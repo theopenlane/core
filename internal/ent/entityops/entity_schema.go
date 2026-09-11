@@ -116,6 +116,8 @@ type FieldDescriptor struct {
 	SystemControlled bool `json:"systemControlled,omitempty"`
 	// Volatile excludes the field from triggering an ingest change; it rides along on material changes
 	Volatile bool `json:"volatile,omitempty"`
+	// CaseInsensitive compares the field case-insensitively in ingest change detection
+	CaseInsensitive bool `json:"caseInsensitive,omitempty"`
 	// TaskRules are suggested-task rules declared on this field via entx.FieldTaskRule
 	TaskRules []TaskRuleDescriptor `json:"taskRules,omitempty"`
 }
@@ -154,6 +156,13 @@ func (d FieldDescriptor) Equal(old, proposed any) bool {
 	old, proposed = unwrap(old), unwrap(proposed)
 	if old == nil || proposed == nil {
 		return old == nil && proposed == nil
+	}
+	if d.CaseInsensitive {
+		a, aOK := old.(string)
+		b, bOK := proposed.(string)
+		if aOK && bOK {
+			return strings.EqualFold(a, b)
+		}
 	}
 	if d.Type == "time.Time" || d.Type == "models.DateTime" {
 		a, b := reflect.ValueOf(old), reflect.ValueOf(proposed)
@@ -255,6 +264,9 @@ type TargetSelector struct {
 	SourceSchema SchemaDescriptor `json:"source_schema,omitempty"`
 	// KeyMatch, when set, resolves candidates with an indexed key query before any Expression filtering
 	KeyMatch *KeyMatch `json:"key_match,omitempty"`
+	// Unique reports whether the edge this selector resolves for sets a single target, so more than
+	// one candidate is narrowed by provenance rather than accepted as a to-many match set
+	Unique bool `json:"unique,omitempty"`
 	// Expression is a CEL expression evaluated against each candidate entity
 	Expression string `json:"expression"`
 	// ExcludeIDs is a list of entity IDs to exclude from the result set
@@ -273,3 +285,14 @@ type LinkSpec struct {
 	// Target specifies which entities to link via schema, key match, or expression
 	Target TargetSelector `json:"target"`
 }
+
+// LookupAlternative is one ordered composite ingest lookup key: an AND of the listed snake_case
+// field names, evaluated against the ingest payload to resolve an existing row
+type LookupAlternative struct {
+	// Fields is the ordered snake_case field names forming this alternative's composite key
+	Fields []string
+}
+
+// LookupValues is one candidate row's or payload's values for a lookup alternative, keyed by
+// snake_case field name
+type LookupValues map[string]string

@@ -196,7 +196,6 @@ func (g *Gala) initialize(dispatchMode DispatchMode) error {
 	contextManager, err := newContextManager(
 		NewKeyCodec("caller", auth.CallerKey),
 		NewKeyCodec("workflow_flags", WorkflowFlagsKey),
-		NewKeyCodec("integration_directory_sync_run_id", DirectorySyncRunIDKey),
 		NewKeyCodec("active_trust_center_id", auth.ActiveTrustCenterIDKey),
 		OperationContextCodec(),
 		logFieldsCodec(),

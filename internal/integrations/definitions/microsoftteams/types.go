@@ -12,8 +12,6 @@ import (
 var (
 	// DefinitionID is the stable identifier for the Microsoft Teams integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0MSTEAMS00000000000000001")
-	// VirtualUser is the virtual actor identity for records created by this definition's installations
-	VirtualUser = types.NewVirtualUserRef("01VRTACTRTBP4VRDEXE5KA0MQC")
 	// installation is the typed installation metadata handle for the Microsoft Teams definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// teamsCredential is the auth-managed credential slot used by the Teams client

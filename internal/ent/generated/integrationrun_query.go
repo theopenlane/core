@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -12,13 +13,23 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/v2/internal/ent/generated/event"
-	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -26,18 +37,40 @@ import (
 // IntegrationRunQuery is the builder for querying IntegrationRun entities.
 type IntegrationRunQuery struct {
 	config
-	ctx                    *QueryContext
-	order                  []integrationrun.OrderOption
-	inters                 []Interceptor
-	predicates             []predicate.IntegrationRun
-	withOwner              *OrganizationQuery
-	withIntegration        *IntegrationQuery
-	withRequestFile        *FileQuery
-	withResponseFile       *FileQuery
-	withEvent              *EventQuery
-	withAssessmentResponse *AssessmentResponseQuery
-	loadTotal              []func(context.Context, []*IntegrationRun) error
-	modifiers              []func(*sql.Selector)
+	ctx                           *QueryContext
+	order                         []integrationrun.OrderOption
+	inters                        []Interceptor
+	predicates                    []predicate.IntegrationRun
+	withOwner                     *OrganizationQuery
+	withIntegration               *IntegrationQuery
+	withActionPlans               *ActionPlanQuery
+	withAssets                    *AssetQuery
+	withCheckResults              *CheckResultQuery
+	withContacts                  *ContactQuery
+	withDirectoryAccounts         *DirectoryAccountQuery
+	withDirectoryGroups           *DirectoryGroupQuery
+	withDirectoryMemberships      *DirectoryMembershipQuery
+	withEntities                  *EntityQuery
+	withFindings                  *FindingQuery
+	withInternalPolicies          *InternalPolicyQuery
+	withProcedures                *ProcedureQuery
+	withRisks                     *RiskQuery
+	withVulnerabilities           *VulnerabilityQuery
+	loadTotal                     []func(context.Context, []*IntegrationRun) error
+	modifiers                     []func(*sql.Selector)
+	withNamedActionPlans          map[string]*ActionPlanQuery
+	withNamedAssets               map[string]*AssetQuery
+	withNamedCheckResults         map[string]*CheckResultQuery
+	withNamedContacts             map[string]*ContactQuery
+	withNamedDirectoryAccounts    map[string]*DirectoryAccountQuery
+	withNamedDirectoryGroups      map[string]*DirectoryGroupQuery
+	withNamedDirectoryMemberships map[string]*DirectoryMembershipQuery
+	withNamedEntities             map[string]*EntityQuery
+	withNamedFindings             map[string]*FindingQuery
+	withNamedInternalPolicies     map[string]*InternalPolicyQuery
+	withNamedProcedures           map[string]*ProcedureQuery
+	withNamedRisks                map[string]*RiskQuery
+	withNamedVulnerabilities      map[string]*VulnerabilityQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -118,9 +151,9 @@ func (_q *IntegrationRunQuery) QueryIntegration() *IntegrationQuery {
 	return query
 }
 
-// QueryRequestFile chains the current query on the "request_file" edge.
-func (_q *IntegrationRunQuery) QueryRequestFile() *FileQuery {
-	query := (&FileClient{config: _q.config}).Query()
+// QueryActionPlans chains the current query on the "action_plans" edge.
+func (_q *IntegrationRunQuery) QueryActionPlans() *ActionPlanQuery {
+	query := (&ActionPlanClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -131,8 +164,8 @@ func (_q *IntegrationRunQuery) QueryRequestFile() *FileQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, selector),
-			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, integrationrun.RequestFileTable, integrationrun.RequestFileColumn),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.ActionPlansTable, integrationrun.ActionPlansPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -140,9 +173,9 @@ func (_q *IntegrationRunQuery) QueryRequestFile() *FileQuery {
 	return query
 }
 
-// QueryResponseFile chains the current query on the "response_file" edge.
-func (_q *IntegrationRunQuery) QueryResponseFile() *FileQuery {
-	query := (&FileClient{config: _q.config}).Query()
+// QueryAssets chains the current query on the "assets" edge.
+func (_q *IntegrationRunQuery) QueryAssets() *AssetQuery {
+	query := (&AssetClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -153,8 +186,8 @@ func (_q *IntegrationRunQuery) QueryResponseFile() *FileQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, selector),
-			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, integrationrun.ResponseFileTable, integrationrun.ResponseFileColumn),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.AssetsTable, integrationrun.AssetsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -162,9 +195,9 @@ func (_q *IntegrationRunQuery) QueryResponseFile() *FileQuery {
 	return query
 }
 
-// QueryEvent chains the current query on the "event" edge.
-func (_q *IntegrationRunQuery) QueryEvent() *EventQuery {
-	query := (&EventClient{config: _q.config}).Query()
+// QueryCheckResults chains the current query on the "check_results" edge.
+func (_q *IntegrationRunQuery) QueryCheckResults() *CheckResultQuery {
+	query := (&CheckResultClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -175,8 +208,8 @@ func (_q *IntegrationRunQuery) QueryEvent() *EventQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, selector),
-			sqlgraph.To(event.Table, event.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, integrationrun.EventTable, integrationrun.EventColumn),
+			sqlgraph.To(checkresult.Table, checkresult.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.CheckResultsTable, integrationrun.CheckResultsPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -184,9 +217,9 @@ func (_q *IntegrationRunQuery) QueryEvent() *EventQuery {
 	return query
 }
 
-// QueryAssessmentResponse chains the current query on the "assessment_response" edge.
-func (_q *IntegrationRunQuery) QueryAssessmentResponse() *AssessmentResponseQuery {
-	query := (&AssessmentResponseClient{config: _q.config}).Query()
+// QueryContacts chains the current query on the "contacts" edge.
+func (_q *IntegrationRunQuery) QueryContacts() *ContactQuery {
+	query := (&ContactClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -197,8 +230,206 @@ func (_q *IntegrationRunQuery) QueryAssessmentResponse() *AssessmentResponseQuer
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, selector),
-			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, integrationrun.AssessmentResponseTable, integrationrun.AssessmentResponseColumn),
+			sqlgraph.To(contact.Table, contact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.ContactsTable, integrationrun.ContactsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDirectoryAccounts chains the current query on the "directory_accounts" edge.
+func (_q *IntegrationRunQuery) QueryDirectoryAccounts() *DirectoryAccountQuery {
+	query := (&DirectoryAccountClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, selector),
+			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.DirectoryAccountsTable, integrationrun.DirectoryAccountsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDirectoryGroups chains the current query on the "directory_groups" edge.
+func (_q *IntegrationRunQuery) QueryDirectoryGroups() *DirectoryGroupQuery {
+	query := (&DirectoryGroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, selector),
+			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.DirectoryGroupsTable, integrationrun.DirectoryGroupsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDirectoryMemberships chains the current query on the "directory_memberships" edge.
+func (_q *IntegrationRunQuery) QueryDirectoryMemberships() *DirectoryMembershipQuery {
+	query := (&DirectoryMembershipClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, selector),
+			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.DirectoryMembershipsTable, integrationrun.DirectoryMembershipsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEntities chains the current query on the "entities" edge.
+func (_q *IntegrationRunQuery) QueryEntities() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, selector),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.EntitiesTable, integrationrun.EntitiesPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFindings chains the current query on the "findings" edge.
+func (_q *IntegrationRunQuery) QueryFindings() *FindingQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, selector),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.FindingsTable, integrationrun.FindingsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalPolicies chains the current query on the "internal_policies" edge.
+func (_q *IntegrationRunQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.InternalPoliciesTable, integrationrun.InternalPoliciesPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProcedures chains the current query on the "procedures" edge.
+func (_q *IntegrationRunQuery) QueryProcedures() *ProcedureQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, selector),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.ProceduresTable, integrationrun.ProceduresPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRisks chains the current query on the "risks" edge.
+func (_q *IntegrationRunQuery) QueryRisks() *RiskQuery {
+	query := (&RiskClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, selector),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.RisksTable, integrationrun.RisksPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVulnerabilities chains the current query on the "vulnerabilities" edge.
+func (_q *IntegrationRunQuery) QueryVulnerabilities() *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, selector),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.VulnerabilitiesTable, integrationrun.VulnerabilitiesPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -393,17 +624,26 @@ func (_q *IntegrationRunQuery) Clone() *IntegrationRunQuery {
 		return nil
 	}
 	return &IntegrationRunQuery{
-		config:                 _q.config,
-		ctx:                    _q.ctx.Clone(),
-		order:                  append([]integrationrun.OrderOption{}, _q.order...),
-		inters:                 append([]Interceptor{}, _q.inters...),
-		predicates:             append([]predicate.IntegrationRun{}, _q.predicates...),
-		withOwner:              _q.withOwner.Clone(),
-		withIntegration:        _q.withIntegration.Clone(),
-		withRequestFile:        _q.withRequestFile.Clone(),
-		withResponseFile:       _q.withResponseFile.Clone(),
-		withEvent:              _q.withEvent.Clone(),
-		withAssessmentResponse: _q.withAssessmentResponse.Clone(),
+		config:                   _q.config,
+		ctx:                      _q.ctx.Clone(),
+		order:                    append([]integrationrun.OrderOption{}, _q.order...),
+		inters:                   append([]Interceptor{}, _q.inters...),
+		predicates:               append([]predicate.IntegrationRun{}, _q.predicates...),
+		withOwner:                _q.withOwner.Clone(),
+		withIntegration:          _q.withIntegration.Clone(),
+		withActionPlans:          _q.withActionPlans.Clone(),
+		withAssets:               _q.withAssets.Clone(),
+		withCheckResults:         _q.withCheckResults.Clone(),
+		withContacts:             _q.withContacts.Clone(),
+		withDirectoryAccounts:    _q.withDirectoryAccounts.Clone(),
+		withDirectoryGroups:      _q.withDirectoryGroups.Clone(),
+		withDirectoryMemberships: _q.withDirectoryMemberships.Clone(),
+		withEntities:             _q.withEntities.Clone(),
+		withFindings:             _q.withFindings.Clone(),
+		withInternalPolicies:     _q.withInternalPolicies.Clone(),
+		withProcedures:           _q.withProcedures.Clone(),
+		withRisks:                _q.withRisks.Clone(),
+		withVulnerabilities:      _q.withVulnerabilities.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -433,47 +673,146 @@ func (_q *IntegrationRunQuery) WithIntegration(opts ...func(*IntegrationQuery)) 
 	return _q
 }
 
-// WithRequestFile tells the query-builder to eager-load the nodes that are connected to
-// the "request_file" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *IntegrationRunQuery) WithRequestFile(opts ...func(*FileQuery)) *IntegrationRunQuery {
-	query := (&FileClient{config: _q.config}).Query()
+// WithActionPlans tells the query-builder to eager-load the nodes that are connected to
+// the "action_plans" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithActionPlans(opts ...func(*ActionPlanQuery)) *IntegrationRunQuery {
+	query := (&ActionPlanClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withRequestFile = query
+	_q.withActionPlans = query
 	return _q
 }
 
-// WithResponseFile tells the query-builder to eager-load the nodes that are connected to
-// the "response_file" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *IntegrationRunQuery) WithResponseFile(opts ...func(*FileQuery)) *IntegrationRunQuery {
-	query := (&FileClient{config: _q.config}).Query()
+// WithAssets tells the query-builder to eager-load the nodes that are connected to
+// the "assets" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithAssets(opts ...func(*AssetQuery)) *IntegrationRunQuery {
+	query := (&AssetClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withResponseFile = query
+	_q.withAssets = query
 	return _q
 }
 
-// WithEvent tells the query-builder to eager-load the nodes that are connected to
-// the "event" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *IntegrationRunQuery) WithEvent(opts ...func(*EventQuery)) *IntegrationRunQuery {
-	query := (&EventClient{config: _q.config}).Query()
+// WithCheckResults tells the query-builder to eager-load the nodes that are connected to
+// the "check_results" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithCheckResults(opts ...func(*CheckResultQuery)) *IntegrationRunQuery {
+	query := (&CheckResultClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withEvent = query
+	_q.withCheckResults = query
 	return _q
 }
 
-// WithAssessmentResponse tells the query-builder to eager-load the nodes that are connected to
-// the "assessment_response" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *IntegrationRunQuery) WithAssessmentResponse(opts ...func(*AssessmentResponseQuery)) *IntegrationRunQuery {
-	query := (&AssessmentResponseClient{config: _q.config}).Query()
+// WithContacts tells the query-builder to eager-load the nodes that are connected to
+// the "contacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithContacts(opts ...func(*ContactQuery)) *IntegrationRunQuery {
+	query := (&ContactClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withAssessmentResponse = query
+	_q.withContacts = query
+	return _q
+}
+
+// WithDirectoryAccounts tells the query-builder to eager-load the nodes that are connected to
+// the "directory_accounts" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithDirectoryAccounts(opts ...func(*DirectoryAccountQuery)) *IntegrationRunQuery {
+	query := (&DirectoryAccountClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDirectoryAccounts = query
+	return _q
+}
+
+// WithDirectoryGroups tells the query-builder to eager-load the nodes that are connected to
+// the "directory_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithDirectoryGroups(opts ...func(*DirectoryGroupQuery)) *IntegrationRunQuery {
+	query := (&DirectoryGroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDirectoryGroups = query
+	return _q
+}
+
+// WithDirectoryMemberships tells the query-builder to eager-load the nodes that are connected to
+// the "directory_memberships" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithDirectoryMemberships(opts ...func(*DirectoryMembershipQuery)) *IntegrationRunQuery {
+	query := (&DirectoryMembershipClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDirectoryMemberships = query
+	return _q
+}
+
+// WithEntities tells the query-builder to eager-load the nodes that are connected to
+// the "entities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithEntities(opts ...func(*EntityQuery)) *IntegrationRunQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEntities = query
+	return _q
+}
+
+// WithFindings tells the query-builder to eager-load the nodes that are connected to
+// the "findings" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithFindings(opts ...func(*FindingQuery)) *IntegrationRunQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindings = query
+	return _q
+}
+
+// WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *IntegrationRunQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalPolicies = query
+	return _q
+}
+
+// WithProcedures tells the query-builder to eager-load the nodes that are connected to
+// the "procedures" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithProcedures(opts ...func(*ProcedureQuery)) *IntegrationRunQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withProcedures = query
+	return _q
+}
+
+// WithRisks tells the query-builder to eager-load the nodes that are connected to
+// the "risks" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithRisks(opts ...func(*RiskQuery)) *IntegrationRunQuery {
+	query := (&RiskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRisks = query
+	return _q
+}
+
+// WithVulnerabilities tells the query-builder to eager-load the nodes that are connected to
+// the "vulnerabilities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithVulnerabilities(opts ...func(*VulnerabilityQuery)) *IntegrationRunQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVulnerabilities = query
 	return _q
 }
 
@@ -561,13 +900,22 @@ func (_q *IntegrationRunQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*IntegrationRun{}
 		_spec       = _q.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [15]bool{
 			_q.withOwner != nil,
 			_q.withIntegration != nil,
-			_q.withRequestFile != nil,
-			_q.withResponseFile != nil,
-			_q.withEvent != nil,
-			_q.withAssessmentResponse != nil,
+			_q.withActionPlans != nil,
+			_q.withAssets != nil,
+			_q.withCheckResults != nil,
+			_q.withContacts != nil,
+			_q.withDirectoryAccounts != nil,
+			_q.withDirectoryGroups != nil,
+			_q.withDirectoryMemberships != nil,
+			_q.withEntities != nil,
+			_q.withFindings != nil,
+			_q.withInternalPolicies != nil,
+			_q.withProcedures != nil,
+			_q.withRisks != nil,
+			_q.withVulnerabilities != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -603,27 +951,195 @@ func (_q *IntegrationRunQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
-	if query := _q.withRequestFile; query != nil {
-		if err := _q.loadRequestFile(ctx, query, nodes, nil,
-			func(n *IntegrationRun, e *File) { n.Edges.RequestFile = e }); err != nil {
+	if query := _q.withActionPlans; query != nil {
+		if err := _q.loadActionPlans(ctx, query, nodes,
+			func(n *IntegrationRun) { n.Edges.ActionPlans = []*ActionPlan{} },
+			func(n *IntegrationRun, e *ActionPlan) { n.Edges.ActionPlans = append(n.Edges.ActionPlans, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := _q.withResponseFile; query != nil {
-		if err := _q.loadResponseFile(ctx, query, nodes, nil,
-			func(n *IntegrationRun, e *File) { n.Edges.ResponseFile = e }); err != nil {
+	if query := _q.withAssets; query != nil {
+		if err := _q.loadAssets(ctx, query, nodes,
+			func(n *IntegrationRun) { n.Edges.Assets = []*Asset{} },
+			func(n *IntegrationRun, e *Asset) { n.Edges.Assets = append(n.Edges.Assets, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := _q.withEvent; query != nil {
-		if err := _q.loadEvent(ctx, query, nodes, nil,
-			func(n *IntegrationRun, e *Event) { n.Edges.Event = e }); err != nil {
+	if query := _q.withCheckResults; query != nil {
+		if err := _q.loadCheckResults(ctx, query, nodes,
+			func(n *IntegrationRun) { n.Edges.CheckResults = []*CheckResult{} },
+			func(n *IntegrationRun, e *CheckResult) { n.Edges.CheckResults = append(n.Edges.CheckResults, e) }); err != nil {
 			return nil, err
 		}
 	}
-	if query := _q.withAssessmentResponse; query != nil {
-		if err := _q.loadAssessmentResponse(ctx, query, nodes, nil,
-			func(n *IntegrationRun, e *AssessmentResponse) { n.Edges.AssessmentResponse = e }); err != nil {
+	if query := _q.withContacts; query != nil {
+		if err := _q.loadContacts(ctx, query, nodes,
+			func(n *IntegrationRun) { n.Edges.Contacts = []*Contact{} },
+			func(n *IntegrationRun, e *Contact) { n.Edges.Contacts = append(n.Edges.Contacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDirectoryAccounts; query != nil {
+		if err := _q.loadDirectoryAccounts(ctx, query, nodes,
+			func(n *IntegrationRun) { n.Edges.DirectoryAccounts = []*DirectoryAccount{} },
+			func(n *IntegrationRun, e *DirectoryAccount) {
+				n.Edges.DirectoryAccounts = append(n.Edges.DirectoryAccounts, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDirectoryGroups; query != nil {
+		if err := _q.loadDirectoryGroups(ctx, query, nodes,
+			func(n *IntegrationRun) { n.Edges.DirectoryGroups = []*DirectoryGroup{} },
+			func(n *IntegrationRun, e *DirectoryGroup) {
+				n.Edges.DirectoryGroups = append(n.Edges.DirectoryGroups, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDirectoryMemberships; query != nil {
+		if err := _q.loadDirectoryMemberships(ctx, query, nodes,
+			func(n *IntegrationRun) { n.Edges.DirectoryMemberships = []*DirectoryMembership{} },
+			func(n *IntegrationRun, e *DirectoryMembership) {
+				n.Edges.DirectoryMemberships = append(n.Edges.DirectoryMemberships, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEntities; query != nil {
+		if err := _q.loadEntities(ctx, query, nodes,
+			func(n *IntegrationRun) { n.Edges.Entities = []*Entity{} },
+			func(n *IntegrationRun, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFindings; query != nil {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *IntegrationRun) { n.Edges.Findings = []*Finding{} },
+			func(n *IntegrationRun, e *Finding) { n.Edges.Findings = append(n.Edges.Findings, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalPolicies; query != nil {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *IntegrationRun) { n.Edges.InternalPolicies = []*InternalPolicy{} },
+			func(n *IntegrationRun, e *InternalPolicy) {
+				n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withProcedures; query != nil {
+		if err := _q.loadProcedures(ctx, query, nodes,
+			func(n *IntegrationRun) { n.Edges.Procedures = []*Procedure{} },
+			func(n *IntegrationRun, e *Procedure) { n.Edges.Procedures = append(n.Edges.Procedures, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withRisks; query != nil {
+		if err := _q.loadRisks(ctx, query, nodes,
+			func(n *IntegrationRun) { n.Edges.Risks = []*Risk{} },
+			func(n *IntegrationRun, e *Risk) { n.Edges.Risks = append(n.Edges.Risks, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withVulnerabilities; query != nil {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *IntegrationRun) { n.Edges.Vulnerabilities = []*Vulnerability{} },
+			func(n *IntegrationRun, e *Vulnerability) {
+				n.Edges.Vulnerabilities = append(n.Edges.Vulnerabilities, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedActionPlans {
+		if err := _q.loadActionPlans(ctx, query, nodes,
+			func(n *IntegrationRun) { n.appendNamedActionPlans(name) },
+			func(n *IntegrationRun, e *ActionPlan) { n.appendNamedActionPlans(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAssets {
+		if err := _q.loadAssets(ctx, query, nodes,
+			func(n *IntegrationRun) { n.appendNamedAssets(name) },
+			func(n *IntegrationRun, e *Asset) { n.appendNamedAssets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCheckResults {
+		if err := _q.loadCheckResults(ctx, query, nodes,
+			func(n *IntegrationRun) { n.appendNamedCheckResults(name) },
+			func(n *IntegrationRun, e *CheckResult) { n.appendNamedCheckResults(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedContacts {
+		if err := _q.loadContacts(ctx, query, nodes,
+			func(n *IntegrationRun) { n.appendNamedContacts(name) },
+			func(n *IntegrationRun, e *Contact) { n.appendNamedContacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDirectoryAccounts {
+		if err := _q.loadDirectoryAccounts(ctx, query, nodes,
+			func(n *IntegrationRun) { n.appendNamedDirectoryAccounts(name) },
+			func(n *IntegrationRun, e *DirectoryAccount) { n.appendNamedDirectoryAccounts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDirectoryGroups {
+		if err := _q.loadDirectoryGroups(ctx, query, nodes,
+			func(n *IntegrationRun) { n.appendNamedDirectoryGroups(name) },
+			func(n *IntegrationRun, e *DirectoryGroup) { n.appendNamedDirectoryGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDirectoryMemberships {
+		if err := _q.loadDirectoryMemberships(ctx, query, nodes,
+			func(n *IntegrationRun) { n.appendNamedDirectoryMemberships(name) },
+			func(n *IntegrationRun, e *DirectoryMembership) { n.appendNamedDirectoryMemberships(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEntities {
+		if err := _q.loadEntities(ctx, query, nodes,
+			func(n *IntegrationRun) { n.appendNamedEntities(name) },
+			func(n *IntegrationRun, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFindings {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *IntegrationRun) { n.appendNamedFindings(name) },
+			func(n *IntegrationRun, e *Finding) { n.appendNamedFindings(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedInternalPolicies {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *IntegrationRun) { n.appendNamedInternalPolicies(name) },
+			func(n *IntegrationRun, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedProcedures {
+		if err := _q.loadProcedures(ctx, query, nodes,
+			func(n *IntegrationRun) { n.appendNamedProcedures(name) },
+			func(n *IntegrationRun, e *Procedure) { n.appendNamedProcedures(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedRisks {
+		if err := _q.loadRisks(ctx, query, nodes,
+			func(n *IntegrationRun) { n.appendNamedRisks(name) },
+			func(n *IntegrationRun, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVulnerabilities {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *IntegrationRun) { n.appendNamedVulnerabilities(name) },
+			func(n *IntegrationRun, e *Vulnerability) { n.appendNamedVulnerabilities(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -693,118 +1209,795 @@ func (_q *IntegrationRunQuery) loadIntegration(ctx context.Context, query *Integ
 	}
 	return nil
 }
-func (_q *IntegrationRunQuery) loadRequestFile(ctx context.Context, query *FileQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *File)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*IntegrationRun)
-	for i := range nodes {
-		fk := nodes[i].RequestFileID
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
+func (_q *IntegrationRunQuery) loadActionPlans(ctx context.Context, query *ActionPlanQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *ActionPlan)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IntegrationRun)
+	nids := make(map[string]map[*IntegrationRun]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
 		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(integrationrun.ActionPlansTable)
+		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(integrationrun.ActionPlansPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(integrationrun.ActionPlansPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(integrationrun.ActionPlansPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(file.IDIn(ids...))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IntegrationRun]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*ActionPlan](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "request_file_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "action_plans" node returned %v`, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil
 }
-func (_q *IntegrationRunQuery) loadResponseFile(ctx context.Context, query *FileQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *File)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*IntegrationRun)
-	for i := range nodes {
-		fk := nodes[i].ResponseFileID
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
+func (_q *IntegrationRunQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *Asset)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IntegrationRun)
+	nids := make(map[string]map[*IntegrationRun]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
 		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(integrationrun.AssetsTable)
+		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(integrationrun.AssetsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(integrationrun.AssetsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(integrationrun.AssetsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(file.IDIn(ids...))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IntegrationRun]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Asset](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "response_file_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "assets" node returned %v`, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil
 }
-func (_q *IntegrationRunQuery) loadEvent(ctx context.Context, query *EventQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *Event)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*IntegrationRun)
-	for i := range nodes {
-		fk := nodes[i].EventID
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
+func (_q *IntegrationRunQuery) loadCheckResults(ctx context.Context, query *CheckResultQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *CheckResult)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IntegrationRun)
+	nids := make(map[string]map[*IntegrationRun]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
 		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(integrationrun.CheckResultsTable)
+		s.Join(joinT).On(s.C(checkresult.FieldID), joinT.C(integrationrun.CheckResultsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(integrationrun.CheckResultsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(integrationrun.CheckResultsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(event.IDIn(ids...))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IntegrationRun]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*CheckResult](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "event_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "check_results" node returned %v`, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil
 }
-func (_q *IntegrationRunQuery) loadAssessmentResponse(ctx context.Context, query *AssessmentResponseQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *AssessmentResponse)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*IntegrationRun)
-	for i := range nodes {
-		fk := nodes[i].AssessmentResponseID
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
+func (_q *IntegrationRunQuery) loadContacts(ctx context.Context, query *ContactQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *Contact)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IntegrationRun)
+	nids := make(map[string]map[*IntegrationRun]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
 		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(ids) == 0 {
-		return nil
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(integrationrun.ContactsTable)
+		s.Join(joinT).On(s.C(contact.FieldID), joinT.C(integrationrun.ContactsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(integrationrun.ContactsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(integrationrun.ContactsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
 	}
-	query.Where(assessmentresponse.IDIn(ids...))
-	neighbors, err := query.All(ctx)
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IntegrationRun]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Contact](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "assessment_response_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected "contacts" node returned %v`, n.ID)
 		}
-		for i := range nodes {
-			assign(nodes[i], n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *IntegrationRunQuery) loadDirectoryAccounts(ctx context.Context, query *DirectoryAccountQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *DirectoryAccount)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IntegrationRun)
+	nids := make(map[string]map[*IntegrationRun]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(integrationrun.DirectoryAccountsTable)
+		s.Join(joinT).On(s.C(directoryaccount.FieldID), joinT.C(integrationrun.DirectoryAccountsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(integrationrun.DirectoryAccountsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(integrationrun.DirectoryAccountsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IntegrationRun]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*DirectoryAccount](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "directory_accounts" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *IntegrationRunQuery) loadDirectoryGroups(ctx context.Context, query *DirectoryGroupQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *DirectoryGroup)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IntegrationRun)
+	nids := make(map[string]map[*IntegrationRun]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(integrationrun.DirectoryGroupsTable)
+		s.Join(joinT).On(s.C(directorygroup.FieldID), joinT.C(integrationrun.DirectoryGroupsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(integrationrun.DirectoryGroupsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(integrationrun.DirectoryGroupsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IntegrationRun]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*DirectoryGroup](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "directory_groups" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *IntegrationRunQuery) loadDirectoryMemberships(ctx context.Context, query *DirectoryMembershipQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *DirectoryMembership)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IntegrationRun)
+	nids := make(map[string]map[*IntegrationRun]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(integrationrun.DirectoryMembershipsTable)
+		s.Join(joinT).On(s.C(directorymembership.FieldID), joinT.C(integrationrun.DirectoryMembershipsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(integrationrun.DirectoryMembershipsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(integrationrun.DirectoryMembershipsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IntegrationRun]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*DirectoryMembership](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "directory_memberships" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *IntegrationRunQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *Entity)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IntegrationRun)
+	nids := make(map[string]map[*IntegrationRun]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(integrationrun.EntitiesTable)
+		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(integrationrun.EntitiesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(integrationrun.EntitiesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(integrationrun.EntitiesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IntegrationRun]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Entity](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "entities" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *IntegrationRunQuery) loadFindings(ctx context.Context, query *FindingQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *Finding)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IntegrationRun)
+	nids := make(map[string]map[*IntegrationRun]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(integrationrun.FindingsTable)
+		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(integrationrun.FindingsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(integrationrun.FindingsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(integrationrun.FindingsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IntegrationRun]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Finding](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "findings" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *IntegrationRunQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *InternalPolicy)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IntegrationRun)
+	nids := make(map[string]map[*IntegrationRun]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(integrationrun.InternalPoliciesTable)
+		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(integrationrun.InternalPoliciesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(integrationrun.InternalPoliciesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(integrationrun.InternalPoliciesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IntegrationRun]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*InternalPolicy](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "internal_policies" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *IntegrationRunQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *Procedure)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IntegrationRun)
+	nids := make(map[string]map[*IntegrationRun]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(integrationrun.ProceduresTable)
+		s.Join(joinT).On(s.C(procedure.FieldID), joinT.C(integrationrun.ProceduresPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(integrationrun.ProceduresPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(integrationrun.ProceduresPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IntegrationRun]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Procedure](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "procedures" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *IntegrationRunQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *Risk)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IntegrationRun)
+	nids := make(map[string]map[*IntegrationRun]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(integrationrun.RisksTable)
+		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(integrationrun.RisksPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(integrationrun.RisksPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(integrationrun.RisksPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IntegrationRun]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Risk](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "risks" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *IntegrationRunQuery) loadVulnerabilities(ctx context.Context, query *VulnerabilityQuery, nodes []*IntegrationRun, init func(*IntegrationRun), assign func(*IntegrationRun, *Vulnerability)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*IntegrationRun)
+	nids := make(map[string]map[*IntegrationRun]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(integrationrun.VulnerabilitiesTable)
+		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(integrationrun.VulnerabilitiesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(integrationrun.VulnerabilitiesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(integrationrun.VulnerabilitiesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*IntegrationRun]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Vulnerability](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "vulnerabilities" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil
@@ -843,18 +2036,6 @@ func (_q *IntegrationRunQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withIntegration != nil {
 			_spec.Node.AddColumnOnce(integrationrun.FieldIntegrationID)
-		}
-		if _q.withRequestFile != nil {
-			_spec.Node.AddColumnOnce(integrationrun.FieldRequestFileID)
-		}
-		if _q.withResponseFile != nil {
-			_spec.Node.AddColumnOnce(integrationrun.FieldResponseFileID)
-		}
-		if _q.withEvent != nil {
-			_spec.Node.AddColumnOnce(integrationrun.FieldEventID)
-		}
-		if _q.withAssessmentResponse != nil {
-			_spec.Node.AddColumnOnce(integrationrun.FieldAssessmentResponseID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
@@ -919,6 +2100,188 @@ func (_q *IntegrationRunQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *IntegrationRunQuery) Modify(modifiers ...func(s *sql.Selector)) *IntegrationRunSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedActionPlans tells the query-builder to eager-load the nodes that are connected to the "action_plans"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithNamedActionPlans(name string, opts ...func(*ActionPlanQuery)) *IntegrationRunQuery {
+	query := (&ActionPlanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedActionPlans == nil {
+		_q.withNamedActionPlans = make(map[string]*ActionPlanQuery)
+	}
+	_q.withNamedActionPlans[name] = query
+	return _q
+}
+
+// WithNamedAssets tells the query-builder to eager-load the nodes that are connected to the "assets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithNamedAssets(name string, opts ...func(*AssetQuery)) *IntegrationRunQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssets == nil {
+		_q.withNamedAssets = make(map[string]*AssetQuery)
+	}
+	_q.withNamedAssets[name] = query
+	return _q
+}
+
+// WithNamedCheckResults tells the query-builder to eager-load the nodes that are connected to the "check_results"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithNamedCheckResults(name string, opts ...func(*CheckResultQuery)) *IntegrationRunQuery {
+	query := (&CheckResultClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCheckResults == nil {
+		_q.withNamedCheckResults = make(map[string]*CheckResultQuery)
+	}
+	_q.withNamedCheckResults[name] = query
+	return _q
+}
+
+// WithNamedContacts tells the query-builder to eager-load the nodes that are connected to the "contacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithNamedContacts(name string, opts ...func(*ContactQuery)) *IntegrationRunQuery {
+	query := (&ContactClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedContacts == nil {
+		_q.withNamedContacts = make(map[string]*ContactQuery)
+	}
+	_q.withNamedContacts[name] = query
+	return _q
+}
+
+// WithNamedDirectoryAccounts tells the query-builder to eager-load the nodes that are connected to the "directory_accounts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithNamedDirectoryAccounts(name string, opts ...func(*DirectoryAccountQuery)) *IntegrationRunQuery {
+	query := (&DirectoryAccountClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDirectoryAccounts == nil {
+		_q.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery)
+	}
+	_q.withNamedDirectoryAccounts[name] = query
+	return _q
+}
+
+// WithNamedDirectoryGroups tells the query-builder to eager-load the nodes that are connected to the "directory_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithNamedDirectoryGroups(name string, opts ...func(*DirectoryGroupQuery)) *IntegrationRunQuery {
+	query := (&DirectoryGroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDirectoryGroups == nil {
+		_q.withNamedDirectoryGroups = make(map[string]*DirectoryGroupQuery)
+	}
+	_q.withNamedDirectoryGroups[name] = query
+	return _q
+}
+
+// WithNamedDirectoryMemberships tells the query-builder to eager-load the nodes that are connected to the "directory_memberships"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithNamedDirectoryMemberships(name string, opts ...func(*DirectoryMembershipQuery)) *IntegrationRunQuery {
+	query := (&DirectoryMembershipClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDirectoryMemberships == nil {
+		_q.withNamedDirectoryMemberships = make(map[string]*DirectoryMembershipQuery)
+	}
+	_q.withNamedDirectoryMemberships[name] = query
+	return _q
+}
+
+// WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *IntegrationRunQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEntities == nil {
+		_q.withNamedEntities = make(map[string]*EntityQuery)
+	}
+	_q.withNamedEntities[name] = query
+	return _q
+}
+
+// WithNamedFindings tells the query-builder to eager-load the nodes that are connected to the "findings"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithNamedFindings(name string, opts ...func(*FindingQuery)) *IntegrationRunQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFindings == nil {
+		_q.withNamedFindings = make(map[string]*FindingQuery)
+	}
+	_q.withNamedFindings[name] = query
+	return _q
+}
+
+// WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *IntegrationRunQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedInternalPolicies == nil {
+		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	}
+	_q.withNamedInternalPolicies[name] = query
+	return _q
+}
+
+// WithNamedProcedures tells the query-builder to eager-load the nodes that are connected to the "procedures"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *IntegrationRunQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedProcedures == nil {
+		_q.withNamedProcedures = make(map[string]*ProcedureQuery)
+	}
+	_q.withNamedProcedures[name] = query
+	return _q
+}
+
+// WithNamedRisks tells the query-builder to eager-load the nodes that are connected to the "risks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *IntegrationRunQuery {
+	query := (&RiskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedRisks == nil {
+		_q.withNamedRisks = make(map[string]*RiskQuery)
+	}
+	_q.withNamedRisks[name] = query
+	return _q
+}
+
+// WithNamedVulnerabilities tells the query-builder to eager-load the nodes that are connected to the "vulnerabilities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IntegrationRunQuery) WithNamedVulnerabilities(name string, opts ...func(*VulnerabilityQuery)) *IntegrationRunQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVulnerabilities == nil {
+		_q.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery)
+	}
+	_q.withNamedVulnerabilities[name] = query
+	return _q
 }
 
 // CountIDs returns the count of ids with FGA batch filtering applied

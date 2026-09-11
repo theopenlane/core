@@ -185,6 +185,7 @@ type CreateActionPlanInput struct {
 	SourceDefinitionVersion         *string                       `json:"source_definition_version,omitempty"`
 	SourceInstanceID                *string                       `json:"source_instance_id,omitempty"`
 	ManagedBy                       *string                       `json:"managed_by,omitempty"`
+	IntegrationRunID                *string                       `json:"integration_run_id,omitempty"`
 	Name                            string                        `json:"name,omitempty"`
 	Status                          *enums.DocumentStatus         `json:"status,omitempty"`
 	ManagementMode                  *enums.DocumentManagementMode `json:"management_mode,omitempty"`
@@ -217,6 +218,7 @@ type CreateActionPlanInput struct {
 	Metadata                        map[string]interface{}        `json:"metadata,omitempty"`
 	RawPayload                      map[string]interface{}        `json:"raw_payload,omitempty"`
 	Source                          *string                       `json:"source,omitempty"`
+	IntegrationRunIDs               []string                      `json:"integration_run_ids,omitempty"`
 	ApproverID                      *string                       `json:"approver_id,omitempty"`
 	DelegateID                      *string                       `json:"delegate_id,omitempty"`
 	OwnerID                         *string                       `json:"owner_id,omitempty"`
@@ -257,6 +259,9 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
@@ -350,6 +355,9 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
 	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
 	if v := i.ApproverID; v != nil {
 		m.SetApproverID(*v)
 	}
@@ -430,6 +438,8 @@ type UpdateActionPlanInput struct {
 	SourceInstanceID                      *string `json:"source_instance_id,omitempty"`
 	ClearManagedBy                        bool
 	ManagedBy                             *string `json:"managed_by,omitempty"`
+	ClearIntegrationRunID                 bool
+	IntegrationRunID                      *string `json:"integration_run_id,omitempty"`
 	Name                                  *string `json:"name,omitempty"`
 	ClearStatus                           bool
 	Status                                *enums.DocumentStatus `json:"status,omitempty"`
@@ -497,6 +507,9 @@ type UpdateActionPlanInput struct {
 	RawPayload                            map[string]interface{} `json:"raw_payload,omitempty"`
 	ClearSource                           bool
 	Source                                *string `json:"source,omitempty"`
+	ClearIntegrationRuns                  bool
+	AddIntegrationRunIDs                  []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs               []string `json:"remove_integration_run_ids,omitempty"`
 	ClearApprover                         bool
 	ApproverID                            *string `json:"approver_id,omitempty"`
 	ClearDelegate                         bool
@@ -589,6 +602,12 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if i.ClearIntegrationRunID {
+		m.ClearIntegrationRunID()
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -790,6 +809,15 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearApprover {
 		m.ClearApprover()
@@ -1330,6 +1358,7 @@ type CreateAssetInput struct {
 	SourceDefinitionVersion       *string           `json:"source_definition_version,omitempty"`
 	SourceInstanceID              *string           `json:"source_instance_id,omitempty"`
 	ManagedBy                     *string           `json:"managed_by,omitempty"`
+	IntegrationRunID              *string           `json:"integration_run_id,omitempty"`
 	InternalOwner                 *string           `json:"internal_owner,omitempty"`
 	AssetSubtypeName              *string           `json:"asset_subtype_name,omitempty"`
 	AssetDataClassificationName   *string           `json:"asset_data_classification_name,omitempty"`
@@ -1358,6 +1387,7 @@ type CreateAssetInput struct {
 	Cpe                           *string           `json:"cpe,omitempty"`
 	Categories                    []string          `json:"categories,omitempty"`
 	ObservedAt                    *models.DateTime  `json:"observed_at,omitempty"`
+	IntegrationRunIDs             []string          `json:"integration_run_ids,omitempty"`
 	OwnerID                       *string           `json:"owner_id,omitempty"`
 	BlockedGroupIDs               []string          `json:"blocked_group_ids,omitempty"`
 	EditorIDs                     []string          `json:"editor_ids,omitempty"`
@@ -1408,6 +1438,9 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if v := i.InternalOwner; v != nil {
 		m.SetInternalOwner(*v)
@@ -1490,6 +1523,9 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -1608,6 +1644,8 @@ type UpdateAssetInput struct {
 	SourceInstanceID                 *string `json:"source_instance_id,omitempty"`
 	ClearManagedBy                   bool
 	ManagedBy                        *string `json:"managed_by,omitempty"`
+	ClearIntegrationRunID            bool
+	IntegrationRunID                 *string `json:"integration_run_id,omitempty"`
 	ClearInternalOwner               bool
 	InternalOwner                    *string `json:"internal_owner,omitempty"`
 	ClearAssetSubtypeName            bool
@@ -1662,6 +1700,9 @@ type UpdateAssetInput struct {
 	AppendCategories                 []string
 	ClearObservedAt                  bool
 	ObservedAt                       *models.DateTime `json:"observed_at,omitempty"`
+	ClearIntegrationRuns             bool
+	AddIntegrationRunIDs             []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs          []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups               bool
 	AddBlockedGroupIDs               []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs            []string `json:"remove_blocked_group_ids,omitempty"`
@@ -1778,6 +1819,12 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if i.ClearIntegrationRunID {
+		m.ClearIntegrationRunID()
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if i.ClearInternalOwner {
 		m.ClearInternalOwner()
@@ -1940,6 +1987,15 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -2986,12 +3042,14 @@ type CreateCheckResultInput struct {
 	SourceDefinitionVersion *string            `json:"source_definition_version,omitempty"`
 	SourceInstanceID        *string            `json:"source_instance_id,omitempty"`
 	ManagedBy               *string            `json:"managed_by,omitempty"`
+	IntegrationRunID        *string            `json:"integration_run_id,omitempty"`
 	Status                  *enums.CheckStatus `json:"status,omitempty"`
 	Source                  string             `json:"source,omitempty"`
 	LastObservedAt          *models.DateTime   `json:"last_observed_at,omitempty"`
 	ExternalURI             *string            `json:"external_uri,omitempty"`
 	Details                 *string            `json:"details,omitempty"`
 	ParentExternalID        *string            `json:"parent_external_id,omitempty"`
+	IntegrationRunIDs       []string           `json:"integration_run_ids,omitempty"`
 	BlockedGroupIDs         []string           `json:"blocked_group_ids,omitempty"`
 	EditorIDs               []string           `json:"editor_ids,omitempty"`
 	ViewerIDs               []string           `json:"viewer_ids,omitempty"`
@@ -3017,6 +3075,9 @@ func (i *CreateCheckResultInput) Mutate(m *CheckResultMutation) {
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
 	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
+	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
@@ -3032,6 +3093,9 @@ func (i *CreateCheckResultInput) Mutate(m *CheckResultMutation) {
 	}
 	if v := i.ParentExternalID; v != nil {
 		m.SetParentExternalID(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
@@ -3071,7 +3135,9 @@ type UpdateCheckResultInput struct {
 	ClearSourceInstanceID        bool
 	SourceInstanceID             *string `json:"source_instance_id,omitempty"`
 	ClearManagedBy               bool
-	ManagedBy                    *string            `json:"managed_by,omitempty"`
+	ManagedBy                    *string `json:"managed_by,omitempty"`
+	ClearIntegrationRunID        bool
+	IntegrationRunID             *string            `json:"integration_run_id,omitempty"`
 	Status                       *enums.CheckStatus `json:"status,omitempty"`
 	Source                       *string            `json:"source,omitempty"`
 	ClearLastObservedAt          bool
@@ -3082,6 +3148,9 @@ type UpdateCheckResultInput struct {
 	Details                      *string `json:"details,omitempty"`
 	ClearParentExternalID        bool
 	ParentExternalID             *string `json:"parent_external_id,omitempty"`
+	ClearIntegrationRuns         bool
+	AddIntegrationRunIDs         []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs      []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups           bool
 	AddBlockedGroupIDs           []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs        []string `json:"remove_blocked_group_ids,omitempty"`
@@ -3136,6 +3205,12 @@ func (i *UpdateCheckResultInput) Mutate(m *CheckResultMutation) {
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
 	}
+	if i.ClearIntegrationRunID {
+		m.ClearIntegrationRunID()
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
+	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
@@ -3165,6 +3240,15 @@ func (i *UpdateCheckResultInput) Mutate(m *CheckResultMutation) {
 	}
 	if v := i.ParentExternalID; v != nil {
 		m.SetParentExternalID(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -3238,6 +3322,7 @@ type CreateContactInput struct {
 	SourceDefinitionVersion *string           `json:"source_definition_version,omitempty"`
 	SourceInstanceID        *string           `json:"source_instance_id,omitempty"`
 	ManagedBy               *string           `json:"managed_by,omitempty"`
+	IntegrationRunID        *string           `json:"integration_run_id,omitempty"`
 	FullName                *string           `json:"full_name,omitempty"`
 	Title                   *string           `json:"title,omitempty"`
 	Company                 *string           `json:"company,omitempty"`
@@ -3248,6 +3333,7 @@ type CreateContactInput struct {
 	ExternalID              *string           `json:"external_id,omitempty"`
 	IntegrationID           *string           `json:"integration_id,omitempty"`
 	ObservedAt              *models.DateTime  `json:"observed_at,omitempty"`
+	IntegrationRunIDs       []string          `json:"integration_run_ids,omitempty"`
 	OwnerID                 *string           `json:"owner_id,omitempty"`
 	EntityIDs               []string          `json:"entity_ids,omitempty"`
 	CampaignIDs             []string          `json:"campaign_ids,omitempty"`
@@ -3272,6 +3358,9 @@ func (i *CreateContactInput) Mutate(m *ContactMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if v := i.FullName; v != nil {
 		m.SetFullName(*v)
@@ -3302,6 +3391,9 @@ func (i *CreateContactInput) Mutate(m *ContactMutation) {
 	}
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -3342,6 +3434,8 @@ type UpdateContactInput struct {
 	SourceInstanceID             *string `json:"source_instance_id,omitempty"`
 	ClearManagedBy               bool
 	ManagedBy                    *string `json:"managed_by,omitempty"`
+	ClearIntegrationRunID        bool
+	IntegrationRunID             *string `json:"integration_run_id,omitempty"`
 	ClearFullName                bool
 	FullName                     *string `json:"full_name,omitempty"`
 	ClearTitle                   bool
@@ -3361,6 +3455,9 @@ type UpdateContactInput struct {
 	IntegrationID                *string `json:"integration_id,omitempty"`
 	ClearObservedAt              bool
 	ObservedAt                   *models.DateTime `json:"observed_at,omitempty"`
+	ClearIntegrationRuns         bool
+	AddIntegrationRunIDs         []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs      []string `json:"remove_integration_run_ids,omitempty"`
 	ClearOwner                   bool
 	OwnerID                      *string `json:"owner_id,omitempty"`
 	ClearEntities                bool
@@ -3414,6 +3511,12 @@ func (i *UpdateContactInput) Mutate(m *ContactMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if i.ClearIntegrationRunID {
+		m.ClearIntegrationRunID()
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if i.ClearFullName {
 		m.ClearFullName()
@@ -3471,6 +3574,15 @@ func (i *UpdateContactInput) Mutate(m *ContactMutation) {
 	}
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -5718,9 +5830,9 @@ type CreateDirectoryAccountInput struct {
 	SourceDefinitionVersion *string                         `json:"source_definition_version,omitempty"`
 	SourceInstanceID        *string                         `json:"source_instance_id,omitempty"`
 	ManagedBy               *string                         `json:"managed_by,omitempty"`
+	IntegrationRunID        *string                         `json:"integration_run_id,omitempty"`
 	EnvironmentName         *string                         `json:"environment_name,omitempty"`
 	ScopeName               *string                         `json:"scope_name,omitempty"`
-	DirectoryInstanceID     *string                         `json:"directory_instance_id,omitempty"`
 	DirectoryName           *string                         `json:"directory_name,omitempty"`
 	ExternalID              string                          `json:"external_id,omitempty"`
 	SecondaryKey            *string                         `json:"secondary_key,omitempty"`
@@ -5745,16 +5857,15 @@ type CreateDirectoryAccountInput struct {
 	AddedAt                 *time.Time                      `json:"added_at,omitempty"`
 	RemovedAt               *time.Time                      `json:"removed_at,omitempty"`
 	ObservedAt              *time.Time                      `json:"observed_at,omitempty"`
-	ProfileHash             *string                         `json:"profile_hash,omitempty"`
 	Profile                 map[string]interface{}          `json:"profile,omitempty"`
 	Metadata                map[string]interface{}          `json:"metadata,omitempty"`
 	SourceVersion           *string                         `json:"source_version,omitempty"`
 	PrimarySource           *bool                           `json:"primary_source,omitempty"`
+	IntegrationRunIDs       []string                        `json:"integration_run_ids,omitempty"`
 	OwnerID                 *string                         `json:"owner_id,omitempty"`
 	EnvironmentID           *string                         `json:"environment_id,omitempty"`
 	ScopeID                 *string                         `json:"scope_id,omitempty"`
 	IntegrationID           *string                         `json:"integration_id,omitempty"`
-	DirectorySyncRunID      *string                         `json:"directory_sync_run_id,omitempty"`
 	PlatformID              *string                         `json:"platform_id,omitempty"`
 	IdentityHolderID        *string                         `json:"identity_holder_id,omitempty"`
 	AvatarFileID            *string                         `json:"avatar_file_id,omitempty"`
@@ -5779,14 +5890,14 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
 	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
+	}
 	if v := i.EnvironmentName; v != nil {
 		m.SetEnvironmentName(*v)
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
-	}
-	if v := i.DirectoryInstanceID; v != nil {
-		m.SetDirectoryInstanceID(*v)
 	}
 	if v := i.DirectoryName; v != nil {
 		m.SetDirectoryName(*v)
@@ -5858,9 +5969,6 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
 	}
-	if v := i.ProfileHash; v != nil {
-		m.SetProfileHash(*v)
-	}
 	if v := i.Profile; v != nil {
 		m.SetProfile(v)
 	}
@@ -5873,6 +5981,9 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.PrimarySource; v != nil {
 		m.SetPrimarySource(*v)
 	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -5884,9 +5995,6 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.IntegrationID; v != nil {
 		m.SetIntegrationID(*v)
-	}
-	if v := i.DirectorySyncRunID; v != nil {
-		m.SetDirectorySyncRunID(*v)
 	}
 	if v := i.PlatformID; v != nil {
 		m.SetPlatformID(*v)
@@ -5924,12 +6032,12 @@ type UpdateDirectoryAccountInput struct {
 	SourceInstanceID             *string `json:"source_instance_id,omitempty"`
 	ClearManagedBy               bool
 	ManagedBy                    *string `json:"managed_by,omitempty"`
+	ClearIntegrationRunID        bool
+	IntegrationRunID             *string `json:"integration_run_id,omitempty"`
 	ClearEnvironmentName         bool
 	EnvironmentName              *string `json:"environment_name,omitempty"`
 	ClearScopeName               bool
 	ScopeName                    *string `json:"scope_name,omitempty"`
-	ClearDirectoryInstanceID     bool
-	DirectoryInstanceID          *string `json:"directory_instance_id,omitempty"`
 	ClearDirectoryName           bool
 	DirectoryName                *string `json:"directory_name,omitempty"`
 	ClearSecondaryKey            bool
@@ -5973,7 +6081,6 @@ type UpdateDirectoryAccountInput struct {
 	AddedAt                      *time.Time `json:"added_at,omitempty"`
 	ClearRemovedAt               bool
 	RemovedAt                    *time.Time `json:"removed_at,omitempty"`
-	ProfileHash                  *string    `json:"profile_hash,omitempty"`
 	ClearProfile                 bool
 	Profile                      map[string]interface{} `json:"profile,omitempty"`
 	ClearMetadata                bool
@@ -5981,6 +6088,9 @@ type UpdateDirectoryAccountInput struct {
 	ClearSourceVersion           bool
 	SourceVersion                *string `json:"source_version,omitempty"`
 	PrimarySource                *bool   `json:"primary_source,omitempty"`
+	ClearIntegrationRuns         bool
+	AddIntegrationRunIDs         []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs      []string `json:"remove_integration_run_ids,omitempty"`
 	ClearEnvironment             bool
 	EnvironmentID                *string `json:"environment_id,omitempty"`
 	ClearScope                   bool
@@ -6034,6 +6144,12 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
 	}
+	if i.ClearIntegrationRunID {
+		m.ClearIntegrationRunID()
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
+	}
 	if i.ClearEnvironmentName {
 		m.ClearEnvironmentName()
 	}
@@ -6045,12 +6161,6 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
-	}
-	if i.ClearDirectoryInstanceID {
-		m.ClearDirectoryInstanceID()
-	}
-	if v := i.DirectoryInstanceID; v != nil {
-		m.SetDirectoryInstanceID(*v)
 	}
 	if i.ClearDirectoryName {
 		m.ClearDirectoryName()
@@ -6181,9 +6291,6 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.RemovedAt; v != nil {
 		m.SetRemovedAt(*v)
 	}
-	if v := i.ProfileHash; v != nil {
-		m.SetProfileHash(*v)
-	}
 	if i.ClearProfile {
 		m.ClearProfile()
 	}
@@ -6204,6 +6311,15 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.PrimarySource; v != nil {
 		m.SetPrimarySource(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()
@@ -6274,9 +6390,9 @@ type CreateDirectoryGroupInput struct {
 	SourceDefinitionVersion *string                             `json:"source_definition_version,omitempty"`
 	SourceInstanceID        *string                             `json:"source_instance_id,omitempty"`
 	ManagedBy               *string                             `json:"managed_by,omitempty"`
+	IntegrationRunID        *string                             `json:"integration_run_id,omitempty"`
 	EnvironmentName         *string                             `json:"environment_name,omitempty"`
 	ScopeName               *string                             `json:"scope_name,omitempty"`
-	DirectoryInstanceID     *string                             `json:"directory_instance_id,omitempty"`
 	ExternalID              string                              `json:"external_id,omitempty"`
 	Email                   *string                             `json:"email,omitempty"`
 	DisplayName             *string                             `json:"display_name,omitempty"`
@@ -6290,16 +6406,15 @@ type CreateDirectoryGroupInput struct {
 	AddedAt                 *time.Time                          `json:"added_at,omitempty"`
 	RemovedAt               *time.Time                          `json:"removed_at,omitempty"`
 	ObservedAt              *time.Time                          `json:"observed_at,omitempty"`
-	ProfileHash             *string                             `json:"profile_hash,omitempty"`
 	Profile                 map[string]interface{}              `json:"profile,omitempty"`
 	Metadata                map[string]interface{}              `json:"metadata,omitempty"`
 	SourceVersion           *string                             `json:"source_version,omitempty"`
 	DirectoryName           *string                             `json:"directory_name,omitempty"`
+	IntegrationRunIDs       []string                            `json:"integration_run_ids,omitempty"`
 	OwnerID                 *string                             `json:"owner_id,omitempty"`
 	EnvironmentID           *string                             `json:"environment_id,omitempty"`
 	ScopeID                 *string                             `json:"scope_id,omitempty"`
 	IntegrationID           string                              `json:"integration_id,omitempty"`
-	DirectorySyncRunID      string                              `json:"directory_sync_run_id,omitempty"`
 	PlatformID              *string                             `json:"platform_id,omitempty"`
 	WorkflowObjectRefIDs    []string                            `json:"workflow_object_ref_ids,omitempty"`
 }
@@ -6321,14 +6436,14 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
 	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
+	}
 	if v := i.EnvironmentName; v != nil {
 		m.SetEnvironmentName(*v)
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
-	}
-	if v := i.DirectoryInstanceID; v != nil {
-		m.SetDirectoryInstanceID(*v)
 	}
 	m.SetExternalID(i.ExternalID)
 	if v := i.Email; v != nil {
@@ -6367,9 +6482,6 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
 	}
-	if v := i.ProfileHash; v != nil {
-		m.SetProfileHash(*v)
-	}
 	if v := i.Profile; v != nil {
 		m.SetProfile(v)
 	}
@@ -6382,6 +6494,9 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.DirectoryName; v != nil {
 		m.SetDirectoryName(*v)
 	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -6392,7 +6507,6 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 		m.SetScopeID(*v)
 	}
 	m.SetIntegrationID(i.IntegrationID)
-	m.SetDirectorySyncRunID(i.DirectorySyncRunID)
 	if v := i.PlatformID; v != nil {
 		m.SetPlatformID(*v)
 	}
@@ -6420,12 +6534,12 @@ type UpdateDirectoryGroupInput struct {
 	SourceInstanceID             *string `json:"source_instance_id,omitempty"`
 	ClearManagedBy               bool
 	ManagedBy                    *string `json:"managed_by,omitempty"`
+	ClearIntegrationRunID        bool
+	IntegrationRunID             *string `json:"integration_run_id,omitempty"`
 	ClearEnvironmentName         bool
 	EnvironmentName              *string `json:"environment_name,omitempty"`
 	ClearScopeName               bool
 	ScopeName                    *string `json:"scope_name,omitempty"`
-	ClearDirectoryInstanceID     bool
-	DirectoryInstanceID          *string `json:"directory_instance_id,omitempty"`
 	ClearEmail                   bool
 	Email                        *string `json:"email,omitempty"`
 	ClearDisplayName             bool
@@ -6446,7 +6560,6 @@ type UpdateDirectoryGroupInput struct {
 	AddedAt                      *time.Time `json:"added_at,omitempty"`
 	ClearRemovedAt               bool
 	RemovedAt                    *time.Time `json:"removed_at,omitempty"`
-	ProfileHash                  *string    `json:"profile_hash,omitempty"`
 	ClearProfile                 bool
 	Profile                      map[string]interface{} `json:"profile,omitempty"`
 	ClearMetadata                bool
@@ -6455,6 +6568,9 @@ type UpdateDirectoryGroupInput struct {
 	SourceVersion                *string `json:"source_version,omitempty"`
 	ClearDirectoryName           bool
 	DirectoryName                *string `json:"directory_name,omitempty"`
+	ClearIntegrationRuns         bool
+	AddIntegrationRunIDs         []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs      []string `json:"remove_integration_run_ids,omitempty"`
 	ClearOwner                   bool
 	OwnerID                      *string `json:"owner_id,omitempty"`
 	ClearEnvironment             bool
@@ -6502,6 +6618,12 @@ func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
 	}
+	if i.ClearIntegrationRunID {
+		m.ClearIntegrationRunID()
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
+	}
 	if i.ClearEnvironmentName {
 		m.ClearEnvironmentName()
 	}
@@ -6513,12 +6635,6 @@ func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
-	}
-	if i.ClearDirectoryInstanceID {
-		m.ClearDirectoryInstanceID()
-	}
-	if v := i.DirectoryInstanceID; v != nil {
-		m.SetDirectoryInstanceID(*v)
 	}
 	if i.ClearEmail {
 		m.ClearEmail()
@@ -6580,9 +6696,6 @@ func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.RemovedAt; v != nil {
 		m.SetRemovedAt(*v)
 	}
-	if v := i.ProfileHash; v != nil {
-		m.SetProfileHash(*v)
-	}
 	if i.ClearProfile {
 		m.ClearProfile()
 	}
@@ -6606,6 +6719,15 @@ func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	}
 	if v := i.DirectoryName; v != nil {
 		m.SetDirectoryName(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -6657,9 +6779,9 @@ type CreateDirectoryMembershipInput struct {
 	SourceDefinitionVersion *string                        `json:"source_definition_version,omitempty"`
 	SourceInstanceID        *string                        `json:"source_instance_id,omitempty"`
 	ManagedBy               *string                        `json:"managed_by,omitempty"`
+	IntegrationRunID        *string                        `json:"integration_run_id,omitempty"`
 	EnvironmentName         *string                        `json:"environment_name,omitempty"`
 	ScopeName               *string                        `json:"scope_name,omitempty"`
-	DirectoryInstanceID     *string                        `json:"directory_instance_id,omitempty"`
 	Role                    *enums.DirectoryMembershipRole `json:"role,omitempty"`
 	Source                  *string                        `json:"source,omitempty"`
 	DirectoryName           *string                        `json:"directory_name,omitempty"`
@@ -6668,13 +6790,12 @@ type CreateDirectoryMembershipInput struct {
 	AddedAt                 *time.Time                     `json:"added_at,omitempty"`
 	RemovedAt               *time.Time                     `json:"removed_at,omitempty"`
 	ObservedAt              *time.Time                     `json:"observed_at,omitempty"`
-	LastConfirmedRunID      *string                        `json:"last_confirmed_run_id,omitempty"`
 	Metadata                map[string]interface{}         `json:"metadata,omitempty"`
+	IntegrationRunIDs       []string                       `json:"integration_run_ids,omitempty"`
 	OwnerID                 *string                        `json:"owner_id,omitempty"`
 	EnvironmentID           *string                        `json:"environment_id,omitempty"`
 	ScopeID                 *string                        `json:"scope_id,omitempty"`
 	IntegrationID           string                         `json:"integration_id,omitempty"`
-	DirectorySyncRunID      string                         `json:"directory_sync_run_id,omitempty"`
 	PlatformID              *string                        `json:"platform_id,omitempty"`
 	DirectoryAccountID      string                         `json:"directory_account_id,omitempty"`
 	DirectoryGroupID        string                         `json:"directory_group_id,omitempty"`
@@ -6696,14 +6817,14 @@ func (i *CreateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
 	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
+	}
 	if v := i.EnvironmentName; v != nil {
 		m.SetEnvironmentName(*v)
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
-	}
-	if v := i.DirectoryInstanceID; v != nil {
-		m.SetDirectoryInstanceID(*v)
 	}
 	if v := i.Role; v != nil {
 		m.SetRole(*v)
@@ -6729,11 +6850,11 @@ func (i *CreateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
 	}
-	if v := i.LastConfirmedRunID; v != nil {
-		m.SetLastConfirmedRunID(*v)
-	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -6745,7 +6866,6 @@ func (i *CreateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 		m.SetScopeID(*v)
 	}
 	m.SetIntegrationID(i.IntegrationID)
-	m.SetDirectorySyncRunID(i.DirectorySyncRunID)
 	if v := i.PlatformID; v != nil {
 		m.SetPlatformID(*v)
 	}
@@ -6775,12 +6895,12 @@ type UpdateDirectoryMembershipInput struct {
 	SourceInstanceID             *string `json:"source_instance_id,omitempty"`
 	ClearManagedBy               bool
 	ManagedBy                    *string `json:"managed_by,omitempty"`
+	ClearIntegrationRunID        bool
+	IntegrationRunID             *string `json:"integration_run_id,omitempty"`
 	ClearEnvironmentName         bool
 	EnvironmentName              *string `json:"environment_name,omitempty"`
 	ClearScopeName               bool
 	ScopeName                    *string `json:"scope_name,omitempty"`
-	ClearDirectoryInstanceID     bool
-	DirectoryInstanceID          *string `json:"directory_instance_id,omitempty"`
 	ClearRole                    bool
 	Role                         *enums.DirectoryMembershipRole `json:"role,omitempty"`
 	ClearSource                  bool
@@ -6795,10 +6915,11 @@ type UpdateDirectoryMembershipInput struct {
 	AddedAt                      *time.Time `json:"added_at,omitempty"`
 	ClearRemovedAt               bool
 	RemovedAt                    *time.Time `json:"removed_at,omitempty"`
-	ClearLastConfirmedRunID      bool
-	LastConfirmedRunID           *string `json:"last_confirmed_run_id,omitempty"`
 	ClearMetadata                bool
 	Metadata                     map[string]interface{} `json:"metadata,omitempty"`
+	ClearIntegrationRuns         bool
+	AddIntegrationRunIDs         []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs      []string `json:"remove_integration_run_ids,omitempty"`
 	ClearOwner                   bool
 	OwnerID                      *string `json:"owner_id,omitempty"`
 	ClearEnvironment             bool
@@ -6840,6 +6961,12 @@ func (i *UpdateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
 	}
+	if i.ClearIntegrationRunID {
+		m.ClearIntegrationRunID()
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
+	}
 	if i.ClearEnvironmentName {
 		m.ClearEnvironmentName()
 	}
@@ -6851,12 +6978,6 @@ func (i *UpdateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	}
 	if v := i.ScopeName; v != nil {
 		m.SetScopeName(*v)
-	}
-	if i.ClearDirectoryInstanceID {
-		m.ClearDirectoryInstanceID()
-	}
-	if v := i.DirectoryInstanceID; v != nil {
-		m.SetDirectoryInstanceID(*v)
 	}
 	if i.ClearRole {
 		m.ClearRole()
@@ -6900,17 +7021,20 @@ func (i *UpdateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	if v := i.RemovedAt; v != nil {
 		m.SetRemovedAt(*v)
 	}
-	if i.ClearLastConfirmedRunID {
-		m.ClearLastConfirmedRunID()
-	}
-	if v := i.LastConfirmedRunID; v != nil {
-		m.SetLastConfirmedRunID(*v)
-	}
 	if i.ClearMetadata {
 		m.ClearMetadata()
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -6961,242 +7085,6 @@ func (c *DirectoryMembershipUpdate) SetInput(i UpdateDirectoryMembershipInput) *
 
 // SetInput applies the change-set in the UpdateDirectoryMembershipInput on the DirectoryMembershipUpdateOne builder.
 func (c *DirectoryMembershipUpdateOne) SetInput(i UpdateDirectoryMembershipInput) *DirectoryMembershipUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateDirectorySyncRunInput represents a mutation input for creating directorysyncruns.
-type CreateDirectorySyncRunInput struct {
-	EnvironmentName     *string                       `json:"environment_name,omitempty"`
-	ScopeName           *string                       `json:"scope_name,omitempty"`
-	DirectoryInstanceID *string                       `json:"directory_instance_id,omitempty"`
-	Status              *enums.DirectorySyncRunStatus `json:"status,omitempty"`
-	StartedAt           *time.Time                    `json:"started_at,omitempty"`
-	CompletedAt         *time.Time                    `json:"completed_at,omitempty"`
-	SourceCursor        *string                       `json:"source_cursor,omitempty"`
-	FullCount           *int                          `json:"full_count,omitempty"`
-	DeltaCount          *int                          `json:"delta_count,omitempty"`
-	Error               *string                       `json:"error,omitempty"`
-	RawManifestFileID   *string                       `json:"raw_manifest_file_id,omitempty"`
-	Stats               map[string]interface{}        `json:"stats,omitempty"`
-	OwnerID             *string                       `json:"owner_id,omitempty"`
-	EnvironmentID       *string                       `json:"environment_id,omitempty"`
-	ScopeID             *string                       `json:"scope_id,omitempty"`
-	IntegrationID       string                        `json:"integration_id,omitempty"`
-	PlatformID          *string                       `json:"platform_id,omitempty"`
-	DirectoryAccountIDs []string                      `json:"directory_account_ids,omitempty"`
-	DirectoryGroupIDs   []string                      `json:"directory_group_ids,omitempty"`
-}
-
-// Mutate applies the CreateDirectorySyncRunInput on the DirectorySyncRunMutation builder.
-func (i *CreateDirectorySyncRunInput) Mutate(m *DirectorySyncRunMutation) {
-	if v := i.EnvironmentName; v != nil {
-		m.SetEnvironmentName(*v)
-	}
-	if v := i.ScopeName; v != nil {
-		m.SetScopeName(*v)
-	}
-	if v := i.DirectoryInstanceID; v != nil {
-		m.SetDirectoryInstanceID(*v)
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
-	}
-	if v := i.StartedAt; v != nil {
-		m.SetStartedAt(*v)
-	}
-	if v := i.CompletedAt; v != nil {
-		m.SetCompletedAt(*v)
-	}
-	if v := i.SourceCursor; v != nil {
-		m.SetSourceCursor(*v)
-	}
-	if v := i.FullCount; v != nil {
-		m.SetFullCount(*v)
-	}
-	if v := i.DeltaCount; v != nil {
-		m.SetDeltaCount(*v)
-	}
-	if v := i.Error; v != nil {
-		m.SetError(*v)
-	}
-	if v := i.RawManifestFileID; v != nil {
-		m.SetRawManifestFileID(*v)
-	}
-	if v := i.Stats; v != nil {
-		m.SetStats(v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if v := i.EnvironmentID; v != nil {
-		m.SetEnvironmentID(*v)
-	}
-	if v := i.ScopeID; v != nil {
-		m.SetScopeID(*v)
-	}
-	m.SetIntegrationID(i.IntegrationID)
-	if v := i.PlatformID; v != nil {
-		m.SetPlatformID(*v)
-	}
-	if v := i.DirectoryAccountIDs; len(v) > 0 {
-		m.AddDirectoryAccountIDs(v...)
-	}
-	if v := i.DirectoryGroupIDs; len(v) > 0 {
-		m.AddDirectoryGroupIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the CreateDirectorySyncRunInput on the DirectorySyncRunCreate builder.
-func (c *DirectorySyncRunCreate) SetInput(i CreateDirectorySyncRunInput) *DirectorySyncRunCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateDirectorySyncRunInput represents a mutation input for updating directorysyncruns.
-type UpdateDirectorySyncRunInput struct {
-	ClearEnvironmentName      bool
-	EnvironmentName           *string `json:"environment_name,omitempty"`
-	ClearScopeName            bool
-	ScopeName                 *string `json:"scope_name,omitempty"`
-	ClearDirectoryInstanceID  bool
-	DirectoryInstanceID       *string                       `json:"directory_instance_id,omitempty"`
-	Status                    *enums.DirectorySyncRunStatus `json:"status,omitempty"`
-	StartedAt                 *time.Time                    `json:"started_at,omitempty"`
-	ClearCompletedAt          bool
-	CompletedAt               *time.Time `json:"completed_at,omitempty"`
-	ClearSourceCursor         bool
-	SourceCursor              *string `json:"source_cursor,omitempty"`
-	FullCount                 *int    `json:"full_count,omitempty"`
-	DeltaCount                *int    `json:"delta_count,omitempty"`
-	ClearError                bool
-	Error                     *string `json:"error,omitempty"`
-	ClearRawManifestFileID    bool
-	RawManifestFileID         *string `json:"raw_manifest_file_id,omitempty"`
-	ClearStats                bool
-	Stats                     map[string]interface{} `json:"stats,omitempty"`
-	ClearOwner                bool
-	OwnerID                   *string `json:"owner_id,omitempty"`
-	ClearEnvironment          bool
-	EnvironmentID             *string `json:"environment_id,omitempty"`
-	ClearScope                bool
-	ScopeID                   *string `json:"scope_id,omitempty"`
-	ClearDirectoryAccounts    bool
-	AddDirectoryAccountIDs    []string `json:"add_directory_account_ids,omitempty"`
-	RemoveDirectoryAccountIDs []string `json:"remove_directory_account_ids,omitempty"`
-	ClearDirectoryGroups      bool
-	AddDirectoryGroupIDs      []string `json:"add_directory_group_ids,omitempty"`
-	RemoveDirectoryGroupIDs   []string `json:"remove_directory_group_ids,omitempty"`
-}
-
-// Mutate applies the UpdateDirectorySyncRunInput on the DirectorySyncRunMutation builder.
-func (i *UpdateDirectorySyncRunInput) Mutate(m *DirectorySyncRunMutation) {
-	if i.ClearEnvironmentName {
-		m.ClearEnvironmentName()
-	}
-	if v := i.EnvironmentName; v != nil {
-		m.SetEnvironmentName(*v)
-	}
-	if i.ClearScopeName {
-		m.ClearScopeName()
-	}
-	if v := i.ScopeName; v != nil {
-		m.SetScopeName(*v)
-	}
-	if i.ClearDirectoryInstanceID {
-		m.ClearDirectoryInstanceID()
-	}
-	if v := i.DirectoryInstanceID; v != nil {
-		m.SetDirectoryInstanceID(*v)
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
-	}
-	if v := i.StartedAt; v != nil {
-		m.SetStartedAt(*v)
-	}
-	if i.ClearCompletedAt {
-		m.ClearCompletedAt()
-	}
-	if v := i.CompletedAt; v != nil {
-		m.SetCompletedAt(*v)
-	}
-	if i.ClearSourceCursor {
-		m.ClearSourceCursor()
-	}
-	if v := i.SourceCursor; v != nil {
-		m.SetSourceCursor(*v)
-	}
-	if v := i.FullCount; v != nil {
-		m.SetFullCount(*v)
-	}
-	if v := i.DeltaCount; v != nil {
-		m.SetDeltaCount(*v)
-	}
-	if i.ClearError {
-		m.ClearError()
-	}
-	if v := i.Error; v != nil {
-		m.SetError(*v)
-	}
-	if i.ClearRawManifestFileID {
-		m.ClearRawManifestFileID()
-	}
-	if v := i.RawManifestFileID; v != nil {
-		m.SetRawManifestFileID(*v)
-	}
-	if i.ClearStats {
-		m.ClearStats()
-	}
-	if v := i.Stats; v != nil {
-		m.SetStats(v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if i.ClearEnvironment {
-		m.ClearEnvironment()
-	}
-	if v := i.EnvironmentID; v != nil {
-		m.SetEnvironmentID(*v)
-	}
-	if i.ClearScope {
-		m.ClearScope()
-	}
-	if v := i.ScopeID; v != nil {
-		m.SetScopeID(*v)
-	}
-	if i.ClearDirectoryAccounts {
-		m.ClearDirectoryAccounts()
-	}
-	if v := i.AddDirectoryAccountIDs; len(v) > 0 {
-		m.AddDirectoryAccountIDs(v...)
-	}
-	if v := i.RemoveDirectoryAccountIDs; len(v) > 0 {
-		m.RemoveDirectoryAccountIDs(v...)
-	}
-	if i.ClearDirectoryGroups {
-		m.ClearDirectoryGroups()
-	}
-	if v := i.AddDirectoryGroupIDs; len(v) > 0 {
-		m.AddDirectoryGroupIDs(v...)
-	}
-	if v := i.RemoveDirectoryGroupIDs; len(v) > 0 {
-		m.RemoveDirectoryGroupIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the UpdateDirectorySyncRunInput on the DirectorySyncRunUpdate builder.
-func (c *DirectorySyncRunUpdate) SetInput(i UpdateDirectorySyncRunInput) *DirectorySyncRunUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateDirectorySyncRunInput on the DirectorySyncRunUpdateOne builder.
-func (c *DirectorySyncRunUpdateOne) SetInput(i UpdateDirectorySyncRunInput) *DirectorySyncRunUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -7882,6 +7770,7 @@ type CreateEntityInput struct {
 	SourceDefinitionVersion               *string                `json:"source_definition_version,omitempty"`
 	SourceInstanceID                      *string                `json:"source_instance_id,omitempty"`
 	ManagedBy                             *string                `json:"managed_by,omitempty"`
+	IntegrationRunID                      *string                `json:"integration_run_id,omitempty"`
 	InternalOwner                         *string                `json:"internal_owner,omitempty"`
 	ReviewedBy                            *string                `json:"reviewed_by,omitempty"`
 	LastReviewedAt                        *models.DateTime       `json:"last_reviewed_at,omitempty"`
@@ -7926,6 +7815,7 @@ type CreateEntityInput struct {
 	LogoRemoteURL                         *string                `json:"logo_remote_url,omitempty"`
 	ExternalID                            *string                `json:"external_id,omitempty"`
 	ObservedAt                            *models.DateTime       `json:"observed_at,omitempty"`
+	IntegrationRunIDs                     []string               `json:"integration_run_ids,omitempty"`
 	OwnerID                               *string                `json:"owner_id,omitempty"`
 	BlockedGroupIDs                       []string               `json:"blocked_group_ids,omitempty"`
 	EditorIDs                             []string               `json:"editor_ids,omitempty"`
@@ -7985,6 +7875,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if v := i.InternalOwner; v != nil {
 		m.SetInternalOwner(*v)
@@ -8117,6 +8010,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -8262,6 +8158,8 @@ type UpdateEntityInput struct {
 	SourceInstanceID                           *string `json:"source_instance_id,omitempty"`
 	ClearManagedBy                             bool
 	ManagedBy                                  *string `json:"managed_by,omitempty"`
+	ClearIntegrationRunID                      bool
+	IntegrationRunID                           *string `json:"integration_run_id,omitempty"`
 	ClearInternalOwner                         bool
 	InternalOwner                              *string `json:"internal_owner,omitempty"`
 	ClearReviewedBy                            bool
@@ -8355,6 +8253,9 @@ type UpdateEntityInput struct {
 	ExternalID                                 *string `json:"external_id,omitempty"`
 	ClearObservedAt                            bool
 	ObservedAt                                 *models.DateTime `json:"observed_at,omitempty"`
+	ClearIntegrationRuns                       bool
+	AddIntegrationRunIDs                       []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs                    []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups                         bool
 	AddBlockedGroupIDs                         []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs                      []string `json:"remove_blocked_group_ids,omitempty"`
@@ -8498,6 +8399,12 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if i.ClearIntegrationRunID {
+		m.ClearIntegrationRunID()
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if i.ClearInternalOwner {
 		m.ClearInternalOwner()
@@ -8777,6 +8684,15 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.ObservedAt; v != nil {
 		m.SetObservedAt(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -10688,6 +10604,7 @@ type CreateFindingInput struct {
 	SourceDefinitionVersion    *string                `json:"source_definition_version,omitempty"`
 	SourceInstanceID           *string                `json:"source_instance_id,omitempty"`
 	ManagedBy                  *string                `json:"managed_by,omitempty"`
+	IntegrationRunID           *string                `json:"integration_run_id,omitempty"`
 	ReviewedBy                 *string                `json:"reviewed_by,omitempty"`
 	AssignedTo                 *string                `json:"assigned_to,omitempty"`
 	InternalNotes              *string                `json:"internal_notes,omitempty"`
@@ -10732,6 +10649,7 @@ type CreateFindingInput struct {
 	ExternalURI                *string                `json:"external_uri,omitempty"`
 	Metadata                   map[string]interface{} `json:"metadata,omitempty"`
 	RawPayload                 map[string]interface{} `json:"raw_payload,omitempty"`
+	IntegrationRunIDs          []string               `json:"integration_run_ids,omitempty"`
 	OwnerID                    *string                `json:"owner_id,omitempty"`
 	BlockedGroupIDs            []string               `json:"blocked_group_ids,omitempty"`
 	EditorIDs                  []string               `json:"editor_ids,omitempty"`
@@ -10780,6 +10698,9 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if v := i.ReviewedBy; v != nil {
 		m.SetReviewedBy(*v)
@@ -10913,6 +10834,9 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.RawPayload; v != nil {
 		m.SetRawPayload(v)
 	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -11024,6 +10948,8 @@ type UpdateFindingInput struct {
 	SourceInstanceID              *string `json:"source_instance_id,omitempty"`
 	ClearManagedBy                bool
 	ManagedBy                     *string `json:"managed_by,omitempty"`
+	ClearIntegrationRunID         bool
+	IntegrationRunID              *string `json:"integration_run_id,omitempty"`
 	ClearReviewedBy               bool
 	ReviewedBy                    *string `json:"reviewed_by,omitempty"`
 	ClearAssignedTo               bool
@@ -11116,6 +11042,9 @@ type UpdateFindingInput struct {
 	Metadata                      map[string]interface{} `json:"metadata,omitempty"`
 	ClearRawPayload               bool
 	RawPayload                    map[string]interface{} `json:"raw_payload,omitempty"`
+	ClearIntegrationRuns          bool
+	AddIntegrationRunIDs          []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs       []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups            bool
 	AddBlockedGroupIDs            []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs         []string `json:"remove_blocked_group_ids,omitempty"`
@@ -11230,6 +11159,12 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if i.ClearIntegrationRunID {
+		m.ClearIntegrationRunID()
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if i.ClearReviewedBy {
 		m.ClearReviewedBy()
@@ -11506,6 +11441,15 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.RawPayload; v != nil {
 		m.SetRawPayload(v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -13919,6 +13863,7 @@ type CreateInternalPolicyInput struct {
 	SourceDefinitionVersion         *string                       `json:"source_definition_version,omitempty"`
 	SourceInstanceID                *string                       `json:"source_instance_id,omitempty"`
 	ManagedBy                       *string                       `json:"managed_by,omitempty"`
+	IntegrationRunID                *string                       `json:"integration_run_id,omitempty"`
 	InternalNotes                   *string                       `json:"internal_notes,omitempty"`
 	SystemInternalID                *string                       `json:"system_internal_id,omitempty"`
 	Name                            string                        `json:"name,omitempty"`
@@ -13943,6 +13888,7 @@ type CreateInternalPolicyInput struct {
 	ScopeName                       *string                       `json:"scope_name,omitempty"`
 	WorkflowEligibleMarker          *bool                         `json:"workflow_eligible_marker,omitempty"`
 	ExternalUUID                    *string                       `json:"external_uuid,omitempty"`
+	IntegrationRunIDs               []string                      `json:"integration_run_ids,omitempty"`
 	OwnerID                         *string                       `json:"owner_id,omitempty"`
 	BlockedGroupIDs                 []string                      `json:"blocked_group_ids,omitempty"`
 	EditorIDs                       []string                      `json:"editor_ids,omitempty"`
@@ -13990,6 +13936,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
@@ -14060,6 +14009,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.ExternalUUID; v != nil {
 		m.SetExternalUUID(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -14162,6 +14114,8 @@ type UpdateInternalPolicyInput struct {
 	SourceInstanceID                      *string `json:"source_instance_id,omitempty"`
 	ClearManagedBy                        bool
 	ManagedBy                             *string `json:"managed_by,omitempty"`
+	ClearIntegrationRunID                 bool
+	IntegrationRunID                      *string `json:"integration_run_id,omitempty"`
 	ClearInternalNotes                    bool
 	InternalNotes                         *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID                 bool
@@ -14216,6 +14170,9 @@ type UpdateInternalPolicyInput struct {
 	WorkflowEligibleMarker                *bool `json:"workflow_eligible_marker,omitempty"`
 	ClearExternalUUID                     bool
 	ExternalUUID                          *string `json:"external_uuid,omitempty"`
+	ClearIntegrationRuns                  bool
+	AddIntegrationRunIDs                  []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs               []string `json:"remove_integration_run_ids,omitempty"`
 	ClearOwner                            bool
 	OwnerID                               *string `json:"owner_id,omitempty"`
 	ClearBlockedGroups                    bool
@@ -14329,6 +14286,12 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if i.ClearIntegrationRunID {
+		m.ClearIntegrationRunID()
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
@@ -14491,6 +14454,15 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.ExternalUUID; v != nil {
 		m.SetExternalUUID(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -16486,7 +16458,6 @@ type CreateOrganizationInput struct {
 	DirectoryAccountCreatorIDs           []string   `json:"directory_account_creator_ids,omitempty"`
 	DirectoryGroupCreatorIDs             []string   `json:"directory_group_creator_ids,omitempty"`
 	DirectoryMembershipCreatorIDs        []string   `json:"directory_membership_creator_ids,omitempty"`
-	DirectorySyncRunCreatorIDs           []string   `json:"directory_sync_run_creator_ids,omitempty"`
 	DiscussionCreatorIDs                 []string   `json:"discussion_creator_ids,omitempty"`
 	DocumentDataCreatorIDs               []string   `json:"document_data_creator_ids,omitempty"`
 	EmailTemplateCreatorIDs              []string   `json:"email_template_creator_ids,omitempty"`
@@ -16612,7 +16583,6 @@ type CreateOrganizationInput struct {
 	WorkflowObjectRefIDs                 []string   `json:"workflow_object_ref_ids,omitempty"`
 	DirectoryAccountIDs                  []string   `json:"directory_account_ids,omitempty"`
 	DirectoryGroupIDs                    []string   `json:"directory_group_ids,omitempty"`
-	DirectorySyncRunIDs                  []string   `json:"directory_sync_run_ids,omitempty"`
 	DiscussionIDs                        []string   `json:"discussion_ids,omitempty"`
 	VendorScoringConfigIDs               []string   `json:"vendor_scoring_config_ids,omitempty"`
 	VendorRiskScoreIDs                   []string   `json:"vendor_risk_score_ids,omitempty"`
@@ -16686,9 +16656,6 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.DirectoryMembershipCreatorIDs; len(v) > 0 {
 		m.AddDirectoryMembershipCreatorIDs(v...)
-	}
-	if v := i.DirectorySyncRunCreatorIDs; len(v) > 0 {
-		m.AddDirectorySyncRunCreatorIDs(v...)
 	}
 	if v := i.DiscussionCreatorIDs; len(v) > 0 {
 		m.AddDiscussionCreatorIDs(v...)
@@ -17065,9 +17032,6 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.DirectoryGroupIDs; len(v) > 0 {
 		m.AddDirectoryGroupIDs(v...)
 	}
-	if v := i.DirectorySyncRunIDs; len(v) > 0 {
-		m.AddDirectorySyncRunIDs(v...)
-	}
 	if v := i.DiscussionIDs; len(v) > 0 {
 		m.AddDiscussionIDs(v...)
 	}
@@ -17145,9 +17109,6 @@ type UpdateOrganizationInput struct {
 	ClearDirectoryMembershipCreators           bool
 	AddDirectoryMembershipCreatorIDs           []string `json:"add_directory_membership_creator_ids,omitempty"`
 	RemoveDirectoryMembershipCreatorIDs        []string `json:"remove_directory_membership_creator_ids,omitempty"`
-	ClearDirectorySyncRunCreators              bool
-	AddDirectorySyncRunCreatorIDs              []string `json:"add_directory_sync_run_creator_ids,omitempty"`
-	RemoveDirectorySyncRunCreatorIDs           []string `json:"remove_directory_sync_run_creator_ids,omitempty"`
 	ClearDiscussionCreators                    bool
 	AddDiscussionCreatorIDs                    []string `json:"add_discussion_creator_ids,omitempty"`
 	RemoveDiscussionCreatorIDs                 []string `json:"remove_discussion_creator_ids,omitempty"`
@@ -17518,9 +17479,6 @@ type UpdateOrganizationInput struct {
 	ClearDirectoryGroups                       bool
 	AddDirectoryGroupIDs                       []string `json:"add_directory_group_ids,omitempty"`
 	RemoveDirectoryGroupIDs                    []string `json:"remove_directory_group_ids,omitempty"`
-	ClearDirectorySyncRuns                     bool
-	AddDirectorySyncRunIDs                     []string `json:"add_directory_sync_run_ids,omitempty"`
-	RemoveDirectorySyncRunIDs                  []string `json:"remove_directory_sync_run_ids,omitempty"`
 	ClearDiscussions                           bool
 	AddDiscussionIDs                           []string `json:"add_discussion_ids,omitempty"`
 	RemoveDiscussionIDs                        []string `json:"remove_discussion_ids,omitempty"`
@@ -17707,15 +17665,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveDirectoryMembershipCreatorIDs; len(v) > 0 {
 		m.RemoveDirectoryMembershipCreatorIDs(v...)
-	}
-	if i.ClearDirectorySyncRunCreators {
-		m.ClearDirectorySyncRunCreators()
-	}
-	if v := i.AddDirectorySyncRunCreatorIDs; len(v) > 0 {
-		m.AddDirectorySyncRunCreatorIDs(v...)
-	}
-	if v := i.RemoveDirectorySyncRunCreatorIDs; len(v) > 0 {
-		m.RemoveDirectorySyncRunCreatorIDs(v...)
 	}
 	if i.ClearDiscussionCreators {
 		m.ClearDiscussionCreators()
@@ -18827,15 +18776,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveDirectoryGroupIDs; len(v) > 0 {
 		m.RemoveDirectoryGroupIDs(v...)
 	}
-	if i.ClearDirectorySyncRuns {
-		m.ClearDirectorySyncRuns()
-	}
-	if v := i.AddDirectorySyncRunIDs; len(v) > 0 {
-		m.AddDirectorySyncRunIDs(v...)
-	}
-	if v := i.RemoveDirectorySyncRunIDs; len(v) > 0 {
-		m.RemoveDirectorySyncRunIDs(v...)
-	}
 	if i.ClearDiscussions {
 		m.ClearDiscussions()
 	}
@@ -19503,7 +19443,6 @@ type CreatePlatformInput struct {
 	TaskIDs                        []string               `json:"task_ids,omitempty"`
 	IdentityHolderIDs              []string               `json:"identity_holder_ids,omitempty"`
 	IntegrationIDs                 []string               `json:"integration_ids,omitempty"`
-	DirectorySyncRunIDs            []string               `json:"directory_sync_run_ids,omitempty"`
 	DirectoryAccountIDs            []string               `json:"directory_account_ids,omitempty"`
 	DirectoryGroupIDs              []string               `json:"directory_group_ids,omitempty"`
 	WorkflowObjectRefIDs           []string               `json:"workflow_object_ref_ids,omitempty"`
@@ -19727,9 +19666,6 @@ func (i *CreatePlatformInput) Mutate(m *PlatformMutation) {
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
 	}
-	if v := i.DirectorySyncRunIDs; len(v) > 0 {
-		m.AddDirectorySyncRunIDs(v...)
-	}
 	if v := i.DirectoryAccountIDs; len(v) > 0 {
 		m.AddDirectoryAccountIDs(v...)
 	}
@@ -19926,9 +19862,6 @@ type UpdatePlatformInput struct {
 	ClearIntegrations                   bool
 	AddIntegrationIDs                   []string `json:"add_integration_ids,omitempty"`
 	RemoveIntegrationIDs                []string `json:"remove_integration_ids,omitempty"`
-	ClearDirectorySyncRuns              bool
-	AddDirectorySyncRunIDs              []string `json:"add_directory_sync_run_ids,omitempty"`
-	RemoveDirectorySyncRunIDs           []string `json:"remove_directory_sync_run_ids,omitempty"`
 	ClearDirectoryAccounts              bool
 	AddDirectoryAccountIDs              []string `json:"add_directory_account_ids,omitempty"`
 	RemoveDirectoryAccountIDs           []string `json:"remove_directory_account_ids,omitempty"`
@@ -20424,15 +20357,6 @@ func (i *UpdatePlatformInput) Mutate(m *PlatformMutation) {
 	if v := i.RemoveIntegrationIDs; len(v) > 0 {
 		m.RemoveIntegrationIDs(v...)
 	}
-	if i.ClearDirectorySyncRuns {
-		m.ClearDirectorySyncRuns()
-	}
-	if v := i.AddDirectorySyncRunIDs; len(v) > 0 {
-		m.AddDirectorySyncRunIDs(v...)
-	}
-	if v := i.RemoveDirectorySyncRunIDs; len(v) > 0 {
-		m.RemoveDirectorySyncRunIDs(v...)
-	}
 	if i.ClearDirectoryAccounts {
 		m.ClearDirectoryAccounts()
 	}
@@ -20551,6 +20475,7 @@ type CreateProcedureInput struct {
 	SourceDefinitionVersion         *string                       `json:"source_definition_version,omitempty"`
 	SourceInstanceID                *string                       `json:"source_instance_id,omitempty"`
 	ManagedBy                       *string                       `json:"managed_by,omitempty"`
+	IntegrationRunID                *string                       `json:"integration_run_id,omitempty"`
 	Name                            string                        `json:"name,omitempty"`
 	Status                          *enums.DocumentStatus         `json:"status,omitempty"`
 	ManagementMode                  *enums.DocumentManagementMode `json:"management_mode,omitempty"`
@@ -20574,6 +20499,7 @@ type CreateProcedureInput struct {
 	EnvironmentName                 *string                       `json:"environment_name,omitempty"`
 	ScopeName                       *string                       `json:"scope_name,omitempty"`
 	WorkflowEligibleMarker          *bool                         `json:"workflow_eligible_marker,omitempty"`
+	IntegrationRunIDs               []string                      `json:"integration_run_ids,omitempty"`
 	OwnerID                         *string                       `json:"owner_id,omitempty"`
 	BlockedGroupIDs                 []string                      `json:"blocked_group_ids,omitempty"`
 	EditorIDs                       []string                      `json:"editor_ids,omitempty"`
@@ -20614,6 +20540,9 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
@@ -20681,6 +20610,9 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -20762,6 +20694,8 @@ type UpdateProcedureInput struct {
 	SourceInstanceID                      *string `json:"source_instance_id,omitempty"`
 	ClearManagedBy                        bool
 	ManagedBy                             *string `json:"managed_by,omitempty"`
+	ClearIntegrationRunID                 bool
+	IntegrationRunID                      *string `json:"integration_run_id,omitempty"`
 	Name                                  *string `json:"name,omitempty"`
 	ClearStatus                           bool
 	Status                                *enums.DocumentStatus `json:"status,omitempty"`
@@ -20814,6 +20748,9 @@ type UpdateProcedureInput struct {
 	ScopeName                             *string `json:"scope_name,omitempty"`
 	ClearWorkflowEligibleMarker           bool
 	WorkflowEligibleMarker                *bool `json:"workflow_eligible_marker,omitempty"`
+	ClearIntegrationRuns                  bool
+	AddIntegrationRunIDs                  []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs               []string `json:"remove_integration_run_ids,omitempty"`
 	ClearOwner                            bool
 	OwnerID                               *string `json:"owner_id,omitempty"`
 	ClearBlockedGroups                    bool
@@ -20906,6 +20843,12 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if i.ClearIntegrationRunID {
+		m.ClearIntegrationRunID()
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -21062,6 +21005,15 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.WorkflowEligibleMarker; v != nil {
 		m.SetWorkflowEligibleMarker(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -23166,6 +23118,7 @@ type CreateRiskInput struct {
 	SourceDefinitionVersion *string               `json:"source_definition_version,omitempty"`
 	SourceInstanceID        *string               `json:"source_instance_id,omitempty"`
 	ManagedBy               *string               `json:"managed_by,omitempty"`
+	IntegrationRunID        *string               `json:"integration_run_id,omitempty"`
 	RiskKindName            *string               `json:"risk_kind_name,omitempty"`
 	RiskCategoryName        *string               `json:"risk_category_name,omitempty"`
 	EnvironmentName         *string               `json:"environment_name,omitempty"`
@@ -23194,6 +23147,7 @@ type CreateRiskInput struct {
 	NextReviewDueAt         *models.DateTime      `json:"next_review_due_at,omitempty"`
 	ResidualScore           *int                  `json:"residual_score,omitempty"`
 	RiskDecision            *enums.RiskDecision   `json:"risk_decision,omitempty"`
+	IntegrationRunIDs       []string              `json:"integration_run_ids,omitempty"`
 	OwnerID                 *string               `json:"owner_id,omitempty"`
 	BlockedGroupIDs         []string              `json:"blocked_group_ids,omitempty"`
 	EditorIDs               []string              `json:"editor_ids,omitempty"`
@@ -23240,6 +23194,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if v := i.RiskKindName; v != nil {
 		m.SetRiskKindName(*v)
@@ -23322,6 +23279,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.RiskDecision; v != nil {
 		m.SetRiskDecision(*v)
+	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -23428,6 +23388,8 @@ type UpdateRiskInput struct {
 	SourceInstanceID             *string `json:"source_instance_id,omitempty"`
 	ClearManagedBy               bool
 	ManagedBy                    *string `json:"managed_by,omitempty"`
+	ClearIntegrationRunID        bool
+	IntegrationRunID             *string `json:"integration_run_id,omitempty"`
 	ClearRiskKindName            bool
 	RiskKindName                 *string `json:"risk_kind_name,omitempty"`
 	ClearRiskCategoryName        bool
@@ -23486,6 +23448,9 @@ type UpdateRiskInput struct {
 	ResidualScore                *int `json:"residual_score,omitempty"`
 	ClearRiskDecision            bool
 	RiskDecision                 *enums.RiskDecision `json:"risk_decision,omitempty"`
+	ClearIntegrationRuns         bool
+	AddIntegrationRunIDs         []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs      []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups           bool
 	AddBlockedGroupIDs           []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs        []string `json:"remove_blocked_group_ids,omitempty"`
@@ -23597,6 +23562,12 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if i.ClearIntegrationRunID {
+		m.ClearIntegrationRunID()
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if i.ClearRiskKindName {
 		m.ClearRiskKindName()
@@ -23771,6 +23742,15 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.RiskDecision; v != nil {
 		m.SetRiskDecision(*v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -30230,6 +30210,7 @@ type CreateVulnerabilityInput struct {
 	SourceDefinitionVersion    *string                `json:"source_definition_version,omitempty"`
 	SourceInstanceID           *string                `json:"source_instance_id,omitempty"`
 	ManagedBy                  *string                `json:"managed_by,omitempty"`
+	IntegrationRunID           *string                `json:"integration_run_id,omitempty"`
 	ReviewedBy                 *string                `json:"reviewed_by,omitempty"`
 	AssignedTo                 *string                `json:"assigned_to,omitempty"`
 	InternalNotes              *string                `json:"internal_notes,omitempty"`
@@ -30279,6 +30260,7 @@ type CreateVulnerabilityInput struct {
 	ExternalURI                *string                `json:"external_uri,omitempty"`
 	Metadata                   map[string]interface{} `json:"metadata,omitempty"`
 	RawPayload                 map[string]interface{} `json:"raw_payload,omitempty"`
+	IntegrationRunIDs          []string               `json:"integration_run_ids,omitempty"`
 	OwnerID                    *string                `json:"owner_id,omitempty"`
 	BlockedGroupIDs            []string               `json:"blocked_group_ids,omitempty"`
 	EditorIDs                  []string               `json:"editor_ids,omitempty"`
@@ -30326,6 +30308,9 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if v := i.ReviewedBy; v != nil {
 		m.SetReviewedBy(*v)
@@ -30472,6 +30457,9 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.RawPayload; v != nil {
 		m.SetRawPayload(v)
 	}
+	if v := i.IntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -30580,6 +30568,8 @@ type UpdateVulnerabilityInput struct {
 	SourceInstanceID              *string `json:"source_instance_id,omitempty"`
 	ClearManagedBy                bool
 	ManagedBy                     *string `json:"managed_by,omitempty"`
+	ClearIntegrationRunID         bool
+	IntegrationRunID              *string `json:"integration_run_id,omitempty"`
 	ClearReviewedBy               bool
 	ReviewedBy                    *string `json:"reviewed_by,omitempty"`
 	ClearAssignedTo               bool
@@ -30680,6 +30670,9 @@ type UpdateVulnerabilityInput struct {
 	Metadata                      map[string]interface{} `json:"metadata,omitempty"`
 	ClearRawPayload               bool
 	RawPayload                    map[string]interface{} `json:"raw_payload,omitempty"`
+	ClearIntegrationRuns          bool
+	AddIntegrationRunIDs          []string `json:"add_integration_run_ids,omitempty"`
+	RemoveIntegrationRunIDs       []string `json:"remove_integration_run_ids,omitempty"`
 	ClearBlockedGroups            bool
 	AddBlockedGroupIDs            []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs         []string `json:"remove_blocked_group_ids,omitempty"`
@@ -30791,6 +30784,12 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.ManagedBy; v != nil {
 		m.SetManagedBy(*v)
+	}
+	if i.ClearIntegrationRunID {
+		m.ClearIntegrationRunID()
+	}
+	if v := i.IntegrationRunID; v != nil {
+		m.SetIntegrationRunID(*v)
 	}
 	if i.ClearReviewedBy {
 		m.ClearReviewedBy()
@@ -31091,6 +31090,15 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.RawPayload; v != nil {
 		m.SetRawPayload(v)
+	}
+	if i.ClearIntegrationRuns {
+		m.ClearIntegrationRuns()
+	}
+	if v := i.AddIntegrationRunIDs; len(v) > 0 {
+		m.AddIntegrationRunIDs(v...)
+	}
+	if v := i.RemoveIntegrationRunIDs; len(v) > 0 {
+		m.RemoveIntegrationRunIDs(v...)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()

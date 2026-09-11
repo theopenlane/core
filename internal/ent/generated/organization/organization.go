@@ -83,8 +83,6 @@ const (
 	EdgeDirectoryGroupCreators = "directory_group_creators"
 	// EdgeDirectoryMembershipCreators holds the string denoting the directory_membership_creators edge name in mutations.
 	EdgeDirectoryMembershipCreators = "directory_membership_creators"
-	// EdgeDirectorySyncRunCreators holds the string denoting the directory_sync_run_creators edge name in mutations.
-	EdgeDirectorySyncRunCreators = "directory_sync_run_creators"
 	// EdgeDiscussionCreators holds the string denoting the discussion_creators edge name in mutations.
 	EdgeDiscussionCreators = "discussion_creators"
 	// EdgeDocumentDataCreators holds the string denoting the document_data_creators edge name in mutations.
@@ -357,8 +355,6 @@ const (
 	EdgeDirectoryGroups = "directory_groups"
 	// EdgeDirectoryMemberships holds the string denoting the directory_memberships edge name in mutations.
 	EdgeDirectoryMemberships = "directory_memberships"
-	// EdgeDirectorySyncRuns holds the string denoting the directory_sync_runs edge name in mutations.
-	EdgeDirectorySyncRuns = "directory_sync_runs"
 	// EdgeDiscussions holds the string denoting the discussions edge name in mutations.
 	EdgeDiscussions = "discussions"
 	// EdgeVendorScoringConfigs holds the string denoting the vendor_scoring_configs edge name in mutations.
@@ -481,13 +477,6 @@ const (
 	DirectoryMembershipCreatorsInverseTable = "groups"
 	// DirectoryMembershipCreatorsColumn is the table column denoting the directory_membership_creators relation/edge.
 	DirectoryMembershipCreatorsColumn = "organization_directory_membership_creators"
-	// DirectorySyncRunCreatorsTable is the table that holds the directory_sync_run_creators relation/edge.
-	DirectorySyncRunCreatorsTable = "groups"
-	// DirectorySyncRunCreatorsInverseTable is the table name for the Group entity.
-	// It exists in this package in order to avoid circular dependency with the "group" package.
-	DirectorySyncRunCreatorsInverseTable = "groups"
-	// DirectorySyncRunCreatorsColumn is the table column denoting the directory_sync_run_creators relation/edge.
-	DirectorySyncRunCreatorsColumn = "organization_directory_sync_run_creators"
 	// DiscussionCreatorsTable is the table that holds the discussion_creators relation/edge.
 	DiscussionCreatorsTable = "groups"
 	// DiscussionCreatorsInverseTable is the table name for the Group entity.
@@ -1426,13 +1415,6 @@ const (
 	DirectoryMembershipsInverseTable = "directory_memberships"
 	// DirectoryMembershipsColumn is the table column denoting the directory_memberships relation/edge.
 	DirectoryMembershipsColumn = "owner_id"
-	// DirectorySyncRunsTable is the table that holds the directory_sync_runs relation/edge.
-	DirectorySyncRunsTable = "directory_sync_runs"
-	// DirectorySyncRunsInverseTable is the table name for the DirectorySyncRun entity.
-	// It exists in this package in order to avoid circular dependency with the "directorysyncrun" package.
-	DirectorySyncRunsInverseTable = "directory_sync_runs"
-	// DirectorySyncRunsColumn is the table column denoting the directory_sync_runs relation/edge.
-	DirectorySyncRunsColumn = "owner_id"
 	// DiscussionsTable is the table that holds the discussions relation/edge.
 	DiscussionsTable = "discussions"
 	// DiscussionsInverseTable is the table name for the Discussion entity.
@@ -1517,7 +1499,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [83]ent.Hook
+	Hooks        [82]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -1860,20 +1842,6 @@ func ByDirectoryMembershipCreatorsCount(opts ...sql.OrderTermOption) OrderOption
 func ByDirectoryMembershipCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newDirectoryMembershipCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByDirectorySyncRunCreatorsCount orders the results by directory_sync_run_creators count.
-func ByDirectorySyncRunCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newDirectorySyncRunCreatorsStep(), opts...)
-	}
-}
-
-// ByDirectorySyncRunCreators orders the results by directory_sync_run_creators terms.
-func ByDirectorySyncRunCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDirectorySyncRunCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -3760,20 +3728,6 @@ func ByDirectoryMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpt
 	}
 }
 
-// ByDirectorySyncRunsCount orders the results by directory_sync_runs count.
-func ByDirectorySyncRunsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newDirectorySyncRunsStep(), opts...)
-	}
-}
-
-// ByDirectorySyncRuns orders the results by directory_sync_runs terms.
-func ByDirectorySyncRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDirectorySyncRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByDiscussionsCount orders the results by discussions count.
 func ByDiscussionsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -3939,13 +3893,6 @@ func newDirectoryMembershipCreatorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DirectoryMembershipCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryMembershipCreatorsTable, DirectoryMembershipCreatorsColumn),
-	)
-}
-func newDirectorySyncRunCreatorsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DirectorySyncRunCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunCreatorsTable, DirectorySyncRunCreatorsColumn),
 	)
 }
 func newDiscussionCreatorsStep() *sqlgraph.Step {
@@ -4898,13 +4845,6 @@ func newDirectoryMembershipsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DirectoryMembershipsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryMembershipsTable, DirectoryMembershipsColumn),
-	)
-}
-func newDirectorySyncRunsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DirectorySyncRunsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
 	)
 }
 func newDiscussionsStep() *sqlgraph.Step {

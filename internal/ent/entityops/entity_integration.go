@@ -196,8 +196,6 @@ var AssetFields = struct {
 	SecurityTierName FieldDescriptor
 	// SourceIdentifier is the source_identifier field
 	SourceIdentifier FieldDescriptor
-	// SourcePlatformID is the source_platform_id field
-	SourcePlatformID FieldDescriptor
 	// SourceType is the source_type field
 	SourceType FieldDescriptor
 	// SystemInternalID is the system_internal_id field
@@ -242,7 +240,6 @@ var AssetFields = struct {
 	SecurityTierID:                FieldDescriptor{Name: "security_tier_id", InputKey: "security_tier_id"},
 	SecurityTierName:              FieldDescriptor{Name: "security_tier_name", InputKey: "security_tier_name"},
 	SourceIdentifier:              FieldDescriptor{Name: "source_identifier", InputKey: "source_identifier"},
-	SourcePlatformID:              FieldDescriptor{Name: "source_platform_id", InputKey: "source_platform_id"},
 	SourceType:                    FieldDescriptor{Name: "source_type", InputKey: "source_type"},
 	SystemInternalID:              FieldDescriptor{Name: "system_internal_id", InputKey: "system_internal_id"},
 	Tags:                          FieldDescriptor{Name: "tags", InputKey: "tags"},
@@ -330,12 +327,8 @@ var DirectoryAccountFields = struct {
 	CanonicalEmail FieldDescriptor
 	// Department is the department field
 	Department FieldDescriptor
-	// DirectoryInstanceID is the directory_instance_id field
-	DirectoryInstanceID FieldDescriptor
 	// DirectoryName is the directory_name field
 	DirectoryName FieldDescriptor
-	// DirectorySyncRunID is the directory_sync_run_id field
-	DirectorySyncRunID FieldDescriptor
 	// DisplayName is the display_name field
 	DisplayName FieldDescriptor
 	// EmailAliases is the email_aliases field
@@ -376,8 +369,6 @@ var DirectoryAccountFields = struct {
 	PrimarySource FieldDescriptor
 	// Profile is the profile field
 	Profile FieldDescriptor
-	// ProfileHash is the profile_hash field
-	ProfileHash FieldDescriptor
 	// RemovedAt is the removed_at field
 	RemovedAt FieldDescriptor
 	// ScopeID is the scope_id field
@@ -393,43 +384,40 @@ var DirectoryAccountFields = struct {
 	// Tags is the tags field
 	Tags FieldDescriptor
 }{
-	AccountType:         FieldDescriptor{Name: "account_type", InputKey: "account_type"},
-	AddedAt:             FieldDescriptor{Name: "added_at", InputKey: "added_at"},
-	AvatarRemoteURL:     FieldDescriptor{Name: "avatar_remote_url", InputKey: "avatar_remote_url"},
-	AvatarUpdatedAt:     FieldDescriptor{Name: "avatar_updated_at", InputKey: "avatar_updated_at"},
-	CanonicalEmail:      FieldDescriptor{Name: "canonical_email", InputKey: "canonical_email"},
-	Department:          FieldDescriptor{Name: "department", InputKey: "department"},
-	DirectoryInstanceID: FieldDescriptor{Name: "directory_instance_id", InputKey: "directory_instance_id"},
-	DirectoryName:       FieldDescriptor{Name: "directory_name", InputKey: "directory_name"},
-	DirectorySyncRunID:  FieldDescriptor{Name: "directory_sync_run_id", InputKey: "directory_sync_run_id"},
-	DisplayName:         FieldDescriptor{Name: "display_name", InputKey: "display_name"},
-	EmailAliases:        FieldDescriptor{Name: "email_aliases", InputKey: "email_aliases"},
-	EnvironmentID:       FieldDescriptor{Name: "environment_id", InputKey: "environment_id"},
-	EnvironmentName:     FieldDescriptor{Name: "environment_name", InputKey: "environment_name"},
-	ExternalID:          FieldDescriptor{Name: "external_id", InputKey: "external_id"},
-	FamilyName:          FieldDescriptor{Name: "family_name", InputKey: "family_name"},
-	FirstSeenAt:         FieldDescriptor{Name: "first_seen_at", InputKey: "first_seen_at"},
-	GivenName:           FieldDescriptor{Name: "given_name", InputKey: "given_name"},
-	IdentityHolderID:    FieldDescriptor{Name: "identity_holder_id", InputKey: "identity_holder_id"},
-	JobTitle:            FieldDescriptor{Name: "job_title", InputKey: "job_title"},
-	LastLoginAt:         FieldDescriptor{Name: "last_login_at", InputKey: "last_login_at"},
-	LastSeenAt:          FieldDescriptor{Name: "last_seen_at", InputKey: "last_seen_at"},
-	LastSeenIP:          FieldDescriptor{Name: "last_seen_ip", InputKey: "last_seen_ip"},
-	Metadata:            FieldDescriptor{Name: "metadata", InputKey: "metadata"},
-	MfaState:            FieldDescriptor{Name: "mfa_state", InputKey: "mfa_state"},
-	ObservedAt:          FieldDescriptor{Name: "observed_at", InputKey: "observed_at"},
-	OrganizationUnit:    FieldDescriptor{Name: "organization_unit", InputKey: "organization_unit"},
-	PhoneNumber:         FieldDescriptor{Name: "phone_number", InputKey: "phone_number"},
-	PrimarySource:       FieldDescriptor{Name: "primary_source", InputKey: "primary_source"},
-	Profile:             FieldDescriptor{Name: "profile", InputKey: "profile"},
-	ProfileHash:         FieldDescriptor{Name: "profile_hash", InputKey: "profile_hash"},
-	RemovedAt:           FieldDescriptor{Name: "removed_at", InputKey: "removed_at"},
-	ScopeID:             FieldDescriptor{Name: "scope_id", InputKey: "scope_id"},
-	ScopeName:           FieldDescriptor{Name: "scope_name", InputKey: "scope_name"},
-	SecondaryKey:        FieldDescriptor{Name: "secondary_key", InputKey: "secondary_key"},
-	SourceVersion:       FieldDescriptor{Name: "source_version", InputKey: "source_version"},
-	Status:              FieldDescriptor{Name: "status", InputKey: "status"},
-	Tags:                FieldDescriptor{Name: "tags", InputKey: "tags"},
+	AccountType:      FieldDescriptor{Name: "account_type", InputKey: "account_type"},
+	AddedAt:          FieldDescriptor{Name: "added_at", InputKey: "added_at"},
+	AvatarRemoteURL:  FieldDescriptor{Name: "avatar_remote_url", InputKey: "avatar_remote_url"},
+	AvatarUpdatedAt:  FieldDescriptor{Name: "avatar_updated_at", InputKey: "avatar_updated_at"},
+	CanonicalEmail:   FieldDescriptor{Name: "canonical_email", InputKey: "canonical_email"},
+	Department:       FieldDescriptor{Name: "department", InputKey: "department"},
+	DirectoryName:    FieldDescriptor{Name: "directory_name", InputKey: "directory_name"},
+	DisplayName:      FieldDescriptor{Name: "display_name", InputKey: "display_name"},
+	EmailAliases:     FieldDescriptor{Name: "email_aliases", InputKey: "email_aliases"},
+	EnvironmentID:    FieldDescriptor{Name: "environment_id", InputKey: "environment_id"},
+	EnvironmentName:  FieldDescriptor{Name: "environment_name", InputKey: "environment_name"},
+	ExternalID:       FieldDescriptor{Name: "external_id", InputKey: "external_id"},
+	FamilyName:       FieldDescriptor{Name: "family_name", InputKey: "family_name"},
+	FirstSeenAt:      FieldDescriptor{Name: "first_seen_at", InputKey: "first_seen_at"},
+	GivenName:        FieldDescriptor{Name: "given_name", InputKey: "given_name"},
+	IdentityHolderID: FieldDescriptor{Name: "identity_holder_id", InputKey: "identity_holder_id"},
+	JobTitle:         FieldDescriptor{Name: "job_title", InputKey: "job_title"},
+	LastLoginAt:      FieldDescriptor{Name: "last_login_at", InputKey: "last_login_at"},
+	LastSeenAt:       FieldDescriptor{Name: "last_seen_at", InputKey: "last_seen_at"},
+	LastSeenIP:       FieldDescriptor{Name: "last_seen_ip", InputKey: "last_seen_ip"},
+	Metadata:         FieldDescriptor{Name: "metadata", InputKey: "metadata"},
+	MfaState:         FieldDescriptor{Name: "mfa_state", InputKey: "mfa_state"},
+	ObservedAt:       FieldDescriptor{Name: "observed_at", InputKey: "observed_at"},
+	OrganizationUnit: FieldDescriptor{Name: "organization_unit", InputKey: "organization_unit"},
+	PhoneNumber:      FieldDescriptor{Name: "phone_number", InputKey: "phone_number"},
+	PrimarySource:    FieldDescriptor{Name: "primary_source", InputKey: "primary_source"},
+	Profile:          FieldDescriptor{Name: "profile", InputKey: "profile"},
+	RemovedAt:        FieldDescriptor{Name: "removed_at", InputKey: "removed_at"},
+	ScopeID:          FieldDescriptor{Name: "scope_id", InputKey: "scope_id"},
+	ScopeName:        FieldDescriptor{Name: "scope_name", InputKey: "scope_name"},
+	SecondaryKey:     FieldDescriptor{Name: "secondary_key", InputKey: "secondary_key"},
+	SourceVersion:    FieldDescriptor{Name: "source_version", InputKey: "source_version"},
+	Status:           FieldDescriptor{Name: "status", InputKey: "status"},
+	Tags:             FieldDescriptor{Name: "tags", InputKey: "tags"},
 }
 
 // DirectoryGroupFields indexes DirectoryGroup's provider-mappable fields so integration
@@ -440,12 +428,8 @@ var DirectoryGroupFields = struct {
 	AddedAt FieldDescriptor
 	// Classification is the classification field
 	Classification FieldDescriptor
-	// DirectoryInstanceID is the directory_instance_id field
-	DirectoryInstanceID FieldDescriptor
 	// DirectoryName is the directory_name field
 	DirectoryName FieldDescriptor
-	// DirectorySyncRunID is the directory_sync_run_id field
-	DirectorySyncRunID FieldDescriptor
 	// DisplayName is the display_name field
 	DisplayName FieldDescriptor
 	// Email is the email field
@@ -470,8 +454,6 @@ var DirectoryGroupFields = struct {
 	ObservedAt FieldDescriptor
 	// Profile is the profile field
 	Profile FieldDescriptor
-	// ProfileHash is the profile_hash field
-	ProfileHash FieldDescriptor
 	// RemovedAt is the removed_at field
 	RemovedAt FieldDescriptor
 	// ScopeID is the scope_id field
@@ -487,9 +469,7 @@ var DirectoryGroupFields = struct {
 }{
 	AddedAt:                FieldDescriptor{Name: "added_at", InputKey: "added_at"},
 	Classification:         FieldDescriptor{Name: "classification", InputKey: "classification"},
-	DirectoryInstanceID:    FieldDescriptor{Name: "directory_instance_id", InputKey: "directory_instance_id"},
 	DirectoryName:          FieldDescriptor{Name: "directory_name", InputKey: "directory_name"},
-	DirectorySyncRunID:     FieldDescriptor{Name: "directory_sync_run_id", InputKey: "directory_sync_run_id"},
 	DisplayName:            FieldDescriptor{Name: "display_name", InputKey: "display_name"},
 	Email:                  FieldDescriptor{Name: "email", InputKey: "email"},
 	EnvironmentID:          FieldDescriptor{Name: "environment_id", InputKey: "environment_id"},
@@ -502,7 +482,6 @@ var DirectoryGroupFields = struct {
 	Metadata:               FieldDescriptor{Name: "metadata", InputKey: "metadata"},
 	ObservedAt:             FieldDescriptor{Name: "observed_at", InputKey: "observed_at"},
 	Profile:                FieldDescriptor{Name: "profile", InputKey: "profile"},
-	ProfileHash:            FieldDescriptor{Name: "profile_hash", InputKey: "profile_hash"},
 	RemovedAt:              FieldDescriptor{Name: "removed_at", InputKey: "removed_at"},
 	ScopeID:                FieldDescriptor{Name: "scope_id", InputKey: "scope_id"},
 	ScopeName:              FieldDescriptor{Name: "scope_name", InputKey: "scope_name"},
@@ -521,20 +500,14 @@ var DirectoryMembershipFields = struct {
 	DirectoryAccountID FieldDescriptor
 	// DirectoryGroupID is the directory_group_id field
 	DirectoryGroupID FieldDescriptor
-	// DirectoryInstanceID is the directory_instance_id field
-	DirectoryInstanceID FieldDescriptor
 	// DirectoryName is the directory_name field
 	DirectoryName FieldDescriptor
-	// DirectorySyncRunID is the directory_sync_run_id field
-	DirectorySyncRunID FieldDescriptor
 	// EnvironmentID is the environment_id field
 	EnvironmentID FieldDescriptor
 	// EnvironmentName is the environment_name field
 	EnvironmentName FieldDescriptor
 	// FirstSeenAt is the first_seen_at field
 	FirstSeenAt FieldDescriptor
-	// LastConfirmedRunID is the last_confirmed_run_id field
-	LastConfirmedRunID FieldDescriptor
 	// LastSeenAt is the last_seen_at field
 	LastSeenAt FieldDescriptor
 	// Metadata is the metadata field
@@ -554,25 +527,22 @@ var DirectoryMembershipFields = struct {
 	// Source is the source field
 	Source FieldDescriptor
 }{
-	AddedAt:             FieldDescriptor{Name: "added_at", InputKey: "added_at"},
-	DirectoryAccountID:  FieldDescriptor{Name: "directory_account_id", InputKey: "directory_account_id"},
-	DirectoryGroupID:    FieldDescriptor{Name: "directory_group_id", InputKey: "directory_group_id"},
-	DirectoryInstanceID: FieldDescriptor{Name: "directory_instance_id", InputKey: "directory_instance_id"},
-	DirectoryName:       FieldDescriptor{Name: "directory_name", InputKey: "directory_name"},
-	DirectorySyncRunID:  FieldDescriptor{Name: "directory_sync_run_id", InputKey: "directory_sync_run_id"},
-	EnvironmentID:       FieldDescriptor{Name: "environment_id", InputKey: "environment_id"},
-	EnvironmentName:     FieldDescriptor{Name: "environment_name", InputKey: "environment_name"},
-	FirstSeenAt:         FieldDescriptor{Name: "first_seen_at", InputKey: "first_seen_at"},
-	LastConfirmedRunID:  FieldDescriptor{Name: "last_confirmed_run_id", InputKey: "last_confirmed_run_id"},
-	LastSeenAt:          FieldDescriptor{Name: "last_seen_at", InputKey: "last_seen_at"},
-	Metadata:            FieldDescriptor{Name: "metadata", InputKey: "metadata"},
-	ObservedAt:          FieldDescriptor{Name: "observed_at", InputKey: "observed_at"},
-	PlatformID:          FieldDescriptor{Name: "platform_id", InputKey: "platform_id"},
-	RemovedAt:           FieldDescriptor{Name: "removed_at", InputKey: "removed_at"},
-	Role:                FieldDescriptor{Name: "role", InputKey: "role"},
-	ScopeID:             FieldDescriptor{Name: "scope_id", InputKey: "scope_id"},
-	ScopeName:           FieldDescriptor{Name: "scope_name", InputKey: "scope_name"},
-	Source:              FieldDescriptor{Name: "source", InputKey: "source"},
+	AddedAt:            FieldDescriptor{Name: "added_at", InputKey: "added_at"},
+	DirectoryAccountID: FieldDescriptor{Name: "directory_account_id", InputKey: "directory_account_id"},
+	DirectoryGroupID:   FieldDescriptor{Name: "directory_group_id", InputKey: "directory_group_id"},
+	DirectoryName:      FieldDescriptor{Name: "directory_name", InputKey: "directory_name"},
+	EnvironmentID:      FieldDescriptor{Name: "environment_id", InputKey: "environment_id"},
+	EnvironmentName:    FieldDescriptor{Name: "environment_name", InputKey: "environment_name"},
+	FirstSeenAt:        FieldDescriptor{Name: "first_seen_at", InputKey: "first_seen_at"},
+	LastSeenAt:         FieldDescriptor{Name: "last_seen_at", InputKey: "last_seen_at"},
+	Metadata:           FieldDescriptor{Name: "metadata", InputKey: "metadata"},
+	ObservedAt:         FieldDescriptor{Name: "observed_at", InputKey: "observed_at"},
+	PlatformID:         FieldDescriptor{Name: "platform_id", InputKey: "platform_id"},
+	RemovedAt:          FieldDescriptor{Name: "removed_at", InputKey: "removed_at"},
+	Role:               FieldDescriptor{Name: "role", InputKey: "role"},
+	ScopeID:            FieldDescriptor{Name: "scope_id", InputKey: "scope_id"},
+	ScopeName:          FieldDescriptor{Name: "scope_name", InputKey: "scope_name"},
+	Source:             FieldDescriptor{Name: "source", InputKey: "source"},
 }
 
 // EntityFields indexes Entity's provider-mappable fields so integration
@@ -613,8 +583,6 @@ var EntityFields = struct {
 	EntitySourceTypeID FieldDescriptor
 	// EntitySourceTypeName is the entity_source_type_name field
 	EntitySourceTypeName FieldDescriptor
-	// EntityTypeID is the entity_type_id field
-	EntityTypeID FieldDescriptor
 	// EnvironmentID is the environment_id field
 	EnvironmentID FieldDescriptor
 	// EnvironmentName is the environment_name field
@@ -635,8 +603,6 @@ var EntityFields = struct {
 	InternalOwnerUserID FieldDescriptor
 	// LastReviewedAt is the last_reviewed_at field
 	LastReviewedAt FieldDescriptor
-	// LinkedAssetIds is the linked_asset_ids field
-	LinkedAssetIds FieldDescriptor
 	// Links is the links field
 	Links FieldDescriptor
 	// LogoRemoteURL is the logo_remote_url field
@@ -711,7 +677,6 @@ var EntityFields = struct {
 	EntitySecurityQuestionnaireStatusName: FieldDescriptor{Name: "entity_security_questionnaire_status_name", InputKey: "entity_security_questionnaire_status_name"},
 	EntitySourceTypeID:                    FieldDescriptor{Name: "entity_source_type_id", InputKey: "entity_source_type_id"},
 	EntitySourceTypeName:                  FieldDescriptor{Name: "entity_source_type_name", InputKey: "entity_source_type_name"},
-	EntityTypeID:                          FieldDescriptor{Name: "entity_type_id", InputKey: "entity_type_id"},
 	EnvironmentID:                         FieldDescriptor{Name: "environment_id", InputKey: "environment_id"},
 	EnvironmentName:                       FieldDescriptor{Name: "environment_name", InputKey: "environment_name"},
 	ExternalID:                            FieldDescriptor{Name: "external_id", InputKey: "external_id"},
@@ -722,7 +687,6 @@ var EntityFields = struct {
 	InternalOwnerIdentityHolderID:         FieldDescriptor{Name: "internal_owner_identity_holder_id", InputKey: "internal_owner_identity_holder_id"},
 	InternalOwnerUserID:                   FieldDescriptor{Name: "internal_owner_user_id", InputKey: "internal_owner_user_id"},
 	LastReviewedAt:                        FieldDescriptor{Name: "last_reviewed_at", InputKey: "last_reviewed_at"},
-	LinkedAssetIds:                        FieldDescriptor{Name: "linked_asset_ids", InputKey: "linked_asset_ids"},
 	Links:                                 FieldDescriptor{Name: "links", InputKey: "links"},
 	LogoRemoteURL:                         FieldDescriptor{Name: "logo_remote_url", InputKey: "logo_remote_url"},
 	MfaEnforced:                           FieldDescriptor{Name: "mfa_enforced", InputKey: "mfa_enforced"},
@@ -1118,8 +1082,6 @@ var RiskFields = struct {
 	BusinessCosts FieldDescriptor
 	// BusinessCostsJSON is the business_costs_json field
 	BusinessCostsJSON FieldDescriptor
-	// DelegateID is the delegate_id field
-	DelegateID FieldDescriptor
 	// Details is the details field
 	Details FieldDescriptor
 	// DetailsJSON is the details_json field
@@ -1174,8 +1136,6 @@ var RiskFields = struct {
 	ScopeName FieldDescriptor
 	// Score is the score field
 	Score FieldDescriptor
-	// StakeholderID is the stakeholder_id field
-	StakeholderID FieldDescriptor
 	// Status is the status field
 	Status FieldDescriptor
 	// Tags is the tags field
@@ -1183,7 +1143,6 @@ var RiskFields = struct {
 }{
 	BusinessCosts:     FieldDescriptor{Name: "business_costs", InputKey: "business_costs"},
 	BusinessCostsJSON: FieldDescriptor{Name: "business_costs_json", InputKey: "business_costs_json"},
-	DelegateID:        FieldDescriptor{Name: "delegate_id", InputKey: "delegate_id"},
 	Details:           FieldDescriptor{Name: "details", InputKey: "details"},
 	DetailsJSON:       FieldDescriptor{Name: "details_json", InputKey: "details_json"},
 	DueDate:           FieldDescriptor{Name: "due_date", InputKey: "due_date"},
@@ -1211,7 +1170,6 @@ var RiskFields = struct {
 	ScopeID:           FieldDescriptor{Name: "scope_id", InputKey: "scope_id"},
 	ScopeName:         FieldDescriptor{Name: "scope_name", InputKey: "scope_name"},
 	Score:             FieldDescriptor{Name: "score", InputKey: "score"},
-	StakeholderID:     FieldDescriptor{Name: "stakeholder_id", InputKey: "stakeholder_id"},
 	Status:            FieldDescriptor{Name: "status", InputKey: "status"},
 	Tags:              FieldDescriptor{Name: "tags", InputKey: "tags"},
 }

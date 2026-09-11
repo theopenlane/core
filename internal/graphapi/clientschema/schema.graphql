@@ -438,9 +438,13 @@ type ActionPlan implements Node @modules(names: ["compliance_module","policy_man
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the name of the action_plan
 	"""
@@ -594,6 +598,37 @@ type ActionPlan implements Node @modules(names: ["compliance_module","policy_man
 	source of the action plan
 	"""
 	source: String
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	"""
 	the group of users who are responsible for approving the action_plan
 	"""
@@ -1380,6 +1415,20 @@ input ActionPlanWhereInput {
 	managedByEqualFold: String
 	managedByContainsFold: String
 	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
+	"""
 	name field predicates
 	"""
 	name: String
@@ -1710,6 +1759,11 @@ input ActionPlanWhereInput {
 	sourceNotNil: Boolean
 	sourceEqualFold: String
 	sourceContainsFold: String
+	"""
+	integration_runs edge predicates
+	"""
+	hasIntegrationRuns: Boolean
+	hasIntegrationRunsWith: [IntegrationRunWhereInput!]
 	"""
 	approver edge predicates
 	"""
@@ -3187,9 +3241,13 @@ type Asset implements Node @modules(names: ["entity_management_module","complian
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -3359,6 +3417,37 @@ type Asset implements Node @modules(names: ["entity_management_module","complian
 	time when this asset was last observed by the source integration
 	"""
 	observedAt: DateTime
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	owner: Organization
 	blockedGroups(
 		"""
@@ -4227,6 +4316,20 @@ input AssetWhereInput {
 	managedByEqualFold: String
 	managedByContainsFold: String
 	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -4761,6 +4864,11 @@ input AssetWhereInput {
 	observedAtLTE: DateTime
 	observedAtIsNil: Boolean
 	observedAtNotNil: Boolean
+	"""
+	integration_runs edge predicates
+	"""
+	hasIntegrationRuns: Boolean
+	hasIntegrationRunsWith: [IntegrationRunWhereInput!]
 	"""
 	owner edge predicates
 	"""
@@ -6724,9 +6832,13 @@ type CheckResult implements Node {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	current status of the control
 	"""
@@ -6755,6 +6867,37 @@ type CheckResult implements Node {
 	integration that owns this check result
 	"""
 	integrationID: ID
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	blockedGroups(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -7186,6 +7329,20 @@ input CheckResultWhereInput {
 	managedByEqualFold: String
 	managedByContainsFold: String
 	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
+	"""
 	status field predicates
 	"""
 	status: CheckResultCheckStatus
@@ -7270,6 +7427,11 @@ input CheckResultWhereInput {
 	integrationIDNotNil: Boolean
 	integrationIDEqualFold: ID
 	integrationIDContainsFold: ID
+	"""
+	integration_runs edge predicates
+	"""
+	hasIntegrationRuns: Boolean
+	hasIntegrationRunsWith: [IntegrationRunWhereInput!]
 	"""
 	blocked_groups edge predicates
 	"""
@@ -7425,9 +7587,13 @@ type Contact implements Node @modules(names: ["entity_management_module","compli
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the organization id that owns the object
 	"""
@@ -7472,6 +7638,37 @@ type Contact implements Node @modules(names: ["entity_management_module","compli
 	time when this contact was last observed by the source integration
 	"""
 	observedAt: DateTime
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	owner: Organization
 	entities(
 		"""
@@ -7907,6 +8104,20 @@ input ContactWhereInput {
 	managedByEqualFold: String
 	managedByContainsFold: String
 	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -8049,6 +8260,11 @@ input ContactWhereInput {
 	observedAtLTE: DateTime
 	observedAtIsNil: Boolean
 	observedAtNotNil: Boolean
+	"""
+	integration_runs edge predicates
+	"""
+	hasIntegrationRuns: Boolean
+	hasIntegrationRunsWith: [IntegrationRunWhereInput!]
 	"""
 	owner edge predicates
 	"""
@@ -12030,9 +12246,13 @@ input CreateActionPlanInput {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the name of the action_plan
 	"""
@@ -12161,6 +12381,7 @@ input CreateActionPlanInput {
 	source of the action plan
 	"""
 	source: String
+	integrationRunIDs: [ID!]
 	approverID: ID
 	delegateID: ID
 	ownerID: ID
@@ -12331,9 +12552,13 @@ input CreateAssetInput {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the internal owner for the asset when no user, group, or identity holder is linked
 	"""
@@ -12443,6 +12668,7 @@ input CreateAssetInput {
 	time when this asset was last observed by the source integration
 	"""
 	observedAt: DateTime
+	integrationRunIDs: [ID!]
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -12679,9 +12905,13 @@ input CreateCheckResultInput {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	current status of the control
 	"""
@@ -12706,6 +12936,7 @@ input CreateCheckResultInput {
 	external parent reference id for the aggregate rule, e.g. in aws config this is the config rule name
 	"""
 	parentExternalID: String
+	integrationRunIDs: [ID!]
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	viewerIDs: [ID!]
@@ -12735,9 +12966,13 @@ input CreateContactInput {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the full name of the contact
 	"""
@@ -12778,6 +13013,7 @@ input CreateContactInput {
 	time when this contact was last observed by the source integration
 	"""
 	observedAt: DateTime
+	integrationRunIDs: [ID!]
 	ownerID: ID
 	entityIDs: [ID!]
 	campaignIDs: [ID!]
@@ -13237,9 +13473,13 @@ input CreateDirectoryAccountInput {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the environment of the directory_account
 	"""
@@ -13248,10 +13488,6 @@ input CreateDirectoryAccountInput {
 	the scope of the directory_account
 	"""
 	scopeName: String
-	"""
-	stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
-	"""
-	directoryInstanceID: String
 	"""
 	directory source label set by the integration (e.g. googleworkspace, github, slack)
 	"""
@@ -13349,10 +13585,6 @@ input CreateDirectoryAccountInput {
 	"""
 	observedAt: Time
 	"""
-	hash of the normalized profile payload for change detection
-	"""
-	profileHash: String
-	"""
 	flattened attribute bag used for filtering/diffing
 	"""
 	profile: Map
@@ -13368,11 +13600,11 @@ input CreateDirectoryAccountInput {
 	indicates this directory account originates from the installation designated as the primary directory source for its owner organization
 	"""
 	primarySource: Boolean
+	integrationRunIDs: [ID!]
 	ownerID: ID
 	environmentID: ID
 	scopeID: ID
 	integrationID: ID
-	directorySyncRunID: ID
 	platformID: ID
 	identityHolderID: ID
 	avatarFileID: ID
@@ -13401,9 +13633,13 @@ input CreateDirectoryGroupInput {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the environment of the directory_group
 	"""
@@ -13412,10 +13648,6 @@ input CreateDirectoryGroupInput {
 	the scope of the directory_group
 	"""
 	scopeName: String
-	"""
-	stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
-	"""
-	directoryInstanceID: String
 	"""
 	stable identifier from the directory system
 	"""
@@ -13469,10 +13701,6 @@ input CreateDirectoryGroupInput {
 	"""
 	observedAt: Time
 	"""
-	hash of the normalized payload for diffing
-	"""
-	profileHash: String
-	"""
 	flattened attribute bag used for filtering/diffing
 	"""
 	profile: Map
@@ -13488,11 +13716,11 @@ input CreateDirectoryGroupInput {
 	directory source label set by the integration (e.g. googleworkspace, github, slack)
 	"""
 	directoryName: String
+	integrationRunIDs: [ID!]
 	ownerID: ID
 	environmentID: ID
 	scopeID: ID
 	integrationID: ID!
-	directorySyncRunID: ID!
 	platformID: ID
 	workflowObjectRefIDs: [ID!]
 }
@@ -13514,9 +13742,13 @@ input CreateDirectoryMembershipInput {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the environment of the directory_membership
 	"""
@@ -13525,10 +13757,6 @@ input CreateDirectoryMembershipInput {
 	the scope of the directory_membership
 	"""
 	scopeName: String
-	"""
-	stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
-	"""
-	directoryInstanceID: String
 	"""
 	membership role reported by the provider
 	"""
@@ -13562,84 +13790,19 @@ input CreateDirectoryMembershipInput {
 	"""
 	observedAt: Time
 	"""
-	sync run identifier that most recently confirmed this membership
-	"""
-	lastConfirmedRunID: String
-	"""
 	raw metadata associated with this membership from the provider
 	"""
 	metadata: Map
+	integrationRunIDs: [ID!]
 	ownerID: ID
 	environmentID: ID
 	scopeID: ID
 	integrationID: ID!
-	directorySyncRunID: ID!
 	platformID: ID
 	directoryAccountID: ID!
 	directoryGroupID: ID!
 	eventIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
-}
-"""
-CreateDirectorySyncRunInput is used for create DirectorySyncRun object.
-Input was generated by ent.
-"""
-input CreateDirectorySyncRunInput {
-	"""
-	the environment of the directory_sync_run
-	"""
-	environmentName: String
-	"""
-	the scope of the directory_sync_run
-	"""
-	scopeName: String
-	"""
-	stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
-	"""
-	directoryInstanceID: String
-	"""
-	current state of the sync run
-	"""
-	status: DirectorySyncRunDirectorySyncRunStatus
-	"""
-	time the sync started
-	"""
-	startedAt: Time
-	"""
-	time the sync finished
-	"""
-	completedAt: Time
-	"""
-	cursor or checkpoint returned by the provider for the next run
-	"""
-	sourceCursor: String
-	"""
-	total records processed during this run
-	"""
-	fullCount: Int
-	"""
-	number of records that changed compared to the prior run
-	"""
-	deltaCount: Int
-	"""
-	serialized error information when the run failed
-	"""
-	error: String
-	"""
-	object storage file identifier for the manifest captured during the run
-	"""
-	rawManifestFileID: String
-	"""
-	additional provider-specific stats for the run
-	"""
-	stats: Map
-	ownerID: ID
-	environmentID: ID
-	scopeID: ID
-	integrationID: ID!
-	platformID: ID
-	directoryAccountIDs: [ID!]
-	directoryGroupIDs: [ID!]
 }
 """
 CreateDiscussionInput is used for create Discussion object.
@@ -13806,9 +13969,13 @@ input CreateEntityInput {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the internal owner for the entity when no user, group, or identity holder is linked
 	"""
@@ -13985,6 +14152,7 @@ input CreateEntityInput {
 	time when this entity was last observed by the source integration
 	"""
 	observedAt: DateTime
+	integrationRunIDs: [ID!]
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -14368,9 +14536,13 @@ input CreateFindingInput {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	who reviewed the finding when no user, group, or identity holder is linked
 	"""
@@ -14547,6 +14719,7 @@ input CreateFindingInput {
 	raw payload received from the integration for auditing and troubleshooting
 	"""
 	rawPayload: Map
+	integrationRunIDs: [ID!]
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -14932,9 +15105,13 @@ input CreateInternalPolicyInput {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
@@ -15031,6 +15208,7 @@ input CreateInternalPolicyInput {
 	stable external UUID for deterministic OSCAL export and round-tripping
 	"""
 	externalUUID: String
+	integrationRunIDs: [ID!]
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -15580,7 +15758,6 @@ input CreateOrganizationInput {
 	directoryAccountCreatorIDs: [ID!]
 	directoryGroupCreatorIDs: [ID!]
 	directoryMembershipCreatorIDs: [ID!]
-	directorySyncRunCreatorIDs: [ID!]
 	discussionCreatorIDs: [ID!]
 	documentDataCreatorIDs: [ID!]
 	emailTemplateCreatorIDs: [ID!]
@@ -15706,7 +15883,6 @@ input CreateOrganizationInput {
 	workflowObjectRefIDs: [ID!]
 	directoryAccountIDs: [ID!]
 	directoryGroupIDs: [ID!]
-	directorySyncRunIDs: [ID!]
 	discussionIDs: [ID!]
 	vendorScoringConfigIDs: [ID!]
 	vendorRiskScoreIDs: [ID!]
@@ -16029,7 +16205,6 @@ input CreatePlatformInput {
 	taskIDs: [ID!]
 	identityHolderIDs: [ID!]
 	integrationIDs: [ID!]
-	directorySyncRunIDs: [ID!]
 	directoryAccountIDs: [ID!]
 	directoryGroupIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
@@ -16068,9 +16243,13 @@ input CreateProcedureInput {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the name of the procedure
 	"""
@@ -16163,6 +16342,7 @@ input CreateProcedureInput {
 	internal marker field for workflow eligibility, not exposed in API
 	"""
 	workflowEligibleMarker: Boolean
+	integrationRunIDs: [ID!]
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -16595,9 +16775,13 @@ input CreateRiskInput {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the kind of the risk
 	"""
@@ -16707,6 +16891,7 @@ input CreateRiskInput {
 	the decision made for the risk - accept, transfer, avoid, mitigate, or none
 	"""
 	riskDecision: RiskRiskDecision
+	integrationRunIDs: [ID!]
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -18091,9 +18276,13 @@ input CreateVulnerabilityInput {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	who reviewed the vulnerability when no user, group, or identity holder is linked
 	"""
@@ -18290,6 +18479,7 @@ input CreateVulnerabilityInput {
 	raw payload received from the integration for auditing and troubleshooting
 	"""
 	rawPayload: Map
+	integrationRunIDs: [ID!]
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -20026,9 +20216,13 @@ type DirectoryAccount implements Node {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -20054,17 +20248,9 @@ type DirectoryAccount implements Node {
 	"""
 	integrationID: ID
 	"""
-	optional sync run that produced this snapshot
-	"""
-	directorySyncRunID: ID
-	"""
 	optional platform associated with this directory account
 	"""
 	platformID: ID
-	"""
-	stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
-	"""
-	directoryInstanceID: String
 	"""
 	deduplicated identity holder linked to this directory account
 	"""
@@ -20170,10 +20356,6 @@ type DirectoryAccount implements Node {
 	"""
 	observedAt: Time!
 	"""
-	hash of the normalized profile payload for change detection
-	"""
-	profileHash: String!
-	"""
 	flattened attribute bag used for filtering/diffing
 	"""
 	profile: Map
@@ -20193,6 +20375,37 @@ type DirectoryAccount implements Node {
 	indicates this directory account originates from the installation designated as the primary directory source for its owner organization
 	"""
 	primarySource: Boolean!
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	owner: Organization
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
@@ -20200,10 +20413,6 @@ type DirectoryAccount implements Node {
 	integration that owns this directory account
 	"""
 	integration: Integration
-	"""
-	sync run that produced this snapshot
-	"""
-	directorySyncRun: DirectorySyncRun
 	"""
 	platform associated with this directory account
 	"""
@@ -20444,7 +20653,6 @@ Properties by which DirectoryAccount connections can be ordered.
 enum DirectoryAccountOrderField {
 	created_at
 	updated_at
-	directory_instance_id
 	directory_name
 	external_id
 	canonical_email
@@ -20607,6 +20815,20 @@ input DirectoryAccountWhereInput {
 	managedByEqualFold: String
 	managedByContainsFold: String
 	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -20691,20 +20913,6 @@ input DirectoryAccountWhereInput {
 	integrationIDEqualFold: ID
 	integrationIDContainsFold: ID
 	"""
-	directory_sync_run_id field predicates
-	"""
-	directorySyncRunID: ID
-	directorySyncRunIDNEQ: ID
-	directorySyncRunIDIn: [ID!]
-	directorySyncRunIDNotIn: [ID!]
-	directorySyncRunIDContains: ID
-	directorySyncRunIDHasPrefix: ID
-	directorySyncRunIDHasSuffix: ID
-	directorySyncRunIDIsNil: Boolean
-	directorySyncRunIDNotNil: Boolean
-	directorySyncRunIDEqualFold: ID
-	directorySyncRunIDContainsFold: ID
-	"""
 	platform_id field predicates
 	"""
 	platformID: ID
@@ -20718,20 +20926,6 @@ input DirectoryAccountWhereInput {
 	platformIDNotNil: Boolean
 	platformIDEqualFold: ID
 	platformIDContainsFold: ID
-	"""
-	directory_instance_id field predicates
-	"""
-	directoryInstanceID: String
-	directoryInstanceIDNEQ: String
-	directoryInstanceIDIn: [String!]
-	directoryInstanceIDNotIn: [String!]
-	directoryInstanceIDContains: String
-	directoryInstanceIDHasPrefix: String
-	directoryInstanceIDHasSuffix: String
-	directoryInstanceIDIsNil: Boolean
-	directoryInstanceIDNotNil: Boolean
-	directoryInstanceIDEqualFold: String
-	directoryInstanceIDContainsFold: String
 	"""
 	identity_holder_id field predicates
 	"""
@@ -21032,18 +21226,6 @@ input DirectoryAccountWhereInput {
 	observedAtLT: Time
 	observedAtLTE: Time
 	"""
-	profile_hash field predicates
-	"""
-	profileHash: String
-	profileHashNEQ: String
-	profileHashIn: [String!]
-	profileHashNotIn: [String!]
-	profileHashContains: String
-	profileHashHasPrefix: String
-	profileHashHasSuffix: String
-	profileHashEqualFold: String
-	profileHashContainsFold: String
-	"""
 	source_version field predicates
 	"""
 	sourceVersion: String
@@ -21062,6 +21244,11 @@ input DirectoryAccountWhereInput {
 	"""
 	primarySource: Boolean
 	primarySourceNEQ: Boolean
+	"""
+	integration_runs edge predicates
+	"""
+	hasIntegrationRuns: Boolean
+	hasIntegrationRunsWith: [IntegrationRunWhereInput!]
 	"""
 	owner edge predicates
 	"""
@@ -21082,11 +21269,6 @@ input DirectoryAccountWhereInput {
 	"""
 	hasIntegration: Boolean
 	hasIntegrationWith: [IntegrationWhereInput!]
-	"""
-	directory_sync_run edge predicates
-	"""
-	hasDirectorySyncRun: Boolean
-	hasDirectorySyncRunWith: [DirectorySyncRunWhereInput!]
 	"""
 	platform edge predicates
 	"""
@@ -21162,9 +21344,13 @@ type DirectoryGroup implements Node {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the organization id that owns the object
 	"""
@@ -21193,14 +21379,6 @@ type DirectoryGroup implements Node {
 	optional platform associated with this directory group
 	"""
 	platformID: ID
-	"""
-	stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
-	"""
-	directoryInstanceID: String
-	"""
-	sync run that produced this snapshot
-	"""
-	directorySyncRunID: ID!
 	"""
 	stable identifier from the directory system
 	"""
@@ -21254,10 +21432,6 @@ type DirectoryGroup implements Node {
 	"""
 	observedAt: Time!
 	"""
-	hash of the normalized payload for diffing
-	"""
-	profileHash: String!
-	"""
 	flattened attribute bag used for filtering/diffing
 	"""
 	profile: Map
@@ -21277,6 +21451,37 @@ type DirectoryGroup implements Node {
 	directory source label set by the integration (e.g. googleworkspace, github, slack)
 	"""
 	directoryName: String
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	owner: Organization
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
@@ -21284,10 +21489,6 @@ type DirectoryGroup implements Node {
 	integration that owns this directory group
 	"""
 	integration: Integration!
-	"""
-	sync run that produced this snapshot
-	"""
-	directorySyncRun: DirectorySyncRun!
 	"""
 	platform associated with this directory group
 	"""
@@ -21479,7 +21680,6 @@ Properties by which DirectoryGroup connections can be ordered.
 enum DirectoryGroupOrderField {
 	created_at
 	updated_at
-	directory_instance_id
 	external_id
 	email
 	display_name
@@ -21642,6 +21842,20 @@ input DirectoryGroupWhereInput {
 	managedByEqualFold: String
 	managedByContainsFold: String
 	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -21737,32 +21951,6 @@ input DirectoryGroupWhereInput {
 	platformIDNotNil: Boolean
 	platformIDEqualFold: ID
 	platformIDContainsFold: ID
-	"""
-	directory_instance_id field predicates
-	"""
-	directoryInstanceID: String
-	directoryInstanceIDNEQ: String
-	directoryInstanceIDIn: [String!]
-	directoryInstanceIDNotIn: [String!]
-	directoryInstanceIDContains: String
-	directoryInstanceIDHasPrefix: String
-	directoryInstanceIDHasSuffix: String
-	directoryInstanceIDIsNil: Boolean
-	directoryInstanceIDNotNil: Boolean
-	directoryInstanceIDEqualFold: String
-	directoryInstanceIDContainsFold: String
-	"""
-	directory_sync_run_id field predicates
-	"""
-	directorySyncRunID: ID
-	directorySyncRunIDNEQ: ID
-	directorySyncRunIDIn: [ID!]
-	directorySyncRunIDNotIn: [ID!]
-	directorySyncRunIDContains: ID
-	directorySyncRunIDHasPrefix: ID
-	directorySyncRunIDHasSuffix: ID
-	directorySyncRunIDEqualFold: ID
-	directorySyncRunIDContainsFold: ID
 	"""
 	external_id field predicates
 	"""
@@ -21884,18 +22072,6 @@ input DirectoryGroupWhereInput {
 	observedAtLT: Time
 	observedAtLTE: Time
 	"""
-	profile_hash field predicates
-	"""
-	profileHash: String
-	profileHashNEQ: String
-	profileHashIn: [String!]
-	profileHashNotIn: [String!]
-	profileHashContains: String
-	profileHashHasPrefix: String
-	profileHashHasSuffix: String
-	profileHashEqualFold: String
-	profileHashContainsFold: String
-	"""
 	source_version field predicates
 	"""
 	sourceVersion: String
@@ -21924,6 +22100,11 @@ input DirectoryGroupWhereInput {
 	directoryNameEqualFold: String
 	directoryNameContainsFold: String
 	"""
+	integration_runs edge predicates
+	"""
+	hasIntegrationRuns: Boolean
+	hasIntegrationRunsWith: [IntegrationRunWhereInput!]
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -21943,11 +22124,6 @@ input DirectoryGroupWhereInput {
 	"""
 	hasIntegration: Boolean
 	hasIntegrationWith: [IntegrationWhereInput!]
-	"""
-	directory_sync_run edge predicates
-	"""
-	hasDirectorySyncRun: Boolean
-	hasDirectorySyncRunWith: [DirectorySyncRunWhereInput!]
 	"""
 	platform edge predicates
 	"""
@@ -22000,9 +22176,13 @@ type DirectoryMembership implements Node {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the organization id that owns the object
 	"""
@@ -22031,14 +22211,6 @@ type DirectoryMembership implements Node {
 	optional platform associated with this directory membership
 	"""
 	platformID: ID
-	"""
-	stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
-	"""
-	directoryInstanceID: String
-	"""
-	sync run that produced this snapshot
-	"""
-	directorySyncRunID: ID!
 	"""
 	directory account participating in this membership
 	"""
@@ -22080,13 +22252,40 @@ type DirectoryMembership implements Node {
 	"""
 	observedAt: Time!
 	"""
-	sync run identifier that most recently confirmed this membership
-	"""
-	lastConfirmedRunID: String
-	"""
 	raw metadata associated with this membership from the provider
 	"""
 	metadata: Map
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	owner: Organization
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
@@ -22094,10 +22293,6 @@ type DirectoryMembership implements Node {
 	integration that owns this directory membership
 	"""
 	integration: Integration!
-	"""
-	sync run that produced this snapshot
-	"""
-	directorySyncRun: DirectorySyncRun!
 	"""
 	platform associated with this directory membership
 	"""
@@ -22411,6 +22606,20 @@ input DirectoryMembershipWhereInput {
 	managedByEqualFold: String
 	managedByContainsFold: String
 	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
+	"""
 	environment_name field predicates
 	"""
 	environmentName: String
@@ -22438,20 +22647,6 @@ input DirectoryMembershipWhereInput {
 	scopeNameNotNil: Boolean
 	scopeNameEqualFold: String
 	scopeNameContainsFold: String
-	"""
-	directory_instance_id field predicates
-	"""
-	directoryInstanceID: String
-	directoryInstanceIDNEQ: String
-	directoryInstanceIDIn: [String!]
-	directoryInstanceIDNotIn: [String!]
-	directoryInstanceIDContains: String
-	directoryInstanceIDHasPrefix: String
-	directoryInstanceIDHasSuffix: String
-	directoryInstanceIDIsNil: Boolean
-	directoryInstanceIDNotNil: Boolean
-	directoryInstanceIDEqualFold: String
-	directoryInstanceIDContainsFold: String
 	"""
 	role field predicates
 	"""
@@ -22537,630 +22732,6 @@ input DirectoryMembershipWhereInput {
 	observedAtGTE: Time
 	observedAtLT: Time
 	observedAtLTE: Time
-	"""
-	last_confirmed_run_id field predicates
-	"""
-	lastConfirmedRunID: String
-	lastConfirmedRunIDNEQ: String
-	lastConfirmedRunIDIn: [String!]
-	lastConfirmedRunIDNotIn: [String!]
-	lastConfirmedRunIDContains: String
-	lastConfirmedRunIDHasPrefix: String
-	lastConfirmedRunIDHasSuffix: String
-	lastConfirmedRunIDIsNil: Boolean
-	lastConfirmedRunIDNotNil: Boolean
-	lastConfirmedRunIDEqualFold: String
-	lastConfirmedRunIDContainsFold: String
-}
-type DirectorySyncRun implements Node {
-	id: ID!
-	createdAt: Time
-	updatedAt: Time
-	createdBy: String
-	updatedBy: String
-	"""
-	the real user acting through an impersonation session when the record was last mutated, if any
-	"""
-	updatedByImpersonator: String
-	"""
-	a shortened prefixed id field to use as a human readable identifier
-	"""
-	displayID: String!
-	"""
-	the organization id that owns the object
-	"""
-	ownerID: ID
-	"""
-	the environment of the directory_sync_run
-	"""
-	environmentName: String
-	"""
-	the environment of the directory_sync_run
-	"""
-	environmentID: ID
-	"""
-	the scope of the directory_sync_run
-	"""
-	scopeName: String
-	"""
-	the scope of the directory_sync_run
-	"""
-	scopeID: ID
-	"""
-	integration this sync run executed for
-	"""
-	integrationID: ID!
-	"""
-	optional platform associated with this sync run
-	"""
-	platformID: ID
-	"""
-	stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
-	"""
-	directoryInstanceID: String
-	"""
-	current state of the sync run
-	"""
-	status: DirectorySyncRunDirectorySyncRunStatus!
-	"""
-	time the sync started
-	"""
-	startedAt: Time!
-	"""
-	time the sync finished
-	"""
-	completedAt: Time
-	"""
-	cursor or checkpoint returned by the provider for the next run
-	"""
-	sourceCursor: String
-	"""
-	total records processed during this run
-	"""
-	fullCount: Int!
-	"""
-	number of records that changed compared to the prior run
-	"""
-	deltaCount: Int!
-	"""
-	serialized error information when the run failed
-	"""
-	error: String
-	"""
-	object storage file identifier for the manifest captured during the run
-	"""
-	rawManifestFileID: String
-	"""
-	additional provider-specific stats for the run
-	"""
-	stats: Map
-	owner: Organization
-	environment: CustomTypeEnum
-	scope: CustomTypeEnum
-	"""
-	integration that executed this sync run
-	"""
-	integration: Integration!
-	"""
-	platform associated with this sync run
-	"""
-	platform: Platform
-	directoryAccounts(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for DirectoryAccounts returned from the connection.
-		"""
-		orderBy: [DirectoryAccountOrder!]
-
-		"""
-		Filtering options for DirectoryAccounts returned from the connection.
-		"""
-		where: DirectoryAccountWhereInput
-	): DirectoryAccountConnection!
-	directoryGroups(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for DirectoryGroups returned from the connection.
-		"""
-		orderBy: [DirectoryGroupOrder!]
-
-		"""
-		Filtering options for DirectoryGroups returned from the connection.
-		"""
-		where: DirectoryGroupWhereInput
-	): DirectoryGroupConnection!
-	directoryMemberships(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for DirectoryMemberships returned from the connection.
-		"""
-		orderBy: [DirectoryMembershipOrder!]
-
-		"""
-		Filtering options for DirectoryMemberships returned from the connection.
-		"""
-		where: DirectoryMembershipWhereInput
-	): DirectoryMembershipConnection!
-}
-"""
-Return response for createBulkDirectorySyncRun mutation
-"""
-type DirectorySyncRunBulkCreatePayload {
-	"""
-	Created directorySyncRuns
-	"""
-	directorySyncRuns: [DirectorySyncRun!]
-}
-"""
-A connection to a list of items.
-"""
-type DirectorySyncRunConnection {
-	"""
-	A list of edges.
-	"""
-	edges: [DirectorySyncRunEdge]
-	"""
-	Information to aid in pagination.
-	"""
-	pageInfo: PageInfo!
-	"""
-	Identifies the total count of items in the connection.
-	"""
-	totalCount: Int!
-}
-"""
-Return response for createDirectorySyncRun mutation
-"""
-type DirectorySyncRunCreatePayload {
-	"""
-	Created directorySyncRun
-	"""
-	directorySyncRun: DirectorySyncRun!
-}
-"""
-Return response for deleteDirectorySyncRun mutation
-"""
-type DirectorySyncRunDeletePayload {
-	"""
-	Deleted directorySyncRun ID
-	"""
-	deletedID: ID!
-}
-"""
-DirectorySyncRunDirectorySyncRunStatus is enum for the field status
-"""
-enum DirectorySyncRunDirectorySyncRunStatus @goModel(model: "github.com/theopenlane/core/common/enums.DirectorySyncRunStatus") {
-	PENDING
-	RUNNING
-	COMPLETED
-	FAILED
-}
-"""
-An edge in a connection.
-"""
-type DirectorySyncRunEdge {
-	"""
-	The item at the end of the edge.
-	"""
-	node: DirectorySyncRun
-	"""
-	A cursor for use in pagination.
-	"""
-	cursor: Cursor!
-}
-"""
-Ordering options for DirectorySyncRun connections
-"""
-input DirectorySyncRunOrder {
-	"""
-	The ordering direction.
-	"""
-	direction: OrderDirection! = ASC
-	"""
-	The field by which to order DirectorySyncRuns.
-	"""
-	field: DirectorySyncRunOrderField!
-}
-"""
-Properties by which DirectorySyncRun connections can be ordered.
-"""
-enum DirectorySyncRunOrderField {
-	created_at
-	updated_at
-	started_at
-}
-"""
-Return response for updateDirectorySyncRun mutation
-"""
-type DirectorySyncRunUpdatePayload {
-	"""
-	Updated directorySyncRun
-	"""
-	directorySyncRun: DirectorySyncRun!
-}
-"""
-DirectorySyncRunWhereInput is used for filtering DirectorySyncRun objects.
-Input was generated by ent.
-"""
-input DirectorySyncRunWhereInput {
-	not: DirectorySyncRunWhereInput
-	and: [DirectorySyncRunWhereInput!]
-	or: [DirectorySyncRunWhereInput!]
-	"""
-	id field predicates
-	"""
-	id: ID
-	idNEQ: ID
-	idIn: [ID!]
-	idNotIn: [ID!]
-	idEqualFold: ID
-	idContainsFold: ID
-	"""
-	created_at field predicates
-	"""
-	createdAt: Time
-	createdAtGT: Time
-	createdAtGTE: Time
-	createdAtLT: Time
-	createdAtLTE: Time
-	createdAtIsNil: Boolean
-	createdAtNotNil: Boolean
-	"""
-	updated_at field predicates
-	"""
-	updatedAt: Time
-	updatedAtGT: Time
-	updatedAtGTE: Time
-	updatedAtLT: Time
-	updatedAtLTE: Time
-	updatedAtIsNil: Boolean
-	updatedAtNotNil: Boolean
-	"""
-	created_by field predicates
-	"""
-	createdBy: String
-	createdByNEQ: String
-	createdByIn: [String!]
-	createdByNotIn: [String!]
-	createdByContains: String
-	createdByHasPrefix: String
-	createdByHasSuffix: String
-	createdByIsNil: Boolean
-	createdByNotNil: Boolean
-	createdByEqualFold: String
-	createdByContainsFold: String
-	"""
-	updated_by field predicates
-	"""
-	updatedBy: String
-	updatedByNEQ: String
-	updatedByIn: [String!]
-	updatedByNotIn: [String!]
-	updatedByContains: String
-	updatedByHasPrefix: String
-	updatedByHasSuffix: String
-	updatedByIsNil: Boolean
-	updatedByNotNil: Boolean
-	updatedByEqualFold: String
-	updatedByContainsFold: String
-	"""
-	updated_by_impersonator field predicates
-	"""
-	updatedByImpersonator: String
-	updatedByImpersonatorNEQ: String
-	updatedByImpersonatorIn: [String!]
-	updatedByImpersonatorNotIn: [String!]
-	updatedByImpersonatorContains: String
-	updatedByImpersonatorHasPrefix: String
-	updatedByImpersonatorHasSuffix: String
-	updatedByImpersonatorIsNil: Boolean
-	updatedByImpersonatorNotNil: Boolean
-	updatedByImpersonatorEqualFold: String
-	updatedByImpersonatorContainsFold: String
-	"""
-	display_id field predicates
-	"""
-	displayID: String
-	displayIDNEQ: String
-	displayIDIn: [String!]
-	displayIDNotIn: [String!]
-	displayIDContains: String
-	displayIDHasPrefix: String
-	displayIDHasSuffix: String
-	displayIDEqualFold: String
-	displayIDContainsFold: String
-	"""
-	owner_id field predicates
-	"""
-	ownerID: ID
-	ownerIDNEQ: ID
-	ownerIDIn: [ID!]
-	ownerIDNotIn: [ID!]
-	ownerIDContains: ID
-	ownerIDHasPrefix: ID
-	ownerIDHasSuffix: ID
-	ownerIDIsNil: Boolean
-	ownerIDNotNil: Boolean
-	ownerIDEqualFold: ID
-	ownerIDContainsFold: ID
-	"""
-	environment_name field predicates
-	"""
-	environmentName: String
-	environmentNameNEQ: String
-	environmentNameIn: [String!]
-	environmentNameNotIn: [String!]
-	environmentNameContains: String
-	environmentNameHasPrefix: String
-	environmentNameHasSuffix: String
-	environmentNameIsNil: Boolean
-	environmentNameNotNil: Boolean
-	environmentNameEqualFold: String
-	environmentNameContainsFold: String
-	"""
-	environment_id field predicates
-	"""
-	environmentID: ID
-	environmentIDNEQ: ID
-	environmentIDIn: [ID!]
-	environmentIDNotIn: [ID!]
-	environmentIDContains: ID
-	environmentIDHasPrefix: ID
-	environmentIDHasSuffix: ID
-	environmentIDIsNil: Boolean
-	environmentIDNotNil: Boolean
-	environmentIDEqualFold: ID
-	environmentIDContainsFold: ID
-	"""
-	scope_name field predicates
-	"""
-	scopeName: String
-	scopeNameNEQ: String
-	scopeNameIn: [String!]
-	scopeNameNotIn: [String!]
-	scopeNameContains: String
-	scopeNameHasPrefix: String
-	scopeNameHasSuffix: String
-	scopeNameIsNil: Boolean
-	scopeNameNotNil: Boolean
-	scopeNameEqualFold: String
-	scopeNameContainsFold: String
-	"""
-	scope_id field predicates
-	"""
-	scopeID: ID
-	scopeIDNEQ: ID
-	scopeIDIn: [ID!]
-	scopeIDNotIn: [ID!]
-	scopeIDContains: ID
-	scopeIDHasPrefix: ID
-	scopeIDHasSuffix: ID
-	scopeIDIsNil: Boolean
-	scopeIDNotNil: Boolean
-	scopeIDEqualFold: ID
-	scopeIDContainsFold: ID
-	"""
-	integration_id field predicates
-	"""
-	integrationID: ID
-	integrationIDNEQ: ID
-	integrationIDIn: [ID!]
-	integrationIDNotIn: [ID!]
-	integrationIDContains: ID
-	integrationIDHasPrefix: ID
-	integrationIDHasSuffix: ID
-	integrationIDEqualFold: ID
-	integrationIDContainsFold: ID
-	"""
-	platform_id field predicates
-	"""
-	platformID: ID
-	platformIDNEQ: ID
-	platformIDIn: [ID!]
-	platformIDNotIn: [ID!]
-	platformIDContains: ID
-	platformIDHasPrefix: ID
-	platformIDHasSuffix: ID
-	platformIDIsNil: Boolean
-	platformIDNotNil: Boolean
-	platformIDEqualFold: ID
-	platformIDContainsFold: ID
-	"""
-	directory_instance_id field predicates
-	"""
-	directoryInstanceID: String
-	directoryInstanceIDNEQ: String
-	directoryInstanceIDIn: [String!]
-	directoryInstanceIDNotIn: [String!]
-	directoryInstanceIDContains: String
-	directoryInstanceIDHasPrefix: String
-	directoryInstanceIDHasSuffix: String
-	directoryInstanceIDIsNil: Boolean
-	directoryInstanceIDNotNil: Boolean
-	directoryInstanceIDEqualFold: String
-	directoryInstanceIDContainsFold: String
-	"""
-	status field predicates
-	"""
-	status: DirectorySyncRunDirectorySyncRunStatus
-	statusNEQ: DirectorySyncRunDirectorySyncRunStatus
-	statusIn: [DirectorySyncRunDirectorySyncRunStatus!]
-	statusNotIn: [DirectorySyncRunDirectorySyncRunStatus!]
-	"""
-	started_at field predicates
-	"""
-	startedAt: Time
-	startedAtGT: Time
-	startedAtGTE: Time
-	startedAtLT: Time
-	startedAtLTE: Time
-	"""
-	completed_at field predicates
-	"""
-	completedAt: Time
-	completedAtGT: Time
-	completedAtGTE: Time
-	completedAtLT: Time
-	completedAtLTE: Time
-	completedAtIsNil: Boolean
-	completedAtNotNil: Boolean
-	"""
-	source_cursor field predicates
-	"""
-	sourceCursor: String
-	sourceCursorNEQ: String
-	sourceCursorIn: [String!]
-	sourceCursorNotIn: [String!]
-	sourceCursorContains: String
-	sourceCursorHasPrefix: String
-	sourceCursorHasSuffix: String
-	sourceCursorIsNil: Boolean
-	sourceCursorNotNil: Boolean
-	sourceCursorEqualFold: String
-	sourceCursorContainsFold: String
-	"""
-	full_count field predicates
-	"""
-	fullCount: Int
-	fullCountNEQ: Int
-	fullCountGT: Int
-	fullCountGTE: Int
-	fullCountLT: Int
-	fullCountLTE: Int
-	"""
-	delta_count field predicates
-	"""
-	deltaCount: Int
-	deltaCountNEQ: Int
-	deltaCountGT: Int
-	deltaCountGTE: Int
-	deltaCountLT: Int
-	deltaCountLTE: Int
-	"""
-	error field predicates
-	"""
-	error: String
-	errorNEQ: String
-	errorIn: [String!]
-	errorNotIn: [String!]
-	errorContains: String
-	errorHasPrefix: String
-	errorHasSuffix: String
-	errorIsNil: Boolean
-	errorNotNil: Boolean
-	errorEqualFold: String
-	errorContainsFold: String
-	"""
-	raw_manifest_file_id field predicates
-	"""
-	rawManifestFileID: String
-	rawManifestFileIDNEQ: String
-	rawManifestFileIDIn: [String!]
-	rawManifestFileIDNotIn: [String!]
-	rawManifestFileIDContains: String
-	rawManifestFileIDHasPrefix: String
-	rawManifestFileIDHasSuffix: String
-	rawManifestFileIDIsNil: Boolean
-	rawManifestFileIDNotNil: Boolean
-	rawManifestFileIDEqualFold: String
-	rawManifestFileIDContainsFold: String
-	"""
-	owner edge predicates
-	"""
-	hasOwner: Boolean
-	hasOwnerWith: [OrganizationWhereInput!]
-	"""
-	environment edge predicates
-	"""
-	hasEnvironment: Boolean
-	hasEnvironmentWith: [CustomTypeEnumWhereInput!]
-	"""
-	scope edge predicates
-	"""
-	hasScope: Boolean
-	hasScopeWith: [CustomTypeEnumWhereInput!]
-	"""
-	integration edge predicates
-	"""
-	hasIntegration: Boolean
-	hasIntegrationWith: [IntegrationWhereInput!]
-	"""
-	platform edge predicates
-	"""
-	hasPlatform: Boolean
-	hasPlatformWith: [PlatformWhereInput!]
-	"""
-	directory_accounts edge predicates
-	"""
-	hasDirectoryAccounts: Boolean
-	hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
-	"""
-	directory_groups edge predicates
-	"""
-	hasDirectoryGroups: Boolean
-	hasDirectoryGroupsWith: [DirectoryGroupWhereInput!]
-	"""
-	directory_memberships edge predicates
-	"""
-	hasDirectoryMemberships: Boolean
-	hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
 }
 type Discussion implements Node {
 	id: ID!
@@ -24787,9 +24358,13 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -25030,6 +24605,37 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	time when this entity was last observed by the source integration
 	"""
 	observedAt: DateTime
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	owner: Organization
 	blockedGroups(
 		"""
@@ -26554,6 +26160,20 @@ input EntityWhereInput {
 	managedByEqualFold: String
 	managedByContainsFold: String
 	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -27207,6 +26827,11 @@ input EntityWhereInput {
 	observedAtLTE: DateTime
 	observedAtIsNil: Boolean
 	observedAtNotNil: Boolean
+	"""
+	integration_runs edge predicates
+	"""
+	hasIntegrationRuns: Boolean
+	hasIntegrationRunsWith: [IntegrationRunWhereInput!]
 	"""
 	owner edge predicates
 	"""
@@ -30583,9 +30208,13 @@ type Finding implements Node @modules(names: ["vulnerability_management_module",
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -30810,6 +30439,37 @@ type Finding implements Node @modules(names: ["vulnerability_management_module",
 	raw payload received from the integration for auditing and troubleshooting
 	"""
 	rawPayload: Map
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	owner: Organization
 	blockedGroups(
 		"""
@@ -32112,6 +31772,20 @@ input FindingWhereInput {
 	managedByEqualFold: String
 	managedByContainsFold: String
 	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -32724,6 +32398,11 @@ input FindingWhereInput {
 	externalURINotNil: Boolean
 	externalURIEqualFold: String
 	externalURIContainsFold: String
+	"""
+	integration_runs edge predicates
+	"""
+	hasIntegrationRuns: Boolean
+	hasIntegrationRunsWith: [IntegrationRunWhereInput!]
 	"""
 	owner edge predicates
 	"""
@@ -38633,37 +38312,6 @@ type Integration implements Node {
 		"""
 		where: DirectoryMembershipWhereInput
 	): DirectoryMembershipConnection!
-	directorySyncRuns(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for DirectorySyncRuns returned from the connection.
-		"""
-		orderBy: [DirectorySyncRunOrder!]
-
-		"""
-		Filtering options for DirectorySyncRuns returned from the connection.
-		"""
-		where: DirectorySyncRunWhereInput
-	): DirectorySyncRunConnection!
 	checkResults(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -38792,6 +38440,37 @@ type Integration implements Node {
 		"""
 		where: CampaignWhereInput
 	): CampaignConnection!
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	entities(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -38908,6 +38587,840 @@ enum IntegrationOrderField {
 	family
 	status
 	expires_at
+}
+type IntegrationRun implements Node {
+	id: ID!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	the real user acting through an impersonation session when the record was last mutated, if any
+	"""
+	updatedByImpersonator: String
+	"""
+	the ID of the organization owner of the object
+	"""
+	ownerID: ID
+	"""
+	integration connection this run belongs to
+	"""
+	integrationID: ID
+	"""
+	operation identifier executed for this run
+	"""
+	operationName: String
+	"""
+	operation category executed for this run
+	"""
+	operationKind: IntegrationRunIntegrationOperationKind
+	"""
+	run type such as MANUAL, SCHEDULED, WEBHOOK, or EVENT
+	"""
+	runType: IntegrationRunIntegrationRunType
+	"""
+	resolved operation configuration used for this run
+	"""
+	operationConfig: Map
+	"""
+	status of the run
+	"""
+	status: IntegrationRunIntegrationRunStatus!
+	"""
+	when the run started
+	"""
+	startedAt: Time!
+	"""
+	when the run completed
+	"""
+	finishedAt: Time
+	"""
+	run duration in milliseconds
+	"""
+	durationMs: Int
+	"""
+	summary of the run outcome
+	"""
+	summary: String
+	"""
+	error details for failed runs
+	"""
+	error: String
+	"""
+	structured metrics and outputs for the run
+	"""
+	metrics: Map
+	owner: Organization
+	integration: Integration
+	actionPlans(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for ActionPlans returned from the connection.
+		"""
+		orderBy: [ActionPlanOrder!]
+
+		"""
+		Filtering options for ActionPlans returned from the connection.
+		"""
+		where: ActionPlanWhereInput
+	): ActionPlanConnection!
+	assets(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assets returned from the connection.
+		"""
+		orderBy: [AssetOrder!]
+
+		"""
+		Filtering options for Assets returned from the connection.
+		"""
+		where: AssetWhereInput
+	): AssetConnection!
+	checkResults(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for CheckResults returned from the connection.
+		"""
+		orderBy: [CheckResultOrder!]
+
+		"""
+		Filtering options for CheckResults returned from the connection.
+		"""
+		where: CheckResultWhereInput
+	): CheckResultConnection!
+	contacts(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Contacts returned from the connection.
+		"""
+		orderBy: [ContactOrder!]
+
+		"""
+		Filtering options for Contacts returned from the connection.
+		"""
+		where: ContactWhereInput
+	): ContactConnection!
+	directoryAccounts(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for DirectoryAccounts returned from the connection.
+		"""
+		orderBy: [DirectoryAccountOrder!]
+
+		"""
+		Filtering options for DirectoryAccounts returned from the connection.
+		"""
+		where: DirectoryAccountWhereInput
+	): DirectoryAccountConnection!
+	directoryGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for DirectoryGroups returned from the connection.
+		"""
+		orderBy: [DirectoryGroupOrder!]
+
+		"""
+		Filtering options for DirectoryGroups returned from the connection.
+		"""
+		where: DirectoryGroupWhereInput
+	): DirectoryGroupConnection!
+	directoryMemberships(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for DirectoryMemberships returned from the connection.
+		"""
+		orderBy: [DirectoryMembershipOrder!]
+
+		"""
+		Filtering options for DirectoryMemberships returned from the connection.
+		"""
+		where: DirectoryMembershipWhereInput
+	): DirectoryMembershipConnection!
+	entities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
+	findings(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Findings returned from the connection.
+		"""
+		orderBy: [FindingOrder!]
+
+		"""
+		Filtering options for Findings returned from the connection.
+		"""
+		where: FindingWhereInput
+	): FindingConnection!
+	internalPolicies(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for InternalPolicies returned from the connection.
+		"""
+		orderBy: [InternalPolicyOrder!]
+
+		"""
+		Filtering options for InternalPolicies returned from the connection.
+		"""
+		where: InternalPolicyWhereInput
+	): InternalPolicyConnection!
+	procedures(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Procedures returned from the connection.
+		"""
+		orderBy: [ProcedureOrder!]
+
+		"""
+		Filtering options for Procedures returned from the connection.
+		"""
+		where: ProcedureWhereInput
+	): ProcedureConnection!
+	risks(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Risks returned from the connection.
+		"""
+		orderBy: [RiskOrder!]
+
+		"""
+		Filtering options for Risks returned from the connection.
+		"""
+		where: RiskWhereInput
+	): RiskConnection!
+	vulnerabilities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Vulnerabilities returned from the connection.
+		"""
+		orderBy: [VulnerabilityOrder!]
+
+		"""
+		Filtering options for Vulnerabilities returned from the connection.
+		"""
+		where: VulnerabilityWhereInput
+	): VulnerabilityConnection!
+}
+"""
+A connection to a list of items.
+"""
+type IntegrationRunConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [IntegrationRunEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type IntegrationRunEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: IntegrationRun
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+IntegrationRunIntegrationOperationKind is enum for the field operation_kind
+"""
+enum IntegrationRunIntegrationOperationKind @goModel(model: "github.com/theopenlane/core/common/enums.IntegrationOperationKind") {
+	SYNC
+	PUSH
+	PULL
+	WEBHOOK
+	SCHEDULED
+}
+"""
+IntegrationRunIntegrationRunStatus is enum for the field status
+"""
+enum IntegrationRunIntegrationRunStatus @goModel(model: "github.com/theopenlane/core/common/enums.IntegrationRunStatus") {
+	PENDING
+	RUNNING
+	SUCCESS
+	FAILED
+	CANCELLED
+}
+"""
+IntegrationRunIntegrationRunType is enum for the field run_type
+"""
+enum IntegrationRunIntegrationRunType @goModel(model: "github.com/theopenlane/core/common/enums.IntegrationRunType") {
+	MANUAL
+	SCHEDULED
+	WEBHOOK
+	EVENT
+	RECONCILE
+}
+"""
+Ordering options for IntegrationRun connections
+"""
+input IntegrationRunOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order IntegrationRuns.
+	"""
+	field: IntegrationRunOrderField!
+}
+"""
+Properties by which IntegrationRun connections can be ordered.
+"""
+enum IntegrationRunOrderField {
+	created_at
+	updated_at
+	OPERATION_NAME
+	OPERATION_KIND
+	RUN_TYPE
+	STATUS
+	STARTED_AT
+	FINISHED_AT
+	DURATION_MS
+}
+"""
+IntegrationRunWhereInput is used for filtering IntegrationRun objects.
+Input was generated by ent.
+"""
+input IntegrationRunWhereInput {
+	not: IntegrationRunWhereInput
+	and: [IntegrationRunWhereInput!]
+	or: [IntegrationRunWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	updated_by_impersonator field predicates
+	"""
+	updatedByImpersonator: String
+	updatedByImpersonatorNEQ: String
+	updatedByImpersonatorIn: [String!]
+	updatedByImpersonatorNotIn: [String!]
+	updatedByImpersonatorContains: String
+	updatedByImpersonatorHasPrefix: String
+	updatedByImpersonatorHasSuffix: String
+	updatedByImpersonatorIsNil: Boolean
+	updatedByImpersonatorNotNil: Boolean
+	updatedByImpersonatorEqualFold: String
+	updatedByImpersonatorContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: ID
+	ownerIDNEQ: ID
+	ownerIDIn: [ID!]
+	ownerIDNotIn: [ID!]
+	ownerIDContains: ID
+	ownerIDHasPrefix: ID
+	ownerIDHasSuffix: ID
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: ID
+	ownerIDContainsFold: ID
+	"""
+	integration_id field predicates
+	"""
+	integrationID: ID
+	integrationIDNEQ: ID
+	integrationIDIn: [ID!]
+	integrationIDNotIn: [ID!]
+	integrationIDContains: ID
+	integrationIDHasPrefix: ID
+	integrationIDHasSuffix: ID
+	integrationIDIsNil: Boolean
+	integrationIDNotNil: Boolean
+	integrationIDEqualFold: ID
+	integrationIDContainsFold: ID
+	"""
+	operation_name field predicates
+	"""
+	operationName: String
+	operationNameNEQ: String
+	operationNameIn: [String!]
+	operationNameNotIn: [String!]
+	operationNameContains: String
+	operationNameHasPrefix: String
+	operationNameHasSuffix: String
+	operationNameIsNil: Boolean
+	operationNameNotNil: Boolean
+	operationNameEqualFold: String
+	operationNameContainsFold: String
+	"""
+	operation_kind field predicates
+	"""
+	operationKind: IntegrationRunIntegrationOperationKind
+	operationKindNEQ: IntegrationRunIntegrationOperationKind
+	operationKindIn: [IntegrationRunIntegrationOperationKind!]
+	operationKindNotIn: [IntegrationRunIntegrationOperationKind!]
+	operationKindIsNil: Boolean
+	operationKindNotNil: Boolean
+	"""
+	run_type field predicates
+	"""
+	runType: IntegrationRunIntegrationRunType
+	runTypeNEQ: IntegrationRunIntegrationRunType
+	runTypeIn: [IntegrationRunIntegrationRunType!]
+	runTypeNotIn: [IntegrationRunIntegrationRunType!]
+	runTypeIsNil: Boolean
+	runTypeNotNil: Boolean
+	"""
+	status field predicates
+	"""
+	status: IntegrationRunIntegrationRunStatus
+	statusNEQ: IntegrationRunIntegrationRunStatus
+	statusIn: [IntegrationRunIntegrationRunStatus!]
+	statusNotIn: [IntegrationRunIntegrationRunStatus!]
+	"""
+	started_at field predicates
+	"""
+	startedAt: Time
+	startedAtGT: Time
+	startedAtGTE: Time
+	startedAtLT: Time
+	startedAtLTE: Time
+	"""
+	finished_at field predicates
+	"""
+	finishedAt: Time
+	finishedAtGT: Time
+	finishedAtGTE: Time
+	finishedAtLT: Time
+	finishedAtLTE: Time
+	finishedAtIsNil: Boolean
+	finishedAtNotNil: Boolean
+	"""
+	duration_ms field predicates
+	"""
+	durationMs: Int
+	durationMsNEQ: Int
+	durationMsGT: Int
+	durationMsGTE: Int
+	durationMsLT: Int
+	durationMsLTE: Int
+	durationMsIsNil: Boolean
+	durationMsNotNil: Boolean
+	"""
+	summary field predicates
+	"""
+	summary: String
+	summaryNEQ: String
+	summaryIn: [String!]
+	summaryNotIn: [String!]
+	summaryContains: String
+	summaryHasPrefix: String
+	summaryHasSuffix: String
+	summaryIsNil: Boolean
+	summaryNotNil: Boolean
+	summaryEqualFold: String
+	summaryContainsFold: String
+	"""
+	error field predicates
+	"""
+	error: String
+	errorNEQ: String
+	errorIn: [String!]
+	errorNotIn: [String!]
+	errorContains: String
+	errorHasPrefix: String
+	errorHasSuffix: String
+	errorIsNil: Boolean
+	errorNotNil: Boolean
+	errorEqualFold: String
+	errorContainsFold: String
+	"""
+	owner edge predicates
+	"""
+	hasOwner: Boolean
+	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	integration edge predicates
+	"""
+	hasIntegration: Boolean
+	hasIntegrationWith: [IntegrationWhereInput!]
+	"""
+	action_plans edge predicates
+	"""
+	hasActionPlans: Boolean
+	hasActionPlansWith: [ActionPlanWhereInput!]
+	"""
+	assets edge predicates
+	"""
+	hasAssets: Boolean
+	hasAssetsWith: [AssetWhereInput!]
+	"""
+	check_results edge predicates
+	"""
+	hasCheckResults: Boolean
+	hasCheckResultsWith: [CheckResultWhereInput!]
+	"""
+	contacts edge predicates
+	"""
+	hasContacts: Boolean
+	hasContactsWith: [ContactWhereInput!]
+	"""
+	directory_accounts edge predicates
+	"""
+	hasDirectoryAccounts: Boolean
+	hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
+	"""
+	directory_groups edge predicates
+	"""
+	hasDirectoryGroups: Boolean
+	hasDirectoryGroupsWith: [DirectoryGroupWhereInput!]
+	"""
+	directory_memberships edge predicates
+	"""
+	hasDirectoryMemberships: Boolean
+	hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
+	"""
+	entities edge predicates
+	"""
+	hasEntities: Boolean
+	hasEntitiesWith: [EntityWhereInput!]
+	"""
+	findings edge predicates
+	"""
+	hasFindings: Boolean
+	hasFindingsWith: [FindingWhereInput!]
+	"""
+	internal_policies edge predicates
+	"""
+	hasInternalPolicies: Boolean
+	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+	"""
+	procedures edge predicates
+	"""
+	hasProcedures: Boolean
+	hasProceduresWith: [ProcedureWhereInput!]
+	"""
+	risks edge predicates
+	"""
+	hasRisks: Boolean
+	hasRisksWith: [RiskWhereInput!]
+	"""
+	vulnerabilities edge predicates
+	"""
+	hasVulnerabilities: Boolean
+	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
 }
 """
 IntegrationWhereInput is used for filtering Integration objects.
@@ -39316,11 +39829,6 @@ input IntegrationWhereInput {
 	hasDirectoryMemberships: Boolean
 	hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
 	"""
-	directory_sync_runs edge predicates
-	"""
-	hasDirectorySyncRuns: Boolean
-	hasDirectorySyncRunsWith: [DirectorySyncRunWhereInput!]
-	"""
 	check_results edge predicates
 	"""
 	hasCheckResults: Boolean
@@ -39345,6 +39853,11 @@ input IntegrationWhereInput {
 	"""
 	hasCampaigns: Boolean
 	hasCampaignsWith: [CampaignWhereInput!]
+	"""
+	integration_runs edge predicates
+	"""
+	hasIntegrationRuns: Boolean
+	hasIntegrationRunsWith: [IntegrationRunWhereInput!]
 	"""
 	entities edge predicates
 	"""
@@ -39390,9 +39903,13 @@ type InternalPolicy implements Node @modules(names: ["compliance_module","policy
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the organization id that owns the object
 	"""
@@ -39522,6 +40039,37 @@ type InternalPolicy implements Node @modules(names: ["compliance_module","policy
 	stable external UUID for deterministic OSCAL export and round-tripping
 	"""
 	externalUUID: String
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	owner: Organization
 	blockedGroups(
 		"""
@@ -40469,6 +41017,20 @@ input InternalPolicyWhereInput {
 	managedByEqualFold: String
 	managedByContainsFold: String
 	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -40776,6 +41338,11 @@ input InternalPolicyWhereInput {
 	externalUUIDNotNil: Boolean
 	externalUUIDEqualFold: String
 	externalUUIDContainsFold: String
+	"""
+	integration_runs edge predicates
+	"""
+	hasIntegrationRuns: Boolean
+	hasIntegrationRunsWith: [IntegrationRunWhereInput!]
 	"""
 	owner edge predicates
 	"""
@@ -43461,56 +44028,6 @@ type Mutation {
 		"""
 		id: ID!
 	): DirectoryMembershipDeletePayload!
-	"""
-	Create a new directorySyncRun
-	"""
-	createDirectorySyncRun(
-		"""
-		values of the directorySyncRun
-		"""
-		input: CreateDirectorySyncRunInput!
-	): DirectorySyncRunCreatePayload!
-	"""
-	Create multiple new directorySyncRuns
-	"""
-	createBulkDirectorySyncRun(
-		"""
-		values of the directorySyncRun
-		"""
-		input: [CreateDirectorySyncRunInput!]
-	): DirectorySyncRunBulkCreatePayload!
-	"""
-	Create multiple new directorySyncRuns via file upload
-	"""
-	createBulkCSVDirectorySyncRun(
-		"""
-		csv file containing values of the directorySyncRun
-		"""
-		input: Upload!
-	): DirectorySyncRunBulkCreatePayload!
-	"""
-	Update an existing directorySyncRun
-	"""
-	updateDirectorySyncRun(
-		"""
-		ID of the directorySyncRun
-		"""
-		id: ID!
-
-		"""
-		New values for the directorySyncRun
-		"""
-		input: UpdateDirectorySyncRunInput!
-	): DirectorySyncRunUpdatePayload!
-	"""
-	Delete an existing directorySyncRun
-	"""
-	deleteDirectorySyncRun(
-		"""
-		ID of the directorySyncRun
-		"""
-		id: ID!
-	): DirectorySyncRunDeletePayload!
 	"""
 	Create a new discussion
 	"""
@@ -52280,37 +52797,6 @@ type Organization implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
-	directorySyncRunCreators(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Groups returned from the connection.
-		"""
-		orderBy: [GroupOrder!]
-
-		"""
-		Filtering options for Groups returned from the connection.
-		"""
-		where: GroupWhereInput
-	): GroupConnection!
 	discussionCreators(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -56159,37 +56645,6 @@ type Organization implements Node {
 		"""
 		where: DirectoryMembershipWhereInput
 	): DirectoryMembershipConnection!
-	directorySyncRuns(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for DirectorySyncRuns returned from the connection.
-		"""
-		orderBy: [DirectorySyncRunOrder!]
-
-		"""
-		Filtering options for DirectorySyncRuns returned from the connection.
-		"""
-		where: DirectorySyncRunWhereInput
-	): DirectorySyncRunConnection!
 	discussions(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -57353,11 +57808,6 @@ input OrganizationWhereInput {
 	hasDirectoryMembershipCreators: Boolean
 	hasDirectoryMembershipCreatorsWith: [GroupWhereInput!]
 	"""
-	directory_sync_run_creators edge predicates
-	"""
-	hasDirectorySyncRunCreators: Boolean
-	hasDirectorySyncRunCreatorsWith: [GroupWhereInput!]
-	"""
 	discussion_creators edge predicates
 	"""
 	hasDiscussionCreators: Boolean
@@ -57997,11 +58447,6 @@ input OrganizationWhereInput {
 	"""
 	hasDirectoryMemberships: Boolean
 	hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
-	"""
-	directory_sync_runs edge predicates
-	"""
-	hasDirectorySyncRuns: Boolean
-	hasDirectorySyncRunsWith: [DirectorySyncRunWhereInput!]
 	"""
 	discussions edge predicates
 	"""
@@ -59219,37 +59664,6 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
 		"""
 		where: IntegrationWhereInput
 	): IntegrationConnection!
-	directorySyncRuns(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for DirectorySyncRuns returned from the connection.
-		"""
-		orderBy: [DirectorySyncRunOrder!]
-
-		"""
-		Filtering options for DirectorySyncRuns returned from the connection.
-		"""
-		where: DirectorySyncRunWhereInput
-	): DirectorySyncRunConnection!
 	directoryAccounts(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -60661,11 +61075,6 @@ input PlatformWhereInput {
 	hasIntegrations: Boolean
 	hasIntegrationsWith: [IntegrationWhereInput!]
 	"""
-	directory_sync_runs edge predicates
-	"""
-	hasDirectorySyncRuns: Boolean
-	hasDirectorySyncRunsWith: [DirectorySyncRunWhereInput!]
-	"""
 	directory_accounts edge predicates
 	"""
 	hasDirectoryAccounts: Boolean
@@ -60790,9 +61199,13 @@ type Procedure implements Node @modules(names: ["compliance_module","policy_mana
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the organization id that owns the object
 	"""
@@ -60918,6 +61331,37 @@ type Procedure implements Node @modules(names: ["compliance_module","policy_mana
 	internal marker field for workflow eligibility, not exposed in API
 	"""
 	workflowEligibleMarker: Boolean
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	owner: Organization
 	blockedGroups(
 		"""
@@ -61643,6 +62087,20 @@ input ProcedureWhereInput {
 	managedByEqualFold: String
 	managedByContainsFold: String
 	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -61936,6 +62394,11 @@ input ProcedureWhereInput {
 	workflowEligibleMarkerNEQ: Boolean
 	workflowEligibleMarkerIsNil: Boolean
 	workflowEligibleMarkerNotNil: Boolean
+	"""
+	integration_runs edge predicates
+	"""
+	hasIntegrationRuns: Boolean
+	hasIntegrationRunsWith: [IntegrationRunWhereInput!]
 	"""
 	owner edge predicates
 	"""
@@ -64262,37 +64725,6 @@ type Query {
 		"""
 		where: DirectoryMembershipWhereInput
 	): DirectoryMembershipConnection!
-	directorySyncRuns(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for DirectorySyncRuns returned from the connection.
-		"""
-		orderBy: [DirectorySyncRunOrder!]
-
-		"""
-		Filtering options for DirectorySyncRuns returned from the connection.
-		"""
-		where: DirectorySyncRunWhereInput
-	): DirectorySyncRunConnection!
 	discussions(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -64820,6 +65252,37 @@ type Query {
 		"""
 		where: IntegrationWhereInput
 	): IntegrationConnection!
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	internalPolicies(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -66707,15 +67170,6 @@ type Query {
 		"""
 		id: ID!
 	): DirectoryMembership!
-	"""
-	Look up directorySyncRun by ID
-	"""
-	directorySyncRun(
-		"""
-		ID of the directorySyncRun
-		"""
-		id: ID!
-	): DirectorySyncRun!
 	"""
 	Look up discussion by ID
 	"""
@@ -71502,9 +71956,13 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -71642,6 +72100,37 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
 	the decision made for the risk - accept, transfer, avoid, mitigate, or none
 	"""
 	riskDecision: RiskRiskDecision
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	owner: Organization
 	blockedGroups(
 		"""
@@ -72668,6 +73157,20 @@ input RiskWhereInput {
 	managedByEqualFold: String
 	managedByContainsFold: String
 	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -73048,6 +73551,11 @@ input RiskWhereInput {
 	riskDecisionNotIn: [RiskRiskDecision!]
 	riskDecisionIsNil: Boolean
 	riskDecisionNotNil: Boolean
+	"""
+	integration_runs edge predicates
+	"""
+	hasIntegrationRuns: Boolean
+	hasIntegrationRunsWith: [IntegrationRunWhereInput!]
 	"""
 	owner edge predicates
 	"""
@@ -85922,10 +86430,15 @@ input UpdateActionPlanInput {
 	sourceInstanceID: String
 	clearSourceInstanceID: Boolean
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
 	clearManagedBy: Boolean
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
+	clearIntegrationRunID: Boolean
 	"""
 	the name of the action_plan
 	"""
@@ -86089,6 +86602,9 @@ input UpdateActionPlanInput {
 	"""
 	source: String
 	clearSource: Boolean
+	addIntegrationRunIDs: [ID!]
+	removeIntegrationRunIDs: [ID!]
+	clearIntegrationRuns: Boolean
 	approverID: ID
 	clearApprover: Boolean
 	delegateID: ID
@@ -86241,10 +86757,15 @@ input UpdateAssetInput {
 	sourceInstanceID: String
 	clearSourceInstanceID: Boolean
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
 	clearManagedBy: Boolean
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
+	clearIntegrationRunID: Boolean
 	"""
 	the internal owner for the asset when no user, group, or identity holder is linked
 	"""
@@ -86380,6 +86901,9 @@ input UpdateAssetInput {
 	"""
 	observedAt: DateTime
 	clearObservedAt: Boolean
+	addIntegrationRunIDs: [ID!]
+	removeIntegrationRunIDs: [ID!]
+	clearIntegrationRuns: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -86716,10 +87240,15 @@ input UpdateCheckResultInput {
 	sourceInstanceID: String
 	clearSourceInstanceID: Boolean
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
 	clearManagedBy: Boolean
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
+	clearIntegrationRunID: Boolean
 	"""
 	current status of the control
 	"""
@@ -86748,6 +87277,9 @@ input UpdateCheckResultInput {
 	"""
 	parentExternalID: String
 	clearParentExternalID: Boolean
+	addIntegrationRunIDs: [ID!]
+	removeIntegrationRunIDs: [ID!]
+	clearIntegrationRuns: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -86793,10 +87325,15 @@ input UpdateContactInput {
 	sourceInstanceID: String
 	clearSourceInstanceID: Boolean
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
 	clearManagedBy: Boolean
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
+	clearIntegrationRunID: Boolean
 	"""
 	the full name of the contact
 	"""
@@ -86846,6 +87383,9 @@ input UpdateContactInput {
 	"""
 	observedAt: DateTime
 	clearObservedAt: Boolean
+	addIntegrationRunIDs: [ID!]
+	removeIntegrationRunIDs: [ID!]
+	clearIntegrationRuns: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addEntityIDs: [ID!]
@@ -87502,10 +88042,15 @@ input UpdateDirectoryAccountInput {
 	sourceInstanceID: String
 	clearSourceInstanceID: Boolean
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
 	clearManagedBy: Boolean
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
+	clearIntegrationRunID: Boolean
 	"""
 	the environment of the directory_account
 	"""
@@ -87516,11 +88061,6 @@ input UpdateDirectoryAccountInput {
 	"""
 	scopeName: String
 	clearScopeName: Boolean
-	"""
-	stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
-	"""
-	directoryInstanceID: String
-	clearDirectoryInstanceID: Boolean
 	"""
 	directory source label set by the integration (e.g. googleworkspace, github, slack)
 	"""
@@ -87631,10 +88171,6 @@ input UpdateDirectoryAccountInput {
 	removedAt: Time
 	clearRemovedAt: Boolean
 	"""
-	hash of the normalized profile payload for change detection
-	"""
-	profileHash: String
-	"""
 	flattened attribute bag used for filtering/diffing
 	"""
 	profile: Map
@@ -87653,6 +88189,9 @@ input UpdateDirectoryAccountInput {
 	indicates this directory account originates from the installation designated as the primary directory source for its owner organization
 	"""
 	primarySource: Boolean
+	addIntegrationRunIDs: [ID!]
+	removeIntegrationRunIDs: [ID!]
+	clearIntegrationRuns: Boolean
 	environmentID: ID
 	clearEnvironment: Boolean
 	scopeID: ID
@@ -87697,10 +88236,15 @@ input UpdateDirectoryGroupInput {
 	sourceInstanceID: String
 	clearSourceInstanceID: Boolean
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
 	clearManagedBy: Boolean
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
+	clearIntegrationRunID: Boolean
 	"""
 	the environment of the directory_group
 	"""
@@ -87711,11 +88255,6 @@ input UpdateDirectoryGroupInput {
 	"""
 	scopeName: String
 	clearScopeName: Boolean
-	"""
-	stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
-	"""
-	directoryInstanceID: String
-	clearDirectoryInstanceID: Boolean
 	"""
 	primary group email address, when applicable
 	"""
@@ -87770,10 +88309,6 @@ input UpdateDirectoryGroupInput {
 	removedAt: Time
 	clearRemovedAt: Boolean
 	"""
-	hash of the normalized payload for diffing
-	"""
-	profileHash: String
-	"""
 	flattened attribute bag used for filtering/diffing
 	"""
 	profile: Map
@@ -87793,6 +88328,9 @@ input UpdateDirectoryGroupInput {
 	"""
 	directoryName: String
 	clearDirectoryName: Boolean
+	addIntegrationRunIDs: [ID!]
+	removeIntegrationRunIDs: [ID!]
+	clearIntegrationRuns: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	environmentID: ID
@@ -87825,10 +88363,15 @@ input UpdateDirectoryMembershipInput {
 	sourceInstanceID: String
 	clearSourceInstanceID: Boolean
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
 	clearManagedBy: Boolean
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
+	clearIntegrationRunID: Boolean
 	"""
 	the environment of the directory_membership
 	"""
@@ -87839,11 +88382,6 @@ input UpdateDirectoryMembershipInput {
 	"""
 	scopeName: String
 	clearScopeName: Boolean
-	"""
-	stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
-	"""
-	directoryInstanceID: String
-	clearDirectoryInstanceID: Boolean
 	"""
 	membership role reported by the provider
 	"""
@@ -87880,15 +88418,13 @@ input UpdateDirectoryMembershipInput {
 	removedAt: Time
 	clearRemovedAt: Boolean
 	"""
-	sync run identifier that most recently confirmed this membership
-	"""
-	lastConfirmedRunID: String
-	clearLastConfirmedRunID: Boolean
-	"""
 	raw metadata associated with this membership from the provider
 	"""
 	metadata: Map
 	clearMetadata: Boolean
+	addIntegrationRunIDs: [ID!]
+	removeIntegrationRunIDs: [ID!]
+	clearIntegrationRuns: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	environmentID: ID
@@ -87902,80 +88438,6 @@ input UpdateDirectoryMembershipInput {
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
-}
-"""
-UpdateDirectorySyncRunInput is used for update DirectorySyncRun object.
-Input was generated by ent.
-"""
-input UpdateDirectorySyncRunInput {
-	"""
-	the environment of the directory_sync_run
-	"""
-	environmentName: String
-	clearEnvironmentName: Boolean
-	"""
-	the scope of the directory_sync_run
-	"""
-	scopeName: String
-	clearScopeName: Boolean
-	"""
-	stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
-	"""
-	directoryInstanceID: String
-	clearDirectoryInstanceID: Boolean
-	"""
-	current state of the sync run
-	"""
-	status: DirectorySyncRunDirectorySyncRunStatus
-	"""
-	time the sync started
-	"""
-	startedAt: Time
-	"""
-	time the sync finished
-	"""
-	completedAt: Time
-	clearCompletedAt: Boolean
-	"""
-	cursor or checkpoint returned by the provider for the next run
-	"""
-	sourceCursor: String
-	clearSourceCursor: Boolean
-	"""
-	total records processed during this run
-	"""
-	fullCount: Int
-	"""
-	number of records that changed compared to the prior run
-	"""
-	deltaCount: Int
-	"""
-	serialized error information when the run failed
-	"""
-	error: String
-	clearError: Boolean
-	"""
-	object storage file identifier for the manifest captured during the run
-	"""
-	rawManifestFileID: String
-	clearRawManifestFileID: Boolean
-	"""
-	additional provider-specific stats for the run
-	"""
-	stats: Map
-	clearStats: Boolean
-	ownerID: ID
-	clearOwner: Boolean
-	environmentID: ID
-	clearEnvironment: Boolean
-	scopeID: ID
-	clearScope: Boolean
-	addDirectoryAccountIDs: [ID!]
-	removeDirectoryAccountIDs: [ID!]
-	clearDirectoryAccounts: Boolean
-	addDirectoryGroupIDs: [ID!]
-	removeDirectoryGroupIDs: [ID!]
-	clearDirectoryGroups: Boolean
 }
 """
 UpdateDiscussionInput is used for update Discussion object.
@@ -88204,10 +88666,15 @@ input UpdateEntityInput {
 	sourceInstanceID: String
 	clearSourceInstanceID: Boolean
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
 	clearManagedBy: Boolean
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
+	clearIntegrationRunID: Boolean
 	"""
 	the internal owner for the entity when no user, group, or identity holder is linked
 	"""
@@ -88433,6 +88900,9 @@ input UpdateEntityInput {
 	"""
 	observedAt: DateTime
 	clearObservedAt: Boolean
+	addIntegrationRunIDs: [ID!]
+	removeIntegrationRunIDs: [ID!]
+	clearIntegrationRuns: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -89023,10 +89493,15 @@ input UpdateFindingInput {
 	sourceInstanceID: String
 	clearSourceInstanceID: Boolean
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
 	clearManagedBy: Boolean
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
+	clearIntegrationRunID: Boolean
 	"""
 	who reviewed the finding when no user, group, or identity holder is linked
 	"""
@@ -89251,6 +89726,9 @@ input UpdateFindingInput {
 	"""
 	rawPayload: Map
 	clearRawPayload: Boolean
+	addIntegrationRunIDs: [ID!]
+	removeIntegrationRunIDs: [ID!]
+	clearIntegrationRuns: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -89874,10 +90352,15 @@ input UpdateInternalPolicyInput {
 	sourceInstanceID: String
 	clearSourceInstanceID: Boolean
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
 	clearManagedBy: Boolean
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
+	clearIntegrationRunID: Boolean
 	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
@@ -90004,6 +90487,9 @@ input UpdateInternalPolicyInput {
 	"""
 	externalUUID: String
 	clearExternalUUID: Boolean
+	addIntegrationRunIDs: [ID!]
+	removeIntegrationRunIDs: [ID!]
+	clearIntegrationRuns: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
@@ -90656,9 +91142,6 @@ input UpdateOrganizationInput {
 	addDirectoryMembershipCreatorIDs: [ID!]
 	removeDirectoryMembershipCreatorIDs: [ID!]
 	clearDirectoryMembershipCreators: Boolean
-	addDirectorySyncRunCreatorIDs: [ID!]
-	removeDirectorySyncRunCreatorIDs: [ID!]
-	clearDirectorySyncRunCreators: Boolean
 	addDiscussionCreatorIDs: [ID!]
 	removeDiscussionCreatorIDs: [ID!]
 	clearDiscussionCreators: Boolean
@@ -91029,9 +91512,6 @@ input UpdateOrganizationInput {
 	addDirectoryGroupIDs: [ID!]
 	removeDirectoryGroupIDs: [ID!]
 	clearDirectoryGroups: Boolean
-	addDirectorySyncRunIDs: [ID!]
-	removeDirectorySyncRunIDs: [ID!]
-	clearDirectorySyncRuns: Boolean
 	addDiscussionIDs: [ID!]
 	removeDiscussionIDs: [ID!]
 	clearDiscussions: Boolean
@@ -91494,9 +91974,6 @@ input UpdatePlatformInput {
 	addIntegrationIDs: [ID!]
 	removeIntegrationIDs: [ID!]
 	clearIntegrations: Boolean
-	addDirectorySyncRunIDs: [ID!]
-	removeDirectorySyncRunIDs: [ID!]
-	clearDirectorySyncRuns: Boolean
 	addDirectoryAccountIDs: [ID!]
 	removeDirectoryAccountIDs: [ID!]
 	clearDirectoryAccounts: Boolean
@@ -91562,10 +92039,15 @@ input UpdateProcedureInput {
 	sourceInstanceID: String
 	clearSourceInstanceID: Boolean
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
 	clearManagedBy: Boolean
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
+	clearIntegrationRunID: Boolean
 	"""
 	the name of the procedure
 	"""
@@ -91687,6 +92169,9 @@ input UpdateProcedureInput {
 	"""
 	workflowEligibleMarker: Boolean
 	clearWorkflowEligibleMarker: Boolean
+	addIntegrationRunIDs: [ID!]
+	removeIntegrationRunIDs: [ID!]
+	clearIntegrationRuns: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
@@ -92318,10 +92803,15 @@ input UpdateRiskInput {
 	sourceInstanceID: String
 	clearSourceInstanceID: Boolean
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
 	clearManagedBy: Boolean
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
+	clearIntegrationRunID: Boolean
 	"""
 	the kind of the risk
 	"""
@@ -92461,6 +92951,9 @@ input UpdateRiskInput {
 	"""
 	riskDecision: RiskRiskDecision
 	clearRiskDecision: Boolean
+	addIntegrationRunIDs: [ID!]
+	removeIntegrationRunIDs: [ID!]
+	clearIntegrationRuns: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -94330,10 +94823,15 @@ input UpdateVulnerabilityInput {
 	sourceInstanceID: String
 	clearSourceInstanceID: Boolean
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
 	clearManagedBy: Boolean
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
+	clearIntegrationRunID: Boolean
 	"""
 	who reviewed the vulnerability when no user, group, or identity holder is linked
 	"""
@@ -94581,6 +95079,9 @@ input UpdateVulnerabilityInput {
 	"""
 	rawPayload: Map
 	clearRawPayload: Boolean
+	addIntegrationRunIDs: [ID!]
+	removeIntegrationRunIDs: [ID!]
+	clearIntegrationRuns: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean
@@ -97205,9 +97706,13 @@ type Vulnerability implements Node @modules(names: ["vulnerability_management_mo
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -97452,6 +97957,37 @@ type Vulnerability implements Node @modules(names: ["vulnerability_management_mo
 	raw payload received from the integration for auditing and troubleshooting
 	"""
 	rawPayload: Map
+	integrationRuns(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for IntegrationRuns returned from the connection.
+		"""
+		orderBy: IntegrationRunOrder
+
+		"""
+		Filtering options for IntegrationRuns returned from the connection.
+		"""
+		where: IntegrationRunWhereInput
+	): IntegrationRunConnection!
 	owner: Organization
 	blockedGroups(
 		"""
@@ -98404,6 +98940,20 @@ input VulnerabilityWhereInput {
 	managedByEqualFold: String
 	managedByContainsFold: String
 	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -99094,6 +99644,11 @@ input VulnerabilityWhereInput {
 	externalURINotNil: Boolean
 	externalURIEqualFold: String
 	externalURIContainsFold: String
+	"""
+	integration_runs edge predicates
+	"""
+	hasIntegrationRuns: Boolean
+	hasIntegrationRunsWith: [IntegrationRunWhereInput!]
 	"""
 	owner edge predicates
 	"""

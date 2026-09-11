@@ -49,8 +49,10 @@ type Finding struct {
 	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
 	// stable identifier of the external system instance the record was sourced from
 	SourceInstanceID string `json:"source_instance_id,omitempty"`
-	// virtual subject id of the integration definition managing the record, empty when user controlled
+	// id of the integration installation managing the record, empty when the record is unclaimed
 	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// who reviewed the finding when no user, group, or identity holder is linked
@@ -171,6 +173,8 @@ type Finding struct {
 
 // FindingEdges holds the relations/edges for other nodes in the graph.
 type FindingEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -237,10 +241,11 @@ type FindingEdges struct {
 	ControlMappings []*FindingControl `json:"control_mappings,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [32]bool
+	loadedTypes [33]bool
 	// totalCount holds the count of the edges above.
-	totalCount [32]map[string]int
+	totalCount [33]map[string]int
 
+	namedIntegrationRuns    map[string][]*IntegrationRun
 	namedBlockedGroups      map[string][]*Group
 	namedEditors            map[string][]*Group
 	namedIntegrations       map[string][]*Integration
@@ -265,12 +270,21 @@ type FindingEdges struct {
 	namedControlMappings    map[string][]*FindingControl
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e FindingEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e FindingEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -279,7 +293,7 @@ func (e FindingEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -288,7 +302,7 @@ func (e FindingEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -299,7 +313,7 @@ func (e FindingEdges) EditorsOrErr() ([]*Group, error) {
 func (e FindingEdges) ReviewedByUserOrErr() (*User, error) {
 	if e.ReviewedByUser != nil {
 		return e.ReviewedByUser, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "reviewed_by_user"}
@@ -310,7 +324,7 @@ func (e FindingEdges) ReviewedByUserOrErr() (*User, error) {
 func (e FindingEdges) ReviewedByGroupOrErr() (*Group, error) {
 	if e.ReviewedByGroup != nil {
 		return e.ReviewedByGroup, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "reviewed_by_group"}
@@ -321,7 +335,7 @@ func (e FindingEdges) ReviewedByGroupOrErr() (*Group, error) {
 func (e FindingEdges) ReviewedByIdentityHolderOrErr() (*IdentityHolder, error) {
 	if e.ReviewedByIdentityHolder != nil {
 		return e.ReviewedByIdentityHolder, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: identityholder.Label}
 	}
 	return nil, &NotLoadedError{edge: "reviewed_by_identity_holder"}
@@ -332,7 +346,7 @@ func (e FindingEdges) ReviewedByIdentityHolderOrErr() (*IdentityHolder, error) {
 func (e FindingEdges) AssignedToUserOrErr() (*User, error) {
 	if e.AssignedToUser != nil {
 		return e.AssignedToUser, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "assigned_to_user"}
@@ -343,7 +357,7 @@ func (e FindingEdges) AssignedToUserOrErr() (*User, error) {
 func (e FindingEdges) AssignedToGroupOrErr() (*Group, error) {
 	if e.AssignedToGroup != nil {
 		return e.AssignedToGroup, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "assigned_to_group"}
@@ -354,7 +368,7 @@ func (e FindingEdges) AssignedToGroupOrErr() (*Group, error) {
 func (e FindingEdges) AssignedToIdentityHolderOrErr() (*IdentityHolder, error) {
 	if e.AssignedToIdentityHolder != nil {
 		return e.AssignedToIdentityHolder, nil
-	} else if e.loadedTypes[8] {
+	} else if e.loadedTypes[9] {
 		return nil, &NotFoundError{label: identityholder.Label}
 	}
 	return nil, &NotLoadedError{edge: "assigned_to_identity_holder"}
@@ -365,7 +379,7 @@ func (e FindingEdges) AssignedToIdentityHolderOrErr() (*IdentityHolder, error) {
 func (e FindingEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 	if e.Environment != nil {
 		return e.Environment, nil
-	} else if e.loadedTypes[9] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "environment"}
@@ -376,7 +390,7 @@ func (e FindingEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 func (e FindingEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	if e.Scope != nil {
 		return e.Scope, nil
-	} else if e.loadedTypes[10] {
+	} else if e.loadedTypes[11] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "scope"}
@@ -387,7 +401,7 @@ func (e FindingEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 func (e FindingEdges) FindingStatusOrErr() (*CustomTypeEnum, error) {
 	if e.FindingStatus != nil {
 		return e.FindingStatus, nil
-	} else if e.loadedTypes[11] {
+	} else if e.loadedTypes[12] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "finding_status"}
@@ -396,7 +410,7 @@ func (e FindingEdges) FindingStatusOrErr() (*CustomTypeEnum, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -405,7 +419,7 @@ func (e FindingEdges) IntegrationsOrErr() ([]*Integration, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -414,7 +428,7 @@ func (e FindingEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -423,7 +437,7 @@ func (e FindingEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -432,7 +446,7 @@ func (e FindingEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -441,7 +455,7 @@ func (e FindingEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -450,7 +464,7 @@ func (e FindingEdges) RisksOrErr() ([]*Risk, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -459,7 +473,7 @@ func (e FindingEdges) ProgramsOrErr() ([]*Program, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -468,7 +482,7 @@ func (e FindingEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -477,7 +491,7 @@ func (e FindingEdges) EntitiesOrErr() ([]*Entity, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -486,7 +500,7 @@ func (e FindingEdges) ScansOrErr() ([]*Scan, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -495,7 +509,7 @@ func (e FindingEdges) TasksOrErr() ([]*Task, error) {
 // DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[24] {
 		return e.DirectoryAccounts, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_accounts"}
@@ -504,7 +518,7 @@ func (e FindingEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[25] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -513,7 +527,7 @@ func (e FindingEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[26] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -522,7 +536,7 @@ func (e FindingEdges) RemediationsOrErr() ([]*Remediation, error) {
 // ReviewsOrErr returns the Reviews value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[27] {
 		return e.Reviews, nil
 	}
 	return nil, &NotLoadedError{edge: "reviews"}
@@ -531,7 +545,7 @@ func (e FindingEdges) ReviewsOrErr() ([]*Review, error) {
 // CommentsOrErr returns the Comments value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) CommentsOrErr() ([]*Note, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[28] {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
@@ -540,7 +554,7 @@ func (e FindingEdges) CommentsOrErr() ([]*Note, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[28] {
+	if e.loadedTypes[29] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -549,7 +563,7 @@ func (e FindingEdges) FilesOrErr() ([]*File, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[29] {
+	if e.loadedTypes[30] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -558,7 +572,7 @@ func (e FindingEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 // CheckResultsOrErr returns the CheckResults value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) CheckResultsOrErr() ([]*CheckResult, error) {
-	if e.loadedTypes[30] {
+	if e.loadedTypes[31] {
 		return e.CheckResults, nil
 	}
 	return nil, &NotLoadedError{edge: "check_results"}
@@ -567,7 +581,7 @@ func (e FindingEdges) CheckResultsOrErr() ([]*CheckResult, error) {
 // ControlMappingsOrErr returns the ControlMappings value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ControlMappingsOrErr() ([]*FindingControl, error) {
-	if e.loadedTypes[31] {
+	if e.loadedTypes[32] {
 		return e.ControlMappings, nil
 	}
 	return nil, &NotLoadedError{edge: "control_mappings"}
@@ -588,7 +602,7 @@ func (*Finding) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case finding.FieldRemediationSLA:
 			values[i] = new(sql.NullInt64)
-		case finding.FieldID, finding.FieldCreatedBy, finding.FieldUpdatedBy, finding.FieldUpdatedByImpersonator, finding.FieldDeletedBy, finding.FieldDisplayID, finding.FieldSourceDefinitionID, finding.FieldSourceDefinitionVersion, finding.FieldSourceInstanceID, finding.FieldManagedBy, finding.FieldOwnerID, finding.FieldReviewedBy, finding.FieldReviewedByUserID, finding.FieldReviewedByGroupID, finding.FieldReviewedByIdentityHolderID, finding.FieldAssignedTo, finding.FieldAssignedToUserID, finding.FieldAssignedToGroupID, finding.FieldAssignedToIdentityHolderID, finding.FieldInternalNotes, finding.FieldSystemInternalID, finding.FieldEnvironmentName, finding.FieldEnvironmentID, finding.FieldScopeName, finding.FieldScopeID, finding.FieldFindingStatusName, finding.FieldFindingStatusID, finding.FieldExternalID, finding.FieldSecurityLevel, finding.FieldExternalOwnerID, finding.FieldSource, finding.FieldResourceName, finding.FieldDisplayName, finding.FieldState, finding.FieldCategory, finding.FieldFindingClass, finding.FieldSeverity, finding.FieldPriority, finding.FieldAssessmentID, finding.FieldDescription, finding.FieldRecommendation, finding.FieldRecommendedActions, finding.FieldVector, finding.FieldExternalURI:
+		case finding.FieldID, finding.FieldCreatedBy, finding.FieldUpdatedBy, finding.FieldUpdatedByImpersonator, finding.FieldDeletedBy, finding.FieldDisplayID, finding.FieldSourceDefinitionID, finding.FieldSourceDefinitionVersion, finding.FieldSourceInstanceID, finding.FieldManagedBy, finding.FieldIntegrationRunID, finding.FieldOwnerID, finding.FieldReviewedBy, finding.FieldReviewedByUserID, finding.FieldReviewedByGroupID, finding.FieldReviewedByIdentityHolderID, finding.FieldAssignedTo, finding.FieldAssignedToUserID, finding.FieldAssignedToGroupID, finding.FieldAssignedToIdentityHolderID, finding.FieldInternalNotes, finding.FieldSystemInternalID, finding.FieldEnvironmentName, finding.FieldEnvironmentID, finding.FieldScopeName, finding.FieldScopeID, finding.FieldFindingStatusName, finding.FieldFindingStatusID, finding.FieldExternalID, finding.FieldSecurityLevel, finding.FieldExternalOwnerID, finding.FieldSource, finding.FieldResourceName, finding.FieldDisplayName, finding.FieldState, finding.FieldCategory, finding.FieldFindingClass, finding.FieldSeverity, finding.FieldPriority, finding.FieldAssessmentID, finding.FieldDescription, finding.FieldRecommendation, finding.FieldRecommendedActions, finding.FieldVector, finding.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case finding.FieldCreatedAt, finding.FieldUpdatedAt, finding.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -693,6 +707,12 @@ func (_m *Finding) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
 			} else if value.Valid {
 				_m.ManagedBy = value.String
+			}
+		case finding.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
 			}
 		case finding.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1062,6 +1082,11 @@ func (_m *Finding) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryIntegrationRuns queries the "integration_runs" edge of the Finding entity.
+func (_m *Finding) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewFindingClient(_m.config).QueryIntegrationRuns(_m)
+}
+
 // QueryOwner queries the "owner" edge of the Finding entity.
 func (_m *Finding) QueryOwner() *OrganizationQuery {
 	return NewFindingClient(_m.config).QueryOwner(_m)
@@ -1286,6 +1311,9 @@ func (_m *Finding) String() string {
 	builder.WriteString("managed_by=")
 	builder.WriteString(_m.ManagedBy)
 	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -1465,6 +1493,30 @@ func (_m *Finding) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.RawPayload))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Finding) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Finding) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not

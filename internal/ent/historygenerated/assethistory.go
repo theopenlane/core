@@ -51,8 +51,10 @@ type AssetHistory struct {
 	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
 	// stable identifier of the external system instance the record was sourced from
 	SourceInstanceID string `json:"source_instance_id,omitempty"`
-	// virtual subject id of the integration definition managing the record, empty when user controlled
+	// id of the integration installation managing the record, empty when the record is unclaimed
 	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the internal owner for the asset when no user, group, or identity holder is linked
@@ -157,7 +159,7 @@ func (*AssetHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case assethistory.FieldEstimatedMonthlyCost:
 			values[i] = new(sql.NullFloat64)
-		case assethistory.FieldID, assethistory.FieldRef, assethistory.FieldCreatedBy, assethistory.FieldUpdatedBy, assethistory.FieldUpdatedByImpersonator, assethistory.FieldDeletedBy, assethistory.FieldSourceDefinitionID, assethistory.FieldSourceDefinitionVersion, assethistory.FieldSourceInstanceID, assethistory.FieldManagedBy, assethistory.FieldOwnerID, assethistory.FieldInternalOwner, assethistory.FieldInternalOwnerUserID, assethistory.FieldInternalOwnerGroupID, assethistory.FieldInternalOwnerIdentityHolderID, assethistory.FieldAssetSubtypeName, assethistory.FieldAssetSubtypeID, assethistory.FieldAssetDataClassificationName, assethistory.FieldAssetDataClassificationID, assethistory.FieldEnvironmentName, assethistory.FieldEnvironmentID, assethistory.FieldScopeName, assethistory.FieldScopeID, assethistory.FieldAccessModelName, assethistory.FieldAccessModelID, assethistory.FieldEncryptionStatusName, assethistory.FieldEncryptionStatusID, assethistory.FieldSecurityTierName, assethistory.FieldSecurityTierID, assethistory.FieldCriticalityName, assethistory.FieldCriticalityID, assethistory.FieldInternalNotes, assethistory.FieldSystemInternalID, assethistory.FieldAssetType, assethistory.FieldName, assethistory.FieldDisplayName, assethistory.FieldDescription, assethistory.FieldIdentifier, assethistory.FieldWebsite, assethistory.FieldPhysicalLocation, assethistory.FieldRegion, assethistory.FieldSourceType, assethistory.FieldSourcePlatformID, assethistory.FieldSourceIdentifier, assethistory.FieldCostCenter, assethistory.FieldCpe, assethistory.FieldIntegrationID:
+		case assethistory.FieldID, assethistory.FieldRef, assethistory.FieldCreatedBy, assethistory.FieldUpdatedBy, assethistory.FieldUpdatedByImpersonator, assethistory.FieldDeletedBy, assethistory.FieldSourceDefinitionID, assethistory.FieldSourceDefinitionVersion, assethistory.FieldSourceInstanceID, assethistory.FieldManagedBy, assethistory.FieldIntegrationRunID, assethistory.FieldOwnerID, assethistory.FieldInternalOwner, assethistory.FieldInternalOwnerUserID, assethistory.FieldInternalOwnerGroupID, assethistory.FieldInternalOwnerIdentityHolderID, assethistory.FieldAssetSubtypeName, assethistory.FieldAssetSubtypeID, assethistory.FieldAssetDataClassificationName, assethistory.FieldAssetDataClassificationID, assethistory.FieldEnvironmentName, assethistory.FieldEnvironmentID, assethistory.FieldScopeName, assethistory.FieldScopeID, assethistory.FieldAccessModelName, assethistory.FieldAccessModelID, assethistory.FieldEncryptionStatusName, assethistory.FieldEncryptionStatusID, assethistory.FieldSecurityTierName, assethistory.FieldSecurityTierID, assethistory.FieldCriticalityName, assethistory.FieldCriticalityID, assethistory.FieldInternalNotes, assethistory.FieldSystemInternalID, assethistory.FieldAssetType, assethistory.FieldName, assethistory.FieldDisplayName, assethistory.FieldDescription, assethistory.FieldIdentifier, assethistory.FieldWebsite, assethistory.FieldPhysicalLocation, assethistory.FieldRegion, assethistory.FieldSourceType, assethistory.FieldSourcePlatformID, assethistory.FieldSourceIdentifier, assethistory.FieldCostCenter, assethistory.FieldCpe, assethistory.FieldIntegrationID:
 			values[i] = new(sql.NullString)
 		case assethistory.FieldHistoryTime, assethistory.FieldCreatedAt, assethistory.FieldUpdatedAt, assethistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -274,6 +276,12 @@ func (_m *AssetHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
 			} else if value.Valid {
 				_m.ManagedBy = value.String
+			}
+		case assethistory.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
 			}
 		case assethistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -621,6 +629,9 @@ func (_m *AssetHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("managed_by=")
 	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)

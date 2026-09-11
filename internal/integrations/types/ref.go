@@ -73,24 +73,6 @@ func (r DefinitionRef) WebhookEventTopic(name string) gala.TopicName {
 	return r.WebhookEventTopics().Name(name)
 }
 
-// VirtualUserRef is the durable virtual actor identity for one registered definition, stamped into
-// created_by and updated_by on records the definition's installations create or enrich; display
-// attributes derive from the owning definition at read time
-type VirtualUserRef struct {
-	// id is the stable ULID subject identifier for the virtual actor
-	id string
-}
-
-// NewVirtualUserRef creates a virtual actor identity handle
-func NewVirtualUserRef(id string) VirtualUserRef {
-	return VirtualUserRef{id: id}
-}
-
-// SubjectID returns the stable ULID subject identifier for the virtual actor
-func (r VirtualUserRef) SubjectID() string {
-	return r.id
-}
-
 // =========
 // Credentials
 // =========

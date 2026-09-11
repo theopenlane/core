@@ -502,7 +502,6 @@ func (suite *HandlerTestSuite) mockEmailSender() *mockprovider.EmailSender {
 
 func buildTestOAuthDefinition() (types.Definition, error) {
 	return types.Definition{
-		VirtualUser: testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{
 			ID:          testAuthDefinitionID,
 			DisplayName: "Test OAuth",

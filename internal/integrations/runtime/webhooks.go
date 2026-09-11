@@ -226,12 +226,16 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 		Webhook:     webhook,
 		Event:       event,
 		Ingest: func(ingestCtx context.Context, payloadSets []types.IngestPayloadSet) error {
+			if err := r.EnsureInstallationInstance(ingestCtx, integration); err != nil {
+				return err
+			}
+
 			_, ingestErr := operations.EmitPayloadSets(ingestCtx, operations.IngestContext{
 				Registry:    r.Registry(),
 				DB:          r.DB(),
 				Runtime:     r.Gala(),
 				Integration: integration,
-			}, src.Webhook, registration.Ingest, payloadSets, operations.IngestOptionsFromOperationContext(oc))
+			}, src.Webhook, registration.Ingest, types.ExecutionPolicy{}, payloadSets, operations.IngestOptionsFromOperationContext(oc))
 
 			return ingestErr
 		},

@@ -26,7 +26,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
@@ -588,21 +587,6 @@ func (_c *OrganizationCreate) AddDirectoryMembershipCreators(v ...*Group) *Organ
 		ids[i] = v[i].ID
 	}
 	return _c.AddDirectoryMembershipCreatorIDs(ids...)
-}
-
-// AddDirectorySyncRunCreatorIDs adds the "directory_sync_run_creators" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddDirectorySyncRunCreatorIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddDirectorySyncRunCreatorIDs(ids...)
-	return _c
-}
-
-// AddDirectorySyncRunCreators adds the "directory_sync_run_creators" edges to the Group entity.
-func (_c *OrganizationCreate) AddDirectorySyncRunCreators(v ...*Group) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddDirectorySyncRunCreatorIDs(ids...)
 }
 
 // AddDiscussionCreatorIDs adds the "discussion_creators" edge to the Group entity by IDs.
@@ -2657,21 +2641,6 @@ func (_c *OrganizationCreate) AddDirectoryMemberships(v ...*DirectoryMembership)
 	return _c.AddDirectoryMembershipIDs(ids...)
 }
 
-// AddDirectorySyncRunIDs adds the "directory_sync_runs" edge to the DirectorySyncRun entity by IDs.
-func (_c *OrganizationCreate) AddDirectorySyncRunIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddDirectorySyncRunIDs(ids...)
-	return _c
-}
-
-// AddDirectorySyncRuns adds the "directory_sync_runs" edges to the DirectorySyncRun entity.
-func (_c *OrganizationCreate) AddDirectorySyncRuns(v ...*DirectorySyncRun) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddDirectorySyncRunIDs(ids...)
-}
-
 // AddDiscussionIDs adds the "discussions" edge to the Discussion entity by IDs.
 func (_c *OrganizationCreate) AddDiscussionIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddDiscussionIDs(ids...)
@@ -3185,22 +3154,6 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Inverse: false,
 			Table:   organization.DirectoryMembershipCreatorsTable,
 			Columns: []string{organization.DirectoryMembershipCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.DirectorySyncRunCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.DirectorySyncRunCreatorsTable,
-			Columns: []string{organization.DirectorySyncRunCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -5389,22 +5342,6 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.DirectorySyncRunsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.DirectorySyncRunsTable,
-			Columns: []string{organization.DirectorySyncRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

@@ -66,6 +66,8 @@ type cloudflareGroupMemberPayload struct {
 	GroupID string `json:"group_id"`
 	// UserID is the clouldflare user id
 	UserID string `json:"user_id"`
+	// Email is the contact email of the member, the account's external id when Cloudflare reports no user id
+	Email string `json:"email,omitempty"`
 	// Meta is metadata from the policy group
 	Meta any `json:"meta,omitempty"`
 	// Payload is the full profile from the source
@@ -184,6 +186,7 @@ func listDirectoryUsers(ctx context.Context, client *CloudflareClient, accountID
 				memberships = append(memberships, cloudflareGroupMemberPayload{
 					GroupID: g.ID,
 					UserID:  m.User.ID,
+					Email:   m.User.Email,
 					Meta:    g.Meta,
 					Payload: g,
 				})

@@ -13,7 +13,6 @@ import (
 func Builder(paymentReminder PaymentReminderConfig, organizationDelete OrganizationDeleteConfig, integrationLifecycle IntegrationLifecycleConfig) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			VirtualUser: VirtualUser,
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Family:      "Openlane",

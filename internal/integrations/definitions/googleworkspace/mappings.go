@@ -40,7 +40,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 
 // mapExprDirectoryMembership is the CEL mapping expression for Google Workspace membership payloads mapped to DirectoryMembership
 var mapExprDirectoryMembership = providerkit.CelMapExpr(
-	entityops.DirectoryMembershipFields.DirectoryAccountID.Expr(`'email' in payload ? payload.email : ""`),
+	entityops.DirectoryMembershipFields.DirectoryAccountID.Expr(`'id' in payload ? payload.id : ""`),
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`resource`),
 	entityops.DirectoryMembershipFields.Role.Expr(`dyn('role' in payload && payload.role != "" ? payload.role : "MEMBER")`),
 	entityops.DirectoryMembershipFields.Metadata.Expr("payload"),

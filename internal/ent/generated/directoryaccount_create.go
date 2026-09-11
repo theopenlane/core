@@ -15,11 +15,11 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
@@ -170,6 +170,20 @@ func (_c *DirectoryAccountCreate) SetNillableManagedBy(v *string) *DirectoryAcco
 	return _c
 }
 
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *DirectoryAccountCreate) SetIntegrationRunID(v string) *DirectoryAccountCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *DirectoryAccountCreate) SetNillableIntegrationRunID(v *string) *DirectoryAccountCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *DirectoryAccountCreate) SetOwnerID(v string) *DirectoryAccountCreate {
 	_c.mutation.SetOwnerID(v)
@@ -254,20 +268,6 @@ func (_c *DirectoryAccountCreate) SetNillableIntegrationID(v *string) *Directory
 	return _c
 }
 
-// SetDirectorySyncRunID sets the "directory_sync_run_id" field.
-func (_c *DirectoryAccountCreate) SetDirectorySyncRunID(v string) *DirectoryAccountCreate {
-	_c.mutation.SetDirectorySyncRunID(v)
-	return _c
-}
-
-// SetNillableDirectorySyncRunID sets the "directory_sync_run_id" field if the given value is not nil.
-func (_c *DirectoryAccountCreate) SetNillableDirectorySyncRunID(v *string) *DirectoryAccountCreate {
-	if v != nil {
-		_c.SetDirectorySyncRunID(*v)
-	}
-	return _c
-}
-
 // SetPlatformID sets the "platform_id" field.
 func (_c *DirectoryAccountCreate) SetPlatformID(v string) *DirectoryAccountCreate {
 	_c.mutation.SetPlatformID(v)
@@ -278,20 +278,6 @@ func (_c *DirectoryAccountCreate) SetPlatformID(v string) *DirectoryAccountCreat
 func (_c *DirectoryAccountCreate) SetNillablePlatformID(v *string) *DirectoryAccountCreate {
 	if v != nil {
 		_c.SetPlatformID(*v)
-	}
-	return _c
-}
-
-// SetDirectoryInstanceID sets the "directory_instance_id" field.
-func (_c *DirectoryAccountCreate) SetDirectoryInstanceID(v string) *DirectoryAccountCreate {
-	_c.mutation.SetDirectoryInstanceID(v)
-	return _c
-}
-
-// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
-func (_c *DirectoryAccountCreate) SetNillableDirectoryInstanceID(v *string) *DirectoryAccountCreate {
-	if v != nil {
-		_c.SetDirectoryInstanceID(*v)
 	}
 	return _c
 }
@@ -644,20 +630,6 @@ func (_c *DirectoryAccountCreate) SetNillableObservedAt(v *time.Time) *Directory
 	return _c
 }
 
-// SetProfileHash sets the "profile_hash" field.
-func (_c *DirectoryAccountCreate) SetProfileHash(v string) *DirectoryAccountCreate {
-	_c.mutation.SetProfileHash(v)
-	return _c
-}
-
-// SetNillableProfileHash sets the "profile_hash" field if the given value is not nil.
-func (_c *DirectoryAccountCreate) SetNillableProfileHash(v *string) *DirectoryAccountCreate {
-	if v != nil {
-		_c.SetProfileHash(*v)
-	}
-	return _c
-}
-
 // SetProfile sets the "profile" field.
 func (_c *DirectoryAccountCreate) SetProfile(v map[string]interface{}) *DirectoryAccountCreate {
 	_c.mutation.SetProfile(v)
@@ -726,6 +698,21 @@ func (_c *DirectoryAccountCreate) SetNillableID(v *string) *DirectoryAccountCrea
 	return _c
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_c *DirectoryAccountCreate) AddIntegrationRunIDs(ids ...string) *DirectoryAccountCreate {
+	_c.mutation.AddIntegrationRunIDs(ids...)
+	return _c
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_c *DirectoryAccountCreate) AddIntegrationRuns(v ...*IntegrationRun) *DirectoryAccountCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationRunIDs(ids...)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_c *DirectoryAccountCreate) SetOwner(v *Organization) *DirectoryAccountCreate {
 	return _c.SetOwnerID(v.ID)
@@ -744,11 +731,6 @@ func (_c *DirectoryAccountCreate) SetScope(v *CustomTypeEnum) *DirectoryAccountC
 // SetIntegration sets the "integration" edge to the Integration entity.
 func (_c *DirectoryAccountCreate) SetIntegration(v *Integration) *DirectoryAccountCreate {
 	return _c.SetIntegrationID(v.ID)
-}
-
-// SetDirectorySyncRun sets the "directory_sync_run" edge to the DirectorySyncRun entity.
-func (_c *DirectoryAccountCreate) SetDirectorySyncRun(v *DirectorySyncRun) *DirectoryAccountCreate {
-	return _c.SetDirectorySyncRunID(v.ID)
 }
 
 // SetPlatform sets the "platform" edge to the Platform entity.
@@ -925,10 +907,6 @@ func (_c *DirectoryAccountCreate) defaults() error {
 		v := directoryaccount.DefaultObservedAt()
 		_c.mutation.SetObservedAt(v)
 	}
-	if _, ok := _c.mutation.ProfileHash(); !ok {
-		v := directoryaccount.DefaultProfileHash
-		_c.mutation.SetProfileHash(v)
-	}
 	if _, ok := _c.mutation.PrimarySource(); !ok {
 		v := directoryaccount.DefaultPrimarySource
 		_c.mutation.SetPrimarySource(v)
@@ -961,11 +939,6 @@ func (_c *DirectoryAccountCreate) check() error {
 	if v, ok := _c.mutation.IntegrationID(); ok {
 		if err := directoryaccount.IntegrationIDValidator(v); err != nil {
 			return &ValidationError{Name: "integration_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.integration_id": %w`, err)}
-		}
-	}
-	if v, ok := _c.mutation.DirectorySyncRunID(); ok {
-		if err := directoryaccount.DirectorySyncRunIDValidator(v); err != nil {
-			return &ValidationError{Name: "directory_sync_run_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.directory_sync_run_id": %w`, err)}
 		}
 	}
 	if v, ok := _c.mutation.PlatformID(); ok {
@@ -1019,9 +992,6 @@ func (_c *DirectoryAccountCreate) check() error {
 	}
 	if _, ok := _c.mutation.ObservedAt(); !ok {
 		return &ValidationError{Name: "observed_at", err: errors.New(`generated: missing required field "DirectoryAccount.observed_at"`)}
-	}
-	if _, ok := _c.mutation.ProfileHash(); !ok {
-		return &ValidationError{Name: "profile_hash", err: errors.New(`generated: missing required field "DirectoryAccount.profile_hash"`)}
 	}
 	if _, ok := _c.mutation.PrimarySource(); !ok {
 		return &ValidationError{Name: "primary_source", err: errors.New(`generated: missing required field "DirectoryAccount.primary_source"`)}
@@ -1105,6 +1075,10 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 		_spec.SetField(directoryaccount.FieldManagedBy, field.TypeString, value)
 		_node.ManagedBy = value
 	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(directoryaccount.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
 	if value, ok := _c.mutation.EnvironmentName(); ok {
 		_spec.SetField(directoryaccount.FieldEnvironmentName, field.TypeString, value)
 		_node.EnvironmentName = value
@@ -1112,10 +1086,6 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 	if value, ok := _c.mutation.ScopeName(); ok {
 		_spec.SetField(directoryaccount.FieldScopeName, field.TypeString, value)
 		_node.ScopeName = value
-	}
-	if value, ok := _c.mutation.DirectoryInstanceID(); ok {
-		_spec.SetField(directoryaccount.FieldDirectoryInstanceID, field.TypeString, value)
-		_node.DirectoryInstanceID = &value
 	}
 	if value, ok := _c.mutation.DirectoryName(); ok {
 		_spec.SetField(directoryaccount.FieldDirectoryName, field.TypeString, value)
@@ -1213,10 +1183,6 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 		_spec.SetField(directoryaccount.FieldObservedAt, field.TypeTime, value)
 		_node.ObservedAt = value
 	}
-	if value, ok := _c.mutation.ProfileHash(); ok {
-		_spec.SetField(directoryaccount.FieldProfileHash, field.TypeString, value)
-		_node.ProfileHash = value
-	}
 	if value, ok := _c.mutation.Profile(); ok {
 		_spec.SetField(directoryaccount.FieldProfile, field.TypeJSON, value)
 		_node.Profile = value
@@ -1236,6 +1202,22 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 	if value, ok := _c.mutation.PrimarySource(); ok {
 		_spec.SetField(directoryaccount.FieldPrimarySource, field.TypeBool, value)
 		_node.PrimarySource = value
+	}
+	if nodes := _c.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   directoryaccount.IntegrationRunsTable,
+			Columns: directoryaccount.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1303,23 +1285,6 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.IntegrationID = nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.DirectorySyncRunIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   directoryaccount.DirectorySyncRunTable,
-			Columns: []string{directoryaccount.DirectorySyncRunColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.DirectorySyncRunID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.PlatformIDs(); len(nodes) > 0 {

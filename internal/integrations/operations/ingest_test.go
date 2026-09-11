@@ -8,7 +8,6 @@ import (
 
 	"gotest.tools/v3/assert"
 
-	"github.com/oklog/ulid/v2"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -128,79 +127,6 @@ func TestContractIncludesSchema_EmptyContracts(t *testing.T) {
 	assert.Equal(t, contractIncludesSchema(nil, "asset"), false)
 }
 
-func TestNeedsDirectorySyncRun(t *testing.T) {
-	t.Parallel()
-
-	tests := []struct {
-		name      string
-		contracts []types.IngestContract
-		want      bool
-	}{
-		{
-			name:      "directory account triggers sync run",
-			contracts: []types.IngestContract{{Schema: entityops.SchemaDirectoryAccount.Name}},
-			want:      true,
-		},
-		{
-			name:      "directory group triggers sync run",
-			contracts: []types.IngestContract{{Schema: entityops.SchemaDirectoryGroup.Name}},
-			want:      true,
-		},
-		{
-			name:      "directory membership triggers sync run",
-			contracts: []types.IngestContract{{Schema: entityops.SchemaDirectoryMembership.Name}},
-			want:      true,
-		},
-		{
-			name:      "asset does not trigger sync run",
-			contracts: []types.IngestContract{{Schema: entityops.SchemaAsset.Name}},
-			want:      false,
-		},
-		{
-			name:      "mixed with directory schema triggers",
-			contracts: []types.IngestContract{{Schema: "asset"}, {Schema: entityops.SchemaDirectoryGroup.Name}},
-			want:      true,
-		},
-		{
-			name:      "nil contracts",
-			contracts: nil,
-			want:      false,
-		},
-		{
-			name:      "empty contracts",
-			contracts: []types.IngestContract{},
-			want:      false,
-		},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			got := needsDirectorySyncRun(tc.contracts)
-			assert.Equal(t, got, tc.want)
-		})
-	}
-}
-
-func TestSameDirectorySyncRun(t *testing.T) {
-	t.Parallel()
-
-	assert.Equal(t, sameDirectorySyncRun("run-1", "run-1"), true)
-	assert.Equal(t, sameDirectorySyncRun("run-1", "run-2"), false)
-	assert.Equal(t, sameDirectorySyncRun("", "run-1"), false)
-}
-
-func TestDirectoryMembershipRunCanAdvance(t *testing.T) {
-	t.Parallel()
-
-	current := "01J00000000000000000000001"
-	assert.Equal(t, directoryMembershipRunCanAdvance(nil, current), true)
-	assert.Equal(t, directoryMembershipRunCanAdvance(&current, current), true)
-	assert.Equal(t, directoryMembershipRunCanAdvance(&current, "01J00000000000000000000000"), false)
-	assert.Equal(t, directoryMembershipRunCanAdvance(&current, ""), false)
-}
-
 func TestResolveInstallationFilterExpr(t *testing.T) {
 	t.Parallel()
 
@@ -247,7 +173,6 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 			name:   "nested filterExpr resolved via ConfigResolver",
 			config: json.RawMessage(`{"directorySync":{"filterExpr":"payload.is_external == false"}}`),
 			definition: types.Definition{
-				VirtualUser: testVirtualUser(),
 				Operations: []types.OperationRegistration{
 					{
 						Name:           "directory-sync",
@@ -263,7 +188,6 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 			name:   "ConfigResolver section has no filterExpr falls back to flat",
 			config: json.RawMessage(`{"directorySync":{},"filterExpr":"resource == \"users\""}`),
 			definition: types.Definition{
-				VirtualUser: testVirtualUser(),
 				Operations: []types.OperationRegistration{
 					{
 						Name:           "directory-sync",
@@ -279,7 +203,6 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 			name:   "ConfigResolver returns nil falls back to flat",
 			config: json.RawMessage(`{"filterExpr":"resource == \"users\""}`),
 			definition: types.Definition{
-				VirtualUser: testVirtualUser(),
 				Operations: []types.OperationRegistration{
 					{
 						Name:           "directory-sync",
@@ -295,7 +218,6 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 			name:   "unknown operationName falls back to flat",
 			config: json.RawMessage(`{"filterExpr":"resource == \"groups\""}`),
 			definition: types.Definition{
-				VirtualUser: testVirtualUser(),
 				Operations: []types.OperationRegistration{
 					{Name: "other-op"},
 				},
@@ -308,7 +230,6 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 			name:   "operation without ConfigResolver falls back to flat",
 			config: json.RawMessage(`{"filterExpr":"resource == \"assets\""}`),
 			definition: types.Definition{
-				VirtualUser: testVirtualUser(),
 				Operations: []types.OperationRegistration{
 					{Name: "asset-sync"},
 				},
@@ -321,7 +242,6 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 			name:   "ConfigResolver not used when operationName does not match",
 			config: json.RawMessage(`{"directorySync":{"filterExpr":"payload.type == \"user\""},"filterExpr":"resource == \"assets\""}`),
 			definition: types.Definition{
-				VirtualUser: testVirtualUser(),
 				Operations: []types.OperationRegistration{
 					{
 						Name:           "directory-sync",
@@ -428,7 +348,6 @@ func TestMapIngestRecord(t *testing.T) {
 	t.Parallel()
 
 	definition := types.Definition{
-		VirtualUser: testVirtualUser(),
 		Mappings: []types.MappingRegistration{
 			{
 				Schema:  "asset",
@@ -548,16 +467,10 @@ func TestWrapIngestPersistError(t *testing.T) {
 }
 
 // testDefinition builds a minimal definition with the given mappings registered in a registry
-// testVirtualUser mints a unique virtual actor identity for one test definition
-func testVirtualUser() types.VirtualUserRef {
-	return types.NewVirtualUserRef(ulid.Make().String())
-}
-
 func testDefinition(t *testing.T, mappings []types.MappingRegistration) (*registry.Registry, types.Definition) {
 	t.Helper()
 
 	def := types.Definition{
-		VirtualUser: testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{
 			ID:          "test-def",
 			DisplayName: "Test",
@@ -583,6 +496,9 @@ func testDefinition(t *testing.T, mappings []types.MappingRegistration) (*regist
 	return reg, def
 }
 
+// testInstallationMetadata carries the instance id every ingest installation must have
+var testInstallationMetadata = openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-test"}}
+
 func TestProcessPayloadSets_DefinitionNotFound(t *testing.T) {
 	t.Parallel()
 
@@ -592,11 +508,28 @@ func TestProcessPayloadSets_DefinitionNotFound(t *testing.T) {
 		Integration: &ent.Integration{DefinitionID: "nonexistent"},
 	}
 
-	_, err := applyPayloadSets(context.Background(), ic, "", nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		return nil
+	_, err := applyPayloadSets(context.Background(), ic, "", nil, types.ExecutionPolicy{}, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+		return ingestOutcome{}, nil
 	})
 
 	assert.ErrorIs(t, err, ErrIngestDefinitionNotFound)
+}
+
+func TestProcessPayloadSets_InstanceIDRequired(t *testing.T) {
+	t.Parallel()
+
+	reg, _ := testDefinition(t, nil)
+
+	ic := IngestContext{
+		Registry:    reg,
+		Integration: &ent.Integration{DefinitionID: "test-def"},
+	}
+
+	_, err := applyPayloadSets(context.Background(), ic, "", nil, types.ExecutionPolicy{}, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+		return ingestOutcome{}, nil
+	})
+
+	assert.ErrorIs(t, err, ErrIngestInstanceIDRequired)
 }
 
 func TestProcessPayloadSets_SchemaNotDeclared(t *testing.T) {
@@ -608,7 +541,7 @@ func TestProcessPayloadSets_SchemaNotDeclared(t *testing.T) {
 
 	ic := IngestContext{
 		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
+		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
 	}
 
 	// contracts say "contact", but payload set says "asset"
@@ -617,8 +550,8 @@ func TestProcessPayloadSets_SchemaNotDeclared(t *testing.T) {
 		{Schema: entityops.SchemaAsset.Name, Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}}},
 	}
 
-	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		return nil
+	_, err := applyPayloadSets(context.Background(), ic, "", contracts, types.ExecutionPolicy{}, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+		return ingestOutcome{}, nil
 	})
 
 	assert.ErrorIs(t, err, ErrIngestSchemaNotDeclared)
@@ -631,7 +564,7 @@ func TestProcessPayloadSets_SchemaNotFound(t *testing.T) {
 
 	ic := IngestContext{
 		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
+		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
 	}
 
 	contracts := []types.IngestContract{{Schema: "totally_bogus_schema"}}
@@ -639,8 +572,8 @@ func TestProcessPayloadSets_SchemaNotFound(t *testing.T) {
 		{Schema: "totally_bogus_schema", Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}}},
 	}
 
-	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		return nil
+	_, err := applyPayloadSets(context.Background(), ic, "", contracts, types.ExecutionPolicy{}, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+		return ingestOutcome{}, nil
 	})
 
 	assert.ErrorIs(t, err, ErrIngestSchemaNotFound)
@@ -654,7 +587,7 @@ func TestProcessPayloadSets_MappingNotFound(t *testing.T) {
 
 	ic := IngestContext{
 		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
+		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
 	}
 
 	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
@@ -667,8 +600,8 @@ func TestProcessPayloadSets_MappingNotFound(t *testing.T) {
 		},
 	}
 
-	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		return nil
+	_, err := applyPayloadSets(context.Background(), ic, "", contracts, types.ExecutionPolicy{}, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+		return ingestOutcome{}, nil
 	})
 
 	assert.NilError(t, err, "unmappable records are skipped, not fatal")
@@ -682,13 +615,14 @@ func TestProcessPayloadSets_InvalidInstallationFilterConfig(t *testing.T) {
 	ic := IngestContext{
 		Registry: reg,
 		Integration: &ent.Integration{
-			DefinitionID: "test-def",
-			Config:       openapi.IntegrationConfig{ClientConfig: json.RawMessage(`{invalid`)},
+			DefinitionID:         "test-def",
+			InstallationMetadata: testInstallationMetadata,
+			Config:               openapi.IntegrationConfig{ClientConfig: json.RawMessage(`{invalid`)},
 		},
 	}
 
-	_, err := applyPayloadSets(context.Background(), ic, "", nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		return nil
+	_, err := applyPayloadSets(context.Background(), ic, "", nil, types.ExecutionPolicy{}, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+		return ingestOutcome{}, nil
 	})
 
 	assert.ErrorIs(t, err, ErrIngestInstallationFilterConfigInvalid)
@@ -707,7 +641,7 @@ func TestProcessPayloadSets_SuccessfulMapping(t *testing.T) {
 
 	ic := IngestContext{
 		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
+		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
 	}
 
 	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
@@ -722,9 +656,9 @@ func TestProcessPayloadSets_SuccessfulMapping(t *testing.T) {
 
 	var handled []mappedIngestRecord
 
-	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(_ context.Context, record mappedIngestRecord) error {
+	_, err := applyPayloadSets(context.Background(), ic, "", contracts, types.ExecutionPolicy{}, payloadSets, IngestOptions{}, func(_ context.Context, record mappedIngestRecord) (ingestOutcome, error) {
 		handled = append(handled, record)
-		return nil
+		return ingestOutcome{}, nil
 	})
 
 	assert.NilError(t, err)
@@ -739,12 +673,12 @@ func TestProcessPayloadSets_EmptyPayloadSets(t *testing.T) {
 
 	ic := IngestContext{
 		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
+		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
 	}
 
-	_, err := applyPayloadSets(context.Background(), ic, "", nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	_, err := applyPayloadSets(context.Background(), ic, "", nil, types.ExecutionPolicy{}, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
 		t.Fatal("handler should not be called for empty payload sets")
-		return nil
+		return ingestOutcome{}, nil
 	})
 
 	assert.NilError(t, err)
@@ -766,7 +700,7 @@ func TestProcessPayloadSets_FilteredEnvelopes(t *testing.T) {
 
 	ic := IngestContext{
 		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
+		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
 	}
 
 	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
@@ -782,9 +716,11 @@ func TestProcessPayloadSets_FilteredEnvelopes(t *testing.T) {
 
 	var handled int
 
-	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	// fanout skips the batched preload query, which would otherwise nil-panic on the DB-less
+	// IngestContext this test builds
+	_, err := applyPayloadSets(context.Background(), ic, "", contracts, types.ExecutionPolicy{Fanout: true}, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
 		handled++
-		return nil
+		return ingestOutcome{}, nil
 	})
 
 	assert.NilError(t, err)
@@ -804,7 +740,7 @@ func TestProcessPayloadSets_HandleError(t *testing.T) {
 
 	ic := IngestContext{
 		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
+		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
 	}
 
 	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
@@ -821,13 +757,15 @@ func TestProcessPayloadSets_HandleError(t *testing.T) {
 	handleErr := errors.New("persist failed")
 	handled := 0
 
-	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	// fanout skips the batched preload query, which would otherwise nil-panic on the DB-less
+	// IngestContext this test builds
+	_, err := applyPayloadSets(context.Background(), ic, "", contracts, types.ExecutionPolicy{Fanout: true}, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
 		handled++
 		if handled == 1 {
-			return handleErr
+			return ingestOutcome{}, handleErr
 		}
 
-		return nil
+		return ingestOutcome{}, nil
 	})
 
 	assert.NilError(t, err, "record failures are skipped, not fatal")
@@ -848,7 +786,6 @@ func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
 	}
 
 	def := types.Definition{
-		VirtualUser: testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{
 			ID:     "test-def",
 			Active: true,
@@ -904,9 +841,11 @@ func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
 	}
 
 	var handled int
-	_, err := applyPayloadSets(context.Background(), ic, "repo-sync", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	// fanout skips the batched preload query, which would otherwise nil-panic on the DB-less
+	// IngestContext this test builds
+	_, err := applyPayloadSets(context.Background(), ic, "repo-sync", contracts, types.ExecutionPolicy{Fanout: true}, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
 		handled++
-		return nil
+		return ingestOutcome{}, nil
 	})
 
 	assert.NilError(t, err)
@@ -930,7 +869,6 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 	}
 
 	def := types.Definition{
-		VirtualUser: testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{
 			ID:     "test-def",
 			Active: true,
@@ -1000,10 +938,11 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 	}
 
 	var handled int
-	// running as asset-sync: the findingSync filterExpr must NOT apply
-	_, err := applyPayloadSets(context.Background(), ic, "asset-sync", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	// running as asset-sync: the findingSync filterExpr must NOT apply; fanout skips the batched
+	// preload query, which would otherwise nil-panic on the DB-less IngestContext this test builds
+	_, err := applyPayloadSets(context.Background(), ic, "asset-sync", contracts, types.ExecutionPolicy{Fanout: true}, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
 		handled++
-		return nil
+		return ingestOutcome{}, nil
 	})
 
 	assert.NilError(t, err)

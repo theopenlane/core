@@ -109,6 +109,9 @@ func (_u *FindingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.ManagedByCleared() {
 		_spec.ClearField(findinghistory.FieldManagedBy, field.TypeString)
 	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(findinghistory.FieldIntegrationRunID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(findinghistory.FieldOwnerID, field.TypeString)
 	}
@@ -406,6 +409,9 @@ func (_u *FindingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FindingH
 	}
 	if _u.mutation.ManagedByCleared() {
 		_spec.ClearField(findinghistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(findinghistory.FieldIntegrationRunID, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(findinghistory.FieldOwnerID, field.TypeString)

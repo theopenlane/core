@@ -60,6 +60,7 @@ type ComplexityRoot struct {
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
+		IntegrationRunID                func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
 		ManagedBy                       func(childComplexity int) int
 		ManagementMode                  func(childComplexity int) int
@@ -212,6 +213,7 @@ type ComplexityRoot struct {
 		ID                            func(childComplexity int) int
 		Identifier                    func(childComplexity int) int
 		IntegrationID                 func(childComplexity int) int
+		IntegrationRunID              func(childComplexity int) int
 		InternalNotes                 func(childComplexity int) int
 		InternalOwner                 func(childComplexity int) int
 		InternalOwnerGroupID          func(childComplexity int) int
@@ -362,6 +364,7 @@ type ComplexityRoot struct {
 		HistoryTime             func(childComplexity int) int
 		ID                      func(childComplexity int) int
 		IntegrationID           func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
 		ManagedBy               func(childComplexity int) int
 		ObservedAt              func(childComplexity int) int
 		Operation               func(childComplexity int) int
@@ -691,6 +694,7 @@ type ComplexityRoot struct {
 		HasSoc2                               func(childComplexity int) int
 		HistoryTime                           func(childComplexity int) int
 		ID                                    func(childComplexity int) int
+		IntegrationRunID                      func(childComplexity int) int
 		InternalNotes                         func(childComplexity int) int
 		InternalOwner                         func(childComplexity int) int
 		InternalOwnerGroupID                  func(childComplexity int) int
@@ -935,6 +939,7 @@ type ComplexityRoot struct {
 		HistoryTime                func(childComplexity int) int
 		ID                         func(childComplexity int) int
 		Impact                     func(childComplexity int) int
+		IntegrationRunID           func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
 		ManagedBy                  func(childComplexity int) int
 		Metadata                   func(childComplexity int) int
@@ -1200,6 +1205,7 @@ type ComplexityRoot struct {
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
+		IntegrationRunID                func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
 		InternalPolicyKindID            func(childComplexity int) int
 		InternalPolicyKindName          func(childComplexity int) int
@@ -1687,6 +1693,7 @@ type ComplexityRoot struct {
 		HistoryTime                     func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
+		IntegrationRunID                func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
 		ManagedBy                       func(childComplexity int) int
 		ManagementMode                  func(childComplexity int) int
@@ -1994,6 +2001,7 @@ type ComplexityRoot struct {
 		ID                      func(childComplexity int) int
 		Impact                  func(childComplexity int) int
 		IntegrationID           func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
 		LastReviewedAt          func(childComplexity int) int
 		Likelihood              func(childComplexity int) int
 		ManagedBy               func(childComplexity int) int
@@ -2807,6 +2815,7 @@ type ComplexityRoot struct {
 		ID                         func(childComplexity int) int
 		Impact                     func(childComplexity int) int
 		Impacts                    func(childComplexity int) int
+		IntegrationRunID           func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
 		ManagedBy                  func(childComplexity int) int
 		ManifestPath               func(childComplexity int) int
@@ -3137,6 +3146,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ActionPlanHistory.ImprovementSuggestions(childComplexity), true
+	case "ActionPlanHistory.integrationRunID":
+		if e.ComplexityRoot.ActionPlanHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlanHistory.IntegrationRunID(childComplexity), true
 	case "ActionPlanHistory.internalNotes":
 		if e.ComplexityRoot.ActionPlanHistory.InternalNotes == nil {
 			break
@@ -3896,6 +3911,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssetHistory.IntegrationID(childComplexity), true
+	case "AssetHistory.integrationRunID":
+		if e.ComplexityRoot.AssetHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssetHistory.IntegrationRunID(childComplexity), true
 	case "AssetHistory.internalNotes":
 		if e.ComplexityRoot.AssetHistory.InternalNotes == nil {
 			break
@@ -4643,6 +4664,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ContactHistory.IntegrationID(childComplexity), true
+	case "ContactHistory.integrationRunID":
+		if e.ComplexityRoot.ContactHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ContactHistory.IntegrationRunID(childComplexity), true
 	case "ContactHistory.managedBy":
 		if e.ComplexityRoot.ContactHistory.ManagedBy == nil {
 			break
@@ -6209,6 +6236,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.ID(childComplexity), true
+	case "EntityHistory.integrationRunID":
+		if e.ComplexityRoot.EntityHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.IntegrationRunID(childComplexity), true
 	case "EntityHistory.internalNotes":
 		if e.ComplexityRoot.EntityHistory.InternalNotes == nil {
 			break
@@ -7418,6 +7451,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FindingHistory.Impact(childComplexity), true
+	case "FindingHistory.integrationRunID":
+		if e.ComplexityRoot.FindingHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingHistory.IntegrationRunID(childComplexity), true
 	case "FindingHistory.internalNotes":
 		if e.ComplexityRoot.FindingHistory.InternalNotes == nil {
 			break
@@ -8702,6 +8741,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.InternalPolicyHistory.ImprovementSuggestions(childComplexity), true
+	case "InternalPolicyHistory.integrationRunID":
+		if e.ComplexityRoot.InternalPolicyHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InternalPolicyHistory.IntegrationRunID(childComplexity), true
 	case "InternalPolicyHistory.internalNotes":
 		if e.ComplexityRoot.InternalPolicyHistory.InternalNotes == nil {
 			break
@@ -11046,6 +11091,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProcedureHistory.ImprovementSuggestions(childComplexity), true
+	case "ProcedureHistory.integrationRunID":
+		if e.ComplexityRoot.ProcedureHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProcedureHistory.IntegrationRunID(childComplexity), true
 	case "ProcedureHistory.internalNotes":
 		if e.ComplexityRoot.ProcedureHistory.InternalNotes == nil {
 			break
@@ -12957,6 +13008,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.IntegrationID(childComplexity), true
+	case "RiskHistory.integrationRunID":
+		if e.ComplexityRoot.RiskHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskHistory.IntegrationRunID(childComplexity), true
 	case "RiskHistory.lastReviewedAt":
 		if e.ComplexityRoot.RiskHistory.LastReviewedAt == nil {
 			break
@@ -16764,6 +16821,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.VulnerabilityHistory.Impacts(childComplexity), true
+	case "VulnerabilityHistory.integrationRunID":
+		if e.ComplexityRoot.VulnerabilityHistory.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityHistory.IntegrationRunID(childComplexity), true
 	case "VulnerabilityHistory.internalNotes":
 		if e.ComplexityRoot.VulnerabilityHistory.InternalNotes == nil {
 			break
@@ -18001,9 +18064,13 @@ type ActionPlanHistory implements Node {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the name of the action_plan
   """
@@ -18445,6 +18512,20 @@ input ActionPlanHistoryWhereInput {
   managedByNotNil: Boolean
   managedByEqualFold: String
   managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   name field predicates
   """
@@ -19674,9 +19755,13 @@ type AssetHistory implements Node {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the ID of the organization owner of the object
   """
@@ -20102,6 +20187,20 @@ input AssetHistoryWhereInput {
   managedByNotNil: Boolean
   managedByEqualFold: String
   managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -21812,9 +21911,13 @@ type ContactHistory implements Node {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the organization id that owns the object
   """
@@ -22101,6 +22204,20 @@ input ContactHistoryWhereInput {
   managedByNotNil: Boolean
   managedByEqualFold: String
   managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -25312,9 +25429,13 @@ type EntityHistory implements Node {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the ID of the organization owner of the object
   """
@@ -25844,6 +25965,20 @@ input EntityHistoryWhereInput {
   managedByNotNil: Boolean
   managedByEqualFold: String
   managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -28292,9 +28427,13 @@ type FindingHistory implements Node {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the ID of the organization owner of the object
   """
@@ -28772,6 +28911,20 @@ input FindingHistoryWhereInput {
   managedByNotNil: Boolean
   managedByEqualFold: String
   managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -31369,9 +31522,13 @@ type InternalPolicyHistory implements Node {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the organization id that owns the object
   """
@@ -31788,6 +31945,20 @@ input InternalPolicyHistoryWhereInput {
   managedByNotNil: Boolean
   managedByEqualFold: String
   managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -36825,9 +36996,13 @@ type ProcedureHistory implements Node {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the organization id that owns the object
   """
@@ -37240,6 +37415,20 @@ input ProcedureHistoryWhereInput {
   managedByNotNil: Boolean
   managedByEqualFold: String
   managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -41719,9 +41908,13 @@ type RiskHistory implements Node {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the ID of the organization owner of the object
   """
@@ -42164,6 +42357,20 @@ input RiskHistoryWhereInput {
   managedByNotNil: Boolean
   managedByEqualFold: String
   managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -50440,9 +50647,13 @@ type VulnerabilityHistory implements Node {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the ID of the organization owner of the object
   """
@@ -50940,6 +51151,20 @@ input VulnerabilityHistoryWhereInput {
   managedByNotNil: Boolean
   managedByEqualFold: String
   managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -52820,6 +53045,8 @@ func (ec *executionContext) childFields_ActionPlanHistory(ctx context.Context, f
 		return ec.fieldContext_ActionPlanHistory_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_ActionPlanHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_ActionPlanHistory_integrationRunID(ctx, field)
 	case "name":
 		return ec.fieldContext_ActionPlanHistory_name(ctx, field)
 	case "status":
@@ -53118,6 +53345,8 @@ func (ec *executionContext) childFields_AssetHistory(ctx context.Context, field 
 		return ec.fieldContext_AssetHistory_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_AssetHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_AssetHistory_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_AssetHistory_ownerID(ctx, field)
 	case "internalOwner":
@@ -53450,6 +53679,8 @@ func (ec *executionContext) childFields_ContactHistory(ctx context.Context, fiel
 		return ec.fieldContext_ContactHistory_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_ContactHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_ContactHistory_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_ContactHistory_ownerID(ctx, field)
 	case "fullName":
@@ -54076,6 +54307,8 @@ func (ec *executionContext) childFields_EntityHistory(ctx context.Context, field
 		return ec.fieldContext_EntityHistory_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_EntityHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_EntityHistory_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_EntityHistory_ownerID(ctx, field)
 	case "internalOwner":
@@ -54566,6 +54799,8 @@ func (ec *executionContext) childFields_FindingHistory(ctx context.Context, fiel
 		return ec.fieldContext_FindingHistory_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_FindingHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_FindingHistory_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_FindingHistory_ownerID(ctx, field)
 	case "reviewedBy":
@@ -55108,6 +55343,8 @@ func (ec *executionContext) childFields_InternalPolicyHistory(ctx context.Contex
 		return ec.fieldContext_InternalPolicyHistory_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_InternalPolicyHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_InternalPolicyHistory_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_InternalPolicyHistory_ownerID(ctx, field)
 	case "systemOwned":
@@ -56084,6 +56321,8 @@ func (ec *executionContext) childFields_ProcedureHistory(ctx context.Context, fi
 		return ec.fieldContext_ProcedureHistory_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_ProcedureHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_ProcedureHistory_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_ProcedureHistory_ownerID(ctx, field)
 	case "name":
@@ -56560,6 +56799,8 @@ func (ec *executionContext) childFields_RiskHistory(ctx context.Context, field g
 		return ec.fieldContext_RiskHistory_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_RiskHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_RiskHistory_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_RiskHistory_ownerID(ctx, field)
 	case "riskKindName":
@@ -58156,6 +58397,8 @@ func (ec *executionContext) childFields_VulnerabilityHistory(ctx context.Context
 		return ec.fieldContext_VulnerabilityHistory_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_VulnerabilityHistory_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_VulnerabilityHistory_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_VulnerabilityHistory_ownerID(ctx, field)
 	case "reviewedBy":

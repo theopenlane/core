@@ -225,6 +225,20 @@ func (_c *FindingHistoryCreate) SetNillableManagedBy(v *string) *FindingHistoryC
 	return _c
 }
 
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *FindingHistoryCreate) SetIntegrationRunID(v string) *FindingHistoryCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableIntegrationRunID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *FindingHistoryCreate) SetOwnerID(v string) *FindingHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -1190,6 +1204,10 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.ManagedBy(); ok {
 		_spec.SetField(findinghistory.FieldManagedBy, field.TypeString, value)
 		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(findinghistory.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
 	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(findinghistory.FieldOwnerID, field.TypeString, value)

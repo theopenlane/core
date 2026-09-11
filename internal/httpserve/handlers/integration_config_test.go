@@ -469,7 +469,6 @@ func configTestDefinitionBuilder(definitionID string, failHealth bool) registry.
 		}
 
 		return types.Definition{
-			VirtualUser: testVirtualUser(),
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
 				DisplayName: "Config Test",
@@ -507,7 +506,6 @@ func configTestDefinitionBuilder(definitionID string, failHealth bool) registry.
 func userInputOnlyTestDefinitionBuilder(definitionID string) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			VirtualUser: testVirtualUser(),
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
 				DisplayName: "User Input Test",

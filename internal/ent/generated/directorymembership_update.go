@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/event"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
@@ -167,6 +168,26 @@ func (_u *DirectoryMembershipUpdate) ClearManagedBy() *DirectoryMembershipUpdate
 	return _u
 }
 
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *DirectoryMembershipUpdate) SetIntegrationRunID(v string) *DirectoryMembershipUpdate {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdate) SetNillableIntegrationRunID(v *string) *DirectoryMembershipUpdate {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *DirectoryMembershipUpdate) ClearIntegrationRunID() *DirectoryMembershipUpdate {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *DirectoryMembershipUpdate) SetOwnerID(v string) *DirectoryMembershipUpdate {
 	_u.mutation.SetOwnerID(v)
@@ -278,26 +299,6 @@ func (_u *DirectoryMembershipUpdate) SetNillableIntegrationID(v *string) *Direct
 	if v != nil {
 		_u.SetIntegrationID(*v)
 	}
-	return _u
-}
-
-// SetDirectoryInstanceID sets the "directory_instance_id" field.
-func (_u *DirectoryMembershipUpdate) SetDirectoryInstanceID(v string) *DirectoryMembershipUpdate {
-	_u.mutation.SetDirectoryInstanceID(v)
-	return _u
-}
-
-// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
-func (_u *DirectoryMembershipUpdate) SetNillableDirectoryInstanceID(v *string) *DirectoryMembershipUpdate {
-	if v != nil {
-		_u.SetDirectoryInstanceID(*v)
-	}
-	return _u
-}
-
-// ClearDirectoryInstanceID clears the value of the "directory_instance_id" field.
-func (_u *DirectoryMembershipUpdate) ClearDirectoryInstanceID() *DirectoryMembershipUpdate {
-	_u.mutation.ClearDirectoryInstanceID()
 	return _u
 }
 
@@ -441,26 +442,6 @@ func (_u *DirectoryMembershipUpdate) ClearRemovedAt() *DirectoryMembershipUpdate
 	return _u
 }
 
-// SetLastConfirmedRunID sets the "last_confirmed_run_id" field.
-func (_u *DirectoryMembershipUpdate) SetLastConfirmedRunID(v string) *DirectoryMembershipUpdate {
-	_u.mutation.SetLastConfirmedRunID(v)
-	return _u
-}
-
-// SetNillableLastConfirmedRunID sets the "last_confirmed_run_id" field if the given value is not nil.
-func (_u *DirectoryMembershipUpdate) SetNillableLastConfirmedRunID(v *string) *DirectoryMembershipUpdate {
-	if v != nil {
-		_u.SetLastConfirmedRunID(*v)
-	}
-	return _u
-}
-
-// ClearLastConfirmedRunID clears the value of the "last_confirmed_run_id" field.
-func (_u *DirectoryMembershipUpdate) ClearLastConfirmedRunID() *DirectoryMembershipUpdate {
-	_u.mutation.ClearLastConfirmedRunID()
-	return _u
-}
-
 // SetMetadata sets the "metadata" field.
 func (_u *DirectoryMembershipUpdate) SetMetadata(v map[string]interface{}) *DirectoryMembershipUpdate {
 	_u.mutation.SetMetadata(v)
@@ -471,6 +452,21 @@ func (_u *DirectoryMembershipUpdate) SetMetadata(v map[string]interface{}) *Dire
 func (_u *DirectoryMembershipUpdate) ClearMetadata() *DirectoryMembershipUpdate {
 	_u.mutation.ClearMetadata()
 	return _u
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *DirectoryMembershipUpdate) AddIntegrationRunIDs(ids ...string) *DirectoryMembershipUpdate {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *DirectoryMembershipUpdate) AddIntegrationRuns(v ...*IntegrationRun) *DirectoryMembershipUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -526,6 +522,27 @@ func (_u *DirectoryMembershipUpdate) AddWorkflowObjectRefs(v ...*WorkflowObjectR
 // Mutation returns the DirectoryMembershipMutation object of the builder.
 func (_u *DirectoryMembershipUpdate) Mutation() *DirectoryMembershipMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *DirectoryMembershipUpdate) ClearIntegrationRuns() *DirectoryMembershipUpdate {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *DirectoryMembershipUpdate) RemoveIntegrationRunIDs(ids ...string) *DirectoryMembershipUpdate {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *DirectoryMembershipUpdate) RemoveIntegrationRuns(v ...*IntegrationRun) *DirectoryMembershipUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -656,9 +673,6 @@ func (_u *DirectoryMembershipUpdate) check() error {
 	if _u.mutation.IntegrationCleared() && len(_u.mutation.IntegrationIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "DirectoryMembership.integration"`)
 	}
-	if _u.mutation.DirectorySyncRunCleared() && len(_u.mutation.DirectorySyncRunIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "DirectoryMembership.directory_sync_run"`)
-	}
 	if _u.mutation.DirectoryAccountCleared() && len(_u.mutation.DirectoryAccountIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "DirectoryMembership.directory_account"`)
 	}
@@ -734,6 +748,12 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.ManagedByCleared() {
 		_spec.ClearField(directorymembership.FieldManagedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(directorymembership.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(directorymembership.FieldIntegrationRunID, field.TypeString)
+	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directorymembership.FieldEnvironmentName, field.TypeString, value)
 	}
@@ -745,12 +765,6 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(directorymembership.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.DirectoryInstanceID(); ok {
-		_spec.SetField(directorymembership.FieldDirectoryInstanceID, field.TypeString, value)
-	}
-	if _u.mutation.DirectoryInstanceIDCleared() {
-		_spec.ClearField(directorymembership.FieldDirectoryInstanceID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(directorymembership.FieldRole, field.TypeEnum, value)
@@ -794,17 +808,56 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.RemovedAtCleared() {
 		_spec.ClearField(directorymembership.FieldRemovedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.LastConfirmedRunID(); ok {
-		_spec.SetField(directorymembership.FieldLastConfirmedRunID, field.TypeString, value)
-	}
-	if _u.mutation.LastConfirmedRunIDCleared() {
-		_spec.ClearField(directorymembership.FieldLastConfirmedRunID, field.TypeString)
-	}
 	if value, ok := _u.mutation.Metadata(); ok {
 		_spec.SetField(directorymembership.FieldMetadata, field.TypeJSON, value)
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(directorymembership.FieldMetadata, field.TypeJSON)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   directorymembership.IntegrationRunsTable,
+			Columns: directorymembership.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   directorymembership.IntegrationRunsTable,
+			Columns: directorymembership.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   directorymembership.IntegrationRunsTable,
+			Columns: directorymembership.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1166,6 +1219,26 @@ func (_u *DirectoryMembershipUpdateOne) ClearManagedBy() *DirectoryMembershipUpd
 	return _u
 }
 
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *DirectoryMembershipUpdateOne) SetIntegrationRunID(v string) *DirectoryMembershipUpdateOne {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdateOne) SetNillableIntegrationRunID(v *string) *DirectoryMembershipUpdateOne {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *DirectoryMembershipUpdateOne) ClearIntegrationRunID() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *DirectoryMembershipUpdateOne) SetOwnerID(v string) *DirectoryMembershipUpdateOne {
 	_u.mutation.SetOwnerID(v)
@@ -1277,26 +1350,6 @@ func (_u *DirectoryMembershipUpdateOne) SetNillableIntegrationID(v *string) *Dir
 	if v != nil {
 		_u.SetIntegrationID(*v)
 	}
-	return _u
-}
-
-// SetDirectoryInstanceID sets the "directory_instance_id" field.
-func (_u *DirectoryMembershipUpdateOne) SetDirectoryInstanceID(v string) *DirectoryMembershipUpdateOne {
-	_u.mutation.SetDirectoryInstanceID(v)
-	return _u
-}
-
-// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
-func (_u *DirectoryMembershipUpdateOne) SetNillableDirectoryInstanceID(v *string) *DirectoryMembershipUpdateOne {
-	if v != nil {
-		_u.SetDirectoryInstanceID(*v)
-	}
-	return _u
-}
-
-// ClearDirectoryInstanceID clears the value of the "directory_instance_id" field.
-func (_u *DirectoryMembershipUpdateOne) ClearDirectoryInstanceID() *DirectoryMembershipUpdateOne {
-	_u.mutation.ClearDirectoryInstanceID()
 	return _u
 }
 
@@ -1440,26 +1493,6 @@ func (_u *DirectoryMembershipUpdateOne) ClearRemovedAt() *DirectoryMembershipUpd
 	return _u
 }
 
-// SetLastConfirmedRunID sets the "last_confirmed_run_id" field.
-func (_u *DirectoryMembershipUpdateOne) SetLastConfirmedRunID(v string) *DirectoryMembershipUpdateOne {
-	_u.mutation.SetLastConfirmedRunID(v)
-	return _u
-}
-
-// SetNillableLastConfirmedRunID sets the "last_confirmed_run_id" field if the given value is not nil.
-func (_u *DirectoryMembershipUpdateOne) SetNillableLastConfirmedRunID(v *string) *DirectoryMembershipUpdateOne {
-	if v != nil {
-		_u.SetLastConfirmedRunID(*v)
-	}
-	return _u
-}
-
-// ClearLastConfirmedRunID clears the value of the "last_confirmed_run_id" field.
-func (_u *DirectoryMembershipUpdateOne) ClearLastConfirmedRunID() *DirectoryMembershipUpdateOne {
-	_u.mutation.ClearLastConfirmedRunID()
-	return _u
-}
-
 // SetMetadata sets the "metadata" field.
 func (_u *DirectoryMembershipUpdateOne) SetMetadata(v map[string]interface{}) *DirectoryMembershipUpdateOne {
 	_u.mutation.SetMetadata(v)
@@ -1470,6 +1503,21 @@ func (_u *DirectoryMembershipUpdateOne) SetMetadata(v map[string]interface{}) *D
 func (_u *DirectoryMembershipUpdateOne) ClearMetadata() *DirectoryMembershipUpdateOne {
 	_u.mutation.ClearMetadata()
 	return _u
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *DirectoryMembershipUpdateOne) AddIntegrationRunIDs(ids ...string) *DirectoryMembershipUpdateOne {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *DirectoryMembershipUpdateOne) AddIntegrationRuns(v ...*IntegrationRun) *DirectoryMembershipUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1525,6 +1573,27 @@ func (_u *DirectoryMembershipUpdateOne) AddWorkflowObjectRefs(v ...*WorkflowObje
 // Mutation returns the DirectoryMembershipMutation object of the builder.
 func (_u *DirectoryMembershipUpdateOne) Mutation() *DirectoryMembershipMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *DirectoryMembershipUpdateOne) ClearIntegrationRuns() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *DirectoryMembershipUpdateOne) RemoveIntegrationRunIDs(ids ...string) *DirectoryMembershipUpdateOne {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *DirectoryMembershipUpdateOne) RemoveIntegrationRuns(v ...*IntegrationRun) *DirectoryMembershipUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearOwner clears the "owner" edge to the Organization entity.
@@ -1668,9 +1737,6 @@ func (_u *DirectoryMembershipUpdateOne) check() error {
 	if _u.mutation.IntegrationCleared() && len(_u.mutation.IntegrationIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "DirectoryMembership.integration"`)
 	}
-	if _u.mutation.DirectorySyncRunCleared() && len(_u.mutation.DirectorySyncRunIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "DirectoryMembership.directory_sync_run"`)
-	}
 	if _u.mutation.DirectoryAccountCleared() && len(_u.mutation.DirectoryAccountIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "DirectoryMembership.directory_account"`)
 	}
@@ -1763,6 +1829,12 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 	if _u.mutation.ManagedByCleared() {
 		_spec.ClearField(directorymembership.FieldManagedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(directorymembership.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(directorymembership.FieldIntegrationRunID, field.TypeString)
+	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directorymembership.FieldEnvironmentName, field.TypeString, value)
 	}
@@ -1774,12 +1846,6 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(directorymembership.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.DirectoryInstanceID(); ok {
-		_spec.SetField(directorymembership.FieldDirectoryInstanceID, field.TypeString, value)
-	}
-	if _u.mutation.DirectoryInstanceIDCleared() {
-		_spec.ClearField(directorymembership.FieldDirectoryInstanceID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(directorymembership.FieldRole, field.TypeEnum, value)
@@ -1823,17 +1889,56 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 	if _u.mutation.RemovedAtCleared() {
 		_spec.ClearField(directorymembership.FieldRemovedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.LastConfirmedRunID(); ok {
-		_spec.SetField(directorymembership.FieldLastConfirmedRunID, field.TypeString, value)
-	}
-	if _u.mutation.LastConfirmedRunIDCleared() {
-		_spec.ClearField(directorymembership.FieldLastConfirmedRunID, field.TypeString)
-	}
 	if value, ok := _u.mutation.Metadata(); ok {
 		_spec.SetField(directorymembership.FieldMetadata, field.TypeJSON, value)
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(directorymembership.FieldMetadata, field.TypeJSON)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   directorymembership.IntegrationRunsTable,
+			Columns: directorymembership.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   directorymembership.IntegrationRunsTable,
+			Columns: directorymembership.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   directorymembership.IntegrationRunsTable,
+			Columns: directorymembership.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
@@ -226,6 +227,26 @@ func (_u *CheckResultUpdate) ClearManagedBy() *CheckResultUpdate {
 	return _u
 }
 
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *CheckResultUpdate) SetIntegrationRunID(v string) *CheckResultUpdate {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *CheckResultUpdate) SetNillableIntegrationRunID(v *string) *CheckResultUpdate {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *CheckResultUpdate) ClearIntegrationRunID() *CheckResultUpdate {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *CheckResultUpdate) SetStatus(v enums.CheckStatus) *CheckResultUpdate {
 	_u.mutation.SetStatus(v)
@@ -354,6 +375,21 @@ func (_u *CheckResultUpdate) ClearIntegrationID() *CheckResultUpdate {
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *CheckResultUpdate) AddIntegrationRunIDs(ids ...string) *CheckResultUpdate {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *CheckResultUpdate) AddIntegrationRuns(v ...*IntegrationRun) *CheckResultUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *CheckResultUpdate) AddBlockedGroupIDs(ids ...string) *CheckResultUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -437,6 +473,27 @@ func (_u *CheckResultUpdate) SetIntegration(v *Integration) *CheckResultUpdate {
 // Mutation returns the CheckResultMutation object of the builder.
 func (_u *CheckResultUpdate) Mutation() *CheckResultMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *CheckResultUpdate) ClearIntegrationRuns() *CheckResultUpdate {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *CheckResultUpdate) RemoveIntegrationRunIDs(ids ...string) *CheckResultUpdate {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *CheckResultUpdate) RemoveIntegrationRuns(v ...*IntegrationRun) *CheckResultUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -691,6 +748,12 @@ func (_u *CheckResultUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.ManagedByCleared() {
 		_spec.ClearField(checkresult.FieldManagedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(checkresult.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(checkresult.FieldIntegrationRunID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(checkresult.FieldStatus, field.TypeEnum, value)
 	}
@@ -720,6 +783,51 @@ func (_u *CheckResultUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.ParentExternalIDCleared() {
 		_spec.ClearField(checkresult.FieldParentExternalID, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   checkresult.IntegrationRunsTable,
+			Columns: checkresult.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   checkresult.IntegrationRunsTable,
+			Columns: checkresult.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   checkresult.IntegrationRunsTable,
+			Columns: checkresult.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1187,6 +1295,26 @@ func (_u *CheckResultUpdateOne) ClearManagedBy() *CheckResultUpdateOne {
 	return _u
 }
 
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *CheckResultUpdateOne) SetIntegrationRunID(v string) *CheckResultUpdateOne {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *CheckResultUpdateOne) SetNillableIntegrationRunID(v *string) *CheckResultUpdateOne {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *CheckResultUpdateOne) ClearIntegrationRunID() *CheckResultUpdateOne {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *CheckResultUpdateOne) SetStatus(v enums.CheckStatus) *CheckResultUpdateOne {
 	_u.mutation.SetStatus(v)
@@ -1315,6 +1443,21 @@ func (_u *CheckResultUpdateOne) ClearIntegrationID() *CheckResultUpdateOne {
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *CheckResultUpdateOne) AddIntegrationRunIDs(ids ...string) *CheckResultUpdateOne {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *CheckResultUpdateOne) AddIntegrationRuns(v ...*IntegrationRun) *CheckResultUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *CheckResultUpdateOne) AddBlockedGroupIDs(ids ...string) *CheckResultUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1398,6 +1541,27 @@ func (_u *CheckResultUpdateOne) SetIntegration(v *Integration) *CheckResultUpdat
 // Mutation returns the CheckResultMutation object of the builder.
 func (_u *CheckResultUpdateOne) Mutation() *CheckResultMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *CheckResultUpdateOne) ClearIntegrationRuns() *CheckResultUpdateOne {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *CheckResultUpdateOne) RemoveIntegrationRunIDs(ids ...string) *CheckResultUpdateOne {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *CheckResultUpdateOne) RemoveIntegrationRuns(v ...*IntegrationRun) *CheckResultUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -1682,6 +1846,12 @@ func (_u *CheckResultUpdateOne) sqlSave(ctx context.Context) (_node *CheckResult
 	if _u.mutation.ManagedByCleared() {
 		_spec.ClearField(checkresult.FieldManagedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(checkresult.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(checkresult.FieldIntegrationRunID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(checkresult.FieldStatus, field.TypeEnum, value)
 	}
@@ -1711,6 +1881,51 @@ func (_u *CheckResultUpdateOne) sqlSave(ctx context.Context) (_node *CheckResult
 	}
 	if _u.mutation.ParentExternalIDCleared() {
 		_spec.ClearField(checkresult.FieldParentExternalID, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   checkresult.IntegrationRunsTable,
+			Columns: checkresult.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   checkresult.IntegrationRunsTable,
+			Columns: checkresult.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   checkresult.IntegrationRunsTable,
+			Columns: checkresult.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

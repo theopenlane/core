@@ -25,10 +25,6 @@ dest="$src/../../definitions/$name"
 mnemonic=$(printf '%s' "$name" | tr '[:lower:]' '[:upper:]' | tr -cd 'A-Z0-9' | cut -c1-20)
 defid=$(printf 'def_01K0%s%0*d' "$mnemonic" $((22 - ${#mnemonic})) 1)
 
-# the virtual actor subject must strictly parse as a ULID: the 01VRTACTR prefix marks the
-# virtual-actor family and the remainder is random from the Crockford base32 alphabet
-vuid="01VRTACTR$(head -c 1000 /dev/urandom | LC_ALL=C tr -dc '0123456789ABCDEFGHJKMNPQRSTVWXYZ' | cut -c1-17)"
-
 mkdir -p "$dest"
 
 for tmpl in "$src"/*.go.tmpl; do
@@ -47,7 +43,6 @@ for tmpl in "$src"/*.go.tmpl; do
 		-e "s|{{ category }}|$category|g" \
 		-e "s|{{ slug }}|$name|g" \
 		-e "s|{{ defid }}|$defid|g" \
-		-e "s|{{ vuid }}|$vuid|g" \
 		"$tmpl" >"$out"
 done
 
@@ -55,5 +50,4 @@ gofmt -w "$dest"
 
 echo
 echo "definition id: $defid"
-echo "virtual actor: $vuid"
 echo "next: add the import and ${name}.Builder() to internal/integrations/definitions/catalog/catalog.go"

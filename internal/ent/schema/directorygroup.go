@@ -52,7 +52,7 @@ func (DirectoryGroup) Fields() []ent.Field {
 			Comment("integration that owns this directory group").
 			NotEmpty().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
+				entx.IntegrationMappingField().SystemControlled(),
 			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory group").
@@ -60,21 +60,7 @@ func (DirectoryGroup) Fields() []ent.Field {
 			NotEmpty().
 			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
-			),
-		field.String("directory_instance_id").
-			Comment("stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance").
-			Optional().
-			Nillable().
-			Annotations(
-				entgql.OrderField("directory_instance_id"),
-			),
-		field.String("directory_sync_run_id").
-			Comment("sync run that produced this snapshot").
-			NotEmpty().
-			Immutable().
-			Annotations(
-				entx.IntegrationMappingField(),
+				entx.IntegrationMappingField().SystemControlled(),
 			),
 		field.String("external_id").
 			Comment("stable identifier from the directory system").
@@ -129,6 +115,7 @@ func (DirectoryGroup) Fields() []ent.Field {
 			Optional(),
 		field.Time("first_seen_at").
 			Comment("time this group was first observed by Openlane from directory ingest").
+			Default(time.Now).
 			Optional().
 			Nillable().
 			Annotations(
@@ -140,6 +127,7 @@ func (DirectoryGroup) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entx.IntegrationMappingField(),
+				entx.SeenAt(),
 			),
 		field.Time("added_at").
 			Comment("provider-reported time the group was added or provisioned in the source directory").
@@ -154,17 +142,18 @@ func (DirectoryGroup) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entx.IntegrationMappingField(),
+				entx.SnapshotRemoval(),
 			),
 		field.Time("observed_at").
 			Comment("time when this snapshot was recorded").
 			Default(time.Now).
 			Immutable(),
-		field.String("profile_hash").
-			Comment("hash of the normalized payload for diffing").
-			Default(""),
 		field.JSON("profile", map[string]any{}).
 			Comment("flattened attribute bag used for filtering/diffing").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField().Volatile(),
+			),
 		field.JSON("metadata", map[string]any{}).
 			Comment("provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl").
 			Optional().
@@ -198,7 +187,7 @@ func (g DirectoryGroup) Mixin() []ent.Mixin {
 		prefix:            "DRG",
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{},
+			ProvenanceMixin{SchemaType: g},
 			newOrgOwnedMixin(g),
 			newCustomEnumMixin(g, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(g, withEnumFieldName("scope"), withGlobalEnum()),
@@ -218,14 +207,6 @@ func (g DirectoryGroup) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Organization{}.Name()),
 			},
-		}),
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: g,
-			edgeSchema: DirectorySyncRun{},
-			field:      "directory_sync_run_id",
-			required:   true,
-			immutable:  true,
-			comment:    "sync run that produced this snapshot",
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: g,
@@ -253,12 +234,7 @@ func (g DirectoryGroup) Edges() []ent.Edge {
 // Indexes of the DirectoryGroup
 func (DirectoryGroup) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("integration_id", "external_id", "directory_sync_run_id").
-			Unique(),
-		index.Fields("directory_instance_id", "external_id"),
-		index.Fields("directory_instance_id", "email"),
 		index.Fields("platform_id", "external_id"),
-		index.Fields("directory_sync_run_id", "email"),
 		index.Fields("integration_id", "email"),
 		index.Fields("platform_id", "email"),
 		index.Fields(ownerFieldName, "email"),
@@ -287,7 +263,7 @@ func (g DirectoryGroup) Annotations() []schema.Annotation {
 				},
 			},
 		),
-		entx.IntegrationMappingSchema().StockPersist(),
+		entx.IntegrationMappingSchema().StockPersist().InstanceScoped(),
 		history.Annotations{
 			Exclude: true,
 		},

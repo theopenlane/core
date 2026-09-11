@@ -982,6 +982,9 @@
                       "policy": {
                         "description": "ExecutionPolicy controls synchronous execution behavior for one operation",
                         "properties": {
+                          "fanout": {
+                            "type": "boolean"
+                          },
                           "inline": {
                             "type": "boolean"
                           },
@@ -992,6 +995,9 @@
                             "type": "boolean"
                           },
                           "skipRunRecord": {
+                            "type": "boolean"
+                          },
+                          "snapshot": {
                             "type": "boolean"
                           }
                         },

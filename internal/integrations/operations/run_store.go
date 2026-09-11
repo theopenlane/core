@@ -3,13 +3,16 @@ package operations
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/mapx"
 )
@@ -26,8 +29,60 @@ type RunResult struct {
 	Metrics map[string]any
 }
 
+// IngestRunSummary renders a compact one-line record-count summary for an ingest run
+func IngestRunSummary(result IngestResult) string {
+	return fmt.Sprintf("attempted %d, persisted %d, changed %d, failed %d, removed %d, excluded %d", result.Attempted, result.Persisted, result.Changed, result.Failed, result.Removed, result.Excluded)
+}
+
+// metricAttempted is the attempted-count key in an ingest run's metrics payload
+const metricAttempted = "attempted"
+
+// metricPersisted is the persisted-count key in an ingest run's metrics payload
+const metricPersisted = "persisted"
+
+// metricChanged is the changed-count key in an ingest run's metrics payload
+const metricChanged = "changed"
+
+// metricSkipped is the skipped-count key in an ingest run's metrics payload
+const metricSkipped = "skipped"
+
+// metricFailed is the failed-count key in an ingest run's metrics payload
+const metricFailed = "failed"
+
+// metricFiltered is the filtered-count key in an ingest run's metrics payload
+const metricFiltered = "filtered"
+
+// metricRemoved is the removed-count key in an ingest run's metrics payload
+const metricRemoved = "removed"
+
+// metricExcluded is the excluded-count key in an ingest run's metrics payload
+const metricExcluded = "excluded"
+
+// IngestMetrics renders one ingest run's record counters as a structured metrics payload
+func IngestMetrics(result IngestResult) map[string]any {
+	return map[string]any{
+		metricAttempted: result.Attempted,
+		metricPersisted: result.Persisted,
+		metricChanged:   result.Changed,
+		metricSkipped:   result.Skipped,
+		metricFailed:    result.Failed,
+		metricFiltered:  result.Filtered,
+		metricRemoved:   result.Removed,
+		metricExcluded:  result.Excluded,
+	}
+}
+
+// operationKind classifies an operation's execution shape as an IntegrationOperationKind
+func operationKind(operation types.OperationRegistration) enums.IntegrationOperationKind {
+	if operation.IngestHandle != nil {
+		return enums.IntegrationOperationKindSync
+	}
+
+	return enums.IntegrationOperationKindPush
+}
+
 // CreatePendingRun inserts one pending run record for a dispatched operation
-func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Integration, operation string, runType enums.IntegrationRunType, config json.RawMessage) (*ent.IntegrationRun, error) {
+func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Integration, operation types.OperationRegistration, runType enums.IntegrationRunType, config json.RawMessage) (*ent.IntegrationRun, error) {
 	if installation == nil {
 		return nil, ErrInstallationIDRequired
 	}
@@ -40,7 +95,8 @@ func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Int
 	return db.IntegrationRun.Create().
 		SetOwnerID(installation.OwnerID).
 		SetIntegrationID(installation.ID).
-		SetOperationName(operation).
+		SetOperationName(operation.Name).
+		SetOperationKind(operationKind(operation)).
 		SetRunType(runType).
 		SetStatus(enums.IntegrationRunStatusPending).
 		SetOperationConfig(configMap).
@@ -103,4 +159,47 @@ func LastSuccessfulRunAt(ctx context.Context, db *ent.Client, integrationID, ope
 	}
 
 	return run.FinishedAt, nil
+}
+
+// LastSuccessfulRunID returns the id of the most recent successful run for the installation and operation
+func LastSuccessfulRunID(ctx context.Context, db *ent.Client, integrationID, operationName string) (string, error) {
+	run, err := db.IntegrationRun.Query().
+		Where(
+			integrationrun.IntegrationIDEQ(integrationID),
+			integrationrun.OperationNameEQ(operationName),
+			integrationrun.StatusEQ(enums.IntegrationRunStatusSuccess),
+			integrationrun.FinishedAtNotNil(),
+		).
+		Order(integrationrun.ByFinishedAt(sql.OrderDesc())).
+		Select(integrationrun.FieldID).
+		First(ctx)
+	if err != nil {
+		if ent.IsNotFound(err) {
+			return "", nil
+		}
+
+		return "", err
+	}
+
+	return run.ID, nil
+}
+
+// LinkedRecordCount returns the total number of ingested records linked to the run across all ingest schemas
+func LinkedRecordCount(ctx context.Context, db *ent.Client, ownerID, runID string) (int, error) {
+	total := 0
+
+	for _, s := range entityops.AllSchemas() {
+		if s.Ingest == nil || s.CountByKey == nil {
+			continue
+		}
+
+		n, err := s.CountByKey(ctx, db, ownerID, entityops.FieldIntegrationRunID, []string{runID})
+		if err != nil {
+			return 0, err
+		}
+
+		total += n
+	}
+
+	return total, nil
 }

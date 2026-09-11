@@ -6,16 +6,9 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/oklog/ulid/v2"
-
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
-
-// testVirtualUser mints a unique virtual actor identity for one test definition
-func testVirtualUser() integrationtypes.VirtualUserRef {
-	return integrationtypes.NewVirtualUserRef(ulid.Make().String())
-}
 
 // testCredentialSlot is a reusable credential slot for tests
 var testCredentialSlot = integrationtypes.NewCredentialSlotID("api_key")
@@ -42,7 +35,6 @@ func minimalDefinition(id string) (integrationtypes.Definition, integrationtypes
 	clientRef := integrationtypes.NewClientRef[string]()
 
 	return integrationtypes.Definition{
-		VirtualUser: testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          id,
 			DisplayName: "Test",
@@ -128,7 +120,6 @@ func TestRegistrySupportsMultipleClientsPerDefinition(t *testing.T) {
 	secondClient := integrationtypes.NewClientRef[int]()
 
 	definition := integrationtypes.Definition{
-		VirtualUser: testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_multi_client",
 			DisplayName: "Multi Client",
@@ -224,7 +215,6 @@ func TestValidateOperatorConfigSchemaRequired(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_opconfig"},
 		OperatorConfig: &integrationtypes.OperatorConfigRegistration{Schema: nil},
 	}
@@ -243,7 +233,6 @@ func TestValidateCredentialSchemaRequired(t *testing.T) {
 	slot := integrationtypes.NewCredentialSlotID("orphan")
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_credschema"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
 			{Ref: slot, Schema: nil},
@@ -264,7 +253,6 @@ func TestValidateCredentialSchemaSkippedForAuthManaged(t *testing.T) {
 	slot := integrationtypes.NewCredentialSlotID("oauth_token")
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_authmanaged"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
 			{Ref: slot},
@@ -298,7 +286,6 @@ func TestValidateUserInputSchemaRequired(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_userinput"},
 		UserInput:      &integrationtypes.UserInputRegistration{Schema: nil},
 	}
@@ -315,7 +302,6 @@ func TestIndexClientsInvalidRef(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_badclient"},
 		Clients: []integrationtypes.ClientRegistration{
 			{Build: func(context.Context, integrationtypes.ClientBuildRequest) (any, error) { return nil, nil }},
@@ -337,7 +323,6 @@ func TestIndexClientsCredentialRefNotDeclared(t *testing.T) {
 	undeclared := integrationtypes.NewCredentialSlotID("ghost")
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_badcredref"},
 		Clients: []integrationtypes.ClientRegistration{
 			{
@@ -360,7 +345,6 @@ func TestIndexOperationsHandlerRequired(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_nohandler"},
 		Operations: []integrationtypes.OperationRegistration{
 			{Name: "bad", Topic: gala.TopicName("bad")},
@@ -379,7 +363,6 @@ func TestIndexOperationsHandlerAmbiguous(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_ambiguous"},
 		Operations: []integrationtypes.OperationRegistration{
 			{
@@ -403,7 +386,6 @@ func TestIndexOperationsIngestContractsRequired(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_noingest"},
 		Operations: []integrationtypes.OperationRegistration{
 			{
@@ -426,7 +408,6 @@ func TestIndexOperationsIngestHandlerWithContracts(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_ingest_ok"},
 		Operations: []integrationtypes.OperationRegistration{
 			{
@@ -434,6 +415,52 @@ func TestIndexOperationsIngestHandlerWithContracts(t *testing.T) {
 				Topic:        gala.TopicName("ingest_ok"),
 				Ingest:       []integrationtypes.IngestContract{{Schema: "finding"}},
 				IngestHandle: newTestIngestHandler(),
+			},
+		},
+	}
+
+	if err := reg.Register(def); err != nil {
+		t.Fatalf("Register() error = %v", err)
+	}
+}
+
+// TestIndexOperationsSnapshotRequiresIngestHandle verifies Policy.Snapshot without an IngestHandle is rejected
+func TestIndexOperationsSnapshotRequiresIngestHandle(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_badsnapshot"},
+		Operations: []integrationtypes.OperationRegistration{
+			{
+				Name:   "bad_snapshot",
+				Topic:  gala.TopicName("bad_snapshot"),
+				Handle: newTestHandler(),
+				Policy: integrationtypes.ExecutionPolicy{Snapshot: true},
+			},
+		},
+	}
+
+	err := reg.Register(def)
+	if !errors.Is(err, ErrIngestSnapshotRequiresIngestHandle) {
+		t.Fatalf("expected ErrIngestSnapshotRequiresIngestHandle, got %v", err)
+	}
+}
+
+// TestIndexOperationsSnapshotWithIngestHandle verifies Policy.Snapshot with an IngestHandle succeeds
+func TestIndexOperationsSnapshotWithIngestHandle(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_goodsnapshot"},
+		Operations: []integrationtypes.OperationRegistration{
+			{
+				Name:         "good_snapshot",
+				Topic:        gala.TopicName("good_snapshot"),
+				Ingest:       []integrationtypes.IngestContract{{Schema: "directory_account"}},
+				IngestHandle: newTestIngestHandler(),
+				Policy:       integrationtypes.ExecutionPolicy{Snapshot: true},
 			},
 		},
 	}
@@ -451,7 +478,6 @@ func TestIndexOperationsClientRefNotFound(t *testing.T) {
 	ghost := integrationtypes.NewClientRef[string]()
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_ghostclient"},
 		Operations: []integrationtypes.OperationRegistration{
 			{
@@ -475,7 +501,6 @@ func TestIndexWebhooksEventResolverRequired(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_noresolver"},
 		Webhooks: []integrationtypes.WebhookRegistration{
 			{
@@ -503,7 +528,6 @@ func TestIndexWebhooksEventHandlerRequired(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_noevthandler"},
 		Webhooks: []integrationtypes.WebhookRegistration{
 			{
@@ -530,7 +554,6 @@ func TestWebhookRegistrationAndLookup(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_webhooks"},
 		Webhooks: []integrationtypes.WebhookRegistration{
 			{
@@ -692,7 +715,6 @@ func TestDefinitionsReturnsSortedByID(t *testing.T) {
 
 	for _, id := range ids {
 		def := integrationtypes.Definition{
-			VirtualUser:    testVirtualUser(),
 			DefinitionSpec: integrationtypes.DefinitionSpec{ID: id, DisplayName: id},
 			Operations: []integrationtypes.OperationRegistration{
 				{Name: "h", Topic: gala.TopicName(id + ".h"), Handle: newTestHandler()},
@@ -722,7 +744,6 @@ func TestCatalogReturnsSortedByID(t *testing.T) {
 
 	for _, id := range ids {
 		def := integrationtypes.Definition{
-			VirtualUser:    testVirtualUser(),
 			DefinitionSpec: integrationtypes.DefinitionSpec{ID: id, DisplayName: id},
 			Operations: []integrationtypes.OperationRegistration{
 				{Name: "h", Topic: gala.TopicName(id + ".h"), Handle: newTestHandler()},
@@ -749,7 +770,6 @@ func TestListenersReturnsSortedByTopic(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_listeners"},
 		Operations: []integrationtypes.OperationRegistration{
 			{Name: "b_op", Topic: gala.TopicName("topic.bravo"), Handle: newTestHandler()},
@@ -784,7 +804,6 @@ func TestRegisterAllSuccess(t *testing.T) {
 
 	b2 := func() (integrationtypes.Definition, error) {
 		return integrationtypes.Definition{
-			VirtualUser:    testVirtualUser(),
 			DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_all_2", DisplayName: "Two"},
 			Operations: []integrationtypes.OperationRegistration{
 				{Name: "h", Topic: gala.TopicName("def_all_2.h"), Handle: newTestHandler()},
@@ -852,7 +871,6 @@ func TestConnectionCredentialRefRequired(t *testing.T) {
 
 	reg := New()
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_nocred"},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{},
@@ -876,7 +894,6 @@ func TestConnectionCredentialRefNotDeclared(t *testing.T) {
 	undeclared := integrationtypes.NewCredentialSlotID("ghost")
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_undecl"},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{CredentialRef: undeclared},
@@ -901,7 +918,6 @@ func TestConnectionAdditionalCredentialRefNotDeclared(t *testing.T) {
 	extra := integrationtypes.NewCredentialSlotID("extra_ghost")
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_extraref"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
 			{Ref: slot, Schema: testCredentialSchema},
@@ -932,7 +948,6 @@ func TestConnectionClientRefNotDeclared(t *testing.T) {
 	ghost := integrationtypes.NewClientRef[string]()
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_badclient"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
 			{Ref: slot, Schema: testCredentialSchema},
@@ -963,7 +978,6 @@ func TestConnectionHealthCheckHandlerRequired(t *testing.T) {
 	slot := integrationtypes.NewCredentialSlotID("tok")
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_nohealthhandler"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
 			{Ref: slot, Schema: testCredentialSchema},
@@ -995,7 +1009,6 @@ func TestConnectionHealthCheckClientNotDeclared(t *testing.T) {
 	unknownClient := integrationtypes.NewClientRef[string]()
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_badhealthclient"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
 			{Ref: slot, Schema: testCredentialSchema},
@@ -1030,7 +1043,6 @@ func TestConnectionAuthCredentialRefNotDeclared(t *testing.T) {
 	authSlot := integrationtypes.NewCredentialSlotID("auth_ghost")
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_badauth"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
 			{Ref: slot, Schema: testCredentialSchema},
@@ -1061,7 +1073,6 @@ func TestConnectionAuthCredentialRefEmpty(t *testing.T) {
 	slot := integrationtypes.NewCredentialSlotID("tok")
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_emptyauth"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
 			{Ref: slot, Schema: testCredentialSchema},
@@ -1093,7 +1104,6 @@ func TestConnectionDisconnectCredentialRefNotDeclared(t *testing.T) {
 	discSlot := integrationtypes.NewCredentialSlotID("disc_ghost")
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_baddisc"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
 			{Ref: slot, Schema: testCredentialSchema},
@@ -1124,7 +1134,6 @@ func TestConnectionDisconnectCredentialRefEmpty(t *testing.T) {
 	slot := integrationtypes.NewCredentialSlotID("tok")
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_emptydisc"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
 			{Ref: slot, Schema: testCredentialSchema},
@@ -1157,7 +1166,6 @@ func TestConnectionFullyWiredSuccess(t *testing.T) {
 	clientRef := integrationtypes.NewClientRef[string]()
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_full"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
 			{Ref: slot, Schema: testCredentialSchema},
@@ -1201,7 +1209,6 @@ func TestConnectionAutoAppendsCredentialRef(t *testing.T) {
 	slot := integrationtypes.NewCredentialSlotID("auto")
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_autoappend"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
 			{Ref: slot, Schema: testCredentialSchema},
@@ -1229,7 +1236,6 @@ func TestRuntimeIntegrationRegistration(t *testing.T) {
 	reg := New()
 
 	def := integrationtypes.Definition{
-		VirtualUser: testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_runtime",
 			DisplayName: "Runtime Test",
@@ -1275,7 +1281,6 @@ func TestRuntimeIntegrationNilConfig(t *testing.T) {
 	reg := New()
 
 	def := integrationtypes.Definition{
-		VirtualUser: testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_runtime_nocfg",
 			DisplayName: "Runtime No Config",
@@ -1314,7 +1319,6 @@ func TestRuntimeCoexistsWithCredentials(t *testing.T) {
 	reg := New()
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_creds", Active: true, Visible: true},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
 			Ref:    integrationtypes.NewRuntimeRefID("WithCreds"),
@@ -1376,7 +1380,6 @@ func TestRuntimeCoexistsWithOperatorConfig(t *testing.T) {
 	reg := New()
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_opconf"},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
 			Ref:   integrationtypes.NewRuntimeRefID("OpConflict"),
@@ -1400,7 +1403,6 @@ func TestRuntimeBuildRequired(t *testing.T) {
 	reg := New()
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_nobuild"},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
 			Ref: integrationtypes.NewRuntimeRefID("NoBuild"),
@@ -1424,7 +1426,6 @@ func TestRuntimeBuildError(t *testing.T) {
 	buildErr := errors.New("provider init failed")
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_buildfail"},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
 			Ref:    integrationtypes.NewRuntimeRefID("FailBuild"),

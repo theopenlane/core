@@ -92,7 +92,7 @@ func (DirectorySync) Run(ctx context.Context, svc *admin.Service, customerID str
 				continue
 			}
 
-			envelope, err := providerkit.MarshalEnvelope(groupResource, member, ErrPayloadEncode)
+			envelope, err := providerkit.MarshalEnvelope(group.Id, member, ErrPayloadEncode)
 			if err != nil {
 				return nil, err
 			}

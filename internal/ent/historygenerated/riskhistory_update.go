@@ -109,6 +109,9 @@ func (_u *RiskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.ManagedByCleared() {
 		_spec.ClearField(riskhistory.FieldManagedBy, field.TypeString)
 	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(riskhistory.FieldIntegrationRunID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(riskhistory.FieldOwnerID, field.TypeString)
 	}
@@ -340,6 +343,9 @@ func (_u *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHistory
 	}
 	if _u.mutation.ManagedByCleared() {
 		_spec.ClearField(riskhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(riskhistory.FieldIntegrationRunID, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(riskhistory.FieldOwnerID, field.TypeString)

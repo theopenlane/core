@@ -174,14 +174,6 @@ type TestGraphClient interface {
 	GetDirectoryMembershipByID(ctx context.Context, directoryMembershipID string, interceptors ...clientv2.RequestInterceptor) (*GetDirectoryMembershipByID, error)
 	GetDirectoryMemberships(ctx context.Context, first *int64, last *int64, where *DirectoryMembershipWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetDirectoryMemberships, error)
 	UpdateDirectoryMembership(ctx context.Context, updateDirectoryMembershipID string, input UpdateDirectoryMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateDirectoryMembership, error)
-	CreateBulkCSVDirectorySyncRun(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVDirectorySyncRun, error)
-	CreateBulkDirectorySyncRun(ctx context.Context, input []*CreateDirectorySyncRunInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkDirectorySyncRun, error)
-	CreateDirectorySyncRun(ctx context.Context, input CreateDirectorySyncRunInput, interceptors ...clientv2.RequestInterceptor) (*CreateDirectorySyncRun, error)
-	DeleteDirectorySyncRun(ctx context.Context, deleteDirectorySyncRunID string, interceptors ...clientv2.RequestInterceptor) (*DeleteDirectorySyncRun, error)
-	GetAllDirectorySyncRuns(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllDirectorySyncRuns, error)
-	GetDirectorySyncRunByID(ctx context.Context, directorySyncRunID string, interceptors ...clientv2.RequestInterceptor) (*GetDirectorySyncRunByID, error)
-	GetDirectorySyncRuns(ctx context.Context, first *int64, last *int64, where *DirectorySyncRunWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetDirectorySyncRuns, error)
-	UpdateDirectorySyncRun(ctx context.Context, updateDirectorySyncRunID string, input UpdateDirectorySyncRunInput, interceptors ...clientv2.RequestInterceptor) (*UpdateDirectorySyncRun, error)
 	CreateBulkCSVDiscussion(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVDiscussion, error)
 	CreateBulkDiscussion(ctx context.Context, input []*CreateDiscussionInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkDiscussion, error)
 	CreateDiscussion(ctx context.Context, input CreateDiscussionInput, interceptors ...clientv2.RequestInterceptor) (*CreateDiscussion, error)
@@ -803,6 +795,7 @@ type CreateActionPlan_CreateActionPlan_ActionPlan struct {
 	FileID                          *string                       "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                        "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                      "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                       "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                       *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode "json:\"managementMode,omitempty\" graphql:\"managementMode\""
@@ -970,6 +963,12 @@ func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetImprovementSuggestions
 		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateActionPlan_CreateActionPlan_ActionPlan{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateActionPlan_CreateActionPlan_ActionPlan) GetInternalNotes() *string {
 	if t == nil {
@@ -1175,6 +1174,7 @@ type CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans struct {
 	FileID                          *string                       "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                        "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                      "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                       "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                       *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode "json:\"managementMode,omitempty\" graphql:\"managementMode\""
@@ -1342,6 +1342,12 @@ func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetImprovementSu
 		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkActionPlan_CreateBulkActionPlan_ActionPlans) GetInternalNotes() *string {
 	if t == nil {
@@ -1547,6 +1553,7 @@ type CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans struct {
 	FileID                          *string                       "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                        "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                      "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                       "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                       *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode "json:\"managementMode,omitempty\" graphql:\"managementMode\""
@@ -1714,6 +1721,12 @@ func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetImprove
 		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkCSVActionPlan_CreateBulkCSVActionPlan_ActionPlans) GetInternalNotes() *string {
 	if t == nil {
@@ -1930,6 +1943,7 @@ type GetActionPlanByID_ActionPlan struct {
 	FileID                          *string                       "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                        "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                      "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                       "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                       *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode "json:\"managementMode,omitempty\" graphql:\"managementMode\""
@@ -2097,6 +2111,12 @@ func (t *GetActionPlanByID_ActionPlan) GetImprovementSuggestions() []string {
 		t = &GetActionPlanByID_ActionPlan{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *GetActionPlanByID_ActionPlan) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetActionPlanByID_ActionPlan{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetActionPlanByID_ActionPlan) GetInternalNotes() *string {
 	if t == nil {
@@ -2567,6 +2587,7 @@ type UpdateActionPlan_UpdateActionPlan_ActionPlan struct {
 	FileID                          *string                       "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                        "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                      "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                       "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                       *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode "json:\"managementMode,omitempty\" graphql:\"managementMode\""
@@ -2734,6 +2755,12 @@ func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetImprovementSuggestions
 		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateActionPlan_UpdateActionPlan_ActionPlan{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateActionPlan_UpdateActionPlan_ActionPlan) GetInternalNotes() *string {
 	if t == nil {
@@ -2939,6 +2966,7 @@ type UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans struct {
 	FileID                          *string                       "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                        "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                      "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                       "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                       *string                       "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode "json:\"managementMode,omitempty\" graphql:\"managementMode\""
@@ -3106,6 +3134,12 @@ func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetImprovementSu
 		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetInternalNotes() *string {
 	if t == nil {
@@ -5890,6 +5924,7 @@ type CreateAsset_CreateAsset_Asset struct {
 	ID                            string           "json:\"id\" graphql:\"id\""
 	Identifier                    *string          "json:\"identifier,omitempty\" graphql:\"identifier\""
 	IntegrationID                 *string          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID              *string          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                 *string          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalOwner                 *string          "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
 	InternalOwnerGroupID          *string          "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
@@ -6070,6 +6105,12 @@ func (t *CreateAsset_CreateAsset_Asset) GetIntegrationID() *string {
 		t = &CreateAsset_CreateAsset_Asset{}
 	}
 	return t.IntegrationID
+}
+func (t *CreateAsset_CreateAsset_Asset) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateAsset_CreateAsset_Asset{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateAsset_CreateAsset_Asset) GetInternalNotes() *string {
 	if t == nil {
@@ -6283,6 +6324,7 @@ type CreateBulkAsset_CreateBulkAsset_Assets struct {
 	ID                            string           "json:\"id\" graphql:\"id\""
 	Identifier                    *string          "json:\"identifier,omitempty\" graphql:\"identifier\""
 	IntegrationID                 *string          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID              *string          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                 *string          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalOwner                 *string          "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
 	InternalOwnerGroupID          *string          "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
@@ -6463,6 +6505,12 @@ func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetIntegrationID() *string {
 		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
 	}
 	return t.IntegrationID
+}
+func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkAsset_CreateBulkAsset_Assets{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkAsset_CreateBulkAsset_Assets) GetInternalNotes() *string {
 	if t == nil {
@@ -6676,6 +6724,7 @@ type CreateBulkCSVAsset_CreateBulkCSVAsset_Assets struct {
 	ID                            string           "json:\"id\" graphql:\"id\""
 	Identifier                    *string          "json:\"identifier,omitempty\" graphql:\"identifier\""
 	IntegrationID                 *string          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID              *string          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                 *string          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalOwner                 *string          "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
 	InternalOwnerGroupID          *string          "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
@@ -6856,6 +6905,12 @@ func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetIntegrationID() *strin
 		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
 	}
 	return t.IntegrationID
+}
+func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVAsset_CreateBulkCSVAsset_Assets{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkCSVAsset_CreateBulkCSVAsset_Assets) GetInternalNotes() *string {
 	if t == nil {
@@ -7137,6 +7192,7 @@ type GetAllAssets_Assets_Edges_Node struct {
 	ID                            string           "json:\"id\" graphql:\"id\""
 	Identifier                    *string          "json:\"identifier,omitempty\" graphql:\"identifier\""
 	IntegrationID                 *string          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID              *string          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                 *string          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalOwner                 *string          "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
 	InternalOwnerGroupID          *string          "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
@@ -7317,6 +7373,12 @@ func (t *GetAllAssets_Assets_Edges_Node) GetIntegrationID() *string {
 		t = &GetAllAssets_Assets_Edges_Node{}
 	}
 	return t.IntegrationID
+}
+func (t *GetAllAssets_Assets_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetAllAssets_Assets_Edges_Node{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetAllAssets_Assets_Edges_Node) GetInternalNotes() *string {
 	if t == nil {
@@ -7555,6 +7617,7 @@ type GetAssetByID_Asset struct {
 	ID                            string           "json:\"id\" graphql:\"id\""
 	Identifier                    *string          "json:\"identifier,omitempty\" graphql:\"identifier\""
 	IntegrationID                 *string          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID              *string          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                 *string          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalOwner                 *string          "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
 	InternalOwnerGroupID          *string          "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
@@ -7735,6 +7798,12 @@ func (t *GetAssetByID_Asset) GetIntegrationID() *string {
 		t = &GetAssetByID_Asset{}
 	}
 	return t.IntegrationID
+}
+func (t *GetAssetByID_Asset) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetAssetByID_Asset{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetAssetByID_Asset) GetInternalNotes() *string {
 	if t == nil {
@@ -7969,6 +8038,7 @@ type GetAssets_Assets_Edges_Node struct {
 	ID                            string           "json:\"id\" graphql:\"id\""
 	Identifier                    *string          "json:\"identifier,omitempty\" graphql:\"identifier\""
 	IntegrationID                 *string          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID              *string          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                 *string          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalOwner                 *string          "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
 	InternalOwnerGroupID          *string          "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
@@ -8149,6 +8219,12 @@ func (t *GetAssets_Assets_Edges_Node) GetIntegrationID() *string {
 		t = &GetAssets_Assets_Edges_Node{}
 	}
 	return t.IntegrationID
+}
+func (t *GetAssets_Assets_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetAssets_Assets_Edges_Node{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetAssets_Assets_Edges_Node) GetInternalNotes() *string {
 	if t == nil {
@@ -8387,6 +8463,7 @@ type UpdateAsset_UpdateAsset_Asset struct {
 	ID                            string           "json:\"id\" graphql:\"id\""
 	Identifier                    *string          "json:\"identifier,omitempty\" graphql:\"identifier\""
 	IntegrationID                 *string          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID              *string          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                 *string          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalOwner                 *string          "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
 	InternalOwnerGroupID          *string          "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
@@ -8567,6 +8644,12 @@ func (t *UpdateAsset_UpdateAsset_Asset) GetIntegrationID() *string {
 		t = &UpdateAsset_UpdateAsset_Asset{}
 	}
 	return t.IntegrationID
+}
+func (t *UpdateAsset_UpdateAsset_Asset) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateAsset_UpdateAsset_Asset{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateAsset_UpdateAsset_Asset) GetInternalNotes() *string {
 	if t == nil {
@@ -8780,6 +8863,7 @@ type UpdateBulkAsset_UpdateBulkAsset_Assets struct {
 	ID                            string           "json:\"id\" graphql:\"id\""
 	Identifier                    *string          "json:\"identifier,omitempty\" graphql:\"identifier\""
 	IntegrationID                 *string          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID              *string          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                 *string          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalOwner                 *string          "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
 	InternalOwnerGroupID          *string          "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
@@ -8960,6 +9044,12 @@ func (t *UpdateBulkAsset_UpdateBulkAsset_Assets) GetIntegrationID() *string {
 		t = &UpdateBulkAsset_UpdateBulkAsset_Assets{}
 	}
 	return t.IntegrationID
+}
+func (t *UpdateBulkAsset_UpdateBulkAsset_Assets) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkAsset_UpdateBulkAsset_Assets{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateBulkAsset_UpdateBulkAsset_Assets) GetInternalNotes() *string {
 	if t == nil {
@@ -9194,6 +9284,7 @@ type UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets struct {
 	ID                            string           "json:\"id\" graphql:\"id\""
 	Identifier                    *string          "json:\"identifier,omitempty\" graphql:\"identifier\""
 	IntegrationID                 *string          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID              *string          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                 *string          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalOwner                 *string          "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
 	InternalOwnerGroupID          *string          "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
@@ -9374,6 +9465,12 @@ func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets) GetIntegrationID() *strin
 		t = &UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets{}
 	}
 	return t.IntegrationID
+}
+func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets) GetInternalNotes() *string {
 	if t == nil {
@@ -14864,6 +14961,7 @@ type CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults struct {
 	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
 	ID                      string            "json:\"id\" graphql:\"id\""
 	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
@@ -14913,6 +15011,12 @@ func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetInte
 		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
 	}
 	return t.IntegrationID
+}
+func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkCSVCheckResult_CreateBulkCSVCheckResult_CheckResults) GetLastObservedAt() *models.DateTime {
 	if t == nil {
@@ -15005,6 +15109,7 @@ type CreateBulkCheckResult_CreateBulkCheckResult_CheckResults struct {
 	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
 	ID                      string            "json:\"id\" graphql:\"id\""
 	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
@@ -15054,6 +15159,12 @@ func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetIntegratio
 		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
 	}
 	return t.IntegrationID
+}
+func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCheckResult_CreateBulkCheckResult_CheckResults{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkCheckResult_CreateBulkCheckResult_CheckResults) GetLastObservedAt() *models.DateTime {
 	if t == nil {
@@ -15146,6 +15257,7 @@ type CreateCheckResult_CreateCheckResult_CheckResult struct {
 	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
 	ID                      string            "json:\"id\" graphql:\"id\""
 	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
@@ -15195,6 +15307,12 @@ func (t *CreateCheckResult_CreateCheckResult_CheckResult) GetIntegrationID() *st
 		t = &CreateCheckResult_CreateCheckResult_CheckResult{}
 	}
 	return t.IntegrationID
+}
+func (t *CreateCheckResult_CreateCheckResult_CheckResult) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateCheckResult_CreateCheckResult_CheckResult{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateCheckResult_CreateCheckResult_CheckResult) GetLastObservedAt() *models.DateTime {
 	if t == nil {
@@ -15355,6 +15473,7 @@ type GetAllCheckResults_CheckResults_Edges_Node struct {
 	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
 	ID                      string            "json:\"id\" graphql:\"id\""
 	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
@@ -15404,6 +15523,12 @@ func (t *GetAllCheckResults_CheckResults_Edges_Node) GetIntegrationID() *string 
 		t = &GetAllCheckResults_CheckResults_Edges_Node{}
 	}
 	return t.IntegrationID
+}
+func (t *GetAllCheckResults_CheckResults_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetAllCheckResults_CheckResults_Edges_Node{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetAllCheckResults_CheckResults_Edges_Node) GetLastObservedAt() *models.DateTime {
 	if t == nil {
@@ -15521,6 +15646,7 @@ type GetCheckResultByID_CheckResult struct {
 	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
 	ID                      string            "json:\"id\" graphql:\"id\""
 	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
@@ -15570,6 +15696,12 @@ func (t *GetCheckResultByID_CheckResult) GetIntegrationID() *string {
 		t = &GetCheckResultByID_CheckResult{}
 	}
 	return t.IntegrationID
+}
+func (t *GetCheckResultByID_CheckResult) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetCheckResultByID_CheckResult{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetCheckResultByID_CheckResult) GetLastObservedAt() *models.DateTime {
 	if t == nil {
@@ -15683,6 +15815,7 @@ type GetCheckResults_CheckResults_Edges_Node struct {
 	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
 	ID                      string            "json:\"id\" graphql:\"id\""
 	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
@@ -15732,6 +15865,12 @@ func (t *GetCheckResults_CheckResults_Edges_Node) GetIntegrationID() *string {
 		t = &GetCheckResults_CheckResults_Edges_Node{}
 	}
 	return t.IntegrationID
+}
+func (t *GetCheckResults_CheckResults_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetCheckResults_CheckResults_Edges_Node{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetCheckResults_CheckResults_Edges_Node) GetLastObservedAt() *models.DateTime {
 	if t == nil {
@@ -15849,6 +15988,7 @@ type UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults struct {
 	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
 	ID                      string            "json:\"id\" graphql:\"id\""
 	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
@@ -15898,6 +16038,12 @@ func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetInte
 		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
 	}
 	return t.IntegrationID
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetLastObservedAt() *models.DateTime {
 	if t == nil {
@@ -16011,6 +16157,7 @@ type UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults struct {
 	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
 	ID                      string            "json:\"id\" graphql:\"id\""
 	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
@@ -16060,6 +16207,12 @@ func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetIntegratio
 		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
 	}
 	return t.IntegrationID
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetLastObservedAt() *models.DateTime {
 	if t == nil {
@@ -16173,6 +16326,7 @@ type UpdateCheckResult_UpdateCheckResult_CheckResult struct {
 	ExternalURI             *string           "json:\"externalURI,omitempty\" graphql:\"externalURI\""
 	ID                      string            "json:\"id\" graphql:\"id\""
 	IntegrationID           *string           "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string           "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastObservedAt          *models.DateTime  "json:\"lastObservedAt,omitempty\" graphql:\"lastObservedAt\""
 	ManagedBy               *string           "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ParentExternalID        *string           "json:\"parentExternalID,omitempty\" graphql:\"parentExternalID\""
@@ -16222,6 +16376,12 @@ func (t *UpdateCheckResult_UpdateCheckResult_CheckResult) GetIntegrationID() *st
 		t = &UpdateCheckResult_UpdateCheckResult_CheckResult{}
 	}
 	return t.IntegrationID
+}
+func (t *UpdateCheckResult_UpdateCheckResult_CheckResult) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateCheckResult_UpdateCheckResult_CheckResult{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateCheckResult_UpdateCheckResult_CheckResult) GetLastObservedAt() *models.DateTime {
 	if t == nil {
@@ -16317,6 +16477,7 @@ type CreateBulkCSVContact_CreateBulkCSVContact_Contacts struct {
 	FullName                *string          "json:\"fullName,omitempty\" graphql:\"fullName\""
 	ID                      string           "json:\"id\" graphql:\"id\""
 	IntegrationID           *string          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	ManagedBy               *string          "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ObservedAt              *models.DateTime "json:\"observedAt,omitempty\" graphql:\"observedAt\""
 	OwnerID                 *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -16385,6 +16546,12 @@ func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetIntegrationID() 
 		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
 	}
 	return t.IntegrationID
+}
+func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVContact_CreateBulkCSVContact_Contacts{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkCSVContact_CreateBulkCSVContact_Contacts) GetManagedBy() *string {
 	if t == nil {
@@ -16486,6 +16653,7 @@ type CreateBulkContact_CreateBulkContact_Contacts struct {
 	FullName                *string          "json:\"fullName,omitempty\" graphql:\"fullName\""
 	ID                      string           "json:\"id\" graphql:\"id\""
 	IntegrationID           *string          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	ManagedBy               *string          "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ObservedAt              *models.DateTime "json:\"observedAt,omitempty\" graphql:\"observedAt\""
 	OwnerID                 *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -16554,6 +16722,12 @@ func (t *CreateBulkContact_CreateBulkContact_Contacts) GetIntegrationID() *strin
 		t = &CreateBulkContact_CreateBulkContact_Contacts{}
 	}
 	return t.IntegrationID
+}
+func (t *CreateBulkContact_CreateBulkContact_Contacts) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkContact_CreateBulkContact_Contacts{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkContact_CreateBulkContact_Contacts) GetManagedBy() *string {
 	if t == nil {
@@ -16655,6 +16829,7 @@ type CreateContact_CreateContact_Contact struct {
 	FullName                *string          "json:\"fullName,omitempty\" graphql:\"fullName\""
 	ID                      string           "json:\"id\" graphql:\"id\""
 	IntegrationID           *string          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	ManagedBy               *string          "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ObservedAt              *models.DateTime "json:\"observedAt,omitempty\" graphql:\"observedAt\""
 	OwnerID                 *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -16723,6 +16898,12 @@ func (t *CreateContact_CreateContact_Contact) GetIntegrationID() *string {
 		t = &CreateContact_CreateContact_Contact{}
 	}
 	return t.IntegrationID
+}
+func (t *CreateContact_CreateContact_Contact) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateContact_CreateContact_Contact{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateContact_CreateContact_Contact) GetManagedBy() *string {
 	if t == nil {
@@ -16959,6 +17140,7 @@ type GetContactByID_Contact struct {
 	FullName                *string          "json:\"fullName,omitempty\" graphql:\"fullName\""
 	ID                      string           "json:\"id\" graphql:\"id\""
 	IntegrationID           *string          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	ManagedBy               *string          "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ObservedAt              *models.DateTime "json:\"observedAt,omitempty\" graphql:\"observedAt\""
 	OwnerID                 *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -17027,6 +17209,12 @@ func (t *GetContactByID_Contact) GetIntegrationID() *string {
 		t = &GetContactByID_Contact{}
 	}
 	return t.IntegrationID
+}
+func (t *GetContactByID_Contact) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetContactByID_Contact{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetContactByID_Contact) GetManagedBy() *string {
 	if t == nil {
@@ -17241,6 +17429,7 @@ type UpdateBulkContact_UpdateBulkContact_Contacts struct {
 	FullName                *string          "json:\"fullName,omitempty\" graphql:\"fullName\""
 	ID                      string           "json:\"id\" graphql:\"id\""
 	IntegrationID           *string          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	ManagedBy               *string          "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ObservedAt              *models.DateTime "json:\"observedAt,omitempty\" graphql:\"observedAt\""
 	OwnerID                 *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -17309,6 +17498,12 @@ func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetIntegrationID() *strin
 		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
 	}
 	return t.IntegrationID
+}
+func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact_Contacts{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetManagedBy() *string {
 	if t == nil {
@@ -17431,6 +17626,7 @@ type UpdateContact_UpdateContact_Contact struct {
 	FullName                *string          "json:\"fullName,omitempty\" graphql:\"fullName\""
 	ID                      string           "json:\"id\" graphql:\"id\""
 	IntegrationID           *string          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	ManagedBy               *string          "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ObservedAt              *models.DateTime "json:\"observedAt,omitempty\" graphql:\"observedAt\""
 	OwnerID                 *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -17499,6 +17695,12 @@ func (t *UpdateContact_UpdateContact_Contact) GetIntegrationID() *string {
 		t = &UpdateContact_UpdateContact_Contact{}
 	}
 	return t.IntegrationID
+}
+func (t *UpdateContact_UpdateContact_Contact) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateContact_UpdateContact_Contact{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateContact_UpdateContact_Contact) GetManagedBy() *string {
 	if t == nil {
@@ -32076,9 +32278,7 @@ type CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccoun
 	CreatedAt               *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy               *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Department              *string                        "json:\"department,omitempty\" graphql:\"department\""
-	DirectoryInstanceID     *string                        "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
 	DirectoryName           *string                        "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID      *string                        "json:\"directorySyncRunID,omitempty\" graphql:\"directorySyncRunID\""
 	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
 	DisplayName             *string                        "json:\"displayName,omitempty\" graphql:\"displayName\""
 	EmailAliases            []string                       "json:\"emailAliases,omitempty\" graphql:\"emailAliases\""
@@ -32091,6 +32291,7 @@ type CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccoun
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IdentityHolderID        *string                        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
 	IntegrationID           *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	JobTitle                *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
 	LastLoginAt             *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
 	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
@@ -32105,7 +32306,6 @@ type CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccoun
 	PlatformID              *string                        "json:\"platformID,omitempty\" graphql:\"platformID\""
 	PrimarySource           bool                           "json:\"primarySource\" graphql:\"primarySource\""
 	Profile                 map[string]any                 "json:\"profile,omitempty\" graphql:\"profile\""
-	ProfileHash             string                         "json:\"profileHash\" graphql:\"profileHash\""
 	RawProfileFileID        *string                        "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
 	RemovedAt               *time.Time                     "json:\"removedAt,omitempty\" graphql:\"removedAt\""
 	ScopeID                 *string                        "json:\"scopeID,omitempty\" graphql:\"scopeID\""
@@ -32176,23 +32376,11 @@ func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAc
 	}
 	return t.Department
 }
-func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts) GetDirectoryName() *string {
 	if t == nil {
 		t = &CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts{}
 	}
 	return t.DirectoryName
-}
-func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts) GetDirectorySyncRunID() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts) GetDisplayID() string {
 	if t == nil {
@@ -32265,6 +32453,12 @@ func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAc
 		t = &CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts{}
 	}
 	return t.IntegrationID
+}
+func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts) GetJobTitle() *string {
 	if t == nil {
@@ -32349,12 +32543,6 @@ func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAc
 		t = &CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts{}
 	}
 	return t.Profile
-}
-func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts) GetProfileHash() string {
-	if t == nil {
-		t = &CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts{}
-	}
-	return t.ProfileHash
 }
 func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts) GetRawProfileFileID() *string {
 	if t == nil {
@@ -32462,9 +32650,7 @@ type CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts str
 	CreatedAt               *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy               *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Department              *string                        "json:\"department,omitempty\" graphql:\"department\""
-	DirectoryInstanceID     *string                        "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
 	DirectoryName           *string                        "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID      *string                        "json:\"directorySyncRunID,omitempty\" graphql:\"directorySyncRunID\""
 	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
 	DisplayName             *string                        "json:\"displayName,omitempty\" graphql:\"displayName\""
 	EmailAliases            []string                       "json:\"emailAliases,omitempty\" graphql:\"emailAliases\""
@@ -32477,6 +32663,7 @@ type CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts str
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IdentityHolderID        *string                        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
 	IntegrationID           *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	JobTitle                *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
 	LastLoginAt             *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
 	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
@@ -32491,7 +32678,6 @@ type CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts str
 	PlatformID              *string                        "json:\"platformID,omitempty\" graphql:\"platformID\""
 	PrimarySource           bool                           "json:\"primarySource\" graphql:\"primarySource\""
 	Profile                 map[string]any                 "json:\"profile,omitempty\" graphql:\"profile\""
-	ProfileHash             string                         "json:\"profileHash\" graphql:\"profileHash\""
 	RawProfileFileID        *string                        "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
 	RemovedAt               *time.Time                     "json:\"removedAt,omitempty\" graphql:\"removedAt\""
 	ScopeID                 *string                        "json:\"scopeID,omitempty\" graphql:\"scopeID\""
@@ -32562,23 +32748,11 @@ func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts
 	}
 	return t.Department
 }
-func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts) GetDirectoryName() *string {
 	if t == nil {
 		t = &CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts{}
 	}
 	return t.DirectoryName
-}
-func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts) GetDirectorySyncRunID() *string {
-	if t == nil {
-		t = &CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts) GetDisplayID() string {
 	if t == nil {
@@ -32651,6 +32825,12 @@ func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts
 		t = &CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts{}
 	}
 	return t.IntegrationID
+}
+func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts) GetJobTitle() *string {
 	if t == nil {
@@ -32735,12 +32915,6 @@ func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts
 		t = &CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts{}
 	}
 	return t.Profile
-}
-func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts) GetProfileHash() string {
-	if t == nil {
-		t = &CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts{}
-	}
-	return t.ProfileHash
 }
 func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts) GetRawProfileFileID() *string {
 	if t == nil {
@@ -32848,9 +33022,7 @@ type CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount struct {
 	CreatedAt               *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy               *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Department              *string                        "json:\"department,omitempty\" graphql:\"department\""
-	DirectoryInstanceID     *string                        "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
 	DirectoryName           *string                        "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID      *string                        "json:\"directorySyncRunID,omitempty\" graphql:\"directorySyncRunID\""
 	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
 	DisplayName             *string                        "json:\"displayName,omitempty\" graphql:\"displayName\""
 	EmailAliases            []string                       "json:\"emailAliases,omitempty\" graphql:\"emailAliases\""
@@ -32863,6 +33035,7 @@ type CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount struct {
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IdentityHolderID        *string                        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
 	IntegrationID           *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	JobTitle                *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
 	LastLoginAt             *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
 	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
@@ -32877,7 +33050,6 @@ type CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount struct {
 	PlatformID              *string                        "json:\"platformID,omitempty\" graphql:\"platformID\""
 	PrimarySource           bool                           "json:\"primarySource\" graphql:\"primarySource\""
 	Profile                 map[string]any                 "json:\"profile,omitempty\" graphql:\"profile\""
-	ProfileHash             string                         "json:\"profileHash\" graphql:\"profileHash\""
 	RawProfileFileID        *string                        "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
 	RemovedAt               *time.Time                     "json:\"removedAt,omitempty\" graphql:\"removedAt\""
 	ScopeID                 *string                        "json:\"scopeID,omitempty\" graphql:\"scopeID\""
@@ -32948,23 +33120,11 @@ func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetDepa
 	}
 	return t.Department
 }
-func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetDirectoryName() *string {
 	if t == nil {
 		t = &CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount{}
 	}
 	return t.DirectoryName
-}
-func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetDirectorySyncRunID() *string {
-	if t == nil {
-		t = &CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetDisplayID() string {
 	if t == nil {
@@ -33037,6 +33197,12 @@ func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetInte
 		t = &CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount{}
 	}
 	return t.IntegrationID
+}
+func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetJobTitle() *string {
 	if t == nil {
@@ -33121,12 +33287,6 @@ func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetProf
 		t = &CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount{}
 	}
 	return t.Profile
-}
-func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetProfileHash() string {
-	if t == nil {
-		t = &CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount{}
-	}
-	return t.ProfileHash
 }
 func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetRawProfileFileID() *string {
 	if t == nil {
@@ -33268,35 +33428,33 @@ func (t *GetAllDirectoryAccounts_DirectoryAccounts_PageInfo) GetStartCursor() *s
 }
 
 type GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node struct {
-	AccountType        *enums.DirectoryAccountType    "json:\"accountType,omitempty\" graphql:\"accountType\""
-	CanonicalEmail     *string                        "json:\"canonicalEmail,omitempty\" graphql:\"canonicalEmail\""
-	CreatedAt          *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Department         *string                        "json:\"department,omitempty\" graphql:\"department\""
-	DirectorySyncRunID *string                        "json:\"directorySyncRunID,omitempty\" graphql:\"directorySyncRunID\""
-	DisplayID          string                         "json:\"displayID\" graphql:\"displayID\""
-	DisplayName        *string                        "json:\"displayName,omitempty\" graphql:\"displayName\""
-	ExternalID         string                         "json:\"externalID\" graphql:\"externalID\""
-	FamilyName         *string                        "json:\"familyName,omitempty\" graphql:\"familyName\""
-	GivenName          *string                        "json:\"givenName,omitempty\" graphql:\"givenName\""
-	ID                 string                         "json:\"id\" graphql:\"id\""
-	IntegrationID      *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
-	JobTitle           *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
-	LastLoginAt        *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
-	LastSeenIP         *string                        "json:\"lastSeenIP,omitempty\" graphql:\"lastSeenIP\""
-	MfaState           enums.DirectoryAccountMFAState "json:\"mfaState\" graphql:\"mfaState\""
-	ObservedAt         time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
-	OrganizationUnit   *string                        "json:\"organizationUnit,omitempty\" graphql:\"organizationUnit\""
-	OwnerID            *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Profile            map[string]any                 "json:\"profile,omitempty\" graphql:\"profile\""
-	ProfileHash        string                         "json:\"profileHash\" graphql:\"profileHash\""
-	RawProfileFileID   *string                        "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
-	SecondaryKey       *string                        "json:\"secondaryKey,omitempty\" graphql:\"secondaryKey\""
-	SourceVersion      *string                        "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
-	Status             enums.DirectoryAccountStatus   "json:\"status\" graphql:\"status\""
-	Tags               []string                       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AccountType      *enums.DirectoryAccountType    "json:\"accountType,omitempty\" graphql:\"accountType\""
+	CanonicalEmail   *string                        "json:\"canonicalEmail,omitempty\" graphql:\"canonicalEmail\""
+	CreatedAt        *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Department       *string                        "json:\"department,omitempty\" graphql:\"department\""
+	DisplayID        string                         "json:\"displayID\" graphql:\"displayID\""
+	DisplayName      *string                        "json:\"displayName,omitempty\" graphql:\"displayName\""
+	ExternalID       string                         "json:\"externalID\" graphql:\"externalID\""
+	FamilyName       *string                        "json:\"familyName,omitempty\" graphql:\"familyName\""
+	GivenName        *string                        "json:\"givenName,omitempty\" graphql:\"givenName\""
+	ID               string                         "json:\"id\" graphql:\"id\""
+	IntegrationID    *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	JobTitle         *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
+	LastLoginAt      *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
+	LastSeenIP       *string                        "json:\"lastSeenIP,omitempty\" graphql:\"lastSeenIP\""
+	MfaState         enums.DirectoryAccountMFAState "json:\"mfaState\" graphql:\"mfaState\""
+	ObservedAt       time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
+	OrganizationUnit *string                        "json:\"organizationUnit,omitempty\" graphql:\"organizationUnit\""
+	OwnerID          *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Profile          map[string]any                 "json:\"profile,omitempty\" graphql:\"profile\""
+	RawProfileFileID *string                        "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
+	SecondaryKey     *string                        "json:\"secondaryKey,omitempty\" graphql:\"secondaryKey\""
+	SourceVersion    *string                        "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
+	Status           enums.DirectoryAccountStatus   "json:\"status\" graphql:\"status\""
+	Tags             []string                       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node) GetAccountType() *enums.DirectoryAccountType {
@@ -33328,12 +33486,6 @@ func (t *GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node) GetDepartment() *
 		t = &GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node{}
 	}
 	return t.Department
-}
-func (t *GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node) GetDirectorySyncRunID() *string {
-	if t == nil {
-		t = &GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node) GetDisplayID() string {
 	if t == nil {
@@ -33425,12 +33577,6 @@ func (t *GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node) GetProfile() map[
 	}
 	return t.Profile
 }
-func (t *GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node) GetProfileHash() string {
-	if t == nil {
-		t = &GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node{}
-	}
-	return t.ProfileHash
-}
 func (t *GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node) GetRawProfileFileID() *string {
 	if t == nil {
 		t = &GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node{}
@@ -33520,9 +33666,7 @@ type GetDirectoryAccountByID_DirectoryAccount struct {
 	CreatedAt               *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy               *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Department              *string                        "json:\"department,omitempty\" graphql:\"department\""
-	DirectoryInstanceID     *string                        "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
 	DirectoryName           *string                        "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID      *string                        "json:\"directorySyncRunID,omitempty\" graphql:\"directorySyncRunID\""
 	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
 	DisplayName             *string                        "json:\"displayName,omitempty\" graphql:\"displayName\""
 	EmailAliases            []string                       "json:\"emailAliases,omitempty\" graphql:\"emailAliases\""
@@ -33535,6 +33679,7 @@ type GetDirectoryAccountByID_DirectoryAccount struct {
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IdentityHolderID        *string                        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
 	IntegrationID           *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	JobTitle                *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
 	LastLoginAt             *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
 	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
@@ -33549,7 +33694,6 @@ type GetDirectoryAccountByID_DirectoryAccount struct {
 	PlatformID              *string                        "json:\"platformID,omitempty\" graphql:\"platformID\""
 	PrimarySource           bool                           "json:\"primarySource\" graphql:\"primarySource\""
 	Profile                 map[string]any                 "json:\"profile,omitempty\" graphql:\"profile\""
-	ProfileHash             string                         "json:\"profileHash\" graphql:\"profileHash\""
 	RawProfileFileID        *string                        "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
 	RemovedAt               *time.Time                     "json:\"removedAt,omitempty\" graphql:\"removedAt\""
 	ScopeID                 *string                        "json:\"scopeID,omitempty\" graphql:\"scopeID\""
@@ -33620,23 +33764,11 @@ func (t *GetDirectoryAccountByID_DirectoryAccount) GetDepartment() *string {
 	}
 	return t.Department
 }
-func (t *GetDirectoryAccountByID_DirectoryAccount) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &GetDirectoryAccountByID_DirectoryAccount{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *GetDirectoryAccountByID_DirectoryAccount) GetDirectoryName() *string {
 	if t == nil {
 		t = &GetDirectoryAccountByID_DirectoryAccount{}
 	}
 	return t.DirectoryName
-}
-func (t *GetDirectoryAccountByID_DirectoryAccount) GetDirectorySyncRunID() *string {
-	if t == nil {
-		t = &GetDirectoryAccountByID_DirectoryAccount{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *GetDirectoryAccountByID_DirectoryAccount) GetDisplayID() string {
 	if t == nil {
@@ -33709,6 +33841,12 @@ func (t *GetDirectoryAccountByID_DirectoryAccount) GetIntegrationID() *string {
 		t = &GetDirectoryAccountByID_DirectoryAccount{}
 	}
 	return t.IntegrationID
+}
+func (t *GetDirectoryAccountByID_DirectoryAccount) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetDirectoryAccountByID_DirectoryAccount{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetDirectoryAccountByID_DirectoryAccount) GetJobTitle() *string {
 	if t == nil {
@@ -33793,12 +33931,6 @@ func (t *GetDirectoryAccountByID_DirectoryAccount) GetProfile() map[string]any {
 		t = &GetDirectoryAccountByID_DirectoryAccount{}
 	}
 	return t.Profile
-}
-func (t *GetDirectoryAccountByID_DirectoryAccount) GetProfileHash() string {
-	if t == nil {
-		t = &GetDirectoryAccountByID_DirectoryAccount{}
-	}
-	return t.ProfileHash
 }
 func (t *GetDirectoryAccountByID_DirectoryAccount) GetRawProfileFileID() *string {
 	if t == nil {
@@ -33918,35 +34050,33 @@ func (t *GetDirectoryAccounts_DirectoryAccounts_PageInfo) GetStartCursor() *stri
 }
 
 type GetDirectoryAccounts_DirectoryAccounts_Edges_Node struct {
-	AccountType        *enums.DirectoryAccountType    "json:\"accountType,omitempty\" graphql:\"accountType\""
-	CanonicalEmail     *string                        "json:\"canonicalEmail,omitempty\" graphql:\"canonicalEmail\""
-	CreatedAt          *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy          *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Department         *string                        "json:\"department,omitempty\" graphql:\"department\""
-	DirectorySyncRunID *string                        "json:\"directorySyncRunID,omitempty\" graphql:\"directorySyncRunID\""
-	DisplayID          string                         "json:\"displayID\" graphql:\"displayID\""
-	DisplayName        *string                        "json:\"displayName,omitempty\" graphql:\"displayName\""
-	ExternalID         string                         "json:\"externalID\" graphql:\"externalID\""
-	FamilyName         *string                        "json:\"familyName,omitempty\" graphql:\"familyName\""
-	GivenName          *string                        "json:\"givenName,omitempty\" graphql:\"givenName\""
-	ID                 string                         "json:\"id\" graphql:\"id\""
-	IntegrationID      *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
-	JobTitle           *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
-	LastLoginAt        *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
-	LastSeenIP         *string                        "json:\"lastSeenIP,omitempty\" graphql:\"lastSeenIP\""
-	MfaState           enums.DirectoryAccountMFAState "json:\"mfaState\" graphql:\"mfaState\""
-	ObservedAt         time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
-	OrganizationUnit   *string                        "json:\"organizationUnit,omitempty\" graphql:\"organizationUnit\""
-	OwnerID            *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	Profile            map[string]any                 "json:\"profile,omitempty\" graphql:\"profile\""
-	ProfileHash        string                         "json:\"profileHash\" graphql:\"profileHash\""
-	RawProfileFileID   *string                        "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
-	SecondaryKey       *string                        "json:\"secondaryKey,omitempty\" graphql:\"secondaryKey\""
-	SourceVersion      *string                        "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
-	Status             enums.DirectoryAccountStatus   "json:\"status\" graphql:\"status\""
-	Tags               []string                       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt          *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy          *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AccountType      *enums.DirectoryAccountType    "json:\"accountType,omitempty\" graphql:\"accountType\""
+	CanonicalEmail   *string                        "json:\"canonicalEmail,omitempty\" graphql:\"canonicalEmail\""
+	CreatedAt        *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy        *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Department       *string                        "json:\"department,omitempty\" graphql:\"department\""
+	DisplayID        string                         "json:\"displayID\" graphql:\"displayID\""
+	DisplayName      *string                        "json:\"displayName,omitempty\" graphql:\"displayName\""
+	ExternalID       string                         "json:\"externalID\" graphql:\"externalID\""
+	FamilyName       *string                        "json:\"familyName,omitempty\" graphql:\"familyName\""
+	GivenName        *string                        "json:\"givenName,omitempty\" graphql:\"givenName\""
+	ID               string                         "json:\"id\" graphql:\"id\""
+	IntegrationID    *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	JobTitle         *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
+	LastLoginAt      *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
+	LastSeenIP       *string                        "json:\"lastSeenIP,omitempty\" graphql:\"lastSeenIP\""
+	MfaState         enums.DirectoryAccountMFAState "json:\"mfaState\" graphql:\"mfaState\""
+	ObservedAt       time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
+	OrganizationUnit *string                        "json:\"organizationUnit,omitempty\" graphql:\"organizationUnit\""
+	OwnerID          *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Profile          map[string]any                 "json:\"profile,omitempty\" graphql:\"profile\""
+	RawProfileFileID *string                        "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
+	SecondaryKey     *string                        "json:\"secondaryKey,omitempty\" graphql:\"secondaryKey\""
+	SourceVersion    *string                        "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
+	Status           enums.DirectoryAccountStatus   "json:\"status\" graphql:\"status\""
+	Tags             []string                       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt        *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy        *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetDirectoryAccounts_DirectoryAccounts_Edges_Node) GetAccountType() *enums.DirectoryAccountType {
@@ -33978,12 +34108,6 @@ func (t *GetDirectoryAccounts_DirectoryAccounts_Edges_Node) GetDepartment() *str
 		t = &GetDirectoryAccounts_DirectoryAccounts_Edges_Node{}
 	}
 	return t.Department
-}
-func (t *GetDirectoryAccounts_DirectoryAccounts_Edges_Node) GetDirectorySyncRunID() *string {
-	if t == nil {
-		t = &GetDirectoryAccounts_DirectoryAccounts_Edges_Node{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *GetDirectoryAccounts_DirectoryAccounts_Edges_Node) GetDisplayID() string {
 	if t == nil {
@@ -34075,12 +34199,6 @@ func (t *GetDirectoryAccounts_DirectoryAccounts_Edges_Node) GetProfile() map[str
 	}
 	return t.Profile
 }
-func (t *GetDirectoryAccounts_DirectoryAccounts_Edges_Node) GetProfileHash() string {
-	if t == nil {
-		t = &GetDirectoryAccounts_DirectoryAccounts_Edges_Node{}
-	}
-	return t.ProfileHash
-}
 func (t *GetDirectoryAccounts_DirectoryAccounts_Edges_Node) GetRawProfileFileID() *string {
 	if t == nil {
 		t = &GetDirectoryAccounts_DirectoryAccounts_Edges_Node{}
@@ -34170,9 +34288,7 @@ type UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount struct {
 	CreatedAt               *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy               *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Department              *string                        "json:\"department,omitempty\" graphql:\"department\""
-	DirectoryInstanceID     *string                        "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
 	DirectoryName           *string                        "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID      *string                        "json:\"directorySyncRunID,omitempty\" graphql:\"directorySyncRunID\""
 	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
 	DisplayName             *string                        "json:\"displayName,omitempty\" graphql:\"displayName\""
 	EmailAliases            []string                       "json:\"emailAliases,omitempty\" graphql:\"emailAliases\""
@@ -34185,6 +34301,7 @@ type UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount struct {
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IdentityHolderID        *string                        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
 	IntegrationID           *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	JobTitle                *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
 	LastLoginAt             *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
 	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
@@ -34199,7 +34316,6 @@ type UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount struct {
 	PlatformID              *string                        "json:\"platformID,omitempty\" graphql:\"platformID\""
 	PrimarySource           bool                           "json:\"primarySource\" graphql:\"primarySource\""
 	Profile                 map[string]any                 "json:\"profile,omitempty\" graphql:\"profile\""
-	ProfileHash             string                         "json:\"profileHash\" graphql:\"profileHash\""
 	RawProfileFileID        *string                        "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
 	RemovedAt               *time.Time                     "json:\"removedAt,omitempty\" graphql:\"removedAt\""
 	ScopeID                 *string                        "json:\"scopeID,omitempty\" graphql:\"scopeID\""
@@ -34270,23 +34386,11 @@ func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetDepa
 	}
 	return t.Department
 }
-func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetDirectoryName() *string {
 	if t == nil {
 		t = &UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount{}
 	}
 	return t.DirectoryName
-}
-func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetDirectorySyncRunID() *string {
-	if t == nil {
-		t = &UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetDisplayID() string {
 	if t == nil {
@@ -34359,6 +34463,12 @@ func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetInte
 		t = &UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount{}
 	}
 	return t.IntegrationID
+}
+func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetJobTitle() *string {
 	if t == nil {
@@ -34443,12 +34553,6 @@ func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetProf
 		t = &UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount{}
 	}
 	return t.Profile
-}
-func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetProfileHash() string {
-	if t == nil {
-		t = &UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount{}
-	}
-	return t.ProfileHash
 }
 func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetRawProfileFileID() *string {
 	if t == nil {
@@ -34552,9 +34656,7 @@ type CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups str
 	CreatedAt               *time.Time                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy               *string                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description             *string                            "json:\"description,omitempty\" graphql:\"description\""
-	DirectoryInstanceID     *string                            "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
 	DirectoryName           *string                            "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID      string                             "json:\"directorySyncRunID\" graphql:\"directorySyncRunID\""
 	DisplayID               string                             "json:\"displayID\" graphql:\"displayID\""
 	DisplayName             *string                            "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Email                   *string                            "json:\"email,omitempty\" graphql:\"email\""
@@ -34565,6 +34667,7 @@ type CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups str
 	FirstSeenAt             *time.Time                         "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                             "json:\"id\" graphql:\"id\""
 	IntegrationID           string                             "json:\"integrationID\" graphql:\"integrationID\""
+	IntegrationRunID        *string                            "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastSeenAt              *time.Time                         "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                            "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MemberCount             *int64                             "json:\"memberCount,omitempty\" graphql:\"memberCount\""
@@ -34573,7 +34676,6 @@ type CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups str
 	OwnerID                 *string                            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PlatformID              *string                            "json:\"platformID,omitempty\" graphql:\"platformID\""
 	Profile                 map[string]any                     "json:\"profile,omitempty\" graphql:\"profile\""
-	ProfileHash             string                             "json:\"profileHash\" graphql:\"profileHash\""
 	RawProfileFileID        *string                            "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
 	RemovedAt               *time.Time                         "json:\"removedAt,omitempty\" graphql:\"removedAt\""
 	ScopeID                 *string                            "json:\"scopeID,omitempty\" graphql:\"scopeID\""
@@ -34619,23 +34721,11 @@ func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups
 	}
 	return t.Description
 }
-func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups) GetDirectoryName() *string {
 	if t == nil {
 		t = &CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups{}
 	}
 	return t.DirectoryName
-}
-func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups) GetDirectorySyncRunID() string {
-	if t == nil {
-		t = &CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups) GetDisplayID() string {
 	if t == nil {
@@ -34697,6 +34787,12 @@ func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups
 	}
 	return t.IntegrationID
 }
+func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups) GetLastSeenAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups{}
@@ -34744,12 +34840,6 @@ func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups
 		t = &CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups{}
 	}
 	return t.Profile
-}
-func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups) GetProfileHash() string {
-	if t == nil {
-		t = &CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups{}
-	}
-	return t.ProfileHash
 }
 func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups) GetRawProfileFileID() *string {
 	if t == nil {
@@ -34847,9 +34937,7 @@ type CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups struct {
 	CreatedAt               *time.Time                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy               *string                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description             *string                            "json:\"description,omitempty\" graphql:\"description\""
-	DirectoryInstanceID     *string                            "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
 	DirectoryName           *string                            "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID      string                             "json:\"directorySyncRunID\" graphql:\"directorySyncRunID\""
 	DisplayID               string                             "json:\"displayID\" graphql:\"displayID\""
 	DisplayName             *string                            "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Email                   *string                            "json:\"email,omitempty\" graphql:\"email\""
@@ -34860,6 +34948,7 @@ type CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups struct {
 	FirstSeenAt             *time.Time                         "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                             "json:\"id\" graphql:\"id\""
 	IntegrationID           string                             "json:\"integrationID\" graphql:\"integrationID\""
+	IntegrationRunID        *string                            "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastSeenAt              *time.Time                         "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                            "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MemberCount             *int64                             "json:\"memberCount,omitempty\" graphql:\"memberCount\""
@@ -34868,7 +34957,6 @@ type CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups struct {
 	OwnerID                 *string                            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PlatformID              *string                            "json:\"platformID,omitempty\" graphql:\"platformID\""
 	Profile                 map[string]any                     "json:\"profile,omitempty\" graphql:\"profile\""
-	ProfileHash             string                             "json:\"profileHash\" graphql:\"profileHash\""
 	RawProfileFileID        *string                            "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
 	RemovedAt               *time.Time                         "json:\"removedAt,omitempty\" graphql:\"removedAt\""
 	ScopeID                 *string                            "json:\"scopeID,omitempty\" graphql:\"scopeID\""
@@ -34914,23 +35002,11 @@ func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetD
 	}
 	return t.Description
 }
-func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetDirectoryName() *string {
 	if t == nil {
 		t = &CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups{}
 	}
 	return t.DirectoryName
-}
-func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetDirectorySyncRunID() string {
-	if t == nil {
-		t = &CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetDisplayID() string {
 	if t == nil {
@@ -34992,6 +35068,12 @@ func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetI
 	}
 	return t.IntegrationID
 }
+func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetLastSeenAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups{}
@@ -35039,12 +35121,6 @@ func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetP
 		t = &CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups{}
 	}
 	return t.Profile
-}
-func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetProfileHash() string {
-	if t == nil {
-		t = &CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups{}
-	}
-	return t.ProfileHash
 }
 func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetRawProfileFileID() *string {
 	if t == nil {
@@ -35142,9 +35218,7 @@ type CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup struct {
 	CreatedAt               *time.Time                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy               *string                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description             *string                            "json:\"description,omitempty\" graphql:\"description\""
-	DirectoryInstanceID     *string                            "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
 	DirectoryName           *string                            "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID      string                             "json:\"directorySyncRunID\" graphql:\"directorySyncRunID\""
 	DisplayID               string                             "json:\"displayID\" graphql:\"displayID\""
 	DisplayName             *string                            "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Email                   *string                            "json:\"email,omitempty\" graphql:\"email\""
@@ -35155,6 +35229,7 @@ type CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup struct {
 	FirstSeenAt             *time.Time                         "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                             "json:\"id\" graphql:\"id\""
 	IntegrationID           string                             "json:\"integrationID\" graphql:\"integrationID\""
+	IntegrationRunID        *string                            "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastSeenAt              *time.Time                         "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                            "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MemberCount             *int64                             "json:\"memberCount,omitempty\" graphql:\"memberCount\""
@@ -35163,7 +35238,6 @@ type CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup struct {
 	OwnerID                 *string                            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PlatformID              *string                            "json:\"platformID,omitempty\" graphql:\"platformID\""
 	Profile                 map[string]any                     "json:\"profile,omitempty\" graphql:\"profile\""
-	ProfileHash             string                             "json:\"profileHash\" graphql:\"profileHash\""
 	RawProfileFileID        *string                            "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
 	RemovedAt               *time.Time                         "json:\"removedAt,omitempty\" graphql:\"removedAt\""
 	ScopeID                 *string                            "json:\"scopeID,omitempty\" graphql:\"scopeID\""
@@ -35209,23 +35283,11 @@ func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetDescriptio
 	}
 	return t.Description
 }
-func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetDirectoryName() *string {
 	if t == nil {
 		t = &CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup{}
 	}
 	return t.DirectoryName
-}
-func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetDirectorySyncRunID() string {
-	if t == nil {
-		t = &CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetDisplayID() string {
 	if t == nil {
@@ -35287,6 +35349,12 @@ func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetIntegratio
 	}
 	return t.IntegrationID
 }
+func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup{}
+	}
+	return t.IntegrationRunID
+}
 func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetLastSeenAt() *time.Time {
 	if t == nil {
 		t = &CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup{}
@@ -35334,12 +35402,6 @@ func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetProfile() 
 		t = &CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup{}
 	}
 	return t.Profile
-}
-func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetProfileHash() string {
-	if t == nil {
-		t = &CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup{}
-	}
-	return t.ProfileHash
 }
 func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetRawProfileFileID() *string {
 	if t == nil {
@@ -35479,7 +35541,6 @@ type GetAllDirectoryGroups_DirectoryGroups_Edges_Node struct {
 	CreatedAt              *time.Time                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description            *string                            "json:\"description,omitempty\" graphql:\"description\""
-	DirectorySyncRunID     string                             "json:\"directorySyncRunID\" graphql:\"directorySyncRunID\""
 	DisplayID              string                             "json:\"displayID\" graphql:\"displayID\""
 	DisplayName            *string                            "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Email                  *string                            "json:\"email,omitempty\" graphql:\"email\""
@@ -35491,7 +35552,6 @@ type GetAllDirectoryGroups_DirectoryGroups_Edges_Node struct {
 	ObservedAt             time.Time                          "json:\"observedAt\" graphql:\"observedAt\""
 	OwnerID                *string                            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Profile                map[string]any                     "json:\"profile,omitempty\" graphql:\"profile\""
-	ProfileHash            string                             "json:\"profileHash\" graphql:\"profileHash\""
 	RawProfileFileID       *string                            "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
 	SourceVersion          *string                            "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
 	Status                 enums.DirectoryGroupStatus         "json:\"status\" graphql:\"status\""
@@ -35523,12 +35583,6 @@ func (t *GetAllDirectoryGroups_DirectoryGroups_Edges_Node) GetDescription() *str
 		t = &GetAllDirectoryGroups_DirectoryGroups_Edges_Node{}
 	}
 	return t.Description
-}
-func (t *GetAllDirectoryGroups_DirectoryGroups_Edges_Node) GetDirectorySyncRunID() string {
-	if t == nil {
-		t = &GetAllDirectoryGroups_DirectoryGroups_Edges_Node{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *GetAllDirectoryGroups_DirectoryGroups_Edges_Node) GetDisplayID() string {
 	if t == nil {
@@ -35595,12 +35649,6 @@ func (t *GetAllDirectoryGroups_DirectoryGroups_Edges_Node) GetProfile() map[stri
 		t = &GetAllDirectoryGroups_DirectoryGroups_Edges_Node{}
 	}
 	return t.Profile
-}
-func (t *GetAllDirectoryGroups_DirectoryGroups_Edges_Node) GetProfileHash() string {
-	if t == nil {
-		t = &GetAllDirectoryGroups_DirectoryGroups_Edges_Node{}
-	}
-	return t.ProfileHash
 }
 func (t *GetAllDirectoryGroups_DirectoryGroups_Edges_Node) GetRawProfileFileID() *string {
 	if t == nil {
@@ -35681,9 +35729,7 @@ type GetDirectoryGroupByID_DirectoryGroup struct {
 	CreatedAt               *time.Time                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy               *string                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description             *string                            "json:\"description,omitempty\" graphql:\"description\""
-	DirectoryInstanceID     *string                            "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
 	DirectoryName           *string                            "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID      string                             "json:\"directorySyncRunID\" graphql:\"directorySyncRunID\""
 	DisplayID               string                             "json:\"displayID\" graphql:\"displayID\""
 	DisplayName             *string                            "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Email                   *string                            "json:\"email,omitempty\" graphql:\"email\""
@@ -35694,6 +35740,7 @@ type GetDirectoryGroupByID_DirectoryGroup struct {
 	FirstSeenAt             *time.Time                         "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                             "json:\"id\" graphql:\"id\""
 	IntegrationID           string                             "json:\"integrationID\" graphql:\"integrationID\""
+	IntegrationRunID        *string                            "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastSeenAt              *time.Time                         "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                            "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MemberCount             *int64                             "json:\"memberCount,omitempty\" graphql:\"memberCount\""
@@ -35702,7 +35749,6 @@ type GetDirectoryGroupByID_DirectoryGroup struct {
 	OwnerID                 *string                            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PlatformID              *string                            "json:\"platformID,omitempty\" graphql:\"platformID\""
 	Profile                 map[string]any                     "json:\"profile,omitempty\" graphql:\"profile\""
-	ProfileHash             string                             "json:\"profileHash\" graphql:\"profileHash\""
 	RawProfileFileID        *string                            "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
 	RemovedAt               *time.Time                         "json:\"removedAt,omitempty\" graphql:\"removedAt\""
 	ScopeID                 *string                            "json:\"scopeID,omitempty\" graphql:\"scopeID\""
@@ -35748,23 +35794,11 @@ func (t *GetDirectoryGroupByID_DirectoryGroup) GetDescription() *string {
 	}
 	return t.Description
 }
-func (t *GetDirectoryGroupByID_DirectoryGroup) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &GetDirectoryGroupByID_DirectoryGroup{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *GetDirectoryGroupByID_DirectoryGroup) GetDirectoryName() *string {
 	if t == nil {
 		t = &GetDirectoryGroupByID_DirectoryGroup{}
 	}
 	return t.DirectoryName
-}
-func (t *GetDirectoryGroupByID_DirectoryGroup) GetDirectorySyncRunID() string {
-	if t == nil {
-		t = &GetDirectoryGroupByID_DirectoryGroup{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *GetDirectoryGroupByID_DirectoryGroup) GetDisplayID() string {
 	if t == nil {
@@ -35826,6 +35860,12 @@ func (t *GetDirectoryGroupByID_DirectoryGroup) GetIntegrationID() string {
 	}
 	return t.IntegrationID
 }
+func (t *GetDirectoryGroupByID_DirectoryGroup) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetDirectoryGroupByID_DirectoryGroup{}
+	}
+	return t.IntegrationRunID
+}
 func (t *GetDirectoryGroupByID_DirectoryGroup) GetLastSeenAt() *time.Time {
 	if t == nil {
 		t = &GetDirectoryGroupByID_DirectoryGroup{}
@@ -35873,12 +35913,6 @@ func (t *GetDirectoryGroupByID_DirectoryGroup) GetProfile() map[string]any {
 		t = &GetDirectoryGroupByID_DirectoryGroup{}
 	}
 	return t.Profile
-}
-func (t *GetDirectoryGroupByID_DirectoryGroup) GetProfileHash() string {
-	if t == nil {
-		t = &GetDirectoryGroupByID_DirectoryGroup{}
-	}
-	return t.ProfileHash
 }
 func (t *GetDirectoryGroupByID_DirectoryGroup) GetRawProfileFileID() *string {
 	if t == nil {
@@ -35996,7 +36030,6 @@ type GetDirectoryGroups_DirectoryGroups_Edges_Node struct {
 	CreatedAt              *time.Time                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description            *string                            "json:\"description,omitempty\" graphql:\"description\""
-	DirectorySyncRunID     string                             "json:\"directorySyncRunID\" graphql:\"directorySyncRunID\""
 	DisplayID              string                             "json:\"displayID\" graphql:\"displayID\""
 	DisplayName            *string                            "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Email                  *string                            "json:\"email,omitempty\" graphql:\"email\""
@@ -36008,7 +36041,6 @@ type GetDirectoryGroups_DirectoryGroups_Edges_Node struct {
 	ObservedAt             time.Time                          "json:\"observedAt\" graphql:\"observedAt\""
 	OwnerID                *string                            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	Profile                map[string]any                     "json:\"profile,omitempty\" graphql:\"profile\""
-	ProfileHash            string                             "json:\"profileHash\" graphql:\"profileHash\""
 	RawProfileFileID       *string                            "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
 	SourceVersion          *string                            "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
 	Status                 enums.DirectoryGroupStatus         "json:\"status\" graphql:\"status\""
@@ -36040,12 +36072,6 @@ func (t *GetDirectoryGroups_DirectoryGroups_Edges_Node) GetDescription() *string
 		t = &GetDirectoryGroups_DirectoryGroups_Edges_Node{}
 	}
 	return t.Description
-}
-func (t *GetDirectoryGroups_DirectoryGroups_Edges_Node) GetDirectorySyncRunID() string {
-	if t == nil {
-		t = &GetDirectoryGroups_DirectoryGroups_Edges_Node{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *GetDirectoryGroups_DirectoryGroups_Edges_Node) GetDisplayID() string {
 	if t == nil {
@@ -36112,12 +36138,6 @@ func (t *GetDirectoryGroups_DirectoryGroups_Edges_Node) GetProfile() map[string]
 		t = &GetDirectoryGroups_DirectoryGroups_Edges_Node{}
 	}
 	return t.Profile
-}
-func (t *GetDirectoryGroups_DirectoryGroups_Edges_Node) GetProfileHash() string {
-	if t == nil {
-		t = &GetDirectoryGroups_DirectoryGroups_Edges_Node{}
-	}
-	return t.ProfileHash
 }
 func (t *GetDirectoryGroups_DirectoryGroups_Edges_Node) GetRawProfileFileID() *string {
 	if t == nil {
@@ -36198,9 +36218,7 @@ type UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup struct {
 	CreatedAt               *time.Time                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy               *string                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Description             *string                            "json:\"description,omitempty\" graphql:\"description\""
-	DirectoryInstanceID     *string                            "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
 	DirectoryName           *string                            "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID      string                             "json:\"directorySyncRunID\" graphql:\"directorySyncRunID\""
 	DisplayID               string                             "json:\"displayID\" graphql:\"displayID\""
 	DisplayName             *string                            "json:\"displayName,omitempty\" graphql:\"displayName\""
 	Email                   *string                            "json:\"email,omitempty\" graphql:\"email\""
@@ -36211,6 +36229,7 @@ type UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup struct {
 	FirstSeenAt             *time.Time                         "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                             "json:\"id\" graphql:\"id\""
 	IntegrationID           string                             "json:\"integrationID\" graphql:\"integrationID\""
+	IntegrationRunID        *string                            "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastSeenAt              *time.Time                         "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                            "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MemberCount             *int64                             "json:\"memberCount,omitempty\" graphql:\"memberCount\""
@@ -36219,7 +36238,6 @@ type UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup struct {
 	OwnerID                 *string                            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PlatformID              *string                            "json:\"platformID,omitempty\" graphql:\"platformID\""
 	Profile                 map[string]any                     "json:\"profile,omitempty\" graphql:\"profile\""
-	ProfileHash             string                             "json:\"profileHash\" graphql:\"profileHash\""
 	RawProfileFileID        *string                            "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
 	RemovedAt               *time.Time                         "json:\"removedAt,omitempty\" graphql:\"removedAt\""
 	ScopeID                 *string                            "json:\"scopeID,omitempty\" graphql:\"scopeID\""
@@ -36265,23 +36283,11 @@ func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetDescriptio
 	}
 	return t.Description
 }
-func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetDirectoryName() *string {
 	if t == nil {
 		t = &UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup{}
 	}
 	return t.DirectoryName
-}
-func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetDirectorySyncRunID() string {
-	if t == nil {
-		t = &UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetDisplayID() string {
 	if t == nil {
@@ -36343,6 +36349,12 @@ func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetIntegratio
 	}
 	return t.IntegrationID
 }
+func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup{}
+	}
+	return t.IntegrationRunID
+}
 func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetLastSeenAt() *time.Time {
 	if t == nil {
 		t = &UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup{}
@@ -36390,12 +36402,6 @@ func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetProfile() 
 		t = &UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup{}
 	}
 	return t.Profile
-}
-func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetProfileHash() string {
-	if t == nil {
-		t = &UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup{}
-	}
-	return t.ProfileHash
 }
 func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetRawProfileFileID() *string {
 	if t == nil {
@@ -36493,16 +36499,14 @@ type CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_Directory
 	CreatedBy               *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DirectoryAccountID      string                         "json:\"directoryAccountID\" graphql:\"directoryAccountID\""
 	DirectoryGroupID        string                         "json:\"directoryGroupID\" graphql:\"directoryGroupID\""
-	DirectoryInstanceID     *string                        "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
 	DirectoryName           *string                        "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID      string                         "json:\"directorySyncRunID\" graphql:\"directorySyncRunID\""
 	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
 	EnvironmentID           *string                        "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName         *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	FirstSeenAt             *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IntegrationID           string                         "json:\"integrationID\" graphql:\"integrationID\""
-	LastConfirmedRunID      *string                        "json:\"lastConfirmedRunID,omitempty\" graphql:\"lastConfirmedRunID\""
+	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -36552,23 +36556,11 @@ func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_Direc
 	}
 	return t.DirectoryGroupID
 }
-func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships) GetDirectoryName() *string {
 	if t == nil {
 		t = &CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships{}
 	}
 	return t.DirectoryName
-}
-func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships) GetDirectorySyncRunID() string {
-	if t == nil {
-		t = &CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships) GetDisplayID() string {
 	if t == nil {
@@ -36606,11 +36598,11 @@ func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_Direc
 	}
 	return t.IntegrationID
 }
-func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships) GetLastConfirmedRunID() *string {
+func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships) GetIntegrationRunID() *string {
 	if t == nil {
 		t = &CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships{}
 	}
-	return t.LastConfirmedRunID
+	return t.IntegrationRunID
 }
 func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships) GetLastSeenAt() *time.Time {
 	if t == nil {
@@ -36732,16 +36724,14 @@ type CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMember
 	CreatedBy               *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DirectoryAccountID      string                         "json:\"directoryAccountID\" graphql:\"directoryAccountID\""
 	DirectoryGroupID        string                         "json:\"directoryGroupID\" graphql:\"directoryGroupID\""
-	DirectoryInstanceID     *string                        "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
 	DirectoryName           *string                        "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID      string                         "json:\"directorySyncRunID\" graphql:\"directorySyncRunID\""
 	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
 	EnvironmentID           *string                        "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName         *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	FirstSeenAt             *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IntegrationID           string                         "json:\"integrationID\" graphql:\"integrationID\""
-	LastConfirmedRunID      *string                        "json:\"lastConfirmedRunID,omitempty\" graphql:\"lastConfirmedRunID\""
+	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -36791,23 +36781,11 @@ func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMe
 	}
 	return t.DirectoryGroupID
 }
-func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships) GetDirectoryName() *string {
 	if t == nil {
 		t = &CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships{}
 	}
 	return t.DirectoryName
-}
-func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships) GetDirectorySyncRunID() string {
-	if t == nil {
-		t = &CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships) GetDisplayID() string {
 	if t == nil {
@@ -36845,11 +36823,11 @@ func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMe
 	}
 	return t.IntegrationID
 }
-func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships) GetLastConfirmedRunID() *string {
+func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships) GetIntegrationRunID() *string {
 	if t == nil {
 		t = &CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships{}
 	}
-	return t.LastConfirmedRunID
+	return t.IntegrationRunID
 }
 func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships) GetLastSeenAt() *time.Time {
 	if t == nil {
@@ -36971,16 +36949,14 @@ type CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership str
 	CreatedBy               *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DirectoryAccountID      string                         "json:\"directoryAccountID\" graphql:\"directoryAccountID\""
 	DirectoryGroupID        string                         "json:\"directoryGroupID\" graphql:\"directoryGroupID\""
-	DirectoryInstanceID     *string                        "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
 	DirectoryName           *string                        "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID      string                         "json:\"directorySyncRunID\" graphql:\"directorySyncRunID\""
 	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
 	EnvironmentID           *string                        "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName         *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	FirstSeenAt             *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IntegrationID           string                         "json:\"integrationID\" graphql:\"integrationID\""
-	LastConfirmedRunID      *string                        "json:\"lastConfirmedRunID,omitempty\" graphql:\"lastConfirmedRunID\""
+	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -37030,23 +37006,11 @@ func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership
 	}
 	return t.DirectoryGroupID
 }
-func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership) GetDirectoryName() *string {
 	if t == nil {
 		t = &CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership{}
 	}
 	return t.DirectoryName
-}
-func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership) GetDirectorySyncRunID() string {
-	if t == nil {
-		t = &CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership) GetDisplayID() string {
 	if t == nil {
@@ -37084,11 +37048,11 @@ func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership
 	}
 	return t.IntegrationID
 }
-func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership) GetLastConfirmedRunID() *string {
+func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership) GetIntegrationRunID() *string {
 	if t == nil {
 		t = &CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership{}
 	}
-	return t.LastConfirmedRunID
+	return t.IntegrationRunID
 }
 func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership) GetLastSeenAt() *time.Time {
 	if t == nil {
@@ -37252,12 +37216,10 @@ type GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node struct {
 	CreatedBy          *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DirectoryAccountID string                         "json:\"directoryAccountID\" graphql:\"directoryAccountID\""
 	DirectoryGroupID   string                         "json:\"directoryGroupID\" graphql:\"directoryGroupID\""
-	DirectorySyncRunID string                         "json:\"directorySyncRunID\" graphql:\"directorySyncRunID\""
 	DisplayID          string                         "json:\"displayID\" graphql:\"displayID\""
 	FirstSeenAt        *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                 string                         "json:\"id\" graphql:\"id\""
 	IntegrationID      string                         "json:\"integrationID\" graphql:\"integrationID\""
-	LastConfirmedRunID *string                        "json:\"lastConfirmedRunID,omitempty\" graphql:\"lastConfirmedRunID\""
 	LastSeenAt         *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	Metadata           map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
 	ObservedAt         time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
@@ -37292,12 +37254,6 @@ func (t *GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node) GetDirector
 	}
 	return t.DirectoryGroupID
 }
-func (t *GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node) GetDirectorySyncRunID() string {
-	if t == nil {
-		t = &GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node{}
-	}
-	return t.DirectorySyncRunID
-}
 func (t *GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node) GetDisplayID() string {
 	if t == nil {
 		t = &GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node{}
@@ -37321,12 +37277,6 @@ func (t *GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node) GetIntegrat
 		t = &GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node{}
 	}
 	return t.IntegrationID
-}
-func (t *GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node) GetLastConfirmedRunID() *string {
-	if t == nil {
-		t = &GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node{}
-	}
-	return t.LastConfirmedRunID
 }
 func (t *GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node) GetLastSeenAt() *time.Time {
 	if t == nil {
@@ -37419,16 +37369,14 @@ type GetDirectoryMembershipByID_DirectoryMembership struct {
 	CreatedBy               *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DirectoryAccountID      string                         "json:\"directoryAccountID\" graphql:\"directoryAccountID\""
 	DirectoryGroupID        string                         "json:\"directoryGroupID\" graphql:\"directoryGroupID\""
-	DirectoryInstanceID     *string                        "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
 	DirectoryName           *string                        "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID      string                         "json:\"directorySyncRunID\" graphql:\"directorySyncRunID\""
 	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
 	EnvironmentID           *string                        "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName         *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	FirstSeenAt             *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IntegrationID           string                         "json:\"integrationID\" graphql:\"integrationID\""
-	LastConfirmedRunID      *string                        "json:\"lastConfirmedRunID,omitempty\" graphql:\"lastConfirmedRunID\""
+	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -37478,23 +37426,11 @@ func (t *GetDirectoryMembershipByID_DirectoryMembership) GetDirectoryGroupID() s
 	}
 	return t.DirectoryGroupID
 }
-func (t *GetDirectoryMembershipByID_DirectoryMembership) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &GetDirectoryMembershipByID_DirectoryMembership{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *GetDirectoryMembershipByID_DirectoryMembership) GetDirectoryName() *string {
 	if t == nil {
 		t = &GetDirectoryMembershipByID_DirectoryMembership{}
 	}
 	return t.DirectoryName
-}
-func (t *GetDirectoryMembershipByID_DirectoryMembership) GetDirectorySyncRunID() string {
-	if t == nil {
-		t = &GetDirectoryMembershipByID_DirectoryMembership{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *GetDirectoryMembershipByID_DirectoryMembership) GetDisplayID() string {
 	if t == nil {
@@ -37532,11 +37468,11 @@ func (t *GetDirectoryMembershipByID_DirectoryMembership) GetIntegrationID() stri
 	}
 	return t.IntegrationID
 }
-func (t *GetDirectoryMembershipByID_DirectoryMembership) GetLastConfirmedRunID() *string {
+func (t *GetDirectoryMembershipByID_DirectoryMembership) GetIntegrationRunID() *string {
 	if t == nil {
 		t = &GetDirectoryMembershipByID_DirectoryMembership{}
 	}
-	return t.LastConfirmedRunID
+	return t.IntegrationRunID
 }
 func (t *GetDirectoryMembershipByID_DirectoryMembership) GetLastSeenAt() *time.Time {
 	if t == nil {
@@ -37678,12 +37614,10 @@ type GetDirectoryMemberships_DirectoryMemberships_Edges_Node struct {
 	CreatedBy          *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DirectoryAccountID string                         "json:\"directoryAccountID\" graphql:\"directoryAccountID\""
 	DirectoryGroupID   string                         "json:\"directoryGroupID\" graphql:\"directoryGroupID\""
-	DirectorySyncRunID string                         "json:\"directorySyncRunID\" graphql:\"directorySyncRunID\""
 	DisplayID          string                         "json:\"displayID\" graphql:\"displayID\""
 	FirstSeenAt        *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                 string                         "json:\"id\" graphql:\"id\""
 	IntegrationID      string                         "json:\"integrationID\" graphql:\"integrationID\""
-	LastConfirmedRunID *string                        "json:\"lastConfirmedRunID,omitempty\" graphql:\"lastConfirmedRunID\""
 	LastSeenAt         *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	Metadata           map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
 	ObservedAt         time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
@@ -37718,12 +37652,6 @@ func (t *GetDirectoryMemberships_DirectoryMemberships_Edges_Node) GetDirectoryGr
 	}
 	return t.DirectoryGroupID
 }
-func (t *GetDirectoryMemberships_DirectoryMemberships_Edges_Node) GetDirectorySyncRunID() string {
-	if t == nil {
-		t = &GetDirectoryMemberships_DirectoryMemberships_Edges_Node{}
-	}
-	return t.DirectorySyncRunID
-}
 func (t *GetDirectoryMemberships_DirectoryMemberships_Edges_Node) GetDisplayID() string {
 	if t == nil {
 		t = &GetDirectoryMemberships_DirectoryMemberships_Edges_Node{}
@@ -37747,12 +37675,6 @@ func (t *GetDirectoryMemberships_DirectoryMemberships_Edges_Node) GetIntegration
 		t = &GetDirectoryMemberships_DirectoryMemberships_Edges_Node{}
 	}
 	return t.IntegrationID
-}
-func (t *GetDirectoryMemberships_DirectoryMemberships_Edges_Node) GetLastConfirmedRunID() *string {
-	if t == nil {
-		t = &GetDirectoryMemberships_DirectoryMemberships_Edges_Node{}
-	}
-	return t.LastConfirmedRunID
 }
 func (t *GetDirectoryMemberships_DirectoryMemberships_Edges_Node) GetLastSeenAt() *time.Time {
 	if t == nil {
@@ -37845,16 +37767,14 @@ type UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership str
 	CreatedBy               *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DirectoryAccountID      string                         "json:\"directoryAccountID\" graphql:\"directoryAccountID\""
 	DirectoryGroupID        string                         "json:\"directoryGroupID\" graphql:\"directoryGroupID\""
-	DirectoryInstanceID     *string                        "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
 	DirectoryName           *string                        "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID      string                         "json:\"directorySyncRunID\" graphql:\"directorySyncRunID\""
 	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
 	EnvironmentID           *string                        "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName         *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	FirstSeenAt             *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IntegrationID           string                         "json:\"integrationID\" graphql:\"integrationID\""
-	LastConfirmedRunID      *string                        "json:\"lastConfirmedRunID,omitempty\" graphql:\"lastConfirmedRunID\""
+	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -37904,23 +37824,11 @@ func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership
 	}
 	return t.DirectoryGroupID
 }
-func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership) GetDirectoryName() *string {
 	if t == nil {
 		t = &UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership{}
 	}
 	return t.DirectoryName
-}
-func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership) GetDirectorySyncRunID() string {
-	if t == nil {
-		t = &UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership) GetDisplayID() string {
 	if t == nil {
@@ -37958,11 +37866,11 @@ func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership
 	}
 	return t.IntegrationID
 }
-func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership) GetLastConfirmedRunID() *string {
+func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership) GetIntegrationRunID() *string {
 	if t == nil {
 		t = &UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership{}
 	}
-	return t.LastConfirmedRunID
+	return t.IntegrationRunID
 }
 func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership) GetLastSeenAt() *time.Time {
 	if t == nil {
@@ -38076,1303 +37984,6 @@ func (t *UpdateDirectoryMembership_UpdateDirectoryMembership) GetDirectoryMember
 		t = &UpdateDirectoryMembership_UpdateDirectoryMembership{}
 	}
 	return &t.DirectoryMembership
-}
-
-type CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns struct {
-	CompletedAt           *time.Time                   "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt             *time.Time                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DeltaCount            int64                        "json:\"deltaCount\" graphql:\"deltaCount\""
-	DirectoryInstanceID   *string                      "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
-	DisplayID             string                       "json:\"displayID\" graphql:\"displayID\""
-	EnvironmentID         *string                      "json:\"environmentID,omitempty\" graphql:\"environmentID\""
-	EnvironmentName       *string                      "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	Error                 *string                      "json:\"error,omitempty\" graphql:\"error\""
-	FullCount             int64                        "json:\"fullCount\" graphql:\"fullCount\""
-	ID                    string                       "json:\"id\" graphql:\"id\""
-	IntegrationID         string                       "json:\"integrationID\" graphql:\"integrationID\""
-	OwnerID               *string                      "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PlatformID            *string                      "json:\"platformID,omitempty\" graphql:\"platformID\""
-	RawManifestFileID     *string                      "json:\"rawManifestFileID,omitempty\" graphql:\"rawManifestFileID\""
-	ScopeID               *string                      "json:\"scopeID,omitempty\" graphql:\"scopeID\""
-	ScopeName             *string                      "json:\"scopeName,omitempty\" graphql:\"scopeName\""
-	SourceCursor          *string                      "json:\"sourceCursor,omitempty\" graphql:\"sourceCursor\""
-	StartedAt             time.Time                    "json:\"startedAt\" graphql:\"startedAt\""
-	Stats                 map[string]any               "json:\"stats,omitempty\" graphql:\"stats\""
-	Status                enums.DirectorySyncRunStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt             *time.Time                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                      "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-}
-
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetCompletedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.CompletedAt
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetDeltaCount() int64 {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.DeltaCount
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.DirectoryInstanceID
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetDisplayID() string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.DisplayID
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetEnvironmentID() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.EnvironmentID
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetEnvironmentName() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.EnvironmentName
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetError() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.Error
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetFullCount() int64 {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.FullCount
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetID() string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.ID
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetIntegrationID() string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.IntegrationID
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetPlatformID() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.PlatformID
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetRawManifestFileID() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.RawManifestFileID
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetScopeID() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.ScopeID
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetScopeName() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.ScopeName
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetSourceCursor() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.SourceCursor
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetStartedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return &t.StartedAt
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetStats() map[string]any {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.Stats
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetStatus() *enums.DirectorySyncRunStatus {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return &t.Status
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.UpdatedByImpersonator
-}
-
-type CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun struct {
-	DirectorySyncRuns []*CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns "json:\"directorySyncRuns,omitempty\" graphql:\"directorySyncRuns\""
-}
-
-func (t *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun) GetDirectorySyncRuns() []*CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun_DirectorySyncRuns {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun{}
-	}
-	return t.DirectorySyncRuns
-}
-
-type CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns struct {
-	CompletedAt           *time.Time                   "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt             *time.Time                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DeltaCount            int64                        "json:\"deltaCount\" graphql:\"deltaCount\""
-	DirectoryInstanceID   *string                      "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
-	DisplayID             string                       "json:\"displayID\" graphql:\"displayID\""
-	EnvironmentID         *string                      "json:\"environmentID,omitempty\" graphql:\"environmentID\""
-	EnvironmentName       *string                      "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	Error                 *string                      "json:\"error,omitempty\" graphql:\"error\""
-	FullCount             int64                        "json:\"fullCount\" graphql:\"fullCount\""
-	ID                    string                       "json:\"id\" graphql:\"id\""
-	IntegrationID         string                       "json:\"integrationID\" graphql:\"integrationID\""
-	OwnerID               *string                      "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PlatformID            *string                      "json:\"platformID,omitempty\" graphql:\"platformID\""
-	RawManifestFileID     *string                      "json:\"rawManifestFileID,omitempty\" graphql:\"rawManifestFileID\""
-	ScopeID               *string                      "json:\"scopeID,omitempty\" graphql:\"scopeID\""
-	ScopeName             *string                      "json:\"scopeName,omitempty\" graphql:\"scopeName\""
-	SourceCursor          *string                      "json:\"sourceCursor,omitempty\" graphql:\"sourceCursor\""
-	StartedAt             time.Time                    "json:\"startedAt\" graphql:\"startedAt\""
-	Stats                 map[string]any               "json:\"stats,omitempty\" graphql:\"stats\""
-	Status                enums.DirectorySyncRunStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt             *time.Time                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                      "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-}
-
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetCompletedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.CompletedAt
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetDeltaCount() int64 {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.DeltaCount
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.DirectoryInstanceID
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetDisplayID() string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.DisplayID
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetEnvironmentID() *string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.EnvironmentID
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetEnvironmentName() *string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.EnvironmentName
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetError() *string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.Error
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetFullCount() int64 {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.FullCount
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetID() string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.ID
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetIntegrationID() string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.IntegrationID
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.OwnerID
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetPlatformID() *string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.PlatformID
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetRawManifestFileID() *string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.RawManifestFileID
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetScopeID() *string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.ScopeID
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetScopeName() *string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.ScopeName
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetSourceCursor() *string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.SourceCursor
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetStartedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return &t.StartedAt
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetStats() map[string]any {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.Stats
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetStatus() *enums.DirectorySyncRunStatus {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return &t.Status
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns{}
-	}
-	return t.UpdatedByImpersonator
-}
-
-type CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun struct {
-	DirectorySyncRuns []*CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns "json:\"directorySyncRuns,omitempty\" graphql:\"directorySyncRuns\""
-}
-
-func (t *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun) GetDirectorySyncRuns() []*CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun_DirectorySyncRuns {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun{}
-	}
-	return t.DirectorySyncRuns
-}
-
-type CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun struct {
-	CompletedAt           *time.Time                   "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt             *time.Time                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DeltaCount            int64                        "json:\"deltaCount\" graphql:\"deltaCount\""
-	DirectoryInstanceID   *string                      "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
-	DisplayID             string                       "json:\"displayID\" graphql:\"displayID\""
-	EnvironmentID         *string                      "json:\"environmentID,omitempty\" graphql:\"environmentID\""
-	EnvironmentName       *string                      "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	Error                 *string                      "json:\"error,omitempty\" graphql:\"error\""
-	FullCount             int64                        "json:\"fullCount\" graphql:\"fullCount\""
-	ID                    string                       "json:\"id\" graphql:\"id\""
-	IntegrationID         string                       "json:\"integrationID\" graphql:\"integrationID\""
-	OwnerID               *string                      "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PlatformID            *string                      "json:\"platformID,omitempty\" graphql:\"platformID\""
-	RawManifestFileID     *string                      "json:\"rawManifestFileID,omitempty\" graphql:\"rawManifestFileID\""
-	ScopeID               *string                      "json:\"scopeID,omitempty\" graphql:\"scopeID\""
-	ScopeName             *string                      "json:\"scopeName,omitempty\" graphql:\"scopeName\""
-	SourceCursor          *string                      "json:\"sourceCursor,omitempty\" graphql:\"sourceCursor\""
-	StartedAt             time.Time                    "json:\"startedAt\" graphql:\"startedAt\""
-	Stats                 map[string]any               "json:\"stats,omitempty\" graphql:\"stats\""
-	Status                enums.DirectorySyncRunStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt             *time.Time                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                      "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-}
-
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetCompletedAt() *time.Time {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.CompletedAt
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.CreatedAt
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetCreatedBy() *string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.CreatedBy
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetDeltaCount() int64 {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.DeltaCount
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.DirectoryInstanceID
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetDisplayID() string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.DisplayID
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetEnvironmentID() *string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.EnvironmentID
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetEnvironmentName() *string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.EnvironmentName
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetError() *string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.Error
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetFullCount() int64 {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.FullCount
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetID() string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.ID
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetIntegrationID() string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.IntegrationID
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetOwnerID() *string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.OwnerID
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetPlatformID() *string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.PlatformID
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetRawManifestFileID() *string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.RawManifestFileID
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetScopeID() *string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.ScopeID
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetScopeName() *string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.ScopeName
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetSourceCursor() *string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.SourceCursor
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetStartedAt() *time.Time {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return &t.StartedAt
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetStats() map[string]any {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.Stats
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetStatus() *enums.DirectorySyncRunStatus {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return &t.Status
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.UpdatedAt
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetUpdatedBy() *string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.UpdatedBy
-}
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.UpdatedByImpersonator
-}
-
-type CreateDirectorySyncRun_CreateDirectorySyncRun struct {
-	DirectorySyncRun CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun "json:\"directorySyncRun\" graphql:\"directorySyncRun\""
-}
-
-func (t *CreateDirectorySyncRun_CreateDirectorySyncRun) GetDirectorySyncRun() *CreateDirectorySyncRun_CreateDirectorySyncRun_DirectorySyncRun {
-	if t == nil {
-		t = &CreateDirectorySyncRun_CreateDirectorySyncRun{}
-	}
-	return &t.DirectorySyncRun
-}
-
-type DeleteDirectorySyncRun_DeleteDirectorySyncRun struct {
-	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
-}
-
-func (t *DeleteDirectorySyncRun_DeleteDirectorySyncRun) GetDeletedID() string {
-	if t == nil {
-		t = &DeleteDirectorySyncRun_DeleteDirectorySyncRun{}
-	}
-	return t.DeletedID
-}
-
-type GetAllDirectorySyncRuns_DirectorySyncRuns_PageInfo struct {
-	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
-	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
-	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
-	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
-}
-
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_PageInfo) GetEndCursor() *string {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_PageInfo{}
-	}
-	return t.EndCursor
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_PageInfo) GetHasNextPage() bool {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_PageInfo{}
-	}
-	return t.HasNextPage
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_PageInfo) GetHasPreviousPage() bool {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_PageInfo{}
-	}
-	return t.HasPreviousPage
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_PageInfo) GetStartCursor() *string {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_PageInfo{}
-	}
-	return t.StartCursor
-}
-
-type GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node struct {
-	CompletedAt       *time.Time                   "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt         *time.Time                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DeltaCount        int64                        "json:\"deltaCount\" graphql:\"deltaCount\""
-	DisplayID         string                       "json:\"displayID\" graphql:\"displayID\""
-	Error             *string                      "json:\"error,omitempty\" graphql:\"error\""
-	FullCount         int64                        "json:\"fullCount\" graphql:\"fullCount\""
-	ID                string                       "json:\"id\" graphql:\"id\""
-	IntegrationID     string                       "json:\"integrationID\" graphql:\"integrationID\""
-	OwnerID           *string                      "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RawManifestFileID *string                      "json:\"rawManifestFileID,omitempty\" graphql:\"rawManifestFileID\""
-	SourceCursor      *string                      "json:\"sourceCursor,omitempty\" graphql:\"sourceCursor\""
-	StartedAt         time.Time                    "json:\"startedAt\" graphql:\"startedAt\""
-	Stats             map[string]any               "json:\"stats,omitempty\" graphql:\"stats\""
-	Status            enums.DirectorySyncRunStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt         *time.Time                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetCompletedAt() *time.Time {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.CompletedAt
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.CreatedAt
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetCreatedBy() *string {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.CreatedBy
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetDeltaCount() int64 {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.DeltaCount
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetError() *string {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.Error
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetFullCount() int64 {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.FullCount
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetIntegrationID() string {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.IntegrationID
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetOwnerID() *string {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.OwnerID
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetRawManifestFileID() *string {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.RawManifestFileID
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetSourceCursor() *string {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.SourceCursor
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetStartedAt() *time.Time {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return &t.StartedAt
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetStats() map[string]any {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.Stats
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetStatus() *enums.DirectorySyncRunStatus {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return &t.Status
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.UpdatedAt
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetUpdatedBy() *string {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.UpdatedBy
-}
-
-type GetAllDirectorySyncRuns_DirectorySyncRuns_Edges struct {
-	Node *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges) GetNode() *GetAllDirectorySyncRuns_DirectorySyncRuns_Edges_Node {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns_Edges{}
-	}
-	return t.Node
-}
-
-type GetAllDirectorySyncRuns_DirectorySyncRuns struct {
-	Edges      []*GetAllDirectorySyncRuns_DirectorySyncRuns_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-	PageInfo   GetAllDirectorySyncRuns_DirectorySyncRuns_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
-	TotalCount int64                                              "json:\"totalCount\" graphql:\"totalCount\""
-}
-
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns) GetEdges() []*GetAllDirectorySyncRuns_DirectorySyncRuns_Edges {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns{}
-	}
-	return t.Edges
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns) GetPageInfo() *GetAllDirectorySyncRuns_DirectorySyncRuns_PageInfo {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns{}
-	}
-	return &t.PageInfo
-}
-func (t *GetAllDirectorySyncRuns_DirectorySyncRuns) GetTotalCount() int64 {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns_DirectorySyncRuns{}
-	}
-	return t.TotalCount
-}
-
-type GetDirectorySyncRunByID_DirectorySyncRun struct {
-	CompletedAt           *time.Time                   "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt             *time.Time                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DeltaCount            int64                        "json:\"deltaCount\" graphql:\"deltaCount\""
-	DirectoryInstanceID   *string                      "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
-	DisplayID             string                       "json:\"displayID\" graphql:\"displayID\""
-	EnvironmentID         *string                      "json:\"environmentID,omitempty\" graphql:\"environmentID\""
-	EnvironmentName       *string                      "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	Error                 *string                      "json:\"error,omitempty\" graphql:\"error\""
-	FullCount             int64                        "json:\"fullCount\" graphql:\"fullCount\""
-	ID                    string                       "json:\"id\" graphql:\"id\""
-	IntegrationID         string                       "json:\"integrationID\" graphql:\"integrationID\""
-	OwnerID               *string                      "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PlatformID            *string                      "json:\"platformID,omitempty\" graphql:\"platformID\""
-	RawManifestFileID     *string                      "json:\"rawManifestFileID,omitempty\" graphql:\"rawManifestFileID\""
-	ScopeID               *string                      "json:\"scopeID,omitempty\" graphql:\"scopeID\""
-	ScopeName             *string                      "json:\"scopeName,omitempty\" graphql:\"scopeName\""
-	SourceCursor          *string                      "json:\"sourceCursor,omitempty\" graphql:\"sourceCursor\""
-	StartedAt             time.Time                    "json:\"startedAt\" graphql:\"startedAt\""
-	Stats                 map[string]any               "json:\"stats,omitempty\" graphql:\"stats\""
-	Status                enums.DirectorySyncRunStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt             *time.Time                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                      "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-}
-
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetCompletedAt() *time.Time {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.CompletedAt
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.CreatedAt
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetCreatedBy() *string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.CreatedBy
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetDeltaCount() int64 {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.DeltaCount
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.DirectoryInstanceID
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetDisplayID() string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.DisplayID
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetEnvironmentID() *string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.EnvironmentID
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetEnvironmentName() *string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.EnvironmentName
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetError() *string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.Error
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetFullCount() int64 {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.FullCount
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetID() string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.ID
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetIntegrationID() string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.IntegrationID
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetOwnerID() *string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.OwnerID
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetPlatformID() *string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.PlatformID
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetRawManifestFileID() *string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.RawManifestFileID
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetScopeID() *string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.ScopeID
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetScopeName() *string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.ScopeName
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetSourceCursor() *string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.SourceCursor
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetStartedAt() *time.Time {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return &t.StartedAt
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetStats() map[string]any {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.Stats
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetStatus() *enums.DirectorySyncRunStatus {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return &t.Status
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.UpdatedAt
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetUpdatedBy() *string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.UpdatedBy
-}
-func (t *GetDirectorySyncRunByID_DirectorySyncRun) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &GetDirectorySyncRunByID_DirectorySyncRun{}
-	}
-	return t.UpdatedByImpersonator
-}
-
-type GetDirectorySyncRuns_DirectorySyncRuns_PageInfo struct {
-	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
-	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
-	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
-	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
-}
-
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_PageInfo) GetEndCursor() *string {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_PageInfo{}
-	}
-	return t.EndCursor
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_PageInfo) GetHasNextPage() bool {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_PageInfo{}
-	}
-	return t.HasNextPage
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_PageInfo) GetHasPreviousPage() bool {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_PageInfo{}
-	}
-	return t.HasPreviousPage
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_PageInfo) GetStartCursor() *string {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_PageInfo{}
-	}
-	return t.StartCursor
-}
-
-type GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node struct {
-	CompletedAt       *time.Time                   "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt         *time.Time                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy         *string                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DeltaCount        int64                        "json:\"deltaCount\" graphql:\"deltaCount\""
-	DisplayID         string                       "json:\"displayID\" graphql:\"displayID\""
-	Error             *string                      "json:\"error,omitempty\" graphql:\"error\""
-	FullCount         int64                        "json:\"fullCount\" graphql:\"fullCount\""
-	ID                string                       "json:\"id\" graphql:\"id\""
-	IntegrationID     string                       "json:\"integrationID\" graphql:\"integrationID\""
-	OwnerID           *string                      "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	RawManifestFileID *string                      "json:\"rawManifestFileID,omitempty\" graphql:\"rawManifestFileID\""
-	SourceCursor      *string                      "json:\"sourceCursor,omitempty\" graphql:\"sourceCursor\""
-	StartedAt         time.Time                    "json:\"startedAt\" graphql:\"startedAt\""
-	Stats             map[string]any               "json:\"stats,omitempty\" graphql:\"stats\""
-	Status            enums.DirectorySyncRunStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt         *time.Time                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy         *string                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-}
-
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetCompletedAt() *time.Time {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.CompletedAt
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.CreatedAt
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetCreatedBy() *string {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.CreatedBy
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetDeltaCount() int64 {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.DeltaCount
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetDisplayID() string {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.DisplayID
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetError() *string {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.Error
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetFullCount() int64 {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.FullCount
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetID() string {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.ID
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetIntegrationID() string {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.IntegrationID
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetOwnerID() *string {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.OwnerID
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetRawManifestFileID() *string {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.RawManifestFileID
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetSourceCursor() *string {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.SourceCursor
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetStartedAt() *time.Time {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return &t.StartedAt
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetStats() map[string]any {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.Stats
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetStatus() *enums.DirectorySyncRunStatus {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return &t.Status
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.UpdatedAt
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node) GetUpdatedBy() *string {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node{}
-	}
-	return t.UpdatedBy
-}
-
-type GetDirectorySyncRuns_DirectorySyncRuns_Edges struct {
-	Node *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
-}
-
-func (t *GetDirectorySyncRuns_DirectorySyncRuns_Edges) GetNode() *GetDirectorySyncRuns_DirectorySyncRuns_Edges_Node {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns_Edges{}
-	}
-	return t.Node
-}
-
-type GetDirectorySyncRuns_DirectorySyncRuns struct {
-	Edges      []*GetDirectorySyncRuns_DirectorySyncRuns_Edges "json:\"edges,omitempty\" graphql:\"edges\""
-	PageInfo   GetDirectorySyncRuns_DirectorySyncRuns_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
-	TotalCount int64                                           "json:\"totalCount\" graphql:\"totalCount\""
-}
-
-func (t *GetDirectorySyncRuns_DirectorySyncRuns) GetEdges() []*GetDirectorySyncRuns_DirectorySyncRuns_Edges {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns{}
-	}
-	return t.Edges
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns) GetPageInfo() *GetDirectorySyncRuns_DirectorySyncRuns_PageInfo {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns{}
-	}
-	return &t.PageInfo
-}
-func (t *GetDirectorySyncRuns_DirectorySyncRuns) GetTotalCount() int64 {
-	if t == nil {
-		t = &GetDirectorySyncRuns_DirectorySyncRuns{}
-	}
-	return t.TotalCount
-}
-
-type UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun struct {
-	CompletedAt           *time.Time                   "json:\"completedAt,omitempty\" graphql:\"completedAt\""
-	CreatedAt             *time.Time                   "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy             *string                      "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DeltaCount            int64                        "json:\"deltaCount\" graphql:\"deltaCount\""
-	DirectoryInstanceID   *string                      "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
-	DisplayID             string                       "json:\"displayID\" graphql:\"displayID\""
-	EnvironmentID         *string                      "json:\"environmentID,omitempty\" graphql:\"environmentID\""
-	EnvironmentName       *string                      "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	Error                 *string                      "json:\"error,omitempty\" graphql:\"error\""
-	FullCount             int64                        "json:\"fullCount\" graphql:\"fullCount\""
-	ID                    string                       "json:\"id\" graphql:\"id\""
-	IntegrationID         string                       "json:\"integrationID\" graphql:\"integrationID\""
-	OwnerID               *string                      "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PlatformID            *string                      "json:\"platformID,omitempty\" graphql:\"platformID\""
-	RawManifestFileID     *string                      "json:\"rawManifestFileID,omitempty\" graphql:\"rawManifestFileID\""
-	ScopeID               *string                      "json:\"scopeID,omitempty\" graphql:\"scopeID\""
-	ScopeName             *string                      "json:\"scopeName,omitempty\" graphql:\"scopeName\""
-	SourceCursor          *string                      "json:\"sourceCursor,omitempty\" graphql:\"sourceCursor\""
-	StartedAt             time.Time                    "json:\"startedAt\" graphql:\"startedAt\""
-	Stats                 map[string]any               "json:\"stats,omitempty\" graphql:\"stats\""
-	Status                enums.DirectorySyncRunStatus "json:\"status\" graphql:\"status\""
-	UpdatedAt             *time.Time                   "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy             *string                      "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator *string                      "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
-}
-
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetCompletedAt() *time.Time {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.CompletedAt
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetCreatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.CreatedAt
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetCreatedBy() *string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.CreatedBy
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetDeltaCount() int64 {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.DeltaCount
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.DirectoryInstanceID
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetDisplayID() string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.DisplayID
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetEnvironmentID() *string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.EnvironmentID
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetEnvironmentName() *string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.EnvironmentName
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetError() *string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.Error
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetFullCount() int64 {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.FullCount
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetID() string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.ID
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetIntegrationID() string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.IntegrationID
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetOwnerID() *string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.OwnerID
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetPlatformID() *string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.PlatformID
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetRawManifestFileID() *string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.RawManifestFileID
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetScopeID() *string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.ScopeID
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetScopeName() *string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.ScopeName
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetSourceCursor() *string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.SourceCursor
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetStartedAt() *time.Time {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return &t.StartedAt
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetStats() map[string]any {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.Stats
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetStatus() *enums.DirectorySyncRunStatus {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return &t.Status
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetUpdatedAt() *time.Time {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.UpdatedAt
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetUpdatedBy() *string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.UpdatedBy
-}
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun) GetUpdatedByImpersonator() *string {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun{}
-	}
-	return t.UpdatedByImpersonator
-}
-
-type UpdateDirectorySyncRun_UpdateDirectorySyncRun struct {
-	DirectorySyncRun UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun "json:\"directorySyncRun\" graphql:\"directorySyncRun\""
-}
-
-func (t *UpdateDirectorySyncRun_UpdateDirectorySyncRun) GetDirectorySyncRun() *UpdateDirectorySyncRun_UpdateDirectorySyncRun_DirectorySyncRun {
-	if t == nil {
-		t = &UpdateDirectorySyncRun_UpdateDirectorySyncRun{}
-	}
-	return &t.DirectorySyncRun
 }
 
 type CreateBulkCSVDiscussion_CreateBulkCSVDiscussion_Discussions struct {
@@ -44532,6 +43143,7 @@ type GetEntityByID_Entity struct {
 	Files                                 GetEntityByID_Entity_Files       "json:\"files\" graphql:\"files\""
 	HasSoc2                               *bool                            "json:\"hasSoc2,omitempty\" graphql:\"hasSoc2\""
 	ID                                    string                           "json:\"id\" graphql:\"id\""
+	IntegrationRunID                      *string                          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                         *string                          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalOwner                         *string                          "json:\"internalOwner,omitempty\" graphql:\"internalOwner\""
 	InternalOwnerGroupID                  *string                          "json:\"internalOwnerGroupID,omitempty\" graphql:\"internalOwnerGroupID\""
@@ -44749,6 +43361,12 @@ func (t *GetEntityByID_Entity) GetID() string {
 		t = &GetEntityByID_Entity{}
 	}
 	return t.ID
+}
+func (t *GetEntityByID_Entity) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetEntityByID_Entity) GetInternalNotes() *string {
 	if t == nil {
@@ -52194,6 +50812,7 @@ type CreateBulkCSVFinding_CreateBulkCSVFinding_Findings struct {
 	FindingStatusName          *string              "json:\"findingStatusName,omitempty\" graphql:\"findingStatusName\""
 	ID                         string               "json:\"id\" graphql:\"id\""
 	Impact                     *float64             "json:\"impact,omitempty\" graphql:\"impact\""
+	IntegrationRunID           *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                  *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                   map[string]any       "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -52388,6 +51007,12 @@ func (t *CreateBulkCSVFinding_CreateBulkCSVFinding_Findings) GetImpact() *float6
 		t = &CreateBulkCSVFinding_CreateBulkCSVFinding_Findings{}
 	}
 	return t.Impact
+}
+func (t *CreateBulkCSVFinding_CreateBulkCSVFinding_Findings) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVFinding_CreateBulkCSVFinding_Findings{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkCSVFinding_CreateBulkCSVFinding_Findings) GetInternalNotes() *string {
 	if t == nil {
@@ -52685,6 +51310,7 @@ type CreateBulkFinding_CreateBulkFinding_Findings struct {
 	FindingStatusName          *string              "json:\"findingStatusName,omitempty\" graphql:\"findingStatusName\""
 	ID                         string               "json:\"id\" graphql:\"id\""
 	Impact                     *float64             "json:\"impact,omitempty\" graphql:\"impact\""
+	IntegrationRunID           *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                  *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                   map[string]any       "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -52879,6 +51505,12 @@ func (t *CreateBulkFinding_CreateBulkFinding_Findings) GetImpact() *float64 {
 		t = &CreateBulkFinding_CreateBulkFinding_Findings{}
 	}
 	return t.Impact
+}
+func (t *CreateBulkFinding_CreateBulkFinding_Findings) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkFinding_CreateBulkFinding_Findings{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkFinding_CreateBulkFinding_Findings) GetInternalNotes() *string {
 	if t == nil {
@@ -53176,6 +51808,7 @@ type CreateFinding_CreateFinding_Finding struct {
 	FindingStatusName          *string              "json:\"findingStatusName,omitempty\" graphql:\"findingStatusName\""
 	ID                         string               "json:\"id\" graphql:\"id\""
 	Impact                     *float64             "json:\"impact,omitempty\" graphql:\"impact\""
+	IntegrationRunID           *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                  *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                   map[string]any       "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -53370,6 +52003,12 @@ func (t *CreateFinding_CreateFinding_Finding) GetImpact() *float64 {
 		t = &CreateFinding_CreateFinding_Finding{}
 	}
 	return t.Impact
+}
+func (t *CreateFinding_CreateFinding_Finding) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateFinding_CreateFinding_Finding{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateFinding_CreateFinding_Finding) GetInternalNotes() *string {
 	if t == nil {
@@ -54306,6 +52945,7 @@ type GetFindingByID_Finding struct {
 	FindingStatusName          *string                                "json:\"findingStatusName,omitempty\" graphql:\"findingStatusName\""
 	ID                         string                                 "json:\"id\" graphql:\"id\""
 	Impact                     *float64                               "json:\"impact,omitempty\" graphql:\"impact\""
+	IntegrationRunID           *string                                "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string                                "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                  *string                                "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                   map[string]any                         "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -54502,6 +53142,12 @@ func (t *GetFindingByID_Finding) GetImpact() *float64 {
 		t = &GetFindingByID_Finding{}
 	}
 	return t.Impact
+}
+func (t *GetFindingByID_Finding) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetFindingByID_Finding{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetFindingByID_Finding) GetInternalNotes() *string {
 	if t == nil {
@@ -55295,6 +53941,7 @@ type UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings struct {
 	FindingStatusName          *string              "json:\"findingStatusName,omitempty\" graphql:\"findingStatusName\""
 	ID                         string               "json:\"id\" graphql:\"id\""
 	Impact                     *float64             "json:\"impact,omitempty\" graphql:\"impact\""
+	IntegrationRunID           *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                  *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                   map[string]any       "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -55489,6 +54136,12 @@ func (t *UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings) GetImpact() *float6
 		t = &UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings{}
 	}
 	return t.Impact
+}
+func (t *UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings) GetInternalNotes() *string {
 	if t == nil {
@@ -55807,6 +54460,7 @@ type UpdateBulkFinding_UpdateBulkFinding_Findings struct {
 	FindingStatusName          *string              "json:\"findingStatusName,omitempty\" graphql:\"findingStatusName\""
 	ID                         string               "json:\"id\" graphql:\"id\""
 	Impact                     *float64             "json:\"impact,omitempty\" graphql:\"impact\""
+	IntegrationRunID           *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                  *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                   map[string]any       "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -56001,6 +54655,12 @@ func (t *UpdateBulkFinding_UpdateBulkFinding_Findings) GetImpact() *float64 {
 		t = &UpdateBulkFinding_UpdateBulkFinding_Findings{}
 	}
 	return t.Impact
+}
+func (t *UpdateBulkFinding_UpdateBulkFinding_Findings) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkFinding_UpdateBulkFinding_Findings{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateBulkFinding_UpdateBulkFinding_Findings) GetInternalNotes() *string {
 	if t == nil {
@@ -56319,6 +54979,7 @@ type UpdateFinding_UpdateFinding_Finding struct {
 	FindingStatusName          *string              "json:\"findingStatusName,omitempty\" graphql:\"findingStatusName\""
 	ID                         string               "json:\"id\" graphql:\"id\""
 	Impact                     *float64             "json:\"impact,omitempty\" graphql:\"impact\""
+	IntegrationRunID           *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                  *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                   map[string]any       "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -56513,6 +55174,12 @@ func (t *UpdateFinding_UpdateFinding_Finding) GetImpact() *float64 {
 		t = &UpdateFinding_UpdateFinding_Finding{}
 	}
 	return t.Impact
+}
+func (t *UpdateFinding_UpdateFinding_Finding) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateFinding_UpdateFinding_Finding{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateFinding_UpdateFinding_Finding) GetInternalNotes() *string {
 	if t == nil {
@@ -64879,52 +63546,49 @@ func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Pag
 }
 
 type GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node struct {
-	AccountType         *enums.DirectoryAccountType    "json:\"accountType,omitempty\" graphql:\"accountType\""
-	AddedAt             *time.Time                     "json:\"addedAt,omitempty\" graphql:\"addedAt\""
-	AvatarLocalFileID   *string                        "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
-	AvatarRemoteURL     *string                        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
-	AvatarUpdatedAt     *time.Time                     "json:\"avatarUpdatedAt,omitempty\" graphql:\"avatarUpdatedAt\""
-	CanonicalEmail      *string                        "json:\"canonicalEmail,omitempty\" graphql:\"canonicalEmail\""
-	CreatedAt           *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy           *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	Department          *string                        "json:\"department,omitempty\" graphql:\"department\""
-	DirectoryInstanceID *string                        "json:\"directoryInstanceID,omitempty\" graphql:\"directoryInstanceID\""
-	DirectoryName       *string                        "json:\"directoryName,omitempty\" graphql:\"directoryName\""
-	DirectorySyncRunID  *string                        "json:\"directorySyncRunID,omitempty\" graphql:\"directorySyncRunID\""
-	DisplayID           string                         "json:\"displayID\" graphql:\"displayID\""
-	DisplayName         *string                        "json:\"displayName,omitempty\" graphql:\"displayName\""
-	EnvironmentID       *string                        "json:\"environmentID,omitempty\" graphql:\"environmentID\""
-	EnvironmentName     *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	ExternalID          string                         "json:\"externalID\" graphql:\"externalID\""
-	FamilyName          *string                        "json:\"familyName,omitempty\" graphql:\"familyName\""
-	FirstSeenAt         *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
-	GivenName           *string                        "json:\"givenName,omitempty\" graphql:\"givenName\""
-	ID                  string                         "json:\"id\" graphql:\"id\""
-	IdentityHolderID    *string                        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
-	IntegrationID       *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
-	JobTitle            *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
-	LastLoginAt         *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
-	LastSeenAt          *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
-	LastSeenIP          *string                        "json:\"lastSeenIP,omitempty\" graphql:\"lastSeenIP\""
-	Metadata            map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
-	MfaState            enums.DirectoryAccountMFAState "json:\"mfaState\" graphql:\"mfaState\""
-	ObservedAt          time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
-	OrganizationUnit    *string                        "json:\"organizationUnit,omitempty\" graphql:\"organizationUnit\""
-	OwnerID             *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PlatformID          *string                        "json:\"platformID,omitempty\" graphql:\"platformID\""
-	PrimarySource       bool                           "json:\"primarySource\" graphql:\"primarySource\""
-	Profile             map[string]any                 "json:\"profile,omitempty\" graphql:\"profile\""
-	ProfileHash         string                         "json:\"profileHash\" graphql:\"profileHash\""
-	RawProfileFileID    *string                        "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
-	RemovedAt           *time.Time                     "json:\"removedAt,omitempty\" graphql:\"removedAt\""
-	ScopeID             *string                        "json:\"scopeID,omitempty\" graphql:\"scopeID\""
-	ScopeName           *string                        "json:\"scopeName,omitempty\" graphql:\"scopeName\""
-	SecondaryKey        *string                        "json:\"secondaryKey,omitempty\" graphql:\"secondaryKey\""
-	SourceVersion       *string                        "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
-	Status              enums.DirectoryAccountStatus   "json:\"status\" graphql:\"status\""
-	Tags                []string                       "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt           *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy           *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	AccountType       *enums.DirectoryAccountType    "json:\"accountType,omitempty\" graphql:\"accountType\""
+	AddedAt           *time.Time                     "json:\"addedAt,omitempty\" graphql:\"addedAt\""
+	AvatarLocalFileID *string                        "json:\"avatarLocalFileID,omitempty\" graphql:\"avatarLocalFileID\""
+	AvatarRemoteURL   *string                        "json:\"avatarRemoteURL,omitempty\" graphql:\"avatarRemoteURL\""
+	AvatarUpdatedAt   *time.Time                     "json:\"avatarUpdatedAt,omitempty\" graphql:\"avatarUpdatedAt\""
+	CanonicalEmail    *string                        "json:\"canonicalEmail,omitempty\" graphql:\"canonicalEmail\""
+	CreatedAt         *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy         *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Department        *string                        "json:\"department,omitempty\" graphql:\"department\""
+	DirectoryName     *string                        "json:\"directoryName,omitempty\" graphql:\"directoryName\""
+	DisplayID         string                         "json:\"displayID\" graphql:\"displayID\""
+	DisplayName       *string                        "json:\"displayName,omitempty\" graphql:\"displayName\""
+	EnvironmentID     *string                        "json:\"environmentID,omitempty\" graphql:\"environmentID\""
+	EnvironmentName   *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
+	ExternalID        string                         "json:\"externalID\" graphql:\"externalID\""
+	FamilyName        *string                        "json:\"familyName,omitempty\" graphql:\"familyName\""
+	FirstSeenAt       *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
+	GivenName         *string                        "json:\"givenName,omitempty\" graphql:\"givenName\""
+	ID                string                         "json:\"id\" graphql:\"id\""
+	IdentityHolderID  *string                        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
+	IntegrationID     *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	JobTitle          *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
+	LastLoginAt       *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
+	LastSeenAt        *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
+	LastSeenIP        *string                        "json:\"lastSeenIP,omitempty\" graphql:\"lastSeenIP\""
+	Metadata          map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
+	MfaState          enums.DirectoryAccountMFAState "json:\"mfaState\" graphql:\"mfaState\""
+	ObservedAt        time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
+	OrganizationUnit  *string                        "json:\"organizationUnit,omitempty\" graphql:\"organizationUnit\""
+	OwnerID           *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PlatformID        *string                        "json:\"platformID,omitempty\" graphql:\"platformID\""
+	PrimarySource     bool                           "json:\"primarySource\" graphql:\"primarySource\""
+	Profile           map[string]any                 "json:\"profile,omitempty\" graphql:\"profile\""
+	RawProfileFileID  *string                        "json:\"rawProfileFileID,omitempty\" graphql:\"rawProfileFileID\""
+	RemovedAt         *time.Time                     "json:\"removedAt,omitempty\" graphql:\"removedAt\""
+	ScopeID           *string                        "json:\"scopeID,omitempty\" graphql:\"scopeID\""
+	ScopeName         *string                        "json:\"scopeName,omitempty\" graphql:\"scopeName\""
+	SecondaryKey      *string                        "json:\"secondaryKey,omitempty\" graphql:\"secondaryKey\""
+	SourceVersion     *string                        "json:\"sourceVersion,omitempty\" graphql:\"sourceVersion\""
+	Status            enums.DirectoryAccountStatus   "json:\"status\" graphql:\"status\""
+	Tags              []string                       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt         *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy         *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
 }
 
 func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node) GetAccountType() *enums.DirectoryAccountType {
@@ -64981,23 +63645,11 @@ func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edg
 	}
 	return t.Department
 }
-func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node) GetDirectoryInstanceID() *string {
-	if t == nil {
-		t = &GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node{}
-	}
-	return t.DirectoryInstanceID
-}
 func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node) GetDirectoryName() *string {
 	if t == nil {
 		t = &GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node{}
 	}
 	return t.DirectoryName
-}
-func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node) GetDirectorySyncRunID() *string {
-	if t == nil {
-		t = &GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node{}
-	}
-	return t.DirectorySyncRunID
 }
 func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node) GetDisplayID() string {
 	if t == nil {
@@ -65136,12 +63788,6 @@ func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edg
 		t = &GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node{}
 	}
 	return t.Profile
-}
-func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node) GetProfileHash() string {
-	if t == nil {
-		t = &GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node{}
-	}
-	return t.ProfileHash
 }
 func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node) GetRawProfileFileID() *string {
 	if t == nil {
@@ -66670,6 +65316,7 @@ type CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies st
 	FileID                          *string                                                                            "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                                                                             "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                                                                           "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                                                                            "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                                                                            "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalPolicyKindID            *string                                                                            "json:\"internalPolicyKindID,omitempty\" graphql:\"internalPolicyKindID\""
 	InternalPolicyKindName          *string                                                                            "json:\"internalPolicyKindName,omitempty\" graphql:\"internalPolicyKindName\""
@@ -66829,6 +65476,12 @@ func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicie
 		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkCSVInternalPolicy_CreateBulkCSVInternalPolicy_InternalPolicies) GetInternalNotes() *string {
 	if t == nil {
@@ -67057,6 +65710,7 @@ type CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies struct {
 	FileID                          *string                                                                      "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                                                                       "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                                                                     "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                                                                      "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                                                                      "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalPolicyKindID            *string                                                                      "json:\"internalPolicyKindID,omitempty\" graphql:\"internalPolicyKindID\""
 	InternalPolicyKindName          *string                                                                      "json:\"internalPolicyKindName,omitempty\" graphql:\"internalPolicyKindName\""
@@ -67216,6 +65870,12 @@ func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) Get
 		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkInternalPolicy_CreateBulkInternalPolicy_InternalPolicies) GetInternalNotes() *string {
 	if t == nil {
@@ -67567,6 +66227,7 @@ type CreateInternalPolicy_CreateInternalPolicy_InternalPolicy struct {
 	FileID                          *string                                                                "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                                                                 "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                                                               "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                                                                "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                                                                "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalPolicyKindID            *string                                                                "json:\"internalPolicyKindID,omitempty\" graphql:\"internalPolicyKindID\""
 	InternalPolicyKindName          *string                                                                "json:\"internalPolicyKindName,omitempty\" graphql:\"internalPolicyKindName\""
@@ -67744,6 +66405,12 @@ func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetImprovemen
 		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateInternalPolicy_CreateInternalPolicy_InternalPolicy{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateInternalPolicy_CreateInternalPolicy_InternalPolicy) GetInternalNotes() *string {
 	if t == nil {
@@ -68415,6 +67082,7 @@ type GetAllInternalPolicies_InternalPolicies_Edges_Node struct {
 	FileID                          *string                                                          "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                                                           "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                                                         "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                                                          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                                                          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalPolicyKindID            *string                                                          "json:\"internalPolicyKindID,omitempty\" graphql:\"internalPolicyKindID\""
 	InternalPolicyKindName          *string                                                          "json:\"internalPolicyKindName,omitempty\" graphql:\"internalPolicyKindName\""
@@ -68586,6 +67254,12 @@ func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetImprovementSugge
 		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetAllInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetAllInternalPolicies_InternalPolicies_Edges_Node) GetInternalNotes() *string {
 	if t == nil {
@@ -68953,6 +67627,7 @@ type GetInternalPolicies_InternalPolicies_Edges_Node struct {
 	FileID                          *string                                                       "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                                                        "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                                                      "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                                                       "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                                                       "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalPolicyKindID            *string                                                       "json:\"internalPolicyKindID,omitempty\" graphql:\"internalPolicyKindID\""
 	InternalPolicyKindName          *string                                                       "json:\"internalPolicyKindName,omitempty\" graphql:\"internalPolicyKindName\""
@@ -69124,6 +67799,12 @@ func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetImprovementSuggesti
 		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetInternalPolicies_InternalPolicies_Edges_Node{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetInternalPolicies_InternalPolicies_Edges_Node) GetInternalNotes() *string {
 	if t == nil {
@@ -69693,6 +68374,7 @@ type GetInternalPolicyByID_InternalPolicy struct {
 	FileID                          *string                                            "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                                             "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                                           "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                                            "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                                            "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalPolicyKindID            *string                                            "json:\"internalPolicyKindID,omitempty\" graphql:\"internalPolicyKindID\""
 	InternalPolicyKindName          *string                                            "json:\"internalPolicyKindName,omitempty\" graphql:\"internalPolicyKindName\""
@@ -69876,6 +68558,12 @@ func (t *GetInternalPolicyByID_InternalPolicy) GetImprovementSuggestions() []str
 		t = &GetInternalPolicyByID_InternalPolicy{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetInternalPolicyByID_InternalPolicy) GetInternalNotes() *string {
 	if t == nil {
@@ -70093,6 +68781,7 @@ type UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies struct {
 	FileID                          *string                                                                      "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                                                                       "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                                                                     "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                                                                      "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                                                                      "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalPolicyKindID            *string                                                                      "json:\"internalPolicyKindID,omitempty\" graphql:\"internalPolicyKindID\""
 	InternalPolicyKindName          *string                                                                      "json:\"internalPolicyKindName,omitempty\" graphql:\"internalPolicyKindName\""
@@ -70252,6 +68941,12 @@ func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) Get
 		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) GetInternalNotes() *string {
 	if t == nil {
@@ -70782,6 +69477,7 @@ type UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy struct {
 	FileID                          *string                                                                "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                                                                 "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                                                               "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                                                                "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                                                                "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	InternalPolicyKindID            *string                                                                "json:\"internalPolicyKindID,omitempty\" graphql:\"internalPolicyKindID\""
 	InternalPolicyKindName          *string                                                                "json:\"internalPolicyKindName,omitempty\" graphql:\"internalPolicyKindName\""
@@ -70965,6 +69661,12 @@ func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetImprovemen
 		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateInternalPolicy_UpdateInternalPolicy_InternalPolicy) GetInternalNotes() *string {
 	if t == nil {
@@ -91641,6 +90343,7 @@ type CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures struct {
 	FileID                          *string                                                            "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                                                             "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                                                           "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                                                            "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                                                            "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                       *string                                                            "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode                                      "json:\"managementMode,omitempty\" graphql:\"managementMode\""
@@ -91794,6 +90497,12 @@ func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetImprovemen
 		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkCSVProcedure_CreateBulkCSVProcedure_Procedures) GetInternalNotes() *string {
 	if t == nil {
@@ -92021,6 +90730,7 @@ type CreateBulkProcedure_CreateBulkProcedure_Procedures struct {
 	FileID                          *string                                                      "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                                                       "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                                                     "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                                                      "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                                                      "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                       *string                                                      "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode                                "json:\"managementMode,omitempty\" graphql:\"managementMode\""
@@ -92174,6 +90884,12 @@ func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetImprovementSugge
 		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkProcedure_CreateBulkProcedure_Procedures{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkProcedure_CreateBulkProcedure_Procedures) GetInternalNotes() *string {
 	if t == nil {
@@ -92483,6 +91199,7 @@ type CreateProcedure_CreateProcedure_Procedure struct {
 	FileID                          *string                                                 "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                                                  "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                                                "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                                                 "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                                                 "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                       *string                                                 "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode                           "json:\"managementMode,omitempty\" graphql:\"managementMode\""
@@ -92648,6 +91365,12 @@ func (t *CreateProcedure_CreateProcedure_Procedure) GetImprovementSuggestions() 
 		t = &CreateProcedure_CreateProcedure_Procedure{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *CreateProcedure_CreateProcedure_Procedure) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateProcedure_CreateProcedure_Procedure{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateProcedure_CreateProcedure_Procedure) GetInternalNotes() *string {
 	if t == nil {
@@ -93546,6 +92269,7 @@ type GetProcedureByID_Procedure struct {
 	FileID                          *string                                  "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                                   "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                                 "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                                  "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                                  "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                       *string                                  "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode            "json:\"managementMode,omitempty\" graphql:\"managementMode\""
@@ -93711,6 +92435,12 @@ func (t *GetProcedureByID_Procedure) GetImprovementSuggestions() []string {
 		t = &GetProcedureByID_Procedure{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *GetProcedureByID_Procedure) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetProcedureByID_Procedure{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetProcedureByID_Procedure) GetInternalNotes() *string {
 	if t == nil {
@@ -94202,6 +92932,7 @@ type UpdateBulkProcedure_UpdateBulkProcedure_Procedures struct {
 	FileID                          *string                                                      "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                                                       "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                                                     "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                                                      "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                                                      "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                       *string                                                      "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode                                "json:\"managementMode,omitempty\" graphql:\"managementMode\""
@@ -94355,6 +93086,12 @@ func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetImprovementSugge
 		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure_Procedures{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetInternalNotes() *string {
 	if t == nil {
@@ -94685,6 +93422,7 @@ type UpdateProcedure_UpdateProcedure_Procedure struct {
 	FileID                          *string                                                 "json:\"fileID,omitempty\" graphql:\"fileID\""
 	ID                              string                                                  "json:\"id\" graphql:\"id\""
 	ImprovementSuggestions          []string                                                "json:\"improvementSuggestions,omitempty\" graphql:\"improvementSuggestions\""
+	IntegrationRunID                *string                                                 "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes                   *string                                                 "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                       *string                                                 "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManagementMode                  *enums.DocumentManagementMode                           "json:\"managementMode,omitempty\" graphql:\"managementMode\""
@@ -94850,6 +93588,12 @@ func (t *UpdateProcedure_UpdateProcedure_Procedure) GetImprovementSuggestions() 
 		t = &UpdateProcedure_UpdateProcedure_Procedure{}
 	}
 	return t.ImprovementSuggestions
+}
+func (t *UpdateProcedure_UpdateProcedure_Procedure) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateProcedure_UpdateProcedure_Procedure{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateProcedure_UpdateProcedure_Procedure) GetInternalNotes() *string {
 	if t == nil {
@@ -105421,6 +104165,7 @@ type CreateBulkCSVRisk_CreateBulkCSVRisk_Risks struct {
 	ID                      string                                                 "json:\"id\" graphql:\"id\""
 	Impact                  *enums.RiskImpact                                      "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID           *string                                                "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string                                                "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastReviewedAt          *models.DateTime                                       "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood              *enums.RiskLikelihood                                  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy               *string                                                "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -105556,6 +104301,12 @@ func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetIntegrationID() *string {
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
 	}
 	return t.IntegrationID
+}
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -105815,6 +104566,7 @@ type CreateBulkRisk_CreateBulkRisk_Risks struct {
 	ID                      string                                           "json:\"id\" graphql:\"id\""
 	Impact                  *enums.RiskImpact                                "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID           *string                                          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string                                          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastReviewedAt          *models.DateTime                                 "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood              *enums.RiskLikelihood                            "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy               *string                                          "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -105950,6 +104702,12 @@ func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetIntegrationID() *string {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
 	}
 	return t.IntegrationID
+}
+func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -106371,6 +105129,7 @@ type CreateRisk_CreateRisk_Risk struct {
 	ID                      string                                   "json:\"id\" graphql:\"id\""
 	Impact                  *enums.RiskImpact                        "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID           *string                                  "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string                                  "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastReviewedAt          *models.DateTime                         "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood              *enums.RiskLikelihood                    "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy               *string                                  "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -106520,6 +105279,12 @@ func (t *CreateRisk_CreateRisk_Risk) GetIntegrationID() *string {
 		t = &CreateRisk_CreateRisk_Risk{}
 	}
 	return t.IntegrationID
+}
+func (t *CreateRisk_CreateRisk_Risk) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateRisk_CreateRisk_Risk) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -106996,6 +105761,7 @@ type GetAllRisks_Risks_Edges_Node struct {
 	ID                      string                                     "json:\"id\" graphql:\"id\""
 	Impact                  *enums.RiskImpact                          "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID           *string                                    "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string                                    "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastReviewedAt          *models.DateTime                           "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood              *enums.RiskLikelihood                      "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy               *string                                    "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -107145,6 +105911,12 @@ func (t *GetAllRisks_Risks_Edges_Node) GetIntegrationID() *string {
 		t = &GetAllRisks_Risks_Edges_Node{}
 	}
 	return t.IntegrationID
+}
+func (t *GetAllRisks_Risks_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetAllRisks_Risks_Edges_Node) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -107603,6 +106375,7 @@ type GetRiskByID_Risk struct {
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	Impact                  *enums.RiskImpact              "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID           *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastReviewedAt          *models.DateTime               "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood              *enums.RiskLikelihood          "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -107752,6 +106525,12 @@ func (t *GetRiskByID_Risk) GetIntegrationID() *string {
 		t = &GetRiskByID_Risk{}
 	}
 	return t.IntegrationID
+}
+func (t *GetRiskByID_Risk) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetRiskByID_Risk{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetRiskByID_Risk) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -108206,6 +106985,7 @@ type GetRisks_Risks_Edges_Node struct {
 	ID                      string                                  "json:\"id\" graphql:\"id\""
 	Impact                  *enums.RiskImpact                       "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID           *string                                 "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string                                 "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastReviewedAt          *models.DateTime                        "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood              *enums.RiskLikelihood                   "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy               *string                                 "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -108355,6 +107135,12 @@ func (t *GetRisks_Risks_Edges_Node) GetIntegrationID() *string {
 		t = &GetRisks_Risks_Edges_Node{}
 	}
 	return t.IntegrationID
+}
+func (t *GetRisks_Risks_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetRisks_Risks_Edges_Node) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -108651,6 +107437,7 @@ type UpdateBulkRisk_UpdateBulkRisk_Risks struct {
 	ID                      string                                           "json:\"id\" graphql:\"id\""
 	Impact                  *enums.RiskImpact                                "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID           *string                                          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string                                          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastReviewedAt          *models.DateTime                                 "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood              *enums.RiskLikelihood                            "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy               *string                                          "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -108786,6 +107573,12 @@ func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetIntegrationID() *string {
 		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
 	}
 	return t.IntegrationID
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -109228,6 +108021,7 @@ type UpdateRisk_UpdateRisk_Risk struct {
 	ID                      string                                   "json:\"id\" graphql:\"id\""
 	Impact                  *enums.RiskImpact                        "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID           *string                                  "json:\"integrationID,omitempty\" graphql:\"integrationID\""
+	IntegrationRunID        *string                                  "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	LastReviewedAt          *models.DateTime                         "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood              *enums.RiskLikelihood                    "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy               *string                                  "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -109377,6 +108171,12 @@ func (t *UpdateRisk_UpdateRisk_Risk) GetIntegrationID() *string {
 		t = &UpdateRisk_UpdateRisk_Risk{}
 	}
 	return t.IntegrationID
+}
+func (t *UpdateRisk_UpdateRisk_Risk) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateRisk_UpdateRisk_Risk) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -148079,6 +146879,7 @@ type CreateBulkCSVVulnerability_CreateBulkCSVVulnerability_Vulnerabilities struc
 	ID                         string               "json:\"id\" graphql:\"id\""
 	Impact                     *float64             "json:\"impact,omitempty\" graphql:\"impact\""
 	Impacts                    []string             "json:\"impacts,omitempty\" graphql:\"impacts\""
+	IntegrationRunID           *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                  *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManifestPath               *string              "json:\"manifestPath,omitempty\" graphql:\"manifestPath\""
@@ -148308,6 +147109,12 @@ func (t *CreateBulkCSVVulnerability_CreateBulkCSVVulnerability_Vulnerabilities) 
 		t = &CreateBulkCSVVulnerability_CreateBulkCSVVulnerability_Vulnerabilities{}
 	}
 	return t.Impacts
+}
+func (t *CreateBulkCSVVulnerability_CreateBulkCSVVulnerability_Vulnerabilities) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkCSVVulnerability_CreateBulkCSVVulnerability_Vulnerabilities{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkCSVVulnerability_CreateBulkCSVVulnerability_Vulnerabilities) GetInternalNotes() *string {
 	if t == nil {
@@ -148605,6 +147412,7 @@ type CreateBulkVulnerability_CreateBulkVulnerability_Vulnerabilities struct {
 	ID                         string               "json:\"id\" graphql:\"id\""
 	Impact                     *float64             "json:\"impact,omitempty\" graphql:\"impact\""
 	Impacts                    []string             "json:\"impacts,omitempty\" graphql:\"impacts\""
+	IntegrationRunID           *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                  *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManifestPath               *string              "json:\"manifestPath,omitempty\" graphql:\"manifestPath\""
@@ -148834,6 +147642,12 @@ func (t *CreateBulkVulnerability_CreateBulkVulnerability_Vulnerabilities) GetImp
 		t = &CreateBulkVulnerability_CreateBulkVulnerability_Vulnerabilities{}
 	}
 	return t.Impacts
+}
+func (t *CreateBulkVulnerability_CreateBulkVulnerability_Vulnerabilities) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateBulkVulnerability_CreateBulkVulnerability_Vulnerabilities{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateBulkVulnerability_CreateBulkVulnerability_Vulnerabilities) GetInternalNotes() *string {
 	if t == nil {
@@ -149131,6 +147945,7 @@ type CreateVulnerability_CreateVulnerability_Vulnerability struct {
 	ID                         string               "json:\"id\" graphql:\"id\""
 	Impact                     *float64             "json:\"impact,omitempty\" graphql:\"impact\""
 	Impacts                    []string             "json:\"impacts,omitempty\" graphql:\"impacts\""
+	IntegrationRunID           *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                  *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManifestPath               *string              "json:\"manifestPath,omitempty\" graphql:\"manifestPath\""
@@ -149360,6 +148175,12 @@ func (t *CreateVulnerability_CreateVulnerability_Vulnerability) GetImpacts() []s
 		t = &CreateVulnerability_CreateVulnerability_Vulnerability{}
 	}
 	return t.Impacts
+}
+func (t *CreateVulnerability_CreateVulnerability_Vulnerability) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &CreateVulnerability_CreateVulnerability_Vulnerability{}
+	}
+	return t.IntegrationRunID
 }
 func (t *CreateVulnerability_CreateVulnerability_Vulnerability) GetInternalNotes() *string {
 	if t == nil {
@@ -150042,6 +148863,7 @@ type GetVulnerabilities_Vulnerabilities_Edges_Node struct {
 	ID                         string               "json:\"id\" graphql:\"id\""
 	Impact                     *float64             "json:\"impact,omitempty\" graphql:\"impact\""
 	Impacts                    []string             "json:\"impacts,omitempty\" graphql:\"impacts\""
+	IntegrationRunID           *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                  *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManifestPath               *string              "json:\"manifestPath,omitempty\" graphql:\"manifestPath\""
@@ -150271,6 +149093,12 @@ func (t *GetVulnerabilities_Vulnerabilities_Edges_Node) GetImpacts() []string {
 		t = &GetVulnerabilities_Vulnerabilities_Edges_Node{}
 	}
 	return t.Impacts
+}
+func (t *GetVulnerabilities_Vulnerabilities_Edges_Node) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetVulnerabilities_Vulnerabilities_Edges_Node{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetVulnerabilities_Vulnerabilities_Edges_Node) GetInternalNotes() *string {
 	if t == nil {
@@ -150593,6 +149421,7 @@ type GetVulnerabilityByID_Vulnerability struct {
 	ID                         string               "json:\"id\" graphql:\"id\""
 	Impact                     *float64             "json:\"impact,omitempty\" graphql:\"impact\""
 	Impacts                    []string             "json:\"impacts,omitempty\" graphql:\"impacts\""
+	IntegrationRunID           *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                  *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManifestPath               *string              "json:\"manifestPath,omitempty\" graphql:\"manifestPath\""
@@ -150822,6 +149651,12 @@ func (t *GetVulnerabilityByID_Vulnerability) GetImpacts() []string {
 		t = &GetVulnerabilityByID_Vulnerability{}
 	}
 	return t.Impacts
+}
+func (t *GetVulnerabilityByID_Vulnerability) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &GetVulnerabilityByID_Vulnerability{}
+	}
+	return t.IntegrationRunID
 }
 func (t *GetVulnerabilityByID_Vulnerability) GetInternalNotes() *string {
 	if t == nil {
@@ -151108,6 +149943,7 @@ type UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability_Vulnerabilities struc
 	ID                         string               "json:\"id\" graphql:\"id\""
 	Impact                     *float64             "json:\"impact,omitempty\" graphql:\"impact\""
 	Impacts                    []string             "json:\"impacts,omitempty\" graphql:\"impacts\""
+	IntegrationRunID           *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                  *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManifestPath               *string              "json:\"manifestPath,omitempty\" graphql:\"manifestPath\""
@@ -151337,6 +150173,12 @@ func (t *UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability_Vulnerabilities) 
 		t = &UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability_Vulnerabilities{}
 	}
 	return t.Impacts
+}
+func (t *UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability_Vulnerabilities) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability_Vulnerabilities{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability_Vulnerabilities) GetInternalNotes() *string {
 	if t == nil {
@@ -151655,6 +150497,7 @@ type UpdateBulkVulnerability_UpdateBulkVulnerability_Vulnerabilities struct {
 	ID                         string               "json:\"id\" graphql:\"id\""
 	Impact                     *float64             "json:\"impact,omitempty\" graphql:\"impact\""
 	Impacts                    []string             "json:\"impacts,omitempty\" graphql:\"impacts\""
+	IntegrationRunID           *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                  *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManifestPath               *string              "json:\"manifestPath,omitempty\" graphql:\"manifestPath\""
@@ -151884,6 +150727,12 @@ func (t *UpdateBulkVulnerability_UpdateBulkVulnerability_Vulnerabilities) GetImp
 		t = &UpdateBulkVulnerability_UpdateBulkVulnerability_Vulnerabilities{}
 	}
 	return t.Impacts
+}
+func (t *UpdateBulkVulnerability_UpdateBulkVulnerability_Vulnerabilities) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateBulkVulnerability_UpdateBulkVulnerability_Vulnerabilities{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateBulkVulnerability_UpdateBulkVulnerability_Vulnerabilities) GetInternalNotes() *string {
 	if t == nil {
@@ -152202,6 +151051,7 @@ type UpdateVulnerability_UpdateVulnerability_Vulnerability struct {
 	ID                         string               "json:\"id\" graphql:\"id\""
 	Impact                     *float64             "json:\"impact,omitempty\" graphql:\"impact\""
 	Impacts                    []string             "json:\"impacts,omitempty\" graphql:\"impacts\""
+	IntegrationRunID           *string              "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	InternalNotes              *string              "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	ManagedBy                  *string              "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	ManifestPath               *string              "json:\"manifestPath,omitempty\" graphql:\"manifestPath\""
@@ -152431,6 +151281,12 @@ func (t *UpdateVulnerability_UpdateVulnerability_Vulnerability) GetImpacts() []s
 		t = &UpdateVulnerability_UpdateVulnerability_Vulnerability{}
 	}
 	return t.Impacts
+}
+func (t *UpdateVulnerability_UpdateVulnerability_Vulnerability) GetIntegrationRunID() *string {
+	if t == nil {
+		t = &UpdateVulnerability_UpdateVulnerability_Vulnerability{}
+	}
+	return t.IntegrationRunID
 }
 func (t *UpdateVulnerability_UpdateVulnerability_Vulnerability) GetInternalNotes() *string {
 	if t == nil {
@@ -167423,94 +166279,6 @@ func (t *UpdateDirectoryMembership) GetUpdateDirectoryMembership() *UpdateDirect
 	return &t.UpdateDirectoryMembership
 }
 
-type CreateBulkCSVDirectorySyncRun struct {
-	CreateBulkCSVDirectorySyncRun CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun "json:\"createBulkCSVDirectorySyncRun\" graphql:\"createBulkCSVDirectorySyncRun\""
-}
-
-func (t *CreateBulkCSVDirectorySyncRun) GetCreateBulkCSVDirectorySyncRun() *CreateBulkCSVDirectorySyncRun_CreateBulkCSVDirectorySyncRun {
-	if t == nil {
-		t = &CreateBulkCSVDirectorySyncRun{}
-	}
-	return &t.CreateBulkCSVDirectorySyncRun
-}
-
-type CreateBulkDirectorySyncRun struct {
-	CreateBulkDirectorySyncRun CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun "json:\"createBulkDirectorySyncRun\" graphql:\"createBulkDirectorySyncRun\""
-}
-
-func (t *CreateBulkDirectorySyncRun) GetCreateBulkDirectorySyncRun() *CreateBulkDirectorySyncRun_CreateBulkDirectorySyncRun {
-	if t == nil {
-		t = &CreateBulkDirectorySyncRun{}
-	}
-	return &t.CreateBulkDirectorySyncRun
-}
-
-type CreateDirectorySyncRun struct {
-	CreateDirectorySyncRun CreateDirectorySyncRun_CreateDirectorySyncRun "json:\"createDirectorySyncRun\" graphql:\"createDirectorySyncRun\""
-}
-
-func (t *CreateDirectorySyncRun) GetCreateDirectorySyncRun() *CreateDirectorySyncRun_CreateDirectorySyncRun {
-	if t == nil {
-		t = &CreateDirectorySyncRun{}
-	}
-	return &t.CreateDirectorySyncRun
-}
-
-type DeleteDirectorySyncRun struct {
-	DeleteDirectorySyncRun DeleteDirectorySyncRun_DeleteDirectorySyncRun "json:\"deleteDirectorySyncRun\" graphql:\"deleteDirectorySyncRun\""
-}
-
-func (t *DeleteDirectorySyncRun) GetDeleteDirectorySyncRun() *DeleteDirectorySyncRun_DeleteDirectorySyncRun {
-	if t == nil {
-		t = &DeleteDirectorySyncRun{}
-	}
-	return &t.DeleteDirectorySyncRun
-}
-
-type GetAllDirectorySyncRuns struct {
-	DirectorySyncRuns GetAllDirectorySyncRuns_DirectorySyncRuns "json:\"directorySyncRuns\" graphql:\"directorySyncRuns\""
-}
-
-func (t *GetAllDirectorySyncRuns) GetDirectorySyncRuns() *GetAllDirectorySyncRuns_DirectorySyncRuns {
-	if t == nil {
-		t = &GetAllDirectorySyncRuns{}
-	}
-	return &t.DirectorySyncRuns
-}
-
-type GetDirectorySyncRunByID struct {
-	DirectorySyncRun GetDirectorySyncRunByID_DirectorySyncRun "json:\"directorySyncRun\" graphql:\"directorySyncRun\""
-}
-
-func (t *GetDirectorySyncRunByID) GetDirectorySyncRun() *GetDirectorySyncRunByID_DirectorySyncRun {
-	if t == nil {
-		t = &GetDirectorySyncRunByID{}
-	}
-	return &t.DirectorySyncRun
-}
-
-type GetDirectorySyncRuns struct {
-	DirectorySyncRuns GetDirectorySyncRuns_DirectorySyncRuns "json:\"directorySyncRuns\" graphql:\"directorySyncRuns\""
-}
-
-func (t *GetDirectorySyncRuns) GetDirectorySyncRuns() *GetDirectorySyncRuns_DirectorySyncRuns {
-	if t == nil {
-		t = &GetDirectorySyncRuns{}
-	}
-	return &t.DirectorySyncRuns
-}
-
-type UpdateDirectorySyncRun struct {
-	UpdateDirectorySyncRun UpdateDirectorySyncRun_UpdateDirectorySyncRun "json:\"updateDirectorySyncRun\" graphql:\"updateDirectorySyncRun\""
-}
-
-func (t *UpdateDirectorySyncRun) GetUpdateDirectorySyncRun() *UpdateDirectorySyncRun_UpdateDirectorySyncRun {
-	if t == nil {
-		t = &UpdateDirectorySyncRun{}
-	}
-	return &t.UpdateDirectorySyncRun
-}
-
 type CreateBulkCSVDiscussion struct {
 	CreateBulkCSVDiscussion CreateBulkCSVDiscussion_CreateBulkCSVDiscussion "json:\"createBulkCSVDiscussion\" graphql:\"createBulkCSVDiscussion\""
 }
@@ -174001,6 +172769,7 @@ const CreateActionPlanDocument = `mutation CreateActionPlan ($input: CreateActio
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -174077,6 +172846,7 @@ const CreateBulkActionPlanDocument = `mutation CreateBulkActionPlan ($input: [Cr
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -174153,6 +172923,7 @@ const CreateBulkCSVActionPlanDocument = `mutation CreateBulkCSVActionPlan ($inpu
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -174252,6 +173023,7 @@ const GetActionPlanByIDDocument = `query GetActionPlanByID ($actionPlanId: ID!) 
 		fileID
 		id
 		improvementSuggestions
+		integrationRunID
 		internalNotes
 		managedBy
 		managementMode
@@ -174411,6 +173183,7 @@ const UpdateActionPlanDocument = `mutation UpdateActionPlan ($updateActionPlanId
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -174488,6 +173261,7 @@ const UpdateBulkActionPlanDocument = `mutation UpdateBulkActionPlan ($ids: [ID!]
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -175375,6 +174149,7 @@ const CreateAssetDocument = `mutation CreateAsset ($input: CreateAssetInput!) {
 			id
 			identifier
 			integrationID
+			integrationRunID
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
@@ -175454,6 +174229,7 @@ const CreateBulkAssetDocument = `mutation CreateBulkAsset ($input: [CreateAssetI
 			id
 			identifier
 			integrationID
+			integrationRunID
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
@@ -175533,6 +174309,7 @@ const CreateBulkCSVAssetDocument = `mutation CreateBulkCSVAsset ($input: Upload!
 			id
 			identifier
 			integrationID
+			integrationRunID
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
@@ -175670,6 +174447,7 @@ const GetAllAssetsDocument = `query GetAllAssets ($first: Int, $last: Int, $afte
 				id
 				identifier
 				integrationID
+				integrationRunID
 				internalNotes
 				internalOwner
 				internalOwnerGroupID
@@ -175753,6 +174531,7 @@ const GetAssetByIDDocument = `query GetAssetByID ($assetId: ID!) {
 		id
 		identifier
 		integrationID
+		integrationRunID
 		internalNotes
 		internalOwner
 		internalOwnerGroupID
@@ -175839,6 +174618,7 @@ const GetAssetsDocument = `query GetAssets ($first: Int, $last: Int, $after: Cur
 				id
 				identifier
 				integrationID
+				integrationRunID
 				internalNotes
 				internalOwner
 				internalOwnerGroupID
@@ -175924,6 +174704,7 @@ const UpdateAssetDocument = `mutation UpdateAsset ($updateAssetId: ID!, $input: 
 			id
 			identifier
 			integrationID
+			integrationRunID
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
@@ -176004,6 +174785,7 @@ const UpdateBulkAssetDocument = `mutation UpdateBulkAsset ($ids: [ID!]!, $input:
 			id
 			identifier
 			integrationID
+			integrationRunID
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
@@ -176087,6 +174869,7 @@ const UpdateBulkCSVAssetDocument = `mutation UpdateBulkCSVAsset ($input: Upload!
 			id
 			identifier
 			integrationID
+			integrationRunID
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
@@ -177411,6 +176194,7 @@ const CreateBulkCSVCheckResultDocument = `mutation CreateBulkCSVCheckResult ($in
 			externalURI
 			id
 			integrationID
+			integrationRunID
 			lastObservedAt
 			managedBy
 			parentExternalID
@@ -177454,6 +176238,7 @@ const CreateBulkCheckResultDocument = `mutation CreateBulkCheckResult ($input: [
 			externalURI
 			id
 			integrationID
+			integrationRunID
 			lastObservedAt
 			managedBy
 			parentExternalID
@@ -177497,6 +176282,7 @@ const CreateCheckResultDocument = `mutation CreateCheckResult ($input: CreateChe
 			externalURI
 			id
 			integrationID
+			integrationRunID
 			lastObservedAt
 			managedBy
 			parentExternalID
@@ -177598,6 +176384,7 @@ const GetAllCheckResultsDocument = `query GetAllCheckResults ($first: Int, $last
 				externalURI
 				id
 				integrationID
+				integrationRunID
 				lastObservedAt
 				managedBy
 				parentExternalID
@@ -177645,6 +176432,7 @@ const GetCheckResultByIDDocument = `query GetCheckResultByID ($checkResultId: ID
 		externalURI
 		id
 		integrationID
+		integrationRunID
 		lastObservedAt
 		managedBy
 		parentExternalID
@@ -177695,6 +176483,7 @@ const GetCheckResultsDocument = `query GetCheckResults ($first: Int, $last: Int,
 				externalURI
 				id
 				integrationID
+				integrationRunID
 				lastObservedAt
 				managedBy
 				parentExternalID
@@ -177744,6 +176533,7 @@ const UpdateBulkCSVCheckResultDocument = `mutation UpdateBulkCSVCheckResult ($in
 			externalURI
 			id
 			integrationID
+			integrationRunID
 			lastObservedAt
 			managedBy
 			parentExternalID
@@ -177790,6 +176580,7 @@ const UpdateBulkCheckResultDocument = `mutation UpdateBulkCheckResult ($ids: [ID
 			externalURI
 			id
 			integrationID
+			integrationRunID
 			lastObservedAt
 			managedBy
 			parentExternalID
@@ -177837,6 +176628,7 @@ const UpdateCheckResultDocument = `mutation UpdateCheckResult ($updateCheckResul
 			externalURI
 			id
 			integrationID
+			integrationRunID
 			lastObservedAt
 			managedBy
 			parentExternalID
@@ -177884,6 +176676,7 @@ const CreateBulkCSVContactDocument = `mutation CreateBulkCSVContact ($input: Upl
 			fullName
 			id
 			integrationID
+			integrationRunID
 			managedBy
 			observedAt
 			ownerID
@@ -177931,6 +176724,7 @@ const CreateBulkContactDocument = `mutation CreateBulkContact ($input: [CreateCo
 			fullName
 			id
 			integrationID
+			integrationRunID
 			managedBy
 			observedAt
 			ownerID
@@ -177978,6 +176772,7 @@ const CreateContactDocument = `mutation CreateContact ($input: CreateContactInpu
 			fullName
 			id
 			integrationID
+			integrationRunID
 			managedBy
 			observedAt
 			ownerID
@@ -178087,6 +176882,7 @@ const GetContactByIDDocument = `query GetContactByID ($contactId: ID!) {
 		fullName
 		id
 		integrationID
+		integrationRunID
 		managedBy
 		observedAt
 		ownerID
@@ -178174,6 +176970,7 @@ const UpdateBulkContactDocument = `mutation UpdateBulkContact ($ids: [ID!]!, $in
 			fullName
 			id
 			integrationID
+			integrationRunID
 			managedBy
 			observedAt
 			ownerID
@@ -178225,6 +177022,7 @@ const UpdateContactDocument = `mutation UpdateContact ($updateContactId: ID!, $i
 			fullName
 			id
 			integrationID
+			integrationRunID
 			managedBy
 			observedAt
 			ownerID
@@ -181784,9 +180582,7 @@ const CreateBulkCSVDirectoryAccountDocument = `mutation CreateBulkCSVDirectoryAc
 			createdAt
 			createdBy
 			department
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			emailAliases
@@ -181799,6 +180595,7 @@ const CreateBulkCSVDirectoryAccountDocument = `mutation CreateBulkCSVDirectoryAc
 			id
 			identityHolderID
 			integrationID
+			integrationRunID
 			jobTitle
 			lastLoginAt
 			lastSeenAt
@@ -181813,7 +180610,6 @@ const CreateBulkCSVDirectoryAccountDocument = `mutation CreateBulkCSVDirectoryAc
 			platformID
 			primarySource
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
@@ -181862,9 +180658,7 @@ const CreateBulkDirectoryAccountDocument = `mutation CreateBulkDirectoryAccount 
 			createdAt
 			createdBy
 			department
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			emailAliases
@@ -181877,6 +180671,7 @@ const CreateBulkDirectoryAccountDocument = `mutation CreateBulkDirectoryAccount 
 			id
 			identityHolderID
 			integrationID
+			integrationRunID
 			jobTitle
 			lastLoginAt
 			lastSeenAt
@@ -181891,7 +180686,6 @@ const CreateBulkDirectoryAccountDocument = `mutation CreateBulkDirectoryAccount 
 			platformID
 			primarySource
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
@@ -181940,9 +180734,7 @@ const CreateDirectoryAccountDocument = `mutation CreateDirectoryAccount ($input:
 			createdAt
 			createdBy
 			department
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			emailAliases
@@ -181955,6 +180747,7 @@ const CreateDirectoryAccountDocument = `mutation CreateDirectoryAccount ($input:
 			id
 			identityHolderID
 			integrationID
+			integrationRunID
 			jobTitle
 			lastLoginAt
 			lastSeenAt
@@ -181969,7 +180762,6 @@ const CreateDirectoryAccountDocument = `mutation CreateDirectoryAccount ($input:
 			platformID
 			primarySource
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
@@ -182046,7 +180838,6 @@ const GetAllDirectoryAccountsDocument = `query GetAllDirectoryAccounts {
 				createdAt
 				createdBy
 				department
-				directorySyncRunID
 				displayID
 				displayName
 				externalID
@@ -182062,7 +180853,6 @@ const GetAllDirectoryAccountsDocument = `query GetAllDirectoryAccounts {
 				organizationUnit
 				ownerID
 				profile
-				profileHash
 				rawProfileFileID
 				secondaryKey
 				sourceVersion
@@ -182102,9 +180892,7 @@ const GetDirectoryAccountByIDDocument = `query GetDirectoryAccountByID ($directo
 		createdAt
 		createdBy
 		department
-		directoryInstanceID
 		directoryName
-		directorySyncRunID
 		displayID
 		displayName
 		emailAliases
@@ -182117,6 +180905,7 @@ const GetDirectoryAccountByIDDocument = `query GetDirectoryAccountByID ($directo
 		id
 		identityHolderID
 		integrationID
+		integrationRunID
 		jobTitle
 		lastLoginAt
 		lastSeenAt
@@ -182131,7 +180920,6 @@ const GetDirectoryAccountByIDDocument = `query GetDirectoryAccountByID ($directo
 		platformID
 		primarySource
 		profile
-		profileHash
 		rawProfileFileID
 		removedAt
 		scopeID
@@ -182183,7 +180971,6 @@ const GetDirectoryAccountsDocument = `query GetDirectoryAccounts ($first: Int, $
 				createdAt
 				createdBy
 				department
-				directorySyncRunID
 				displayID
 				displayName
 				externalID
@@ -182199,7 +180986,6 @@ const GetDirectoryAccountsDocument = `query GetDirectoryAccounts ($first: Int, $
 				organizationUnit
 				ownerID
 				profile
-				profileHash
 				rawProfileFileID
 				secondaryKey
 				sourceVersion
@@ -182244,9 +181030,7 @@ const UpdateDirectoryAccountDocument = `mutation UpdateDirectoryAccount ($update
 			createdAt
 			createdBy
 			department
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			emailAliases
@@ -182259,6 +181043,7 @@ const UpdateDirectoryAccountDocument = `mutation UpdateDirectoryAccount ($update
 			id
 			identityHolderID
 			integrationID
+			integrationRunID
 			jobTitle
 			lastLoginAt
 			lastSeenAt
@@ -182273,7 +181058,6 @@ const UpdateDirectoryAccountDocument = `mutation UpdateDirectoryAccount ($update
 			platformID
 			primarySource
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
@@ -182319,9 +181103,7 @@ const CreateBulkCSVDirectoryGroupDocument = `mutation CreateBulkCSVDirectoryGrou
 			createdAt
 			createdBy
 			description
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			email
@@ -182332,6 +181114,7 @@ const CreateBulkCSVDirectoryGroupDocument = `mutation CreateBulkCSVDirectoryGrou
 			firstSeenAt
 			id
 			integrationID
+			integrationRunID
 			lastSeenAt
 			managedBy
 			memberCount
@@ -182340,7 +181123,6 @@ const CreateBulkCSVDirectoryGroupDocument = `mutation CreateBulkCSVDirectoryGrou
 			ownerID
 			platformID
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
@@ -182384,9 +181166,7 @@ const CreateBulkDirectoryGroupDocument = `mutation CreateBulkDirectoryGroup ($in
 			createdAt
 			createdBy
 			description
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			email
@@ -182397,6 +181177,7 @@ const CreateBulkDirectoryGroupDocument = `mutation CreateBulkDirectoryGroup ($in
 			firstSeenAt
 			id
 			integrationID
+			integrationRunID
 			lastSeenAt
 			managedBy
 			memberCount
@@ -182405,7 +181186,6 @@ const CreateBulkDirectoryGroupDocument = `mutation CreateBulkDirectoryGroup ($in
 			ownerID
 			platformID
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
@@ -182449,9 +181229,7 @@ const CreateDirectoryGroupDocument = `mutation CreateDirectoryGroup ($input: Cre
 			createdAt
 			createdBy
 			description
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			email
@@ -182462,6 +181240,7 @@ const CreateDirectoryGroupDocument = `mutation CreateDirectoryGroup ($input: Cre
 			firstSeenAt
 			id
 			integrationID
+			integrationRunID
 			lastSeenAt
 			managedBy
 			memberCount
@@ -182470,7 +181249,6 @@ const CreateDirectoryGroupDocument = `mutation CreateDirectoryGroup ($input: Cre
 			ownerID
 			platformID
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
@@ -182545,7 +181323,6 @@ const GetAllDirectoryGroupsDocument = `query GetAllDirectoryGroups {
 				createdAt
 				createdBy
 				description
-				directorySyncRunID
 				displayID
 				displayName
 				email
@@ -182557,7 +181334,6 @@ const GetAllDirectoryGroupsDocument = `query GetAllDirectoryGroups {
 				observedAt
 				ownerID
 				profile
-				profileHash
 				rawProfileFileID
 				sourceVersion
 				status
@@ -182592,9 +181368,7 @@ const GetDirectoryGroupByIDDocument = `query GetDirectoryGroupByID ($directoryGr
 		createdAt
 		createdBy
 		description
-		directoryInstanceID
 		directoryName
-		directorySyncRunID
 		displayID
 		displayName
 		email
@@ -182605,6 +181379,7 @@ const GetDirectoryGroupByIDDocument = `query GetDirectoryGroupByID ($directoryGr
 		firstSeenAt
 		id
 		integrationID
+		integrationRunID
 		lastSeenAt
 		managedBy
 		memberCount
@@ -182613,7 +181388,6 @@ const GetDirectoryGroupByIDDocument = `query GetDirectoryGroupByID ($directoryGr
 		ownerID
 		platformID
 		profile
-		profileHash
 		rawProfileFileID
 		removedAt
 		scopeID
@@ -182663,7 +181437,6 @@ const GetDirectoryGroupsDocument = `query GetDirectoryGroups ($first: Int, $last
 				createdAt
 				createdBy
 				description
-				directorySyncRunID
 				displayID
 				displayName
 				email
@@ -182675,7 +181448,6 @@ const GetDirectoryGroupsDocument = `query GetDirectoryGroups ($first: Int, $last
 				observedAt
 				ownerID
 				profile
-				profileHash
 				rawProfileFileID
 				sourceVersion
 				status
@@ -182715,9 +181487,7 @@ const UpdateDirectoryGroupDocument = `mutation UpdateDirectoryGroup ($updateDire
 			createdAt
 			createdBy
 			description
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			email
@@ -182728,6 +181498,7 @@ const UpdateDirectoryGroupDocument = `mutation UpdateDirectoryGroup ($updateDire
 			firstSeenAt
 			id
 			integrationID
+			integrationRunID
 			lastSeenAt
 			managedBy
 			memberCount
@@ -182736,7 +181507,6 @@ const UpdateDirectoryGroupDocument = `mutation UpdateDirectoryGroup ($updateDire
 			ownerID
 			platformID
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
@@ -182781,16 +181551,14 @@ const CreateBulkCSVDirectoryMembershipDocument = `mutation CreateBulkCSVDirector
 			createdBy
 			directoryAccountID
 			directoryGroupID
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			environmentID
 			environmentName
 			firstSeenAt
 			id
 			integrationID
-			lastConfirmedRunID
+			integrationRunID
 			lastSeenAt
 			managedBy
 			metadata
@@ -182838,16 +181606,14 @@ const CreateBulkDirectoryMembershipDocument = `mutation CreateBulkDirectoryMembe
 			createdBy
 			directoryAccountID
 			directoryGroupID
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			environmentID
 			environmentName
 			firstSeenAt
 			id
 			integrationID
-			lastConfirmedRunID
+			integrationRunID
 			lastSeenAt
 			managedBy
 			metadata
@@ -182895,16 +181661,14 @@ const CreateDirectoryMembershipDocument = `mutation CreateDirectoryMembership ($
 			createdBy
 			directoryAccountID
 			directoryGroupID
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			environmentID
 			environmentName
 			firstSeenAt
 			id
 			integrationID
-			lastConfirmedRunID
+			integrationRunID
 			lastSeenAt
 			managedBy
 			metadata
@@ -182983,12 +181747,10 @@ const GetAllDirectoryMembershipsDocument = `query GetAllDirectoryMemberships {
 				createdBy
 				directoryAccountID
 				directoryGroupID
-				directorySyncRunID
 				displayID
 				firstSeenAt
 				id
 				integrationID
-				lastConfirmedRunID
 				lastSeenAt
 				metadata
 				observedAt
@@ -183025,16 +181787,14 @@ const GetDirectoryMembershipByIDDocument = `query GetDirectoryMembershipByID ($d
 		createdBy
 		directoryAccountID
 		directoryGroupID
-		directoryInstanceID
 		directoryName
-		directorySyncRunID
 		displayID
 		environmentID
 		environmentName
 		firstSeenAt
 		id
 		integrationID
-		lastConfirmedRunID
+		integrationRunID
 		lastSeenAt
 		managedBy
 		metadata
@@ -183088,12 +181848,10 @@ const GetDirectoryMembershipsDocument = `query GetDirectoryMemberships ($first: 
 				createdBy
 				directoryAccountID
 				directoryGroupID
-				directorySyncRunID
 				displayID
 				firstSeenAt
 				id
 				integrationID
-				lastConfirmedRunID
 				lastSeenAt
 				metadata
 				observedAt
@@ -183135,16 +181893,14 @@ const UpdateDirectoryMembershipDocument = `mutation UpdateDirectoryMembership ($
 			createdBy
 			directoryAccountID
 			directoryGroupID
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			environmentID
 			environmentName
 			firstSeenAt
 			id
 			integrationID
-			lastConfirmedRunID
+			integrationRunID
 			lastSeenAt
 			managedBy
 			metadata
@@ -183175,376 +181931,6 @@ func (c *Client) UpdateDirectoryMembership(ctx context.Context, updateDirectoryM
 
 	var res UpdateDirectoryMembership
 	if err := c.Client.Post(ctx, "UpdateDirectoryMembership", UpdateDirectoryMembershipDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateBulkCSVDirectorySyncRunDocument = `mutation CreateBulkCSVDirectorySyncRun ($input: Upload!) {
-	createBulkCSVDirectorySyncRun(input: $input) {
-		directorySyncRuns {
-			completedAt
-			createdAt
-			createdBy
-			deltaCount
-			directoryInstanceID
-			displayID
-			environmentID
-			environmentName
-			error
-			fullCount
-			id
-			integrationID
-			ownerID
-			platformID
-			rawManifestFileID
-			scopeID
-			scopeName
-			sourceCursor
-			startedAt
-			stats
-			status
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkCSVDirectorySyncRun(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVDirectorySyncRun, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkCSVDirectorySyncRun
-	if err := c.Client.Post(ctx, "CreateBulkCSVDirectorySyncRun", CreateBulkCSVDirectorySyncRunDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateBulkDirectorySyncRunDocument = `mutation CreateBulkDirectorySyncRun ($input: [CreateDirectorySyncRunInput!]) {
-	createBulkDirectorySyncRun(input: $input) {
-		directorySyncRuns {
-			completedAt
-			createdAt
-			createdBy
-			deltaCount
-			directoryInstanceID
-			displayID
-			environmentID
-			environmentName
-			error
-			fullCount
-			id
-			integrationID
-			ownerID
-			platformID
-			rawManifestFileID
-			scopeID
-			scopeName
-			sourceCursor
-			startedAt
-			stats
-			status
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
-}
-`
-
-func (c *Client) CreateBulkDirectorySyncRun(ctx context.Context, input []*CreateDirectorySyncRunInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkDirectorySyncRun, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateBulkDirectorySyncRun
-	if err := c.Client.Post(ctx, "CreateBulkDirectorySyncRun", CreateBulkDirectorySyncRunDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const CreateDirectorySyncRunDocument = `mutation CreateDirectorySyncRun ($input: CreateDirectorySyncRunInput!) {
-	createDirectorySyncRun(input: $input) {
-		directorySyncRun {
-			completedAt
-			createdAt
-			createdBy
-			deltaCount
-			directoryInstanceID
-			displayID
-			environmentID
-			environmentName
-			error
-			fullCount
-			id
-			integrationID
-			ownerID
-			platformID
-			rawManifestFileID
-			scopeID
-			scopeName
-			sourceCursor
-			startedAt
-			stats
-			status
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
-}
-`
-
-func (c *Client) CreateDirectorySyncRun(ctx context.Context, input CreateDirectorySyncRunInput, interceptors ...clientv2.RequestInterceptor) (*CreateDirectorySyncRun, error) {
-	vars := map[string]any{
-		"input": input,
-	}
-
-	var res CreateDirectorySyncRun
-	if err := c.Client.Post(ctx, "CreateDirectorySyncRun", CreateDirectorySyncRunDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const DeleteDirectorySyncRunDocument = `mutation DeleteDirectorySyncRun ($deleteDirectorySyncRunId: ID!) {
-	deleteDirectorySyncRun(id: $deleteDirectorySyncRunId) {
-		deletedID
-	}
-}
-`
-
-func (c *Client) DeleteDirectorySyncRun(ctx context.Context, deleteDirectorySyncRunID string, interceptors ...clientv2.RequestInterceptor) (*DeleteDirectorySyncRun, error) {
-	vars := map[string]any{
-		"deleteDirectorySyncRunId": deleteDirectorySyncRunID,
-	}
-
-	var res DeleteDirectorySyncRun
-	if err := c.Client.Post(ctx, "DeleteDirectorySyncRun", DeleteDirectorySyncRunDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const GetAllDirectorySyncRunsDocument = `query GetAllDirectorySyncRuns {
-	directorySyncRuns {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				completedAt
-				createdAt
-				createdBy
-				deltaCount
-				displayID
-				error
-				fullCount
-				id
-				integrationID
-				ownerID
-				rawManifestFileID
-				sourceCursor
-				startedAt
-				stats
-				status
-				updatedAt
-				updatedBy
-			}
-		}
-	}
-}
-`
-
-func (c *Client) GetAllDirectorySyncRuns(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllDirectorySyncRuns, error) {
-	vars := map[string]any{}
-
-	var res GetAllDirectorySyncRuns
-	if err := c.Client.Post(ctx, "GetAllDirectorySyncRuns", GetAllDirectorySyncRunsDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const GetDirectorySyncRunByIDDocument = `query GetDirectorySyncRunByID ($directorySyncRunId: ID!) {
-	directorySyncRun(id: $directorySyncRunId) {
-		completedAt
-		createdAt
-		createdBy
-		deltaCount
-		directoryInstanceID
-		displayID
-		environmentID
-		environmentName
-		error
-		fullCount
-		id
-		integrationID
-		ownerID
-		platformID
-		rawManifestFileID
-		scopeID
-		scopeName
-		sourceCursor
-		startedAt
-		stats
-		status
-		updatedAt
-		updatedBy
-		updatedByImpersonator
-	}
-}
-`
-
-func (c *Client) GetDirectorySyncRunByID(ctx context.Context, directorySyncRunID string, interceptors ...clientv2.RequestInterceptor) (*GetDirectorySyncRunByID, error) {
-	vars := map[string]any{
-		"directorySyncRunId": directorySyncRunID,
-	}
-
-	var res GetDirectorySyncRunByID
-	if err := c.Client.Post(ctx, "GetDirectorySyncRunByID", GetDirectorySyncRunByIDDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const GetDirectorySyncRunsDocument = `query GetDirectorySyncRuns ($first: Int, $last: Int, $where: DirectorySyncRunWhereInput) {
-	directorySyncRuns(first: $first, last: $last, where: $where) {
-		totalCount
-		pageInfo {
-			startCursor
-			endCursor
-			hasPreviousPage
-			hasNextPage
-		}
-		edges {
-			node {
-				completedAt
-				createdAt
-				createdBy
-				deltaCount
-				displayID
-				error
-				fullCount
-				id
-				integrationID
-				ownerID
-				rawManifestFileID
-				sourceCursor
-				startedAt
-				stats
-				status
-				updatedAt
-				updatedBy
-			}
-		}
-	}
-}
-`
-
-func (c *Client) GetDirectorySyncRuns(ctx context.Context, first *int64, last *int64, where *DirectorySyncRunWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetDirectorySyncRuns, error) {
-	vars := map[string]any{
-		"first": first,
-		"last":  last,
-		"where": where,
-	}
-
-	var res GetDirectorySyncRuns
-	if err := c.Client.Post(ctx, "GetDirectorySyncRuns", GetDirectorySyncRunsDocument, &res, vars, interceptors...); err != nil {
-		if c.Client.ParseDataWhenErrors {
-			return &res, err
-		}
-
-		return nil, err
-	}
-
-	return &res, nil
-}
-
-const UpdateDirectorySyncRunDocument = `mutation UpdateDirectorySyncRun ($updateDirectorySyncRunId: ID!, $input: UpdateDirectorySyncRunInput!) {
-	updateDirectorySyncRun(id: $updateDirectorySyncRunId, input: $input) {
-		directorySyncRun {
-			completedAt
-			createdAt
-			createdBy
-			deltaCount
-			directoryInstanceID
-			displayID
-			environmentID
-			environmentName
-			error
-			fullCount
-			id
-			integrationID
-			ownerID
-			platformID
-			rawManifestFileID
-			scopeID
-			scopeName
-			sourceCursor
-			startedAt
-			stats
-			status
-			updatedAt
-			updatedBy
-			updatedByImpersonator
-		}
-	}
-}
-`
-
-func (c *Client) UpdateDirectorySyncRun(ctx context.Context, updateDirectorySyncRunID string, input UpdateDirectorySyncRunInput, interceptors ...clientv2.RequestInterceptor) (*UpdateDirectorySyncRun, error) {
-	vars := map[string]any{
-		"updateDirectorySyncRunId": updateDirectorySyncRunID,
-		"input":                    input,
-	}
-
-	var res UpdateDirectorySyncRun
-	if err := c.Client.Post(ctx, "UpdateDirectorySyncRun", UpdateDirectorySyncRunDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -185183,6 +183569,7 @@ const GetEntityByIDDocument = `query GetEntityByID ($entityId: ID!) {
 		externalID
 		hasSoc2
 		id
+		integrationRunID
 		internalNotes
 		internalOwner
 		internalOwnerGroupID
@@ -187257,6 +185644,7 @@ const CreateBulkCSVFindingDocument = `mutation CreateBulkCSVFinding ($input: Upl
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
 			managedBy
 			metadata
@@ -187350,6 +185738,7 @@ const CreateBulkFindingDocument = `mutation CreateBulkFinding ($input: [CreateFi
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
 			managedBy
 			metadata
@@ -187443,6 +185832,7 @@ const CreateFindingDocument = `mutation CreateFinding ($input: CreateFindingInpu
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
 			managedBy
 			metadata
@@ -187680,6 +186070,7 @@ const GetFindingByIDDocument = `query GetFindingByID ($findingId: ID!) {
 		findingStatusName
 		id
 		impact
+		integrationRunID
 		internalNotes
 		managedBy
 		metadata
@@ -187891,6 +186282,7 @@ const UpdateBulkCSVFindingDocument = `mutation UpdateBulkCSVFinding ($input: Upl
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
 			managedBy
 			metadata
@@ -187987,6 +186379,7 @@ const UpdateBulkFindingDocument = `mutation UpdateBulkFinding ($ids: [ID!]!, $in
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
 			managedBy
 			metadata
@@ -188084,6 +186477,7 @@ const UpdateFindingDocument = `mutation UpdateFinding ($updateFindingId: ID!, $i
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
 			managedBy
 			metadata
@@ -190388,9 +188782,7 @@ const GetIdentityHolderDirectoryAccountsDocument = `query GetIdentityHolderDirec
 					createdAt
 					createdBy
 					department
-					directoryInstanceID
 					directoryName
-					directorySyncRunID
 					displayID
 					displayName
 					environmentID
@@ -190414,7 +188806,6 @@ const GetIdentityHolderDirectoryAccountsDocument = `query GetIdentityHolderDirec
 					platformID
 					primarySource
 					profile
-					profileHash
 					rawProfileFileID
 					removedAt
 					scopeID
@@ -190838,6 +189229,7 @@ const CreateBulkCSVInternalPolicyDocument = `mutation CreateBulkCSVInternalPolic
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			internalPolicyKindID
 			internalPolicyKindName
@@ -190917,6 +189309,7 @@ const CreateBulkInternalPolicyDocument = `mutation CreateBulkInternalPolicy ($in
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			internalPolicyKindID
 			internalPolicyKindName
@@ -190996,6 +189389,7 @@ const CreateInternalPolicyDocument = `mutation CreateInternalPolicy ($input: Cre
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			internalPolicyKindID
 			internalPolicyKindName
@@ -191206,6 +189600,7 @@ const GetAllInternalPoliciesDocument = `query GetAllInternalPolicies ($first: In
 				fileID
 				id
 				improvementSuggestions
+				integrationRunID
 				internalNotes
 				internalPolicyKindID
 				internalPolicyKindName
@@ -191314,6 +189709,7 @@ const GetInternalPoliciesDocument = `query GetInternalPolicies ($first: Int, $la
 				fileID
 				id
 				improvementSuggestions
+				integrationRunID
 				internalNotes
 				internalPolicyKindID
 				internalPolicyKindName
@@ -191414,6 +189810,7 @@ const GetInternalPolicyByIDDocument = `query GetInternalPolicyByID ($internalPol
 		fileID
 		id
 		improvementSuggestions
+		integrationRunID
 		internalNotes
 		internalPolicyKindID
 		internalPolicyKindName
@@ -191547,6 +189944,7 @@ const UpdateBulkInternalPolicyDocument = `mutation UpdateBulkInternalPolicy ($id
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			internalPolicyKindID
 			internalPolicyKindName
@@ -191630,6 +190028,7 @@ const UpdateInternalPolicyDocument = `mutation UpdateInternalPolicy ($updateInte
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			internalPolicyKindID
 			internalPolicyKindName
@@ -197085,6 +195484,7 @@ const CreateBulkCSVProcedureDocument = `mutation CreateBulkCSVProcedure ($input:
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -197163,6 +195563,7 @@ const CreateBulkProcedureDocument = `mutation CreateBulkProcedure ($input: [Crea
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -197241,6 +195642,7 @@ const CreateProcedureDocument = `mutation CreateProcedure ($input: CreateProcedu
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -197516,6 +195918,7 @@ const GetProcedureByIDDocument = `query GetProcedureByID ($procedureId: ID!) {
 		fileID
 		id
 		improvementSuggestions
+		integrationRunID
 		internalNotes
 		managedBy
 		managementMode
@@ -197675,6 +196078,7 @@ const UpdateBulkProcedureDocument = `mutation UpdateBulkProcedure ($ids: [ID!]!,
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -197757,6 +196161,7 @@ const UpdateProcedureDocument = `mutation UpdateProcedure ($updateProcedureId: I
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -200512,6 +198917,7 @@ const CreateBulkCSVRiskDocument = `mutation CreateBulkCSVRisk ($input: Upload!) 
 			id
 			impact
 			integrationID
+			integrationRunID
 			lastReviewedAt
 			likelihood
 			managedBy
@@ -200592,6 +198998,7 @@ const CreateBulkRiskDocument = `mutation CreateBulkRisk ($input: [CreateRiskInpu
 			id
 			impact
 			integrationID
+			integrationRunID
 			lastReviewedAt
 			likelihood
 			managedBy
@@ -200672,6 +199079,7 @@ const CreateRiskDocument = `mutation CreateRisk ($input: CreateRiskInput!) {
 			id
 			impact
 			integrationID
+			integrationRunID
 			lastReviewedAt
 			likelihood
 			managedBy
@@ -200816,6 +199224,7 @@ const GetAllRisksDocument = `query GetAllRisks ($first: Int, $last: Int, $after:
 				id
 				impact
 				integrationID
+				integrationRunID
 				lastReviewedAt
 				likelihood
 				managedBy
@@ -200932,6 +199341,7 @@ const GetRiskByIDDocument = `query GetRiskByID ($riskId: ID!) {
 		id
 		impact
 		integrationID
+		integrationRunID
 		lastReviewedAt
 		likelihood
 		managedBy
@@ -201051,6 +199461,7 @@ const GetRisksDocument = `query GetRisks ($first: Int, $last: Int, $after: Curso
 				id
 				impact
 				integrationID
+				integrationRunID
 				lastReviewedAt
 				likelihood
 				managedBy
@@ -201169,6 +199580,7 @@ const UpdateBulkRiskDocument = `mutation UpdateBulkRisk ($ids: [ID!]!, $input: U
 			id
 			impact
 			integrationID
+			integrationRunID
 			lastReviewedAt
 			likelihood
 			managedBy
@@ -201253,6 +199665,7 @@ const UpdateRiskDocument = `mutation UpdateRisk ($updateRiskId: ID!, $input: Upd
 			id
 			impact
 			integrationID
+			integrationRunID
 			lastReviewedAt
 			likelihood
 			managedBy
@@ -211771,6 +210184,7 @@ const CreateBulkCSVVulnerabilityDocument = `mutation CreateBulkCSVVulnerability 
 			id
 			impact
 			impacts
+			integrationRunID
 			internalNotes
 			managedBy
 			manifestPath
@@ -211869,6 +210283,7 @@ const CreateBulkVulnerabilityDocument = `mutation CreateBulkVulnerability ($inpu
 			id
 			impact
 			impacts
+			integrationRunID
 			internalNotes
 			managedBy
 			manifestPath
@@ -211967,6 +210382,7 @@ const CreateVulnerabilityDocument = `mutation CreateVulnerability ($input: Creat
 			id
 			impact
 			impacts
+			integrationRunID
 			internalNotes
 			managedBy
 			manifestPath
@@ -212190,6 +210606,7 @@ const GetVulnerabilitiesDocument = `query GetVulnerabilities ($first: Int, $last
 				id
 				impact
 				impacts
+				integrationRunID
 				internalNotes
 				managedBy
 				manifestPath
@@ -212293,6 +210710,7 @@ const GetVulnerabilityByIDDocument = `query GetVulnerabilityByID ($vulnerability
 		id
 		impact
 		impacts
+		integrationRunID
 		internalNotes
 		managedBy
 		manifestPath
@@ -212390,6 +210808,7 @@ const UpdateBulkCSVVulnerabilityDocument = `mutation UpdateBulkCSVVulnerability 
 			id
 			impact
 			impacts
+			integrationRunID
 			internalNotes
 			managedBy
 			manifestPath
@@ -212491,6 +210910,7 @@ const UpdateBulkVulnerabilityDocument = `mutation UpdateBulkVulnerability ($ids:
 			id
 			impact
 			impacts
+			integrationRunID
 			internalNotes
 			managedBy
 			manifestPath
@@ -212593,6 +211013,7 @@ const UpdateVulnerabilityDocument = `mutation UpdateVulnerability ($updateVulner
 			id
 			impact
 			impacts
+			integrationRunID
 			internalNotes
 			managedBy
 			manifestPath
@@ -216254,14 +214675,6 @@ var DocumentOperationNames = map[string]string{
 	GetDirectoryMembershipByIDDocument:            "GetDirectoryMembershipByID",
 	GetDirectoryMembershipsDocument:               "GetDirectoryMemberships",
 	UpdateDirectoryMembershipDocument:             "UpdateDirectoryMembership",
-	CreateBulkCSVDirectorySyncRunDocument:         "CreateBulkCSVDirectorySyncRun",
-	CreateBulkDirectorySyncRunDocument:            "CreateBulkDirectorySyncRun",
-	CreateDirectorySyncRunDocument:                "CreateDirectorySyncRun",
-	DeleteDirectorySyncRunDocument:                "DeleteDirectorySyncRun",
-	GetAllDirectorySyncRunsDocument:               "GetAllDirectorySyncRuns",
-	GetDirectorySyncRunByIDDocument:               "GetDirectorySyncRunByID",
-	GetDirectorySyncRunsDocument:                  "GetDirectorySyncRuns",
-	UpdateDirectorySyncRunDocument:                "UpdateDirectorySyncRun",
 	CreateBulkCSVDiscussionDocument:               "CreateBulkCSVDiscussion",
 	CreateBulkDiscussionDocument:                  "CreateBulkDiscussion",
 	CreateDiscussionDocument:                      "CreateDiscussion",

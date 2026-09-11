@@ -241,9 +241,10 @@ The workflow engine's object-creation action shares this machinery, so a workflo
 A mapping declares `Links []types.LinkRule`. Each rule names the target object type and how to match candidates — either a **field match** (indexed query push-down) or a **CEL expression**:
 
 ```go
-// internal/integrations/definitions/cloudflare/mappings.go
+// internal/integrations/definitions/cloudflare/builder.go
 // Field names are typed references, never hand-typed strings: the target side uses the ent
-// field constants, the source side uses the generated entityops input-key constants.
+// field constants, the source side uses the generated entityops.<Schema>Fields.<Field>.InputKey
+// accessor (the same descriptor's .Expr(...) method binds a CEL expression when building MapExpr).
 Spec: types.MappingOverride{
     MapExpr: mapExprFinding,
     Links: []types.LinkRule{
@@ -251,8 +252,8 @@ Spec: types.MappingOverride{
         {
             TargetSchema: entityops.SchemaControl.Name,
             TargetField:  control.FieldRefCode,
-            SourceField:  entityops.InputKeyFindingCategory,
-            SourceList:   entityops.InputKeyFindingCategories,
+            SourceField:  entityops.FindingFields.Category.InputKey,
+            SourceList:   entityops.FindingFields.Categories.InputKey,
         },
     },
 },

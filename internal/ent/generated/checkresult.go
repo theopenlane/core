@@ -43,8 +43,10 @@ type CheckResult struct {
 	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
 	// stable identifier of the external system instance the record was sourced from
 	SourceInstanceID string `json:"source_instance_id,omitempty"`
-	// virtual subject id of the integration definition managing the record, empty when user controlled
+	// id of the integration installation managing the record, empty when the record is unclaimed
 	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
 	// current status of the control
 	Status enums.CheckStatus `json:"status,omitempty"`
 	// source that set the check result
@@ -67,6 +69,8 @@ type CheckResult struct {
 
 // CheckResultEdges holds the relations/edges for other nodes in the graph.
 type CheckResultEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// groups that are blocked from viewing or editing the risk
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// provides edit access to the risk to members of the group
@@ -81,21 +85,31 @@ type CheckResultEdges struct {
 	Integration *Integration `json:"integration,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [7]map[string]int
 
-	namedBlockedGroups map[string][]*Group
-	namedEditors       map[string][]*Group
-	namedViewers       map[string][]*Group
-	namedControls      map[string][]*Control
-	namedFindings      map[string][]*Finding
+	namedIntegrationRuns map[string][]*IntegrationRun
+	namedBlockedGroups   map[string][]*Group
+	namedEditors         map[string][]*Group
+	namedViewers         map[string][]*Group
+	namedControls        map[string][]*Control
+	namedFindings        map[string][]*Finding
+}
+
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e CheckResultEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
 }
 
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e CheckResultEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -104,7 +118,7 @@ func (e CheckResultEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e CheckResultEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -113,7 +127,7 @@ func (e CheckResultEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e CheckResultEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -122,7 +136,7 @@ func (e CheckResultEdges) ViewersOrErr() ([]*Group, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e CheckResultEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -131,7 +145,7 @@ func (e CheckResultEdges) ControlsOrErr() ([]*Control, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e CheckResultEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -142,7 +156,7 @@ func (e CheckResultEdges) FindingsOrErr() ([]*Finding, error) {
 func (e CheckResultEdges) IntegrationOrErr() (*Integration, error) {
 	if e.Integration != nil {
 		return e.Integration, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: integration.Label}
 	}
 	return nil, &NotLoadedError{edge: "integration"}
@@ -157,7 +171,7 @@ func (*CheckResult) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case checkresult.FieldTags:
 			values[i] = new([]byte)
-		case checkresult.FieldID, checkresult.FieldCreatedBy, checkresult.FieldUpdatedBy, checkresult.FieldUpdatedByImpersonator, checkresult.FieldDeletedBy, checkresult.FieldSourceDefinitionID, checkresult.FieldSourceDefinitionVersion, checkresult.FieldSourceInstanceID, checkresult.FieldManagedBy, checkresult.FieldStatus, checkresult.FieldSource, checkresult.FieldExternalURI, checkresult.FieldDetails, checkresult.FieldParentExternalID, checkresult.FieldIntegrationID:
+		case checkresult.FieldID, checkresult.FieldCreatedBy, checkresult.FieldUpdatedBy, checkresult.FieldUpdatedByImpersonator, checkresult.FieldDeletedBy, checkresult.FieldSourceDefinitionID, checkresult.FieldSourceDefinitionVersion, checkresult.FieldSourceInstanceID, checkresult.FieldManagedBy, checkresult.FieldIntegrationRunID, checkresult.FieldStatus, checkresult.FieldSource, checkresult.FieldExternalURI, checkresult.FieldDetails, checkresult.FieldParentExternalID, checkresult.FieldIntegrationID:
 			values[i] = new(sql.NullString)
 		case checkresult.FieldCreatedAt, checkresult.FieldUpdatedAt, checkresult.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -257,6 +271,12 @@ func (_m *CheckResult) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ManagedBy = value.String
 			}
+		case checkresult.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
 		case checkresult.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
@@ -312,6 +332,11 @@ func (_m *CheckResult) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *CheckResult) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryIntegrationRuns queries the "integration_runs" edge of the CheckResult entity.
+func (_m *CheckResult) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewCheckResultClient(_m.config).QueryIntegrationRuns(_m)
 }
 
 // QueryBlockedGroups queries the "blocked_groups" edge of the CheckResult entity.
@@ -405,6 +430,9 @@ func (_m *CheckResult) String() string {
 	builder.WriteString("managed_by=")
 	builder.WriteString(_m.ManagedBy)
 	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
@@ -431,6 +459,30 @@ func (_m *CheckResult) String() string {
 	builder.WriteString(_m.IntegrationID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *CheckResult) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *CheckResult) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not

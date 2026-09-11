@@ -14,7 +14,6 @@ query GetAllDirectoryAccountHistories {
 				createdAt
 				createdBy
 				department
-				directorySyncRunID
 				displayID
 				displayName
 				externalID
@@ -32,7 +31,6 @@ query GetAllDirectoryAccountHistories {
 				organizationUnit
 				ownerID
 				profile
-				profileHash
 				rawProfileFileID
 				ref
 				secondaryKey
@@ -61,7 +59,6 @@ query GetDirectoryAccountHistories ($first: Int, $last: Int, $where: DirectoryAc
 				createdAt
 				createdBy
 				department
-				directorySyncRunID
 				displayID
 				displayName
 				externalID
@@ -79,7 +76,6 @@ query GetDirectoryAccountHistories ($first: Int, $last: Int, $where: DirectoryAc
 				organizationUnit
 				ownerID
 				profile
-				profileHash
 				rawProfileFileID
 				ref
 				secondaryKey

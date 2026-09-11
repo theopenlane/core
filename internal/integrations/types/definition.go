@@ -38,8 +38,6 @@ type DefinitionSpec struct {
 type Definition struct {
 	// DefinitionSpec is the base catalog metadata for the definition
 	DefinitionSpec `json:"spec"`
-	// VirtualUser is the virtual actor identity records created by this definition's installations are attributed to
-	VirtualUser VirtualUserRef `json:"-"`
 	// OperatorConfig describes operator-owned configuration for the definition
 	OperatorConfig *OperatorConfigRegistration `json:"operatorConfig,omitempty"`
 	// UserInput describes installation-scoped user input for the definition

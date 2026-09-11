@@ -219,6 +219,20 @@ func (_c *EntityHistoryCreate) SetNillableManagedBy(v *string) *EntityHistoryCre
 	return _c
 }
 
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *EntityHistoryCreate) SetIntegrationRunID(v string) *EntityHistoryCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableIntegrationRunID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *EntityHistoryCreate) SetOwnerID(v string) *EntityHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -1275,6 +1289,10 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.ManagedBy(); ok {
 		_spec.SetField(entityhistory.FieldManagedBy, field.TypeString, value)
 		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(entityhistory.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
 	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(entityhistory.FieldOwnerID, field.TypeString, value)

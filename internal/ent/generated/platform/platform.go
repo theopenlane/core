@@ -218,8 +218,6 @@ const (
 	EdgeIdentityHolders = "identity_holders"
 	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
 	EdgeIntegrations = "integrations"
-	// EdgeDirectorySyncRuns holds the string denoting the directory_sync_runs edge name in mutations.
-	EdgeDirectorySyncRuns = "directory_sync_runs"
 	// EdgeDirectoryAccounts holds the string denoting the directory_accounts edge name in mutations.
 	EdgeDirectoryAccounts = "directory_accounts"
 	// EdgeDirectoryGroups holds the string denoting the directory_groups edge name in mutations.
@@ -486,13 +484,6 @@ const (
 	IntegrationsInverseTable = "integrations"
 	// IntegrationsColumn is the table column denoting the integrations relation/edge.
 	IntegrationsColumn = "platform_id"
-	// DirectorySyncRunsTable is the table that holds the directory_sync_runs relation/edge.
-	DirectorySyncRunsTable = "directory_sync_runs"
-	// DirectorySyncRunsInverseTable is the table name for the DirectorySyncRun entity.
-	// It exists in this package in order to avoid circular dependency with the "directorysyncrun" package.
-	DirectorySyncRunsInverseTable = "directory_sync_runs"
-	// DirectorySyncRunsColumn is the table column denoting the directory_sync_runs relation/edge.
-	DirectorySyncRunsColumn = "platform_id"
 	// DirectoryAccountsTable is the table that holds the directory_accounts relation/edge.
 	DirectoryAccountsTable = "directory_accounts"
 	// DirectoryAccountsInverseTable is the table name for the DirectoryAccount entity.
@@ -1463,20 +1454,6 @@ func ByIntegrations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByDirectorySyncRunsCount orders the results by directory_sync_runs count.
-func ByDirectorySyncRunsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newDirectorySyncRunsStep(), opts...)
-	}
-}
-
-// ByDirectorySyncRuns orders the results by directory_sync_runs terms.
-func ByDirectorySyncRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDirectorySyncRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByDirectoryAccountsCount orders the results by directory_accounts count.
 func ByDirectoryAccountsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1901,13 +1878,6 @@ func newIntegrationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(IntegrationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationsTable, IntegrationsColumn),
-	)
-}
-func newDirectorySyncRunsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DirectorySyncRunsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
 	)
 }
 func newDirectoryAccountsStep() *sqlgraph.Step {

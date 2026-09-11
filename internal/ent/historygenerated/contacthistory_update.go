@@ -109,6 +109,9 @@ func (_u *ContactHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.ManagedByCleared() {
 		_spec.ClearField(contacthistory.FieldManagedBy, field.TypeString)
 	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(contacthistory.FieldIntegrationRunID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(contacthistory.FieldOwnerID, field.TypeString)
 	}
@@ -268,6 +271,9 @@ func (_u *ContactHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ContactH
 	}
 	if _u.mutation.ManagedByCleared() {
 		_spec.ClearField(contacthistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(contacthistory.FieldIntegrationRunID, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(contacthistory.FieldOwnerID, field.TypeString)

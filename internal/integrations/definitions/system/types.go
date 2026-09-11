@@ -10,9 +10,6 @@ import (
 // DefinitionID is the canonical identifier for the system definition
 var DefinitionID = types.NewDefinitionRef("def_01SYSTEM0000000000000000001")
 
-// VirtualUser is the virtual actor identity for records created by this definition's installations
-var VirtualUser = types.NewVirtualUserRef("01VRTACTRM19SKMX9TWGCKAN0G")
-
 const (
 	// DefaultPaymentMethodInterval is the default number of days after org creation
 	// before an org without a payment method is marked for deletion

@@ -386,7 +386,7 @@ func (f Finding) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "FIND",
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{},
+			ProvenanceMixin{SchemaType: f},
 			newObjectOwnedMixin[generated.Finding](f,
 				withParents(
 					Program{},

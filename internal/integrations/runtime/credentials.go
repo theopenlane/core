@@ -201,7 +201,11 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 	}
 
 	if state.CredentialRef == (types.CredentialSlotID{}) {
-		return nil
+		if len(def.Connections) > 0 {
+			return nil
+		}
+
+		return r.saveInstallationMetadata(systemCtx, installation, selfInstanceMetadata(installation))
 	}
 
 	connection, err := def.ConnectionRegistration(state.CredentialRef)
@@ -214,25 +218,41 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 		return err
 	}
 
-	if connection.Integration == nil {
-		return nil
-	}
-
-	metadata, ok, err := connection.Integration.Resolve(systemCtx, types.InstallationRequest{
-		Integration: installation,
-		Connection:  connection,
-		Credentials: bindings,
-		Config:      installation.Config,
-	})
+	metadata, err := resolveConnectionIdentity(systemCtx, installation, connection, bindings, nil)
 	if err != nil {
 		return err
 	}
 
-	if !ok {
-		return r.saveInstallationMetadata(systemCtx, installation, types.IntegrationInstallationMetadata{})
+	return r.saveInstallationMetadata(systemCtx, installation, metadata)
+}
+
+// selfInstanceMetadata identifies an installation whose definition names no external instance by its own id
+func selfInstanceMetadata(installation *ent.Integration) types.IntegrationInstallationMetadata {
+	return types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: installation.ID}}
+}
+
+// resolveConnectionIdentity resolves installation metadata through the connection's resolver, falling to the installation's own id when the connection declares none, and rejects a resolver answer without an instance id
+func resolveConnectionIdentity(ctx context.Context, installation *ent.Integration, connection types.ConnectionRegistration, bindings types.CredentialBindings, input json.RawMessage) (types.IntegrationInstallationMetadata, error) {
+	if connection.Integration == nil {
+		return selfInstanceMetadata(installation), nil
 	}
 
-	return r.saveInstallationMetadata(systemCtx, installation, metadata)
+	metadata, ok, err := connection.Integration.Resolve(ctx, types.InstallationRequest{
+		Integration: installation,
+		Connection:  connection,
+		Credentials: bindings,
+		Config:      installation.Config,
+		Input:       input,
+	})
+	if err != nil {
+		return types.IntegrationInstallationMetadata{}, err
+	}
+
+	if !ok || metadata.Display.ExternalID == "" {
+		return types.IntegrationInstallationMetadata{}, ErrInstallationInstanceIDRequired
+	}
+
+	return metadata, nil
 }
 
 // saveInstallationMetadata persists installation metadata and syncs the normalized
@@ -268,8 +288,14 @@ func (r *Runtime) RefreshInstallationMetadata(ctx context.Context, installation 
 		return err
 	}
 
+	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 	if state.CredentialRef == (types.CredentialSlotID{}) {
-		return nil
+		if len(def.Connections) > 0 {
+			return nil
+		}
+
+		return r.saveInstallationMetadata(systemCtx, installation, selfInstanceMetadata(installation))
 	}
 
 	connection, err := def.ConnectionRegistration(state.CredentialRef)
@@ -277,30 +303,36 @@ func (r *Runtime) RefreshInstallationMetadata(ctx context.Context, installation 
 		return err
 	}
 
-	if connection.Integration == nil {
-		return nil
-	}
-
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	bindings, err := r.loadCredentials(systemCtx, installation, connection.CredentialRefs)
 	if err != nil {
 		return err
 	}
 
-	metadata, ok, err := connection.Integration.Resolve(systemCtx, types.InstallationRequest{
-		Integration: installation,
-		Connection:  connection,
-		Credentials: bindings,
-		Config:      installation.Config,
-	})
-	if err != nil || !ok {
+	metadata, err := resolveConnectionIdentity(systemCtx, installation, connection, bindings, nil)
+	if err != nil {
 		return err
 	}
 
 	metadata.Display.CredentialRef = state.CredentialRef.String()
 
 	return r.saveInstallationMetadata(systemCtx, installation, metadata)
+}
+
+// EnsureInstallationInstance resolves and stores the installation's instance id when it is missing, so ingest never runs without provenance
+func (r *Runtime) EnsureInstallationInstance(ctx context.Context, installation *ent.Integration) error {
+	if installation.InstallationMetadata.Display.ExternalID != "" {
+		return nil
+	}
+
+	if err := r.RefreshInstallationMetadata(ctx, installation); err != nil {
+		return err
+	}
+
+	if installation.InstallationMetadata.Display.ExternalID == "" {
+		return ErrInstallationInstanceIDRequired
+	}
+
+	return nil
 }
 
 // reconcileCredential validates, health-checks, and persists one credential for an installation
@@ -344,23 +376,9 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		return err
 	}
 
-	var metadata types.IntegrationInstallationMetadata
-
-	if connection.Integration != nil {
-		resolved, ok, err := connection.Integration.Resolve(systemCtx, types.InstallationRequest{
-			Integration: installation,
-			Connection:  connection,
-			Credentials: bindings,
-			Config:      installation.Config,
-			Input:       installationInput,
-		})
-		if err != nil {
-			return err
-		}
-
-		if ok {
-			metadata = resolved
-		}
+	metadata, err := resolveConnectionIdentity(systemCtx, installation, connection, bindings, installationInput)
+	if err != nil {
+		return err
 	}
 
 	metadata.Display.CredentialRef = credentialRef.String()

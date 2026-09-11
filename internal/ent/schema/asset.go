@@ -165,7 +165,7 @@ func (Asset) Fields() []ent.Field {
 			Comment("integration that discovered this asset, when sourced via integration ingest").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
+				entx.IntegrationMappingField().SystemControlled(),
 			),
 		field.Time("observed_at").
 			Comment("time when this asset was last observed by the source integration").
@@ -191,7 +191,7 @@ func (Asset) Indexes() []ent.Index {
 func (a Asset) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{},
+			ProvenanceMixin{SchemaType: a},
 			newObjectOwnedMixin[generated.Asset](a,
 				withParents(Platform{}, Entity{}),
 				withOrganizationOwner(),
@@ -280,6 +280,7 @@ func (a Asset) Modules() []models.OrgModule {
 func (Asset) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookAssetCreate(),
+		hooks.HookAssetInternalOwner(),
 	}
 }
 

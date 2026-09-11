@@ -543,30 +543,6 @@ func (f DirectoryMembershipMutationRuleFunc) EvalMutation(ctx context.Context, m
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.DirectoryMembershipMutation", m)
 }
 
-// The DirectorySyncRunQueryRuleFunc type is an adapter to allow the use of ordinary
-// functions as a query rule.
-type DirectorySyncRunQueryRuleFunc func(context.Context, *generated.DirectorySyncRunQuery) error
-
-// EvalQuery return f(ctx, q).
-func (f DirectorySyncRunQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.DirectorySyncRunQuery); ok {
-		return f(ctx, q)
-	}
-	return Denyf("generated/privacy: unexpected query type %T, expect *generated.DirectorySyncRunQuery", q)
-}
-
-// The DirectorySyncRunMutationRuleFunc type is an adapter to allow the use of ordinary
-// functions as a mutation rule.
-type DirectorySyncRunMutationRuleFunc func(context.Context, *generated.DirectorySyncRunMutation) error
-
-// EvalMutation calls f(ctx, m).
-func (f DirectorySyncRunMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
-	if m, ok := m.(*generated.DirectorySyncRunMutation); ok {
-		return f(ctx, m)
-	}
-	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.DirectorySyncRunMutation", m)
-}
-
 // The DiscussionQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type DiscussionQueryRuleFunc func(context.Context, *generated.DiscussionQuery) error
@@ -2582,8 +2558,6 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.DirectoryMembershipQuery:
 		return q.Filter(), nil
-	case *generated.DirectorySyncRunQuery:
-		return q.Filter(), nil
 	case *generated.DiscussionQuery:
 		return q.Filter(), nil
 	case *generated.DocumentDataQuery:
@@ -2788,8 +2762,6 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.DirectoryGroupMutation:
 		return m.Filter(), nil
 	case *generated.DirectoryMembershipMutation:
-		return m.Filter(), nil
-	case *generated.DirectorySyncRunMutation:
 		return m.Filter(), nil
 	case *generated.DiscussionMutation:
 		return m.Filter(), nil

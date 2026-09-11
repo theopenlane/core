@@ -65,9 +65,13 @@ type ActionPlanHistory implements Node {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the name of the action_plan
 	"""
@@ -509,6 +513,20 @@ input ActionPlanHistoryWhereInput {
 	managedByNotNil: Boolean
 	managedByEqualFold: String
 	managedByContainsFold: String
+	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -1756,9 +1774,13 @@ type AssetHistory implements Node {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -2184,6 +2206,20 @@ input AssetHistoryWhereInput {
 	managedByNotNil: Boolean
 	managedByEqualFold: String
 	managedByContainsFold: String
+	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -3907,9 +3943,13 @@ type ContactHistory implements Node {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the organization id that owns the object
 	"""
@@ -4196,6 +4236,20 @@ input ContactHistoryWhereInput {
 	managedByNotNil: Boolean
 	managedByEqualFold: String
 	managedByContainsFold: String
+	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -7424,9 +7478,13 @@ type EntityHistory implements Node {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -7956,6 +8014,20 @@ input EntityHistoryWhereInput {
 	managedByNotNil: Boolean
 	managedByEqualFold: String
 	managedByContainsFold: String
+	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -10416,9 +10488,13 @@ type FindingHistory implements Node {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -10896,6 +10972,20 @@ input FindingHistoryWhereInput {
 	managedByNotNil: Boolean
 	managedByEqualFold: String
 	managedByContainsFold: String
+	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -13501,9 +13591,13 @@ type InternalPolicyHistory implements Node {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the organization id that owns the object
 	"""
@@ -13920,6 +14014,20 @@ input InternalPolicyHistoryWhereInput {
 	managedByNotNil: Boolean
 	managedByEqualFold: String
 	managedByContainsFold: String
+	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -18969,9 +19077,13 @@ type ProcedureHistory implements Node {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the organization id that owns the object
 	"""
@@ -19384,6 +19496,20 @@ input ProcedureHistoryWhereInput {
 	managedByNotNil: Boolean
 	managedByEqualFold: String
 	managedByContainsFold: String
+	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -23867,9 +23993,13 @@ type RiskHistory implements Node {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -24312,6 +24442,20 @@ input RiskHistoryWhereInput {
 	managedByNotNil: Boolean
 	managedByEqualFold: String
 	managedByContainsFold: String
+	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -32622,9 +32766,13 @@ type VulnerabilityHistory implements Node {
 	"""
 	sourceInstanceID: String
 	"""
-	virtual subject id of the integration definition managing the record, empty when user controlled
+	id of the integration installation managing the record, empty when the record is unclaimed
 	"""
 	managedBy: String
+	"""
+	id of the integration run that last wrote this record
+	"""
+	integrationRunID: String
 	"""
 	the ID of the organization owner of the object
 	"""
@@ -33122,6 +33270,20 @@ input VulnerabilityHistoryWhereInput {
 	managedByNotNil: Boolean
 	managedByEqualFold: String
 	managedByContainsFold: String
+	"""
+	integration_run_id field predicates
+	"""
+	integrationRunID: String
+	integrationRunIDNEQ: String
+	integrationRunIDIn: [String!]
+	integrationRunIDNotIn: [String!]
+	integrationRunIDContains: String
+	integrationRunIDHasPrefix: String
+	integrationRunIDHasSuffix: String
+	integrationRunIDIsNil: Boolean
+	integrationRunIDNotNil: Boolean
+	integrationRunIDEqualFold: String
+	integrationRunIDContainsFold: String
 	"""
 	owner_id field predicates
 	"""

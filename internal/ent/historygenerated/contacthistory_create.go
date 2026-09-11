@@ -219,6 +219,20 @@ func (_c *ContactHistoryCreate) SetNillableManagedBy(v *string) *ContactHistoryC
 	return _c
 }
 
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *ContactHistoryCreate) SetIntegrationRunID(v string) *ContactHistoryCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *ContactHistoryCreate) SetNillableIntegrationRunID(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *ContactHistoryCreate) SetOwnerID(v string) *ContactHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -578,6 +592,10 @@ func (_c *ContactHistoryCreate) createSpec() (*ContactHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.ManagedBy(); ok {
 		_spec.SetField(contacthistory.FieldManagedBy, field.TypeString, value)
 		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(contacthistory.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
 	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(contacthistory.FieldOwnerID, field.TypeString, value)

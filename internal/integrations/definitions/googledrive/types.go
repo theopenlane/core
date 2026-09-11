@@ -13,8 +13,6 @@ import (
 var (
 	// definitionID is the stable identifier for the Google Drive integration definition
 	definitionID = types.NewDefinitionRef("def_01K0GDRIVE00000000000000001")
-	// VirtualUser is the virtual actor identity for records created by this definition's installations
-	VirtualUser = types.NewVirtualUserRef("01VRTACTRZZV8PWQWVNH5A2MCT")
 	// installation is the typed installation metadata handle for the Google Drive definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// driveCredential is the credential slot for Google Drive OAuth credentials

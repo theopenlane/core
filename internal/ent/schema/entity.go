@@ -317,7 +317,7 @@ func (Entity) Fields() []ent.Field {
 func (e Entity) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{},
+			ProvenanceMixin{SchemaType: e},
 			newObjectOwnedMixin[generated.Entity](e,
 				withParents(TrustCenterEntity{}, Platform{}, SystemDetail{}),
 				withOrganizationOwner(),

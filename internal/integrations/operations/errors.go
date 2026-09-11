@@ -43,6 +43,8 @@ var (
 	ErrIngestPersistFailed = errors.New("integrations/operations: ingest persistence failed")
 	// ErrIngestIntegrationUnresolved indicates the integration record could not be resolved for an ingest operation
 	ErrIngestIntegrationUnresolved = errors.New("integrations/operations: ingest integration unresolved")
+	// ErrIngestInstanceIDRequired indicates the installation carries no source instance id, which every ingested record needs for provenance
+	ErrIngestInstanceIDRequired = errors.New("integrations/operations: ingest installation instance id required")
 
 	// ErrIngestIntegrationRemoved indicates the integration installation was removed while ingest record jobs were still queued
 	ErrIngestIntegrationRemoved = errors.New("integrations/operations: ingest integration removed")

@@ -27,7 +27,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 // mapExprDirectoryMembership is the CEL mapping expression for Cloudflare policy payloads mapped to DirectoryMembership
 var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`payload.group_id`),
-	entityops.DirectoryMembershipFields.DirectoryAccountID.Expr(`payload.user_id`),
+	entityops.DirectoryMembershipFields.DirectoryAccountID.Expr(`'user_id' in payload && payload.user_id != "" ? payload.user_id : ('email' in payload ? payload.email : "")`),
 	entityops.DirectoryMembershipFields.Metadata.Expr("payload"),
 )
 
@@ -46,7 +46,7 @@ var mapExprFinding = providerkit.CelMapExpr(
 	entityops.FindingFields.FindingStatusName.Expr(`'dismissed' in payload && payload.dismissed ? "Dismissed" : ('user_classification' in payload && payload.user_classification == "false_positive" ? "False Positive" : ('status' in payload ? payload.status : ""))`),
 	entityops.FindingFields.State.Expr(`'status' in payload ? payload.status : ""`),
 	entityops.FindingFields.References.Expr(`'resolve_link' in payload && payload.resolve_link != "" ? [payload.resolve_link] : []`),
-	entityops.FindingFields.Description.Expr(`'payload' in payload && 'detection_method' in payload.payload ? payload.payload.detection_method : ""`),
+	entityops.FindingFields.Description.Expr(`paragraphs('payload' in payload && 'detection_method' in payload.payload ? payload.payload.detection_method : "")`),
 	entityops.FindingFields.EventTime.Expr(`'timestamp' in payload && payload.timestamp != "" ? payload.timestamp : null`),
 	entityops.FindingFields.Severity.Expr(`'severity' in payload ? payload.severity : ""`),
 	entityops.FindingFields.ExternalURI.Expr(`'resolve_link' in payload ? payload.resolve_link : ""`),

@@ -63,7 +63,7 @@ func (Risk) Fields() []ent.Field {
 			Comment("integration that surfaced this risk, when sourced via integration ingest").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
+				entx.IntegrationMappingField().SystemControlled(),
 			),
 		field.Time("observed_at").
 			Comment("time when this risk was last observed by the source integration").
@@ -421,7 +421,7 @@ func (r Risk) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "RSK",
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{},
+			ProvenanceMixin{SchemaType: r},
 			// risks inherit permissions from the associated programs, but must have an organization as well
 			// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
 			// it will also create program parent tuples for the risk when a program is associated to the risk

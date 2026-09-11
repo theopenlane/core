@@ -24,7 +24,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
@@ -640,6 +639,8 @@ func init() {
 	asset.Hooks[18] = assetMixinHooks19[0]
 
 	asset.Hooks[19] = assetHooks[0]
+
+	asset.Hooks[20] = assetHooks[1]
 	assetMixinInters3 := assetMixin[3].Interceptors()
 	assetMixinInters8 := assetMixin[8].Interceptors()
 	asset.Interceptors[0] = assetMixinInters3[0]
@@ -1746,30 +1747,26 @@ func init() {
 	directoryaccountDescIntegrationID := directoryaccountFields[0].Descriptor()
 	// directoryaccount.IntegrationIDValidator is a validator for the "integration_id" field. It is called by the builders before save.
 	directoryaccount.IntegrationIDValidator = directoryaccountDescIntegrationID.Validators[0].(func(string) error)
-	// directoryaccountDescDirectorySyncRunID is the schema descriptor for directory_sync_run_id field.
-	directoryaccountDescDirectorySyncRunID := directoryaccountFields[1].Descriptor()
-	// directoryaccount.DirectorySyncRunIDValidator is a validator for the "directory_sync_run_id" field. It is called by the builders before save.
-	directoryaccount.DirectorySyncRunIDValidator = directoryaccountDescDirectorySyncRunID.Validators[0].(func(string) error)
 	// directoryaccountDescPlatformID is the schema descriptor for platform_id field.
-	directoryaccountDescPlatformID := directoryaccountFields[2].Descriptor()
+	directoryaccountDescPlatformID := directoryaccountFields[1].Descriptor()
 	// directoryaccount.PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
 	directoryaccount.PlatformIDValidator = directoryaccountDescPlatformID.Validators[0].(func(string) error)
 	// directoryaccountDescExternalID is the schema descriptor for external_id field.
-	directoryaccountDescExternalID := directoryaccountFields[6].Descriptor()
+	directoryaccountDescExternalID := directoryaccountFields[4].Descriptor()
 	// directoryaccount.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	directoryaccount.ExternalIDValidator = directoryaccountDescExternalID.Validators[0].(func(string) error)
 	// directoryaccountDescEmailAliases is the schema descriptor for email_aliases field.
-	directoryaccountDescEmailAliases := directoryaccountFields[9].Descriptor()
+	directoryaccountDescEmailAliases := directoryaccountFields[7].Descriptor()
 	// directoryaccount.DefaultEmailAliases holds the default value on creation for the email_aliases field.
 	directoryaccount.DefaultEmailAliases = directoryaccountDescEmailAliases.Default.([]string)
 	// directoryaccount.EmailAliasesValidator is a validator for the "email_aliases" field. It is called by the builders before save.
 	directoryaccount.EmailAliasesValidator = directoryaccountDescEmailAliases.Validators[0].(func([]string) error)
 	// directoryaccountDescPhoneNumber is the schema descriptor for phone_number field.
-	directoryaccountDescPhoneNumber := directoryaccountFields[10].Descriptor()
+	directoryaccountDescPhoneNumber := directoryaccountFields[8].Descriptor()
 	// directoryaccount.PhoneNumberValidator is a validator for the "phone_number" field. It is called by the builders before save.
 	directoryaccount.PhoneNumberValidator = directoryaccountDescPhoneNumber.Validators[0].(func(string) error)
 	// directoryaccountDescAvatarRemoteURL is the schema descriptor for avatar_remote_url field.
-	directoryaccountDescAvatarRemoteURL := directoryaccountFields[12].Descriptor()
+	directoryaccountDescAvatarRemoteURL := directoryaccountFields[10].Descriptor()
 	// directoryaccount.AvatarRemoteURLValidator is a validator for the "avatar_remote_url" field. It is called by the builders before save.
 	directoryaccount.AvatarRemoteURLValidator = func() func(string) error {
 		validators := directoryaccountDescAvatarRemoteURL.Validators
@@ -1787,19 +1784,15 @@ func init() {
 		}
 	}()
 	// directoryaccountDescAvatarUpdatedAt is the schema descriptor for avatar_updated_at field.
-	directoryaccountDescAvatarUpdatedAt := directoryaccountFields[14].Descriptor()
+	directoryaccountDescAvatarUpdatedAt := directoryaccountFields[12].Descriptor()
 	// directoryaccount.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
 	directoryaccount.DefaultAvatarUpdatedAt = directoryaccountDescAvatarUpdatedAt.Default.(func() time.Time)
 	// directoryaccountDescObservedAt is the schema descriptor for observed_at field.
-	directoryaccountDescObservedAt := directoryaccountFields[29].Descriptor()
+	directoryaccountDescObservedAt := directoryaccountFields[27].Descriptor()
 	// directoryaccount.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directoryaccount.DefaultObservedAt = directoryaccountDescObservedAt.Default.(func() time.Time)
-	// directoryaccountDescProfileHash is the schema descriptor for profile_hash field.
-	directoryaccountDescProfileHash := directoryaccountFields[30].Descriptor()
-	// directoryaccount.DefaultProfileHash holds the default value on creation for the profile_hash field.
-	directoryaccount.DefaultProfileHash = directoryaccountDescProfileHash.Default.(string)
 	// directoryaccountDescPrimarySource is the schema descriptor for primary_source field.
-	directoryaccountDescPrimarySource := directoryaccountFields[35].Descriptor()
+	directoryaccountDescPrimarySource := directoryaccountFields[32].Descriptor()
 	// directoryaccount.DefaultPrimarySource holds the default value on creation for the primary_source field.
 	directoryaccount.DefaultPrimarySource = directoryaccountDescPrimarySource.Default.(bool)
 	// directoryaccountDescID is the schema descriptor for id field.
@@ -1879,30 +1872,22 @@ func init() {
 	directorygroupDescPlatformID := directorygroupFields[1].Descriptor()
 	// directorygroup.PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
 	directorygroup.PlatformIDValidator = directorygroupDescPlatformID.Validators[0].(func(string) error)
-	// directorygroupDescDirectorySyncRunID is the schema descriptor for directory_sync_run_id field.
-	directorygroupDescDirectorySyncRunID := directorygroupFields[3].Descriptor()
-	// directorygroup.DirectorySyncRunIDValidator is a validator for the "directory_sync_run_id" field. It is called by the builders before save.
-	directorygroup.DirectorySyncRunIDValidator = directorygroupDescDirectorySyncRunID.Validators[0].(func(string) error)
 	// directorygroupDescExternalID is the schema descriptor for external_id field.
-	directorygroupDescExternalID := directorygroupFields[4].Descriptor()
+	directorygroupDescExternalID := directorygroupFields[2].Descriptor()
 	// directorygroup.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	directorygroup.ExternalIDValidator = directorygroupDescExternalID.Validators[0].(func(string) error)
 	// directorygroupDescEmail is the schema descriptor for email field.
-	directorygroupDescEmail := directorygroupFields[5].Descriptor()
+	directorygroupDescEmail := directorygroupFields[3].Descriptor()
 	// directorygroup.EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	directorygroup.EmailValidator = directorygroupDescEmail.Validators[0].(func(string) error)
 	// directorygroupDescExternalSharingAllowed is the schema descriptor for external_sharing_allowed field.
-	directorygroupDescExternalSharingAllowed := directorygroupFields[10].Descriptor()
+	directorygroupDescExternalSharingAllowed := directorygroupFields[8].Descriptor()
 	// directorygroup.DefaultExternalSharingAllowed holds the default value on creation for the external_sharing_allowed field.
 	directorygroup.DefaultExternalSharingAllowed = directorygroupDescExternalSharingAllowed.Default.(bool)
 	// directorygroupDescObservedAt is the schema descriptor for observed_at field.
-	directorygroupDescObservedAt := directorygroupFields[16].Descriptor()
+	directorygroupDescObservedAt := directorygroupFields[14].Descriptor()
 	// directorygroup.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directorygroup.DefaultObservedAt = directorygroupDescObservedAt.Default.(func() time.Time)
-	// directorygroupDescProfileHash is the schema descriptor for profile_hash field.
-	directorygroupDescProfileHash := directorygroupFields[17].Descriptor()
-	// directorygroup.DefaultProfileHash holds the default value on creation for the profile_hash field.
-	directorygroup.DefaultProfileHash = directorygroupDescProfileHash.Default.(string)
 	// directorygroupDescID is the schema descriptor for id field.
 	directorygroupDescID := directorygroupMixinFields3[0].Descriptor()
 	// directorygroup.DefaultID holds the default value on creation for the id field.
@@ -1971,106 +1956,22 @@ func init() {
 	directorymembershipDescPlatformID := directorymembershipFields[1].Descriptor()
 	// directorymembership.PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
 	directorymembership.PlatformIDValidator = directorymembershipDescPlatformID.Validators[0].(func(string) error)
-	// directorymembershipDescDirectorySyncRunID is the schema descriptor for directory_sync_run_id field.
-	directorymembershipDescDirectorySyncRunID := directorymembershipFields[3].Descriptor()
-	// directorymembership.DirectorySyncRunIDValidator is a validator for the "directory_sync_run_id" field. It is called by the builders before save.
-	directorymembership.DirectorySyncRunIDValidator = directorymembershipDescDirectorySyncRunID.Validators[0].(func(string) error)
 	// directorymembershipDescDirectoryAccountID is the schema descriptor for directory_account_id field.
-	directorymembershipDescDirectoryAccountID := directorymembershipFields[4].Descriptor()
+	directorymembershipDescDirectoryAccountID := directorymembershipFields[2].Descriptor()
 	// directorymembership.DirectoryAccountIDValidator is a validator for the "directory_account_id" field. It is called by the builders before save.
 	directorymembership.DirectoryAccountIDValidator = directorymembershipDescDirectoryAccountID.Validators[0].(func(string) error)
 	// directorymembershipDescDirectoryGroupID is the schema descriptor for directory_group_id field.
-	directorymembershipDescDirectoryGroupID := directorymembershipFields[5].Descriptor()
+	directorymembershipDescDirectoryGroupID := directorymembershipFields[3].Descriptor()
 	// directorymembership.DirectoryGroupIDValidator is a validator for the "directory_group_id" field. It is called by the builders before save.
 	directorymembership.DirectoryGroupIDValidator = directorymembershipDescDirectoryGroupID.Validators[0].(func(string) error)
 	// directorymembershipDescObservedAt is the schema descriptor for observed_at field.
-	directorymembershipDescObservedAt := directorymembershipFields[13].Descriptor()
+	directorymembershipDescObservedAt := directorymembershipFields[11].Descriptor()
 	// directorymembership.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directorymembership.DefaultObservedAt = directorymembershipDescObservedAt.Default.(func() time.Time)
 	// directorymembershipDescID is the schema descriptor for id field.
 	directorymembershipDescID := directorymembershipMixinFields3[0].Descriptor()
 	// directorymembership.DefaultID holds the default value on creation for the id field.
 	directorymembership.DefaultID = directorymembershipDescID.Default.(func() string)
-	directorysyncrunMixin := schema.DirectorySyncRun{}.Mixin()
-	directorysyncrun.Policy = privacy.NewPolicies(schema.DirectorySyncRun{})
-	directorysyncrun.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := directorysyncrun.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	directorysyncrunMixinHooks0 := directorysyncrunMixin[0].Hooks()
-	directorysyncrunMixinHooks1 := directorysyncrunMixin[1].Hooks()
-	directorysyncrunMixinHooks3 := directorysyncrunMixin[3].Hooks()
-	directorysyncrunMixinHooks5 := directorysyncrunMixin[5].Hooks()
-	directorysyncrunMixinHooks6 := directorysyncrunMixin[6].Hooks()
-	directorysyncrunMixinHooks7 := directorysyncrunMixin[7].Hooks()
-
-	directorysyncrun.Hooks[1] = directorysyncrunMixinHooks0[0]
-
-	directorysyncrun.Hooks[2] = directorysyncrunMixinHooks1[0]
-
-	directorysyncrun.Hooks[3] = directorysyncrunMixinHooks3[0]
-
-	directorysyncrun.Hooks[4] = directorysyncrunMixinHooks5[0]
-
-	directorysyncrun.Hooks[5] = directorysyncrunMixinHooks6[0]
-
-	directorysyncrun.Hooks[6] = directorysyncrunMixinHooks7[0]
-	directorysyncrunMixinInters5 := directorysyncrunMixin[5].Interceptors()
-	directorysyncrun.Interceptors[0] = directorysyncrunMixinInters5[0]
-	directorysyncrunMixinFields0 := directorysyncrunMixin[0].Fields()
-	_ = directorysyncrunMixinFields0
-	directorysyncrunMixinFields3 := directorysyncrunMixin[3].Fields()
-	_ = directorysyncrunMixinFields3
-	directorysyncrunMixinFields5 := directorysyncrunMixin[5].Fields()
-	_ = directorysyncrunMixinFields5
-	directorysyncrunFields := schema.DirectorySyncRun{}.Fields()
-	_ = directorysyncrunFields
-	// directorysyncrunDescCreatedAt is the schema descriptor for created_at field.
-	directorysyncrunDescCreatedAt := directorysyncrunMixinFields0[0].Descriptor()
-	// directorysyncrun.DefaultCreatedAt holds the default value on creation for the created_at field.
-	directorysyncrun.DefaultCreatedAt = directorysyncrunDescCreatedAt.Default.(func() time.Time)
-	// directorysyncrunDescUpdatedAt is the schema descriptor for updated_at field.
-	directorysyncrunDescUpdatedAt := directorysyncrunMixinFields0[1].Descriptor()
-	// directorysyncrun.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	directorysyncrun.DefaultUpdatedAt = directorysyncrunDescUpdatedAt.Default.(func() time.Time)
-	// directorysyncrun.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	directorysyncrun.UpdateDefaultUpdatedAt = directorysyncrunDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// directorysyncrunDescDisplayID is the schema descriptor for display_id field.
-	directorysyncrunDescDisplayID := directorysyncrunMixinFields3[1].Descriptor()
-	// directorysyncrun.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
-	directorysyncrun.DisplayIDValidator = directorysyncrunDescDisplayID.Validators[0].(func(string) error)
-	// directorysyncrunDescOwnerID is the schema descriptor for owner_id field.
-	directorysyncrunDescOwnerID := directorysyncrunMixinFields5[0].Descriptor()
-	// directorysyncrun.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	directorysyncrun.OwnerIDValidator = directorysyncrunDescOwnerID.Validators[0].(func(string) error)
-	// directorysyncrunDescIntegrationID is the schema descriptor for integration_id field.
-	directorysyncrunDescIntegrationID := directorysyncrunFields[0].Descriptor()
-	// directorysyncrun.IntegrationIDValidator is a validator for the "integration_id" field. It is called by the builders before save.
-	directorysyncrun.IntegrationIDValidator = directorysyncrunDescIntegrationID.Validators[0].(func(string) error)
-	// directorysyncrunDescPlatformID is the schema descriptor for platform_id field.
-	directorysyncrunDescPlatformID := directorysyncrunFields[1].Descriptor()
-	// directorysyncrun.PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
-	directorysyncrun.PlatformIDValidator = directorysyncrunDescPlatformID.Validators[0].(func(string) error)
-	// directorysyncrunDescStartedAt is the schema descriptor for started_at field.
-	directorysyncrunDescStartedAt := directorysyncrunFields[4].Descriptor()
-	// directorysyncrun.DefaultStartedAt holds the default value on creation for the started_at field.
-	directorysyncrun.DefaultStartedAt = directorysyncrunDescStartedAt.Default.(func() time.Time)
-	// directorysyncrunDescFullCount is the schema descriptor for full_count field.
-	directorysyncrunDescFullCount := directorysyncrunFields[7].Descriptor()
-	// directorysyncrun.DefaultFullCount holds the default value on creation for the full_count field.
-	directorysyncrun.DefaultFullCount = directorysyncrunDescFullCount.Default.(int)
-	// directorysyncrunDescDeltaCount is the schema descriptor for delta_count field.
-	directorysyncrunDescDeltaCount := directorysyncrunFields[8].Descriptor()
-	// directorysyncrun.DefaultDeltaCount holds the default value on creation for the delta_count field.
-	directorysyncrun.DefaultDeltaCount = directorysyncrunDescDeltaCount.Default.(int)
-	// directorysyncrunDescID is the schema descriptor for id field.
-	directorysyncrunDescID := directorysyncrunMixinFields3[0].Descriptor()
-	// directorysyncrun.DefaultID holds the default value on creation for the id field.
-	directorysyncrun.DefaultID = directorysyncrunDescID.Default.(func() string)
 	discussionMixin := schema.Discussion{}.Mixin()
 	discussion.Policy = privacy.NewPolicies(schema.Discussion{})
 	discussion.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -3808,7 +3709,7 @@ func init() {
 	// integrationrun.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	integrationrun.OwnerIDValidator = integrationrunDescOwnerID.Validators[0].(func(string) error)
 	// integrationrunDescStartedAt is the schema descriptor for started_at field.
-	integrationrunDescStartedAt := integrationrunFields[7].Descriptor()
+	integrationrunDescStartedAt := integrationrunFields[6].Descriptor()
 	// integrationrun.DefaultStartedAt holds the default value on creation for the started_at field.
 	integrationrun.DefaultStartedAt = integrationrunDescStartedAt.Default.(func() time.Time)
 	// integrationrunDescID is the schema descriptor for id field.
@@ -5221,13 +5122,11 @@ func init() {
 
 	organization.Hooks[78] = organizationMixinHooks7[73]
 
-	organization.Hooks[79] = organizationMixinHooks7[74]
+	organization.Hooks[79] = organizationHooks[0]
 
-	organization.Hooks[80] = organizationHooks[0]
+	organization.Hooks[80] = organizationHooks[1]
 
-	organization.Hooks[81] = organizationHooks[1]
-
-	organization.Hooks[82] = organizationHooks[2]
+	organization.Hooks[81] = organizationHooks[2]
 	organizationMixinInters3 := organizationMixin[3].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters3[0]

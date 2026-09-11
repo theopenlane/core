@@ -168,6 +168,11 @@ func (_q *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, actionplanhistory.FieldManagedBy)
 				fieldSeen[actionplanhistory.FieldManagedBy] = struct{}{}
 			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[actionplanhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldIntegrationRunID)
+				fieldSeen[actionplanhistory.FieldIntegrationRunID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[actionplanhistory.FieldName]; !ok {
 				selectedFields = append(selectedFields, actionplanhistory.FieldName)
@@ -939,6 +944,11 @@ func (_q *AssetHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 			if _, ok := fieldSeen[assethistory.FieldManagedBy]; !ok {
 				selectedFields = append(selectedFields, assethistory.FieldManagedBy)
 				fieldSeen[assethistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[assethistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, assethistory.FieldIntegrationRunID)
+				fieldSeen[assethistory.FieldIntegrationRunID] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[assethistory.FieldOwnerID]; !ok {
@@ -1796,6 +1806,11 @@ func (_q *ContactHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[contacthistory.FieldManagedBy]; !ok {
 				selectedFields = append(selectedFields, contacthistory.FieldManagedBy)
 				fieldSeen[contacthistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[contacthistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, contacthistory.FieldIntegrationRunID)
+				fieldSeen[contacthistory.FieldIntegrationRunID] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[contacthistory.FieldOwnerID]; !ok {
@@ -3434,6 +3449,11 @@ func (_q *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, entityhistory.FieldManagedBy)
 				fieldSeen[entityhistory.FieldManagedBy] = struct{}{}
 			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[entityhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldIntegrationRunID)
+				fieldSeen[entityhistory.FieldIntegrationRunID] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[entityhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, entityhistory.FieldOwnerID)
@@ -4703,6 +4723,11 @@ func (_q *FindingHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[findinghistory.FieldManagedBy]; !ok {
 				selectedFields = append(selectedFields, findinghistory.FieldManagedBy)
 				fieldSeen[findinghistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[findinghistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldIntegrationRunID)
+				fieldSeen[findinghistory.FieldIntegrationRunID] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[findinghistory.FieldOwnerID]; !ok {
@@ -6112,6 +6137,11 @@ func (_q *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[internalpolicyhistory.FieldManagedBy]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldManagedBy)
 				fieldSeen[internalpolicyhistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldIntegrationRunID)
+				fieldSeen[internalpolicyhistory.FieldIntegrationRunID] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[internalpolicyhistory.FieldOwnerID]; !ok {
@@ -8617,6 +8647,11 @@ func (_q *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, procedurehistory.FieldManagedBy)
 				fieldSeen[procedurehistory.FieldManagedBy] = struct{}{}
 			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[procedurehistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldIntegrationRunID)
+				fieldSeen[procedurehistory.FieldIntegrationRunID] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[procedurehistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldOwnerID)
@@ -9851,6 +9886,11 @@ func (_q *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[riskhistory.FieldManagedBy]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldManagedBy)
 				fieldSeen[riskhistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[riskhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldIntegrationRunID)
+				fieldSeen[riskhistory.FieldIntegrationRunID] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[riskhistory.FieldOwnerID]; !ok {
@@ -14030,6 +14070,11 @@ func (_q *VulnerabilityHistoryQuery) collectField(ctx context.Context, oneNode b
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldManagedBy]; !ok {
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldManagedBy)
 				fieldSeen[vulnerabilityhistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldIntegrationRunID)
+				fieldSeen[vulnerabilityhistory.FieldIntegrationRunID] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldOwnerID]; !ok {

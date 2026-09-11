@@ -11,8 +11,6 @@ import (
 var (
 	// definitionID is the stable identifier for the Oracle Cloud Infrastructure integration definition
 	definitionID = types.NewDefinitionRef("def_01K0OCI00000000000000000001")
-	// VirtualUser is the virtual actor identity for records created by this definition's installations
-	VirtualUser = types.NewVirtualUserRef("01VRTACTRJS7KEW3RYSQHBNF82")
 	// installation is the typed installation metadata handle for the Oracle Cloud Infrastructure definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// ociSchema is the credential schema for Oracle Cloud Infrastructure API signing key credentials

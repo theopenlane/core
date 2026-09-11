@@ -26,6 +26,7 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
 			managedBy
 			metadata
@@ -100,6 +101,7 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
 			managedBy
 			metadata
@@ -174,6 +176,7 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
 			managedBy
 			metadata
@@ -337,6 +340,7 @@ query GetFindingByID ($findingId: ID!) {
 		findingStatusName
 		id
 		impact
+		integrationRunID
 		internalNotes
 		managedBy
 		metadata
@@ -508,6 +512,7 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
 			managedBy
 			metadata
@@ -585,6 +590,7 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
 			managedBy
 			metadata
@@ -662,6 +668,7 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
 			managedBy
 			metadata

@@ -51,11 +51,7 @@ var provenanceStamps = []provenanceStamp{
 	{Schema: "vulnerability", Apply: stampVulnerabilityProvenance},
 }
 
-// backfillIntegrationProvenance stamps source_definition_id, source_definition_version, and
-// source_instance_id on existing integration-sourced records that predate the provenance fields.
-// Only rows with no provenance are written, the instance identity comes from the installation's
-// freshly re-resolved metadata, and the writes run as the integration virtual actor with
-// audit-log bypass
+// backfillIntegrationProvenance stamps provenance fields on existing integration-sourced records that predate them
 func backfillIntegrationProvenance(ctx context.Context, dbClient *ent.Client, rt *runtime.Runtime) {
 	ctx = entityops.WithEmissionVetoed(auth.EnsureIntegrationCaller(ctx, ""))
 
@@ -108,7 +104,8 @@ func backfillIntegrationProvenance(ctx context.Context, dbClient *ent.Client, rt
 func stampActionPlanProvenance(ctx context.Context, db *ent.Client, installation *ent.Integration, instanceID string) (int, error) {
 	update := db.ActionPlan.Update().
 		Where(actionplan.HasIntegrationsWith(integration.ID(installation.ID)), actionplan.Or(actionplan.SourceDefinitionIDIsNil(), actionplan.SourceDefinitionID(""))).
-		SetSourceDefinitionID(installation.DefinitionID)
+		SetSourceDefinitionID(installation.DefinitionID).
+		SetManagedBy(installation.ID)
 
 	if installation.DefinitionVersion != "" {
 		update.SetSourceDefinitionVersion(installation.DefinitionVersion)
@@ -125,7 +122,8 @@ func stampActionPlanProvenance(ctx context.Context, db *ent.Client, installation
 func stampAssetProvenance(ctx context.Context, db *ent.Client, installation *ent.Integration, instanceID string) (int, error) {
 	update := db.Asset.Update().
 		Where(asset.IntegrationID(installation.ID), asset.Or(asset.SourceDefinitionIDIsNil(), asset.SourceDefinitionID(""))).
-		SetSourceDefinitionID(installation.DefinitionID)
+		SetSourceDefinitionID(installation.DefinitionID).
+		SetManagedBy(installation.ID)
 
 	if installation.DefinitionVersion != "" {
 		update.SetSourceDefinitionVersion(installation.DefinitionVersion)
@@ -142,7 +140,8 @@ func stampAssetProvenance(ctx context.Context, db *ent.Client, installation *ent
 func stampCheckResultProvenance(ctx context.Context, db *ent.Client, installation *ent.Integration, instanceID string) (int, error) {
 	update := db.CheckResult.Update().
 		Where(checkresult.IntegrationID(installation.ID), checkresult.Or(checkresult.SourceDefinitionIDIsNil(), checkresult.SourceDefinitionID(""))).
-		SetSourceDefinitionID(installation.DefinitionID)
+		SetSourceDefinitionID(installation.DefinitionID).
+		SetManagedBy(installation.ID)
 
 	if installation.DefinitionVersion != "" {
 		update.SetSourceDefinitionVersion(installation.DefinitionVersion)
@@ -159,7 +158,8 @@ func stampCheckResultProvenance(ctx context.Context, db *ent.Client, installatio
 func stampContactProvenance(ctx context.Context, db *ent.Client, installation *ent.Integration, instanceID string) (int, error) {
 	update := db.Contact.Update().
 		Where(contact.IntegrationID(installation.ID), contact.Or(contact.SourceDefinitionIDIsNil(), contact.SourceDefinitionID(""))).
-		SetSourceDefinitionID(installation.DefinitionID)
+		SetSourceDefinitionID(installation.DefinitionID).
+		SetManagedBy(installation.ID)
 
 	if installation.DefinitionVersion != "" {
 		update.SetSourceDefinitionVersion(installation.DefinitionVersion)
@@ -176,7 +176,8 @@ func stampContactProvenance(ctx context.Context, db *ent.Client, installation *e
 func stampDirectoryAccountProvenance(ctx context.Context, db *ent.Client, installation *ent.Integration, instanceID string) (int, error) {
 	update := db.DirectoryAccount.Update().
 		Where(directoryaccount.IntegrationID(installation.ID), directoryaccount.Or(directoryaccount.SourceDefinitionIDIsNil(), directoryaccount.SourceDefinitionID(""))).
-		SetSourceDefinitionID(installation.DefinitionID)
+		SetSourceDefinitionID(installation.DefinitionID).
+		SetManagedBy(installation.ID)
 
 	if installation.DefinitionVersion != "" {
 		update.SetSourceDefinitionVersion(installation.DefinitionVersion)
@@ -193,7 +194,8 @@ func stampDirectoryAccountProvenance(ctx context.Context, db *ent.Client, instal
 func stampDirectoryGroupProvenance(ctx context.Context, db *ent.Client, installation *ent.Integration, instanceID string) (int, error) {
 	update := db.DirectoryGroup.Update().
 		Where(directorygroup.IntegrationID(installation.ID), directorygroup.Or(directorygroup.SourceDefinitionIDIsNil(), directorygroup.SourceDefinitionID(""))).
-		SetSourceDefinitionID(installation.DefinitionID)
+		SetSourceDefinitionID(installation.DefinitionID).
+		SetManagedBy(installation.ID)
 
 	if installation.DefinitionVersion != "" {
 		update.SetSourceDefinitionVersion(installation.DefinitionVersion)
@@ -210,7 +212,8 @@ func stampDirectoryGroupProvenance(ctx context.Context, db *ent.Client, installa
 func stampDirectoryMembershipProvenance(ctx context.Context, db *ent.Client, installation *ent.Integration, instanceID string) (int, error) {
 	update := db.DirectoryMembership.Update().
 		Where(directorymembership.IntegrationID(installation.ID), directorymembership.Or(directorymembership.SourceDefinitionIDIsNil(), directorymembership.SourceDefinitionID(""))).
-		SetSourceDefinitionID(installation.DefinitionID)
+		SetSourceDefinitionID(installation.DefinitionID).
+		SetManagedBy(installation.ID)
 
 	if installation.DefinitionVersion != "" {
 		update.SetSourceDefinitionVersion(installation.DefinitionVersion)
@@ -227,7 +230,8 @@ func stampDirectoryMembershipProvenance(ctx context.Context, db *ent.Client, ins
 func stampEntityProvenance(ctx context.Context, db *ent.Client, installation *ent.Integration, instanceID string) (int, error) {
 	update := db.Entity.Update().
 		Where(entity.HasIntegrationsWith(integration.ID(installation.ID)), entity.Or(entity.SourceDefinitionIDIsNil(), entity.SourceDefinitionID(""))).
-		SetSourceDefinitionID(installation.DefinitionID)
+		SetSourceDefinitionID(installation.DefinitionID).
+		SetManagedBy(installation.ID)
 
 	if installation.DefinitionVersion != "" {
 		update.SetSourceDefinitionVersion(installation.DefinitionVersion)
@@ -244,7 +248,8 @@ func stampEntityProvenance(ctx context.Context, db *ent.Client, installation *en
 func stampFindingProvenance(ctx context.Context, db *ent.Client, installation *ent.Integration, instanceID string) (int, error) {
 	update := db.Finding.Update().
 		Where(finding.HasIntegrationsWith(integration.ID(installation.ID)), finding.Or(finding.SourceDefinitionIDIsNil(), finding.SourceDefinitionID(""))).
-		SetSourceDefinitionID(installation.DefinitionID)
+		SetSourceDefinitionID(installation.DefinitionID).
+		SetManagedBy(installation.ID)
 
 	if installation.DefinitionVersion != "" {
 		update.SetSourceDefinitionVersion(installation.DefinitionVersion)
@@ -261,7 +266,8 @@ func stampFindingProvenance(ctx context.Context, db *ent.Client, installation *e
 func stampInternalPolicyProvenance(ctx context.Context, db *ent.Client, installation *ent.Integration, instanceID string) (int, error) {
 	update := db.InternalPolicy.Update().
 		Where(internalpolicy.HasIntegrationsWith(integration.ID(installation.ID)), internalpolicy.Or(internalpolicy.SourceDefinitionIDIsNil(), internalpolicy.SourceDefinitionID(""))).
-		SetSourceDefinitionID(installation.DefinitionID)
+		SetSourceDefinitionID(installation.DefinitionID).
+		SetManagedBy(installation.ID)
 
 	if installation.DefinitionVersion != "" {
 		update.SetSourceDefinitionVersion(installation.DefinitionVersion)
@@ -278,7 +284,8 @@ func stampInternalPolicyProvenance(ctx context.Context, db *ent.Client, installa
 func stampRiskProvenance(ctx context.Context, db *ent.Client, installation *ent.Integration, instanceID string) (int, error) {
 	update := db.Risk.Update().
 		Where(risk.IntegrationID(installation.ID), risk.Or(risk.SourceDefinitionIDIsNil(), risk.SourceDefinitionID(""))).
-		SetSourceDefinitionID(installation.DefinitionID)
+		SetSourceDefinitionID(installation.DefinitionID).
+		SetManagedBy(installation.ID)
 
 	if installation.DefinitionVersion != "" {
 		update.SetSourceDefinitionVersion(installation.DefinitionVersion)
@@ -295,7 +302,8 @@ func stampRiskProvenance(ctx context.Context, db *ent.Client, installation *ent.
 func stampVulnerabilityProvenance(ctx context.Context, db *ent.Client, installation *ent.Integration, instanceID string) (int, error) {
 	update := db.Vulnerability.Update().
 		Where(vulnerability.HasIntegrationsWith(integration.ID(installation.ID)), vulnerability.Or(vulnerability.SourceDefinitionIDIsNil(), vulnerability.SourceDefinitionID(""))).
-		SetSourceDefinitionID(installation.DefinitionID)
+		SetSourceDefinitionID(installation.DefinitionID).
+		SetManagedBy(installation.ID)
 
 	if installation.DefinitionVersion != "" {
 		update.SetSourceDefinitionVersion(installation.DefinitionVersion)

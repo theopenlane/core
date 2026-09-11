@@ -12,8 +12,6 @@ import (
 var (
 	// definitionID is the stable identifier for the Google Workspace integration definition
 	definitionID = types.NewDefinitionRef("def_01K0GWKSP000000000000000001")
-	// VirtualUser is the virtual actor identity for records created by this definition's installations
-	VirtualUser = types.NewVirtualUserRef("01VRTACTRQ74XR56FTMP09D33A")
 	// installation is the typed installation metadata handle for the Google Workspace definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// workspaceCredential is the credential slot for Google Workspace OAuth credentials

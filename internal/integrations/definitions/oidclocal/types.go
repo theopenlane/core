@@ -10,8 +10,6 @@ import (
 var (
 	// definitionID is the stable identifier for the local OIDC integration definition
 	definitionID = types.NewDefinitionRef("def_01K0OIDCLOCAL000000000000001")
-	// VirtualUser is the virtual actor identity for records created by this definition's installations
-	VirtualUser = types.NewVirtualUserRef("01VRTACTRGQD5JDGZ1MEA2BZGM")
 	// installation is the typed installation metadata handle for the local OIDC definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// oidcCredential is the auth-managed credential slot used by the local OIDC connection

@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
@@ -208,6 +209,20 @@ func (_c *FindingCreate) SetManagedBy(v string) *FindingCreate {
 func (_c *FindingCreate) SetNillableManagedBy(v *string) *FindingCreate {
 	if v != nil {
 		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *FindingCreate) SetIntegrationRunID(v string) *FindingCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableIntegrationRunID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
 	}
 	return _c
 }
@@ -954,6 +969,21 @@ func (_c *FindingCreate) SetNillableID(v *string) *FindingCreate {
 	return _c
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_c *FindingCreate) AddIntegrationRunIDs(ids ...string) *FindingCreate {
+	_c.mutation.AddIntegrationRunIDs(ids...)
+	return _c
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_c *FindingCreate) AddIntegrationRuns(v ...*IntegrationRun) *FindingCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationRunIDs(ids...)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_c *FindingCreate) SetOwner(v *Organization) *FindingCreate {
 	return _c.SetOwnerID(v.ID)
@@ -1538,6 +1568,10 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 		_spec.SetField(finding.FieldManagedBy, field.TypeString, value)
 		_node.ManagedBy = value
 	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(finding.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
 	if value, ok := _c.mutation.ReviewedBy(); ok {
 		_spec.SetField(finding.FieldReviewedBy, field.TypeString, value)
 		_node.ReviewedBy = value
@@ -1721,6 +1755,22 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.RawPayload(); ok {
 		_spec.SetField(finding.FieldRawPayload, field.TypeJSON, value)
 		_node.RawPayload = value
+	}
+	if nodes := _c.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.IntegrationRunsTable,
+			Columns: finding.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -2,10 +2,8 @@ package operations
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"strings"
-	"sync"
 
 	"github.com/riverqueue/river"
 	"github.com/samber/lo"
@@ -15,14 +13,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
-
-func withDirectorySyncRunID(ctx context.Context, id string) context.Context {
-	return gala.DirectorySyncRunIDKey.Set(ctx, id)
-}
-
-func directorySyncRunIDFromContext(ctx context.Context) string {
-	return gala.DirectorySyncRunIDKey.GetOr(ctx, "")
-}
 
 // resolveIngestIntegration loads the installation referenced by the durable operation context
 func resolveIngestIntegration(ctx context.Context, client *ent.Client) (*ent.Integration, error) {
@@ -39,53 +29,6 @@ func resolveIngestIntegration(ctx context.Context, client *ent.Client) (*ent.Int
 	return integration, err
 }
 
-var (
-	bindIngestOnce sync.Once
-	bindIngestErr  error
-)
-
-// bindIngestPersistence attaches the supported operation-owned persistence implementations to
-// their generated schema capabilities.
-func bindIngestPersistence() error {
-	bindIngestOnce.Do(func() {
-		binds := []func() error{
-			func() error { return entityops.BindIngest(entityops.SchemaActionPlan, persistActionPlanInput) },
-			func() error { return entityops.BindIngest(entityops.SchemaAsset, persistAssetInput) },
-			func() error { return entityops.BindIngest(entityops.SchemaCheckResult, persistCheckResultInput) },
-			func() error { return entityops.BindIngest(entityops.SchemaContact, persistContactInput) },
-			func() error {
-				return entityops.BindIngest(entityops.SchemaDirectoryAccount, func(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryAccountInput) (string, bool, bool, error) {
-					return persistDirectoryAccountInput(ctx, db, integration, prepareDirectoryAccountInput(ctx, input))
-				})
-			},
-			func() error {
-				return entityops.BindIngest(entityops.SchemaDirectoryGroup, func(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryGroupInput) (string, bool, bool, error) {
-					return persistDirectoryGroupInput(ctx, db, integration, prepareDirectoryGroupInput(ctx, input))
-				})
-			},
-			func() error {
-				return entityops.BindIngest(entityops.SchemaDirectoryMembership, func(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryMembershipInput) (string, bool, bool, error) {
-					return persistDirectoryMembershipInput(ctx, db, integration, prepareDirectoryMembershipInput(ctx, input))
-				})
-			},
-			func() error { return entityops.BindIngest(entityops.SchemaEntity, persistEntityInput) },
-			func() error { return entityops.BindIngest(entityops.SchemaFinding, persistFindingInput) },
-			func() error { return entityops.BindIngest(entityops.SchemaInternalPolicy, persistInternalPolicyInput) },
-			func() error { return entityops.BindIngest(entityops.SchemaProcedure, persistProcedureInput) },
-			func() error { return entityops.BindIngest(entityops.SchemaRisk, persistRiskInput) },
-			func() error { return entityops.BindIngest(entityops.SchemaVulnerability, persistVulnerabilityInput) },
-		}
-
-		for _, bind := range binds {
-			if bindIngestErr = bind(); bindIngestErr != nil {
-				return
-			}
-		}
-	})
-
-	return bindIngestErr
-}
-
 // lookupIngestSchema returns the entityops schema when it supports mapped integration ingestion
 func lookupIngestSchema(schema string) (*entityops.Schema, bool) {
 	target, ok := entityops.LookupSchema(schema)
@@ -96,7 +39,7 @@ func lookupIngestSchema(schema string) (*entityops.Schema, bool) {
 	return target, true
 }
 
-// emitMappedRecord queues one durable schema-ingest command.
+// emitMappedRecord queues one durable schema-ingest command
 func emitMappedRecord(ctx context.Context, runtime *gala.Gala, integration *ent.Integration, operationName string, record mappedIngestRecord, options IngestOptions) error {
 	schema, ok := lookupIngestSchema(record.Schema)
 	if !ok {
@@ -109,25 +52,10 @@ func emitMappedRecord(ctx context.Context, runtime *gala.Gala, integration *ent.
 	request := entityops.IngestRequest{
 		OperationContext: buildIngestOperationContext(integration, options),
 		Input:            record.Payload,
+		RunID:            options.RunID,
 	}
 
 	return schema.EmitIngest(ctx, runtime, buildIngestHeaders(integration, operationName, record, options), request)
-}
-
-// persistMappedRecord is retained for synchronous callers (SCIM, directory syncs, and tests).
-// It shares the schema's generated preparation and bound persistence with the durable listener.
-func persistMappedRecord(ctx context.Context, db *ent.Client, integration *ent.Integration, schema string, payload json.RawMessage) (string, error) {
-	target, ok := lookupIngestSchema(schema)
-	if !ok {
-		return "", ErrIngestUnsupportedSchema
-	}
-	if err := bindIngestPersistence(); err != nil {
-		return "", err
-	}
-
-	id, _, _, err := target.PersistIngest(ctx, db, integration, payload)
-
-	return id, err
 }
 
 func buildIngestOperationContext(integration *ent.Integration, options IngestOptions) gala.OperationContext {
@@ -142,31 +70,4 @@ func buildIngestHeaders(integration *ent.Integration, operationName string, reco
 		properties["workflow_action_key"] = options.WorkflowMeta.ActionKey
 	}
 	return gala.Headers{Properties: lo.PickBy(properties, func(_ string, value string) bool { return value != "" }), Tags: []string{integration.DefinitionID, "schema_" + strings.ToLower(record.Schema)}}
-}
-
-// prepareDirectoryAccountInput stamps the directory sync run attribution the generated preparation
-// cannot supply; installation-derived defaults are applied by the schema's prepare
-func prepareDirectoryAccountInput(ctx context.Context, input ent.CreateDirectoryAccountInput) ent.CreateDirectoryAccountInput {
-	if runID := directorySyncRunIDFromContext(ctx); input.DirectorySyncRunID == nil && runID != "" {
-		input.DirectorySyncRunID = &runID
-	}
-	return input
-}
-
-// prepareDirectoryGroupInput stamps the directory sync run attribution the generated preparation
-// cannot supply; installation-derived defaults are applied by the schema's prepare
-func prepareDirectoryGroupInput(ctx context.Context, input ent.CreateDirectoryGroupInput) ent.CreateDirectoryGroupInput {
-	if runID := directorySyncRunIDFromContext(ctx); input.DirectorySyncRunID == "" && runID != "" {
-		input.DirectorySyncRunID = runID
-	}
-	return input
-}
-
-// prepareDirectoryMembershipInput stamps the directory sync run attribution the generated
-// preparation cannot supply; installation-derived defaults are applied by the schema's prepare
-func prepareDirectoryMembershipInput(ctx context.Context, input ent.CreateDirectoryMembershipInput) ent.CreateDirectoryMembershipInput {
-	if runID := directorySyncRunIDFromContext(ctx); input.DirectorySyncRunID == "" && runID != "" {
-		input.DirectorySyncRunID = runID
-	}
-	return input
 }

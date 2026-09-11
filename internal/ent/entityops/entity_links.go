@@ -37,6 +37,7 @@ func InjectCreateLinks(ctx context.Context, client *generated.Client, ownerID st
 		selector.Schema = edge.Target.SchemaDescriptor
 		selector.SourceSchema = schema.SchemaDescriptor
 		selector.SourceContext = payload
+		selector.Unique = edge.Unique
 
 		refs, err := selectTargets(ctx, client, ownerID, selector)
 		if err != nil {
@@ -70,4 +71,59 @@ func InjectCreateLinks(ctx context.Context, client *generated.Client, ownerID st
 	}
 
 	return payload, nil
+}
+
+// PrefetchLinkTargets issues one QueryByKey per key-matched link target field across a batch of
+// payloads, caching the results on the returned context so selectCandidates can answer per-payload
+// link resolution without a query per row
+func PrefetchLinkTargets(ctx context.Context, client *generated.Client, ownerID string, schema *Schema, payloads []json.RawMessage, links []LinkSpec) (context.Context, error) {
+	cache := linkTargetCache{}
+
+	for _, link := range links {
+		if link.Target.KeyMatch == nil {
+			continue
+		}
+
+		edge, found := schema.EdgeByName(link.Edge)
+		if !found {
+			return ctx, logError(ctx, SchemaRef{Schema: schema.Snake, Operation: refOpLink, Edge: link.Edge}, ErrEdgeNotFound, fmt.Errorf("%s has no linkable edge %s", schema.Name, link.Edge))
+		}
+
+		if edge.Target.QueryByKey == nil {
+			return ctx, fmt.Errorf("%w: %s", ErrKeyMatchUnsupported, edge.TargetType)
+		}
+
+		var values []string
+
+		for _, payload := range payloads {
+			values = append(values, collectKeyValues(payload, link.Target.KeyMatch)...)
+		}
+
+		values = lo.Uniq(lo.Without(values, ""))
+		if len(values) == 0 {
+			continue
+		}
+
+		field := link.Target.KeyMatch.TargetField
+
+		for _, chunk := range lo.Chunk(values, ingestQueryChunkSize) {
+			rows, err := edge.Target.QueryByKey(ctx, client, ownerID, field, chunk)
+			if err != nil {
+				return ctx, err
+			}
+
+			byValue := map[string][]json.RawMessage{}
+			for _, row := range rows {
+				value := lookupValue(row, field)
+				byValue[value] = append(byValue[value], row)
+			}
+
+			for _, value := range chunk {
+				key := linkTargetCacheKey{schema: edge.Target.Snake, field: field, value: value}
+				cache[key] = append(cache[key], byValue[value]...)
+			}
+		}
+	}
+
+	return linkTargetCacheContextKey.Set(ctx, cache), nil
 }

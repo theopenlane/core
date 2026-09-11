@@ -7,6 +7,7 @@ mutation CreateBulkCSVCheckResult ($input: Upload!) {
 			externalURI
 			id
 			integrationID
+			integrationRunID
 			lastObservedAt
 			managedBy
 			parentExternalID
@@ -31,6 +32,7 @@ mutation CreateBulkCheckResult ($input: [CreateCheckResultInput!]) {
 			externalURI
 			id
 			integrationID
+			integrationRunID
 			lastObservedAt
 			managedBy
 			parentExternalID
@@ -55,6 +57,7 @@ mutation CreateCheckResult ($input: CreateCheckResultInput!) {
 			externalURI
 			id
 			integrationID
+			integrationRunID
 			lastObservedAt
 			managedBy
 			parentExternalID
@@ -99,6 +102,7 @@ query GetAllCheckResults ($first: Int, $last: Int, $after: Cursor, $before: Curs
 				externalURI
 				id
 				integrationID
+				integrationRunID
 				lastObservedAt
 				managedBy
 				parentExternalID
@@ -123,6 +127,7 @@ query GetCheckResultByID ($checkResultId: ID!) {
 		externalURI
 		id
 		integrationID
+		integrationRunID
 		lastObservedAt
 		managedBy
 		parentExternalID
@@ -154,6 +159,7 @@ query GetCheckResults ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 				externalURI
 				id
 				integrationID
+				integrationRunID
 				lastObservedAt
 				managedBy
 				parentExternalID
@@ -179,6 +185,7 @@ mutation UpdateBulkCSVCheckResult ($input: Upload!) {
 			externalURI
 			id
 			integrationID
+			integrationRunID
 			lastObservedAt
 			managedBy
 			parentExternalID
@@ -206,6 +213,7 @@ mutation UpdateBulkCheckResult ($ids: [ID!]!, $input: UpdateCheckResultInput!) {
 			externalURI
 			id
 			integrationID
+			integrationRunID
 			lastObservedAt
 			managedBy
 			parentExternalID
@@ -233,6 +241,7 @@ mutation UpdateCheckResult ($updateCheckResultId: ID!, $input: UpdateCheckResult
 			externalURI
 			id
 			integrationID
+			integrationRunID
 			lastObservedAt
 			managedBy
 			parentExternalID

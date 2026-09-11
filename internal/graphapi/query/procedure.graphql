@@ -20,6 +20,7 @@ mutation CreateBulkCSVProcedure ($input: Upload!) {
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -79,6 +80,7 @@ mutation CreateBulkProcedure ($input: [CreateProcedureInput!]) {
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -138,6 +140,7 @@ mutation CreateProcedure ($input: CreateProcedureInput!) {
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -318,6 +321,7 @@ query GetProcedureByID ($procedureId: ID!) {
 		fileID
 		id
 		improvementSuggestions
+		integrationRunID
 		internalNotes
 		managedBy
 		managementMode
@@ -439,6 +443,7 @@ mutation UpdateBulkProcedure ($ids: [ID!]!, $input: UpdateProcedureInput!) {
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -501,6 +506,7 @@ mutation UpdateProcedure ($updateProcedureId: ID!, $input: UpdateProcedureInput!
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode

@@ -22,6 +22,10 @@ const (
 
 // ingestPayloadSets routes SCIM directory payloads through the standard ingest path
 func ingestPayloadSets(ctx context.Context, client *generated.Client, rt *integrationsruntime.Runtime, integration *generated.Integration, payloadSets []integrationtypes.IngestPayloadSet) error {
+	if err := rt.EnsureInstallationInstance(ctx, integration); err != nil {
+		return err
+	}
+
 	contracts := make([]integrationtypes.IngestContract, 0, len(payloadSets))
 	for _, ps := range payloadSets {
 		contracts = append(contracts, integrationtypes.IngestContract{Schema: ps.Schema})
@@ -37,6 +41,7 @@ func ingestPayloadSets(ctx context.Context, client *generated.Client, rt *integr
 		},
 		"",
 		contracts,
+		integrationtypes.ExecutionPolicy{Snapshot: true},
 		payloadSets,
 		integrationops.IngestOptions{},
 	)

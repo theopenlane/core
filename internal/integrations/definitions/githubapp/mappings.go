@@ -70,7 +70,7 @@ var (
 	mapExprDependabot = buildWebhookMappingExpr(githubAlertTypeDependabot, `"github:" + resource + ":dependabot:" + ('number' in payload && payload.number != 0 ? string(payload.number) : ('security_advisory' in payload && 'ghsa_id' in payload.security_advisory && payload.security_advisory.ghsa_id != "" ? payload.security_advisory.ghsa_id : "unknown"))`, []entityops.MappingEntry{
 		entityops.VulnerabilityFields.Severity.Expr(`'security_advisory' in payload && 'severity' in payload.security_advisory ? payload.security_advisory.severity : ""`),
 		entityops.VulnerabilityFields.Summary.Expr(`'security_advisory' in payload && 'summary' in payload.security_advisory ? payload.security_advisory.summary : ""`),
-		entityops.VulnerabilityFields.Description.Expr(`'security_advisory' in payload && 'description' in payload.security_advisory ? payload.security_advisory.description : ""`),
+		entityops.VulnerabilityFields.Description.Expr(`paragraphs('security_advisory' in payload && 'description' in payload.security_advisory ? payload.security_advisory.description : "")`),
 		entityops.VulnerabilityFields.CveID.Expr(`'security_advisory' in payload && 'cve_id' in payload.security_advisory ? payload.security_advisory.cve_id : ""`),
 		entityops.VulnerabilityFields.DisplayName.Expr(`'security_advisory' in payload && 'cve_id' in payload.security_advisory ? payload.security_advisory.cve_id : ""`),
 		entityops.VulnerabilityFields.Score.Expr(`'security_advisory' in payload && 'cvss' in payload.security_advisory && 'score' in payload.security_advisory.cvss ? payload.security_advisory.cvss.score : null`),
@@ -90,7 +90,7 @@ var (
 		entityops.VulnerabilityFields.DisplayName.Expr(`'SecurityVulnerability' in payload && 'Advisory' in payload.SecurityVulnerability && 'Identifiers' in payload.SecurityVulnerability.Advisory && payload.SecurityVulnerability.Advisory.Identifiers.filter(i, i.Type == "CVE").size() > 0 ? payload.SecurityVulnerability.Advisory.Identifiers.filter(i, i.Type == "CVE")[0].Value : 'GHSAID' in payload.SecurityVulnerability.Advisory ? payload.SecurityVulnerability.Advisory.GHSAID : ""`),
 		entityops.VulnerabilityFields.Severity.Expr(`'SecurityVulnerability' in payload && 'Severity' in payload.SecurityVulnerability ? payload.SecurityVulnerability.Severity : ""`),
 		entityops.VulnerabilityFields.Summary.Expr(`'SecurityVulnerability' in payload && 'Advisory' in payload.SecurityVulnerability && 'Summary' in payload.SecurityVulnerability.Advisory ? payload.SecurityVulnerability.Advisory.Summary : ""`),
-		entityops.VulnerabilityFields.Description.Expr(`'SecurityVulnerability' in payload && 'Advisory' in payload.SecurityVulnerability && 'Description' in payload.SecurityVulnerability.Advisory ? payload.SecurityVulnerability.Advisory.Description : ""`),
+		entityops.VulnerabilityFields.Description.Expr(`paragraphs('SecurityVulnerability' in payload && 'Advisory' in payload.SecurityVulnerability && 'Description' in payload.SecurityVulnerability.Advisory ? payload.SecurityVulnerability.Advisory.Description : "")`),
 		entityops.VulnerabilityFields.CveID.Expr(`'SecurityVulnerability' in payload && 'Advisory' in payload.SecurityVulnerability && 'Identifiers' in payload.SecurityVulnerability.Advisory && payload.SecurityVulnerability.Advisory.Identifiers.filter(i, i.Type == "CVE").size() > 0 ? payload.SecurityVulnerability.Advisory.Identifiers.filter(i, i.Type == "CVE")[0].Value : ""`),
 		entityops.VulnerabilityFields.Score.Expr(`'SecurityVulnerability' in payload && 'Advisory' in payload.SecurityVulnerability && 'CvssSeverities' in payload.SecurityVulnerability.Advisory && 'CvssV4' in payload.SecurityVulnerability.Advisory.CvssSeverities && payload.SecurityVulnerability.Advisory.CvssSeverities.CvssV4 != null ? payload.SecurityVulnerability.Advisory.CvssSeverities.CvssV4.Score : null`),
 		entityops.VulnerabilityFields.Vector.Expr(`'SecurityVulnerability' in payload && 'Advisory' in payload.SecurityVulnerability && 'CvssSeverities' in payload.SecurityVulnerability.Advisory && 'CvssV4' in payload.SecurityVulnerability.Advisory.CvssSeverities && payload.SecurityVulnerability.Advisory.CvssSeverities.CvssV4 != null ? payload.SecurityVulnerability.Advisory.CvssSeverities.CvssV4.VectorString : ""`),
@@ -108,14 +108,14 @@ var (
 	mapExprCodeScanning = buildWebhookMappingExpr(githubAlertTypeCodeScanning, `"github:" + resource + ":code_scanning:" + ('number' in payload && payload.number != 0 ? string(payload.number) : "unknown")`, []entityops.MappingEntry{
 		entityops.VulnerabilityFields.Severity.Expr(`'rule' in payload && 'security_severity_level' in payload.rule && payload.rule.security_severity_level != "" ? payload.rule.security_severity_level : ('rule' in payload && 'severity' in payload.rule ? payload.rule.severity : "")`),
 		entityops.VulnerabilityFields.Summary.Expr(`'rule' in payload && 'description' in payload.rule && payload.rule.description != "" ? payload.rule.description : ('rule' in payload && 'name' in payload.rule ? payload.rule.name : "")`),
-		entityops.VulnerabilityFields.Description.Expr(`'most_recent_instance' in payload && 'message' in payload.most_recent_instance && 'text' in payload.most_recent_instance.message ? payload.most_recent_instance.message.text : ""`),
+		entityops.VulnerabilityFields.Description.Expr(`paragraphs('most_recent_instance' in payload && 'message' in payload.most_recent_instance && 'text' in payload.most_recent_instance.message ? payload.most_recent_instance.message.text : "")`),
 	},
 	)
 	// mapExprSecretScanning is the CEL mapping expression for secret scanning webhook alert payloads
 	mapExprSecretScanning = buildWebhookMappingExpr(githubAlertTypeSecretScan, `"github:" + resource + ":secret_scanning:" + ('number' in payload && payload.number != 0 ? string(payload.number) : "unknown")`, []entityops.MappingEntry{
 		entityops.VulnerabilityFields.Severity.Expr(`"high"`),
 		entityops.VulnerabilityFields.Summary.Expr(`'secret_type_display_name' in payload && payload.secret_type_display_name != "" ? payload.secret_type_display_name : ('secret_type' in payload ? payload.secret_type : "")`),
-		entityops.VulnerabilityFields.Description.Expr(`'resolution' in payload ? payload.resolution : ""`),
+		entityops.VulnerabilityFields.Description.Expr(`paragraphs('resolution' in payload ? payload.resolution : "")`),
 	},
 	)
 )

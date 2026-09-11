@@ -9,8 +9,6 @@ import (
 var (
 	// definitionID is the stable identifier for the Authentik integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AUTHENTIK000000000000001")
-	// VirtualUser is the virtual actor identity for records created by this definition's installations
-	VirtualUser = types.NewVirtualUserRef("01VRTACTRB7TCZ1K24GKQK5DFM")
 	// integration is the typed installation metadata handle for the Authentik definition
 	integration = types.NewInstallationRef(resolveInstallationMetadata)
 	// authentikCredentialSchema is the JSON schema for the Authentik credential

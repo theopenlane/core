@@ -138,7 +138,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, operations.ErrOperationDisabled
 	}
 
-	runRecord, err := operations.CreatePendingRun(ctx, db, installation, envelope.Operation, enums.IntegrationRunTypeReconcile, nil)
+	runRecord, err := operations.CreatePendingRun(ctx, db, installation, operation, enums.IntegrationRunTypeReconcile, nil)
 	if err != nil {
 		return 0, err
 	}
@@ -197,18 +197,49 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, execErr
 	}
 
-	logx.FromContext(ctx).Info().Int("records", ingestResult.Attempted).Int("changed", ingestResult.Changed).Msg("reconcile operation completed")
+	delta := ingestResult.Changed
+	fanout := operation.Policy.Fanout
 
-	if err := operations.CompleteRun(ctx, db, runRecord.ID, startedAt, operations.RunResult{
+	metrics := operations.IngestMetrics(ingestResult)
+	metrics["response"] = jsonx.DecodeAnyOrNil(response)
+
+	if fanout {
+		prevRunID, runIDErr := operations.LastSuccessfulRunID(ctx, db, src.IntegrationID, envelope.Operation)
+		if runIDErr != nil {
+			return 0, runIDErr
+		}
+
+		if prevRunID != "" {
+			linked, countErr := operations.LinkedRecordCount(ctx, db, installation.OwnerID, prevRunID)
+			if countErr != nil {
+				return 0, countErr
+			}
+
+			delta = linked
+		} else {
+			delta = 0
+		}
+	}
+
+	logx.FromContext(ctx).Info().Int("records", ingestResult.Attempted).Int("changed", delta).Msg("reconcile operation completed")
+
+	summary := "operation completed"
+	if operation.IngestHandle != nil {
+		summary = operations.IngestRunSummary(ingestResult)
+	}
+
+	runResult := operations.RunResult{
 		Status:  enums.IntegrationRunStatusSuccess,
-		Summary: "operation completed",
-		Metrics: map[string]any{
-			"records":  ingestResult.Attempted,
-			"changed":  ingestResult.Changed,
-			"response": jsonx.DecodeAnyOrNil(response),
-		},
-	}); err != nil {
-		return ingestResult.Changed, err
+		Summary: summary,
+		Metrics: metrics,
+	}
+
+	if ingestResult.Failed > 0 {
+		runResult.Error = operations.RecordFailureSummary(ingestResult)
+	}
+
+	if err := operations.CompleteRun(ctx, db, runRecord.ID, startedAt, runResult); err != nil {
+		return delta, err
 	}
 
 	if outputErr := river.RecordOutput(ctx, reconcileOutput{
@@ -220,10 +251,10 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		Status:        enums.IntegrationRunStatusSuccess,
 		DurationMS:    time.Since(startedAt).Milliseconds(),
 	}); outputErr != nil {
-		return ingestResult.Changed, outputErr
+		return delta, outputErr
 	}
 
-	return ingestResult.Changed, nil
+	return delta, nil
 }
 
 // ExecuteOperation runs one integration operation inline without run tracking
@@ -334,7 +365,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 
 	ingestOptions := operations.IngestOptionsFromOperationContext(oc)
 
-	response, _, err := r.executeResolvedOperation(ctx, integration, operation, nil, envelope.Config, envelope.ForceClientRebuild, ingestOptions)
+	response, ingestResult, err := r.executeResolvedOperation(ctx, integration, operation, nil, envelope.Config, envelope.ForceClientRebuild, ingestOptions)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("operation failed")
 
@@ -343,16 +374,28 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 
 	logx.FromContext(ctx).Info().Msg("operation completed")
 
+	summary := "operation completed"
+	if operation.IngestHandle != nil {
+		summary = operations.IngestRunSummary(ingestResult)
+	}
+
+	metrics := operations.IngestMetrics(ingestResult)
+	metrics["response"] = jsonx.DecodeAnyOrNil(response)
+
+	runResult := operations.RunResult{
+		Status:  enums.IntegrationRunStatusSuccess,
+		Summary: summary,
+		Metrics: metrics,
+	}
+
+	if ingestResult.Failed > 0 {
+		runResult.Error = operations.RecordFailureSummary(ingestResult)
+	}
+
 	var completeErr error
 
 	if tracked {
-		completeErr = operations.CompleteRun(ctx, db, src.RunID, startedAt, operations.RunResult{
-			Status:  enums.IntegrationRunStatusSuccess,
-			Summary: "operation completed",
-			Metrics: map[string]any{
-				"response": jsonx.DecodeAnyOrNil(response),
-			},
-		})
+		completeErr = operations.CompleteRun(ctx, db, src.RunID, startedAt, runResult)
 	}
 
 	if r.postExecutionHook != nil {
@@ -424,6 +467,10 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 	}
 
 	if operation.IngestHandle != nil {
+		if err := r.EnsureInstallationInstance(ctx, integration); err != nil {
+			return nil, operations.IngestResult{}, err
+		}
+
 		payloadSets, err := operation.IngestHandle(ctx, req)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("ingest handle failed")
@@ -443,7 +490,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 			DB:          r.DB(),
 			Runtime:     r.Gala(),
 			Integration: integration,
-		}, operation.Name, operation.Ingest, payloadSets, ingestOptions)
+		}, operation.Name, operation.Ingest, operation.Policy, payloadSets, ingestOptions)
 		if err != nil {
 			return nil, operations.IngestResult{}, err
 		}

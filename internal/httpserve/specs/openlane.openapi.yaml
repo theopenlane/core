@@ -727,6 +727,8 @@ components:
                                         policy:
                                             description: ExecutionPolicy controls synchronous execution behavior for one operation
                                             properties:
+                                                fanout:
+                                                    type: boolean
                                                 inline:
                                                     type: boolean
                                                 reconcile:
@@ -734,6 +736,8 @@ components:
                                                 scheduled:
                                                     type: boolean
                                                 skipRunRecord:
+                                                    type: boolean
+                                                snapshot:
                                                     type: boolean
                                             type: object
                                         requiredPermissions:

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/oklog/ulid/v2"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
@@ -28,8 +27,6 @@ type Registry struct {
 	webhookEventsByTopic map[gala.TopicName]types.WebhookEventRegistration
 	// galaListeners collects standalone gala listener registrations across definitions
 	galaListeners []types.GalaListenerRegistration
-	// virtualSubjects maps a virtual actor subject id to the definition ID declaring it
-	virtualSubjects map[string]string
 }
 
 // definitionEntry captures the indexed details for one registered definition
@@ -57,7 +54,6 @@ func New() *Registry {
 		definitions:          map[string]definitionEntry{},
 		operationsByTopic:    map[gala.TopicName]types.OperationRegistration{},
 		webhookEventsByTopic: map[gala.TopicName]types.WebhookEventRegistration{},
-		virtualSubjects:      map[string]string{},
 	}
 }
 
@@ -84,7 +80,6 @@ func (r *Registry) Register(def types.Definition) error {
 	}
 
 	r.definitions[def.ID] = entry
-	r.virtualSubjects[def.VirtualUser.SubjectID()] = def.ID
 
 	for _, operation := range entry.operations {
 		r.operationsByTopic[operation.Topic] = operation
@@ -170,18 +165,6 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 
 	if _, exists := r.definitions[def.ID]; exists {
 		return ErrDefinitionAlreadyRegistered
-	}
-
-	if def.VirtualUser == (types.VirtualUserRef{}) {
-		return fmt.Errorf("%w: %s", ErrVirtualUserRequired, def.ID)
-	}
-
-	if _, err := ulid.Parse(def.VirtualUser.SubjectID()); err != nil {
-		return fmt.Errorf("%w: %s", ErrVirtualUserSubjectInvalid, def.ID)
-	}
-
-	if owner, exists := r.virtualSubjects[def.VirtualUser.SubjectID()]; exists {
-		return fmt.Errorf("%w: %s and %s", ErrVirtualUserSubjectDuplicate, owner, def.ID)
 	}
 
 	if def.OperatorConfig != nil && len(def.OperatorConfig.Schema) == 0 {
@@ -554,6 +537,10 @@ func indexOperations(operations []types.OperationRegistration, clients map[types
 			return nil, ErrOperationHandlerAmbiguous
 		case operation.IngestHandle != nil && len(operation.Ingest) == 0:
 			return nil, ErrIngestContractsRequired
+		}
+
+		if operation.Policy.Snapshot && operation.IngestHandle == nil {
+			return nil, ErrIngestSnapshotRequiresIngestHandle
 		}
 
 		if operation.ClientRef.Valid() {

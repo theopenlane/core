@@ -60,7 +60,6 @@ func TestDispatchWebhookEventUnknownWebhookName(t *testing.T) {
 
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 	})
 
@@ -79,7 +78,6 @@ func TestEnsureWebhookNameNotRegistered(t *testing.T) {
 
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 	})
 

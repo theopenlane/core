@@ -190,6 +190,8 @@ type ComplexityRoot struct {
 		HasWorkflowHistory              func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
+		IntegrationRunID                func(childComplexity int) int
+		IntegrationRuns                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalNotes                   func(childComplexity int) int
 		ManagedBy                       func(childComplexity int) int
@@ -446,6 +448,8 @@ type ComplexityRoot struct {
 		IdentityHolders               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		Integration                   func(childComplexity int) int
 		IntegrationID                 func(childComplexity int) int
+		IntegrationRunID              func(childComplexity int) int
+		IntegrationRuns               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		InternalNotes                 func(childComplexity int) int
 		InternalOwner                 func(childComplexity int) int
 		InternalOwnerGroup            func(childComplexity int) int
@@ -724,6 +728,8 @@ type ComplexityRoot struct {
 		ID                      func(childComplexity int) int
 		Integration             func(childComplexity int) int
 		IntegrationID           func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		LastObservedAt          func(childComplexity int) int
 		ManagedBy               func(childComplexity int) int
 		ParentExternalID        func(childComplexity int) int
@@ -793,6 +799,8 @@ type ComplexityRoot struct {
 		FullName                func(childComplexity int) int
 		ID                      func(childComplexity int) int
 		IntegrationID           func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		ManagedBy               func(childComplexity int) int
 		ObservedAt              func(childComplexity int) int
 		Owner                   func(childComplexity int) int
@@ -1439,10 +1447,7 @@ type ComplexityRoot struct {
 		CreatedAt               func(childComplexity int) int
 		CreatedBy               func(childComplexity int) int
 		Department              func(childComplexity int) int
-		DirectoryInstanceID     func(childComplexity int) int
 		DirectoryName           func(childComplexity int) int
-		DirectorySyncRun        func(childComplexity int) int
-		DirectorySyncRunID      func(childComplexity int) int
 		DisplayID               func(childComplexity int) int
 		DisplayName             func(childComplexity int) int
 		EmailAliases            func(childComplexity int) int
@@ -1460,6 +1465,8 @@ type ComplexityRoot struct {
 		IdentityHolderID        func(childComplexity int) int
 		Integration             func(childComplexity int) int
 		IntegrationID           func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		JobTitle                func(childComplexity int) int
 		LastLoginAt             func(childComplexity int) int
 		LastSeenAt              func(childComplexity int) int
@@ -1477,7 +1484,6 @@ type ComplexityRoot struct {
 		PlatformID              func(childComplexity int) int
 		PrimarySource           func(childComplexity int) int
 		Profile                 func(childComplexity int) int
-		ProfileHash             func(childComplexity int) int
 		RawProfileFileID        func(childComplexity int) int
 		RemovedAt               func(childComplexity int) int
 		Scope                   func(childComplexity int) int
@@ -1530,10 +1536,7 @@ type ComplexityRoot struct {
 		CreatedAt               func(childComplexity int) int
 		CreatedBy               func(childComplexity int) int
 		Description             func(childComplexity int) int
-		DirectoryInstanceID     func(childComplexity int) int
 		DirectoryName           func(childComplexity int) int
-		DirectorySyncRun        func(childComplexity int) int
-		DirectorySyncRunID      func(childComplexity int) int
 		DisplayID               func(childComplexity int) int
 		DisplayName             func(childComplexity int) int
 		Email                   func(childComplexity int) int
@@ -1546,6 +1549,8 @@ type ComplexityRoot struct {
 		ID                      func(childComplexity int) int
 		Integration             func(childComplexity int) int
 		IntegrationID           func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		LastSeenAt              func(childComplexity int) int
 		ManagedBy               func(childComplexity int) int
 		MemberCount             func(childComplexity int) int
@@ -1557,7 +1562,6 @@ type ComplexityRoot struct {
 		Platform                func(childComplexity int) int
 		PlatformID              func(childComplexity int) int
 		Profile                 func(childComplexity int) int
-		ProfileHash             func(childComplexity int) int
 		RawProfileFileID        func(childComplexity int) int
 		RemovedAt               func(childComplexity int) int
 		Scope                   func(childComplexity int) int
@@ -1610,10 +1614,7 @@ type ComplexityRoot struct {
 		DirectoryAccountID      func(childComplexity int) int
 		DirectoryGroup          func(childComplexity int) int
 		DirectoryGroupID        func(childComplexity int) int
-		DirectoryInstanceID     func(childComplexity int) int
 		DirectoryName           func(childComplexity int) int
-		DirectorySyncRun        func(childComplexity int) int
-		DirectorySyncRunID      func(childComplexity int) int
 		DisplayID               func(childComplexity int) int
 		Environment             func(childComplexity int) int
 		EnvironmentID           func(childComplexity int) int
@@ -1623,7 +1624,8 @@ type ComplexityRoot struct {
 		ID                      func(childComplexity int) int
 		Integration             func(childComplexity int) int
 		IntegrationID           func(childComplexity int) int
-		LastConfirmedRunID      func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		LastSeenAt              func(childComplexity int) int
 		ManagedBy               func(childComplexity int) int
 		Metadata                func(childComplexity int) int
@@ -1672,68 +1674,6 @@ type ComplexityRoot struct {
 
 	DirectoryMembershipUpdatePayload struct {
 		DirectoryMembership func(childComplexity int) int
-	}
-
-	DirectorySyncRun struct {
-		CompletedAt           func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		DeltaCount            func(childComplexity int) int
-		DirectoryAccounts     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
-		DirectoryGroups       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
-		DirectoryInstanceID   func(childComplexity int) int
-		DirectoryMemberships  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
-		DisplayID             func(childComplexity int) int
-		Environment           func(childComplexity int) int
-		EnvironmentID         func(childComplexity int) int
-		EnvironmentName       func(childComplexity int) int
-		Error                 func(childComplexity int) int
-		FullCount             func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		Integration           func(childComplexity int) int
-		IntegrationID         func(childComplexity int) int
-		Owner                 func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Platform              func(childComplexity int) int
-		PlatformID            func(childComplexity int) int
-		RawManifestFileID     func(childComplexity int) int
-		Scope                 func(childComplexity int) int
-		ScopeID               func(childComplexity int) int
-		ScopeName             func(childComplexity int) int
-		SourceCursor          func(childComplexity int) int
-		StartedAt             func(childComplexity int) int
-		Stats                 func(childComplexity int) int
-		Status                func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-	}
-
-	DirectorySyncRunBulkCreatePayload struct {
-		DirectorySyncRuns func(childComplexity int) int
-	}
-
-	DirectorySyncRunConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	DirectorySyncRunCreatePayload struct {
-		DirectorySyncRun func(childComplexity int) int
-	}
-
-	DirectorySyncRunDeletePayload struct {
-		DeletedID func(childComplexity int) int
-	}
-
-	DirectorySyncRunEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
-	DirectorySyncRunUpdatePayload struct {
-		DirectorySyncRun func(childComplexity int) int
 	}
 
 	Discussion struct {
@@ -1982,6 +1922,8 @@ type ComplexityRoot struct {
 		HasSoc2                               func(childComplexity int) int
 		ID                                    func(childComplexity int) int
 		IdentityHolders                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
+		IntegrationRunID                      func(childComplexity int) int
+		IntegrationRuns                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		Integrations                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalNotes                         func(childComplexity int) int
 		InternalOwner                         func(childComplexity int) int
@@ -2485,6 +2427,8 @@ type ComplexityRoot struct {
 		ID                         func(childComplexity int) int
 		IdentityHolders            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		Impact                     func(childComplexity int) int
+		IntegrationRunID           func(childComplexity int) int
+		IntegrationRuns            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		Integrations               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalNotes              func(childComplexity int) int
 		ManagedBy                  func(childComplexity int) int
@@ -3091,7 +3035,6 @@ type ComplexityRoot struct {
 		DirectoryAccounts        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
 		DirectoryGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
 		DirectoryMemberships     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
-		DirectorySyncRuns        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
 		EmailTemplates           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
 		Entities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Environment              func(childComplexity int) int
@@ -3104,6 +3047,7 @@ type ComplexityRoot struct {
 		Findings                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		Health                   func(childComplexity int) int
 		ID                       func(childComplexity int) int
+		IntegrationRuns          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		IntegrationType          func(childComplexity int) int
 		InternalNotes            func(childComplexity int) int
 		InternalPolicies         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
@@ -3150,6 +3094,54 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	IntegrationRun struct {
+		ActionPlans           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Assets                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		CheckResults          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CheckResultOrder, where *generated.CheckResultWhereInput) int
+		Contacts              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DirectoryAccounts     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
+		DirectoryGroups       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
+		DirectoryMemberships  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
+		DurationMs            func(childComplexity int) int
+		Entities              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Error                 func(childComplexity int) int
+		Findings              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		FinishedAt            func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Integration           func(childComplexity int) int
+		IntegrationID         func(childComplexity int) int
+		InternalPolicies      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		Metrics               func(childComplexity int) int
+		OperationConfig       func(childComplexity int) int
+		OperationKind         func(childComplexity int) int
+		OperationName         func(childComplexity int) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Procedures            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		Risks                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		RunType               func(childComplexity int) int
+		StartedAt             func(childComplexity int) int
+		Status                func(childComplexity int) int
+		Summary               func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		Vulnerabilities       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+	}
+
+	IntegrationRunConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	IntegrationRunEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	InternalPolicy struct {
 		ActiveWorkflowInstances         func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
@@ -3188,6 +3180,8 @@ type ComplexityRoot struct {
 		ID                              func(childComplexity int) int
 		IdentityHolders                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		ImprovementSuggestions          func(childComplexity int) int
+		IntegrationRunID                func(childComplexity int) int
+		IntegrationRuns                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalNotes                   func(childComplexity int) int
 		InternalPolicyKind              func(childComplexity int) int
@@ -3482,7 +3476,6 @@ type ComplexityRoot struct {
 		CreateBulkCSVDirectoryAccount        func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDirectoryGroup          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDirectoryMembership     func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVDirectorySyncRun        func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDiscussion              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDocumentData            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEmailTemplate           func(childComplexity int, input graphql.Upload) int
@@ -3546,7 +3539,6 @@ type ComplexityRoot struct {
 		CreateBulkDirectoryAccount           func(childComplexity int, input []*generated.CreateDirectoryAccountInput) int
 		CreateBulkDirectoryGroup             func(childComplexity int, input []*generated.CreateDirectoryGroupInput) int
 		CreateBulkDirectoryMembership        func(childComplexity int, input []*generated.CreateDirectoryMembershipInput) int
-		CreateBulkDirectorySyncRun           func(childComplexity int, input []*generated.CreateDirectorySyncRunInput) int
 		CreateBulkDiscussion                 func(childComplexity int, input []*generated.CreateDiscussionInput) int
 		CreateBulkDocumentData               func(childComplexity int, input []*generated.CreateDocumentDataInput) int
 		CreateBulkEmailTemplate              func(childComplexity int, input []*generated.CreateEmailTemplateInput) int
@@ -3614,7 +3606,6 @@ type ComplexityRoot struct {
 		CreateDirectoryAccount               func(childComplexity int, input generated.CreateDirectoryAccountInput) int
 		CreateDirectoryGroup                 func(childComplexity int, input generated.CreateDirectoryGroupInput) int
 		CreateDirectoryMembership            func(childComplexity int, input generated.CreateDirectoryMembershipInput) int
-		CreateDirectorySyncRun               func(childComplexity int, input generated.CreateDirectorySyncRunInput) int
 		CreateDiscussion                     func(childComplexity int, input generated.CreateDiscussionInput) int
 		CreateDocumentData                   func(childComplexity int, input generated.CreateDocumentDataInput) int
 		CreateEmailTemplate                  func(childComplexity int, input generated.CreateEmailTemplateInput) int
@@ -3760,7 +3751,6 @@ type ComplexityRoot struct {
 		DeleteDirectoryAccount               func(childComplexity int, id string) int
 		DeleteDirectoryGroup                 func(childComplexity int, id string) int
 		DeleteDirectoryMembership            func(childComplexity int, id string) int
-		DeleteDirectorySyncRun               func(childComplexity int, id string) int
 		DeleteDiscussion                     func(childComplexity int, id string) int
 		DeleteDocumentData                   func(childComplexity int, id string) int
 		DeleteEmailTemplate                  func(childComplexity int, id string) int
@@ -3961,7 +3951,6 @@ type ComplexityRoot struct {
 		UpdateDirectoryAccount               func(childComplexity int, id string, input generated.UpdateDirectoryAccountInput) int
 		UpdateDirectoryGroup                 func(childComplexity int, id string, input generated.UpdateDirectoryGroupInput) int
 		UpdateDirectoryMembership            func(childComplexity int, id string, input generated.UpdateDirectoryMembershipInput) int
-		UpdateDirectorySyncRun               func(childComplexity int, id string, input generated.UpdateDirectorySyncRunInput) int
 		UpdateDiscussion                     func(childComplexity int, id string, input generated.UpdateDiscussionInput) int
 		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput, documentDataFile *graphql.Upload, documentDataFileMetadata *model.FileMetadataInput) int
 		UpdateEmailTemplate                  func(childComplexity int, id string, input generated.UpdateEmailTemplateInput) int
@@ -4504,8 +4493,6 @@ type ComplexityRoot struct {
 		DirectoryGroups                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
 		DirectoryMembershipCreators        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		DirectoryMemberships               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
-		DirectorySyncRunCreators           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		DirectorySyncRuns                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
 		DiscussionCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Discussions                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayName                        func(childComplexity int) int
@@ -4833,7 +4820,6 @@ type ComplexityRoot struct {
 		DirectoryAccounts              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
 		DirectoryGroups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
 		DirectoryMemberships           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
-		DirectorySyncRuns              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
 		DisplayID                      func(childComplexity int) int
 		Editors                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		EncryptionStatus               func(childComplexity int) int
@@ -4986,6 +4972,8 @@ type ComplexityRoot struct {
 		HasWorkflowHistory              func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
+		IntegrationRunID                func(childComplexity int) int
+		IntegrationRuns                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		InternalNotes                   func(childComplexity int) int
 		InternalPolicies                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		ManagedBy                       func(childComplexity int) int
@@ -5271,8 +5259,6 @@ type ComplexityRoot struct {
 		DirectoryGroups                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
 		DirectoryMembership             func(childComplexity int, id string) int
 		DirectoryMemberships            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
-		DirectorySyncRun                func(childComplexity int, id string) int
-		DirectorySyncRuns               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
 		Discussion                      func(childComplexity int, id string) int
 		Discussions                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DocumentData                    func(childComplexity int, id string) int
@@ -5313,6 +5299,7 @@ type ComplexityRoot struct {
 		IdentityHolderSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		IdentityHolders                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		Integration                     func(childComplexity int, id string) int
+		IntegrationRuns                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		IntegrationSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalPolicies                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
@@ -5706,6 +5693,8 @@ type ComplexityRoot struct {
 		ID                      func(childComplexity int) int
 		Impact                  func(childComplexity int) int
 		IntegrationID           func(childComplexity int) int
+		IntegrationRunID        func(childComplexity int) int
+		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		InternalPolicies        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		LastReviewedAt          func(childComplexity int) int
 		Likelihood              func(childComplexity int) int
@@ -7526,6 +7515,8 @@ type ComplexityRoot struct {
 		ID                         func(childComplexity int) int
 		Impact                     func(childComplexity int) int
 		Impacts                    func(childComplexity int) int
+		IntegrationRunID           func(childComplexity int) int
+		IntegrationRuns            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		Integrations               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalNotes              func(childComplexity int) int
 		ManagedBy                  func(childComplexity int) int
@@ -8542,6 +8533,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ActionPlan.ImprovementSuggestions(childComplexity), true
+	case "ActionPlan.integrationRunID":
+		if e.ComplexityRoot.ActionPlan.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlan.IntegrationRunID(childComplexity), true
+	case "ActionPlan.integrationRuns":
+		if e.ComplexityRoot.ActionPlan.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_ActionPlan_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.ActionPlan.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "ActionPlan.integrations":
 		if e.ComplexityRoot.ActionPlan.Integrations == nil {
 			break
@@ -9859,6 +9867,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Asset.IntegrationID(childComplexity), true
+	case "Asset.integrationRunID":
+		if e.ComplexityRoot.Asset.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Asset.IntegrationRunID(childComplexity), true
+	case "Asset.integrationRuns":
+		if e.ComplexityRoot.Asset.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Asset_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Asset.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "Asset.internalNotes":
 		if e.ComplexityRoot.Asset.InternalNotes == nil {
 			break
@@ -11208,6 +11233,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CheckResult.IntegrationID(childComplexity), true
+	case "CheckResult.integrationRunID":
+		if e.ComplexityRoot.CheckResult.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResult.IntegrationRunID(childComplexity), true
+	case "CheckResult.integrationRuns":
+		if e.ComplexityRoot.CheckResult.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_CheckResult_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.CheckResult.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "CheckResult.lastObservedAt":
 		if e.ComplexityRoot.CheckResult.LastObservedAt == nil {
 			break
@@ -11494,6 +11536,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Contact.IntegrationID(childComplexity), true
+	case "Contact.integrationRunID":
+		if e.ComplexityRoot.Contact.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Contact.IntegrationRunID(childComplexity), true
+	case "Contact.integrationRuns":
+		if e.ComplexityRoot.Contact.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Contact_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Contact.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "Contact.managedBy":
 		if e.ComplexityRoot.Contact.ManagedBy == nil {
 			break
@@ -14339,30 +14398,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryAccount.Department(childComplexity), true
-	case "DirectoryAccount.directoryInstanceID":
-		if e.ComplexityRoot.DirectoryAccount.DirectoryInstanceID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryAccount.DirectoryInstanceID(childComplexity), true
 	case "DirectoryAccount.directoryName":
 		if e.ComplexityRoot.DirectoryAccount.DirectoryName == nil {
 			break
 		}
 
 		return e.ComplexityRoot.DirectoryAccount.DirectoryName(childComplexity), true
-	case "DirectoryAccount.directorySyncRun":
-		if e.ComplexityRoot.DirectoryAccount.DirectorySyncRun == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryAccount.DirectorySyncRun(childComplexity), true
-	case "DirectoryAccount.directorySyncRunID":
-		if e.ComplexityRoot.DirectoryAccount.DirectorySyncRunID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryAccount.DirectorySyncRunID(childComplexity), true
 	case "DirectoryAccount.displayID":
 		if e.ComplexityRoot.DirectoryAccount.DisplayID == nil {
 			break
@@ -14475,6 +14516,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryAccount.IntegrationID(childComplexity), true
+	case "DirectoryAccount.integrationRunID":
+		if e.ComplexityRoot.DirectoryAccount.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryAccount.IntegrationRunID(childComplexity), true
+	case "DirectoryAccount.integrationRuns":
+		if e.ComplexityRoot.DirectoryAccount.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_DirectoryAccount_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.DirectoryAccount.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "DirectoryAccount.jobTitle":
 		if e.ComplexityRoot.DirectoryAccount.JobTitle == nil {
 			break
@@ -14582,12 +14640,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryAccount.Profile(childComplexity), true
-	case "DirectoryAccount.profileHash":
-		if e.ComplexityRoot.DirectoryAccount.ProfileHash == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryAccount.ProfileHash(childComplexity), true
 	case "DirectoryAccount.rawProfileFileID":
 		if e.ComplexityRoot.DirectoryAccount.RawProfileFileID == nil {
 			break
@@ -14791,30 +14843,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryGroup.Description(childComplexity), true
-	case "DirectoryGroup.directoryInstanceID":
-		if e.ComplexityRoot.DirectoryGroup.DirectoryInstanceID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryGroup.DirectoryInstanceID(childComplexity), true
 	case "DirectoryGroup.directoryName":
 		if e.ComplexityRoot.DirectoryGroup.DirectoryName == nil {
 			break
 		}
 
 		return e.ComplexityRoot.DirectoryGroup.DirectoryName(childComplexity), true
-	case "DirectoryGroup.directorySyncRun":
-		if e.ComplexityRoot.DirectoryGroup.DirectorySyncRun == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryGroup.DirectorySyncRun(childComplexity), true
-	case "DirectoryGroup.directorySyncRunID":
-		if e.ComplexityRoot.DirectoryGroup.DirectorySyncRunID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryGroup.DirectorySyncRunID(childComplexity), true
 	case "DirectoryGroup.displayID":
 		if e.ComplexityRoot.DirectoryGroup.DisplayID == nil {
 			break
@@ -14887,6 +14921,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryGroup.IntegrationID(childComplexity), true
+	case "DirectoryGroup.integrationRunID":
+		if e.ComplexityRoot.DirectoryGroup.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DirectoryGroup.IntegrationRunID(childComplexity), true
+	case "DirectoryGroup.integrationRuns":
+		if e.ComplexityRoot.DirectoryGroup.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_DirectoryGroup_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.DirectoryGroup.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "DirectoryGroup.lastSeenAt":
 		if e.ComplexityRoot.DirectoryGroup.LastSeenAt == nil {
 			break
@@ -14958,12 +15009,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryGroup.Profile(childComplexity), true
-	case "DirectoryGroup.profileHash":
-		if e.ComplexityRoot.DirectoryGroup.ProfileHash == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryGroup.ProfileHash(childComplexity), true
 	case "DirectoryGroup.rawProfileFileID":
 		if e.ComplexityRoot.DirectoryGroup.RawProfileFileID == nil {
 			break
@@ -15162,30 +15207,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryMembership.DirectoryGroupID(childComplexity), true
-	case "DirectoryMembership.directoryInstanceID":
-		if e.ComplexityRoot.DirectoryMembership.DirectoryInstanceID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryMembership.DirectoryInstanceID(childComplexity), true
 	case "DirectoryMembership.directoryName":
 		if e.ComplexityRoot.DirectoryMembership.DirectoryName == nil {
 			break
 		}
 
 		return e.ComplexityRoot.DirectoryMembership.DirectoryName(childComplexity), true
-	case "DirectoryMembership.directorySyncRun":
-		if e.ComplexityRoot.DirectoryMembership.DirectorySyncRun == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryMembership.DirectorySyncRun(childComplexity), true
-	case "DirectoryMembership.directorySyncRunID":
-		if e.ComplexityRoot.DirectoryMembership.DirectorySyncRunID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryMembership.DirectorySyncRunID(childComplexity), true
 	case "DirectoryMembership.displayID":
 		if e.ComplexityRoot.DirectoryMembership.DisplayID == nil {
 			break
@@ -15245,12 +15272,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryMembership.IntegrationID(childComplexity), true
-	case "DirectoryMembership.lastConfirmedRunID":
-		if e.ComplexityRoot.DirectoryMembership.LastConfirmedRunID == nil {
+	case "DirectoryMembership.integrationRunID":
+		if e.ComplexityRoot.DirectoryMembership.IntegrationRunID == nil {
 			break
 		}
 
-		return e.ComplexityRoot.DirectoryMembership.LastConfirmedRunID(childComplexity), true
+		return e.ComplexityRoot.DirectoryMembership.IntegrationRunID(childComplexity), true
+	case "DirectoryMembership.integrationRuns":
+		if e.ComplexityRoot.DirectoryMembership.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_DirectoryMembership_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.DirectoryMembership.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "DirectoryMembership.lastSeenAt":
 		if e.ComplexityRoot.DirectoryMembership.LastSeenAt == nil {
 			break
@@ -15442,274 +15480,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryMembershipUpdatePayload.DirectoryMembership(childComplexity), true
-
-	case "DirectorySyncRun.completedAt":
-		if e.ComplexityRoot.DirectorySyncRun.CompletedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.CompletedAt(childComplexity), true
-	case "DirectorySyncRun.createdAt":
-		if e.ComplexityRoot.DirectorySyncRun.CreatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.CreatedAt(childComplexity), true
-	case "DirectorySyncRun.createdBy":
-		if e.ComplexityRoot.DirectorySyncRun.CreatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.CreatedBy(childComplexity), true
-	case "DirectorySyncRun.deltaCount":
-		if e.ComplexityRoot.DirectorySyncRun.DeltaCount == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.DeltaCount(childComplexity), true
-	case "DirectorySyncRun.directoryAccounts":
-		if e.ComplexityRoot.DirectorySyncRun.DirectoryAccounts == nil {
-			break
-		}
-
-		args, err := ec.field_DirectorySyncRun_directoryAccounts_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.DirectoryAccounts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryAccountOrder), args["where"].(*generated.DirectoryAccountWhereInput)), true
-	case "DirectorySyncRun.directoryGroups":
-		if e.ComplexityRoot.DirectorySyncRun.DirectoryGroups == nil {
-			break
-		}
-
-		args, err := ec.field_DirectorySyncRun_directoryGroups_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.DirectoryGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryGroupOrder), args["where"].(*generated.DirectoryGroupWhereInput)), true
-	case "DirectorySyncRun.directoryInstanceID":
-		if e.ComplexityRoot.DirectorySyncRun.DirectoryInstanceID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.DirectoryInstanceID(childComplexity), true
-	case "DirectorySyncRun.directoryMemberships":
-		if e.ComplexityRoot.DirectorySyncRun.DirectoryMemberships == nil {
-			break
-		}
-
-		args, err := ec.field_DirectorySyncRun_directoryMemberships_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.DirectoryMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryMembershipOrder), args["where"].(*generated.DirectoryMembershipWhereInput)), true
-	case "DirectorySyncRun.displayID":
-		if e.ComplexityRoot.DirectorySyncRun.DisplayID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.DisplayID(childComplexity), true
-	case "DirectorySyncRun.environment":
-		if e.ComplexityRoot.DirectorySyncRun.Environment == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.Environment(childComplexity), true
-	case "DirectorySyncRun.environmentID":
-		if e.ComplexityRoot.DirectorySyncRun.EnvironmentID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.EnvironmentID(childComplexity), true
-	case "DirectorySyncRun.environmentName":
-		if e.ComplexityRoot.DirectorySyncRun.EnvironmentName == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.EnvironmentName(childComplexity), true
-	case "DirectorySyncRun.error":
-		if e.ComplexityRoot.DirectorySyncRun.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.Error(childComplexity), true
-	case "DirectorySyncRun.fullCount":
-		if e.ComplexityRoot.DirectorySyncRun.FullCount == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.FullCount(childComplexity), true
-	case "DirectorySyncRun.id":
-		if e.ComplexityRoot.DirectorySyncRun.ID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.ID(childComplexity), true
-	case "DirectorySyncRun.integration":
-		if e.ComplexityRoot.DirectorySyncRun.Integration == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.Integration(childComplexity), true
-	case "DirectorySyncRun.integrationID":
-		if e.ComplexityRoot.DirectorySyncRun.IntegrationID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.IntegrationID(childComplexity), true
-	case "DirectorySyncRun.owner":
-		if e.ComplexityRoot.DirectorySyncRun.Owner == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.Owner(childComplexity), true
-	case "DirectorySyncRun.ownerID":
-		if e.ComplexityRoot.DirectorySyncRun.OwnerID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.OwnerID(childComplexity), true
-	case "DirectorySyncRun.platform":
-		if e.ComplexityRoot.DirectorySyncRun.Platform == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.Platform(childComplexity), true
-	case "DirectorySyncRun.platformID":
-		if e.ComplexityRoot.DirectorySyncRun.PlatformID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.PlatformID(childComplexity), true
-	case "DirectorySyncRun.rawManifestFileID":
-		if e.ComplexityRoot.DirectorySyncRun.RawManifestFileID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.RawManifestFileID(childComplexity), true
-	case "DirectorySyncRun.scope":
-		if e.ComplexityRoot.DirectorySyncRun.Scope == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.Scope(childComplexity), true
-	case "DirectorySyncRun.scopeID":
-		if e.ComplexityRoot.DirectorySyncRun.ScopeID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.ScopeID(childComplexity), true
-	case "DirectorySyncRun.scopeName":
-		if e.ComplexityRoot.DirectorySyncRun.ScopeName == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.ScopeName(childComplexity), true
-	case "DirectorySyncRun.sourceCursor":
-		if e.ComplexityRoot.DirectorySyncRun.SourceCursor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.SourceCursor(childComplexity), true
-	case "DirectorySyncRun.startedAt":
-		if e.ComplexityRoot.DirectorySyncRun.StartedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.StartedAt(childComplexity), true
-	case "DirectorySyncRun.stats":
-		if e.ComplexityRoot.DirectorySyncRun.Stats == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.Stats(childComplexity), true
-	case "DirectorySyncRun.status":
-		if e.ComplexityRoot.DirectorySyncRun.Status == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.Status(childComplexity), true
-	case "DirectorySyncRun.updatedAt":
-		if e.ComplexityRoot.DirectorySyncRun.UpdatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.UpdatedAt(childComplexity), true
-	case "DirectorySyncRun.updatedBy":
-		if e.ComplexityRoot.DirectorySyncRun.UpdatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.UpdatedBy(childComplexity), true
-	case "DirectorySyncRun.updatedByImpersonator":
-		if e.ComplexityRoot.DirectorySyncRun.UpdatedByImpersonator == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRun.UpdatedByImpersonator(childComplexity), true
-
-	case "DirectorySyncRunBulkCreatePayload.directorySyncRuns":
-		if e.ComplexityRoot.DirectorySyncRunBulkCreatePayload.DirectorySyncRuns == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRunBulkCreatePayload.DirectorySyncRuns(childComplexity), true
-
-	case "DirectorySyncRunConnection.edges":
-		if e.ComplexityRoot.DirectorySyncRunConnection.Edges == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRunConnection.Edges(childComplexity), true
-	case "DirectorySyncRunConnection.pageInfo":
-		if e.ComplexityRoot.DirectorySyncRunConnection.PageInfo == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRunConnection.PageInfo(childComplexity), true
-	case "DirectorySyncRunConnection.totalCount":
-		if e.ComplexityRoot.DirectorySyncRunConnection.TotalCount == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRunConnection.TotalCount(childComplexity), true
-
-	case "DirectorySyncRunCreatePayload.directorySyncRun":
-		if e.ComplexityRoot.DirectorySyncRunCreatePayload.DirectorySyncRun == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRunCreatePayload.DirectorySyncRun(childComplexity), true
-
-	case "DirectorySyncRunDeletePayload.deletedID":
-		if e.ComplexityRoot.DirectorySyncRunDeletePayload.DeletedID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRunDeletePayload.DeletedID(childComplexity), true
-
-	case "DirectorySyncRunEdge.cursor":
-		if e.ComplexityRoot.DirectorySyncRunEdge.Cursor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRunEdge.Cursor(childComplexity), true
-	case "DirectorySyncRunEdge.node":
-		if e.ComplexityRoot.DirectorySyncRunEdge.Node == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRunEdge.Node(childComplexity), true
-
-	case "DirectorySyncRunUpdatePayload.directorySyncRun":
-		if e.ComplexityRoot.DirectorySyncRunUpdatePayload.DirectorySyncRun == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectorySyncRunUpdatePayload.DirectorySyncRun(childComplexity), true
 
 	case "Discussion.comments":
 		if e.ComplexityRoot.Discussion.Comments == nil {
@@ -16832,6 +16602,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Entity.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+	case "Entity.integrationRunID":
+		if e.ComplexityRoot.Entity.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.IntegrationRunID(childComplexity), true
+	case "Entity.integrationRuns":
+		if e.ComplexityRoot.Entity.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Entity_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Entity.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "Entity.integrations":
 		if e.ComplexityRoot.Entity.Integrations == nil {
 			break
@@ -19317,6 +19104,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Finding.Impact(childComplexity), true
+	case "Finding.integrationRunID":
+		if e.ComplexityRoot.Finding.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Finding.IntegrationRunID(childComplexity), true
+	case "Finding.integrationRuns":
+		if e.ComplexityRoot.Finding.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Finding.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "Finding.integrations":
 		if e.ComplexityRoot.Finding.Integrations == nil {
 			break
@@ -22296,17 +22100,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Integration.DirectoryMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryMembershipOrder), args["where"].(*generated.DirectoryMembershipWhereInput)), true
-	case "Integration.directorySyncRuns":
-		if e.ComplexityRoot.Integration.DirectorySyncRuns == nil {
-			break
-		}
-
-		args, err := ec.field_Integration_directorySyncRuns_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Integration.DirectorySyncRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectorySyncRunOrder), args["where"].(*generated.DirectorySyncRunWhereInput)), true
 	case "Integration.emailTemplates":
 		if e.ComplexityRoot.Integration.EmailTemplates == nil {
 			break
@@ -22404,6 +22197,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Integration.ID(childComplexity), true
+	case "Integration.integrationRuns":
+		if e.ComplexityRoot.Integration.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Integration.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "Integration.integrationType":
 		if e.ComplexityRoot.Integration.IntegrationType == nil {
 			break
@@ -22652,6 +22456,308 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IntegrationEdge.Node(childComplexity), true
+
+	case "IntegrationRun.actionPlans":
+		if e.ComplexityRoot.IntegrationRun.ActionPlans == nil {
+			break
+		}
+
+		args, err := ec.field_IntegrationRun_actionPlans_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IntegrationRun.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
+	case "IntegrationRun.assets":
+		if e.ComplexityRoot.IntegrationRun.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_IntegrationRun_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IntegrationRun.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+	case "IntegrationRun.checkResults":
+		if e.ComplexityRoot.IntegrationRun.CheckResults == nil {
+			break
+		}
+
+		args, err := ec.field_IntegrationRun_checkResults_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IntegrationRun.CheckResults(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CheckResultOrder), args["where"].(*generated.CheckResultWhereInput)), true
+	case "IntegrationRun.contacts":
+		if e.ComplexityRoot.IntegrationRun.Contacts == nil {
+			break
+		}
+
+		args, err := ec.field_IntegrationRun_contacts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IntegrationRun.Contacts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ContactOrder), args["where"].(*generated.ContactWhereInput)), true
+	case "IntegrationRun.createdAt":
+		if e.ComplexityRoot.IntegrationRun.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.CreatedAt(childComplexity), true
+	case "IntegrationRun.createdBy":
+		if e.ComplexityRoot.IntegrationRun.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.CreatedBy(childComplexity), true
+	case "IntegrationRun.directoryAccounts":
+		if e.ComplexityRoot.IntegrationRun.DirectoryAccounts == nil {
+			break
+		}
+
+		args, err := ec.field_IntegrationRun_directoryAccounts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IntegrationRun.DirectoryAccounts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryAccountOrder), args["where"].(*generated.DirectoryAccountWhereInput)), true
+	case "IntegrationRun.directoryGroups":
+		if e.ComplexityRoot.IntegrationRun.DirectoryGroups == nil {
+			break
+		}
+
+		args, err := ec.field_IntegrationRun_directoryGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IntegrationRun.DirectoryGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryGroupOrder), args["where"].(*generated.DirectoryGroupWhereInput)), true
+	case "IntegrationRun.directoryMemberships":
+		if e.ComplexityRoot.IntegrationRun.DirectoryMemberships == nil {
+			break
+		}
+
+		args, err := ec.field_IntegrationRun_directoryMemberships_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IntegrationRun.DirectoryMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryMembershipOrder), args["where"].(*generated.DirectoryMembershipWhereInput)), true
+	case "IntegrationRun.durationMs":
+		if e.ComplexityRoot.IntegrationRun.DurationMs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.DurationMs(childComplexity), true
+	case "IntegrationRun.entities":
+		if e.ComplexityRoot.IntegrationRun.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_IntegrationRun_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IntegrationRun.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+	case "IntegrationRun.error":
+		if e.ComplexityRoot.IntegrationRun.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.Error(childComplexity), true
+	case "IntegrationRun.findings":
+		if e.ComplexityRoot.IntegrationRun.Findings == nil {
+			break
+		}
+
+		args, err := ec.field_IntegrationRun_findings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IntegrationRun.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+	case "IntegrationRun.finishedAt":
+		if e.ComplexityRoot.IntegrationRun.FinishedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.FinishedAt(childComplexity), true
+	case "IntegrationRun.id":
+		if e.ComplexityRoot.IntegrationRun.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.ID(childComplexity), true
+	case "IntegrationRun.integration":
+		if e.ComplexityRoot.IntegrationRun.Integration == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.Integration(childComplexity), true
+	case "IntegrationRun.integrationID":
+		if e.ComplexityRoot.IntegrationRun.IntegrationID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.IntegrationID(childComplexity), true
+	case "IntegrationRun.internalPolicies":
+		if e.ComplexityRoot.IntegrationRun.InternalPolicies == nil {
+			break
+		}
+
+		args, err := ec.field_IntegrationRun_internalPolicies_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IntegrationRun.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
+	case "IntegrationRun.metrics":
+		if e.ComplexityRoot.IntegrationRun.Metrics == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.Metrics(childComplexity), true
+	case "IntegrationRun.operationConfig":
+		if e.ComplexityRoot.IntegrationRun.OperationConfig == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.OperationConfig(childComplexity), true
+	case "IntegrationRun.operationKind":
+		if e.ComplexityRoot.IntegrationRun.OperationKind == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.OperationKind(childComplexity), true
+	case "IntegrationRun.operationName":
+		if e.ComplexityRoot.IntegrationRun.OperationName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.OperationName(childComplexity), true
+	case "IntegrationRun.owner":
+		if e.ComplexityRoot.IntegrationRun.Owner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.Owner(childComplexity), true
+	case "IntegrationRun.ownerID":
+		if e.ComplexityRoot.IntegrationRun.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.OwnerID(childComplexity), true
+	case "IntegrationRun.procedures":
+		if e.ComplexityRoot.IntegrationRun.Procedures == nil {
+			break
+		}
+
+		args, err := ec.field_IntegrationRun_procedures_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IntegrationRun.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProcedureOrder), args["where"].(*generated.ProcedureWhereInput)), true
+	case "IntegrationRun.risks":
+		if e.ComplexityRoot.IntegrationRun.Risks == nil {
+			break
+		}
+
+		args, err := ec.field_IntegrationRun_risks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IntegrationRun.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+	case "IntegrationRun.runType":
+		if e.ComplexityRoot.IntegrationRun.RunType == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.RunType(childComplexity), true
+	case "IntegrationRun.startedAt":
+		if e.ComplexityRoot.IntegrationRun.StartedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.StartedAt(childComplexity), true
+	case "IntegrationRun.status":
+		if e.ComplexityRoot.IntegrationRun.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.Status(childComplexity), true
+	case "IntegrationRun.summary":
+		if e.ComplexityRoot.IntegrationRun.Summary == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.Summary(childComplexity), true
+	case "IntegrationRun.updatedAt":
+		if e.ComplexityRoot.IntegrationRun.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.UpdatedAt(childComplexity), true
+	case "IntegrationRun.updatedBy":
+		if e.ComplexityRoot.IntegrationRun.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.UpdatedBy(childComplexity), true
+	case "IntegrationRun.updatedByImpersonator":
+		if e.ComplexityRoot.IntegrationRun.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRun.UpdatedByImpersonator(childComplexity), true
+	case "IntegrationRun.vulnerabilities":
+		if e.ComplexityRoot.IntegrationRun.Vulnerabilities == nil {
+			break
+		}
+
+		args, err := ec.field_IntegrationRun_vulnerabilities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IntegrationRun.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
+
+	case "IntegrationRunConnection.edges":
+		if e.ComplexityRoot.IntegrationRunConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRunConnection.Edges(childComplexity), true
+	case "IntegrationRunConnection.pageInfo":
+		if e.ComplexityRoot.IntegrationRunConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRunConnection.PageInfo(childComplexity), true
+	case "IntegrationRunConnection.totalCount":
+		if e.ComplexityRoot.IntegrationRunConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRunConnection.TotalCount(childComplexity), true
+
+	case "IntegrationRunEdge.cursor":
+		if e.ComplexityRoot.IntegrationRunEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRunEdge.Cursor(childComplexity), true
+	case "IntegrationRunEdge.node":
+		if e.ComplexityRoot.IntegrationRunEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRunEdge.Node(childComplexity), true
 
 	case "InternalPolicy.activeWorkflowInstances":
 		if e.ComplexityRoot.InternalPolicy.ActiveWorkflowInstances == nil {
@@ -22925,6 +23031,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.InternalPolicy.ImprovementSuggestions(childComplexity), true
+	case "InternalPolicy.integrationRunID":
+		if e.ComplexityRoot.InternalPolicy.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InternalPolicy.IntegrationRunID(childComplexity), true
+	case "InternalPolicy.integrationRuns":
+		if e.ComplexityRoot.InternalPolicy.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.InternalPolicy.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "InternalPolicy.integrations":
 		if e.ComplexityRoot.InternalPolicy.Integrations == nil {
 			break
@@ -24332,17 +24455,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVDirectoryMembership(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.createBulkCSVDirectorySyncRun":
-		if e.ComplexityRoot.Mutation.CreateBulkCSVDirectorySyncRun == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVDirectorySyncRun_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkCSVDirectorySyncRun(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.createBulkCSVDiscussion":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVDiscussion == nil {
 			break
@@ -25036,17 +25148,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkDirectoryMembership(childComplexity, args["input"].([]*generated.CreateDirectoryMembershipInput)), true
-	case "Mutation.createBulkDirectorySyncRun":
-		if e.ComplexityRoot.Mutation.CreateBulkDirectorySyncRun == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkDirectorySyncRun_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkDirectorySyncRun(childComplexity, args["input"].([]*generated.CreateDirectorySyncRunInput)), true
 	case "Mutation.createBulkDiscussion":
 		if e.ComplexityRoot.Mutation.CreateBulkDiscussion == nil {
 			break
@@ -25784,17 +25885,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateDirectoryMembership(childComplexity, args["input"].(generated.CreateDirectoryMembershipInput)), true
-	case "Mutation.createDirectorySyncRun":
-		if e.ComplexityRoot.Mutation.CreateDirectorySyncRun == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createDirectorySyncRun_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateDirectorySyncRun(childComplexity, args["input"].(generated.CreateDirectorySyncRunInput)), true
 	case "Mutation.createDiscussion":
 		if e.ComplexityRoot.Mutation.CreateDiscussion == nil {
 			break
@@ -27390,17 +27480,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteDirectoryMembership(childComplexity, args["id"].(string)), true
-	case "Mutation.deleteDirectorySyncRun":
-		if e.ComplexityRoot.Mutation.DeleteDirectorySyncRun == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteDirectorySyncRun_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteDirectorySyncRun(childComplexity, args["id"].(string)), true
 	case "Mutation.deleteDiscussion":
 		if e.ComplexityRoot.Mutation.DeleteDiscussion == nil {
 			break
@@ -29596,17 +29675,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateDirectoryMembership(childComplexity, args["id"].(string), args["input"].(generated.UpdateDirectoryMembershipInput)), true
-	case "Mutation.updateDirectorySyncRun":
-		if e.ComplexityRoot.Mutation.UpdateDirectorySyncRun == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateDirectorySyncRun_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateDirectorySyncRun(childComplexity, args["id"].(string), args["input"].(generated.UpdateDirectorySyncRunInput)), true
 	case "Mutation.updateDiscussion":
 		if e.ComplexityRoot.Mutation.UpdateDiscussion == nil {
 			break
@@ -32602,28 +32670,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.DirectoryMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryMembershipOrder), args["where"].(*generated.DirectoryMembershipWhereInput)), true
-	case "Organization.directorySyncRunCreators":
-		if e.ComplexityRoot.Organization.DirectorySyncRunCreators == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_directorySyncRunCreators_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.DirectorySyncRunCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.directorySyncRuns":
-		if e.ComplexityRoot.Organization.DirectorySyncRuns == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_directorySyncRuns_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.DirectorySyncRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectorySyncRunOrder), args["where"].(*generated.DirectorySyncRunWhereInput)), true
 	case "Organization.discussionCreators":
 		if e.ComplexityRoot.Organization.DiscussionCreators == nil {
 			break
@@ -34766,17 +34812,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Platform.DirectoryMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryMembershipOrder), args["where"].(*generated.DirectoryMembershipWhereInput)), true
-	case "Platform.directorySyncRuns":
-		if e.ComplexityRoot.Platform.DirectorySyncRuns == nil {
-			break
-		}
-
-		args, err := ec.field_Platform_directorySyncRuns_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Platform.DirectorySyncRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectorySyncRunOrder), args["where"].(*generated.DirectorySyncRunWhereInput)), true
 	case "Platform.displayID":
 		if e.ComplexityRoot.Platform.DisplayID == nil {
 			break
@@ -35673,6 +35708,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Procedure.ImprovementSuggestions(childComplexity), true
+	case "Procedure.integrationRunID":
+		if e.ComplexityRoot.Procedure.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Procedure.IntegrationRunID(childComplexity), true
+	case "Procedure.integrationRuns":
+		if e.ComplexityRoot.Procedure.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Procedure_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Procedure.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "Procedure.internalNotes":
 		if e.ComplexityRoot.Procedure.InternalNotes == nil {
 			break
@@ -37334,28 +37386,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.DirectoryMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryMembershipOrder), args["where"].(*generated.DirectoryMembershipWhereInput)), true
-	case "Query.directorySyncRun":
-		if e.ComplexityRoot.Query.DirectorySyncRun == nil {
-			break
-		}
-
-		args, err := ec.field_Query_directorySyncRun_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.DirectorySyncRun(childComplexity, args["id"].(string)), true
-	case "Query.directorySyncRuns":
-		if e.ComplexityRoot.Query.DirectorySyncRuns == nil {
-			break
-		}
-
-		args, err := ec.field_Query_directorySyncRuns_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.DirectorySyncRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectorySyncRunOrder), args["where"].(*generated.DirectorySyncRunWhereInput)), true
 	case "Query.discussion":
 		if e.ComplexityRoot.Query.Discussion == nil {
 			break
@@ -37791,6 +37821,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Integration(childComplexity, args["id"].(string)), true
+	case "Query.integrationRuns":
+		if e.ComplexityRoot.Query.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Query_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "Query.integrationSearch":
 		if e.ComplexityRoot.Query.IntegrationSearch == nil {
 			break
@@ -40664,6 +40705,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Risk.IntegrationID(childComplexity), true
+	case "Risk.integrationRunID":
+		if e.ComplexityRoot.Risk.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Risk.IntegrationRunID(childComplexity), true
+	case "Risk.integrationRuns":
+		if e.ComplexityRoot.Risk.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Risk_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Risk.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "Risk.internalPolicies":
 		if e.ComplexityRoot.Risk.InternalPolicies == nil {
 			break
@@ -48676,6 +48734,23 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Vulnerability.Impacts(childComplexity), true
+	case "Vulnerability.integrationRunID":
+		if e.ComplexityRoot.Vulnerability.IntegrationRunID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Vulnerability.IntegrationRunID(childComplexity), true
+	case "Vulnerability.integrationRuns":
+		if e.ComplexityRoot.Vulnerability.IntegrationRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Vulnerability_integrationRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Vulnerability.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
 	case "Vulnerability.integrations":
 		if e.ComplexityRoot.Vulnerability.Integrations == nil {
 			break
@@ -51242,7 +51317,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateDirectoryAccountInput,
 		ec.unmarshalInputCreateDirectoryGroupInput,
 		ec.unmarshalInputCreateDirectoryMembershipInput,
-		ec.unmarshalInputCreateDirectorySyncRunInput,
 		ec.unmarshalInputCreateDiscussionInput,
 		ec.unmarshalInputCreateDocumentDataInput,
 		ec.unmarshalInputCreateEmailTemplateInput,
@@ -51324,8 +51398,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputDirectoryGroupWhereInput,
 		ec.unmarshalInputDirectoryMembershipOrder,
 		ec.unmarshalInputDirectoryMembershipWhereInput,
-		ec.unmarshalInputDirectorySyncRunOrder,
-		ec.unmarshalInputDirectorySyncRunWhereInput,
 		ec.unmarshalInputDiscussionOrder,
 		ec.unmarshalInputDiscussionWhereInput,
 		ec.unmarshalInputDocumentDataOrder,
@@ -51370,6 +51442,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputImportDomainScanReviewSystemInput,
 		ec.unmarshalInputImportDomainScanReviewVendorInput,
 		ec.unmarshalInputIntegrationOrder,
+		ec.unmarshalInputIntegrationRunOrder,
+		ec.unmarshalInputIntegrationRunWhereInput,
 		ec.unmarshalInputIntegrationWhereInput,
 		ec.unmarshalInputInternalPolicyOrder,
 		ec.unmarshalInputInternalPolicyWhereInput,
@@ -51477,7 +51551,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateDirectoryAccountInput,
 		ec.unmarshalInputUpdateDirectoryGroupInput,
 		ec.unmarshalInputUpdateDirectoryMembershipInput,
-		ec.unmarshalInputUpdateDirectorySyncRunInput,
 		ec.unmarshalInputUpdateDiscussionInput,
 		ec.unmarshalInputUpdateDiscussionsInput,
 		ec.unmarshalInputUpdateDocumentDataInput,
@@ -55302,109 +55375,6 @@ type DirectoryMembershipBulkCreatePayload {
     """
     directoryMemberships: [DirectoryMembership!]
 }`, BuiltIn: false},
-	{Name: "../schema/directorysyncrun.graphql", Input: `extend type Query {
-    """
-    Look up directorySyncRun by ID
-    """
-     directorySyncRun(
-        """
-        ID of the directorySyncRun
-        """
-        id: ID!
-    ):  DirectorySyncRun!
-}
-
-extend type Mutation{
-    """
-    Create a new directorySyncRun
-    """
-    createDirectorySyncRun(
-        """
-        values of the directorySyncRun
-        """
-        input: CreateDirectorySyncRunInput!
-    ): DirectorySyncRunCreatePayload!
-    """
-    Create multiple new directorySyncRuns
-    """
-    createBulkDirectorySyncRun(
-        """
-        values of the directorySyncRun
-        """
-        input: [CreateDirectorySyncRunInput!]
-    ): DirectorySyncRunBulkCreatePayload!
-    """
-    Create multiple new directorySyncRuns via file upload
-    """
-    createBulkCSVDirectorySyncRun(
-        """
-        csv file containing values of the directorySyncRun
-        """
-        input: Upload!
-    ): DirectorySyncRunBulkCreatePayload!
-    """
-    Update an existing directorySyncRun
-    """
-    updateDirectorySyncRun(
-        """
-        ID of the directorySyncRun
-        """
-        id: ID!
-        """
-        New values for the directorySyncRun
-        """
-        input: UpdateDirectorySyncRunInput!
-    ): DirectorySyncRunUpdatePayload!
-    """
-    Delete an existing directorySyncRun
-    """
-    deleteDirectorySyncRun(
-        """
-        ID of the directorySyncRun
-        """
-        id: ID!
-    ): DirectorySyncRunDeletePayload!
-}
-
-"""
-Return response for createDirectorySyncRun mutation
-"""
-type DirectorySyncRunCreatePayload {
-    """
-    Created directorySyncRun
-    """
-    directorySyncRun: DirectorySyncRun!
-}
-
-"""
-Return response for updateDirectorySyncRun mutation
-"""
-type DirectorySyncRunUpdatePayload {
-    """
-    Updated directorySyncRun
-    """
-    directorySyncRun: DirectorySyncRun!
-}
-
-"""
-Return response for deleteDirectorySyncRun mutation
-"""
-type DirectorySyncRunDeletePayload {
-    """
-    Deleted directorySyncRun ID
-    """
-    deletedID: ID!
-}
-
-"""
-Return response for createBulkDirectorySyncRun mutation
-"""
-type DirectorySyncRunBulkCreatePayload {
-    """
-    Created directorySyncRuns
-    """
-    directorySyncRuns: [DirectorySyncRun!]
-}`, BuiltIn: false},
 	{Name: "../schema/discussion.graphql", Input: `extend type Query {
     """
     Look up discussion by ID
@@ -56659,9 +56629,13 @@ type ActionPlan implements Node @modules(names: ["compliance_module","policy_man
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the name of the action_plan
   """
@@ -56815,6 +56789,37 @@ type ActionPlan implements Node @modules(names: ["compliance_module","policy_man
   source of the action plan
   """
   source: String
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   """
   the group of users who are responsible for approving the action_plan
   """
@@ -57511,6 +57516,20 @@ input ActionPlanWhereInput {
   managedByEqualFold: String
   managedByContainsFold: String
   """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   name field predicates
   """
   name: String
@@ -57841,6 +57860,11 @@ input ActionPlanWhereInput {
   sourceNotNil: Boolean
   sourceEqualFold: String
   sourceContainsFold: String
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   approver edge predicates
   """
@@ -59189,9 +59213,13 @@ type Asset implements Node @modules(names: ["entity_management_module","complian
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the ID of the organization owner of the object
   """
@@ -59361,6 +59389,37 @@ type Asset implements Node @modules(names: ["entity_management_module","complian
   time when this asset was last observed by the source integration
   """
   observedAt: DateTime
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   blockedGroups(
     """
@@ -60155,6 +60214,20 @@ input AssetWhereInput {
   managedByEqualFold: String
   managedByContainsFold: String
   """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -60689,6 +60762,11 @@ input AssetWhereInput {
   observedAtLTE: DateTime
   observedAtIsNil: Boolean
   observedAtNotNil: Boolean
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -62479,9 +62557,13 @@ type CheckResult implements Node {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   current status of the control
   """
@@ -62510,6 +62592,37 @@ type CheckResult implements Node {
   integration that owns this check result
   """
   integrationID: ID
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -62867,6 +62980,20 @@ input CheckResultWhereInput {
   managedByEqualFold: String
   managedByContainsFold: String
   """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   status field predicates
   """
   status: CheckResultCheckStatus
@@ -62952,6 +63079,11 @@ input CheckResultWhereInput {
   integrationIDEqualFold: ID
   integrationIDContainsFold: ID
   """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
+  """
   blocked_groups edge predicates
   """
   hasBlockedGroups: Boolean
@@ -63013,9 +63145,13 @@ type Contact implements Node @modules(names: ["entity_management_module","compli
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the organization id that owns the object
   """
@@ -63060,6 +63196,37 @@ type Contact implements Node @modules(names: ["entity_management_module","compli
   time when this contact was last observed by the source integration
   """
   observedAt: DateTime
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   entities(
     """
@@ -63421,6 +63588,20 @@ input ContactWhereInput {
   managedByEqualFold: String
   managedByContainsFold: String
   """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -63563,6 +63744,11 @@ input ContactWhereInput {
   observedAtLTE: DateTime
   observedAtIsNil: Boolean
   observedAtNotNil: Boolean
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -66922,9 +67108,13 @@ input CreateActionPlanInput {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the name of the action_plan
   """
@@ -67053,6 +67243,7 @@ input CreateActionPlanInput {
   source of the action plan
   """
   source: String
+  integrationRunIDs: [ID!]
   approverID: ID
   delegateID: ID
   ownerID: ID
@@ -67202,9 +67393,13 @@ input CreateAssetInput {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the internal owner for the asset when no user, group, or identity holder is linked
   """
@@ -67314,6 +67509,7 @@ input CreateAssetInput {
   time when this asset was last observed by the source integration
   """
   observedAt: DateTime
+  integrationRunIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -67537,9 +67733,13 @@ input CreateCheckResultInput {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   current status of the control
   """
@@ -67564,6 +67764,7 @@ input CreateCheckResultInput {
   external parent reference id for the aggregate rule, e.g. in aws config this is the config rule name
   """
   parentExternalID: String
+  integrationRunIDs: [ID!]
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
@@ -67593,9 +67794,13 @@ input CreateContactInput {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the full name of the contact
   """
@@ -67636,6 +67841,7 @@ input CreateContactInput {
   time when this contact was last observed by the source integration
   """
   observedAt: DateTime
+  integrationRunIDs: [ID!]
   ownerID: ID
   entityIDs: [ID!]
   campaignIDs: [ID!]
@@ -68091,9 +68297,13 @@ input CreateDirectoryAccountInput {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the environment of the directory_account
   """
@@ -68102,10 +68312,6 @@ input CreateDirectoryAccountInput {
   the scope of the directory_account
   """
   scopeName: String
-  """
-  stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
-  """
-  directoryInstanceID: String
   """
   directory source label set by the integration (e.g. googleworkspace, github, slack)
   """
@@ -68203,10 +68409,6 @@ input CreateDirectoryAccountInput {
   """
   observedAt: Time
   """
-  hash of the normalized profile payload for change detection
-  """
-  profileHash: String
-  """
   flattened attribute bag used for filtering/diffing
   """
   profile: Map
@@ -68222,11 +68424,11 @@ input CreateDirectoryAccountInput {
   indicates this directory account originates from the installation designated as the primary directory source for its owner organization
   """
   primarySource: Boolean
+  integrationRunIDs: [ID!]
   ownerID: ID
   environmentID: ID
   scopeID: ID
   integrationID: ID
-  directorySyncRunID: ID
   platformID: ID
   identityHolderID: ID
   avatarFileID: ID
@@ -68255,9 +68457,13 @@ input CreateDirectoryGroupInput {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the environment of the directory_group
   """
@@ -68266,10 +68472,6 @@ input CreateDirectoryGroupInput {
   the scope of the directory_group
   """
   scopeName: String
-  """
-  stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
-  """
-  directoryInstanceID: String
   """
   stable identifier from the directory system
   """
@@ -68323,10 +68525,6 @@ input CreateDirectoryGroupInput {
   """
   observedAt: Time
   """
-  hash of the normalized payload for diffing
-  """
-  profileHash: String
-  """
   flattened attribute bag used for filtering/diffing
   """
   profile: Map
@@ -68342,11 +68540,11 @@ input CreateDirectoryGroupInput {
   directory source label set by the integration (e.g. googleworkspace, github, slack)
   """
   directoryName: String
+  integrationRunIDs: [ID!]
   ownerID: ID
   environmentID: ID
   scopeID: ID
   integrationID: ID!
-  directorySyncRunID: ID!
   platformID: ID
   workflowObjectRefIDs: [ID!]
 }
@@ -68368,9 +68566,13 @@ input CreateDirectoryMembershipInput {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the environment of the directory_membership
   """
@@ -68379,10 +68581,6 @@ input CreateDirectoryMembershipInput {
   the scope of the directory_membership
   """
   scopeName: String
-  """
-  stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
-  """
-  directoryInstanceID: String
   """
   membership role reported by the provider
   """
@@ -68416,84 +68614,19 @@ input CreateDirectoryMembershipInput {
   """
   observedAt: Time
   """
-  sync run identifier that most recently confirmed this membership
-  """
-  lastConfirmedRunID: String
-  """
   raw metadata associated with this membership from the provider
   """
   metadata: Map
+  integrationRunIDs: [ID!]
   ownerID: ID
   environmentID: ID
   scopeID: ID
   integrationID: ID!
-  directorySyncRunID: ID!
   platformID: ID
   directoryAccountID: ID!
   directoryGroupID: ID!
   eventIDs: [ID!]
   workflowObjectRefIDs: [ID!]
-}
-"""
-CreateDirectorySyncRunInput is used for create DirectorySyncRun object.
-Input was generated by ent.
-"""
-input CreateDirectorySyncRunInput {
-  """
-  the environment of the directory_sync_run
-  """
-  environmentName: String
-  """
-  the scope of the directory_sync_run
-  """
-  scopeName: String
-  """
-  stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
-  """
-  directoryInstanceID: String
-  """
-  current state of the sync run
-  """
-  status: DirectorySyncRunDirectorySyncRunStatus
-  """
-  time the sync started
-  """
-  startedAt: Time
-  """
-  time the sync finished
-  """
-  completedAt: Time
-  """
-  cursor or checkpoint returned by the provider for the next run
-  """
-  sourceCursor: String
-  """
-  total records processed during this run
-  """
-  fullCount: Int
-  """
-  number of records that changed compared to the prior run
-  """
-  deltaCount: Int
-  """
-  serialized error information when the run failed
-  """
-  error: String
-  """
-  object storage file identifier for the manifest captured during the run
-  """
-  rawManifestFileID: String
-  """
-  additional provider-specific stats for the run
-  """
-  stats: Map
-  ownerID: ID
-  environmentID: ID
-  scopeID: ID
-  integrationID: ID!
-  platformID: ID
-  directoryAccountIDs: [ID!]
-  directoryGroupIDs: [ID!]
 }
 """
 CreateDiscussionInput is used for create Discussion object.
@@ -68659,9 +68792,13 @@ input CreateEntityInput {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the internal owner for the entity when no user, group, or identity holder is linked
   """
@@ -68838,6 +68975,7 @@ input CreateEntityInput {
   time when this entity was last observed by the source integration
   """
   observedAt: DateTime
+  integrationRunIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -69220,9 +69358,13 @@ input CreateFindingInput {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   who reviewed the finding when no user, group, or identity holder is linked
   """
@@ -69399,6 +69541,7 @@ input CreateFindingInput {
   raw payload received from the integration for auditing and troubleshooting
   """
   rawPayload: Map
+  integrationRunIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -69774,9 +69917,13 @@ input CreateInternalPolicyInput {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   internal notes about the object creation, this field is only available to system admins
   """
@@ -69873,6 +70020,7 @@ input CreateInternalPolicyInput {
   stable external UUID for deterministic OSCAL export and round-tripping
   """
   externalUUID: String
+  integrationRunIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -70402,7 +70550,6 @@ input CreateOrganizationInput {
   directoryAccountCreatorIDs: [ID!]
   directoryGroupCreatorIDs: [ID!]
   directoryMembershipCreatorIDs: [ID!]
-  directorySyncRunCreatorIDs: [ID!]
   discussionCreatorIDs: [ID!]
   documentDataCreatorIDs: [ID!]
   emailTemplateCreatorIDs: [ID!]
@@ -70528,7 +70675,6 @@ input CreateOrganizationInput {
   workflowObjectRefIDs: [ID!]
   directoryAccountIDs: [ID!]
   directoryGroupIDs: [ID!]
-  directorySyncRunIDs: [ID!]
   discussionIDs: [ID!]
   vendorScoringConfigIDs: [ID!]
   vendorRiskScoreIDs: [ID!]
@@ -70850,7 +70996,6 @@ input CreatePlatformInput {
   taskIDs: [ID!]
   identityHolderIDs: [ID!]
   integrationIDs: [ID!]
-  directorySyncRunIDs: [ID!]
   directoryAccountIDs: [ID!]
   directoryGroupIDs: [ID!]
   workflowObjectRefIDs: [ID!]
@@ -70889,9 +71034,13 @@ input CreateProcedureInput {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the name of the procedure
   """
@@ -70984,6 +71133,7 @@ input CreateProcedureInput {
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
+  integrationRunIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -71390,9 +71540,13 @@ input CreateRiskInput {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the kind of the risk
   """
@@ -71502,6 +71656,7 @@ input CreateRiskInput {
   the decision made for the risk - accept, transfer, avoid, mitigate, or none
   """
   riskDecision: RiskRiskDecision
+  integrationRunIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -72792,9 +72947,13 @@ input CreateVulnerabilityInput {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   who reviewed the vulnerability when no user, group, or identity holder is linked
   """
@@ -72991,6 +73150,7 @@ input CreateVulnerabilityInput {
   raw payload received from the integration for auditing and troubleshooting
   """
   rawPayload: Map
+  integrationRunIDs: [ID!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -74526,9 +74686,13 @@ type DirectoryAccount implements Node {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the ID of the organization owner of the object
   """
@@ -74554,17 +74718,9 @@ type DirectoryAccount implements Node {
   """
   integrationID: ID
   """
-  optional sync run that produced this snapshot
-  """
-  directorySyncRunID: ID
-  """
   optional platform associated with this directory account
   """
   platformID: ID
-  """
-  stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
-  """
-  directoryInstanceID: String
   """
   deduplicated identity holder linked to this directory account
   """
@@ -74670,10 +74826,6 @@ type DirectoryAccount implements Node {
   """
   observedAt: Time!
   """
-  hash of the normalized profile payload for change detection
-  """
-  profileHash: String!
-  """
   flattened attribute bag used for filtering/diffing
   """
   profile: Map
@@ -74693,6 +74845,37 @@ type DirectoryAccount implements Node {
   indicates this directory account originates from the installation designated as the primary directory source for its owner organization
   """
   primarySource: Boolean!
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   environment: CustomTypeEnum
   scope: CustomTypeEnum
@@ -74700,10 +74883,6 @@ type DirectoryAccount implements Node {
   integration that owns this directory account
   """
   integration: Integration
-  """
-  sync run that produced this snapshot
-  """
-  directorySyncRun: DirectorySyncRun
   """
   platform associated with this directory account
   """
@@ -74917,7 +75096,6 @@ Properties by which DirectoryAccount connections can be ordered.
 enum DirectoryAccountOrderField {
   created_at
   updated_at
-  directory_instance_id
   directory_name
   external_id
   canonical_email
@@ -75071,6 +75249,20 @@ input DirectoryAccountWhereInput {
   managedByEqualFold: String
   managedByContainsFold: String
   """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -75155,20 +75347,6 @@ input DirectoryAccountWhereInput {
   integrationIDEqualFold: ID
   integrationIDContainsFold: ID
   """
-  directory_sync_run_id field predicates
-  """
-  directorySyncRunID: ID
-  directorySyncRunIDNEQ: ID
-  directorySyncRunIDIn: [ID!]
-  directorySyncRunIDNotIn: [ID!]
-  directorySyncRunIDContains: ID
-  directorySyncRunIDHasPrefix: ID
-  directorySyncRunIDHasSuffix: ID
-  directorySyncRunIDIsNil: Boolean
-  directorySyncRunIDNotNil: Boolean
-  directorySyncRunIDEqualFold: ID
-  directorySyncRunIDContainsFold: ID
-  """
   platform_id field predicates
   """
   platformID: ID
@@ -75182,20 +75360,6 @@ input DirectoryAccountWhereInput {
   platformIDNotNil: Boolean
   platformIDEqualFold: ID
   platformIDContainsFold: ID
-  """
-  directory_instance_id field predicates
-  """
-  directoryInstanceID: String
-  directoryInstanceIDNEQ: String
-  directoryInstanceIDIn: [String!]
-  directoryInstanceIDNotIn: [String!]
-  directoryInstanceIDContains: String
-  directoryInstanceIDHasPrefix: String
-  directoryInstanceIDHasSuffix: String
-  directoryInstanceIDIsNil: Boolean
-  directoryInstanceIDNotNil: Boolean
-  directoryInstanceIDEqualFold: String
-  directoryInstanceIDContainsFold: String
   """
   identity_holder_id field predicates
   """
@@ -75496,18 +75660,6 @@ input DirectoryAccountWhereInput {
   observedAtLT: Time
   observedAtLTE: Time
   """
-  profile_hash field predicates
-  """
-  profileHash: String
-  profileHashNEQ: String
-  profileHashIn: [String!]
-  profileHashNotIn: [String!]
-  profileHashContains: String
-  profileHashHasPrefix: String
-  profileHashHasSuffix: String
-  profileHashEqualFold: String
-  profileHashContainsFold: String
-  """
   source_version field predicates
   """
   sourceVersion: String
@@ -75526,6 +75678,11 @@ input DirectoryAccountWhereInput {
   """
   primarySource: Boolean
   primarySourceNEQ: Boolean
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -75546,11 +75703,6 @@ input DirectoryAccountWhereInput {
   """
   hasIntegration: Boolean
   hasIntegrationWith: [IntegrationWhereInput!]
-  """
-  directory_sync_run edge predicates
-  """
-  hasDirectorySyncRun: Boolean
-  hasDirectorySyncRunWith: [DirectorySyncRunWhereInput!]
   """
   platform edge predicates
   """
@@ -75626,9 +75778,13 @@ type DirectoryGroup implements Node {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the organization id that owns the object
   """
@@ -75657,14 +75813,6 @@ type DirectoryGroup implements Node {
   optional platform associated with this directory group
   """
   platformID: ID
-  """
-  stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
-  """
-  directoryInstanceID: String
-  """
-  sync run that produced this snapshot
-  """
-  directorySyncRunID: ID!
   """
   stable identifier from the directory system
   """
@@ -75718,10 +75866,6 @@ type DirectoryGroup implements Node {
   """
   observedAt: Time!
   """
-  hash of the normalized payload for diffing
-  """
-  profileHash: String!
-  """
   flattened attribute bag used for filtering/diffing
   """
   profile: Map
@@ -75741,6 +75885,37 @@ type DirectoryGroup implements Node {
   directory source label set by the integration (e.g. googleworkspace, github, slack)
   """
   directoryName: String
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   environment: CustomTypeEnum
   scope: CustomTypeEnum
@@ -75748,10 +75923,6 @@ type DirectoryGroup implements Node {
   integration that owns this directory group
   """
   integration: Integration!
-  """
-  sync run that produced this snapshot
-  """
-  directorySyncRun: DirectorySyncRun!
   """
   platform associated with this directory group
   """
@@ -75916,7 +76087,6 @@ Properties by which DirectoryGroup connections can be ordered.
 enum DirectoryGroupOrderField {
   created_at
   updated_at
-  directory_instance_id
   external_id
   email
   display_name
@@ -76070,6 +76240,20 @@ input DirectoryGroupWhereInput {
   managedByEqualFold: String
   managedByContainsFold: String
   """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -76165,32 +76349,6 @@ input DirectoryGroupWhereInput {
   platformIDNotNil: Boolean
   platformIDEqualFold: ID
   platformIDContainsFold: ID
-  """
-  directory_instance_id field predicates
-  """
-  directoryInstanceID: String
-  directoryInstanceIDNEQ: String
-  directoryInstanceIDIn: [String!]
-  directoryInstanceIDNotIn: [String!]
-  directoryInstanceIDContains: String
-  directoryInstanceIDHasPrefix: String
-  directoryInstanceIDHasSuffix: String
-  directoryInstanceIDIsNil: Boolean
-  directoryInstanceIDNotNil: Boolean
-  directoryInstanceIDEqualFold: String
-  directoryInstanceIDContainsFold: String
-  """
-  directory_sync_run_id field predicates
-  """
-  directorySyncRunID: ID
-  directorySyncRunIDNEQ: ID
-  directorySyncRunIDIn: [ID!]
-  directorySyncRunIDNotIn: [ID!]
-  directorySyncRunIDContains: ID
-  directorySyncRunIDHasPrefix: ID
-  directorySyncRunIDHasSuffix: ID
-  directorySyncRunIDEqualFold: ID
-  directorySyncRunIDContainsFold: ID
   """
   external_id field predicates
   """
@@ -76312,18 +76470,6 @@ input DirectoryGroupWhereInput {
   observedAtLT: Time
   observedAtLTE: Time
   """
-  profile_hash field predicates
-  """
-  profileHash: String
-  profileHashNEQ: String
-  profileHashIn: [String!]
-  profileHashNotIn: [String!]
-  profileHashContains: String
-  profileHashHasPrefix: String
-  profileHashHasSuffix: String
-  profileHashEqualFold: String
-  profileHashContainsFold: String
-  """
   source_version field predicates
   """
   sourceVersion: String
@@ -76352,6 +76498,11 @@ input DirectoryGroupWhereInput {
   directoryNameEqualFold: String
   directoryNameContainsFold: String
   """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -76371,11 +76522,6 @@ input DirectoryGroupWhereInput {
   """
   hasIntegration: Boolean
   hasIntegrationWith: [IntegrationWhereInput!]
-  """
-  directory_sync_run edge predicates
-  """
-  hasDirectorySyncRun: Boolean
-  hasDirectorySyncRunWith: [DirectorySyncRunWhereInput!]
   """
   platform edge predicates
   """
@@ -76428,9 +76574,13 @@ type DirectoryMembership implements Node {
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the organization id that owns the object
   """
@@ -76459,14 +76609,6 @@ type DirectoryMembership implements Node {
   optional platform associated with this directory membership
   """
   platformID: ID
-  """
-  stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
-  """
-  directoryInstanceID: String
-  """
-  sync run that produced this snapshot
-  """
-  directorySyncRunID: ID!
   """
   directory account participating in this membership
   """
@@ -76508,13 +76650,40 @@ type DirectoryMembership implements Node {
   """
   observedAt: Time!
   """
-  sync run identifier that most recently confirmed this membership
-  """
-  lastConfirmedRunID: String
-  """
   raw metadata associated with this membership from the provider
   """
   metadata: Map
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   environment: CustomTypeEnum
   scope: CustomTypeEnum
@@ -76522,10 +76691,6 @@ type DirectoryMembership implements Node {
   integration that owns this directory membership
   """
   integration: Integration!
-  """
-  sync run that produced this snapshot
-  """
-  directorySyncRun: DirectorySyncRun!
   """
   platform associated with this directory membership
   """
@@ -76803,6 +76968,20 @@ input DirectoryMembershipWhereInput {
   managedByEqualFold: String
   managedByContainsFold: String
   """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   environment_name field predicates
   """
   environmentName: String
@@ -76830,20 +77009,6 @@ input DirectoryMembershipWhereInput {
   scopeNameNotNil: Boolean
   scopeNameEqualFold: String
   scopeNameContainsFold: String
-  """
-  directory_instance_id field predicates
-  """
-  directoryInstanceID: String
-  directoryInstanceIDNEQ: String
-  directoryInstanceIDIn: [String!]
-  directoryInstanceIDNotIn: [String!]
-  directoryInstanceIDContains: String
-  directoryInstanceIDHasPrefix: String
-  directoryInstanceIDHasSuffix: String
-  directoryInstanceIDIsNil: Boolean
-  directoryInstanceIDNotNil: Boolean
-  directoryInstanceIDEqualFold: String
-  directoryInstanceIDContainsFold: String
   """
   role field predicates
   """
@@ -76929,594 +77094,6 @@ input DirectoryMembershipWhereInput {
   observedAtGTE: Time
   observedAtLT: Time
   observedAtLTE: Time
-  """
-  last_confirmed_run_id field predicates
-  """
-  lastConfirmedRunID: String
-  lastConfirmedRunIDNEQ: String
-  lastConfirmedRunIDIn: [String!]
-  lastConfirmedRunIDNotIn: [String!]
-  lastConfirmedRunIDContains: String
-  lastConfirmedRunIDHasPrefix: String
-  lastConfirmedRunIDHasSuffix: String
-  lastConfirmedRunIDIsNil: Boolean
-  lastConfirmedRunIDNotNil: Boolean
-  lastConfirmedRunIDEqualFold: String
-  lastConfirmedRunIDContainsFold: String
-}
-type DirectorySyncRun implements Node {
-  id: ID!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  the real user acting through an impersonation session when the record was last mutated, if any
-  """
-  updatedByImpersonator: String
-  """
-  a shortened prefixed id field to use as a human readable identifier
-  """
-  displayID: String!
-  """
-  the organization id that owns the object
-  """
-  ownerID: ID
-  """
-  the environment of the directory_sync_run
-  """
-  environmentName: String
-  """
-  the environment of the directory_sync_run
-  """
-  environmentID: ID
-  """
-  the scope of the directory_sync_run
-  """
-  scopeName: String
-  """
-  the scope of the directory_sync_run
-  """
-  scopeID: ID
-  """
-  integration this sync run executed for
-  """
-  integrationID: ID!
-  """
-  optional platform associated with this sync run
-  """
-  platformID: ID
-  """
-  stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
-  """
-  directoryInstanceID: String
-  """
-  current state of the sync run
-  """
-  status: DirectorySyncRunDirectorySyncRunStatus!
-  """
-  time the sync started
-  """
-  startedAt: Time!
-  """
-  time the sync finished
-  """
-  completedAt: Time
-  """
-  cursor or checkpoint returned by the provider for the next run
-  """
-  sourceCursor: String
-  """
-  total records processed during this run
-  """
-  fullCount: Int!
-  """
-  number of records that changed compared to the prior run
-  """
-  deltaCount: Int!
-  """
-  serialized error information when the run failed
-  """
-  error: String
-  """
-  object storage file identifier for the manifest captured during the run
-  """
-  rawManifestFileID: String
-  """
-  additional provider-specific stats for the run
-  """
-  stats: Map
-  owner: Organization
-  environment: CustomTypeEnum
-  scope: CustomTypeEnum
-  """
-  integration that executed this sync run
-  """
-  integration: Integration!
-  """
-  platform associated with this sync run
-  """
-  platform: Platform
-  directoryAccounts(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for DirectoryAccounts returned from the connection.
-    """
-    orderBy: [DirectoryAccountOrder!]
-
-    """
-    Filtering options for DirectoryAccounts returned from the connection.
-    """
-    where: DirectoryAccountWhereInput
-  ): DirectoryAccountConnection!
-  directoryGroups(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for DirectoryGroups returned from the connection.
-    """
-    orderBy: [DirectoryGroupOrder!]
-
-    """
-    Filtering options for DirectoryGroups returned from the connection.
-    """
-    where: DirectoryGroupWhereInput
-  ): DirectoryGroupConnection!
-  directoryMemberships(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for DirectoryMemberships returned from the connection.
-    """
-    orderBy: [DirectoryMembershipOrder!]
-
-    """
-    Filtering options for DirectoryMemberships returned from the connection.
-    """
-    where: DirectoryMembershipWhereInput
-  ): DirectoryMembershipConnection!
-}
-"""
-A connection to a list of items.
-"""
-type DirectorySyncRunConnection {
-  """
-  A list of edges.
-  """
-  edges: [DirectorySyncRunEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-DirectorySyncRunDirectorySyncRunStatus is enum for the field status
-"""
-enum DirectorySyncRunDirectorySyncRunStatus @goModel(model: "github.com/theopenlane/core/common/enums.DirectorySyncRunStatus") {
-  PENDING
-  RUNNING
-  COMPLETED
-  FAILED
-}
-"""
-An edge in a connection.
-"""
-type DirectorySyncRunEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: DirectorySyncRun
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-Ordering options for DirectorySyncRun connections
-"""
-input DirectorySyncRunOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order DirectorySyncRuns.
-  """
-  field: DirectorySyncRunOrderField!
-}
-"""
-Properties by which DirectorySyncRun connections can be ordered.
-"""
-enum DirectorySyncRunOrderField {
-  created_at
-  updated_at
-  started_at
-}
-"""
-DirectorySyncRunWhereInput is used for filtering DirectorySyncRun objects.
-Input was generated by ent.
-"""
-input DirectorySyncRunWhereInput {
-  not: DirectorySyncRunWhereInput
-  and: [DirectorySyncRunWhereInput!]
-  or: [DirectorySyncRunWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  updated_by_impersonator field predicates
-  """
-  updatedByImpersonator: String
-  updatedByImpersonatorNEQ: String
-  updatedByImpersonatorIn: [String!]
-  updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorContains: String
-  updatedByImpersonatorHasPrefix: String
-  updatedByImpersonatorHasSuffix: String
-  updatedByImpersonatorIsNil: Boolean
-  updatedByImpersonatorNotNil: Boolean
-  updatedByImpersonatorEqualFold: String
-  updatedByImpersonatorContainsFold: String
-  """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
-  environment_name field predicates
-  """
-  environmentName: String
-  environmentNameNEQ: String
-  environmentNameIn: [String!]
-  environmentNameNotIn: [String!]
-  environmentNameContains: String
-  environmentNameHasPrefix: String
-  environmentNameHasSuffix: String
-  environmentNameIsNil: Boolean
-  environmentNameNotNil: Boolean
-  environmentNameEqualFold: String
-  environmentNameContainsFold: String
-  """
-  environment_id field predicates
-  """
-  environmentID: ID
-  environmentIDNEQ: ID
-  environmentIDIn: [ID!]
-  environmentIDNotIn: [ID!]
-  environmentIDContains: ID
-  environmentIDHasPrefix: ID
-  environmentIDHasSuffix: ID
-  environmentIDIsNil: Boolean
-  environmentIDNotNil: Boolean
-  environmentIDEqualFold: ID
-  environmentIDContainsFold: ID
-  """
-  scope_name field predicates
-  """
-  scopeName: String
-  scopeNameNEQ: String
-  scopeNameIn: [String!]
-  scopeNameNotIn: [String!]
-  scopeNameContains: String
-  scopeNameHasPrefix: String
-  scopeNameHasSuffix: String
-  scopeNameIsNil: Boolean
-  scopeNameNotNil: Boolean
-  scopeNameEqualFold: String
-  scopeNameContainsFold: String
-  """
-  scope_id field predicates
-  """
-  scopeID: ID
-  scopeIDNEQ: ID
-  scopeIDIn: [ID!]
-  scopeIDNotIn: [ID!]
-  scopeIDContains: ID
-  scopeIDHasPrefix: ID
-  scopeIDHasSuffix: ID
-  scopeIDIsNil: Boolean
-  scopeIDNotNil: Boolean
-  scopeIDEqualFold: ID
-  scopeIDContainsFold: ID
-  """
-  integration_id field predicates
-  """
-  integrationID: ID
-  integrationIDNEQ: ID
-  integrationIDIn: [ID!]
-  integrationIDNotIn: [ID!]
-  integrationIDContains: ID
-  integrationIDHasPrefix: ID
-  integrationIDHasSuffix: ID
-  integrationIDEqualFold: ID
-  integrationIDContainsFold: ID
-  """
-  platform_id field predicates
-  """
-  platformID: ID
-  platformIDNEQ: ID
-  platformIDIn: [ID!]
-  platformIDNotIn: [ID!]
-  platformIDContains: ID
-  platformIDHasPrefix: ID
-  platformIDHasSuffix: ID
-  platformIDIsNil: Boolean
-  platformIDNotNil: Boolean
-  platformIDEqualFold: ID
-  platformIDContainsFold: ID
-  """
-  directory_instance_id field predicates
-  """
-  directoryInstanceID: String
-  directoryInstanceIDNEQ: String
-  directoryInstanceIDIn: [String!]
-  directoryInstanceIDNotIn: [String!]
-  directoryInstanceIDContains: String
-  directoryInstanceIDHasPrefix: String
-  directoryInstanceIDHasSuffix: String
-  directoryInstanceIDIsNil: Boolean
-  directoryInstanceIDNotNil: Boolean
-  directoryInstanceIDEqualFold: String
-  directoryInstanceIDContainsFold: String
-  """
-  status field predicates
-  """
-  status: DirectorySyncRunDirectorySyncRunStatus
-  statusNEQ: DirectorySyncRunDirectorySyncRunStatus
-  statusIn: [DirectorySyncRunDirectorySyncRunStatus!]
-  statusNotIn: [DirectorySyncRunDirectorySyncRunStatus!]
-  """
-  started_at field predicates
-  """
-  startedAt: Time
-  startedAtGT: Time
-  startedAtGTE: Time
-  startedAtLT: Time
-  startedAtLTE: Time
-  """
-  completed_at field predicates
-  """
-  completedAt: Time
-  completedAtGT: Time
-  completedAtGTE: Time
-  completedAtLT: Time
-  completedAtLTE: Time
-  completedAtIsNil: Boolean
-  completedAtNotNil: Boolean
-  """
-  source_cursor field predicates
-  """
-  sourceCursor: String
-  sourceCursorNEQ: String
-  sourceCursorIn: [String!]
-  sourceCursorNotIn: [String!]
-  sourceCursorContains: String
-  sourceCursorHasPrefix: String
-  sourceCursorHasSuffix: String
-  sourceCursorIsNil: Boolean
-  sourceCursorNotNil: Boolean
-  sourceCursorEqualFold: String
-  sourceCursorContainsFold: String
-  """
-  full_count field predicates
-  """
-  fullCount: Int
-  fullCountNEQ: Int
-  fullCountGT: Int
-  fullCountGTE: Int
-  fullCountLT: Int
-  fullCountLTE: Int
-  """
-  delta_count field predicates
-  """
-  deltaCount: Int
-  deltaCountNEQ: Int
-  deltaCountGT: Int
-  deltaCountGTE: Int
-  deltaCountLT: Int
-  deltaCountLTE: Int
-  """
-  error field predicates
-  """
-  error: String
-  errorNEQ: String
-  errorIn: [String!]
-  errorNotIn: [String!]
-  errorContains: String
-  errorHasPrefix: String
-  errorHasSuffix: String
-  errorIsNil: Boolean
-  errorNotNil: Boolean
-  errorEqualFold: String
-  errorContainsFold: String
-  """
-  raw_manifest_file_id field predicates
-  """
-  rawManifestFileID: String
-  rawManifestFileIDNEQ: String
-  rawManifestFileIDIn: [String!]
-  rawManifestFileIDNotIn: [String!]
-  rawManifestFileIDContains: String
-  rawManifestFileIDHasPrefix: String
-  rawManifestFileIDHasSuffix: String
-  rawManifestFileIDIsNil: Boolean
-  rawManifestFileIDNotNil: Boolean
-  rawManifestFileIDEqualFold: String
-  rawManifestFileIDContainsFold: String
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  environment edge predicates
-  """
-  hasEnvironment: Boolean
-  hasEnvironmentWith: [CustomTypeEnumWhereInput!]
-  """
-  scope edge predicates
-  """
-  hasScope: Boolean
-  hasScopeWith: [CustomTypeEnumWhereInput!]
-  """
-  integration edge predicates
-  """
-  hasIntegration: Boolean
-  hasIntegrationWith: [IntegrationWhereInput!]
-  """
-  platform edge predicates
-  """
-  hasPlatform: Boolean
-  hasPlatformWith: [PlatformWhereInput!]
-  """
-  directory_accounts edge predicates
-  """
-  hasDirectoryAccounts: Boolean
-  hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
-  """
-  directory_groups edge predicates
-  """
-  hasDirectoryGroups: Boolean
-  hasDirectoryGroupsWith: [DirectoryGroupWhereInput!]
-  """
-  directory_memberships edge predicates
-  """
-  hasDirectoryMemberships: Boolean
-  hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
 }
 type Discussion implements Node {
   id: ID!
@@ -78905,9 +78482,13 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the ID of the organization owner of the object
   """
@@ -79148,6 +78729,37 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   time when this entity was last observed by the source integration
   """
   observedAt: DateTime
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   blockedGroups(
     """
@@ -80524,6 +80136,20 @@ input EntityWhereInput {
   managedByEqualFold: String
   managedByContainsFold: String
   """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -81177,6 +80803,11 @@ input EntityWhereInput {
   observedAtLTE: DateTime
   observedAtIsNil: Boolean
   observedAtNotNil: Boolean
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -84290,9 +83921,13 @@ type Finding implements Node @modules(names: ["vulnerability_management_module",
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the ID of the organization owner of the object
   """
@@ -84517,6 +84152,37 @@ type Finding implements Node @modules(names: ["vulnerability_management_module",
   raw payload received from the integration for auditing and troubleshooting
   """
   rawPayload: Map
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   blockedGroups(
     """
@@ -85676,6 +85342,20 @@ input FindingWhereInput {
   managedByEqualFold: String
   managedByContainsFold: String
   """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -86288,6 +85968,11 @@ input FindingWhereInput {
   externalURINotNil: Boolean
   externalURIEqualFold: String
   externalURIContainsFold: String
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -91451,37 +91136,6 @@ type Integration implements Node {
     """
     where: DirectoryMembershipWhereInput
   ): DirectoryMembershipConnection!
-  directorySyncRuns(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for DirectorySyncRuns returned from the connection.
-    """
-    orderBy: [DirectorySyncRunOrder!]
-
-    """
-    Filtering options for DirectorySyncRuns returned from the connection.
-    """
-    where: DirectorySyncRunWhereInput
-  ): DirectorySyncRunConnection!
   checkResults(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -91610,6 +91264,37 @@ type Integration implements Node {
     """
     where: CampaignWhereInput
   ): CampaignConnection!
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   entities(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -91710,6 +91395,840 @@ enum IntegrationOrderField {
   family
   status
   expires_at
+}
+type IntegrationRun implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  the ID of the organization owner of the object
+  """
+  ownerID: ID
+  """
+  integration connection this run belongs to
+  """
+  integrationID: ID
+  """
+  operation identifier executed for this run
+  """
+  operationName: String
+  """
+  operation category executed for this run
+  """
+  operationKind: IntegrationRunIntegrationOperationKind
+  """
+  run type such as MANUAL, SCHEDULED, WEBHOOK, or EVENT
+  """
+  runType: IntegrationRunIntegrationRunType
+  """
+  resolved operation configuration used for this run
+  """
+  operationConfig: Map
+  """
+  status of the run
+  """
+  status: IntegrationRunIntegrationRunStatus!
+  """
+  when the run started
+  """
+  startedAt: Time!
+  """
+  when the run completed
+  """
+  finishedAt: Time
+  """
+  run duration in milliseconds
+  """
+  durationMs: Int
+  """
+  summary of the run outcome
+  """
+  summary: String
+  """
+  error details for failed runs
+  """
+  error: String
+  """
+  structured metrics and outputs for the run
+  """
+  metrics: Map
+  owner: Organization
+  integration: Integration
+  actionPlans(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  checkResults(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for CheckResults returned from the connection.
+    """
+    orderBy: [CheckResultOrder!]
+
+    """
+    Filtering options for CheckResults returned from the connection.
+    """
+    where: CheckResultWhereInput
+  ): CheckResultConnection!
+  contacts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Contacts returned from the connection.
+    """
+    orderBy: [ContactOrder!]
+
+    """
+    Filtering options for Contacts returned from the connection.
+    """
+    where: ContactWhereInput
+  ): ContactConnection!
+  directoryAccounts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryAccounts returned from the connection.
+    """
+    orderBy: [DirectoryAccountOrder!]
+
+    """
+    Filtering options for DirectoryAccounts returned from the connection.
+    """
+    where: DirectoryAccountWhereInput
+  ): DirectoryAccountConnection!
+  directoryGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryGroups returned from the connection.
+    """
+    orderBy: [DirectoryGroupOrder!]
+
+    """
+    Filtering options for DirectoryGroups returned from the connection.
+    """
+    where: DirectoryGroupWhereInput
+  ): DirectoryGroupConnection!
+  directoryMemberships(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryMemberships returned from the connection.
+    """
+    orderBy: [DirectoryMembershipOrder!]
+
+    """
+    Filtering options for DirectoryMemberships returned from the connection.
+    """
+    where: DirectoryMembershipWhereInput
+  ): DirectoryMembershipConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  findings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for InternalPolicies returned from the connection.
+    """
+    orderBy: [InternalPolicyOrder!]
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Procedures returned from the connection.
+    """
+    orderBy: [ProcedureOrder!]
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  vulnerabilities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Vulnerabilities returned from the connection.
+    """
+    orderBy: [VulnerabilityOrder!]
+
+    """
+    Filtering options for Vulnerabilities returned from the connection.
+    """
+    where: VulnerabilityWhereInput
+  ): VulnerabilityConnection!
+}
+"""
+A connection to a list of items.
+"""
+type IntegrationRunConnection {
+  """
+  A list of edges.
+  """
+  edges: [IntegrationRunEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type IntegrationRunEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: IntegrationRun
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+IntegrationRunIntegrationOperationKind is enum for the field operation_kind
+"""
+enum IntegrationRunIntegrationOperationKind @goModel(model: "github.com/theopenlane/core/common/enums.IntegrationOperationKind") {
+  SYNC
+  PUSH
+  PULL
+  WEBHOOK
+  SCHEDULED
+}
+"""
+IntegrationRunIntegrationRunStatus is enum for the field status
+"""
+enum IntegrationRunIntegrationRunStatus @goModel(model: "github.com/theopenlane/core/common/enums.IntegrationRunStatus") {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+"""
+IntegrationRunIntegrationRunType is enum for the field run_type
+"""
+enum IntegrationRunIntegrationRunType @goModel(model: "github.com/theopenlane/core/common/enums.IntegrationRunType") {
+  MANUAL
+  SCHEDULED
+  WEBHOOK
+  EVENT
+  RECONCILE
+}
+"""
+Ordering options for IntegrationRun connections
+"""
+input IntegrationRunOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order IntegrationRuns.
+  """
+  field: IntegrationRunOrderField!
+}
+"""
+Properties by which IntegrationRun connections can be ordered.
+"""
+enum IntegrationRunOrderField {
+  created_at
+  updated_at
+  OPERATION_NAME
+  OPERATION_KIND
+  RUN_TYPE
+  STATUS
+  STARTED_AT
+  FINISHED_AT
+  DURATION_MS
+}
+"""
+IntegrationRunWhereInput is used for filtering IntegrationRun objects.
+Input was generated by ent.
+"""
+input IntegrationRunWhereInput {
+  not: IntegrationRunWhereInput
+  and: [IntegrationRunWhereInput!]
+  or: [IntegrationRunWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  integration_id field predicates
+  """
+  integrationID: ID
+  integrationIDNEQ: ID
+  integrationIDIn: [ID!]
+  integrationIDNotIn: [ID!]
+  integrationIDContains: ID
+  integrationIDHasPrefix: ID
+  integrationIDHasSuffix: ID
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: ID
+  integrationIDContainsFold: ID
+  """
+  operation_name field predicates
+  """
+  operationName: String
+  operationNameNEQ: String
+  operationNameIn: [String!]
+  operationNameNotIn: [String!]
+  operationNameContains: String
+  operationNameHasPrefix: String
+  operationNameHasSuffix: String
+  operationNameIsNil: Boolean
+  operationNameNotNil: Boolean
+  operationNameEqualFold: String
+  operationNameContainsFold: String
+  """
+  operation_kind field predicates
+  """
+  operationKind: IntegrationRunIntegrationOperationKind
+  operationKindNEQ: IntegrationRunIntegrationOperationKind
+  operationKindIn: [IntegrationRunIntegrationOperationKind!]
+  operationKindNotIn: [IntegrationRunIntegrationOperationKind!]
+  operationKindIsNil: Boolean
+  operationKindNotNil: Boolean
+  """
+  run_type field predicates
+  """
+  runType: IntegrationRunIntegrationRunType
+  runTypeNEQ: IntegrationRunIntegrationRunType
+  runTypeIn: [IntegrationRunIntegrationRunType!]
+  runTypeNotIn: [IntegrationRunIntegrationRunType!]
+  runTypeIsNil: Boolean
+  runTypeNotNil: Boolean
+  """
+  status field predicates
+  """
+  status: IntegrationRunIntegrationRunStatus
+  statusNEQ: IntegrationRunIntegrationRunStatus
+  statusIn: [IntegrationRunIntegrationRunStatus!]
+  statusNotIn: [IntegrationRunIntegrationRunStatus!]
+  """
+  started_at field predicates
+  """
+  startedAt: Time
+  startedAtGT: Time
+  startedAtGTE: Time
+  startedAtLT: Time
+  startedAtLTE: Time
+  """
+  finished_at field predicates
+  """
+  finishedAt: Time
+  finishedAtGT: Time
+  finishedAtGTE: Time
+  finishedAtLT: Time
+  finishedAtLTE: Time
+  finishedAtIsNil: Boolean
+  finishedAtNotNil: Boolean
+  """
+  duration_ms field predicates
+  """
+  durationMs: Int
+  durationMsNEQ: Int
+  durationMsGT: Int
+  durationMsGTE: Int
+  durationMsLT: Int
+  durationMsLTE: Int
+  durationMsIsNil: Boolean
+  durationMsNotNil: Boolean
+  """
+  summary field predicates
+  """
+  summary: String
+  summaryNEQ: String
+  summaryIn: [String!]
+  summaryNotIn: [String!]
+  summaryContains: String
+  summaryHasPrefix: String
+  summaryHasSuffix: String
+  summaryIsNil: Boolean
+  summaryNotNil: Boolean
+  summaryEqualFold: String
+  summaryContainsFold: String
+  """
+  error field predicates
+  """
+  error: String
+  errorNEQ: String
+  errorIn: [String!]
+  errorNotIn: [String!]
+  errorContains: String
+  errorHasPrefix: String
+  errorHasSuffix: String
+  errorIsNil: Boolean
+  errorNotNil: Boolean
+  errorEqualFold: String
+  errorContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  integration edge predicates
+  """
+  hasIntegration: Boolean
+  hasIntegrationWith: [IntegrationWhereInput!]
+  """
+  action_plans edge predicates
+  """
+  hasActionPlans: Boolean
+  hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  check_results edge predicates
+  """
+  hasCheckResults: Boolean
+  hasCheckResultsWith: [CheckResultWhereInput!]
+  """
+  contacts edge predicates
+  """
+  hasContacts: Boolean
+  hasContactsWith: [ContactWhereInput!]
+  """
+  directory_accounts edge predicates
+  """
+  hasDirectoryAccounts: Boolean
+  hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
+  """
+  directory_groups edge predicates
+  """
+  hasDirectoryGroups: Boolean
+  hasDirectoryGroupsWith: [DirectoryGroupWhereInput!]
+  """
+  directory_memberships edge predicates
+  """
+  hasDirectoryMemberships: Boolean
+  hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  findings edge predicates
+  """
+  hasFindings: Boolean
+  hasFindingsWith: [FindingWhereInput!]
+  """
+  internal_policies edge predicates
+  """
+  hasInternalPolicies: Boolean
+  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+  """
+  procedures edge predicates
+  """
+  hasProcedures: Boolean
+  hasProceduresWith: [ProcedureWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
+  """
+  vulnerabilities edge predicates
+  """
+  hasVulnerabilities: Boolean
+  hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
 }
 """
 IntegrationWhereInput is used for filtering Integration objects.
@@ -92118,11 +92637,6 @@ input IntegrationWhereInput {
   hasDirectoryMemberships: Boolean
   hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
   """
-  directory_sync_runs edge predicates
-  """
-  hasDirectorySyncRuns: Boolean
-  hasDirectorySyncRunsWith: [DirectorySyncRunWhereInput!]
-  """
   check_results edge predicates
   """
   hasCheckResults: Boolean
@@ -92147,6 +92661,11 @@ input IntegrationWhereInput {
   """
   hasCampaigns: Boolean
   hasCampaignsWith: [CampaignWhereInput!]
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   entities edge predicates
   """
@@ -92192,9 +92711,13 @@ type InternalPolicy implements Node @modules(names: ["compliance_module","policy
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the organization id that owns the object
   """
@@ -92324,6 +92847,37 @@ type InternalPolicy implements Node @modules(names: ["compliance_module","policy
   stable external UUID for deterministic OSCAL export and round-tripping
   """
   externalUUID: String
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   blockedGroups(
     """
@@ -93176,6 +93730,20 @@ input InternalPolicyWhereInput {
   managedByEqualFold: String
   managedByContainsFold: String
   """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -93483,6 +94051,11 @@ input InternalPolicyWhereInput {
   externalUUIDNotNil: Boolean
   externalUUIDEqualFold: String
   externalUUIDContainsFold: String
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -98200,37 +98773,6 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  directorySyncRunCreators(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
   discussionCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -102079,37 +102621,6 @@ type Organization implements Node {
     """
     where: DirectoryMembershipWhereInput
   ): DirectoryMembershipConnection!
-  directorySyncRuns(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for DirectorySyncRuns returned from the connection.
-    """
-    orderBy: [DirectorySyncRunOrder!]
-
-    """
-    Filtering options for DirectorySyncRuns returned from the connection.
-    """
-    where: DirectorySyncRunWhereInput
-  ): DirectorySyncRunConnection!
   discussions(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -103150,11 +103661,6 @@ input OrganizationWhereInput {
   hasDirectoryMembershipCreators: Boolean
   hasDirectoryMembershipCreatorsWith: [GroupWhereInput!]
   """
-  directory_sync_run_creators edge predicates
-  """
-  hasDirectorySyncRunCreators: Boolean
-  hasDirectorySyncRunCreatorsWith: [GroupWhereInput!]
-  """
   discussion_creators edge predicates
   """
   hasDiscussionCreators: Boolean
@@ -103794,11 +104300,6 @@ input OrganizationWhereInput {
   """
   hasDirectoryMemberships: Boolean
   hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
-  """
-  directory_sync_runs edge predicates
-  """
-  hasDirectorySyncRuns: Boolean
-  hasDirectorySyncRunsWith: [DirectorySyncRunWhereInput!]
   """
   discussions edge predicates
   """
@@ -104971,37 +105472,6 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
     """
     where: IntegrationWhereInput
   ): IntegrationConnection!
-  directorySyncRuns(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for DirectorySyncRuns returned from the connection.
-    """
-    orderBy: [DirectorySyncRunOrder!]
-
-    """
-    Filtering options for DirectorySyncRuns returned from the connection.
-    """
-    where: DirectorySyncRunWhereInput
-  ): DirectorySyncRunConnection!
   directoryAccounts(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -106361,11 +106831,6 @@ input PlatformWhereInput {
   hasIntegrations: Boolean
   hasIntegrationsWith: [IntegrationWhereInput!]
   """
-  directory_sync_runs edge predicates
-  """
-  hasDirectorySyncRuns: Boolean
-  hasDirectorySyncRunsWith: [DirectorySyncRunWhereInput!]
-  """
   directory_accounts edge predicates
   """
   hasDirectoryAccounts: Boolean
@@ -106465,9 +106930,13 @@ type Procedure implements Node @modules(names: ["compliance_module","policy_mana
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the organization id that owns the object
   """
@@ -106593,6 +107062,37 @@ type Procedure implements Node @modules(names: ["compliance_module","policy_mana
   internal marker field for workflow eligibility, not exposed in API
   """
   workflowEligibleMarker: Boolean
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   blockedGroups(
     """
@@ -107228,6 +107728,20 @@ input ProcedureWhereInput {
   managedByEqualFold: String
   managedByContainsFold: String
   """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -107521,6 +108035,11 @@ input ProcedureWhereInput {
   workflowEligibleMarkerNEQ: Boolean
   workflowEligibleMarkerIsNil: Boolean
   workflowEligibleMarkerNotNil: Boolean
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -109697,37 +110216,6 @@ type Query {
     """
     where: DirectoryMembershipWhereInput
   ): DirectoryMembershipConnection!
-  directorySyncRuns(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for DirectorySyncRuns returned from the connection.
-    """
-    orderBy: [DirectorySyncRunOrder!]
-
-    """
-    Filtering options for DirectorySyncRuns returned from the connection.
-    """
-    where: DirectorySyncRunWhereInput
-  ): DirectorySyncRunConnection!
   discussions(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -110255,6 +110743,37 @@ type Query {
     """
     where: IntegrationWhereInput
   ): IntegrationConnection!
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   internalPolicies(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -114449,9 +114968,13 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the ID of the organization owner of the object
   """
@@ -114589,6 +115112,37 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
   the decision made for the risk - accept, transfer, avoid, mitigate, or none
   """
   riskDecision: RiskRiskDecision
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   blockedGroups(
     """
@@ -115521,6 +116075,20 @@ input RiskWhereInput {
   managedByEqualFold: String
   managedByContainsFold: String
   """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -115901,6 +116469,11 @@ input RiskWhereInput {
   riskDecisionNotIn: [RiskRiskDecision!]
   riskDecisionIsNil: Boolean
   riskDecisionNotNil: Boolean
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -127400,10 +127973,15 @@ input UpdateActionPlanInput {
   sourceInstanceID: String
   clearSourceInstanceID: Boolean
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
   clearManagedBy: Boolean
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  clearIntegrationRunID: Boolean
   """
   the name of the action_plan
   """
@@ -127567,6 +128145,9 @@ input UpdateActionPlanInput {
   """
   source: String
   clearSource: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   approverID: ID
   clearApprover: Boolean
   delegateID: ID
@@ -127718,10 +128299,15 @@ input UpdateAssetInput {
   sourceInstanceID: String
   clearSourceInstanceID: Boolean
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
   clearManagedBy: Boolean
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  clearIntegrationRunID: Boolean
   """
   the internal owner for the asset when no user, group, or identity holder is linked
   """
@@ -127857,6 +128443,9 @@ input UpdateAssetInput {
   """
   observedAt: DateTime
   clearObservedAt: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -128193,10 +128782,15 @@ input UpdateCheckResultInput {
   sourceInstanceID: String
   clearSourceInstanceID: Boolean
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
   clearManagedBy: Boolean
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  clearIntegrationRunID: Boolean
   """
   current status of the control
   """
@@ -128225,6 +128819,9 @@ input UpdateCheckResultInput {
   """
   parentExternalID: String
   clearParentExternalID: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -128270,10 +128867,15 @@ input UpdateContactInput {
   sourceInstanceID: String
   clearSourceInstanceID: Boolean
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
   clearManagedBy: Boolean
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  clearIntegrationRunID: Boolean
   """
   the full name of the contact
   """
@@ -128323,6 +128925,9 @@ input UpdateContactInput {
   """
   observedAt: DateTime
   clearObservedAt: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   ownerID: ID
   clearOwner: Boolean
   addEntityIDs: [ID!]
@@ -128973,10 +129578,15 @@ input UpdateDirectoryAccountInput {
   sourceInstanceID: String
   clearSourceInstanceID: Boolean
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
   clearManagedBy: Boolean
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  clearIntegrationRunID: Boolean
   """
   the environment of the directory_account
   """
@@ -128987,11 +129597,6 @@ input UpdateDirectoryAccountInput {
   """
   scopeName: String
   clearScopeName: Boolean
-  """
-  stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance
-  """
-  directoryInstanceID: String
-  clearDirectoryInstanceID: Boolean
   """
   directory source label set by the integration (e.g. googleworkspace, github, slack)
   """
@@ -129102,10 +129707,6 @@ input UpdateDirectoryAccountInput {
   removedAt: Time
   clearRemovedAt: Boolean
   """
-  hash of the normalized profile payload for change detection
-  """
-  profileHash: String
-  """
   flattened attribute bag used for filtering/diffing
   """
   profile: Map
@@ -129124,6 +129725,9 @@ input UpdateDirectoryAccountInput {
   indicates this directory account originates from the installation designated as the primary directory source for its owner organization
   """
   primarySource: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID
@@ -129168,10 +129772,15 @@ input UpdateDirectoryGroupInput {
   sourceInstanceID: String
   clearSourceInstanceID: Boolean
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
   clearManagedBy: Boolean
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  clearIntegrationRunID: Boolean
   """
   the environment of the directory_group
   """
@@ -129182,11 +129791,6 @@ input UpdateDirectoryGroupInput {
   """
   scopeName: String
   clearScopeName: Boolean
-  """
-  stable external workspace, tenant, or installation identifier used to correlate groups across multiple integrations pointed at the same directory instance
-  """
-  directoryInstanceID: String
-  clearDirectoryInstanceID: Boolean
   """
   primary group email address, when applicable
   """
@@ -129241,10 +129845,6 @@ input UpdateDirectoryGroupInput {
   removedAt: Time
   clearRemovedAt: Boolean
   """
-  hash of the normalized payload for diffing
-  """
-  profileHash: String
-  """
   flattened attribute bag used for filtering/diffing
   """
   profile: Map
@@ -129264,6 +129864,9 @@ input UpdateDirectoryGroupInput {
   """
   directoryName: String
   clearDirectoryName: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   ownerID: ID
   clearOwner: Boolean
   environmentID: ID
@@ -129296,10 +129899,15 @@ input UpdateDirectoryMembershipInput {
   sourceInstanceID: String
   clearSourceInstanceID: Boolean
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
   clearManagedBy: Boolean
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  clearIntegrationRunID: Boolean
   """
   the environment of the directory_membership
   """
@@ -129310,11 +129918,6 @@ input UpdateDirectoryMembershipInput {
   """
   scopeName: String
   clearScopeName: Boolean
-  """
-  stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance
-  """
-  directoryInstanceID: String
-  clearDirectoryInstanceID: Boolean
   """
   membership role reported by the provider
   """
@@ -129351,15 +129954,13 @@ input UpdateDirectoryMembershipInput {
   removedAt: Time
   clearRemovedAt: Boolean
   """
-  sync run identifier that most recently confirmed this membership
-  """
-  lastConfirmedRunID: String
-  clearLastConfirmedRunID: Boolean
-  """
   raw metadata associated with this membership from the provider
   """
   metadata: Map
   clearMetadata: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   ownerID: ID
   clearOwner: Boolean
   environmentID: ID
@@ -129373,80 +129974,6 @@ input UpdateDirectoryMembershipInput {
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean
-}
-"""
-UpdateDirectorySyncRunInput is used for update DirectorySyncRun object.
-Input was generated by ent.
-"""
-input UpdateDirectorySyncRunInput {
-  """
-  the environment of the directory_sync_run
-  """
-  environmentName: String
-  clearEnvironmentName: Boolean
-  """
-  the scope of the directory_sync_run
-  """
-  scopeName: String
-  clearScopeName: Boolean
-  """
-  stable external workspace, tenant, or installation identifier derived from integration installation metadata for grouping runs across integrations pointed at the same directory instance
-  """
-  directoryInstanceID: String
-  clearDirectoryInstanceID: Boolean
-  """
-  current state of the sync run
-  """
-  status: DirectorySyncRunDirectorySyncRunStatus
-  """
-  time the sync started
-  """
-  startedAt: Time
-  """
-  time the sync finished
-  """
-  completedAt: Time
-  clearCompletedAt: Boolean
-  """
-  cursor or checkpoint returned by the provider for the next run
-  """
-  sourceCursor: String
-  clearSourceCursor: Boolean
-  """
-  total records processed during this run
-  """
-  fullCount: Int
-  """
-  number of records that changed compared to the prior run
-  """
-  deltaCount: Int
-  """
-  serialized error information when the run failed
-  """
-  error: String
-  clearError: Boolean
-  """
-  object storage file identifier for the manifest captured during the run
-  """
-  rawManifestFileID: String
-  clearRawManifestFileID: Boolean
-  """
-  additional provider-specific stats for the run
-  """
-  stats: Map
-  clearStats: Boolean
-  ownerID: ID
-  clearOwner: Boolean
-  environmentID: ID
-  clearEnvironment: Boolean
-  scopeID: ID
-  clearScope: Boolean
-  addDirectoryAccountIDs: [ID!]
-  removeDirectoryAccountIDs: [ID!]
-  clearDirectoryAccounts: Boolean
-  addDirectoryGroupIDs: [ID!]
-  removeDirectoryGroupIDs: [ID!]
-  clearDirectoryGroups: Boolean
 }
 """
 UpdateDiscussionInput is used for update Discussion object.
@@ -129663,10 +130190,15 @@ input UpdateEntityInput {
   sourceInstanceID: String
   clearSourceInstanceID: Boolean
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
   clearManagedBy: Boolean
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  clearIntegrationRunID: Boolean
   """
   the internal owner for the entity when no user, group, or identity holder is linked
   """
@@ -129892,6 +130424,9 @@ input UpdateEntityInput {
   """
   observedAt: DateTime
   clearObservedAt: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -130479,10 +131014,15 @@ input UpdateFindingInput {
   sourceInstanceID: String
   clearSourceInstanceID: Boolean
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
   clearManagedBy: Boolean
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  clearIntegrationRunID: Boolean
   """
   who reviewed the finding when no user, group, or identity holder is linked
   """
@@ -130707,6 +131247,9 @@ input UpdateFindingInput {
   """
   rawPayload: Map
   clearRawPayload: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -131322,10 +131865,15 @@ input UpdateInternalPolicyInput {
   sourceInstanceID: String
   clearSourceInstanceID: Boolean
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
   clearManagedBy: Boolean
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  clearIntegrationRunID: Boolean
   """
   internal notes about the object creation, this field is only available to system admins
   """
@@ -131452,6 +132000,9 @@ input UpdateInternalPolicyInput {
   """
   externalUUID: String
   clearExternalUUID: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -132098,9 +132649,6 @@ input UpdateOrganizationInput {
   addDirectoryMembershipCreatorIDs: [ID!]
   removeDirectoryMembershipCreatorIDs: [ID!]
   clearDirectoryMembershipCreators: Boolean
-  addDirectorySyncRunCreatorIDs: [ID!]
-  removeDirectorySyncRunCreatorIDs: [ID!]
-  clearDirectorySyncRunCreators: Boolean
   addDiscussionCreatorIDs: [ID!]
   removeDiscussionCreatorIDs: [ID!]
   clearDiscussionCreators: Boolean
@@ -132471,9 +133019,6 @@ input UpdateOrganizationInput {
   addDirectoryGroupIDs: [ID!]
   removeDirectoryGroupIDs: [ID!]
   clearDirectoryGroups: Boolean
-  addDirectorySyncRunIDs: [ID!]
-  removeDirectorySyncRunIDs: [ID!]
-  clearDirectorySyncRuns: Boolean
   addDiscussionIDs: [ID!]
   removeDiscussionIDs: [ID!]
   clearDiscussions: Boolean
@@ -132933,9 +133478,6 @@ input UpdatePlatformInput {
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
-  addDirectorySyncRunIDs: [ID!]
-  removeDirectorySyncRunIDs: [ID!]
-  clearDirectorySyncRuns: Boolean
   addDirectoryAccountIDs: [ID!]
   removeDirectoryAccountIDs: [ID!]
   clearDirectoryAccounts: Boolean
@@ -133001,10 +133543,15 @@ input UpdateProcedureInput {
   sourceInstanceID: String
   clearSourceInstanceID: Boolean
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
   clearManagedBy: Boolean
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  clearIntegrationRunID: Boolean
   """
   the name of the procedure
   """
@@ -133126,6 +133673,9 @@ input UpdateProcedureInput {
   """
   workflowEligibleMarker: Boolean
   clearWorkflowEligibleMarker: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -133747,10 +134297,15 @@ input UpdateRiskInput {
   sourceInstanceID: String
   clearSourceInstanceID: Boolean
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
   clearManagedBy: Boolean
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  clearIntegrationRunID: Boolean
   """
   the kind of the risk
   """
@@ -133890,6 +134445,9 @@ input UpdateRiskInput {
   """
   riskDecision: RiskRiskDecision
   clearRiskDecision: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -135731,10 +136289,15 @@ input UpdateVulnerabilityInput {
   sourceInstanceID: String
   clearSourceInstanceID: Boolean
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
   clearManagedBy: Boolean
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  clearIntegrationRunID: Boolean
   """
   who reviewed the vulnerability when no user, group, or identity holder is linked
   """
@@ -135982,6 +136545,9 @@ input UpdateVulnerabilityInput {
   """
   rawPayload: Map
   clearRawPayload: Boolean
+  addIntegrationRunIDs: [ID!]
+  removeIntegrationRunIDs: [ID!]
+  clearIntegrationRuns: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -138327,9 +138893,13 @@ type Vulnerability implements Node @modules(names: ["vulnerability_management_mo
   """
   sourceInstanceID: String
   """
-  virtual subject id of the integration definition managing the record, empty when user controlled
+  id of the integration installation managing the record, empty when the record is unclaimed
   """
   managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
   """
   the ID of the organization owner of the object
   """
@@ -138574,6 +139144,37 @@ type Vulnerability implements Node @modules(names: ["vulnerability_management_mo
   raw payload received from the integration for auditing and troubleshooting
   """
   rawPayload: Map
+  integrationRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRuns returned from the connection.
+    """
+    orderBy: IntegrationRunOrder
+
+    """
+    Filtering options for IntegrationRuns returned from the connection.
+    """
+    where: IntegrationRunWhereInput
+  ): IntegrationRunConnection!
   owner: Organization
   blockedGroups(
     """
@@ -139389,6 +139990,20 @@ input VulnerabilityWhereInput {
   managedByEqualFold: String
   managedByContainsFold: String
   """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -140079,6 +140694,11 @@ input VulnerabilityWhereInput {
   externalURINotNil: Boolean
   externalURIEqualFold: String
   externalURIContainsFold: String
+  """
+  integration_runs edge predicates
+  """
+  hasIntegrationRuns: Boolean
+  hasIntegrationRunsWith: [IntegrationRunWhereInput!]
   """
   owner edge predicates
   """
@@ -156106,6 +156726,8 @@ func (ec *executionContext) childFields_ActionPlan(ctx context.Context, field gr
 		return ec.fieldContext_ActionPlan_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_ActionPlan_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_ActionPlan_integrationRunID(ctx, field)
 	case "name":
 		return ec.fieldContext_ActionPlan_name(ctx, field)
 	case "status":
@@ -156184,6 +156806,8 @@ func (ec *executionContext) childFields_ActionPlan(ctx context.Context, field gr
 		return ec.fieldContext_ActionPlan_rawPayload(ctx, field)
 	case "source":
 		return ec.fieldContext_ActionPlan_source(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_ActionPlan_integrationRuns(ctx, field)
 	case "approver":
 		return ec.fieldContext_ActionPlan_approver(ctx, field)
 	case "delegate":
@@ -156604,6 +157228,8 @@ func (ec *executionContext) childFields_Asset(ctx context.Context, field graphql
 		return ec.fieldContext_Asset_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_Asset_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_Asset_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_Asset_ownerID(ctx, field)
 	case "internalOwner":
@@ -156690,6 +157316,8 @@ func (ec *executionContext) childFields_Asset(ctx context.Context, field graphql
 		return ec.fieldContext_Asset_integrationID(ctx, field)
 	case "observedAt":
 		return ec.fieldContext_Asset_observedAt(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_Asset_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_Asset_owner(ctx, field)
 	case "blockedGroups":
@@ -157218,6 +157846,8 @@ func (ec *executionContext) childFields_CheckResult(ctx context.Context, field g
 		return ec.fieldContext_CheckResult_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_CheckResult_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_CheckResult_integrationRunID(ctx, field)
 	case "status":
 		return ec.fieldContext_CheckResult_status(ctx, field)
 	case "source":
@@ -157232,6 +157862,8 @@ func (ec *executionContext) childFields_CheckResult(ctx context.Context, field g
 		return ec.fieldContext_CheckResult_parentExternalID(ctx, field)
 	case "integrationID":
 		return ec.fieldContext_CheckResult_integrationID(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_CheckResult_integrationRuns(ctx, field)
 	case "blockedGroups":
 		return ec.fieldContext_CheckResult_blockedGroups(ctx, field)
 	case "editors":
@@ -157352,6 +157984,8 @@ func (ec *executionContext) childFields_Contact(ctx context.Context, field graph
 		return ec.fieldContext_Contact_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_Contact_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_Contact_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_Contact_ownerID(ctx, field)
 	case "fullName":
@@ -157374,6 +158008,8 @@ func (ec *executionContext) childFields_Contact(ctx context.Context, field graph
 		return ec.fieldContext_Contact_integrationID(ctx, field)
 	case "observedAt":
 		return ec.fieldContext_Contact_observedAt(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_Contact_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_Contact_owner(ctx, field)
 	case "entities":
@@ -158640,6 +159276,8 @@ func (ec *executionContext) childFields_DirectoryAccount(ctx context.Context, fi
 		return ec.fieldContext_DirectoryAccount_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_DirectoryAccount_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_DirectoryAccount_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_DirectoryAccount_ownerID(ctx, field)
 	case "environmentName":
@@ -158652,12 +159290,8 @@ func (ec *executionContext) childFields_DirectoryAccount(ctx context.Context, fi
 		return ec.fieldContext_DirectoryAccount_scopeID(ctx, field)
 	case "integrationID":
 		return ec.fieldContext_DirectoryAccount_integrationID(ctx, field)
-	case "directorySyncRunID":
-		return ec.fieldContext_DirectoryAccount_directorySyncRunID(ctx, field)
 	case "platformID":
 		return ec.fieldContext_DirectoryAccount_platformID(ctx, field)
-	case "directoryInstanceID":
-		return ec.fieldContext_DirectoryAccount_directoryInstanceID(ctx, field)
 	case "identityHolderID":
 		return ec.fieldContext_DirectoryAccount_identityHolderID(ctx, field)
 	case "directoryName":
@@ -158710,8 +159344,6 @@ func (ec *executionContext) childFields_DirectoryAccount(ctx context.Context, fi
 		return ec.fieldContext_DirectoryAccount_removedAt(ctx, field)
 	case "observedAt":
 		return ec.fieldContext_DirectoryAccount_observedAt(ctx, field)
-	case "profileHash":
-		return ec.fieldContext_DirectoryAccount_profileHash(ctx, field)
 	case "profile":
 		return ec.fieldContext_DirectoryAccount_profile(ctx, field)
 	case "metadata":
@@ -158722,6 +159354,8 @@ func (ec *executionContext) childFields_DirectoryAccount(ctx context.Context, fi
 		return ec.fieldContext_DirectoryAccount_sourceVersion(ctx, field)
 	case "primarySource":
 		return ec.fieldContext_DirectoryAccount_primarySource(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_DirectoryAccount_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_DirectoryAccount_owner(ctx, field)
 	case "environment":
@@ -158730,8 +159364,6 @@ func (ec *executionContext) childFields_DirectoryAccount(ctx context.Context, fi
 		return ec.fieldContext_DirectoryAccount_scope(ctx, field)
 	case "integration":
 		return ec.fieldContext_DirectoryAccount_integration(ctx, field)
-	case "directorySyncRun":
-		return ec.fieldContext_DirectoryAccount_directorySyncRun(ctx, field)
 	case "platform":
 		return ec.fieldContext_DirectoryAccount_platform(ctx, field)
 	case "identityHolder":
@@ -158830,6 +159462,8 @@ func (ec *executionContext) childFields_DirectoryGroup(ctx context.Context, fiel
 		return ec.fieldContext_DirectoryGroup_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_DirectoryGroup_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_DirectoryGroup_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_DirectoryGroup_ownerID(ctx, field)
 	case "environmentName":
@@ -158844,10 +159478,6 @@ func (ec *executionContext) childFields_DirectoryGroup(ctx context.Context, fiel
 		return ec.fieldContext_DirectoryGroup_integrationID(ctx, field)
 	case "platformID":
 		return ec.fieldContext_DirectoryGroup_platformID(ctx, field)
-	case "directoryInstanceID":
-		return ec.fieldContext_DirectoryGroup_directoryInstanceID(ctx, field)
-	case "directorySyncRunID":
-		return ec.fieldContext_DirectoryGroup_directorySyncRunID(ctx, field)
 	case "externalID":
 		return ec.fieldContext_DirectoryGroup_externalID(ctx, field)
 	case "email":
@@ -158874,8 +159504,6 @@ func (ec *executionContext) childFields_DirectoryGroup(ctx context.Context, fiel
 		return ec.fieldContext_DirectoryGroup_removedAt(ctx, field)
 	case "observedAt":
 		return ec.fieldContext_DirectoryGroup_observedAt(ctx, field)
-	case "profileHash":
-		return ec.fieldContext_DirectoryGroup_profileHash(ctx, field)
 	case "profile":
 		return ec.fieldContext_DirectoryGroup_profile(ctx, field)
 	case "metadata":
@@ -158886,6 +159514,8 @@ func (ec *executionContext) childFields_DirectoryGroup(ctx context.Context, fiel
 		return ec.fieldContext_DirectoryGroup_sourceVersion(ctx, field)
 	case "directoryName":
 		return ec.fieldContext_DirectoryGroup_directoryName(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_DirectoryGroup_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_DirectoryGroup_owner(ctx, field)
 	case "environment":
@@ -158894,8 +159524,6 @@ func (ec *executionContext) childFields_DirectoryGroup(ctx context.Context, fiel
 		return ec.fieldContext_DirectoryGroup_scope(ctx, field)
 	case "integration":
 		return ec.fieldContext_DirectoryGroup_integration(ctx, field)
-	case "directorySyncRun":
-		return ec.fieldContext_DirectoryGroup_directorySyncRun(ctx, field)
 	case "platform":
 		return ec.fieldContext_DirectoryGroup_platform(ctx, field)
 	case "accounts":
@@ -158986,6 +159614,8 @@ func (ec *executionContext) childFields_DirectoryMembership(ctx context.Context,
 		return ec.fieldContext_DirectoryMembership_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_DirectoryMembership_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_DirectoryMembership_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_DirectoryMembership_ownerID(ctx, field)
 	case "environmentName":
@@ -159000,10 +159630,6 @@ func (ec *executionContext) childFields_DirectoryMembership(ctx context.Context,
 		return ec.fieldContext_DirectoryMembership_integrationID(ctx, field)
 	case "platformID":
 		return ec.fieldContext_DirectoryMembership_platformID(ctx, field)
-	case "directoryInstanceID":
-		return ec.fieldContext_DirectoryMembership_directoryInstanceID(ctx, field)
-	case "directorySyncRunID":
-		return ec.fieldContext_DirectoryMembership_directorySyncRunID(ctx, field)
 	case "directoryAccountID":
 		return ec.fieldContext_DirectoryMembership_directoryAccountID(ctx, field)
 	case "directoryGroupID":
@@ -159024,10 +159650,10 @@ func (ec *executionContext) childFields_DirectoryMembership(ctx context.Context,
 		return ec.fieldContext_DirectoryMembership_removedAt(ctx, field)
 	case "observedAt":
 		return ec.fieldContext_DirectoryMembership_observedAt(ctx, field)
-	case "lastConfirmedRunID":
-		return ec.fieldContext_DirectoryMembership_lastConfirmedRunID(ctx, field)
 	case "metadata":
 		return ec.fieldContext_DirectoryMembership_metadata(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_DirectoryMembership_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_DirectoryMembership_owner(ctx, field)
 	case "environment":
@@ -159036,8 +159662,6 @@ func (ec *executionContext) childFields_DirectoryMembership(ctx context.Context,
 		return ec.fieldContext_DirectoryMembership_scope(ctx, field)
 	case "integration":
 		return ec.fieldContext_DirectoryMembership_integration(ctx, field)
-	case "directorySyncRun":
-		return ec.fieldContext_DirectoryMembership_directorySyncRun(ctx, field)
 	case "platform":
 		return ec.fieldContext_DirectoryMembership_platform(ctx, field)
 	case "directoryAccount":
@@ -159104,130 +159728,6 @@ func (ec *executionContext) childFields_DirectoryMembershipUpdatePayload(ctx con
 		return ec.fieldContext_DirectoryMembershipUpdatePayload_directoryMembership(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type DirectoryMembershipUpdatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_DirectorySyncRun(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "id":
-		return ec.fieldContext_DirectorySyncRun_id(ctx, field)
-	case "createdAt":
-		return ec.fieldContext_DirectorySyncRun_createdAt(ctx, field)
-	case "updatedAt":
-		return ec.fieldContext_DirectorySyncRun_updatedAt(ctx, field)
-	case "createdBy":
-		return ec.fieldContext_DirectorySyncRun_createdBy(ctx, field)
-	case "updatedBy":
-		return ec.fieldContext_DirectorySyncRun_updatedBy(ctx, field)
-	case "updatedByImpersonator":
-		return ec.fieldContext_DirectorySyncRun_updatedByImpersonator(ctx, field)
-	case "displayID":
-		return ec.fieldContext_DirectorySyncRun_displayID(ctx, field)
-	case "ownerID":
-		return ec.fieldContext_DirectorySyncRun_ownerID(ctx, field)
-	case "environmentName":
-		return ec.fieldContext_DirectorySyncRun_environmentName(ctx, field)
-	case "environmentID":
-		return ec.fieldContext_DirectorySyncRun_environmentID(ctx, field)
-	case "scopeName":
-		return ec.fieldContext_DirectorySyncRun_scopeName(ctx, field)
-	case "scopeID":
-		return ec.fieldContext_DirectorySyncRun_scopeID(ctx, field)
-	case "integrationID":
-		return ec.fieldContext_DirectorySyncRun_integrationID(ctx, field)
-	case "platformID":
-		return ec.fieldContext_DirectorySyncRun_platformID(ctx, field)
-	case "directoryInstanceID":
-		return ec.fieldContext_DirectorySyncRun_directoryInstanceID(ctx, field)
-	case "status":
-		return ec.fieldContext_DirectorySyncRun_status(ctx, field)
-	case "startedAt":
-		return ec.fieldContext_DirectorySyncRun_startedAt(ctx, field)
-	case "completedAt":
-		return ec.fieldContext_DirectorySyncRun_completedAt(ctx, field)
-	case "sourceCursor":
-		return ec.fieldContext_DirectorySyncRun_sourceCursor(ctx, field)
-	case "fullCount":
-		return ec.fieldContext_DirectorySyncRun_fullCount(ctx, field)
-	case "deltaCount":
-		return ec.fieldContext_DirectorySyncRun_deltaCount(ctx, field)
-	case "error":
-		return ec.fieldContext_DirectorySyncRun_error(ctx, field)
-	case "rawManifestFileID":
-		return ec.fieldContext_DirectorySyncRun_rawManifestFileID(ctx, field)
-	case "stats":
-		return ec.fieldContext_DirectorySyncRun_stats(ctx, field)
-	case "owner":
-		return ec.fieldContext_DirectorySyncRun_owner(ctx, field)
-	case "environment":
-		return ec.fieldContext_DirectorySyncRun_environment(ctx, field)
-	case "scope":
-		return ec.fieldContext_DirectorySyncRun_scope(ctx, field)
-	case "integration":
-		return ec.fieldContext_DirectorySyncRun_integration(ctx, field)
-	case "platform":
-		return ec.fieldContext_DirectorySyncRun_platform(ctx, field)
-	case "directoryAccounts":
-		return ec.fieldContext_DirectorySyncRun_directoryAccounts(ctx, field)
-	case "directoryGroups":
-		return ec.fieldContext_DirectorySyncRun_directoryGroups(ctx, field)
-	case "directoryMemberships":
-		return ec.fieldContext_DirectorySyncRun_directoryMemberships(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type DirectorySyncRun", field.Name)
-}
-
-func (ec *executionContext) childFields_DirectorySyncRunBulkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "directorySyncRuns":
-		return ec.fieldContext_DirectorySyncRunBulkCreatePayload_directorySyncRuns(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type DirectorySyncRunBulkCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_DirectorySyncRunConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "edges":
-		return ec.fieldContext_DirectorySyncRunConnection_edges(ctx, field)
-	case "pageInfo":
-		return ec.fieldContext_DirectorySyncRunConnection_pageInfo(ctx, field)
-	case "totalCount":
-		return ec.fieldContext_DirectorySyncRunConnection_totalCount(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type DirectorySyncRunConnection", field.Name)
-}
-
-func (ec *executionContext) childFields_DirectorySyncRunCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "directorySyncRun":
-		return ec.fieldContext_DirectorySyncRunCreatePayload_directorySyncRun(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type DirectorySyncRunCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_DirectorySyncRunDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedID":
-		return ec.fieldContext_DirectorySyncRunDeletePayload_deletedID(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type DirectorySyncRunDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_DirectorySyncRunEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "node":
-		return ec.fieldContext_DirectorySyncRunEdge_node(ctx, field)
-	case "cursor":
-		return ec.fieldContext_DirectorySyncRunEdge_cursor(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type DirectorySyncRunEdge", field.Name)
-}
-
-func (ec *executionContext) childFields_DirectorySyncRunUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "directorySyncRun":
-		return ec.fieldContext_DirectorySyncRunUpdatePayload_directorySyncRun(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type DirectorySyncRunUpdatePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_Discussion(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -159658,6 +160158,8 @@ func (ec *executionContext) childFields_Entity(ctx context.Context, field graphq
 		return ec.fieldContext_Entity_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_Entity_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_Entity_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_Entity_ownerID(ctx, field)
 	case "internalOwner":
@@ -159778,6 +160280,8 @@ func (ec *executionContext) childFields_Entity(ctx context.Context, field graphq
 		return ec.fieldContext_Entity_externalID(ctx, field)
 	case "observedAt":
 		return ec.fieldContext_Entity_observedAt(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_Entity_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_Entity_owner(ctx, field)
 	case "blockedGroups":
@@ -160654,6 +161158,8 @@ func (ec *executionContext) childFields_Finding(ctx context.Context, field graph
 		return ec.fieldContext_Finding_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_Finding_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_Finding_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_Finding_ownerID(ctx, field)
 	case "reviewedBy":
@@ -160766,6 +161272,8 @@ func (ec *executionContext) childFields_Finding(ctx context.Context, field graph
 		return ec.fieldContext_Finding_metadata(ctx, field)
 	case "rawPayload":
 		return ec.fieldContext_Finding_rawPayload(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_Finding_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_Finding_owner(ctx, field)
 	case "blockedGroups":
@@ -161996,8 +162504,6 @@ func (ec *executionContext) childFields_Integration(ctx context.Context, field g
 		return ec.fieldContext_Integration_directoryGroups(ctx, field)
 	case "directoryMemberships":
 		return ec.fieldContext_Integration_directoryMemberships(ctx, field)
-	case "directorySyncRuns":
-		return ec.fieldContext_Integration_directorySyncRuns(ctx, field)
 	case "checkResults":
 		return ec.fieldContext_Integration_checkResults(ctx, field)
 	case "platform":
@@ -162008,6 +162514,8 @@ func (ec *executionContext) childFields_Integration(ctx context.Context, field g
 		return ec.fieldContext_Integration_emailTemplates(ctx, field)
 	case "campaigns":
 		return ec.fieldContext_Integration_campaigns(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_Integration_integrationRuns(ctx, field)
 	case "entities":
 		return ec.fieldContext_Integration_entities(ctx, field)
 	case "webhookURLs":
@@ -162050,6 +162558,102 @@ func (ec *executionContext) childFields_IntegrationEdge(ctx context.Context, fie
 	return nil, fmt.Errorf("no field named %q was found under type IntegrationEdge", field.Name)
 }
 
+func (ec *executionContext) childFields_IntegrationRun(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_IntegrationRun_id(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_IntegrationRun_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_IntegrationRun_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_IntegrationRun_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_IntegrationRun_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_IntegrationRun_updatedByImpersonator(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_IntegrationRun_ownerID(ctx, field)
+	case "integrationID":
+		return ec.fieldContext_IntegrationRun_integrationID(ctx, field)
+	case "operationName":
+		return ec.fieldContext_IntegrationRun_operationName(ctx, field)
+	case "operationKind":
+		return ec.fieldContext_IntegrationRun_operationKind(ctx, field)
+	case "runType":
+		return ec.fieldContext_IntegrationRun_runType(ctx, field)
+	case "operationConfig":
+		return ec.fieldContext_IntegrationRun_operationConfig(ctx, field)
+	case "status":
+		return ec.fieldContext_IntegrationRun_status(ctx, field)
+	case "startedAt":
+		return ec.fieldContext_IntegrationRun_startedAt(ctx, field)
+	case "finishedAt":
+		return ec.fieldContext_IntegrationRun_finishedAt(ctx, field)
+	case "durationMs":
+		return ec.fieldContext_IntegrationRun_durationMs(ctx, field)
+	case "summary":
+		return ec.fieldContext_IntegrationRun_summary(ctx, field)
+	case "error":
+		return ec.fieldContext_IntegrationRun_error(ctx, field)
+	case "metrics":
+		return ec.fieldContext_IntegrationRun_metrics(ctx, field)
+	case "owner":
+		return ec.fieldContext_IntegrationRun_owner(ctx, field)
+	case "integration":
+		return ec.fieldContext_IntegrationRun_integration(ctx, field)
+	case "actionPlans":
+		return ec.fieldContext_IntegrationRun_actionPlans(ctx, field)
+	case "assets":
+		return ec.fieldContext_IntegrationRun_assets(ctx, field)
+	case "checkResults":
+		return ec.fieldContext_IntegrationRun_checkResults(ctx, field)
+	case "contacts":
+		return ec.fieldContext_IntegrationRun_contacts(ctx, field)
+	case "directoryAccounts":
+		return ec.fieldContext_IntegrationRun_directoryAccounts(ctx, field)
+	case "directoryGroups":
+		return ec.fieldContext_IntegrationRun_directoryGroups(ctx, field)
+	case "directoryMemberships":
+		return ec.fieldContext_IntegrationRun_directoryMemberships(ctx, field)
+	case "entities":
+		return ec.fieldContext_IntegrationRun_entities(ctx, field)
+	case "findings":
+		return ec.fieldContext_IntegrationRun_findings(ctx, field)
+	case "internalPolicies":
+		return ec.fieldContext_IntegrationRun_internalPolicies(ctx, field)
+	case "procedures":
+		return ec.fieldContext_IntegrationRun_procedures(ctx, field)
+	case "risks":
+		return ec.fieldContext_IntegrationRun_risks(ctx, field)
+	case "vulnerabilities":
+		return ec.fieldContext_IntegrationRun_vulnerabilities(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type IntegrationRun", field.Name)
+}
+
+func (ec *executionContext) childFields_IntegrationRunConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_IntegrationRunConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_IntegrationRunConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_IntegrationRunConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type IntegrationRunConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_IntegrationRunEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_IntegrationRunEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_IntegrationRunEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type IntegrationRunEdge", field.Name)
+}
+
 func (ec *executionContext) childFields_InternalPolicy(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -162078,6 +162682,8 @@ func (ec *executionContext) childFields_InternalPolicy(ctx context.Context, fiel
 		return ec.fieldContext_InternalPolicy_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_InternalPolicy_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_InternalPolicy_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_InternalPolicy_ownerID(ctx, field)
 	case "systemOwned":
@@ -162144,6 +162750,8 @@ func (ec *executionContext) childFields_InternalPolicy(ctx context.Context, fiel
 		return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
 	case "externalUUID":
 		return ec.fieldContext_InternalPolicy_externalUUID(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_InternalPolicy_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_InternalPolicy_owner(ctx, field)
 	case "blockedGroups":
@@ -163558,8 +164166,6 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_directoryGroupCreators(ctx, field)
 	case "directoryMembershipCreators":
 		return ec.fieldContext_Organization_directoryMembershipCreators(ctx, field)
-	case "directorySyncRunCreators":
-		return ec.fieldContext_Organization_directorySyncRunCreators(ctx, field)
 	case "discussionCreators":
 		return ec.fieldContext_Organization_discussionCreators(ctx, field)
 	case "documentDataCreators":
@@ -163816,8 +164422,6 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_directoryGroups(ctx, field)
 	case "directoryMemberships":
 		return ec.fieldContext_Organization_directoryMemberships(ctx, field)
-	case "directorySyncRuns":
-		return ec.fieldContext_Organization_directorySyncRuns(ctx, field)
 	case "discussions":
 		return ec.fieldContext_Organization_discussions(ctx, field)
 	case "vendorScoringConfigs":
@@ -164358,8 +164962,6 @@ func (ec *executionContext) childFields_Platform(ctx context.Context, field grap
 		return ec.fieldContext_Platform_identityHolders(ctx, field)
 	case "integrations":
 		return ec.fieldContext_Platform_integrations(ctx, field)
-	case "directorySyncRuns":
-		return ec.fieldContext_Platform_directorySyncRuns(ctx, field)
 	case "directoryAccounts":
 		return ec.fieldContext_Platform_directoryAccounts(ctx, field)
 	case "directoryGroups":
@@ -164492,6 +165094,8 @@ func (ec *executionContext) childFields_Procedure(ctx context.Context, field gra
 		return ec.fieldContext_Procedure_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_Procedure_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_Procedure_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_Procedure_ownerID(ctx, field)
 	case "name":
@@ -164556,6 +165160,8 @@ func (ec *executionContext) childFields_Procedure(ctx context.Context, field gra
 		return ec.fieldContext_Procedure_scopeID(ctx, field)
 	case "workflowEligibleMarker":
 		return ec.fieldContext_Procedure_workflowEligibleMarker(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_Procedure_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_Procedure_owner(ctx, field)
 	case "blockedGroups":
@@ -165436,6 +166042,8 @@ func (ec *executionContext) childFields_Risk(ctx context.Context, field graphql.
 		return ec.fieldContext_Risk_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_Risk_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_Risk_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_Risk_ownerID(ctx, field)
 	case "riskKindName":
@@ -165506,6 +166114,8 @@ func (ec *executionContext) childFields_Risk(ctx context.Context, field graphql.
 		return ec.fieldContext_Risk_residualScore(ctx, field)
 	case "riskDecision":
 		return ec.fieldContext_Risk_riskDecision(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_Risk_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_Risk_owner(ctx, field)
 	case "blockedGroups":
@@ -169002,6 +169612,8 @@ func (ec *executionContext) childFields_Vulnerability(ctx context.Context, field
 		return ec.fieldContext_Vulnerability_sourceInstanceID(ctx, field)
 	case "managedBy":
 		return ec.fieldContext_Vulnerability_managedBy(ctx, field)
+	case "integrationRunID":
+		return ec.fieldContext_Vulnerability_integrationRunID(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_Vulnerability_ownerID(ctx, field)
 	case "reviewedBy":
@@ -169124,6 +169736,8 @@ func (ec *executionContext) childFields_Vulnerability(ctx context.Context, field
 		return ec.fieldContext_Vulnerability_metadata(ctx, field)
 	case "rawPayload":
 		return ec.fieldContext_Vulnerability_rawPayload(ctx, field)
+	case "integrationRuns":
+		return ec.fieldContext_Vulnerability_integrationRuns(ctx, field)
 	case "owner":
 		return ec.fieldContext_Vulnerability_owner(ctx, field)
 	case "blockedGroups":

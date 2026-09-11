@@ -114,6 +114,10 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetManagedBy(managedBy)
 	}
 
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -380,6 +384,12 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetManagedBy(managedBy)
 		} else {
 			create = create.SetManagedBy(actionplan.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(actionplan.IntegrationRunID)
 		}
 
 		if name, exists := m.Name(); exists {
@@ -667,6 +677,7 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetSourceDefinitionVersion(actionplan.SourceDefinitionVersion).
 			SetSourceInstanceID(actionplan.SourceInstanceID).
 			SetManagedBy(actionplan.ManagedBy).
+			SetIntegrationRunID(actionplan.IntegrationRunID).
 			SetName(actionplan.Name).
 			SetStatus(actionplan.Status).
 			SetManagementMode(actionplan.ManagementMode).
@@ -1568,6 +1579,10 @@ func (m *AssetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetManagedBy(managedBy)
 	}
 
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -1844,6 +1859,12 @@ func (m *AssetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetManagedBy(managedBy)
 		} else {
 			create = create.SetManagedBy(asset.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(asset.IntegrationRunID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -2154,6 +2175,7 @@ func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSourceDefinitionVersion(asset.SourceDefinitionVersion).
 			SetSourceInstanceID(asset.SourceInstanceID).
 			SetManagedBy(asset.ManagedBy).
+			SetIntegrationRunID(asset.IntegrationRunID).
 			SetOwnerID(asset.OwnerID).
 			SetInternalOwner(asset.InternalOwner).
 			SetInternalOwnerUserID(asset.InternalOwnerUserID).
@@ -3202,6 +3224,10 @@ func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetManagedBy(managedBy)
 	}
 
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -3352,6 +3378,12 @@ func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetManagedBy(contact.ManagedBy)
 		}
 
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(contact.IntegrationRunID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -3468,6 +3500,7 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSourceDefinitionVersion(contact.SourceDefinitionVersion).
 			SetSourceInstanceID(contact.SourceInstanceID).
 			SetManagedBy(contact.ManagedBy).
+			SetIntegrationRunID(contact.IntegrationRunID).
 			SetOwnerID(contact.OwnerID).
 			SetFullName(contact.FullName).
 			SetTitle(contact.Title).
@@ -6199,6 +6232,10 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetManagedBy(managedBy)
 	}
 
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -6543,6 +6580,12 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetManagedBy(managedBy)
 		} else {
 			create = create.SetManagedBy(entity.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(entity.IntegrationRunID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -6955,6 +6998,7 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSourceDefinitionVersion(entity.SourceDefinitionVersion).
 			SetSourceInstanceID(entity.SourceInstanceID).
 			SetManagedBy(entity.ManagedBy).
+			SetIntegrationRunID(entity.IntegrationRunID).
 			SetOwnerID(entity.OwnerID).
 			SetInternalOwner(entity.InternalOwner).
 			SetInternalOwnerUserID(entity.InternalOwnerUserID).
@@ -8290,6 +8334,10 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetManagedBy(managedBy)
 	}
 
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -8624,6 +8672,12 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetManagedBy(managedBy)
 		} else {
 			create = create.SetManagedBy(finding.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(finding.IntegrationRunID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -9013,6 +9067,7 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSourceDefinitionVersion(finding.SourceDefinitionVersion).
 			SetSourceInstanceID(finding.SourceInstanceID).
 			SetManagedBy(finding.ManagedBy).
+			SetIntegrationRunID(finding.IntegrationRunID).
 			SetOwnerID(finding.OwnerID).
 			SetReviewedBy(finding.ReviewedBy).
 			SetReviewedByUserID(finding.ReviewedByUserID).
@@ -11146,6 +11201,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetManagedBy(managedBy)
 	}
 
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -11394,6 +11453,12 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetManagedBy(managedBy)
 		} else {
 			create = create.SetManagedBy(internalpolicy.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(internalpolicy.IntegrationRunID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -11646,6 +11711,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetSourceDefinitionVersion(internalpolicy.SourceDefinitionVersion).
 			SetSourceInstanceID(internalpolicy.SourceInstanceID).
 			SetManagedBy(internalpolicy.ManagedBy).
+			SetIntegrationRunID(internalpolicy.IntegrationRunID).
 			SetOwnerID(internalpolicy.OwnerID).
 			SetSystemOwned(internalpolicy.SystemOwned).
 			SetNillableInternalNotes(internalpolicy.InternalNotes).
@@ -15722,6 +15788,10 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetManagedBy(managedBy)
 	}
 
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -15968,6 +16038,12 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetManagedBy(procedure.ManagedBy)
 		}
 
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(procedure.IntegrationRunID)
+		}
+
 		if ownerID, exists := m.OwnerID(); exists {
 			create = create.SetOwnerID(ownerID)
 		} else {
@@ -16212,6 +16288,7 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSourceDefinitionVersion(procedure.SourceDefinitionVersion).
 			SetSourceInstanceID(procedure.SourceInstanceID).
 			SetManagedBy(procedure.ManagedBy).
+			SetIntegrationRunID(procedure.IntegrationRunID).
 			SetOwnerID(procedure.OwnerID).
 			SetName(procedure.Name).
 			SetStatus(procedure.Status).
@@ -18005,6 +18082,10 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetManagedBy(managedBy)
 	}
 
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -18255,6 +18336,12 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetManagedBy(managedBy)
 		} else {
 			create = create.SetManagedBy(risk.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(risk.IntegrationRunID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -18518,6 +18605,7 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSourceDefinitionVersion(risk.SourceDefinitionVersion).
 			SetSourceInstanceID(risk.SourceInstanceID).
 			SetManagedBy(risk.ManagedBy).
+			SetIntegrationRunID(risk.IntegrationRunID).
 			SetOwnerID(risk.OwnerID).
 			SetRiskKindName(risk.RiskKindName).
 			SetRiskKindID(risk.RiskKindID).
@@ -25461,6 +25549,10 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetManagedBy(managedBy)
 	}
 
+	if integrationRunID, exists := m.IntegrationRunID(); exists {
+		create = create.SetIntegrationRunID(integrationRunID)
+	}
+
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
 	}
@@ -25815,6 +25907,12 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetManagedBy(managedBy)
 		} else {
 			create = create.SetManagedBy(vulnerability.ManagedBy)
+		}
+
+		if integrationRunID, exists := m.IntegrationRunID(); exists {
+			create = create.SetIntegrationRunID(integrationRunID)
+		} else {
+			create = create.SetIntegrationRunID(vulnerability.IntegrationRunID)
 		}
 
 		if ownerID, exists := m.OwnerID(); exists {
@@ -26234,6 +26332,7 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetSourceDefinitionVersion(vulnerability.SourceDefinitionVersion).
 			SetSourceInstanceID(vulnerability.SourceInstanceID).
 			SetManagedBy(vulnerability.ManagedBy).
+			SetIntegrationRunID(vulnerability.IntegrationRunID).
 			SetOwnerID(vulnerability.OwnerID).
 			SetReviewedBy(vulnerability.ReviewedBy).
 			SetReviewedByUserID(vulnerability.ReviewedByUserID).

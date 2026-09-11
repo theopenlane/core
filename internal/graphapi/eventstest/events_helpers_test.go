@@ -8,7 +8,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/oklog/ulid/v2"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	mockprovider "github.com/theopenlane/newman/providers/mock"
@@ -25,11 +24,6 @@ import (
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
-
-// testVirtualUser mints a unique virtual actor identity for one test definition
-func testVirtualUser() integrationtypes.VirtualUserRef {
-	return integrationtypes.NewVirtualUserRef(ulid.Make().String())
-}
 
 // notification object types mirrored from internal/integrations/runtime/health.go
 const (

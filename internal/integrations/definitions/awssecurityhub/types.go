@@ -12,8 +12,6 @@ import (
 var (
 	// definitionID is the stable identifier for the AWS Security Hub integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AWSSECHUB0000000000001")
-	// VirtualUser is the virtual actor identity for records created by this definition's installations
-	VirtualUser = types.NewVirtualUserRef("01VRTACTR3YW7K3GD3WMY2AK84")
 	// installation is the typed installation metadata handle for the AWS Security Hub definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// awsAssumeRoleScheme is the cred schema for AWS STS auth

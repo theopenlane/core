@@ -24,6 +24,7 @@ mutation CreateActionPlan ($input: CreateActionPlanInput!) {
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -81,6 +82,7 @@ mutation CreateBulkActionPlan ($input: [CreateActionPlanInput!]) {
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -138,6 +140,7 @@ mutation CreateBulkCSVActionPlan ($input: Upload!) {
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -199,6 +202,7 @@ query GetActionPlanByID ($actionPlanId: ID!) {
 		fileID
 		id
 		improvementSuggestions
+		integrationRunID
 		internalNotes
 		managedBy
 		managementMode
@@ -303,6 +307,7 @@ mutation UpdateActionPlan ($updateActionPlanId: ID!, $input: UpdateActionPlanInp
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode
@@ -360,6 +365,7 @@ mutation UpdateBulkActionPlan ($ids: [ID!]!, $input: UpdateActionPlanInput!) {
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			managedBy
 			managementMode

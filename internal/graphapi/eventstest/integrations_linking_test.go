@@ -11,6 +11,7 @@ import (
 
 	"github.com/samber/lo"
 
+	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
@@ -28,7 +29,6 @@ const linkTestOperationName = "findings.sync"
 // provider payload through unchanged and declares the supplied cross-object link rules
 func linkTestDefinition(defID string, links []integrationtypes.LinkRule) integrationtypes.Definition {
 	return integrationtypes.Definition{
-		VirtualUser: testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          defID,
 			DisplayName: "Link Test",
@@ -69,7 +69,7 @@ func ingestFindings(ctx context.Context, t *testing.T, integration *ent.Integrat
 		Registry:    reg,
 		DB:          suite.Client.DB,
 		Integration: integration,
-	}, linkTestOperationName, def.Operations[0].Ingest, []integrationtypes.IngestPayloadSet{
+	}, linkTestOperationName, def.Operations[0].Ingest, def.Operations[0].Policy, []integrationtypes.IngestPayloadSet{
 		{Schema: entityops.SchemaFinding.Name, Envelopes: envelopes},
 	}, operations.IngestOptions{})
 
@@ -103,6 +103,7 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 		SetName("Link Test Integration").
 		SetKind("linktest").
 		SetDefinitionID("def_linktest").
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-linktest"}}).
 		Save(ctx)
 	th.RequireNoError(t, err)
 	assert.Assert(t, integration.OwnerID != "", "seeded integration must be org-owned")

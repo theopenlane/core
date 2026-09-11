@@ -14,7 +14,7 @@ var mapExprFinding = providerkit.CelMapExpr(
 	entityops.FindingFields.FindingClass.Expr(`'detectorId' in payload ? payload.detectorId : ""`),
 	entityops.FindingFields.DisplayName.Expr(`'detectorRuleId' in payload && payload.detectorRuleId != null && payload.detectorRuleId != "" ? payload.detectorRuleId : ('id' in payload && payload.id != null ? payload.id : "")`),
 
-	entityops.FindingFields.Description.Expr(`'description' in payload && payload.description != null ? payload.description : ""`),
+	entityops.FindingFields.Description.Expr(`paragraphs('description' in payload && payload.description != null ? payload.description : "")`),
 	entityops.FindingFields.RecommendedActions.Expr(`'recommendation' in payload && payload.recommendation != null ? payload.recommendation : ""`),
 
 	entityops.FindingFields.Severity.Expr(`'riskLevel' in payload ? payload.riskLevel : ""`),

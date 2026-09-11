@@ -10,9 +10,7 @@ mutation CreateBulkCSVDirectoryAccount ($input: Upload!) {
 			createdAt
 			createdBy
 			department
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			emailAliases
@@ -25,6 +23,7 @@ mutation CreateBulkCSVDirectoryAccount ($input: Upload!) {
 			id
 			identityHolderID
 			integrationID
+			integrationRunID
 			jobTitle
 			lastLoginAt
 			lastSeenAt
@@ -39,7 +38,6 @@ mutation CreateBulkCSVDirectoryAccount ($input: Upload!) {
 			platformID
 			primarySource
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
@@ -69,9 +67,7 @@ mutation CreateBulkDirectoryAccount ($input: [CreateDirectoryAccountInput!]) {
 			createdAt
 			createdBy
 			department
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			emailAliases
@@ -84,6 +80,7 @@ mutation CreateBulkDirectoryAccount ($input: [CreateDirectoryAccountInput!]) {
 			id
 			identityHolderID
 			integrationID
+			integrationRunID
 			jobTitle
 			lastLoginAt
 			lastSeenAt
@@ -98,7 +95,6 @@ mutation CreateBulkDirectoryAccount ($input: [CreateDirectoryAccountInput!]) {
 			platformID
 			primarySource
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
@@ -128,9 +124,7 @@ mutation CreateDirectoryAccount ($input: CreateDirectoryAccountInput!) {
 			createdAt
 			createdBy
 			department
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			emailAliases
@@ -143,6 +137,7 @@ mutation CreateDirectoryAccount ($input: CreateDirectoryAccountInput!) {
 			id
 			identityHolderID
 			integrationID
+			integrationRunID
 			jobTitle
 			lastLoginAt
 			lastSeenAt
@@ -157,7 +152,6 @@ mutation CreateDirectoryAccount ($input: CreateDirectoryAccountInput!) {
 			platformID
 			primarySource
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
@@ -196,7 +190,6 @@ query GetAllDirectoryAccounts {
 				createdAt
 				createdBy
 				department
-				directorySyncRunID
 				displayID
 				displayName
 				externalID
@@ -212,7 +205,6 @@ query GetAllDirectoryAccounts {
 				organizationUnit
 				ownerID
 				profile
-				profileHash
 				rawProfileFileID
 				secondaryKey
 				sourceVersion
@@ -235,9 +227,7 @@ query GetDirectoryAccountByID ($directoryAccountId: ID!) {
 		createdAt
 		createdBy
 		department
-		directoryInstanceID
 		directoryName
-		directorySyncRunID
 		displayID
 		displayName
 		emailAliases
@@ -250,6 +240,7 @@ query GetDirectoryAccountByID ($directoryAccountId: ID!) {
 		id
 		identityHolderID
 		integrationID
+		integrationRunID
 		jobTitle
 		lastLoginAt
 		lastSeenAt
@@ -264,7 +255,6 @@ query GetDirectoryAccountByID ($directoryAccountId: ID!) {
 		platformID
 		primarySource
 		profile
-		profileHash
 		rawProfileFileID
 		removedAt
 		scopeID
@@ -297,7 +287,6 @@ query GetDirectoryAccounts ($first: Int, $last: Int, $where: DirectoryAccountWhe
 				createdAt
 				createdBy
 				department
-				directorySyncRunID
 				displayID
 				displayName
 				externalID
@@ -313,7 +302,6 @@ query GetDirectoryAccounts ($first: Int, $last: Int, $where: DirectoryAccountWhe
 				organizationUnit
 				ownerID
 				profile
-				profileHash
 				rawProfileFileID
 				secondaryKey
 				sourceVersion
@@ -337,9 +325,7 @@ mutation UpdateDirectoryAccount ($updateDirectoryAccountId: ID!, $input: UpdateD
 			createdAt
 			createdBy
 			department
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			emailAliases
@@ -352,6 +338,7 @@ mutation UpdateDirectoryAccount ($updateDirectoryAccountId: ID!, $input: UpdateD
 			id
 			identityHolderID
 			integrationID
+			integrationRunID
 			jobTitle
 			lastLoginAt
 			lastSeenAt
@@ -366,7 +353,6 @@ mutation UpdateDirectoryAccount ($updateDirectoryAccountId: ID!, $input: UpdateD
 			platformID
 			primarySource
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID

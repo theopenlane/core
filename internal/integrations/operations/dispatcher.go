@@ -82,7 +82,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	var runID string
 
 	if installation != nil && !operation.Policy.SkipRunRecord {
-		runRecord, err := CreatePendingRun(ctx, db, installation, req.Operation, runType, req.Config)
+		runRecord, err := CreatePendingRun(ctx, db, installation, operation, runType, req.Config)
 		if err != nil {
 			return types.DispatchResult{}, err
 		}

@@ -73,11 +73,17 @@ var (
 	ErrEvaluatorBuildFailed = errors.New("entityops: evaluator build failed")
 	// ErrIngestUnsupported indicates the schema has no generated ingest capability
 	ErrIngestUnsupported = errors.New("entityops: ingest unsupported")
-	// ErrIngestMisconfigured indicates a schema ingest capability was wired incorrectly at startup:
-	// bound without persistence, bound twice, or registered without its resolver or binding
+	// ErrIngestMisconfigured indicates a schema ingest capability was registered incorrectly at
+	// startup: without its resolver, or before persistence was bound
 	ErrIngestMisconfigured = errors.New("entityops: ingest misconfigured")
 	// ErrIngestIntegrationResolveFailed indicates the durable command's integration could not be resolved
 	ErrIngestIntegrationResolveFailed = errors.New("entityops: ingest integration resolve failed")
+	// ErrUpsertStaleRun indicates an ingest update lost its run guard race to a newer or equal integration run
+	ErrUpsertStaleRun = errors.New("entityops: upsert stale run")
+	// ErrLookupAlternativeInvalid indicates a lookup was requested against an alternative index the schema does not declare
+	ErrLookupAlternativeInvalid = errors.New("entityops: lookup alternative invalid")
+	// ErrLinkAmbiguous indicates a unique-edge link resolved to more than one candidate after provenance filtering
+	ErrLinkAmbiguous = errors.New("entityops: link ambiguous")
 )
 
 // --- Operation constants ---

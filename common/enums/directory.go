@@ -193,34 +193,3 @@ func (r DirectoryMembershipRole) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
 
 // UnmarshalGQL implements gqlgen Unmarshaler.
 func (r *DirectoryMembershipRole) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }
-
-// DirectorySyncRunStatus is the state of a directory sync run.
-type DirectorySyncRunStatus string
-
-var (
-	DirectorySyncRunStatusPending   DirectorySyncRunStatus = "PENDING"
-	DirectorySyncRunStatusRunning   DirectorySyncRunStatus = "RUNNING"
-	DirectorySyncRunStatusCompleted DirectorySyncRunStatus = "COMPLETED"
-	DirectorySyncRunStatusFailed    DirectorySyncRunStatus = "FAILED"
-)
-
-var directorySyncRunStatusValues = []DirectorySyncRunStatus{
-	DirectorySyncRunStatusPending, DirectorySyncRunStatusRunning, DirectorySyncRunStatusCompleted, DirectorySyncRunStatusFailed,
-}
-
-// Values returns all values as strings.
-func (DirectorySyncRunStatus) Values() []string { return stringValues(directorySyncRunStatusValues) }
-
-// String returns the string value.
-func (r DirectorySyncRunStatus) String() string { return string(r) }
-
-// ToDirectorySyncRunStatus converts a string to DirectorySyncRunStatus.
-func ToDirectorySyncRunStatus(v string) *DirectorySyncRunStatus {
-	return parse(v, directorySyncRunStatusValues, nil)
-}
-
-// MarshalGQL implements gqlgen Marshaler.
-func (r DirectorySyncRunStatus) MarshalGQL(w io.Writer) { marshalGQL(r, w) }
-
-// UnmarshalGQL implements gqlgen Unmarshaler.
-func (r *DirectorySyncRunStatus) UnmarshalGQL(v any) error { return unmarshalGQL(r, v) }

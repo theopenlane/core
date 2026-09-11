@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
@@ -252,6 +253,26 @@ func (_u *ActionPlanUpdate) SetNillableManagedBy(v *string) *ActionPlanUpdate {
 // ClearManagedBy clears the value of the "managed_by" field.
 func (_u *ActionPlanUpdate) ClearManagedBy() *ActionPlanUpdate {
 	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *ActionPlanUpdate) SetIntegrationRunID(v string) *ActionPlanUpdate {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableIntegrationRunID(v *string) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *ActionPlanUpdate) ClearIntegrationRunID() *ActionPlanUpdate {
+	_u.mutation.ClearIntegrationRunID()
 	return _u
 }
 
@@ -941,6 +962,21 @@ func (_u *ActionPlanUpdate) ClearSource() *ActionPlanUpdate {
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *ActionPlanUpdate) AddIntegrationRunIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *ActionPlanUpdate) AddIntegrationRuns(v ...*IntegrationRun) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // SetApprover sets the "approver" edge to the Group entity.
 func (_u *ActionPlanUpdate) SetApprover(v *Group) *ActionPlanUpdate {
 	return _u.SetApproverID(v.ID)
@@ -1174,6 +1210,27 @@ func (_u *ActionPlanUpdate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *Acti
 // Mutation returns the ActionPlanMutation object of the builder.
 func (_u *ActionPlanUpdate) Mutation() *ActionPlanMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *ActionPlanUpdate) ClearIntegrationRuns() *ActionPlanUpdate {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *ActionPlanUpdate) RemoveIntegrationRunIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *ActionPlanUpdate) RemoveIntegrationRuns(v ...*IntegrationRun) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearApprover clears the "approver" edge to the Group entity.
@@ -1676,6 +1733,12 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.ManagedByCleared() {
 		_spec.ClearField(actionplan.FieldManagedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(actionplan.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(actionplan.FieldIntegrationRunID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(actionplan.FieldName, field.TypeString, value)
 	}
@@ -1899,6 +1962,51 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(actionplan.FieldSource, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   actionplan.IntegrationRunsTable,
+			Columns: actionplan.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   actionplan.IntegrationRunsTable,
+			Columns: actionplan.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   actionplan.IntegrationRunsTable,
+			Columns: actionplan.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.ApproverCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2878,6 +2986,26 @@ func (_u *ActionPlanUpdateOne) ClearManagedBy() *ActionPlanUpdateOne {
 	return _u
 }
 
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *ActionPlanUpdateOne) SetIntegrationRunID(v string) *ActionPlanUpdateOne {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableIntegrationRunID(v *string) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *ActionPlanUpdateOne) ClearIntegrationRunID() *ActionPlanUpdateOne {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *ActionPlanUpdateOne) SetName(v string) *ActionPlanUpdateOne {
 	_u.mutation.SetName(v)
@@ -3564,6 +3692,21 @@ func (_u *ActionPlanUpdateOne) ClearSource() *ActionPlanUpdateOne {
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *ActionPlanUpdateOne) AddIntegrationRunIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *ActionPlanUpdateOne) AddIntegrationRuns(v ...*IntegrationRun) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // SetApprover sets the "approver" edge to the Group entity.
 func (_u *ActionPlanUpdateOne) SetApprover(v *Group) *ActionPlanUpdateOne {
 	return _u.SetApproverID(v.ID)
@@ -3797,6 +3940,27 @@ func (_u *ActionPlanUpdateOne) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *A
 // Mutation returns the ActionPlanMutation object of the builder.
 func (_u *ActionPlanUpdateOne) Mutation() *ActionPlanMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *ActionPlanUpdateOne) ClearIntegrationRuns() *ActionPlanUpdateOne {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *ActionPlanUpdateOne) RemoveIntegrationRunIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *ActionPlanUpdateOne) RemoveIntegrationRuns(v ...*IntegrationRun) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearApprover clears the "approver" edge to the Group entity.
@@ -4329,6 +4493,12 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 	if _u.mutation.ManagedByCleared() {
 		_spec.ClearField(actionplan.FieldManagedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(actionplan.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(actionplan.FieldIntegrationRunID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(actionplan.FieldName, field.TypeString, value)
 	}
@@ -4552,6 +4722,51 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(actionplan.FieldSource, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   actionplan.IntegrationRunsTable,
+			Columns: actionplan.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   actionplan.IntegrationRunsTable,
+			Columns: actionplan.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   actionplan.IntegrationRunsTable,
+			Columns: actionplan.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.ApproverCleared() {
 		edge := &sqlgraph.EdgeSpec{

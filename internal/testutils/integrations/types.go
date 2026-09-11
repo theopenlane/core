@@ -13,9 +13,6 @@ import (
 // DefinitionID is the stable identifier for the shared test integration definition
 var DefinitionID = types.NewDefinitionRef("def_01K0TESTDEF0000000000000001")
 
-// VirtualUser is the virtual actor identity for records created by this definition's installations
-var VirtualUser = types.NewVirtualUserRef("01VRTACTR8BS4HSGG7X298P96R")
-
 var (
 	// RepoSyncOp is the async client-resolving operation
 	repoSyncSchema, RepoSyncOp = providerkit.OperationSchema[repoSync]()

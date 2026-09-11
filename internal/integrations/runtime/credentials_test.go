@@ -17,7 +17,6 @@ func TestResolveConnectionFromStateEmptyProviderState(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 	}
 
@@ -38,7 +37,6 @@ func TestResolveConnectionFromStateNilProviders(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 	}
 
@@ -61,7 +59,6 @@ func TestResolveConnectionFromStateWithPersistedRef(t *testing.T) {
 
 	credRef := types.NewCredentialSlotID("oauth")
 	def := types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []types.CredentialRegistration{
 			{Ref: credRef, Name: "OAuth", Schema: json.RawMessage(`{"type":"object"}`)},
@@ -100,7 +97,6 @@ func TestResolveConnectionFromStateUnknownRef(t *testing.T) {
 
 	credRef := types.NewCredentialSlotID("unknown")
 	def := types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 	}
 
@@ -127,7 +123,6 @@ func TestResolveConnectionForCredentialFromPersistedState(t *testing.T) {
 
 	credRef := types.NewCredentialSlotID("oauth")
 	def := types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []types.CredentialRegistration{
 			{Ref: credRef, Name: "OAuth", Schema: json.RawMessage(`{"type":"object"}`)},
@@ -164,7 +159,6 @@ func TestResolveConnectionForCredentialRefNotDeclared(t *testing.T) {
 	credRef := types.NewCredentialSlotID("oauth")
 	otherRef := types.NewCredentialSlotID("api-key")
 	def := types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []types.CredentialRegistration{
 			{Ref: credRef, Name: "OAuth", Schema: json.RawMessage(`{"type":"object"}`)},
@@ -196,7 +190,6 @@ func TestResolveConnectionForCredentialNoStateWithRef(t *testing.T) {
 
 	credRef := types.NewCredentialSlotID("api-key")
 	def := types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []types.CredentialRegistration{
 			{Ref: credRef, Name: "API Key", Schema: json.RawMessage(`{"type":"object"}`)},
@@ -225,7 +218,6 @@ func TestResolveConnectionForCredentialNoStateEmptyRef(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 	}
 	installation := &ent.Integration{
@@ -243,7 +235,6 @@ func TestResolveConnectionForCredentialNoStateUnknownRef(t *testing.T) {
 	t.Parallel()
 
 	def := types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 	}
 	installation := &ent.Integration{
@@ -289,7 +280,6 @@ func TestDisconnectConnectionResolutionError(t *testing.T) {
 
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 	})
 
@@ -336,7 +326,6 @@ func TestReconcileNoInputNoCredential(t *testing.T) {
 
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 	})
 
@@ -354,7 +343,6 @@ func TestReconcileEmptyInputNoCredential(t *testing.T) {
 
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 	})
 
@@ -376,7 +364,6 @@ func TestResolvePersistedConnectionSingleConnectionFallback(t *testing.T) {
 	credRef := types.NewCredentialSlotID("oauth")
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []types.CredentialRegistration{
 			{Ref: credRef, Name: "OAuth", Schema: json.RawMessage(`{"type":"object"}`)},
@@ -388,7 +375,6 @@ func TestResolvePersistedConnectionSingleConnectionFallback(t *testing.T) {
 
 	rt := NewForTesting(reg)
 	conn, err := rt.resolvePersistedConnection(types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		Connections: []types.ConnectionRegistration{
 			{CredentialRef: credRef, Name: "Only Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
@@ -413,7 +399,6 @@ func TestResolvePersistedConnectionMultipleConnectionsNoState(t *testing.T) {
 
 	rt := NewForTesting(registry.New())
 	_, err := rt.resolvePersistedConnection(types.Definition{
-		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		Connections: []types.ConnectionRegistration{
 			{CredentialRef: refA, Name: "OAuth"},

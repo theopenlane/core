@@ -6,9 +6,7 @@ mutation CreateBulkCSVDirectoryGroup ($input: Upload!) {
 			createdAt
 			createdBy
 			description
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			email
@@ -19,6 +17,7 @@ mutation CreateBulkCSVDirectoryGroup ($input: Upload!) {
 			firstSeenAt
 			id
 			integrationID
+			integrationRunID
 			lastSeenAt
 			managedBy
 			memberCount
@@ -27,7 +26,6 @@ mutation CreateBulkCSVDirectoryGroup ($input: Upload!) {
 			ownerID
 			platformID
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
@@ -52,9 +50,7 @@ mutation CreateBulkDirectoryGroup ($input: [CreateDirectoryGroupInput!]) {
 			createdAt
 			createdBy
 			description
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			email
@@ -65,6 +61,7 @@ mutation CreateBulkDirectoryGroup ($input: [CreateDirectoryGroupInput!]) {
 			firstSeenAt
 			id
 			integrationID
+			integrationRunID
 			lastSeenAt
 			managedBy
 			memberCount
@@ -73,7 +70,6 @@ mutation CreateBulkDirectoryGroup ($input: [CreateDirectoryGroupInput!]) {
 			ownerID
 			platformID
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
@@ -98,9 +94,7 @@ mutation CreateDirectoryGroup ($input: CreateDirectoryGroupInput!) {
 			createdAt
 			createdBy
 			description
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			email
@@ -111,6 +105,7 @@ mutation CreateDirectoryGroup ($input: CreateDirectoryGroupInput!) {
 			firstSeenAt
 			id
 			integrationID
+			integrationRunID
 			lastSeenAt
 			managedBy
 			memberCount
@@ -119,7 +114,6 @@ mutation CreateDirectoryGroup ($input: CreateDirectoryGroupInput!) {
 			ownerID
 			platformID
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
@@ -156,7 +150,6 @@ query GetAllDirectoryGroups {
 				createdAt
 				createdBy
 				description
-				directorySyncRunID
 				displayID
 				displayName
 				email
@@ -168,7 +161,6 @@ query GetAllDirectoryGroups {
 				observedAt
 				ownerID
 				profile
-				profileHash
 				rawProfileFileID
 				sourceVersion
 				status
@@ -186,9 +178,7 @@ query GetDirectoryGroupByID ($directoryGroupId: ID!) {
 		createdAt
 		createdBy
 		description
-		directoryInstanceID
 		directoryName
-		directorySyncRunID
 		displayID
 		displayName
 		email
@@ -199,6 +189,7 @@ query GetDirectoryGroupByID ($directoryGroupId: ID!) {
 		firstSeenAt
 		id
 		integrationID
+		integrationRunID
 		lastSeenAt
 		managedBy
 		memberCount
@@ -207,7 +198,6 @@ query GetDirectoryGroupByID ($directoryGroupId: ID!) {
 		ownerID
 		platformID
 		profile
-		profileHash
 		rawProfileFileID
 		removedAt
 		scopeID
@@ -238,7 +228,6 @@ query GetDirectoryGroups ($first: Int, $last: Int, $where: DirectoryGroupWhereIn
 				createdAt
 				createdBy
 				description
-				directorySyncRunID
 				displayID
 				displayName
 				email
@@ -250,7 +239,6 @@ query GetDirectoryGroups ($first: Int, $last: Int, $where: DirectoryGroupWhereIn
 				observedAt
 				ownerID
 				profile
-				profileHash
 				rawProfileFileID
 				sourceVersion
 				status
@@ -269,9 +257,7 @@ mutation UpdateDirectoryGroup ($updateDirectoryGroupId: ID!, $input: UpdateDirec
 			createdAt
 			createdBy
 			description
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			email
@@ -282,6 +268,7 @@ mutation UpdateDirectoryGroup ($updateDirectoryGroupId: ID!, $input: UpdateDirec
 			firstSeenAt
 			id
 			integrationID
+			integrationRunID
 			lastSeenAt
 			managedBy
 			memberCount
@@ -290,7 +277,6 @@ mutation UpdateDirectoryGroup ($updateDirectoryGroupId: ID!, $input: UpdateDirec
 			ownerID
 			platformID
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID

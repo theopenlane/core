@@ -82,7 +82,7 @@ func (CheckResult) Fields() []ent.Field {
 			Comment("integration that owns this check result").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
+				entx.IntegrationMappingField().SystemControlled(),
 			),
 	}
 }
@@ -91,7 +91,7 @@ func (CheckResult) Fields() []ent.Field {
 func (c CheckResult) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			ProvenanceMixin{},
+			ProvenanceMixin{SchemaType: c},
 			newObjectOwnedMixin[generated.CheckResult](c,
 				withParents(
 					Control{},
@@ -136,7 +136,7 @@ func (CheckResult) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
-		entx.IntegrationMappingSchema().StockPersist(),
+		entx.IntegrationMappingSchema().StockPersist().InstanceScoped(),
 		history.Annotations{
 			Exclude: true,
 		},

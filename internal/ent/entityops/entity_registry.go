@@ -18,6 +18,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/utils/contextx"
 
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
@@ -25,6 +26,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
@@ -33,7 +35,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
@@ -41,15 +42,19 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/findingcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
@@ -85,6 +90,8 @@ type IngestRequest struct {
 	ThroughEdgeIDs   map[string][]string   `json:"throughEdgeIds,omitempty"`
 	Defaults         map[string]any        `json:"defaults,omitempty"`
 	Links            []LinkSpec            `json:"links,omitempty"`
+	// RunID is the integration run the record belongs to
+	RunID string `json:"runId,omitempty"`
 }
 
 // IngestIntegrationResolver loads the integration referenced by the durable operation context.
@@ -94,16 +101,12 @@ type IngestIntegrationResolver func(context.Context, *generated.Client, gala.Ope
 // IngestPersist is the type-erased persistence operation bound to a schema at startup.
 type IngestPersist func(context.Context, *generated.Client, *generated.Integration, json.RawMessage) (id string, changed bool, managed bool, err error)
 
-// TypedIngestPersist is the typed persistence operation adapted by BindIngest.
-type TypedIngestPersist[T any] func(context.Context, *generated.Client, *generated.Integration, T) (id string, changed bool, managed bool, err error)
-
 // IngestCapability is the schema's single asynchronous ingest control surface.
 type IngestCapability struct {
 	Topic   gala.Topic[IngestRequest]
 	prepare func(context.Context, *generated.Integration, json.RawMessage) (json.RawMessage, error)
 	persist IngestPersist
-	// buildUpdate reconstructs the resolved row as its concrete entity for cached old-value reads and
-	// binds the ingest payload as an update mutation, returning the mutation with its save closure
+	// buildUpdate binds the ingest payload as an update mutation and returns it with its save closure
 	buildUpdate func(context.Context, *generated.Client, json.RawMessage, json.RawMessage) (ent.Mutation, func(context.Context) error, error)
 }
 
@@ -125,6 +128,47 @@ type Schema struct {
 	// field matches any of the provided values, pushing the predicate into the database; emitted
 	// only for integration-mapped schemas and link-rule targets with match-key columns
 	QueryByKey func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error)
+	// CountByKey counts entities of this schema within an organization whose given snake_case field matches any of the provided values, emitted under the same condition as QueryByKey
+	CountByKey func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error)
+	// IntegrationFKField is the schema's mutable FK column to Integration (e.g. "integration_id");
+	// empty when the schema has no such edge. Used to strip an ownership pointer during ingest claim
+	// resolution
+	IntegrationFKField string
+	// IntegrationM2MEdge is the name of the schema's to-many edge to Integration; empty when the
+	// schema has no such edge. Used to strip ownership-pointer edge keys during ingest claim resolution
+	IntegrationM2MEdge string
+	// IntegrationRunM2MEdge is the name of the schema's to-many edge to IntegrationRun; empty when
+	// the schema has no such edge. Changes to this edge are treated as volatile bookkeeping, never
+	// material on their own, matching the integration ownership edges
+	IntegrationRunM2MEdge string
+	// RemovedAtField is the snake_case name of the schema's SnapshotRemoval-annotated field, empty
+	// when the schema declares none
+	RemovedAtField string
+	// RemovedAtEpisodic reports whether removal is a recurring observation rather than a permanent
+	// tombstone, so ingest never auto-clears RemovedAtField on resurrection
+	RemovedAtEpisodic bool
+	// SeenAtField is the snake_case name of the schema's SeenAt-annotated field, empty when the
+	// schema declares none
+	SeenAtField string
+	// Lookup lists the schema's composite ingest lookup alternatives, in declared or synthesized order
+	Lookup []LookupAlternative
+	// InstanceScoped reports whether records with the same natural key but a different source
+	// instance are distinct rows rather than candidates for cross-instance ownership resolution
+	InstanceScoped bool
+	// QueryByLookup returns rows matching one of the given key tuples for a declared lookup
+	// alternative, pushing the alternative's first field into the database and filtering the
+	// remainder in memory; emitted only for integration-mapped, create-capable schemas with at least
+	// one lookup alternative
+	QueryByLookup func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error)
+	// ConfirmSeen bulk-touches SeenAtField to the given time for the given ids; emitted only when the
+	// schema declares a SeenAt field
+	ConfirmSeen func(ctx context.Context, client *generated.Client, ids []string, at time.Time) error
+	// SnapshotScope returns every row for one owner, source definition, and source instance that is
+	// not already marked removed; emitted only when the schema declares a SnapshotRemoval field
+	SnapshotScope func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID string) ([]json.RawMessage, error)
+	// MarkRemoved bulk-marks the given ids removed at the given time, recording the integration run
+	// when the schema carries one; emitted only when the schema declares a SnapshotRemoval field
+	MarkRemoved func(ctx context.Context, client *generated.Client, ids []string, at time.Time, runID string) error
 	// Load loads a single entity by ID and returns its JSON representation
 	Load func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error)
 	// LoadObject loads the native generated Ent object for consumers that require its interfaces;
@@ -152,31 +196,17 @@ type Schema struct {
 	ApprovalSpec *ApprovalSpec
 }
 
-// BindIngest binds typed persistence to a generated schema capability. Topic, registration,
-// emission, preparation, and delivery remain schema-owned.
-func BindIngest[T any](schema *Schema, persist TypedIngestPersist[T]) error {
-	if schema == nil || schema.Ingest == nil {
-		return ErrIngestUnsupported
-	}
-
-	if persist == nil {
-		return fmt.Errorf("%w: %s bound without a persistence operation", ErrIngestMisconfigured, schema.Name)
-	}
-
-	if schema.Ingest.persist != nil {
-		return fmt.Errorf("%w: %s persistence already bound", ErrIngestMisconfigured, schema.Name)
-	}
-
-	schema.Ingest.persist = func(ctx context.Context, client *generated.Client, integration *generated.Integration, payload json.RawMessage) (string, bool, bool, error) {
-		decoded, err := jsonx.Decode[T](payload)
-		if err != nil {
-			return "", false, false, logError(ctx, SchemaRef{Schema: schema.Snake, Operation: refOpCreate}, ErrDecodeFailed, err)
+// defaultIngestPersist returns the stock upsert-backed persistence installed for every ingest
+// schema at init
+func defaultIngestPersist(s *Schema) IngestPersist {
+	return func(ctx context.Context, client *generated.Client, integration *generated.Integration, payload json.RawMessage) (string, bool, bool, error) {
+		owner := lookupValue(payload, FieldOwnerID)
+		if owner == "" && integration != nil {
+			owner = integration.OwnerID
 		}
 
-		return persist(ctx, client, integration, decoded)
+		return s.Upsert(ctx, client, owner, payload)
 	}
-
-	return nil
 }
 
 // registerIngest attaches the schema's durable ingest consumer.
@@ -647,6 +677,255 @@ func matchKeyIn(field string, values []string) func(*sql.Selector) {
 	}
 }
 
+// ingestQueryChunkSize bounds the number of values pushed into a single IN(...) predicate for
+// lookup and link-target prefetch queries
+const ingestQueryChunkSize = 500
+
+const (
+	// FieldOwnerID is the provenance column recording the owning organization
+	FieldOwnerID = "owner_id"
+	// FieldIntegrationID is the provenance column recording the writing installation's FK, on schemas that carry one
+	FieldIntegrationID = "integration_id"
+	// FieldManagedBy is the provenance column recording which installation owns a record
+	FieldManagedBy = "managed_by"
+	// FieldPlatformID is the provenance column recording the platform of the writing installation
+	FieldPlatformID = "platform_id"
+	// FieldSourceDefinitionID is the provenance column recording the definition an installation writes with
+	FieldSourceDefinitionID = "source_definition_id"
+	// FieldSourceDefinitionVersion is the provenance column recording the definition version an installation writes with
+	FieldSourceDefinitionVersion = "source_definition_version"
+	// FieldSourceInstanceID is the provenance column recording the external tenant or instance an installation targets
+	FieldSourceInstanceID = "source_instance_id"
+	// FieldIntegrationRunID is the provenance column recording the integration run that last created or changed a record
+	FieldIntegrationRunID = "integration_run_id"
+)
+
+// activeIntegrationsKey carries the ctx-scoped set of confirmed integration active/inactive answers
+var activeIntegrationsKey = contextx.NewKey[map[string]bool]()
+
+// WithActiveIntegrations installs a ctx-carried set of integration ids known to be active, letting
+// bulk operations answer active/removed checks without a query per row
+func WithActiveIntegrations(ctx context.Context, ids []string) context.Context {
+	set := make(map[string]bool, len(ids))
+	for _, id := range ids {
+		set[id] = true
+	}
+
+	return activeIntegrationsKey.Set(ctx, set)
+}
+
+// integrationActive reports whether the given integration is active, answering from the ctx-carried
+// set when present and falling back to an existence query otherwise
+func integrationActive(ctx context.Context, client *generated.Client, integrationID string) (bool, error) {
+	if set, ok := activeIntegrationsKey.Get(ctx); ok {
+		return set[integrationID], nil
+	}
+
+	return client.Integration.Query().Where(integration.ID(integrationID)).Exist(ctx)
+}
+
+// filterByAlternativeFields keeps rows whose lookup alternative field values match one of the
+// provided key tuples exactly
+func filterByAlternativeFields(rows []json.RawMessage, fields []string, keys []LookupValues) []json.RawMessage {
+	kept := make([]json.RawMessage, 0, len(rows))
+
+	for _, row := range rows {
+		rowValues := make(LookupValues, len(fields))
+		for _, field := range fields {
+			rowValues[field] = lookupValue(row, field)
+		}
+
+		if lo.SomeBy(keys, func(key LookupValues) bool {
+			return lo.EveryBy(fields, func(field string) bool { return rowValues[field] == key[field] })
+		}) {
+			kept = append(kept, row)
+		}
+	}
+
+	return kept
+}
+
+// lookupKeyFor resolves the first lookup alternative whose fields are all present and non-empty in
+// the payload, returning its index and extracted values
+func lookupKeyFor(s *Schema, payload json.RawMessage) (alternative int, values LookupValues, ok bool) {
+	for i, alt := range s.Lookup {
+		candidate := make(LookupValues, len(alt.Fields))
+
+		complete := true
+
+		for _, name := range alt.Fields {
+			field, found := s.FieldByName(name)
+			if !found {
+				complete = false
+				break
+			}
+
+			value := lookupValue(payload, field.InputKey)
+			if value == "" {
+				complete = false
+				break
+			}
+
+			candidate[name] = value
+		}
+
+		if complete {
+			return i, candidate, true
+		}
+	}
+
+	return 0, nil, false
+}
+
+// EncodeLookupKey renders a lookup alternative's key values into the stable cache key used by both
+// WithLookupMatches and Upsert, keeping the encoding in one place for writer and reader
+func EncodeLookupKey(alternative LookupAlternative, keys LookupValues) string {
+	parts := make([]string, len(alternative.Fields))
+	for i, field := range alternative.Fields {
+		parts[i] = keys[field]
+	}
+
+	return strings.Join(parts, "\x1f")
+}
+
+// lookupMatchKey identifies one cached ingest lookup match by schema, alternative index, and
+// encoded key tuple
+type lookupMatchKey struct {
+	schema      string
+	alternative int
+	keys        string
+}
+
+// lookupMatchEntry is one cached ingest lookup match: rows resolved by a batch prefetch query, plus
+// the ids of records created for this key later in the same run and not yet hydrated into rows. A
+// present key with a zero-value entry (no rows, no createdIDs) is a confirmed miss, distinct from
+// the key being absent entirely
+type lookupMatchEntry struct {
+	rows       []json.RawMessage
+	createdIDs []string
+}
+
+// lookupMatchCache is the ctx-carried prefetch cache for ingest lookup matches
+type lookupMatchCache map[lookupMatchKey]lookupMatchEntry
+
+// lookupMatchCacheContextKey carries the prefetch cache installed by WithLookupMatches
+var lookupMatchCacheContextKey = contextx.NewKey[lookupMatchCache]()
+
+// WithLookupMatches installs a ctx-carried cache of one schema's ingest lookup matches, keyed by
+// lookup alternative index and encoded key tuple (see EncodeLookupKey), letting Upsert resolve a
+// payload's existing row from the prefetched batch instead of issuing QueryByLookup per record. A
+// same-run create records its id against the cache under its key instead of loading the row
+// eagerly; Upsert hydrates recorded ids into rows lazily on the next read of that key, so a
+// duplicate key later in the same run converges on the row just created without a Load per create
+func WithLookupMatches(ctx context.Context, schema *Schema, matches map[int]map[string][]json.RawMessage) context.Context {
+	cache, ok := lookupMatchCacheContextKey.Get(ctx)
+	if !ok {
+		cache = lookupMatchCache{}
+	}
+
+	for alternative, byKey := range matches {
+		for keys, rows := range byKey {
+			cache[lookupMatchKey{schema: schema.Snake, alternative: alternative, keys: keys}] = lookupMatchEntry{rows: rows}
+		}
+	}
+
+	return lookupMatchCacheContextKey.Set(ctx, cache)
+}
+
+// deleteDocKey removes a key from a JSON document map if present, reporting whether it deleted anything
+func deleteDocKey(doc map[string]json.RawMessage, key string) bool {
+	if key == "" {
+		return false
+	}
+
+	if _, ok := doc[key]; !ok {
+		return false
+	}
+
+	delete(doc, key)
+
+	return true
+}
+
+// selectIngestCandidate partitions the rows matched by an ingest lookup into ownership categories
+// and selects the single row, if any, an ingest write should apply to. A row already managed by the
+// payload's own installation takes priority over every other category, even when other rows share
+// the lookup key. Otherwise, a payload with no source definition (a non-integration caller) treats
+// every row as owned. Rows sharing the payload's definition are owned outright when the instance
+// also matches, or partially owned when the row carries no instance yet; rows with no definition at
+// all are unclaimed; everything else is foreign. Ties within the managed-by, owned/partial, or
+// unclaimed categories are rejected rather than guessed at, and no created_at or other recency
+// tie-break is ever applied
+func selectIngestCandidate(s *Schema, rows []json.RawMessage, payload json.RawMessage) (row json.RawMessage, claimable bool, foreign bool, err error) {
+	me := lookupValue(payload, FieldManagedBy)
+
+	managedByMe := lo.Filter(rows, func(candidate json.RawMessage, _ int) bool {
+		return lookupValue(candidate, FieldManagedBy) == me
+	})
+
+	switch len(managedByMe) {
+	case 0:
+	case 1:
+		return managedByMe[0], false, false, nil
+	default:
+		return nil, false, false, ErrUpsertConflict
+	}
+
+	pd := lookupValue(payload, FieldSourceDefinitionID)
+	pi := lookupValue(payload, FieldSourceInstanceID)
+
+	var ownedPartial, unclaimed, foreignRows []json.RawMessage
+
+	for _, candidate := range rows {
+		rd := lookupValue(candidate, FieldSourceDefinitionID)
+		ri := lookupValue(candidate, FieldSourceInstanceID)
+
+		switch {
+		case pd == "":
+			ownedPartial = append(ownedPartial, candidate)
+		case rd == pd && (ri == pi || ri == ""):
+			ownedPartial = append(ownedPartial, candidate)
+		case rd == "":
+			unclaimed = append(unclaimed, candidate)
+		default:
+			foreignRows = append(foreignRows, candidate)
+		}
+	}
+
+	switch len(ownedPartial) {
+	case 0:
+	case 1:
+		return ownedPartial[0], false, false, nil
+	default:
+		return nil, false, false, ErrUpsertConflict
+	}
+
+	switch len(unclaimed) {
+	case 0:
+	case 1:
+		return unclaimed[0], true, false, nil
+	default:
+		return nil, false, false, ErrUpsertConflict
+	}
+
+	if s.InstanceScoped {
+		foreignRows = lo.Filter(foreignRows, func(candidate json.RawMessage, _ int) bool {
+			ri := lookupValue(candidate, FieldSourceInstanceID)
+
+			return ri == pi || ri == ""
+		})
+	}
+
+	switch len(foreignRows) {
+	case 0:
+		return nil, false, false, nil
+	case 1:
+		return foreignRows[0], false, true, nil
+	default:
+		return nil, false, false, ErrUpsertConflict
+	}
+}
+
 // DisplayField returns the schema's display-name field; generation enforces at most one
 func (s *Schema) DisplayField() (FieldDescriptor, bool) {
 	for _, f := range s.Fields {
@@ -669,76 +948,109 @@ func (s *Schema) DisplayValue(row json.RawMessage) string {
 	return lookupValue(row, field.Name)
 }
 
-// LookupField returns the schema's single ingest upsert lookup field. It returns false when the
-// schema declares no lookup key or more than one, since priority between multiple lookup keys is
-// schema-specific and stays with hand-written persistence
-func (s *Schema) LookupField() (FieldDescriptor, bool) {
-	var (
-		found FieldDescriptor
-		count int
-	)
-
-	for _, f := range s.Fields {
-		if f.LookupKey {
-			found = f
-			count++
-		}
-	}
-
-	return found, count == 1
-}
-
-// Upsert persists through the ingest capability using a stock or previously resolved match
-// An explicit empty row set means create; omitted matches use the schema lookup key
-func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID string, payload json.RawMessage, matched ...[]json.RawMessage) (id string, changed bool, managed bool, err error) {
+// Upsert persists through the ingest capability, resolving the existing row from the ctx-carried
+// lookup cache when present or by QueryByLookup otherwise
+func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID string, payload json.RawMessage) (id string, changed bool, managed bool, err error) {
 	ref := SchemaRef{Schema: s.Snake, Operation: refOpUpsert}
 
 	if s.Create == nil || s.Ingest == nil || s.Ingest.buildUpdate == nil {
 		return "", false, false, logError(ctx, ref, ErrUpsertUnsupported, nil)
 	}
 
-	if len(matched) > 1 {
-		return "", false, false, logError(ctx, ref, ErrUpsertConflict, fmt.Errorf("multiple match sets supplied for %s", s.Name))
+	alternative, keys, hasKey := lookupKeyFor(s, payload)
+
+	var (
+		rows      []json.RawMessage
+		cacheKey  lookupMatchKey
+		cacheable bool
+	)
+
+	switch {
+	case !hasKey:
+		return "", false, false, ErrUpsertKeyMissing
+	default:
+		cacheKey = lookupMatchKey{schema: s.Snake, alternative: alternative, keys: EncodeLookupKey(s.Lookup[alternative], keys)}
+
+		cache, ok := lookupMatchCacheContextKey.Get(ctx)
+		if !ok {
+			rows, err = s.QueryByLookup(ctx, client, ownerID, alternative, []LookupValues{keys})
+			if err != nil {
+				return "", false, false, err
+			}
+
+			break
+		}
+
+		cacheable = true
+
+		entry, present := cache[cacheKey]
+		if !present {
+			rows, err = s.QueryByLookup(ctx, client, ownerID, alternative, []LookupValues{keys})
+			if err != nil {
+				return "", false, false, err
+			}
+
+			break
+		}
+
+		for _, createdID := range entry.createdIDs {
+			row, lerr := s.Load(ctx, client, createdID)
+			if lerr != nil {
+				return "", false, false, lerr
+			}
+
+			entry.rows = append(entry.rows, row)
+		}
+
+		if len(entry.createdIDs) > 0 {
+			entry.createdIDs = nil
+			cache[cacheKey] = entry
+		}
+
+		rows = entry.rows
 	}
 
-	var rows []json.RawMessage
-	if len(matched) == 1 {
-		rows = matched[0]
-	} else {
-		field, ok := s.LookupField()
-		if !ok || s.QueryByKey == nil {
-			return "", false, false, logError(ctx, ref, ErrUpsertUnsupported, fmt.Errorf("%s has no stock lookup", s.Name))
-		}
-		value := lookupValue(payload, field.InputKey)
-		if value == "" {
-			return "", false, false, ErrUpsertKeyMissing
-		}
-		rows, err = s.QueryByKey(ctx, client, ownerID, field.Name, []string{value})
+	candidate, _, foreign, err := selectIngestCandidate(s, rows, payload)
+	if err != nil {
+		return "", false, false, logError(ctx, ref, err, fmt.Errorf("%s lookup matched conflicting records", s.Name))
+	}
+
+	if foreign {
+		logx.FromContext(ctx).Debug().Str(FieldSchema, s.Snake).Str(fieldEntityID, entityID(candidate)).Msg("ingest skipped record managed by another definition")
+
+		return entityID(candidate), false, false, nil
+	}
+
+	if candidate == nil {
+		id, err = s.Create(ctx, client, payload)
 		if err != nil {
 			return "", false, false, err
 		}
+
+		if cacheable {
+			if cache, ok := lookupMatchCacheContextKey.Get(ctx); ok {
+				entry := cache[cacheKey]
+				entry.createdIDs = append(entry.createdIDs, id)
+				cache[cacheKey] = entry
+			}
+		}
+
+		return id, true, true, nil
 	}
 
-	switch len(rows) {
-	case 0:
-		id, err = s.Create(ctx, client, payload)
-		return id, err == nil, err == nil, err
-	case 1:
-		id = entityID(rows[0])
-		if id == "" || lookupValue(rows[0], "owner_id") != ownerID {
-			return "", false, false, logError(ctx, ref, ErrUpsertConflict, fmt.Errorf("invalid or cross-organization match for %s", s.Name))
-		}
-		changed, managed, err = s.applyIngestUpdate(ctx, client, rows[0], payload)
-		return id, changed, managed, err
-	default:
-		return "", false, false, logError(ctx, ref, ErrUpsertConflict, fmt.Errorf("%s lookup matched %d records", s.Name, len(rows)))
+	id = entityID(candidate)
+
+	_, hasOwner := s.FieldByName(FieldOwnerID)
+	if id == "" || (hasOwner && lookupValue(candidate, FieldOwnerID) != ownerID) {
+		return "", false, false, logError(ctx, ref, ErrUpsertConflict, fmt.Errorf("invalid or cross-organization match for %s", s.Name))
 	}
+
+	changed, managed, err = s.applyIngestUpdate(ctx, client, candidate, payload)
+
+	return id, changed, managed, err
 }
 
-// pruneIngestFields removes unchanged assignments before hooks or storage see the mutation. A field
-// marked Volatile never triggers a write on its own: when only volatile fields differ and no edge
-// changed, they are dropped so an idle re-sync writes nothing and emits no event; they still ride
-// along when a material field or edge changed
+// pruneIngestFields drops unchanged and volatile-only assignments from the mutation before it is saved
 func (s *Schema) pruneIngestFields(ctx context.Context, mutation ent.Mutation) (ChangeSet, error) {
 	var volatile []string
 
@@ -774,7 +1086,18 @@ func (s *Schema) pruneIngestFields(ctx context.Context, mutation ent.Mutation) (
 	}
 
 	set := ChangeSetFromMutation(mutation)
-	if material || len(set.ChangedEdges) > 0 {
+
+	edgeChanged := lo.SomeBy(set.ChangedEdges, func(name string) bool {
+		if name == s.IntegrationM2MEdge || name == s.IntegrationRunM2MEdge {
+			return false
+		}
+
+		edge, ok := s.EdgeByName(name)
+
+		return !ok || edge.Field == "" || !lo.Contains(volatile, edge.Field)
+	})
+
+	if material || edgeChanged {
 		return set, nil
 	}
 
@@ -784,49 +1107,128 @@ func (s *Schema) pruneIngestFields(ctx context.Context, mutation ent.Mutation) (
 		}
 	}
 
+	for _, name := range []string{s.IntegrationM2MEdge, s.IntegrationRunM2MEdge} {
+		if name == "" || !lo.Contains(set.ChangedEdges, name) {
+			continue
+		}
+
+		if err := mutation.ResetEdge(name); err != nil {
+			return ChangeSet{}, err
+		}
+	}
+
 	return ChangeSetFromMutation(mutation), nil
 }
 
-// IngestChangeSet computes the pruned update delta for a resolved row without writing it, so callers
-// that add their own bookkeeping fields can decide whether provider data actually changed
-func (s *Schema) IngestChangeSet(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ChangeSet, error) {
-	if s.Ingest == nil || s.Ingest.buildUpdate == nil {
-		return ChangeSet{}, ErrUpsertUnsupported
+// SystemControlledOnly reports whether the pruned delta touches only framework-controlled columns
+// and edges: the integration ownership edges (the mutable FK edge and the integration and
+// integration-run many-to-many edges) count as bookkeeping; any other edge stays material
+func (s *Schema) SystemControlledOnly(set ChangeSet) bool {
+	if len(set.ChangedFields) == 0 && len(set.ChangedEdges) == 0 {
+		return false
 	}
 
-	mutation, _, err := s.Ingest.buildUpdate(ctx, client, row, s.rekeyEdgesForUpdate(payload))
+	bookkeepingEdges := lo.EveryBy(set.ChangedEdges, func(name string) bool {
+		if name == s.IntegrationM2MEdge || name == s.IntegrationRunM2MEdge {
+			return true
+		}
+
+		edge, ok := s.EdgeByName(name)
+
+		return ok && s.IntegrationFKField != "" && edge.Field == s.IntegrationFKField
+	})
+
+	if !bookkeepingEdges {
+		return false
+	}
+
+	return lo.EveryBy(set.ChangedFields, func(name string) bool {
+		field, ok := s.FieldByName(name)
+
+		return ok && field.SystemControlled
+	})
+}
+
+// stripIntegrationPointer removes the managed_by field, the integration FK field, and the
+// integration m2m edge keys from an ingest payload, leaving an actively-managed record's ownership
+// pointer untouched by a write from a different integration
+func (s *Schema) stripIntegrationPointer(payload json.RawMessage) json.RawMessage {
+	return jsonx.EditObject(payload, func(doc map[string]json.RawMessage) bool {
+		changed := deleteDocKey(doc, FieldManagedBy)
+
+		if deleteDocKey(doc, s.IntegrationFKField) {
+			changed = true
+		}
+
+		if s.IntegrationM2MEdge != "" {
+			if edge, ok := s.EdgeByName(s.IntegrationM2MEdge); ok {
+				if deleteDocKey(doc, edge.CreateField) {
+					changed = true
+				}
+
+				if deleteDocKey(doc, edge.AddField) {
+					changed = true
+				}
+			}
+		}
+
+		return changed
+	})
+}
+
+// applyIngestClaim strips the ownership pointer from a payload that would otherwise move an
+// actively-managed record away from its current manager. A record managed by an integration that
+// is no longer active is free to be claimed by this write instead
+func (s *Schema) applyIngestClaim(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (json.RawMessage, error) {
+	manager := lookupValue(row, FieldManagedBy)
+	me := lookupValue(payload, FieldManagedBy)
+
+	if manager == "" || manager == me {
+		return payload, nil
+	}
+
+	active, err := integrationActive(ctx, client, manager)
 	if err != nil {
-		return ChangeSet{}, err
+		return nil, err
 	}
 
-	return s.pruneIngestFields(ctx, mutation)
-}
-
-// managerFieldName is the provenance column recording which definition manages a record
-const managerFieldName = "source_definition_id"
-
-// ingestManagesRecord reports whether the payload's definition may write the row: an unclaimed row is
-// claimed by the first writing definition, a claimed row is writable only by the definition already
-// recorded on it, and a payload carrying no definition identity writes normally
-func ingestManagesRecord(row json.RawMessage, payload json.RawMessage) bool {
-	payloadDefinition := lookupValue(payload, managerFieldName)
-	if payloadDefinition == "" {
-		return true
+	if !active {
+		return payload, nil
 	}
 
-	rowDefinition := lookupValue(row, managerFieldName)
-
-	return rowDefinition == "" || rowDefinition == payloadDefinition
+	return s.stripIntegrationPointer(payload), nil
 }
 
-// applyIngestUpdate applies the shared ingest write decision to one resolved row: a row managed by a
-// different definition is read-only, an unchanged payload writes nothing, and a real field or link
-// delta is pruned to its changed fields and edges before a single update. changed reports whether a
-// write occurred; managed reports whether this payload's definition may write the row
+// applyIngestResurrect clears a non-episodic removed_at-style value in the payload when the
+// resolved row already carries one, so a record seen again by ingest is treated as an explicit
+// un-removal. Episodic schemas leave the field alone since removal there is a recurring observation
+func (s *Schema) applyIngestResurrect(row json.RawMessage, payload json.RawMessage) json.RawMessage {
+	if s.RemovedAtField == "" || s.RemovedAtEpisodic {
+		return payload
+	}
+
+	if lookupValue(row, s.RemovedAtField) == "" {
+		return payload
+	}
+
+	field, _ := s.FieldByName(s.RemovedAtField)
+
+	edited, _, err := jsonx.SetObjectKey(payload, field.InputKey, nil)
+	if err != nil {
+		return payload
+	}
+
+	return edited
+}
+
+// applyIngestUpdate applies the shared ingest write decision to one resolved row
 func (s *Schema) applyIngestUpdate(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (changed bool, managed bool, err error) {
-	if !ingestManagesRecord(row, payload) {
-		return false, false, nil
+	payload, err = s.applyIngestClaim(ctx, client, row, payload)
+	if err != nil {
+		return false, true, err
 	}
+
+	payload = s.applyIngestResurrect(row, payload)
 
 	rekeyed, throughIDs := splitThroughEdgeIDs(s, s.rekeyEdgesForUpdate(payload))
 
@@ -840,8 +1242,15 @@ func (s *Schema) applyIngestUpdate(ctx context.Context, client *generated.Client
 		return false, true, err
 	}
 
+	bookkeeping := s.SystemControlledOnly(changes)
+
 	if !changes.Empty() {
-		if err := save(ctx); err != nil {
+		saveCtx := ctx
+		if bookkeeping {
+			saveCtx = WithEmissionVetoed(ctx)
+		}
+
+		if err := save(saveCtx); err != nil {
 			return false, true, err
 		}
 	}
@@ -852,7 +1261,7 @@ func (s *Schema) applyIngestUpdate(ctx context.Context, client *generated.Client
 		}
 	}
 
-	return !changes.Empty() || len(throughIDs) > 0, true, nil
+	return (!changes.Empty() && !bookkeeping) || len(throughIDs) > 0, true, nil
 }
 
 // rekeyEdgesForUpdate renames to-many edge keys in a create-input payload to their update-input add
@@ -934,9 +1343,14 @@ var (
 			Lower:            "actionplan",
 			WorkflowEligible: true,
 		},
-		ProjectionType: reflect.TypeFor[ActionPlanProjection](),
-		MentionSpec:    &MentionSpec{Schema: "ActionPlan", NameField: "name", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
-		ApprovalSpec:   &ApprovalSpec{Schema: "ActionPlan", StatusField: "status", ApproverField: "approver_id"},
+		ProjectionType:        reflect.TypeFor[ActionPlanProjection](),
+		MentionSpec:           &MentionSpec{Schema: "ActionPlan", NameField: "name", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
+		ApprovalSpec:          &ApprovalSpec{Schema: "ActionPlan", StatusField: "status", ApproverField: "approver_id"},
+		IntegrationM2MEdge:    "integrations",
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"external_file_id"}},
+		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "action_plan", Operation: refOpCreate}
 
@@ -1123,7 +1537,12 @@ var (
 			Snake: "asset",
 			Lower: "asset",
 		},
-		ProjectionType: reflect.TypeFor[AssetProjection](),
+		ProjectionType:        reflect.TypeFor[AssetProjection](),
+		IntegrationFKField:    "integration_id",
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"source_identifier"}},
+		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "asset", Operation: refOpCreate}
 
@@ -1202,7 +1621,8 @@ var (
 			Lower:            "campaign",
 			WorkflowEligible: true,
 		},
-		ProjectionType: reflect.TypeFor[CampaignProjection](),
+		ProjectionType:     reflect.TypeFor[CampaignProjection](),
+		IntegrationFKField: "integration_id",
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
 			ref := SchemaRef{Schema: "campaign", Operation: refOpUpdate, EntityID: entityID}
 
@@ -1339,7 +1759,13 @@ var (
 			Snake: "check_result",
 			Lower: "checkresult",
 		},
-		ProjectionType: reflect.TypeFor[CheckResultProjection](),
+		ProjectionType:        reflect.TypeFor[CheckResultProjection](),
+		IntegrationFKField:    "integration_id",
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"parent_external_id"}},
+		},
+		InstanceScoped: true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "check_result", Operation: refOpCreate}
 
@@ -1394,7 +1820,12 @@ var (
 			Snake: "contact",
 			Lower: "contact",
 		},
-		ProjectionType: reflect.TypeFor[ContactProjection](),
+		ProjectionType:        reflect.TypeFor[ContactProjection](),
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"external_id"}},
+			{Fields: []string{"email"}},
+		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "contact", Operation: refOpCreate}
 
@@ -1724,7 +2155,15 @@ var (
 			Snake: "directory_account",
 			Lower: "directoryaccount",
 		},
-		ProjectionType: reflect.TypeFor[DirectoryAccountProjection](),
+		ProjectionType:        reflect.TypeFor[DirectoryAccountProjection](),
+		IntegrationFKField:    "integration_id",
+		IntegrationRunM2MEdge: "integration_runs",
+		RemovedAtField:        "removed_at",
+		SeenAtField:           "last_seen_at",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"external_id"}},
+		},
+		InstanceScoped: true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "directory_account", Operation: refOpCreate}
 
@@ -1802,7 +2241,15 @@ var (
 			Snake: "directory_group",
 			Lower: "directorygroup",
 		},
-		ProjectionType: reflect.TypeFor[DirectoryGroupProjection](),
+		ProjectionType:        reflect.TypeFor[DirectoryGroupProjection](),
+		IntegrationFKField:    "integration_id",
+		IntegrationRunM2MEdge: "integration_runs",
+		RemovedAtField:        "removed_at",
+		SeenAtField:           "last_seen_at",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"external_id"}},
+		},
+		InstanceScoped: true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "directory_group", Operation: refOpCreate}
 
@@ -1880,7 +2327,16 @@ var (
 			Snake: "directory_membership",
 			Lower: "directorymembership",
 		},
-		ProjectionType: reflect.TypeFor[DirectoryMembershipProjection](),
+		ProjectionType:        reflect.TypeFor[DirectoryMembershipProjection](),
+		IntegrationFKField:    "integration_id",
+		IntegrationRunM2MEdge: "integration_runs",
+		RemovedAtField:        "removed_at",
+		RemovedAtEpisodic:     true,
+		SeenAtField:           "last_seen_at",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"directory_account_id", "directory_group_id"}},
+		},
+		InstanceScoped: true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "directory_membership", Operation: refOpCreate}
 
@@ -1950,52 +2406,6 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "directory_membership.ingest.requested"),
-		},
-	}
-	SchemaDirectorySyncRun = &Schema{
-		SchemaDescriptor: SchemaDescriptor{
-			Name:  "DirectorySyncRun",
-			Snake: "directory_sync_run",
-			Lower: "directorysyncrun",
-		},
-		ProjectionType: reflect.TypeFor[DirectorySyncRunProjection](),
-		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "directory_sync_run", Operation: refOpQuery}
-
-			entities, err := client.DirectorySyncRun.Query().
-				Where(directorysyncrun.OwnerID(orgID)).
-				All(ctx)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrQueryFailed, err)
-			}
-
-			results := make([]json.RawMessage, 0, len(entities))
-			for _, e := range entities {
-				data, err := json.Marshal(e)
-				if err != nil {
-					logError(ctx, ref, ErrMarshalFailed, err)
-					continue
-				}
-
-				results = append(results, data)
-			}
-
-			return results, nil
-		},
-		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "directory_sync_run", Operation: refOpLoad, EntityID: entityID}
-
-			entity, err := client.DirectorySyncRun.Get(ctx, entityID)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrLoadFailed, err)
-			}
-
-			data, err := json.Marshal(entity)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrMarshalFailed, err)
-			}
-
-			return data, nil
 		},
 	}
 	SchemaDiscussion = &Schema{
@@ -2096,6 +2506,7 @@ var (
 			Snake: "email_template",
 			Lower: "emailtemplate",
 		},
+		IntegrationFKField: "integration_id",
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "email_template", Operation: refOpLoad, EntityID: entityID}
 
@@ -2140,7 +2551,12 @@ var (
 			Snake: "entity",
 			Lower: "entity",
 		},
-		ProjectionType: reflect.TypeFor[EntityProjection](),
+		ProjectionType:        reflect.TypeFor[EntityProjection](),
+		IntegrationM2MEdge:    "integrations",
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"external_id"}},
+		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "entity", Operation: refOpCreate}
 
@@ -2264,7 +2680,8 @@ var (
 			Snake: "event",
 			Lower: "event",
 		},
-		ProjectionType: reflect.TypeFor[EventProjection](),
+		ProjectionType:     reflect.TypeFor[EventProjection](),
+		IntegrationM2MEdge: "integrations",
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "event", Operation: refOpLoad, EntityID: entityID}
 
@@ -2356,7 +2773,8 @@ var (
 			Snake: "file",
 			Lower: "file",
 		},
-		ProjectionType: reflect.TypeFor[FileProjection](),
+		ProjectionType:     reflect.TypeFor[FileProjection](),
+		IntegrationM2MEdge: "integrations",
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "file", Operation: refOpLoad, EntityID: entityID}
 
@@ -2402,7 +2820,12 @@ var (
 			Lower:            "finding",
 			WorkflowEligible: true,
 		},
-		ProjectionType: reflect.TypeFor[FindingProjection](),
+		ProjectionType:        reflect.TypeFor[FindingProjection](),
+		IntegrationM2MEdge:    "integrations",
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"external_id"}},
+		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "finding", Operation: refOpCreate}
 
@@ -2534,7 +2957,8 @@ var (
 			Snake: "group",
 			Lower: "group",
 		},
-		ProjectionType: reflect.TypeFor[GroupProjection](),
+		ProjectionType:     reflect.TypeFor[GroupProjection](),
+		IntegrationM2MEdge: "integrations",
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "group", Operation: refOpQuery}
 
@@ -2624,6 +3048,7 @@ var (
 			Snake: "hush",
 			Lower: "hush",
 		},
+		IntegrationM2MEdge: "integrations",
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "hush", Operation: refOpLoad, EntityID: entityID}
 
@@ -2737,8 +3162,9 @@ var (
 			Snake: "integration",
 			Lower: "integration",
 		},
-		ProjectionType: reflect.TypeFor[IntegrationProjection](),
-		ConsoleRoute:   &ConsoleRoute{Base: "automation/integrations"},
+		ProjectionType:        reflect.TypeFor[IntegrationProjection](),
+		ConsoleRoute:          &ConsoleRoute{Base: "automation/integrations"},
+		IntegrationRunM2MEdge: "integration_runs",
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "integration", Operation: refOpQuery}
 
@@ -2784,6 +3210,31 @@ var (
 			Snake: "integration_run",
 			Lower: "integrationrun",
 		},
+		ProjectionType:     reflect.TypeFor[IntegrationRunProjection](),
+		IntegrationFKField: "integration_id",
+		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
+			ref := SchemaRef{Schema: "integration_run", Operation: refOpQuery}
+
+			entities, err := client.IntegrationRun.Query().
+				Where(integrationrun.OwnerID(orgID)).
+				All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			results := make([]json.RawMessage, 0, len(entities))
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+
+			return results, nil
+		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "integration_run", Operation: refOpLoad, EntityID: entityID}
 
@@ -2806,6 +3257,7 @@ var (
 			Snake: "integration_webhook",
 			Lower: "integrationwebhook",
 		},
+		IntegrationFKField: "integration_id",
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "integration_webhook", Operation: refOpLoad, EntityID: entityID}
 
@@ -2829,10 +3281,15 @@ var (
 			Lower:            "internalpolicy",
 			WorkflowEligible: true,
 		},
-		ProjectionType: reflect.TypeFor[InternalPolicyProjection](),
-		ConsoleRoute:   &ConsoleRoute{Base: "policies", Suffix: "view"},
-		MentionSpec:    &MentionSpec{Schema: "InternalPolicy", NameField: "name", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
-		ApprovalSpec:   &ApprovalSpec{Schema: "InternalPolicy", StatusField: "status", ApproverField: "approver_id"},
+		ProjectionType:        reflect.TypeFor[InternalPolicyProjection](),
+		ConsoleRoute:          &ConsoleRoute{Base: "policies", Suffix: "view"},
+		MentionSpec:           &MentionSpec{Schema: "InternalPolicy", NameField: "name", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
+		ApprovalSpec:          &ApprovalSpec{Schema: "InternalPolicy", StatusField: "status", ApproverField: "approver_id"},
+		IntegrationM2MEdge:    "integrations",
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"external_file_id"}},
+		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "internal_policy", Operation: refOpCreate}
 
@@ -3121,6 +3578,7 @@ var (
 			Snake: "notification_template",
 			Lower: "notificationtemplate",
 		},
+		IntegrationFKField: "integration_id",
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "notification_template", Operation: refOpLoad, EntityID: entityID}
 
@@ -3275,7 +3733,9 @@ var (
 			Snake: "organization",
 			Lower: "organization",
 		},
-		ProjectionType: reflect.TypeFor[OrganizationProjection](),
+		ProjectionType:        reflect.TypeFor[OrganizationProjection](),
+		IntegrationM2MEdge:    "integrations",
+		IntegrationRunM2MEdge: "integration_runs",
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "organization", Operation: refOpLoad, EntityID: entityID}
 
@@ -3365,7 +3825,8 @@ var (
 			Lower:            "platform",
 			WorkflowEligible: true,
 		},
-		ProjectionType: reflect.TypeFor[PlatformProjection](),
+		ProjectionType:     reflect.TypeFor[PlatformProjection](),
+		IntegrationM2MEdge: "integrations",
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
 			ref := SchemaRef{Schema: "platform", Operation: refOpUpdate, EntityID: entityID}
 
@@ -3434,10 +3895,14 @@ var (
 			Lower:            "procedure",
 			WorkflowEligible: true,
 		},
-		ProjectionType: reflect.TypeFor[ProcedureProjection](),
-		ConsoleRoute:   &ConsoleRoute{Base: "procedures", Suffix: "view"},
-		MentionSpec:    &MentionSpec{Schema: "Procedure", NameField: "name", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
-		ApprovalSpec:   &ApprovalSpec{Schema: "Procedure", StatusField: "status", ApproverField: "approver_id"},
+		ProjectionType:        reflect.TypeFor[ProcedureProjection](),
+		ConsoleRoute:          &ConsoleRoute{Base: "procedures", Suffix: "view"},
+		MentionSpec:           &MentionSpec{Schema: "Procedure", NameField: "name", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
+		ApprovalSpec:          &ApprovalSpec{Schema: "Procedure", StatusField: "status", ApproverField: "approver_id"},
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"external_file_id"}},
+		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "procedure", Operation: refOpCreate}
 
@@ -3593,7 +4058,8 @@ var (
 			Lower:            "remediation",
 			WorkflowEligible: true,
 		},
-		ProjectionType: reflect.TypeFor[RemediationProjection](),
+		ProjectionType:     reflect.TypeFor[RemediationProjection](),
+		IntegrationM2MEdge: "integrations",
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
 			ref := SchemaRef{Schema: "remediation", Operation: refOpUpdate, EntityID: entityID}
 
@@ -3661,7 +4127,8 @@ var (
 			Snake: "review",
 			Lower: "review",
 		},
-		ProjectionType: reflect.TypeFor[ReviewProjection](),
+		ProjectionType:     reflect.TypeFor[ReviewProjection](),
+		IntegrationM2MEdge: "integrations",
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "review", Operation: refOpQuery}
 
@@ -3708,9 +4175,13 @@ var (
 			Lower:            "risk",
 			WorkflowEligible: true,
 		},
-		ProjectionType: reflect.TypeFor[RiskProjection](),
-		ConsoleRoute:   &ConsoleRoute{Base: "exposure/risks"},
-		MentionSpec:    &MentionSpec{Schema: "Risk", NameField: "name", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
+		ProjectionType:        reflect.TypeFor[RiskProjection](),
+		ConsoleRoute:          &ConsoleRoute{Base: "exposure/risks"},
+		MentionSpec:           &MentionSpec{Schema: "Risk", NameField: "name", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"external_id"}},
+		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "risk", Operation: refOpCreate}
 
@@ -4544,7 +5015,12 @@ var (
 			Lower:            "vulnerability",
 			WorkflowEligible: true,
 		},
-		ProjectionType: reflect.TypeFor[VulnerabilityProjection](),
+		ProjectionType:        reflect.TypeFor[VulnerabilityProjection](),
+		IntegrationM2MEdge:    "integrations",
+		IntegrationRunM2MEdge: "integration_runs",
+		Lookup: []LookupAlternative{
+			{Fields: []string{"external_id"}},
+		},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "vulnerability", Operation: refOpCreate}
 
@@ -4740,6 +5216,7 @@ var (
 			Snake: "workflow_instance",
 			Lower: "workflowinstance",
 		},
+		IntegrationFKField: "integration_id",
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "workflow_instance", Operation: refOpLoad, EntityID: entityID}
 
@@ -4848,11 +5325,11 @@ func init() {
 		{Name: "token", Label: "Token", Type: "string", MatchKey: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaActionPlan.Fields = []FieldDescriptor{
 		{Name: "action_plan_kind_id", Label: "ActionPlanKindID", Type: "string", MatchKey: true, InputKey: "action_plan_kind_id", Clearable: true},
-		{Name: "action_plan_kind_name", Label: "ActionPlanKindName", Type: "string", MatchKey: true, InputKey: "action_plan_kind_name", Clearable: true},
+		{Name: "action_plan_kind_name", Label: "ActionPlanKindName", Type: "string", MatchKey: true, InputKey: "action_plan_kind_name", Clearable: true, CaseInsensitive: true},
 		{Name: "approval_required", Label: "ApprovalRequired", Type: "bool", InputKey: "approval_required", Clearable: true},
 		{Name: "approver_id", Label: "ApproverID", Type: "string", MatchKey: true, InputKey: "approver_id", Clearable: true},
 		{Name: "blocked", Label: "Blocked", Type: "bool", InputKey: "blocked"},
@@ -4875,6 +5352,7 @@ func init() {
 		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", LookupKey: true, Clearable: true},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", InputKey: "improvement_suggestions", Clearable: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode", Clearable: true},
@@ -4889,7 +5367,7 @@ func init() {
 		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, InputKey: "revision", Clearable: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Clearable: true},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, Clearable: true},
@@ -4900,7 +5378,7 @@ func init() {
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true, InputKey: "title"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "url", Label: "URL", Type: "string", MatchKey: true, InputKey: "url", Clearable: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
@@ -4922,7 +5400,7 @@ func init() {
 		{Name: "uischema", Label: "Uischema", Type: "map[string]interface {}", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaAssessmentResponse.Fields = []FieldDescriptor{
@@ -4955,16 +5433,16 @@ func init() {
 		{Name: "status", Label: "Status", Type: "enums.AssessmentResponseStatus"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaAsset.Fields = []FieldDescriptor{
 		{Name: "access_model_id", Label: "AccessModelID", Type: "string", MatchKey: true, InputKey: "access_model_id", Clearable: true},
-		{Name: "access_model_name", Label: "AccessModelName", Type: "string", MatchKey: true, InputKey: "access_model_name", Clearable: true},
+		{Name: "access_model_name", Label: "AccessModelName", Type: "string", MatchKey: true, InputKey: "access_model_name", Clearable: true, CaseInsensitive: true},
 		{Name: "asset_data_classification_id", Label: "AssetDataClassificationID", Type: "string", MatchKey: true, InputKey: "asset_data_classification_id", Clearable: true},
-		{Name: "asset_data_classification_name", Label: "AssetDataClassificationName", Type: "string", MatchKey: true, InputKey: "asset_data_classification_name", Clearable: true},
+		{Name: "asset_data_classification_name", Label: "AssetDataClassificationName", Type: "string", MatchKey: true, InputKey: "asset_data_classification_name", Clearable: true, CaseInsensitive: true},
 		{Name: "asset_subtype_id", Label: "AssetSubtypeID", Type: "string", MatchKey: true, InputKey: "asset_subtype_id", Clearable: true},
-		{Name: "asset_subtype_name", Label: "AssetSubtypeName", Type: "string", MatchKey: true, InputKey: "asset_subtype_name", Clearable: true},
+		{Name: "asset_subtype_name", Label: "AssetSubtypeName", Type: "string", MatchKey: true, InputKey: "asset_subtype_name", Clearable: true, CaseInsensitive: true},
 		{Name: "asset_type", Label: "AssetType", Type: "enums.AssetType", InputKey: "asset_type"},
 		{Name: "categories", Label: "Categories", Type: "[]string", InputKey: "categories", Clearable: true},
 		{Name: "contains_pii", Label: "ContainsPii", Type: "bool", InputKey: "contains_pii", Clearable: true},
@@ -4973,18 +5451,19 @@ func init() {
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "criticality_id", Label: "CriticalityID", Type: "string", MatchKey: true, InputKey: "criticality_id", Clearable: true},
-		{Name: "criticality_name", Label: "CriticalityName", Type: "string", MatchKey: true, InputKey: "criticality_name", Clearable: true},
+		{Name: "criticality_name", Label: "CriticalityName", Type: "string", MatchKey: true, InputKey: "criticality_name", Clearable: true, CaseInsensitive: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Clearable: true},
 		{Name: "encryption_status_id", Label: "EncryptionStatusID", Type: "string", MatchKey: true, InputKey: "encryption_status_id", Clearable: true},
-		{Name: "encryption_status_name", Label: "EncryptionStatusName", Type: "string", MatchKey: true, InputKey: "encryption_status_name", Clearable: true},
+		{Name: "encryption_status_name", Label: "EncryptionStatusName", Type: "string", MatchKey: true, InputKey: "encryption_status_name", Clearable: true, CaseInsensitive: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "estimated_monthly_cost", Label: "EstimatedMonthlyCost", Type: "float64", InputKey: "estimated_monthly_cost", Clearable: true},
 		{Name: "identifier", Label: "Identifier", Type: "string", MatchKey: true, InputKey: "identifier", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "internal_owner", Label: "InternalOwner", Type: "string", MatchKey: true, InputKey: "internal_owner", Clearable: true},
 		{Name: "internal_owner_group_id", Label: "InternalOwnerGroupID", Type: "string", MatchKey: true, InputKey: "internal_owner_group_id", Clearable: true},
@@ -4998,21 +5477,21 @@ func init() {
 		{Name: "purchase_date", Label: "PurchaseDate", Type: "models.DateTime", InputKey: "purchase_date", Clearable: true},
 		{Name: "region", Label: "Region", Type: "string", MatchKey: true, InputKey: "region", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
 		{Name: "security_tier_id", Label: "SecurityTierID", Type: "string", MatchKey: true, InputKey: "security_tier_id", Clearable: true},
-		{Name: "security_tier_name", Label: "SecurityTierName", Type: "string", MatchKey: true, InputKey: "security_tier_name", Clearable: true},
+		{Name: "security_tier_name", Label: "SecurityTierName", Type: "string", MatchKey: true, InputKey: "security_tier_name", Clearable: true, CaseInsensitive: true},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_identifier", Label: "SourceIdentifier", Type: "string", MatchKey: true, InputKey: "source_identifier", LookupKey: true, Clearable: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "source_platform_id", Label: "SourcePlatformID", Type: "string", MatchKey: true, InputKey: "source_platform_id", Clearable: true},
+		{Name: "source_platform_id", Label: "SourcePlatformID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "source_type", Label: "SourceType", Type: "enums.SourceType", InputKey: "source_type"},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "website", Label: "Website", Type: "string", MatchKey: true, InputKey: "website", Clearable: true},
 	}
 	SchemaCampaign.Fields = []FieldDescriptor{
@@ -5057,7 +5536,7 @@ func init() {
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaCampaignTarget.Fields = []FieldDescriptor{
@@ -5078,7 +5557,7 @@ func init() {
 		{Name: "subscriber_id", Label: "SubscriberID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
@@ -5090,18 +5569,19 @@ func init() {
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true, InputKey: "details", Clearable: true},
 		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "last_observed_at", Label: "LastObservedAt", Type: "models.DateTime", InputKey: "last_observed_at", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "parent_external_id", Label: "ParentExternalID", Type: "string", MatchKey: true, InputKey: "parent_external_id", LookupKey: true, Clearable: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source"},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.CheckStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaContact.Fields = []FieldDescriptor{
 		{Name: "address", Label: "Address", Type: "string", MatchKey: true, InputKey: "address", Clearable: true},
@@ -5110,23 +5590,24 @@ func init() {
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "email", Label: "Email", Type: "string", MatchKey: true, InputKey: "email", LookupKey: true, Clearable: true},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "email", Label: "Email", Type: "string", MatchKey: true, InputKey: "email", Clearable: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", Clearable: true},
 		{Name: "full_name", Label: "FullName", Type: "string", MatchKey: true, InputKey: "full_name", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "phone_number", Label: "PhoneNumber", Type: "string", MatchKey: true, InputKey: "phone_number", Clearable: true},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.UserStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true, InputKey: "title", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaControl.Fields = []FieldDescriptor{
 		{Name: "aliases", Label: "Aliases", Type: "[]string", Clearable: true},
@@ -5136,7 +5617,7 @@ func init() {
 		{Name: "category", Label: "Category", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
 		{Name: "category_id", Label: "CategoryID", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
 		{Name: "control_kind_id", Label: "ControlKindID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "control_kind_name", Label: "ControlKindName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "control_kind_name", Label: "ControlKindName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "control_owner_id", Label: "ControlOwnerID", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
 		{Name: "control_questions", Label: "ControlQuestions", Type: "[]string", Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -5148,7 +5629,7 @@ func init() {
 		{Name: "description_json", Label: "DescriptionJSON", Type: "[]interface {}", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "evidence_requests", Label: "EvidenceRequests", Type: "[]models.EvidenceRequests", Clearable: true},
 		{Name: "example_evidence", Label: "ExampleEvidence", Type: "[]models.ExampleEvidence", Clearable: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, Clearable: true},
@@ -5167,7 +5648,7 @@ func init() {
 		{Name: "references", Label: "References", Type: "[]models.Reference", Clearable: true},
 		{Name: "responsible_party_id", Label: "ResponsiblePartyID", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "source", Label: "Source", Type: "enums.ControlSource", Clearable: true},
 		{Name: "source_name", Label: "SourceName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "standard_id", Label: "StandardID", Type: "string", MatchKey: true, Clearable: true},
@@ -5181,7 +5662,7 @@ func init() {
 		{Name: "trust_center_visibility", Label: "TrustCenterVisibility", Type: "enums.TrustCenterControlVisibility", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaControlImplementation.Fields = []FieldDescriptor{
@@ -5200,7 +5681,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "verification_date", Label: "VerificationDate", Type: "time.Time", Clearable: true},
 		{Name: "verified", Label: "Verified", Type: "bool", Clearable: true},
 	}
@@ -5226,7 +5707,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaCustomDomain.Fields = []FieldDescriptor{
 		{Name: "cname_record", Label: "CnameRecord", Type: "string", MatchKey: true},
@@ -5245,7 +5726,7 @@ func init() {
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaCustomTypeEnum.Fields = []FieldDescriptor{
 		{Name: "color", Label: "Color", Type: "string", MatchKey: true, Clearable: true},
@@ -5264,7 +5745,7 @@ func init() {
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaDNSVerification.Fields = []FieldDescriptor{
 		{Name: "acme_challenge_path", Label: "AcmeChallengePath", Type: "string", MatchKey: true, Clearable: true},
@@ -5284,7 +5765,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaDirectoryAccount.Fields = []FieldDescriptor{
 		{Name: "account_type", Label: "AccountType", Type: "enums.DirectoryAccountType", InputKey: "account_type", Clearable: true},
@@ -5296,20 +5777,19 @@ func init() {
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "department", Label: "Department", Type: "string", MatchKey: true, InputKey: "department", Clearable: true},
-		{Name: "directory_instance_id", Label: "DirectoryInstanceID", Type: "string", MatchKey: true, InputKey: "directory_instance_id", Clearable: true},
 		{Name: "directory_name", Label: "DirectoryName", Type: "string", MatchKey: true, InputKey: "directory_name", Clearable: true},
-		{Name: "directory_sync_run_id", Label: "DirectorySyncRunID", Type: "string", MatchKey: true, InputKey: "directory_sync_run_id", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Clearable: true},
 		{Name: "email_aliases", Label: "EmailAliases", Type: "[]string", InputKey: "email_aliases", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
 		{Name: "family_name", Label: "FamilyName", Type: "string", MatchKey: true, InputKey: "family_name", Clearable: true},
 		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at", Clearable: true},
 		{Name: "given_name", Label: "GivenName", Type: "string", MatchKey: true, InputKey: "given_name", Clearable: true},
 		{Name: "identity_holder_id", Label: "IdentityHolderID", Type: "string", MatchKey: true, InputKey: "identity_holder_id", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "job_title", Label: "JobTitle", Type: "string", MatchKey: true, InputKey: "job_title", Clearable: true},
 		{Name: "last_login_at", Label: "LastLoginAt", Type: "time.Time", InputKey: "last_login_at", Clearable: true, Volatile: true},
 		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Clearable: true, Volatile: true},
@@ -5323,22 +5803,21 @@ func init() {
 		{Name: "phone_number", Label: "PhoneNumber", Type: "string", MatchKey: true, InputKey: "phone_number", Clearable: true},
 		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "primary_source", Label: "PrimarySource", Type: "bool", InputKey: "primary_source"},
-		{Name: "profile", Label: "Profile", Type: "map[string]interface {}", InputKey: "profile", Clearable: true},
-		{Name: "profile_hash", Label: "ProfileHash", Type: "string", MatchKey: true, InputKey: "profile_hash"},
+		{Name: "profile", Label: "Profile", Type: "map[string]interface {}", InputKey: "profile", Clearable: true, Volatile: true},
 		{Name: "raw_profile_file_id", Label: "RawProfileFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "removed_at", Label: "RemovedAt", Type: "time.Time", InputKey: "removed_at", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
 		{Name: "secondary_key", Label: "SecondaryKey", Type: "string", MatchKey: true, InputKey: "secondary_key", Clearable: true},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_version", Label: "SourceVersion", Type: "string", MatchKey: true, InputKey: "source_version", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.DirectoryAccountStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaDirectoryGroup.Fields = []FieldDescriptor{
 		{Name: "added_at", Label: "AddedAt", Type: "time.Time", InputKey: "added_at", Clearable: true},
@@ -5346,18 +5825,17 @@ func init() {
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "directory_instance_id", Label: "DirectoryInstanceID", Type: "string", MatchKey: true, InputKey: "directory_instance_id", Clearable: true},
 		{Name: "directory_name", Label: "DirectoryName", Type: "string", MatchKey: true, InputKey: "directory_name", Clearable: true},
-		{Name: "directory_sync_run_id", Label: "DirectorySyncRunID", Type: "string", MatchKey: true, InputKey: "directory_sync_run_id"},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Clearable: true},
 		{Name: "email", Label: "Email", Type: "string", MatchKey: true, InputKey: "email", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
 		{Name: "external_sharing_allowed", Label: "ExternalSharingAllowed", Type: "bool", InputKey: "external_sharing_allowed", Clearable: true},
 		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, SystemControlled: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "member_count", Label: "MemberCount", Type: "int", InputKey: "member_count", Clearable: true},
@@ -5365,21 +5843,20 @@ func init() {
 		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", InputKey: "observed_at"},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "profile", Label: "Profile", Type: "map[string]interface {}", InputKey: "profile", Clearable: true},
-		{Name: "profile_hash", Label: "ProfileHash", Type: "string", MatchKey: true, InputKey: "profile_hash"},
+		{Name: "profile", Label: "Profile", Type: "map[string]interface {}", InputKey: "profile", Clearable: true, Volatile: true},
 		{Name: "raw_profile_file_id", Label: "RawProfileFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "removed_at", Label: "RemovedAt", Type: "time.Time", InputKey: "removed_at", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_version", Label: "SourceVersion", Type: "string", MatchKey: true, InputKey: "source_version", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.DirectoryGroupStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaDirectoryMembership.Fields = []FieldDescriptor{
 		{Name: "added_at", Label: "AddedAt", Type: "time.Time", InputKey: "added_at", Clearable: true},
@@ -5387,57 +5864,30 @@ func init() {
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "directory_account_id", Label: "DirectoryAccountID", Type: "string", MatchKey: true, InputKey: "directory_account_id", LookupKey: true},
 		{Name: "directory_group_id", Label: "DirectoryGroupID", Type: "string", MatchKey: true, InputKey: "directory_group_id", LookupKey: true},
-		{Name: "directory_instance_id", Label: "DirectoryInstanceID", Type: "string", MatchKey: true, InputKey: "directory_instance_id", Clearable: true},
 		{Name: "directory_name", Label: "DirectoryName", Type: "string", MatchKey: true, InputKey: "directory_name", Clearable: true},
-		{Name: "directory_sync_run_id", Label: "DirectorySyncRunID", Type: "string", MatchKey: true, InputKey: "directory_sync_run_id"},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, SystemControlled: true},
-		{Name: "last_confirmed_run_id", Label: "LastConfirmedRunID", Type: "string", MatchKey: true, InputKey: "last_confirmed_run_id", Clearable: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
+		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true, Volatile: true},
 		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", InputKey: "observed_at"},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, InputKey: "platform_id", Clearable: true},
 		{Name: "removed_at", Label: "RemovedAt", Type: "time.Time", InputKey: "removed_at", Clearable: true},
 		{Name: "role", Label: "Role", Type: "enums.DirectoryMembershipRole", InputKey: "role", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Clearable: true},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-	}
-	SchemaDirectorySyncRun.Fields = []FieldDescriptor{
-		{Name: "completed_at", Label: "CompletedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "delta_count", Label: "DeltaCount", Type: "int"},
-		{Name: "directory_instance_id", Label: "DirectoryInstanceID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
-		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "error", Label: "Error", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "full_count", Label: "FullCount", Type: "int"},
-		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "raw_manifest_file_id", Label: "RawManifestFileID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "source_cursor", Label: "SourceCursor", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "started_at", Label: "StartedAt", Type: "time.Time"},
-		{Name: "stats", Label: "Stats", Type: "map[string]interface {}", Clearable: true},
-		{Name: "status", Label: "Status", Type: "enums.DirectorySyncRunStatus"},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaDiscussion.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -5449,7 +5899,7 @@ func init() {
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaDocumentData.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -5458,15 +5908,15 @@ func init() {
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "template_id", Label: "TemplateID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaEmailTemplate.Fields = []FieldDescriptor{
 		{Name: "active", Label: "Active", Type: "bool"},
@@ -5497,7 +5947,7 @@ func init() {
 		{Name: "uischema", Label: "Uischema", Type: "map[string]interface {}", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "version", Label: "Version", Type: "int"},
 		{Name: "workflow_definition_id", Label: "WorkflowDefinitionID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "workflow_instance_id", Label: "WorkflowInstanceID", Type: "string", MatchKey: true, Clearable: true},
@@ -5532,23 +5982,24 @@ func init() {
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Clearable: true},
 		{Name: "domains", Label: "Domains", Type: "[]string", InputKey: "domains", Clearable: true},
 		{Name: "entity_relationship_state_id", Label: "EntityRelationshipStateID", Type: "string", MatchKey: true, InputKey: "entity_relationship_state_id", Clearable: true},
-		{Name: "entity_relationship_state_name", Label: "EntityRelationshipStateName", Type: "string", MatchKey: true, InputKey: "entity_relationship_state_name", Clearable: true},
+		{Name: "entity_relationship_state_name", Label: "EntityRelationshipStateName", Type: "string", MatchKey: true, InputKey: "entity_relationship_state_name", Clearable: true, CaseInsensitive: true},
 		{Name: "entity_security_questionnaire_status_id", Label: "EntitySecurityQuestionnaireStatusID", Type: "string", MatchKey: true, InputKey: "entity_security_questionnaire_status_id", Clearable: true},
-		{Name: "entity_security_questionnaire_status_name", Label: "EntitySecurityQuestionnaireStatusName", Type: "string", MatchKey: true, InputKey: "entity_security_questionnaire_status_name", Clearable: true},
+		{Name: "entity_security_questionnaire_status_name", Label: "EntitySecurityQuestionnaireStatusName", Type: "string", MatchKey: true, InputKey: "entity_security_questionnaire_status_name", Clearable: true, CaseInsensitive: true},
 		{Name: "entity_source_type_id", Label: "EntitySourceTypeID", Type: "string", MatchKey: true, InputKey: "entity_source_type_id", Clearable: true},
-		{Name: "entity_source_type_name", Label: "EntitySourceTypeName", Type: "string", MatchKey: true, InputKey: "entity_source_type_name", Clearable: true},
-		{Name: "entity_type_id", Label: "EntityTypeID", Type: "string", MatchKey: true, InputKey: "entity_type_id", Clearable: true},
+		{Name: "entity_source_type_name", Label: "EntitySourceTypeName", Type: "string", MatchKey: true, InputKey: "entity_source_type_name", Clearable: true, CaseInsensitive: true},
+		{Name: "entity_type_id", Label: "EntityTypeID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
 		{Name: "has_soc2", Label: "HasSoc2", Type: "bool", InputKey: "has_soc2", Clearable: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "internal_owner", Label: "InternalOwner", Type: "string", MatchKey: true, InputKey: "internal_owner", Clearable: true},
 		{Name: "internal_owner_group_id", Label: "InternalOwnerGroupID", Type: "string", MatchKey: true, InputKey: "internal_owner_group_id", Clearable: true},
 		{Name: "internal_owner_identity_holder_id", Label: "InternalOwnerIdentityHolderID", Type: "string", MatchKey: true, InputKey: "internal_owner_identity_holder_id", Clearable: true},
 		{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true, InputKey: "internal_owner_user_id", Clearable: true},
 		{Name: "last_reviewed_at", Label: "LastReviewedAt", Type: "models.DateTime", InputKey: "last_reviewed_at", Clearable: true},
-		{Name: "linked_asset_ids", Label: "LinkedAssetIds", Type: "[]string", InputKey: "linked_asset_ids", Clearable: true},
+		{Name: "linked_asset_ids", Label: "LinkedAssetIds", Type: "[]string", Clearable: true},
 		{Name: "links", Label: "Links", Type: "[]string", InputKey: "links", Clearable: true},
 		{Name: "logo_file_id", Label: "LogoFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true, InputKey: "logo_remote_url", Clearable: true},
@@ -5570,10 +6021,10 @@ func init() {
 		{Name: "risk_score", Label: "RiskScore", Type: "int", InputKey: "risk_score", Clearable: true},
 		{Name: "risk_score_coverage", Label: "RiskScoreCoverage", Type: "int", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
 		{Name: "soc2_period_end", Label: "Soc2PeriodEnd", Type: "models.DateTime", InputKey: "soc2_period_end", Clearable: true},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "spend_currency", Label: "SpendCurrency", Type: "string", MatchKey: true, InputKey: "spend_currency", Clearable: true},
 		{Name: "sso_enforced", Label: "SSOEnforced", Type: "bool", InputKey: "sso_enforced", Clearable: true},
@@ -5586,7 +6037,7 @@ func init() {
 		{Name: "tier", Label: "Tier", Type: "enums.VendorTier", InputKey: "tier", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "vendor_metadata", Label: "VendorMetadata", Type: "map[string]interface {}", InputKey: "vendor_metadata", Clearable: true},
 	}
 	SchemaEntityType.Fields = []FieldDescriptor{
@@ -5602,7 +6053,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaEvent.Fields = []FieldDescriptor{
 		{Name: "correlation_id", Label: "CorrelationID", Type: "string", MatchKey: true, Clearable: true},
@@ -5626,7 +6077,7 @@ func init() {
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "is_automated", Label: "IsAutomated", Type: "bool", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, DisplayKey: true},
@@ -5634,13 +6085,13 @@ func init() {
 		{Name: "renewal_date", Label: "RenewalDate", Type: "models.DateTime", Clearable: true},
 		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.EvidenceStatus", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "url", Label: "URL", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
@@ -5661,12 +6112,12 @@ func init() {
 		{Name: "status", Label: "Status", Type: "enums.ExportStatus"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaFile.Fields = []FieldDescriptor{
 		{Name: "backup_state", Label: "BackupState", Type: "models.FileBackupState", Clearable: true},
 		{Name: "category_id", Label: "CategoryID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "category_name", Label: "CategoryName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "category_name", Label: "CategoryName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "category_type", Label: "CategoryType", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -5675,7 +6126,7 @@ func init() {
 		{Name: "detected_content_type", Label: "DetectedContentType", Type: "string", MatchKey: true},
 		{Name: "detected_mime_type", Label: "DetectedMimeType", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "file_contents", Label: "FileContents", Type: "[]byte", Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "last_accessed_at", Label: "LastAccessedAt", Type: "time.Time", Clearable: true},
@@ -5687,7 +6138,7 @@ func init() {
 		{Name: "provided_file_name", Label: "ProvidedFileName", Type: "string", MatchKey: true},
 		{Name: "provided_file_size", Label: "ProvidedFileSize", Type: "int64", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "storage_path", Label: "StoragePath", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "storage_provider", Label: "StorageProvider", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "storage_region", Label: "StorageRegion", Type: "string", MatchKey: true, Clearable: true},
@@ -5699,7 +6150,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "uri", Label: "URI", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaFileDownloadToken.Fields = []FieldDescriptor{
@@ -5734,7 +6185,7 @@ func init() {
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "event_time", Label: "EventTime", Type: "models.DateTime", WorkflowEligible: true, InputKey: "event_time", Clearable: true, Volatile: true},
 		{Name: "exploitability", Label: "Exploitability", Type: "float64", InputKey: "exploitability", Clearable: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
@@ -5742,8 +6193,9 @@ func init() {
 		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri", Clearable: true},
 		{Name: "finding_class", Label: "FindingClass", Type: "string", MatchKey: true, InputKey: "finding_class", Clearable: true},
 		{Name: "finding_status_id", Label: "FindingStatusID", Type: "string", MatchKey: true, InputKey: "finding_status_id", Clearable: true},
-		{Name: "finding_status_name", Label: "FindingStatusName", Type: "string", MatchKey: true, InputKey: "finding_status_name", Clearable: true},
+		{Name: "finding_status_name", Label: "FindingStatusName", Type: "string", MatchKey: true, InputKey: "finding_status_name", Clearable: true, CaseInsensitive: true},
 		{Name: "impact", Label: "Impact", Type: "float64", InputKey: "impact", Clearable: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
@@ -5765,13 +6217,13 @@ func init() {
 		{Name: "reviewed_by_identity_holder_id", Label: "ReviewedByIdentityHolderID", Type: "string", MatchKey: true, InputKey: "reviewed_by_identity_holder_id", Clearable: true},
 		{Name: "reviewed_by_user_id", Label: "ReviewedByUserID", Type: "string", MatchKey: true, InputKey: "reviewed_by_user_id", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
 		{Name: "score", Label: "Score", Type: "float64", WorkflowEligible: true, InputKey: "score", Clearable: true},
 		{Name: "security_level", Label: "SecurityLevel", Type: "enums.SecurityLevel", Clearable: true},
 		{Name: "severity", Label: "Severity", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "severity", Clearable: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Clearable: true},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_updated_at", Label: "SourceUpdatedAt", Type: "models.DateTime", InputKey: "source_updated_at", Clearable: true, Volatile: true},
 		{Name: "state", Label: "State", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "state", Clearable: true},
@@ -5783,7 +6235,7 @@ func init() {
 		{Name: "targets", Label: "Targets", Type: "[]string", InputKey: "targets", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "validated", Label: "Validated", Type: "bool", WorkflowEligible: true, InputKey: "validated", Clearable: true},
 		{Name: "vector", Label: "Vector", Type: "string", MatchKey: true, InputKey: "vector", Clearable: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
@@ -5803,7 +6255,7 @@ func init() {
 		{Name: "standard_id", Label: "StandardID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaGroup.Fields = []FieldDescriptor{
 		{Name: "avatar_local_file_id", Label: "AvatarLocalFileID", Type: "string", MatchKey: true, Clearable: true},
@@ -5829,7 +6281,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaGroupMembership.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -5838,7 +6290,7 @@ func init() {
 		{Name: "role", Label: "Role", Type: "enums.Role"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true},
 	}
 	SchemaGroupSetting.Fields = []FieldDescriptor{
@@ -5852,7 +6304,7 @@ func init() {
 		{Name: "sync_to_slack", Label: "SyncToSlack", Type: "bool", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "visibility", Label: "Visibility", Type: "enums.Visibility"},
 	}
 	SchemaHush.Fields = []FieldDescriptor{
@@ -5875,7 +6327,7 @@ func init() {
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaIdentityHolder.Fields = []FieldDescriptor{
 		{Name: "alternate_email", Label: "AlternateEmail", Type: "string", MatchKey: true, Clearable: true},
@@ -5891,7 +6343,7 @@ func init() {
 		{Name: "employer_entity_id", Label: "EmployerEntityID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "end_date", Label: "EndDate", Type: "models.DateTime", WorkflowEligible: true, Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "external_reference_id", Label: "ExternalReferenceID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "external_user_id", Label: "ExternalUserID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "full_name", Label: "FullName", Type: "string", MatchKey: true},
@@ -5907,7 +6359,7 @@ func init() {
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "phone_number", Label: "PhoneNumber", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "start_date", Label: "StartDate", Type: "models.DateTime", WorkflowEligible: true, Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.UserStatus", WorkflowEligible: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
@@ -5915,7 +6367,7 @@ func init() {
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
@@ -5934,7 +6386,7 @@ func init() {
 		{Name: "target_user_id", Label: "TargetUserID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "user_agent", Label: "UserAgent", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true},
 	}
@@ -5950,7 +6402,7 @@ func init() {
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "expires_at", Label: "ExpiresAt", Type: "time.Time", Clearable: true},
 		{Name: "family", Label: "Family", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "health", Label: "Health", Type: "models.IntegrationHealth", Clearable: true},
@@ -5967,41 +6419,36 @@ func init() {
 		{Name: "provider_metadata_snapshot", Label: "ProviderMetadataSnapshot", Type: "map[string]interface {}", Clearable: true},
 		{Name: "provider_state", Label: "ProviderState", Type: "openapi.IntegrationProviderState", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "status", Label: "Status", Type: "enums.IntegrationStatus"},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaIntegrationRun.Fields = []FieldDescriptor{
-		{Name: "assessment_response_id", Label: "AssessmentResponseID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "duration_ms", Label: "DurationMs", Type: "int", Clearable: true},
 		{Name: "error", Label: "Error", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "event_id", Label: "EventID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "finished_at", Label: "FinishedAt", Type: "time.Time", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "mapping_version", Label: "MappingVersion", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "metrics", Label: "Metrics", Type: "map[string]interface {}", Clearable: true},
 		{Name: "operation_config", Label: "OperationConfig", Type: "map[string]interface {}", Clearable: true},
 		{Name: "operation_kind", Label: "OperationKind", Type: "enums.IntegrationOperationKind", Clearable: true},
 		{Name: "operation_name", Label: "OperationName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "request_file_id", Label: "RequestFileID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "response_file_id", Label: "ResponseFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "run_type", Label: "RunType", Type: "enums.IntegrationRunType", Clearable: true},
 		{Name: "started_at", Label: "StartedAt", Type: "time.Time"},
 		{Name: "status", Label: "Status", Type: "enums.IntegrationRunStatus"},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaIntegrationWebhook.Fields = []FieldDescriptor{
 		{Name: "allowed_events", Label: "AllowedEvents", Type: "[]string", Clearable: true},
@@ -6025,7 +6472,7 @@ func init() {
 		{Name: "status", Label: "Status", Type: "enums.IntegrationWebhookStatus"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaInternalPolicy.Fields = []FieldDescriptor{
 		{Name: "approval_required", Label: "ApprovalRequired", Type: "bool", InputKey: "approval_required", Clearable: true},
@@ -6043,15 +6490,16 @@ func init() {
 		{Name: "dismissed_tag_suggestions", Label: "DismissedTagSuggestions", Type: "[]string", InputKey: "dismissed_tag_suggestions", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents", Clearable: true},
 		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", LookupKey: true, Clearable: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", InputKey: "improvement_suggestions", Clearable: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "internal_policy_kind_id", Label: "InternalPolicyKindID", Type: "string", MatchKey: true, InputKey: "internal_policy_kind_id", Clearable: true},
-		{Name: "internal_policy_kind_name", Label: "InternalPolicyKindName", Type: "string", MatchKey: true, InputKey: "internal_policy_kind_name", Clearable: true},
+		{Name: "internal_policy_kind_name", Label: "InternalPolicyKindName", Type: "string", MatchKey: true, InputKey: "internal_policy_kind_name", Clearable: true, CaseInsensitive: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", DisplayKey: true},
@@ -6060,9 +6508,9 @@ func init() {
 		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", InputKey: "review_frequency", Clearable: true},
 		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, InputKey: "revision", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, Clearable: true},
@@ -6072,7 +6520,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "url", Label: "URL", Type: "string", MatchKey: true, InputKey: "url", Clearable: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
@@ -6094,7 +6542,7 @@ func init() {
 		{Name: "token", Label: "Token", Type: "string"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaMappableDomain.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -6105,7 +6553,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "zone_id", Label: "ZoneID", Type: "string", MatchKey: true},
 	}
 	SchemaMappedControl.Fields = []FieldDescriptor{
@@ -6124,7 +6572,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaNarrative.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -6142,7 +6590,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaNote.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -6162,7 +6610,7 @@ func init() {
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaNotification.Fields = []FieldDescriptor{
 		{Name: "body", Label: "Body", Type: "string", MatchKey: true},
@@ -6180,7 +6628,7 @@ func init() {
 		{Name: "topic", Label: "Topic", Type: "enums.NotificationTopic", Clearable: true, TaskRules: []TaskRuleDescriptor{{RuleID: "review-domain-scan", Expression: "value == \"DOMAIN_SCAN\"", Trigger: "createOnly"}}},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaNotificationPreference.Fields = []FieldDescriptor{
@@ -6210,7 +6658,7 @@ func init() {
 		{Name: "topic_patterns", Label: "TopicPatterns", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true},
 		{Name: "verified_at", Label: "VerifiedAt", Type: "time.Time", Clearable: true},
 	}
@@ -6246,7 +6694,7 @@ func init() {
 		{Name: "uischema", Label: "Uischema", Type: "map[string]interface {}", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "version", Label: "Version", Type: "int"},
 		{Name: "workflow_definition_id", Label: "WorkflowDefinitionID", Type: "string", MatchKey: true, Clearable: true},
 	}
@@ -6276,7 +6724,7 @@ func init() {
 		{Name: "tfa_enforced_reason", Label: "TfaEnforcedReason", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true},
 	}
 	SchemaOrgModule.Fields = []FieldDescriptor{
@@ -6296,7 +6744,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "visibility", Label: "Visibility", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaOrgPrice.Fields = []FieldDescriptor{
@@ -6314,7 +6762,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaOrgProduct.Fields = []FieldDescriptor{
 		{Name: "active", Label: "Active", Type: "bool"},
@@ -6331,7 +6779,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaOrgSubscription.Fields = []FieldDescriptor{
 		{Name: "active", Label: "Active", Type: "bool"},
@@ -6348,7 +6796,7 @@ func init() {
 		{Name: "trial_expires_at", Label: "TrialExpiresAt", Type: "time.Time", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaOrganization.Fields = []FieldDescriptor{
 		{Name: "avatar_local_file_id", Label: "AvatarLocalFileID", Type: "string", MatchKey: true, Clearable: true},
@@ -6368,7 +6816,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaOrganizationSetting.Fields = []FieldDescriptor{
 		{Name: "allow_matching_domains_autojoin", Label: "AllowMatchingDomainsAutojoin", Type: "bool", Clearable: true},
@@ -6408,7 +6856,7 @@ func init() {
 		{Name: "tax_identifier", Label: "TaxIdentifier", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaPasswordResetToken.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -6443,11 +6891,11 @@ func init() {
 		{Name: "token", Label: "Token", Type: "string", MatchKey: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaPlatform.Fields = []FieldDescriptor{
 		{Name: "access_model_id", Label: "AccessModelID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "access_model_name", Label: "AccessModelName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "access_model_name", Label: "AccessModelName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "business_owner", Label: "BusinessOwner", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "business_owner_group_id", Label: "BusinessOwnerGroupID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "business_owner_identity_holder_id", Label: "BusinessOwnerIdentityHolderID", Type: "string", MatchKey: true, Clearable: true},
@@ -6458,16 +6906,16 @@ func init() {
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "criticality_id", Label: "CriticalityID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "criticality_name", Label: "CriticalityName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "criticality_name", Label: "CriticalityName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "data_flow_summary", Label: "DataFlowSummary", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "encryption_status_id", Label: "EncryptionStatusID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "encryption_status_name", Label: "EncryptionStatusName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "encryption_status_name", Label: "EncryptionStatusName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "estimated_monthly_cost", Label: "EstimatedMonthlyCost", Type: "float64", Clearable: true},
 		{Name: "external_reference_id", Label: "ExternalReferenceID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, Clearable: true},
@@ -6480,21 +6928,21 @@ func init() {
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "physical_location", Label: "PhysicalLocation", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "platform_data_classification_id", Label: "PlatformDataClassificationID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "platform_data_classification_name", Label: "PlatformDataClassificationName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "platform_data_classification_name", Label: "PlatformDataClassificationName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "platform_kind_id", Label: "PlatformKindID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "platform_kind_name", Label: "PlatformKindName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "platform_kind_name", Label: "PlatformKindName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "platform_owner_id", Label: "PlatformOwnerID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "purchase_date", Label: "PurchaseDate", Type: "models.DateTime", Clearable: true},
 		{Name: "region", Label: "Region", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "scope_statement", Label: "ScopeStatement", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
 		{Name: "security_owner", Label: "SecurityOwner", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "security_owner_group_id", Label: "SecurityOwnerGroupID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "security_owner_identity_holder_id", Label: "SecurityOwnerIdentityHolderID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "security_owner_user_id", Label: "SecurityOwnerUserID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "security_tier_id", Label: "SecurityTierID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "security_tier_name", Label: "SecurityTierName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "security_tier_name", Label: "SecurityTierName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "source_identifier", Label: "SourceIdentifier", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "source_type", Label: "SourceType", Type: "enums.SourceType"},
 		{Name: "status", Label: "Status", Type: "enums.PlatformStatus", WorkflowEligible: true},
@@ -6506,7 +6954,7 @@ func init() {
 		{Name: "trust_boundary_description", Label: "TrustBoundaryDescription", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaProcedure.Fields = []FieldDescriptor{
@@ -6525,25 +6973,26 @@ func init() {
 		{Name: "dismissed_tag_suggestions", Label: "DismissedTagSuggestions", Type: "[]string", InputKey: "dismissed_tag_suggestions", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents", Clearable: true},
 		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", LookupKey: true, Clearable: true},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", InputKey: "improvement_suggestions", Clearable: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", DisplayKey: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "procedure_kind_id", Label: "ProcedureKindID", Type: "string", MatchKey: true, InputKey: "procedure_kind_id", Clearable: true},
-		{Name: "procedure_kind_name", Label: "ProcedureKindName", Type: "string", MatchKey: true, InputKey: "procedure_kind_name", Clearable: true},
+		{Name: "procedure_kind_name", Label: "ProcedureKindName", Type: "string", MatchKey: true, InputKey: "procedure_kind_name", Clearable: true, CaseInsensitive: true},
 		{Name: "review_due", Label: "ReviewDue", Type: "time.Time", InputKey: "review_due", Clearable: true},
 		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", InputKey: "review_frequency", Clearable: true},
 		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, InputKey: "revision", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, Clearable: true},
@@ -6553,7 +7002,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "url", Label: "URL", Type: "string", MatchKey: true, InputKey: "url", Clearable: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
@@ -6580,14 +7029,14 @@ func init() {
 		{Name: "observation_period_start_date", Label: "ObservationPeriodStartDate", Type: "time.Time", Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "program_kind_id", Label: "ProgramKindID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "program_kind_name", Label: "ProgramKindName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "program_kind_name", Label: "ProgramKindName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "program_owner_id", Label: "ProgramOwnerID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "start_date", Label: "StartDate", Type: "time.Time", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.ProgramStatus"},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaProgramMembership.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -6596,7 +7045,7 @@ func init() {
 		{Name: "role", Label: "Role", Type: "enums.Role"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true},
 	}
 	SchemaRemediation.Fields = []FieldDescriptor{
@@ -6608,7 +7057,7 @@ func init() {
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "due_at", Label: "DueAt", Type: "models.DateTime", WorkflowEligible: true, Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "error", Label: "Error", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "explanation", Label: "Explanation", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, Clearable: true},
@@ -6624,7 +7073,7 @@ func init() {
 		{Name: "pull_request_uri", Label: "PullRequestURI", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "repository_uri", Label: "RepositoryURI", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "state", Label: "State", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.RemediationStatus", WorkflowEligible: true, Clearable: true},
@@ -6636,7 +7085,7 @@ func init() {
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaReview.Fields = []FieldDescriptor{
@@ -6650,7 +7099,7 @@ func init() {
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, Clearable: true},
@@ -6663,7 +7112,7 @@ func init() {
 		{Name: "reviewed_at", Label: "ReviewedAt", Type: "models.DateTime", Clearable: true},
 		{Name: "reviewer_id", Label: "ReviewerID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "state", Label: "State", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.ReviewStatus", Clearable: true},
@@ -6674,14 +7123,14 @@ func init() {
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaRisk.Fields = []FieldDescriptor{
 		{Name: "business_costs", Label: "BusinessCosts", Type: "string", MatchKey: true, InputKey: "business_costs", Clearable: true},
 		{Name: "business_costs_json", Label: "BusinessCostsJSON", Type: "[]interface {}", InputKey: "business_costs_json", Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, InputKey: "delegate_id", Clearable: true},
+		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true, InputKey: "details", Clearable: true},
@@ -6689,11 +7138,12 @@ func init() {
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "due_date", Label: "DueDate", Type: "models.DateTime", WorkflowEligible: true, InputKey: "due_date", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
 		{Name: "impact", Label: "Impact", Type: "enums.RiskImpact", WorkflowEligible: true, InputKey: "impact", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "last_reviewed_at", Label: "LastReviewedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "last_reviewed_at", Clearable: true},
 		{Name: "likelihood", Label: "Likelihood", Type: "enums.RiskLikelihood", WorkflowEligible: true, InputKey: "likelihood", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -6708,22 +7158,22 @@ func init() {
 		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", WorkflowEligible: true, InputKey: "review_frequency", Clearable: true},
 		{Name: "review_required", Label: "ReviewRequired", Type: "bool", WorkflowEligible: true, InputKey: "review_required", Clearable: true},
 		{Name: "risk_category_id", Label: "RiskCategoryID", Type: "string", MatchKey: true, InputKey: "risk_category_id", Clearable: true},
-		{Name: "risk_category_name", Label: "RiskCategoryName", Type: "string", MatchKey: true, InputKey: "risk_category_name", Clearable: true},
+		{Name: "risk_category_name", Label: "RiskCategoryName", Type: "string", MatchKey: true, InputKey: "risk_category_name", Clearable: true, CaseInsensitive: true},
 		{Name: "risk_decision", Label: "RiskDecision", Type: "enums.RiskDecision", WorkflowEligible: true, InputKey: "risk_decision", Clearable: true},
 		{Name: "risk_kind_id", Label: "RiskKindID", Type: "string", MatchKey: true, InputKey: "risk_kind_id", Clearable: true},
-		{Name: "risk_kind_name", Label: "RiskKindName", Type: "string", MatchKey: true, InputKey: "risk_kind_name", Clearable: true},
+		{Name: "risk_kind_name", Label: "RiskKindName", Type: "string", MatchKey: true, InputKey: "risk_kind_name", Clearable: true, CaseInsensitive: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
 		{Name: "score", Label: "Score", Type: "int", WorkflowEligible: true, InputKey: "score", Clearable: true},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "stakeholder_id", Label: "StakeholderID", Type: "string", MatchKey: true, InputKey: "stakeholder_id", Clearable: true},
+		{Name: "stakeholder_id", Label: "StakeholderID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.RiskStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaSLADefinition.Fields = []FieldDescriptor{
@@ -6738,7 +7188,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaScan.Fields = []FieldDescriptor{
 		{Name: "assigned_to", Label: "AssignedTo", Type: "string", MatchKey: true, Clearable: true},
@@ -6751,7 +7201,7 @@ func init() {
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "discovered_vulnerability_ids", Label: "DiscoveredVulnerabilityIds", Type: "[]string", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "generated_by_platform_id", Label: "GeneratedByPlatformID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
@@ -6768,7 +7218,7 @@ func init() {
 		{Name: "scan_schedule", Label: "ScanSchedule", Type: "models.Cron", Clearable: true},
 		{Name: "scan_type", Label: "ScanType", Type: "enums.ScanType"},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "status", Label: "Status", Type: "enums.ScanStatus"},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
@@ -6776,7 +7226,7 @@ func init() {
 		{Name: "target", Label: "Target", Type: "string", MatchKey: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaStandard.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -6804,7 +7254,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "version", Label: "Version", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaSubcontrol.Fields = []FieldDescriptor{
@@ -6846,7 +7296,7 @@ func init() {
 		{Name: "status", Label: "Status", Type: "enums.ControlStatus", WorkflowEligible: true, Clearable: true, WebhookPayload: true},
 		{Name: "subcategory", Label: "Subcategory", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
 		{Name: "subcontrol_kind_id", Label: "SubcontrolKindID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "subcontrol_kind_name", Label: "SubcontrolKindName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "subcontrol_kind_name", Label: "SubcontrolKindName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
@@ -6854,7 +7304,7 @@ func init() {
 		{Name: "title", Label: "Title", Type: "string", WorkflowEligible: true, MatchKey: true, DisplayKey: true, Clearable: true, WebhookPayload: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaSubprocessor.Fields = []FieldDescriptor{
@@ -6873,7 +7323,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaSubscriber.Fields = []FieldDescriptor{
 		{Name: "active", Label: "Active", Type: "bool"},
@@ -6894,7 +7344,7 @@ func init() {
 		{Name: "unsubscribed", Label: "Unsubscribed", Type: "bool"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "verified_email", Label: "VerifiedEmail", Type: "bool"},
 		{Name: "verified_phone", Label: "VerifiedPhone", Type: "bool"},
@@ -6916,7 +7366,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "version", Label: "Version", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaTFASetting.Fields = []FieldDescriptor{
@@ -6932,7 +7382,7 @@ func init() {
 		{Name: "totp_allowed", Label: "TotpAllowed", Type: "bool", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "verified", Label: "Verified", Type: "bool"},
 	}
 	SchemaTagDefinition.Fields = []FieldDescriptor{
@@ -6951,7 +7401,7 @@ func init() {
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaTask.Fields = []FieldDescriptor{
 		{Name: "assignee_id", Label: "AssigneeID", Type: "string", MatchKey: true, Clearable: true},
@@ -6966,7 +7416,7 @@ func init() {
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "due", Label: "Due", Type: "models.DateTime", WorkflowEligible: true, Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "external_reference_url", Label: "ExternalReferenceURL", Type: "[]string", Clearable: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "idempotency_key", Label: "IdempotencyKey", Type: "string", MatchKey: true, Clearable: true},
@@ -6977,18 +7427,18 @@ func init() {
 		{Name: "parent_task_id", Label: "ParentTaskID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "priority", Label: "Priority", Type: "int"},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.TaskStatus", WorkflowEligible: true},
 		{Name: "system_generated", Label: "SystemGenerated", Type: "bool", WorkflowEligible: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "task_kind_id", Label: "TaskKindID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "task_kind_name", Label: "TaskKindName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "task_kind_name", Label: "TaskKindName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true, DisplayKey: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaTemplate.Fields = []FieldDescriptor{
@@ -6998,14 +7448,14 @@ func init() {
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "jsonconfig", Label: "Jsonconfig", Type: "map[string]interface {}"},
 		{Name: "kind", Label: "Kind", Type: "enums.TemplateKind", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
@@ -7015,7 +7465,7 @@ func init() {
 		{Name: "uischema", Label: "Uischema", Type: "map[string]interface {}", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaTrustCenter.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -7034,7 +7484,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaTrustCenterCompliance.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -7046,7 +7496,7 @@ func init() {
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaTrustCenterDoc.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
@@ -7059,11 +7509,11 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true},
 		{Name: "trust_center_doc_kind_id", Label: "TrustCenterDocKindID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "trust_center_doc_kind_name", Label: "TrustCenterDocKindName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "trust_center_doc_kind_name", Label: "TrustCenterDocKindName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "visibility", Label: "Visibility", Type: "enums.TrustCenterDocumentVisibility", Clearable: true},
 		{Name: "watermark_status", Label: "WatermarkStatus", Type: "enums.WatermarkStatus", Clearable: true},
 		{Name: "watermarking_enabled", Label: "WatermarkingEnabled", Type: "bool", Clearable: true},
@@ -7079,7 +7529,7 @@ func init() {
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "url", Label: "URL", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaTrustCenterFAQ.Fields = []FieldDescriptor{
@@ -7091,11 +7541,11 @@ func init() {
 		{Name: "note_id", Label: "NoteID", Type: "string", MatchKey: true},
 		{Name: "reference_link", Label: "ReferenceLink", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "trust_center_faq_kind_id", Label: "TrustCenterFaqKindID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "trust_center_faq_kind_name", Label: "TrustCenterFaqKindName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "trust_center_faq_kind_name", Label: "TrustCenterFaqKindName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaTrustCenterNDARequest.Fields = []FieldDescriptor{
 		{Name: "access_level", Label: "AccessLevel", Type: "enums.TrustCenterNDARequestAccessLevel", Clearable: true},
@@ -7118,7 +7568,7 @@ func init() {
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaTrustCenterSetting.Fields = []FieldDescriptor{
 		{Name: "accent_color", Label: "AccentColor", Type: "string", MatchKey: true, Clearable: true},
@@ -7155,7 +7605,7 @@ func init() {
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaTrustCenterSubprocessor.Fields = []FieldDescriptor{
 		{Name: "countries", Label: "Countries", Type: "[]string", Clearable: true},
@@ -7166,10 +7616,10 @@ func init() {
 		{Name: "subprocessor_id", Label: "SubprocessorID", Type: "string", MatchKey: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "trust_center_subprocessor_kind_id", Label: "TrustCenterSubprocessorKindID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "trust_center_subprocessor_kind_name", Label: "TrustCenterSubprocessorKindName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "trust_center_subprocessor_kind_name", Label: "TrustCenterSubprocessorKindName", Type: "string", MatchKey: true, Clearable: true, CaseInsensitive: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaTrustCenterWatermarkConfig.Fields = []FieldDescriptor{
 		{Name: "color", Label: "Color", Type: "string", MatchKey: true, Clearable: true},
@@ -7188,7 +7638,7 @@ func init() {
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaUser.Fields = []FieldDescriptor{
 		{Name: "auth_provider", Label: "AuthProvider", Type: "enums.AuthProvider"},
@@ -7237,7 +7687,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaVendorRiskScore.Fields = []FieldDescriptor{
@@ -7261,7 +7711,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "vendor_scoring_config_id", Label: "VendorScoringConfigID", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaVendorScoringConfig.Fields = []FieldDescriptor{
@@ -7276,7 +7726,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaVulnerability.Fields = []FieldDescriptor{
 		{Name: "assigned_to", Label: "AssignedTo", Type: "string", MatchKey: true, InputKey: "assigned_to", Clearable: true},
@@ -7301,7 +7751,7 @@ func init() {
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "exploitability", Label: "Exploitability", Type: "float64", InputKey: "exploitability", Clearable: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
 		{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, InputKey: "external_owner_id", Clearable: true},
@@ -7311,6 +7761,7 @@ func init() {
 		{Name: "fixed_at", Label: "FixedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "fixed_at", Clearable: true},
 		{Name: "impact", Label: "Impact", Type: "float64", InputKey: "impact", Clearable: true},
 		{Name: "impacts", Label: "Impacts", Type: "[]string", InputKey: "impacts", Clearable: true},
+		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "manifest_path", Label: "ManifestPath", Type: "string", MatchKey: true, InputKey: "manifest_path", Clearable: true},
@@ -7331,13 +7782,13 @@ func init() {
 		{Name: "reviewed_by_identity_holder_id", Label: "ReviewedByIdentityHolderID", Type: "string", MatchKey: true, InputKey: "reviewed_by_identity_holder_id", Clearable: true},
 		{Name: "reviewed_by_user_id", Label: "ReviewedByUserID", Type: "string", MatchKey: true, InputKey: "reviewed_by_user_id", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true, CaseInsensitive: true},
 		{Name: "score", Label: "Score", Type: "float64", WorkflowEligible: true, InputKey: "score", Clearable: true},
 		{Name: "security_level", Label: "SecurityLevel", Type: "enums.SecurityLevel", Clearable: true},
 		{Name: "severity", Label: "Severity", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "severity", Clearable: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Clearable: true},
 		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_updated_at", Label: "SourceUpdatedAt", Type: "models.DateTime", InputKey: "source_updated_at", Clearable: true, Volatile: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, InputKey: "summary", Clearable: true},
@@ -7346,11 +7797,11 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "validated", Label: "Validated", Type: "bool", WorkflowEligible: true, InputKey: "validated", Clearable: true},
 		{Name: "vector", Label: "Vector", Type: "string", MatchKey: true, InputKey: "vector", Clearable: true},
 		{Name: "vulnerability_status_id", Label: "VulnerabilityStatusID", Type: "string", MatchKey: true, InputKey: "vulnerability_status_id", Clearable: true},
-		{Name: "vulnerability_status_name", Label: "VulnerabilityStatusName", Type: "string", MatchKey: true, InputKey: "vulnerability_status_name", Clearable: true},
+		{Name: "vulnerability_status_name", Label: "VulnerabilityStatusName", Type: "string", MatchKey: true, InputKey: "vulnerability_status_name", Clearable: true, CaseInsensitive: true},
 		{Name: "vulnerable_version_range", Label: "VulnerableVersionRange", Type: "string", MatchKey: true, InputKey: "vulnerable_version_range", Clearable: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
@@ -7397,7 +7848,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_instance_id", Label: "WorkflowInstanceID", Type: "string", MatchKey: true},
 	}
 	SchemaWorkflowAssignmentTarget.Fields = []FieldDescriptor{
@@ -7414,7 +7865,7 @@ func init() {
 		{Name: "target_user_id", Label: "TargetUserID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_assignment_id", Label: "WorkflowAssignmentID", Type: "string", MatchKey: true},
 	}
 	SchemaWorkflowDefinition.Fields = []FieldDescriptor{
@@ -7446,7 +7897,7 @@ func init() {
 		{Name: "trigger_operations", Label: "TriggerOperations", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_kind", Label: "WorkflowKind", Type: "enums.WorkflowKind"},
 	}
 	SchemaWorkflowEvent.Fields = []FieldDescriptor{
@@ -7461,7 +7912,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_instance_id", Label: "WorkflowInstanceID", Type: "string", MatchKey: true},
 	}
 	SchemaWorkflowInstance.Fields = []FieldDescriptor{
@@ -7496,7 +7947,7 @@ func init() {
 		{Name: "task_id", Label: "TaskID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "vulnerability_id", Label: "VulnerabilityID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "workflow_definition_id", Label: "WorkflowDefinitionID", Type: "string", MatchKey: true},
 		{Name: "workflow_proposal_id", Label: "WorkflowProposalID", Type: "string", MatchKey: true, Clearable: true},
@@ -7527,7 +7978,7 @@ func init() {
 		{Name: "task_id", Label: "TaskID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "vulnerability_id", Label: "VulnerabilityID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "workflow_instance_id", Label: "WorkflowInstanceID", Type: "string", MatchKey: true},
 	}
@@ -7547,7 +7998,7 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "workflow_object_ref_id", Label: "WorkflowObjectRefID", Type: "string", MatchKey: true},
 	}
 	SchemaOrganization.TaskRules = []TaskRuleDescriptor{
@@ -7640,6 +8091,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+		},
+		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
 		},
 		{
 			Name:        "integrations",
@@ -8015,6 +8474,14 @@ func init() {
 			Unique:      true,
 			CreateField: "integration_id",
 			Field:       "integration_id",
+		},
+		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
 		},
 		{
 			Name:        "internal_owner_group",
@@ -8447,6 +8914,14 @@ func init() {
 			Field:       "integration_id",
 		},
 		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
+		},
+		{
 			Name:        "viewers",
 			Label:       "Viewers",
 			Target:      SchemaGroup,
@@ -8487,6 +8962,14 @@ func init() {
 			TargetType:  "File",
 			CreateField: "file_ids",
 			AddField:    "add_file_ids",
+		},
+		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
 		},
 		{
 			Name:        "owner",
@@ -8662,9 +9145,24 @@ func init() {
 			CreateField: "finding_ids",
 			Through:     true,
 			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				existing, err := client.FindingControl.Query().
+					Where(findingcontrol.ControlID(sourceID), findingcontrol.FindingIDIn(targetIDs...)).
+					All(ctx)
+				if err != nil {
+					return err
+				}
+
+				linked := make(map[string]struct{}, len(existing))
+				for _, row := range existing {
+					linked[row.FindingID] = struct{}{}
+				}
+
 				for _, targetID := range targetIDs {
-					err := client.FindingControl.Create().SetControlID(sourceID).SetFindingID(targetID).Exec(ctx)
-					if err != nil && !generated.IsConstraintError(err) {
+					if _, ok := linked[targetID]; ok {
+						continue
+					}
+
+					if err := client.FindingControl.Create().SetControlID(sourceID).SetFindingID(targetID).Exec(ctx); err != nil && !generated.IsConstraintError(err) {
 						return err
 					}
 				}
@@ -9160,15 +9658,6 @@ func init() {
 			Field:       "avatar_local_file_id",
 		},
 		{
-			Name:        "directory_sync_run",
-			Label:       "DirectorySyncRun",
-			Target:      SchemaDirectorySyncRun,
-			TargetType:  "DirectorySyncRun",
-			Unique:      true,
-			CreateField: "directory_sync_run_id",
-			Field:       "directory_sync_run_id",
-		},
-		{
 			Name:        "environment",
 			Label:       "Environment",
 			Target:      SchemaCustomTypeEnum,
@@ -9193,9 +9682,24 @@ func init() {
 			CreateField: "group_ids",
 			Through:     true,
 			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				existing, err := client.DirectoryMembership.Query().
+					Where(directorymembership.DirectoryAccountID(sourceID), directorymembership.DirectoryGroupIDIn(targetIDs...)).
+					All(ctx)
+				if err != nil {
+					return err
+				}
+
+				linked := make(map[string]struct{}, len(existing))
+				for _, row := range existing {
+					linked[row.DirectoryGroupID] = struct{}{}
+				}
+
 				for _, targetID := range targetIDs {
-					err := client.DirectoryMembership.Create().SetDirectoryAccountID(sourceID).SetDirectoryGroupID(targetID).Exec(ctx)
-					if err != nil && !generated.IsConstraintError(err) {
+					if _, ok := linked[targetID]; ok {
+						continue
+					}
+
+					if err := client.DirectoryMembership.Create().SetDirectoryAccountID(sourceID).SetDirectoryGroupID(targetID).Exec(ctx); err != nil && !generated.IsConstraintError(err) {
 						return err
 					}
 				}
@@ -9220,6 +9724,14 @@ func init() {
 			Unique:      true,
 			CreateField: "integration_id",
 			Field:       "integration_id",
+		},
+		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
 		},
 		{
 			Name:        "memberships",
@@ -9274,24 +9786,30 @@ func init() {
 			CreateField: "account_ids",
 			Through:     true,
 			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				existing, err := client.DirectoryMembership.Query().
+					Where(directorymembership.DirectoryGroupID(sourceID), directorymembership.DirectoryAccountIDIn(targetIDs...)).
+					All(ctx)
+				if err != nil {
+					return err
+				}
+
+				linked := make(map[string]struct{}, len(existing))
+				for _, row := range existing {
+					linked[row.DirectoryAccountID] = struct{}{}
+				}
+
 				for _, targetID := range targetIDs {
-					err := client.DirectoryMembership.Create().SetDirectoryGroupID(sourceID).SetDirectoryAccountID(targetID).Exec(ctx)
-					if err != nil && !generated.IsConstraintError(err) {
+					if _, ok := linked[targetID]; ok {
+						continue
+					}
+
+					if err := client.DirectoryMembership.Create().SetDirectoryGroupID(sourceID).SetDirectoryAccountID(targetID).Exec(ctx); err != nil && !generated.IsConstraintError(err) {
 						return err
 					}
 				}
 
 				return nil
 			},
-		},
-		{
-			Name:        "directory_sync_run",
-			Label:       "DirectorySyncRun",
-			Target:      SchemaDirectorySyncRun,
-			TargetType:  "DirectorySyncRun",
-			Unique:      true,
-			CreateField: "directory_sync_run_id",
-			Field:       "directory_sync_run_id",
 		},
 		{
 			Name:        "environment",
@@ -9310,6 +9828,14 @@ func init() {
 			Unique:      true,
 			CreateField: "integration_id",
 			Field:       "integration_id",
+		},
+		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
 		},
 		{
 			Name:        "members",
@@ -9375,15 +9901,6 @@ func init() {
 			Field:       "directory_group_id",
 		},
 		{
-			Name:        "directory_sync_run",
-			Label:       "DirectorySyncRun",
-			Target:      SchemaDirectorySyncRun,
-			TargetType:  "DirectorySyncRun",
-			Unique:      true,
-			CreateField: "directory_sync_run_id",
-			Field:       "directory_sync_run_id",
-		},
-		{
 			Name:        "environment",
 			Label:       "Environment",
 			Target:      SchemaCustomTypeEnum,
@@ -9408,6 +9925,14 @@ func init() {
 			Unique:      true,
 			CreateField: "integration_id",
 			Field:       "integration_id",
+		},
+		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
 		},
 		{
 			Name:        "owner",
@@ -9443,77 +9968,6 @@ func init() {
 			TargetType:  "WorkflowObjectRef",
 			CreateField: "workflow_object_ref_ids",
 			AddField:    "add_workflow_object_ref_ids",
-		},
-	}
-	SchemaDirectorySyncRun.Edges = []EdgeDescriptor{
-		{
-			Name:        "directory_accounts",
-			Label:       "DirectoryAccounts",
-			Target:      SchemaDirectoryAccount,
-			TargetType:  "DirectoryAccount",
-			CreateField: "directory_account_ids",
-			AddField:    "add_directory_account_ids",
-		},
-		{
-			Name:        "directory_groups",
-			Label:       "DirectoryGroups",
-			Target:      SchemaDirectoryGroup,
-			TargetType:  "DirectoryGroup",
-			CreateField: "directory_group_ids",
-			AddField:    "add_directory_group_ids",
-		},
-		{
-			Name:        "directory_memberships",
-			Label:       "DirectoryMemberships",
-			Target:      SchemaDirectoryMembership,
-			TargetType:  "DirectoryMembership",
-			CreateField: "directory_membership_ids",
-			AddField:    "add_directory_membership_ids",
-		},
-		{
-			Name:        "environment",
-			Label:       "Environment",
-			Target:      SchemaCustomTypeEnum,
-			TargetType:  "CustomTypeEnum",
-			Unique:      true,
-			CreateField: "environment_id",
-			Field:       "environment_id",
-		},
-		{
-			Name:        "integration",
-			Label:       "Integration",
-			Target:      SchemaIntegration,
-			TargetType:  "Integration",
-			Unique:      true,
-			CreateField: "integration_id",
-			Field:       "integration_id",
-		},
-		{
-			Name:        "owner",
-			Label:       "Owner",
-			Target:      SchemaOrganization,
-			TargetType:  "Organization",
-			Unique:      true,
-			CreateField: "owner_id",
-			Field:       "owner_id",
-		},
-		{
-			Name:        "platform",
-			Label:       "Platform",
-			Target:      SchemaPlatform,
-			TargetType:  "Platform",
-			Unique:      true,
-			CreateField: "platform_id",
-			Field:       "platform_id",
-		},
-		{
-			Name:        "scope",
-			Label:       "Scope",
-			Target:      SchemaCustomTypeEnum,
-			TargetType:  "CustomTypeEnum",
-			Unique:      true,
-			CreateField: "scope_id",
-			Field:       "scope_id",
 		},
 	}
 	SchemaDiscussion.Edges = []EdgeDescriptor{
@@ -9889,6 +10343,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+		},
+		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
 		},
 		{
 			Name:        "integrations",
@@ -10630,9 +11092,24 @@ func init() {
 			CreateField: "control_ids",
 			Through:     true,
 			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				existing, err := client.FindingControl.Query().
+					Where(findingcontrol.FindingID(sourceID), findingcontrol.ControlIDIn(targetIDs...)).
+					All(ctx)
+				if err != nil {
+					return err
+				}
+
+				linked := make(map[string]struct{}, len(existing))
+				for _, row := range existing {
+					linked[row.ControlID] = struct{}{}
+				}
+
 				for _, targetID := range targetIDs {
-					err := client.FindingControl.Create().SetFindingID(sourceID).SetControlID(targetID).Exec(ctx)
-					if err != nil && !generated.IsConstraintError(err) {
+					if _, ok := linked[targetID]; ok {
+						continue
+					}
+
+					if err := client.FindingControl.Create().SetFindingID(sourceID).SetControlID(targetID).Exec(ctx); err != nil && !generated.IsConstraintError(err) {
 						return err
 					}
 				}
@@ -10697,6 +11174,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+		},
+		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
 		},
 		{
 			Name:        "integrations",
@@ -11297,9 +11782,24 @@ func init() {
 			CreateField: "user_ids",
 			Through:     true,
 			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				existing, err := client.GroupMembership.Query().
+					Where(groupmembership.GroupID(sourceID), groupmembership.UserIDIn(targetIDs...)).
+					All(ctx)
+				if err != nil {
+					return err
+				}
+
+				linked := make(map[string]struct{}, len(existing))
+				for _, row := range existing {
+					linked[row.UserID] = struct{}{}
+				}
+
 				for _, targetID := range targetIDs {
-					err := client.GroupMembership.Create().SetGroupID(sourceID).SetUserID(targetID).Exec(ctx)
-					if err != nil && !generated.IsConstraintError(err) {
+					if _, ok := linked[targetID]; ok {
+						continue
+					}
+
+					if err := client.GroupMembership.Create().SetGroupID(sourceID).SetUserID(targetID).Exec(ctx); err != nil && !generated.IsConstraintError(err) {
 						return err
 					}
 				}
@@ -11704,14 +12204,6 @@ func init() {
 			AddField:    "add_directory_membership_ids",
 		},
 		{
-			Name:        "directory_sync_runs",
-			Label:       "DirectorySyncRuns",
-			Target:      SchemaDirectorySyncRun,
-			TargetType:  "DirectorySyncRun",
-			CreateField: "directory_sync_run_ids",
-			AddField:    "add_directory_sync_run_ids",
-		},
-		{
 			Name:        "email_templates",
 			Label:       "EmailTemplates",
 			Target:      SchemaEmailTemplate,
@@ -11862,22 +12354,76 @@ func init() {
 	}
 	SchemaIntegrationRun.Edges = []EdgeDescriptor{
 		{
-			Name:        "assessment_response",
-			Label:       "AssessmentResponse",
-			Target:      SchemaAssessmentResponse,
-			TargetType:  "AssessmentResponse",
-			Unique:      true,
-			CreateField: "assessment_response_id",
-			Field:       "assessment_response_id",
+			Name:        "action_plans",
+			Label:       "ActionPlans",
+			Target:      SchemaActionPlan,
+			TargetType:  "ActionPlan",
+			CreateField: "action_plan_ids",
+			AddField:    "add_action_plan_ids",
 		},
 		{
-			Name:        "event",
-			Label:       "Event",
-			Target:      SchemaEvent,
-			TargetType:  "Event",
-			Unique:      true,
-			CreateField: "event_id",
-			Field:       "event_id",
+			Name:        "assets",
+			Label:       "Assets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "asset_ids",
+			AddField:    "add_asset_ids",
+		},
+		{
+			Name:        "check_results",
+			Label:       "CheckResults",
+			Target:      SchemaCheckResult,
+			TargetType:  "CheckResult",
+			CreateField: "check_result_ids",
+			AddField:    "add_check_result_ids",
+		},
+		{
+			Name:        "contacts",
+			Label:       "Contacts",
+			Target:      SchemaContact,
+			TargetType:  "Contact",
+			CreateField: "contact_ids",
+			AddField:    "add_contact_ids",
+		},
+		{
+			Name:        "directory_accounts",
+			Label:       "DirectoryAccounts",
+			Target:      SchemaDirectoryAccount,
+			TargetType:  "DirectoryAccount",
+			CreateField: "directory_account_ids",
+			AddField:    "add_directory_account_ids",
+		},
+		{
+			Name:        "directory_groups",
+			Label:       "DirectoryGroups",
+			Target:      SchemaDirectoryGroup,
+			TargetType:  "DirectoryGroup",
+			CreateField: "directory_group_ids",
+			AddField:    "add_directory_group_ids",
+		},
+		{
+			Name:        "directory_memberships",
+			Label:       "DirectoryMemberships",
+			Target:      SchemaDirectoryMembership,
+			TargetType:  "DirectoryMembership",
+			CreateField: "directory_membership_ids",
+			AddField:    "add_directory_membership_ids",
+		},
+		{
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+		},
+		{
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "finding_ids",
+			AddField:    "add_finding_ids",
 		},
 		{
 			Name:        "integration",
@@ -11889,6 +12435,14 @@ func init() {
 			Field:       "integration_id",
 		},
 		{
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internal_policy_ids",
+			AddField:    "add_internal_policy_ids",
+		},
+		{
 			Name:        "owner",
 			Label:       "Owner",
 			Target:      SchemaOrganization,
@@ -11898,22 +12452,28 @@ func init() {
 			Field:       "owner_id",
 		},
 		{
-			Name:        "request_file",
-			Label:       "RequestFile",
-			Target:      SchemaFile,
-			TargetType:  "File",
-			Unique:      true,
-			CreateField: "request_file_id",
-			Field:       "request_file_id",
+			Name:        "procedures",
+			Label:       "Procedures",
+			Target:      SchemaProcedure,
+			TargetType:  "Procedure",
+			CreateField: "procedure_ids",
+			AddField:    "add_procedure_ids",
 		},
 		{
-			Name:        "response_file",
-			Label:       "ResponseFile",
-			Target:      SchemaFile,
-			TargetType:  "File",
-			Unique:      true,
-			CreateField: "response_file_id",
-			Field:       "response_file_id",
+			Name:        "risks",
+			Label:       "Risks",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			CreateField: "risk_ids",
+			AddField:    "add_risk_ids",
+		},
+		{
+			Name:        "vulnerabilities",
+			Label:       "Vulnerabilities",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			CreateField: "vulnerability_ids",
+			AddField:    "add_vulnerability_ids",
 		},
 	}
 	SchemaIntegrationWebhook.Edges = []EdgeDescriptor{
@@ -12057,6 +12617,14 @@ func init() {
 			TargetType:  "IdentityHolder",
 			CreateField: "identity_holder_ids",
 			AddField:    "add_identity_holder_ids",
+		},
+		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
 		},
 		{
 			Name:        "integrations",
@@ -13015,22 +13583,6 @@ func init() {
 			AddField:    "add_directory_membership_ids",
 		},
 		{
-			Name:        "directory_sync_run_creators",
-			Label:       "DirectorySyncRunCreators",
-			Target:      SchemaGroup,
-			TargetType:  "Group",
-			CreateField: "directory_sync_run_creator_ids",
-			AddField:    "add_directory_sync_run_creator_ids",
-		},
-		{
-			Name:        "directory_sync_runs",
-			Label:       "DirectorySyncRuns",
-			Target:      SchemaDirectorySyncRun,
-			TargetType:  "DirectorySyncRun",
-			CreateField: "directory_sync_run_ids",
-			AddField:    "add_directory_sync_run_ids",
-		},
-		{
 			Name:        "discussion_creators",
 			Label:       "DiscussionCreators",
 			Target:      SchemaGroup,
@@ -13871,9 +14423,24 @@ func init() {
 			CreateField: "user_ids",
 			Through:     true,
 			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				existing, err := client.OrgMembership.Query().
+					Where(orgmembership.OrganizationID(sourceID), orgmembership.UserIDIn(targetIDs...)).
+					All(ctx)
+				if err != nil {
+					return err
+				}
+
+				linked := make(map[string]struct{}, len(existing))
+				for _, row := range existing {
+					linked[row.UserID] = struct{}{}
+				}
+
 				for _, targetID := range targetIDs {
-					err := client.OrgMembership.Create().SetOrganizationID(sourceID).SetUserID(targetID).Exec(ctx)
-					if err != nil && !generated.IsConstraintError(err) {
+					if _, ok := linked[targetID]; ok {
+						continue
+					}
+
+					if err := client.OrgMembership.Create().SetOrganizationID(sourceID).SetUserID(targetID).Exec(ctx); err != nil && !generated.IsConstraintError(err) {
 						return err
 					}
 				}
@@ -14184,14 +14751,6 @@ func init() {
 			TargetType:  "DirectoryMembership",
 			CreateField: "directory_membership_ids",
 			AddField:    "add_directory_membership_ids",
-		},
-		{
-			Name:        "directory_sync_runs",
-			Label:       "DirectorySyncRuns",
-			Target:      SchemaDirectorySyncRun,
-			TargetType:  "DirectorySyncRun",
-			CreateField: "directory_sync_run_ids",
-			AddField:    "add_directory_sync_run_ids",
 		},
 		{
 			Name:        "editors",
@@ -14575,6 +15134,14 @@ func init() {
 			WorkflowEligible: true,
 		},
 		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
+		},
+		{
 			Name:             "internal_policies",
 			Label:            "InternalPolicies",
 			Target:           SchemaInternalPolicy,
@@ -14853,9 +15420,24 @@ func init() {
 			CreateField: "user_ids",
 			Through:     true,
 			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				existing, err := client.ProgramMembership.Query().
+					Where(programmembership.ProgramID(sourceID), programmembership.UserIDIn(targetIDs...)).
+					All(ctx)
+				if err != nil {
+					return err
+				}
+
+				linked := make(map[string]struct{}, len(existing))
+				for _, row := range existing {
+					linked[row.UserID] = struct{}{}
+				}
+
 				for _, targetID := range targetIDs {
-					err := client.ProgramMembership.Create().SetProgramID(sourceID).SetUserID(targetID).Exec(ctx)
-					if err != nil && !generated.IsConstraintError(err) {
+					if _, ok := linked[targetID]; ok {
+						continue
+					}
+
+					if err := client.ProgramMembership.Create().SetProgramID(sourceID).SetUserID(targetID).Exec(ctx); err != nil && !generated.IsConstraintError(err) {
 						return err
 					}
 				}
@@ -15346,6 +15928,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+		},
+		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
 		},
 		{
 			Name:        "internal_policies",
@@ -17134,9 +17724,24 @@ func init() {
 			CreateField: "group_ids",
 			Through:     true,
 			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				existing, err := client.GroupMembership.Query().
+					Where(groupmembership.UserID(sourceID), groupmembership.GroupIDIn(targetIDs...)).
+					All(ctx)
+				if err != nil {
+					return err
+				}
+
+				linked := make(map[string]struct{}, len(existing))
+				for _, row := range existing {
+					linked[row.GroupID] = struct{}{}
+				}
+
 				for _, targetID := range targetIDs {
-					err := client.GroupMembership.Create().SetUserID(sourceID).SetGroupID(targetID).Exec(ctx)
-					if err != nil && !generated.IsConstraintError(err) {
+					if _, ok := linked[targetID]; ok {
+						continue
+					}
+
+					if err := client.GroupMembership.Create().SetUserID(sourceID).SetGroupID(targetID).Exec(ctx); err != nil && !generated.IsConstraintError(err) {
 						return err
 					}
 				}
@@ -17176,9 +17781,24 @@ func init() {
 			CreateField: "organization_ids",
 			Through:     true,
 			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				existing, err := client.OrgMembership.Query().
+					Where(orgmembership.UserID(sourceID), orgmembership.OrganizationIDIn(targetIDs...)).
+					All(ctx)
+				if err != nil {
+					return err
+				}
+
+				linked := make(map[string]struct{}, len(existing))
+				for _, row := range existing {
+					linked[row.OrganizationID] = struct{}{}
+				}
+
 				for _, targetID := range targetIDs {
-					err := client.OrgMembership.Create().SetUserID(sourceID).SetOrganizationID(targetID).Exec(ctx)
-					if err != nil && !generated.IsConstraintError(err) {
+					if _, ok := linked[targetID]; ok {
+						continue
+					}
+
+					if err := client.OrgMembership.Create().SetUserID(sourceID).SetOrganizationID(targetID).Exec(ctx); err != nil && !generated.IsConstraintError(err) {
 						return err
 					}
 				}
@@ -17226,9 +17846,24 @@ func init() {
 			CreateField: "program_ids",
 			Through:     true,
 			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				existing, err := client.ProgramMembership.Query().
+					Where(programmembership.UserID(sourceID), programmembership.ProgramIDIn(targetIDs...)).
+					All(ctx)
+				if err != nil {
+					return err
+				}
+
+				linked := make(map[string]struct{}, len(existing))
+				for _, row := range existing {
+					linked[row.ProgramID] = struct{}{}
+				}
+
 				for _, targetID := range targetIDs {
-					err := client.ProgramMembership.Create().SetUserID(sourceID).SetProgramID(targetID).Exec(ctx)
-					if err != nil && !generated.IsConstraintError(err) {
+					if _, ok := linked[targetID]; ok {
+						continue
+					}
+
+					if err := client.ProgramMembership.Create().SetUserID(sourceID).SetProgramID(targetID).Exec(ctx); err != nil && !generated.IsConstraintError(err) {
 						return err
 					}
 				}
@@ -17478,6 +18113,14 @@ func init() {
 			TargetType:  "Finding",
 			CreateField: "finding_ids",
 			AddField:    "add_finding_ids",
+		},
+		{
+			Name:        "integration_runs",
+			Label:       "IntegrationRuns",
+			Target:      SchemaIntegrationRun,
+			TargetType:  "IntegrationRun",
+			CreateField: "integration_run_ids",
+			AddField:    "add_integration_run_ids",
 		},
 		{
 			Name:        "integrations",
@@ -18300,6 +18943,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaActionPlan.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "action_plan", Operation: refOpQuery}
+
+		if !SchemaActionPlan.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "action_plan"))
+		}
+
+		count, err := client.ActionPlan.Query().
+			Where(actionplan.OwnerID(orgID)).
+			Where(predicate.ActionPlan(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaAssessmentResponse.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "assessment_response", Operation: refOpQuery}
 
@@ -18327,6 +18988,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaAssessmentResponse.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "assessment_response", Operation: refOpQuery}
+
+		if !SchemaAssessmentResponse.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "assessment_response"))
+		}
+
+		count, err := client.AssessmentResponse.Query().
+			Where(assessmentresponse.OwnerID(orgID)).
+			Where(predicate.AssessmentResponse(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaAsset.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "asset", Operation: refOpQuery}
@@ -18356,6 +19035,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaAsset.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "asset", Operation: refOpQuery}
+
+		if !SchemaAsset.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "asset"))
+		}
+
+		count, err := client.Asset.Query().
+			Where(asset.OwnerID(orgID)).
+			Where(predicate.Asset(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaCampaign.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "campaign", Operation: refOpQuery}
 
@@ -18383,6 +19080,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaCampaign.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "campaign", Operation: refOpQuery}
+
+		if !SchemaCampaign.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "campaign"))
+		}
+
+		count, err := client.Campaign.Query().
+			Where(campaign.OwnerID(orgID)).
+			Where(predicate.Campaign(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaCampaignTarget.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "campaign_target", Operation: refOpQuery}
@@ -18412,6 +19127,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaCampaignTarget.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "campaign_target", Operation: refOpQuery}
+
+		if !SchemaCampaignTarget.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "campaign_target"))
+		}
+
+		count, err := client.CampaignTarget.Query().
+			Where(campaigntarget.OwnerID(orgID)).
+			Where(predicate.CampaignTarget(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaContact.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "contact", Operation: refOpQuery}
 
@@ -18439,6 +19172,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaContact.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "contact", Operation: refOpQuery}
+
+		if !SchemaContact.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "contact"))
+		}
+
+		count, err := client.Contact.Query().
+			Where(contact.OwnerID(orgID)).
+			Where(predicate.Contact(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaControl.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "control", Operation: refOpQuery}
@@ -18468,6 +19219,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaControl.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "control", Operation: refOpQuery}
+
+		if !SchemaControl.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "control"))
+		}
+
+		count, err := client.Control.Query().
+			Where(control.OwnerID(orgID)).
+			Where(predicate.Control(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaControlImplementation.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "control_implementation", Operation: refOpQuery}
 
@@ -18495,6 +19264,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaControlImplementation.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "control_implementation", Operation: refOpQuery}
+
+		if !SchemaControlImplementation.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "control_implementation"))
+		}
+
+		count, err := client.ControlImplementation.Query().
+			Where(controlimplementation.OwnerID(orgID)).
+			Where(predicate.ControlImplementation(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaControlObjective.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "control_objective", Operation: refOpQuery}
@@ -18524,6 +19311,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaControlObjective.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "control_objective", Operation: refOpQuery}
+
+		if !SchemaControlObjective.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "control_objective"))
+		}
+
+		count, err := client.ControlObjective.Query().
+			Where(controlobjective.OwnerID(orgID)).
+			Where(predicate.ControlObjective(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaCustomTypeEnum.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "custom_type_enum", Operation: refOpQuery}
 
@@ -18551,6 +19356,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaCustomTypeEnum.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "custom_type_enum", Operation: refOpQuery}
+
+		if !SchemaCustomTypeEnum.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "custom_type_enum"))
+		}
+
+		count, err := client.CustomTypeEnum.Query().
+			Where(customtypeenum.OwnerID(orgID)).
+			Where(predicate.CustomTypeEnum(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaDirectoryAccount.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_account", Operation: refOpQuery}
@@ -18580,6 +19403,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaDirectoryAccount.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "directory_account", Operation: refOpQuery}
+
+		if !SchemaDirectoryAccount.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "directory_account"))
+		}
+
+		count, err := client.DirectoryAccount.Query().
+			Where(directoryaccount.OwnerID(orgID)).
+			Where(predicate.DirectoryAccount(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaDirectoryGroup.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_group", Operation: refOpQuery}
 
@@ -18607,6 +19448,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaDirectoryGroup.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "directory_group", Operation: refOpQuery}
+
+		if !SchemaDirectoryGroup.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "directory_group"))
+		}
+
+		count, err := client.DirectoryGroup.Query().
+			Where(directorygroup.OwnerID(orgID)).
+			Where(predicate.DirectoryGroup(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaDirectoryMembership.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_membership", Operation: refOpQuery}
@@ -18636,33 +19495,23 @@ func init() {
 
 		return results, nil
 	}
-	SchemaDirectorySyncRun.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "directory_sync_run", Operation: refOpQuery}
 
-		if !SchemaDirectorySyncRun.MatchKeyField(field) {
-			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "directory_sync_run"))
+	SchemaDirectoryMembership.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "directory_membership", Operation: refOpQuery}
+
+		if !SchemaDirectoryMembership.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "directory_membership"))
 		}
 
-		entities, err := client.DirectorySyncRun.Query().
-			Where(directorysyncrun.OwnerID(orgID)).
-			Where(predicate.DirectorySyncRun(matchKeyIn(field, values))).
-			All(ctx)
+		count, err := client.DirectoryMembership.Query().
+			Where(directorymembership.OwnerID(orgID)).
+			Where(predicate.DirectoryMembership(matchKeyIn(field, values))).
+			Count(ctx)
 		if err != nil {
-			return nil, logError(ctx, ref, ErrQueryFailed, err)
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
 		}
 
-		results := make([]json.RawMessage, 0, len(entities))
-		for _, e := range entities {
-			data, err := json.Marshal(e)
-			if err != nil {
-				logError(ctx, ref, ErrMarshalFailed, err)
-				continue
-			}
-
-			results = append(results, data)
-		}
-
-		return results, nil
+		return count, nil
 	}
 	SchemaDiscussion.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "discussion", Operation: refOpQuery}
@@ -18692,6 +19541,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaDiscussion.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "discussion", Operation: refOpQuery}
+
+		if !SchemaDiscussion.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "discussion"))
+		}
+
+		count, err := client.Discussion.Query().
+			Where(discussion.OwnerID(orgID)).
+			Where(predicate.Discussion(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaDocumentData.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "document_data", Operation: refOpQuery}
 
@@ -18719,6 +19586,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaDocumentData.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "document_data", Operation: refOpQuery}
+
+		if !SchemaDocumentData.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "document_data"))
+		}
+
+		count, err := client.DocumentData.Query().
+			Where(documentdata.OwnerID(orgID)).
+			Where(predicate.DocumentData(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaEntity.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "entity", Operation: refOpQuery}
@@ -18748,6 +19633,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaEntity.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "entity", Operation: refOpQuery}
+
+		if !SchemaEntity.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "entity"))
+		}
+
+		count, err := client.Entity.Query().
+			Where(entity.OwnerID(orgID)).
+			Where(predicate.Entity(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaEntityType.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "entity_type", Operation: refOpQuery}
 
@@ -18775,6 +19678,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaEntityType.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "entity_type", Operation: refOpQuery}
+
+		if !SchemaEntityType.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "entity_type"))
+		}
+
+		count, err := client.EntityType.Query().
+			Where(entitytype.OwnerID(orgID)).
+			Where(predicate.EntityType(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaFinding.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "finding", Operation: refOpQuery}
@@ -18804,6 +19725,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaFinding.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "finding", Operation: refOpQuery}
+
+		if !SchemaFinding.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "finding"))
+		}
+
+		count, err := client.Finding.Query().
+			Where(finding.OwnerID(orgID)).
+			Where(predicate.Finding(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaFindingControl.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "finding_control", Operation: refOpQuery}
 
@@ -18831,6 +19770,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaFindingControl.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "finding_control", Operation: refOpQuery}
+
+		if !SchemaFindingControl.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "finding_control"))
+		}
+
+		count, err := client.FindingControl.Query().
+			Where(findingcontrol.OwnerID(orgID)).
+			Where(predicate.FindingControl(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaGroup.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "group", Operation: refOpQuery}
@@ -18860,6 +19817,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaGroup.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "group", Operation: refOpQuery}
+
+		if !SchemaGroup.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "group"))
+		}
+
+		count, err := client.Group.Query().
+			Where(group.OwnerID(orgID)).
+			Where(predicate.Group(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaIdentityHolder.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "identity_holder", Operation: refOpQuery}
 
@@ -18887,6 +19862,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaIdentityHolder.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "identity_holder", Operation: refOpQuery}
+
+		if !SchemaIdentityHolder.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "identity_holder"))
+		}
+
+		count, err := client.IdentityHolder.Query().
+			Where(identityholder.OwnerID(orgID)).
+			Where(predicate.IdentityHolder(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaIntegration.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "integration", Operation: refOpQuery}
@@ -18916,6 +19909,70 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaIntegration.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "integration", Operation: refOpQuery}
+
+		if !SchemaIntegration.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "integration"))
+		}
+
+		count, err := client.Integration.Query().
+			Where(integration.OwnerID(orgID)).
+			Where(predicate.Integration(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
+	SchemaIntegrationRun.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "integration_run", Operation: refOpQuery}
+
+		if !SchemaIntegrationRun.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "integration_run"))
+		}
+
+		entities, err := client.IntegrationRun.Query().
+			Where(integrationrun.OwnerID(orgID)).
+			Where(predicate.IntegrationRun(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+
+	SchemaIntegrationRun.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "integration_run", Operation: refOpQuery}
+
+		if !SchemaIntegrationRun.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "integration_run"))
+		}
+
+		count, err := client.IntegrationRun.Query().
+			Where(integrationrun.OwnerID(orgID)).
+			Where(predicate.IntegrationRun(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaInternalPolicy.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "internal_policy", Operation: refOpQuery}
 
@@ -18943,6 +20000,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaInternalPolicy.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "internal_policy", Operation: refOpQuery}
+
+		if !SchemaInternalPolicy.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "internal_policy"))
+		}
+
+		count, err := client.InternalPolicy.Query().
+			Where(internalpolicy.OwnerID(orgID)).
+			Where(predicate.InternalPolicy(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaNarrative.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "narrative", Operation: refOpQuery}
@@ -18972,6 +20047,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaNarrative.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "narrative", Operation: refOpQuery}
+
+		if !SchemaNarrative.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "narrative"))
+		}
+
+		count, err := client.Narrative.Query().
+			Where(narrative.OwnerID(orgID)).
+			Where(predicate.Narrative(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaNote.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "note", Operation: refOpQuery}
 
@@ -18999,6 +20092,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaNote.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "note", Operation: refOpQuery}
+
+		if !SchemaNote.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "note"))
+		}
+
+		count, err := client.Note.Query().
+			Where(note.OwnerID(orgID)).
+			Where(predicate.Note(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaPlatform.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "platform", Operation: refOpQuery}
@@ -19028,6 +20139,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaPlatform.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "platform", Operation: refOpQuery}
+
+		if !SchemaPlatform.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "platform"))
+		}
+
+		count, err := client.Platform.Query().
+			Where(platform.OwnerID(orgID)).
+			Where(predicate.Platform(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaProcedure.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "procedure", Operation: refOpQuery}
 
@@ -19055,6 +20184,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaProcedure.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "procedure", Operation: refOpQuery}
+
+		if !SchemaProcedure.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "procedure"))
+		}
+
+		count, err := client.Procedure.Query().
+			Where(procedure.OwnerID(orgID)).
+			Where(predicate.Procedure(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaProgram.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "program", Operation: refOpQuery}
@@ -19084,6 +20231,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaProgram.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "program", Operation: refOpQuery}
+
+		if !SchemaProgram.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "program"))
+		}
+
+		count, err := client.Program.Query().
+			Where(program.OwnerID(orgID)).
+			Where(predicate.Program(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaRemediation.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "remediation", Operation: refOpQuery}
 
@@ -19111,6 +20276,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaRemediation.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "remediation", Operation: refOpQuery}
+
+		if !SchemaRemediation.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "remediation"))
+		}
+
+		count, err := client.Remediation.Query().
+			Where(remediation.OwnerID(orgID)).
+			Where(predicate.Remediation(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaReview.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "review", Operation: refOpQuery}
@@ -19140,6 +20323,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaReview.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "review", Operation: refOpQuery}
+
+		if !SchemaReview.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "review"))
+		}
+
+		count, err := client.Review.Query().
+			Where(review.OwnerID(orgID)).
+			Where(predicate.Review(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaRisk.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "risk", Operation: refOpQuery}
 
@@ -19167,6 +20368,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaRisk.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "risk", Operation: refOpQuery}
+
+		if !SchemaRisk.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "risk"))
+		}
+
+		count, err := client.Risk.Query().
+			Where(risk.OwnerID(orgID)).
+			Where(predicate.Risk(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaScan.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "scan", Operation: refOpQuery}
@@ -19196,6 +20415,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaScan.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "scan", Operation: refOpQuery}
+
+		if !SchemaScan.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "scan"))
+		}
+
+		count, err := client.Scan.Query().
+			Where(scan.OwnerID(orgID)).
+			Where(predicate.Scan(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaSubcontrol.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "subcontrol", Operation: refOpQuery}
 
@@ -19223,6 +20460,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaSubcontrol.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "subcontrol", Operation: refOpQuery}
+
+		if !SchemaSubcontrol.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "subcontrol"))
+		}
+
+		count, err := client.Subcontrol.Query().
+			Where(subcontrol.OwnerID(orgID)).
+			Where(predicate.Subcontrol(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaSubprocessor.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "subprocessor", Operation: refOpQuery}
@@ -19252,6 +20507,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaSubprocessor.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "subprocessor", Operation: refOpQuery}
+
+		if !SchemaSubprocessor.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "subprocessor"))
+		}
+
+		count, err := client.Subprocessor.Query().
+			Where(subprocessor.OwnerID(orgID)).
+			Where(predicate.Subprocessor(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaSubscriber.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "subscriber", Operation: refOpQuery}
 
@@ -19279,6 +20552,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaSubscriber.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "subscriber", Operation: refOpQuery}
+
+		if !SchemaSubscriber.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "subscriber"))
+		}
+
+		count, err := client.Subscriber.Query().
+			Where(subscriber.OwnerID(orgID)).
+			Where(predicate.Subscriber(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaSystemDetail.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "system_detail", Operation: refOpQuery}
@@ -19308,6 +20599,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaSystemDetail.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "system_detail", Operation: refOpQuery}
+
+		if !SchemaSystemDetail.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "system_detail"))
+		}
+
+		count, err := client.SystemDetail.Query().
+			Where(systemdetail.OwnerID(orgID)).
+			Where(predicate.SystemDetail(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaTask.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "task", Operation: refOpQuery}
 
@@ -19335,6 +20644,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaTask.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "task", Operation: refOpQuery}
+
+		if !SchemaTask.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "task"))
+		}
+
+		count, err := client.Task.Query().
+			Where(task.OwnerID(orgID)).
+			Where(predicate.Task(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaVendorRiskScore.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpQuery}
@@ -19364,6 +20691,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaVendorRiskScore.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpQuery}
+
+		if !SchemaVendorRiskScore.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "vendor_risk_score"))
+		}
+
+		count, err := client.VendorRiskScore.Query().
+			Where(vendorriskscore.OwnerID(orgID)).
+			Where(predicate.VendorRiskScore(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaVulnerability.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "vulnerability", Operation: refOpQuery}
 
@@ -19392,6 +20737,24 @@ func init() {
 
 		return results, nil
 	}
+
+	SchemaVulnerability.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "vulnerability", Operation: refOpQuery}
+
+		if !SchemaVulnerability.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "vulnerability"))
+		}
+
+		count, err := client.Vulnerability.Query().
+			Where(vulnerability.OwnerID(orgID)).
+			Where(predicate.Vulnerability(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
+	}
 	SchemaWorkflowObjectRef.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "workflow_object_ref", Operation: refOpQuery}
 
@@ -19419,6 +20782,24 @@ func init() {
 		}
 
 		return results, nil
+	}
+
+	SchemaWorkflowObjectRef.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
+		ref := SchemaRef{Schema: "workflow_object_ref", Operation: refOpQuery}
+
+		if !SchemaWorkflowObjectRef.MatchKeyField(field) {
+			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "workflow_object_ref"))
+		}
+
+		count, err := client.WorkflowObjectRef.Query().
+			Where(workflowobjectref.OwnerID(orgID)).
+			Where(predicate.WorkflowObjectRef(matchKeyIn(field, values))).
+			Count(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		return count, nil
 	}
 	SchemaActionPlan.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
 		ref := SchemaRef{Schema: "action_plan", Operation: refOpCreate}
@@ -19505,6 +20886,13 @@ func init() {
 			return nil, logError(ctx, ref, ErrDecodeFailed, err)
 		}
 
+		if input.Email != nil {
+			if err := contact.EmailValidator(*input.Email); err != nil {
+				logSanitizedIngestField(ctx, "contact", "email", err)
+				input.Email = nil
+			}
+		}
+
 		if input.FullName != nil {
 			if err := contact.FullNameValidator(*input.FullName); err != nil {
 				logSanitizedIngestField(ctx, "contact", "full_name", err)
@@ -19537,13 +20925,6 @@ func init() {
 			if err := directoryaccount.AvatarRemoteURLValidator(*input.AvatarRemoteURL); err != nil {
 				logSanitizedIngestField(ctx, "directory_account", "avatar_remote_url", err)
 				input.AvatarRemoteURL = nil
-			}
-		}
-
-		if input.DirectorySyncRunID != nil {
-			if err := directoryaccount.DirectorySyncRunIDValidator(*input.DirectorySyncRunID); err != nil {
-				logSanitizedIngestField(ctx, "directory_account", "directory_sync_run_id", err)
-				input.DirectorySyncRunID = nil
 			}
 		}
 
@@ -19834,8 +21215,19 @@ func init() {
 
 		update := client.ActionPlan.UpdateOne(&existing).SetInput(input)
 
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(actionplan.Or(actionplan.IntegrationRunIDIsNil(), actionplan.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
 		return update.Mutation(), func(ctx context.Context) error {
 			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -19857,8 +21249,19 @@ func init() {
 
 		update := client.Asset.UpdateOne(&existing).SetInput(input)
 
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(asset.Or(asset.IntegrationRunIDIsNil(), asset.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
 		return update.Mutation(), func(ctx context.Context) error {
 			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -19880,8 +21283,19 @@ func init() {
 
 		update := client.CheckResult.UpdateOne(&existing).SetInput(input)
 
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(checkresult.Or(checkresult.IntegrationRunIDIsNil(), checkresult.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
 		return update.Mutation(), func(ctx context.Context) error {
 			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -19903,8 +21317,19 @@ func init() {
 
 		update := client.Contact.UpdateOne(&existing).SetInput(input)
 
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(contact.Or(contact.IntegrationRunIDIsNil(), contact.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
 		return update.Mutation(), func(ctx context.Context) error {
 			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -19926,8 +21351,19 @@ func init() {
 
 		update := client.DirectoryAccount.UpdateOne(&existing).SetInput(input)
 
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(directoryaccount.Or(directoryaccount.IntegrationRunIDIsNil(), directoryaccount.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
 		return update.Mutation(), func(ctx context.Context) error {
 			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -19949,8 +21385,19 @@ func init() {
 
 		update := client.DirectoryGroup.UpdateOne(&existing).SetInput(input)
 
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(directorygroup.Or(directorygroup.IntegrationRunIDIsNil(), directorygroup.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
 		return update.Mutation(), func(ctx context.Context) error {
 			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -19972,8 +21419,19 @@ func init() {
 
 		update := client.DirectoryMembership.UpdateOne(&existing).SetInput(input)
 
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(directorymembership.Or(directorymembership.IntegrationRunIDIsNil(), directorymembership.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
 		return update.Mutation(), func(ctx context.Context) error {
 			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -19995,8 +21453,19 @@ func init() {
 
 		update := client.Entity.UpdateOne(&existing).SetInput(input)
 
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(entity.Or(entity.IntegrationRunIDIsNil(), entity.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
 		return update.Mutation(), func(ctx context.Context) error {
 			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -20018,8 +21487,19 @@ func init() {
 
 		update := client.Finding.UpdateOne(&existing).SetInput(input)
 
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(finding.Or(finding.IntegrationRunIDIsNil(), finding.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
 		return update.Mutation(), func(ctx context.Context) error {
 			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -20041,8 +21521,19 @@ func init() {
 
 		update := client.InternalPolicy.UpdateOne(&existing).SetInput(input)
 
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(internalpolicy.Or(internalpolicy.IntegrationRunIDIsNil(), internalpolicy.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
 		return update.Mutation(), func(ctx context.Context) error {
 			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -20064,8 +21555,19 @@ func init() {
 
 		update := client.Procedure.UpdateOne(&existing).SetInput(input)
 
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(procedure.Or(procedure.IntegrationRunIDIsNil(), procedure.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
 		return update.Mutation(), func(ctx context.Context) error {
 			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -20087,8 +21589,19 @@ func init() {
 
 		update := client.Risk.UpdateOne(&existing).SetInput(input)
 
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(risk.Or(risk.IntegrationRunIDIsNil(), risk.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
 		return update.Mutation(), func(ctx context.Context) error {
 			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -20110,14 +21623,811 @@ func init() {
 
 		update := client.Vulnerability.UpdateOne(&existing).SetInput(input)
 
+		guarded := false
+
+		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
+			update = update.Where(vulnerability.Or(vulnerability.IntegrationRunIDIsNil(), vulnerability.IntegrationRunIDLT(runID)))
+			guarded = true
+		}
+
 		return update.Mutation(), func(ctx context.Context) error {
 			if err := update.Exec(ctx); err != nil {
+				if guarded && generated.IsNotFound(err) {
+					return ErrUpsertStaleRun
+				}
+
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
 			return nil
 		}, nil
 	}
+	SchemaActionPlan.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "action_plan", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaActionPlan.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "action_plan"))
+		}
+
+		fields := SchemaActionPlan.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.ActionPlan.Query()
+			query = query.Where(actionplan.OwnerID(ownerID))
+			query = query.Where(predicate.ActionPlan(matchKeyIn(primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaAsset.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "asset", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaAsset.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "asset"))
+		}
+
+		fields := SchemaAsset.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.Asset.Query()
+			query = query.Where(asset.OwnerID(ownerID))
+			query = query.Where(predicate.Asset(matchKeyIn(primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaCheckResult.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "check_result", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaCheckResult.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "check_result"))
+		}
+
+		fields := SchemaCheckResult.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.CheckResult.Query()
+			query = query.Where(predicate.CheckResult(matchKeyIn(primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaContact.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "contact", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaContact.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "contact"))
+		}
+
+		fields := SchemaContact.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.Contact.Query()
+			query = query.Where(contact.OwnerID(ownerID))
+			query = query.Where(predicate.Contact(matchKeyIn(primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaDirectoryAccount.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "directory_account", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaDirectoryAccount.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "directory_account"))
+		}
+
+		fields := SchemaDirectoryAccount.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.DirectoryAccount.Query()
+			query = query.Where(directoryaccount.OwnerID(ownerID))
+			query = query.Where(predicate.DirectoryAccount(matchKeyIn(primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaDirectoryGroup.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "directory_group", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaDirectoryGroup.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "directory_group"))
+		}
+
+		fields := SchemaDirectoryGroup.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.DirectoryGroup.Query()
+			query = query.Where(directorygroup.OwnerID(ownerID))
+			query = query.Where(predicate.DirectoryGroup(matchKeyIn(primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaDirectoryMembership.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "directory_membership", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaDirectoryMembership.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "directory_membership"))
+		}
+
+		fields := SchemaDirectoryMembership.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.DirectoryMembership.Query()
+			query = query.Where(directorymembership.OwnerID(ownerID))
+			query = query.Where(predicate.DirectoryMembership(matchKeyIn(primary, chunk)))
+			query = query.Where(directorymembership.RemovedAtIsNil())
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaEntity.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "entity", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaEntity.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "entity"))
+		}
+
+		fields := SchemaEntity.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.Entity.Query()
+			query = query.Where(entity.OwnerID(ownerID))
+			query = query.Where(predicate.Entity(matchKeyIn(primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaFinding.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "finding", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaFinding.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "finding"))
+		}
+
+		fields := SchemaFinding.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.Finding.Query()
+			query = query.Where(finding.OwnerID(ownerID))
+			query = query.Where(predicate.Finding(matchKeyIn(primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaInternalPolicy.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "internal_policy", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaInternalPolicy.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "internal_policy"))
+		}
+
+		fields := SchemaInternalPolicy.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.InternalPolicy.Query()
+			query = query.Where(internalpolicy.OwnerID(ownerID))
+			query = query.Where(predicate.InternalPolicy(matchKeyIn(primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaProcedure.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "procedure", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaProcedure.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "procedure"))
+		}
+
+		fields := SchemaProcedure.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.Procedure.Query()
+			query = query.Where(procedure.OwnerID(ownerID))
+			query = query.Where(predicate.Procedure(matchKeyIn(primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaRisk.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "risk", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaRisk.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "risk"))
+		}
+
+		fields := SchemaRisk.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.Risk.Query()
+			query = query.Where(risk.OwnerID(ownerID))
+			query = query.Where(predicate.Risk(matchKeyIn(primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaVulnerability.QueryByLookup = func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "vulnerability", Operation: refOpQuery}
+
+		if alternative < 0 || alternative >= len(SchemaVulnerability.Lookup) {
+			return nil, logError(ctx, ref, ErrLookupAlternativeInvalid, fmt.Errorf("alternative %d out of range for %s", alternative, "vulnerability"))
+		}
+
+		fields := SchemaVulnerability.Lookup[alternative].Fields
+		primary := fields[0]
+
+		primaryValues := lo.Uniq(lo.FilterMap(keys, func(k LookupValues, _ int) (string, bool) {
+			v, ok := k[primary]
+			return v, ok && v != ""
+		}))
+
+		if len(primaryValues) == 0 {
+			return nil, nil
+		}
+
+		var results []json.RawMessage
+
+		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
+			query := client.Vulnerability.Query()
+			query = query.Where(vulnerability.OwnerID(ownerID))
+			query = query.Where(predicate.Vulnerability(matchKeyIn(primary, chunk)))
+
+			entities, err := query.All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+		}
+
+		return filterByAlternativeFields(results, fields, keys), nil
+	}
+	SchemaDirectoryAccount.ConfirmSeen = func(ctx context.Context, client *generated.Client, ids []string, at time.Time) error {
+		ref := SchemaRef{Schema: "directory_account", Operation: refOpUpdate}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if err := client.DirectoryAccount.Update().
+				Where(directoryaccount.IDIn(chunk...)).
+				SetLastSeenAt(at).
+				Exec(WithEmissionVetoed(ctx)); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+		}
+
+		return nil
+	}
+	SchemaDirectoryGroup.ConfirmSeen = func(ctx context.Context, client *generated.Client, ids []string, at time.Time) error {
+		ref := SchemaRef{Schema: "directory_group", Operation: refOpUpdate}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if err := client.DirectoryGroup.Update().
+				Where(directorygroup.IDIn(chunk...)).
+				SetLastSeenAt(at).
+				Exec(WithEmissionVetoed(ctx)); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+		}
+
+		return nil
+	}
+	SchemaDirectoryMembership.ConfirmSeen = func(ctx context.Context, client *generated.Client, ids []string, at time.Time) error {
+		ref := SchemaRef{Schema: "directory_membership", Operation: refOpUpdate}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			if err := client.DirectoryMembership.Update().
+				Where(directorymembership.IDIn(chunk...)).
+				SetLastSeenAt(at).
+				Exec(WithEmissionVetoed(ctx)); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+		}
+
+		return nil
+	}
+	SchemaDirectoryAccount.SnapshotScope = func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "directory_account", Operation: refOpQuery}
+
+		instance := directoryaccount.SourceInstanceID(instanceID)
+		if instanceID == "" {
+			instance = directoryaccount.SourceInstanceIDIsNil()
+		}
+
+		entities, err := client.DirectoryAccount.Query().
+			Where(
+				directoryaccount.OwnerID(ownerID),
+				directoryaccount.SourceDefinitionID(definitionID),
+				instance,
+				directoryaccount.RemovedAtIsNil(),
+			).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaDirectoryGroup.SnapshotScope = func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "directory_group", Operation: refOpQuery}
+
+		instance := directorygroup.SourceInstanceID(instanceID)
+		if instanceID == "" {
+			instance = directorygroup.SourceInstanceIDIsNil()
+		}
+
+		entities, err := client.DirectoryGroup.Query().
+			Where(
+				directorygroup.OwnerID(ownerID),
+				directorygroup.SourceDefinitionID(definitionID),
+				instance,
+				directorygroup.RemovedAtIsNil(),
+			).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaDirectoryMembership.SnapshotScope = func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "directory_membership", Operation: refOpQuery}
+
+		instance := directorymembership.SourceInstanceID(instanceID)
+		if instanceID == "" {
+			instance = directorymembership.SourceInstanceIDIsNil()
+		}
+
+		entities, err := client.DirectoryMembership.Query().
+			Where(
+				directorymembership.OwnerID(ownerID),
+				directorymembership.SourceDefinitionID(definitionID),
+				instance,
+				directorymembership.RemovedAtIsNil(),
+			).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaDirectoryAccount.MarkRemoved = func(ctx context.Context, client *generated.Client, ids []string, at time.Time, runID string) error {
+		ref := SchemaRef{Schema: "directory_account", Operation: refOpUpdate}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			update := client.DirectoryAccount.Update().
+				Where(directoryaccount.IDIn(chunk...)).
+				SetRemovedAt(at)
+
+			if runID != "" {
+				update = update.SetIntegrationRunID(runID)
+				update = update.AddIntegrationRunIDs(runID)
+			}
+
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+		}
+
+		return nil
+	}
+	SchemaDirectoryGroup.MarkRemoved = func(ctx context.Context, client *generated.Client, ids []string, at time.Time, runID string) error {
+		ref := SchemaRef{Schema: "directory_group", Operation: refOpUpdate}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			update := client.DirectoryGroup.Update().
+				Where(directorygroup.IDIn(chunk...)).
+				SetRemovedAt(at)
+
+			if runID != "" {
+				update = update.SetIntegrationRunID(runID)
+				update = update.AddIntegrationRunIDs(runID)
+			}
+
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+		}
+
+		return nil
+	}
+	SchemaDirectoryMembership.MarkRemoved = func(ctx context.Context, client *generated.Client, ids []string, at time.Time, runID string) error {
+		ref := SchemaRef{Schema: "directory_membership", Operation: refOpUpdate}
+
+		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
+			update := client.DirectoryMembership.Update().
+				Where(directorymembership.IDIn(chunk...)).
+				SetRemovedAt(at)
+
+			if runID != "" {
+				update = update.SetIntegrationRunID(runID)
+				update = update.AddIntegrationRunIDs(runID)
+			}
+
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+		}
+
+		return nil
+	}
+	SchemaActionPlan.Ingest.persist = defaultIngestPersist(SchemaActionPlan)
+	SchemaAsset.Ingest.persist = defaultIngestPersist(SchemaAsset)
+	SchemaCheckResult.Ingest.persist = defaultIngestPersist(SchemaCheckResult)
+	SchemaContact.Ingest.persist = defaultIngestPersist(SchemaContact)
+	SchemaDirectoryAccount.Ingest.persist = defaultIngestPersist(SchemaDirectoryAccount)
+	SchemaDirectoryGroup.Ingest.persist = defaultIngestPersist(SchemaDirectoryGroup)
+	SchemaDirectoryMembership.Ingest.persist = defaultIngestPersist(SchemaDirectoryMembership)
+	SchemaEntity.Ingest.persist = defaultIngestPersist(SchemaEntity)
+	SchemaFinding.Ingest.persist = defaultIngestPersist(SchemaFinding)
+	SchemaInternalPolicy.Ingest.persist = defaultIngestPersist(SchemaInternalPolicy)
+	SchemaProcedure.Ingest.persist = defaultIngestPersist(SchemaProcedure)
+	SchemaRisk.Ingest.persist = defaultIngestPersist(SchemaRisk)
+	SchemaVulnerability.Ingest.persist = defaultIngestPersist(SchemaVulnerability)
 
 	// through edges are linked by creating join entity rows — one per target, each with its own
 	// generated id — so wrap the create and update closures of schemas that have them: through-edge
@@ -20241,7 +22551,6 @@ var allSchemas = []*Schema{
 	SchemaDirectoryAccount,
 	SchemaDirectoryGroup,
 	SchemaDirectoryMembership,
-	SchemaDirectorySyncRun,
 	SchemaDiscussion,
 	SchemaDocumentData,
 	SchemaEmailTemplate,
@@ -20386,6 +22695,15 @@ func selectTargets(ctx context.Context, client *generated.Client, orgID string, 
 		return nil, err
 	}
 
+	if selector.Unique {
+		narrowed, nerr := narrowUniqueCandidates(schema, entities, selector.SourceContext)
+		if nerr != nil {
+			return nil, logError(ctx, SchemaRef{Schema: schema.Snake, Operation: refOpQuery}, nerr, fmt.Errorf("%s unique-edge link matched %d candidates", schema.Name, len(entities)))
+		}
+
+		entities = narrowed
+	}
+
 	var (
 		eval      *celx.NativeEntityEvaluator
 		useSource bool
@@ -20461,8 +22779,9 @@ func selectTargets(ctx context.Context, client *generated.Client, orgID string, 
 }
 
 // selectCandidates resolves the candidate entity set for a target selector. When the selector
-// carries a KeyMatch it issues an indexed query that pushes the key predicate into the database;
-// otherwise it loads all org-scoped entities for row-by-row expression evaluation
+// carries a KeyMatch it consults a ctx-carried prefetch cache when present, or otherwise issues an
+// indexed query that pushes the key predicate into the database; without a KeyMatch it loads all
+// org-scoped entities for row-by-row expression evaluation
 func selectCandidates(ctx context.Context, client *generated.Client, schema *Schema, orgID string, selector TargetSelector) ([]json.RawMessage, error) {
 	if selector.KeyMatch != nil {
 		if schema.QueryByKey == nil {
@@ -20474,6 +22793,10 @@ func selectCandidates(ctx context.Context, client *generated.Client, schema *Sch
 			return nil, nil
 		}
 
+		if cache, ok := linkTargetCacheContextKey.Get(ctx); ok {
+			return lookupLinkTargetCache(cache, schema.Snake, selector.KeyMatch.TargetField, values), nil
+		}
+
 		return schema.QueryByKey(ctx, client, orgID, selector.KeyMatch.TargetField, values)
 	}
 
@@ -20482,6 +22805,60 @@ func selectCandidates(ctx context.Context, client *generated.Client, schema *Sch
 	}
 
 	return schema.Query(ctx, client, orgID)
+}
+
+// narrowUniqueCandidates resolves a unique edge's link target to at most one candidate under the target's identity rule
+func narrowUniqueCandidates(schema *Schema, entities []json.RawMessage, source json.RawMessage) ([]json.RawMessage, error) {
+	if schema.InstanceScoped {
+		pi := lookupValue(source, FieldSourceInstanceID)
+
+		entities = lo.Filter(entities, func(row json.RawMessage, _ int) bool {
+			ri := lookupValue(row, FieldSourceInstanceID)
+
+			return ri == pi || ri == ""
+		})
+	}
+
+	if len(entities) > 1 {
+		return nil, ErrLinkAmbiguous
+	}
+
+	return entities, nil
+}
+
+// linkTargetCacheKey identifies one cached target lookup by target schema, field, and value
+type linkTargetCacheKey struct {
+	schema string
+	field  string
+	value  string
+}
+
+// linkTargetCache is the ctx-carried prefetch cache for link target rows; a present key with a nil
+// or empty slice is a confirmed miss, distinct from the key being absent entirely
+type linkTargetCache map[linkTargetCacheKey][]json.RawMessage
+
+// linkTargetCacheContextKey carries the prefetch cache installed by PrefetchLinkTargets
+var linkTargetCacheContextKey = contextx.NewKey[linkTargetCache]()
+
+// lookupLinkTargetCache collects the cached rows for every value, deduplicated by entity id
+func lookupLinkTargetCache(cache linkTargetCache, schemaSnake, field string, values []string) []json.RawMessage {
+	seen := map[string]struct{}{}
+
+	var rows []json.RawMessage
+
+	for _, value := range values {
+		for _, row := range cache[linkTargetCacheKey{schema: schemaSnake, field: field, value: value}] {
+			id := entityID(row)
+			if _, ok := seen[id]; ok {
+				continue
+			}
+
+			seen[id] = struct{}{}
+			rows = append(rows, row)
+		}
+	}
+
+	return rows
 }
 
 // collectKeyValues extracts the deduplicated, non-empty source-side key values for a KeyMatch

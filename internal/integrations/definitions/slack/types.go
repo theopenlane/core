@@ -12,8 +12,6 @@ import (
 var (
 	// DefinitionID is the stable identifier for the Slack integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0SLACK000000000000000001")
-	// VirtualUser is the virtual actor identity for records created by this definition's installations
-	VirtualUser = types.NewVirtualUserRef("01VRTACTREE6H116GS5BW6HNT5")
 	// installation is the typed installation metadata handle for the Slack definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// slackCredential is the auth-managed credential slot used by the OAuth connection

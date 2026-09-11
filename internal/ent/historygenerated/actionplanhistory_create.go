@@ -232,6 +232,20 @@ func (_c *ActionPlanHistoryCreate) SetNillableManagedBy(v *string) *ActionPlanHi
 	return _c
 }
 
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *ActionPlanHistoryCreate) SetIntegrationRunID(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableIntegrationRunID(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *ActionPlanHistoryCreate) SetName(v string) *ActionPlanHistoryCreate {
 	_c.mutation.SetName(v)
@@ -983,6 +997,10 @@ func (_c *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph.C
 	if value, ok := _c.mutation.ManagedBy(); ok {
 		_spec.SetField(actionplanhistory.FieldManagedBy, field.TypeString, value)
 		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(actionplanhistory.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(actionplanhistory.FieldName, field.TypeString, value)

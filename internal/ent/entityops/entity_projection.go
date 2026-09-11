@@ -38,6 +38,7 @@ type ActionPlanProjection struct {
 	ExternalFileID                  string                       `json:"external_file_id,omitempty"`
 	FileID                          string                       `json:"file_id,omitempty"`
 	ImprovementSuggestions          []string                     `json:"improvement_suggestions,omitempty"`
+	IntegrationRunID                string                       `json:"integration_run_id,omitempty"`
 	InternalNotes                   string                       `json:"internal_notes,omitempty"`
 	ManagedBy                       string                       `json:"managed_by,omitempty"`
 	ManagementMode                  enums.DocumentManagementMode `json:"management_mode,omitempty"`
@@ -163,6 +164,7 @@ type AssetProjection struct {
 	EstimatedMonthlyCost          float64          `json:"estimated_monthly_cost,omitempty"`
 	Identifier                    string           `json:"identifier,omitempty"`
 	IntegrationID                 string           `json:"integration_id,omitempty"`
+	IntegrationRunID              string           `json:"integration_run_id,omitempty"`
 	InternalNotes                 string           `json:"internal_notes,omitempty"`
 	InternalOwner                 string           `json:"internal_owner,omitempty"`
 	InternalOwnerGroupID          string           `json:"internal_owner_group_id,omitempty"`
@@ -283,6 +285,7 @@ type CheckResultProjection struct {
 	Details                 string            `json:"details,omitempty"`
 	ExternalURI             string            `json:"external_uri,omitempty"`
 	IntegrationID           string            `json:"integration_id,omitempty"`
+	IntegrationRunID        string            `json:"integration_run_id,omitempty"`
 	LastObservedAt          models.DateTime   `json:"last_observed_at,omitempty"`
 	ManagedBy               string            `json:"managed_by,omitempty"`
 	ParentExternalID        string            `json:"parent_external_id,omitempty"`
@@ -312,6 +315,7 @@ type ContactProjection struct {
 	ExternalID              string           `json:"external_id,omitempty"`
 	FullName                string           `json:"full_name,omitempty"`
 	IntegrationID           string           `json:"integration_id,omitempty"`
+	IntegrationRunID        string           `json:"integration_run_id,omitempty"`
 	ManagedBy               string           `json:"managed_by,omitempty"`
 	ObservedAt              models.DateTime  `json:"observed_at,omitempty"`
 	OwnerID                 string           `json:"owner_id,omitempty"`
@@ -482,9 +486,7 @@ type DirectoryAccountProjection struct {
 	CreatedAt               time.Time                      `json:"created_at,omitempty"`
 	CreatedBy               string                         `json:"created_by,omitempty"`
 	Department              string                         `json:"department,omitempty"`
-	DirectoryInstanceID     string                         `json:"directory_instance_id,omitempty"`
 	DirectoryName           string                         `json:"directory_name,omitempty"`
-	DirectorySyncRunID      string                         `json:"directory_sync_run_id,omitempty"`
 	DisplayID               string                         `json:"display_id,omitempty"`
 	DisplayName             string                         `json:"display_name,omitempty"`
 	EmailAliases            []string                       `json:"email_aliases,omitempty"`
@@ -496,6 +498,7 @@ type DirectoryAccountProjection struct {
 	GivenName               string                         `json:"given_name,omitempty"`
 	IdentityHolderID        string                         `json:"identity_holder_id,omitempty"`
 	IntegrationID           string                         `json:"integration_id,omitempty"`
+	IntegrationRunID        string                         `json:"integration_run_id,omitempty"`
 	JobTitle                string                         `json:"job_title,omitempty"`
 	LastLoginAt             time.Time                      `json:"last_login_at,omitempty"`
 	LastSeenAt              time.Time                      `json:"last_seen_at,omitempty"`
@@ -510,7 +513,6 @@ type DirectoryAccountProjection struct {
 	PlatformID              string                         `json:"platform_id,omitempty"`
 	PrimarySource           bool                           `json:"primary_source,omitempty"`
 	Profile                 map[string]interface{}         `json:"profile,omitempty"`
-	ProfileHash             string                         `json:"profile_hash,omitempty"`
 	RawProfileFileID        string                         `json:"raw_profile_file_id,omitempty"`
 	RemovedAt               time.Time                      `json:"removed_at,omitempty"`
 	ScopeID                 string                         `json:"scope_id,omitempty"`
@@ -539,9 +541,7 @@ type DirectoryGroupProjection struct {
 	CreatedAt               time.Time                          `json:"created_at,omitempty"`
 	CreatedBy               string                             `json:"created_by,omitempty"`
 	Description             string                             `json:"description,omitempty"`
-	DirectoryInstanceID     string                             `json:"directory_instance_id,omitempty"`
 	DirectoryName           string                             `json:"directory_name,omitempty"`
-	DirectorySyncRunID      string                             `json:"directory_sync_run_id,omitempty"`
 	DisplayID               string                             `json:"display_id,omitempty"`
 	DisplayName             string                             `json:"display_name,omitempty"`
 	Email                   string                             `json:"email,omitempty"`
@@ -551,6 +551,7 @@ type DirectoryGroupProjection struct {
 	ExternalSharingAllowed  bool                               `json:"external_sharing_allowed,omitempty"`
 	FirstSeenAt             time.Time                          `json:"first_seen_at,omitempty"`
 	IntegrationID           string                             `json:"integration_id,omitempty"`
+	IntegrationRunID        string                             `json:"integration_run_id,omitempty"`
 	LastSeenAt              time.Time                          `json:"last_seen_at,omitempty"`
 	ManagedBy               string                             `json:"managed_by,omitempty"`
 	MemberCount             int                                `json:"member_count,omitempty"`
@@ -559,7 +560,6 @@ type DirectoryGroupProjection struct {
 	OwnerID                 string                             `json:"owner_id,omitempty"`
 	PlatformID              string                             `json:"platform_id,omitempty"`
 	Profile                 map[string]interface{}             `json:"profile,omitempty"`
-	ProfileHash             string                             `json:"profile_hash,omitempty"`
 	RawProfileFileID        string                             `json:"raw_profile_file_id,omitempty"`
 	RemovedAt               time.Time                          `json:"removed_at,omitempty"`
 	ScopeID                 string                             `json:"scope_id,omitempty"`
@@ -587,15 +587,13 @@ type DirectoryMembershipProjection struct {
 	CreatedBy               string                        `json:"created_by,omitempty"`
 	DirectoryAccountID      string                        `json:"directory_account_id,omitempty"`
 	DirectoryGroupID        string                        `json:"directory_group_id,omitempty"`
-	DirectoryInstanceID     string                        `json:"directory_instance_id,omitempty"`
 	DirectoryName           string                        `json:"directory_name,omitempty"`
-	DirectorySyncRunID      string                        `json:"directory_sync_run_id,omitempty"`
 	DisplayID               string                        `json:"display_id,omitempty"`
 	EnvironmentID           string                        `json:"environment_id,omitempty"`
 	EnvironmentName         string                        `json:"environment_name,omitempty"`
 	FirstSeenAt             time.Time                     `json:"first_seen_at,omitempty"`
 	IntegrationID           string                        `json:"integration_id,omitempty"`
-	LastConfirmedRunID      string                        `json:"last_confirmed_run_id,omitempty"`
+	IntegrationRunID        string                        `json:"integration_run_id,omitempty"`
 	LastSeenAt              time.Time                     `json:"last_seen_at,omitempty"`
 	ManagedBy               string                        `json:"managed_by,omitempty"`
 	Metadata                map[string]interface{}        `json:"metadata,omitempty"`
@@ -613,38 +611,6 @@ type DirectoryMembershipProjection struct {
 	UpdatedAt               time.Time                     `json:"updated_at,omitempty"`
 	UpdatedBy               string                        `json:"updated_by,omitempty"`
 	UpdatedByImpersonator   string                        `json:"updated_by_impersonator,omitempty"`
-}
-
-// DirectorySyncRunProjection is the flat, CEL- and jsonschema-facing view of a DirectorySyncRun: its
-// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
-// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
-// the full generated.DirectorySyncRun whose edge graph cannot be reflected
-type DirectorySyncRunProjection struct {
-	// ID is the entity identifier, exposed to expressions as "id"
-	ID                    string                       `json:"id,omitempty"`
-	CompletedAt           time.Time                    `json:"completed_at,omitempty"`
-	CreatedAt             time.Time                    `json:"created_at,omitempty"`
-	CreatedBy             string                       `json:"created_by,omitempty"`
-	DeltaCount            int                          `json:"delta_count,omitempty"`
-	DirectoryInstanceID   string                       `json:"directory_instance_id,omitempty"`
-	DisplayID             string                       `json:"display_id,omitempty"`
-	EnvironmentID         string                       `json:"environment_id,omitempty"`
-	EnvironmentName       string                       `json:"environment_name,omitempty"`
-	Error                 string                       `json:"error,omitempty"`
-	FullCount             int                          `json:"full_count,omitempty"`
-	IntegrationID         string                       `json:"integration_id,omitempty"`
-	OwnerID               string                       `json:"owner_id,omitempty"`
-	PlatformID            string                       `json:"platform_id,omitempty"`
-	RawManifestFileID     string                       `json:"raw_manifest_file_id,omitempty"`
-	ScopeID               string                       `json:"scope_id,omitempty"`
-	ScopeName             string                       `json:"scope_name,omitempty"`
-	SourceCursor          string                       `json:"source_cursor,omitempty"`
-	StartedAt             time.Time                    `json:"started_at,omitempty"`
-	Stats                 map[string]interface{}       `json:"stats,omitempty"`
-	Status                enums.DirectorySyncRunStatus `json:"status,omitempty"`
-	UpdatedAt             time.Time                    `json:"updated_at,omitempty"`
-	UpdatedBy             string                       `json:"updated_by,omitempty"`
-	UpdatedByImpersonator string                       `json:"updated_by_impersonator,omitempty"`
 }
 
 // DiscussionProjection is the flat, CEL- and jsonschema-facing view of a Discussion: its
@@ -717,6 +683,7 @@ type EntityProjection struct {
 	EnvironmentName                       string                 `json:"environment_name,omitempty"`
 	ExternalID                            string                 `json:"external_id,omitempty"`
 	HasSoc2                               bool                   `json:"has_soc2,omitempty"`
+	IntegrationRunID                      string                 `json:"integration_run_id,omitempty"`
 	InternalNotes                         string                 `json:"internal_notes,omitempty"`
 	InternalOwner                         string                 `json:"internal_owner,omitempty"`
 	InternalOwnerGroupID                  string                 `json:"internal_owner_group_id,omitempty"`
@@ -910,6 +877,7 @@ type FindingProjection struct {
 	FindingStatusID            string                 `json:"finding_status_id,omitempty"`
 	FindingStatusName          string                 `json:"finding_status_name,omitempty"`
 	Impact                     float64                `json:"impact,omitempty"`
+	IntegrationRunID           string                 `json:"integration_run_id,omitempty"`
 	InternalNotes              string                 `json:"internal_notes,omitempty"`
 	ManagedBy                  string                 `json:"managed_by,omitempty"`
 	Metadata                   map[string]interface{} `json:"metadata,omitempty"`
@@ -1096,6 +1064,33 @@ type IntegrationProjection struct {
 	UpdatedByImpersonator    string                   `json:"updated_by_impersonator,omitempty"`
 }
 
+// IntegrationRunProjection is the flat, CEL- and jsonschema-facing view of a IntegrationRun: its
+// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
+// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
+// the full generated.IntegrationRun whose edge graph cannot be reflected
+type IntegrationRunProjection struct {
+	// ID is the entity identifier, exposed to expressions as "id"
+	ID                    string                         `json:"id,omitempty"`
+	CreatedAt             time.Time                      `json:"created_at,omitempty"`
+	CreatedBy             string                         `json:"created_by,omitempty"`
+	DurationMs            int                            `json:"duration_ms,omitempty"`
+	Error                 string                         `json:"error,omitempty"`
+	FinishedAt            time.Time                      `json:"finished_at,omitempty"`
+	IntegrationID         string                         `json:"integration_id,omitempty"`
+	Metrics               map[string]interface{}         `json:"metrics,omitempty"`
+	OperationConfig       map[string]interface{}         `json:"operation_config,omitempty"`
+	OperationKind         enums.IntegrationOperationKind `json:"operation_kind,omitempty"`
+	OperationName         string                         `json:"operation_name,omitempty"`
+	OwnerID               string                         `json:"owner_id,omitempty"`
+	RunType               enums.IntegrationRunType       `json:"run_type,omitempty"`
+	StartedAt             time.Time                      `json:"started_at,omitempty"`
+	Status                enums.IntegrationRunStatus     `json:"status,omitempty"`
+	Summary               string                         `json:"summary,omitempty"`
+	UpdatedAt             time.Time                      `json:"updated_at,omitempty"`
+	UpdatedBy             string                         `json:"updated_by,omitempty"`
+	UpdatedByImpersonator string                         `json:"updated_by_impersonator,omitempty"`
+}
+
 // InternalPolicyProjection is the flat, CEL- and jsonschema-facing view of a InternalPolicy: its
 // readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
 // names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
@@ -1122,6 +1117,7 @@ type InternalPolicyProjection struct {
 	ExternalUUID                    string                       `json:"external_uuid,omitempty"`
 	FileID                          string                       `json:"file_id,omitempty"`
 	ImprovementSuggestions          []string                     `json:"improvement_suggestions,omitempty"`
+	IntegrationRunID                string                       `json:"integration_run_id,omitempty"`
 	InternalNotes                   string                       `json:"internal_notes,omitempty"`
 	InternalPolicyKindID            string                       `json:"internal_policy_kind_id,omitempty"`
 	InternalPolicyKindName          string                       `json:"internal_policy_kind_name,omitempty"`
@@ -1316,6 +1312,7 @@ type ProcedureProjection struct {
 	ExternalFileID                  string                       `json:"external_file_id,omitempty"`
 	FileID                          string                       `json:"file_id,omitempty"`
 	ImprovementSuggestions          []string                     `json:"improvement_suggestions,omitempty"`
+	IntegrationRunID                string                       `json:"integration_run_id,omitempty"`
 	InternalNotes                   string                       `json:"internal_notes,omitempty"`
 	ManagedBy                       string                       `json:"managed_by,omitempty"`
 	ManagementMode                  enums.DocumentManagementMode `json:"management_mode,omitempty"`
@@ -1490,6 +1487,7 @@ type RiskProjection struct {
 	ExternalUUID            string               `json:"external_uuid,omitempty"`
 	Impact                  enums.RiskImpact     `json:"impact,omitempty"`
 	IntegrationID           string               `json:"integration_id,omitempty"`
+	IntegrationRunID        string               `json:"integration_run_id,omitempty"`
 	LastReviewedAt          models.DateTime      `json:"last_reviewed_at,omitempty"`
 	Likelihood              enums.RiskLikelihood `json:"likelihood,omitempty"`
 	ManagedBy               string               `json:"managed_by,omitempty"`
@@ -1836,6 +1834,7 @@ type VulnerabilityProjection struct {
 	FixedAt                    models.DateTime        `json:"fixed_at,omitempty"`
 	Impact                     float64                `json:"impact,omitempty"`
 	Impacts                    []string               `json:"impacts,omitempty"`
+	IntegrationRunID           string                 `json:"integration_run_id,omitempty"`
 	InternalNotes              string                 `json:"internal_notes,omitempty"`
 	ManagedBy                  string                 `json:"managed_by,omitempty"`
 	ManifestPath               string                 `json:"manifest_path,omitempty"`

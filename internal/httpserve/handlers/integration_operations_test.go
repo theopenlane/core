@@ -50,7 +50,6 @@ var (
 func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			VirtualUser: testVirtualUser(),
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
 				DisplayName: "Operation Test",
