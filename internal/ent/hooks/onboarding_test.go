@@ -185,6 +185,8 @@ func (suite *HookTestSuite) TestOnboardingProgramFrameworkSelections() {
 			}
 			require.NoError(t, err)
 
+			suite.waitForEvents()
+
 			programs, err := suite.client.Program.Query().Where(program.OwnerIDEQ(onboarding.OrganizationID)).WithControls().All(ctx)
 			require.NoError(t, err)
 			require.Len(t, programs, tc.programCount)
@@ -192,8 +194,6 @@ func (suite *HookTestSuite) TestOnboardingProgramFrameworkSelections() {
 			if tc.programCount > 0 {
 				assert.Len(t, programs[0].Edges.Controls, tc.controlCount)
 			}
-
-			suite.waitForEvents()
 
 			taskCount, err := suite.client.Task.Query().Where(
 				task.OwnerIDEQ(onboarding.OrganizationID),

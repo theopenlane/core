@@ -160,6 +160,8 @@ func (suite *HookTestSuite) TestOnboardingCreatesProgramWithSelectedFrameworks()
 	}).Save(ctx)
 	require.NoError(t, err)
 
+	suite.waitForEvents()
+
 	created, err := suite.client.Program.Query().Where(program.OwnerIDEQ(onboarding.OrganizationID)).
 		WithControls(func(q *generated.ControlQuery) { q.WithSubcontrols() }).
 		WithMembers().Only(ctx)
@@ -185,8 +187,6 @@ func (suite *HookTestSuite) TestOnboardingCreatesProgramWithSelectedFrameworks()
 		"soc2-Security", "iso27001-Security", "iso27001-Availability",
 		"iso27001-Confidentiality", "iso27001-Processing Integrity", "iso27001-Privacy",
 	}, refs)
-
-	suite.waitForEvents()
 
 	tasks, err := suite.client.Task.Query().Where(task.OwnerIDEQ(onboarding.OrganizationID)).All(ctx)
 	require.NoError(t, err)
