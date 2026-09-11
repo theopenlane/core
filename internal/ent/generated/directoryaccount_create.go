@@ -900,6 +900,13 @@ func (_c *DirectoryAccountCreate) defaults() error {
 		v := directoryaccount.DefaultMfaState
 		_c.mutation.SetMfaState(v)
 	}
+	if _, ok := _c.mutation.FirstSeenAt(); !ok {
+		if directoryaccount.DefaultFirstSeenAt == nil {
+			return fmt.Errorf("generated: uninitialized directoryaccount.DefaultFirstSeenAt (forgotten import generated/runtime?)")
+		}
+		v := directoryaccount.DefaultFirstSeenAt()
+		_c.mutation.SetFirstSeenAt(v)
+	}
 	if _, ok := _c.mutation.ObservedAt(); !ok {
 		if directoryaccount.DefaultObservedAt == nil {
 			return fmt.Errorf("generated: uninitialized directoryaccount.DefaultObservedAt (forgotten import generated/runtime?)")

@@ -245,6 +245,8 @@ var (
 	DirectoryAccountIDValidator func(string) error
 	// DirectoryGroupIDValidator is a validator for the "directory_group_id" field. It is called by the builders before save.
 	DirectoryGroupIDValidator func(string) error
+	// DefaultFirstSeenAt holds the default value on creation for the "first_seen_at" field.
+	DefaultFirstSeenAt func() time.Time
 	// DefaultObservedAt holds the default value on creation for the "observed_at" field.
 	DefaultObservedAt func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.

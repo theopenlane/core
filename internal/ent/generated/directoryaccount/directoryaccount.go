@@ -338,6 +338,8 @@ var (
 	AvatarRemoteURLValidator func(string) error
 	// DefaultAvatarUpdatedAt holds the default value on creation for the "avatar_updated_at" field.
 	DefaultAvatarUpdatedAt func() time.Time
+	// DefaultFirstSeenAt holds the default value on creation for the "first_seen_at" field.
+	DefaultFirstSeenAt func() time.Time
 	// DefaultObservedAt holds the default value on creation for the "observed_at" field.
 	DefaultObservedAt func() time.Time
 	// DefaultPrimarySource holds the default value on creation for the "primary_source" field.

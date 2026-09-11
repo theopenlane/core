@@ -545,6 +545,13 @@ func (_c *DirectoryMembershipCreate) defaults() error {
 		v := directorymembership.DefaultRole
 		_c.mutation.SetRole(v)
 	}
+	if _, ok := _c.mutation.FirstSeenAt(); !ok {
+		if directorymembership.DefaultFirstSeenAt == nil {
+			return fmt.Errorf("generated: uninitialized directorymembership.DefaultFirstSeenAt (forgotten import generated/runtime?)")
+		}
+		v := directorymembership.DefaultFirstSeenAt()
+		_c.mutation.SetFirstSeenAt(v)
+	}
 	if _, ok := _c.mutation.ObservedAt(); !ok {
 		if directorymembership.DefaultObservedAt == nil {
 			return fmt.Errorf("generated: uninitialized directorymembership.DefaultObservedAt (forgotten import generated/runtime?)")

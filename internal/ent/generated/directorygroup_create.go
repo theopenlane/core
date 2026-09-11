@@ -665,6 +665,13 @@ func (_c *DirectoryGroupCreate) defaults() error {
 		v := directorygroup.DefaultExternalSharingAllowed
 		_c.mutation.SetExternalSharingAllowed(v)
 	}
+	if _, ok := _c.mutation.FirstSeenAt(); !ok {
+		if directorygroup.DefaultFirstSeenAt == nil {
+			return fmt.Errorf("generated: uninitialized directorygroup.DefaultFirstSeenAt (forgotten import generated/runtime?)")
+		}
+		v := directorygroup.DefaultFirstSeenAt()
+		_c.mutation.SetFirstSeenAt(v)
+	}
 	if _, ok := _c.mutation.ObservedAt(); !ok {
 		if directorygroup.DefaultObservedAt == nil {
 			return fmt.Errorf("generated: uninitialized directorygroup.DefaultObservedAt (forgotten import generated/runtime?)")

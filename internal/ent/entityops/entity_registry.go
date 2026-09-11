@@ -851,9 +851,8 @@ func deleteDocKey(doc map[string]json.RawMessage, key string) bool {
 // and selects the single row, if any, an ingest write should apply to. A row already managed by the
 // payload's own installation takes priority over every other category, even when other rows share
 // the lookup key. Otherwise, a payload with no source definition (a non-integration caller) treats
-// every row as owned. Rows sharing the payload's definition are owned outright when the instance
-// also matches, or partially owned when the row carries no instance yet; rows with no definition at
-// all are unclaimed; everything else is foreign. Ties within the managed-by, owned/partial, or
+// every row as owned. Rows sharing the payload's definition and instance are owned; rows with no
+// definition at all are unclaimed; everything else is foreign. Ties within the managed-by, owned/partial, or
 // unclaimed categories are rejected rather than guessed at, and no created_at or other recency
 // tie-break is ever applied
 func selectIngestCandidate(s *Schema, rows []json.RawMessage, payload json.RawMessage) (row json.RawMessage, claimable bool, foreign bool, err error) {
@@ -883,7 +882,7 @@ func selectIngestCandidate(s *Schema, rows []json.RawMessage, payload json.RawMe
 		switch {
 		case pd == "":
 			ownedPartial = append(ownedPartial, candidate)
-		case rd == pd && (ri == pi || ri == ""):
+		case rd == pd && ri == pi:
 			ownedPartial = append(ownedPartial, candidate)
 		case rd == "":
 			unclaimed = append(unclaimed, candidate)
@@ -910,9 +909,7 @@ func selectIngestCandidate(s *Schema, rows []json.RawMessage, payload json.RawMe
 
 	if s.InstanceScoped {
 		foreignRows = lo.Filter(foreignRows, func(candidate json.RawMessage, _ int) bool {
-			ri := lookupValue(candidate, FieldSourceInstanceID)
-
-			return ri == pi || ri == ""
+			return lookupValue(candidate, FieldSourceInstanceID) == pi
 		})
 	}
 
@@ -22259,16 +22256,11 @@ func init() {
 	SchemaDirectoryAccount.SnapshotScope = func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_account", Operation: refOpQuery}
 
-		instance := directoryaccount.SourceInstanceID(instanceID)
-		if instanceID == "" {
-			instance = directoryaccount.SourceInstanceIDIsNil()
-		}
-
 		entities, err := client.DirectoryAccount.Query().
 			Where(
 				directoryaccount.OwnerID(ownerID),
 				directoryaccount.SourceDefinitionID(definitionID),
-				instance,
+				directoryaccount.SourceInstanceID(instanceID),
 				directoryaccount.RemovedAtIsNil(),
 			).
 			All(ctx)
@@ -22292,16 +22284,11 @@ func init() {
 	SchemaDirectoryGroup.SnapshotScope = func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_group", Operation: refOpQuery}
 
-		instance := directorygroup.SourceInstanceID(instanceID)
-		if instanceID == "" {
-			instance = directorygroup.SourceInstanceIDIsNil()
-		}
-
 		entities, err := client.DirectoryGroup.Query().
 			Where(
 				directorygroup.OwnerID(ownerID),
 				directorygroup.SourceDefinitionID(definitionID),
-				instance,
+				directorygroup.SourceInstanceID(instanceID),
 				directorygroup.RemovedAtIsNil(),
 			).
 			All(ctx)
@@ -22325,16 +22312,11 @@ func init() {
 	SchemaDirectoryMembership.SnapshotScope = func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_membership", Operation: refOpQuery}
 
-		instance := directorymembership.SourceInstanceID(instanceID)
-		if instanceID == "" {
-			instance = directorymembership.SourceInstanceIDIsNil()
-		}
-
 		entities, err := client.DirectoryMembership.Query().
 			Where(
 				directorymembership.OwnerID(ownerID),
 				directorymembership.SourceDefinitionID(definitionID),
-				instance,
+				directorymembership.SourceInstanceID(instanceID),
 				directorymembership.RemovedAtIsNil(),
 			).
 			All(ctx)
@@ -22813,9 +22795,7 @@ func narrowUniqueCandidates(schema *Schema, entities []json.RawMessage, source j
 		pi := lookupValue(source, FieldSourceInstanceID)
 
 		entities = lo.Filter(entities, func(row json.RawMessage, _ int) bool {
-			ri := lookupValue(row, FieldSourceInstanceID)
-
-			return ri == pi || ri == ""
+			return lookupValue(row, FieldSourceInstanceID) == pi
 		})
 	}
 

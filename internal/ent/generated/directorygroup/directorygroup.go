@@ -265,6 +265,8 @@ var (
 	EmailValidator func(string) error
 	// DefaultExternalSharingAllowed holds the default value on creation for the "external_sharing_allowed" field.
 	DefaultExternalSharingAllowed bool
+	// DefaultFirstSeenAt holds the default value on creation for the "first_seen_at" field.
+	DefaultFirstSeenAt func() time.Time
 	// DefaultObservedAt holds the default value on creation for the "observed_at" field.
 	DefaultObservedAt func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.
