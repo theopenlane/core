@@ -88,7 +88,6 @@ func (b *brandDesignCDP) callMethod(ctx context.Context, method string, params a
 }
 
 func (b *brandDesignCDP) readResponse(ctx context.Context) (*brandDesignCDPMessaging, error) {
-
 	var message brandDesignCDPMessaging
 	if err := wsjson.Read(ctx, b.conn, &message); err != nil {
 		return nil, err
