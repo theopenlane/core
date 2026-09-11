@@ -169,6 +169,7 @@ integrations:
         accountid: ""
         apitoken: ""
         domainscan:
+            bulkscan: true
             deniedvendornames:
                 - rfc-editor
                 - ajax
