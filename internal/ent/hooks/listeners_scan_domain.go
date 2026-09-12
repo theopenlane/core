@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
@@ -56,27 +57,40 @@ func handleScanDomainCreated(inv entityops.Invocation, _ entityops.MutationPaylo
 	}
 
 	forceRefresh, _ := scanRecord.Metadata["forceRefresh"].(bool)
+	isBrandDesignOnly, _ := scanRecord.Metadata[cloudflare.DomainScanBrandDesignOnlyMetadataKey].(bool)
+	applyBrandDesign, _ := scanRecord.Metadata[cloudflare.DomainScanApplyBrandDesignMetadataKey].(bool)
 
 	return dispatchDomainScan(inv.Context, rt, cloudflare.DefinitionID.OperationTopics().Key(cloudflare.DomainScanRequestOp.Name(), string(inv.Envelope.ID)), cloudflare.DomainScanRequest{
-		OrganizationID: scanRecord.OwnerID,
-		Domain:         scanRecord.Target,
-		ForceRefresh:   forceRefresh,
+		ScanID:           scanRecord.ID,
+		OrganizationID:   scanRecord.OwnerID,
+		Domain:           scanRecord.Target,
+		ForceRefresh:     forceRefresh,
+		BrandDesignOnly:  isBrandDesignOnly,
+		ApplyBrandDesign: applyBrandDesign,
 	})
 }
 
 // handleOrganizationSettingDomainsUpdated requests a scan for every current domain whenever
 // an organization's settings domains field changes
-func handleOrganizationSettingDomainsUpdated(inv entityops.Invocation, _ entityops.MutationPayload, rt *intruntime.Runtime) error {
+func handleOrganizationSettingDomainsUpdated(inv entityops.Invocation, payload entityops.MutationPayload, rt *intruntime.Runtime) error {
 	setting, ok, err := entityops.LoadEntity(inv.Context, inv.EntityID, inv.Client.OrganizationSetting.Get)
 	if err != nil || !ok {
 		return err
 	}
 
-	for _, domain := range setting.Domains {
+	previousDomains, _ := payload.OldValue(organizationsetting.FieldDomains)
+	domains, ok := previousDomains.([]string)
+
+	// only apply the branding to the trustcenter by default on the first run
+	// if org settings has existing domains then no need to
+	applyBrandDesign := domains == nil || (ok && len(domains) == 0)
+
+	for idx, domain := range setting.Domains {
 		if err := dispatchDomainScan(inv.Context, rt, cloudflare.DefinitionID.OperationTopics().Key(cloudflare.DomainScanRequestOp.Name(), string(inv.Envelope.ID), domain), cloudflare.DomainScanRequest{
-			OrganizationID: setting.OrganizationID,
-			Domain:         domain,
-			GroupID:        string(inv.Envelope.ID),
+			OrganizationID:   setting.OrganizationID,
+			Domain:           domain,
+			GroupID:          string(inv.Envelope.ID),
+			ApplyBrandDesign: applyBrandDesign && idx == 0,
 		}); err != nil {
 			return err
 		}
