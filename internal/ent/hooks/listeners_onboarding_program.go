@@ -38,6 +38,8 @@ func OnboardingProgramListeners() []gala.Registration {
 }
 
 func handleOnboardingProgram(inv entityops.Invocation, _ entityops.MutationPayload) error {
+	// cannot use MutationPayload because the organization_id needed is actually stored by the hook
+	// so it will not be available here
 	record, ok, err := entityops.LoadEntity(inv.Context, inv.EntityID, inv.Client.Onboarding.Get)
 	if err != nil || !ok {
 		return err
@@ -51,13 +53,8 @@ func handleOnboardingProgram(inv entityops.Invocation, _ entityops.MutationPaylo
 	caller.OrganizationID = record.OrganizationID
 	ctx := auth.WithCaller(inv.Context, &caller)
 
-	org, ok, err := entityops.LoadEntity(ctx, record.OrganizationID, inv.Client.Organization.Get)
-	if err != nil || !ok {
-		return err
-	}
-
 	_, err = workflows.WithTx(ctx, inv.Client, nil, func(tx *generated.Tx) (struct{}, error) {
-		return struct{}{}, createProgram(ctx, tx.Client(), org, record.Compliance)
+		return struct{}{}, createProgram(ctx, tx.Client(), record.OrganizationID, record.Compliance)
 	})
 
 	return err
@@ -71,18 +68,22 @@ func generateProgramName(standards []*generated.Standard, year int) string {
 	return fmt.Sprintf("Compliance Program %d", year)
 }
 
-func createProgram(ctx context.Context, client *generated.Client, org *generated.Organization, complianceData map[string]interface{}) error {
+func createProgram(ctx context.Context, client *generated.Client, orgID string, complianceData map[string]interface{}) error {
 	standards, labels, err := resolveOnboardingStandards(ctx, client, complianceData)
 	if err != nil || len(labels) == 0 {
 		return err
 	}
 
-	year := time.Now().Year()
+	currentYear := time.Now().Year()
+
 	frameworks := strings.Join(labels, ", ")
+
+	description := fmt.Sprintf("Track %s compliance activities, evidence, and audit readiness for %d.", frameworks, currentYear)
+
 	builder := client.Program.Create().
-		SetOwnerID(org.ID).
-		SetName(generateProgramName(standards, year)).
-		SetDescription(fmt.Sprintf("Track %s compliance activities, evidence, and audit readiness for %d.", frameworks, year)).
+		SetOwnerID(orgID).
+		SetName(generateProgramName(standards, currentYear)).
+		SetDescription(description).
 		SetFrameworkName(frameworks)
 
 	if auditor, ok := complianceData["auditor_name"].(string); ok && auditor != "" {
@@ -108,6 +109,7 @@ func createProgram(ctx context.Context, client *generated.Client, org *generated
 		if err != nil {
 			return err
 		}
+
 		sources, err := client.Control.Query().Where(where...).WithStandard().WithSubcontrols().All(ctx)
 		if err != nil {
 			return err
@@ -115,14 +117,14 @@ func createProgram(ctx context.Context, client *generated.Client, org *generated
 
 		// can't use worker pool here since we are in a tx
 		for _, source := range sources {
-			input, _ := controls.CreateCloneControlInput(source, &program.ID, org.ID)
+			input, _ := controls.CreateCloneControlInput(source, &program.ID, orgID)
 			cloned, err := client.Control.Create().SetInput(input).Save(ctx)
 			if err != nil {
 				return err
 			}
 
 			for _, subcontrol := range source.Edges.Subcontrols {
-				input := controls.CreateCloneSubcontrolInput(subcontrol, org.ID, controls.SubcontrolToCreate{RefControl: source})
+				input := controls.CreateCloneSubcontrolInput(subcontrol, orgID, controls.SubcontrolToCreate{RefControl: source})
 				input.ControlID = cloned.ID
 				if err := client.Subcontrol.Create().SetInput(*input).Exec(ctx); err != nil {
 					return err
@@ -152,11 +154,6 @@ func resolveOnboardingStandards(ctx context.Context, client *generated.Client, c
 	frameworks, err := getOnboardingFrameworks(complianceData)
 	if err != nil || len(frameworks) == 0 {
 		return nil, nil, err
-	}
-
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
-		return nil, nil, auth.ErrNoAuthUser
 	}
 
 	standards := make([]*generated.Standard, 0, len(frameworks))

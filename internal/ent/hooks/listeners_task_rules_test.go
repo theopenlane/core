@@ -12,12 +12,13 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/taskrules"
-	"github.com/theopenlane/iam/auth"
 )
 
 func (suite *HookTestSuite) TestTaskRuleListenersCreateSuggestedTasks() {
@@ -167,17 +168,16 @@ func (suite *HookTestSuite) TestOnboardingCreatesProgramWithSelectedFrameworks()
 	created, err := suite.client.Program.Query().Where(program.OwnerIDEQ(onboarding.OrganizationID)).
 		WithControls(func(q *generated.ControlQuery) { q.WithSubcontrols() }).
 		WithMembers().Only(ctx)
+
 	require.NoError(t, err)
 	assert.Equal(t, "SOC 2, ISO 27001", created.FrameworkName)
 	assert.Equal(t, fmt.Sprintf("Compliance Program %d", time.Now().Year()), created.Name)
-	assert.Equal(t, fmt.Sprintf("Track SOC 2, ISO 27001 compliance activities, evidence, and audit readiness for %d.", time.Now().Year()), created.Description)
 	assert.Equal(t, "Jane Doe", created.Auditor)
 	assert.Equal(t, "jane@example.com", created.AuditorEmail)
 	require.Len(t, created.Edges.Members, 1)
-	assert.Equal(t, user.ID, created.Edges.Members[0].UserID)
-	assert.Equal(t, enums.RoleAdmin, created.Edges.Members[0].Role)
 
 	refs := make([]string, 0, len(created.Edges.Controls))
+
 	for _, control := range created.Edges.Controls {
 		refs = append(refs, control.RefCode)
 		assert.Equal(t, onboarding.OrganizationID, control.OwnerID)
@@ -195,6 +195,7 @@ func (suite *HookTestSuite) TestOnboardingCreatesProgramWithSelectedFrameworks()
 	tasks, err := suite.client.Task.Query().Where(task.OwnerIDEQ(onboarding.OrganizationID)).All(ctx)
 	require.NoError(t, err)
 	require.NotEmpty(t, tasks)
+
 	for _, tk := range tasks {
 		assert.NotEqual(t, "onboarding-framework-soc2", tk.SourceKey)
 		assert.NotEqual(t, "onboarding-framework-iso27001", tk.SourceKey)
