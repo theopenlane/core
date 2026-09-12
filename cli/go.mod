@@ -28,6 +28,7 @@ require (
 )
 
 require (
+	github.com/alicebob/miniredis/v2 v2.39.0 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/clipperhouse/displaywidth v0.10.0 // indirect

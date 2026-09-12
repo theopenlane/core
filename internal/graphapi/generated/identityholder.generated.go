@@ -583,10 +583,6 @@ func (ec *executionContext) _IdentityHolderUpdatePayload(ctx context.Context, se
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNIdentityHolderBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.IdentityHolderBulkCreatePayload) graphql.Marshaler {
-	return ec._IdentityHolderBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNIdentityHolderBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.IdentityHolderBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNIdentityHolderBulkCreatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._IdentityHolderBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNIdentityHolderBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.IdentityHolderBulkDeletePayload) graphql.Marshaler {
-	return ec._IdentityHolderBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNIdentityHolderBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.IdentityHolderBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNIdentityHolderBulkDeletePayload2ᚖgithubᚗ
 	return ec._IdentityHolderBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNIdentityHolderBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.IdentityHolderBulkUpdatePayload) graphql.Marshaler {
-	return ec._IdentityHolderBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNIdentityHolderBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.IdentityHolderBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNIdentityHolderBulkUpdatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._IdentityHolderBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNIdentityHolderCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.IdentityHolderCreatePayload) graphql.Marshaler {
-	return ec._IdentityHolderCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNIdentityHolderCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.IdentityHolderCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNIdentityHolderCreatePayload2ᚖgithubᚗcom�
 	return ec._IdentityHolderCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNIdentityHolderDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.IdentityHolderDeletePayload) graphql.Marshaler {
-	return ec._IdentityHolderDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNIdentityHolderDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.IdentityHolderDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNIdentityHolderDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._IdentityHolderDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNIdentityHolderUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.IdentityHolderUpdatePayload) graphql.Marshaler {
-	return ec._IdentityHolderUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNIdentityHolderUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIdentityHolderUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.IdentityHolderUpdatePayload) graphql.Marshaler {
