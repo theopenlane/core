@@ -56,6 +56,11 @@ func HookOnboarding() ent.Hook {
 				}
 			}
 
+			compliance, _ := m.Compliance()
+			if _, _, err := resolveOnboardingStandards(ctx, m.Client(), compliance); err != nil {
+				return nil, err
+			}
+
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err
@@ -68,7 +73,6 @@ func HookOnboarding() ent.Hook {
 
 			companyDetails, _ := m.CompanyDetails()
 			userDetails, _ := m.UserDetails()
-			compliance, _ := m.Compliance()
 			demoRequested, _ := m.DemoRequested()
 
 			if err := sendSystemSlack(ctx, slackdef.DemoRequestOp.Name(), slackdef.DemoRequestMessage{

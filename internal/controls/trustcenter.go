@@ -4,12 +4,13 @@ import (
 	"context"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/pkg/logx"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/rout"
 )
 
 var (
@@ -17,13 +18,16 @@ var (
 	// used to identify controls that should be flagged as trust center controls during clone
 	trustCenterStandardShortName = "OTS"
 
-	// trustCenterFrameworkName is the name of the framework the trust center standard belongs to, used in conjunction with trustCenterStandardShortName to identify controls that should be flagged as trust center controls during clone
-	trustCenterFrameworkName = "openlane-trust-center"
+	// TrustCenterFrameworkName is the name of the framework the trust center standard belongs to, used in conjunction with trustCenterStandardShortName to identify controls that should be flagged as trust center controls during clone
+	TrustCenterFrameworkName = "openlane-trust-center"
+
+	// StandardTrustCenterFrameworkName is the name of the fremework the default standards go to
+	StandardTrustCenterFrameworkName = "openlane-standard"
 
 	// trustCenterStandardFilter is the filter used to identify controls that should be flagged as trust center controls during clone
 	trustCenterStandardFilter = CloneFilterOptions{
 		StandardShortName:     &trustCenterStandardShortName,
-		StandardFrameworkName: &trustCenterFrameworkName,
+		StandardFrameworkName: &TrustCenterFrameworkName,
 	}
 )
 

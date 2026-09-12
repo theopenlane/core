@@ -162,6 +162,9 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 	_, err = gala.Register(galaRuntime, hooks.TaskRuleListeners()...)
 	require.NoError(t, err)
 
+	_, err = gala.Register(galaRuntime, hooks.OnboardingProgramListeners()...)
+	require.NoError(t, err)
+
 	_, err = gala.Register(galaRuntime, hooks.CampaignRecurringListeners()...)
 	require.NoError(t, err)
 

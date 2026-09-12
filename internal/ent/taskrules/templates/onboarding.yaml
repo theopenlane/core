@@ -1,14 +1,4 @@
 rules:
-  framework:
-    title: Set up your {{.label}} program
-    taskKindName: Operational
-    details: |
-      Kick your program off by creating a program with the framework controls
-    priority: 10
-    metadata:
-      docsLink: https://docs.theopenlane.io/docs/platform/compliance-management/programs/overview
-      link: '{{if eq .value "soc2"}}/programs/create/soc2?onboarding=true{{else}}/programs/create/framework-based?onboarding=true&framework={{.label}}{{end}}{{if .auditor_name}}&auditorName={{.auditor_name}}{{end}}{{if .auditor_email}}&auditorEmail={{.auditor_email}}{{end}}'
-
   framework-generic:
     title: Set up your compliance program
     taskKindName: Operational
