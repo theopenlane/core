@@ -41,6 +41,8 @@ var (
 	ErrIngestUnsupportedSchema = errors.New("integrations/operations: ingest schema unsupported")
 	// ErrIngestPersistFailed indicates the mapped record could not be persisted
 	ErrIngestPersistFailed = errors.New("integrations/operations: ingest persistence failed")
+	// ErrIngestRecordExcluded indicates the record was skipped because an earlier run recorded it as failing
+	ErrIngestRecordExcluded = errors.New("integrations/operations: ingest record excluded")
 	// ErrIngestIntegrationUnresolved indicates the integration record could not be resolved for an ingest operation
 	ErrIngestIntegrationUnresolved = errors.New("integrations/operations: ingest integration unresolved")
 	// ErrIngestInstanceIDRequired indicates the installation carries no source instance id, which every ingested record needs for provenance

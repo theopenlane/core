@@ -104,7 +104,8 @@ func TestDirectorySyncInstanceScopedCorrelation(t *testing.T) {
 
 	resynced := ingestDirectorySnapshot(ctx, t, reinstalled, accounts, groups, memberships)
 	assert.Check(t, is.Equal(0, resynced.Failed))
-	assert.Check(t, is.Equal(0, resynced.Changed), "a reinstalled integration confirming correlated rows must report no changes")
+	assert.Check(t, is.Equal(0, resynced.Changed), "a second live installation must not change rows the first one manages")
+	assert.Check(t, is.Equal(3, resynced.Skipped), "a second live installation must skip every row the first one manages")
 
 	confirmed, err := suite.Client.DB.DirectoryAccount.Query().Where(directoryaccount.ExternalID("dirinst-a-1")).Only(ctx)
 	th.RequireNoError(t, err)

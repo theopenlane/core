@@ -152,12 +152,14 @@ func (DirectorySync) Run(ctx context.Context, credentials types.CredentialBindin
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    entityops.SchemaDirectoryAccount.Name,
-			Envelopes: accountEnvelopes,
+			Schema:           entityops.SchemaDirectoryAccount.Name,
+			Envelopes:        accountEnvelopes,
+			SnapshotComplete: true,
 		},
 		{
-			Schema:    entityops.SchemaDirectoryGroup.Name,
-			Envelopes: groupEnvelopes,
+			Schema:           entityops.SchemaDirectoryGroup.Name,
+			Envelopes:        groupEnvelopes,
+			SnapshotComplete: true,
 		},
 		{
 			Schema:           entityops.SchemaDirectoryMembership.Name,

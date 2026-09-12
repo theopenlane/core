@@ -104,6 +104,8 @@ type MappingInstallation struct {
 	DefinitionName string `json:"definition_name"`
 	// InstanceID is the external system instance the installation connects to
 	InstanceID string `json:"instance_id"`
+	// PrimaryDirectory reports whether the installation is its organization's authoritative directory source
+	PrimaryDirectory bool `json:"primary_directory"`
 }
 
 // IngestPayloadSet groups mapping envelopes by normalized target schema

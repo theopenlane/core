@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"reflect"
 	"slices"
@@ -160,12 +161,14 @@ type Schema struct {
 	// remainder in memory; emitted only for integration-mapped, create-capable schemas with at least
 	// one lookup alternative
 	QueryByLookup func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error)
+	// RepairLookupField rewrites one lookup field on one row through the sql modifier, bypassing immutability, so a row found under a legacy key form is re-keyed in place
+	RepairLookupField func(ctx context.Context, client *generated.Client, entityID, field, value string) error
 	// ConfirmSeen bulk-touches SeenAtField to the given time for the given ids; emitted only when the
 	// schema declares a SeenAt field
 	ConfirmSeen func(ctx context.Context, client *generated.Client, ids []string, at time.Time) error
-	// SnapshotScope returns every row for one owner, source definition, and source instance that is
+	// SnapshotScope returns every row one installation manages for one owner, source definition, and source instance that is
 	// not already marked removed; emitted only when the schema declares a SnapshotRemoval field
-	SnapshotScope func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID string) ([]json.RawMessage, error)
+	SnapshotScope func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID, managedBy string) ([]json.RawMessage, error)
 	// MarkRemoved bulk-marks the given ids removed at the given time, recording the integration run
 	// when the schema carries one; emitted only when the schema declares a SnapshotRemoval field
 	MarkRemoved func(ctx context.Context, client *generated.Client, ids []string, at time.Time, runID string) error
@@ -360,6 +363,10 @@ func (s *Schema) handleIngest(ctx context.Context, client *generated.Client, res
 	}
 
 	id, _, managed, err := s.Ingest.persist(ctx, client, integration, payload)
+	if errors.Is(err, ErrUpsertStaleRun) {
+		return nil
+	}
+
 	if err != nil {
 		return logPersistError(ctx, ref, ErrPersistFailed, err)
 	}
@@ -1146,54 +1153,23 @@ func (s *Schema) SystemControlledOnly(set ChangeSet) bool {
 	})
 }
 
-// stripIntegrationPointer removes the managed_by field, the integration FK field, and the
-// integration m2m edge keys from an ingest payload, leaving an actively-managed record's ownership
-// pointer untouched by a write from a different integration
-func (s *Schema) stripIntegrationPointer(payload json.RawMessage) json.RawMessage {
-	return jsonx.EditObject(payload, func(doc map[string]json.RawMessage) bool {
-		changed := deleteDocKey(doc, FieldManagedBy)
-
-		if deleteDocKey(doc, s.IntegrationFKField) {
-			changed = true
-		}
-
-		if s.IntegrationM2MEdge != "" {
-			if edge, ok := s.EdgeByName(s.IntegrationM2MEdge); ok {
-				if deleteDocKey(doc, edge.CreateField) {
-					changed = true
-				}
-
-				if deleteDocKey(doc, edge.AddField) {
-					changed = true
-				}
-			}
-		}
-
-		return changed
-	})
-}
-
-// applyIngestClaim strips the ownership pointer from a payload that would otherwise move an
-// actively-managed record away from its current manager. A record managed by an integration that
-// is no longer active is free to be claimed by this write instead
-func (s *Schema) applyIngestClaim(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (json.RawMessage, error) {
+// applyIngestClaim reports whether this write may own the resolved row: an unclaimed row, a row this
+// installation already manages, or a row whose manager is no longer active is owned and claimed by
+// the write; a row another active installation manages is not, and the write must leave it untouched
+func (s *Schema) applyIngestClaim(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (bool, error) {
 	manager := lookupValue(row, FieldManagedBy)
 	me := lookupValue(payload, FieldManagedBy)
 
 	if manager == "" || manager == me {
-		return payload, nil
+		return true, nil
 	}
 
 	active, err := integrationActive(ctx, client, manager)
 	if err != nil {
-		return nil, err
+		return false, err
 	}
 
-	if !active {
-		return payload, nil
-	}
-
-	return s.stripIntegrationPointer(payload), nil
+	return !active, nil
 }
 
 // applyIngestResurrect clears a non-episodic removed_at-style value in the payload when the
@@ -1220,9 +1196,13 @@ func (s *Schema) applyIngestResurrect(row json.RawMessage, payload json.RawMessa
 
 // applyIngestUpdate applies the shared ingest write decision to one resolved row
 func (s *Schema) applyIngestUpdate(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (changed bool, managed bool, err error) {
-	payload, err = s.applyIngestClaim(ctx, client, row, payload)
+	owned, err := s.applyIngestClaim(ctx, client, row, payload)
 	if err != nil {
 		return false, true, err
+	}
+
+	if !owned {
+		return false, false, nil
 	}
 
 	payload = s.applyIngestResurrect(row, payload)
@@ -5800,7 +5780,7 @@ func init() {
 		{Name: "phone_number", Label: "PhoneNumber", Type: "string", MatchKey: true, InputKey: "phone_number", Clearable: true},
 		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "primary_source", Label: "PrimarySource", Type: "bool", InputKey: "primary_source"},
-		{Name: "profile", Label: "Profile", Type: "map[string]interface {}", InputKey: "profile", Clearable: true, Volatile: true},
+		{Name: "profile", Label: "Profile", Type: "map[string]interface {}", InputKey: "profile", Clearable: true},
 		{Name: "raw_profile_file_id", Label: "RawProfileFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "removed_at", Label: "RemovedAt", Type: "time.Time", InputKey: "removed_at", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
@@ -5840,7 +5820,7 @@ func init() {
 		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", InputKey: "observed_at"},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "profile", Label: "Profile", Type: "map[string]interface {}", InputKey: "profile", Clearable: true, Volatile: true},
+		{Name: "profile", Label: "Profile", Type: "map[string]interface {}", InputKey: "profile", Clearable: true},
 		{Name: "raw_profile_file_id", Label: "RawProfileFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "removed_at", Label: "RemovedAt", Type: "time.Time", InputKey: "removed_at", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
@@ -5870,7 +5850,7 @@ func init() {
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true, Volatile: true},
+		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
 		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", InputKey: "observed_at"},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, InputKey: "platform_id", Clearable: true},
@@ -22211,6 +22191,175 @@ func init() {
 
 		return filterByAlternativeFields(results, fields, keys), nil
 	}
+	SchemaActionPlan.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
+		ref := SchemaRef{Schema: "action_plan", Operation: refOpUpdate}
+
+		if err := client.ActionPlan.UpdateOneID(entityID).
+			Modify(func(u *sql.UpdateBuilder) {
+				u.Set(field, value)
+			}).
+			Exec(WithEmissionVetoed(ctx)); err != nil {
+			return logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return nil
+	}
+	SchemaAsset.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
+		ref := SchemaRef{Schema: "asset", Operation: refOpUpdate}
+
+		if err := client.Asset.UpdateOneID(entityID).
+			Modify(func(u *sql.UpdateBuilder) {
+				u.Set(field, value)
+			}).
+			Exec(WithEmissionVetoed(ctx)); err != nil {
+			return logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return nil
+	}
+	SchemaCheckResult.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
+		ref := SchemaRef{Schema: "check_result", Operation: refOpUpdate}
+
+		if err := client.CheckResult.UpdateOneID(entityID).
+			Modify(func(u *sql.UpdateBuilder) {
+				u.Set(field, value)
+			}).
+			Exec(WithEmissionVetoed(ctx)); err != nil {
+			return logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return nil
+	}
+	SchemaContact.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
+		ref := SchemaRef{Schema: "contact", Operation: refOpUpdate}
+
+		if err := client.Contact.UpdateOneID(entityID).
+			Modify(func(u *sql.UpdateBuilder) {
+				u.Set(field, value)
+			}).
+			Exec(WithEmissionVetoed(ctx)); err != nil {
+			return logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return nil
+	}
+	SchemaDirectoryAccount.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
+		ref := SchemaRef{Schema: "directory_account", Operation: refOpUpdate}
+
+		if err := client.DirectoryAccount.UpdateOneID(entityID).
+			Modify(func(u *sql.UpdateBuilder) {
+				u.Set(field, value)
+			}).
+			Exec(WithEmissionVetoed(ctx)); err != nil {
+			return logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return nil
+	}
+	SchemaDirectoryGroup.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
+		ref := SchemaRef{Schema: "directory_group", Operation: refOpUpdate}
+
+		if err := client.DirectoryGroup.UpdateOneID(entityID).
+			Modify(func(u *sql.UpdateBuilder) {
+				u.Set(field, value)
+			}).
+			Exec(WithEmissionVetoed(ctx)); err != nil {
+			return logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return nil
+	}
+	SchemaDirectoryMembership.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
+		ref := SchemaRef{Schema: "directory_membership", Operation: refOpUpdate}
+
+		if err := client.DirectoryMembership.UpdateOneID(entityID).
+			Modify(func(u *sql.UpdateBuilder) {
+				u.Set(field, value)
+			}).
+			Exec(WithEmissionVetoed(ctx)); err != nil {
+			return logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return nil
+	}
+	SchemaEntity.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
+		ref := SchemaRef{Schema: "entity", Operation: refOpUpdate}
+
+		if err := client.Entity.UpdateOneID(entityID).
+			Modify(func(u *sql.UpdateBuilder) {
+				u.Set(field, value)
+			}).
+			Exec(WithEmissionVetoed(ctx)); err != nil {
+			return logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return nil
+	}
+	SchemaFinding.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
+		ref := SchemaRef{Schema: "finding", Operation: refOpUpdate}
+
+		if err := client.Finding.UpdateOneID(entityID).
+			Modify(func(u *sql.UpdateBuilder) {
+				u.Set(field, value)
+			}).
+			Exec(WithEmissionVetoed(ctx)); err != nil {
+			return logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return nil
+	}
+	SchemaInternalPolicy.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
+		ref := SchemaRef{Schema: "internal_policy", Operation: refOpUpdate}
+
+		if err := client.InternalPolicy.UpdateOneID(entityID).
+			Modify(func(u *sql.UpdateBuilder) {
+				u.Set(field, value)
+			}).
+			Exec(WithEmissionVetoed(ctx)); err != nil {
+			return logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return nil
+	}
+	SchemaProcedure.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
+		ref := SchemaRef{Schema: "procedure", Operation: refOpUpdate}
+
+		if err := client.Procedure.UpdateOneID(entityID).
+			Modify(func(u *sql.UpdateBuilder) {
+				u.Set(field, value)
+			}).
+			Exec(WithEmissionVetoed(ctx)); err != nil {
+			return logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return nil
+	}
+	SchemaRisk.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
+		ref := SchemaRef{Schema: "risk", Operation: refOpUpdate}
+
+		if err := client.Risk.UpdateOneID(entityID).
+			Modify(func(u *sql.UpdateBuilder) {
+				u.Set(field, value)
+			}).
+			Exec(WithEmissionVetoed(ctx)); err != nil {
+			return logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return nil
+	}
+	SchemaVulnerability.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
+		ref := SchemaRef{Schema: "vulnerability", Operation: refOpUpdate}
+
+		if err := client.Vulnerability.UpdateOneID(entityID).
+			Modify(func(u *sql.UpdateBuilder) {
+				u.Set(field, value)
+			}).
+			Exec(WithEmissionVetoed(ctx)); err != nil {
+			return logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return nil
+	}
 	SchemaDirectoryAccount.ConfirmSeen = func(ctx context.Context, client *generated.Client, ids []string, at time.Time) error {
 		ref := SchemaRef{Schema: "directory_account", Operation: refOpUpdate}
 
@@ -22253,7 +22402,7 @@ func init() {
 
 		return nil
 	}
-	SchemaDirectoryAccount.SnapshotScope = func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID string) ([]json.RawMessage, error) {
+	SchemaDirectoryAccount.SnapshotScope = func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID, managedBy string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_account", Operation: refOpQuery}
 
 		entities, err := client.DirectoryAccount.Query().
@@ -22261,6 +22410,7 @@ func init() {
 				directoryaccount.OwnerID(ownerID),
 				directoryaccount.SourceDefinitionID(definitionID),
 				directoryaccount.SourceInstanceID(instanceID),
+				directoryaccount.ManagedBy(managedBy),
 				directoryaccount.RemovedAtIsNil(),
 			).
 			All(ctx)
@@ -22281,7 +22431,7 @@ func init() {
 
 		return results, nil
 	}
-	SchemaDirectoryGroup.SnapshotScope = func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID string) ([]json.RawMessage, error) {
+	SchemaDirectoryGroup.SnapshotScope = func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID, managedBy string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_group", Operation: refOpQuery}
 
 		entities, err := client.DirectoryGroup.Query().
@@ -22289,6 +22439,7 @@ func init() {
 				directorygroup.OwnerID(ownerID),
 				directorygroup.SourceDefinitionID(definitionID),
 				directorygroup.SourceInstanceID(instanceID),
+				directorygroup.ManagedBy(managedBy),
 				directorygroup.RemovedAtIsNil(),
 			).
 			All(ctx)
@@ -22309,7 +22460,7 @@ func init() {
 
 		return results, nil
 	}
-	SchemaDirectoryMembership.SnapshotScope = func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID string) ([]json.RawMessage, error) {
+	SchemaDirectoryMembership.SnapshotScope = func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID, managedBy string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_membership", Operation: refOpQuery}
 
 		entities, err := client.DirectoryMembership.Query().
@@ -22317,6 +22468,7 @@ func init() {
 				directorymembership.OwnerID(ownerID),
 				directorymembership.SourceDefinitionID(definitionID),
 				directorymembership.SourceInstanceID(instanceID),
+				directorymembership.ManagedBy(managedBy),
 				directorymembership.RemovedAtIsNil(),
 			).
 			All(ctx)
@@ -22678,12 +22830,7 @@ func selectTargets(ctx context.Context, client *generated.Client, orgID string, 
 	}
 
 	if selector.Unique {
-		narrowed, nerr := narrowUniqueCandidates(schema, entities, selector.SourceContext)
-		if nerr != nil {
-			return nil, logError(ctx, SchemaRef{Schema: schema.Snake, Operation: refOpQuery}, nerr, fmt.Errorf("%s unique-edge link matched %d candidates", schema.Name, len(entities)))
-		}
-
-		entities = narrowed
+		entities = narrowUniqueCandidates(schema, entities, selector.SourceContext)
 	}
 
 	var (
@@ -22789,21 +22936,17 @@ func selectCandidates(ctx context.Context, client *generated.Client, schema *Sch
 	return schema.Query(ctx, client, orgID)
 }
 
-// narrowUniqueCandidates resolves a unique edge's link target to at most one candidate under the target's identity rule
-func narrowUniqueCandidates(schema *Schema, entities []json.RawMessage, source json.RawMessage) ([]json.RawMessage, error) {
-	if schema.InstanceScoped {
-		pi := lookupValue(source, FieldSourceInstanceID)
-
-		entities = lo.Filter(entities, func(row json.RawMessage, _ int) bool {
-			return lookupValue(row, FieldSourceInstanceID) == pi
-		})
+// narrowUniqueCandidates keeps only the candidates that share the writer's source instance when the target type is instance scoped; the first remaining candidate is linked
+func narrowUniqueCandidates(schema *Schema, entities []json.RawMessage, source json.RawMessage) []json.RawMessage {
+	if !schema.InstanceScoped {
+		return entities
 	}
 
-	if len(entities) > 1 {
-		return nil, ErrLinkAmbiguous
-	}
+	pi := lookupValue(source, FieldSourceInstanceID)
 
-	return entities, nil
+	return lo.Filter(entities, func(row json.RawMessage, _ int) bool {
+		return lookupValue(row, FieldSourceInstanceID) == pi
+	})
 }
 
 // linkTargetCacheKey identifies one cached target lookup by target schema, field, and value

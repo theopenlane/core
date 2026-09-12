@@ -144,6 +144,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.FamilyName.Expr(`payload.FamilyName`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
 	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
 // mapExprDirectoryGroup is the CEL mapping expression for GitHub teams mapped to DirectoryGroup

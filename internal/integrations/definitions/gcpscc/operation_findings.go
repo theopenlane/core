@@ -175,7 +175,7 @@ func resolveFindingResource(sourceName string, finding *securitycenterpb.Finding
 // resolveParents chooses the SCC parent resources used for health/settings checks
 func resolveParents(meta CollectionScope) ([]string, error) {
 	if meta.OrganizationID != "" && meta.ProjectScope != projectScopeSpecific {
-		return []string{fmt.Sprintf("organizations/%s", meta.OrganizationID)}, nil
+		return []string{organizationParent(meta.OrganizationID)}, nil
 	}
 
 	if meta.ProjectScope == projectScopeSpecific {
@@ -185,7 +185,7 @@ func resolveParents(meta CollectionScope) ([]string, error) {
 				return "", false
 			}
 
-			return fmt.Sprintf("projects/%s", value), true
+			return projectParent(value), true
 		})
 
 		parentList = lo.Uniq(parentList)
@@ -198,11 +198,11 @@ func resolveParents(meta CollectionScope) ([]string, error) {
 	}
 
 	if meta.ProjectID != "" {
-		return []string{fmt.Sprintf("projects/%s", meta.ProjectID)}, nil
+		return []string{projectParent(meta.ProjectID)}, nil
 	}
 
 	if meta.OrganizationID != "" {
-		return []string{fmt.Sprintf("organizations/%s", meta.OrganizationID)}, nil
+		return []string{organizationParent(meta.OrganizationID)}, nil
 	}
 
 	return nil, ErrProjectIDRequired
@@ -226,7 +226,7 @@ func resolveSources(meta CollectionScope) ([]string, error) {
 		}
 
 		switch {
-		case strings.HasPrefix(source, "organizations/"), strings.HasPrefix(source, "projects/"):
+		case strings.HasPrefix(source, organizationParentPrefix), strings.HasPrefix(source, projectParentPrefix):
 			return []string{source}
 		default:
 			return lo.Map(parents, func(parent string, _ int) string {

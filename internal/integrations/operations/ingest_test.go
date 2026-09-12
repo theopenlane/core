@@ -333,7 +333,7 @@ func TestEnvelopeIncludedByFilters(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			matched, err := envelopeIncludedByFilters(context.Background(), tc.installationFilterExpr, tc.mappingFilterExpr, envelope)
+			matched, err := envelopeIncludedByFilters(context.Background(), tc.installationFilterExpr, tc.mappingFilterExpr, envelope, types.MappingInstallation{})
 			if tc.wantErr {
 				assert.Assert(t, err != nil, "expected error")
 				return
@@ -949,4 +949,52 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 
 	assert.NilError(t, err)
 	assert.Equal(t, handled, 2) // both pass — asset-sync has no filter
+}
+
+func TestStampProvenanceOverridesMappedValues(t *testing.T) {
+	t.Parallel()
+
+	installation := &ent.Integration{
+		ID:                   "int_owner",
+		OwnerID:              "org_1",
+		DefinitionID:         "def_dir",
+		InstallationMetadata: testInstallationMetadata,
+	}
+
+	payload := json.RawMessage(`{"external_id":"acct-1","managed_by":"int_other","source_instance_id":"tenant-other","owner_id":"org_other","source_definition_id":"def_other"}`)
+
+	stamped := stampProvenance(payload, entityops.SchemaDirectoryAccount, installation, "run_1")
+
+	assert.Equal(t, "int_owner", entityops.FieldValue(stamped, entityops.FieldManagedBy), "a mapping must not pick the managing installation")
+	assert.Equal(t, "tenant-test", entityops.FieldValue(stamped, entityops.FieldSourceInstanceID), "a mapping must not pick the source instance")
+	assert.Equal(t, "org_1", entityops.FieldValue(stamped, entityops.FieldOwnerID), "a mapping must not pick the owner")
+	assert.Equal(t, "def_dir", entityops.FieldValue(stamped, entityops.FieldSourceDefinitionID), "a mapping must not pick the source definition")
+	assert.Equal(t, "run_1", entityops.FieldValue(stamped, entityops.FieldIntegrationRunID))
+	assert.Equal(t, "acct-1", entityops.FieldValue(stamped, "external_id"), "mapped non-provenance fields pass through")
+}
+
+func TestLegacyScientificKey(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name   string
+		value  string
+		legacy string
+		ok     bool
+	}{
+		{name: "large numeric key has a scientific form", value: "147884153", legacy: "1.47884153e+08", ok: true},
+		{name: "small numeric key is identical in both forms", value: "123", ok: false},
+		{name: "non numeric key has no legacy form", value: "acct-1", ok: false},
+		{name: "empty key has no legacy form", value: "", ok: false},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			legacy, ok := legacyScientificKey(tc.value)
+			assert.Equal(t, tc.ok, ok)
+			assert.Equal(t, tc.legacy, legacy)
+		})
+	}
 }

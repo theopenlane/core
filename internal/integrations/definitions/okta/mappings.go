@@ -18,6 +18,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.LastLoginAt.Expr(`'lastLogin' in payload && payload.lastLogin != null ? payload.lastLogin : null`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
 	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
 // mapExprDirectoryGroup is the CEL mapping expression for Okta group payloads mapped to DirectoryGroup

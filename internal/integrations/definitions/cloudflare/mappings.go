@@ -16,6 +16,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.Status.Expr(`dyn('status' in payload && payload.status == "accepted" ? "ACTIVE" : "INACTIVE")`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
 	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
 // mapExprDirectoryGroup is the CEL mapping expression for Cloudflare groups and roles payloads mapped to DirectoryGroup

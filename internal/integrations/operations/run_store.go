@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
@@ -100,6 +101,24 @@ func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Int
 		SetRunType(runType).
 		SetStatus(enums.IntegrationRunStatusPending).
 		SetOperationConfig(configMap).
+		Save(ctx)
+}
+
+// metricRetryOf is the metrics key recording the run a re-executed attempt continues from
+const metricRetryOf = "retry_of"
+
+// RetryRun inserts a fresh pending run for a re-executed attempt of the given run, carrying its
+// operation, run type, and config, so every attempt writes records under its own run id
+func RetryRun(ctx context.Context, db *ent.Client, run *ent.IntegrationRun) (*ent.IntegrationRun, error) {
+	return db.IntegrationRun.Create().
+		SetOwnerID(run.OwnerID).
+		SetIntegrationID(run.IntegrationID).
+		SetOperationName(run.OperationName).
+		SetNillableOperationKind(lo.EmptyableToPtr(run.OperationKind)).
+		SetRunType(run.RunType).
+		SetStatus(enums.IntegrationRunStatusPending).
+		SetOperationConfig(run.OperationConfig).
+		SetMetrics(map[string]any{metricRetryOf: run.ID}).
 		Save(ctx)
 }
 

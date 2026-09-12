@@ -78,8 +78,6 @@ type directoryGroupPayload struct {
 type directoryEntityRef struct {
 	// ID is the stable Azure object identifier
 	ID string `json:"id,omitempty"`
-	// Email is the primary email for the entity
-	Email string `json:"email,omitempty"`
 }
 
 // directoryMembershipPayload is the envelope payload for one group membership record
@@ -134,16 +132,13 @@ func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, 
 		if payload.ID != "" {
 			includedUsers[payload.ID] = struct{}{}
 		}
-
-		if payload.UserPrincipalName != "" {
-			includedUsers[strings.ToLower(payload.UserPrincipalName)] = struct{}{}
-		}
 	}
 
 	payloadSets := []types.IngestPayloadSet{
 		{
-			Schema:    entityops.SchemaDirectoryAccount.Name,
-			Envelopes: accountEnvelopes,
+			Schema:           entityops.SchemaDirectoryAccount.Name,
+			Envelopes:        accountEnvelopes,
+			SnapshotComplete: true,
 		},
 	}
 
@@ -175,23 +170,17 @@ func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, 
 			return nil, err
 		}
 
-		groupRef := directoryEntityRef{ID: payload.ID, Email: payload.Mail}
+		groupRef := directoryEntityRef{ID: payload.ID}
 
 		for _, member := range members {
 			memberPayload := userToPayload(member)
-			memberRef := directoryEntityRef{
-				ID:    memberPayload.ID,
-				Email: entraUserEmail(memberPayload),
-			}
+			memberRef := directoryEntityRef{ID: memberPayload.ID}
 
 			if !isIncludedMember(memberRef, includedUsers) {
 				continue
 			}
 
-			membershipResource := resource
-			if memberRef.ID != "" {
-				membershipResource = resource + ":" + memberRef.ID
-			}
+			membershipResource := resource + ":" + memberRef.ID
 
 			membershipEnvelope, err := providerkit.MarshalEnvelope(membershipResource, directoryMembershipPayload{
 				Group:  groupRef,
@@ -207,8 +196,9 @@ func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, 
 
 	payloadSets = append(payloadSets,
 		types.IngestPayloadSet{
-			Schema:    entityops.SchemaDirectoryGroup.Name,
-			Envelopes: groupEnvelopes,
+			Schema:           entityops.SchemaDirectoryGroup.Name,
+			Envelopes:        groupEnvelopes,
+			SnapshotComplete: true,
 		},
 		types.IngestPayloadSet{
 			Schema:           entityops.SchemaDirectoryMembership.Name,
@@ -336,24 +326,11 @@ func isEntraUserIncluded(user models.Userable, cfg UserInput) bool {
 	return true
 }
 
-// isIncludedMember reports whether the member's ID or email appears in the included users set
+// isIncludedMember reports whether the member's ID appears in the included users set
 func isIncludedMember(ref directoryEntityRef, includedUsers map[string]struct{}) bool {
-	if len(includedUsers) == 0 {
-		return false
-	}
+	_, ok := includedUsers[ref.ID]
 
-	if ref.ID != "" {
-		if _, ok := includedUsers[ref.ID]; ok {
-			return true
-		}
-	}
-
-	if ref.Email != "" {
-		_, ok := includedUsers[strings.ToLower(ref.Email)]
-		return ok
-	}
-
-	return false
+	return ok
 }
 
 // userToPayload maps a Userable SDK model to a JSON-serializable payload struct

@@ -18,6 +18,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.Metadata.Expr(`'attributes' in payload ? payload.attributes : {}`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
 	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
 // mapExprDirectoryGroup is the CEL mapping expression for Authentik group payloads mapped to DirectoryGroup

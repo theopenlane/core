@@ -210,10 +210,9 @@ func TestCatalogClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
 	assert.Check(t, is.Equal(integration.ID, after.ManagedBy))
 }
 
-// TestCatalogClaimActiveOtherInstallationKeepsPointers verifies a row managed by another still-active
-// installation of the same definition keeps its ownership pointers while its other fields still diff
-// and update normally
-func TestCatalogClaimActiveOtherInstallationKeepsPointers(t *testing.T) {
+// TestCatalogClaimActiveOtherInstallationReadOnly verifies a row managed by another still-active
+// installation of the same definition is skipped untouched, ownership pointers and data alike
+func TestCatalogClaimActiveOtherInstallationReadOnly(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const sharedDefinitionID = "def_catclaimactive"
@@ -251,12 +250,13 @@ func TestCatalogClaimActiveOtherInstallationKeepsPointers(t *testing.T) {
 
 	resultB := ingestAssetPayloads(ctx, t, installationB, `{"source_identifier":"catclaim-active-1","name":"Renamed By B"}`)
 	assert.Check(t, is.Equal(0, resultB.Failed))
-	assert.Check(t, is.Equal(1, resultB.Changed), "the other field's material change must still apply")
+	assert.Check(t, is.Equal(0, resultB.Changed), "a row managed by another live installation must not change")
+	assert.Check(t, is.Equal(1, resultB.Skipped), "a row managed by another live installation must be skipped")
 
 	after := catalogAssetBySourceIdentifier(ctx, t, "catclaim-active-1")
 	assert.Check(t, is.Equal(installationA.ID, after.IntegrationID), "an active other installation must keep the ownership pointer")
 	assert.Check(t, is.Equal(installationA.ID, after.ManagedBy), "an active other installation must keep managed_by")
-	assert.Check(t, is.Equal("Renamed By B", after.Name), "the non-ownership field change must still be applied")
+	assert.Check(t, is.Equal("Owned By A", after.Name), "no field may be written by a non-owning live installation")
 }
 
 // TestCatalogClaimGoneOtherInstallationRepoints verifies a row whose managing installation no longer

@@ -267,10 +267,9 @@ func TestFindingClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
 	assert.Check(t, linked, "the claim must add the claiming installation's integration edge")
 }
 
-// TestFindingClaimActiveOtherInstallationKeepsPointers verifies a finding managed by another
-// still-active installation of the same definition keeps its ownership pointer while its other
-// fields still diff and update normally
-func TestFindingClaimActiveOtherInstallationKeepsPointers(t *testing.T) {
+// TestFindingClaimActiveOtherInstallationReadOnly verifies a finding managed by another
+// still-active installation of the same definition is skipped untouched, pointer and data alike
+func TestFindingClaimActiveOtherInstallationReadOnly(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const sharedDefinitionID = "def_findclaimactive"
@@ -308,11 +307,12 @@ func TestFindingClaimActiveOtherInstallationKeepsPointers(t *testing.T) {
 
 	resultB := ingestFindingPayloads(ctx, t, installationB, `{"external_id":"find-claim-active-1","display_name":"Owned By A","description":"changed by B"}`)
 	assert.Check(t, is.Equal(0, resultB.Failed))
-	assert.Check(t, is.Equal(1, resultB.Changed), "the description change must still apply")
+	assert.Check(t, is.Equal(0, resultB.Changed), "a finding managed by another live installation must not change")
+	assert.Check(t, is.Equal(1, resultB.Skipped), "a finding managed by another live installation must be skipped")
 
 	after := findingByExternalID(ctx, t, "find-claim-active-1")
 	assert.Check(t, is.Equal(installationA.ID, after.ManagedBy), "an active other installation must keep managed_by")
-	assert.Check(t, is.Equal("changed by B", after.Description))
+	assert.Check(t, is.Equal("from A", after.Description), "no field may be written by a non-owning live installation")
 
 	linkedToB, err := after.QueryIntegrations().Where(integration.ID(installationB.ID)).Exist(ctx)
 	th.RequireNoError(t, err)

@@ -29,4 +29,6 @@ var (
 	ErrOperationRateLimited = errors.New("integrations/runtime: operation rate limited")
 	// ErrInstallationInstanceIDRequired indicates the connection resolved no instance id for the system the installation connects to
 	ErrInstallationInstanceIDRequired = errors.New("integrations/runtime: installation instance id required")
+	// ErrInstallationInstanceMismatch indicates the credential resolves to a different external instance than the one the installation already records
+	ErrInstallationInstanceMismatch = errors.New("integrations/runtime: installation instance mismatch")
 )

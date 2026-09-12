@@ -56,11 +56,14 @@ type UserInput struct {
 type InstallationMetadata struct {
 	// Domain is the Zitadel instance domain configured for this installation
 	Domain string `json:"domain,omitempty"`
+	// InstanceID is the immutable id of the Zitadel instance the credential is scoped to
+	InstanceID string `json:"instanceId,omitempty"`
 }
 
 // InstallationIdentity implements types.InstallationIdentifiable
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	return types.IntegrationInstallationIdentity{
+		ExternalID:   m.InstanceID,
 		ExternalName: m.Domain,
 	}
 }

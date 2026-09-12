@@ -49,6 +49,8 @@ type directoryGroupRecord struct {
 	ExternalID string `json:"external_id"`
 	// DisplayName is the directory supplied display name, a material (non-Volatile) field
 	DisplayName string `json:"display_name,omitempty"`
+	// Email is the group's primary email address, the fallback link target for memberships referencing the group by email
+	Email string `json:"email,omitempty"`
 	// Profile is the flattened attribute bag, and is Volatile
 	Profile map[string]any `json:"profile,omitempty"`
 }
@@ -279,6 +281,16 @@ func (s directorySnapshot) withoutAccount(externalID string) directorySnapshot {
 
 	out.Accounts = lo.Reject(out.Accounts, func(a directoryAccountRecord, _ int) bool { return a.ExternalID == externalID })
 	out.Memberships = lo.Reject(out.Memberships, func(m directoryMembershipRecord, _ int) bool { return m.DirectoryAccountID == externalID })
+
+	return out
+}
+
+// withoutGroup returns a snapshot with the group matching externalID, and every membership referencing it, removed
+func (s directorySnapshot) withoutGroup(externalID string) directorySnapshot {
+	out := s.clone()
+
+	out.Groups = lo.Reject(out.Groups, func(g directoryGroupRecord, _ int) bool { return g.ExternalID == externalID })
+	out.Memberships = lo.Reject(out.Memberships, func(m directoryMembershipRecord, _ int) bool { return m.DirectoryGroupID == externalID })
 
 	return out
 }

@@ -231,7 +231,7 @@ func selfInstanceMetadata(installation *ent.Integration) types.IntegrationInstal
 	return types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: installation.ID}}
 }
 
-// resolveConnectionIdentity resolves installation metadata through the connection's resolver, falling to the installation's own id when the connection declares none, and rejects a resolver answer without an instance id
+// resolveConnectionIdentity resolves installation metadata through the connection's resolver, falling to the installation's own id when the connection declares none, and rejects a resolver answer without an instance id or with one that differs from the instance already recorded
 func resolveConnectionIdentity(ctx context.Context, installation *ent.Integration, connection types.ConnectionRegistration, bindings types.CredentialBindings, input json.RawMessage) (types.IntegrationInstallationMetadata, error) {
 	if connection.Integration == nil {
 		return selfInstanceMetadata(installation), nil
@@ -250,6 +250,12 @@ func resolveConnectionIdentity(ctx context.Context, installation *ent.Integratio
 
 	if !ok || metadata.Display.ExternalID == "" {
 		return types.IntegrationInstallationMetadata{}, ErrInstallationInstanceIDRequired
+	}
+
+	if stored := installation.InstallationMetadata.Display.ExternalID; stored != "" && stored != metadata.Display.ExternalID {
+		logx.FromContext(ctx).Error().Str("stored_instance_id", stored).Str("resolved_instance_id", metadata.Display.ExternalID).Msg("installation credential resolves to a different instance")
+
+		return types.IntegrationInstallationMetadata{}, ErrInstallationInstanceMismatch
 	}
 
 	return metadata, nil
@@ -368,6 +374,13 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
+	metadata, err := resolveConnectionIdentity(systemCtx, installation, connection, bindings, installationInput)
+	if err != nil {
+		return err
+	}
+
+	metadata.Display.CredentialRef = credentialRef.String()
+
 	if err := r.keystore().SaveCredential(systemCtx, installation, registration.Ref, credential); err != nil {
 		return err
 	}
@@ -375,13 +388,6 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 	if err := r.persistConnectionState(systemCtx, installation, def, connection.CredentialRef); err != nil {
 		return err
 	}
-
-	metadata, err := resolveConnectionIdentity(systemCtx, installation, connection, bindings, installationInput)
-	if err != nil {
-		return err
-	}
-
-	metadata.Display.CredentialRef = credentialRef.String()
 
 	if err := r.saveInstallationMetadata(systemCtx, installation, metadata); err != nil {
 		return err

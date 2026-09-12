@@ -127,7 +127,7 @@ func (DirectoryMembership) Fields() []ent.Field {
 			Comment("raw metadata associated with this membership from the provider").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField().Volatile(),
+				entx.IntegrationMappingField(),
 			),
 	}
 }

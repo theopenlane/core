@@ -59,12 +59,7 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 		accountEnvelopes = append(accountEnvelopes, envelope)
 	}
 
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema:    entityops.SchemaDirectoryAccount.Name,
-			Envelopes: accountEnvelopes,
-		},
-	}
+	payloadSets := []types.IngestPayloadSet{accountPayloadSet(accountEnvelopes)}
 
 	if cfg.DisableGroupSync {
 		logx.FromContext(ctx).Debug().Int("user_count", len(accountEnvelopes)).Msg("tailscale: collected users; group sync disabled")
@@ -168,20 +163,35 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 
 	logx.FromContext(ctx).Debug().Int("user_count", len(accountEnvelopes)).Int("group_count", len(groupEnvelopes)).Int("membership_count", len(membershipEnvelopes)).Msg("tailscale: collected users, role groups, and memberships")
 
-	payloadSets = append(payloadSets,
-		types.IngestPayloadSet{
-			Schema:    entityops.SchemaDirectoryGroup.Name,
-			Envelopes: groupEnvelopes,
+	payloadSets = append(payloadSets, groupPayloadSets(groupEnvelopes, membershipEnvelopes, membershipsComplete)...)
+
+	return payloadSets, nil
+}
+
+// accountPayloadSet builds the always-complete directory account payload set
+func accountPayloadSet(envelopes []types.MappingEnvelope) types.IngestPayloadSet {
+	return types.IngestPayloadSet{
+		Schema:           entityops.SchemaDirectoryAccount.Name,
+		Envelopes:        envelopes,
+		SnapshotComplete: true,
+	}
+}
+
+// groupPayloadSets builds the directory group and membership payload sets, complete only when policy file groups were fetched
+func groupPayloadSets(groupEnvelopes, membershipEnvelopes []types.MappingEnvelope, membershipsComplete bool) []types.IngestPayloadSet {
+	return []types.IngestPayloadSet{
+		{
+			Schema:           entityops.SchemaDirectoryGroup.Name,
+			Envelopes:        groupEnvelopes,
+			SnapshotComplete: membershipsComplete,
 		},
-		types.IngestPayloadSet{
+		{
 			Schema:    entityops.SchemaDirectoryMembership.Name,
 			Envelopes: membershipEnvelopes,
 			// memberships derived without policy data are incomplete
 			SnapshotComplete: membershipsComplete,
 		},
-	)
-
-	return payloadSets, nil
+	}
 }
 
 // listTailscaleUsers fetches all users from the Tailscale API and maps them to payloads

@@ -67,6 +67,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.OrganizationUnit.Expr(`'path' in payload ? payload.path : ""`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
 	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
 // mapExprDirectoryGroup maps AWS IAM group payloads to DirectoryGroup

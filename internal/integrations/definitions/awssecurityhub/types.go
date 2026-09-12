@@ -12,8 +12,6 @@ import (
 var (
 	// definitionID is the stable identifier for the AWS Security Hub integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AWSSECHUB0000000000001")
-	// installation is the typed installation metadata handle for the AWS Security Hub definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// awsAssumeRoleScheme is the cred schema for AWS STS auth
 	awsAssumeRoleSchema, awsAssumeRoleCredential = providerkit.CredentialSchema[AssumeRoleCredentialSchema]()
 	// awsServiceAccountSchema is the cred schema for AWS service account credentials

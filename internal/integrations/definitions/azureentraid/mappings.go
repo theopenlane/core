@@ -21,6 +21,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.Status.Expr(`dyn('accountEnabled' in payload && payload.accountEnabled ? "ACTIVE" : "INACTIVE")`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
 	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
 // mapExprDirectoryGroup maps Azure Entra ID group payloads to DirectoryGroup

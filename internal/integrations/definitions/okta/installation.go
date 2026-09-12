@@ -30,6 +30,10 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 		return InstallationMetadata{}, false, fmt.Errorf("%w: %w", ErrOrgSettingsFetchFailed, err)
 	}
 
+	if org.GetId() == "" {
+		return InstallationMetadata{}, false, ErrOrgIDMissing
+	}
+
 	return InstallationMetadata{
 		OrgURL: cred.OrgURL,
 		OrgID:  org.GetId(),

@@ -82,8 +82,6 @@ var (
 	ErrUpsertStaleRun = errors.New("entityops: upsert stale run")
 	// ErrLookupAlternativeInvalid indicates a lookup was requested against an alternative index the schema does not declare
 	ErrLookupAlternativeInvalid = errors.New("entityops: lookup alternative invalid")
-	// ErrLinkAmbiguous indicates a unique-edge link resolved to more than one candidate after provenance filtering
-	ErrLinkAmbiguous = errors.New("entityops: link ambiguous")
 )
 
 // --- Operation constants ---

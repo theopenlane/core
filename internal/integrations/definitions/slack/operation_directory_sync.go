@@ -90,12 +90,16 @@ func (DirectorySync) Run(ctx context.Context, client *slackgo.Client, lastRunAt 
 		envelopes = append(envelopes, envelope)
 	}
 
-	return []types.IngestPayloadSet{
-		{
-			Schema:    entityops.SchemaDirectoryAccount.Name,
-			Envelopes: envelopes,
-		},
-	}, nil
+	return []types.IngestPayloadSet{accountPayloadSet(envelopes, lastRunAt)}, nil
+}
+
+// accountPayloadSet builds the directory account payload set, complete only when users were fetched without a last run cutoff
+func accountPayloadSet(envelopes []types.MappingEnvelope, lastRunAt *time.Time) types.IngestPayloadSet {
+	return types.IngestPayloadSet{
+		Schema:           entityops.SchemaDirectoryAccount.Name,
+		Envelopes:        envelopes,
+		SnapshotComplete: lastRunAt == nil,
+	}
 }
 
 func normalizeUser(user slackgo.User) slackUserPayload {

@@ -62,8 +62,9 @@ func (DirectorySync) Run(ctx context.Context, c *client.Client, _ UserInput) ([]
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    entityops.SchemaDirectoryAccount.Name,
-			Envelopes: accountEnvelopes,
+			Schema:           entityops.SchemaDirectoryAccount.Name,
+			Envelopes:        accountEnvelopes,
+			SnapshotComplete: true,
 		},
 	}, nil
 }

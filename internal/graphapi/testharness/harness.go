@@ -193,7 +193,8 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	otpMan := totp.NewOTP(otpOpts...)
 
 	entCfg := &entconfig.Config{
-		EntityTypes: []string{"vendor"},
+		EntityTypes:             []string{"vendor"},
+		QuestionnaireProductURL: "https://console.example.com",
 		Summarizer: summarizer.Config{
 			Type:             summarizer.TypeLexrank,
 			MaximumSentences: 60,

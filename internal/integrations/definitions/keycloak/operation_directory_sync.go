@@ -76,8 +76,9 @@ func (DirectorySync) Run(ctx context.Context, gc *gocloak.GoCloak, token, realm 
 
 	payloadSets := []types.IngestPayloadSet{
 		{
-			Schema:    entityops.SchemaDirectoryAccount.Name,
-			Envelopes: accountEnvelopes,
+			Schema:           entityops.SchemaDirectoryAccount.Name,
+			Envelopes:        accountEnvelopes,
+			SnapshotComplete: true,
 		},
 	}
 
@@ -134,8 +135,9 @@ func (DirectorySync) Run(ctx context.Context, gc *gocloak.GoCloak, token, realm 
 
 	payloadSets = append(payloadSets,
 		types.IngestPayloadSet{
-			Schema:    entityops.SchemaDirectoryGroup.Name,
-			Envelopes: groupEnvelopes,
+			Schema:           entityops.SchemaDirectoryGroup.Name,
+			Envelopes:        groupEnvelopes,
+			SnapshotComplete: true,
 		},
 		types.IngestPayloadSet{
 			Schema:           entityops.SchemaDirectoryMembership.Name,

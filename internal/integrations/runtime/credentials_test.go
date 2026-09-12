@@ -411,3 +411,59 @@ func TestResolvePersistedConnectionMultipleConnectionsNoState(t *testing.T) {
 		t.Fatalf("expected ErrConnectionRequired, got %v", err)
 	}
 }
+
+// --- resolveConnectionIdentity ---
+
+// staticIdentityConnection builds a connection whose installation resolver always answers with the given instance id
+func staticIdentityConnection(instanceID string) types.ConnectionRegistration {
+	return types.ConnectionRegistration{
+		Integration: &types.InstallationRegistration{
+			Resolve: func(context.Context, types.InstallationRequest) (types.IntegrationInstallationMetadata, bool, error) {
+				return types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: instanceID}}, true, nil
+			},
+		},
+	}
+}
+
+func TestResolveConnectionIdentityRejectsInstanceMismatch(t *testing.T) {
+	t.Parallel()
+
+	installation := &ent.Integration{
+		InstallationMetadata: types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: "tenant-a"}},
+	}
+
+	_, err := resolveConnectionIdentity(context.Background(), installation, staticIdentityConnection("tenant-b"), nil, nil)
+	if !errors.Is(err, ErrInstallationInstanceMismatch) {
+		t.Fatalf("expected ErrInstallationInstanceMismatch, got %v", err)
+	}
+}
+
+func TestResolveConnectionIdentityKeepsMatchingInstance(t *testing.T) {
+	t.Parallel()
+
+	installation := &ent.Integration{
+		InstallationMetadata: types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: "tenant-a"}},
+	}
+
+	metadata, err := resolveConnectionIdentity(context.Background(), installation, staticIdentityConnection("tenant-a"), nil, nil)
+	if err != nil {
+		t.Fatalf("expected no error for a matching instance, got %v", err)
+	}
+
+	if metadata.Display.ExternalID != "tenant-a" {
+		t.Fatalf("expected tenant-a, got %q", metadata.Display.ExternalID)
+	}
+}
+
+func TestResolveConnectionIdentityAcceptsFirstResolution(t *testing.T) {
+	t.Parallel()
+
+	metadata, err := resolveConnectionIdentity(context.Background(), &ent.Integration{}, staticIdentityConnection("tenant-b"), nil, nil)
+	if err != nil {
+		t.Fatalf("expected no error for a first resolution, got %v", err)
+	}
+
+	if metadata.Display.ExternalID != "tenant-b" {
+		t.Fatalf("expected tenant-b, got %q", metadata.Display.ExternalID)
+	}
+}

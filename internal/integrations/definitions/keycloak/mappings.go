@@ -19,6 +19,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
 	entityops.DirectoryAccountFields.LastSeenAt.Expr(`'lastLogin' in payload && payload.lastLogin != null ? timestamp(int(payload.lastLogin) / 1000) : null`),
 	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
 // mapExprDirectoryGroup is the CEL mapping expression for Keycloak group payloads mapped to DirectoryGroup

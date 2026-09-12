@@ -103,12 +103,14 @@ func (DirectorySync) Run(ctx context.Context, svc *admin.Service, customerID str
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    entityops.SchemaDirectoryAccount.Name,
-			Envelopes: accountEnvelopes,
+			Schema:           entityops.SchemaDirectoryAccount.Name,
+			Envelopes:        accountEnvelopes,
+			SnapshotComplete: true,
 		},
 		{
-			Schema:    entityops.SchemaDirectoryGroup.Name,
-			Envelopes: groupEnvelopes,
+			Schema:           entityops.SchemaDirectoryGroup.Name,
+			Envelopes:        groupEnvelopes,
+			SnapshotComplete: true,
 		},
 		{
 			Schema:           entityops.SchemaDirectoryMembership.Name,

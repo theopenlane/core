@@ -111,8 +111,8 @@ func TestDirectoryFullSnapshotIdleResyncWritesNothing(t *testing.T) {
 	assert.Check(t, is.Equal(materialChange.account(changedExternalID).DisplayName, after.DisplayName))
 }
 
-// TestDirectoryGroupProfileChurnUnchanged verifies a churn-only group profile key emits no update event but rides along on a material change
-func TestDirectoryGroupProfileChurnUnchanged(t *testing.T) {
+// TestDirectoryGroupProfileChangePersisted verifies a change confined to the group profile bag is a material update, and a later display-name change is one more
+func TestDirectoryGroupProfileChangePersisted(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "grpchurn"
@@ -144,30 +144,29 @@ func TestDirectoryGroupProfileChurnUnchanged(t *testing.T) {
 	waitForGala(t, counters.Runtime)
 
 	assert.Check(t, is.Equal(0, churnResult.Failed))
-	assert.Check(t, is.Equal(0, churnResult.Changed), "a churn-only group profile key must not count as changed")
-	assert.Check(t, is.Equal(int64(0), counters.GroupUpdates.Load()), "a churn-only group profile key must not emit an update mutation event")
+	assert.Check(t, is.Equal(1, churnResult.Changed), "a group profile change must count as changed")
+	assert.Check(t, is.Equal(int64(1), counters.GroupUpdates.Load()), "a group profile change must emit exactly one update mutation event")
 
 	afterChurn := directoryGroupByExternalID(ctx, t, groupExternalID)
-	assert.Check(t, is.Equal(before.DisplayName, afterChurn.DisplayName), "a churn-only group profile key must not change the row")
-	assert.Check(t, afterChurn.LastSeenAt != nil, "the confirming run must still advance last_seen_at")
-	assert.Check(t, afterChurn.Profile["lastLoginTime"] == directoryProfileBaseLastLogin, "the stored profile must still carry the pre-churn value")
+	assert.Check(t, is.Equal(before.DisplayName, afterChurn.DisplayName), "a profile-only change must not touch other fields")
+	assert.Check(t, afterChurn.Profile["lastLoginTime"] == directoryProfileChurnedLastLogin, "the stored profile must carry the new value")
 
 	materialized := churned.withGroupMaterialChange(groupExternalID)
 	materialResult := ingestDirectorySnapshotFixture(ctx, t, integration, materialized, true)
 	waitForGala(t, counters.Runtime)
 
 	assert.Check(t, is.Equal(0, materialResult.Failed))
-	assert.Check(t, is.Equal(1, materialResult.Changed), "a material group change must count as changed")
-	assert.Check(t, is.Equal(int64(1), counters.GroupUpdates.Load()), "a material group change must emit exactly one update mutation event")
+	assert.Check(t, is.Equal(1, materialResult.Changed), "a display-name change must count as changed")
+	assert.Check(t, is.Equal(int64(2), counters.GroupUpdates.Load()), "a display-name change must emit one more update mutation event")
 
 	after := directoryGroupByExternalID(ctx, t, groupExternalID)
 	assert.Check(t, is.Equal(materialized.group(groupExternalID).DisplayName, after.DisplayName))
 	assert.Check(t, !after.UpdatedAt.Equal(afterChurn.UpdatedAt), "a material group change must rewrite the row")
-	assert.Check(t, after.Profile["lastLoginTime"] == directoryProfileChurnedLastLogin, "the profile must now carry the churned key once a material change rides it along")
+	assert.Check(t, after.Profile["lastLoginTime"] == directoryProfileChurnedLastLogin, "the profile value written by the earlier change must survive")
 }
 
-// TestDirectoryMembershipMetadataChurnUnchanged verifies a churn-only membership metadata key emits no update event but still confirms the membership
-func TestDirectoryMembershipMetadataChurnUnchanged(t *testing.T) {
+// TestDirectoryMembershipMetadataChangePersisted verifies a change confined to membership metadata is a material update that is written and emitted
+func TestDirectoryMembershipMetadataChangePersisted(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "memchurn"
@@ -199,11 +198,11 @@ func TestDirectoryMembershipMetadataChurnUnchanged(t *testing.T) {
 	waitForGala(t, counters.Runtime)
 
 	assert.Check(t, is.Equal(0, result.Failed))
-	assert.Check(t, is.Equal(0, result.Changed), "a churn-only membership metadata key must not count as changed")
-	assert.Check(t, is.Equal(int64(0), counters.MembershipUpdates.Load()), "a churn-only membership metadata key must not emit an update mutation event")
+	assert.Check(t, is.Equal(1, result.Changed), "a membership metadata change must count as changed")
+	assert.Check(t, is.Equal(int64(1), counters.MembershipUpdates.Load()), "a membership metadata change must emit exactly one update mutation event")
 
 	after := directoryMembershipByExternalIDs(ctx, t, membership.DirectoryAccountID, membership.DirectoryGroupID)
 
-	assert.Check(t, after.LastSeenAt.After(lo.FromPtr(before.LastSeenAt)), "the confirming run must still advance last_seen_at")
-	assert.Check(t, is.DeepEqual(before.Metadata, after.Metadata), "membership metadata must remain unchanged in the database")
+	assert.Check(t, is.DeepEqual(before.Metadata, membership.Metadata), "the seeded metadata is the pre-change value")
+	assert.Check(t, is.DeepEqual(churned.Memberships[0].Metadata, after.Metadata), "the stored metadata must carry the new value")
 }

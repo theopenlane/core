@@ -13,6 +13,10 @@ var (
 	ErrRegionMissing = errors.New("awssecurityhub: homeRegion required")
 	// ErrAWSConfigBuildFailed indicates the AWS SDK config could not be constructed
 	ErrAWSConfigBuildFailed = errors.New("awssecurityhub: aws config build failed")
+	// ErrCallerIdentityFetchFailed indicates STS GetCallerIdentity failed
+	ErrCallerIdentityFetchFailed = errors.New("awssecurityhub: caller identity fetch failed")
+	// ErrAccountIDMissing indicates STS GetCallerIdentity returned no account id for the installation identity
+	ErrAccountIDMissing = errors.New("awssecurityhub: account id missing")
 	// ErrDescribeHubFailed indicates DescribeHub failed
 	ErrDescribeHubFailed = errors.New("awssecurityhub: describe hub failed")
 	// ErrDescribeHubFailed indicates DescribeHub failed

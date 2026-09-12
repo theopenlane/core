@@ -339,22 +339,16 @@ func TestDirectoryAccountReinstallRelinkNoUpdate(t *testing.T) {
 	result := ingestDirectoryPayloads(ctx, t, installationB, entityops.SchemaDirectoryAccount.Name, accountPayload)
 	waitForGala(t, setup.Runtime)
 
-	assert.Check(t, is.Equal(0, result.Changed), "a reinstall adoption must not count as a material change")
-	assert.Check(t, is.Equal(int64(0), accountUpdates.Load()), "a reinstall adoption must not emit a per-row update mutation event")
+	assert.Check(t, is.Equal(0, result.Changed), "a second live installation must not change rows the first one manages")
+	assert.Check(t, is.Equal(1, result.Skipped), "a second live installation must skip rows the first one manages")
+	assert.Check(t, is.Equal(int64(0), accountUpdates.Load()), "a second live installation must not emit a per-row update mutation event")
 
 	after := directoryAccountByExternalID(ctx, t, "reinstall-acct-1")
 	assert.Check(t, is.Equal(installationA.ID, after.IntegrationID), "integration_id stays on the original installation: provenance repoints only ride along an actual write, and no other field changed to justify one")
 }
 
-// TestDirectoryAccountProfileChurnUnchanged is regen-gated on defect 2 (profile/metadata = whole
-// payload defeats Volatile): every directory mapping maps DirectoryAccountFields.Profile.Expr to
-// the raw provider payload, profile is not Volatile, and profile_hash is derived from it, so a
-// provider-only churn key nested inside profile (e.g. Okta/Google lastLoginTime, Tailscale
-// LastSeen) rewrites the row every sync even though every mapped scalar field is unchanged. This
-// test asserts the intended post-fix behavior — a churn-only profile key is treated as unchanged —
-// and will fail until profile/profile_hash are marked Volatile or provider churn keys are stripped
-// before hashing.
-func TestDirectoryAccountProfileChurnUnchanged(t *testing.T) {
+// TestDirectoryAccountProfileChangePersisted verifies a change confined to the profile bag is a material update: it is written, counted, and emitted
+func TestDirectoryAccountProfileChangePersisted(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	var accountUpdates atomic.Int64
@@ -403,12 +397,12 @@ func TestDirectoryAccountProfileChurnUnchanged(t *testing.T) {
 	result := ingestDirectoryPayloads(ctx, t, installation, entityops.SchemaDirectoryAccount.Name, churned)
 	waitForGala(t, setup.Runtime)
 
-	assert.Check(t, is.Equal(0, result.Changed), "a churn-only profile key must not count as changed")
-	assert.Check(t, is.Equal(int64(0), accountUpdates.Load()), "a churn-only profile key must not emit an update mutation event")
+	assert.Check(t, is.Equal(1, result.Changed), "a profile change must count as changed")
+	assert.Check(t, is.Equal(int64(1), accountUpdates.Load()), "a profile change must emit exactly one update mutation event")
 
 	after := directoryAccountByExternalID(ctx, t, "churn-acct-1")
-	assert.Check(t, is.DeepEqual(before.Profile, after.Profile), "a churn-only profile key must not be written to the stored profile")
-	assert.Check(t, after.LastSeenAt != nil, "the vetoed bulk confirmation still advances last_seen_at by design")
+	assert.Check(t, is.Equal("2024-01-01T00:00:00Z", before.Profile["lastLoginTime"]))
+	assert.Check(t, is.Equal("2024-06-01T00:00:00Z", after.Profile["lastLoginTime"]), "the stored profile must carry the new value")
 }
 
 // TestDirectoryMembershipStaleRunUnchangedNoop verifies a batched run whose id is older than the

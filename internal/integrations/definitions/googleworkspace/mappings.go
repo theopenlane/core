@@ -26,6 +26,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.AddedAt.Expr(`'creationTime' in payload ? payload.creationTime : ""`),
 	entityops.DirectoryAccountFields.AvatarRemoteURL.Expr(`'thumbnailPhotoUrl' in payload ? payload.thumbnailPhotoUrl : null`),
 	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
 // mapExprDirectoryGroup is the CEL mapping expression for Google Workspace group payloads mapped to DirectoryGroup

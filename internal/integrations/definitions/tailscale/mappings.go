@@ -13,6 +13,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.Status.Expr(`dyn('status' in payload ? (payload.status == "active" ? "ACTIVE" : (payload.status == "suspended" ? "INACTIVE" : "INACTIVE")) : "INACTIVE")`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
 	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
 // mapExprDirectoryGroup is the CEL mapping expression for Tailscale role group payloads mapped to DirectoryGroup

@@ -20,8 +20,8 @@ func resolveInstallationMetadata(_ context.Context, req types.InstallationReques
 		return InstallationMetadata{}, false, err
 	}
 
-	if scope.OrganizationID == "" && scope.ProjectID == "" && len(scope.SourceIDs) == 0 {
-		return InstallationMetadata{}, false, nil
+	if scope.OrganizationID == "" && scope.ProjectID == "" {
+		return InstallationMetadata{}, false, ErrProjectIDRequired
 	}
 
 	return InstallationMetadata{

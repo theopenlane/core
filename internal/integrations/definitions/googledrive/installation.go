@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/ssoutils"
 )
 
 // resolveInstallationMetadata derives Google Drive installation metadata from the credential
@@ -45,19 +46,8 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 	}
 
 	meta := InstallationMetadata{
-		Domain: domainFromEmail(about.User.EmailAddress),
+		Domain: ssoutils.EmailDomain(about.User.EmailAddress),
 	}
 
 	return meta, true, nil
-}
-
-// domainFromEmail extracts the domain portion from an email address
-func domainFromEmail(email string) string {
-	for i := len(email) - 1; i >= 0; i-- {
-		if email[i] == '@' {
-			return email[i+1:]
-		}
-	}
-
-	return email
 }

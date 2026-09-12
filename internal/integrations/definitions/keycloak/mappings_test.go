@@ -61,6 +61,7 @@ func TestExamplePayloads(t *testing.T) {
 		assert.Equal(t, "ACTIVE", mapped["status"])
 		assert.Equal(t, "USER", mapped["account_type"])
 		assert.Equal(t, mappingtest.Installation.Name, mapped["directory_name"])
+		assert.Equal(t, true, mapped["primary_source"])
 	})
 
 	t.Run("service_account_user_json", func(t *testing.T) {

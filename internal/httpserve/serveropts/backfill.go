@@ -135,7 +135,8 @@ var backfillRoutines = []backfillRoutine{
 	{
 		Name:    "integration-provenance",
 		Version: "v1",
-		Enabled: false,
+		Enabled: true,
+		Repeat:  true,
 		Run: func(ctx context.Context, deps backfillDeps) error {
 			backfillIntegrationProvenance(ctx, deps.Client, deps.Runtime)
 

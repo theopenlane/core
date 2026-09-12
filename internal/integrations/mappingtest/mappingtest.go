@@ -43,7 +43,7 @@ func MappingSpec(t *testing.T, mappings []types.MappingRegistration, schema stri
 func AssertFiltered(t *testing.T, spec types.MappingOverride, envelope types.MappingEnvelope) bool {
 	t.Helper()
 
-	matched, err := providerkit.EvalFilter(context.Background(), spec.FilterExpr, envelope)
+	matched, err := providerkit.EvalFilter(context.Background(), spec.FilterExpr, envelope, Installation)
 	assert.NilError(t, err)
 
 	return matched
@@ -51,11 +51,12 @@ func AssertFiltered(t *testing.T, spec types.MappingOverride, envelope types.Map
 
 // Installation is the writing installation every mapping test evaluates against
 var Installation = types.MappingInstallation{
-	ID:             "int_mappingtest",
-	Name:           "Mapping Test Installation",
-	DefinitionID:   "def_mappingtest",
-	DefinitionName: "Mapping Test",
-	InstanceID:     "tenant-mappingtest",
+	ID:               "int_mappingtest",
+	Name:             "Mapping Test Installation",
+	DefinitionID:     "def_mappingtest",
+	DefinitionName:   "Mapping Test",
+	InstanceID:       "tenant-mappingtest",
+	PrimaryDirectory: true,
 }
 
 // EvalMap evaluates the map expression for the given spec and envelope, returning the result as a map

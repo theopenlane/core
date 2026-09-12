@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"slices"
+	"strconv"
 	"strings"
 	"time"
 
@@ -39,6 +40,9 @@ const keyJoin = "\x1f"
 
 // ingestQueryChunk bounds the number of lookup key tuples pushed into a single QueryByLookup batch
 const ingestQueryChunk = 500
+
+// fieldID is the primary key field name on every marshaled entity row
+const fieldID = "id"
 
 // IngestOptions carries the minimal ingest-time metadata needed by persistence
 type IngestOptions struct {
@@ -152,8 +156,8 @@ type variantGroup struct {
 }
 
 // snapshotSet tracks one payload set's snapshot-reconciliation bookkeeping across its persist pass:
-// scope is every row entityops considers live for this owner, definition, and instance before the
-// pass began, and seen accumulates the ids this pass actually confirmed
+// scope is every row entityops considers live for this owner, definition, instance, and managing
+// installation before the pass began, and seen accumulates the ids this pass actually confirmed
 type snapshotSet struct {
 	schema *entityops.Schema
 	scope  map[string]struct{}
@@ -162,9 +166,6 @@ type snapshotSet struct {
 	// plus rows the run guard rejected during this pass; any stale row makes this run too old to
 	// infer removals for the set
 	stale int
-	// unknown counts excluded-failure rows this pass could not resolve to an id, so removal
-	// reconciliation skips this set exactly like stale
-	unknown int
 }
 
 // ProcessPayloadSets persists one batch of mapped payload sets synchronously; record
@@ -209,11 +210,12 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 	}
 
 	mappingInstallation := types.MappingInstallation{
-		ID:             ic.Integration.ID,
-		Name:           ic.Integration.Name,
-		DefinitionID:   definition.ID,
-		DefinitionName: definition.DisplayName,
-		InstanceID:     ic.Integration.InstallationMetadata.Display.ExternalID,
+		ID:               ic.Integration.ID,
+		Name:             ic.Integration.Name,
+		DefinitionID:     definition.ID,
+		DefinitionName:   definition.DisplayName,
+		InstanceID:       ic.Integration.InstallationMetadata.Display.ExternalID,
+		PrimaryDirectory: ic.Integration.PrimaryDirectory,
 	}
 
 	batched := !policy.Fanout
@@ -335,6 +337,12 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			}
 		}
 
+		if batched && sourceSchema.QueryByLookup != nil && sourceSchema.RepairLookupField != nil && len(sourceSchema.Lookup) > 0 {
+			if adoptErr := adoptLegacyLookupKeys(ctx, ic.DB, ic.Integration.OwnerID, sourceSchema, ready); adoptErr != nil {
+				return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, adoptErr)
+			}
+		}
+
 		if batched && preload && sourceSchema.QueryByLookup != nil && len(sourceSchema.Lookup) > 0 {
 			setCtx, prefetchErr := prefetchLookupMatches(ctx, ic.DB, ic.Integration.OwnerID, sourceSchema, ready)
 			if prefetchErr != nil {
@@ -349,14 +357,14 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		var set *snapshotSet
 
 		if batched && policy.Snapshot && payloadSet.SnapshotComplete && sourceSchema.SnapshotScope != nil {
-			rows, scopeErr := sourceSchema.SnapshotScope(ctx, ic.DB, ic.Integration.OwnerID, ic.Integration.DefinitionID, ic.Integration.InstallationMetadata.Display.ExternalID)
+			rows, scopeErr := sourceSchema.SnapshotScope(ctx, ic.DB, ic.Integration.OwnerID, ic.Integration.DefinitionID, ic.Integration.InstallationMetadata.Display.ExternalID, ic.Integration.ID)
 			if scopeErr != nil {
 				return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, scopeErr)
 			}
 
 			scope := make(map[string]struct{}, len(rows))
 			for _, row := range rows {
-				scope[entityops.FieldValue(row, "id")] = struct{}{}
+				scope[entityops.FieldValue(row, fieldID)] = struct{}{}
 			}
 
 			set = &snapshotSet{schema: sourceSchema, scope: scope, seen: map[string]struct{}{}}
@@ -373,8 +381,6 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		var confirm []string
 
 		for _, p := range ready {
-			outcome, handleErr := handle(p.ctx, p.record)
-
 			var recordKey, trackKey string
 
 			if batched {
@@ -383,6 +389,35 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 					trackKey = trackingKey(sourceSchema.Snake, key)
 				}
 			}
+
+			if entry, excluded := tracked[trackKey]; excluded && trackKey != "" {
+				entry.Attempts++
+				dirty = true
+
+				if set != nil {
+					ids, lookupErr := excludedRecordRowIDs(ctx, ic.DB, ic.Integration.OwnerID, sourceSchema, p.record.Payload)
+					if lookupErr != nil {
+						return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, lookupErr)
+					}
+
+					for _, id := range ids {
+						set.seen[id] = struct{}{}
+					}
+				}
+
+				result.Excluded++
+				result.Failures = append(result.Failures, RecordFailure{Schema: payloadSet.Schema, Resource: p.resource, Err: fmt.Errorf("%w: %s", ErrIngestRecordExcluded, entry.LastError)})
+
+				logx.FromContext(p.ctx).Warn().Int("attempts", entry.Attempts).Msg("ingest excluded record skipped")
+
+				if entry.Attempts >= ingestMaxRecordAttempts {
+					delete(tracked, trackKey)
+				}
+
+				continue
+			}
+
+			outcome, handleErr := handle(p.ctx, p.record)
 
 			switch {
 			case handleErr == nil:
@@ -426,31 +461,6 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 				wrapped := wrapIngestPersistError(handleErr)
 
 				if trackKey != "" {
-					if entry, excluded := tracked[trackKey]; excluded {
-						entry.Attempts++
-						entry.LastError = wrapped.Error()
-						dirty = true
-
-						if set != nil {
-							if outcome.id != "" {
-								set.seen[outcome.id] = struct{}{}
-							} else {
-								set.unknown++
-							}
-						}
-
-						result.Excluded++
-						result.Failures = append(result.Failures, RecordFailure{Schema: payloadSet.Schema, Resource: p.resource, Err: wrapped})
-
-						logx.FromContext(p.ctx).Warn().Err(wrapped).Int("attempts", entry.Attempts).Msg("ingest excluded record still failing")
-
-						if entry.Attempts >= ingestMaxRecordAttempts {
-							delete(tracked, trackKey)
-						}
-
-						continue
-					}
-
 					tracked[trackKey] = &models.FailedRecord{Schema: sourceSchema.Snake, Key: recordKey, RunID: options.RunID, Attempts: 1, LastError: wrapped.Error()}
 					dirty = true
 				}
@@ -489,11 +499,6 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 				continue
 			}
 
-			if set.unknown > 0 {
-				logx.FromContext(ctx).Debug().Str("schema", set.schema.Snake).Int("unknown", set.unknown).Msg("ingest skipped snapshot removal for unresolved exclusion")
-				continue
-			}
-
 			removed := lo.FilterKeys(set.scope, func(id string, _ struct{}) bool {
 				_, seen := set.seen[id]
 				return !seen
@@ -516,17 +521,33 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 	}
 
 	if batched && dirty {
-		health := ic.Integration.Health
-		health.FailedRecords = failedRecordsFromTracked(tracked)
-
-		if healthErr := ic.DB.Integration.UpdateOneID(ic.Integration.ID).SetHealth(health).Exec(privacy.DecisionContext(ctx, privacy.Allow)); healthErr != nil {
+		if healthErr := persistFailedRecords(ctx, ic, failedRecordsFromTracked(tracked)); healthErr != nil {
 			return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, healthErr)
 		}
-
-		ic.Integration.Health = health
 	}
 
 	return result, nil
+}
+
+// persistFailedRecords writes the exclusion-tracking state onto the installation's health from a fresh read of the row, so concurrent health writers are not clobbered by the batch's stale snapshot
+func persistFailedRecords(ctx context.Context, ic IngestContext, records []models.FailedRecord) error {
+	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	current, err := ic.DB.Integration.Get(systemCtx, ic.Integration.ID)
+	if err != nil {
+		return err
+	}
+
+	health := current.Health
+	health.FailedRecords = records
+
+	if err := ic.DB.Integration.UpdateOneID(ic.Integration.ID).SetHealth(health).Exec(systemCtx); err != nil {
+		return err
+	}
+
+	ic.Integration.Health = health
+
+	return nil
 }
 
 // groupByVariant batches a payload set's prepared records by mapping variant, in first-seen order,
@@ -657,6 +678,22 @@ func prefetchLookupMatches(ctx context.Context, db *ent.Client, ownerID string, 
 	return entityops.WithLookupMatches(ctx, schema, matches), nil
 }
 
+// excludedRecordRowIDs resolves the rows an excluded record would have written, so a snapshot pass
+// treats them as seen and never marks a record removed only because its write was skipped
+func excludedRecordRowIDs(ctx context.Context, db *ent.Client, ownerID string, schema *entityops.Schema, payload json.RawMessage) ([]string, error) {
+	alternative, values, ok := lookupKeyFor(schema, payload)
+	if !ok || schema.QueryByLookup == nil {
+		return nil, nil
+	}
+
+	rows, err := schema.QueryByLookup(ctx, db, ownerID, alternative, []entityops.LookupValues{values})
+	if err != nil {
+		return nil, err
+	}
+
+	return lo.Map(rows, func(row json.RawMessage, _ int) string { return entityops.FieldValue(row, fieldID) }), nil
+}
+
 // trackingKey builds the exclusion-tracking map key from a schema name and a failed record's
 // lookup key, so records sharing lookup values across different schemas track independently
 func trackingKey(schemaName, key string) string {
@@ -679,8 +716,9 @@ func failedRecordsFromTracked(tracked map[string]*models.FailedRecord) []models.
 	return records
 }
 
-// stampProvenance fills the schema's trusted integration-derived provenance columns and ownership
-// edges onto a prepared ingest payload; the sole writer of provenance columns in this package
+// stampProvenance writes the schema's trusted integration-derived provenance columns and ownership
+// edges onto a prepared ingest payload, overriding anything the mapping emitted for them; the sole
+// writer of provenance columns in this package
 func stampProvenance(payload json.RawMessage, schema *entityops.Schema, integrationRecord *ent.Integration, runID string) json.RawMessage {
 	values := []struct {
 		field string
@@ -730,15 +768,14 @@ func stampProvenance(payload json.RawMessage, schema *entityops.Schema, integrat
 	})
 }
 
-// stampProvenanceKey writes value to key when the key is absent, JSON null, or an empty string,
-// reporting whether it wrote a change
+// stampProvenanceKey writes value to key unconditionally, reporting whether the stored bytes changed
 func stampProvenanceKey(doc map[string]json.RawMessage, key string, value any) bool {
-	if raw, ok := doc[key]; ok && !jsonx.IsEmptyRawMessage(raw) && !bytes.Equal(bytes.TrimSpace(raw), []byte(`""`)) {
+	encoded, err := json.Marshal(value)
+	if err != nil {
 		return false
 	}
 
-	encoded, err := json.Marshal(value)
-	if err != nil {
+	if raw, ok := doc[key]; ok && bytes.Equal(raw, encoded) {
 		return false
 	}
 
@@ -747,10 +784,109 @@ func stampProvenanceKey(doc map[string]json.RawMessage, key string, value any) b
 	return true
 }
 
+// legacyScientificKey converts a numeric key like "147884153" into the "1.47884153e+08" form the
+// old CEL double conversion stored, so rows written before the fix can still be found; returns
+// false for non-numeric keys and for numbers whose two forms are identical
+func legacyScientificKey(value string) (string, bool) {
+	parsed, err := strconv.ParseFloat(value, 64)
+	if err != nil {
+		return "", false
+	}
+
+	legacy := strconv.FormatFloat(parsed, 'g', -1, 64)
+	if legacy == value {
+		return "", false
+	}
+
+	return legacy, true
+}
+
+// legacyLookup pairs one record's lookup alternative with the legacy-form key tuple to search for
+// and the canonical values to repair matched rows to
+type legacyLookup struct {
+	alternative int
+	legacy      entityops.LookupValues
+	canonical   entityops.LookupValues
+}
+
+// adoptLegacyLookupKeys finds rows still keyed by the scientific-notation form of a numeric lookup
+// value and rewrites them to the canonical key in place, so the upsert lookup that follows resolves
+// them under the key the mapping now emits instead of creating a duplicate
+func adoptLegacyLookupKeys(ctx context.Context, db *ent.Client, ownerID string, schema *entityops.Schema, ready []preparedIngestRecord) error {
+	var lookups []legacyLookup
+
+	for _, p := range ready {
+		alternative, values, ok := lookupKeyFor(schema, p.record.Payload)
+		if !ok {
+			continue
+		}
+
+		legacy := make(entityops.LookupValues, len(values))
+		converted := false
+
+		for name, value := range values {
+			legacy[name] = value
+
+			if form, ok := legacyScientificKey(value); ok {
+				legacy[name] = form
+				converted = true
+			}
+		}
+
+		if converted {
+			lookups = append(lookups, legacyLookup{alternative: alternative, legacy: legacy, canonical: values})
+		}
+	}
+
+	for alternative, group := range lo.GroupBy(lookups, func(l legacyLookup) int { return l.alternative }) {
+		alt := schema.Lookup[alternative]
+
+		canonicalByKey := make(map[string]entityops.LookupValues, len(group))
+		for _, l := range group {
+			canonicalByKey[entityops.EncodeLookupKey(alt, l.legacy)] = l.canonical
+		}
+
+		keys := lo.Map(group, func(l legacyLookup, _ int) entityops.LookupValues { return l.legacy })
+
+		for _, chunk := range lo.Chunk(keys, ingestQueryChunk) {
+			rows, err := schema.QueryByLookup(ctx, db, ownerID, alternative, chunk)
+			if err != nil {
+				return err
+			}
+
+			for _, row := range rows {
+				rowValues := make(entityops.LookupValues, len(alt.Fields))
+				for _, name := range alt.Fields {
+					rowValues[name] = entityops.FieldValue(row, name)
+				}
+
+				canonical, ok := canonicalByKey[entityops.EncodeLookupKey(alt, rowValues)]
+				if !ok {
+					continue
+				}
+
+				for _, name := range alt.Fields {
+					if rowValues[name] == canonical[name] {
+						continue
+					}
+
+					if err := schema.RepairLookupField(ctx, db, entityops.FieldValue(row, fieldID), name, canonical[name]); err != nil {
+						return err
+					}
+
+					logx.FromContext(ctx).Info().Str("schema", schema.Snake).Str("field", name).Str("legacy", rowValues[name]).Str("canonical", canonical[name]).Msg("ingest adopted legacy lookup key")
+				}
+			}
+		}
+	}
+
+	return nil
+}
+
 // mapIngestRecord applies the resolved mapping's filters and map expression to one data envelope,
 // returning the mapped record and whether the envelope passed the include filters
 func mapIngestRecord(ctx context.Context, mapping types.MappingOverride, schema string, envelope types.MappingEnvelope, installationFilterExpr string, installation types.MappingInstallation) (mappedIngestRecord, bool, error) {
-	matched, err := envelopeIncludedByFilters(ctx, installationFilterExpr, mapping.FilterExpr, envelope)
+	matched, err := envelopeIncludedByFilters(ctx, installationFilterExpr, mapping.FilterExpr, envelope, installation)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("ingest filter failed")
 		return mappedIngestRecord{}, false, ErrIngestFilterFailed
@@ -800,8 +936,8 @@ func resolveInstallationFilterExpr(installation *ent.Integration, definition typ
 }
 
 // envelopeIncludedByFilters evaluates the installation-level and mapping-level filter expressions against the data envelope
-func envelopeIncludedByFilters(ctx context.Context, installationFilterExpr string, mappingFilterExpr string, envelope types.MappingEnvelope) (bool, error) {
-	matched, err := providerkit.EvalFilter(ctx, installationFilterExpr, envelope)
+func envelopeIncludedByFilters(ctx context.Context, installationFilterExpr string, mappingFilterExpr string, envelope types.MappingEnvelope, installation types.MappingInstallation) (bool, error) {
+	matched, err := providerkit.EvalFilter(ctx, installationFilterExpr, envelope, installation)
 	if err != nil {
 		return false, err
 	}
@@ -809,7 +945,7 @@ func envelopeIncludedByFilters(ctx context.Context, installationFilterExpr strin
 		return false, nil
 	}
 
-	return providerkit.EvalFilter(ctx, mappingFilterExpr, envelope)
+	return providerkit.EvalFilter(ctx, mappingFilterExpr, envelope, installation)
 }
 
 // findMapping looks up the mapping spec for the given schema and variant

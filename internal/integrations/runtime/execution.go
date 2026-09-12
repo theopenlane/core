@@ -353,6 +353,24 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	}
 
 	if tracked {
+		run, err := db.IntegrationRun.Get(ctx, src.RunID)
+		if err != nil {
+			return failRun(err, nil)
+		}
+
+		if run.Status != enums.IntegrationRunStatusPending {
+			retry, retryErr := operations.RetryRun(ctx, db, run)
+			if retryErr != nil {
+				return failRun(retryErr, nil)
+			}
+
+			logx.FromContext(ctx).Info().Str("retry_of", run.ID).Str("run_id", retry.ID).Msg("operation attempt continues under a new run")
+
+			src.RunID = retry.ID
+			_ = gala.SetAttributes(&oc, src)
+			ctx = intobvs.WithContext(ctx, oc)
+		}
+
 		if err := operations.MarkRunRunning(ctx, db, src.RunID); err != nil {
 			return failRun(err, nil)
 		}

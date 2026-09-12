@@ -118,6 +118,19 @@ func normalizeIntegralNumbers(value any) any {
 	}
 }
 
+// mappingVars builds the CEL variable map shared by filter and map evaluation, binding the envelope and the writing installation
+func mappingVars(envelope types.MappingEnvelope, installation types.MappingInstallation) (map[string]any, error) {
+	installationVars, err := jsonx.ToMap(installation)
+	if err != nil {
+		return nil, err
+	}
+
+	vars := envelopeToVars(envelope)
+	vars[celVarInstallation] = installationVars
+
+	return vars, nil
+}
+
 // envelopeToVars converts a MappingEnvelope into the CEL variable map
 func envelopeToVars(envelope types.MappingEnvelope) map[string]any {
 	var payload any
@@ -144,10 +157,10 @@ func envelopeToVars(envelope types.MappingEnvelope) map[string]any {
 	}
 }
 
-// EvalFilter evaluates a CEL filter expression against a MappingEnvelope
+// EvalFilter evaluates a CEL filter expression against a MappingEnvelope and the writing installation
 // An empty expr returns true (pass-through). Returns false when the expression excludes the envelope,
 // or a wrapped ErrFilterExprEval on evaluation failure
-func EvalFilter(ctx context.Context, expr string, envelope types.MappingEnvelope) (bool, error) {
+func EvalFilter(ctx context.Context, expr string, envelope types.MappingEnvelope, installation types.MappingInstallation) (bool, error) {
 	if expr == "" {
 		return true, nil
 	}
@@ -157,7 +170,12 @@ func EvalFilter(ctx context.Context, expr string, envelope types.MappingEnvelope
 		return false, fmt.Errorf("%w: %w", ErrFilterExprEval, err)
 	}
 
-	out, _, err := ev.Evaluate(ctx, expr, envelopeToVars(envelope))
+	vars, err := mappingVars(envelope, installation)
+	if err != nil {
+		return false, fmt.Errorf("%w: %w", ErrFilterExprEval, err)
+	}
+
+	out, _, err := ev.Evaluate(ctx, expr, vars)
 	if err != nil {
 		return false, fmt.Errorf("%w: %w", ErrFilterExprEval, err)
 	}
@@ -187,13 +205,10 @@ func EvalMap(ctx context.Context, expr string, envelope types.MappingEnvelope, i
 		return nil, fmt.Errorf("%w: %w", ErrMapExprEval, err)
 	}
 
-	installationVars, err := jsonx.ToMap(installation)
+	vars, err := mappingVars(envelope, installation)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrMapExprEval, err)
 	}
-
-	vars := envelopeToVars(envelope)
-	vars[celVarInstallation] = installationVars
 
 	result, err := ev.EvaluateJSONMap(ctx, expr, vars)
 	if err != nil {
