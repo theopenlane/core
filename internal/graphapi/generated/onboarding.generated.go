@@ -110,10 +110,6 @@ func (ec *executionContext) _OnboardingCreatePayload(ctx context.Context, sel as
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNOnboardingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOnboardingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.OnboardingCreatePayload) graphql.Marshaler {
-	return ec._OnboardingCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNOnboardingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOnboardingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OnboardingCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {

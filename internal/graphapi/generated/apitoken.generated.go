@@ -583,10 +583,6 @@ func (ec *executionContext) _APITokenUpdatePayload(ctx context.Context, sel ast.
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAPITokenBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenBulkCreatePayload) graphql.Marshaler {
-	return ec._APITokenBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAPITokenBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNAPITokenBulkCreatePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._APITokenBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAPITokenBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenBulkDeletePayload) graphql.Marshaler {
-	return ec._APITokenBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAPITokenBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNAPITokenBulkDeletePayload2ᚖgithubᚗcomᚋ
 	return ec._APITokenBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAPITokenBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenBulkUpdatePayload) graphql.Marshaler {
-	return ec._APITokenBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAPITokenBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNAPITokenBulkUpdatePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._APITokenBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAPITokenCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenCreatePayload) graphql.Marshaler {
-	return ec._APITokenCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAPITokenCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNAPITokenCreatePayload2ᚖgithubᚗcomᚋtheo
 	return ec._APITokenCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAPITokenDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenDeletePayload) graphql.Marshaler {
-	return ec._APITokenDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAPITokenDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNAPITokenDeletePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._APITokenDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAPITokenUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenUpdatePayload) graphql.Marshaler {
-	return ec._APITokenUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAPITokenUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenUpdatePayload) graphql.Marshaler {

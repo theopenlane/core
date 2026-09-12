@@ -583,10 +583,6 @@ func (ec *executionContext) _DNSVerificationUpdatePayload(ctx context.Context, s
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNDNSVerificationBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationBulkCreatePayload) graphql.Marshaler {
-	return ec._DNSVerificationBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDNSVerificationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNDNSVerificationBulkCreatePayload2ᚖgithub�
 		return graphql.Null
 	}
 	return ec._DNSVerificationBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDNSVerificationBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationBulkDeletePayload) graphql.Marshaler {
-	return ec._DNSVerificationBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDNSVerificationBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNDNSVerificationBulkDeletePayload2ᚖgithub�
 	return ec._DNSVerificationBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDNSVerificationBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationBulkUpdatePayload) graphql.Marshaler {
-	return ec._DNSVerificationBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDNSVerificationBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNDNSVerificationBulkUpdatePayload2ᚖgithub�
 		return graphql.Null
 	}
 	return ec._DNSVerificationBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDNSVerificationCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationCreatePayload) graphql.Marshaler {
-	return ec._DNSVerificationCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDNSVerificationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNDNSVerificationCreatePayload2ᚖgithubᚗcom
 	return ec._DNSVerificationCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDNSVerificationDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationDeletePayload) graphql.Marshaler {
-	return ec._DNSVerificationDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDNSVerificationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNDNSVerificationDeletePayload2ᚖgithubᚗcom
 		return graphql.Null
 	}
 	return ec._DNSVerificationDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDNSVerificationUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationUpdatePayload) graphql.Marshaler {
-	return ec._DNSVerificationUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDNSVerificationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationUpdatePayload) graphql.Marshaler {

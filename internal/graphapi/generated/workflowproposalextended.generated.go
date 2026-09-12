@@ -292,10 +292,6 @@ func (ec *executionContext) unmarshalNUpdateWorkflowProposalChangesInput2github�
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNWorkflowProposalSubmitPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalSubmitPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowProposalSubmitPayload) graphql.Marshaler {
-	return ec._WorkflowProposalSubmitPayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowProposalSubmitPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalSubmitPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowProposalSubmitPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -306,10 +302,6 @@ func (ec *executionContext) marshalNWorkflowProposalSubmitPayload2ᚖgithubᚗco
 	return ec._WorkflowProposalSubmitPayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNWorkflowProposalUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowProposalUpdatePayload) graphql.Marshaler {
-	return ec._WorkflowProposalUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowProposalUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowProposalUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -318,10 +310,6 @@ func (ec *executionContext) marshalNWorkflowProposalUpdatePayload2ᚖgithubᚗco
 		return graphql.Null
 	}
 	return ec._WorkflowProposalUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowProposalWithdrawPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalWithdrawPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowProposalWithdrawPayload) graphql.Marshaler {
-	return ec._WorkflowProposalWithdrawPayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowProposalWithdrawPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalWithdrawPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowProposalWithdrawPayload) graphql.Marshaler {
