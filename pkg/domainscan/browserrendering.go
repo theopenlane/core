@@ -592,7 +592,6 @@ func buildCompanyProfileSchema() ResponseFormat {
 				"customers": {
 					Type:        "array",
 					Description: "Named customers, clients, or case study companies mentioned on the website (e.g., in logos, testimonials, or case studies). Only include company or organization names, not individual people.",
-					MaxItems:    30,
 					Items: &JSONSchemaProperty{
 						Type:        "string",
 						Description: "A customer or client company name",
@@ -603,7 +602,6 @@ func buildCompanyProfileSchema() ResponseFormat {
 				"technologies": {
 					Type:        "array",
 					Description: "Third-party SaaS tools, platforms, analytics services, and technology vendors the company itself relies on (e.g., Google Analytics, Salesforce, HubSpot, Cloudflare, Intercom, Stripe, Segment, Zendesk). Canonical vendor names only, no aliases or 'X API' variants, not web standards or protocols, and not the integrations or connectors the company's own product offers to its customers.",
-					MaxItems:    40,
 					Items: &JSONSchemaProperty{
 						Type:        "string",
 						Description: "A technology vendor or SaaS platform name",
@@ -614,7 +612,7 @@ func buildCompanyProfileSchema() ResponseFormat {
 				"provided_services": {
 					Type:        "array",
 					Description: "The services or product categories this company itself provides to its own customers (e.g. compliance automation, payment processing, CRM, email marketing, identity management). This describes what the company sells, not third-party tools it uses internally.",
-					MaxItems:    20,
+					MaxItems:    maxListItems,
 					Items: &JSONSchemaProperty{
 						Type:        "string",
 						Description: "A service or product category the company provides",
@@ -627,7 +625,7 @@ func buildCompanyProfileSchema() ResponseFormat {
 				"subdomain_links": {
 					Type:        "array",
 					Description: "URLs found in the page's navigation, footer, or body that point to other subdomains of this same company's domain (e.g. console.<domain>, app.<domain>, docs.<domain>, dashboard.<domain>) — the company's own other products or sections, not third-party vendor links.",
-					MaxItems:    30,
+					MaxItems:    maxListItems,
 					Items: &JSONSchemaProperty{
 						Type:        "string",
 						Description: "A URL pointing to another subdomain of this same company's domain",
