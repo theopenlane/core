@@ -141,6 +141,17 @@ func TestBuildDomainScanImportEnvelope(t *testing.T) {
 		Findings: []*model.ImportDomainScanReviewFindingInput{
 			{Category: lo.ToPtr("security"), Description: lo.ToPtr("missing SPF"), Severity: lo.ToPtr("medium")},
 		},
+		Branding: &model.ImportDomainScanReviewBrandDesignInput{
+			LogoURL:                  lo.ToPtr("https://theopenlane.io/logo.svg"),
+			FaviconURL:               lo.ToPtr("https://theopenlane.io/favicon.ico"),
+			PrimaryColor:             lo.ToPtr("#123456"),
+			Font:                     lo.ToPtr("Inter"),
+			ForegroundColor:          lo.ToPtr("#111111"),
+			BackgroundColor:          lo.ToPtr("#FFFFFF"),
+			AccentColor:              lo.ToPtr("#654321"),
+			SecondaryBackgroundColor: lo.ToPtr("#F5F5F5"),
+			SecondaryForegroundColor: lo.ToPtr("#222222"),
+		},
 	}
 
 	got := buildDomainScanImportEnvelope("org-1", input)
@@ -182,4 +193,11 @@ func TestBuildDomainScanImportEnvelope(t *testing.T) {
 
 	assert.Assert(t, len(got.Findings) == 1)
 	assert.Equal(t, got.Findings[0].Severity, "medium")
+
+	assert.Assert(t, got.Branding != nil)
+	assert.Equal(t, got.Branding.LogoURL, "https://theopenlane.io/logo.svg")
+	assert.Equal(t, got.Branding.FaviconURL, "https://theopenlane.io/favicon.ico")
+	assert.Equal(t, got.Branding.PrimaryColor, "#123456")
+	assert.Equal(t, got.Branding.Font, "Inter")
+	assert.Equal(t, got.Branding.ForegroundColor, "#111111")
 }

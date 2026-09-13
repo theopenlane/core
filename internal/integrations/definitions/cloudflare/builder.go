@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"

@@ -1702,6 +1702,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**bulkscan**|`boolean`|||
 |[**nonvendorcategories**](#defsstring)|`string[]`|||
 |[**deniedvendornames**](#defsstring)|`string[]`|||
 |**scanttl**|`integer`|||

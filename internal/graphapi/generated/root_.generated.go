@@ -50992,6 +50992,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputIdentityHolderOrder,
 		ec.unmarshalInputIdentityHolderWhereInput,
 		ec.unmarshalInputImportDomainScanReviewAssetInput,
+		ec.unmarshalInputImportDomainScanReviewBrandDesignInput,
 		ec.unmarshalInputImportDomainScanReviewFindingInput,
 		ec.unmarshalInputImportDomainScanReviewInput,
 		ec.unmarshalInputImportDomainScanReviewPlatformInput,
@@ -55628,6 +55629,21 @@ input ImportDomainScanReviewFindingInput {
 }
 
 """
+brand design data retrieved from the domain scan
+"""
+input ImportDomainScanReviewBrandDesignInput {
+    logoURL: String
+    faviconURL: String
+    primaryColor: String
+    font: String
+    foregroundColor: String
+    backgroundColor: String
+    accentColor: String
+    secondaryBackgroundColor: String
+    secondaryForegroundColor: String
+}
+
+"""
 Input for importDomainScanReview mutation
 """
 input ImportDomainScanReviewInput {
@@ -55655,6 +55671,10 @@ input ImportDomainScanReviewInput {
     the accepted findings
     """
     findings: [ImportDomainScanReviewFindingInput!]
+    """
+    the accepted trust center branding, if any
+    """
+    branding: ImportDomainScanReviewBrandDesignInput
 }
 
 """
@@ -55672,7 +55692,7 @@ type ImportDomainScanReviewPayload {
 extend type Mutation {
     """
     Accept a domain scan review and asynchronously create the corresponding platform, system
-    details, vendors, assets, and findings
+    details, vendors, assets, findings and brand design details
     """
     importDomainScanReview(
         """
@@ -152079,6 +152099,14 @@ input CreateTrustCenterPreviewSettingInput {
   accent color for the trust center
   """
   accentColor: String
+  """
+  secondary background color for the trust center
+  """
+  secondaryBackgroundColor: String
+  """
+  secondary foreground color for the trust center
+  """
+  secondaryForegroundColor: String
   """
   hero image local file ID
   """

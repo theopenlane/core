@@ -477,6 +477,9 @@
     },
     "domainscan.ReportConfig": {
       "properties": {
+        "bulkscan": {
+          "type": "boolean"
+        },
         "nonvendorcategories": {
           "$ref": "#/$defs/[]string"
         },

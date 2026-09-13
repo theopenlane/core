@@ -44,6 +44,9 @@ const (
 	// couldn't connect to at all (e.g. DNS doesn't resolve, connection refused) - retrying doesn't
 	// help since the domain itself is unreachable, not the render
 	cloudflareErrNetworkConnectionClosed = 5006
+	// maxListItems bounds open-ended string arrays in extraction schemas so the model cannot
+	// exhaust its output budget enumerating aliases before closing the JSON document
+	maxListItems = 25
 )
 
 // trustCenterContentSelector is a best-effort CSS selector for the content
@@ -100,6 +103,24 @@ func (c *Config) GetComplianceData(ctx context.Context, domain string) (*Complia
 	}
 
 	return comp, nil
+}
+
+// GetBrandingData extracts visual design tokens from the rendered website
+func (c *Config) GetBrandingData(ctx context.Context, domain string) (*BrandDesignProfile, error) {
+	branding, err := c.browserBranding(ctx, domain)
+	if errors.Is(err, errBrandingBotChallenge) {
+		return &BrandDesignProfile{
+			Error:      errBrandingBotChallenge.Error(),
+			FaviconURL: formatFaviconURL(domain),
+		}, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	branding.FaviconURL = formatFaviconURL(domain)
+
+	return branding, nil
 }
 
 // fetchCompliancePage runs the compliance prompt against a single URL and unmarshals the structured result into a CompliancePage
@@ -333,9 +354,11 @@ func (c *Config) browserRendering(ctx context.Context, target string, kind Promp
 			}
 		}
 
-		resp, err := client.BrowserRendering.Json.New(ctx, params)
+		var envelope browser_rendering.JsonNewResponseEnvelope
+
+		_, err := client.BrowserRendering.Json.New(ctx, params, option.WithResponseBodyInto(&envelope))
 		if err == nil {
-			return resp, nil
+			return &envelope.Result, nil
 		}
 
 		lastErr = err
@@ -494,14 +517,18 @@ func buildCompanyProfileSchema() ResponseFormat {
 						Type:        "string",
 						Description: "A customer or client company name",
 					},
+					MaxItems:    maxListItems,
+					UniqueItems: true,
 				},
 				"technologies": {
 					Type:        "array",
-					Description: "Third-party SaaS tools, platforms, analytics services, and technology vendors detectable on the website (e.g., Google Analytics, Salesforce, HubSpot, Cloudflare, Intercom, Stripe, Segment, Zendesk). Only include vendor or product names, not web standards or protocols.",
+					Description: "Third-party SaaS tools, platforms, analytics services, and technology vendors the company itself relies on (e.g., Google Analytics, Salesforce, HubSpot, Cloudflare, Intercom, Stripe, Segment, Zendesk). Canonical vendor names only, no aliases or 'X API' variants, not web standards or protocols, and not the integrations or connectors the company's own product offers to its customers.",
 					Items: &JSONSchemaProperty{
 						Type:        "string",
 						Description: "A technology vendor or SaaS platform name",
 					},
+					MaxItems:    maxListItems,
+					UniqueItems: true,
 				},
 				"provided_services": {
 					Type:        "array",
