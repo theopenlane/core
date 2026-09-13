@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -18,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 func init() { registerListeners(OnboardingProgramListeners) }
@@ -49,12 +49,8 @@ func handleOnboardingProgram(inv entityops.Invocation, _ entityops.MutationPaylo
 		return nil
 	}
 
-	caller := *inv.Caller
-	caller.OrganizationID = record.OrganizationID
-	ctx := auth.WithCaller(inv.Context, &caller)
-
-	_, err = workflows.WithTx(ctx, inv.Client, nil, func(tx *generated.Tx) (struct{}, error) {
-		return struct{}{}, createProgram(ctx, tx.Client(), record.OrganizationID, record.Compliance)
+	_, err = workflows.WithTx(inv.Context, inv.Client, nil, func(tx *generated.Tx) (struct{}, error) {
+		return struct{}{}, createProgram(inv.Context, tx.Client(), record.OrganizationID, record.Compliance)
 	})
 
 	return err
@@ -62,7 +58,12 @@ func handleOnboardingProgram(inv entityops.Invocation, _ entityops.MutationPaylo
 
 func generateProgramName(standards []*generated.Standard, year int) string {
 	if len(standards) == 1 {
-		return fmt.Sprintf("%s Program %d", standards[0].ShortName, year)
+		name := standards[0].ShortName
+		if name == "" {
+			name = standards[0].Name
+		}
+
+		return fmt.Sprintf("%s Program %d", name, year)
 	}
 
 	return fmt.Sprintf("Compliance Program %d", year)
@@ -137,13 +138,8 @@ func createProgram(ctx context.Context, client *generated.Client, orgID string, 
 }
 
 func getOnboardingFrameworks(complianceData map[string]interface{}) ([]string, error) {
-	data, err := json.Marshal(complianceData["frameworks"])
-	if err != nil {
-		return nil, err
-	}
-
 	var frameworks []string
-	if err := json.Unmarshal(data, &frameworks); err != nil {
+	if err := jsonx.RoundTrip(complianceData["frameworks"], &frameworks); err != nil {
 		return nil, fmt.Errorf("invalid onboarding frameworks: %w", err)
 	}
 
