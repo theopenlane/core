@@ -4,7 +4,6 @@ import "github.com/theopenlane/entx"
 
 // Onboarding compliance rule IDs
 const (
-	RuleFramework                  = "framework"
 	RuleFrameworkGeneric           = "framework-generic"
 	RuleImportExistingControls     = "import-existing-controls"
 	RuleImportTemplateControls     = "import-template-controls"
@@ -18,11 +17,6 @@ const (
 
 // OnboardingComplianceRules generate suggested tasks from the onboarding compliance answers
 var OnboardingComplianceRules = []entx.TaskRuleSpec{
-	{
-		RuleID:      RuleFramework,
-		EachElement: "value.frameworks",
-		Trigger:     entx.TaskRuleOnCreateOnly,
-	},
 	{
 		RuleID:     RuleFrameworkGeneric,
 		Expression: "!(has(value.frameworks) && size(value.frameworks) > 0)",
