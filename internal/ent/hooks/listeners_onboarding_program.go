@@ -82,7 +82,6 @@ func createProgram(ctx context.Context, client *generated.Client, orgID string, 
 	description := fmt.Sprintf("Track %s compliance activities, evidence, and audit readiness for %d.", frameworks, currentYear)
 
 	builder := client.Program.Create().
-		SetOwnerID(orgID).
 		SetName(generateProgramName(standards, currentYear)).
 		SetDescription(description).
 		SetFrameworkName(frameworks)
