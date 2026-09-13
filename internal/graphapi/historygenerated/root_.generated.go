@@ -811,7 +811,6 @@ type ComplexityRoot struct {
 	FileHistory struct {
 		CategoryID            func(childComplexity int) int
 		CategoryName          func(childComplexity int) int
-		CategoryType          func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
 		DetectedContentType   func(childComplexity int) int
@@ -6740,12 +6739,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FileHistory.CategoryName(childComplexity), true
-	case "FileHistory.categoryType":
-		if e.ComplexityRoot.FileHistory.CategoryType == nil {
-			break
-		}
-
-		return e.ComplexityRoot.FileHistory.CategoryType(childComplexity), true
 	case "FileHistory.createdAt":
 		if e.ComplexityRoot.FileHistory.CreatedAt == nil {
 			break
@@ -26835,10 +26828,6 @@ type FileHistory implements Node {
   """
   storeKey: String
   """
-  the category type of the file, if any (e.g. evidence, invoice, etc.)
-  """
-  categoryType: String @deprecated(reason: "use category_status_name instead")
-  """
   the full URI of the file
   """
   uri: String
@@ -27269,20 +27258,6 @@ input FileHistoryWhereInput {
   storeKeyNotNil: Boolean
   storeKeyEqualFold: String
   storeKeyContainsFold: String
-  """
-  category_type field predicates
-  """
-  categoryType: String
-  categoryTypeNEQ: String
-  categoryTypeIn: [String!]
-  categoryTypeNotIn: [String!]
-  categoryTypeContains: String
-  categoryTypeHasPrefix: String
-  categoryTypeHasSuffix: String
-  categoryTypeIsNil: Boolean
-  categoryTypeNotNil: Boolean
-  categoryTypeEqualFold: String
-  categoryTypeContainsFold: String
   """
   uri field predicates
   """
@@ -53492,8 +53467,6 @@ func (ec *executionContext) childFields_FileHistory(ctx context.Context, field g
 		return ec.fieldContext_FileHistory_detectedContentType(ctx, field)
 	case "storeKey":
 		return ec.fieldContext_FileHistory_storeKey(ctx, field)
-	case "categoryType":
-		return ec.fieldContext_FileHistory_categoryType(ctx, field)
 	case "uri":
 		return ec.fieldContext_FileHistory_uri(ctx, field)
 	case "storageScheme":

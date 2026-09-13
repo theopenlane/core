@@ -9650,7 +9650,6 @@ type CreateFileInput struct {
 	Md5Hash                   *string                `json:"md5_hash,omitempty"`
 	DetectedContentType       string                 `json:"detected_content_type,omitempty"`
 	StoreKey                  *string                `json:"store_key,omitempty"`
-	CategoryType              *string                `json:"category_type,omitempty"`
 	URI                       *string                `json:"uri,omitempty"`
 	StorageScheme             *string                `json:"storage_scheme,omitempty"`
 	StorageVolume             *string                `json:"storage_volume,omitempty"`
@@ -9722,9 +9721,6 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	m.SetDetectedContentType(i.DetectedContentType)
 	if v := i.StoreKey; v != nil {
 		m.SetStoreKey(*v)
-	}
-	if v := i.CategoryType; v != nil {
-		m.SetCategoryType(*v)
 	}
 	if v := i.URI; v != nil {
 		m.SetURI(*v)
@@ -9851,8 +9847,6 @@ type UpdateFileInput struct {
 	DetectedContentType             *string `json:"detected_content_type,omitempty"`
 	ClearStoreKey                   bool
 	StoreKey                        *string `json:"store_key,omitempty"`
-	ClearCategoryType               bool
-	CategoryType                    *string `json:"category_type,omitempty"`
 	ClearURI                        bool
 	URI                             *string `json:"uri,omitempty"`
 	ClearStorageScheme              bool
@@ -10016,12 +10010,6 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.StoreKey; v != nil {
 		m.SetStoreKey(*v)
-	}
-	if i.ClearCategoryType {
-		m.ClearCategoryType()
-	}
-	if v := i.CategoryType; v != nil {
-		m.SetCategoryType(*v)
 	}
 	if i.ClearURI {
 		m.ClearURI()

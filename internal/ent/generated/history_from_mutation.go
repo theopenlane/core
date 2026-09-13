@@ -7647,10 +7647,6 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStoreKey(storeKey)
 	}
 
-	if categoryType, exists := m.CategoryType(); exists {
-		create = create.SetCategoryType(categoryType)
-	}
-
 	if uri, exists := m.URI(); exists {
 		create = create.SetURI(uri)
 	}
@@ -7881,12 +7877,6 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStoreKey(file.StoreKey)
 		}
 
-		if categoryType, exists := m.CategoryType(); exists {
-			create = create.SetCategoryType(categoryType)
-		} else {
-			create = create.SetCategoryType(file.CategoryType)
-		}
-
 		if uri, exists := m.URI(); exists {
 			create = create.SetURI(uri)
 		} else {
@@ -8011,7 +8001,6 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetMd5Hash(file.Md5Hash).
 			SetDetectedContentType(file.DetectedContentType).
 			SetStoreKey(file.StoreKey).
-			SetCategoryType(file.CategoryType).
 			SetURI(file.URI).
 			SetStorageScheme(file.StorageScheme).
 			SetStorageVolume(file.StorageVolume).
