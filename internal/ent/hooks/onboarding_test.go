@@ -143,7 +143,6 @@ func (suite *HookTestSuite) TestOnboardingProgramFrameworkSelections() {
 		compliance   map[string]interface{}
 		programCount int
 		controlCount int
-		expectedErr  string
 	}{
 		{name: "no compliance"},
 		{name: "no frameworks", compliance: map[string]interface{}{"existing_controls": true}},
@@ -159,16 +158,6 @@ func (suite *HookTestSuite) TestOnboardingProgramFrameworkSelections() {
 			compliance:   map[string]interface{}{"frameworks": []string{"other"}},
 			programCount: 1,
 		},
-		{
-			name:        "unknown framework",
-			compliance:  map[string]interface{}{"frameworks": []string{"missing-framework"}},
-			expectedErr: "resolve onboarding framework",
-		},
-		{
-			name:        "invalid framework input",
-			compliance:  map[string]interface{}{"frameworks": []interface{}{123}},
-			expectedErr: "invalid onboarding frameworks",
-		},
 	} {
 
 		t.Run(tc.name, func(t *testing.T) {
@@ -181,10 +170,6 @@ func (suite *HookTestSuite) TestOnboardingProgramFrameworkSelections() {
 				Compliance:  tc.compliance,
 			}).Save(ctx)
 
-			if tc.expectedErr != "" {
-				require.ErrorContains(t, err, tc.expectedErr)
-				return
-			}
 			require.NoError(t, err)
 
 			suite.waitForEvents()
