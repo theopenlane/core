@@ -494,14 +494,11 @@ type DirectoryAccountProjection struct {
 	EnvironmentName         string                         `json:"environment_name,omitempty"`
 	ExternalID              string                         `json:"external_id,omitempty"`
 	FamilyName              string                         `json:"family_name,omitempty"`
-	FirstSeenAt             time.Time                      `json:"first_seen_at,omitempty"`
 	GivenName               string                         `json:"given_name,omitempty"`
 	IdentityHolderID        string                         `json:"identity_holder_id,omitempty"`
 	IntegrationID           string                         `json:"integration_id,omitempty"`
 	IntegrationRunID        string                         `json:"integration_run_id,omitempty"`
 	JobTitle                string                         `json:"job_title,omitempty"`
-	LastLoginAt             time.Time                      `json:"last_login_at,omitempty"`
-	LastSeenAt              time.Time                      `json:"last_seen_at,omitempty"`
 	LastSeenIP              string                         `json:"last_seen_ip,omitempty"`
 	ManagedBy               string                         `json:"managed_by,omitempty"`
 	Metadata                map[string]interface{}         `json:"metadata,omitempty"`
@@ -549,10 +546,8 @@ type DirectoryGroupProjection struct {
 	EnvironmentName         string                             `json:"environment_name,omitempty"`
 	ExternalID              string                             `json:"external_id,omitempty"`
 	ExternalSharingAllowed  bool                               `json:"external_sharing_allowed,omitempty"`
-	FirstSeenAt             time.Time                          `json:"first_seen_at,omitempty"`
 	IntegrationID           string                             `json:"integration_id,omitempty"`
 	IntegrationRunID        string                             `json:"integration_run_id,omitempty"`
-	LastSeenAt              time.Time                          `json:"last_seen_at,omitempty"`
 	ManagedBy               string                             `json:"managed_by,omitempty"`
 	MemberCount             int                                `json:"member_count,omitempty"`
 	Metadata                map[string]interface{}             `json:"metadata,omitempty"`
@@ -591,10 +586,8 @@ type DirectoryMembershipProjection struct {
 	DisplayID               string                        `json:"display_id,omitempty"`
 	EnvironmentID           string                        `json:"environment_id,omitempty"`
 	EnvironmentName         string                        `json:"environment_name,omitempty"`
-	FirstSeenAt             time.Time                     `json:"first_seen_at,omitempty"`
 	IntegrationID           string                        `json:"integration_id,omitempty"`
 	IntegrationRunID        string                        `json:"integration_run_id,omitempty"`
-	LastSeenAt              time.Time                     `json:"last_seen_at,omitempty"`
 	ManagedBy               string                        `json:"managed_by,omitempty"`
 	Metadata                map[string]interface{}        `json:"metadata,omitempty"`
 	ObservedAt              time.Time                     `json:"observed_at,omitempty"`

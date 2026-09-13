@@ -55,7 +55,6 @@ func TestExamplePayloads(t *testing.T) {
 		assert.Equal(t, "ACTIVE", mapped["status"])
 		assert.Equal(t, "USER", mapped["account_type"])
 		assert.Equal(t, "2026-05-08T01:54:15.179825Z", mapped["added_at"])
-		assert.Equal(t, "2026-05-09T08:11:37.941933Z", mapped["last_seen_at"])
 		assert.Equal(t, "2026-05-08T01:55:21.345631Z", mapped["observed_at"])
 		assert.Equal(t, mappingtest.Installation.Name, mapped["directory_name"])
 		assert.Equal(t, true, mapped["primary_source"])

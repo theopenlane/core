@@ -23,7 +23,6 @@ query GetAllDirectoryAccountHistories {
 				id
 				integrationID
 				jobTitle
-				lastLoginAt
 				lastSeenIP
 				mfaState
 				observedAt
@@ -68,7 +67,6 @@ query GetDirectoryAccountHistories ($first: Int, $last: Int, $where: DirectoryAc
 				id
 				integrationID
 				jobTitle
-				lastLoginAt
 				lastSeenIP
 				mfaState
 				observedAt

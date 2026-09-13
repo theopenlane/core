@@ -71,10 +71,6 @@ type DirectoryMembership struct {
 	Source *string `json:"source,omitempty"`
 	// directory source label set by the integration (e.g. googleworkspace, github, slack)
 	DirectoryName *string `json:"directory_name,omitempty"`
-	// first time the membership was detected
-	FirstSeenAt *time.Time `json:"first_seen_at,omitempty"`
-	// most recent time the membership was confirmed by directory ingest
-	LastSeenAt *time.Time `json:"last_seen_at,omitempty"`
 	// provider-reported time the membership was added in the source directory
 	AddedAt *time.Time `json:"added_at,omitempty"`
 	// provider-reported or locally-recorded time the membership was removed from the source directory
@@ -235,7 +231,7 @@ func (*DirectoryMembership) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case directorymembership.FieldID, directorymembership.FieldCreatedBy, directorymembership.FieldUpdatedBy, directorymembership.FieldUpdatedByImpersonator, directorymembership.FieldDisplayID, directorymembership.FieldSourceDefinitionID, directorymembership.FieldSourceDefinitionVersion, directorymembership.FieldSourceInstanceID, directorymembership.FieldManagedBy, directorymembership.FieldIntegrationRunID, directorymembership.FieldOwnerID, directorymembership.FieldEnvironmentName, directorymembership.FieldEnvironmentID, directorymembership.FieldScopeName, directorymembership.FieldScopeID, directorymembership.FieldIntegrationID, directorymembership.FieldPlatformID, directorymembership.FieldDirectoryAccountID, directorymembership.FieldDirectoryGroupID, directorymembership.FieldRole, directorymembership.FieldSource, directorymembership.FieldDirectoryName:
 			values[i] = new(sql.NullString)
-		case directorymembership.FieldCreatedAt, directorymembership.FieldUpdatedAt, directorymembership.FieldFirstSeenAt, directorymembership.FieldLastSeenAt, directorymembership.FieldAddedAt, directorymembership.FieldRemovedAt, directorymembership.FieldObservedAt:
+		case directorymembership.FieldCreatedAt, directorymembership.FieldUpdatedAt, directorymembership.FieldAddedAt, directorymembership.FieldRemovedAt, directorymembership.FieldObservedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -398,20 +394,6 @@ func (_m *DirectoryMembership) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				_m.DirectoryName = new(string)
 				*_m.DirectoryName = value.String
-			}
-		case directorymembership.FieldFirstSeenAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field first_seen_at", values[i])
-			} else if value.Valid {
-				_m.FirstSeenAt = new(time.Time)
-				*_m.FirstSeenAt = value.Time
-			}
-		case directorymembership.FieldLastSeenAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field last_seen_at", values[i])
-			} else if value.Valid {
-				_m.LastSeenAt = new(time.Time)
-				*_m.LastSeenAt = value.Time
 			}
 		case directorymembership.FieldAddedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -600,16 +582,6 @@ func (_m *DirectoryMembership) String() string {
 	if v := _m.DirectoryName; v != nil {
 		builder.WriteString("directory_name=")
 		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := _m.FirstSeenAt; v != nil {
-		builder.WriteString("first_seen_at=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
-	builder.WriteString(", ")
-	if v := _m.LastSeenAt; v != nil {
-		builder.WriteString("last_seen_at=")
-		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	if v := _m.AddedAt; v != nil {

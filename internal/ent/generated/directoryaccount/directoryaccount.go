@@ -96,12 +96,6 @@ const (
 	FieldMfaState = "mfa_state"
 	// FieldLastSeenIP holds the string denoting the last_seen_ip field in the database.
 	FieldLastSeenIP = "last_seen_ip"
-	// FieldLastLoginAt holds the string denoting the last_login_at field in the database.
-	FieldLastLoginAt = "last_login_at"
-	// FieldFirstSeenAt holds the string denoting the first_seen_at field in the database.
-	FieldFirstSeenAt = "first_seen_at"
-	// FieldLastSeenAt holds the string denoting the last_seen_at field in the database.
-	FieldLastSeenAt = "last_seen_at"
 	// FieldAddedAt holds the string denoting the added_at field in the database.
 	FieldAddedAt = "added_at"
 	// FieldRemovedAt holds the string denoting the removed_at field in the database.
@@ -266,9 +260,6 @@ var Columns = []string{
 	FieldStatus,
 	FieldMfaState,
 	FieldLastSeenIP,
-	FieldLastLoginAt,
-	FieldFirstSeenAt,
-	FieldLastSeenAt,
 	FieldAddedAt,
 	FieldRemovedAt,
 	FieldObservedAt,
@@ -338,8 +329,6 @@ var (
 	AvatarRemoteURLValidator func(string) error
 	// DefaultAvatarUpdatedAt holds the default value on creation for the "avatar_updated_at" field.
 	DefaultAvatarUpdatedAt func() time.Time
-	// DefaultFirstSeenAt holds the default value on creation for the "first_seen_at" field.
-	DefaultFirstSeenAt func() time.Time
 	// DefaultObservedAt holds the default value on creation for the "observed_at" field.
 	DefaultObservedAt func() time.Time
 	// DefaultPrimarySource holds the default value on creation for the "primary_source" field.
@@ -575,21 +564,6 @@ func ByMfaState(opts ...sql.OrderTermOption) OrderOption {
 // ByLastSeenIP orders the results by the last_seen_ip field.
 func ByLastSeenIP(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastSeenIP, opts...).ToFunc()
-}
-
-// ByLastLoginAt orders the results by the last_login_at field.
-func ByLastLoginAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLastLoginAt, opts...).ToFunc()
-}
-
-// ByFirstSeenAt orders the results by the first_seen_at field.
-func ByFirstSeenAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFirstSeenAt, opts...).ToFunc()
-}
-
-// ByLastSeenAt orders the results by the last_seen_at field.
-func ByLastSeenAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLastSeenAt, opts...).ToFunc()
 }
 
 // ByAddedAt orders the results by the added_at field.

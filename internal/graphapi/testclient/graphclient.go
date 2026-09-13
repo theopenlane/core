@@ -32286,15 +32286,12 @@ type CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccoun
 	EnvironmentName         *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	ExternalID              string                         "json:\"externalID\" graphql:\"externalID\""
 	FamilyName              *string                        "json:\"familyName,omitempty\" graphql:\"familyName\""
-	FirstSeenAt             *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	GivenName               *string                        "json:\"givenName,omitempty\" graphql:\"givenName\""
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IdentityHolderID        *string                        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
 	IntegrationID           *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	JobTitle                *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
-	LastLoginAt             *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
-	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	LastSeenIP              *string                        "json:\"lastSeenIP,omitempty\" graphql:\"lastSeenIP\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -32424,12 +32421,6 @@ func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAc
 	}
 	return t.FamilyName
 }
-func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts{}
-	}
-	return t.FirstSeenAt
-}
 func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts) GetGivenName() *string {
 	if t == nil {
 		t = &CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts{}
@@ -32465,18 +32456,6 @@ func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAc
 		t = &CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts{}
 	}
 	return t.JobTitle
-}
-func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts) GetLastLoginAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts{}
-	}
-	return t.LastLoginAt
-}
-func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts{}
-	}
-	return t.LastSeenAt
 }
 func (t *CreateBulkCSVDirectoryAccount_CreateBulkCSVDirectoryAccount_DirectoryAccounts) GetLastSeenIP() *string {
 	if t == nil {
@@ -32658,15 +32637,12 @@ type CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts str
 	EnvironmentName         *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	ExternalID              string                         "json:\"externalID\" graphql:\"externalID\""
 	FamilyName              *string                        "json:\"familyName,omitempty\" graphql:\"familyName\""
-	FirstSeenAt             *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	GivenName               *string                        "json:\"givenName,omitempty\" graphql:\"givenName\""
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IdentityHolderID        *string                        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
 	IntegrationID           *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	JobTitle                *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
-	LastLoginAt             *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
-	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	LastSeenIP              *string                        "json:\"lastSeenIP,omitempty\" graphql:\"lastSeenIP\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -32796,12 +32772,6 @@ func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts
 	}
 	return t.FamilyName
 }
-func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts{}
-	}
-	return t.FirstSeenAt
-}
 func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts) GetGivenName() *string {
 	if t == nil {
 		t = &CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts{}
@@ -32837,18 +32807,6 @@ func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts
 		t = &CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts{}
 	}
 	return t.JobTitle
-}
-func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts) GetLastLoginAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts{}
-	}
-	return t.LastLoginAt
-}
-func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts{}
-	}
-	return t.LastSeenAt
 }
 func (t *CreateBulkDirectoryAccount_CreateBulkDirectoryAccount_DirectoryAccounts) GetLastSeenIP() *string {
 	if t == nil {
@@ -33030,15 +32988,12 @@ type CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount struct {
 	EnvironmentName         *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	ExternalID              string                         "json:\"externalID\" graphql:\"externalID\""
 	FamilyName              *string                        "json:\"familyName,omitempty\" graphql:\"familyName\""
-	FirstSeenAt             *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	GivenName               *string                        "json:\"givenName,omitempty\" graphql:\"givenName\""
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IdentityHolderID        *string                        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
 	IntegrationID           *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	JobTitle                *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
-	LastLoginAt             *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
-	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	LastSeenIP              *string                        "json:\"lastSeenIP,omitempty\" graphql:\"lastSeenIP\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -33168,12 +33123,6 @@ func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetFami
 	}
 	return t.FamilyName
 }
-func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount{}
-	}
-	return t.FirstSeenAt
-}
 func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetGivenName() *string {
 	if t == nil {
 		t = &CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount{}
@@ -33209,18 +33158,6 @@ func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetJobT
 		t = &CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount{}
 	}
 	return t.JobTitle
-}
-func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetLastLoginAt() *time.Time {
-	if t == nil {
-		t = &CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount{}
-	}
-	return t.LastLoginAt
-}
-func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount{}
-	}
-	return t.LastSeenAt
 }
 func (t *CreateDirectoryAccount_CreateDirectoryAccount_DirectoryAccount) GetLastSeenIP() *string {
 	if t == nil {
@@ -33441,7 +33378,6 @@ type GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node struct {
 	ID               string                         "json:\"id\" graphql:\"id\""
 	IntegrationID    *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	JobTitle         *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
-	LastLoginAt      *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
 	LastSeenIP       *string                        "json:\"lastSeenIP,omitempty\" graphql:\"lastSeenIP\""
 	MfaState         enums.DirectoryAccountMFAState "json:\"mfaState\" graphql:\"mfaState\""
 	ObservedAt       time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
@@ -33534,12 +33470,6 @@ func (t *GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node) GetJobTitle() *st
 		t = &GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node{}
 	}
 	return t.JobTitle
-}
-func (t *GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node) GetLastLoginAt() *time.Time {
-	if t == nil {
-		t = &GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node{}
-	}
-	return t.LastLoginAt
 }
 func (t *GetAllDirectoryAccounts_DirectoryAccounts_Edges_Node) GetLastSeenIP() *string {
 	if t == nil {
@@ -33674,15 +33604,12 @@ type GetDirectoryAccountByID_DirectoryAccount struct {
 	EnvironmentName         *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	ExternalID              string                         "json:\"externalID\" graphql:\"externalID\""
 	FamilyName              *string                        "json:\"familyName,omitempty\" graphql:\"familyName\""
-	FirstSeenAt             *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	GivenName               *string                        "json:\"givenName,omitempty\" graphql:\"givenName\""
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IdentityHolderID        *string                        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
 	IntegrationID           *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	JobTitle                *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
-	LastLoginAt             *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
-	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	LastSeenIP              *string                        "json:\"lastSeenIP,omitempty\" graphql:\"lastSeenIP\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -33812,12 +33739,6 @@ func (t *GetDirectoryAccountByID_DirectoryAccount) GetFamilyName() *string {
 	}
 	return t.FamilyName
 }
-func (t *GetDirectoryAccountByID_DirectoryAccount) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &GetDirectoryAccountByID_DirectoryAccount{}
-	}
-	return t.FirstSeenAt
-}
 func (t *GetDirectoryAccountByID_DirectoryAccount) GetGivenName() *string {
 	if t == nil {
 		t = &GetDirectoryAccountByID_DirectoryAccount{}
@@ -33853,18 +33774,6 @@ func (t *GetDirectoryAccountByID_DirectoryAccount) GetJobTitle() *string {
 		t = &GetDirectoryAccountByID_DirectoryAccount{}
 	}
 	return t.JobTitle
-}
-func (t *GetDirectoryAccountByID_DirectoryAccount) GetLastLoginAt() *time.Time {
-	if t == nil {
-		t = &GetDirectoryAccountByID_DirectoryAccount{}
-	}
-	return t.LastLoginAt
-}
-func (t *GetDirectoryAccountByID_DirectoryAccount) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &GetDirectoryAccountByID_DirectoryAccount{}
-	}
-	return t.LastSeenAt
 }
 func (t *GetDirectoryAccountByID_DirectoryAccount) GetLastSeenIP() *string {
 	if t == nil {
@@ -34063,7 +33972,6 @@ type GetDirectoryAccounts_DirectoryAccounts_Edges_Node struct {
 	ID               string                         "json:\"id\" graphql:\"id\""
 	IntegrationID    *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	JobTitle         *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
-	LastLoginAt      *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
 	LastSeenIP       *string                        "json:\"lastSeenIP,omitempty\" graphql:\"lastSeenIP\""
 	MfaState         enums.DirectoryAccountMFAState "json:\"mfaState\" graphql:\"mfaState\""
 	ObservedAt       time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
@@ -34156,12 +34064,6 @@ func (t *GetDirectoryAccounts_DirectoryAccounts_Edges_Node) GetJobTitle() *strin
 		t = &GetDirectoryAccounts_DirectoryAccounts_Edges_Node{}
 	}
 	return t.JobTitle
-}
-func (t *GetDirectoryAccounts_DirectoryAccounts_Edges_Node) GetLastLoginAt() *time.Time {
-	if t == nil {
-		t = &GetDirectoryAccounts_DirectoryAccounts_Edges_Node{}
-	}
-	return t.LastLoginAt
 }
 func (t *GetDirectoryAccounts_DirectoryAccounts_Edges_Node) GetLastSeenIP() *string {
 	if t == nil {
@@ -34296,15 +34198,12 @@ type UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount struct {
 	EnvironmentName         *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	ExternalID              string                         "json:\"externalID\" graphql:\"externalID\""
 	FamilyName              *string                        "json:\"familyName,omitempty\" graphql:\"familyName\""
-	FirstSeenAt             *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	GivenName               *string                        "json:\"givenName,omitempty\" graphql:\"givenName\""
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IdentityHolderID        *string                        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
 	IntegrationID           *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
 	JobTitle                *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
-	LastLoginAt             *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
-	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	LastSeenIP              *string                        "json:\"lastSeenIP,omitempty\" graphql:\"lastSeenIP\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -34434,12 +34333,6 @@ func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetFami
 	}
 	return t.FamilyName
 }
-func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount{}
-	}
-	return t.FirstSeenAt
-}
 func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetGivenName() *string {
 	if t == nil {
 		t = &UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount{}
@@ -34475,18 +34368,6 @@ func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetJobT
 		t = &UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount{}
 	}
 	return t.JobTitle
-}
-func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetLastLoginAt() *time.Time {
-	if t == nil {
-		t = &UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount{}
-	}
-	return t.LastLoginAt
-}
-func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount{}
-	}
-	return t.LastSeenAt
 }
 func (t *UpdateDirectoryAccount_UpdateDirectoryAccount_DirectoryAccount) GetLastSeenIP() *string {
 	if t == nil {
@@ -34664,11 +34545,9 @@ type CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups str
 	EnvironmentName         *string                            "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	ExternalID              string                             "json:\"externalID\" graphql:\"externalID\""
 	ExternalSharingAllowed  *bool                              "json:\"externalSharingAllowed,omitempty\" graphql:\"externalSharingAllowed\""
-	FirstSeenAt             *time.Time                         "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                             "json:\"id\" graphql:\"id\""
 	IntegrationID           string                             "json:\"integrationID\" graphql:\"integrationID\""
 	IntegrationRunID        *string                            "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	LastSeenAt              *time.Time                         "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                            "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MemberCount             *int64                             "json:\"memberCount,omitempty\" graphql:\"memberCount\""
 	Metadata                map[string]any                     "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -34769,12 +34648,6 @@ func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups
 	}
 	return t.ExternalSharingAllowed
 }
-func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups{}
-	}
-	return t.FirstSeenAt
-}
 func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups) GetID() string {
 	if t == nil {
 		t = &CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups{}
@@ -34792,12 +34665,6 @@ func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups
 		t = &CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups{}
 	}
 	return t.IntegrationRunID
-}
-func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups{}
-	}
-	return t.LastSeenAt
 }
 func (t *CreateBulkCSVDirectoryGroup_CreateBulkCSVDirectoryGroup_DirectoryGroups) GetManagedBy() *string {
 	if t == nil {
@@ -34945,11 +34812,9 @@ type CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups struct {
 	EnvironmentName         *string                            "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	ExternalID              string                             "json:\"externalID\" graphql:\"externalID\""
 	ExternalSharingAllowed  *bool                              "json:\"externalSharingAllowed,omitempty\" graphql:\"externalSharingAllowed\""
-	FirstSeenAt             *time.Time                         "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                             "json:\"id\" graphql:\"id\""
 	IntegrationID           string                             "json:\"integrationID\" graphql:\"integrationID\""
 	IntegrationRunID        *string                            "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	LastSeenAt              *time.Time                         "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                            "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MemberCount             *int64                             "json:\"memberCount,omitempty\" graphql:\"memberCount\""
 	Metadata                map[string]any                     "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -35050,12 +34915,6 @@ func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetE
 	}
 	return t.ExternalSharingAllowed
 }
-func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups{}
-	}
-	return t.FirstSeenAt
-}
 func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetID() string {
 	if t == nil {
 		t = &CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups{}
@@ -35073,12 +34932,6 @@ func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetI
 		t = &CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups{}
 	}
 	return t.IntegrationRunID
-}
-func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups{}
-	}
-	return t.LastSeenAt
 }
 func (t *CreateBulkDirectoryGroup_CreateBulkDirectoryGroup_DirectoryGroups) GetManagedBy() *string {
 	if t == nil {
@@ -35226,11 +35079,9 @@ type CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup struct {
 	EnvironmentName         *string                            "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	ExternalID              string                             "json:\"externalID\" graphql:\"externalID\""
 	ExternalSharingAllowed  *bool                              "json:\"externalSharingAllowed,omitempty\" graphql:\"externalSharingAllowed\""
-	FirstSeenAt             *time.Time                         "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                             "json:\"id\" graphql:\"id\""
 	IntegrationID           string                             "json:\"integrationID\" graphql:\"integrationID\""
 	IntegrationRunID        *string                            "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	LastSeenAt              *time.Time                         "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                            "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MemberCount             *int64                             "json:\"memberCount,omitempty\" graphql:\"memberCount\""
 	Metadata                map[string]any                     "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -35331,12 +35182,6 @@ func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetExternalSh
 	}
 	return t.ExternalSharingAllowed
 }
-func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup{}
-	}
-	return t.FirstSeenAt
-}
 func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetID() string {
 	if t == nil {
 		t = &CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup{}
@@ -35354,12 +35199,6 @@ func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetIntegratio
 		t = &CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup{}
 	}
 	return t.IntegrationRunID
-}
-func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup{}
-	}
-	return t.LastSeenAt
 }
 func (t *CreateDirectoryGroup_CreateDirectoryGroup_DirectoryGroup) GetManagedBy() *string {
 	if t == nil {
@@ -35737,11 +35576,9 @@ type GetDirectoryGroupByID_DirectoryGroup struct {
 	EnvironmentName         *string                            "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	ExternalID              string                             "json:\"externalID\" graphql:\"externalID\""
 	ExternalSharingAllowed  *bool                              "json:\"externalSharingAllowed,omitempty\" graphql:\"externalSharingAllowed\""
-	FirstSeenAt             *time.Time                         "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                             "json:\"id\" graphql:\"id\""
 	IntegrationID           string                             "json:\"integrationID\" graphql:\"integrationID\""
 	IntegrationRunID        *string                            "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	LastSeenAt              *time.Time                         "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                            "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MemberCount             *int64                             "json:\"memberCount,omitempty\" graphql:\"memberCount\""
 	Metadata                map[string]any                     "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -35842,12 +35679,6 @@ func (t *GetDirectoryGroupByID_DirectoryGroup) GetExternalSharingAllowed() *bool
 	}
 	return t.ExternalSharingAllowed
 }
-func (t *GetDirectoryGroupByID_DirectoryGroup) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &GetDirectoryGroupByID_DirectoryGroup{}
-	}
-	return t.FirstSeenAt
-}
 func (t *GetDirectoryGroupByID_DirectoryGroup) GetID() string {
 	if t == nil {
 		t = &GetDirectoryGroupByID_DirectoryGroup{}
@@ -35865,12 +35696,6 @@ func (t *GetDirectoryGroupByID_DirectoryGroup) GetIntegrationRunID() *string {
 		t = &GetDirectoryGroupByID_DirectoryGroup{}
 	}
 	return t.IntegrationRunID
-}
-func (t *GetDirectoryGroupByID_DirectoryGroup) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &GetDirectoryGroupByID_DirectoryGroup{}
-	}
-	return t.LastSeenAt
 }
 func (t *GetDirectoryGroupByID_DirectoryGroup) GetManagedBy() *string {
 	if t == nil {
@@ -36226,11 +36051,9 @@ type UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup struct {
 	EnvironmentName         *string                            "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	ExternalID              string                             "json:\"externalID\" graphql:\"externalID\""
 	ExternalSharingAllowed  *bool                              "json:\"externalSharingAllowed,omitempty\" graphql:\"externalSharingAllowed\""
-	FirstSeenAt             *time.Time                         "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                             "json:\"id\" graphql:\"id\""
 	IntegrationID           string                             "json:\"integrationID\" graphql:\"integrationID\""
 	IntegrationRunID        *string                            "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	LastSeenAt              *time.Time                         "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                            "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	MemberCount             *int64                             "json:\"memberCount,omitempty\" graphql:\"memberCount\""
 	Metadata                map[string]any                     "json:\"metadata,omitempty\" graphql:\"metadata\""
@@ -36331,12 +36154,6 @@ func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetExternalSh
 	}
 	return t.ExternalSharingAllowed
 }
-func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup{}
-	}
-	return t.FirstSeenAt
-}
 func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetID() string {
 	if t == nil {
 		t = &UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup{}
@@ -36354,12 +36171,6 @@ func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetIntegratio
 		t = &UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup{}
 	}
 	return t.IntegrationRunID
-}
-func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup{}
-	}
-	return t.LastSeenAt
 }
 func (t *UpdateDirectoryGroup_UpdateDirectoryGroup_DirectoryGroup) GetManagedBy() *string {
 	if t == nil {
@@ -36503,11 +36314,9 @@ type CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_Directory
 	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
 	EnvironmentID           *string                        "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName         *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	FirstSeenAt             *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IntegrationID           string                         "json:\"integrationID\" graphql:\"integrationID\""
 	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
 	ObservedAt              time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
@@ -36580,12 +36389,6 @@ func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_Direc
 	}
 	return t.EnvironmentName
 }
-func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships{}
-	}
-	return t.FirstSeenAt
-}
 func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships) GetID() string {
 	if t == nil {
 		t = &CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships{}
@@ -36603,12 +36406,6 @@ func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_Direc
 		t = &CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships{}
 	}
 	return t.IntegrationRunID
-}
-func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships{}
-	}
-	return t.LastSeenAt
 }
 func (t *CreateBulkCSVDirectoryMembership_CreateBulkCSVDirectoryMembership_DirectoryMemberships) GetManagedBy() *string {
 	if t == nil {
@@ -36728,11 +36525,9 @@ type CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMember
 	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
 	EnvironmentID           *string                        "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName         *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	FirstSeenAt             *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IntegrationID           string                         "json:\"integrationID\" graphql:\"integrationID\""
 	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
 	ObservedAt              time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
@@ -36805,12 +36600,6 @@ func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMe
 	}
 	return t.EnvironmentName
 }
-func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships{}
-	}
-	return t.FirstSeenAt
-}
 func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships) GetID() string {
 	if t == nil {
 		t = &CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships{}
@@ -36828,12 +36617,6 @@ func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMe
 		t = &CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships{}
 	}
 	return t.IntegrationRunID
-}
-func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships{}
-	}
-	return t.LastSeenAt
 }
 func (t *CreateBulkDirectoryMembership_CreateBulkDirectoryMembership_DirectoryMemberships) GetManagedBy() *string {
 	if t == nil {
@@ -36953,11 +36736,9 @@ type CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership str
 	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
 	EnvironmentID           *string                        "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName         *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	FirstSeenAt             *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IntegrationID           string                         "json:\"integrationID\" graphql:\"integrationID\""
 	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
 	ObservedAt              time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
@@ -37030,12 +36811,6 @@ func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership
 	}
 	return t.EnvironmentName
 }
-func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership{}
-	}
-	return t.FirstSeenAt
-}
 func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership) GetID() string {
 	if t == nil {
 		t = &CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership{}
@@ -37053,12 +36828,6 @@ func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership
 		t = &CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership{}
 	}
 	return t.IntegrationRunID
-}
-func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership{}
-	}
-	return t.LastSeenAt
 }
 func (t *CreateDirectoryMembership_CreateDirectoryMembership_DirectoryMembership) GetManagedBy() *string {
 	if t == nil {
@@ -37217,10 +36986,8 @@ type GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node struct {
 	DirectoryAccountID string                         "json:\"directoryAccountID\" graphql:\"directoryAccountID\""
 	DirectoryGroupID   string                         "json:\"directoryGroupID\" graphql:\"directoryGroupID\""
 	DisplayID          string                         "json:\"displayID\" graphql:\"displayID\""
-	FirstSeenAt        *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                 string                         "json:\"id\" graphql:\"id\""
 	IntegrationID      string                         "json:\"integrationID\" graphql:\"integrationID\""
-	LastSeenAt         *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	Metadata           map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
 	ObservedAt         time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
 	OwnerID            *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -37260,12 +37027,6 @@ func (t *GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node) GetDisplayI
 	}
 	return t.DisplayID
 }
-func (t *GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node{}
-	}
-	return t.FirstSeenAt
-}
 func (t *GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node{}
@@ -37277,12 +37038,6 @@ func (t *GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node) GetIntegrat
 		t = &GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node{}
 	}
 	return t.IntegrationID
-}
-func (t *GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node{}
-	}
-	return t.LastSeenAt
 }
 func (t *GetAllDirectoryMemberships_DirectoryMemberships_Edges_Node) GetMetadata() map[string]any {
 	if t == nil {
@@ -37373,11 +37128,9 @@ type GetDirectoryMembershipByID_DirectoryMembership struct {
 	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
 	EnvironmentID           *string                        "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName         *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	FirstSeenAt             *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IntegrationID           string                         "json:\"integrationID\" graphql:\"integrationID\""
 	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
 	ObservedAt              time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
@@ -37450,12 +37203,6 @@ func (t *GetDirectoryMembershipByID_DirectoryMembership) GetEnvironmentName() *s
 	}
 	return t.EnvironmentName
 }
-func (t *GetDirectoryMembershipByID_DirectoryMembership) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &GetDirectoryMembershipByID_DirectoryMembership{}
-	}
-	return t.FirstSeenAt
-}
 func (t *GetDirectoryMembershipByID_DirectoryMembership) GetID() string {
 	if t == nil {
 		t = &GetDirectoryMembershipByID_DirectoryMembership{}
@@ -37473,12 +37220,6 @@ func (t *GetDirectoryMembershipByID_DirectoryMembership) GetIntegrationRunID() *
 		t = &GetDirectoryMembershipByID_DirectoryMembership{}
 	}
 	return t.IntegrationRunID
-}
-func (t *GetDirectoryMembershipByID_DirectoryMembership) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &GetDirectoryMembershipByID_DirectoryMembership{}
-	}
-	return t.LastSeenAt
 }
 func (t *GetDirectoryMembershipByID_DirectoryMembership) GetManagedBy() *string {
 	if t == nil {
@@ -37615,10 +37356,8 @@ type GetDirectoryMemberships_DirectoryMemberships_Edges_Node struct {
 	DirectoryAccountID string                         "json:\"directoryAccountID\" graphql:\"directoryAccountID\""
 	DirectoryGroupID   string                         "json:\"directoryGroupID\" graphql:\"directoryGroupID\""
 	DisplayID          string                         "json:\"displayID\" graphql:\"displayID\""
-	FirstSeenAt        *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                 string                         "json:\"id\" graphql:\"id\""
 	IntegrationID      string                         "json:\"integrationID\" graphql:\"integrationID\""
-	LastSeenAt         *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	Metadata           map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
 	ObservedAt         time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
 	OwnerID            *string                        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -37658,12 +37397,6 @@ func (t *GetDirectoryMemberships_DirectoryMemberships_Edges_Node) GetDisplayID()
 	}
 	return t.DisplayID
 }
-func (t *GetDirectoryMemberships_DirectoryMemberships_Edges_Node) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &GetDirectoryMemberships_DirectoryMemberships_Edges_Node{}
-	}
-	return t.FirstSeenAt
-}
 func (t *GetDirectoryMemberships_DirectoryMemberships_Edges_Node) GetID() string {
 	if t == nil {
 		t = &GetDirectoryMemberships_DirectoryMemberships_Edges_Node{}
@@ -37675,12 +37408,6 @@ func (t *GetDirectoryMemberships_DirectoryMemberships_Edges_Node) GetIntegration
 		t = &GetDirectoryMemberships_DirectoryMemberships_Edges_Node{}
 	}
 	return t.IntegrationID
-}
-func (t *GetDirectoryMemberships_DirectoryMemberships_Edges_Node) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &GetDirectoryMemberships_DirectoryMemberships_Edges_Node{}
-	}
-	return t.LastSeenAt
 }
 func (t *GetDirectoryMemberships_DirectoryMemberships_Edges_Node) GetMetadata() map[string]any {
 	if t == nil {
@@ -37771,11 +37498,9 @@ type UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership str
 	DisplayID               string                         "json:\"displayID\" graphql:\"displayID\""
 	EnvironmentID           *string                        "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName         *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	FirstSeenAt             *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	ID                      string                         "json:\"id\" graphql:\"id\""
 	IntegrationID           string                         "json:\"integrationID\" graphql:\"integrationID\""
 	IntegrationRunID        *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
-	LastSeenAt              *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	ManagedBy               *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
 	Metadata                map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
 	ObservedAt              time.Time                      "json:\"observedAt\" graphql:\"observedAt\""
@@ -37848,12 +37573,6 @@ func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership
 	}
 	return t.EnvironmentName
 }
-func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership{}
-	}
-	return t.FirstSeenAt
-}
 func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership) GetID() string {
 	if t == nil {
 		t = &UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership{}
@@ -37871,12 +37590,6 @@ func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership
 		t = &UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership{}
 	}
 	return t.IntegrationRunID
-}
-func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership{}
-	}
-	return t.LastSeenAt
 }
 func (t *UpdateDirectoryMembership_UpdateDirectoryMembership_DirectoryMembership) GetManagedBy() *string {
 	if t == nil {
@@ -63562,14 +63275,11 @@ type GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_N
 	EnvironmentName   *string                        "json:\"environmentName,omitempty\" graphql:\"environmentName\""
 	ExternalID        string                         "json:\"externalID\" graphql:\"externalID\""
 	FamilyName        *string                        "json:\"familyName,omitempty\" graphql:\"familyName\""
-	FirstSeenAt       *time.Time                     "json:\"firstSeenAt,omitempty\" graphql:\"firstSeenAt\""
 	GivenName         *string                        "json:\"givenName,omitempty\" graphql:\"givenName\""
 	ID                string                         "json:\"id\" graphql:\"id\""
 	IdentityHolderID  *string                        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
 	IntegrationID     *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	JobTitle          *string                        "json:\"jobTitle,omitempty\" graphql:\"jobTitle\""
-	LastLoginAt       *time.Time                     "json:\"lastLoginAt,omitempty\" graphql:\"lastLoginAt\""
-	LastSeenAt        *time.Time                     "json:\"lastSeenAt,omitempty\" graphql:\"lastSeenAt\""
 	LastSeenIP        *string                        "json:\"lastSeenIP,omitempty\" graphql:\"lastSeenIP\""
 	Metadata          map[string]any                 "json:\"metadata,omitempty\" graphql:\"metadata\""
 	MfaState          enums.DirectoryAccountMFAState "json:\"mfaState\" graphql:\"mfaState\""
@@ -63687,12 +63397,6 @@ func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edg
 	}
 	return t.FamilyName
 }
-func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node) GetFirstSeenAt() *time.Time {
-	if t == nil {
-		t = &GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node{}
-	}
-	return t.FirstSeenAt
-}
 func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node) GetGivenName() *string {
 	if t == nil {
 		t = &GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node{}
@@ -63722,18 +63426,6 @@ func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edg
 		t = &GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node{}
 	}
 	return t.JobTitle
-}
-func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node) GetLastLoginAt() *time.Time {
-	if t == nil {
-		t = &GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node{}
-	}
-	return t.LastLoginAt
-}
-func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node) GetLastSeenAt() *time.Time {
-	if t == nil {
-		t = &GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node{}
-	}
-	return t.LastSeenAt
 }
 func (t *GetIdentityHolderDirectoryAccounts_IdentityHolder_DirectoryAccounts_Edges_Node) GetLastSeenIP() *string {
 	if t == nil {
@@ -180590,15 +180282,12 @@ const CreateBulkCSVDirectoryAccountDocument = `mutation CreateBulkCSVDirectoryAc
 			environmentName
 			externalID
 			familyName
-			firstSeenAt
 			givenName
 			id
 			identityHolderID
 			integrationID
 			integrationRunID
 			jobTitle
-			lastLoginAt
-			lastSeenAt
 			lastSeenIP
 			managedBy
 			metadata
@@ -180666,15 +180355,12 @@ const CreateBulkDirectoryAccountDocument = `mutation CreateBulkDirectoryAccount 
 			environmentName
 			externalID
 			familyName
-			firstSeenAt
 			givenName
 			id
 			identityHolderID
 			integrationID
 			integrationRunID
 			jobTitle
-			lastLoginAt
-			lastSeenAt
 			lastSeenIP
 			managedBy
 			metadata
@@ -180742,15 +180428,12 @@ const CreateDirectoryAccountDocument = `mutation CreateDirectoryAccount ($input:
 			environmentName
 			externalID
 			familyName
-			firstSeenAt
 			givenName
 			id
 			identityHolderID
 			integrationID
 			integrationRunID
 			jobTitle
-			lastLoginAt
-			lastSeenAt
 			lastSeenIP
 			managedBy
 			metadata
@@ -180846,7 +180529,6 @@ const GetAllDirectoryAccountsDocument = `query GetAllDirectoryAccounts {
 				id
 				integrationID
 				jobTitle
-				lastLoginAt
 				lastSeenIP
 				mfaState
 				observedAt
@@ -180900,15 +180582,12 @@ const GetDirectoryAccountByIDDocument = `query GetDirectoryAccountByID ($directo
 		environmentName
 		externalID
 		familyName
-		firstSeenAt
 		givenName
 		id
 		identityHolderID
 		integrationID
 		integrationRunID
 		jobTitle
-		lastLoginAt
-		lastSeenAt
 		lastSeenIP
 		managedBy
 		metadata
@@ -180979,7 +180658,6 @@ const GetDirectoryAccountsDocument = `query GetDirectoryAccounts ($first: Int, $
 				id
 				integrationID
 				jobTitle
-				lastLoginAt
 				lastSeenIP
 				mfaState
 				observedAt
@@ -181038,15 +180716,12 @@ const UpdateDirectoryAccountDocument = `mutation UpdateDirectoryAccount ($update
 			environmentName
 			externalID
 			familyName
-			firstSeenAt
 			givenName
 			id
 			identityHolderID
 			integrationID
 			integrationRunID
 			jobTitle
-			lastLoginAt
-			lastSeenAt
 			lastSeenIP
 			managedBy
 			metadata
@@ -181111,11 +180786,9 @@ const CreateBulkCSVDirectoryGroupDocument = `mutation CreateBulkCSVDirectoryGrou
 			environmentName
 			externalID
 			externalSharingAllowed
-			firstSeenAt
 			id
 			integrationID
 			integrationRunID
-			lastSeenAt
 			managedBy
 			memberCount
 			metadata
@@ -181174,11 +180847,9 @@ const CreateBulkDirectoryGroupDocument = `mutation CreateBulkDirectoryGroup ($in
 			environmentName
 			externalID
 			externalSharingAllowed
-			firstSeenAt
 			id
 			integrationID
 			integrationRunID
-			lastSeenAt
 			managedBy
 			memberCount
 			metadata
@@ -181237,11 +180908,9 @@ const CreateDirectoryGroupDocument = `mutation CreateDirectoryGroup ($input: Cre
 			environmentName
 			externalID
 			externalSharingAllowed
-			firstSeenAt
 			id
 			integrationID
 			integrationRunID
-			lastSeenAt
 			managedBy
 			memberCount
 			metadata
@@ -181376,11 +181045,9 @@ const GetDirectoryGroupByIDDocument = `query GetDirectoryGroupByID ($directoryGr
 		environmentName
 		externalID
 		externalSharingAllowed
-		firstSeenAt
 		id
 		integrationID
 		integrationRunID
-		lastSeenAt
 		managedBy
 		memberCount
 		metadata
@@ -181495,11 +181162,9 @@ const UpdateDirectoryGroupDocument = `mutation UpdateDirectoryGroup ($updateDire
 			environmentName
 			externalID
 			externalSharingAllowed
-			firstSeenAt
 			id
 			integrationID
 			integrationRunID
-			lastSeenAt
 			managedBy
 			memberCount
 			metadata
@@ -181555,11 +181220,9 @@ const CreateBulkCSVDirectoryMembershipDocument = `mutation CreateBulkCSVDirector
 			displayID
 			environmentID
 			environmentName
-			firstSeenAt
 			id
 			integrationID
 			integrationRunID
-			lastSeenAt
 			managedBy
 			metadata
 			observedAt
@@ -181610,11 +181273,9 @@ const CreateBulkDirectoryMembershipDocument = `mutation CreateBulkDirectoryMembe
 			displayID
 			environmentID
 			environmentName
-			firstSeenAt
 			id
 			integrationID
 			integrationRunID
-			lastSeenAt
 			managedBy
 			metadata
 			observedAt
@@ -181665,11 +181326,9 @@ const CreateDirectoryMembershipDocument = `mutation CreateDirectoryMembership ($
 			displayID
 			environmentID
 			environmentName
-			firstSeenAt
 			id
 			integrationID
 			integrationRunID
-			lastSeenAt
 			managedBy
 			metadata
 			observedAt
@@ -181748,10 +181407,8 @@ const GetAllDirectoryMembershipsDocument = `query GetAllDirectoryMemberships {
 				directoryAccountID
 				directoryGroupID
 				displayID
-				firstSeenAt
 				id
 				integrationID
-				lastSeenAt
 				metadata
 				observedAt
 				ownerID
@@ -181791,11 +181448,9 @@ const GetDirectoryMembershipByIDDocument = `query GetDirectoryMembershipByID ($d
 		displayID
 		environmentID
 		environmentName
-		firstSeenAt
 		id
 		integrationID
 		integrationRunID
-		lastSeenAt
 		managedBy
 		metadata
 		observedAt
@@ -181849,10 +181504,8 @@ const GetDirectoryMembershipsDocument = `query GetDirectoryMemberships ($first: 
 				directoryAccountID
 				directoryGroupID
 				displayID
-				firstSeenAt
 				id
 				integrationID
-				lastSeenAt
 				metadata
 				observedAt
 				ownerID
@@ -181897,11 +181550,9 @@ const UpdateDirectoryMembershipDocument = `mutation UpdateDirectoryMembership ($
 			displayID
 			environmentID
 			environmentName
-			firstSeenAt
 			id
 			integrationID
 			integrationRunID
-			lastSeenAt
 			managedBy
 			metadata
 			observedAt
@@ -188789,14 +188440,11 @@ const GetIdentityHolderDirectoryAccountsDocument = `query GetIdentityHolderDirec
 					environmentName
 					externalID
 					familyName
-					firstSeenAt
 					givenName
 					id
 					identityHolderID
 					integrationID
 					jobTitle
-					lastLoginAt
-					lastSeenAt
 					lastSeenIP
 					metadata
 					mfaState

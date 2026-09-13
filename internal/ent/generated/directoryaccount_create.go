@@ -546,48 +546,6 @@ func (_c *DirectoryAccountCreate) SetNillableLastSeenIP(v *string) *DirectoryAcc
 	return _c
 }
 
-// SetLastLoginAt sets the "last_login_at" field.
-func (_c *DirectoryAccountCreate) SetLastLoginAt(v time.Time) *DirectoryAccountCreate {
-	_c.mutation.SetLastLoginAt(v)
-	return _c
-}
-
-// SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
-func (_c *DirectoryAccountCreate) SetNillableLastLoginAt(v *time.Time) *DirectoryAccountCreate {
-	if v != nil {
-		_c.SetLastLoginAt(*v)
-	}
-	return _c
-}
-
-// SetFirstSeenAt sets the "first_seen_at" field.
-func (_c *DirectoryAccountCreate) SetFirstSeenAt(v time.Time) *DirectoryAccountCreate {
-	_c.mutation.SetFirstSeenAt(v)
-	return _c
-}
-
-// SetNillableFirstSeenAt sets the "first_seen_at" field if the given value is not nil.
-func (_c *DirectoryAccountCreate) SetNillableFirstSeenAt(v *time.Time) *DirectoryAccountCreate {
-	if v != nil {
-		_c.SetFirstSeenAt(*v)
-	}
-	return _c
-}
-
-// SetLastSeenAt sets the "last_seen_at" field.
-func (_c *DirectoryAccountCreate) SetLastSeenAt(v time.Time) *DirectoryAccountCreate {
-	_c.mutation.SetLastSeenAt(v)
-	return _c
-}
-
-// SetNillableLastSeenAt sets the "last_seen_at" field if the given value is not nil.
-func (_c *DirectoryAccountCreate) SetNillableLastSeenAt(v *time.Time) *DirectoryAccountCreate {
-	if v != nil {
-		_c.SetLastSeenAt(*v)
-	}
-	return _c
-}
-
 // SetAddedAt sets the "added_at" field.
 func (_c *DirectoryAccountCreate) SetAddedAt(v time.Time) *DirectoryAccountCreate {
 	_c.mutation.SetAddedAt(v)
@@ -900,13 +858,6 @@ func (_c *DirectoryAccountCreate) defaults() error {
 		v := directoryaccount.DefaultMfaState
 		_c.mutation.SetMfaState(v)
 	}
-	if _, ok := _c.mutation.FirstSeenAt(); !ok {
-		if directoryaccount.DefaultFirstSeenAt == nil {
-			return fmt.Errorf("generated: uninitialized directoryaccount.DefaultFirstSeenAt (forgotten import generated/runtime?)")
-		}
-		v := directoryaccount.DefaultFirstSeenAt()
-		_c.mutation.SetFirstSeenAt(v)
-	}
 	if _, ok := _c.mutation.ObservedAt(); !ok {
 		if directoryaccount.DefaultObservedAt == nil {
 			return fmt.Errorf("generated: uninitialized directoryaccount.DefaultObservedAt (forgotten import generated/runtime?)")
@@ -1165,18 +1116,6 @@ func (_c *DirectoryAccountCreate) createSpec() (*DirectoryAccount, *sqlgraph.Cre
 	if value, ok := _c.mutation.LastSeenIP(); ok {
 		_spec.SetField(directoryaccount.FieldLastSeenIP, field.TypeString, value)
 		_node.LastSeenIP = &value
-	}
-	if value, ok := _c.mutation.LastLoginAt(); ok {
-		_spec.SetField(directoryaccount.FieldLastLoginAt, field.TypeTime, value)
-		_node.LastLoginAt = &value
-	}
-	if value, ok := _c.mutation.FirstSeenAt(); ok {
-		_spec.SetField(directoryaccount.FieldFirstSeenAt, field.TypeTime, value)
-		_node.FirstSeenAt = &value
-	}
-	if value, ok := _c.mutation.LastSeenAt(); ok {
-		_spec.SetField(directoryaccount.FieldLastSeenAt, field.TypeTime, value)
-		_node.LastSeenAt = &value
 	}
 	if value, ok := _c.mutation.AddedAt(); ok {
 		_spec.SetField(directoryaccount.FieldAddedAt, field.TypeTime, value)

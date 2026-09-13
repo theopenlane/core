@@ -1,7 +1,6 @@
 package operations
 
 import (
-	"bytes"
 	"cmp"
 	"context"
 	"encoding/json"
@@ -71,7 +70,7 @@ type RecordFailure struct {
 // IngestResult reports record-level work completed by a payload batch
 type IngestResult struct {
 	Attempted int
-	// Persisted counts records this installation's definition wrote or confirmed, created, changed, or left unchanged
+	// Persisted counts records this installation's definition created, changed, or left unchanged
 	Persisted int
 	// Filtered counts records excluded by configured filters
 	Filtered int
@@ -288,7 +287,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			}
 
 			record.schema = sourceSchema
-			record.Payload = stampProvenance(record.Payload, sourceSchema, ic.Integration, options.RunID)
+			record.Payload = entityops.StampProvenance(record.Payload, sourceSchema, ic.Integration, options.RunID)
 
 			prepared = append(prepared, preparedIngestRecord{ctx: envCtx, resource: envelope.Resource, record: record, links: mapping.Links})
 		}
@@ -378,8 +377,6 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			snapshotSets = append(snapshotSets, set)
 		}
 
-		var confirm []string
-
 		for _, p := range ready {
 			var recordKey, trackKey string
 
@@ -391,30 +388,45 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			}
 
 			if entry, excluded := tracked[trackKey]; excluded && trackKey != "" {
-				entry.Attempts++
-				dirty = true
+				resolvable := sourceSchema.QueryByLookup != nil && entry.RunID != ""
 
-				if set != nil {
-					ids, lookupErr := excludedRecordRowIDs(ctx, ic.DB, ic.Integration.OwnerID, sourceSchema, p.record.Payload)
+				var rows []json.RawMessage
+
+				if set != nil || resolvable {
+					fetched, lookupErr := excludedRecordRows(ctx, ic.DB, ic.Integration.OwnerID, sourceSchema, p.record.Payload)
 					if lookupErr != nil {
 						return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, lookupErr)
 					}
 
-					for _, id := range ids {
-						set.seen[id] = struct{}{}
-					}
+					rows = fetched
 				}
 
-				result.Excluded++
-				result.Failures = append(result.Failures, RecordFailure{Schema: payloadSet.Schema, Resource: p.resource, Err: fmt.Errorf("%w: %s", ErrIngestRecordExcluded, entry.LastError)})
-
-				logx.FromContext(p.ctx).Warn().Int("attempts", entry.Attempts).Msg("ingest excluded record skipped")
-
-				if entry.Attempts >= ingestMaxRecordAttempts {
+				if resolvable && trackedFailureResolved(rows, entry.RunID) {
 					delete(tracked, trackKey)
-				}
+					dirty = true
 
-				continue
+					logx.FromContext(p.ctx).Debug().Msg("ingest tracked failure resolved by durable retry")
+				} else {
+					entry.Attempts++
+					dirty = true
+
+					if set != nil {
+						for _, row := range rows {
+							set.seen[entityops.FieldValue(row, fieldID)] = struct{}{}
+						}
+					}
+
+					result.Excluded++
+					result.Failures = append(result.Failures, RecordFailure{Schema: payloadSet.Schema, Resource: p.resource, Err: fmt.Errorf("%w: %s", ErrIngestRecordExcluded, entry.LastError)})
+
+					logx.FromContext(p.ctx).Warn().Int("attempts", entry.Attempts).Msg("ingest excluded record skipped")
+
+					if entry.Attempts >= ingestMaxRecordAttempts {
+						delete(tracked, trackKey)
+					}
+
+					continue
+				}
 			}
 
 			outcome, handleErr := handle(p.ctx, p.record)
@@ -444,10 +456,6 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 
 				if set != nil {
 					set.seen[outcome.id] = struct{}{}
-				}
-
-				if outcome.managed && !outcome.changed && sourceSchema.ConfirmSeen != nil {
-					confirm = append(confirm, outcome.id)
 				}
 			case errors.Is(handleErr, entityops.ErrUpsertStaleRun):
 				result.Skipped++
@@ -479,12 +487,6 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 
 				result.Failed++
 				result.Failures = append(result.Failures, RecordFailure{Schema: payloadSet.Schema, Resource: p.resource, Err: wrapped})
-			}
-		}
-
-		if len(confirm) > 0 {
-			if confirmErr := sourceSchema.ConfirmSeen(ctx, ic.DB, confirm, time.Now()); confirmErr != nil {
-				return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, confirmErr)
 			}
 		}
 	}
@@ -678,20 +680,25 @@ func prefetchLookupMatches(ctx context.Context, db *ent.Client, ownerID string, 
 	return entityops.WithLookupMatches(ctx, schema, matches), nil
 }
 
-// excludedRecordRowIDs resolves the rows an excluded record would have written, so a snapshot pass
-// treats them as seen and never marks a record removed only because its write was skipped
-func excludedRecordRowIDs(ctx context.Context, db *ent.Client, ownerID string, schema *entityops.Schema, payload json.RawMessage) ([]string, error) {
+// excludedRecordRows resolves the rows an excluded record's lookup key currently matches, so a
+// snapshot pass can mark them seen (never marking a record removed only because its write was
+// skipped) and a tracked failure can be checked for resolution by a durable retry
+func excludedRecordRows(ctx context.Context, db *ent.Client, ownerID string, schema *entityops.Schema, payload json.RawMessage) ([]json.RawMessage, error) {
 	alternative, values, ok := lookupKeyFor(schema, payload)
 	if !ok || schema.QueryByLookup == nil {
 		return nil, nil
 	}
 
-	rows, err := schema.QueryByLookup(ctx, db, ownerID, alternative, []entityops.LookupValues{values})
-	if err != nil {
-		return nil, err
-	}
+	return schema.QueryByLookup(ctx, db, ownerID, alternative, []entityops.LookupValues{values})
+}
 
-	return lo.Map(rows, func(row json.RawMessage, _ int) string { return entityops.FieldValue(row, fieldID) }), nil
+// trackedFailureResolved reports whether any row matching an excluded record's lookup key carries
+// an integration run id at or after the tracked failure's run id, meaning a durable per-record
+// retry already wrote the row after the batched run that recorded the failure
+func trackedFailureResolved(rows []json.RawMessage, runID string) bool {
+	return lo.ContainsBy(rows, func(row json.RawMessage) bool {
+		return entityops.FieldValue(row, entityops.FieldIntegrationRunID) >= runID
+	})
 }
 
 // trackingKey builds the exclusion-tracking map key from a schema name and a failed record's
@@ -714,74 +721,6 @@ func failedRecordsFromTracked(tracked map[string]*models.FailedRecord) []models.
 	})
 
 	return records
-}
-
-// stampProvenance writes the schema's trusted integration-derived provenance columns and ownership
-// edges onto a prepared ingest payload, overriding anything the mapping emitted for them; the sole
-// writer of provenance columns in this package
-func stampProvenance(payload json.RawMessage, schema *entityops.Schema, integrationRecord *ent.Integration, runID string) json.RawMessage {
-	values := []struct {
-		field string
-		value string
-	}{
-		{entityops.FieldOwnerID, integrationRecord.OwnerID},
-		{entityops.FieldIntegrationID, integrationRecord.ID},
-		{entityops.FieldManagedBy, integrationRecord.ID},
-		{entityops.FieldPlatformID, integrationRecord.PlatformID},
-		{entityops.FieldSourceDefinitionID, integrationRecord.DefinitionID},
-		{entityops.FieldSourceDefinitionVersion, integrationRecord.DefinitionVersion},
-		{entityops.FieldSourceInstanceID, integrationRecord.InstallationMetadata.Display.ExternalID},
-		{entityops.FieldIntegrationRunID, runID},
-	}
-
-	return jsonx.EditObject(payload, func(doc map[string]json.RawMessage) bool {
-		changed := false
-
-		for _, v := range values {
-			if v.value == "" {
-				continue
-			}
-
-			field, ok := schema.FieldByName(v.field)
-			if !ok {
-				continue
-			}
-
-			if stampProvenanceKey(doc, field.Name, v.value) {
-				changed = true
-			}
-		}
-
-		if schema.IntegrationM2MEdge != "" {
-			if edge, ok := schema.EdgeByName(schema.IntegrationM2MEdge); ok && stampProvenanceKey(doc, edge.CreateField, []string{integrationRecord.ID}) {
-				changed = true
-			}
-		}
-
-		if runID != "" && schema.IntegrationRunM2MEdge != "" {
-			if edge, ok := schema.EdgeByName(schema.IntegrationRunM2MEdge); ok && stampProvenanceKey(doc, edge.CreateField, []string{runID}) {
-				changed = true
-			}
-		}
-
-		return changed
-	})
-}
-
-// stampProvenanceKey writes value to key unconditionally, reporting whether the stored bytes changed
-func stampProvenanceKey(doc map[string]json.RawMessage, key string, value any) bool {
-	encoded, err := json.Marshal(value)
-	if err != nil {
-		return false
-	}
-
-	if raw, ok := doc[key]; ok && bytes.Equal(raw, encoded) {
-		return false
-	}
-
-	doc[key] = encoded
-
-	return true
 }
 
 // legacyScientificKey converts a numeric key like "147884153" into the "1.47884153e+08" form the

@@ -13,8 +13,6 @@ import (
 var (
 	// definitionID is the stable identifier for the Google Drive integration definition
 	definitionID = types.NewDefinitionRef("def_01K0GDRIVE00000000000000001")
-	// installation is the typed installation metadata handle for the Google Drive definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// driveCredential is the credential slot for Google Drive OAuth credentials
 	_, driveCredential = providerkit.CredentialSchema[googleDriveCred]()
 	// driveClient is the client ref for the Google Drive SDK
@@ -54,8 +52,8 @@ type UserInput struct {
 
 // InstallationMetadata holds the stable Google Drive target selected for one installation
 type InstallationMetadata struct {
-	// CustomerID is the Google Workspace customer identifier (empty for personal accounts)
-	CustomerID string `json:"customerId,omitempty" jsonschema:"title=Customer ID"`
+	// AccountID is the stable id of the connected Google account as reported by the Drive About API
+	AccountID string `json:"accountId,omitempty" jsonschema:"title=Account ID"`
 	// Domain is the primary domain of the Google Workspace account
 	Domain string `json:"domain,omitempty" jsonschema:"title=Domain"`
 }
@@ -74,6 +72,6 @@ func ExportOperationName() string {
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	return types.IntegrationInstallationIdentity{
 		ExternalName: m.Domain,
-		ExternalID:   m.CustomerID,
+		ExternalID:   m.AccountID,
 	}
 }

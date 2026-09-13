@@ -1457,7 +1457,6 @@ type ComplexityRoot struct {
 		ExternalID              func(childComplexity int) int
 		FamilyName              func(childComplexity int) int
 		Findings                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
-		FirstSeenAt             func(childComplexity int) int
 		GivenName               func(childComplexity int) int
 		Groups                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
 		ID                      func(childComplexity int) int
@@ -1468,8 +1467,6 @@ type ComplexityRoot struct {
 		IntegrationRunID        func(childComplexity int) int
 		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
 		JobTitle                func(childComplexity int) int
-		LastLoginAt             func(childComplexity int) int
-		LastSeenAt              func(childComplexity int) int
 		LastSeenIP              func(childComplexity int) int
 		ManagedBy               func(childComplexity int) int
 		Memberships             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
@@ -1545,13 +1542,11 @@ type ComplexityRoot struct {
 		EnvironmentName         func(childComplexity int) int
 		ExternalID              func(childComplexity int) int
 		ExternalSharingAllowed  func(childComplexity int) int
-		FirstSeenAt             func(childComplexity int) int
 		ID                      func(childComplexity int) int
 		Integration             func(childComplexity int) int
 		IntegrationID           func(childComplexity int) int
 		IntegrationRunID        func(childComplexity int) int
 		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
-		LastSeenAt              func(childComplexity int) int
 		ManagedBy               func(childComplexity int) int
 		MemberCount             func(childComplexity int) int
 		Members                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
@@ -1620,13 +1615,11 @@ type ComplexityRoot struct {
 		EnvironmentID           func(childComplexity int) int
 		EnvironmentName         func(childComplexity int) int
 		Events                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		FirstSeenAt             func(childComplexity int) int
 		ID                      func(childComplexity int) int
 		Integration             func(childComplexity int) int
 		IntegrationID           func(childComplexity int) int
 		IntegrationRunID        func(childComplexity int) int
 		IntegrationRuns         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
-		LastSeenAt              func(childComplexity int) int
 		ManagedBy               func(childComplexity int) int
 		Metadata                func(childComplexity int) int
 		ObservedAt              func(childComplexity int) int
@@ -14463,12 +14456,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryAccount.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
-	case "DirectoryAccount.firstSeenAt":
-		if e.ComplexityRoot.DirectoryAccount.FirstSeenAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryAccount.FirstSeenAt(childComplexity), true
 	case "DirectoryAccount.givenName":
 		if e.ComplexityRoot.DirectoryAccount.GivenName == nil {
 			break
@@ -14539,18 +14526,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryAccount.JobTitle(childComplexity), true
-	case "DirectoryAccount.lastLoginAt":
-		if e.ComplexityRoot.DirectoryAccount.LastLoginAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryAccount.LastLoginAt(childComplexity), true
-	case "DirectoryAccount.lastSeenAt":
-		if e.ComplexityRoot.DirectoryAccount.LastSeenAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryAccount.LastSeenAt(childComplexity), true
 	case "DirectoryAccount.lastSeenIP":
 		if e.ComplexityRoot.DirectoryAccount.LastSeenIP == nil {
 			break
@@ -14897,12 +14872,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryGroup.ExternalSharingAllowed(childComplexity), true
-	case "DirectoryGroup.firstSeenAt":
-		if e.ComplexityRoot.DirectoryGroup.FirstSeenAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryGroup.FirstSeenAt(childComplexity), true
 	case "DirectoryGroup.id":
 		if e.ComplexityRoot.DirectoryGroup.ID == nil {
 			break
@@ -14938,12 +14907,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryGroup.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
-	case "DirectoryGroup.lastSeenAt":
-		if e.ComplexityRoot.DirectoryGroup.LastSeenAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryGroup.LastSeenAt(childComplexity), true
 	case "DirectoryGroup.managedBy":
 		if e.ComplexityRoot.DirectoryGroup.ManagedBy == nil {
 			break
@@ -15248,12 +15211,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryMembership.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EventOrder), args["where"].(*generated.EventWhereInput)), true
-	case "DirectoryMembership.firstSeenAt":
-		if e.ComplexityRoot.DirectoryMembership.FirstSeenAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryMembership.FirstSeenAt(childComplexity), true
 	case "DirectoryMembership.id":
 		if e.ComplexityRoot.DirectoryMembership.ID == nil {
 			break
@@ -15289,12 +15246,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DirectoryMembership.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
-	case "DirectoryMembership.lastSeenAt":
-		if e.ComplexityRoot.DirectoryMembership.LastSeenAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.DirectoryMembership.LastSeenAt(childComplexity), true
 	case "DirectoryMembership.managedBy":
 		if e.ComplexityRoot.DirectoryMembership.ManagedBy == nil {
 			break
@@ -68385,18 +68336,6 @@ input CreateDirectoryAccountInput {
   """
   lastSeenIP: String
   """
-  timestamp of the most recent login reported by the provider
-  """
-  lastLoginAt: Time
-  """
-  time this account was first observed by Openlane from directory ingest
-  """
-  firstSeenAt: Time
-  """
-  time this account was most recently confirmed by directory ingest
-  """
-  lastSeenAt: Time
-  """
   provider-reported time the account was added or provisioned in the source directory
   """
   addedAt: Time
@@ -68505,14 +68444,6 @@ input CreateDirectoryGroupInput {
   """
   memberCount: Int
   """
-  time this group was first observed by Openlane from directory ingest
-  """
-  firstSeenAt: Time
-  """
-  time this group was most recently confirmed by directory ingest
-  """
-  lastSeenAt: Time
-  """
   provider-reported time the group was added or provisioned in the source directory
   """
   addedAt: Time
@@ -68593,14 +68524,6 @@ input CreateDirectoryMembershipInput {
   directory source label set by the integration (e.g. googleworkspace, github, slack)
   """
   directoryName: String
-  """
-  first time the membership was detected
-  """
-  firstSeenAt: Time
-  """
-  most recent time the membership was confirmed by directory ingest
-  """
-  lastSeenAt: Time
   """
   provider-reported time the membership was added in the source directory
   """
@@ -74802,18 +74725,6 @@ type DirectoryAccount implements Node {
   """
   lastSeenIP: String
   """
-  timestamp of the most recent login reported by the provider
-  """
-  lastLoginAt: Time
-  """
-  time this account was first observed by Openlane from directory ingest
-  """
-  firstSeenAt: Time
-  """
-  time this account was most recently confirmed by directory ingest
-  """
-  lastSeenAt: Time
-  """
   provider-reported time the account was added or provisioned in the source directory
   """
   addedAt: Time
@@ -75602,36 +75513,6 @@ input DirectoryAccountWhereInput {
   lastSeenIPEqualFold: String
   lastSeenIPContainsFold: String
   """
-  last_login_at field predicates
-  """
-  lastLoginAt: Time
-  lastLoginAtGT: Time
-  lastLoginAtGTE: Time
-  lastLoginAtLT: Time
-  lastLoginAtLTE: Time
-  lastLoginAtIsNil: Boolean
-  lastLoginAtNotNil: Boolean
-  """
-  first_seen_at field predicates
-  """
-  firstSeenAt: Time
-  firstSeenAtGT: Time
-  firstSeenAtGTE: Time
-  firstSeenAtLT: Time
-  firstSeenAtLTE: Time
-  firstSeenAtIsNil: Boolean
-  firstSeenAtNotNil: Boolean
-  """
-  last_seen_at field predicates
-  """
-  lastSeenAt: Time
-  lastSeenAtGT: Time
-  lastSeenAtGTE: Time
-  lastSeenAtLT: Time
-  lastSeenAtLTE: Time
-  lastSeenAtIsNil: Boolean
-  lastSeenAtNotNil: Boolean
-  """
   added_at field predicates
   """
   addedAt: Time
@@ -75845,14 +75726,6 @@ type DirectoryGroup implements Node {
   member count reported by the directory
   """
   memberCount: Int
-  """
-  time this group was first observed by Openlane from directory ingest
-  """
-  firstSeenAt: Time
-  """
-  time this group was most recently confirmed by directory ingest
-  """
-  lastSeenAt: Time
   """
   provider-reported time the group was added or provisioned in the source directory
   """
@@ -76422,26 +76295,6 @@ input DirectoryGroupWhereInput {
   memberCountIsNil: Boolean
   memberCountNotNil: Boolean
   """
-  first_seen_at field predicates
-  """
-  firstSeenAt: Time
-  firstSeenAtGT: Time
-  firstSeenAtGTE: Time
-  firstSeenAtLT: Time
-  firstSeenAtLTE: Time
-  firstSeenAtIsNil: Boolean
-  firstSeenAtNotNil: Boolean
-  """
-  last_seen_at field predicates
-  """
-  lastSeenAt: Time
-  lastSeenAtGT: Time
-  lastSeenAtGTE: Time
-  lastSeenAtLT: Time
-  lastSeenAtLTE: Time
-  lastSeenAtIsNil: Boolean
-  lastSeenAtNotNil: Boolean
-  """
   added_at field predicates
   """
   addedAt: Time
@@ -76629,14 +76482,6 @@ type DirectoryMembership implements Node {
   directory source label set by the integration (e.g. googleworkspace, github, slack)
   """
   directoryName: String
-  """
-  first time the membership was detected
-  """
-  firstSeenAt: Time
-  """
-  most recent time the membership was confirmed by directory ingest
-  """
-  lastSeenAt: Time
   """
   provider-reported time the membership was added in the source directory
   """
@@ -77046,26 +76891,6 @@ input DirectoryMembershipWhereInput {
   directoryNameNotNil: Boolean
   directoryNameEqualFold: String
   directoryNameContainsFold: String
-  """
-  first_seen_at field predicates
-  """
-  firstSeenAt: Time
-  firstSeenAtGT: Time
-  firstSeenAtGTE: Time
-  firstSeenAtLT: Time
-  firstSeenAtLTE: Time
-  firstSeenAtIsNil: Boolean
-  firstSeenAtNotNil: Boolean
-  """
-  last_seen_at field predicates
-  """
-  lastSeenAt: Time
-  lastSeenAtGT: Time
-  lastSeenAtGTE: Time
-  lastSeenAtLT: Time
-  lastSeenAtLTE: Time
-  lastSeenAtIsNil: Boolean
-  lastSeenAtNotNil: Boolean
   """
   added_at field predicates
   """
@@ -129682,21 +129507,6 @@ input UpdateDirectoryAccountInput {
   lastSeenIP: String
   clearLastSeenIP: Boolean
   """
-  timestamp of the most recent login reported by the provider
-  """
-  lastLoginAt: Time
-  clearLastLoginAt: Boolean
-  """
-  time this account was first observed by Openlane from directory ingest
-  """
-  firstSeenAt: Time
-  clearFirstSeenAt: Boolean
-  """
-  time this account was most recently confirmed by directory ingest
-  """
-  lastSeenAt: Time
-  clearLastSeenAt: Boolean
-  """
   provider-reported time the account was added or provisioned in the source directory
   """
   addedAt: Time
@@ -129825,16 +129635,6 @@ input UpdateDirectoryGroupInput {
   memberCount: Int
   clearMemberCount: Boolean
   """
-  time this group was first observed by Openlane from directory ingest
-  """
-  firstSeenAt: Time
-  clearFirstSeenAt: Boolean
-  """
-  time this group was most recently confirmed by directory ingest
-  """
-  lastSeenAt: Time
-  clearLastSeenAt: Boolean
-  """
   provider-reported time the group was added or provisioned in the source directory
   """
   addedAt: Time
@@ -129933,16 +129733,6 @@ input UpdateDirectoryMembershipInput {
   """
   directoryName: String
   clearDirectoryName: Boolean
-  """
-  first time the membership was detected
-  """
-  firstSeenAt: Time
-  clearFirstSeenAt: Boolean
-  """
-  most recent time the membership was confirmed by directory ingest
-  """
-  lastSeenAt: Time
-  clearLastSeenAt: Boolean
   """
   provider-reported time the membership was added in the source directory
   """
@@ -159332,12 +159122,6 @@ func (ec *executionContext) childFields_DirectoryAccount(ctx context.Context, fi
 		return ec.fieldContext_DirectoryAccount_mfaState(ctx, field)
 	case "lastSeenIP":
 		return ec.fieldContext_DirectoryAccount_lastSeenIP(ctx, field)
-	case "lastLoginAt":
-		return ec.fieldContext_DirectoryAccount_lastLoginAt(ctx, field)
-	case "firstSeenAt":
-		return ec.fieldContext_DirectoryAccount_firstSeenAt(ctx, field)
-	case "lastSeenAt":
-		return ec.fieldContext_DirectoryAccount_lastSeenAt(ctx, field)
 	case "addedAt":
 		return ec.fieldContext_DirectoryAccount_addedAt(ctx, field)
 	case "removedAt":
@@ -159494,10 +159278,6 @@ func (ec *executionContext) childFields_DirectoryGroup(ctx context.Context, fiel
 		return ec.fieldContext_DirectoryGroup_externalSharingAllowed(ctx, field)
 	case "memberCount":
 		return ec.fieldContext_DirectoryGroup_memberCount(ctx, field)
-	case "firstSeenAt":
-		return ec.fieldContext_DirectoryGroup_firstSeenAt(ctx, field)
-	case "lastSeenAt":
-		return ec.fieldContext_DirectoryGroup_lastSeenAt(ctx, field)
 	case "addedAt":
 		return ec.fieldContext_DirectoryGroup_addedAt(ctx, field)
 	case "removedAt":
@@ -159640,10 +159420,6 @@ func (ec *executionContext) childFields_DirectoryMembership(ctx context.Context,
 		return ec.fieldContext_DirectoryMembership_source(ctx, field)
 	case "directoryName":
 		return ec.fieldContext_DirectoryMembership_directoryName(ctx, field)
-	case "firstSeenAt":
-		return ec.fieldContext_DirectoryMembership_firstSeenAt(ctx, field)
-	case "lastSeenAt":
-		return ec.fieldContext_DirectoryMembership_lastSeenAt(ctx, field)
 	case "addedAt":
 		return ec.fieldContext_DirectoryMembership_addedAt(ctx, field)
 	case "removedAt":

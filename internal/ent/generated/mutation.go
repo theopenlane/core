@@ -49548,9 +49548,6 @@ type DirectoryAccountMutation struct {
 	status                      *enums.DirectoryAccountStatus
 	mfa_state                   *enums.DirectoryAccountMFAState
 	last_seen_ip                *string
-	last_login_at               *time.Time
-	first_seen_at               *time.Time
-	last_seen_at                *time.Time
 	added_at                    *time.Time
 	removed_at                  *time.Time
 	observed_at                 *time.Time
@@ -51589,153 +51586,6 @@ func (m *DirectoryAccountMutation) ResetLastSeenIP() {
 	delete(m.clearedFields, directoryaccount.FieldLastSeenIP)
 }
 
-// SetLastLoginAt sets the "last_login_at" field.
-func (m *DirectoryAccountMutation) SetLastLoginAt(t time.Time) {
-	m.last_login_at = &t
-}
-
-// LastLoginAt returns the value of the "last_login_at" field in the mutation.
-func (m *DirectoryAccountMutation) LastLoginAt() (r time.Time, exists bool) {
-	v := m.last_login_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldLastLoginAt returns the old "last_login_at" field's value of the DirectoryAccount entity.
-// If the DirectoryAccount object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DirectoryAccountMutation) OldLastLoginAt(ctx context.Context) (v *time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldLastLoginAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldLastLoginAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldLastLoginAt: %w", err)
-	}
-	return oldValue.LastLoginAt, nil
-}
-
-// ClearLastLoginAt clears the value of the "last_login_at" field.
-func (m *DirectoryAccountMutation) ClearLastLoginAt() {
-	m.last_login_at = nil
-	m.clearedFields[directoryaccount.FieldLastLoginAt] = struct{}{}
-}
-
-// LastLoginAtCleared returns if the "last_login_at" field was cleared in this mutation.
-func (m *DirectoryAccountMutation) LastLoginAtCleared() bool {
-	_, ok := m.clearedFields[directoryaccount.FieldLastLoginAt]
-	return ok
-}
-
-// ResetLastLoginAt resets all changes to the "last_login_at" field.
-func (m *DirectoryAccountMutation) ResetLastLoginAt() {
-	m.last_login_at = nil
-	delete(m.clearedFields, directoryaccount.FieldLastLoginAt)
-}
-
-// SetFirstSeenAt sets the "first_seen_at" field.
-func (m *DirectoryAccountMutation) SetFirstSeenAt(t time.Time) {
-	m.first_seen_at = &t
-}
-
-// FirstSeenAt returns the value of the "first_seen_at" field in the mutation.
-func (m *DirectoryAccountMutation) FirstSeenAt() (r time.Time, exists bool) {
-	v := m.first_seen_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldFirstSeenAt returns the old "first_seen_at" field's value of the DirectoryAccount entity.
-// If the DirectoryAccount object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DirectoryAccountMutation) OldFirstSeenAt(ctx context.Context) (v *time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldFirstSeenAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldFirstSeenAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldFirstSeenAt: %w", err)
-	}
-	return oldValue.FirstSeenAt, nil
-}
-
-// ClearFirstSeenAt clears the value of the "first_seen_at" field.
-func (m *DirectoryAccountMutation) ClearFirstSeenAt() {
-	m.first_seen_at = nil
-	m.clearedFields[directoryaccount.FieldFirstSeenAt] = struct{}{}
-}
-
-// FirstSeenAtCleared returns if the "first_seen_at" field was cleared in this mutation.
-func (m *DirectoryAccountMutation) FirstSeenAtCleared() bool {
-	_, ok := m.clearedFields[directoryaccount.FieldFirstSeenAt]
-	return ok
-}
-
-// ResetFirstSeenAt resets all changes to the "first_seen_at" field.
-func (m *DirectoryAccountMutation) ResetFirstSeenAt() {
-	m.first_seen_at = nil
-	delete(m.clearedFields, directoryaccount.FieldFirstSeenAt)
-}
-
-// SetLastSeenAt sets the "last_seen_at" field.
-func (m *DirectoryAccountMutation) SetLastSeenAt(t time.Time) {
-	m.last_seen_at = &t
-}
-
-// LastSeenAt returns the value of the "last_seen_at" field in the mutation.
-func (m *DirectoryAccountMutation) LastSeenAt() (r time.Time, exists bool) {
-	v := m.last_seen_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldLastSeenAt returns the old "last_seen_at" field's value of the DirectoryAccount entity.
-// If the DirectoryAccount object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DirectoryAccountMutation) OldLastSeenAt(ctx context.Context) (v *time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldLastSeenAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldLastSeenAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldLastSeenAt: %w", err)
-	}
-	return oldValue.LastSeenAt, nil
-}
-
-// ClearLastSeenAt clears the value of the "last_seen_at" field.
-func (m *DirectoryAccountMutation) ClearLastSeenAt() {
-	m.last_seen_at = nil
-	m.clearedFields[directoryaccount.FieldLastSeenAt] = struct{}{}
-}
-
-// LastSeenAtCleared returns if the "last_seen_at" field was cleared in this mutation.
-func (m *DirectoryAccountMutation) LastSeenAtCleared() bool {
-	_, ok := m.clearedFields[directoryaccount.FieldLastSeenAt]
-	return ok
-}
-
-// ResetLastSeenAt resets all changes to the "last_seen_at" field.
-func (m *DirectoryAccountMutation) ResetLastSeenAt() {
-	m.last_seen_at = nil
-	delete(m.clearedFields, directoryaccount.FieldLastSeenAt)
-}
-
 // SetAddedAt sets the "added_at" field.
 func (m *DirectoryAccountMutation) SetAddedAt(t time.Time) {
 	m.added_at = &t
@@ -52608,7 +52458,7 @@ func (m *DirectoryAccountMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DirectoryAccountMutation) Fields() []string {
-	fields := make([]string, 0, 50)
+	fields := make([]string, 0, 47)
 	if m.created_at != nil {
 		fields = append(fields, directoryaccount.FieldCreatedAt)
 	}
@@ -52726,15 +52576,6 @@ func (m *DirectoryAccountMutation) Fields() []string {
 	if m.last_seen_ip != nil {
 		fields = append(fields, directoryaccount.FieldLastSeenIP)
 	}
-	if m.last_login_at != nil {
-		fields = append(fields, directoryaccount.FieldLastLoginAt)
-	}
-	if m.first_seen_at != nil {
-		fields = append(fields, directoryaccount.FieldFirstSeenAt)
-	}
-	if m.last_seen_at != nil {
-		fields = append(fields, directoryaccount.FieldLastSeenAt)
-	}
 	if m.added_at != nil {
 		fields = append(fields, directoryaccount.FieldAddedAt)
 	}
@@ -52845,12 +52686,6 @@ func (m *DirectoryAccountMutation) Field(name string) (ent.Value, bool) {
 		return m.MfaState()
 	case directoryaccount.FieldLastSeenIP:
 		return m.LastSeenIP()
-	case directoryaccount.FieldLastLoginAt:
-		return m.LastLoginAt()
-	case directoryaccount.FieldFirstSeenAt:
-		return m.FirstSeenAt()
-	case directoryaccount.FieldLastSeenAt:
-		return m.LastSeenAt()
 	case directoryaccount.FieldAddedAt:
 		return m.AddedAt()
 	case directoryaccount.FieldRemovedAt:
@@ -52954,12 +52789,6 @@ func (m *DirectoryAccountMutation) OldField(ctx context.Context, name string) (e
 		return m.OldMfaState(ctx)
 	case directoryaccount.FieldLastSeenIP:
 		return m.OldLastSeenIP(ctx)
-	case directoryaccount.FieldLastLoginAt:
-		return m.OldLastLoginAt(ctx)
-	case directoryaccount.FieldFirstSeenAt:
-		return m.OldFirstSeenAt(ctx)
-	case directoryaccount.FieldLastSeenAt:
-		return m.OldLastSeenAt(ctx)
 	case directoryaccount.FieldAddedAt:
 		return m.OldAddedAt(ctx)
 	case directoryaccount.FieldRemovedAt:
@@ -53258,27 +53087,6 @@ func (m *DirectoryAccountMutation) SetField(name string, value ent.Value) error 
 		}
 		m.SetLastSeenIP(v)
 		return nil
-	case directoryaccount.FieldLastLoginAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetLastLoginAt(v)
-		return nil
-	case directoryaccount.FieldFirstSeenAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetFirstSeenAt(v)
-		return nil
-	case directoryaccount.FieldLastSeenAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetLastSeenAt(v)
-		return nil
 	case directoryaccount.FieldAddedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -53470,15 +53278,6 @@ func (m *DirectoryAccountMutation) ClearedFields() []string {
 	if m.FieldCleared(directoryaccount.FieldLastSeenIP) {
 		fields = append(fields, directoryaccount.FieldLastSeenIP)
 	}
-	if m.FieldCleared(directoryaccount.FieldLastLoginAt) {
-		fields = append(fields, directoryaccount.FieldLastLoginAt)
-	}
-	if m.FieldCleared(directoryaccount.FieldFirstSeenAt) {
-		fields = append(fields, directoryaccount.FieldFirstSeenAt)
-	}
-	if m.FieldCleared(directoryaccount.FieldLastSeenAt) {
-		fields = append(fields, directoryaccount.FieldLastSeenAt)
-	}
 	if m.FieldCleared(directoryaccount.FieldAddedAt) {
 		fields = append(fields, directoryaccount.FieldAddedAt)
 	}
@@ -53615,15 +53414,6 @@ func (m *DirectoryAccountMutation) ClearField(name string) error {
 		return nil
 	case directoryaccount.FieldLastSeenIP:
 		m.ClearLastSeenIP()
-		return nil
-	case directoryaccount.FieldLastLoginAt:
-		m.ClearLastLoginAt()
-		return nil
-	case directoryaccount.FieldFirstSeenAt:
-		m.ClearFirstSeenAt()
-		return nil
-	case directoryaccount.FieldLastSeenAt:
-		m.ClearLastSeenAt()
 		return nil
 	case directoryaccount.FieldAddedAt:
 		m.ClearAddedAt()
@@ -53767,15 +53557,6 @@ func (m *DirectoryAccountMutation) ResetField(name string) error {
 		return nil
 	case directoryaccount.FieldLastSeenIP:
 		m.ResetLastSeenIP()
-		return nil
-	case directoryaccount.FieldLastLoginAt:
-		m.ResetLastLoginAt()
-		return nil
-	case directoryaccount.FieldFirstSeenAt:
-		m.ResetFirstSeenAt()
-		return nil
-	case directoryaccount.FieldLastSeenAt:
-		m.ResetLastSeenAt()
 		return nil
 	case directoryaccount.FieldAddedAt:
 		m.ResetAddedAt()
@@ -54149,8 +53930,6 @@ type DirectoryGroupMutation struct {
 	external_sharing_allowed    *bool
 	member_count                *int
 	addmember_count             *int
-	first_seen_at               *time.Time
-	last_seen_at                *time.Time
 	added_at                    *time.Time
 	removed_at                  *time.Time
 	observed_at                 *time.Time
@@ -55586,104 +55365,6 @@ func (m *DirectoryGroupMutation) ResetMemberCount() {
 	delete(m.clearedFields, directorygroup.FieldMemberCount)
 }
 
-// SetFirstSeenAt sets the "first_seen_at" field.
-func (m *DirectoryGroupMutation) SetFirstSeenAt(t time.Time) {
-	m.first_seen_at = &t
-}
-
-// FirstSeenAt returns the value of the "first_seen_at" field in the mutation.
-func (m *DirectoryGroupMutation) FirstSeenAt() (r time.Time, exists bool) {
-	v := m.first_seen_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldFirstSeenAt returns the old "first_seen_at" field's value of the DirectoryGroup entity.
-// If the DirectoryGroup object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DirectoryGroupMutation) OldFirstSeenAt(ctx context.Context) (v *time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldFirstSeenAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldFirstSeenAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldFirstSeenAt: %w", err)
-	}
-	return oldValue.FirstSeenAt, nil
-}
-
-// ClearFirstSeenAt clears the value of the "first_seen_at" field.
-func (m *DirectoryGroupMutation) ClearFirstSeenAt() {
-	m.first_seen_at = nil
-	m.clearedFields[directorygroup.FieldFirstSeenAt] = struct{}{}
-}
-
-// FirstSeenAtCleared returns if the "first_seen_at" field was cleared in this mutation.
-func (m *DirectoryGroupMutation) FirstSeenAtCleared() bool {
-	_, ok := m.clearedFields[directorygroup.FieldFirstSeenAt]
-	return ok
-}
-
-// ResetFirstSeenAt resets all changes to the "first_seen_at" field.
-func (m *DirectoryGroupMutation) ResetFirstSeenAt() {
-	m.first_seen_at = nil
-	delete(m.clearedFields, directorygroup.FieldFirstSeenAt)
-}
-
-// SetLastSeenAt sets the "last_seen_at" field.
-func (m *DirectoryGroupMutation) SetLastSeenAt(t time.Time) {
-	m.last_seen_at = &t
-}
-
-// LastSeenAt returns the value of the "last_seen_at" field in the mutation.
-func (m *DirectoryGroupMutation) LastSeenAt() (r time.Time, exists bool) {
-	v := m.last_seen_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldLastSeenAt returns the old "last_seen_at" field's value of the DirectoryGroup entity.
-// If the DirectoryGroup object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DirectoryGroupMutation) OldLastSeenAt(ctx context.Context) (v *time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldLastSeenAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldLastSeenAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldLastSeenAt: %w", err)
-	}
-	return oldValue.LastSeenAt, nil
-}
-
-// ClearLastSeenAt clears the value of the "last_seen_at" field.
-func (m *DirectoryGroupMutation) ClearLastSeenAt() {
-	m.last_seen_at = nil
-	m.clearedFields[directorygroup.FieldLastSeenAt] = struct{}{}
-}
-
-// LastSeenAtCleared returns if the "last_seen_at" field was cleared in this mutation.
-func (m *DirectoryGroupMutation) LastSeenAtCleared() bool {
-	_, ok := m.clearedFields[directorygroup.FieldLastSeenAt]
-	return ok
-}
-
-// ResetLastSeenAt resets all changes to the "last_seen_at" field.
-func (m *DirectoryGroupMutation) ResetLastSeenAt() {
-	m.last_seen_at = nil
-	delete(m.clearedFields, directorygroup.FieldLastSeenAt)
-}
-
 // SetAddedAt sets the "added_at" field.
 func (m *DirectoryGroupMutation) SetAddedAt(t time.Time) {
 	m.added_at = &t
@@ -56448,7 +56129,7 @@ func (m *DirectoryGroupMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DirectoryGroupMutation) Fields() []string {
-	fields := make([]string, 0, 37)
+	fields := make([]string, 0, 35)
 	if m.created_at != nil {
 		fields = append(fields, directorygroup.FieldCreatedAt)
 	}
@@ -56529,12 +56210,6 @@ func (m *DirectoryGroupMutation) Fields() []string {
 	}
 	if m.member_count != nil {
 		fields = append(fields, directorygroup.FieldMemberCount)
-	}
-	if m.first_seen_at != nil {
-		fields = append(fields, directorygroup.FieldFirstSeenAt)
-	}
-	if m.last_seen_at != nil {
-		fields = append(fields, directorygroup.FieldLastSeenAt)
 	}
 	if m.added_at != nil {
 		fields = append(fields, directorygroup.FieldAddedAt)
@@ -56622,10 +56297,6 @@ func (m *DirectoryGroupMutation) Field(name string) (ent.Value, bool) {
 		return m.ExternalSharingAllowed()
 	case directorygroup.FieldMemberCount:
 		return m.MemberCount()
-	case directorygroup.FieldFirstSeenAt:
-		return m.FirstSeenAt()
-	case directorygroup.FieldLastSeenAt:
-		return m.LastSeenAt()
 	case directorygroup.FieldAddedAt:
 		return m.AddedAt()
 	case directorygroup.FieldRemovedAt:
@@ -56705,10 +56376,6 @@ func (m *DirectoryGroupMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldExternalSharingAllowed(ctx)
 	case directorygroup.FieldMemberCount:
 		return m.OldMemberCount(ctx)
-	case directorygroup.FieldFirstSeenAt:
-		return m.OldFirstSeenAt(ctx)
-	case directorygroup.FieldLastSeenAt:
-		return m.OldLastSeenAt(ctx)
 	case directorygroup.FieldAddedAt:
 		return m.OldAddedAt(ctx)
 	case directorygroup.FieldRemovedAt:
@@ -56923,20 +56590,6 @@ func (m *DirectoryGroupMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMemberCount(v)
 		return nil
-	case directorygroup.FieldFirstSeenAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetFirstSeenAt(v)
-		return nil
-	case directorygroup.FieldLastSeenAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetLastSeenAt(v)
-		return nil
 	case directorygroup.FieldAddedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -57104,12 +56757,6 @@ func (m *DirectoryGroupMutation) ClearedFields() []string {
 	if m.FieldCleared(directorygroup.FieldMemberCount) {
 		fields = append(fields, directorygroup.FieldMemberCount)
 	}
-	if m.FieldCleared(directorygroup.FieldFirstSeenAt) {
-		fields = append(fields, directorygroup.FieldFirstSeenAt)
-	}
-	if m.FieldCleared(directorygroup.FieldLastSeenAt) {
-		fields = append(fields, directorygroup.FieldLastSeenAt)
-	}
 	if m.FieldCleared(directorygroup.FieldAddedAt) {
 		fields = append(fields, directorygroup.FieldAddedAt)
 	}
@@ -57210,12 +56857,6 @@ func (m *DirectoryGroupMutation) ClearField(name string) error {
 		return nil
 	case directorygroup.FieldMemberCount:
 		m.ClearMemberCount()
-		return nil
-	case directorygroup.FieldFirstSeenAt:
-		m.ClearFirstSeenAt()
-		return nil
-	case directorygroup.FieldLastSeenAt:
-		m.ClearLastSeenAt()
 		return nil
 	case directorygroup.FieldAddedAt:
 		m.ClearAddedAt()
@@ -57326,12 +56967,6 @@ func (m *DirectoryGroupMutation) ResetField(name string) error {
 		return nil
 	case directorygroup.FieldMemberCount:
 		m.ResetMemberCount()
-		return nil
-	case directorygroup.FieldFirstSeenAt:
-		m.ResetFirstSeenAt()
-		return nil
-	case directorygroup.FieldLastSeenAt:
-		m.ResetLastSeenAt()
 		return nil
 	case directorygroup.FieldAddedAt:
 		m.ResetAddedAt()
@@ -57635,8 +57270,6 @@ type DirectoryMembershipMutation struct {
 	role                        *enums.DirectoryMembershipRole
 	source                      *string
 	directory_name              *string
-	first_seen_at               *time.Time
-	last_seen_at                *time.Time
 	added_at                    *time.Time
 	removed_at                  *time.Time
 	observed_at                 *time.Time
@@ -58849,104 +58482,6 @@ func (m *DirectoryMembershipMutation) ResetDirectoryName() {
 	delete(m.clearedFields, directorymembership.FieldDirectoryName)
 }
 
-// SetFirstSeenAt sets the "first_seen_at" field.
-func (m *DirectoryMembershipMutation) SetFirstSeenAt(t time.Time) {
-	m.first_seen_at = &t
-}
-
-// FirstSeenAt returns the value of the "first_seen_at" field in the mutation.
-func (m *DirectoryMembershipMutation) FirstSeenAt() (r time.Time, exists bool) {
-	v := m.first_seen_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldFirstSeenAt returns the old "first_seen_at" field's value of the DirectoryMembership entity.
-// If the DirectoryMembership object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DirectoryMembershipMutation) OldFirstSeenAt(ctx context.Context) (v *time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldFirstSeenAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldFirstSeenAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldFirstSeenAt: %w", err)
-	}
-	return oldValue.FirstSeenAt, nil
-}
-
-// ClearFirstSeenAt clears the value of the "first_seen_at" field.
-func (m *DirectoryMembershipMutation) ClearFirstSeenAt() {
-	m.first_seen_at = nil
-	m.clearedFields[directorymembership.FieldFirstSeenAt] = struct{}{}
-}
-
-// FirstSeenAtCleared returns if the "first_seen_at" field was cleared in this mutation.
-func (m *DirectoryMembershipMutation) FirstSeenAtCleared() bool {
-	_, ok := m.clearedFields[directorymembership.FieldFirstSeenAt]
-	return ok
-}
-
-// ResetFirstSeenAt resets all changes to the "first_seen_at" field.
-func (m *DirectoryMembershipMutation) ResetFirstSeenAt() {
-	m.first_seen_at = nil
-	delete(m.clearedFields, directorymembership.FieldFirstSeenAt)
-}
-
-// SetLastSeenAt sets the "last_seen_at" field.
-func (m *DirectoryMembershipMutation) SetLastSeenAt(t time.Time) {
-	m.last_seen_at = &t
-}
-
-// LastSeenAt returns the value of the "last_seen_at" field in the mutation.
-func (m *DirectoryMembershipMutation) LastSeenAt() (r time.Time, exists bool) {
-	v := m.last_seen_at
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldLastSeenAt returns the old "last_seen_at" field's value of the DirectoryMembership entity.
-// If the DirectoryMembership object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *DirectoryMembershipMutation) OldLastSeenAt(ctx context.Context) (v *time.Time, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldLastSeenAt is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldLastSeenAt requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldLastSeenAt: %w", err)
-	}
-	return oldValue.LastSeenAt, nil
-}
-
-// ClearLastSeenAt clears the value of the "last_seen_at" field.
-func (m *DirectoryMembershipMutation) ClearLastSeenAt() {
-	m.last_seen_at = nil
-	m.clearedFields[directorymembership.FieldLastSeenAt] = struct{}{}
-}
-
-// LastSeenAtCleared returns if the "last_seen_at" field was cleared in this mutation.
-func (m *DirectoryMembershipMutation) LastSeenAtCleared() bool {
-	_, ok := m.clearedFields[directorymembership.FieldLastSeenAt]
-	return ok
-}
-
-// ResetLastSeenAt resets all changes to the "last_seen_at" field.
-func (m *DirectoryMembershipMutation) ResetLastSeenAt() {
-	m.last_seen_at = nil
-	delete(m.clearedFields, directorymembership.FieldLastSeenAt)
-}
-
 // SetAddedAt sets the "added_at" field.
 func (m *DirectoryMembershipMutation) SetAddedAt(t time.Time) {
 	m.added_at = &t
@@ -59515,7 +59050,7 @@ func (m *DirectoryMembershipMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *DirectoryMembershipMutation) Fields() []string {
-	fields := make([]string, 0, 29)
+	fields := make([]string, 0, 27)
 	if m.created_at != nil {
 		fields = append(fields, directorymembership.FieldCreatedAt)
 	}
@@ -59585,12 +59120,6 @@ func (m *DirectoryMembershipMutation) Fields() []string {
 	if m.directory_name != nil {
 		fields = append(fields, directorymembership.FieldDirectoryName)
 	}
-	if m.first_seen_at != nil {
-		fields = append(fields, directorymembership.FieldFirstSeenAt)
-	}
-	if m.last_seen_at != nil {
-		fields = append(fields, directorymembership.FieldLastSeenAt)
-	}
 	if m.added_at != nil {
 		fields = append(fields, directorymembership.FieldAddedAt)
 	}
@@ -59657,10 +59186,6 @@ func (m *DirectoryMembershipMutation) Field(name string) (ent.Value, bool) {
 		return m.Source()
 	case directorymembership.FieldDirectoryName:
 		return m.DirectoryName()
-	case directorymembership.FieldFirstSeenAt:
-		return m.FirstSeenAt()
-	case directorymembership.FieldLastSeenAt:
-		return m.LastSeenAt()
 	case directorymembership.FieldAddedAt:
 		return m.AddedAt()
 	case directorymembership.FieldRemovedAt:
@@ -59724,10 +59249,6 @@ func (m *DirectoryMembershipMutation) OldField(ctx context.Context, name string)
 		return m.OldSource(ctx)
 	case directorymembership.FieldDirectoryName:
 		return m.OldDirectoryName(ctx)
-	case directorymembership.FieldFirstSeenAt:
-		return m.OldFirstSeenAt(ctx)
-	case directorymembership.FieldLastSeenAt:
-		return m.OldLastSeenAt(ctx)
 	case directorymembership.FieldAddedAt:
 		return m.OldAddedAt(ctx)
 	case directorymembership.FieldRemovedAt:
@@ -59906,20 +59427,6 @@ func (m *DirectoryMembershipMutation) SetField(name string, value ent.Value) err
 		}
 		m.SetDirectoryName(v)
 		return nil
-	case directorymembership.FieldFirstSeenAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetFirstSeenAt(v)
-		return nil
-	case directorymembership.FieldLastSeenAt:
-		v, ok := value.(time.Time)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetLastSeenAt(v)
-		return nil
 	case directorymembership.FieldAddedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -60035,12 +59542,6 @@ func (m *DirectoryMembershipMutation) ClearedFields() []string {
 	if m.FieldCleared(directorymembership.FieldDirectoryName) {
 		fields = append(fields, directorymembership.FieldDirectoryName)
 	}
-	if m.FieldCleared(directorymembership.FieldFirstSeenAt) {
-		fields = append(fields, directorymembership.FieldFirstSeenAt)
-	}
-	if m.FieldCleared(directorymembership.FieldLastSeenAt) {
-		fields = append(fields, directorymembership.FieldLastSeenAt)
-	}
 	if m.FieldCleared(directorymembership.FieldAddedAt) {
 		fields = append(fields, directorymembership.FieldAddedAt)
 	}
@@ -60120,12 +59621,6 @@ func (m *DirectoryMembershipMutation) ClearField(name string) error {
 		return nil
 	case directorymembership.FieldDirectoryName:
 		m.ClearDirectoryName()
-		return nil
-	case directorymembership.FieldFirstSeenAt:
-		m.ClearFirstSeenAt()
-		return nil
-	case directorymembership.FieldLastSeenAt:
-		m.ClearLastSeenAt()
 		return nil
 	case directorymembership.FieldAddedAt:
 		m.ClearAddedAt()
@@ -60212,12 +59707,6 @@ func (m *DirectoryMembershipMutation) ResetField(name string) error {
 		return nil
 	case directorymembership.FieldDirectoryName:
 		m.ResetDirectoryName()
-		return nil
-	case directorymembership.FieldFirstSeenAt:
-		m.ResetFirstSeenAt()
-		return nil
-	case directorymembership.FieldLastSeenAt:
-		m.ResetLastSeenAt()
 		return nil
 	case directorymembership.FieldAddedAt:
 		m.ResetAddedAt()

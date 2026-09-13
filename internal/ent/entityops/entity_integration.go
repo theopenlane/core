@@ -7,9 +7,7 @@ import "github.com/theopenlane/core/v2/pkg/gala"
 // IngestTopics is the namespace for every generated asynchronous schema-ingest topic.
 var IngestTopics = gala.IntegrationIngest.At("entityops")
 
-// ActionPlanFields indexes ActionPlan's provider-mappable fields so integration
-// definitions register expressions on the catalog instead of raw keys. It is a self-contained
-// literal so it needs no init ordering
+// ActionPlanFields indexes the provider-mappable fields of ActionPlan
 var ActionPlanFields = struct {
 	// ActionPlanKindID is the action_plan_kind_id field
 	ActionPlanKindID FieldDescriptor
@@ -122,9 +120,7 @@ var ActionPlanFields = struct {
 	URL:                             FieldDescriptor{Name: "url", InputKey: "url"},
 }
 
-// AssetFields indexes Asset's provider-mappable fields so integration
-// definitions register expressions on the catalog instead of raw keys. It is a self-contained
-// literal so it needs no init ordering
+// AssetFields indexes the provider-mappable fields of Asset
 var AssetFields = struct {
 	// AccessModelID is the access_model_id field
 	AccessModelID FieldDescriptor
@@ -246,9 +242,7 @@ var AssetFields = struct {
 	Website:                       FieldDescriptor{Name: "website", InputKey: "website"},
 }
 
-// CheckResultFields indexes CheckResult's provider-mappable fields so integration
-// definitions register expressions on the catalog instead of raw keys. It is a self-contained
-// literal so it needs no init ordering
+// CheckResultFields indexes the provider-mappable fields of CheckResult
 var CheckResultFields = struct {
 	// Details is the details field
 	Details FieldDescriptor
@@ -274,9 +268,7 @@ var CheckResultFields = struct {
 	Tags:             FieldDescriptor{Name: "tags", InputKey: "tags"},
 }
 
-// ContactFields indexes Contact's provider-mappable fields so integration
-// definitions register expressions on the catalog instead of raw keys. It is a self-contained
-// literal so it needs no init ordering
+// ContactFields indexes the provider-mappable fields of Contact
 var ContactFields = struct {
 	// Address is the address field
 	Address FieldDescriptor
@@ -311,9 +303,7 @@ var ContactFields = struct {
 	Title:       FieldDescriptor{Name: "title", InputKey: "title"},
 }
 
-// DirectoryAccountFields indexes DirectoryAccount's provider-mappable fields so integration
-// definitions register expressions on the catalog instead of raw keys. It is a self-contained
-// literal so it needs no init ordering
+// DirectoryAccountFields indexes the provider-mappable fields of DirectoryAccount
 var DirectoryAccountFields = struct {
 	// AccountType is the account_type field
 	AccountType FieldDescriptor
@@ -341,18 +331,12 @@ var DirectoryAccountFields = struct {
 	ExternalID FieldDescriptor
 	// FamilyName is the family_name field
 	FamilyName FieldDescriptor
-	// FirstSeenAt is the first_seen_at field
-	FirstSeenAt FieldDescriptor
 	// GivenName is the given_name field
 	GivenName FieldDescriptor
 	// IdentityHolderID is the identity_holder_id field
 	IdentityHolderID FieldDescriptor
 	// JobTitle is the job_title field
 	JobTitle FieldDescriptor
-	// LastLoginAt is the last_login_at field
-	LastLoginAt FieldDescriptor
-	// LastSeenAt is the last_seen_at field
-	LastSeenAt FieldDescriptor
 	// LastSeenIP is the last_seen_ip field
 	LastSeenIP FieldDescriptor
 	// Metadata is the metadata field
@@ -397,12 +381,9 @@ var DirectoryAccountFields = struct {
 	EnvironmentName:  FieldDescriptor{Name: "environment_name", InputKey: "environment_name"},
 	ExternalID:       FieldDescriptor{Name: "external_id", InputKey: "external_id"},
 	FamilyName:       FieldDescriptor{Name: "family_name", InputKey: "family_name"},
-	FirstSeenAt:      FieldDescriptor{Name: "first_seen_at", InputKey: "first_seen_at"},
 	GivenName:        FieldDescriptor{Name: "given_name", InputKey: "given_name"},
 	IdentityHolderID: FieldDescriptor{Name: "identity_holder_id", InputKey: "identity_holder_id"},
 	JobTitle:         FieldDescriptor{Name: "job_title", InputKey: "job_title"},
-	LastLoginAt:      FieldDescriptor{Name: "last_login_at", InputKey: "last_login_at"},
-	LastSeenAt:       FieldDescriptor{Name: "last_seen_at", InputKey: "last_seen_at"},
 	LastSeenIP:       FieldDescriptor{Name: "last_seen_ip", InputKey: "last_seen_ip"},
 	Metadata:         FieldDescriptor{Name: "metadata", InputKey: "metadata"},
 	MfaState:         FieldDescriptor{Name: "mfa_state", InputKey: "mfa_state"},
@@ -420,9 +401,7 @@ var DirectoryAccountFields = struct {
 	Tags:             FieldDescriptor{Name: "tags", InputKey: "tags"},
 }
 
-// DirectoryGroupFields indexes DirectoryGroup's provider-mappable fields so integration
-// definitions register expressions on the catalog instead of raw keys. It is a self-contained
-// literal so it needs no init ordering
+// DirectoryGroupFields indexes the provider-mappable fields of DirectoryGroup
 var DirectoryGroupFields = struct {
 	// AddedAt is the added_at field
 	AddedAt FieldDescriptor
@@ -442,10 +421,6 @@ var DirectoryGroupFields = struct {
 	ExternalID FieldDescriptor
 	// ExternalSharingAllowed is the external_sharing_allowed field
 	ExternalSharingAllowed FieldDescriptor
-	// FirstSeenAt is the first_seen_at field
-	FirstSeenAt FieldDescriptor
-	// LastSeenAt is the last_seen_at field
-	LastSeenAt FieldDescriptor
 	// MemberCount is the member_count field
 	MemberCount FieldDescriptor
 	// Metadata is the metadata field
@@ -476,8 +451,6 @@ var DirectoryGroupFields = struct {
 	EnvironmentName:        FieldDescriptor{Name: "environment_name", InputKey: "environment_name"},
 	ExternalID:             FieldDescriptor{Name: "external_id", InputKey: "external_id"},
 	ExternalSharingAllowed: FieldDescriptor{Name: "external_sharing_allowed", InputKey: "external_sharing_allowed"},
-	FirstSeenAt:            FieldDescriptor{Name: "first_seen_at", InputKey: "first_seen_at"},
-	LastSeenAt:             FieldDescriptor{Name: "last_seen_at", InputKey: "last_seen_at"},
 	MemberCount:            FieldDescriptor{Name: "member_count", InputKey: "member_count"},
 	Metadata:               FieldDescriptor{Name: "metadata", InputKey: "metadata"},
 	ObservedAt:             FieldDescriptor{Name: "observed_at", InputKey: "observed_at"},
@@ -490,9 +463,7 @@ var DirectoryGroupFields = struct {
 	Tags:                   FieldDescriptor{Name: "tags", InputKey: "tags"},
 }
 
-// DirectoryMembershipFields indexes DirectoryMembership's provider-mappable fields so integration
-// definitions register expressions on the catalog instead of raw keys. It is a self-contained
-// literal so it needs no init ordering
+// DirectoryMembershipFields indexes the provider-mappable fields of DirectoryMembership
 var DirectoryMembershipFields = struct {
 	// AddedAt is the added_at field
 	AddedAt FieldDescriptor
@@ -506,10 +477,6 @@ var DirectoryMembershipFields = struct {
 	EnvironmentID FieldDescriptor
 	// EnvironmentName is the environment_name field
 	EnvironmentName FieldDescriptor
-	// FirstSeenAt is the first_seen_at field
-	FirstSeenAt FieldDescriptor
-	// LastSeenAt is the last_seen_at field
-	LastSeenAt FieldDescriptor
 	// Metadata is the metadata field
 	Metadata FieldDescriptor
 	// ObservedAt is the observed_at field
@@ -533,8 +500,6 @@ var DirectoryMembershipFields = struct {
 	DirectoryName:      FieldDescriptor{Name: "directory_name", InputKey: "directory_name"},
 	EnvironmentID:      FieldDescriptor{Name: "environment_id", InputKey: "environment_id"},
 	EnvironmentName:    FieldDescriptor{Name: "environment_name", InputKey: "environment_name"},
-	FirstSeenAt:        FieldDescriptor{Name: "first_seen_at", InputKey: "first_seen_at"},
-	LastSeenAt:         FieldDescriptor{Name: "last_seen_at", InputKey: "last_seen_at"},
 	Metadata:           FieldDescriptor{Name: "metadata", InputKey: "metadata"},
 	ObservedAt:         FieldDescriptor{Name: "observed_at", InputKey: "observed_at"},
 	PlatformID:         FieldDescriptor{Name: "platform_id", InputKey: "platform_id"},
@@ -545,9 +510,7 @@ var DirectoryMembershipFields = struct {
 	Source:             FieldDescriptor{Name: "source", InputKey: "source"},
 }
 
-// EntityFields indexes Entity's provider-mappable fields so integration
-// definitions register expressions on the catalog instead of raw keys. It is a self-contained
-// literal so it needs no init ordering
+// EntityFields indexes the provider-mappable fields of Entity
 var EntityFields = struct {
 	// Aliases is the aliases field
 	Aliases FieldDescriptor
@@ -717,9 +680,7 @@ var EntityFields = struct {
 	VendorMetadata:                        FieldDescriptor{Name: "vendor_metadata", InputKey: "vendor_metadata"},
 }
 
-// FindingFields indexes Finding's provider-mappable fields so integration
-// definitions register expressions on the catalog instead of raw keys. It is a self-contained
-// literal so it needs no init ordering
+// FindingFields indexes the provider-mappable fields of Finding
 var FindingFields = struct {
 	// AssessmentID is the assessment_id field
 	AssessmentID FieldDescriptor
@@ -883,9 +844,7 @@ var FindingFields = struct {
 	Vector:                     FieldDescriptor{Name: "vector", InputKey: "vector"},
 }
 
-// InternalPolicyFields indexes InternalPolicy's provider-mappable fields so integration
-// definitions register expressions on the catalog instead of raw keys. It is a self-contained
-// literal so it needs no init ordering
+// InternalPolicyFields indexes the provider-mappable fields of InternalPolicy
 var InternalPolicyFields = struct {
 	// ApprovalRequired is the approval_required field
 	ApprovalRequired FieldDescriptor
@@ -980,9 +939,7 @@ var InternalPolicyFields = struct {
 	URL:                             FieldDescriptor{Name: "url", InputKey: "url"},
 }
 
-// ProcedureFields indexes Procedure's provider-mappable fields so integration
-// definitions register expressions on the catalog instead of raw keys. It is a self-contained
-// literal so it needs no init ordering
+// ProcedureFields indexes the provider-mappable fields of Procedure
 var ProcedureFields = struct {
 	// ApprovalRequired is the approval_required field
 	ApprovalRequired FieldDescriptor
@@ -1074,9 +1031,7 @@ var ProcedureFields = struct {
 	URL:                             FieldDescriptor{Name: "url", InputKey: "url"},
 }
 
-// RiskFields indexes Risk's provider-mappable fields so integration
-// definitions register expressions on the catalog instead of raw keys. It is a self-contained
-// literal so it needs no init ordering
+// RiskFields indexes the provider-mappable fields of Risk
 var RiskFields = struct {
 	// BusinessCosts is the business_costs field
 	BusinessCosts FieldDescriptor
@@ -1174,9 +1129,7 @@ var RiskFields = struct {
 	Tags:              FieldDescriptor{Name: "tags", InputKey: "tags"},
 }
 
-// VulnerabilityFields indexes Vulnerability's provider-mappable fields so integration
-// definitions register expressions on the catalog instead of raw keys. It is a self-contained
-// literal so it needs no init ordering
+// VulnerabilityFields indexes the provider-mappable fields of Vulnerability
 var VulnerabilityFields = struct {
 	// AssignedTo is the assigned_to field
 	AssignedTo FieldDescriptor

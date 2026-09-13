@@ -49,8 +49,6 @@ type directoryGroupRecord struct {
 	ExternalID string `json:"external_id"`
 	// DisplayName is the directory supplied display name, a material (non-Volatile) field
 	DisplayName string `json:"display_name,omitempty"`
-	// Email is the group's primary email address, the fallback link target for memberships referencing the group by email
-	Email string `json:"email,omitempty"`
 	// Profile is the flattened attribute bag, and is Volatile
 	Profile map[string]any `json:"profile,omitempty"`
 }

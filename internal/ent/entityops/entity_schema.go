@@ -114,7 +114,7 @@ type FieldDescriptor struct {
 	WebhookPayload bool `json:"webhookPayload,omitempty"`
 	// SystemControlled excludes the field from provider mappings
 	SystemControlled bool `json:"systemControlled,omitempty"`
-	// Volatile excludes the field from triggering an ingest change; it rides along on material changes
+	// Volatile excludes the field from triggering an ingest change
 	Volatile bool `json:"volatile,omitempty"`
 	// CaseInsensitive compares the field case-insensitively in ingest change detection
 	CaseInsensitive bool `json:"caseInsensitive,omitempty"`
@@ -264,8 +264,7 @@ type TargetSelector struct {
 	SourceSchema SchemaDescriptor `json:"source_schema,omitempty"`
 	// KeyMatch, when set, resolves candidates with an indexed key query before any Expression filtering
 	KeyMatch *KeyMatch `json:"key_match,omitempty"`
-	// Unique reports whether the edge this selector resolves for sets a single target, so more than
-	// one candidate is narrowed by provenance rather than accepted as a to-many match set
+	// Unique reports whether the edge this selector resolves for sets a single target
 	Unique bool `json:"unique,omitempty"`
 	// Expression is a CEL expression evaluated against each candidate entity
 	Expression string `json:"expression"`
@@ -286,13 +285,11 @@ type LinkSpec struct {
 	Target TargetSelector `json:"target"`
 }
 
-// LookupAlternative is one ordered composite ingest lookup key: an AND of the listed snake_case
-// field names, evaluated against the ingest payload to resolve an existing row
+// LookupAlternative is one ordered composite ingest lookup key of snake_case field names
 type LookupAlternative struct {
 	// Fields is the ordered snake_case field names forming this alternative's composite key
 	Fields []string
 }
 
-// LookupValues is one candidate row's or payload's values for a lookup alternative, keyed by
-// snake_case field name
+// LookupValues is one row's or payload's values for a lookup alternative keyed by snake_case field name
 type LookupValues map[string]string

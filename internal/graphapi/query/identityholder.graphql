@@ -314,14 +314,11 @@ query GetIdentityHolderDirectoryAccounts ($identityHolderId: ID!, $first: Int, $
 					environmentName
 					externalID
 					familyName
-					firstSeenAt
 					givenName
 					id
 					identityHolderID
 					integrationID
 					jobTitle
-					lastLoginAt
-					lastSeenAt
 					lastSeenIP
 					metadata
 					mfaState

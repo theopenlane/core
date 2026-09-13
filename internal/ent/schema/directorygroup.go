@@ -113,22 +113,6 @@ func (DirectoryGroup) Fields() []ent.Field {
 		field.Int("member_count").
 			Comment("member count reported by the directory").
 			Optional(),
-		field.Time("first_seen_at").
-			Comment("time this group was first observed by Openlane from directory ingest").
-			Default(time.Now).
-			Optional().
-			Nillable().
-			Annotations(
-				entx.IntegrationMappingField(),
-			),
-		field.Time("last_seen_at").
-			Comment("time this group was most recently confirmed by directory ingest").
-			Optional().
-			Nillable().
-			Annotations(
-				entx.IntegrationMappingField(),
-				entx.SeenAt(),
-			),
 		field.Time("added_at").
 			Comment("provider-reported time the group was added or provisioned in the source directory").
 			Optional().

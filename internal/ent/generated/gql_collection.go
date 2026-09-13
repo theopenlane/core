@@ -16621,21 +16621,6 @@ func (_q *DirectoryAccountQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, directoryaccount.FieldLastSeenIP)
 				fieldSeen[directoryaccount.FieldLastSeenIP] = struct{}{}
 			}
-		case "lastLoginAt":
-			if _, ok := fieldSeen[directoryaccount.FieldLastLoginAt]; !ok {
-				selectedFields = append(selectedFields, directoryaccount.FieldLastLoginAt)
-				fieldSeen[directoryaccount.FieldLastLoginAt] = struct{}{}
-			}
-		case "firstSeenAt":
-			if _, ok := fieldSeen[directoryaccount.FieldFirstSeenAt]; !ok {
-				selectedFields = append(selectedFields, directoryaccount.FieldFirstSeenAt)
-				fieldSeen[directoryaccount.FieldFirstSeenAt] = struct{}{}
-			}
-		case "lastSeenAt":
-			if _, ok := fieldSeen[directoryaccount.FieldLastSeenAt]; !ok {
-				selectedFields = append(selectedFields, directoryaccount.FieldLastSeenAt)
-				fieldSeen[directoryaccount.FieldLastSeenAt] = struct{}{}
-			}
 		case "addedAt":
 			if _, ok := fieldSeen[directoryaccount.FieldAddedAt]; !ok {
 				selectedFields = append(selectedFields, directoryaccount.FieldAddedAt)
@@ -17340,16 +17325,6 @@ func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, directorygroup.FieldMemberCount)
 				fieldSeen[directorygroup.FieldMemberCount] = struct{}{}
 			}
-		case "firstSeenAt":
-			if _, ok := fieldSeen[directorygroup.FieldFirstSeenAt]; !ok {
-				selectedFields = append(selectedFields, directorygroup.FieldFirstSeenAt)
-				fieldSeen[directorygroup.FieldFirstSeenAt] = struct{}{}
-			}
-		case "lastSeenAt":
-			if _, ok := fieldSeen[directorygroup.FieldLastSeenAt]; !ok {
-				selectedFields = append(selectedFields, directorygroup.FieldLastSeenAt)
-				fieldSeen[directorygroup.FieldLastSeenAt] = struct{}{}
-			}
 		case "addedAt":
 			if _, ok := fieldSeen[directorygroup.FieldAddedAt]; !ok {
 				selectedFields = append(selectedFields, directorygroup.FieldAddedAt)
@@ -17970,16 +17945,6 @@ func (_q *DirectoryMembershipQuery) collectField(ctx context.Context, oneNode bo
 			if _, ok := fieldSeen[directorymembership.FieldDirectoryName]; !ok {
 				selectedFields = append(selectedFields, directorymembership.FieldDirectoryName)
 				fieldSeen[directorymembership.FieldDirectoryName] = struct{}{}
-			}
-		case "firstSeenAt":
-			if _, ok := fieldSeen[directorymembership.FieldFirstSeenAt]; !ok {
-				selectedFields = append(selectedFields, directorymembership.FieldFirstSeenAt)
-				fieldSeen[directorymembership.FieldFirstSeenAt] = struct{}{}
-			}
-		case "lastSeenAt":
-			if _, ok := fieldSeen[directorymembership.FieldLastSeenAt]; !ok {
-				selectedFields = append(selectedFields, directorymembership.FieldLastSeenAt)
-				fieldSeen[directorymembership.FieldLastSeenAt] = struct{}{}
 			}
 		case "addedAt":
 			if _, ok := fieldSeen[directorymembership.FieldAddedAt]; !ok {

@@ -14,11 +14,9 @@ query GetAllDirectoryMembershipHistories {
 				directoryAccountID
 				directoryGroupID
 				displayID
-				firstSeenAt
 				historyTime
 				id
 				integrationID
-				lastSeenAt
 				metadata
 				observedAt
 				operation
@@ -48,11 +46,9 @@ query GetDirectoryMembershipHistories ($first: Int, $last: Int, $where: Director
 				directoryAccountID
 				directoryGroupID
 				displayID
-				firstSeenAt
 				historyTime
 				id
 				integrationID
-				lastSeenAt
 				metadata
 				observedAt
 				operation

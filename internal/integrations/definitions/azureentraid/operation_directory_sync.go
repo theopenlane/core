@@ -176,7 +176,7 @@ func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, 
 			memberPayload := userToPayload(member)
 			memberRef := directoryEntityRef{ID: memberPayload.ID}
 
-			if !isIncludedMember(memberRef, includedUsers) {
+			if _, ok := includedUsers[memberRef.ID]; !ok {
 				continue
 			}
 
@@ -324,13 +324,6 @@ func isEntraUserIncluded(user models.Userable, cfg UserInput) bool {
 	}
 
 	return true
-}
-
-// isIncludedMember reports whether the member's ID appears in the included users set
-func isIncludedMember(ref directoryEntityRef, includedUsers map[string]struct{}) bool {
-	_, ok := includedUsers[ref.ID]
-
-	return ok
 }
 
 // userToPayload maps a Userable SDK model to a JSON-serializable payload struct

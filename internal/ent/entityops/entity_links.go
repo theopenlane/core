@@ -73,9 +73,7 @@ func InjectCreateLinks(ctx context.Context, client *generated.Client, ownerID st
 	return payload, nil
 }
 
-// PrefetchLinkTargets issues one QueryByKey per key-matched link target field across a batch of
-// payloads, caching the results on the returned context so selectCandidates can answer per-payload
-// link resolution without a query per row
+// PrefetchLinkTargets caches key-matched link target rows for a batch of payloads on the returned context
 func PrefetchLinkTargets(ctx context.Context, client *generated.Client, ownerID string, schema *Schema, payloads []json.RawMessage, links []LinkSpec) (context.Context, error) {
 	cache := linkTargetCache{}
 

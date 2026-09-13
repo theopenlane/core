@@ -20,7 +20,6 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.JobTitle.Expr(`'organizations' in payload && size(payload.organizations.filter(o, ('primary' in o) && o.primary == true)) > 0 ? ('title' in payload.organizations.filter(o, ('primary' in o) && o.primary == true)[0] ? payload.organizations.filter(o, ('primary' in o) && o.primary == true)[0].title : "") : ""`),
 	entityops.DirectoryAccountFields.AccountType.Expr(`'type' in payload ? payload.type : "USER"`),
 	entityops.DirectoryAccountFields.MfaState.Expr(`dyn('isEnforcedIn2Sv' in payload && payload.isEnforcedIn2Sv ? "ENFORCED" : ('isEnrolledIn2Sv' in payload && payload.isEnrolledIn2Sv ? "ENABLED" : "DISABLED"))`),
-	entityops.DirectoryAccountFields.LastLoginAt.Expr(`'lastLoginTime' in payload ? payload.lastLoginTime : ""`),
 	entityops.DirectoryAccountFields.EmailAliases.Expr(`dyn('emails' in payload ? payload.emails.filter(e, !('primary' in e) || e.primary != true).map(e, e.address) : [])`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
 	entityops.DirectoryAccountFields.AddedAt.Expr(`'creationTime' in payload ? payload.creationTime : ""`),

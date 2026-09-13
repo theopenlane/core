@@ -3,7 +3,6 @@ package googleworkspace
 import (
 	"context"
 
-	"golang.org/x/oauth2"
 	admin "google.golang.org/api/admin/directory/v1"
 	"google.golang.org/api/option"
 
@@ -11,8 +10,17 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
+// installationRef builds the typed installation metadata handle for the Google Workspace
+// definition, closing over the operator OAuth config needed to refresh the stored credential's
+// access token
+func installationRef(cfg Config) types.InstallationRef[InstallationMetadata] {
+	return types.NewInstallationRef(func(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
+		return resolveInstallationMetadata(ctx, cfg, req)
+	})
+}
+
 // resolveInstallationMetadata derives Google Workspace installation metadata from the credential
-func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
+func resolveInstallationMetadata(ctx context.Context, cfg Config, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	cred, _, err := workspaceCredential.Resolve(req.Credentials)
 	if err != nil {
 		logx.FromContext(ctx).Err(err).Msg("googleworkspace: failed to resolve workspace credential")
@@ -24,9 +32,7 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 		return InstallationMetadata{}, false, nil
 	}
 
-	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: cred.AccessToken})
-
-	svc, err := admin.NewService(ctx, option.WithTokenSource(ts))
+	svc, err := admin.NewService(ctx, option.WithTokenSource(tokenSource(ctx, cfg, cred)))
 	if err != nil {
 		logx.FromContext(ctx).Err(err).Msg("googleworkspace: failed to create admin service")
 

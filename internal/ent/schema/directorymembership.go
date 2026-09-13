@@ -88,22 +88,6 @@ func (DirectoryMembership) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("directory_name"),
 			),
-		field.Time("first_seen_at").
-			Comment("first time the membership was detected").
-			Default(time.Now).
-			Optional().
-			Nillable().
-			Annotations(
-				entx.IntegrationMappingField(),
-			),
-		field.Time("last_seen_at").
-			Comment("most recent time the membership was confirmed by directory ingest").
-			Optional().
-			Nillable().
-			Annotations(
-				entx.IntegrationMappingField(),
-				entx.SeenAt(),
-			),
 		field.Time("added_at").
 			Comment("provider-reported time the membership was added in the source directory").
 			Optional().

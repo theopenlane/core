@@ -6759,12 +6759,6 @@ type CreateDirectoryAccountInput struct {
 	MfaState *enums.DirectoryAccountMFAState `json:"mfaState,omitempty"`
 	// last IP address observed by the provider, if any
 	LastSeenIP *string `json:"lastSeenIP,omitempty"`
-	// timestamp of the most recent login reported by the provider
-	LastLoginAt *time.Time `json:"lastLoginAt,omitempty"`
-	// time this account was first observed by Openlane from directory ingest
-	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
-	// time this account was most recently confirmed by directory ingest
-	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
 	// provider-reported time the account was added or provisioned in the source directory
 	AddedAt *time.Time `json:"addedAt,omitempty"`
 	// provider-reported or locally-recorded time the account was removed from the source directory
@@ -6826,10 +6820,6 @@ type CreateDirectoryGroupInput struct {
 	ExternalSharingAllowed *bool `json:"externalSharingAllowed,omitempty"`
 	// member count reported by the directory
 	MemberCount *int64 `json:"memberCount,omitempty"`
-	// time this group was first observed by Openlane from directory ingest
-	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
-	// time this group was most recently confirmed by directory ingest
-	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
 	// provider-reported time the group was added or provisioned in the source directory
 	AddedAt *time.Time `json:"addedAt,omitempty"`
 	// provider-reported or locally-recorded time the group was removed from the source directory
@@ -6876,10 +6866,6 @@ type CreateDirectoryMembershipInput struct {
 	Source *string `json:"source,omitempty"`
 	// directory source label set by the integration (e.g. googleworkspace, github, slack)
 	DirectoryName *string `json:"directoryName,omitempty"`
-	// first time the membership was detected
-	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
-	// most recent time the membership was confirmed by directory ingest
-	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
 	// provider-reported time the membership was added in the source directory
 	AddedAt *time.Time `json:"addedAt,omitempty"`
 	// provider-reported or locally-recorded time the membership was removed from the source directory
@@ -10817,12 +10803,6 @@ type DirectoryAccount struct {
 	MfaState enums.DirectoryAccountMFAState `json:"mfaState"`
 	// last IP address observed by the provider, if any
 	LastSeenIP *string `json:"lastSeenIP,omitempty"`
-	// timestamp of the most recent login reported by the provider
-	LastLoginAt *time.Time `json:"lastLoginAt,omitempty"`
-	// time this account was first observed by Openlane from directory ingest
-	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
-	// time this account was most recently confirmed by directory ingest
-	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
 	// provider-reported time the account was added or provisioned in the source directory
 	AddedAt *time.Time `json:"addedAt,omitempty"`
 	// provider-reported or locally-recorded time the account was removed from the source directory
@@ -11331,30 +11311,6 @@ type DirectoryAccountWhereInput struct {
 	LastSeenIPNotNil       *bool    `json:"lastSeenIPNotNil,omitempty"`
 	LastSeenIPEqualFold    *string  `json:"lastSeenIPEqualFold,omitempty"`
 	LastSeenIPContainsFold *string  `json:"lastSeenIPContainsFold,omitempty"`
-	// last_login_at field predicates
-	LastLoginAt       *time.Time `json:"lastLoginAt,omitempty"`
-	LastLoginAtGt     *time.Time `json:"lastLoginAtGT,omitempty"`
-	LastLoginAtGte    *time.Time `json:"lastLoginAtGTE,omitempty"`
-	LastLoginAtLt     *time.Time `json:"lastLoginAtLT,omitempty"`
-	LastLoginAtLte    *time.Time `json:"lastLoginAtLTE,omitempty"`
-	LastLoginAtIsNil  *bool      `json:"lastLoginAtIsNil,omitempty"`
-	LastLoginAtNotNil *bool      `json:"lastLoginAtNotNil,omitempty"`
-	// first_seen_at field predicates
-	FirstSeenAt       *time.Time `json:"firstSeenAt,omitempty"`
-	FirstSeenAtGt     *time.Time `json:"firstSeenAtGT,omitempty"`
-	FirstSeenAtGte    *time.Time `json:"firstSeenAtGTE,omitempty"`
-	FirstSeenAtLt     *time.Time `json:"firstSeenAtLT,omitempty"`
-	FirstSeenAtLte    *time.Time `json:"firstSeenAtLTE,omitempty"`
-	FirstSeenAtIsNil  *bool      `json:"firstSeenAtIsNil,omitempty"`
-	FirstSeenAtNotNil *bool      `json:"firstSeenAtNotNil,omitempty"`
-	// last_seen_at field predicates
-	LastSeenAt       *time.Time `json:"lastSeenAt,omitempty"`
-	LastSeenAtGt     *time.Time `json:"lastSeenAtGT,omitempty"`
-	LastSeenAtGte    *time.Time `json:"lastSeenAtGTE,omitempty"`
-	LastSeenAtLt     *time.Time `json:"lastSeenAtLT,omitempty"`
-	LastSeenAtLte    *time.Time `json:"lastSeenAtLTE,omitempty"`
-	LastSeenAtIsNil  *bool      `json:"lastSeenAtIsNil,omitempty"`
-	LastSeenAtNotNil *bool      `json:"lastSeenAtNotNil,omitempty"`
 	// added_at field predicates
 	AddedAt       *time.Time `json:"addedAt,omitempty"`
 	AddedAtGt     *time.Time `json:"addedAtGT,omitempty"`
@@ -11486,10 +11442,6 @@ type DirectoryGroup struct {
 	ExternalSharingAllowed *bool `json:"externalSharingAllowed,omitempty"`
 	// member count reported by the directory
 	MemberCount *int64 `json:"memberCount,omitempty"`
-	// time this group was first observed by Openlane from directory ingest
-	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
-	// time this group was most recently confirmed by directory ingest
-	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
 	// provider-reported time the group was added or provisioned in the source directory
 	AddedAt *time.Time `json:"addedAt,omitempty"`
 	// provider-reported or locally-recorded time the group was removed from the source directory
@@ -11846,22 +11798,6 @@ type DirectoryGroupWhereInput struct {
 	MemberCountLte    *int64 `json:"memberCountLTE,omitempty"`
 	MemberCountIsNil  *bool  `json:"memberCountIsNil,omitempty"`
 	MemberCountNotNil *bool  `json:"memberCountNotNil,omitempty"`
-	// first_seen_at field predicates
-	FirstSeenAt       *time.Time `json:"firstSeenAt,omitempty"`
-	FirstSeenAtGt     *time.Time `json:"firstSeenAtGT,omitempty"`
-	FirstSeenAtGte    *time.Time `json:"firstSeenAtGTE,omitempty"`
-	FirstSeenAtLt     *time.Time `json:"firstSeenAtLT,omitempty"`
-	FirstSeenAtLte    *time.Time `json:"firstSeenAtLTE,omitempty"`
-	FirstSeenAtIsNil  *bool      `json:"firstSeenAtIsNil,omitempty"`
-	FirstSeenAtNotNil *bool      `json:"firstSeenAtNotNil,omitempty"`
-	// last_seen_at field predicates
-	LastSeenAt       *time.Time `json:"lastSeenAt,omitempty"`
-	LastSeenAtGt     *time.Time `json:"lastSeenAtGT,omitempty"`
-	LastSeenAtGte    *time.Time `json:"lastSeenAtGTE,omitempty"`
-	LastSeenAtLt     *time.Time `json:"lastSeenAtLT,omitempty"`
-	LastSeenAtLte    *time.Time `json:"lastSeenAtLTE,omitempty"`
-	LastSeenAtIsNil  *bool      `json:"lastSeenAtIsNil,omitempty"`
-	LastSeenAtNotNil *bool      `json:"lastSeenAtNotNil,omitempty"`
 	// added_at field predicates
 	AddedAt       *time.Time `json:"addedAt,omitempty"`
 	AddedAtGt     *time.Time `json:"addedAtGT,omitempty"`
@@ -11983,10 +11919,6 @@ type DirectoryMembership struct {
 	Source *string `json:"source,omitempty"`
 	// directory source label set by the integration (e.g. googleworkspace, github, slack)
 	DirectoryName *string `json:"directoryName,omitempty"`
-	// first time the membership was detected
-	FirstSeenAt *time.Time `json:"firstSeenAt,omitempty"`
-	// most recent time the membership was confirmed by directory ingest
-	LastSeenAt *time.Time `json:"lastSeenAt,omitempty"`
 	// provider-reported time the membership was added in the source directory
 	AddedAt *time.Time `json:"addedAt,omitempty"`
 	// provider-reported or locally-recorded time the membership was removed from the source directory
@@ -12251,22 +12183,6 @@ type DirectoryMembershipWhereInput struct {
 	DirectoryNameNotNil       *bool    `json:"directoryNameNotNil,omitempty"`
 	DirectoryNameEqualFold    *string  `json:"directoryNameEqualFold,omitempty"`
 	DirectoryNameContainsFold *string  `json:"directoryNameContainsFold,omitempty"`
-	// first_seen_at field predicates
-	FirstSeenAt       *time.Time `json:"firstSeenAt,omitempty"`
-	FirstSeenAtGt     *time.Time `json:"firstSeenAtGT,omitempty"`
-	FirstSeenAtGte    *time.Time `json:"firstSeenAtGTE,omitempty"`
-	FirstSeenAtLt     *time.Time `json:"firstSeenAtLT,omitempty"`
-	FirstSeenAtLte    *time.Time `json:"firstSeenAtLTE,omitempty"`
-	FirstSeenAtIsNil  *bool      `json:"firstSeenAtIsNil,omitempty"`
-	FirstSeenAtNotNil *bool      `json:"firstSeenAtNotNil,omitempty"`
-	// last_seen_at field predicates
-	LastSeenAt       *time.Time `json:"lastSeenAt,omitempty"`
-	LastSeenAtGt     *time.Time `json:"lastSeenAtGT,omitempty"`
-	LastSeenAtGte    *time.Time `json:"lastSeenAtGTE,omitempty"`
-	LastSeenAtLt     *time.Time `json:"lastSeenAtLT,omitempty"`
-	LastSeenAtLte    *time.Time `json:"lastSeenAtLTE,omitempty"`
-	LastSeenAtIsNil  *bool      `json:"lastSeenAtIsNil,omitempty"`
-	LastSeenAtNotNil *bool      `json:"lastSeenAtNotNil,omitempty"`
 	// added_at field predicates
 	AddedAt       *time.Time `json:"addedAt,omitempty"`
 	AddedAtGt     *time.Time `json:"addedAtGT,omitempty"`
@@ -37315,15 +37231,6 @@ type UpdateDirectoryAccountInput struct {
 	// last IP address observed by the provider, if any
 	LastSeenIP      *string `json:"lastSeenIP,omitempty"`
 	ClearLastSeenIP *bool   `json:"clearLastSeenIP,omitempty"`
-	// timestamp of the most recent login reported by the provider
-	LastLoginAt      *time.Time `json:"lastLoginAt,omitempty"`
-	ClearLastLoginAt *bool      `json:"clearLastLoginAt,omitempty"`
-	// time this account was first observed by Openlane from directory ingest
-	FirstSeenAt      *time.Time `json:"firstSeenAt,omitempty"`
-	ClearFirstSeenAt *bool      `json:"clearFirstSeenAt,omitempty"`
-	// time this account was most recently confirmed by directory ingest
-	LastSeenAt      *time.Time `json:"lastSeenAt,omitempty"`
-	ClearLastSeenAt *bool      `json:"clearLastSeenAt,omitempty"`
 	// provider-reported time the account was added or provisioned in the source directory
 	AddedAt      *time.Time `json:"addedAt,omitempty"`
 	ClearAddedAt *bool      `json:"clearAddedAt,omitempty"`
@@ -37409,12 +37316,6 @@ type UpdateDirectoryGroupInput struct {
 	// member count reported by the directory
 	MemberCount      *int64 `json:"memberCount,omitempty"`
 	ClearMemberCount *bool  `json:"clearMemberCount,omitempty"`
-	// time this group was first observed by Openlane from directory ingest
-	FirstSeenAt      *time.Time `json:"firstSeenAt,omitempty"`
-	ClearFirstSeenAt *bool      `json:"clearFirstSeenAt,omitempty"`
-	// time this group was most recently confirmed by directory ingest
-	LastSeenAt      *time.Time `json:"lastSeenAt,omitempty"`
-	ClearLastSeenAt *bool      `json:"clearLastSeenAt,omitempty"`
 	// provider-reported time the group was added or provisioned in the source directory
 	AddedAt      *time.Time `json:"addedAt,omitempty"`
 	ClearAddedAt *bool      `json:"clearAddedAt,omitempty"`
@@ -37481,12 +37382,6 @@ type UpdateDirectoryMembershipInput struct {
 	// directory source label set by the integration (e.g. googleworkspace, github, slack)
 	DirectoryName      *string `json:"directoryName,omitempty"`
 	ClearDirectoryName *bool   `json:"clearDirectoryName,omitempty"`
-	// first time the membership was detected
-	FirstSeenAt      *time.Time `json:"firstSeenAt,omitempty"`
-	ClearFirstSeenAt *bool      `json:"clearFirstSeenAt,omitempty"`
-	// most recent time the membership was confirmed by directory ingest
-	LastSeenAt      *time.Time `json:"lastSeenAt,omitempty"`
-	ClearLastSeenAt *bool      `json:"clearLastSeenAt,omitempty"`
 	// provider-reported time the membership was added in the source directory
 	AddedAt      *time.Time `json:"addedAt,omitempty"`
 	ClearAddedAt *bool      `json:"clearAddedAt,omitempty"`

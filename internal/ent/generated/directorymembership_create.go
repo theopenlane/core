@@ -320,34 +320,6 @@ func (_c *DirectoryMembershipCreate) SetNillableDirectoryName(v *string) *Direct
 	return _c
 }
 
-// SetFirstSeenAt sets the "first_seen_at" field.
-func (_c *DirectoryMembershipCreate) SetFirstSeenAt(v time.Time) *DirectoryMembershipCreate {
-	_c.mutation.SetFirstSeenAt(v)
-	return _c
-}
-
-// SetNillableFirstSeenAt sets the "first_seen_at" field if the given value is not nil.
-func (_c *DirectoryMembershipCreate) SetNillableFirstSeenAt(v *time.Time) *DirectoryMembershipCreate {
-	if v != nil {
-		_c.SetFirstSeenAt(*v)
-	}
-	return _c
-}
-
-// SetLastSeenAt sets the "last_seen_at" field.
-func (_c *DirectoryMembershipCreate) SetLastSeenAt(v time.Time) *DirectoryMembershipCreate {
-	_c.mutation.SetLastSeenAt(v)
-	return _c
-}
-
-// SetNillableLastSeenAt sets the "last_seen_at" field if the given value is not nil.
-func (_c *DirectoryMembershipCreate) SetNillableLastSeenAt(v *time.Time) *DirectoryMembershipCreate {
-	if v != nil {
-		_c.SetLastSeenAt(*v)
-	}
-	return _c
-}
-
 // SetAddedAt sets the "added_at" field.
 func (_c *DirectoryMembershipCreate) SetAddedAt(v time.Time) *DirectoryMembershipCreate {
 	_c.mutation.SetAddedAt(v)
@@ -545,13 +517,6 @@ func (_c *DirectoryMembershipCreate) defaults() error {
 		v := directorymembership.DefaultRole
 		_c.mutation.SetRole(v)
 	}
-	if _, ok := _c.mutation.FirstSeenAt(); !ok {
-		if directorymembership.DefaultFirstSeenAt == nil {
-			return fmt.Errorf("generated: uninitialized directorymembership.DefaultFirstSeenAt (forgotten import generated/runtime?)")
-		}
-		v := directorymembership.DefaultFirstSeenAt()
-		_c.mutation.SetFirstSeenAt(v)
-	}
 	if _, ok := _c.mutation.ObservedAt(); !ok {
 		if directorymembership.DefaultObservedAt == nil {
 			return fmt.Errorf("generated: uninitialized directorymembership.DefaultObservedAt (forgotten import generated/runtime?)")
@@ -728,14 +693,6 @@ func (_c *DirectoryMembershipCreate) createSpec() (*DirectoryMembership, *sqlgra
 	if value, ok := _c.mutation.DirectoryName(); ok {
 		_spec.SetField(directorymembership.FieldDirectoryName, field.TypeString, value)
 		_node.DirectoryName = &value
-	}
-	if value, ok := _c.mutation.FirstSeenAt(); ok {
-		_spec.SetField(directorymembership.FieldFirstSeenAt, field.TypeTime, value)
-		_node.FirstSeenAt = &value
-	}
-	if value, ok := _c.mutation.LastSeenAt(); ok {
-		_spec.SetField(directorymembership.FieldLastSeenAt, field.TypeTime, value)
-		_node.LastSeenAt = &value
 	}
 	if value, ok := _c.mutation.AddedAt(); ok {
 		_spec.SetField(directorymembership.FieldAddedAt, field.TypeTime, value)

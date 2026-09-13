@@ -3,7 +3,6 @@ package githubapp
 import (
 	"context"
 
-	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
@@ -19,9 +18,9 @@ func resolveInstallationMetadata(_ context.Context, req types.InstallationReques
 		return metadata, true, nil
 	}
 
-	stored, err := storedInstallationMetadata(req.Integration)
-	if err != nil {
-		return InstallationMetadata{}, false, err
+	var stored InstallationMetadata
+	if err := jsonx.UnmarshalIfPresent(req.Integration.InstallationMetadata.Attributes, &stored); err != nil {
+		return InstallationMetadata{}, false, ErrInstallationMetadataDecode
 	}
 
 	if stored.InstallationID == "" {
@@ -29,14 +28,4 @@ func resolveInstallationMetadata(_ context.Context, req types.InstallationReques
 	}
 
 	return stored, true, nil
-}
-
-// storedInstallationMetadata decodes the provider attributes already persisted on the installation record
-func storedInstallationMetadata(installation *generated.Integration) (InstallationMetadata, error) {
-	var metadata InstallationMetadata
-	if err := jsonx.UnmarshalIfPresent(installation.InstallationMetadata.Attributes, &metadata); err != nil {
-		return InstallationMetadata{}, ErrInstallationMetadataDecode
-	}
-
-	return metadata, nil
 }

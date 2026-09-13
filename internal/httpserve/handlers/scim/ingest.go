@@ -22,7 +22,7 @@ const (
 
 // ingestPayloadSets routes SCIM directory payloads through the standard ingest path
 func ingestPayloadSets(ctx context.Context, client *generated.Client, rt *integrationsruntime.Runtime, integration *generated.Integration, payloadSets []integrationtypes.IngestPayloadSet) error {
-	if err := rt.EnsureInstallationInstance(ctx, integration); err != nil {
+	if err := rt.EnsureInstallationConverted(ctx, integration); err != nil {
 		return err
 	}
 

@@ -790,9 +790,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directoryaccount.FieldStatus:                  {Type: field.TypeEnum, Column: directoryaccount.FieldStatus},
 			directoryaccount.FieldMfaState:                {Type: field.TypeEnum, Column: directoryaccount.FieldMfaState},
 			directoryaccount.FieldLastSeenIP:              {Type: field.TypeString, Column: directoryaccount.FieldLastSeenIP},
-			directoryaccount.FieldLastLoginAt:             {Type: field.TypeTime, Column: directoryaccount.FieldLastLoginAt},
-			directoryaccount.FieldFirstSeenAt:             {Type: field.TypeTime, Column: directoryaccount.FieldFirstSeenAt},
-			directoryaccount.FieldLastSeenAt:              {Type: field.TypeTime, Column: directoryaccount.FieldLastSeenAt},
 			directoryaccount.FieldAddedAt:                 {Type: field.TypeTime, Column: directoryaccount.FieldAddedAt},
 			directoryaccount.FieldRemovedAt:               {Type: field.TypeTime, Column: directoryaccount.FieldRemovedAt},
 			directoryaccount.FieldObservedAt:              {Type: field.TypeTime, Column: directoryaccount.FieldObservedAt},
@@ -841,8 +838,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorygroup.FieldStatus:                  {Type: field.TypeEnum, Column: directorygroup.FieldStatus},
 			directorygroup.FieldExternalSharingAllowed:  {Type: field.TypeBool, Column: directorygroup.FieldExternalSharingAllowed},
 			directorygroup.FieldMemberCount:             {Type: field.TypeInt, Column: directorygroup.FieldMemberCount},
-			directorygroup.FieldFirstSeenAt:             {Type: field.TypeTime, Column: directorygroup.FieldFirstSeenAt},
-			directorygroup.FieldLastSeenAt:              {Type: field.TypeTime, Column: directorygroup.FieldLastSeenAt},
 			directorygroup.FieldAddedAt:                 {Type: field.TypeTime, Column: directorygroup.FieldAddedAt},
 			directorygroup.FieldRemovedAt:               {Type: field.TypeTime, Column: directorygroup.FieldRemovedAt},
 			directorygroup.FieldObservedAt:              {Type: field.TypeTime, Column: directorygroup.FieldObservedAt},
@@ -887,8 +882,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			directorymembership.FieldRole:                    {Type: field.TypeEnum, Column: directorymembership.FieldRole},
 			directorymembership.FieldSource:                  {Type: field.TypeString, Column: directorymembership.FieldSource},
 			directorymembership.FieldDirectoryName:           {Type: field.TypeString, Column: directorymembership.FieldDirectoryName},
-			directorymembership.FieldFirstSeenAt:             {Type: field.TypeTime, Column: directorymembership.FieldFirstSeenAt},
-			directorymembership.FieldLastSeenAt:              {Type: field.TypeTime, Column: directorymembership.FieldLastSeenAt},
 			directorymembership.FieldAddedAt:                 {Type: field.TypeTime, Column: directorymembership.FieldAddedAt},
 			directorymembership.FieldRemovedAt:               {Type: field.TypeTime, Column: directorymembership.FieldRemovedAt},
 			directorymembership.FieldObservedAt:              {Type: field.TypeTime, Column: directorymembership.FieldObservedAt},
@@ -24534,21 +24527,6 @@ func (f *DirectoryAccountFilter) WhereLastSeenIP(p entql.StringP) {
 	f.Where(p.Field(directoryaccount.FieldLastSeenIP))
 }
 
-// WhereLastLoginAt applies the entql time.Time predicate on the last_login_at field.
-func (f *DirectoryAccountFilter) WhereLastLoginAt(p entql.TimeP) {
-	f.Where(p.Field(directoryaccount.FieldLastLoginAt))
-}
-
-// WhereFirstSeenAt applies the entql time.Time predicate on the first_seen_at field.
-func (f *DirectoryAccountFilter) WhereFirstSeenAt(p entql.TimeP) {
-	f.Where(p.Field(directoryaccount.FieldFirstSeenAt))
-}
-
-// WhereLastSeenAt applies the entql time.Time predicate on the last_seen_at field.
-func (f *DirectoryAccountFilter) WhereLastSeenAt(p entql.TimeP) {
-	f.Where(p.Field(directoryaccount.FieldLastSeenAt))
-}
-
 // WhereAddedAt applies the entql time.Time predicate on the added_at field.
 func (f *DirectoryAccountFilter) WhereAddedAt(p entql.TimeP) {
 	f.Where(p.Field(directoryaccount.FieldAddedAt))
@@ -24932,16 +24910,6 @@ func (f *DirectoryGroupFilter) WhereMemberCount(p entql.IntP) {
 	f.Where(p.Field(directorygroup.FieldMemberCount))
 }
 
-// WhereFirstSeenAt applies the entql time.Time predicate on the first_seen_at field.
-func (f *DirectoryGroupFilter) WhereFirstSeenAt(p entql.TimeP) {
-	f.Where(p.Field(directorygroup.FieldFirstSeenAt))
-}
-
-// WhereLastSeenAt applies the entql time.Time predicate on the last_seen_at field.
-func (f *DirectoryGroupFilter) WhereLastSeenAt(p entql.TimeP) {
-	f.Where(p.Field(directorygroup.FieldLastSeenAt))
-}
-
 // WhereAddedAt applies the entql time.Time predicate on the added_at field.
 func (f *DirectoryGroupFilter) WhereAddedAt(p entql.TimeP) {
 	f.Where(p.Field(directorygroup.FieldAddedAt))
@@ -25261,16 +25229,6 @@ func (f *DirectoryMembershipFilter) WhereSource(p entql.StringP) {
 // WhereDirectoryName applies the entql string predicate on the directory_name field.
 func (f *DirectoryMembershipFilter) WhereDirectoryName(p entql.StringP) {
 	f.Where(p.Field(directorymembership.FieldDirectoryName))
-}
-
-// WhereFirstSeenAt applies the entql time.Time predicate on the first_seen_at field.
-func (f *DirectoryMembershipFilter) WhereFirstSeenAt(p entql.TimeP) {
-	f.Where(p.Field(directorymembership.FieldFirstSeenAt))
-}
-
-// WhereLastSeenAt applies the entql time.Time predicate on the last_seen_at field.
-func (f *DirectoryMembershipFilter) WhereLastSeenAt(p entql.TimeP) {
-	f.Where(p.Field(directorymembership.FieldLastSeenAt))
 }
 
 // WhereAddedAt applies the entql time.Time predicate on the added_at field.

@@ -58,19 +58,9 @@ func TestDirectoryFullSnapshotIdleResyncWritesNothing(t *testing.T) {
 	assert.Check(t, is.Equal(0, seeded.Failed))
 	assert.Check(t, is.Equal(len(base.Accounts)+len(base.Groups)+len(base.Memberships), seeded.Changed), "the first sync must create every account, group, and membership")
 
-	accountsBefore := lo.Map(base.Accounts, func(a directoryAccountRecord, _ int) *ent.DirectoryAccount {
-		return directoryAccountByExternalID(ctx, t, a.ExternalID)
-	})
 	groupsBefore := lo.Map(base.Groups, func(g directoryGroupRecord, _ int) *ent.DirectoryGroup {
 		return directoryGroupByExternalID(ctx, t, g.ExternalID)
 	})
-	membershipsBefore := lo.Map(base.Memberships, func(m directoryMembershipRecord, _ int) *ent.DirectoryMembership {
-		return directoryMembershipByExternalIDs(ctx, t, m.DirectoryAccountID, m.DirectoryGroupID)
-	})
-
-	for _, account := range accountsBefore {
-		assert.Check(t, account.LastSeenAt == nil, "an account must not carry last_seen_at until a confirming sync follows its create")
-	}
 
 	resynced := ingestDirectorySnapshotFixture(ctx, t, integration, base.identical(), true)
 	waitForGala(t, counters.Runtime)
@@ -81,20 +71,9 @@ func TestDirectoryFullSnapshotIdleResyncWritesNothing(t *testing.T) {
 	assert.Check(t, is.Equal(int64(0), counters.GroupUpdates.Load()), "a fully idle resync must not emit a group update mutation event")
 	assert.Check(t, is.Equal(int64(0), counters.MembershipUpdates.Load()), "a fully idle resync must not emit a membership update mutation event")
 
-	for _, a := range base.Accounts {
-		after := directoryAccountByExternalID(ctx, t, a.ExternalID)
-		assert.Check(t, after.LastSeenAt != nil, "an idle resync must still advance last_seen_at on every account")
-	}
-
 	for i, g := range base.Groups {
 		after := directoryGroupByExternalID(ctx, t, g.ExternalID)
 		assert.Check(t, is.Equal(groupsBefore[i].DisplayName, after.DisplayName), "an idle resync must not change an unchanged group row")
-		assert.Check(t, after.LastSeenAt != nil, "an idle resync must still advance last_seen_at on every group")
-	}
-
-	for i, m := range base.Memberships {
-		after := directoryMembershipByExternalIDs(ctx, t, m.DirectoryAccountID, m.DirectoryGroupID)
-		assert.Check(t, after.LastSeenAt.After(lo.FromPtr(membershipsBefore[i].LastSeenAt)), "an idle resync must still advance last_seen_at on every membership")
 	}
 
 	changedExternalID := base.Accounts[0].ExternalID

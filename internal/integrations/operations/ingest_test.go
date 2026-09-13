@@ -963,7 +963,7 @@ func TestStampProvenanceOverridesMappedValues(t *testing.T) {
 
 	payload := json.RawMessage(`{"external_id":"acct-1","managed_by":"int_other","source_instance_id":"tenant-other","owner_id":"org_other","source_definition_id":"def_other"}`)
 
-	stamped := stampProvenance(payload, entityops.SchemaDirectoryAccount, installation, "run_1")
+	stamped := entityops.StampProvenance(payload, entityops.SchemaDirectoryAccount, installation, "run_1")
 
 	assert.Equal(t, "int_owner", entityops.FieldValue(stamped, entityops.FieldManagedBy), "a mapping must not pick the managing installation")
 	assert.Equal(t, "tenant-test", entityops.FieldValue(stamped, entityops.FieldSourceInstanceID), "a mapping must not pick the source instance")

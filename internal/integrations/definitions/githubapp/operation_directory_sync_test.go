@@ -2,6 +2,7 @@ package githubapp
 
 import (
 	"context"
+	"github.com/samber/lo"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -65,17 +66,6 @@ func newDirectorySyncGraphQLServer(t *testing.T, teamsResponse string) GraphQLCl
 	return client
 }
 
-// snapshotFlagsBySchema indexes payload set completeness by schema name
-func snapshotFlagsBySchema(sets []types.IngestPayloadSet) map[string]bool {
-	flags := make(map[string]bool, len(sets))
-
-	for _, set := range sets {
-		flags[set.Schema] = set.SnapshotComplete
-	}
-
-	return flags
-}
-
 // TestDirectorySyncSnapshotComplete verifies account, group, and membership payload sets carry the expected completeness flags
 func TestDirectorySyncSnapshotComplete(t *testing.T) {
 	t.Parallel()
@@ -122,7 +112,7 @@ func TestDirectorySyncSnapshotComplete(t *testing.T) {
 
 			sets, err := tc.cfg.Run(context.Background(), client)
 			assert.NilError(t, err)
-			assert.DeepEqual(t, snapshotFlagsBySchema(sets), tc.want)
+			assert.DeepEqual(t, lo.SliceToMap(sets, func(set types.IngestPayloadSet) (string, bool) { return set.Schema, set.SnapshotComplete }), tc.want)
 		})
 	}
 }

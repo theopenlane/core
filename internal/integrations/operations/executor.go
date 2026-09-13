@@ -60,7 +60,16 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, servic
 	}
 
 	if err := entityops.RegisterIngestListeners(runtime, func(ctx context.Context, client *ent.Client, _ gala.OperationContext) (*ent.Integration, error) {
-		return resolveIngestIntegration(ctx, client)
+		integration, err := resolveIngestIntegration(ctx, client)
+		if err != nil {
+			return nil, err
+		}
+
+		if err := services.EnsureInstallationConverted(ctx, integration); err != nil {
+			return nil, err
+		}
+
+		return integration, nil
 	}); err != nil {
 		return err
 	}

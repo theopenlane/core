@@ -5851,9 +5851,6 @@ type CreateDirectoryAccountInput struct {
 	Status                  *enums.DirectoryAccountStatus   `json:"status,omitempty"`
 	MfaState                *enums.DirectoryAccountMFAState `json:"mfa_state,omitempty"`
 	LastSeenIP              *string                         `json:"last_seen_ip,omitempty"`
-	LastLoginAt             *time.Time                      `json:"last_login_at,omitempty"`
-	FirstSeenAt             *time.Time                      `json:"first_seen_at,omitempty"`
-	LastSeenAt              *time.Time                      `json:"last_seen_at,omitempty"`
 	AddedAt                 *time.Time                      `json:"added_at,omitempty"`
 	RemovedAt               *time.Time                      `json:"removed_at,omitempty"`
 	ObservedAt              *time.Time                      `json:"observed_at,omitempty"`
@@ -5950,15 +5947,6 @@ func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	}
 	if v := i.LastSeenIP; v != nil {
 		m.SetLastSeenIP(*v)
-	}
-	if v := i.LastLoginAt; v != nil {
-		m.SetLastLoginAt(*v)
-	}
-	if v := i.FirstSeenAt; v != nil {
-		m.SetFirstSeenAt(*v)
-	}
-	if v := i.LastSeenAt; v != nil {
-		m.SetLastSeenAt(*v)
 	}
 	if v := i.AddedAt; v != nil {
 		m.SetAddedAt(*v)
@@ -6071,12 +6059,6 @@ type UpdateDirectoryAccountInput struct {
 	MfaState                     *enums.DirectoryAccountMFAState `json:"mfa_state,omitempty"`
 	ClearLastSeenIP              bool
 	LastSeenIP                   *string `json:"last_seen_ip,omitempty"`
-	ClearLastLoginAt             bool
-	LastLoginAt                  *time.Time `json:"last_login_at,omitempty"`
-	ClearFirstSeenAt             bool
-	FirstSeenAt                  *time.Time `json:"first_seen_at,omitempty"`
-	ClearLastSeenAt              bool
-	LastSeenAt                   *time.Time `json:"last_seen_at,omitempty"`
 	ClearAddedAt                 bool
 	AddedAt                      *time.Time `json:"added_at,omitempty"`
 	ClearRemovedAt               bool
@@ -6261,24 +6243,6 @@ func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
 	if v := i.LastSeenIP; v != nil {
 		m.SetLastSeenIP(*v)
 	}
-	if i.ClearLastLoginAt {
-		m.ClearLastLoginAt()
-	}
-	if v := i.LastLoginAt; v != nil {
-		m.SetLastLoginAt(*v)
-	}
-	if i.ClearFirstSeenAt {
-		m.ClearFirstSeenAt()
-	}
-	if v := i.FirstSeenAt; v != nil {
-		m.SetFirstSeenAt(*v)
-	}
-	if i.ClearLastSeenAt {
-		m.ClearLastSeenAt()
-	}
-	if v := i.LastSeenAt; v != nil {
-		m.SetLastSeenAt(*v)
-	}
 	if i.ClearAddedAt {
 		m.ClearAddedAt()
 	}
@@ -6401,8 +6365,6 @@ type CreateDirectoryGroupInput struct {
 	Status                  *enums.DirectoryGroupStatus         `json:"status,omitempty"`
 	ExternalSharingAllowed  *bool                               `json:"external_sharing_allowed,omitempty"`
 	MemberCount             *int                                `json:"member_count,omitempty"`
-	FirstSeenAt             *time.Time                          `json:"first_seen_at,omitempty"`
-	LastSeenAt              *time.Time                          `json:"last_seen_at,omitempty"`
 	AddedAt                 *time.Time                          `json:"added_at,omitempty"`
 	RemovedAt               *time.Time                          `json:"removed_at,omitempty"`
 	ObservedAt              *time.Time                          `json:"observed_at,omitempty"`
@@ -6466,12 +6428,6 @@ func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	}
 	if v := i.MemberCount; v != nil {
 		m.SetMemberCount(*v)
-	}
-	if v := i.FirstSeenAt; v != nil {
-		m.SetFirstSeenAt(*v)
-	}
-	if v := i.LastSeenAt; v != nil {
-		m.SetLastSeenAt(*v)
 	}
 	if v := i.AddedAt; v != nil {
 		m.SetAddedAt(*v)
@@ -6552,10 +6508,6 @@ type UpdateDirectoryGroupInput struct {
 	ExternalSharingAllowed       *bool `json:"external_sharing_allowed,omitempty"`
 	ClearMemberCount             bool
 	MemberCount                  *int `json:"member_count,omitempty"`
-	ClearFirstSeenAt             bool
-	FirstSeenAt                  *time.Time `json:"first_seen_at,omitempty"`
-	ClearLastSeenAt              bool
-	LastSeenAt                   *time.Time `json:"last_seen_at,omitempty"`
 	ClearAddedAt                 bool
 	AddedAt                      *time.Time `json:"added_at,omitempty"`
 	ClearRemovedAt               bool
@@ -6672,18 +6624,6 @@ func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
 	if v := i.MemberCount; v != nil {
 		m.SetMemberCount(*v)
 	}
-	if i.ClearFirstSeenAt {
-		m.ClearFirstSeenAt()
-	}
-	if v := i.FirstSeenAt; v != nil {
-		m.SetFirstSeenAt(*v)
-	}
-	if i.ClearLastSeenAt {
-		m.ClearLastSeenAt()
-	}
-	if v := i.LastSeenAt; v != nil {
-		m.SetLastSeenAt(*v)
-	}
 	if i.ClearAddedAt {
 		m.ClearAddedAt()
 	}
@@ -6785,8 +6725,6 @@ type CreateDirectoryMembershipInput struct {
 	Role                    *enums.DirectoryMembershipRole `json:"role,omitempty"`
 	Source                  *string                        `json:"source,omitempty"`
 	DirectoryName           *string                        `json:"directory_name,omitempty"`
-	FirstSeenAt             *time.Time                     `json:"first_seen_at,omitempty"`
-	LastSeenAt              *time.Time                     `json:"last_seen_at,omitempty"`
 	AddedAt                 *time.Time                     `json:"added_at,omitempty"`
 	RemovedAt               *time.Time                     `json:"removed_at,omitempty"`
 	ObservedAt              *time.Time                     `json:"observed_at,omitempty"`
@@ -6834,12 +6772,6 @@ func (i *CreateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	}
 	if v := i.DirectoryName; v != nil {
 		m.SetDirectoryName(*v)
-	}
-	if v := i.FirstSeenAt; v != nil {
-		m.SetFirstSeenAt(*v)
-	}
-	if v := i.LastSeenAt; v != nil {
-		m.SetLastSeenAt(*v)
 	}
 	if v := i.AddedAt; v != nil {
 		m.SetAddedAt(*v)
@@ -6907,10 +6839,6 @@ type UpdateDirectoryMembershipInput struct {
 	Source                       *string `json:"source,omitempty"`
 	ClearDirectoryName           bool
 	DirectoryName                *string `json:"directory_name,omitempty"`
-	ClearFirstSeenAt             bool
-	FirstSeenAt                  *time.Time `json:"first_seen_at,omitempty"`
-	ClearLastSeenAt              bool
-	LastSeenAt                   *time.Time `json:"last_seen_at,omitempty"`
 	ClearAddedAt                 bool
 	AddedAt                      *time.Time `json:"added_at,omitempty"`
 	ClearRemovedAt               bool
@@ -6996,18 +6924,6 @@ func (i *UpdateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) 
 	}
 	if v := i.DirectoryName; v != nil {
 		m.SetDirectoryName(*v)
-	}
-	if i.ClearFirstSeenAt {
-		m.ClearFirstSeenAt()
-	}
-	if v := i.FirstSeenAt; v != nil {
-		m.SetFirstSeenAt(*v)
-	}
-	if i.ClearLastSeenAt {
-		m.ClearLastSeenAt()
-	}
-	if v := i.LastSeenAt; v != nil {
-		m.SetLastSeenAt(*v)
 	}
 	if i.ClearAddedAt {
 		m.ClearAddedAt()

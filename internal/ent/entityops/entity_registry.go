@@ -129,48 +129,29 @@ type Schema struct {
 	// field matches any of the provided values, pushing the predicate into the database; emitted
 	// only for integration-mapped schemas and link-rule targets with match-key columns
 	QueryByKey func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error)
-	// CountByKey counts entities of this schema within an organization whose given snake_case field matches any of the provided values, emitted under the same condition as QueryByKey
+	// CountByKey counts org-scoped entities whose given snake_case field matches any of the values
 	CountByKey func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error)
-	// IntegrationFKField is the schema's mutable FK column to Integration (e.g. "integration_id");
-	// empty when the schema has no such edge. Used to strip an ownership pointer during ingest claim
-	// resolution
+	// IntegrationFKField is the schema's mutable FK column to Integration, if any
 	IntegrationFKField string
-	// IntegrationM2MEdge is the name of the schema's to-many edge to Integration; empty when the
-	// schema has no such edge. Used to strip ownership-pointer edge keys during ingest claim resolution
+	// IntegrationM2MEdge is the name of the schema's to-many edge to Integration, if any
 	IntegrationM2MEdge string
-	// IntegrationRunM2MEdge is the name of the schema's to-many edge to IntegrationRun; empty when
-	// the schema has no such edge. Changes to this edge are treated as volatile bookkeeping, never
-	// material on their own, matching the integration ownership edges
+	// IntegrationRunM2MEdge is the name of the schema's to-many edge to IntegrationRun, if any
 	IntegrationRunM2MEdge string
-	// RemovedAtField is the snake_case name of the schema's SnapshotRemoval-annotated field, empty
-	// when the schema declares none
+	// RemovedAtField is the snake_case name of the schema's SnapshotRemoval-annotated field, if any
 	RemovedAtField string
-	// RemovedAtEpisodic reports whether removal is a recurring observation rather than a permanent
-	// tombstone, so ingest never auto-clears RemovedAtField on resurrection
+	// RemovedAtEpisodic reports whether removal is a recurring observation rather than a permanent tombstone
 	RemovedAtEpisodic bool
-	// SeenAtField is the snake_case name of the schema's SeenAt-annotated field, empty when the
-	// schema declares none
-	SeenAtField string
-	// Lookup lists the schema's composite ingest lookup alternatives, in declared or synthesized order
+	// Lookup lists the schema's composite ingest lookup alternatives in order
 	Lookup []LookupAlternative
-	// InstanceScoped reports whether records with the same natural key but a different source
-	// instance are distinct rows rather than candidates for cross-instance ownership resolution
+	// InstanceScoped reports whether same-key records from different source instances are distinct rows
 	InstanceScoped bool
-	// QueryByLookup returns rows matching one of the given key tuples for a declared lookup
-	// alternative, pushing the alternative's first field into the database and filtering the
-	// remainder in memory; emitted only for integration-mapped, create-capable schemas with at least
-	// one lookup alternative
+	// QueryByLookup returns rows matching one of the given key tuples for a declared lookup alternative
 	QueryByLookup func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error)
-	// RepairLookupField rewrites one lookup field on one row through the sql modifier, bypassing immutability, so a row found under a legacy key form is re-keyed in place
+	// RepairLookupField rewrites one lookup field on one row, bypassing immutability
 	RepairLookupField func(ctx context.Context, client *generated.Client, entityID, field, value string) error
-	// ConfirmSeen bulk-touches SeenAtField to the given time for the given ids; emitted only when the
-	// schema declares a SeenAt field
-	ConfirmSeen func(ctx context.Context, client *generated.Client, ids []string, at time.Time) error
-	// SnapshotScope returns every row one installation manages for one owner, source definition, and source instance that is
-	// not already marked removed; emitted only when the schema declares a SnapshotRemoval field
+	// SnapshotScope returns the non-removed rows one installation manages for a definition and instance
 	SnapshotScope func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID, managedBy string) ([]json.RawMessage, error)
-	// MarkRemoved bulk-marks the given ids removed at the given time, recording the integration run
-	// when the schema carries one; emitted only when the schema declares a SnapshotRemoval field
+	// MarkRemoved bulk-marks the given ids removed at the given time under the given integration run
 	MarkRemoved func(ctx context.Context, client *generated.Client, ids []string, at time.Time, runID string) error
 	// Load loads a single entity by ID and returns its JSON representation
 	Load func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error)
@@ -199,8 +180,7 @@ type Schema struct {
 	ApprovalSpec *ApprovalSpec
 }
 
-// defaultIngestPersist returns the stock upsert-backed persistence installed for every ingest
-// schema at init
+// defaultIngestPersist returns the stock upsert-backed persistence for an ingest schema
 func defaultIngestPersist(s *Schema) IngestPersist {
 	return func(ctx context.Context, client *generated.Client, integration *generated.Integration, payload json.RawMessage) (string, bool, bool, error) {
 		owner := lookupValue(payload, FieldOwnerID)
@@ -337,6 +317,8 @@ func (s *Schema) handleIngest(ctx context.Context, client *generated.Client, res
 	if err != nil {
 		return err
 	}
+
+	payload = StampProvenance(payload, s, integration, request.RunID)
 
 	payload, err = s.Ingest.prepare(ctx, integration, payload)
 	if err != nil {
@@ -684,34 +666,101 @@ func matchKeyIn(field string, values []string) func(*sql.Selector) {
 	}
 }
 
-// ingestQueryChunkSize bounds the number of values pushed into a single IN(...) predicate for
-// lookup and link-target prefetch queries
+// ingestQueryChunkSize bounds the number of values pushed into a single IN predicate
 const ingestQueryChunkSize = 500
 
 const (
 	// FieldOwnerID is the provenance column recording the owning organization
 	FieldOwnerID = "owner_id"
-	// FieldIntegrationID is the provenance column recording the writing installation's FK, on schemas that carry one
+	// FieldIntegrationID is the provenance column recording the writing installation's FK
 	FieldIntegrationID = "integration_id"
 	// FieldManagedBy is the provenance column recording which installation owns a record
 	FieldManagedBy = "managed_by"
 	// FieldPlatformID is the provenance column recording the platform of the writing installation
 	FieldPlatformID = "platform_id"
-	// FieldSourceDefinitionID is the provenance column recording the definition an installation writes with
+	// FieldSourceDefinitionID is the provenance column recording the source definition id
 	FieldSourceDefinitionID = "source_definition_id"
-	// FieldSourceDefinitionVersion is the provenance column recording the definition version an installation writes with
+	// FieldSourceDefinitionVersion is the provenance column recording the source definition version
 	FieldSourceDefinitionVersion = "source_definition_version"
-	// FieldSourceInstanceID is the provenance column recording the external tenant or instance an installation targets
+	// FieldSourceInstanceID is the provenance column recording the external tenant or instance
 	FieldSourceInstanceID = "source_instance_id"
-	// FieldIntegrationRunID is the provenance column recording the integration run that last created or changed a record
+	// FieldIntegrationRunID is the provenance column recording the integration run that last wrote a record
 	FieldIntegrationRunID = "integration_run_id"
 )
 
-// activeIntegrationsKey carries the ctx-scoped set of confirmed integration active/inactive answers
+// StampProvenance writes the schema's trusted integration-derived provenance columns and ownership
+// edges onto an ingest payload from the writing installation, overriding anything the mapping
+// emitted for them; it is the sole writer of provenance columns for both the synchronous and the
+// durable ingest paths, so a queued record persists with the same provenance a batched one does
+func StampProvenance(payload json.RawMessage, schema *Schema, integration *generated.Integration, runID string) json.RawMessage {
+	values := []struct {
+		field string
+		value string
+	}{
+		{FieldOwnerID, integration.OwnerID},
+		{FieldIntegrationID, integration.ID},
+		{FieldManagedBy, integration.ID},
+		{FieldPlatformID, integration.PlatformID},
+		{FieldSourceDefinitionID, integration.DefinitionID},
+		{FieldSourceDefinitionVersion, integration.DefinitionVersion},
+		{FieldSourceInstanceID, integration.InstallationMetadata.Display.ExternalID},
+		{FieldIntegrationRunID, runID},
+	}
+
+	return jsonx.EditObject(payload, func(doc map[string]json.RawMessage) bool {
+		changed := false
+
+		for _, v := range values {
+			if v.value == "" {
+				continue
+			}
+
+			field, ok := schema.FieldByName(v.field)
+			if !ok {
+				continue
+			}
+
+			if stampProvenanceKey(doc, field.Name, v.value) {
+				changed = true
+			}
+		}
+
+		if schema.IntegrationM2MEdge != "" {
+			if edge, ok := schema.EdgeByName(schema.IntegrationM2MEdge); ok && stampProvenanceKey(doc, edge.CreateField, []string{integration.ID}) {
+				changed = true
+			}
+		}
+
+		if runID != "" && schema.IntegrationRunM2MEdge != "" {
+			if edge, ok := schema.EdgeByName(schema.IntegrationRunM2MEdge); ok && stampProvenanceKey(doc, edge.CreateField, []string{runID}) {
+				changed = true
+			}
+		}
+
+		return changed
+	})
+}
+
+// stampProvenanceKey writes value to key unconditionally, reporting whether the stored bytes changed
+func stampProvenanceKey(doc map[string]json.RawMessage, key string, value any) bool {
+	encoded, err := json.Marshal(value)
+	if err != nil {
+		return false
+	}
+
+	if raw, ok := doc[key]; ok && bytes.Equal(raw, encoded) {
+		return false
+	}
+
+	doc[key] = encoded
+
+	return true
+}
+
+// activeIntegrationsKey carries the ctx-scoped set of integration active answers
 var activeIntegrationsKey = contextx.NewKey[map[string]bool]()
 
-// WithActiveIntegrations installs a ctx-carried set of integration ids known to be active, letting
-// bulk operations answer active/removed checks without a query per row
+// WithActiveIntegrations installs a ctx-carried set of integration ids known to be active
 func WithActiveIntegrations(ctx context.Context, ids []string) context.Context {
 	set := make(map[string]bool, len(ids))
 	for _, id := range ids {
@@ -721,8 +770,7 @@ func WithActiveIntegrations(ctx context.Context, ids []string) context.Context {
 	return activeIntegrationsKey.Set(ctx, set)
 }
 
-// integrationActive reports whether the given integration is active, answering from the ctx-carried
-// set when present and falling back to an existence query otherwise
+// integrationActive reports whether the given integration is active
 func integrationActive(ctx context.Context, client *generated.Client, integrationID string) (bool, error) {
 	if set, ok := activeIntegrationsKey.Get(ctx); ok {
 		return set[integrationID], nil
@@ -731,8 +779,7 @@ func integrationActive(ctx context.Context, client *generated.Client, integratio
 	return client.Integration.Query().Where(integration.ID(integrationID)).Exist(ctx)
 }
 
-// filterByAlternativeFields keeps rows whose lookup alternative field values match one of the
-// provided key tuples exactly
+// filterByAlternativeFields keeps rows whose lookup alternative field values match one of the key tuples
 func filterByAlternativeFields(rows []json.RawMessage, fields []string, keys []LookupValues) []json.RawMessage {
 	kept := make([]json.RawMessage, 0, len(rows))
 
@@ -752,8 +799,7 @@ func filterByAlternativeFields(rows []json.RawMessage, fields []string, keys []L
 	return kept
 }
 
-// lookupKeyFor resolves the first lookup alternative whose fields are all present and non-empty in
-// the payload, returning its index and extracted values
+// lookupKeyFor resolves the first lookup alternative fully present in the payload
 func lookupKeyFor(s *Schema, payload json.RawMessage) (alternative int, values LookupValues, ok bool) {
 	for i, alt := range s.Lookup {
 		candidate := make(LookupValues, len(alt.Fields))
@@ -784,8 +830,7 @@ func lookupKeyFor(s *Schema, payload json.RawMessage) (alternative int, values L
 	return 0, nil, false
 }
 
-// EncodeLookupKey renders a lookup alternative's key values into the stable cache key used by both
-// WithLookupMatches and Upsert, keeping the encoding in one place for writer and reader
+// EncodeLookupKey renders a lookup alternative's key values into the lookup cache key
 func EncodeLookupKey(alternative LookupAlternative, keys LookupValues) string {
 	parts := make([]string, len(alternative.Fields))
 	for i, field := range alternative.Fields {
@@ -795,18 +840,14 @@ func EncodeLookupKey(alternative LookupAlternative, keys LookupValues) string {
 	return strings.Join(parts, "\x1f")
 }
 
-// lookupMatchKey identifies one cached ingest lookup match by schema, alternative index, and
-// encoded key tuple
+// lookupMatchKey identifies one cached ingest lookup match by schema, alternative index, and key tuple
 type lookupMatchKey struct {
 	schema      string
 	alternative int
 	keys        string
 }
 
-// lookupMatchEntry is one cached ingest lookup match: rows resolved by a batch prefetch query, plus
-// the ids of records created for this key later in the same run and not yet hydrated into rows. A
-// present key with a zero-value entry (no rows, no createdIDs) is a confirmed miss, distinct from
-// the key being absent entirely
+// lookupMatchEntry is one cached ingest lookup match of prefetched rows and same-run created ids
 type lookupMatchEntry struct {
 	rows       []json.RawMessage
 	createdIDs []string
@@ -818,12 +859,7 @@ type lookupMatchCache map[lookupMatchKey]lookupMatchEntry
 // lookupMatchCacheContextKey carries the prefetch cache installed by WithLookupMatches
 var lookupMatchCacheContextKey = contextx.NewKey[lookupMatchCache]()
 
-// WithLookupMatches installs a ctx-carried cache of one schema's ingest lookup matches, keyed by
-// lookup alternative index and encoded key tuple (see EncodeLookupKey), letting Upsert resolve a
-// payload's existing row from the prefetched batch instead of issuing QueryByLookup per record. A
-// same-run create records its id against the cache under its key instead of loading the row
-// eagerly; Upsert hydrates recorded ids into rows lazily on the next read of that key, so a
-// duplicate key later in the same run converges on the row just created without a Load per create
+// WithLookupMatches installs a ctx-carried cache of one schema's ingest lookup matches by alternative and key
 func WithLookupMatches(ctx context.Context, schema *Schema, matches map[int]map[string][]json.RawMessage) context.Context {
 	cache, ok := lookupMatchCacheContextKey.Get(ctx)
 	if !ok {
@@ -839,29 +875,7 @@ func WithLookupMatches(ctx context.Context, schema *Schema, matches map[int]map[
 	return lookupMatchCacheContextKey.Set(ctx, cache)
 }
 
-// deleteDocKey removes a key from a JSON document map if present, reporting whether it deleted anything
-func deleteDocKey(doc map[string]json.RawMessage, key string) bool {
-	if key == "" {
-		return false
-	}
-
-	if _, ok := doc[key]; !ok {
-		return false
-	}
-
-	delete(doc, key)
-
-	return true
-}
-
-// selectIngestCandidate partitions the rows matched by an ingest lookup into ownership categories
-// and selects the single row, if any, an ingest write should apply to. A row already managed by the
-// payload's own installation takes priority over every other category, even when other rows share
-// the lookup key. Otherwise, a payload with no source definition (a non-integration caller) treats
-// every row as owned. Rows sharing the payload's definition and instance are owned; rows with no
-// definition at all are unclaimed; everything else is foreign. Ties within the managed-by, owned/partial, or
-// unclaimed categories are rejected rather than guessed at, and no created_at or other recency
-// tie-break is ever applied
+// selectIngestCandidate selects the single row an ingest write applies to from the lookup matches
 func selectIngestCandidate(s *Schema, rows []json.RawMessage, payload json.RawMessage) (row json.RawMessage, claimable bool, foreign bool, err error) {
 	me := lookupValue(payload, FieldManagedBy)
 
@@ -952,8 +966,7 @@ func (s *Schema) DisplayValue(row json.RawMessage) string {
 	return lookupValue(row, field.Name)
 }
 
-// Upsert persists through the ingest capability, resolving the existing row from the ctx-carried
-// lookup cache when present or by QueryByLookup otherwise
+// Upsert creates or updates the row matching the payload's lookup key through the ingest capability
 func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID string, payload json.RawMessage) (id string, changed bool, managed bool, err error) {
 	ref := SchemaRef{Schema: s.Snake, Operation: refOpUpsert}
 
@@ -1054,7 +1067,7 @@ func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID s
 	return id, changed, managed, err
 }
 
-// pruneIngestFields drops unchanged and volatile-only assignments from the mutation before it is saved
+// pruneIngestFields drops unchanged and volatile-only assignments from the mutation
 func (s *Schema) pruneIngestFields(ctx context.Context, mutation ent.Mutation) (ChangeSet, error) {
 	var volatile []string
 
@@ -1124,9 +1137,7 @@ func (s *Schema) pruneIngestFields(ctx context.Context, mutation ent.Mutation) (
 	return ChangeSetFromMutation(mutation), nil
 }
 
-// SystemControlledOnly reports whether the pruned delta touches only framework-controlled columns
-// and edges: the integration ownership edges (the mutable FK edge and the integration and
-// integration-run many-to-many edges) count as bookkeeping; any other edge stays material
+// SystemControlledOnly reports whether the change set touches only system-controlled columns and edges
 func (s *Schema) SystemControlledOnly(set ChangeSet) bool {
 	if len(set.ChangedFields) == 0 && len(set.ChangedEdges) == 0 {
 		return false
@@ -1153,9 +1164,7 @@ func (s *Schema) SystemControlledOnly(set ChangeSet) bool {
 	})
 }
 
-// applyIngestClaim reports whether this write may own the resolved row: an unclaimed row, a row this
-// installation already manages, or a row whose manager is no longer active is owned and claimed by
-// the write; a row another active installation manages is not, and the write must leave it untouched
+// applyIngestClaim reports whether the writing installation may own the resolved row
 func (s *Schema) applyIngestClaim(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (bool, error) {
 	manager := lookupValue(row, FieldManagedBy)
 	me := lookupValue(payload, FieldManagedBy)
@@ -1172,9 +1181,7 @@ func (s *Schema) applyIngestClaim(ctx context.Context, client *generated.Client,
 	return !active, nil
 }
 
-// applyIngestResurrect clears a non-episodic removed_at-style value in the payload when the
-// resolved row already carries one, so a record seen again by ingest is treated as an explicit
-// un-removal. Episodic schemas leave the field alone since removal there is a recurring observation
+// applyIngestResurrect clears a non-episodic removal field in the payload when the resolved row carries one
 func (s *Schema) applyIngestResurrect(row json.RawMessage, payload json.RawMessage) json.RawMessage {
 	if s.RemovedAtField == "" || s.RemovedAtEpisodic {
 		return payload
@@ -2136,7 +2143,6 @@ var (
 		IntegrationFKField:    "integration_id",
 		IntegrationRunM2MEdge: "integration_runs",
 		RemovedAtField:        "removed_at",
-		SeenAtField:           "last_seen_at",
 		Lookup: []LookupAlternative{
 			{Fields: []string{"external_id"}},
 		},
@@ -2222,7 +2228,6 @@ var (
 		IntegrationFKField:    "integration_id",
 		IntegrationRunM2MEdge: "integration_runs",
 		RemovedAtField:        "removed_at",
-		SeenAtField:           "last_seen_at",
 		Lookup: []LookupAlternative{
 			{Fields: []string{"external_id"}},
 		},
@@ -2309,7 +2314,6 @@ var (
 		IntegrationRunM2MEdge: "integration_runs",
 		RemovedAtField:        "removed_at",
 		RemovedAtEpisodic:     true,
-		SeenAtField:           "last_seen_at",
 		Lookup: []LookupAlternative{
 			{Fields: []string{"directory_account_id", "directory_group_id"}},
 		},
@@ -5762,14 +5766,11 @@ func init() {
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
 		{Name: "family_name", Label: "FamilyName", Type: "string", MatchKey: true, InputKey: "family_name", Clearable: true},
-		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at", Clearable: true},
 		{Name: "given_name", Label: "GivenName", Type: "string", MatchKey: true, InputKey: "given_name", Clearable: true},
 		{Name: "identity_holder_id", Label: "IdentityHolderID", Type: "string", MatchKey: true, InputKey: "identity_holder_id", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "job_title", Label: "JobTitle", Type: "string", MatchKey: true, InputKey: "job_title", Clearable: true},
-		{Name: "last_login_at", Label: "LastLoginAt", Type: "time.Time", InputKey: "last_login_at", Clearable: true, Volatile: true},
-		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Clearable: true, Volatile: true},
 		{Name: "last_seen_ip", Label: "LastSeenIP", Type: "string", MatchKey: true, InputKey: "last_seen_ip", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
@@ -5810,10 +5811,8 @@ func init() {
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
 		{Name: "external_sharing_allowed", Label: "ExternalSharingAllowed", Type: "bool", InputKey: "external_sharing_allowed", Clearable: true},
-		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, SystemControlled: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
-		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "member_count", Label: "MemberCount", Type: "int", InputKey: "member_count", Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
@@ -5845,10 +5844,8 @@ func init() {
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
-		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, SystemControlled: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
-		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
 		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", InputKey: "observed_at"},
@@ -22360,48 +22357,6 @@ func init() {
 
 		return nil
 	}
-	SchemaDirectoryAccount.ConfirmSeen = func(ctx context.Context, client *generated.Client, ids []string, at time.Time) error {
-		ref := SchemaRef{Schema: "directory_account", Operation: refOpUpdate}
-
-		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
-			if err := client.DirectoryAccount.Update().
-				Where(directoryaccount.IDIn(chunk...)).
-				SetLastSeenAt(at).
-				Exec(WithEmissionVetoed(ctx)); err != nil {
-				return logPersistError(ctx, ref, ErrUpdateFailed, err)
-			}
-		}
-
-		return nil
-	}
-	SchemaDirectoryGroup.ConfirmSeen = func(ctx context.Context, client *generated.Client, ids []string, at time.Time) error {
-		ref := SchemaRef{Schema: "directory_group", Operation: refOpUpdate}
-
-		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
-			if err := client.DirectoryGroup.Update().
-				Where(directorygroup.IDIn(chunk...)).
-				SetLastSeenAt(at).
-				Exec(WithEmissionVetoed(ctx)); err != nil {
-				return logPersistError(ctx, ref, ErrUpdateFailed, err)
-			}
-		}
-
-		return nil
-	}
-	SchemaDirectoryMembership.ConfirmSeen = func(ctx context.Context, client *generated.Client, ids []string, at time.Time) error {
-		ref := SchemaRef{Schema: "directory_membership", Operation: refOpUpdate}
-
-		for _, chunk := range lo.Chunk(ids, ingestQueryChunkSize) {
-			if err := client.DirectoryMembership.Update().
-				Where(directorymembership.IDIn(chunk...)).
-				SetLastSeenAt(at).
-				Exec(WithEmissionVetoed(ctx)); err != nil {
-				return logPersistError(ctx, ref, ErrUpdateFailed, err)
-			}
-		}
-
-		return nil
-	}
 	SchemaDirectoryAccount.SnapshotScope = func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID, managedBy string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_account", Operation: refOpQuery}
 
@@ -22829,8 +22784,12 @@ func selectTargets(ctx context.Context, client *generated.Client, orgID string, 
 		return nil, err
 	}
 
-	if selector.Unique {
-		entities = narrowUniqueCandidates(schema, entities, selector.SourceContext)
+	if selector.Unique && schema.InstanceScoped {
+		pi := lookupValue(selector.SourceContext, FieldSourceInstanceID)
+
+		entities = lo.Filter(entities, func(row json.RawMessage, _ int) bool {
+			return lookupValue(row, FieldSourceInstanceID) == pi
+		})
 	}
 
 	var (
@@ -22907,10 +22866,7 @@ func selectTargets(ctx context.Context, client *generated.Client, orgID string, 
 	return results, nil
 }
 
-// selectCandidates resolves the candidate entity set for a target selector. When the selector
-// carries a KeyMatch it consults a ctx-carried prefetch cache when present, or otherwise issues an
-// indexed query that pushes the key predicate into the database; without a KeyMatch it loads all
-// org-scoped entities for row-by-row expression evaluation
+// selectCandidates resolves the candidate entity set for a target selector
 func selectCandidates(ctx context.Context, client *generated.Client, schema *Schema, orgID string, selector TargetSelector) ([]json.RawMessage, error) {
 	if selector.KeyMatch != nil {
 		if schema.QueryByKey == nil {
@@ -22936,19 +22892,6 @@ func selectCandidates(ctx context.Context, client *generated.Client, schema *Sch
 	return schema.Query(ctx, client, orgID)
 }
 
-// narrowUniqueCandidates keeps only the candidates that share the writer's source instance when the target type is instance scoped; the first remaining candidate is linked
-func narrowUniqueCandidates(schema *Schema, entities []json.RawMessage, source json.RawMessage) []json.RawMessage {
-	if !schema.InstanceScoped {
-		return entities
-	}
-
-	pi := lookupValue(source, FieldSourceInstanceID)
-
-	return lo.Filter(entities, func(row json.RawMessage, _ int) bool {
-		return lookupValue(row, FieldSourceInstanceID) == pi
-	})
-}
-
 // linkTargetCacheKey identifies one cached target lookup by target schema, field, and value
 type linkTargetCacheKey struct {
 	schema string
@@ -22956,8 +22899,7 @@ type linkTargetCacheKey struct {
 	value  string
 }
 
-// linkTargetCache is the ctx-carried prefetch cache for link target rows; a present key with a nil
-// or empty slice is a confirmed miss, distinct from the key being absent entirely
+// linkTargetCache is the ctx-carried prefetch cache for link target rows
 type linkTargetCache map[linkTargetCacheKey][]json.RawMessage
 
 // linkTargetCacheContextKey carries the prefetch cache installed by PrefetchLinkTargets

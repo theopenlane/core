@@ -1787,16 +1787,12 @@ func init() {
 	directoryaccountDescAvatarUpdatedAt := directoryaccountFields[12].Descriptor()
 	// directoryaccount.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
 	directoryaccount.DefaultAvatarUpdatedAt = directoryaccountDescAvatarUpdatedAt.Default.(func() time.Time)
-	// directoryaccountDescFirstSeenAt is the schema descriptor for first_seen_at field.
-	directoryaccountDescFirstSeenAt := directoryaccountFields[23].Descriptor()
-	// directoryaccount.DefaultFirstSeenAt holds the default value on creation for the first_seen_at field.
-	directoryaccount.DefaultFirstSeenAt = directoryaccountDescFirstSeenAt.Default.(func() time.Time)
 	// directoryaccountDescObservedAt is the schema descriptor for observed_at field.
-	directoryaccountDescObservedAt := directoryaccountFields[27].Descriptor()
+	directoryaccountDescObservedAt := directoryaccountFields[24].Descriptor()
 	// directoryaccount.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directoryaccount.DefaultObservedAt = directoryaccountDescObservedAt.Default.(func() time.Time)
 	// directoryaccountDescPrimarySource is the schema descriptor for primary_source field.
-	directoryaccountDescPrimarySource := directoryaccountFields[32].Descriptor()
+	directoryaccountDescPrimarySource := directoryaccountFields[29].Descriptor()
 	// directoryaccount.DefaultPrimarySource holds the default value on creation for the primary_source field.
 	directoryaccount.DefaultPrimarySource = directoryaccountDescPrimarySource.Default.(bool)
 	// directoryaccountDescID is the schema descriptor for id field.
@@ -1888,12 +1884,8 @@ func init() {
 	directorygroupDescExternalSharingAllowed := directorygroupFields[8].Descriptor()
 	// directorygroup.DefaultExternalSharingAllowed holds the default value on creation for the external_sharing_allowed field.
 	directorygroup.DefaultExternalSharingAllowed = directorygroupDescExternalSharingAllowed.Default.(bool)
-	// directorygroupDescFirstSeenAt is the schema descriptor for first_seen_at field.
-	directorygroupDescFirstSeenAt := directorygroupFields[10].Descriptor()
-	// directorygroup.DefaultFirstSeenAt holds the default value on creation for the first_seen_at field.
-	directorygroup.DefaultFirstSeenAt = directorygroupDescFirstSeenAt.Default.(func() time.Time)
 	// directorygroupDescObservedAt is the schema descriptor for observed_at field.
-	directorygroupDescObservedAt := directorygroupFields[14].Descriptor()
+	directorygroupDescObservedAt := directorygroupFields[12].Descriptor()
 	// directorygroup.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directorygroup.DefaultObservedAt = directorygroupDescObservedAt.Default.(func() time.Time)
 	// directorygroupDescID is the schema descriptor for id field.
@@ -1972,12 +1964,8 @@ func init() {
 	directorymembershipDescDirectoryGroupID := directorymembershipFields[3].Descriptor()
 	// directorymembership.DirectoryGroupIDValidator is a validator for the "directory_group_id" field. It is called by the builders before save.
 	directorymembership.DirectoryGroupIDValidator = directorymembershipDescDirectoryGroupID.Validators[0].(func(string) error)
-	// directorymembershipDescFirstSeenAt is the schema descriptor for first_seen_at field.
-	directorymembershipDescFirstSeenAt := directorymembershipFields[7].Descriptor()
-	// directorymembership.DefaultFirstSeenAt holds the default value on creation for the first_seen_at field.
-	directorymembership.DefaultFirstSeenAt = directorymembershipDescFirstSeenAt.Default.(func() time.Time)
 	// directorymembershipDescObservedAt is the schema descriptor for observed_at field.
-	directorymembershipDescObservedAt := directorymembershipFields[11].Descriptor()
+	directorymembershipDescObservedAt := directorymembershipFields[9].Descriptor()
 	// directorymembership.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directorymembership.DefaultObservedAt = directorymembershipDescObservedAt.Default.(func() time.Time)
 	// directorymembershipDescID is the schema descriptor for id field.

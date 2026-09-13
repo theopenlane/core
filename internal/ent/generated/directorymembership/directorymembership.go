@@ -64,10 +64,6 @@ const (
 	FieldSource = "source"
 	// FieldDirectoryName holds the string denoting the directory_name field in the database.
 	FieldDirectoryName = "directory_name"
-	// FieldFirstSeenAt holds the string denoting the first_seen_at field in the database.
-	FieldFirstSeenAt = "first_seen_at"
-	// FieldLastSeenAt holds the string denoting the last_seen_at field in the database.
-	FieldLastSeenAt = "last_seen_at"
 	// FieldAddedAt holds the string denoting the added_at field in the database.
 	FieldAddedAt = "added_at"
 	// FieldRemovedAt holds the string denoting the removed_at field in the database.
@@ -194,8 +190,6 @@ var Columns = []string{
 	FieldRole,
 	FieldSource,
 	FieldDirectoryName,
-	FieldFirstSeenAt,
-	FieldLastSeenAt,
 	FieldAddedAt,
 	FieldRemovedAt,
 	FieldObservedAt,
@@ -245,8 +239,6 @@ var (
 	DirectoryAccountIDValidator func(string) error
 	// DirectoryGroupIDValidator is a validator for the "directory_group_id" field. It is called by the builders before save.
 	DirectoryGroupIDValidator func(string) error
-	// DefaultFirstSeenAt holds the default value on creation for the "first_seen_at" field.
-	DefaultFirstSeenAt func() time.Time
 	// DefaultObservedAt holds the default value on creation for the "observed_at" field.
 	DefaultObservedAt func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.
@@ -386,16 +378,6 @@ func BySource(opts ...sql.OrderTermOption) OrderOption {
 // ByDirectoryName orders the results by the directory_name field.
 func ByDirectoryName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDirectoryName, opts...).ToFunc()
-}
-
-// ByFirstSeenAt orders the results by the first_seen_at field.
-func ByFirstSeenAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFirstSeenAt, opts...).ToFunc()
-}
-
-// ByLastSeenAt orders the results by the last_seen_at field.
-func ByLastSeenAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLastSeenAt, opts...).ToFunc()
 }
 
 // ByAddedAt orders the results by the added_at field.

@@ -375,34 +375,6 @@ func (_c *DirectoryGroupCreate) SetNillableMemberCount(v *int) *DirectoryGroupCr
 	return _c
 }
 
-// SetFirstSeenAt sets the "first_seen_at" field.
-func (_c *DirectoryGroupCreate) SetFirstSeenAt(v time.Time) *DirectoryGroupCreate {
-	_c.mutation.SetFirstSeenAt(v)
-	return _c
-}
-
-// SetNillableFirstSeenAt sets the "first_seen_at" field if the given value is not nil.
-func (_c *DirectoryGroupCreate) SetNillableFirstSeenAt(v *time.Time) *DirectoryGroupCreate {
-	if v != nil {
-		_c.SetFirstSeenAt(*v)
-	}
-	return _c
-}
-
-// SetLastSeenAt sets the "last_seen_at" field.
-func (_c *DirectoryGroupCreate) SetLastSeenAt(v time.Time) *DirectoryGroupCreate {
-	_c.mutation.SetLastSeenAt(v)
-	return _c
-}
-
-// SetNillableLastSeenAt sets the "last_seen_at" field if the given value is not nil.
-func (_c *DirectoryGroupCreate) SetNillableLastSeenAt(v *time.Time) *DirectoryGroupCreate {
-	if v != nil {
-		_c.SetLastSeenAt(*v)
-	}
-	return _c
-}
-
 // SetAddedAt sets the "added_at" field.
 func (_c *DirectoryGroupCreate) SetAddedAt(v time.Time) *DirectoryGroupCreate {
 	_c.mutation.SetAddedAt(v)
@@ -665,13 +637,6 @@ func (_c *DirectoryGroupCreate) defaults() error {
 		v := directorygroup.DefaultExternalSharingAllowed
 		_c.mutation.SetExternalSharingAllowed(v)
 	}
-	if _, ok := _c.mutation.FirstSeenAt(); !ok {
-		if directorygroup.DefaultFirstSeenAt == nil {
-			return fmt.Errorf("generated: uninitialized directorygroup.DefaultFirstSeenAt (forgotten import generated/runtime?)")
-		}
-		v := directorygroup.DefaultFirstSeenAt()
-		_c.mutation.SetFirstSeenAt(v)
-	}
 	if _, ok := _c.mutation.ObservedAt(); !ok {
 		if directorygroup.DefaultObservedAt == nil {
 			return fmt.Errorf("generated: uninitialized directorygroup.DefaultObservedAt (forgotten import generated/runtime?)")
@@ -874,14 +839,6 @@ func (_c *DirectoryGroupCreate) createSpec() (*DirectoryGroup, *sqlgraph.CreateS
 	if value, ok := _c.mutation.MemberCount(); ok {
 		_spec.SetField(directorygroup.FieldMemberCount, field.TypeInt, value)
 		_node.MemberCount = value
-	}
-	if value, ok := _c.mutation.FirstSeenAt(); ok {
-		_spec.SetField(directorygroup.FieldFirstSeenAt, field.TypeTime, value)
-		_node.FirstSeenAt = &value
-	}
-	if value, ok := _c.mutation.LastSeenAt(); ok {
-		_spec.SetField(directorygroup.FieldLastSeenAt, field.TypeTime, value)
-		_node.LastSeenAt = &value
 	}
 	if value, ok := _c.mutation.AddedAt(); ok {
 		_spec.SetField(directorygroup.FieldAddedAt, field.TypeTime, value)

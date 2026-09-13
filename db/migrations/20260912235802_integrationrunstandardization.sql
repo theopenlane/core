@@ -47,7 +47,7 @@ CREATE TABLE "contact_integration_runs" ("contact_id" character varying NOT NULL
 -- Create index "contact_integration_runs_integration_run_id_idx" to table: "contact_integration_runs"
 CREATE INDEX "contact_integration_runs_integration_run_id_idx" ON "contact_integration_runs" ("integration_run_id");
 -- Modify "directory_accounts" table
-ALTER TABLE "directory_accounts" DROP COLUMN "directory_instance_id", DROP COLUMN "profile_hash", DROP COLUMN "directory_sync_run_id", ADD COLUMN "source_definition_id" character varying NULL, ADD COLUMN "source_definition_version" character varying NULL, ADD COLUMN "source_instance_id" character varying NULL, ADD COLUMN "managed_by" character varying NULL, ADD COLUMN "integration_run_id" character varying NULL;
+ALTER TABLE "directory_accounts" DROP COLUMN "directory_instance_id", DROP COLUMN "last_login_at", DROP COLUMN "first_seen_at", DROP COLUMN "last_seen_at", DROP COLUMN "profile_hash", DROP COLUMN "directory_sync_run_id", ADD COLUMN "source_definition_id" character varying NULL, ADD COLUMN "source_definition_version" character varying NULL, ADD COLUMN "source_instance_id" character varying NULL, ADD COLUMN "managed_by" character varying NULL, ADD COLUMN "integration_run_id" character varying NULL;
 -- Create index "directoryaccount_integration_run_id" to table: "directory_accounts"
 CREATE INDEX "directoryaccount_integration_run_id" ON "directory_accounts" ("integration_run_id");
 -- Create index "directoryaccount_source_instance_id" to table: "directory_accounts"
@@ -57,7 +57,7 @@ CREATE TABLE "directory_account_integration_runs" ("directory_account_id" charac
 -- Create index "directory_account_integration_runs_integration_run_id_idx" to table: "directory_account_integration_runs"
 CREATE INDEX "directory_account_integration_runs_integration_run_id_idx" ON "directory_account_integration_runs" ("integration_run_id");
 -- Modify "directory_groups" table
-ALTER TABLE "directory_groups" DROP COLUMN "directory_instance_id", DROP COLUMN "profile_hash", DROP COLUMN "directory_sync_run_id", ADD COLUMN "source_definition_id" character varying NULL, ADD COLUMN "source_definition_version" character varying NULL, ADD COLUMN "source_instance_id" character varying NULL, ADD COLUMN "managed_by" character varying NULL, ADD COLUMN "integration_run_id" character varying NULL;
+ALTER TABLE "directory_groups" DROP COLUMN "directory_instance_id", DROP COLUMN "first_seen_at", DROP COLUMN "last_seen_at", DROP COLUMN "profile_hash", DROP COLUMN "directory_sync_run_id", ADD COLUMN "source_definition_id" character varying NULL, ADD COLUMN "source_definition_version" character varying NULL, ADD COLUMN "source_instance_id" character varying NULL, ADD COLUMN "managed_by" character varying NULL, ADD COLUMN "integration_run_id" character varying NULL;
 -- Create index "directorygroup_integration_run_id" to table: "directory_groups"
 CREATE INDEX "directorygroup_integration_run_id" ON "directory_groups" ("integration_run_id");
 -- Create index "directorygroup_source_instance_id" to table: "directory_groups"
@@ -67,7 +67,7 @@ CREATE TABLE "directory_group_integration_runs" ("directory_group_id" character 
 -- Create index "directory_group_integration_runs_integration_run_id_idx" to table: "directory_group_integration_runs"
 CREATE INDEX "directory_group_integration_runs_integration_run_id_idx" ON "directory_group_integration_runs" ("integration_run_id");
 -- Modify "directory_memberships" table
-ALTER TABLE "directory_memberships" DROP COLUMN "directory_instance_id", DROP COLUMN "last_confirmed_run_id", DROP COLUMN "directory_sync_run_id", ADD COLUMN "source_definition_id" character varying NULL, ADD COLUMN "source_definition_version" character varying NULL, ADD COLUMN "source_instance_id" character varying NULL, ADD COLUMN "managed_by" character varying NULL, ADD COLUMN "integration_run_id" character varying NULL;
+ALTER TABLE "directory_memberships" DROP COLUMN "directory_instance_id", DROP COLUMN "first_seen_at", DROP COLUMN "last_seen_at", DROP COLUMN "last_confirmed_run_id", DROP COLUMN "directory_sync_run_id", ADD COLUMN "source_definition_id" character varying NULL, ADD COLUMN "source_definition_version" character varying NULL, ADD COLUMN "source_instance_id" character varying NULL, ADD COLUMN "managed_by" character varying NULL, ADD COLUMN "integration_run_id" character varying NULL;
 -- Create index "directory_membership_integration_id_idx" to table: "directory_memberships"
 CREATE INDEX "directory_membership_integration_id_idx" ON "directory_memberships" ("integration_id");
 -- Create index "directory_membership_platform_id_idx" to table: "directory_memberships"

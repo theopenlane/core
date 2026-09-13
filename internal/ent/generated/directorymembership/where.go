@@ -176,16 +176,6 @@ func DirectoryName(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldDirectoryName, v))
 }
 
-// FirstSeenAt applies equality check predicate on the "first_seen_at" field. It's identical to FirstSeenAtEQ.
-func FirstSeenAt(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEQ(FieldFirstSeenAt, v))
-}
-
-// LastSeenAt applies equality check predicate on the "last_seen_at" field. It's identical to LastSeenAtEQ.
-func LastSeenAt(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEQ(FieldLastSeenAt, v))
-}
-
 // AddedAt applies equality check predicate on the "added_at" field. It's identical to AddedAtEQ.
 func AddedAt(v time.Time) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldAddedAt, v))
@@ -1799,106 +1789,6 @@ func DirectoryNameEqualFold(v string) predicate.DirectoryMembership {
 // DirectoryNameContainsFold applies the ContainsFold predicate on the "directory_name" field.
 func DirectoryNameContainsFold(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldDirectoryName, v))
-}
-
-// FirstSeenAtEQ applies the EQ predicate on the "first_seen_at" field.
-func FirstSeenAtEQ(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEQ(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtNEQ applies the NEQ predicate on the "first_seen_at" field.
-func FirstSeenAtNEQ(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNEQ(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtIn applies the In predicate on the "first_seen_at" field.
-func FirstSeenAtIn(vs ...time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldIn(FieldFirstSeenAt, vs...))
-}
-
-// FirstSeenAtNotIn applies the NotIn predicate on the "first_seen_at" field.
-func FirstSeenAtNotIn(vs ...time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNotIn(FieldFirstSeenAt, vs...))
-}
-
-// FirstSeenAtGT applies the GT predicate on the "first_seen_at" field.
-func FirstSeenAtGT(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldGT(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtGTE applies the GTE predicate on the "first_seen_at" field.
-func FirstSeenAtGTE(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldGTE(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtLT applies the LT predicate on the "first_seen_at" field.
-func FirstSeenAtLT(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldLT(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtLTE applies the LTE predicate on the "first_seen_at" field.
-func FirstSeenAtLTE(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldLTE(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtIsNil applies the IsNil predicate on the "first_seen_at" field.
-func FirstSeenAtIsNil() predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldIsNull(FieldFirstSeenAt))
-}
-
-// FirstSeenAtNotNil applies the NotNil predicate on the "first_seen_at" field.
-func FirstSeenAtNotNil() predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNotNull(FieldFirstSeenAt))
-}
-
-// LastSeenAtEQ applies the EQ predicate on the "last_seen_at" field.
-func LastSeenAtEQ(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEQ(FieldLastSeenAt, v))
-}
-
-// LastSeenAtNEQ applies the NEQ predicate on the "last_seen_at" field.
-func LastSeenAtNEQ(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNEQ(FieldLastSeenAt, v))
-}
-
-// LastSeenAtIn applies the In predicate on the "last_seen_at" field.
-func LastSeenAtIn(vs ...time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldIn(FieldLastSeenAt, vs...))
-}
-
-// LastSeenAtNotIn applies the NotIn predicate on the "last_seen_at" field.
-func LastSeenAtNotIn(vs ...time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNotIn(FieldLastSeenAt, vs...))
-}
-
-// LastSeenAtGT applies the GT predicate on the "last_seen_at" field.
-func LastSeenAtGT(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldGT(FieldLastSeenAt, v))
-}
-
-// LastSeenAtGTE applies the GTE predicate on the "last_seen_at" field.
-func LastSeenAtGTE(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldGTE(FieldLastSeenAt, v))
-}
-
-// LastSeenAtLT applies the LT predicate on the "last_seen_at" field.
-func LastSeenAtLT(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldLT(FieldLastSeenAt, v))
-}
-
-// LastSeenAtLTE applies the LTE predicate on the "last_seen_at" field.
-func LastSeenAtLTE(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldLTE(FieldLastSeenAt, v))
-}
-
-// LastSeenAtIsNil applies the IsNil predicate on the "last_seen_at" field.
-func LastSeenAtIsNil() predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldIsNull(FieldLastSeenAt))
-}
-
-// LastSeenAtNotNil applies the NotNil predicate on the "last_seen_at" field.
-func LastSeenAtNotNil() predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNotNull(FieldLastSeenAt))
 }
 
 // AddedAtEQ applies the EQ predicate on the "added_at" field.

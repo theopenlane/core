@@ -103,12 +103,6 @@ type DirectoryAccount struct {
 	MfaState enums.DirectoryAccountMFAState `json:"mfa_state,omitempty"`
 	// last IP address observed by the provider, if any
 	LastSeenIP *string `json:"last_seen_ip,omitempty"`
-	// timestamp of the most recent login reported by the provider
-	LastLoginAt *time.Time `json:"last_login_at,omitempty"`
-	// time this account was first observed by Openlane from directory ingest
-	FirstSeenAt *time.Time `json:"first_seen_at,omitempty"`
-	// time this account was most recently confirmed by directory ingest
-	LastSeenAt *time.Time `json:"last_seen_at,omitempty"`
 	// provider-reported time the account was added or provisioned in the source directory
 	AddedAt *time.Time `json:"added_at,omitempty"`
 	// provider-reported or locally-recorded time the account was removed from the source directory
@@ -303,7 +297,7 @@ func (*DirectoryAccount) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case directoryaccount.FieldID, directoryaccount.FieldCreatedBy, directoryaccount.FieldUpdatedBy, directoryaccount.FieldUpdatedByImpersonator, directoryaccount.FieldDisplayID, directoryaccount.FieldSourceDefinitionID, directoryaccount.FieldSourceDefinitionVersion, directoryaccount.FieldSourceInstanceID, directoryaccount.FieldManagedBy, directoryaccount.FieldIntegrationRunID, directoryaccount.FieldOwnerID, directoryaccount.FieldEnvironmentName, directoryaccount.FieldEnvironmentID, directoryaccount.FieldScopeName, directoryaccount.FieldScopeID, directoryaccount.FieldIntegrationID, directoryaccount.FieldPlatformID, directoryaccount.FieldIdentityHolderID, directoryaccount.FieldDirectoryName, directoryaccount.FieldExternalID, directoryaccount.FieldSecondaryKey, directoryaccount.FieldCanonicalEmail, directoryaccount.FieldPhoneNumber, directoryaccount.FieldDisplayName, directoryaccount.FieldAvatarRemoteURL, directoryaccount.FieldAvatarLocalFileID, directoryaccount.FieldGivenName, directoryaccount.FieldFamilyName, directoryaccount.FieldJobTitle, directoryaccount.FieldDepartment, directoryaccount.FieldOrganizationUnit, directoryaccount.FieldAccountType, directoryaccount.FieldStatus, directoryaccount.FieldMfaState, directoryaccount.FieldLastSeenIP, directoryaccount.FieldRawProfileFileID, directoryaccount.FieldSourceVersion:
 			values[i] = new(sql.NullString)
-		case directoryaccount.FieldCreatedAt, directoryaccount.FieldUpdatedAt, directoryaccount.FieldAvatarUpdatedAt, directoryaccount.FieldLastLoginAt, directoryaccount.FieldFirstSeenAt, directoryaccount.FieldLastSeenAt, directoryaccount.FieldAddedAt, directoryaccount.FieldRemovedAt, directoryaccount.FieldObservedAt:
+		case directoryaccount.FieldCreatedAt, directoryaccount.FieldUpdatedAt, directoryaccount.FieldAvatarUpdatedAt, directoryaccount.FieldAddedAt, directoryaccount.FieldRemovedAt, directoryaccount.FieldObservedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -578,27 +572,6 @@ func (_m *DirectoryAccount) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.LastSeenIP = new(string)
 				*_m.LastSeenIP = value.String
-			}
-		case directoryaccount.FieldLastLoginAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field last_login_at", values[i])
-			} else if value.Valid {
-				_m.LastLoginAt = new(time.Time)
-				*_m.LastLoginAt = value.Time
-			}
-		case directoryaccount.FieldFirstSeenAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field first_seen_at", values[i])
-			} else if value.Valid {
-				_m.FirstSeenAt = new(time.Time)
-				*_m.FirstSeenAt = value.Time
-			}
-		case directoryaccount.FieldLastSeenAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field last_seen_at", values[i])
-			} else if value.Valid {
-				_m.LastSeenAt = new(time.Time)
-				*_m.LastSeenAt = value.Time
 			}
 		case directoryaccount.FieldAddedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -897,21 +870,6 @@ func (_m *DirectoryAccount) String() string {
 	if v := _m.LastSeenIP; v != nil {
 		builder.WriteString("last_seen_ip=")
 		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := _m.LastLoginAt; v != nil {
-		builder.WriteString("last_login_at=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
-	builder.WriteString(", ")
-	if v := _m.FirstSeenAt; v != nil {
-		builder.WriteString("first_seen_at=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
-	builder.WriteString(", ")
-	if v := _m.LastSeenAt; v != nil {
-		builder.WriteString("last_seen_at=")
-		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
 	if v := _m.AddedAt; v != nil {

@@ -362,46 +362,6 @@ func (_u *DirectoryMembershipUpdate) ClearDirectoryName() *DirectoryMembershipUp
 	return _u
 }
 
-// SetFirstSeenAt sets the "first_seen_at" field.
-func (_u *DirectoryMembershipUpdate) SetFirstSeenAt(v time.Time) *DirectoryMembershipUpdate {
-	_u.mutation.SetFirstSeenAt(v)
-	return _u
-}
-
-// SetNillableFirstSeenAt sets the "first_seen_at" field if the given value is not nil.
-func (_u *DirectoryMembershipUpdate) SetNillableFirstSeenAt(v *time.Time) *DirectoryMembershipUpdate {
-	if v != nil {
-		_u.SetFirstSeenAt(*v)
-	}
-	return _u
-}
-
-// ClearFirstSeenAt clears the value of the "first_seen_at" field.
-func (_u *DirectoryMembershipUpdate) ClearFirstSeenAt() *DirectoryMembershipUpdate {
-	_u.mutation.ClearFirstSeenAt()
-	return _u
-}
-
-// SetLastSeenAt sets the "last_seen_at" field.
-func (_u *DirectoryMembershipUpdate) SetLastSeenAt(v time.Time) *DirectoryMembershipUpdate {
-	_u.mutation.SetLastSeenAt(v)
-	return _u
-}
-
-// SetNillableLastSeenAt sets the "last_seen_at" field if the given value is not nil.
-func (_u *DirectoryMembershipUpdate) SetNillableLastSeenAt(v *time.Time) *DirectoryMembershipUpdate {
-	if v != nil {
-		_u.SetLastSeenAt(*v)
-	}
-	return _u
-}
-
-// ClearLastSeenAt clears the value of the "last_seen_at" field.
-func (_u *DirectoryMembershipUpdate) ClearLastSeenAt() *DirectoryMembershipUpdate {
-	_u.mutation.ClearLastSeenAt()
-	return _u
-}
-
 // SetAddedAt sets the "added_at" field.
 func (_u *DirectoryMembershipUpdate) SetAddedAt(v time.Time) *DirectoryMembershipUpdate {
 	_u.mutation.SetAddedAt(v)
@@ -783,18 +743,6 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if _u.mutation.DirectoryNameCleared() {
 		_spec.ClearField(directorymembership.FieldDirectoryName, field.TypeString)
-	}
-	if value, ok := _u.mutation.FirstSeenAt(); ok {
-		_spec.SetField(directorymembership.FieldFirstSeenAt, field.TypeTime, value)
-	}
-	if _u.mutation.FirstSeenAtCleared() {
-		_spec.ClearField(directorymembership.FieldFirstSeenAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.LastSeenAt(); ok {
-		_spec.SetField(directorymembership.FieldLastSeenAt, field.TypeTime, value)
-	}
-	if _u.mutation.LastSeenAtCleared() {
-		_spec.ClearField(directorymembership.FieldLastSeenAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.AddedAt(); ok {
 		_spec.SetField(directorymembership.FieldAddedAt, field.TypeTime, value)
@@ -1413,46 +1361,6 @@ func (_u *DirectoryMembershipUpdateOne) ClearDirectoryName() *DirectoryMembershi
 	return _u
 }
 
-// SetFirstSeenAt sets the "first_seen_at" field.
-func (_u *DirectoryMembershipUpdateOne) SetFirstSeenAt(v time.Time) *DirectoryMembershipUpdateOne {
-	_u.mutation.SetFirstSeenAt(v)
-	return _u
-}
-
-// SetNillableFirstSeenAt sets the "first_seen_at" field if the given value is not nil.
-func (_u *DirectoryMembershipUpdateOne) SetNillableFirstSeenAt(v *time.Time) *DirectoryMembershipUpdateOne {
-	if v != nil {
-		_u.SetFirstSeenAt(*v)
-	}
-	return _u
-}
-
-// ClearFirstSeenAt clears the value of the "first_seen_at" field.
-func (_u *DirectoryMembershipUpdateOne) ClearFirstSeenAt() *DirectoryMembershipUpdateOne {
-	_u.mutation.ClearFirstSeenAt()
-	return _u
-}
-
-// SetLastSeenAt sets the "last_seen_at" field.
-func (_u *DirectoryMembershipUpdateOne) SetLastSeenAt(v time.Time) *DirectoryMembershipUpdateOne {
-	_u.mutation.SetLastSeenAt(v)
-	return _u
-}
-
-// SetNillableLastSeenAt sets the "last_seen_at" field if the given value is not nil.
-func (_u *DirectoryMembershipUpdateOne) SetNillableLastSeenAt(v *time.Time) *DirectoryMembershipUpdateOne {
-	if v != nil {
-		_u.SetLastSeenAt(*v)
-	}
-	return _u
-}
-
-// ClearLastSeenAt clears the value of the "last_seen_at" field.
-func (_u *DirectoryMembershipUpdateOne) ClearLastSeenAt() *DirectoryMembershipUpdateOne {
-	_u.mutation.ClearLastSeenAt()
-	return _u
-}
-
 // SetAddedAt sets the "added_at" field.
 func (_u *DirectoryMembershipUpdateOne) SetAddedAt(v time.Time) *DirectoryMembershipUpdateOne {
 	_u.mutation.SetAddedAt(v)
@@ -1864,18 +1772,6 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 	}
 	if _u.mutation.DirectoryNameCleared() {
 		_spec.ClearField(directorymembership.FieldDirectoryName, field.TypeString)
-	}
-	if value, ok := _u.mutation.FirstSeenAt(); ok {
-		_spec.SetField(directorymembership.FieldFirstSeenAt, field.TypeTime, value)
-	}
-	if _u.mutation.FirstSeenAtCleared() {
-		_spec.ClearField(directorymembership.FieldFirstSeenAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.LastSeenAt(); ok {
-		_spec.SetField(directorymembership.FieldLastSeenAt, field.TypeTime, value)
-	}
-	if _u.mutation.LastSeenAtCleared() {
-		_spec.ClearField(directorymembership.FieldLastSeenAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.AddedAt(); ok {
 		_spec.SetField(directorymembership.FieldAddedAt, field.TypeTime, value)

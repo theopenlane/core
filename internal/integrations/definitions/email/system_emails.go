@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"html/template"
 	"net/url"
-
-	"github.com/theopenlane/core/v2/pkg/urlx"
 	"time"
 
 	"github.com/samber/lo"
@@ -15,6 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email/themes"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // defaultHeader returns the standard header block used by all system emails

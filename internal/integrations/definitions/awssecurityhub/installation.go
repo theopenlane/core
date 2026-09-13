@@ -11,16 +11,14 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// installationRef builds the typed installation metadata handle for the AWS Security Hub definition with the operator config applied
-func installationRef(cfg Config) types.InstallationRef[InstallationMetadata] {
-	return types.NewInstallationRef(func(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
-		return resolveInstallationMetadata(ctx, cfg, req)
-	})
+// installationRef builds the typed installation metadata handle for the AWS Security Hub definition
+func installationRef() types.InstallationRef[InstallationMetadata] {
+	return types.NewInstallationRef(resolveInstallationMetadata)
 }
 
 // resolveInstallationMetadata derives AWS connection metadata from whichever credential is bound.
 // It uses the assume-role credential when present, otherwise falls back to the service account credential.
-func resolveInstallationMetadata(ctx context.Context, opCfg Config, req types.InstallationRequest) (InstallationMetadata, bool, error) {
+func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	_, hasAssumeRole := req.Credentials.Resolve(awsAssumeRoleCredential.ID())
 	if !hasAssumeRole {
 		return resolveServiceAccountInstallationMetadata(ctx, req)
@@ -36,27 +34,22 @@ func resolveInstallationMetadata(ctx context.Context, opCfg Config, req types.In
 		return InstallationMetadata{}, ok, nil
 	}
 
+	account := arnAccountID(assumeRole.RoleARN)
+	if account == "" {
+		return InstallationMetadata{}, false, fmt.Errorf("%w: %s", ErrRoleARNInvalid, assumeRole.RoleARN)
+	}
+
+	if assumeRole.AccountID != "" && assumeRole.AccountID != account {
+		return InstallationMetadata{}, false, fmt.Errorf("%w: configured account %s, role arn account %s", ErrAccountIDMismatch, assumeRole.AccountID, account)
+	}
+
 	metadata := InstallationMetadata{
 		RoleARN:       assumeRole.RoleARN,
 		HomeRegion:    assumeRole.HomeRegion,
-		AccountID:     assumeRole.AccountID,
+		AccountID:     account,
 		AccountScope:  assumeRole.AccountScope,
 		AccountIDs:    assumeRole.AccountIDs,
 		LinkedRegions: assumeRole.LinkedRegions,
-	}
-
-	if metadata.AccountID != "" {
-		return metadata, true, nil
-	}
-
-	cfg, err := buildAWSConfig(ctx, assumeRole, opCfg)
-	if err != nil {
-		return InstallationMetadata{}, false, err
-	}
-
-	metadata.AccountID, err = callerAccountID(ctx, cfg)
-	if err != nil {
-		return InstallationMetadata{}, false, err
 	}
 
 	return metadata, true, nil

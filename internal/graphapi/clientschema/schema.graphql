@@ -13561,18 +13561,6 @@ input CreateDirectoryAccountInput {
 	"""
 	lastSeenIP: String
 	"""
-	timestamp of the most recent login reported by the provider
-	"""
-	lastLoginAt: Time
-	"""
-	time this account was first observed by Openlane from directory ingest
-	"""
-	firstSeenAt: Time
-	"""
-	time this account was most recently confirmed by directory ingest
-	"""
-	lastSeenAt: Time
-	"""
 	provider-reported time the account was added or provisioned in the source directory
 	"""
 	addedAt: Time
@@ -13681,14 +13669,6 @@ input CreateDirectoryGroupInput {
 	"""
 	memberCount: Int
 	"""
-	time this group was first observed by Openlane from directory ingest
-	"""
-	firstSeenAt: Time
-	"""
-	time this group was most recently confirmed by directory ingest
-	"""
-	lastSeenAt: Time
-	"""
 	provider-reported time the group was added or provisioned in the source directory
 	"""
 	addedAt: Time
@@ -13769,14 +13749,6 @@ input CreateDirectoryMembershipInput {
 	directory source label set by the integration (e.g. googleworkspace, github, slack)
 	"""
 	directoryName: String
-	"""
-	first time the membership was detected
-	"""
-	firstSeenAt: Time
-	"""
-	most recent time the membership was confirmed by directory ingest
-	"""
-	lastSeenAt: Time
 	"""
 	provider-reported time the membership was added in the source directory
 	"""
@@ -20332,18 +20304,6 @@ type DirectoryAccount implements Node {
 	"""
 	lastSeenIP: String
 	"""
-	timestamp of the most recent login reported by the provider
-	"""
-	lastLoginAt: Time
-	"""
-	time this account was first observed by Openlane from directory ingest
-	"""
-	firstSeenAt: Time
-	"""
-	time this account was most recently confirmed by directory ingest
-	"""
-	lastSeenAt: Time
-	"""
 	provider-reported time the account was added or provisioned in the source directory
 	"""
 	addedAt: Time
@@ -21168,36 +21128,6 @@ input DirectoryAccountWhereInput {
 	lastSeenIPEqualFold: String
 	lastSeenIPContainsFold: String
 	"""
-	last_login_at field predicates
-	"""
-	lastLoginAt: Time
-	lastLoginAtGT: Time
-	lastLoginAtGTE: Time
-	lastLoginAtLT: Time
-	lastLoginAtLTE: Time
-	lastLoginAtIsNil: Boolean
-	lastLoginAtNotNil: Boolean
-	"""
-	first_seen_at field predicates
-	"""
-	firstSeenAt: Time
-	firstSeenAtGT: Time
-	firstSeenAtGTE: Time
-	firstSeenAtLT: Time
-	firstSeenAtLTE: Time
-	firstSeenAtIsNil: Boolean
-	firstSeenAtNotNil: Boolean
-	"""
-	last_seen_at field predicates
-	"""
-	lastSeenAt: Time
-	lastSeenAtGT: Time
-	lastSeenAtGTE: Time
-	lastSeenAtLT: Time
-	lastSeenAtLTE: Time
-	lastSeenAtIsNil: Boolean
-	lastSeenAtNotNil: Boolean
-	"""
 	added_at field predicates
 	"""
 	addedAt: Time
@@ -21411,14 +21341,6 @@ type DirectoryGroup implements Node {
 	member count reported by the directory
 	"""
 	memberCount: Int
-	"""
-	time this group was first observed by Openlane from directory ingest
-	"""
-	firstSeenAt: Time
-	"""
-	time this group was most recently confirmed by directory ingest
-	"""
-	lastSeenAt: Time
 	"""
 	provider-reported time the group was added or provisioned in the source directory
 	"""
@@ -22024,26 +21946,6 @@ input DirectoryGroupWhereInput {
 	memberCountIsNil: Boolean
 	memberCountNotNil: Boolean
 	"""
-	first_seen_at field predicates
-	"""
-	firstSeenAt: Time
-	firstSeenAtGT: Time
-	firstSeenAtGTE: Time
-	firstSeenAtLT: Time
-	firstSeenAtLTE: Time
-	firstSeenAtIsNil: Boolean
-	firstSeenAtNotNil: Boolean
-	"""
-	last_seen_at field predicates
-	"""
-	lastSeenAt: Time
-	lastSeenAtGT: Time
-	lastSeenAtGTE: Time
-	lastSeenAtLT: Time
-	lastSeenAtLTE: Time
-	lastSeenAtIsNil: Boolean
-	lastSeenAtNotNil: Boolean
-	"""
 	added_at field predicates
 	"""
 	addedAt: Time
@@ -22231,14 +22133,6 @@ type DirectoryMembership implements Node {
 	directory source label set by the integration (e.g. googleworkspace, github, slack)
 	"""
 	directoryName: String
-	"""
-	first time the membership was detected
-	"""
-	firstSeenAt: Time
-	"""
-	most recent time the membership was confirmed by directory ingest
-	"""
-	lastSeenAt: Time
 	"""
 	provider-reported time the membership was added in the source directory
 	"""
@@ -22684,26 +22578,6 @@ input DirectoryMembershipWhereInput {
 	directoryNameNotNil: Boolean
 	directoryNameEqualFold: String
 	directoryNameContainsFold: String
-	"""
-	first_seen_at field predicates
-	"""
-	firstSeenAt: Time
-	firstSeenAtGT: Time
-	firstSeenAtGTE: Time
-	firstSeenAtLT: Time
-	firstSeenAtLTE: Time
-	firstSeenAtIsNil: Boolean
-	firstSeenAtNotNil: Boolean
-	"""
-	last_seen_at field predicates
-	"""
-	lastSeenAt: Time
-	lastSeenAtGT: Time
-	lastSeenAtGTE: Time
-	lastSeenAtLT: Time
-	lastSeenAtLTE: Time
-	lastSeenAtIsNil: Boolean
-	lastSeenAtNotNil: Boolean
 	"""
 	added_at field predicates
 	"""
@@ -88146,21 +88020,6 @@ input UpdateDirectoryAccountInput {
 	lastSeenIP: String
 	clearLastSeenIP: Boolean
 	"""
-	timestamp of the most recent login reported by the provider
-	"""
-	lastLoginAt: Time
-	clearLastLoginAt: Boolean
-	"""
-	time this account was first observed by Openlane from directory ingest
-	"""
-	firstSeenAt: Time
-	clearFirstSeenAt: Boolean
-	"""
-	time this account was most recently confirmed by directory ingest
-	"""
-	lastSeenAt: Time
-	clearLastSeenAt: Boolean
-	"""
 	provider-reported time the account was added or provisioned in the source directory
 	"""
 	addedAt: Time
@@ -88289,16 +88148,6 @@ input UpdateDirectoryGroupInput {
 	memberCount: Int
 	clearMemberCount: Boolean
 	"""
-	time this group was first observed by Openlane from directory ingest
-	"""
-	firstSeenAt: Time
-	clearFirstSeenAt: Boolean
-	"""
-	time this group was most recently confirmed by directory ingest
-	"""
-	lastSeenAt: Time
-	clearLastSeenAt: Boolean
-	"""
 	provider-reported time the group was added or provisioned in the source directory
 	"""
 	addedAt: Time
@@ -88397,16 +88246,6 @@ input UpdateDirectoryMembershipInput {
 	"""
 	directoryName: String
 	clearDirectoryName: Boolean
-	"""
-	first time the membership was detected
-	"""
-	firstSeenAt: Time
-	clearFirstSeenAt: Boolean
-	"""
-	most recent time the membership was confirmed by directory ingest
-	"""
-	lastSeenAt: Time
-	clearLastSeenAt: Boolean
 	"""
 	provider-reported time the membership was added in the source directory
 	"""

@@ -485,7 +485,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 	}
 
 	if operation.IngestHandle != nil {
-		if err := r.EnsureInstallationInstance(ctx, integration); err != nil {
+		if err := r.EnsureInstallationConverted(ctx, integration); err != nil {
 			return nil, operations.IngestResult{}, err
 		}
 
@@ -696,6 +696,17 @@ func (r *Runtime) PurgeInstallationJobs(ctx context.Context, integrationID strin
 	return purged, nil
 }
 
+// PurgeInstallationIngestJobs removes every queued per-record ingest job bound to the installation
+// and returns how many were purged, leaving its operation-context jobs in place
+func (r *Runtime) PurgeInstallationIngestJobs(ctx context.Context, integrationID string) (int, error) {
+	fragment, err := installationIngestJobFragment(integrationID)
+	if err != nil {
+		return 0, err
+	}
+
+	return r.Gala().PurgeActiveJobsWithMetadata(ctx, fragment)
+}
+
 // installationJobFragments builds the JSONB containment fragments matching every job family
 // bound to one installation
 func installationJobFragments(integrationID string) ([]string, error) {
@@ -704,12 +715,18 @@ func installationJobFragments(integrationID string) ([]string, error) {
 		return nil, err
 	}
 
-	ingestJobs, err := types.PropertiesFragment(map[string]string{"integration_id": integrationID})
+	ingestJobs, err := installationIngestJobFragment(integrationID)
 	if err != nil {
 		return nil, err
 	}
 
 	return []string{operationJobs, ingestJobs}, nil
+}
+
+// installationIngestJobFragment builds the JSONB containment fragment matching the per-record
+// ingest jobs bound to one installation
+func installationIngestJobFragment(integrationID string) (string, error) {
+	return types.PropertiesFragment(map[string]string{"integration_id": integrationID})
 }
 
 // resolveOperationClient resolves the client for an operation. When integration

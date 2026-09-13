@@ -63,13 +63,12 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:                directorySyncOperation.Name(),
-					Description:         "Collect Authentik directory users, groups, and memberships as directory accounts",
-					Topic:               definitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:           authentikClient.ID(),
-					ConfigSchema:        directorySyncSchema,
-					Policy:              types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					SkipDefaultLookback: true,
+					Name:         directorySyncOperation.Name(),
+					Description:  "Collect Authentik directory users, groups, and memberships as directory accounts",
+					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
+					ClientRef:    authentikClient.ID(),
+					ConfigSchema: directorySyncSchema,
+					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,

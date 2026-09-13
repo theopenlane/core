@@ -190,29 +190,6 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Comment("last IP address observed by the provider, if any").
 			Optional().
 			Nillable(),
-		field.Time("last_login_at").
-			Comment("timestamp of the most recent login reported by the provider").
-			Optional().
-			Nillable().
-			Annotations(
-				entx.IntegrationMappingField().Volatile(),
-			),
-		field.Time("first_seen_at").
-			Comment("time this account was first observed by Openlane from directory ingest").
-			Default(time.Now).
-			Optional().
-			Nillable().
-			Annotations(
-				entx.IntegrationMappingField(),
-			),
-		field.Time("last_seen_at").
-			Comment("time this account was most recently confirmed by directory ingest").
-			Optional().
-			Nillable().
-			Annotations(
-				entx.IntegrationMappingField().Volatile(),
-				entx.SeenAt(),
-			),
 		field.Time("added_at").
 			Comment("provider-reported time the account was added or provisioned in the source directory").
 			Optional().

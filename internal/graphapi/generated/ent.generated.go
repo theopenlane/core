@@ -74249,75 +74249,6 @@ func (ec *executionContext) fieldContext_DirectoryAccount_lastSeenIP(_ context.C
 	return graphql.NewScalarFieldContext("DirectoryAccount", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
-func (ec *executionContext) _DirectoryAccount_lastLoginAt(ctx context.Context, field graphql.CollectedField, obj *generated.DirectoryAccount) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_DirectoryAccount_lastLoginAt(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.LastLoginAt, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
-			return ec.marshalOTime2ᚖtimeᚐTime(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_DirectoryAccount_lastLoginAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("DirectoryAccount", field, false, false, errors.New("field of type Time does not have child fields"))
-}
-
-func (ec *executionContext) _DirectoryAccount_firstSeenAt(ctx context.Context, field graphql.CollectedField, obj *generated.DirectoryAccount) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_DirectoryAccount_firstSeenAt(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.FirstSeenAt, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
-			return ec.marshalOTime2ᚖtimeᚐTime(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_DirectoryAccount_firstSeenAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("DirectoryAccount", field, false, false, errors.New("field of type Time does not have child fields"))
-}
-
-func (ec *executionContext) _DirectoryAccount_lastSeenAt(ctx context.Context, field graphql.CollectedField, obj *generated.DirectoryAccount) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_DirectoryAccount_lastSeenAt(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.LastSeenAt, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
-			return ec.marshalOTime2ᚖtimeᚐTime(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_DirectoryAccount_lastSeenAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("DirectoryAccount", field, false, false, errors.New("field of type Time does not have child fields"))
-}
-
 func (ec *executionContext) _DirectoryAccount_addedAt(ctx context.Context, field graphql.CollectedField, obj *generated.DirectoryAccount) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -75732,52 +75663,6 @@ func (ec *executionContext) fieldContext_DirectoryGroup_memberCount(_ context.Co
 	return graphql.NewScalarFieldContext("DirectoryGroup", field, false, false, errors.New("field of type Int does not have child fields"))
 }
 
-func (ec *executionContext) _DirectoryGroup_firstSeenAt(ctx context.Context, field graphql.CollectedField, obj *generated.DirectoryGroup) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_DirectoryGroup_firstSeenAt(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.FirstSeenAt, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
-			return ec.marshalOTime2ᚖtimeᚐTime(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_DirectoryGroup_firstSeenAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("DirectoryGroup", field, false, false, errors.New("field of type Time does not have child fields"))
-}
-
-func (ec *executionContext) _DirectoryGroup_lastSeenAt(ctx context.Context, field graphql.CollectedField, obj *generated.DirectoryGroup) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_DirectoryGroup_lastSeenAt(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.LastSeenAt, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
-			return ec.marshalOTime2ᚖtimeᚐTime(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_DirectoryGroup_lastSeenAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("DirectoryGroup", field, false, false, errors.New("field of type Time does not have child fields"))
-}
-
 func (ec *executionContext) _DirectoryGroup_addedAt(ctx context.Context, field graphql.CollectedField, obj *generated.DirectoryGroup) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -76990,52 +76875,6 @@ func (ec *executionContext) _DirectoryMembership_directoryName(ctx context.Conte
 }
 func (ec *executionContext) fieldContext_DirectoryMembership_directoryName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("DirectoryMembership", field, false, false, errors.New("field of type String does not have child fields"))
-}
-
-func (ec *executionContext) _DirectoryMembership_firstSeenAt(ctx context.Context, field graphql.CollectedField, obj *generated.DirectoryMembership) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_DirectoryMembership_firstSeenAt(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.FirstSeenAt, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
-			return ec.marshalOTime2ᚖtimeᚐTime(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_DirectoryMembership_firstSeenAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("DirectoryMembership", field, false, false, errors.New("field of type Time does not have child fields"))
-}
-
-func (ec *executionContext) _DirectoryMembership_lastSeenAt(ctx context.Context, field graphql.CollectedField, obj *generated.DirectoryMembership) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_DirectoryMembership_lastSeenAt(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.LastSeenAt, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
-			return ec.marshalOTime2ᚖtimeᚐTime(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_DirectoryMembership_lastSeenAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("DirectoryMembership", field, false, false, errors.New("field of type Time does not have child fields"))
 }
 
 func (ec *executionContext) _DirectoryMembership_addedAt(ctx context.Context, field graphql.CollectedField, obj *generated.DirectoryMembership) (ret graphql.Marshaler) {
@@ -207792,7 +207631,7 @@ func (ec *executionContext) unmarshalInputCreateDirectoryAccountInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "environmentName", "scopeName", "directoryName", "externalID", "secondaryKey", "canonicalEmail", "emailAliases", "phoneNumber", "displayName", "avatarRemoteURL", "avatarUpdatedAt", "givenName", "familyName", "jobTitle", "department", "organizationUnit", "accountType", "status", "mfaState", "lastSeenIP", "lastLoginAt", "firstSeenAt", "lastSeenAt", "addedAt", "removedAt", "observedAt", "profile", "metadata", "sourceVersion", "primarySource", "integrationRunIDs", "ownerID", "environmentID", "scopeID", "integrationID", "platformID", "identityHolderID", "avatarFileID", "findingIDs", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"tags", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "environmentName", "scopeName", "directoryName", "externalID", "secondaryKey", "canonicalEmail", "emailAliases", "phoneNumber", "displayName", "avatarRemoteURL", "avatarUpdatedAt", "givenName", "familyName", "jobTitle", "department", "organizationUnit", "accountType", "status", "mfaState", "lastSeenIP", "addedAt", "removedAt", "observedAt", "profile", "metadata", "sourceVersion", "primarySource", "integrationRunIDs", "ownerID", "environmentID", "scopeID", "integrationID", "platformID", "identityHolderID", "avatarFileID", "findingIDs", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -207981,27 +207820,6 @@ func (ec *executionContext) unmarshalInputCreateDirectoryAccountInput(ctx contex
 				return it, err
 			}
 			it.LastSeenIP = data
-		case "lastLoginAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastLoginAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastLoginAt = data
-		case "firstSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAt = data
-		case "lastSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAt = data
 		case "addedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addedAt"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
@@ -208137,7 +207955,7 @@ func (ec *executionContext) unmarshalInputCreateDirectoryGroupInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "environmentName", "scopeName", "externalID", "email", "displayName", "description", "classification", "status", "externalSharingAllowed", "memberCount", "firstSeenAt", "lastSeenAt", "addedAt", "removedAt", "observedAt", "profile", "metadata", "sourceVersion", "directoryName", "integrationRunIDs", "ownerID", "environmentID", "scopeID", "integrationID", "platformID", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"tags", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "environmentName", "scopeName", "externalID", "email", "displayName", "description", "classification", "status", "externalSharingAllowed", "memberCount", "addedAt", "removedAt", "observedAt", "profile", "metadata", "sourceVersion", "directoryName", "integrationRunIDs", "ownerID", "environmentID", "scopeID", "integrationID", "platformID", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -208256,20 +208074,6 @@ func (ec *executionContext) unmarshalInputCreateDirectoryGroupInput(ctx context.
 				return it, err
 			}
 			it.MemberCount = data
-		case "firstSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAt = data
-		case "lastSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAt = data
 		case "addedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addedAt"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
@@ -208384,7 +208188,7 @@ func (ec *executionContext) unmarshalInputCreateDirectoryMembershipInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "environmentName", "scopeName", "role", "source", "directoryName", "firstSeenAt", "lastSeenAt", "addedAt", "removedAt", "observedAt", "metadata", "integrationRunIDs", "ownerID", "environmentID", "scopeID", "integrationID", "platformID", "directoryAccountID", "directoryGroupID", "eventIDs", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "environmentName", "scopeName", "role", "source", "directoryName", "addedAt", "removedAt", "observedAt", "metadata", "integrationRunIDs", "ownerID", "environmentID", "scopeID", "integrationID", "platformID", "directoryAccountID", "directoryGroupID", "eventIDs", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -208461,20 +208265,6 @@ func (ec *executionContext) unmarshalInputCreateDirectoryMembershipInput(ctx con
 				return it, err
 			}
 			it.DirectoryName = data
-		case "firstSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAt = data
-		case "lastSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAt = data
 		case "addedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addedAt"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
@@ -226703,7 +226493,7 @@ func (ec *executionContext) unmarshalInputDirectoryAccountWhereInput(ctx context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "platformID", "platformIDNEQ", "platformIDIn", "platformIDNotIn", "platformIDContains", "platformIDHasPrefix", "platformIDHasSuffix", "platformIDIsNil", "platformIDNotNil", "platformIDEqualFold", "platformIDContainsFold", "identityHolderID", "identityHolderIDNEQ", "identityHolderIDIn", "identityHolderIDNotIn", "identityHolderIDContains", "identityHolderIDHasPrefix", "identityHolderIDHasSuffix", "identityHolderIDIsNil", "identityHolderIDNotNil", "identityHolderIDEqualFold", "identityHolderIDContainsFold", "directoryName", "directoryNameNEQ", "directoryNameIn", "directoryNameNotIn", "directoryNameContains", "directoryNameHasPrefix", "directoryNameHasSuffix", "directoryNameIsNil", "directoryNameNotNil", "directoryNameEqualFold", "directoryNameContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDEqualFold", "externalIDContainsFold", "secondaryKey", "secondaryKeyNEQ", "secondaryKeyIn", "secondaryKeyNotIn", "secondaryKeyContains", "secondaryKeyHasPrefix", "secondaryKeyHasSuffix", "secondaryKeyIsNil", "secondaryKeyNotNil", "secondaryKeyEqualFold", "secondaryKeyContainsFold", "canonicalEmail", "canonicalEmailNEQ", "canonicalEmailIn", "canonicalEmailNotIn", "canonicalEmailContains", "canonicalEmailHasPrefix", "canonicalEmailHasSuffix", "canonicalEmailIsNil", "canonicalEmailNotNil", "canonicalEmailEqualFold", "canonicalEmailContainsFold", "phoneNumber", "phoneNumberNEQ", "phoneNumberIn", "phoneNumberNotIn", "phoneNumberContains", "phoneNumberHasPrefix", "phoneNumberHasSuffix", "phoneNumberIsNil", "phoneNumberNotNil", "phoneNumberEqualFold", "phoneNumberContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "avatarLocalFileID", "avatarLocalFileIDNEQ", "avatarLocalFileIDIn", "avatarLocalFileIDNotIn", "avatarLocalFileIDContains", "avatarLocalFileIDHasPrefix", "avatarLocalFileIDHasSuffix", "avatarLocalFileIDIsNil", "avatarLocalFileIDNotNil", "avatarLocalFileIDEqualFold", "avatarLocalFileIDContainsFold", "avatarUpdatedAt", "avatarUpdatedAtGT", "avatarUpdatedAtGTE", "avatarUpdatedAtLT", "avatarUpdatedAtLTE", "avatarUpdatedAtIsNil", "avatarUpdatedAtNotNil", "givenName", "givenNameNEQ", "givenNameIn", "givenNameNotIn", "givenNameContains", "givenNameHasPrefix", "givenNameHasSuffix", "givenNameIsNil", "givenNameNotNil", "givenNameEqualFold", "givenNameContainsFold", "familyName", "familyNameNEQ", "familyNameIn", "familyNameNotIn", "familyNameContains", "familyNameHasPrefix", "familyNameHasSuffix", "familyNameIsNil", "familyNameNotNil", "familyNameEqualFold", "familyNameContainsFold", "jobTitle", "jobTitleNEQ", "jobTitleIn", "jobTitleNotIn", "jobTitleContains", "jobTitleHasPrefix", "jobTitleHasSuffix", "jobTitleIsNil", "jobTitleNotNil", "jobTitleEqualFold", "jobTitleContainsFold", "department", "departmentNEQ", "departmentIn", "departmentNotIn", "departmentContains", "departmentHasPrefix", "departmentHasSuffix", "departmentIsNil", "departmentNotNil", "departmentEqualFold", "departmentContainsFold", "organizationUnit", "organizationUnitNEQ", "organizationUnitIn", "organizationUnitNotIn", "organizationUnitContains", "organizationUnitHasPrefix", "organizationUnitHasSuffix", "organizationUnitIsNil", "organizationUnitNotNil", "organizationUnitEqualFold", "organizationUnitContainsFold", "accountType", "accountTypeNEQ", "accountTypeIn", "accountTypeNotIn", "accountTypeIsNil", "accountTypeNotNil", "status", "statusNEQ", "statusIn", "statusNotIn", "mfaState", "mfaStateNEQ", "mfaStateIn", "mfaStateNotIn", "lastSeenIP", "lastSeenIPNEQ", "lastSeenIPIn", "lastSeenIPNotIn", "lastSeenIPContains", "lastSeenIPHasPrefix", "lastSeenIPHasSuffix", "lastSeenIPIsNil", "lastSeenIPNotNil", "lastSeenIPEqualFold", "lastSeenIPContainsFold", "lastLoginAt", "lastLoginAtGT", "lastLoginAtGTE", "lastLoginAtLT", "lastLoginAtLTE", "lastLoginAtIsNil", "lastLoginAtNotNil", "firstSeenAt", "firstSeenAtGT", "firstSeenAtGTE", "firstSeenAtLT", "firstSeenAtLTE", "firstSeenAtIsNil", "firstSeenAtNotNil", "lastSeenAt", "lastSeenAtGT", "lastSeenAtGTE", "lastSeenAtLT", "lastSeenAtLTE", "lastSeenAtIsNil", "lastSeenAtNotNil", "addedAt", "addedAtGT", "addedAtGTE", "addedAtLT", "addedAtLTE", "addedAtIsNil", "addedAtNotNil", "removedAt", "removedAtGT", "removedAtGTE", "removedAtLT", "removedAtLTE", "removedAtIsNil", "removedAtNotNil", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "sourceVersion", "sourceVersionNEQ", "sourceVersionIn", "sourceVersionNotIn", "sourceVersionContains", "sourceVersionHasPrefix", "sourceVersionHasSuffix", "sourceVersionIsNil", "sourceVersionNotNil", "sourceVersionEqualFold", "sourceVersionContainsFold", "primarySource", "primarySourceNEQ", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasIntegration", "hasIntegrationWith", "hasPlatform", "hasPlatformWith", "hasIdentityHolder", "hasIdentityHolderWith", "hasAvatarFile", "hasAvatarFileWith", "hasGroups", "hasGroupsWith", "hasFindings", "hasFindingsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasMemberships", "hasMembershipsWith", "tagsHas", "emailAliasesHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "platformID", "platformIDNEQ", "platformIDIn", "platformIDNotIn", "platformIDContains", "platformIDHasPrefix", "platformIDHasSuffix", "platformIDIsNil", "platformIDNotNil", "platformIDEqualFold", "platformIDContainsFold", "identityHolderID", "identityHolderIDNEQ", "identityHolderIDIn", "identityHolderIDNotIn", "identityHolderIDContains", "identityHolderIDHasPrefix", "identityHolderIDHasSuffix", "identityHolderIDIsNil", "identityHolderIDNotNil", "identityHolderIDEqualFold", "identityHolderIDContainsFold", "directoryName", "directoryNameNEQ", "directoryNameIn", "directoryNameNotIn", "directoryNameContains", "directoryNameHasPrefix", "directoryNameHasSuffix", "directoryNameIsNil", "directoryNameNotNil", "directoryNameEqualFold", "directoryNameContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDEqualFold", "externalIDContainsFold", "secondaryKey", "secondaryKeyNEQ", "secondaryKeyIn", "secondaryKeyNotIn", "secondaryKeyContains", "secondaryKeyHasPrefix", "secondaryKeyHasSuffix", "secondaryKeyIsNil", "secondaryKeyNotNil", "secondaryKeyEqualFold", "secondaryKeyContainsFold", "canonicalEmail", "canonicalEmailNEQ", "canonicalEmailIn", "canonicalEmailNotIn", "canonicalEmailContains", "canonicalEmailHasPrefix", "canonicalEmailHasSuffix", "canonicalEmailIsNil", "canonicalEmailNotNil", "canonicalEmailEqualFold", "canonicalEmailContainsFold", "phoneNumber", "phoneNumberNEQ", "phoneNumberIn", "phoneNumberNotIn", "phoneNumberContains", "phoneNumberHasPrefix", "phoneNumberHasSuffix", "phoneNumberIsNil", "phoneNumberNotNil", "phoneNumberEqualFold", "phoneNumberContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "avatarLocalFileID", "avatarLocalFileIDNEQ", "avatarLocalFileIDIn", "avatarLocalFileIDNotIn", "avatarLocalFileIDContains", "avatarLocalFileIDHasPrefix", "avatarLocalFileIDHasSuffix", "avatarLocalFileIDIsNil", "avatarLocalFileIDNotNil", "avatarLocalFileIDEqualFold", "avatarLocalFileIDContainsFold", "avatarUpdatedAt", "avatarUpdatedAtGT", "avatarUpdatedAtGTE", "avatarUpdatedAtLT", "avatarUpdatedAtLTE", "avatarUpdatedAtIsNil", "avatarUpdatedAtNotNil", "givenName", "givenNameNEQ", "givenNameIn", "givenNameNotIn", "givenNameContains", "givenNameHasPrefix", "givenNameHasSuffix", "givenNameIsNil", "givenNameNotNil", "givenNameEqualFold", "givenNameContainsFold", "familyName", "familyNameNEQ", "familyNameIn", "familyNameNotIn", "familyNameContains", "familyNameHasPrefix", "familyNameHasSuffix", "familyNameIsNil", "familyNameNotNil", "familyNameEqualFold", "familyNameContainsFold", "jobTitle", "jobTitleNEQ", "jobTitleIn", "jobTitleNotIn", "jobTitleContains", "jobTitleHasPrefix", "jobTitleHasSuffix", "jobTitleIsNil", "jobTitleNotNil", "jobTitleEqualFold", "jobTitleContainsFold", "department", "departmentNEQ", "departmentIn", "departmentNotIn", "departmentContains", "departmentHasPrefix", "departmentHasSuffix", "departmentIsNil", "departmentNotNil", "departmentEqualFold", "departmentContainsFold", "organizationUnit", "organizationUnitNEQ", "organizationUnitIn", "organizationUnitNotIn", "organizationUnitContains", "organizationUnitHasPrefix", "organizationUnitHasSuffix", "organizationUnitIsNil", "organizationUnitNotNil", "organizationUnitEqualFold", "organizationUnitContainsFold", "accountType", "accountTypeNEQ", "accountTypeIn", "accountTypeNotIn", "accountTypeIsNil", "accountTypeNotNil", "status", "statusNEQ", "statusIn", "statusNotIn", "mfaState", "mfaStateNEQ", "mfaStateIn", "mfaStateNotIn", "lastSeenIP", "lastSeenIPNEQ", "lastSeenIPIn", "lastSeenIPNotIn", "lastSeenIPContains", "lastSeenIPHasPrefix", "lastSeenIPHasSuffix", "lastSeenIPIsNil", "lastSeenIPNotNil", "lastSeenIPEqualFold", "lastSeenIPContainsFold", "addedAt", "addedAtGT", "addedAtGTE", "addedAtLT", "addedAtLTE", "addedAtIsNil", "addedAtNotNil", "removedAt", "removedAtGT", "removedAtGTE", "removedAtLT", "removedAtLTE", "removedAtIsNil", "removedAtNotNil", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "sourceVersion", "sourceVersionNEQ", "sourceVersionIn", "sourceVersionNotIn", "sourceVersionContains", "sourceVersionHasPrefix", "sourceVersionHasSuffix", "sourceVersionIsNil", "sourceVersionNotNil", "sourceVersionEqualFold", "sourceVersionContainsFold", "primarySource", "primarySourceNEQ", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasIntegration", "hasIntegrationWith", "hasPlatform", "hasPlatformWith", "hasIdentityHolder", "hasIdentityHolderWith", "hasAvatarFile", "hasAvatarFileWith", "hasGroups", "hasGroupsWith", "hasFindings", "hasFindingsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasMemberships", "hasMembershipsWith", "tagsHas", "emailAliasesHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -229377,153 +229167,6 @@ func (ec *executionContext) unmarshalInputDirectoryAccountWhereInput(ctx context
 				return it, err
 			}
 			it.LastSeenIPContainsFold = data
-		case "lastLoginAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastLoginAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastLoginAt = data
-		case "lastLoginAtGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastLoginAtGT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastLoginAtGT = data
-		case "lastLoginAtGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastLoginAtGTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastLoginAtGTE = data
-		case "lastLoginAtLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastLoginAtLT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastLoginAtLT = data
-		case "lastLoginAtLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastLoginAtLTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastLoginAtLTE = data
-		case "lastLoginAtIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastLoginAtIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastLoginAtIsNil = data
-		case "lastLoginAtNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastLoginAtNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastLoginAtNotNil = data
-		case "firstSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAt = data
-		case "firstSeenAtGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtGT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtGT = data
-		case "firstSeenAtGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtGTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtGTE = data
-		case "firstSeenAtLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtLT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtLT = data
-		case "firstSeenAtLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtLTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtLTE = data
-		case "firstSeenAtIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtIsNil = data
-		case "firstSeenAtNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtNotNil = data
-		case "lastSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAt = data
-		case "lastSeenAtGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtGT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtGT = data
-		case "lastSeenAtGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtGTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtGTE = data
-		case "lastSeenAtLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtLT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtLT = data
-		case "lastSeenAtLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtLTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtLTE = data
-		case "lastSeenAtIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtIsNil = data
-		case "lastSeenAtNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtNotNil = data
 		case "addedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addedAt"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
@@ -229987,7 +229630,7 @@ func (ec *executionContext) unmarshalInputDirectoryGroupWhereInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDEqualFold", "integrationIDContainsFold", "platformID", "platformIDNEQ", "platformIDIn", "platformIDNotIn", "platformIDContains", "platformIDHasPrefix", "platformIDHasSuffix", "platformIDIsNil", "platformIDNotNil", "platformIDEqualFold", "platformIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDEqualFold", "externalIDContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailIsNil", "emailNotNil", "emailEqualFold", "emailContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "classification", "classificationNEQ", "classificationIn", "classificationNotIn", "status", "statusNEQ", "statusIn", "statusNotIn", "externalSharingAllowed", "externalSharingAllowedNEQ", "externalSharingAllowedIsNil", "externalSharingAllowedNotNil", "memberCount", "memberCountNEQ", "memberCountGT", "memberCountGTE", "memberCountLT", "memberCountLTE", "memberCountIsNil", "memberCountNotNil", "firstSeenAt", "firstSeenAtGT", "firstSeenAtGTE", "firstSeenAtLT", "firstSeenAtLTE", "firstSeenAtIsNil", "firstSeenAtNotNil", "lastSeenAt", "lastSeenAtGT", "lastSeenAtGTE", "lastSeenAtLT", "lastSeenAtLTE", "lastSeenAtIsNil", "lastSeenAtNotNil", "addedAt", "addedAtGT", "addedAtGTE", "addedAtLT", "addedAtLTE", "addedAtIsNil", "addedAtNotNil", "removedAt", "removedAtGT", "removedAtGTE", "removedAtLT", "removedAtLTE", "removedAtIsNil", "removedAtNotNil", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "sourceVersion", "sourceVersionNEQ", "sourceVersionIn", "sourceVersionNotIn", "sourceVersionContains", "sourceVersionHasPrefix", "sourceVersionHasSuffix", "sourceVersionIsNil", "sourceVersionNotNil", "sourceVersionEqualFold", "sourceVersionContainsFold", "directoryName", "directoryNameNEQ", "directoryNameIn", "directoryNameNotIn", "directoryNameContains", "directoryNameHasPrefix", "directoryNameHasSuffix", "directoryNameIsNil", "directoryNameNotNil", "directoryNameEqualFold", "directoryNameContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasIntegration", "hasIntegrationWith", "hasPlatform", "hasPlatformWith", "hasAccounts", "hasAccountsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasMembers", "hasMembersWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDEqualFold", "integrationIDContainsFold", "platformID", "platformIDNEQ", "platformIDIn", "platformIDNotIn", "platformIDContains", "platformIDHasPrefix", "platformIDHasSuffix", "platformIDIsNil", "platformIDNotNil", "platformIDEqualFold", "platformIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDEqualFold", "externalIDContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailIsNil", "emailNotNil", "emailEqualFold", "emailContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "classification", "classificationNEQ", "classificationIn", "classificationNotIn", "status", "statusNEQ", "statusIn", "statusNotIn", "externalSharingAllowed", "externalSharingAllowedNEQ", "externalSharingAllowedIsNil", "externalSharingAllowedNotNil", "memberCount", "memberCountNEQ", "memberCountGT", "memberCountGTE", "memberCountLT", "memberCountLTE", "memberCountIsNil", "memberCountNotNil", "addedAt", "addedAtGT", "addedAtGTE", "addedAtLT", "addedAtLTE", "addedAtIsNil", "addedAtNotNil", "removedAt", "removedAtGT", "removedAtGTE", "removedAtLT", "removedAtLTE", "removedAtIsNil", "removedAtNotNil", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "sourceVersion", "sourceVersionNEQ", "sourceVersionIn", "sourceVersionNotIn", "sourceVersionContains", "sourceVersionHasPrefix", "sourceVersionHasSuffix", "sourceVersionIsNil", "sourceVersionNotNil", "sourceVersionEqualFold", "sourceVersionContainsFold", "directoryName", "directoryNameNEQ", "directoryNameIn", "directoryNameNotIn", "directoryNameContains", "directoryNameHasPrefix", "directoryNameHasSuffix", "directoryNameIsNil", "directoryNameNotNil", "directoryNameEqualFold", "directoryNameContainsFold", "hasIntegrationRuns", "hasIntegrationRunsWith", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasIntegration", "hasIntegrationWith", "hasPlatform", "hasPlatformWith", "hasAccounts", "hasAccountsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasMembers", "hasMembersWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -231716,104 +231359,6 @@ func (ec *executionContext) unmarshalInputDirectoryGroupWhereInput(ctx context.C
 				return it, err
 			}
 			it.MemberCountNotNil = data
-		case "firstSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAt = data
-		case "firstSeenAtGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtGT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtGT = data
-		case "firstSeenAtGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtGTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtGTE = data
-		case "firstSeenAtLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtLT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtLT = data
-		case "firstSeenAtLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtLTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtLTE = data
-		case "firstSeenAtIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtIsNil = data
-		case "firstSeenAtNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtNotNil = data
-		case "lastSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAt = data
-		case "lastSeenAtGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtGT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtGT = data
-		case "lastSeenAtGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtGTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtGTE = data
-		case "lastSeenAtLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtLT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtLT = data
-		case "lastSeenAtLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtLTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtLTE = data
-		case "lastSeenAtIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtIsNil = data
-		case "lastSeenAtNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtNotNil = data
 		case "addedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addedAt"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
@@ -232291,7 +231836,7 @@ func (ec *executionContext) unmarshalInputDirectoryMembershipWhereInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "role", "roleNEQ", "roleIn", "roleNotIn", "roleIsNil", "roleNotNil", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "directoryName", "directoryNameNEQ", "directoryNameIn", "directoryNameNotIn", "directoryNameContains", "directoryNameHasPrefix", "directoryNameHasSuffix", "directoryNameIsNil", "directoryNameNotNil", "directoryNameEqualFold", "directoryNameContainsFold", "firstSeenAt", "firstSeenAtGT", "firstSeenAtGTE", "firstSeenAtLT", "firstSeenAtLTE", "firstSeenAtIsNil", "firstSeenAtNotNil", "lastSeenAt", "lastSeenAtGT", "lastSeenAtGTE", "lastSeenAtLT", "lastSeenAtLTE", "lastSeenAtIsNil", "lastSeenAtNotNil", "addedAt", "addedAtGT", "addedAtGTE", "addedAtLT", "addedAtLTE", "addedAtIsNil", "addedAtNotNil", "removedAt", "removedAtGT", "removedAtGTE", "removedAtLT", "removedAtLTE", "removedAtIsNil", "removedAtNotNil", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "sourceDefinitionID", "sourceDefinitionIDNEQ", "sourceDefinitionIDIn", "sourceDefinitionIDNotIn", "sourceDefinitionIDContains", "sourceDefinitionIDHasPrefix", "sourceDefinitionIDHasSuffix", "sourceDefinitionIDIsNil", "sourceDefinitionIDNotNil", "sourceDefinitionIDEqualFold", "sourceDefinitionIDContainsFold", "sourceDefinitionVersion", "sourceDefinitionVersionNEQ", "sourceDefinitionVersionIn", "sourceDefinitionVersionNotIn", "sourceDefinitionVersionContains", "sourceDefinitionVersionHasPrefix", "sourceDefinitionVersionHasSuffix", "sourceDefinitionVersionIsNil", "sourceDefinitionVersionNotNil", "sourceDefinitionVersionEqualFold", "sourceDefinitionVersionContainsFold", "sourceInstanceID", "sourceInstanceIDNEQ", "sourceInstanceIDIn", "sourceInstanceIDNotIn", "sourceInstanceIDContains", "sourceInstanceIDHasPrefix", "sourceInstanceIDHasSuffix", "sourceInstanceIDIsNil", "sourceInstanceIDNotNil", "sourceInstanceIDEqualFold", "sourceInstanceIDContainsFold", "managedBy", "managedByNEQ", "managedByIn", "managedByNotIn", "managedByContains", "managedByHasPrefix", "managedByHasSuffix", "managedByIsNil", "managedByNotNil", "managedByEqualFold", "managedByContainsFold", "integrationRunID", "integrationRunIDNEQ", "integrationRunIDIn", "integrationRunIDNotIn", "integrationRunIDContains", "integrationRunIDHasPrefix", "integrationRunIDHasSuffix", "integrationRunIDIsNil", "integrationRunIDNotNil", "integrationRunIDEqualFold", "integrationRunIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "role", "roleNEQ", "roleIn", "roleNotIn", "roleIsNil", "roleNotNil", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "directoryName", "directoryNameNEQ", "directoryNameIn", "directoryNameNotIn", "directoryNameContains", "directoryNameHasPrefix", "directoryNameHasSuffix", "directoryNameIsNil", "directoryNameNotNil", "directoryNameEqualFold", "directoryNameContainsFold", "addedAt", "addedAtGT", "addedAtGTE", "addedAtLT", "addedAtLTE", "addedAtIsNil", "addedAtNotNil", "removedAt", "removedAtGT", "removedAtGTE", "removedAtLT", "removedAtLTE", "removedAtIsNil", "removedAtNotNil", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -233488,104 +233033,6 @@ func (ec *executionContext) unmarshalInputDirectoryMembershipWhereInput(ctx cont
 				return it, err
 			}
 			it.DirectoryNameContainsFold = data
-		case "firstSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAt = data
-		case "firstSeenAtGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtGT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtGT = data
-		case "firstSeenAtGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtGTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtGTE = data
-		case "firstSeenAtLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtLT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtLT = data
-		case "firstSeenAtLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtLTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtLTE = data
-		case "firstSeenAtIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtIsNil = data
-		case "firstSeenAtNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAtNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAtNotNil = data
-		case "lastSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAt = data
-		case "lastSeenAtGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtGT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtGT = data
-		case "lastSeenAtGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtGTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtGTE = data
-		case "lastSeenAtLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtLT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtLT = data
-		case "lastSeenAtLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtLTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtLTE = data
-		case "lastSeenAtIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtIsNil = data
-		case "lastSeenAtNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAtNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAtNotNil = data
 		case "addedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addedAt"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
@@ -337832,7 +337279,7 @@ func (ec *executionContext) unmarshalInputUpdateDirectoryAccountInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "directoryName", "clearDirectoryName", "secondaryKey", "clearSecondaryKey", "canonicalEmail", "clearCanonicalEmail", "emailAliases", "appendEmailAliases", "clearEmailAliases", "phoneNumber", "clearPhoneNumber", "displayName", "clearDisplayName", "avatarRemoteURL", "clearAvatarRemoteURL", "avatarUpdatedAt", "clearAvatarUpdatedAt", "givenName", "clearGivenName", "familyName", "clearFamilyName", "jobTitle", "clearJobTitle", "department", "clearDepartment", "organizationUnit", "clearOrganizationUnit", "accountType", "clearAccountType", "status", "mfaState", "lastSeenIP", "clearLastSeenIP", "lastLoginAt", "clearLastLoginAt", "firstSeenAt", "clearFirstSeenAt", "lastSeenAt", "clearLastSeenAt", "addedAt", "clearAddedAt", "removedAt", "clearRemovedAt", "profile", "clearProfile", "metadata", "clearMetadata", "sourceVersion", "clearSourceVersion", "primarySource", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "environmentID", "clearEnvironment", "scopeID", "clearScope", "integrationID", "clearIntegration", "identityHolderID", "clearIdentityHolder", "avatarFileID", "clearAvatarFile", "addFindingIDs", "removeFindingIDs", "clearFindings", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "directoryName", "clearDirectoryName", "secondaryKey", "clearSecondaryKey", "canonicalEmail", "clearCanonicalEmail", "emailAliases", "appendEmailAliases", "clearEmailAliases", "phoneNumber", "clearPhoneNumber", "displayName", "clearDisplayName", "avatarRemoteURL", "clearAvatarRemoteURL", "avatarUpdatedAt", "clearAvatarUpdatedAt", "givenName", "clearGivenName", "familyName", "clearFamilyName", "jobTitle", "clearJobTitle", "department", "clearDepartment", "organizationUnit", "clearOrganizationUnit", "accountType", "clearAccountType", "status", "mfaState", "lastSeenIP", "clearLastSeenIP", "addedAt", "clearAddedAt", "removedAt", "clearRemovedAt", "profile", "clearProfile", "metadata", "clearMetadata", "sourceVersion", "clearSourceVersion", "primarySource", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "environmentID", "clearEnvironment", "scopeID", "clearScope", "integrationID", "clearIntegration", "identityHolderID", "clearIdentityHolder", "avatarFileID", "clearAvatarFile", "addFindingIDs", "removeFindingIDs", "clearFindings", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -338189,48 +337636,6 @@ func (ec *executionContext) unmarshalInputUpdateDirectoryAccountInput(ctx contex
 				return it, err
 			}
 			it.ClearLastSeenIP = data
-		case "lastLoginAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastLoginAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastLoginAt = data
-		case "clearLastLoginAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLastLoginAt"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearLastLoginAt = data
-		case "firstSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAt = data
-		case "clearFirstSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearFirstSeenAt"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearFirstSeenAt = data
-		case "lastSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAt = data
-		case "clearLastSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLastSeenAt"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearLastSeenAt = data
 		case "addedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addedAt"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
@@ -338457,7 +337862,7 @@ func (ec *executionContext) unmarshalInputUpdateDirectoryGroupInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "email", "clearEmail", "displayName", "clearDisplayName", "description", "clearDescription", "classification", "status", "externalSharingAllowed", "clearExternalSharingAllowed", "memberCount", "clearMemberCount", "firstSeenAt", "clearFirstSeenAt", "lastSeenAt", "clearLastSeenAt", "addedAt", "clearAddedAt", "removedAt", "clearRemovedAt", "profile", "clearProfile", "metadata", "clearMetadata", "sourceVersion", "clearSourceVersion", "directoryName", "clearDirectoryName", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "ownerID", "clearOwner", "environmentID", "clearEnvironment", "scopeID", "clearScope", "integrationID", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "email", "clearEmail", "displayName", "clearDisplayName", "description", "clearDescription", "classification", "status", "externalSharingAllowed", "clearExternalSharingAllowed", "memberCount", "clearMemberCount", "addedAt", "clearAddedAt", "removedAt", "clearRemovedAt", "profile", "clearProfile", "metadata", "clearMetadata", "sourceVersion", "clearSourceVersion", "directoryName", "clearDirectoryName", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "ownerID", "clearOwner", "environmentID", "clearEnvironment", "scopeID", "clearScope", "integrationID", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -338667,34 +338072,6 @@ func (ec *executionContext) unmarshalInputUpdateDirectoryGroupInput(ctx context.
 				return it, err
 			}
 			it.ClearMemberCount = data
-		case "firstSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAt = data
-		case "clearFirstSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearFirstSeenAt"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearFirstSeenAt = data
-		case "lastSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAt = data
-		case "clearLastSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLastSeenAt"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearLastSeenAt = data
 		case "addedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addedAt"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
@@ -338886,7 +338263,7 @@ func (ec *executionContext) unmarshalInputUpdateDirectoryMembershipInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "role", "clearRole", "source", "clearSource", "directoryName", "clearDirectoryName", "firstSeenAt", "clearFirstSeenAt", "lastSeenAt", "clearLastSeenAt", "addedAt", "clearAddedAt", "removedAt", "clearRemovedAt", "metadata", "clearMetadata", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "ownerID", "clearOwner", "environmentID", "clearEnvironment", "scopeID", "clearScope", "integrationID", "addEventIDs", "removeEventIDs", "clearEvents", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
+	fieldsInOrder := [...]string{"sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "role", "clearRole", "source", "clearSource", "directoryName", "clearDirectoryName", "addedAt", "clearAddedAt", "removedAt", "clearRemovedAt", "metadata", "clearMetadata", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "ownerID", "clearOwner", "environmentID", "clearEnvironment", "scopeID", "clearScope", "integrationID", "addEventIDs", "removeEventIDs", "clearEvents", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -339033,34 +338410,6 @@ func (ec *executionContext) unmarshalInputUpdateDirectoryMembershipInput(ctx con
 				return it, err
 			}
 			it.ClearDirectoryName = data
-		case "firstSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FirstSeenAt = data
-		case "clearFirstSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearFirstSeenAt"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearFirstSeenAt = data
-		case "lastSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastSeenAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.LastSeenAt = data
-		case "clearLastSeenAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearLastSeenAt"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearLastSeenAt = data
 		case "addedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addedAt"))
 			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
@@ -402092,21 +401441,6 @@ func (ec *executionContext) _DirectoryAccount(ctx context.Context, sel ast.Selec
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
-		case "lastLoginAt":
-			out.Values[i] = ec._DirectoryAccount_lastLoginAt(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "firstSeenAt":
-			out.Values[i] = ec._DirectoryAccount_firstSeenAt(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "lastSeenAt":
-			out.Values[i] = ec._DirectoryAccount_lastSeenAt(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
 		case "addedAt":
 			out.Values[i] = ec._DirectoryAccount_addedAt(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -402867,16 +402201,6 @@ func (ec *executionContext) _DirectoryGroup(ctx context.Context, sel ast.Selecti
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
-		case "firstSeenAt":
-			out.Values[i] = ec._DirectoryGroup_firstSeenAt(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "lastSeenAt":
-			out.Values[i] = ec._DirectoryGroup_lastSeenAt(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
 		case "addedAt":
 			out.Values[i] = ec._DirectoryGroup_addedAt(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -403500,16 +402824,6 @@ func (ec *executionContext) _DirectoryMembership(ctx context.Context, sel ast.Se
 			}
 		case "directoryName":
 			out.Values[i] = ec._DirectoryMembership_directoryName(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "firstSeenAt":
-			out.Values[i] = ec._DirectoryMembership_firstSeenAt(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "lastSeenAt":
-			out.Values[i] = ec._DirectoryMembership_lastSeenAt(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}

@@ -195,11 +195,9 @@ func TestDirectorySyncIngestUnchangedFieldGate(t *testing.T) {
 
 		da := directoryAccountByExternalID(ctx, t, "dirhash-acct-1")
 		assert.Check(t, is.Equal("800-867-5309", lo.FromPtr(da.PhoneNumber)))
-		assert.Check(t, da.FirstSeenAt != nil)
-		assert.Check(t, da.LastSeenAt == nil, "create stamps first seen only; last seen arrives with the next confirming sync")
 	})
 
-	t.Run("unchanged re-ingest advances last seen without emitting events", func(t *testing.T) {
+	t.Run("unchanged re-ingest does not emit events", func(t *testing.T) {
 		before := directoryAccountByExternalID(ctx, t, "dirhash-acct-1")
 
 		result := ingestDirectoryPayloads(ctx, t, integration, entityops.SchemaDirectoryAccount.Name, accountPayload)
@@ -213,7 +211,6 @@ func TestDirectorySyncIngestUnchangedFieldGate(t *testing.T) {
 		after := directoryAccountByExternalID(ctx, t, "dirhash-acct-1")
 		assert.Check(t, is.Equal(before.DisplayName, after.DisplayName))
 		assert.Check(t, is.DeepEqual(before.Profile, after.Profile), "an unchanged payload must not rewrite the stored profile")
-		assert.Check(t, after.LastSeenAt != nil, "the vetoed bookkeeping write must still confirm the sighting")
 	})
 
 	t.Run("changed payload updates the row and emits an update", func(t *testing.T) {
@@ -260,7 +257,6 @@ func TestDirectorySyncIngestUnchangedFieldGate(t *testing.T) {
 		unchanged := directoryGroupByExternalID(ctx, t, "dirhash-grp-1")
 		assert.Check(t, is.Equal(before.DisplayName, unchanged.DisplayName))
 		assert.Check(t, is.DeepEqual(before.Profile, unchanged.Profile), "an unchanged group must not rewrite the stored profile")
-		assert.Check(t, unchanged.LastSeenAt != nil, "the vetoed bookkeeping write must still confirm the sighting")
 
 		changed := `{"external_id":"dirhash-grp-1","display_name":"Hash Group Two","profile":{"id":"dirhash-grp-1","rev":2}}`
 		result = ingestDirectoryPayloads(ctx, t, integration, entityops.SchemaDirectoryGroup.Name, changed)

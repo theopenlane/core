@@ -77,10 +77,6 @@ type DirectoryGroup struct {
 	ExternalSharingAllowed bool `json:"external_sharing_allowed,omitempty"`
 	// member count reported by the directory
 	MemberCount int `json:"member_count,omitempty"`
-	// time this group was first observed by Openlane from directory ingest
-	FirstSeenAt *time.Time `json:"first_seen_at,omitempty"`
-	// time this group was most recently confirmed by directory ingest
-	LastSeenAt *time.Time `json:"last_seen_at,omitempty"`
 	// provider-reported time the group was added or provisioned in the source directory
 	AddedAt *time.Time `json:"added_at,omitempty"`
 	// provider-reported or locally-recorded time the group was removed from the source directory
@@ -239,7 +235,7 @@ func (*DirectoryGroup) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case directorygroup.FieldID, directorygroup.FieldCreatedBy, directorygroup.FieldUpdatedBy, directorygroup.FieldUpdatedByImpersonator, directorygroup.FieldDisplayID, directorygroup.FieldSourceDefinitionID, directorygroup.FieldSourceDefinitionVersion, directorygroup.FieldSourceInstanceID, directorygroup.FieldManagedBy, directorygroup.FieldIntegrationRunID, directorygroup.FieldOwnerID, directorygroup.FieldEnvironmentName, directorygroup.FieldEnvironmentID, directorygroup.FieldScopeName, directorygroup.FieldScopeID, directorygroup.FieldIntegrationID, directorygroup.FieldPlatformID, directorygroup.FieldExternalID, directorygroup.FieldEmail, directorygroup.FieldDisplayName, directorygroup.FieldDescription, directorygroup.FieldClassification, directorygroup.FieldStatus, directorygroup.FieldRawProfileFileID, directorygroup.FieldSourceVersion, directorygroup.FieldDirectoryName:
 			values[i] = new(sql.NullString)
-		case directorygroup.FieldCreatedAt, directorygroup.FieldUpdatedAt, directorygroup.FieldFirstSeenAt, directorygroup.FieldLastSeenAt, directorygroup.FieldAddedAt, directorygroup.FieldRemovedAt, directorygroup.FieldObservedAt:
+		case directorygroup.FieldCreatedAt, directorygroup.FieldUpdatedAt, directorygroup.FieldAddedAt, directorygroup.FieldRemovedAt, directorygroup.FieldObservedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -428,20 +424,6 @@ func (_m *DirectoryGroup) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field member_count", values[i])
 			} else if value.Valid {
 				_m.MemberCount = int(value.Int64)
-			}
-		case directorygroup.FieldFirstSeenAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field first_seen_at", values[i])
-			} else if value.Valid {
-				_m.FirstSeenAt = new(time.Time)
-				*_m.FirstSeenAt = value.Time
-			}
-		case directorygroup.FieldLastSeenAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field last_seen_at", values[i])
-			} else if value.Valid {
-				_m.LastSeenAt = new(time.Time)
-				*_m.LastSeenAt = value.Time
 			}
 		case directorygroup.FieldAddedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -667,16 +649,6 @@ func (_m *DirectoryGroup) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("member_count=")
 	builder.WriteString(fmt.Sprintf("%v", _m.MemberCount))
-	builder.WriteString(", ")
-	if v := _m.FirstSeenAt; v != nil {
-		builder.WriteString("first_seen_at=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
-	builder.WriteString(", ")
-	if v := _m.LastSeenAt; v != nil {
-		builder.WriteString("last_seen_at=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
 	builder.WriteString(", ")
 	if v := _m.AddedAt; v != nil {
 		builder.WriteString("added_at=")

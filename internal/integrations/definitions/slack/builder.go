@@ -152,7 +152,6 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
-					SkipDefaultLookback: true,
 					RequiredPermissions: scopes,
 					Disabled:            providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
 					ConfigResolver:      providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),

@@ -72,10 +72,6 @@ const (
 	FieldExternalSharingAllowed = "external_sharing_allowed"
 	// FieldMemberCount holds the string denoting the member_count field in the database.
 	FieldMemberCount = "member_count"
-	// FieldFirstSeenAt holds the string denoting the first_seen_at field in the database.
-	FieldFirstSeenAt = "first_seen_at"
-	// FieldLastSeenAt holds the string denoting the last_seen_at field in the database.
-	FieldLastSeenAt = "last_seen_at"
 	// FieldAddedAt holds the string denoting the added_at field in the database.
 	FieldAddedAt = "added_at"
 	// FieldRemovedAt holds the string denoting the removed_at field in the database.
@@ -203,8 +199,6 @@ var Columns = []string{
 	FieldStatus,
 	FieldExternalSharingAllowed,
 	FieldMemberCount,
-	FieldFirstSeenAt,
-	FieldLastSeenAt,
 	FieldAddedAt,
 	FieldRemovedAt,
 	FieldObservedAt,
@@ -265,8 +259,6 @@ var (
 	EmailValidator func(string) error
 	// DefaultExternalSharingAllowed holds the default value on creation for the "external_sharing_allowed" field.
 	DefaultExternalSharingAllowed bool
-	// DefaultFirstSeenAt holds the default value on creation for the "first_seen_at" field.
-	DefaultFirstSeenAt func() time.Time
 	// DefaultObservedAt holds the default value on creation for the "observed_at" field.
 	DefaultObservedAt func() time.Time
 	// DefaultID holds the default value on creation for the "id" field.
@@ -433,16 +425,6 @@ func ByExternalSharingAllowed(opts ...sql.OrderTermOption) OrderOption {
 // ByMemberCount orders the results by the member_count field.
 func ByMemberCount(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMemberCount, opts...).ToFunc()
-}
-
-// ByFirstSeenAt orders the results by the first_seen_at field.
-func ByFirstSeenAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldFirstSeenAt, opts...).ToFunc()
-}
-
-// ByLastSeenAt orders the results by the last_seen_at field.
-func ByLastSeenAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLastSeenAt, opts...).ToFunc()
 }
 
 // ByAddedAt orders the results by the added_at field.

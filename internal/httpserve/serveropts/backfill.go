@@ -133,12 +133,11 @@ var backfillRoutines = []backfillRoutine{
 		},
 	},
 	{
-		Name:    "integration-provenance",
+		Name:    "ingest-batching",
 		Version: "v1",
 		Enabled: true,
-		Repeat:  true,
 		Run: func(ctx context.Context, deps backfillDeps) error {
-			backfillIntegrationProvenance(ctx, deps.Client, deps.Runtime)
+			backfillIngestBatching(ctx, deps.Client, deps.Runtime)
 
 			return nil
 		},
@@ -268,6 +267,38 @@ func backfillReconcileLoops(ctx context.Context, dbClient *ent.Client, rt *runti
 	}
 
 	logx.FromContext(ctx).Info().Int("reset", reset).Int("reviewed", len(installations)).Msg("backfill: reconcile loop reset completed")
+}
+
+// backfillIngestBatching transitions every installation from the fan-out ingest model to the
+// batched model: queued per-record ingest jobs are purged, since the next batched sync re-ingests
+// their records with provenance, and each connected installation's recurring loops are reset to
+// exactly one fresh loop per operation
+func backfillIngestBatching(ctx context.Context, dbClient *ent.Client, rt *runtime.Runtime) {
+	installations, err := dbClient.Integration.Query().All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to query integrations for ingest batching transition")
+
+		return
+	}
+
+	var purged int
+
+	for _, installation := range installations {
+		installCtx := intobvs.WithInstallation(ctx, installation)
+
+		count, err := rt.PurgeInstallationIngestJobs(installCtx, installation.ID)
+		if err != nil {
+			logx.FromContext(installCtx).Error().Err(err).Msg("backfill: failed purging queued per-record ingest jobs")
+
+			continue
+		}
+
+		purged += count
+	}
+
+	logx.FromContext(ctx).Info().Int("purged", purged).Int("reviewed", len(installations)).Msg("backfill: queued per-record ingest jobs purged")
+
+	backfillReconcileLoops(ctx, dbClient, rt)
 }
 
 // backfillIntegrationExpiry stamps expires_at on pending installations created before the

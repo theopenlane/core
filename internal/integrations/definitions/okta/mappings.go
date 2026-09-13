@@ -15,7 +15,6 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.Department.Expr(`'profile' in payload && payload.profile != null && 'department' in payload.profile ? payload.profile.department : ""`),
 	entityops.DirectoryAccountFields.JobTitle.Expr(`'profile' in payload && payload.profile != null && 'title' in payload.profile && payload.profile.title != null ? payload.profile.title : ""`),
 	entityops.DirectoryAccountFields.Status.Expr(`dyn('status' in payload ? (payload.status == "DEPROVISIONED" ? "DELETED" : (payload.status == "SUSPENDED" ? "SUSPENDED" : (payload.status == "STAGED" || payload.status == "PROVISIONED" ? "INACTIVE" : "ACTIVE"))) : "ACTIVE")`),
-	entityops.DirectoryAccountFields.LastLoginAt.Expr(`'lastLogin' in payload && payload.lastLogin != null ? payload.lastLogin : null`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
 	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
 	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),

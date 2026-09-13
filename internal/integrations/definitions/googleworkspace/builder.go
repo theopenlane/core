@@ -22,6 +22,8 @@ var directorySyncScopes = []string{
 // Builder returns the Google Workspace definition builder with the supplied operator config applied
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
+		installation := installationRef(cfg)
+
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),

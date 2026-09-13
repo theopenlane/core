@@ -20,4 +20,6 @@ type RuntimeServices interface {
 	Dispatch(ctx context.Context, req DispatchRequest) (DispatchResult, error)
 	// ReapExpiredInstallation soft-deletes one expired never-connected installation and its credentials, reporting whether it was reaped
 	ReapExpiredInstallation(ctx context.Context, integrationID string) (bool, error)
+	// EnsureInstallationConverted converts every installation in the given installation's organization to the current provenance scheme before it may ingest
+	EnsureInstallationConverted(ctx context.Context, installation *generated.Integration) error
 }

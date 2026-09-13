@@ -15,7 +15,7 @@ import (
 // Builder returns the AWS Security Hub definition builder with the supplied operator config applied
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
-		installation := installationRef(cfg)
+		installation := installationRef()
 
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{

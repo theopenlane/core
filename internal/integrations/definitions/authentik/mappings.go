@@ -13,7 +13,6 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.Status.Expr(`dyn('is_active' in payload ? (payload.is_active ? "ACTIVE" : "INACTIVE") : "INACTIVE")`),
 	entityops.DirectoryAccountFields.AccountType.Expr(`dyn('type' in payload && payload.type != null ? (payload.type == "internal" ? "USER" : (payload.type == "external" ? "GUEST" : (payload.type == "service_account" ? "SERVICE" : (payload.type == "internal_service_account" ? "SERVICE" : "USER")))) : "USER")`),
 	entityops.DirectoryAccountFields.AddedAt.Expr(`'date_joined' in payload ? payload.date_joined : null`),
-	entityops.DirectoryAccountFields.LastSeenAt.Expr(`'last_login' in payload ? payload.last_login : null`),
 	entityops.DirectoryAccountFields.ObservedAt.Expr(`'last_updated' in payload ? payload.last_updated : null`),
 	entityops.DirectoryAccountFields.Metadata.Expr(`'attributes' in payload ? payload.attributes : {}`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),

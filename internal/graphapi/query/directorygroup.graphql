@@ -14,11 +14,9 @@ mutation CreateBulkCSVDirectoryGroup ($input: Upload!) {
 			environmentName
 			externalID
 			externalSharingAllowed
-			firstSeenAt
 			id
 			integrationID
 			integrationRunID
-			lastSeenAt
 			managedBy
 			memberCount
 			metadata
@@ -58,11 +56,9 @@ mutation CreateBulkDirectoryGroup ($input: [CreateDirectoryGroupInput!]) {
 			environmentName
 			externalID
 			externalSharingAllowed
-			firstSeenAt
 			id
 			integrationID
 			integrationRunID
-			lastSeenAt
 			managedBy
 			memberCount
 			metadata
@@ -102,11 +98,9 @@ mutation CreateDirectoryGroup ($input: CreateDirectoryGroupInput!) {
 			environmentName
 			externalID
 			externalSharingAllowed
-			firstSeenAt
 			id
 			integrationID
 			integrationRunID
-			lastSeenAt
 			managedBy
 			memberCount
 			metadata
@@ -186,11 +180,9 @@ query GetDirectoryGroupByID ($directoryGroupId: ID!) {
 		environmentName
 		externalID
 		externalSharingAllowed
-		firstSeenAt
 		id
 		integrationID
 		integrationRunID
-		lastSeenAt
 		managedBy
 		memberCount
 		metadata
@@ -265,11 +257,9 @@ mutation UpdateDirectoryGroup ($updateDirectoryGroupId: ID!, $input: UpdateDirec
 			environmentName
 			externalID
 			externalSharingAllowed
-			firstSeenAt
 			id
 			integrationID
 			integrationRunID
-			lastSeenAt
 			managedBy
 			memberCount
 			metadata

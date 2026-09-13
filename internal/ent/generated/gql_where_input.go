@@ -20517,33 +20517,6 @@ type DirectoryAccountWhereInput struct {
 	LastSeenIPEqualFold    *string  `json:"lastSeenIPEqualFold,omitempty"`
 	LastSeenIPContainsFold *string  `json:"lastSeenIPContainsFold,omitempty"`
 
-	// "last_login_at" field predicates.
-	LastLoginAt       *time.Time `json:"lastLoginAt,omitempty"`
-	LastLoginAtGT     *time.Time `json:"lastLoginAtGT,omitempty"`
-	LastLoginAtGTE    *time.Time `json:"lastLoginAtGTE,omitempty"`
-	LastLoginAtLT     *time.Time `json:"lastLoginAtLT,omitempty"`
-	LastLoginAtLTE    *time.Time `json:"lastLoginAtLTE,omitempty"`
-	LastLoginAtIsNil  bool       `json:"lastLoginAtIsNil,omitempty"`
-	LastLoginAtNotNil bool       `json:"lastLoginAtNotNil,omitempty"`
-
-	// "first_seen_at" field predicates.
-	FirstSeenAt       *time.Time `json:"firstSeenAt,omitempty"`
-	FirstSeenAtGT     *time.Time `json:"firstSeenAtGT,omitempty"`
-	FirstSeenAtGTE    *time.Time `json:"firstSeenAtGTE,omitempty"`
-	FirstSeenAtLT     *time.Time `json:"firstSeenAtLT,omitempty"`
-	FirstSeenAtLTE    *time.Time `json:"firstSeenAtLTE,omitempty"`
-	FirstSeenAtIsNil  bool       `json:"firstSeenAtIsNil,omitempty"`
-	FirstSeenAtNotNil bool       `json:"firstSeenAtNotNil,omitempty"`
-
-	// "last_seen_at" field predicates.
-	LastSeenAt       *time.Time `json:"lastSeenAt,omitempty"`
-	LastSeenAtGT     *time.Time `json:"lastSeenAtGT,omitempty"`
-	LastSeenAtGTE    *time.Time `json:"lastSeenAtGTE,omitempty"`
-	LastSeenAtLT     *time.Time `json:"lastSeenAtLT,omitempty"`
-	LastSeenAtLTE    *time.Time `json:"lastSeenAtLTE,omitempty"`
-	LastSeenAtIsNil  bool       `json:"lastSeenAtIsNil,omitempty"`
-	LastSeenAtNotNil bool       `json:"lastSeenAtNotNil,omitempty"`
-
 	// "added_at" field predicates.
 	AddedAt       *time.Time `json:"addedAt,omitempty"`
 	AddedAtGT     *time.Time `json:"addedAtGT,omitempty"`
@@ -21846,69 +21819,6 @@ func (i *DirectoryAccountWhereInput) P() (predicate.DirectoryAccount, error) {
 	if i.LastSeenIPContainsFold != nil {
 		predicates = append(predicates, directoryaccount.LastSeenIPContainsFold(*i.LastSeenIPContainsFold))
 	}
-	if i.LastLoginAt != nil {
-		predicates = append(predicates, directoryaccount.LastLoginAtEQ(*i.LastLoginAt))
-	}
-	if i.LastLoginAtGT != nil {
-		predicates = append(predicates, directoryaccount.LastLoginAtGT(*i.LastLoginAtGT))
-	}
-	if i.LastLoginAtGTE != nil {
-		predicates = append(predicates, directoryaccount.LastLoginAtGTE(*i.LastLoginAtGTE))
-	}
-	if i.LastLoginAtLT != nil {
-		predicates = append(predicates, directoryaccount.LastLoginAtLT(*i.LastLoginAtLT))
-	}
-	if i.LastLoginAtLTE != nil {
-		predicates = append(predicates, directoryaccount.LastLoginAtLTE(*i.LastLoginAtLTE))
-	}
-	if i.LastLoginAtIsNil {
-		predicates = append(predicates, directoryaccount.LastLoginAtIsNil())
-	}
-	if i.LastLoginAtNotNil {
-		predicates = append(predicates, directoryaccount.LastLoginAtNotNil())
-	}
-	if i.FirstSeenAt != nil {
-		predicates = append(predicates, directoryaccount.FirstSeenAtEQ(*i.FirstSeenAt))
-	}
-	if i.FirstSeenAtGT != nil {
-		predicates = append(predicates, directoryaccount.FirstSeenAtGT(*i.FirstSeenAtGT))
-	}
-	if i.FirstSeenAtGTE != nil {
-		predicates = append(predicates, directoryaccount.FirstSeenAtGTE(*i.FirstSeenAtGTE))
-	}
-	if i.FirstSeenAtLT != nil {
-		predicates = append(predicates, directoryaccount.FirstSeenAtLT(*i.FirstSeenAtLT))
-	}
-	if i.FirstSeenAtLTE != nil {
-		predicates = append(predicates, directoryaccount.FirstSeenAtLTE(*i.FirstSeenAtLTE))
-	}
-	if i.FirstSeenAtIsNil {
-		predicates = append(predicates, directoryaccount.FirstSeenAtIsNil())
-	}
-	if i.FirstSeenAtNotNil {
-		predicates = append(predicates, directoryaccount.FirstSeenAtNotNil())
-	}
-	if i.LastSeenAt != nil {
-		predicates = append(predicates, directoryaccount.LastSeenAtEQ(*i.LastSeenAt))
-	}
-	if i.LastSeenAtGT != nil {
-		predicates = append(predicates, directoryaccount.LastSeenAtGT(*i.LastSeenAtGT))
-	}
-	if i.LastSeenAtGTE != nil {
-		predicates = append(predicates, directoryaccount.LastSeenAtGTE(*i.LastSeenAtGTE))
-	}
-	if i.LastSeenAtLT != nil {
-		predicates = append(predicates, directoryaccount.LastSeenAtLT(*i.LastSeenAtLT))
-	}
-	if i.LastSeenAtLTE != nil {
-		predicates = append(predicates, directoryaccount.LastSeenAtLTE(*i.LastSeenAtLTE))
-	}
-	if i.LastSeenAtIsNil {
-		predicates = append(predicates, directoryaccount.LastSeenAtIsNil())
-	}
-	if i.LastSeenAtNotNil {
-		predicates = append(predicates, directoryaccount.LastSeenAtNotNil())
-	}
 	if i.AddedAt != nil {
 		predicates = append(predicates, directoryaccount.AddedAtEQ(*i.AddedAt))
 	}
@@ -22556,24 +22466,6 @@ type DirectoryGroupWhereInput struct {
 	MemberCountLTE    *int `json:"memberCountLTE,omitempty"`
 	MemberCountIsNil  bool `json:"memberCountIsNil,omitempty"`
 	MemberCountNotNil bool `json:"memberCountNotNil,omitempty"`
-
-	// "first_seen_at" field predicates.
-	FirstSeenAt       *time.Time `json:"firstSeenAt,omitempty"`
-	FirstSeenAtGT     *time.Time `json:"firstSeenAtGT,omitempty"`
-	FirstSeenAtGTE    *time.Time `json:"firstSeenAtGTE,omitempty"`
-	FirstSeenAtLT     *time.Time `json:"firstSeenAtLT,omitempty"`
-	FirstSeenAtLTE    *time.Time `json:"firstSeenAtLTE,omitempty"`
-	FirstSeenAtIsNil  bool       `json:"firstSeenAtIsNil,omitempty"`
-	FirstSeenAtNotNil bool       `json:"firstSeenAtNotNil,omitempty"`
-
-	// "last_seen_at" field predicates.
-	LastSeenAt       *time.Time `json:"lastSeenAt,omitempty"`
-	LastSeenAtGT     *time.Time `json:"lastSeenAtGT,omitempty"`
-	LastSeenAtGTE    *time.Time `json:"lastSeenAtGTE,omitempty"`
-	LastSeenAtLT     *time.Time `json:"lastSeenAtLT,omitempty"`
-	LastSeenAtLTE    *time.Time `json:"lastSeenAtLTE,omitempty"`
-	LastSeenAtIsNil  bool       `json:"lastSeenAtIsNil,omitempty"`
-	LastSeenAtNotNil bool       `json:"lastSeenAtNotNil,omitempty"`
 
 	// "added_at" field predicates.
 	AddedAt       *time.Time `json:"addedAt,omitempty"`
@@ -23466,48 +23358,6 @@ func (i *DirectoryGroupWhereInput) P() (predicate.DirectoryGroup, error) {
 	if i.MemberCountNotNil {
 		predicates = append(predicates, directorygroup.MemberCountNotNil())
 	}
-	if i.FirstSeenAt != nil {
-		predicates = append(predicates, directorygroup.FirstSeenAtEQ(*i.FirstSeenAt))
-	}
-	if i.FirstSeenAtGT != nil {
-		predicates = append(predicates, directorygroup.FirstSeenAtGT(*i.FirstSeenAtGT))
-	}
-	if i.FirstSeenAtGTE != nil {
-		predicates = append(predicates, directorygroup.FirstSeenAtGTE(*i.FirstSeenAtGTE))
-	}
-	if i.FirstSeenAtLT != nil {
-		predicates = append(predicates, directorygroup.FirstSeenAtLT(*i.FirstSeenAtLT))
-	}
-	if i.FirstSeenAtLTE != nil {
-		predicates = append(predicates, directorygroup.FirstSeenAtLTE(*i.FirstSeenAtLTE))
-	}
-	if i.FirstSeenAtIsNil {
-		predicates = append(predicates, directorygroup.FirstSeenAtIsNil())
-	}
-	if i.FirstSeenAtNotNil {
-		predicates = append(predicates, directorygroup.FirstSeenAtNotNil())
-	}
-	if i.LastSeenAt != nil {
-		predicates = append(predicates, directorygroup.LastSeenAtEQ(*i.LastSeenAt))
-	}
-	if i.LastSeenAtGT != nil {
-		predicates = append(predicates, directorygroup.LastSeenAtGT(*i.LastSeenAtGT))
-	}
-	if i.LastSeenAtGTE != nil {
-		predicates = append(predicates, directorygroup.LastSeenAtGTE(*i.LastSeenAtGTE))
-	}
-	if i.LastSeenAtLT != nil {
-		predicates = append(predicates, directorygroup.LastSeenAtLT(*i.LastSeenAtLT))
-	}
-	if i.LastSeenAtLTE != nil {
-		predicates = append(predicates, directorygroup.LastSeenAtLTE(*i.LastSeenAtLTE))
-	}
-	if i.LastSeenAtIsNil {
-		predicates = append(predicates, directorygroup.LastSeenAtIsNil())
-	}
-	if i.LastSeenAtNotNil {
-		predicates = append(predicates, directorygroup.LastSeenAtNotNil())
-	}
 	if i.AddedAt != nil {
 		predicates = append(predicates, directorygroup.AddedAtEQ(*i.AddedAt))
 	}
@@ -24109,24 +23959,6 @@ type DirectoryMembershipWhereInput struct {
 	DirectoryNameNotNil       bool     `json:"directoryNameNotNil,omitempty"`
 	DirectoryNameEqualFold    *string  `json:"directoryNameEqualFold,omitempty"`
 	DirectoryNameContainsFold *string  `json:"directoryNameContainsFold,omitempty"`
-
-	// "first_seen_at" field predicates.
-	FirstSeenAt       *time.Time `json:"firstSeenAt,omitempty"`
-	FirstSeenAtGT     *time.Time `json:"firstSeenAtGT,omitempty"`
-	FirstSeenAtGTE    *time.Time `json:"firstSeenAtGTE,omitempty"`
-	FirstSeenAtLT     *time.Time `json:"firstSeenAtLT,omitempty"`
-	FirstSeenAtLTE    *time.Time `json:"firstSeenAtLTE,omitempty"`
-	FirstSeenAtIsNil  bool       `json:"firstSeenAtIsNil,omitempty"`
-	FirstSeenAtNotNil bool       `json:"firstSeenAtNotNil,omitempty"`
-
-	// "last_seen_at" field predicates.
-	LastSeenAt       *time.Time `json:"lastSeenAt,omitempty"`
-	LastSeenAtGT     *time.Time `json:"lastSeenAtGT,omitempty"`
-	LastSeenAtGTE    *time.Time `json:"lastSeenAtGTE,omitempty"`
-	LastSeenAtLT     *time.Time `json:"lastSeenAtLT,omitempty"`
-	LastSeenAtLTE    *time.Time `json:"lastSeenAtLTE,omitempty"`
-	LastSeenAtIsNil  bool       `json:"lastSeenAtIsNil,omitempty"`
-	LastSeenAtNotNil bool       `json:"lastSeenAtNotNil,omitempty"`
 
 	// "added_at" field predicates.
 	AddedAt       *time.Time `json:"addedAt,omitempty"`
@@ -24978,48 +24810,6 @@ func (i *DirectoryMembershipWhereInput) P() (predicate.DirectoryMembership, erro
 	}
 	if i.DirectoryNameContainsFold != nil {
 		predicates = append(predicates, directorymembership.DirectoryNameContainsFold(*i.DirectoryNameContainsFold))
-	}
-	if i.FirstSeenAt != nil {
-		predicates = append(predicates, directorymembership.FirstSeenAtEQ(*i.FirstSeenAt))
-	}
-	if i.FirstSeenAtGT != nil {
-		predicates = append(predicates, directorymembership.FirstSeenAtGT(*i.FirstSeenAtGT))
-	}
-	if i.FirstSeenAtGTE != nil {
-		predicates = append(predicates, directorymembership.FirstSeenAtGTE(*i.FirstSeenAtGTE))
-	}
-	if i.FirstSeenAtLT != nil {
-		predicates = append(predicates, directorymembership.FirstSeenAtLT(*i.FirstSeenAtLT))
-	}
-	if i.FirstSeenAtLTE != nil {
-		predicates = append(predicates, directorymembership.FirstSeenAtLTE(*i.FirstSeenAtLTE))
-	}
-	if i.FirstSeenAtIsNil {
-		predicates = append(predicates, directorymembership.FirstSeenAtIsNil())
-	}
-	if i.FirstSeenAtNotNil {
-		predicates = append(predicates, directorymembership.FirstSeenAtNotNil())
-	}
-	if i.LastSeenAt != nil {
-		predicates = append(predicates, directorymembership.LastSeenAtEQ(*i.LastSeenAt))
-	}
-	if i.LastSeenAtGT != nil {
-		predicates = append(predicates, directorymembership.LastSeenAtGT(*i.LastSeenAtGT))
-	}
-	if i.LastSeenAtGTE != nil {
-		predicates = append(predicates, directorymembership.LastSeenAtGTE(*i.LastSeenAtGTE))
-	}
-	if i.LastSeenAtLT != nil {
-		predicates = append(predicates, directorymembership.LastSeenAtLT(*i.LastSeenAtLT))
-	}
-	if i.LastSeenAtLTE != nil {
-		predicates = append(predicates, directorymembership.LastSeenAtLTE(*i.LastSeenAtLTE))
-	}
-	if i.LastSeenAtIsNil {
-		predicates = append(predicates, directorymembership.LastSeenAtIsNil())
-	}
-	if i.LastSeenAtNotNil {
-		predicates = append(predicates, directorymembership.LastSeenAtNotNil())
 	}
 	if i.AddedAt != nil {
 		predicates = append(predicates, directorymembership.AddedAtEQ(*i.AddedAt))

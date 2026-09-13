@@ -226,7 +226,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 		Webhook:     webhook,
 		Event:       event,
 		Ingest: func(ingestCtx context.Context, payloadSets []types.IngestPayloadSet) error {
-			if err := r.EnsureInstallationInstance(ingestCtx, integration); err != nil {
+			if err := r.EnsureInstallationConverted(ingestCtx, integration); err != nil {
 				return err
 			}
 
