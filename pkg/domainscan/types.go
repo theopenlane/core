@@ -8,6 +8,7 @@ type JSONSchemaProperty struct {
 	Properties  map[string]JSONSchemaProperty `json:"properties,omitempty"`
 	MaxItems    int                           `json:"maxItems,omitempty"`
 	UniqueItems bool                          `json:"uniqueItems,omitempty"`
+	Enum        []string                      `json:"enum,omitempty"`
 }
 
 // JSONSchema is the JSON schema for structured extraction

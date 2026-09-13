@@ -61,6 +61,28 @@ var trustCenterSubpaths = []string{"", "controls", "compliance", "security", "do
 // profile, since details are frequently only mentioned on a dedicated page rather than the homepage itself
 var companyProfileSubpaths = []string{"company", "pricing", "security", "legal", "contact", "about", "features", "platform", "docs", "legal/subprocessors", "subprocessors"}
 
+// complianceSubpaths are the conventional locations for legal and compliance documents. The
+// homepage alone is rarely enough: a company's DPA and subprocessor list usually live only
+// under a legal hub, so extracting from the homepage and nothing else reports them absent
+// for sites that publish them perfectly well
+var complianceSubpaths = []string{
+	"legal",
+	"legal/privacy",
+	"legal/terms",
+	"legal/dpa",
+	"legal/subprocessors",
+	"privacy",
+	"privacy-policy",
+	"terms",
+	"terms-of-service",
+	"dpa",
+	"subprocessors",
+	"security",
+	"trust",
+	"compliance",
+	"cookie-policy",
+}
+
 // Config holds the Cloudflare credentials used for browser rendering and browser-derived enrichment lookups
 type Config struct {
 	// APIToken use to authenticate into with the cloudflare API
@@ -82,9 +104,47 @@ func (c *Config) clientOptions() []option.RequestOption {
 
 // GetComplianceData fetches compliance information from the given domain and, if it can derive one, from a trust.<domain> subdomain as well
 func (c *Config) GetComplianceData(ctx context.Context, domain string) (*CompliancePage, error) {
-	comp, err := c.fetchCompliancePage(ctx, domain)
+	homepage, err := c.fetchCompliancePage(ctx, domain)
 	if err != nil {
 		return nil, err
+	}
+
+	// probe the conventional legal locations too. Each is best-effort: an unreachable or
+	// unrenderable subpath is skipped rather than failing the lookup
+	pages := make([]*CompliancePage, len(complianceSubpaths))
+
+	var g errgroup.Group
+
+	for i, sub := range complianceSubpaths {
+		g.Go(func() error {
+			pageURL, ok := subpathURL(domain, sub)
+			if !ok {
+				return nil
+			}
+
+			resolved, reachable := urlReachable(ctx, pageURL)
+			if !reachable {
+				return nil
+			}
+
+			page, err := c.fetchCompliancePage(ctx, resolved)
+			if err != nil {
+				logx.FromContext(ctx).Debug().Err(err).Str("subpath", sub).Msg("domainscan: compliance subpath failed to render, skipping")
+
+				return nil
+			}
+
+			pages[i] = page
+
+			return nil
+		})
+	}
+
+	_ = g.Wait() // every subpath is best-effort and records its own outcome above
+
+	comp := mergeCompliancePages(append([]*CompliancePage{homepage}, pages...)...)
+	if comp == nil {
+		comp = homepage
 	}
 
 	candidates, ok := trustCenterURLs(domain)
@@ -471,6 +531,7 @@ func buildCompanyProfileSchema() ResponseFormat {
 				"systems": {
 					Type:        "array",
 					Description: "Typically 2-5 distinct technical surfaces that make up the company's own product infrastructure, e.g. a web console/dashboard, public API, mobile app, CLI tool, or storage/database backend. Do NOT include the company's product modules, capabilities, or named marketing features as separate entries (e.g. things like 'Compliance Automation', 'Policy Management', 'Frameworks', 'Trust Center', 'Registry', 'Reporting', or similar named offerings are features within one web console, not separate systems, and must be excluded). A company with a single product should usually yield a single system, not one per feature it markets.",
+					MaxItems:    8,
 					Items: &JSONSchemaProperty{
 						Type:        "object",
 						Description: "A single technical system, not a product module, capability, or marketing feature name",
@@ -513,6 +574,7 @@ func buildCompanyProfileSchema() ResponseFormat {
 				"customers": {
 					Type:        "array",
 					Description: "Named customers, clients, or case study companies mentioned on the website (e.g., in logos, testimonials, or case studies). Only include company or organization names, not individual people.",
+					MaxItems:    30,
 					Items: &JSONSchemaProperty{
 						Type:        "string",
 						Description: "A customer or client company name",
@@ -523,6 +585,7 @@ func buildCompanyProfileSchema() ResponseFormat {
 				"technologies": {
 					Type:        "array",
 					Description: "Third-party SaaS tools, platforms, analytics services, and technology vendors the company itself relies on (e.g., Google Analytics, Salesforce, HubSpot, Cloudflare, Intercom, Stripe, Segment, Zendesk). Canonical vendor names only, no aliases or 'X API' variants, not web standards or protocols, and not the integrations or connectors the company's own product offers to its customers.",
+					MaxItems:    40,
 					Items: &JSONSchemaProperty{
 						Type:        "string",
 						Description: "A technology vendor or SaaS platform name",
@@ -533,6 +596,7 @@ func buildCompanyProfileSchema() ResponseFormat {
 				"provided_services": {
 					Type:        "array",
 					Description: "The services or product categories this company itself provides to its own customers (e.g. compliance automation, payment processing, CRM, email marketing, identity management). This describes what the company sells, not third-party tools it uses internally.",
+					MaxItems:    20,
 					Items: &JSONSchemaProperty{
 						Type:        "string",
 						Description: "A service or product category the company provides",
@@ -545,6 +609,7 @@ func buildCompanyProfileSchema() ResponseFormat {
 				"subdomain_links": {
 					Type:        "array",
 					Description: "URLs found in the page's navigation, footer, or body that point to other subdomains of this same company's domain (e.g. console.<domain>, app.<domain>, docs.<domain>, dashboard.<domain>) — the company's own other products or sections, not third-party vendor links.",
+					MaxItems:    30,
 					Items: &JSONSchemaProperty{
 						Type:        "string",
 						Description: "A URL pointing to another subdomain of this same company's domain",
@@ -576,6 +641,22 @@ func buildCompanyProfileSchema() ResponseFormat {
 }
 
 // buildCompliancePageSchema constructs the JSON schema for compliance page extraction
+// complianceDocumentTypes is the closed set of document types the extraction may return.
+// hasComplianceLink matches against these exactly, so they are constrained at the schema
+// level rather than merely described in a prompt
+var complianceDocumentTypes = []string{
+	"privacy_policy",
+	"terms_of_service",
+	"trust_center",
+	"dpa",
+	"soc2_report",
+	"security",
+	"subprocessors",
+	"gdpr",
+	"cookie_policy",
+	"other",
+}
+
 func buildCompliancePageSchema() ResponseFormat {
 	return ResponseFormat{
 		Type: "json_schema",
@@ -588,7 +669,8 @@ func buildCompliancePageSchema() ResponseFormat {
 				},
 				"page_type": {
 					Type:        "string",
-					Description: "The type of compliance document: privacy_policy, terms_of_service, trust_center, dpa, soc2_report, security, subprocessors, gdpr, cookie_policy, or other",
+					Description: "The type of compliance document this page is",
+					Enum:        complianceDocumentTypes,
 				},
 				"title": {
 					Type:        "string",
@@ -601,6 +683,7 @@ func buildCompliancePageSchema() ResponseFormat {
 				"frameworks": {
 					Type:        "array",
 					Description: "Compliance frameworks or certifications the company claims to have achieved (e.g., SOC 2 Type II, ISO 27001, GDPR, HIPAA, PCI DSS)",
+					MaxItems:    20,
 					Items: &JSONSchemaProperty{
 						Type:        "string",
 						Description: "A compliance framework or certification name",
@@ -617,6 +700,7 @@ func buildCompliancePageSchema() ResponseFormat {
 				"download_links": {
 					Type:        "array",
 					Description: "URLs to downloadable documents or reports found on the page",
+					MaxItems:    30,
 					Items: &JSONSchemaProperty{
 						Type:        "string",
 						Description: "A URL to a downloadable document or report",
@@ -625,6 +709,7 @@ func buildCompliancePageSchema() ResponseFormat {
 				"subprocessors": {
 					Type:        "array",
 					Description: "Names of any subprocessors or third-party vendors listed on the page",
+					MaxItems:    100,
 					Items: &JSONSchemaProperty{
 						Type:        "string",
 						Description: "A subprocessor or third-party vendor name",
@@ -632,6 +717,7 @@ func buildCompliancePageSchema() ResponseFormat {
 				},
 				"controls": {
 					Type:        "array",
+					MaxItems:    40,
 					Description: "Individual, concrete security or operational practices that this specific page actually states the company performs (for example, statements about access control, encryption, monitoring, testing, or training — the exact wording should reflect what's on the page, not a generic list). Do NOT put framework, certification, or compliance-standard names or statements here (e.g., do not include \"SOC 2 Certified\", \"ISO 27001 Certified\", \"HIPAA Compliant\") — those belong only in frameworks and soc2_certified. Return an empty array if the page does not explicitly describe any such practices; do not guess or fill in typical examples.",
 					Items: &JSONSchemaProperty{
 						Type:        "string",
@@ -641,12 +727,17 @@ func buildCompliancePageSchema() ResponseFormat {
 				"compliance_links": {
 					Type:        "array",
 					Description: "URLs to other compliance documents such as privacy policies, terms of service, trust center pages, data processing agreements, or security pages found on this page",
+					MaxItems:    30,
 					Items: &JSONSchemaProperty{
 						Type:        "object",
 						Description: "A single compliance-related link, categorized by document type",
 						Properties: map[string]JSONSchemaProperty{
-							"url":  {Type: "string", Description: "The link target"},
-							"type": {Type: "string", Description: "The type of document the link points to: privacy_policy, terms_of_service, trust_center, dpa, soc2_report, security, subprocessors, gdpr, cookie_policy, or other"},
+							"url": {Type: "string", Description: "The link target"},
+							"type": {
+								Type:        "string",
+								Description: "The type of document the link points to",
+								Enum:        complianceDocumentTypes,
+							},
 						},
 					},
 				},
@@ -669,6 +760,7 @@ func buildTrustCenterPageSchema() ResponseFormat {
 				"frameworks": {
 					Type:        "array",
 					Description: "Compliance frameworks or certifications listed (e.g., SOC 2 Type II, ISO 27001, ISO 42001, GDPR, HIPAA, PCI DSS)",
+					MaxItems:    20,
 					Items: &JSONSchemaProperty{
 						Type:        "string",
 						Description: "A compliance framework or certification name",
@@ -680,6 +772,7 @@ func buildTrustCenterPageSchema() ResponseFormat {
 				},
 				"controls": {
 					Type:        "array",
+					MaxItems:    40,
 					Description: "Individual, concrete security or operational practices that this specific page actually states the company performs (for example, statements about access control, encryption, monitoring, testing, or training — the exact wording should reflect what's on the page, not a generic list). Do NOT put framework, certification, or compliance-standard names or statements here (e.g., do not include \"SOC 2 Certified\", \"ISO 27001 Certified\", \"HIPAA Compliant\") — those belong only in frameworks and soc2_certified. Return an empty array if the page does not explicitly describe any such practices; do not guess or fill in typical examples.",
 					Items: &JSONSchemaProperty{
 						Type:        "string",
@@ -689,6 +782,7 @@ func buildTrustCenterPageSchema() ResponseFormat {
 				"subprocessors": {
 					Type:        "array",
 					Description: "Names of any subprocessors or third-party vendors listed",
+					MaxItems:    100,
 					Items: &JSONSchemaProperty{
 						Type:        "string",
 						Description: "A subprocessor or third-party vendor name",

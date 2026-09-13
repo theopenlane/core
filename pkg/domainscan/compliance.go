@@ -96,3 +96,63 @@ func mergeComplianceLinks(a, b []ComplianceLink) []ComplianceLink {
 
 	return merged
 }
+
+// mergeCompliancePages folds several pages' compliance extractions into one. Later pages fill
+// gaps the earlier ones left rather than overwriting them, so the homepage's summary survives
+// while a dedicated legal page contributes the document links it alone carries
+func mergeCompliancePages(pages ...*CompliancePage) *CompliancePage {
+	merged := &CompliancePage{}
+
+	var any bool
+
+	for _, page := range pages {
+		if page == nil {
+			continue
+		}
+
+		any = true
+
+		if merged.URL == "" {
+			merged.URL = page.URL
+		}
+
+		// the homepage is rarely a compliance document itself, so a more specific page's
+		// classification is the better one to keep
+		if merged.PageType == "" || merged.PageType == "other" {
+			merged.PageType = page.PageType
+		}
+
+		if merged.Title == "" {
+			merged.Title = page.Title
+		}
+
+		if merged.Summary == "" {
+			merged.Summary = page.Summary
+		}
+
+		if merged.LastUpdated == "" {
+			merged.LastUpdated = page.LastUpdated
+		}
+
+		if merged.TrustCenterHostedBy == "" {
+			merged.TrustCenterHostedBy = page.TrustCenterHostedBy
+		}
+
+		if page.SOC2Certified {
+			merged.SOC2Certified = true
+		}
+
+		merged.Frameworks = mergeStrings(merged.Frameworks, page.Frameworks)
+		merged.Controls = mergeStrings(merged.Controls, page.Controls)
+		merged.Subprocessors = mergeStrings(merged.Subprocessors, page.Subprocessors)
+		merged.DownloadLinks = mergeStrings(merged.DownloadLinks, page.DownloadLinks)
+		merged.Documents = mergeTrustDocuments(merged.Documents, page.Documents)
+		merged.ComplianceLinks = mergeComplianceLinks(merged.ComplianceLinks, page.ComplianceLinks)
+	}
+
+	if !any {
+		return nil
+	}
+
+	return merged
+}

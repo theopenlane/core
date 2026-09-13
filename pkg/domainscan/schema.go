@@ -76,6 +76,36 @@ type AgentReadinessFinding struct {
 	Domain string `json:"domain,omitempty"`
 }
 
+// AgentReadinessCheck is one check within Cloudflare's agent-readiness assessment
+type AgentReadinessCheck struct {
+	// Check is the dotted path identifying the check, e.g. "capabilities.mcp"
+	Check string `json:"check"`
+	// Status is the check's outcome as reported by Cloudflare, typically "pass" or "fail"
+	Status string `json:"status"`
+	// Message is the human-readable description of the outcome
+	Message string `json:"message,omitempty"`
+}
+
+// AgentReadinessAssessment is the full structured agent-readiness result for a domain,
+// retained alongside the failure-only AgentReadinessFinding so a score can be derived from
+// the pass ratio rather than inferred from the absence of failures
+type AgentReadinessAssessment struct {
+	// Level is the assessment's score
+	Level int64 `json:"level"`
+	// LevelName is the human-readable name for Level (e.g. "Bot-Aware")
+	LevelName string `json:"level_name,omitempty"`
+	// Reference links to Cloudflare's writeup of what the assessment measures
+	Reference string `json:"reference,omitempty"`
+	// TotalChecks is how many checks reported a status
+	TotalChecks int `json:"total_checks"`
+	// PassedChecks is how many of those checks passed
+	PassedChecks int `json:"passed_checks"`
+	// FailedChecks is how many of those checks failed
+	FailedChecks int `json:"failed_checks"`
+	// Checks are every check that reported a status, ordered by check path
+	Checks []AgentReadinessCheck `json:"checks,omitempty"`
+}
+
 // Findings is the findings section of a scan report
 type Findings struct {
 	// SecurityViolations are the scan's overall verdict categories
@@ -176,6 +206,11 @@ type Compliance struct {
 	TrustCenterHostedBy string `json:"trust_center_hosted_by,omitempty"`
 	// Documents lists compliance documents found on a trust center
 	Documents []TrustDocument `json:"documents,omitempty"`
+	// PageType categorizes the compliance page that was analyzed (e.g. privacy_policy, trust_center)
+	PageType string `json:"page_type,omitempty"`
+	// Links are the typed compliance document links found on the site. Unlike Documents,
+	// whose Name is a free-text title, each link carries a machine-readable Type
+	Links []ComplianceLink `json:"links,omitempty"`
 }
 
 // Favicon is the scanned site's favicon
@@ -234,6 +269,12 @@ type ScanReport struct {
 	Systems []SystemEntry `json:"systems,omitempty"`
 	// Compliance is the company's compliance posture gathered by the domainscan enrichment
 	Compliance *Compliance `json:"compliance,omitempty"`
+	// WellKnown is the well-known file and transport security posture probed directly at the domain
+	WellKnown *WellKnown `json:"well_known,omitempty"`
+	// AgentReadiness is the full structured agent-readiness assessment, present even when every check passed
+	AgentReadiness *AgentReadinessAssessment `json:"agent_readiness,omitempty"`
+	// EmailAuth is the domain's SPF, DKIM and DMARC posture
+	EmailAuth *EmailAuth `json:"email_auth,omitempty"`
 }
 
 // Report is the JSON-schema-described payload attached to a domain scan completion Notification.
@@ -261,6 +302,13 @@ type Report struct {
 	Systems []SystemEntry `json:"systems,omitempty"`
 	// Compliance is the first non-empty compliance section found across completed domains
 	Compliance *Compliance `json:"compliance,omitempty"`
+	// WellKnown is the first non-empty well-known section found across completed domains,
+	// which for a parent-plus-subdomain submission is the parent's
+	WellKnown *WellKnown `json:"well_known,omitempty"`
+	// AgentReadiness is the first non-empty agent-readiness assessment found across completed domains
+	AgentReadiness *AgentReadinessAssessment `json:"agent_readiness,omitempty"`
+	// EmailAuth is the first non-empty email authentication section found across completed domains
+	EmailAuth *EmailAuth `json:"email_auth,omitempty"`
 }
 
 // Result is one domain's outcome within a DomainScanReport

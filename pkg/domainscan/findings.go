@@ -116,18 +116,44 @@ func buildAgentReadinessChecklistMarkdown(failedChecks []map[string]any) string 
 	return strings.Join(items, "\n")
 }
 
-// walkAgentReadinessChecks recursively descends a generic agent-readiness check result
+// agentReadinessStatusFail is the status Cloudflare reports for a check that did not pass
+const agentReadinessStatusFail = "fail"
+
+// agentReadinessStatusPass is the status Cloudflare reports for a check that passed
+const agentReadinessStatusPass = "pass"
+
+// walkAgentReadinessChecks recursively descends a generic agent-readiness check result,
+// appending the failing checks in the legacy map form used to render the markdown checklist
 func walkAgentReadinessChecks(node map[string]any, path string, failedChecks *[]map[string]any) {
+	var checks []AgentReadinessCheck
+
+	collectAgentReadinessChecks(node, path, &checks)
+
+	for _, check := range checks {
+		if check.Status != agentReadinessStatusFail {
+			continue
+		}
+
+		*failedChecks = append(*failedChecks, map[string]any{
+			"check":   check.Check,
+			"message": check.Message,
+		})
+	}
+}
+
+// collectAgentReadinessChecks recursively descends a generic agent-readiness check result,
+// appending every leaf that reports a status. A leaf is a node carrying both a status and a
+// message; everything else is treated as a container and descended into
+func collectAgentReadinessChecks(node map[string]any, path string, checks *[]AgentReadinessCheck) {
 	status, hasStatus := node["status"].(string)
 	message, hasMessage := node["message"].(string)
 
 	if hasStatus && hasMessage {
-		if status == "fail" {
-			*failedChecks = append(*failedChecks, map[string]any{
-				"check":   path,
-				"message": message,
-			})
-		}
+		*checks = append(*checks, AgentReadinessCheck{
+			Check:   path,
+			Status:  status,
+			Message: message,
+		})
 
 		return
 	}
@@ -143,6 +169,55 @@ func walkAgentReadinessChecks(node map[string]any, path string, failedChecks *[]
 			childPath = path + "." + key
 		}
 
-		walkAgentReadinessChecks(child, childPath, failedChecks)
+		collectAgentReadinessChecks(child, childPath, checks)
 	}
+}
+
+// buildAgentReadinessAssessment reports the full agent-readiness assessment, including the
+// checks that passed. Unlike buildAgentReadinessFindings this returns a result for a domain
+// with no failures at all, so a perfect score is distinguishable from a missing assessment
+func buildAgentReadinessAssessment(processor url_scanner.ScanGetResponseMetaProcessorsAgentReadiness) *AgentReadinessAssessment {
+	raw := processor.JSON.RawJSON()
+	if raw == "" {
+		return nil
+	}
+
+	var parsed struct {
+		Level     int64          `json:"level"`
+		LevelName string         `json:"levelName"`
+		Checks    map[string]any `json:"checks"`
+	}
+
+	if err := json.Unmarshal([]byte(raw), &parsed); err != nil || len(parsed.Checks) == 0 {
+		return nil
+	}
+
+	var checks []AgentReadinessCheck
+
+	collectAgentReadinessChecks(parsed.Checks, "", &checks)
+
+	if len(checks) == 0 {
+		return nil
+	}
+
+	sort.Slice(checks, func(i, j int) bool { return checks[i].Check < checks[j].Check })
+
+	assessment := &AgentReadinessAssessment{
+		Level:       parsed.Level,
+		LevelName:   parsed.LevelName,
+		Reference:   agentReadinessReferenceURL,
+		TotalChecks: len(checks),
+		Checks:      checks,
+	}
+
+	for _, check := range checks {
+		switch check.Status {
+		case agentReadinessStatusPass:
+			assessment.PassedChecks++
+		case agentReadinessStatusFail:
+			assessment.FailedChecks++
+		}
+	}
+
+	return assessment
 }

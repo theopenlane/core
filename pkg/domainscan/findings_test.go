@@ -86,3 +86,69 @@ func TestWalkAgentReadinessChecks(t *testing.T) {
 
 	assert.Check(t, is.DeepEqual(want, failedChecks))
 }
+
+func TestCollectAgentReadinessChecks(t *testing.T) {
+	node := map[string]any{
+		"discoverability": map[string]any{
+			"robots": map[string]any{
+				"status":  "pass",
+				"message": "robots.txt present",
+			},
+			"sitemap": map[string]any{
+				"status":  "fail",
+				"message": "no sitemap.xml",
+			},
+		},
+		"capabilities": map[string]any{
+			"mcp": map[string]any{
+				"status":  "fail",
+				"message": "no MCP server card",
+			},
+		},
+		"notACheck": "ignored scalar",
+	}
+
+	var checks []AgentReadinessCheck
+
+	collectAgentReadinessChecks(node, "", &checks)
+
+	sort.Slice(checks, func(i, j int) bool { return checks[i].Check < checks[j].Check })
+
+	want := []AgentReadinessCheck{
+		{Check: "capabilities.mcp", Status: "fail", Message: "no MCP server card"},
+		{Check: "discoverability.robots", Status: "pass", Message: "robots.txt present"},
+		{Check: "discoverability.sitemap", Status: "fail", Message: "no sitemap.xml"},
+	}
+
+	assert.DeepEqual(t, checks, want)
+}
+
+func TestCollectAgentReadinessChecksIgnoresIncompleteLeaves(t *testing.T) {
+	node := map[string]any{
+		"statusOnly":  map[string]any{"status": "pass"},
+		"messageOnly": map[string]any{"message": "orphan"},
+		"real":        map[string]any{"status": "fail", "message": "a real check"},
+	}
+
+	var checks []AgentReadinessCheck
+
+	collectAgentReadinessChecks(node, "", &checks)
+
+	assert.Equal(t, len(checks), 1)
+	assert.Equal(t, checks[0].Check, "real")
+}
+
+func TestWalkAgentReadinessChecksStillReportsOnlyFailures(t *testing.T) {
+	node := map[string]any{
+		"a": map[string]any{"status": "pass", "message": "fine"},
+		"b": map[string]any{"status": "fail", "message": "broken"},
+	}
+
+	var failedChecks []map[string]any
+
+	walkAgentReadinessChecks(node, "", &failedChecks)
+
+	assert.Equal(t, len(failedChecks), 1)
+	assert.Equal(t, failedChecks[0]["check"], "b")
+	assert.Equal(t, failedChecks[0]["message"], "broken")
+}
