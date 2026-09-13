@@ -30,6 +30,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/errcode"
+	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 	"github.com/vmihailenco/msgpack/v5"
 )
@@ -670,7 +671,8 @@ func ({{ $r }} *{{ $name }}) ToEdge(order *{{ $order }}) *{{ $edge }} {
 	{{- /* Ensure the "edges" field is marshaled as "[]" in case it is empty. */}}
 	conn := &{{ $conn }}{Edges: []*{{ $edge }}{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	{{- /* pageInfo alone does not need the count; conn.build() derives hasNext/hasPrevious from the overfetched row */}}
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := {{ $r }}.Clone()
@@ -679,8 +681,6 @@ func ({{ $r }} *{{ $name }}) ToEdge(order *{{ $order }}) *{{ $edge }} {
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 		{{- /* TotalCount will be settled by conn.build() */}}
 	}
@@ -690,20 +690,46 @@ func ({{ $r }} *{{ $name }}) ToEdge(order *{{ $order }}) *{{ $edge }} {
 	if {{ $r }}, err = pager.applyCursors({{ $r }}, after, before); err != nil {
 		return nil, err
 	}
-	limit := {{ if $node.Annotations.OPENLANE_SKIP_FGA_OVERFETCH.enabled }}paginateLimitSingle{{ else }}paginateLimit{{ end }}(first, last)
-	if limit != 0 {
-		{{ $r }}.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := {{ $r }}.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	{{ $r }} = pager.applyOrder({{ $r }})
+	{{- if $node.Annotations.OPENLANE_SKIP_FGA_OVERFETCH.enabled }}
+	{{- /* access is settled in SQL for this schema, a single fetch is enough */}}
+	if limit != 0 {
+		{{ $r }}.Limit(limit)
+	}
 	nodes, err := {{ $r }}.All(ctx)
 	if err != nil {
 		return nil, err
 	}
+	{{- else }}
+	{{- /* the FGA filter may drop rows after the fetch, keep fetching windows until the page is full or SQL is exhausted */}}
+	var nodes []*{{ $name }}
+	if limit == 0 {
+		if nodes, err = {{ $r }}.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := {{ $r }}.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
+	}
+	{{- end }}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
 {{ end }}

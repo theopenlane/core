@@ -305,7 +305,7 @@ func addParentBlockedGroupPredicate(q intercept.Query, groupIDs []string, parent
 		t := sql.Table(joinTableName).As(joinTableName)
 		subquery := sql.SelectExpr(sql.Raw("1")).From(t).Where(
 			sql.And(
-				sql.EQ(t.C(parentFKField), s.C(parentFKField)),
+				sql.ColumnsEQ(t.C(parentFKField), s.C(parentFKField)),
 				sql.In(t.C("group_id"), lo.ToAnySlice(groupIDs)...),
 			),
 		)
