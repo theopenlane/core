@@ -59,29 +59,47 @@ var trustCenterSubpaths = []string{"", "controls", "compliance", "security", "do
 
 // companyProfileSubpaths are common marketing/product pages fetched alongside the homepage when building a company
 // profile, since details are frequently only mentioned on a dedicated page rather than the homepage itself
-var companyProfileSubpaths = []string{"company", "pricing", "security", "legal", "contact", "about", "features", "platform", "docs", "legal/subprocessors", "subprocessors"}
+// legalSubpaths are the conventional locations that carry both company-facing and
+// compliance-facing content, so both extractions visit them. They are shared rather than
+// repeated in each list below, since a site that moves its legal hub should only need
+// updating in one place
+var legalSubpaths = []string{"legal", "legal/subprocessors", "subprocessors", "security"}
 
-// complianceSubpaths are the conventional locations for legal and compliance documents. The
-// homepage alone is rarely enough: a company's DPA and subprocessor list usually live only
-// under a legal hub, so extracting from the homepage and nothing else reports them absent
-// for sites that publish them perfectly well
-var complianceSubpaths = []string{
-	"legal",
+// companyProfileSubpaths are the pages the company profile prompt is run against: product
+// and marketing pages that describe what the company does and sells, plus the shared legal
+// paths, which often carry entity and location detail the homepage omits
+var companyProfileSubpaths = append([]string{
+	"company",
+	"pricing",
+	"contact",
+	"about",
+	"features",
+	"platform",
+	"docs",
+}, legalSubpaths...)
+
+// complianceSubpaths are the pages the compliance prompt is run against. The homepage alone
+// is not enough: a DPA and a subprocessor list usually live only under a legal hub, so
+// extracting from the homepage and nothing else reports them absent for sites that publish
+// them perfectly well.
+//
+// This is a separate list from companyProfileSubpaths rather than a reuse of it because the
+// two prompts want different pages. A pricing or features page yields nothing for compliance,
+// and /privacy, /terms and /dpa yield nothing for a company profile. Each unreachable path
+// costs only a HEAD request before it is skipped, so listing the variants is cheap
+var complianceSubpaths = append([]string{
 	"legal/privacy",
 	"legal/terms",
 	"legal/dpa",
-	"legal/subprocessors",
 	"privacy",
 	"privacy-policy",
 	"terms",
 	"terms-of-service",
 	"dpa",
-	"subprocessors",
-	"security",
 	"trust",
 	"compliance",
 	"cookie-policy",
-}
+}, legalSubpaths...)
 
 // Config holds the Cloudflare credentials used for browser rendering and browser-derived enrichment lookups
 type Config struct {
