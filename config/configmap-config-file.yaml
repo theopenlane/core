@@ -191,10 +191,22 @@ data:
       defaulttrustcenterdomain: {{ .Values.openlane.coreConfiguration.server.defaulttrustcenterdomain | quote }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.trustcentercnametarget }}
-      trustcentercnametarget: {{ .Values.openlane.coreConfiguration.server.trustcentercnametarget | quote }}
+      trustcentercnametarget:
+        {{- if .Values.openlane.coreConfiguration.server.trustcentercnametarget.cname }}
+        cname: {{ .Values.openlane.coreConfiguration.server.trustcentercnametarget.cname | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.server.trustcentercnametarget.zone_id }}
+        zone_id: {{ .Values.openlane.coreConfiguration.server.trustcentercnametarget.zone_id | quote }}
+        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.trustcenterpreviewcnametarget }}
-      trustcenterpreviewcnametarget: {{ .Values.openlane.coreConfiguration.server.trustcenterpreviewcnametarget | quote }}
+      trustcenterpreviewcnametarget:
+        {{- if .Values.openlane.coreConfiguration.server.trustcenterpreviewcnametarget.cname }}
+        cname: {{ .Values.openlane.coreConfiguration.server.trustcenterpreviewcnametarget.cname | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.server.trustcenterpreviewcnametarget.zone_id }}
+        zone_id: {{ .Values.openlane.coreConfiguration.server.trustcenterpreviewcnametarget.zone_id | quote }}
+        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.notificationlookbackdays }}
       notificationlookbackdays: {{ .Values.openlane.coreConfiguration.server.notificationlookbackdays }}

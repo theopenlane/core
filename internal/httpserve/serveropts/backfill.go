@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
+
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
@@ -120,6 +121,16 @@ var backfillRoutines = []backfillRoutine{
 		Enabled: true,
 		Run: func(ctx context.Context, deps backfillDeps) error {
 			backfillIntegrationExpiry(ctx, deps.Client)
+
+			return nil
+		},
+	},
+	{
+		Name:    "mappable-domain",
+		Version: "v1",
+		Enabled: true,
+		Run: func(ctx context.Context, deps backfillDeps) error {
+			backfillMappableDomains(ctx, deps.Client)
 
 			return nil
 		},
@@ -348,4 +359,8 @@ func backfillFileBackups(ctx context.Context, dbClient *ent.Client, galaApp *gal
 	}
 
 	logx.FromContext(ctx).Info().Int("enqueued_files", enqueuedCounter).Int("failed_files", failedCounter).Int("total_candidate_files", totalFiles).Msg("backfill: file backups enqueued")
+}
+
+func backfillMappableDomains(ctx context.Context, dbClient *ent.Client) {
+
 }

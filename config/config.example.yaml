@@ -478,8 +478,12 @@ server:
         certfile: server.crt
         certkey: server.key
         enabled: false
-    trustcentercnametarget: ""
-    trustcenterpreviewcnametarget: ""
+    trustcentercnametarget:
+        cname: ""
+        zone_id: ""
+    trustcenterpreviewcnametarget:
+        cname: ""
+        zone_id: ""
     writetimeout: 15000000000
 sessions:
     domain: ""
