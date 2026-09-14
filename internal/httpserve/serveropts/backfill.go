@@ -367,7 +367,13 @@ func backfillFileBackups(ctx context.Context, dbClient *ent.Client, galaApp *gal
 }
 
 func backfillMappableDomains(ctx context.Context, dbClient *ent.Client, cfg config.Server) {
-	targets := []config.TrustCenterCnameTarget{cfg.TrustCenterCnameTarget, cfg.TrustCenterPreviewCnameTarget}
+	targets := []struct {
+		Cname  string
+		ZoneID string
+	}{
+		{Cname: cfg.TrustCenterCnameTarget, ZoneID: cfg.TrustCenterCnameTargetZoneID},
+		{Cname: cfg.TrustCenterPreviewCnameTarget, ZoneID: cfg.TrustCenterPreviewZoneID},
+	}
 
 	for _, target := range targets {
 		if target.Cname == "" || target.ZoneID == "" {

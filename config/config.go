@@ -148,21 +148,14 @@ type Server struct {
 	DefaultTrustCenterDomain string `json:"defaulttrustcenterdomain" koanf:"defaulttrustcenterdomain" default:"trust.theopenlane.net"`
 	// TrustCenterCnameTarget is the cname target for the trust center
 	// Used for mapping the vanity domains to the trust centers
-	TrustCenterCnameTarget TrustCenterCnameTarget `json:"trustcentercnametarget" koanf:"trustcentercnametarget" default:""`
+	TrustCenterCnameTarget       string `json:"trustcentercnametarget" koanf:"trustcentercnametarget" default:"cname.openlane-dns.com"`
+	TrustCenterCnameTargetZoneID string `json:"trustcentercnametargetzoneid" koanf:"trustcentercnametargetzoneid" default:"" sensitive:"true"`
 	// TrustCenterPreviewCnameTarget is the cname target for trust center preview domains
-	TrustCenterPreviewCnameTarget TrustCenterCnameTarget `json:"trustcenterpreviewcnametarget" koanf:"trustcenterpreviewcnametarget" default:""`
+	TrustCenterPreviewCnameTarget string `json:"trustcenterpreviewcnametarget" koanf:"trustcenterpreviewcnametarget" default:"theopenlane.net"`
+	TrustCenterPreviewZoneID      string `json:"trustcenterpreviewzoneid" koanf:"trustcenterpreviewzoneid" default:"" sensitive:"true"`
 	// NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
 	// Unread notifications are always pulled regardless of this setting
 	NotificationLookbackDays int `json:"notificationlookbackdays" koanf:"notificationlookbackdays" default:"30"`
-}
-
-// TrustCenterCnameTarget is used to define targets that a trustcenter can map to
-type TrustCenterCnameTarget struct {
-	// Cname is the actual domain/cname this maps to
-	Cname string `json:"cname" koanf:"cname"`
-
-	// ZoneID is the cloudflare identifier for the cname above
-	ZoneID string `json:"zoneid" koanf:"zoneid"`
 }
 
 // KeyWatcher contains settings for the key watcher that manages JWT signing keys

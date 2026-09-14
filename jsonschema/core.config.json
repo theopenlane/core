@@ -371,12 +371,18 @@
           "description": "DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set"
         },
         "trustcentercnametarget": {
-          "$ref": "#/$defs/config.TrustCenterCnameTarget",
+          "type": "string",
           "description": "TrustCenterCnameTarget is the cname target for the trust center\nUsed for mapping the vanity domains to the trust centers"
         },
+        "trustcentercnametargetzoneid": {
+          "type": "string"
+        },
         "trustcenterpreviewcnametarget": {
-          "$ref": "#/$defs/config.TrustCenterCnameTarget",
+          "type": "string",
           "description": "TrustCenterPreviewCnameTarget is the cname target for trust center preview domains"
+        },
+        "trustcenterpreviewzoneid": {
+          "type": "string"
         },
         "notificationlookbackdays": {
           "type": "integer",
@@ -412,21 +418,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "TLS settings for the server for secure connections"
-    },
-    "config.TrustCenterCnameTarget": {
-      "properties": {
-        "cname": {
-          "type": "string",
-          "description": "Cname is the actual domain/cname this maps to"
-        },
-        "zoneid": {
-          "type": "string",
-          "description": "ZoneID is the cloudflare identifier for the cname above"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "TrustCenterCnameTarget is used to define targets that a trustcenter can map to"
     },
     "cors.Config": {
       "properties": {

@@ -45,9 +45,7 @@ Config contains the configuration for the core server
         },
         "mime": {},
         "graphpool": {},
-        "csrfprotection": {},
-        "trustcentercnametarget": {},
-        "trustcenterpreviewcnametarget": {}
+        "csrfprotection": {}
     },
     "entconfig": {
         "summarizer": {
@@ -211,8 +209,10 @@ Server settings for the echo server
 |[**csrfprotection**](#defscsrfconfig)|`object`|Config defines configuration for the CSRF middleware wrapper.<br/>||
 |**secretmanager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>|no|
 |**defaulttrustcenterdomain**|`string`|DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set<br/>|no|
-|[**trustcentercnametarget**](#defsconfigtrustcentercnametarget)|`object`|TrustCenterCnameTarget is used to define targets that a trustcenter can map to<br/>||
-|[**trustcenterpreviewcnametarget**](#defsconfigtrustcentercnametarget)|`object`|TrustCenterCnameTarget is used to define targets that a trustcenter can map to<br/>||
+|**trustcentercnametarget**|`string`|TrustCenterCnameTarget is the cname target for the trust center<br/>Used for mapping the vanity domains to the trust centers<br/>|no|
+|**trustcentercnametargetzoneid**|`string`||no|
+|**trustcenterpreviewcnametarget**|`string`|TrustCenterPreviewCnameTarget is the cname target for trust center preview domains<br/>|no|
+|**trustcenterpreviewzoneid**|`string`||no|
 |**notificationlookbackdays**|`integer`|NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription<br/>Unread notifications are always pulled regardless of this setting<br/>|no|
 
 **Additional Properties:** not allowed   
@@ -230,9 +230,7 @@ Server settings for the echo server
     },
     "mime": {},
     "graphpool": {},
-    "csrfprotection": {},
-    "trustcentercnametarget": {},
-    "trustcenterpreviewcnametarget": {}
+    "csrfprotection": {}
 }
 ```
 
@@ -414,21 +412,6 @@ Config defines configuration for the CSRF middleware wrapper.
 |**cookiehttponly**|`boolean`|CookieHTTPOnly indicates whether the CSRF cookie is HTTP only.<br/>||
 |**cookiedomain**|`string`|CookieDomain specifies the domain for the CSRF cookie, default to no domain<br/>||
 |**cookiepath**|`string`|CookiePath specifies the path for the CSRF cookie, default to "/"<br/>||
-
-**Additional Properties:** not allowed   
-   
-<a name="defsconfigtrustcentercnametarget"></a>
-### $defs/config\.TrustCenterCnameTarget: object
-
-TrustCenterCnameTarget is used to define targets that a trustcenter can map to
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**cname**|`string`|Cname is the actual domain/cname this maps to<br/>||
-|**zoneid**|`string`|ZoneID is the cloudflare identifier for the cname above<br/>||
 
 **Additional Properties:** not allowed   
    

@@ -154,8 +154,8 @@ func serve(ctx context.Context) error {
 
 	// Set trust center config for hooks and email integration
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
-		CnameTarget:              so.Config.Settings.Server.TrustCenterCnameTarget.Cname,
-		PreviewCnameTarget:       so.Config.Settings.Server.TrustCenterPreviewCnameTarget.Cname,
+		CnameTarget:              so.Config.Settings.Server.TrustCenterCnameTarget,
+		PreviewCnameTarget:       so.Config.Settings.Server.TrustCenterPreviewCnameTarget,
 		DefaultTrustCenterDomain: so.Config.Settings.Server.DefaultTrustCenterDomain,
 	})
 
