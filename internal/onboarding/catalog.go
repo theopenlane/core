@@ -6,6 +6,8 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
+	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
@@ -93,7 +95,7 @@ func getFrameworkOptions(ctx context.Context, client *generated.Client) ([]model
 	standards, err := client.Standard.Query().
 		Where(
 			standard.StatusEQ(enums.StandardActive),
-			standard.FrameworkNotIn("openlane-standard", "openlane-trust-center"),
+			standard.FrameworkNotIn(controls.StandardTrustCenterFrameworkName, controls.TrustCenterFrameworkName),
 			standard.SystemOwned(true),
 			standard.IsPublic(true),
 		).

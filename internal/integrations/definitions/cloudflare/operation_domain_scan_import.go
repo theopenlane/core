@@ -82,6 +82,19 @@ type DomainScanImportFinding struct {
 	Domain string `json:"domain,omitempty"`
 }
 
+// DomainScanImportBranding is the brand design reviewer(s) accepted
+type DomainScanImportBranding struct {
+	LogoURL                  string `json:"logoUrl,omitempty"`
+	FaviconURL               string `json:"faviconUrl,omitempty"`
+	PrimaryColor             string `json:"primaryColor,omitempty"`
+	Font                     string `json:"font,omitempty"`
+	ForegroundColor          string `json:"foregroundColor,omitempty"`
+	BackgroundColor          string `json:"backgroundColor,omitempty"`
+	AccentColor              string `json:"accentColor,omitempty"`
+	SecondaryBackgroundColor string `json:"secondaryBackgroundColor,omitempty"`
+	SecondaryForegroundColor string `json:"secondaryForegroundColor,omitempty"`
+}
+
 // DomainScanImport imports a reviewer-accepted domain scan report into real
 // Platform/SystemDetail/Entity/Asset/Finding records
 type DomainScanImport struct {
@@ -99,6 +112,8 @@ type DomainScanImport struct {
 	Assets []DomainScanImportAsset `json:"assets"`
 	// Findings are the accepted findings
 	Findings []DomainScanImportFinding `json:"findings,omitempty"`
+	// Branding is the brand design config for a trust center preview
+	Branding *DomainScanImportBranding `json:"branding,omitempty"`
 }
 
 // Handle adapts DomainScanImport to the generic operation registration boundary

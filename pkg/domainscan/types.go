@@ -6,18 +6,42 @@ type JSONSchemaProperty struct {
 	Description string                        `json:"description,omitempty"`
 	Items       *JSONSchemaProperty           `json:"items,omitempty"`
 	Properties  map[string]JSONSchemaProperty `json:"properties,omitempty"`
+	MaxItems    int                           `json:"maxItems,omitempty"`
+	UniqueItems bool                          `json:"uniqueItems,omitempty"`
 }
 
 // JSONSchema is the JSON schema for structured extraction
 type JSONSchema struct {
 	Type       string                        `json:"type"`
 	Properties map[string]JSONSchemaProperty `json:"properties"`
+	Required   []string                      `json:"required,omitempty"`
 }
 
 // ResponseFormat specifies JSON schema extraction
 type ResponseFormat struct {
 	Type   string     `json:"type"`
 	Schema JSONSchema `json:"json_schema"`
+}
+
+// BrandDesignProfile is the visual branding extracted from a rendered website
+type BrandDesignProfile struct {
+	Error                    string `json:"error,omitempty"`
+	LogoURL                  string `json:"logo_url,omitempty"`
+	FaviconURL               string `json:"favicon_url,omitempty"`
+	PrimaryColor             string `json:"primary_color,omitempty"`
+	Font                     string `json:"font,omitempty"`
+	ForegroundColor          string `json:"foreground_color,omitempty"`
+	BackgroundColor          string `json:"background_color,omitempty"`
+	AccentColor              string `json:"accent_color,omitempty"`
+	SecondaryBackgroundColor string `json:"secondary_background_color,omitempty"`
+	SecondaryForegroundColor string `json:"secondary_foreground_color,omitempty"`
+}
+
+// IsEmpty checks if branding data was found after the browser rendering job completes
+func (b BrandDesignProfile) IsEmpty() bool {
+	return b.LogoURL == "" && b.FaviconURL == "" && b.PrimaryColor == "" && b.Font == "" && b.ForegroundColor == "" &&
+		b.BackgroundColor == "" && b.AccentColor == "" &&
+		b.SecondaryBackgroundColor == "" && b.SecondaryForegroundColor == "" && b.Error == ""
 }
 
 // CompanyProfile is the company information extracted from a website by
@@ -31,7 +55,7 @@ type CompanyProfile struct {
 	EmployeeRange    string      `json:"employee_range,omitempty"`
 	FoundedYear      string      `json:"founded_year,omitempty"`
 	EstimatedRevenue string      `json:"estimated_revenue,omitempty"`
-	SocialLinks      SocialLinks `json:"social_links,omitempty"`
+	SocialLinks      SocialLinks `json:"social_links"`
 	Customers        []string    `json:"customers,omitempty"`
 	Technologies     []string    `json:"technologies,omitempty"`
 	// ProvidedServices are the services or product categories the company itself provides

@@ -2970,6 +2970,24 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "file_category_name_created_at",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[14], FilesColumns[1]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "file_created_at",
+				Unique:  false,
+				Columns: []*schema.Column{FilesColumns[1]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
 	}
 	// FileDownloadTokensColumns holds the columns for the "file_download_tokens" table.
 	FileDownloadTokensColumns = []*schema.Column{

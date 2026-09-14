@@ -16,6 +16,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -254,6 +255,61 @@ func TestQueryEvidences(t *testing.T) {
 	// delete created evidences
 	(&th.Cleanup[*generated.EvidenceDeleteOne]{Client: suite.Client.DB.Evidence, IDs: []string{e1.ID, e2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	(&th.Cleanup[*generated.EvidenceDeleteOne]{Client: suite.Client.DB.Evidence, ID: e3.ID}).MustDelete(userAnotherOrg.UserCtx, t)
+}
+
+func TestQueryEvidence_TagsHasFilter(t *testing.T) {
+	ctx := th.SharedAdminUser.UserCtx
+
+	evidence := (&th.EvidenceBuilder{Client: suite.Client, Tags: []string{"Population", "Openlane"}}).
+		MustNew(ctx, t)
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.EvidenceDeleteOne]{Client: suite.Client.DB.Evidence, ID: evidence.ID}).MustDelete(ctx, t)
+	})
+
+	tt := []struct {
+		tag           string
+		expectedMatch bool
+	}{
+		{
+			tag:           "population",
+			expectedMatch: true,
+		},
+		{
+			tag:           "POPULATION",
+			expectedMatch: true,
+		},
+		{
+			tag:           "PoPuLaTiOn",
+			expectedMatch: true,
+		},
+		{
+			tag:           "openlane",
+			expectedMatch: true,
+		},
+		{
+			tag:           "oPeNlAnE",
+			expectedMatch: true,
+		},
+		{
+			tag:           "Openlane",
+			expectedMatch: true,
+		},
+	}
+
+	for _, v := range tt {
+		t.Run(v.tag, func(t *testing.T) {
+			where := testclient.EvidenceWhereInput{
+				ID: &evidence.ID,
+				And: []*testclient.EvidenceWhereInput{
+					{TagsHas: &v.tag},
+				},
+			}
+			resp, err := suite.Client.API.GetEvidences(ctx, &where)
+			assert.NilError(t, err)
+			assert.Equal(t, len(resp.Evidences.Edges) > 0, v.expectedMatch)
+		})
+	}
 }
 
 func TestMutationCreateEvidence(t *testing.T) {

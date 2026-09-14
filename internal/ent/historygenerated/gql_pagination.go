@@ -84,6 +84,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowassignmenthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowassignmenttargethistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowdefinitionhistory"
+	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -359,7 +360,7 @@ func (_m *ActionPlanHistoryQuery) Paginate(
 	}
 	conn := &ActionPlanHistoryConnection{Edges: []*ActionPlanHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -367,8 +368,6 @@ func (_m *ActionPlanHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -377,19 +376,33 @@ func (_m *ActionPlanHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*ActionPlanHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -871,7 +884,7 @@ func (_m *AssessmentHistoryQuery) Paginate(
 	}
 	conn := &AssessmentHistoryConnection{Edges: []*AssessmentHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -879,8 +892,6 @@ func (_m *AssessmentHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -889,19 +900,33 @@ func (_m *AssessmentHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*AssessmentHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -1257,7 +1282,7 @@ func (_m *AssessmentResponseHistoryQuery) Paginate(
 	}
 	conn := &AssessmentResponseHistoryConnection{Edges: []*AssessmentResponseHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -1265,8 +1290,6 @@ func (_m *AssessmentResponseHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -1275,19 +1298,33 @@ func (_m *AssessmentResponseHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*AssessmentResponseHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -1859,7 +1896,7 @@ func (_m *AssetHistoryQuery) Paginate(
 	}
 	conn := &AssetHistoryConnection{Edges: []*AssetHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -1867,8 +1904,6 @@ func (_m *AssetHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -1877,19 +1912,33 @@ func (_m *AssetHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*AssetHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -2451,7 +2500,7 @@ func (_m *AudienceHistoryQuery) Paginate(
 	}
 	conn := &AudienceHistoryConnection{Edges: []*AudienceHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -2459,8 +2508,6 @@ func (_m *AudienceHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -2469,19 +2516,33 @@ func (_m *AudienceHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*AudienceHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -2819,7 +2880,7 @@ func (_m *AudienceMemberHistoryQuery) Paginate(
 	}
 	conn := &AudienceMemberHistoryConnection{Edges: []*AudienceMemberHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -2827,8 +2888,6 @@ func (_m *AudienceMemberHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -2837,19 +2896,33 @@ func (_m *AudienceMemberHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*AudienceMemberHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -3187,7 +3260,7 @@ func (_m *CampaignHistoryQuery) Paginate(
 	}
 	conn := &CampaignHistoryConnection{Edges: []*CampaignHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -3195,8 +3268,6 @@ func (_m *CampaignHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -3205,19 +3276,33 @@ func (_m *CampaignHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*CampaignHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -3965,7 +4050,7 @@ func (_m *CampaignTargetHistoryQuery) Paginate(
 	}
 	conn := &CampaignTargetHistoryConnection{Edges: []*CampaignTargetHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -3973,8 +4058,6 @@ func (_m *CampaignTargetHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -3983,19 +4066,33 @@ func (_m *CampaignTargetHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*CampaignTargetHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -4413,7 +4510,7 @@ func (_m *ContactHistoryQuery) Paginate(
 	}
 	conn := &ContactHistoryConnection{Edges: []*ContactHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -4421,8 +4518,6 @@ func (_m *ContactHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -4431,19 +4526,33 @@ func (_m *ContactHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*ContactHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -4884,7 +4993,7 @@ func (_m *ControlHistoryQuery) Paginate(
 	}
 	conn := &ControlHistoryConnection{Edges: []*ControlHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -4892,8 +5001,6 @@ func (_m *ControlHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -4902,19 +5009,33 @@ func (_m *ControlHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*ControlHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -5355,7 +5476,7 @@ func (_m *ControlImplementationHistoryQuery) Paginate(
 	}
 	conn := &ControlImplementationHistoryConnection{Edges: []*ControlImplementationHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -5363,8 +5484,6 @@ func (_m *ControlImplementationHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -5373,19 +5492,33 @@ func (_m *ControlImplementationHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*ControlImplementationHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -5759,7 +5892,7 @@ func (_m *ControlObjectiveHistoryQuery) Paginate(
 	}
 	conn := &ControlObjectiveHistoryConnection{Edges: []*ControlObjectiveHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -5767,8 +5900,6 @@ func (_m *ControlObjectiveHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -5777,19 +5908,33 @@ func (_m *ControlObjectiveHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*ControlObjectiveHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -6217,7 +6362,7 @@ func (_m *CustomDomainHistoryQuery) Paginate(
 	}
 	conn := &CustomDomainHistoryConnection{Edges: []*CustomDomainHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -6225,8 +6370,6 @@ func (_m *CustomDomainHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -6235,19 +6378,33 @@ func (_m *CustomDomainHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*CustomDomainHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -6567,7 +6724,7 @@ func (_m *DiscussionHistoryQuery) Paginate(
 	}
 	conn := &DiscussionHistoryConnection{Edges: []*DiscussionHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -6575,8 +6732,6 @@ func (_m *DiscussionHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -6585,19 +6740,33 @@ func (_m *DiscussionHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*DiscussionHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -6899,7 +7068,7 @@ func (_m *DocumentDataHistoryQuery) Paginate(
 	}
 	conn := &DocumentDataHistoryConnection{Edges: []*DocumentDataHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -6907,8 +7076,6 @@ func (_m *DocumentDataHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -6917,19 +7084,33 @@ func (_m *DocumentDataHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*DocumentDataHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -7231,7 +7412,7 @@ func (_m *EmailTemplateHistoryQuery) Paginate(
 	}
 	conn := &EmailTemplateHistoryConnection{Edges: []*EmailTemplateHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -7239,8 +7420,6 @@ func (_m *EmailTemplateHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -7249,19 +7428,33 @@ func (_m *EmailTemplateHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*EmailTemplateHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -7707,7 +7900,7 @@ func (_m *EntityHistoryQuery) Paginate(
 	}
 	conn := &EntityHistoryConnection{Edges: []*EntityHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -7715,8 +7908,6 @@ func (_m *EntityHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -7725,19 +7916,33 @@ func (_m *EntityHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*EntityHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -8670,7 +8875,7 @@ func (_m *EntityTypeHistoryQuery) Paginate(
 	}
 	conn := &EntityTypeHistoryConnection{Edges: []*EntityTypeHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -8678,8 +8883,6 @@ func (_m *EntityTypeHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -8688,19 +8891,33 @@ func (_m *EntityTypeHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*EntityTypeHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -9020,7 +9237,7 @@ func (_m *EvidenceHistoryQuery) Paginate(
 	}
 	conn := &EvidenceHistoryConnection{Edges: []*EvidenceHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -9028,8 +9245,6 @@ func (_m *EvidenceHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -9038,19 +9253,33 @@ func (_m *EvidenceHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*EvidenceHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -9468,7 +9697,7 @@ func (_m *FileHistoryQuery) Paginate(
 	}
 	conn := &FileHistoryConnection{Edges: []*FileHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -9476,8 +9705,6 @@ func (_m *FileHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -9486,19 +9713,33 @@ func (_m *FileHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*FileHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -9831,7 +10072,7 @@ func (_m *FindingControlHistoryQuery) Paginate(
 	}
 	conn := &FindingControlHistoryConnection{Edges: []*FindingControlHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -9839,8 +10080,6 @@ func (_m *FindingControlHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -9849,19 +10088,33 @@ func (_m *FindingControlHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*FindingControlHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -10163,7 +10416,7 @@ func (_m *FindingHistoryQuery) Paginate(
 	}
 	conn := &FindingHistoryConnection{Edges: []*FindingHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -10171,8 +10424,6 @@ func (_m *FindingHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -10181,19 +10432,33 @@ func (_m *FindingHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*FindingHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -10647,7 +10912,7 @@ func (_m *GroupHistoryQuery) Paginate(
 	}
 	conn := &GroupHistoryConnection{Edges: []*GroupHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -10655,8 +10920,6 @@ func (_m *GroupHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -10665,19 +10928,33 @@ func (_m *GroupHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*GroupHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -11015,7 +11292,7 @@ func (_m *GroupMembershipHistoryQuery) Paginate(
 	}
 	conn := &GroupMembershipHistoryConnection{Edges: []*GroupMembershipHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -11023,8 +11300,6 @@ func (_m *GroupMembershipHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -11033,19 +11308,33 @@ func (_m *GroupMembershipHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*GroupMembershipHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -11365,7 +11654,7 @@ func (_m *GroupSettingHistoryQuery) Paginate(
 	}
 	conn := &GroupSettingHistoryConnection{Edges: []*GroupSettingHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -11373,8 +11662,6 @@ func (_m *GroupSettingHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -11383,19 +11670,33 @@ func (_m *GroupSettingHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*GroupSettingHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -11697,7 +11998,7 @@ func (_m *HushHistoryQuery) Paginate(
 	}
 	conn := &HushHistoryConnection{Edges: []*HushHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -11705,8 +12006,6 @@ func (_m *HushHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -11715,19 +12014,33 @@ func (_m *HushHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*HushHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -12127,7 +12440,7 @@ func (_m *IdentityHolderHistoryQuery) Paginate(
 	}
 	conn := &IdentityHolderHistoryConnection{Edges: []*IdentityHolderHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -12135,8 +12448,6 @@ func (_m *IdentityHolderHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -12145,19 +12456,33 @@ func (_m *IdentityHolderHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*IdentityHolderHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -12773,7 +13098,7 @@ func (_m *InternalPolicyHistoryQuery) Paginate(
 	}
 	conn := &InternalPolicyHistoryConnection{Edges: []*InternalPolicyHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -12781,8 +13106,6 @@ func (_m *InternalPolicyHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -12791,19 +13114,33 @@ func (_m *InternalPolicyHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*InternalPolicyHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -13213,7 +13550,7 @@ func (_m *MappableDomainHistoryQuery) Paginate(
 	}
 	conn := &MappableDomainHistoryConnection{Edges: []*MappableDomainHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -13221,8 +13558,6 @@ func (_m *MappableDomainHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -13231,19 +13566,33 @@ func (_m *MappableDomainHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*MappableDomainHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -13563,7 +13912,7 @@ func (_m *MappedControlHistoryQuery) Paginate(
 	}
 	conn := &MappedControlHistoryConnection{Edges: []*MappedControlHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -13571,8 +13920,6 @@ func (_m *MappedControlHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -13581,19 +13928,33 @@ func (_m *MappedControlHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*MappedControlHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -13931,7 +14292,7 @@ func (_m *NarrativeHistoryQuery) Paginate(
 	}
 	conn := &NarrativeHistoryConnection{Edges: []*NarrativeHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -13939,8 +14300,6 @@ func (_m *NarrativeHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -13949,19 +14308,33 @@ func (_m *NarrativeHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*NarrativeHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -14281,7 +14654,7 @@ func (_m *NoteHistoryQuery) Paginate(
 	}
 	conn := &NoteHistoryConnection{Edges: []*NoteHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -14289,8 +14662,6 @@ func (_m *NoteHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -14299,19 +14670,33 @@ func (_m *NoteHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*NoteHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -14613,7 +14998,7 @@ func (_m *NotificationPreferenceHistoryQuery) Paginate(
 	}
 	conn := &NotificationPreferenceHistoryConnection{Edges: []*NotificationPreferenceHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -14621,8 +15006,6 @@ func (_m *NotificationPreferenceHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -14631,19 +15014,33 @@ func (_m *NotificationPreferenceHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*NotificationPreferenceHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -14999,7 +15396,7 @@ func (_m *NotificationTemplateHistoryQuery) Paginate(
 	}
 	conn := &NotificationTemplateHistoryConnection{Edges: []*NotificationTemplateHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -15007,8 +15404,6 @@ func (_m *NotificationTemplateHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -15017,19 +15412,33 @@ func (_m *NotificationTemplateHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*NotificationTemplateHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -15511,7 +15920,7 @@ func (_m *OrgMembershipHistoryQuery) Paginate(
 	}
 	conn := &OrgMembershipHistoryConnection{Edges: []*OrgMembershipHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -15519,8 +15928,6 @@ func (_m *OrgMembershipHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -15529,19 +15936,33 @@ func (_m *OrgMembershipHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*OrgMembershipHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -15861,7 +16282,7 @@ func (_m *OrganizationHistoryQuery) Paginate(
 	}
 	conn := &OrganizationHistoryConnection{Edges: []*OrganizationHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -15869,8 +16290,6 @@ func (_m *OrganizationHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -15879,19 +16298,33 @@ func (_m *OrganizationHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*OrganizationHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -16229,7 +16662,7 @@ func (_m *OrganizationSettingHistoryQuery) Paginate(
 	}
 	conn := &OrganizationSettingHistoryConnection{Edges: []*OrganizationSettingHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -16237,8 +16670,6 @@ func (_m *OrganizationSettingHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -16247,19 +16678,33 @@ func (_m *OrganizationSettingHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*OrganizationSettingHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -16561,7 +17006,7 @@ func (_m *PlatformHistoryQuery) Paginate(
 	}
 	conn := &PlatformHistoryConnection{Edges: []*PlatformHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -16569,8 +17014,6 @@ func (_m *PlatformHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -16579,19 +17022,33 @@ func (_m *PlatformHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*PlatformHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -17194,7 +17651,7 @@ func (_m *ProcedureHistoryQuery) Paginate(
 	}
 	conn := &ProcedureHistoryConnection{Edges: []*ProcedureHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -17202,8 +17659,6 @@ func (_m *ProcedureHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -17212,19 +17667,33 @@ func (_m *ProcedureHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*ProcedureHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -17634,7 +18103,7 @@ func (_m *ProgramHistoryQuery) Paginate(
 	}
 	conn := &ProgramHistoryConnection{Edges: []*ProgramHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -17642,8 +18111,6 @@ func (_m *ProgramHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -17652,19 +18119,33 @@ func (_m *ProgramHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*ProgramHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -18128,7 +18609,7 @@ func (_m *ProgramMembershipHistoryQuery) Paginate(
 	}
 	conn := &ProgramMembershipHistoryConnection{Edges: []*ProgramMembershipHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -18136,8 +18617,6 @@ func (_m *ProgramMembershipHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -18146,19 +18625,33 @@ func (_m *ProgramMembershipHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*ProgramMembershipHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -18478,7 +18971,7 @@ func (_m *RemediationHistoryQuery) Paginate(
 	}
 	conn := &RemediationHistoryConnection{Edges: []*RemediationHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -18486,8 +18979,6 @@ func (_m *RemediationHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -18496,19 +18987,33 @@ func (_m *RemediationHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*RemediationHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -18900,7 +19405,7 @@ func (_m *ReviewHistoryQuery) Paginate(
 	}
 	conn := &ReviewHistoryConnection{Edges: []*ReviewHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -18908,8 +19413,6 @@ func (_m *ReviewHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -18918,19 +19421,33 @@ func (_m *ReviewHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*ReviewHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -19304,7 +19821,7 @@ func (_m *RiskHistoryQuery) Paginate(
 	}
 	conn := &RiskHistoryConnection{Edges: []*RiskHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -19312,8 +19829,6 @@ func (_m *RiskHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -19322,19 +19837,33 @@ func (_m *RiskHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*RiskHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -19989,7 +20518,7 @@ func (_m *SLADefinitionHistoryQuery) Paginate(
 	}
 	conn := &SLADefinitionHistoryConnection{Edges: []*SLADefinitionHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -19997,8 +20526,6 @@ func (_m *SLADefinitionHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -20007,19 +20534,33 @@ func (_m *SLADefinitionHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*SLADefinitionHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -20357,7 +20898,7 @@ func (_m *StandardHistoryQuery) Paginate(
 	}
 	conn := &StandardHistoryConnection{Edges: []*StandardHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -20365,8 +20906,6 @@ func (_m *StandardHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -20375,19 +20914,33 @@ func (_m *StandardHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*StandardHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -20815,7 +21368,7 @@ func (_m *SubcontrolHistoryQuery) Paginate(
 	}
 	conn := &SubcontrolHistoryConnection{Edges: []*SubcontrolHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -20823,8 +21376,6 @@ func (_m *SubcontrolHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -20833,19 +21384,33 @@ func (_m *SubcontrolHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*SubcontrolHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -21286,7 +21851,7 @@ func (_m *SubprocessorHistoryQuery) Paginate(
 	}
 	conn := &SubprocessorHistoryConnection{Edges: []*SubprocessorHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -21294,8 +21859,6 @@ func (_m *SubprocessorHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -21304,19 +21867,33 @@ func (_m *SubprocessorHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*SubprocessorHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -21636,7 +22213,7 @@ func (_m *SystemDetailHistoryQuery) Paginate(
 	}
 	conn := &SystemDetailHistoryConnection{Edges: []*SystemDetailHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -21644,8 +22221,6 @@ func (_m *SystemDetailHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -21654,19 +22229,33 @@ func (_m *SystemDetailHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*SystemDetailHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -21986,7 +22575,7 @@ func (_m *TaskHistoryQuery) Paginate(
 	}
 	conn := &TaskHistoryConnection{Edges: []*TaskHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -21994,8 +22583,6 @@ func (_m *TaskHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -22004,19 +22591,33 @@ func (_m *TaskHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*TaskHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -22470,7 +23071,7 @@ func (_m *TemplateHistoryQuery) Paginate(
 	}
 	conn := &TemplateHistoryConnection{Edges: []*TemplateHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -22478,8 +23079,6 @@ func (_m *TemplateHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -22488,19 +23087,33 @@ func (_m *TemplateHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*TemplateHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -22856,7 +23469,7 @@ func (_m *TrustCenterComplianceHistoryQuery) Paginate(
 	}
 	conn := &TrustCenterComplianceHistoryConnection{Edges: []*TrustCenterComplianceHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -22864,8 +23477,6 @@ func (_m *TrustCenterComplianceHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -22874,19 +23485,33 @@ func (_m *TrustCenterComplianceHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*TrustCenterComplianceHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -23188,7 +23813,7 @@ func (_m *TrustCenterDocHistoryQuery) Paginate(
 	}
 	conn := &TrustCenterDocHistoryConnection{Edges: []*TrustCenterDocHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -23196,8 +23821,6 @@ func (_m *TrustCenterDocHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -23206,19 +23829,33 @@ func (_m *TrustCenterDocHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*TrustCenterDocHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -23520,7 +24157,7 @@ func (_m *TrustCenterEntityHistoryQuery) Paginate(
 	}
 	conn := &TrustCenterEntityHistoryConnection{Edges: []*TrustCenterEntityHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -23528,8 +24165,6 @@ func (_m *TrustCenterEntityHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -23538,19 +24173,33 @@ func (_m *TrustCenterEntityHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*TrustCenterEntityHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -23870,7 +24519,7 @@ func (_m *TrustCenterFAQHistoryQuery) Paginate(
 	}
 	conn := &TrustCenterFAQHistoryConnection{Edges: []*TrustCenterFAQHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -23878,8 +24527,6 @@ func (_m *TrustCenterFAQHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -23888,19 +24535,33 @@ func (_m *TrustCenterFAQHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*TrustCenterFAQHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -24220,7 +24881,7 @@ func (_m *TrustCenterHistoryQuery) Paginate(
 	}
 	conn := &TrustCenterHistoryConnection{Edges: []*TrustCenterHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -24228,8 +24889,6 @@ func (_m *TrustCenterHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -24238,19 +24897,33 @@ func (_m *TrustCenterHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*TrustCenterHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -24552,7 +25225,7 @@ func (_m *TrustCenterNDARequestHistoryQuery) Paginate(
 	}
 	conn := &TrustCenterNDARequestHistoryConnection{Edges: []*TrustCenterNDARequestHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -24560,8 +25233,6 @@ func (_m *TrustCenterNDARequestHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -24570,19 +25241,33 @@ func (_m *TrustCenterNDARequestHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*TrustCenterNDARequestHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -24884,7 +25569,7 @@ func (_m *TrustCenterSettingHistoryQuery) Paginate(
 	}
 	conn := &TrustCenterSettingHistoryConnection{Edges: []*TrustCenterSettingHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -24892,8 +25577,6 @@ func (_m *TrustCenterSettingHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -24902,19 +25585,33 @@ func (_m *TrustCenterSettingHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*TrustCenterSettingHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -25216,7 +25913,7 @@ func (_m *TrustCenterSubprocessorHistoryQuery) Paginate(
 	}
 	conn := &TrustCenterSubprocessorHistoryConnection{Edges: []*TrustCenterSubprocessorHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -25224,8 +25921,6 @@ func (_m *TrustCenterSubprocessorHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -25234,19 +25929,33 @@ func (_m *TrustCenterSubprocessorHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*TrustCenterSubprocessorHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -25548,7 +26257,7 @@ func (_m *TrustCenterWatermarkConfigHistoryQuery) Paginate(
 	}
 	conn := &TrustCenterWatermarkConfigHistoryConnection{Edges: []*TrustCenterWatermarkConfigHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -25556,8 +26265,6 @@ func (_m *TrustCenterWatermarkConfigHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -25566,19 +26273,33 @@ func (_m *TrustCenterWatermarkConfigHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*TrustCenterWatermarkConfigHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -25880,7 +26601,7 @@ func (_m *UserHistoryQuery) Paginate(
 	}
 	conn := &UserHistoryConnection{Edges: []*UserHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -25888,8 +26609,6 @@ func (_m *UserHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -25898,19 +26617,33 @@ func (_m *UserHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*UserHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -26266,7 +26999,7 @@ func (_m *UserSettingHistoryQuery) Paginate(
 	}
 	conn := &UserSettingHistoryConnection{Edges: []*UserSettingHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -26274,8 +27007,6 @@ func (_m *UserSettingHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -26284,19 +27015,33 @@ func (_m *UserSettingHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*UserSettingHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -26598,7 +27343,7 @@ func (_m *VendorRiskScoreHistoryQuery) Paginate(
 	}
 	conn := &VendorRiskScoreHistoryConnection{Edges: []*VendorRiskScoreHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -26606,8 +27351,6 @@ func (_m *VendorRiskScoreHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -26616,19 +27359,33 @@ func (_m *VendorRiskScoreHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*VendorRiskScoreHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -27020,7 +27777,7 @@ func (_m *VendorScoringConfigHistoryQuery) Paginate(
 	}
 	conn := &VendorScoringConfigHistoryConnection{Edges: []*VendorScoringConfigHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -27028,8 +27785,6 @@ func (_m *VendorScoringConfigHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -27038,19 +27793,33 @@ func (_m *VendorScoringConfigHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*VendorScoringConfigHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -27370,7 +28139,7 @@ func (_m *VulnerabilityHistoryQuery) Paginate(
 	}
 	conn := &VulnerabilityHistoryConnection{Edges: []*VulnerabilityHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -27378,8 +28147,6 @@ func (_m *VulnerabilityHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -27388,19 +28155,33 @@ func (_m *VulnerabilityHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*VulnerabilityHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -27828,7 +28609,7 @@ func (_m *WorkflowAssignmentHistoryQuery) Paginate(
 	}
 	conn := &WorkflowAssignmentHistoryConnection{Edges: []*WorkflowAssignmentHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -27836,8 +28617,6 @@ func (_m *WorkflowAssignmentHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -27846,19 +28625,33 @@ func (_m *WorkflowAssignmentHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*WorkflowAssignmentHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -28160,7 +28953,7 @@ func (_m *WorkflowAssignmentTargetHistoryQuery) Paginate(
 	}
 	conn := &WorkflowAssignmentTargetHistoryConnection{Edges: []*WorkflowAssignmentTargetHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -28168,8 +28961,6 @@ func (_m *WorkflowAssignmentTargetHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -28178,19 +28969,33 @@ func (_m *WorkflowAssignmentTargetHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*WorkflowAssignmentTargetHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
@@ -28492,7 +29297,7 @@ func (_m *WorkflowDefinitionHistoryQuery) Paginate(
 	}
 	conn := &WorkflowDefinitionHistoryConnection{Edges: []*WorkflowDefinitionHistoryEdge{}}
 	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+	if hasCollectedField(ctx, totalCountField) {
 		hasPagination := after != nil || first != nil || before != nil || last != nil
 		if hasPagination || ignoredEdges {
 			c := _m.Clone()
@@ -28500,8 +29305,6 @@ func (_m *WorkflowDefinitionHistoryQuery) Paginate(
 			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
 				return nil, err
 			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
 		}
 	}
 	if (first != nil && *first == 0) || (last != nil && *last == 0) {
@@ -28510,19 +29313,33 @@ func (_m *WorkflowDefinitionHistoryQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
+	limit := paginateLimitSingle(first, last)
 	if field := collectedField(ctx, edgesField, nodeField); field != nil {
 		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
 			return nil, err
 		}
 	}
 	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
+	var nodes []*WorkflowDefinitionHistory
+	if limit == 0 {
+		if nodes, err = _m.All(ctx); err != nil {
+			return nil, err
+		}
+	} else {
+		window, offset := limit, 0
+		for len(nodes) < limit {
+			fetchCtx, rawCount := contextx.WithRawCount(ctx)
+			batch, err := _m.Clone().Limit(window).Offset(offset).All(fetchCtx)
+			if err != nil {
+				return nil, err
+			}
+			nodes = append(nodes, batch...)
+			if rawCount.Value(len(batch)) < window {
+				break
+			}
+			offset += window
+			window *= 2
+		}
 	}
 	conn.build(nodes, pager, after, first, before, last)
 	return conn, nil
