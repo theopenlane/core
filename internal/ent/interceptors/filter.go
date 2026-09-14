@@ -15,6 +15,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
 	access "github.com/theopenlane/core/v2/internal/ent/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
@@ -256,6 +257,8 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 	default:
 		switch t := v.(type) {
 		case []*V:
+			contextx.SetRawCount(ctx, len(t))
+
 			return filterListObjects[V](ctx, t, q)
 		case *V:
 			return singleObjectCheck[V](ctx, t, q)
