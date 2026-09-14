@@ -10,9 +10,12 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
+
+	"github.com/theopenlane/core/v2/config"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
@@ -71,7 +74,8 @@ type backfillDeps struct {
 	// Runtime is the integrations runtime
 	Runtime *runtime.Runtime
 	// Gala is the runtime routines emit follow-up work on
-	Gala *gala.Gala
+	Gala         *gala.Gala
+	ServerConfig config.Server
 }
 
 // backfillRoutine is one registered backfill and the run semantics it declares. Routines are
@@ -124,6 +128,16 @@ var backfillRoutines = []backfillRoutine{
 			return nil
 		},
 	},
+	{
+		Name:    "mappable-domain",
+		Version: "v1",
+		Enabled: true,
+		Run: func(ctx context.Context, deps backfillDeps) error {
+			backfillMappableDomains(ctx, deps.Client, deps.ServerConfig)
+
+			return nil
+		},
+	},
 }
 
 // WithBackfill submits the config-gated backfill scheduling run as a gala job: every pod submits
@@ -155,7 +169,7 @@ func WithBackfill(ctx context.Context, galaApp *gala.Gala) ServerOption {
 				return &auth.Caller{Capabilities: backfillBypassCaps}
 			},
 			Handle: func(handlerCtx gala.HandlerContext, req backfillRoutineRequest) error {
-				return runBackfillRoutine(handlerCtx, galaApp, req.Name)
+				return runBackfillRoutine(handlerCtx, galaApp, req.Name, s.Config.Settings.Server)
 			},
 		}); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to register routine listener")
@@ -193,7 +207,7 @@ func scheduleBackfillRoutines(ctx context.Context, galaApp *gala.Gala) error {
 }
 
 // runBackfillRoutine executes the named routine with its dependencies resolved from the injector
-func runBackfillRoutine(handlerCtx gala.HandlerContext, galaApp *gala.Gala, name string) error {
+func runBackfillRoutine(handlerCtx gala.HandlerContext, galaApp *gala.Gala, name string, serverConfig config.Server) error {
 	routine, ok := lo.Find(backfillRoutines, func(r backfillRoutine) bool {
 		return r.Name == name
 	})
@@ -204,9 +218,10 @@ func runBackfillRoutine(handlerCtx gala.HandlerContext, galaApp *gala.Gala, name
 	}
 
 	return routine.Run(handlerCtx.Context, backfillDeps{
-		Client:  do.MustInvoke[*ent.Client](handlerCtx.Injector),
-		Runtime: do.MustInvoke[*runtime.Runtime](handlerCtx.Injector),
-		Gala:    galaApp,
+		Client:       do.MustInvoke[*ent.Client](handlerCtx.Injector),
+		Runtime:      do.MustInvoke[*runtime.Runtime](handlerCtx.Injector),
+		Gala:         galaApp,
+		ServerConfig: serverConfig,
 	})
 }
 
@@ -348,4 +363,68 @@ func backfillFileBackups(ctx context.Context, dbClient *ent.Client, galaApp *gal
 	}
 
 	logx.FromContext(ctx).Info().Int("enqueued_files", enqueuedCounter).Int("failed_files", failedCounter).Int("total_candidate_files", totalFiles).Msg("backfill: file backups enqueued")
+}
+
+func backfillMappableDomains(ctx context.Context, dbClient *ent.Client, cfg config.Server) {
+	targets := []struct {
+		Cname  string
+		ZoneID string
+	}{
+		{Cname: cfg.TrustCenterCnameTarget, ZoneID: cfg.TrustCenterCnameTargetZoneID},
+		{Cname: cfg.TrustCenterPreviewCnameTarget, ZoneID: cfg.TrustCenterPreviewZoneID},
+	}
+
+	// creates the mappable domain.
+	// if the cname does not exists, it is created.
+	//
+	// but if it exists, it checks if the zone id from the db matches what is in the configuration
+	// if it differs, the old entry is deleted and re-created. else it is left alone
+	for _, target := range targets {
+		if target.Cname == "" || target.ZoneID == "" {
+			continue
+		}
+
+		domain, err := dbClient.MappableDomain.Query().
+			Where(mappabledomain.Name(target.Cname)).
+			Select(mappabledomain.FieldID, mappabledomain.FieldZoneID).
+			Only(ctx)
+
+		if ent.IsNotFound(err) {
+			_, err = dbClient.MappableDomain.Create().
+				SetName(target.Cname).
+				SetZoneID(target.ZoneID).
+				Save(ctx)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("cname", target.Cname).Msg("backfill: failed to create mappable domain")
+			}
+
+			continue
+		}
+
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("cname", target.Cname).Msg("backfill: failed to query mappable domain")
+
+			continue
+		}
+
+		if domain.ZoneID == target.ZoneID {
+			continue
+		}
+
+		if err := dbClient.MappableDomain.DeleteOneID(domain.ID).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("cname", target.Cname).Msg("backfill: failed to delete mappable domain")
+
+			continue
+		}
+
+		_, err = dbClient.MappableDomain.Create().
+			SetName(target.Cname).
+			SetZoneID(target.ZoneID).
+			Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("cname", target.Cname).Msg("backfill: failed to reconcile mappable domain")
+		}
+	}
+
+	logx.FromContext(ctx).Info().Msg("backfill: mappable domains backfill completed")
 }

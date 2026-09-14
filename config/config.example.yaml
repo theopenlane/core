@@ -478,8 +478,10 @@ server:
         certfile: server.crt
         certkey: server.key
         enabled: false
-    trustcentercnametarget: ""
-    trustcenterpreviewcnametarget: ""
+    trustcentercnametarget: cname.openlane-dns.com
+    trustcentercnametargetzoneid: ""
+    trustcenterpreviewcnametarget: theopenlane.net
+    trustcenterpreviewzoneid: ""
     writetimeout: 15000000000
 sessions:
     domain: ""
