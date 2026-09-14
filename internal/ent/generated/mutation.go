@@ -249979,6 +249979,7 @@ type TrustCenterFAQMutation struct {
 	deleted_at                   *time.Time
 	deleted_by                   *string
 	trust_center_faq_kind_name   *string
+	category_name                *string
 	reference_link               *string
 	display_order                *int
 	adddisplay_order             *int
@@ -249991,6 +249992,8 @@ type TrustCenterFAQMutation struct {
 	editors                      map[string]struct{}
 	removededitors               map[string]struct{}
 	clearededitors               bool
+	category                     *string
+	clearedcategory              bool
 	trust_center                 *string
 	clearedtrust_center          bool
 	note                         *string
@@ -250545,6 +250548,104 @@ func (m *TrustCenterFAQMutation) ResetTrustCenterFaqKindID() {
 	delete(m.clearedFields, trustcenterfaq.FieldTrustCenterFaqKindID)
 }
 
+// SetCategoryName sets the "category_name" field.
+func (m *TrustCenterFAQMutation) SetCategoryName(s string) {
+	m.category_name = &s
+}
+
+// CategoryName returns the value of the "category_name" field in the mutation.
+func (m *TrustCenterFAQMutation) CategoryName() (r string, exists bool) {
+	v := m.category_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCategoryName returns the old "category_name" field's value of the TrustCenterFAQ entity.
+// If the TrustCenterFAQ object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterFAQMutation) OldCategoryName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCategoryName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCategoryName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCategoryName: %w", err)
+	}
+	return oldValue.CategoryName, nil
+}
+
+// ClearCategoryName clears the value of the "category_name" field.
+func (m *TrustCenterFAQMutation) ClearCategoryName() {
+	m.category_name = nil
+	m.clearedFields[trustcenterfaq.FieldCategoryName] = struct{}{}
+}
+
+// CategoryNameCleared returns if the "category_name" field was cleared in this mutation.
+func (m *TrustCenterFAQMutation) CategoryNameCleared() bool {
+	_, ok := m.clearedFields[trustcenterfaq.FieldCategoryName]
+	return ok
+}
+
+// ResetCategoryName resets all changes to the "category_name" field.
+func (m *TrustCenterFAQMutation) ResetCategoryName() {
+	m.category_name = nil
+	delete(m.clearedFields, trustcenterfaq.FieldCategoryName)
+}
+
+// SetCategoryID sets the "category_id" field.
+func (m *TrustCenterFAQMutation) SetCategoryID(s string) {
+	m.category = &s
+}
+
+// CategoryID returns the value of the "category_id" field in the mutation.
+func (m *TrustCenterFAQMutation) CategoryID() (r string, exists bool) {
+	v := m.category
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCategoryID returns the old "category_id" field's value of the TrustCenterFAQ entity.
+// If the TrustCenterFAQ object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterFAQMutation) OldCategoryID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCategoryID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCategoryID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCategoryID: %w", err)
+	}
+	return oldValue.CategoryID, nil
+}
+
+// ClearCategoryID clears the value of the "category_id" field.
+func (m *TrustCenterFAQMutation) ClearCategoryID() {
+	m.category = nil
+	m.clearedFields[trustcenterfaq.FieldCategoryID] = struct{}{}
+}
+
+// CategoryIDCleared returns if the "category_id" field was cleared in this mutation.
+func (m *TrustCenterFAQMutation) CategoryIDCleared() bool {
+	_, ok := m.clearedFields[trustcenterfaq.FieldCategoryID]
+	return ok
+}
+
+// ResetCategoryID resets all changes to the "category_id" field.
+func (m *TrustCenterFAQMutation) ResetCategoryID() {
+	m.category = nil
+	delete(m.clearedFields, trustcenterfaq.FieldCategoryID)
+}
+
 // SetNoteID sets the "note_id" field.
 func (m *TrustCenterFAQMutation) SetNoteID(s string) {
 	m.note = &s
@@ -250884,6 +250985,33 @@ func (m *TrustCenterFAQMutation) ResetEditors() {
 	m.removededitors = nil
 }
 
+// ClearCategory clears the "category" edge to the CustomTypeEnum entity.
+func (m *TrustCenterFAQMutation) ClearCategory() {
+	m.clearedcategory = true
+	m.clearedFields[trustcenterfaq.FieldCategoryID] = struct{}{}
+}
+
+// CategoryCleared reports if the "category" edge to the CustomTypeEnum entity was cleared.
+func (m *TrustCenterFAQMutation) CategoryCleared() bool {
+	return m.CategoryIDCleared() || m.clearedcategory
+}
+
+// CategoryIDs returns the "category" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// CategoryID instead. It exists only for internal usage by the builders.
+func (m *TrustCenterFAQMutation) CategoryIDs() (ids []string) {
+	if id := m.category; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetCategory resets all changes to the "category" edge.
+func (m *TrustCenterFAQMutation) ResetCategory() {
+	m.category = nil
+	m.clearedcategory = false
+}
+
 // ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
 func (m *TrustCenterFAQMutation) ClearTrustCenter() {
 	m.clearedtrust_center = true
@@ -250972,7 +251100,7 @@ func (m *TrustCenterFAQMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TrustCenterFAQMutation) Fields() []string {
-	fields := make([]string, 0, 13)
+	fields := make([]string, 0, 15)
 	if m.created_at != nil {
 		fields = append(fields, trustcenterfaq.FieldCreatedAt)
 	}
@@ -250999,6 +251127,12 @@ func (m *TrustCenterFAQMutation) Fields() []string {
 	}
 	if m.trust_center_faq_kind != nil {
 		fields = append(fields, trustcenterfaq.FieldTrustCenterFaqKindID)
+	}
+	if m.category_name != nil {
+		fields = append(fields, trustcenterfaq.FieldCategoryName)
+	}
+	if m.category != nil {
+		fields = append(fields, trustcenterfaq.FieldCategoryID)
 	}
 	if m.note != nil {
 		fields = append(fields, trustcenterfaq.FieldNoteID)
@@ -251038,6 +251172,10 @@ func (m *TrustCenterFAQMutation) Field(name string) (ent.Value, bool) {
 		return m.TrustCenterFaqKindName()
 	case trustcenterfaq.FieldTrustCenterFaqKindID:
 		return m.TrustCenterFaqKindID()
+	case trustcenterfaq.FieldCategoryName:
+		return m.CategoryName()
+	case trustcenterfaq.FieldCategoryID:
+		return m.CategoryID()
 	case trustcenterfaq.FieldNoteID:
 		return m.NoteID()
 	case trustcenterfaq.FieldTrustCenterID:
@@ -251073,6 +251211,10 @@ func (m *TrustCenterFAQMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldTrustCenterFaqKindName(ctx)
 	case trustcenterfaq.FieldTrustCenterFaqKindID:
 		return m.OldTrustCenterFaqKindID(ctx)
+	case trustcenterfaq.FieldCategoryName:
+		return m.OldCategoryName(ctx)
+	case trustcenterfaq.FieldCategoryID:
+		return m.OldCategoryID(ctx)
 	case trustcenterfaq.FieldNoteID:
 		return m.OldNoteID(ctx)
 	case trustcenterfaq.FieldTrustCenterID:
@@ -251152,6 +251294,20 @@ func (m *TrustCenterFAQMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTrustCenterFaqKindID(v)
+		return nil
+	case trustcenterfaq.FieldCategoryName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCategoryName(v)
+		return nil
+	case trustcenterfaq.FieldCategoryID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCategoryID(v)
 		return nil
 	case trustcenterfaq.FieldNoteID:
 		v, ok := value.(string)
@@ -251253,6 +251409,12 @@ func (m *TrustCenterFAQMutation) ClearedFields() []string {
 	if m.FieldCleared(trustcenterfaq.FieldTrustCenterFaqKindID) {
 		fields = append(fields, trustcenterfaq.FieldTrustCenterFaqKindID)
 	}
+	if m.FieldCleared(trustcenterfaq.FieldCategoryName) {
+		fields = append(fields, trustcenterfaq.FieldCategoryName)
+	}
+	if m.FieldCleared(trustcenterfaq.FieldCategoryID) {
+		fields = append(fields, trustcenterfaq.FieldCategoryID)
+	}
 	if m.FieldCleared(trustcenterfaq.FieldTrustCenterID) {
 		fields = append(fields, trustcenterfaq.FieldTrustCenterID)
 	}
@@ -251303,6 +251465,12 @@ func (m *TrustCenterFAQMutation) ClearField(name string) error {
 	case trustcenterfaq.FieldTrustCenterFaqKindID:
 		m.ClearTrustCenterFaqKindID()
 		return nil
+	case trustcenterfaq.FieldCategoryName:
+		m.ClearCategoryName()
+		return nil
+	case trustcenterfaq.FieldCategoryID:
+		m.ClearCategoryID()
+		return nil
 	case trustcenterfaq.FieldTrustCenterID:
 		m.ClearTrustCenterID()
 		return nil
@@ -251347,6 +251515,12 @@ func (m *TrustCenterFAQMutation) ResetField(name string) error {
 	case trustcenterfaq.FieldTrustCenterFaqKindID:
 		m.ResetTrustCenterFaqKindID()
 		return nil
+	case trustcenterfaq.FieldCategoryName:
+		m.ResetCategoryName()
+		return nil
+	case trustcenterfaq.FieldCategoryID:
+		m.ResetCategoryID()
+		return nil
 	case trustcenterfaq.FieldNoteID:
 		m.ResetNoteID()
 		return nil
@@ -251365,7 +251539,7 @@ func (m *TrustCenterFAQMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *TrustCenterFAQMutation) AddedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.trust_center_faq_kind != nil {
 		edges = append(edges, trustcenterfaq.EdgeTrustCenterFaqKind)
 	}
@@ -251374,6 +251548,9 @@ func (m *TrustCenterFAQMutation) AddedEdges() []string {
 	}
 	if m.editors != nil {
 		edges = append(edges, trustcenterfaq.EdgeEditors)
+	}
+	if m.category != nil {
+		edges = append(edges, trustcenterfaq.EdgeCategory)
 	}
 	if m.trust_center != nil {
 		edges = append(edges, trustcenterfaq.EdgeTrustCenter)
@@ -251404,6 +251581,10 @@ func (m *TrustCenterFAQMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case trustcenterfaq.EdgeCategory:
+		if id := m.category; id != nil {
+			return []ent.Value{*id}
+		}
 	case trustcenterfaq.EdgeTrustCenter:
 		if id := m.trust_center; id != nil {
 			return []ent.Value{*id}
@@ -251418,7 +251599,7 @@ func (m *TrustCenterFAQMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *TrustCenterFAQMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, trustcenterfaq.EdgeBlockedGroups)
 	}
@@ -251450,7 +251631,7 @@ func (m *TrustCenterFAQMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *TrustCenterFAQMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 5)
+	edges := make([]string, 0, 6)
 	if m.clearedtrust_center_faq_kind {
 		edges = append(edges, trustcenterfaq.EdgeTrustCenterFaqKind)
 	}
@@ -251459,6 +251640,9 @@ func (m *TrustCenterFAQMutation) ClearedEdges() []string {
 	}
 	if m.clearededitors {
 		edges = append(edges, trustcenterfaq.EdgeEditors)
+	}
+	if m.clearedcategory {
+		edges = append(edges, trustcenterfaq.EdgeCategory)
 	}
 	if m.clearedtrust_center {
 		edges = append(edges, trustcenterfaq.EdgeTrustCenter)
@@ -251479,6 +251663,8 @@ func (m *TrustCenterFAQMutation) EdgeCleared(name string) bool {
 		return m.clearedblocked_groups
 	case trustcenterfaq.EdgeEditors:
 		return m.clearededitors
+	case trustcenterfaq.EdgeCategory:
+		return m.clearedcategory
 	case trustcenterfaq.EdgeTrustCenter:
 		return m.clearedtrust_center
 	case trustcenterfaq.EdgeNote:
@@ -251493,6 +251679,9 @@ func (m *TrustCenterFAQMutation) ClearEdge(name string) error {
 	switch name {
 	case trustcenterfaq.EdgeTrustCenterFaqKind:
 		m.ClearTrustCenterFaqKind()
+		return nil
+	case trustcenterfaq.EdgeCategory:
+		m.ClearCategory()
 		return nil
 	case trustcenterfaq.EdgeTrustCenter:
 		m.ClearTrustCenter()
@@ -251516,6 +251705,9 @@ func (m *TrustCenterFAQMutation) ResetEdge(name string) error {
 		return nil
 	case trustcenterfaq.EdgeEditors:
 		m.ResetEditors()
+		return nil
+	case trustcenterfaq.EdgeCategory:
+		m.ResetCategory()
 		return nil
 	case trustcenterfaq.EdgeTrustCenter:
 		m.ResetTrustCenter()

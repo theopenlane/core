@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
@@ -82,6 +83,7 @@ func (t TrustCenterFAQ) Mixin() []ent.Mixin {
 			),
 			newCustomEnumMixin(t),
 			newGroupPermissionsMixin(withSkipViewPermissions()),
+			newCustomEnumMixin(t, withEnumFieldName("category"), withGlobalEnum()),
 		},
 	}.getMixins(t)
 }
@@ -135,6 +137,8 @@ func (TrustCenterFAQ) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("note_id", "trust_center_id").
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("category_name", "created_at").
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 

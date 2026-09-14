@@ -9,6 +9,8 @@ query GetAllTrustCenterFAQHistories ($first: Int, $last: Int, $after: Cursor, $b
 		}
 		edges {
 			node {
+				categoryID
+				categoryName
 				createdAt
 				createdBy
 				displayOrder
@@ -39,6 +41,8 @@ query GetTrustCenterFAQHistories ($first: Int, $last: Int, $after: Cursor, $befo
 		}
 		edges {
 			node {
+				categoryID
+				categoryName
 				createdAt
 				createdBy
 				displayOrder

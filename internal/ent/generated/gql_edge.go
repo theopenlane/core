@@ -17668,6 +17668,14 @@ func (_m *TrustCenterFAQ) Editors(
 	return _m.QueryEditors().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *TrustCenterFAQ) Category(ctx context.Context) (*CustomTypeEnum, error) {
+	result, err := _m.Edges.CategoryOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryCategory().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *TrustCenterFAQ) TrustCenter(ctx context.Context) (*TrustCenter, error) {
 	result, err := _m.Edges.TrustCenterOrErr()
 	if IsNotLoaded(err) {

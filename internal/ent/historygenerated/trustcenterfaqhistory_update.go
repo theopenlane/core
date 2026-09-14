@@ -100,6 +100,12 @@ func (_u *TrustCenterFAQHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.TrustCenterFaqKindIDCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterFaqKindID, field.TypeString)
 	}
+	if _u.mutation.CategoryNameCleared() {
+		_spec.ClearField(trustcenterfaqhistory.FieldCategoryName, field.TypeString)
+	}
+	if _u.mutation.CategoryIDCleared() {
+		_spec.ClearField(trustcenterfaqhistory.FieldCategoryID, field.TypeString)
+	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterID, field.TypeString)
 	}
@@ -229,6 +235,12 @@ func (_u *TrustCenterFAQHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	}
 	if _u.mutation.TrustCenterFaqKindIDCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterFaqKindID, field.TypeString)
+	}
+	if _u.mutation.CategoryNameCleared() {
+		_spec.ClearField(trustcenterfaqhistory.FieldCategoryName, field.TypeString)
+	}
+	if _u.mutation.CategoryIDCleared() {
+		_spec.ClearField(trustcenterfaqhistory.FieldCategoryID, field.TypeString)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterID, field.TypeString)

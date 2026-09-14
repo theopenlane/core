@@ -85461,6 +85461,21 @@ func (_q *TrustCenterFAQQuery) collectField(ctx context.Context, oneNode bool, o
 				*wq = *query
 			})
 
+		case "category":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CustomTypeEnumClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, customtypeenumImplementors)...); err != nil {
+				return err
+			}
+			_q.withCategory = query
+			if _, ok := fieldSeen[trustcenterfaq.FieldCategoryID]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaq.FieldCategoryID)
+				fieldSeen[trustcenterfaq.FieldCategoryID] = struct{}{}
+			}
+
 		case "trustCenter":
 			var (
 				alias = field.Alias
@@ -85524,6 +85539,16 @@ func (_q *TrustCenterFAQQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[trustcenterfaq.FieldTrustCenterFaqKindID]; !ok {
 				selectedFields = append(selectedFields, trustcenterfaq.FieldTrustCenterFaqKindID)
 				fieldSeen[trustcenterfaq.FieldTrustCenterFaqKindID] = struct{}{}
+			}
+		case "categoryName":
+			if _, ok := fieldSeen[trustcenterfaq.FieldCategoryName]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaq.FieldCategoryName)
+				fieldSeen[trustcenterfaq.FieldCategoryName] = struct{}{}
+			}
+		case "categoryID":
+			if _, ok := fieldSeen[trustcenterfaq.FieldCategoryID]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaq.FieldCategoryID)
+				fieldSeen[trustcenterfaq.FieldCategoryID] = struct{}{}
 			}
 		case "noteID":
 			if _, ok := fieldSeen[trustcenterfaq.FieldNoteID]; !ok {

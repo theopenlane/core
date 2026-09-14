@@ -2390,6 +2390,8 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterFAQHistory struct {
+		CategoryID             func(childComplexity int) int
+		CategoryName           func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
 		DisplayOrder           func(childComplexity int) int
@@ -14736,6 +14738,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TrustCenterEntityHistoryEdge.Node(childComplexity), true
 
+	case "TrustCenterFAQHistory.categoryID":
+		if e.ComplexityRoot.TrustCenterFAQHistory.CategoryID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterFAQHistory.CategoryID(childComplexity), true
+	case "TrustCenterFAQHistory.categoryName":
+		if e.ComplexityRoot.TrustCenterFAQHistory.CategoryName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterFAQHistory.CategoryName(childComplexity), true
 	case "TrustCenterFAQHistory.createdAt":
 		if e.ComplexityRoot.TrustCenterFAQHistory.CreatedAt == nil {
 			break
@@ -45792,6 +45806,14 @@ type TrustCenterFAQHistory implements Node {
   """
   trustCenterFaqKindID: String
   """
+  the category of the trust_center_faq
+  """
+  categoryName: String
+  """
+  the category of the trust_center_faq
+  """
+  categoryID: String
+  """
   ID of the note containing the FAQ question and answer
   """
   noteID: String!
@@ -46004,6 +46026,34 @@ input TrustCenterFAQHistoryWhereInput {
   trustCenterFaqKindIDNotNil: Boolean
   trustCenterFaqKindIDEqualFold: String
   trustCenterFaqKindIDContainsFold: String
+  """
+  category_name field predicates
+  """
+  categoryName: String
+  categoryNameNEQ: String
+  categoryNameIn: [String!]
+  categoryNameNotIn: [String!]
+  categoryNameContains: String
+  categoryNameHasPrefix: String
+  categoryNameHasSuffix: String
+  categoryNameIsNil: Boolean
+  categoryNameNotNil: Boolean
+  categoryNameEqualFold: String
+  categoryNameContainsFold: String
+  """
+  category_id field predicates
+  """
+  categoryID: String
+  categoryIDNEQ: String
+  categoryIDIn: [String!]
+  categoryIDNotIn: [String!]
+  categoryIDContains: String
+  categoryIDHasPrefix: String
+  categoryIDHasSuffix: String
+  categoryIDIsNil: Boolean
+  categoryIDNotNil: Boolean
+  categoryIDEqualFold: String
+  categoryIDContainsFold: String
   """
   note_id field predicates
   """
@@ -56478,6 +56528,10 @@ func (ec *executionContext) childFields_TrustCenterFAQHistory(ctx context.Contex
 		return ec.fieldContext_TrustCenterFAQHistory_trustCenterFaqKindName(ctx, field)
 	case "trustCenterFaqKindID":
 		return ec.fieldContext_TrustCenterFAQHistory_trustCenterFaqKindID(ctx, field)
+	case "categoryName":
+		return ec.fieldContext_TrustCenterFAQHistory_categoryName(ctx, field)
+	case "categoryID":
+		return ec.fieldContext_TrustCenterFAQHistory_categoryID(ctx, field)
 	case "noteID":
 		return ec.fieldContext_TrustCenterFAQHistory_noteID(ctx, field)
 	case "trustCenterID":

@@ -15474,6 +15474,10 @@ input CreateTrustCenterFAQInput {
   """
   trustCenterFaqKindName: String
   """
+  the category of the trust_center_faq
+  """
+  categoryName: String
+  """
   optional reference link for the FAQ
   """
   referenceLink: String
@@ -15484,6 +15488,7 @@ input CreateTrustCenterFAQInput {
   trustCenterFaqKindID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
+  categoryID: ID
   trustCenterID: ID
   noteID: ID!
 }
@@ -67309,6 +67314,14 @@ type TrustCenterFAQ implements Node @modules(names: ["trust_center_module"]) {
   """
   trustCenterFaqKindID: ID
   """
+  the category of the trust_center_faq
+  """
+  categoryName: String
+  """
+  the category of the trust_center_faq
+  """
+  categoryID: ID
+  """
   ID of the note containing the FAQ question and answer
   """
   noteID: ID!
@@ -67387,6 +67400,7 @@ type TrustCenterFAQ implements Node @modules(names: ["trust_center_module"]) {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  category: CustomTypeEnum
   trustCenter: TrustCenter
   note: Note!
 }
@@ -67549,6 +67563,34 @@ input TrustCenterFAQWhereInput {
   trustCenterFaqKindIDEqualFold: ID
   trustCenterFaqKindIDContainsFold: ID
   """
+  category_name field predicates
+  """
+  categoryName: String
+  categoryNameNEQ: String
+  categoryNameIn: [String!]
+  categoryNameNotIn: [String!]
+  categoryNameContains: String
+  categoryNameHasPrefix: String
+  categoryNameHasSuffix: String
+  categoryNameIsNil: Boolean
+  categoryNameNotNil: Boolean
+  categoryNameEqualFold: String
+  categoryNameContainsFold: String
+  """
+  category_id field predicates
+  """
+  categoryID: ID
+  categoryIDNEQ: ID
+  categoryIDIn: [ID!]
+  categoryIDNotIn: [ID!]
+  categoryIDContains: ID
+  categoryIDHasPrefix: ID
+  categoryIDHasSuffix: ID
+  categoryIDIsNil: Boolean
+  categoryIDNotNil: Boolean
+  categoryIDEqualFold: ID
+  categoryIDContainsFold: ID
+  """
   note_id field predicates
   """
   noteID: ID
@@ -67614,6 +67656,11 @@ input TrustCenterFAQWhereInput {
   """
   hasEditors: Boolean
   hasEditorsWith: [GroupWhereInput!]
+  """
+  category edge predicates
+  """
+  hasCategory: Boolean
+  hasCategoryWith: [CustomTypeEnumWhereInput!]
   """
   trust_center edge predicates
   """
@@ -77388,6 +77435,11 @@ input UpdateTrustCenterFAQInput {
   trustCenterFaqKindName: String
   clearTrustCenterFaqKindName: Boolean
   """
+  the category of the trust_center_faq
+  """
+  categoryName: String
+  clearCategoryName: Boolean
+  """
   optional reference link for the FAQ
   """
   referenceLink: String
@@ -77405,6 +77457,8 @@ input UpdateTrustCenterFAQInput {
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
+  categoryID: ID
+  clearCategory: Boolean
 }
 """
 UpdateTrustCenterInput is used for update TrustCenter object.

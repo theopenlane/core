@@ -7999,11 +7999,13 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_faq_kind_name", Type: field.TypeString, Nullable: true},
+		{Name: "category_name", Type: field.TypeString, Nullable: true},
 		{Name: "reference_link", Type: field.TypeString, Nullable: true},
 		{Name: "display_order", Type: field.TypeInt, Nullable: true, Default: 0},
 		{Name: "note_id", Type: field.TypeString},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_faq_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "category_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterFaqsTable holds the schema information for the "trust_center_faqs" table.
 	TrustCenterFaqsTable = &schema.Table{
@@ -8013,19 +8015,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_faqs_notes_trust_center_faqs",
-				Columns:    []*schema.Column{TrustCenterFaqsColumns[11]},
+				Columns:    []*schema.Column{TrustCenterFaqsColumns[12]},
 				RefColumns: []*schema.Column{NotesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "trust_center_faqs_trust_centers_trust_center_faqs",
-				Columns:    []*schema.Column{TrustCenterFaqsColumns[12]},
+				Columns:    []*schema.Column{TrustCenterFaqsColumns[13]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_faqs_custom_type_enums_trust_center_faq_kind",
-				Columns:    []*schema.Column{TrustCenterFaqsColumns[13]},
+				Columns:    []*schema.Column{TrustCenterFaqsColumns[14]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_faqs_custom_type_enums_category",
+				Columns:    []*schema.Column{TrustCenterFaqsColumns[15]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -8034,12 +8042,20 @@ var (
 			{
 				Name:    "trust_center_faq_trust_center_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterFaqsColumns[12]},
+				Columns: []*schema.Column{TrustCenterFaqsColumns[13]},
 			},
 			{
 				Name:    "trustcenterfaq_note_id_trust_center_id",
 				Unique:  true,
-				Columns: []*schema.Column{TrustCenterFaqsColumns[11], TrustCenterFaqsColumns[12]},
+				Columns: []*schema.Column{TrustCenterFaqsColumns[12], TrustCenterFaqsColumns[13]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "trustcenterfaq_category_name_created_at",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterFaqsColumns[9], TrustCenterFaqsColumns[1]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -16057,6 +16073,7 @@ func init() {
 	TrustCenterFaqsTable.ForeignKeys[0].RefTable = NotesTable
 	TrustCenterFaqsTable.ForeignKeys[1].RefTable = TrustCentersTable
 	TrustCenterFaqsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
+	TrustCenterFaqsTable.ForeignKeys[3].RefTable = CustomTypeEnumsTable
 	TrustCenterFaqsTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_faqs",
 	}

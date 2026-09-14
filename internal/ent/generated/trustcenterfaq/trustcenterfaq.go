@@ -33,6 +33,10 @@ const (
 	FieldTrustCenterFaqKindName = "trust_center_faq_kind_name"
 	// FieldTrustCenterFaqKindID holds the string denoting the trust_center_faq_kind_id field in the database.
 	FieldTrustCenterFaqKindID = "trust_center_faq_kind_id"
+	// FieldCategoryName holds the string denoting the category_name field in the database.
+	FieldCategoryName = "category_name"
+	// FieldCategoryID holds the string denoting the category_id field in the database.
+	FieldCategoryID = "category_id"
 	// FieldNoteID holds the string denoting the note_id field in the database.
 	FieldNoteID = "note_id"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
@@ -47,6 +51,8 @@ const (
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
 	EdgeEditors = "editors"
+	// EdgeCategory holds the string denoting the category edge name in mutations.
+	EdgeCategory = "category"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
 	EdgeTrustCenter = "trust_center"
 	// EdgeNote holds the string denoting the note edge name in mutations.
@@ -74,6 +80,13 @@ const (
 	EditorsInverseTable = "groups"
 	// EditorsColumn is the table column denoting the editors relation/edge.
 	EditorsColumn = "trust_center_faq_editors"
+	// CategoryTable is the table that holds the category relation/edge.
+	CategoryTable = "trust_center_faqs"
+	// CategoryInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	CategoryInverseTable = "custom_type_enums"
+	// CategoryColumn is the table column denoting the category relation/edge.
+	CategoryColumn = "category_id"
 	// TrustCenterTable is the table that holds the trust_center relation/edge.
 	TrustCenterTable = "trust_center_faqs"
 	// TrustCenterInverseTable is the table name for the TrustCenter entity.
@@ -102,6 +115,8 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTrustCenterFaqKindName,
 	FieldTrustCenterFaqKindID,
+	FieldCategoryName,
+	FieldCategoryID,
 	FieldNoteID,
 	FieldTrustCenterID,
 	FieldReferenceLink,
@@ -124,7 +139,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [9]ent.Hook
+	Hooks        [10]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -198,6 +213,16 @@ func ByTrustCenterFaqKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTrustCenterFaqKindID, opts...).ToFunc()
 }
 
+// ByCategoryName orders the results by the category_name field.
+func ByCategoryName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategoryName, opts...).ToFunc()
+}
+
+// ByCategoryID orders the results by the category_id field.
+func ByCategoryID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategoryID, opts...).ToFunc()
+}
+
 // ByNoteID orders the results by the note_id field.
 func ByNoteID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNoteID, opts...).ToFunc()
@@ -253,6 +278,13 @@ func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByCategoryField orders the results by category field.
+func ByCategoryField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCategoryStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByTrustCenterField orders the results by trust_center field.
 func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -285,6 +317,13 @@ func newEditorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EditorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
+	)
+}
+func newCategoryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CategoryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, CategoryTable, CategoryColumn),
 	)
 }
 func newTrustCenterStep() *sqlgraph.Step {

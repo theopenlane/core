@@ -92148,6 +92148,32 @@ type TrustCenterFAQWhereInput struct {
 	TrustCenterFaqKindIDEqualFold    *string  `json:"trustCenterFaqKindIDEqualFold,omitempty"`
 	TrustCenterFaqKindIDContainsFold *string  `json:"trustCenterFaqKindIDContainsFold,omitempty"`
 
+	// "category_name" field predicates.
+	CategoryName             *string  `json:"categoryName,omitempty"`
+	CategoryNameNEQ          *string  `json:"categoryNameNEQ,omitempty"`
+	CategoryNameIn           []string `json:"categoryNameIn,omitempty"`
+	CategoryNameNotIn        []string `json:"categoryNameNotIn,omitempty"`
+	CategoryNameContains     *string  `json:"categoryNameContains,omitempty"`
+	CategoryNameHasPrefix    *string  `json:"categoryNameHasPrefix,omitempty"`
+	CategoryNameHasSuffix    *string  `json:"categoryNameHasSuffix,omitempty"`
+	CategoryNameIsNil        bool     `json:"categoryNameIsNil,omitempty"`
+	CategoryNameNotNil       bool     `json:"categoryNameNotNil,omitempty"`
+	CategoryNameEqualFold    *string  `json:"categoryNameEqualFold,omitempty"`
+	CategoryNameContainsFold *string  `json:"categoryNameContainsFold,omitempty"`
+
+	// "category_id" field predicates.
+	CategoryID             *string  `json:"categoryID,omitempty"`
+	CategoryIDNEQ          *string  `json:"categoryIDNEQ,omitempty"`
+	CategoryIDIn           []string `json:"categoryIDIn,omitempty"`
+	CategoryIDNotIn        []string `json:"categoryIDNotIn,omitempty"`
+	CategoryIDContains     *string  `json:"categoryIDContains,omitempty"`
+	CategoryIDHasPrefix    *string  `json:"categoryIDHasPrefix,omitempty"`
+	CategoryIDHasSuffix    *string  `json:"categoryIDHasSuffix,omitempty"`
+	CategoryIDIsNil        bool     `json:"categoryIDIsNil,omitempty"`
+	CategoryIDNotNil       bool     `json:"categoryIDNotNil,omitempty"`
+	CategoryIDEqualFold    *string  `json:"categoryIDEqualFold,omitempty"`
+	CategoryIDContainsFold *string  `json:"categoryIDContainsFold,omitempty"`
+
 	// "note_id" field predicates.
 	NoteID             *string  `json:"noteID,omitempty"`
 	NoteIDNEQ          *string  `json:"noteIDNEQ,omitempty"`
@@ -92206,6 +92232,10 @@ type TrustCenterFAQWhereInput struct {
 	// "editors" edge predicates.
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
+	// "category" edge predicates.
+	HasCategory     *bool                       `json:"hasCategory,omitempty"`
+	HasCategoryWith []*CustomTypeEnumWhereInput `json:"hasCategoryWith,omitempty"`
 
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
@@ -92512,6 +92542,72 @@ func (i *TrustCenterFAQWhereInput) P() (predicate.TrustCenterFAQ, error) {
 	if i.TrustCenterFaqKindIDContainsFold != nil {
 		predicates = append(predicates, trustcenterfaq.TrustCenterFaqKindIDContainsFold(*i.TrustCenterFaqKindIDContainsFold))
 	}
+	if i.CategoryName != nil {
+		predicates = append(predicates, trustcenterfaq.CategoryNameEQ(*i.CategoryName))
+	}
+	if i.CategoryNameNEQ != nil {
+		predicates = append(predicates, trustcenterfaq.CategoryNameNEQ(*i.CategoryNameNEQ))
+	}
+	if len(i.CategoryNameIn) > 0 {
+		predicates = append(predicates, trustcenterfaq.CategoryNameIn(i.CategoryNameIn...))
+	}
+	if len(i.CategoryNameNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaq.CategoryNameNotIn(i.CategoryNameNotIn...))
+	}
+	if i.CategoryNameContains != nil {
+		predicates = append(predicates, trustcenterfaq.CategoryNameContains(*i.CategoryNameContains))
+	}
+	if i.CategoryNameHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaq.CategoryNameHasPrefix(*i.CategoryNameHasPrefix))
+	}
+	if i.CategoryNameHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaq.CategoryNameHasSuffix(*i.CategoryNameHasSuffix))
+	}
+	if i.CategoryNameIsNil {
+		predicates = append(predicates, trustcenterfaq.CategoryNameIsNil())
+	}
+	if i.CategoryNameNotNil {
+		predicates = append(predicates, trustcenterfaq.CategoryNameNotNil())
+	}
+	if i.CategoryNameEqualFold != nil {
+		predicates = append(predicates, trustcenterfaq.CategoryNameEqualFold(*i.CategoryNameEqualFold))
+	}
+	if i.CategoryNameContainsFold != nil {
+		predicates = append(predicates, trustcenterfaq.CategoryNameContainsFold(*i.CategoryNameContainsFold))
+	}
+	if i.CategoryID != nil {
+		predicates = append(predicates, trustcenterfaq.CategoryIDEQ(*i.CategoryID))
+	}
+	if i.CategoryIDNEQ != nil {
+		predicates = append(predicates, trustcenterfaq.CategoryIDNEQ(*i.CategoryIDNEQ))
+	}
+	if len(i.CategoryIDIn) > 0 {
+		predicates = append(predicates, trustcenterfaq.CategoryIDIn(i.CategoryIDIn...))
+	}
+	if len(i.CategoryIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaq.CategoryIDNotIn(i.CategoryIDNotIn...))
+	}
+	if i.CategoryIDContains != nil {
+		predicates = append(predicates, trustcenterfaq.CategoryIDContains(*i.CategoryIDContains))
+	}
+	if i.CategoryIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaq.CategoryIDHasPrefix(*i.CategoryIDHasPrefix))
+	}
+	if i.CategoryIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaq.CategoryIDHasSuffix(*i.CategoryIDHasSuffix))
+	}
+	if i.CategoryIDIsNil {
+		predicates = append(predicates, trustcenterfaq.CategoryIDIsNil())
+	}
+	if i.CategoryIDNotNil {
+		predicates = append(predicates, trustcenterfaq.CategoryIDNotNil())
+	}
+	if i.CategoryIDEqualFold != nil {
+		predicates = append(predicates, trustcenterfaq.CategoryIDEqualFold(*i.CategoryIDEqualFold))
+	}
+	if i.CategoryIDContainsFold != nil {
+		predicates = append(predicates, trustcenterfaq.CategoryIDContainsFold(*i.CategoryIDContainsFold))
+	}
 	if i.NoteID != nil {
 		predicates = append(predicates, trustcenterfaq.NoteIDEQ(*i.NoteID))
 	}
@@ -92686,6 +92782,25 @@ func (i *TrustCenterFAQWhereInput) P() (predicate.TrustCenterFAQ, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, trustcenterfaq.HasEditorsWith(with...))
+	}
+	if i.HasCategory != nil {
+		p := trustcenterfaq.HasCategory()
+		if !*i.HasCategory {
+			p = trustcenterfaq.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCategoryWith) > 0 {
+		with := make([]predicate.CustomTypeEnum, 0, len(i.HasCategoryWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
+		for _, w := range i.HasCategoryWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCategoryWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterfaq.HasCategoryWith(with...))
 	}
 	if i.HasTrustCenter != nil {
 		p := trustcenterfaq.HasTrustCenter()

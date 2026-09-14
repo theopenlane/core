@@ -2382,6 +2382,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterfaqhistory.FieldDeletedBy:              {Type: field.TypeString, Column: trustcenterfaqhistory.FieldDeletedBy},
 			trustcenterfaqhistory.FieldTrustCenterFaqKindName: {Type: field.TypeString, Column: trustcenterfaqhistory.FieldTrustCenterFaqKindName},
 			trustcenterfaqhistory.FieldTrustCenterFaqKindID:   {Type: field.TypeString, Column: trustcenterfaqhistory.FieldTrustCenterFaqKindID},
+			trustcenterfaqhistory.FieldCategoryName:           {Type: field.TypeString, Column: trustcenterfaqhistory.FieldCategoryName},
+			trustcenterfaqhistory.FieldCategoryID:             {Type: field.TypeString, Column: trustcenterfaqhistory.FieldCategoryID},
 			trustcenterfaqhistory.FieldNoteID:                 {Type: field.TypeString, Column: trustcenterfaqhistory.FieldNoteID},
 			trustcenterfaqhistory.FieldTrustCenterID:          {Type: field.TypeString, Column: trustcenterfaqhistory.FieldTrustCenterID},
 			trustcenterfaqhistory.FieldReferenceLink:          {Type: field.TypeString, Column: trustcenterfaqhistory.FieldReferenceLink},
@@ -13116,6 +13118,16 @@ func (f *TrustCenterFAQHistoryFilter) WhereTrustCenterFaqKindName(p entql.String
 // WhereTrustCenterFaqKindID applies the entql string predicate on the trust_center_faq_kind_id field.
 func (f *TrustCenterFAQHistoryFilter) WhereTrustCenterFaqKindID(p entql.StringP) {
 	f.Where(p.Field(trustcenterfaqhistory.FieldTrustCenterFaqKindID))
+}
+
+// WhereCategoryName applies the entql string predicate on the category_name field.
+func (f *TrustCenterFAQHistoryFilter) WhereCategoryName(p entql.StringP) {
+	f.Where(p.Field(trustcenterfaqhistory.FieldCategoryName))
+}
+
+// WhereCategoryID applies the entql string predicate on the category_id field.
+func (f *TrustCenterFAQHistoryFilter) WhereCategoryID(p entql.StringP) {
+	f.Where(p.Field(trustcenterfaqhistory.FieldCategoryID))
 }
 
 // WhereNoteID applies the entql string predicate on the note_id field.

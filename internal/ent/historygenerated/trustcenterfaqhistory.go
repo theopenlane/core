@@ -44,6 +44,10 @@ type TrustCenterFAQHistory struct {
 	TrustCenterFaqKindName string `json:"trust_center_faq_kind_name,omitempty"`
 	// the kind of the trust_center_faq
 	TrustCenterFaqKindID string `json:"trust_center_faq_kind_id,omitempty"`
+	// the category of the trust_center_faq
+	CategoryName string `json:"category_name,omitempty"`
+	// the category of the trust_center_faq
+	CategoryID string `json:"category_id,omitempty"`
 	// ID of the note containing the FAQ question and answer
 	NoteID string `json:"note_id,omitempty"`
 	// ID of the trust center
@@ -64,7 +68,7 @@ func (*TrustCenterFAQHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case trustcenterfaqhistory.FieldDisplayOrder:
 			values[i] = new(sql.NullInt64)
-		case trustcenterfaqhistory.FieldID, trustcenterfaqhistory.FieldRef, trustcenterfaqhistory.FieldCreatedBy, trustcenterfaqhistory.FieldUpdatedBy, trustcenterfaqhistory.FieldUpdatedByImpersonator, trustcenterfaqhistory.FieldDeletedBy, trustcenterfaqhistory.FieldTrustCenterFaqKindName, trustcenterfaqhistory.FieldTrustCenterFaqKindID, trustcenterfaqhistory.FieldNoteID, trustcenterfaqhistory.FieldTrustCenterID, trustcenterfaqhistory.FieldReferenceLink:
+		case trustcenterfaqhistory.FieldID, trustcenterfaqhistory.FieldRef, trustcenterfaqhistory.FieldCreatedBy, trustcenterfaqhistory.FieldUpdatedBy, trustcenterfaqhistory.FieldUpdatedByImpersonator, trustcenterfaqhistory.FieldDeletedBy, trustcenterfaqhistory.FieldTrustCenterFaqKindName, trustcenterfaqhistory.FieldTrustCenterFaqKindID, trustcenterfaqhistory.FieldCategoryName, trustcenterfaqhistory.FieldCategoryID, trustcenterfaqhistory.FieldNoteID, trustcenterfaqhistory.FieldTrustCenterID, trustcenterfaqhistory.FieldReferenceLink:
 			values[i] = new(sql.NullString)
 		case trustcenterfaqhistory.FieldHistoryTime, trustcenterfaqhistory.FieldCreatedAt, trustcenterfaqhistory.FieldUpdatedAt, trustcenterfaqhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -161,6 +165,18 @@ func (_m *TrustCenterFAQHistory) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field trust_center_faq_kind_id", values[i])
 			} else if value.Valid {
 				_m.TrustCenterFaqKindID = value.String
+			}
+		case trustcenterfaqhistory.FieldCategoryName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category_name", values[i])
+			} else if value.Valid {
+				_m.CategoryName = value.String
+			}
+		case trustcenterfaqhistory.FieldCategoryID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category_id", values[i])
+			} else if value.Valid {
+				_m.CategoryID = value.String
 			}
 		case trustcenterfaqhistory.FieldNoteID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -259,6 +275,12 @@ func (_m *TrustCenterFAQHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("trust_center_faq_kind_id=")
 	builder.WriteString(_m.TrustCenterFaqKindID)
+	builder.WriteString(", ")
+	builder.WriteString("category_name=")
+	builder.WriteString(_m.CategoryName)
+	builder.WriteString(", ")
+	builder.WriteString("category_id=")
+	builder.WriteString(_m.CategoryID)
 	builder.WriteString(", ")
 	builder.WriteString("note_id=")
 	builder.WriteString(_m.NoteID)

@@ -29721,6 +29721,22 @@ func (c *TrustCenterFAQClient) QueryEditors(_m *TrustCenterFAQ) *GroupQuery {
 	return query
 }
 
+// QueryCategory queries the category edge of a TrustCenterFAQ.
+func (c *TrustCenterFAQClient) QueryCategory(_m *TrustCenterFAQ) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterfaq.Table, trustcenterfaq.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterfaq.CategoryTable, trustcenterfaq.CategoryColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryTrustCenter queries the trust_center edge of a TrustCenterFAQ.
 func (c *TrustCenterFAQClient) QueryTrustCenter(_m *TrustCenterFAQ) *TrustCenterQuery {
 	query := (&TrustCenterClient{config: c.config}).Query()

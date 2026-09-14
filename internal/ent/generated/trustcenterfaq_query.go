@@ -33,6 +33,7 @@ type TrustCenterFAQQuery struct {
 	withTrustCenterFaqKind *CustomTypeEnumQuery
 	withBlockedGroups      *GroupQuery
 	withEditors            *GroupQuery
+	withCategory           *CustomTypeEnumQuery
 	withTrustCenter        *TrustCenterQuery
 	withNote               *NoteQuery
 	loadTotal              []func(context.Context, []*TrustCenterFAQ) error
@@ -134,6 +135,28 @@ func (_q *TrustCenterFAQQuery) QueryEditors() *GroupQuery {
 			sqlgraph.From(trustcenterfaq.Table, trustcenterfaq.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterfaq.EditorsTable, trustcenterfaq.EditorsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCategory chains the current query on the "category" edge.
+func (_q *TrustCenterFAQQuery) QueryCategory() *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterfaq.Table, trustcenterfaq.FieldID, selector),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterfaq.CategoryTable, trustcenterfaq.CategoryColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -380,6 +403,7 @@ func (_q *TrustCenterFAQQuery) Clone() *TrustCenterFAQQuery {
 		withTrustCenterFaqKind: _q.withTrustCenterFaqKind.Clone(),
 		withBlockedGroups:      _q.withBlockedGroups.Clone(),
 		withEditors:            _q.withEditors.Clone(),
+		withCategory:           _q.withCategory.Clone(),
 		withTrustCenter:        _q.withTrustCenter.Clone(),
 		withNote:               _q.withNote.Clone(),
 		// clone intermediate query.
@@ -419,6 +443,17 @@ func (_q *TrustCenterFAQQuery) WithEditors(opts ...func(*GroupQuery)) *TrustCent
 		opt(query)
 	}
 	_q.withEditors = query
+	return _q
+}
+
+// WithCategory tells the query-builder to eager-load the nodes that are connected to
+// the "category" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterFAQQuery) WithCategory(opts ...func(*CustomTypeEnumQuery)) *TrustCenterFAQQuery {
+	query := (&CustomTypeEnumClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCategory = query
 	return _q
 }
 
@@ -528,10 +563,11 @@ func (_q *TrustCenterFAQQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*TrustCenterFAQ{}
 		_spec       = _q.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [6]bool{
 			_q.withTrustCenterFaqKind != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
+			_q.withCategory != nil,
 			_q.withTrustCenter != nil,
 			_q.withNote != nil,
 		}
@@ -574,6 +610,12 @@ func (_q *TrustCenterFAQQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *TrustCenterFAQ) { n.Edges.Editors = []*Group{} },
 			func(n *TrustCenterFAQ, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCategory; query != nil {
+		if err := _q.loadCategory(ctx, query, nodes, nil,
+			func(n *TrustCenterFAQ, e *CustomTypeEnum) { n.Edges.Category = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -702,6 +744,35 @@ func (_q *TrustCenterFAQQuery) loadEditors(ctx context.Context, query *GroupQuer
 	}
 	return nil
 }
+func (_q *TrustCenterFAQQuery) loadCategory(ctx context.Context, query *CustomTypeEnumQuery, nodes []*TrustCenterFAQ, init func(*TrustCenterFAQ), assign func(*TrustCenterFAQ, *CustomTypeEnum)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenterFAQ)
+	for i := range nodes {
+		fk := nodes[i].CategoryID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(customtypeenum.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "category_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *TrustCenterFAQQuery) loadTrustCenter(ctx context.Context, query *TrustCenterQuery, nodes []*TrustCenterFAQ, init func(*TrustCenterFAQ), assign func(*TrustCenterFAQ, *TrustCenter)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*TrustCenterFAQ)
@@ -791,6 +862,9 @@ func (_q *TrustCenterFAQQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withTrustCenterFaqKind != nil {
 			_spec.Node.AddColumnOnce(trustcenterfaq.FieldTrustCenterFaqKindID)
+		}
+		if _q.withCategory != nil {
+			_spec.Node.AddColumnOnce(trustcenterfaq.FieldCategoryID)
 		}
 		if _q.withTrustCenter != nil {
 			_spec.Node.AddColumnOnce(trustcenterfaq.FieldTrustCenterID)

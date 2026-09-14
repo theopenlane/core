@@ -2512,6 +2512,8 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_faq_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_faq_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "category_name", Type: field.TypeString, Nullable: true},
+		{Name: "category_id", Type: field.TypeString, Nullable: true},
 		{Name: "note_id", Type: field.TypeString},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "reference_link", Type: field.TypeString, Nullable: true},

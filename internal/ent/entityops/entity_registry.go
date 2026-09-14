@@ -7364,6 +7364,8 @@ func init() {
 		{Name: "url", Label: "URL", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaTrustCenterFAQ.Fields = []FieldDescriptor{
+		{Name: "category_id", Label: "CategoryID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "category_name", Label: "CategoryName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
@@ -17079,6 +17081,15 @@ func init() {
 			TargetType:  "Group",
 			CreateField: "blocked_group_ids",
 			AddField:    "add_blocked_group_ids",
+		},
+		{
+			Name:        "category",
+			Label:       "Category",
+			Target:      SchemaCustomTypeEnum,
+			TargetType:  "CustomTypeEnum",
+			Unique:      true,
+			CreateField: "category_id",
+			Field:       "category_id",
 		},
 		{
 			Name:        "editors",

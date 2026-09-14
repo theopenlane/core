@@ -2371,7 +2371,7 @@ func init() {
 	// trustcenterfaqhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	trustcenterfaqhistory.DefaultUpdatedAt = trustcenterfaqhistoryDescUpdatedAt.Default.(func() time.Time)
 	// trustcenterfaqhistoryDescDisplayOrder is the schema descriptor for display_order field.
-	trustcenterfaqhistoryDescDisplayOrder := trustcenterfaqhistoryFields[16].Descriptor()
+	trustcenterfaqhistoryDescDisplayOrder := trustcenterfaqhistoryFields[18].Descriptor()
 	// trustcenterfaqhistory.DefaultDisplayOrder holds the default value on creation for the display_order field.
 	trustcenterfaqhistory.DefaultDisplayOrder = trustcenterfaqhistoryDescDisplayOrder.Default.(int)
 	// trustcenterfaqhistoryDescID is the schema descriptor for id field.

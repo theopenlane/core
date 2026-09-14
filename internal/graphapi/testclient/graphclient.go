@@ -134848,6 +134848,8 @@ func (t *UpdateTrustCenterEntity_UpdateTrustCenterEntity) GetTrustCenterEntity()
 }
 
 type CreateBulkCSVTrustCenterFAQ_CreateBulkCSVTrustCenterFaq_TrustCenterFAQs struct {
+	CategoryID             *string    "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	CategoryName           *string    "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	CreatedAt              *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DisplayOrder           *int64     "json:\"displayOrder,omitempty\" graphql:\"displayOrder\""
@@ -134862,6 +134864,18 @@ type CreateBulkCSVTrustCenterFAQ_CreateBulkCSVTrustCenterFaq_TrustCenterFAQs str
 	UpdatedByImpersonator  *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
+func (t *CreateBulkCSVTrustCenterFAQ_CreateBulkCSVTrustCenterFaq_TrustCenterFAQs) GetCategoryID() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterFAQ_CreateBulkCSVTrustCenterFaq_TrustCenterFAQs{}
+	}
+	return t.CategoryID
+}
+func (t *CreateBulkCSVTrustCenterFAQ_CreateBulkCSVTrustCenterFaq_TrustCenterFAQs) GetCategoryName() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterFAQ_CreateBulkCSVTrustCenterFaq_TrustCenterFAQs{}
+	}
+	return t.CategoryName
+}
 func (t *CreateBulkCSVTrustCenterFAQ_CreateBulkCSVTrustCenterFaq_TrustCenterFAQs) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkCSVTrustCenterFAQ_CreateBulkCSVTrustCenterFaq_TrustCenterFAQs{}
@@ -134947,6 +134961,8 @@ func (t *CreateBulkCSVTrustCenterFAQ_CreateBulkCSVTrustCenterFaq) GetTrustCenter
 }
 
 type CreateBulkTrustCenterFAQ_CreateBulkTrustCenterFaq_TrustCenterFAQs struct {
+	CategoryID             *string    "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	CategoryName           *string    "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	CreatedAt              *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DisplayOrder           *int64     "json:\"displayOrder,omitempty\" graphql:\"displayOrder\""
@@ -134961,6 +134977,18 @@ type CreateBulkTrustCenterFAQ_CreateBulkTrustCenterFaq_TrustCenterFAQs struct {
 	UpdatedByImpersonator  *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
+func (t *CreateBulkTrustCenterFAQ_CreateBulkTrustCenterFaq_TrustCenterFAQs) GetCategoryID() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterFAQ_CreateBulkTrustCenterFaq_TrustCenterFAQs{}
+	}
+	return t.CategoryID
+}
+func (t *CreateBulkTrustCenterFAQ_CreateBulkTrustCenterFaq_TrustCenterFAQs) GetCategoryName() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterFAQ_CreateBulkTrustCenterFaq_TrustCenterFAQs{}
+	}
+	return t.CategoryName
+}
 func (t *CreateBulkTrustCenterFAQ_CreateBulkTrustCenterFaq_TrustCenterFAQs) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateBulkTrustCenterFAQ_CreateBulkTrustCenterFaq_TrustCenterFAQs{}
@@ -135046,6 +135074,8 @@ func (t *CreateBulkTrustCenterFAQ_CreateBulkTrustCenterFaq) GetTrustCenterFAQs()
 }
 
 type CreateTrustCenterFAQ_CreateTrustCenterFaq_TrustCenterFaq struct {
+	CategoryID             *string    "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	CategoryName           *string    "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	CreatedAt              *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DisplayOrder           *int64     "json:\"displayOrder,omitempty\" graphql:\"displayOrder\""
@@ -135060,6 +135090,18 @@ type CreateTrustCenterFAQ_CreateTrustCenterFaq_TrustCenterFaq struct {
 	UpdatedByImpersonator  *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
+func (t *CreateTrustCenterFAQ_CreateTrustCenterFaq_TrustCenterFaq) GetCategoryID() *string {
+	if t == nil {
+		t = &CreateTrustCenterFAQ_CreateTrustCenterFaq_TrustCenterFaq{}
+	}
+	return t.CategoryID
+}
+func (t *CreateTrustCenterFAQ_CreateTrustCenterFaq_TrustCenterFaq) GetCategoryName() *string {
+	if t == nil {
+		t = &CreateTrustCenterFAQ_CreateTrustCenterFaq_TrustCenterFaq{}
+	}
+	return t.CategoryName
+}
 func (t *CreateTrustCenterFAQ_CreateTrustCenterFaq_TrustCenterFaq) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &CreateTrustCenterFAQ_CreateTrustCenterFaq_TrustCenterFaq{}
@@ -135213,6 +135255,8 @@ func (t *GetAllTrustCenterFAQS_TrustCenterFAQs_PageInfo) GetStartCursor() *strin
 }
 
 type GetAllTrustCenterFAQS_TrustCenterFAQs_Edges_Node struct {
+	CategoryID             *string    "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	CategoryName           *string    "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	CreatedAt              *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DisplayOrder           *int64     "json:\"displayOrder,omitempty\" graphql:\"displayOrder\""
@@ -135227,6 +135271,18 @@ type GetAllTrustCenterFAQS_TrustCenterFAQs_Edges_Node struct {
 	UpdatedByImpersonator  *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
+func (t *GetAllTrustCenterFAQS_TrustCenterFAQs_Edges_Node) GetCategoryID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterFAQS_TrustCenterFAQs_Edges_Node{}
+	}
+	return t.CategoryID
+}
+func (t *GetAllTrustCenterFAQS_TrustCenterFAQs_Edges_Node) GetCategoryName() *string {
+	if t == nil {
+		t = &GetAllTrustCenterFAQS_TrustCenterFAQs_Edges_Node{}
+	}
+	return t.CategoryName
+}
 func (t *GetAllTrustCenterFAQS_TrustCenterFAQs_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetAllTrustCenterFAQS_TrustCenterFAQs_Edges_Node{}
@@ -135461,6 +135517,8 @@ func (t *GetTrustCenterFAQS_TrustCenterFAQs_PageInfo) GetStartCursor() *string {
 }
 
 type GetTrustCenterFAQS_TrustCenterFAQs_Edges_Node struct {
+	CategoryID             *string    "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	CategoryName           *string    "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	CreatedAt              *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DisplayOrder           *int64     "json:\"displayOrder,omitempty\" graphql:\"displayOrder\""
@@ -135475,6 +135533,18 @@ type GetTrustCenterFAQS_TrustCenterFAQs_Edges_Node struct {
 	UpdatedByImpersonator  *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
+func (t *GetTrustCenterFAQS_TrustCenterFAQs_Edges_Node) GetCategoryID() *string {
+	if t == nil {
+		t = &GetTrustCenterFAQS_TrustCenterFAQs_Edges_Node{}
+	}
+	return t.CategoryID
+}
+func (t *GetTrustCenterFAQS_TrustCenterFAQs_Edges_Node) GetCategoryName() *string {
+	if t == nil {
+		t = &GetTrustCenterFAQS_TrustCenterFAQs_Edges_Node{}
+	}
+	return t.CategoryName
+}
 func (t *GetTrustCenterFAQS_TrustCenterFAQs_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &GetTrustCenterFAQS_TrustCenterFAQs_Edges_Node{}
@@ -135585,6 +135655,8 @@ func (t *GetTrustCenterFAQS_TrustCenterFAQs) GetTotalCount() int64 {
 }
 
 type UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq_TrustCenterFAQs struct {
+	CategoryID             *string    "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	CategoryName           *string    "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	CreatedAt              *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DisplayOrder           *int64     "json:\"displayOrder,omitempty\" graphql:\"displayOrder\""
@@ -135599,6 +135671,18 @@ type UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq_TrustCenterFAQs str
 	UpdatedByImpersonator  *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
+func (t *UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq_TrustCenterFAQs) GetCategoryID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq_TrustCenterFAQs{}
+	}
+	return t.CategoryID
+}
+func (t *UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq_TrustCenterFAQs) GetCategoryName() *string {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq_TrustCenterFAQs{}
+	}
+	return t.CategoryName
+}
 func (t *UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq_TrustCenterFAQs) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq_TrustCenterFAQs{}
@@ -135705,6 +135789,8 @@ func (t *UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq) GetUpdatedIDs(
 }
 
 type UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq_TrustCenterFAQs struct {
+	CategoryID             *string    "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	CategoryName           *string    "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	CreatedAt              *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DisplayOrder           *int64     "json:\"displayOrder,omitempty\" graphql:\"displayOrder\""
@@ -135719,6 +135805,18 @@ type UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq_TrustCenterFAQs struct {
 	UpdatedByImpersonator  *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
+func (t *UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq_TrustCenterFAQs) GetCategoryID() *string {
+	if t == nil {
+		t = &UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq_TrustCenterFAQs{}
+	}
+	return t.CategoryID
+}
+func (t *UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq_TrustCenterFAQs) GetCategoryName() *string {
+	if t == nil {
+		t = &UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq_TrustCenterFAQs{}
+	}
+	return t.CategoryName
+}
 func (t *UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq_TrustCenterFAQs) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq_TrustCenterFAQs{}
@@ -135825,6 +135923,8 @@ func (t *UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq) GetUpdatedIDs() []st
 }
 
 type UpdateTrustCenterFAQ_UpdateTrustCenterFaq_TrustCenterFaq struct {
+	CategoryID             *string    "json:\"categoryID,omitempty\" graphql:\"categoryID\""
+	CategoryName           *string    "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	CreatedAt              *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DisplayOrder           *int64     "json:\"displayOrder,omitempty\" graphql:\"displayOrder\""
@@ -135839,6 +135939,18 @@ type UpdateTrustCenterFAQ_UpdateTrustCenterFaq_TrustCenterFaq struct {
 	UpdatedByImpersonator  *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
+func (t *UpdateTrustCenterFAQ_UpdateTrustCenterFaq_TrustCenterFaq) GetCategoryID() *string {
+	if t == nil {
+		t = &UpdateTrustCenterFAQ_UpdateTrustCenterFaq_TrustCenterFaq{}
+	}
+	return t.CategoryID
+}
+func (t *UpdateTrustCenterFAQ_UpdateTrustCenterFaq_TrustCenterFaq) GetCategoryName() *string {
+	if t == nil {
+		t = &UpdateTrustCenterFAQ_UpdateTrustCenterFaq_TrustCenterFaq{}
+	}
+	return t.CategoryName
+}
 func (t *UpdateTrustCenterFAQ_UpdateTrustCenterFaq_TrustCenterFaq) GetCreatedAt() *time.Time {
 	if t == nil {
 		t = &UpdateTrustCenterFAQ_UpdateTrustCenterFaq_TrustCenterFaq{}
@@ -205625,6 +205737,8 @@ func (c *Client) UpdateTrustCenterEntity(ctx context.Context, updateTrustCenterE
 const CreateBulkCSVTrustCenterFaqDocument = `mutation CreateBulkCSVTrustCenterFAQ ($input: Upload!) {
 	createBulkCSVTrustCenterFAQ(input: $input) {
 		trustCenterFAQs {
+			categoryID
+			categoryName
 			createdAt
 			createdBy
 			displayOrder
@@ -205662,6 +205776,8 @@ func (c *Client) CreateBulkCSVTrustCenterFaq(ctx context.Context, input graphql.
 const CreateBulkTrustCenterFaqDocument = `mutation CreateBulkTrustCenterFAQ ($input: [CreateTrustCenterFAQInput!]) {
 	createBulkTrustCenterFAQ(input: $input) {
 		trustCenterFAQs {
+			categoryID
+			categoryName
 			createdAt
 			createdBy
 			displayOrder
@@ -205699,6 +205815,8 @@ func (c *Client) CreateBulkTrustCenterFaq(ctx context.Context, input []*CreateTr
 const CreateTrustCenterFaqDocument = `mutation CreateTrustCenterFAQ ($input: CreateTrustCenterFAQInput!) {
 	createTrustCenterFAQ(input: $input) {
 		trustCenterFAQ {
+			categoryID
+			categoryName
 			createdAt
 			createdBy
 			displayOrder
@@ -205794,6 +205912,8 @@ const GetAllTrustCenterFaqsDocument = `query GetAllTrustCenterFAQS ($first: Int,
 		}
 		edges {
 			node {
+				categoryID
+				categoryName
 				createdAt
 				createdBy
 				displayOrder
@@ -205880,6 +206000,8 @@ const GetTrustCenterFaqsDocument = `query GetTrustCenterFAQS ($first: Int, $last
 		}
 		edges {
 			node {
+				categoryID
+				categoryName
 				createdAt
 				createdBy
 				displayOrder
@@ -205923,6 +206045,8 @@ func (c *Client) GetTrustCenterFaqs(ctx context.Context, first *int64, last *int
 const UpdateBulkCSVTrustCenterFaqDocument = `mutation UpdateBulkCSVTrustCenterFAQ ($input: Upload!) {
 	updateBulkCSVTrustCenterFAQ(input: $input) {
 		trustCenterFAQs {
+			categoryID
+			categoryName
 			createdAt
 			createdBy
 			displayOrder
@@ -205963,6 +206087,8 @@ func (c *Client) UpdateBulkCSVTrustCenterFaq(ctx context.Context, input graphql.
 const UpdateBulkTrustCenterFaqDocument = `mutation UpdateBulkTrustCenterFAQ ($ids: [ID!]!, $input: UpdateTrustCenterFAQInput!) {
 	updateBulkTrustCenterFAQ(ids: $ids, input: $input) {
 		trustCenterFAQs {
+			categoryID
+			categoryName
 			createdAt
 			createdBy
 			displayOrder
@@ -206004,6 +206130,8 @@ func (c *Client) UpdateBulkTrustCenterFaq(ctx context.Context, ids []string, inp
 const UpdateTrustCenterFaqDocument = `mutation UpdateTrustCenterFAQ ($updateTrustCenterFAQId: ID!, $input: UpdateTrustCenterFAQInput!) {
 	updateTrustCenterFAQ(id: $updateTrustCenterFAQId, input: $input) {
 		trustCenterFAQ {
+			categoryID
+			categoryName
 			createdAt
 			createdBy
 			displayOrder

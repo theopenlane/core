@@ -150,6 +150,34 @@ func (_c *TrustCenterFAQCreate) SetNillableTrustCenterFaqKindID(v *string) *Trus
 	return _c
 }
 
+// SetCategoryName sets the "category_name" field.
+func (_c *TrustCenterFAQCreate) SetCategoryName(v string) *TrustCenterFAQCreate {
+	_c.mutation.SetCategoryName(v)
+	return _c
+}
+
+// SetNillableCategoryName sets the "category_name" field if the given value is not nil.
+func (_c *TrustCenterFAQCreate) SetNillableCategoryName(v *string) *TrustCenterFAQCreate {
+	if v != nil {
+		_c.SetCategoryName(*v)
+	}
+	return _c
+}
+
+// SetCategoryID sets the "category_id" field.
+func (_c *TrustCenterFAQCreate) SetCategoryID(v string) *TrustCenterFAQCreate {
+	_c.mutation.SetCategoryID(v)
+	return _c
+}
+
+// SetNillableCategoryID sets the "category_id" field if the given value is not nil.
+func (_c *TrustCenterFAQCreate) SetNillableCategoryID(v *string) *TrustCenterFAQCreate {
+	if v != nil {
+		_c.SetCategoryID(*v)
+	}
+	return _c
+}
+
 // SetNoteID sets the "note_id" field.
 func (_c *TrustCenterFAQCreate) SetNoteID(v string) *TrustCenterFAQCreate {
 	_c.mutation.SetNoteID(v)
@@ -245,6 +273,11 @@ func (_c *TrustCenterFAQCreate) AddEditors(v ...*Group) *TrustCenterFAQCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddEditorIDs(ids...)
+}
+
+// SetCategory sets the "category" edge to the CustomTypeEnum entity.
+func (_c *TrustCenterFAQCreate) SetCategory(v *CustomTypeEnum) *TrustCenterFAQCreate {
+	return _c.SetCategoryID(v.ID)
 }
 
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
@@ -412,6 +445,10 @@ func (_c *TrustCenterFAQCreate) createSpec() (*TrustCenterFAQ, *sqlgraph.CreateS
 		_spec.SetField(trustcenterfaq.FieldTrustCenterFaqKindName, field.TypeString, value)
 		_node.TrustCenterFaqKindName = value
 	}
+	if value, ok := _c.mutation.CategoryName(); ok {
+		_spec.SetField(trustcenterfaq.FieldCategoryName, field.TypeString, value)
+		_node.CategoryName = value
+	}
 	if value, ok := _c.mutation.ReferenceLink(); ok {
 		_spec.SetField(trustcenterfaq.FieldReferenceLink, field.TypeString, value)
 		_node.ReferenceLink = value
@@ -467,6 +504,23 @@ func (_c *TrustCenterFAQCreate) createSpec() (*TrustCenterFAQ, *sqlgraph.CreateS
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterfaq.CategoryTable,
+			Columns: []string{trustcenterfaq.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CategoryID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {

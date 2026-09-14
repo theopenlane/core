@@ -51351,6 +51351,52 @@ func (ec *executionContext) fieldContext_TrustCenterFAQHistory_trustCenterFaqKin
 	return graphql.NewScalarFieldContext("TrustCenterFAQHistory", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
+func (ec *executionContext) _TrustCenterFAQHistory_categoryName(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterFAQHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterFAQHistory_categoryName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CategoryName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterFAQHistory_categoryName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterFAQHistory", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterFAQHistory_categoryID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterFAQHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterFAQHistory_categoryID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CategoryID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterFAQHistory_categoryID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterFAQHistory", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
 func (ec *executionContext) _TrustCenterFAQHistory_noteID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterFAQHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -151448,7 +151494,7 @@ func (ec *executionContext) unmarshalInputTrustCenterFAQHistoryWhereInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterFaqKindName", "trustCenterFaqKindNameNEQ", "trustCenterFaqKindNameIn", "trustCenterFaqKindNameNotIn", "trustCenterFaqKindNameContains", "trustCenterFaqKindNameHasPrefix", "trustCenterFaqKindNameHasSuffix", "trustCenterFaqKindNameIsNil", "trustCenterFaqKindNameNotNil", "trustCenterFaqKindNameEqualFold", "trustCenterFaqKindNameContainsFold", "trustCenterFaqKindID", "trustCenterFaqKindIDNEQ", "trustCenterFaqKindIDIn", "trustCenterFaqKindIDNotIn", "trustCenterFaqKindIDContains", "trustCenterFaqKindIDHasPrefix", "trustCenterFaqKindIDHasSuffix", "trustCenterFaqKindIDIsNil", "trustCenterFaqKindIDNotNil", "trustCenterFaqKindIDEqualFold", "trustCenterFaqKindIDContainsFold", "noteID", "noteIDNEQ", "noteIDIn", "noteIDNotIn", "noteIDContains", "noteIDHasPrefix", "noteIDHasSuffix", "noteIDEqualFold", "noteIDContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "referenceLink", "referenceLinkNEQ", "referenceLinkIn", "referenceLinkNotIn", "referenceLinkContains", "referenceLinkHasPrefix", "referenceLinkHasSuffix", "referenceLinkIsNil", "referenceLinkNotNil", "referenceLinkEqualFold", "referenceLinkContainsFold", "displayOrder", "displayOrderNEQ", "displayOrderGT", "displayOrderGTE", "displayOrderLT", "displayOrderLTE", "displayOrderIsNil", "displayOrderNotNil"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterFaqKindName", "trustCenterFaqKindNameNEQ", "trustCenterFaqKindNameIn", "trustCenterFaqKindNameNotIn", "trustCenterFaqKindNameContains", "trustCenterFaqKindNameHasPrefix", "trustCenterFaqKindNameHasSuffix", "trustCenterFaqKindNameIsNil", "trustCenterFaqKindNameNotNil", "trustCenterFaqKindNameEqualFold", "trustCenterFaqKindNameContainsFold", "trustCenterFaqKindID", "trustCenterFaqKindIDNEQ", "trustCenterFaqKindIDIn", "trustCenterFaqKindIDNotIn", "trustCenterFaqKindIDContains", "trustCenterFaqKindIDHasPrefix", "trustCenterFaqKindIDHasSuffix", "trustCenterFaqKindIDIsNil", "trustCenterFaqKindIDNotNil", "trustCenterFaqKindIDEqualFold", "trustCenterFaqKindIDContainsFold", "categoryName", "categoryNameNEQ", "categoryNameIn", "categoryNameNotIn", "categoryNameContains", "categoryNameHasPrefix", "categoryNameHasSuffix", "categoryNameIsNil", "categoryNameNotNil", "categoryNameEqualFold", "categoryNameContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "noteID", "noteIDNEQ", "noteIDIn", "noteIDNotIn", "noteIDContains", "noteIDHasPrefix", "noteIDHasSuffix", "noteIDEqualFold", "noteIDContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "referenceLink", "referenceLinkNEQ", "referenceLinkIn", "referenceLinkNotIn", "referenceLinkContains", "referenceLinkHasPrefix", "referenceLinkHasSuffix", "referenceLinkIsNil", "referenceLinkNotNil", "referenceLinkEqualFold", "referenceLinkContainsFold", "displayOrder", "displayOrderNEQ", "displayOrderGT", "displayOrderGTE", "displayOrderLT", "displayOrderLTE", "displayOrderIsNil", "displayOrderNotNil"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -152141,6 +152187,160 @@ func (ec *executionContext) unmarshalInputTrustCenterFAQHistoryWhereInput(ctx co
 				return it, err
 			}
 			it.TrustCenterFaqKindIDContainsFold = data
+		case "categoryName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryName = data
+		case "categoryNameNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryNameNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryNameNEQ = data
+		case "categoryNameIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryNameIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryNameIn = data
+		case "categoryNameNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryNameNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryNameNotIn = data
+		case "categoryNameContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryNameContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryNameContains = data
+		case "categoryNameHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryNameHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryNameHasPrefix = data
+		case "categoryNameHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryNameHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryNameHasSuffix = data
+		case "categoryNameIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryNameIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryNameIsNil = data
+		case "categoryNameNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryNameNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryNameNotNil = data
+		case "categoryNameEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryNameEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryNameEqualFold = data
+		case "categoryNameContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryNameContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryNameContainsFold = data
+		case "categoryID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryID = data
+		case "categoryIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryIDNEQ = data
+		case "categoryIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryIDIn = data
+		case "categoryIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryIDNotIn = data
+		case "categoryIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryIDContains = data
+		case "categoryIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryIDHasPrefix = data
+		case "categoryIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryIDHasSuffix = data
+		case "categoryIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryIDIsNil = data
+		case "categoryIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryIDNotNil = data
+		case "categoryIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryIDEqualFold = data
+		case "categoryIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CategoryIDContainsFold = data
 		case "noteID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noteID"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -188778,6 +188978,16 @@ func (ec *executionContext) _TrustCenterFAQHistory(ctx context.Context, sel ast.
 			}
 		case "trustCenterFaqKindID":
 			out.Values[i] = ec._TrustCenterFAQHistory_trustCenterFaqKindID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "categoryName":
+			out.Values[i] = ec._TrustCenterFAQHistory_categoryName(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "categoryID":
+			out.Values[i] = ec._TrustCenterFAQHistory_categoryID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

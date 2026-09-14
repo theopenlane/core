@@ -43,6 +43,10 @@ const (
 	FieldTrustCenterFaqKindName = "trust_center_faq_kind_name"
 	// FieldTrustCenterFaqKindID holds the string denoting the trust_center_faq_kind_id field in the database.
 	FieldTrustCenterFaqKindID = "trust_center_faq_kind_id"
+	// FieldCategoryName holds the string denoting the category_name field in the database.
+	FieldCategoryName = "category_name"
+	// FieldCategoryID holds the string denoting the category_id field in the database.
+	FieldCategoryID = "category_id"
 	// FieldNoteID holds the string denoting the note_id field in the database.
 	FieldNoteID = "note_id"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
@@ -70,6 +74,8 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTrustCenterFaqKindName,
 	FieldTrustCenterFaqKindID,
+	FieldCategoryName,
+	FieldCategoryID,
 	FieldNoteID,
 	FieldTrustCenterID,
 	FieldReferenceLink,
@@ -183,6 +189,16 @@ func ByTrustCenterFaqKindName(opts ...sql.OrderTermOption) OrderOption {
 // ByTrustCenterFaqKindID orders the results by the trust_center_faq_kind_id field.
 func ByTrustCenterFaqKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTrustCenterFaqKindID, opts...).ToFunc()
+}
+
+// ByCategoryName orders the results by the category_name field.
+func ByCategoryName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategoryName, opts...).ToFunc()
+}
+
+// ByCategoryID orders the results by the category_id field.
+func ByCategoryID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategoryID, opts...).ToFunc()
 }
 
 // ByNoteID orders the results by the note_id field.

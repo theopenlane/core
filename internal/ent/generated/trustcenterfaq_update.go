@@ -163,6 +163,46 @@ func (_u *TrustCenterFAQUpdate) ClearTrustCenterFaqKindID() *TrustCenterFAQUpdat
 	return _u
 }
 
+// SetCategoryName sets the "category_name" field.
+func (_u *TrustCenterFAQUpdate) SetCategoryName(v string) *TrustCenterFAQUpdate {
+	_u.mutation.SetCategoryName(v)
+	return _u
+}
+
+// SetNillableCategoryName sets the "category_name" field if the given value is not nil.
+func (_u *TrustCenterFAQUpdate) SetNillableCategoryName(v *string) *TrustCenterFAQUpdate {
+	if v != nil {
+		_u.SetCategoryName(*v)
+	}
+	return _u
+}
+
+// ClearCategoryName clears the value of the "category_name" field.
+func (_u *TrustCenterFAQUpdate) ClearCategoryName() *TrustCenterFAQUpdate {
+	_u.mutation.ClearCategoryName()
+	return _u
+}
+
+// SetCategoryID sets the "category_id" field.
+func (_u *TrustCenterFAQUpdate) SetCategoryID(v string) *TrustCenterFAQUpdate {
+	_u.mutation.SetCategoryID(v)
+	return _u
+}
+
+// SetNillableCategoryID sets the "category_id" field if the given value is not nil.
+func (_u *TrustCenterFAQUpdate) SetNillableCategoryID(v *string) *TrustCenterFAQUpdate {
+	if v != nil {
+		_u.SetCategoryID(*v)
+	}
+	return _u
+}
+
+// ClearCategoryID clears the value of the "category_id" field.
+func (_u *TrustCenterFAQUpdate) ClearCategoryID() *TrustCenterFAQUpdate {
+	_u.mutation.ClearCategoryID()
+	return _u
+}
+
 // SetReferenceLink sets the "reference_link" field.
 func (_u *TrustCenterFAQUpdate) SetReferenceLink(v string) *TrustCenterFAQUpdate {
 	_u.mutation.SetReferenceLink(v)
@@ -245,6 +285,11 @@ func (_u *TrustCenterFAQUpdate) AddEditors(v ...*Group) *TrustCenterFAQUpdate {
 	return _u.AddEditorIDs(ids...)
 }
 
+// SetCategory sets the "category" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterFAQUpdate) SetCategory(v *CustomTypeEnum) *TrustCenterFAQUpdate {
+	return _u.SetCategoryID(v.ID)
+}
+
 // Mutation returns the TrustCenterFAQMutation object of the builder.
 func (_u *TrustCenterFAQUpdate) Mutation() *TrustCenterFAQMutation {
 	return _u.mutation
@@ -296,6 +341,12 @@ func (_u *TrustCenterFAQUpdate) RemoveEditors(v ...*Group) *TrustCenterFAQUpdate
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
+}
+
+// ClearCategory clears the "category" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterFAQUpdate) ClearCategory() *TrustCenterFAQUpdate {
+	_u.mutation.ClearCategory()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -412,6 +463,12 @@ func (_u *TrustCenterFAQUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.TrustCenterFaqKindNameCleared() {
 		_spec.ClearField(trustcenterfaq.FieldTrustCenterFaqKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.CategoryName(); ok {
+		_spec.SetField(trustcenterfaq.FieldCategoryName, field.TypeString, value)
+	}
+	if _u.mutation.CategoryNameCleared() {
+		_spec.ClearField(trustcenterfaq.FieldCategoryName, field.TypeString)
 	}
 	if value, ok := _u.mutation.ReferenceLink(); ok {
 		_spec.SetField(trustcenterfaq.FieldReferenceLink, field.TypeString, value)
@@ -540,6 +597,35 @@ func (_u *TrustCenterFAQUpdate) sqlSave(ctx context.Context) (_node int, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CategoryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterfaq.CategoryTable,
+			Columns: []string{trustcenterfaq.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterfaq.CategoryTable,
+			Columns: []string{trustcenterfaq.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -701,6 +787,46 @@ func (_u *TrustCenterFAQUpdateOne) ClearTrustCenterFaqKindID() *TrustCenterFAQUp
 	return _u
 }
 
+// SetCategoryName sets the "category_name" field.
+func (_u *TrustCenterFAQUpdateOne) SetCategoryName(v string) *TrustCenterFAQUpdateOne {
+	_u.mutation.SetCategoryName(v)
+	return _u
+}
+
+// SetNillableCategoryName sets the "category_name" field if the given value is not nil.
+func (_u *TrustCenterFAQUpdateOne) SetNillableCategoryName(v *string) *TrustCenterFAQUpdateOne {
+	if v != nil {
+		_u.SetCategoryName(*v)
+	}
+	return _u
+}
+
+// ClearCategoryName clears the value of the "category_name" field.
+func (_u *TrustCenterFAQUpdateOne) ClearCategoryName() *TrustCenterFAQUpdateOne {
+	_u.mutation.ClearCategoryName()
+	return _u
+}
+
+// SetCategoryID sets the "category_id" field.
+func (_u *TrustCenterFAQUpdateOne) SetCategoryID(v string) *TrustCenterFAQUpdateOne {
+	_u.mutation.SetCategoryID(v)
+	return _u
+}
+
+// SetNillableCategoryID sets the "category_id" field if the given value is not nil.
+func (_u *TrustCenterFAQUpdateOne) SetNillableCategoryID(v *string) *TrustCenterFAQUpdateOne {
+	if v != nil {
+		_u.SetCategoryID(*v)
+	}
+	return _u
+}
+
+// ClearCategoryID clears the value of the "category_id" field.
+func (_u *TrustCenterFAQUpdateOne) ClearCategoryID() *TrustCenterFAQUpdateOne {
+	_u.mutation.ClearCategoryID()
+	return _u
+}
+
 // SetReferenceLink sets the "reference_link" field.
 func (_u *TrustCenterFAQUpdateOne) SetReferenceLink(v string) *TrustCenterFAQUpdateOne {
 	_u.mutation.SetReferenceLink(v)
@@ -783,6 +909,11 @@ func (_u *TrustCenterFAQUpdateOne) AddEditors(v ...*Group) *TrustCenterFAQUpdate
 	return _u.AddEditorIDs(ids...)
 }
 
+// SetCategory sets the "category" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterFAQUpdateOne) SetCategory(v *CustomTypeEnum) *TrustCenterFAQUpdateOne {
+	return _u.SetCategoryID(v.ID)
+}
+
 // Mutation returns the TrustCenterFAQMutation object of the builder.
 func (_u *TrustCenterFAQUpdateOne) Mutation() *TrustCenterFAQMutation {
 	return _u.mutation
@@ -834,6 +965,12 @@ func (_u *TrustCenterFAQUpdateOne) RemoveEditors(v ...*Group) *TrustCenterFAQUpd
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
+}
+
+// ClearCategory clears the "category" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterFAQUpdateOne) ClearCategory() *TrustCenterFAQUpdateOne {
+	_u.mutation.ClearCategory()
+	return _u
 }
 
 // Where appends a list predicates to the TrustCenterFAQUpdate builder.
@@ -981,6 +1118,12 @@ func (_u *TrustCenterFAQUpdateOne) sqlSave(ctx context.Context) (_node *TrustCen
 	if _u.mutation.TrustCenterFaqKindNameCleared() {
 		_spec.ClearField(trustcenterfaq.FieldTrustCenterFaqKindName, field.TypeString)
 	}
+	if value, ok := _u.mutation.CategoryName(); ok {
+		_spec.SetField(trustcenterfaq.FieldCategoryName, field.TypeString, value)
+	}
+	if _u.mutation.CategoryNameCleared() {
+		_spec.ClearField(trustcenterfaq.FieldCategoryName, field.TypeString)
+	}
 	if value, ok := _u.mutation.ReferenceLink(); ok {
 		_spec.SetField(trustcenterfaq.FieldReferenceLink, field.TypeString, value)
 	}
@@ -1108,6 +1251,35 @@ func (_u *TrustCenterFAQUpdateOne) sqlSave(ctx context.Context) (_node *TrustCen
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CategoryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterfaq.CategoryTable,
+			Columns: []string{trustcenterfaq.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterfaq.CategoryTable,
+			Columns: []string{trustcenterfaq.CategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

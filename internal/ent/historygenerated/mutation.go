@@ -129929,6 +129929,8 @@ type TrustCenterFAQHistoryMutation struct {
 	deleted_by                 *string
 	trust_center_faq_kind_name *string
 	trust_center_faq_kind_id   *string
+	category_name              *string
+	category_id                *string
 	note_id                    *string
 	trust_center_id            *string
 	reference_link             *string
@@ -130606,6 +130608,104 @@ func (m *TrustCenterFAQHistoryMutation) ResetTrustCenterFaqKindID() {
 	delete(m.clearedFields, trustcenterfaqhistory.FieldTrustCenterFaqKindID)
 }
 
+// SetCategoryName sets the "category_name" field.
+func (m *TrustCenterFAQHistoryMutation) SetCategoryName(s string) {
+	m.category_name = &s
+}
+
+// CategoryName returns the value of the "category_name" field in the mutation.
+func (m *TrustCenterFAQHistoryMutation) CategoryName() (r string, exists bool) {
+	v := m.category_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCategoryName returns the old "category_name" field's value of the TrustCenterFAQHistory entity.
+// If the TrustCenterFAQHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterFAQHistoryMutation) OldCategoryName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCategoryName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCategoryName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCategoryName: %w", err)
+	}
+	return oldValue.CategoryName, nil
+}
+
+// ClearCategoryName clears the value of the "category_name" field.
+func (m *TrustCenterFAQHistoryMutation) ClearCategoryName() {
+	m.category_name = nil
+	m.clearedFields[trustcenterfaqhistory.FieldCategoryName] = struct{}{}
+}
+
+// CategoryNameCleared returns if the "category_name" field was cleared in this mutation.
+func (m *TrustCenterFAQHistoryMutation) CategoryNameCleared() bool {
+	_, ok := m.clearedFields[trustcenterfaqhistory.FieldCategoryName]
+	return ok
+}
+
+// ResetCategoryName resets all changes to the "category_name" field.
+func (m *TrustCenterFAQHistoryMutation) ResetCategoryName() {
+	m.category_name = nil
+	delete(m.clearedFields, trustcenterfaqhistory.FieldCategoryName)
+}
+
+// SetCategoryID sets the "category_id" field.
+func (m *TrustCenterFAQHistoryMutation) SetCategoryID(s string) {
+	m.category_id = &s
+}
+
+// CategoryID returns the value of the "category_id" field in the mutation.
+func (m *TrustCenterFAQHistoryMutation) CategoryID() (r string, exists bool) {
+	v := m.category_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCategoryID returns the old "category_id" field's value of the TrustCenterFAQHistory entity.
+// If the TrustCenterFAQHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterFAQHistoryMutation) OldCategoryID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCategoryID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCategoryID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCategoryID: %w", err)
+	}
+	return oldValue.CategoryID, nil
+}
+
+// ClearCategoryID clears the value of the "category_id" field.
+func (m *TrustCenterFAQHistoryMutation) ClearCategoryID() {
+	m.category_id = nil
+	m.clearedFields[trustcenterfaqhistory.FieldCategoryID] = struct{}{}
+}
+
+// CategoryIDCleared returns if the "category_id" field was cleared in this mutation.
+func (m *TrustCenterFAQHistoryMutation) CategoryIDCleared() bool {
+	_, ok := m.clearedFields[trustcenterfaqhistory.FieldCategoryID]
+	return ok
+}
+
+// ResetCategoryID resets all changes to the "category_id" field.
+func (m *TrustCenterFAQHistoryMutation) ResetCategoryID() {
+	m.category_id = nil
+	delete(m.clearedFields, trustcenterfaqhistory.FieldCategoryID)
+}
+
 // SetNoteID sets the "note_id" field.
 func (m *TrustCenterFAQHistoryMutation) SetNoteID(s string) {
 	m.note_id = &s
@@ -130844,7 +130944,7 @@ func (m *TrustCenterFAQHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TrustCenterFAQHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 16)
+	fields := make([]string, 0, 18)
 	if m.history_time != nil {
 		fields = append(fields, trustcenterfaqhistory.FieldHistoryTime)
 	}
@@ -130880,6 +130980,12 @@ func (m *TrustCenterFAQHistoryMutation) Fields() []string {
 	}
 	if m.trust_center_faq_kind_id != nil {
 		fields = append(fields, trustcenterfaqhistory.FieldTrustCenterFaqKindID)
+	}
+	if m.category_name != nil {
+		fields = append(fields, trustcenterfaqhistory.FieldCategoryName)
+	}
+	if m.category_id != nil {
+		fields = append(fields, trustcenterfaqhistory.FieldCategoryID)
 	}
 	if m.note_id != nil {
 		fields = append(fields, trustcenterfaqhistory.FieldNoteID)
@@ -130925,6 +131031,10 @@ func (m *TrustCenterFAQHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.TrustCenterFaqKindName()
 	case trustcenterfaqhistory.FieldTrustCenterFaqKindID:
 		return m.TrustCenterFaqKindID()
+	case trustcenterfaqhistory.FieldCategoryName:
+		return m.CategoryName()
+	case trustcenterfaqhistory.FieldCategoryID:
+		return m.CategoryID()
 	case trustcenterfaqhistory.FieldNoteID:
 		return m.NoteID()
 	case trustcenterfaqhistory.FieldTrustCenterID:
@@ -130966,6 +131076,10 @@ func (m *TrustCenterFAQHistoryMutation) OldField(ctx context.Context, name strin
 		return m.OldTrustCenterFaqKindName(ctx)
 	case trustcenterfaqhistory.FieldTrustCenterFaqKindID:
 		return m.OldTrustCenterFaqKindID(ctx)
+	case trustcenterfaqhistory.FieldCategoryName:
+		return m.OldCategoryName(ctx)
+	case trustcenterfaqhistory.FieldCategoryID:
+		return m.OldCategoryID(ctx)
 	case trustcenterfaqhistory.FieldNoteID:
 		return m.OldNoteID(ctx)
 	case trustcenterfaqhistory.FieldTrustCenterID:
@@ -131066,6 +131180,20 @@ func (m *TrustCenterFAQHistoryMutation) SetField(name string, value ent.Value) e
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTrustCenterFaqKindID(v)
+		return nil
+	case trustcenterfaqhistory.FieldCategoryName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCategoryName(v)
+		return nil
+	case trustcenterfaqhistory.FieldCategoryID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCategoryID(v)
 		return nil
 	case trustcenterfaqhistory.FieldNoteID:
 		v, ok := value.(string)
@@ -131170,6 +131298,12 @@ func (m *TrustCenterFAQHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(trustcenterfaqhistory.FieldTrustCenterFaqKindID) {
 		fields = append(fields, trustcenterfaqhistory.FieldTrustCenterFaqKindID)
 	}
+	if m.FieldCleared(trustcenterfaqhistory.FieldCategoryName) {
+		fields = append(fields, trustcenterfaqhistory.FieldCategoryName)
+	}
+	if m.FieldCleared(trustcenterfaqhistory.FieldCategoryID) {
+		fields = append(fields, trustcenterfaqhistory.FieldCategoryID)
+	}
 	if m.FieldCleared(trustcenterfaqhistory.FieldTrustCenterID) {
 		fields = append(fields, trustcenterfaqhistory.FieldTrustCenterID)
 	}
@@ -131223,6 +131357,12 @@ func (m *TrustCenterFAQHistoryMutation) ClearField(name string) error {
 	case trustcenterfaqhistory.FieldTrustCenterFaqKindID:
 		m.ClearTrustCenterFaqKindID()
 		return nil
+	case trustcenterfaqhistory.FieldCategoryName:
+		m.ClearCategoryName()
+		return nil
+	case trustcenterfaqhistory.FieldCategoryID:
+		m.ClearCategoryID()
+		return nil
 	case trustcenterfaqhistory.FieldTrustCenterID:
 		m.ClearTrustCenterID()
 		return nil
@@ -131275,6 +131415,12 @@ func (m *TrustCenterFAQHistoryMutation) ResetField(name string) error {
 		return nil
 	case trustcenterfaqhistory.FieldTrustCenterFaqKindID:
 		m.ResetTrustCenterFaqKindID()
+		return nil
+	case trustcenterfaqhistory.FieldCategoryName:
+		m.ResetCategoryName()
+		return nil
+	case trustcenterfaqhistory.FieldCategoryID:
+		m.ResetCategoryID()
 		return nil
 	case trustcenterfaqhistory.FieldNoteID:
 		m.ResetNoteID()

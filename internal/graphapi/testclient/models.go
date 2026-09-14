@@ -8972,6 +8972,8 @@ type CreateTrustCenterEntityInput struct {
 type CreateTrustCenterFAQInput struct {
 	// the kind of the trust_center_faq
 	TrustCenterFaqKindName *string `json:"trustCenterFaqKindName,omitempty"`
+	// the category of the trust_center_faq
+	CategoryName *string `json:"categoryName,omitempty"`
 	// optional reference link for the FAQ
 	ReferenceLink *string `json:"referenceLink,omitempty"`
 	// display order of the FAQ
@@ -8979,6 +8981,7 @@ type CreateTrustCenterFAQInput struct {
 	TrustCenterFaqKindID *string          `json:"trustCenterFaqKindID,omitempty"`
 	BlockedGroupIDs      []string         `json:"blockedGroupIDs,omitempty"`
 	EditorIDs            []string         `json:"editorIDs,omitempty"`
+	CategoryID           *string          `json:"categoryID,omitempty"`
 	TrustCenterID        *string          `json:"trustCenterID,omitempty"`
 	NoteID               string           `json:"noteID"`
 	CreateNote           *CreateNoteInput `json:"createNote,omitempty"`
@@ -33429,6 +33432,10 @@ type TrustCenterFaq struct {
 	TrustCenterFaqKindName *string `json:"trustCenterFaqKindName,omitempty"`
 	// the kind of the trust_center_faq
 	TrustCenterFaqKindID *string `json:"trustCenterFaqKindID,omitempty"`
+	// the category of the trust_center_faq
+	CategoryName *string `json:"categoryName,omitempty"`
+	// the category of the trust_center_faq
+	CategoryID *string `json:"categoryID,omitempty"`
 	// ID of the note containing the FAQ question and answer
 	NoteID string `json:"noteID"`
 	// ID of the trust center
@@ -33440,6 +33447,7 @@ type TrustCenterFaq struct {
 	TrustCenterFaqKind *CustomTypeEnum  `json:"trustCenterFaqKind,omitempty"`
 	BlockedGroups      *GroupConnection `json:"blockedGroups"`
 	Editors            *GroupConnection `json:"editors"`
+	Category           *CustomTypeEnum  `json:"category,omitempty"`
 	TrustCenter        *TrustCenter     `json:"trustCenter,omitempty"`
 	Note               *Note            `json:"note"`
 }
@@ -33607,6 +33615,30 @@ type TrustCenterFAQWhereInput struct {
 	TrustCenterFaqKindIDNotNil       *bool    `json:"trustCenterFaqKindIDNotNil,omitempty"`
 	TrustCenterFaqKindIDEqualFold    *string  `json:"trustCenterFaqKindIDEqualFold,omitempty"`
 	TrustCenterFaqKindIDContainsFold *string  `json:"trustCenterFaqKindIDContainsFold,omitempty"`
+	// category_name field predicates
+	CategoryName             *string  `json:"categoryName,omitempty"`
+	CategoryNameNeq          *string  `json:"categoryNameNEQ,omitempty"`
+	CategoryNameIn           []string `json:"categoryNameIn,omitempty"`
+	CategoryNameNotIn        []string `json:"categoryNameNotIn,omitempty"`
+	CategoryNameContains     *string  `json:"categoryNameContains,omitempty"`
+	CategoryNameHasPrefix    *string  `json:"categoryNameHasPrefix,omitempty"`
+	CategoryNameHasSuffix    *string  `json:"categoryNameHasSuffix,omitempty"`
+	CategoryNameIsNil        *bool    `json:"categoryNameIsNil,omitempty"`
+	CategoryNameNotNil       *bool    `json:"categoryNameNotNil,omitempty"`
+	CategoryNameEqualFold    *string  `json:"categoryNameEqualFold,omitempty"`
+	CategoryNameContainsFold *string  `json:"categoryNameContainsFold,omitempty"`
+	// category_id field predicates
+	CategoryID             *string  `json:"categoryID,omitempty"`
+	CategoryIdneq          *string  `json:"categoryIDNEQ,omitempty"`
+	CategoryIDIn           []string `json:"categoryIDIn,omitempty"`
+	CategoryIDNotIn        []string `json:"categoryIDNotIn,omitempty"`
+	CategoryIDContains     *string  `json:"categoryIDContains,omitempty"`
+	CategoryIDHasPrefix    *string  `json:"categoryIDHasPrefix,omitempty"`
+	CategoryIDHasSuffix    *string  `json:"categoryIDHasSuffix,omitempty"`
+	CategoryIDIsNil        *bool    `json:"categoryIDIsNil,omitempty"`
+	CategoryIDNotNil       *bool    `json:"categoryIDNotNil,omitempty"`
+	CategoryIDEqualFold    *string  `json:"categoryIDEqualFold,omitempty"`
+	CategoryIDContainsFold *string  `json:"categoryIDContainsFold,omitempty"`
 	// note_id field predicates
 	NoteID             *string  `json:"noteID,omitempty"`
 	NoteIdneq          *string  `json:"noteIDNEQ,omitempty"`
@@ -33659,6 +33691,9 @@ type TrustCenterFAQWhereInput struct {
 	// editors edge predicates
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// category edge predicates
+	HasCategory     *bool                       `json:"hasCategory,omitempty"`
+	HasCategoryWith []*CustomTypeEnumWhereInput `json:"hasCategoryWith,omitempty"`
 	// trust_center edge predicates
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
@@ -40902,6 +40937,9 @@ type UpdateTrustCenterFAQInput struct {
 	// the kind of the trust_center_faq
 	TrustCenterFaqKindName      *string `json:"trustCenterFaqKindName,omitempty"`
 	ClearTrustCenterFaqKindName *bool   `json:"clearTrustCenterFaqKindName,omitempty"`
+	// the category of the trust_center_faq
+	CategoryName      *string `json:"categoryName,omitempty"`
+	ClearCategoryName *bool   `json:"clearCategoryName,omitempty"`
 	// optional reference link for the FAQ
 	ReferenceLink      *string `json:"referenceLink,omitempty"`
 	ClearReferenceLink *bool   `json:"clearReferenceLink,omitempty"`
@@ -40916,6 +40954,8 @@ type UpdateTrustCenterFAQInput struct {
 	AddEditorIDs            []string         `json:"addEditorIDs,omitempty"`
 	RemoveEditorIDs         []string         `json:"removeEditorIDs,omitempty"`
 	ClearEditors            *bool            `json:"clearEditors,omitempty"`
+	CategoryID              *string          `json:"categoryID,omitempty"`
+	ClearCategory           *bool            `json:"clearCategory,omitempty"`
 	AddComment              *CreateNoteInput `json:"addComment,omitempty"`
 	DeleteComment           *string          `json:"deleteComment,omitempty"`
 }

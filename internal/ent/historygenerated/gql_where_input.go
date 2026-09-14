@@ -57393,6 +57393,32 @@ type TrustCenterFAQHistoryWhereInput struct {
 	TrustCenterFaqKindIDEqualFold    *string  `json:"trustCenterFaqKindIDEqualFold,omitempty"`
 	TrustCenterFaqKindIDContainsFold *string  `json:"trustCenterFaqKindIDContainsFold,omitempty"`
 
+	// "category_name" field predicates.
+	CategoryName             *string  `json:"categoryName,omitempty"`
+	CategoryNameNEQ          *string  `json:"categoryNameNEQ,omitempty"`
+	CategoryNameIn           []string `json:"categoryNameIn,omitempty"`
+	CategoryNameNotIn        []string `json:"categoryNameNotIn,omitempty"`
+	CategoryNameContains     *string  `json:"categoryNameContains,omitempty"`
+	CategoryNameHasPrefix    *string  `json:"categoryNameHasPrefix,omitempty"`
+	CategoryNameHasSuffix    *string  `json:"categoryNameHasSuffix,omitempty"`
+	CategoryNameIsNil        bool     `json:"categoryNameIsNil,omitempty"`
+	CategoryNameNotNil       bool     `json:"categoryNameNotNil,omitempty"`
+	CategoryNameEqualFold    *string  `json:"categoryNameEqualFold,omitempty"`
+	CategoryNameContainsFold *string  `json:"categoryNameContainsFold,omitempty"`
+
+	// "category_id" field predicates.
+	CategoryID             *string  `json:"categoryID,omitempty"`
+	CategoryIDNEQ          *string  `json:"categoryIDNEQ,omitempty"`
+	CategoryIDIn           []string `json:"categoryIDIn,omitempty"`
+	CategoryIDNotIn        []string `json:"categoryIDNotIn,omitempty"`
+	CategoryIDContains     *string  `json:"categoryIDContains,omitempty"`
+	CategoryIDHasPrefix    *string  `json:"categoryIDHasPrefix,omitempty"`
+	CategoryIDHasSuffix    *string  `json:"categoryIDHasSuffix,omitempty"`
+	CategoryIDIsNil        bool     `json:"categoryIDIsNil,omitempty"`
+	CategoryIDNotNil       bool     `json:"categoryIDNotNil,omitempty"`
+	CategoryIDEqualFold    *string  `json:"categoryIDEqualFold,omitempty"`
+	CategoryIDContainsFold *string  `json:"categoryIDContainsFold,omitempty"`
+
 	// "note_id" field predicates.
 	NoteID             *string  `json:"noteID,omitempty"`
 	NoteIDNEQ          *string  `json:"noteIDNEQ,omitempty"`
@@ -57796,6 +57822,72 @@ func (i *TrustCenterFAQHistoryWhereInput) P() (predicate.TrustCenterFAQHistory, 
 	}
 	if i.TrustCenterFaqKindIDContainsFold != nil {
 		predicates = append(predicates, trustcenterfaqhistory.TrustCenterFaqKindIDContainsFold(*i.TrustCenterFaqKindIDContainsFold))
+	}
+	if i.CategoryName != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryNameEQ(*i.CategoryName))
+	}
+	if i.CategoryNameNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryNameNEQ(*i.CategoryNameNEQ))
+	}
+	if len(i.CategoryNameIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryNameIn(i.CategoryNameIn...))
+	}
+	if len(i.CategoryNameNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryNameNotIn(i.CategoryNameNotIn...))
+	}
+	if i.CategoryNameContains != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryNameContains(*i.CategoryNameContains))
+	}
+	if i.CategoryNameHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryNameHasPrefix(*i.CategoryNameHasPrefix))
+	}
+	if i.CategoryNameHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryNameHasSuffix(*i.CategoryNameHasSuffix))
+	}
+	if i.CategoryNameIsNil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryNameIsNil())
+	}
+	if i.CategoryNameNotNil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryNameNotNil())
+	}
+	if i.CategoryNameEqualFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryNameEqualFold(*i.CategoryNameEqualFold))
+	}
+	if i.CategoryNameContainsFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryNameContainsFold(*i.CategoryNameContainsFold))
+	}
+	if i.CategoryID != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryIDEQ(*i.CategoryID))
+	}
+	if i.CategoryIDNEQ != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryIDNEQ(*i.CategoryIDNEQ))
+	}
+	if len(i.CategoryIDIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryIDIn(i.CategoryIDIn...))
+	}
+	if len(i.CategoryIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryIDNotIn(i.CategoryIDNotIn...))
+	}
+	if i.CategoryIDContains != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryIDContains(*i.CategoryIDContains))
+	}
+	if i.CategoryIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryIDHasPrefix(*i.CategoryIDHasPrefix))
+	}
+	if i.CategoryIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryIDHasSuffix(*i.CategoryIDHasSuffix))
+	}
+	if i.CategoryIDIsNil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryIDIsNil())
+	}
+	if i.CategoryIDNotNil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryIDNotNil())
+	}
+	if i.CategoryIDEqualFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryIDEqualFold(*i.CategoryIDEqualFold))
+	}
+	if i.CategoryIDContainsFold != nil {
+		predicates = append(predicates, trustcenterfaqhistory.CategoryIDContainsFold(*i.CategoryIDContainsFold))
 	}
 	if i.NoteID != nil {
 		predicates = append(predicates, trustcenterfaqhistory.NoteIDEQ(*i.NoteID))

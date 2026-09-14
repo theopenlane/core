@@ -183,6 +183,34 @@ func (_c *TrustCenterFAQHistoryCreate) SetNillableTrustCenterFaqKindID(v *string
 	return _c
 }
 
+// SetCategoryName sets the "category_name" field.
+func (_c *TrustCenterFAQHistoryCreate) SetCategoryName(v string) *TrustCenterFAQHistoryCreate {
+	_c.mutation.SetCategoryName(v)
+	return _c
+}
+
+// SetNillableCategoryName sets the "category_name" field if the given value is not nil.
+func (_c *TrustCenterFAQHistoryCreate) SetNillableCategoryName(v *string) *TrustCenterFAQHistoryCreate {
+	if v != nil {
+		_c.SetCategoryName(*v)
+	}
+	return _c
+}
+
+// SetCategoryID sets the "category_id" field.
+func (_c *TrustCenterFAQHistoryCreate) SetCategoryID(v string) *TrustCenterFAQHistoryCreate {
+	_c.mutation.SetCategoryID(v)
+	return _c
+}
+
+// SetNillableCategoryID sets the "category_id" field if the given value is not nil.
+func (_c *TrustCenterFAQHistoryCreate) SetNillableCategoryID(v *string) *TrustCenterFAQHistoryCreate {
+	if v != nil {
+		_c.SetCategoryID(*v)
+	}
+	return _c
+}
+
 // SetNoteID sets the "note_id" field.
 func (_c *TrustCenterFAQHistoryCreate) SetNoteID(v string) *TrustCenterFAQHistoryCreate {
 	_c.mutation.SetNoteID(v)
@@ -415,6 +443,14 @@ func (_c *TrustCenterFAQHistoryCreate) createSpec() (*TrustCenterFAQHistory, *sq
 	if value, ok := _c.mutation.TrustCenterFaqKindID(); ok {
 		_spec.SetField(trustcenterfaqhistory.FieldTrustCenterFaqKindID, field.TypeString, value)
 		_node.TrustCenterFaqKindID = value
+	}
+	if value, ok := _c.mutation.CategoryName(); ok {
+		_spec.SetField(trustcenterfaqhistory.FieldCategoryName, field.TypeString, value)
+		_node.CategoryName = value
+	}
+	if value, ok := _c.mutation.CategoryID(); ok {
+		_spec.SetField(trustcenterfaqhistory.FieldCategoryID, field.TypeString, value)
+		_node.CategoryID = value
 	}
 	if value, ok := _c.mutation.NoteID(); ok {
 		_spec.SetField(trustcenterfaqhistory.FieldNoteID, field.TypeString, value)

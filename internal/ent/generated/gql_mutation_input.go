@@ -27624,11 +27624,13 @@ func (c *TrustCenterEntityUpdateOne) SetInput(i UpdateTrustCenterEntityInput) *T
 // CreateTrustCenterFAQInput represents a mutation input for creating trustcenterfaqs.
 type CreateTrustCenterFAQInput struct {
 	TrustCenterFaqKindName *string  `json:"trust_center_faq_kind_name,omitempty"`
+	CategoryName           *string  `json:"category_name,omitempty"`
 	ReferenceLink          *string  `json:"reference_link,omitempty"`
 	DisplayOrder           *int     `json:"display_order,omitempty"`
 	TrustCenterFaqKindID   *string  `json:"trust_center_faq_kind_id,omitempty"`
 	BlockedGroupIDs        []string `json:"blocked_group_ids,omitempty"`
 	EditorIDs              []string `json:"editor_ids,omitempty"`
+	CategoryID             *string  `json:"category_id,omitempty"`
 	TrustCenterID          *string  `json:"trust_center_id,omitempty"`
 	NoteID                 string   `json:"note_id,omitempty"`
 }
@@ -27637,6 +27639,9 @@ type CreateTrustCenterFAQInput struct {
 func (i *CreateTrustCenterFAQInput) Mutate(m *TrustCenterFAQMutation) {
 	if v := i.TrustCenterFaqKindName; v != nil {
 		m.SetTrustCenterFaqKindName(*v)
+	}
+	if v := i.CategoryName; v != nil {
+		m.SetCategoryName(*v)
 	}
 	if v := i.ReferenceLink; v != nil {
 		m.SetReferenceLink(*v)
@@ -27652,6 +27657,9 @@ func (i *CreateTrustCenterFAQInput) Mutate(m *TrustCenterFAQMutation) {
 	}
 	if v := i.EditorIDs; len(v) > 0 {
 		m.AddEditorIDs(v...)
+	}
+	if v := i.CategoryID; v != nil {
+		m.SetCategoryID(*v)
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
@@ -27669,6 +27677,8 @@ func (c *TrustCenterFAQCreate) SetInput(i CreateTrustCenterFAQInput) *TrustCente
 type UpdateTrustCenterFAQInput struct {
 	ClearTrustCenterFaqKindName bool
 	TrustCenterFaqKindName      *string `json:"trust_center_faq_kind_name,omitempty"`
+	ClearCategoryName           bool
+	CategoryName                *string `json:"category_name,omitempty"`
 	ClearReferenceLink          bool
 	ReferenceLink               *string `json:"reference_link,omitempty"`
 	ClearDisplayOrder           bool
@@ -27681,6 +27691,8 @@ type UpdateTrustCenterFAQInput struct {
 	ClearEditors                bool
 	AddEditorIDs                []string `json:"add_editor_ids,omitempty"`
 	RemoveEditorIDs             []string `json:"remove_editor_ids,omitempty"`
+	ClearCategory               bool
+	CategoryID                  *string `json:"category_id,omitempty"`
 }
 
 // Mutate applies the UpdateTrustCenterFAQInput on the TrustCenterFAQMutation builder.
@@ -27690,6 +27702,12 @@ func (i *UpdateTrustCenterFAQInput) Mutate(m *TrustCenterFAQMutation) {
 	}
 	if v := i.TrustCenterFaqKindName; v != nil {
 		m.SetTrustCenterFaqKindName(*v)
+	}
+	if i.ClearCategoryName {
+		m.ClearCategoryName()
+	}
+	if v := i.CategoryName; v != nil {
+		m.SetCategoryName(*v)
 	}
 	if i.ClearReferenceLink {
 		m.ClearReferenceLink()
@@ -27726,6 +27744,12 @@ func (i *UpdateTrustCenterFAQInput) Mutate(m *TrustCenterFAQMutation) {
 	}
 	if v := i.RemoveEditorIDs; len(v) > 0 {
 		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearCategory {
+		m.ClearCategory()
+	}
+	if v := i.CategoryID; v != nil {
+		m.SetCategoryID(*v)
 	}
 }
 

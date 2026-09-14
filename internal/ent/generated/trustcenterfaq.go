@@ -38,6 +38,10 @@ type TrustCenterFAQ struct {
 	TrustCenterFaqKindName string `json:"trust_center_faq_kind_name,omitempty"`
 	// the kind of the trust_center_faq
 	TrustCenterFaqKindID string `json:"trust_center_faq_kind_id,omitempty"`
+	// the category of the trust_center_faq
+	CategoryName string `json:"category_name,omitempty"`
+	// the category of the trust_center_faq
+	CategoryID string `json:"category_id,omitempty"`
 	// ID of the note containing the FAQ question and answer
 	NoteID string `json:"note_id,omitempty"`
 	// ID of the trust center
@@ -60,15 +64,17 @@ type TrustCenterFAQEdges struct {
 	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
 	// provides edit access to the risk to members of the group
 	Editors []*Group `json:"editors,omitempty"`
+	// Category holds the value of the category edge.
+	Category *CustomTypeEnum `json:"category,omitempty"`
 	// TrustCenter holds the value of the trust_center edge.
 	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
 	// Note holds the value of the note edge.
 	Note *Note `json:"note,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [6]map[string]int
 
 	namedBlockedGroups map[string][]*Group
 	namedEditors       map[string][]*Group
@@ -103,12 +109,23 @@ func (e TrustCenterFAQEdges) EditorsOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "editors"}
 }
 
+// CategoryOrErr returns the Category value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterFAQEdges) CategoryOrErr() (*CustomTypeEnum, error) {
+	if e.Category != nil {
+		return e.Category, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "category"}
+}
+
 // TrustCenterOrErr returns the TrustCenter value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e TrustCenterFAQEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -119,7 +136,7 @@ func (e TrustCenterFAQEdges) TrustCenterOrErr() (*TrustCenter, error) {
 func (e TrustCenterFAQEdges) NoteOrErr() (*Note, error) {
 	if e.Note != nil {
 		return e.Note, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: note.Label}
 	}
 	return nil, &NotLoadedError{edge: "note"}
@@ -132,7 +149,7 @@ func (*TrustCenterFAQ) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcenterfaq.FieldDisplayOrder:
 			values[i] = new(sql.NullInt64)
-		case trustcenterfaq.FieldID, trustcenterfaq.FieldCreatedBy, trustcenterfaq.FieldUpdatedBy, trustcenterfaq.FieldUpdatedByImpersonator, trustcenterfaq.FieldDeletedBy, trustcenterfaq.FieldTrustCenterFaqKindName, trustcenterfaq.FieldTrustCenterFaqKindID, trustcenterfaq.FieldNoteID, trustcenterfaq.FieldTrustCenterID, trustcenterfaq.FieldReferenceLink:
+		case trustcenterfaq.FieldID, trustcenterfaq.FieldCreatedBy, trustcenterfaq.FieldUpdatedBy, trustcenterfaq.FieldUpdatedByImpersonator, trustcenterfaq.FieldDeletedBy, trustcenterfaq.FieldTrustCenterFaqKindName, trustcenterfaq.FieldTrustCenterFaqKindID, trustcenterfaq.FieldCategoryName, trustcenterfaq.FieldCategoryID, trustcenterfaq.FieldNoteID, trustcenterfaq.FieldTrustCenterID, trustcenterfaq.FieldReferenceLink:
 			values[i] = new(sql.NullString)
 		case trustcenterfaq.FieldCreatedAt, trustcenterfaq.FieldUpdatedAt, trustcenterfaq.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -212,6 +229,18 @@ func (_m *TrustCenterFAQ) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.TrustCenterFaqKindID = value.String
 			}
+		case trustcenterfaq.FieldCategoryName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category_name", values[i])
+			} else if value.Valid {
+				_m.CategoryName = value.String
+			}
+		case trustcenterfaq.FieldCategoryID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category_id", values[i])
+			} else if value.Valid {
+				_m.CategoryID = value.String
+			}
 		case trustcenterfaq.FieldNoteID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field note_id", values[i])
@@ -262,6 +291,11 @@ func (_m *TrustCenterFAQ) QueryBlockedGroups() *GroupQuery {
 // QueryEditors queries the "editors" edge of the TrustCenterFAQ entity.
 func (_m *TrustCenterFAQ) QueryEditors() *GroupQuery {
 	return NewTrustCenterFAQClient(_m.config).QueryEditors(_m)
+}
+
+// QueryCategory queries the "category" edge of the TrustCenterFAQ entity.
+func (_m *TrustCenterFAQ) QueryCategory() *CustomTypeEnumQuery {
+	return NewTrustCenterFAQClient(_m.config).QueryCategory(_m)
 }
 
 // QueryTrustCenter queries the "trust_center" edge of the TrustCenterFAQ entity.
@@ -325,6 +359,12 @@ func (_m *TrustCenterFAQ) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("trust_center_faq_kind_id=")
 	builder.WriteString(_m.TrustCenterFaqKindID)
+	builder.WriteString(", ")
+	builder.WriteString("category_name=")
+	builder.WriteString(_m.CategoryName)
+	builder.WriteString(", ")
+	builder.WriteString("category_id=")
+	builder.WriteString(_m.CategoryID)
 	builder.WriteString(", ")
 	builder.WriteString("note_id=")
 	builder.WriteString(_m.NoteID)

@@ -22127,6 +22127,14 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetTrustCenterFaqKindID(trustCenterFaqKindID)
 	}
 
+	if categoryName, exists := m.CategoryName(); exists {
+		create = create.SetCategoryName(categoryName)
+	}
+
+	if categoryID, exists := m.CategoryID(); exists {
+		create = create.SetCategoryID(categoryID)
+	}
+
 	if noteID, exists := m.NoteID(); exists {
 		create = create.SetNoteID(noteID)
 	}
@@ -22231,6 +22239,18 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetTrustCenterFaqKindID(trustcenterfaq.TrustCenterFaqKindID)
 		}
 
+		if categoryName, exists := m.CategoryName(); exists {
+			create = create.SetCategoryName(categoryName)
+		} else {
+			create = create.SetCategoryName(trustcenterfaq.CategoryName)
+		}
+
+		if categoryID, exists := m.CategoryID(); exists {
+			create = create.SetCategoryID(categoryID)
+		} else {
+			create = create.SetCategoryID(trustcenterfaq.CategoryID)
+		}
+
 		if noteID, exists := m.NoteID(); exists {
 			create = create.SetNoteID(noteID)
 		} else {
@@ -22302,6 +22322,8 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetDeletedBy(trustcenterfaq.DeletedBy).
 			SetTrustCenterFaqKindName(trustcenterfaq.TrustCenterFaqKindName).
 			SetTrustCenterFaqKindID(trustcenterfaq.TrustCenterFaqKindID).
+			SetCategoryName(trustcenterfaq.CategoryName).
+			SetCategoryID(trustcenterfaq.CategoryID).
 			SetNoteID(trustcenterfaq.NoteID).
 			SetTrustCenterID(trustcenterfaq.TrustCenterID).
 			SetReferenceLink(trustcenterfaq.ReferenceLink).

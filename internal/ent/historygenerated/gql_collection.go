@@ -11996,6 +11996,16 @@ func (_q *TrustCenterFAQHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, trustcenterfaqhistory.FieldTrustCenterFaqKindID)
 				fieldSeen[trustcenterfaqhistory.FieldTrustCenterFaqKindID] = struct{}{}
 			}
+		case "categoryName":
+			if _, ok := fieldSeen[trustcenterfaqhistory.FieldCategoryName]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaqhistory.FieldCategoryName)
+				fieldSeen[trustcenterfaqhistory.FieldCategoryName] = struct{}{}
+			}
+		case "categoryID":
+			if _, ok := fieldSeen[trustcenterfaqhistory.FieldCategoryID]; !ok {
+				selectedFields = append(selectedFields, trustcenterfaqhistory.FieldCategoryID)
+				fieldSeen[trustcenterfaqhistory.FieldCategoryID] = struct{}{}
+			}
 		case "noteID":
 			if _, ok := fieldSeen[trustcenterfaqhistory.FieldNoteID]; !ok {
 				selectedFields = append(selectedFields, trustcenterfaqhistory.FieldNoteID)

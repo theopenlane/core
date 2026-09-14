@@ -6854,6 +6854,9 @@ type ComplexityRoot struct {
 
 	TrustCenterFAQ struct {
 		BlockedGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Category               func(childComplexity int) int
+		CategoryID             func(childComplexity int) int
+		CategoryName           func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
 		DisplayOrder           func(childComplexity int) int
@@ -45701,6 +45704,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterFAQ.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "TrustCenterFAQ.category":
+		if e.ComplexityRoot.TrustCenterFAQ.Category == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterFAQ.Category(childComplexity), true
+	case "TrustCenterFAQ.categoryID":
+		if e.ComplexityRoot.TrustCenterFAQ.CategoryID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterFAQ.CategoryID(childComplexity), true
+	case "TrustCenterFAQ.categoryName":
+		if e.ComplexityRoot.TrustCenterFAQ.CategoryName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterFAQ.CategoryName(childComplexity), true
 	case "TrustCenterFAQ.createdAt":
 		if e.ComplexityRoot.TrustCenterFAQ.CreatedAt == nil {
 			break
@@ -71445,6 +71466,10 @@ input CreateTrustCenterFAQInput {
   """
   trustCenterFaqKindName: String
   """
+  the category of the trust_center_faq
+  """
+  categoryName: String
+  """
   optional reference link for the FAQ
   """
   referenceLink: String
@@ -71455,6 +71480,7 @@ input CreateTrustCenterFAQInput {
   trustCenterFaqKindID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
+  categoryID: ID
   trustCenterID: ID
   noteID: ID!
 }
@@ -123280,6 +123306,14 @@ type TrustCenterFAQ implements Node @modules(names: ["trust_center_module"]) {
   """
   trustCenterFaqKindID: ID
   """
+  the category of the trust_center_faq
+  """
+  categoryName: String
+  """
+  the category of the trust_center_faq
+  """
+  categoryID: ID
+  """
   ID of the note containing the FAQ question and answer
   """
   noteID: ID!
@@ -123358,6 +123392,7 @@ type TrustCenterFAQ implements Node @modules(names: ["trust_center_module"]) {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  category: CustomTypeEnum
   trustCenter: TrustCenter
   note: Note!
 }
@@ -123520,6 +123555,34 @@ input TrustCenterFAQWhereInput {
   trustCenterFaqKindIDEqualFold: ID
   trustCenterFaqKindIDContainsFold: ID
   """
+  category_name field predicates
+  """
+  categoryName: String
+  categoryNameNEQ: String
+  categoryNameIn: [String!]
+  categoryNameNotIn: [String!]
+  categoryNameContains: String
+  categoryNameHasPrefix: String
+  categoryNameHasSuffix: String
+  categoryNameIsNil: Boolean
+  categoryNameNotNil: Boolean
+  categoryNameEqualFold: String
+  categoryNameContainsFold: String
+  """
+  category_id field predicates
+  """
+  categoryID: ID
+  categoryIDNEQ: ID
+  categoryIDIn: [ID!]
+  categoryIDNotIn: [ID!]
+  categoryIDContains: ID
+  categoryIDHasPrefix: ID
+  categoryIDHasSuffix: ID
+  categoryIDIsNil: Boolean
+  categoryIDNotNil: Boolean
+  categoryIDEqualFold: ID
+  categoryIDContainsFold: ID
+  """
   note_id field predicates
   """
   noteID: ID
@@ -123585,6 +123648,11 @@ input TrustCenterFAQWhereInput {
   """
   hasEditors: Boolean
   hasEditorsWith: [GroupWhereInput!]
+  """
+  category edge predicates
+  """
+  hasCategory: Boolean
+  hasCategoryWith: [CustomTypeEnumWhereInput!]
   """
   trust_center edge predicates
   """
@@ -133359,6 +133427,11 @@ input UpdateTrustCenterFAQInput {
   trustCenterFaqKindName: String
   clearTrustCenterFaqKindName: Boolean
   """
+  the category of the trust_center_faq
+  """
+  categoryName: String
+  clearCategoryName: Boolean
+  """
   optional reference link for the FAQ
   """
   referenceLink: String
@@ -133376,6 +133449,8 @@ input UpdateTrustCenterFAQInput {
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
+  categoryID: ID
+  clearCategory: Boolean
 }
 """
 UpdateTrustCenterInput is used for update TrustCenter object.
@@ -165990,6 +166065,10 @@ func (ec *executionContext) childFields_TrustCenterFAQ(ctx context.Context, fiel
 		return ec.fieldContext_TrustCenterFAQ_trustCenterFaqKindName(ctx, field)
 	case "trustCenterFaqKindID":
 		return ec.fieldContext_TrustCenterFAQ_trustCenterFaqKindID(ctx, field)
+	case "categoryName":
+		return ec.fieldContext_TrustCenterFAQ_categoryName(ctx, field)
+	case "categoryID":
+		return ec.fieldContext_TrustCenterFAQ_categoryID(ctx, field)
 	case "noteID":
 		return ec.fieldContext_TrustCenterFAQ_noteID(ctx, field)
 	case "trustCenterID":
@@ -166004,6 +166083,8 @@ func (ec *executionContext) childFields_TrustCenterFAQ(ctx context.Context, fiel
 		return ec.fieldContext_TrustCenterFAQ_blockedGroups(ctx, field)
 	case "editors":
 		return ec.fieldContext_TrustCenterFAQ_editors(ctx, field)
+	case "category":
+		return ec.fieldContext_TrustCenterFAQ_category(ctx, field)
 	case "trustCenter":
 		return ec.fieldContext_TrustCenterFAQ_trustCenter(ctx, field)
 	case "note":
