@@ -37,7 +37,7 @@ var backfillTopic = gala.NamespacedTopic[backfillRequest](gala.System, "startup.
 var backfillRoutineTopic = gala.NamespacedTopic[backfillRoutineRequest](gala.System, "startup.backfill.routine")
 
 // schedulerKeyPrefix is the base of the scheduling run's uniqueness key
-const schedulerKeyPrefix = "startup-backfill-v2"
+const schedulerKeyPrefix = "startup-backfill-v3"
 
 // routineKeyPrefix seeds each routine's run-once key
 const routineKeyPrefix = "startup-backfill-routine"
@@ -111,7 +111,7 @@ var backfillRoutines = []backfillRoutine{
 	{
 		Name:    "file-backups",
 		Version: "v1",
-		Enabled: true,
+		Enabled: false,
 		Run: func(ctx context.Context, deps backfillDeps) error {
 			backfillFileBackups(ctx, deps.Client, deps.Gala)
 
@@ -121,7 +121,7 @@ var backfillRoutines = []backfillRoutine{
 	{
 		Name:    "integration-expiry",
 		Version: "v1",
-		Enabled: true,
+		Enabled: false,
 		Run: func(ctx context.Context, deps backfillDeps) error {
 			backfillIntegrationExpiry(ctx, deps.Client)
 
@@ -130,7 +130,7 @@ var backfillRoutines = []backfillRoutine{
 	},
 	{
 		Name:    "mappable-domain",
-		Version: "v1",
+		Version: "v2",
 		Enabled: true,
 		Run: func(ctx context.Context, deps backfillDeps) error {
 			backfillMappableDomains(ctx, deps.Client, deps.ServerConfig)
