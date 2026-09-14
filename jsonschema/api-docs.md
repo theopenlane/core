@@ -428,7 +428,7 @@ TrustCenterCnameTarget is used to define targets that a trustcenter can map to
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**cname**|`string`|Cname is the actual domain/cname this maps to<br/>||
-|**zone\_id**|`string`|ZoneID is the cloudflare identifier for the cname above<br/>||
+|**zoneid**|`string`|ZoneID is the cloudflare identifier for the cname above<br/>||
 
 **Additional Properties:** not allowed   
    

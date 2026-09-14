@@ -125,13 +125,13 @@ coreConfiguration:
       # -- Cname is the actual domain/cname this maps to
       cname: ""  # @schema type:string
       # -- ZoneID is the cloudflare identifier for the cname above
-      zone_id: ""  # @schema type:string
+      zoneid: ""  # @schema type:string
     # -- TrustCenterPreviewCnameTarget is the cname target for trust center preview domains
     trustcenterpreviewcnametarget:
       # -- Cname is the actual domain/cname this maps to
       cname: ""  # @schema type:string
       # -- ZoneID is the cloudflare identifier for the cname above
-      zone_id: ""  # @schema type:string
+      zoneid: ""  # @schema type:string
     # -- NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
     # Unread notifications are always pulled regardless of this setting
     notificationlookbackdays: 30  # @schema type:integer; default:30

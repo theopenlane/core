@@ -288,7 +288,7 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithComplexityLimitConfig(s.Config.Settings.Server.ComplexityLimit).
 			WithMaxResultLimit(s.Config.Settings.Server.MaxResultLimit).
 			WithWorkflowsConfig(s.Config.Settings.Workflows).
-			WithTrustCenterCnameTarget(s.Config.Settings.Server.TrustCenterCnameTarget).
+			WithTrustCenterCnameTarget(s.Config.Settings.Server.TrustCenterCnameTarget.Cname).
 			WithTrustCenterDefaultDomain(s.Config.Settings.Server.DefaultTrustCenterDomain).
 			WithSubscriptions(s.Config.Settings.Server.EnableGraphSubscriptions, subscriptionRedisClient).
 			WithAllowedOrigins(s.Config.Settings.Server.CORS.AllowOrigins).

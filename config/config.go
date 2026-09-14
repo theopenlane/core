@@ -162,7 +162,7 @@ type TrustCenterCnameTarget struct {
 	Cname string `json:"cname" koanf:"cname"`
 
 	// ZoneID is the cloudflare identifier for the cname above
-	ZoneID string `json:"zone_id" koanf:"zone_id"`
+	ZoneID string `json:"zoneid" koanf:"zoneid"`
 }
 
 // KeyWatcher contains settings for the key watcher that manages JWT signing keys

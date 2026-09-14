@@ -419,7 +419,7 @@
           "type": "string",
           "description": "Cname is the actual domain/cname this maps to"
         },
-        "zone_id": {
+        "zoneid": {
           "type": "string",
           "description": "ZoneID is the cloudflare identifier for the cname above"
         }

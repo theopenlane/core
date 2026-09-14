@@ -195,8 +195,8 @@ data:
         {{- if .Values.openlane.coreConfiguration.server.trustcentercnametarget.cname }}
         cname: {{ .Values.openlane.coreConfiguration.server.trustcentercnametarget.cname | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.server.trustcentercnametarget.zone_id }}
-        zone_id: {{ .Values.openlane.coreConfiguration.server.trustcentercnametarget.zone_id | quote }}
+        {{- if .Values.openlane.coreConfiguration.server.trustcentercnametarget.zoneid }}
+        zoneid: {{ .Values.openlane.coreConfiguration.server.trustcentercnametarget.zoneid | quote }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.trustcenterpreviewcnametarget }}
@@ -204,8 +204,8 @@ data:
         {{- if .Values.openlane.coreConfiguration.server.trustcenterpreviewcnametarget.cname }}
         cname: {{ .Values.openlane.coreConfiguration.server.trustcenterpreviewcnametarget.cname | quote }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.server.trustcenterpreviewcnametarget.zone_id }}
-        zone_id: {{ .Values.openlane.coreConfiguration.server.trustcenterpreviewcnametarget.zone_id | quote }}
+        {{- if .Values.openlane.coreConfiguration.server.trustcenterpreviewcnametarget.zoneid }}
+        zoneid: {{ .Values.openlane.coreConfiguration.server.trustcenterpreviewcnametarget.zoneid | quote }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.notificationlookbackdays }}

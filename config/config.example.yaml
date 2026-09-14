@@ -480,10 +480,10 @@ server:
         enabled: false
     trustcentercnametarget:
         cname: ""
-        zone_id: ""
+        zoneid: ""
     trustcenterpreviewcnametarget:
         cname: ""
-        zone_id: ""
+        zoneid: ""
     writetimeout: 15000000000
 sessions:
     domain: ""
