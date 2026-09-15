@@ -22,10 +22,6 @@ import (
 // CreateTrustCenterDomain is the resolver for the createTrustCenterDomain field.
 func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input model.CreateTrustCenterDomainInput) (*model.TrustCenterDomainCreatePayload, error) {
 	cnameTarget := r.trustCenterCnameTarget
-	if input.DomainType != nil && *input.DomainType == enums.CustomDomainTypePreview {
-		cnameTarget = r.trustCenterPreviewCnameTarget
-	}
-
 	if cnameTarget == "" {
 		return nil, parseRequestError(ctx, common.ErrMissingTrustCenterCnameTarget, common.Action{Action: common.ActionCreate, Object: "trustcenterdomain"})
 	}

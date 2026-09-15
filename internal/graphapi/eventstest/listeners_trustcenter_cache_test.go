@@ -40,7 +40,6 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 	// local server so refreshes succeed instead of retrying against unresolvable hosts
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
 		CnameTarget:              th.CnameTargetTest,
-		PreviewCnameTarget:       th.PreviewCnameTargetTest,
 		PreviewZoneID:            th.MappableDomainZoneTestID,
 		DefaultTrustCenterDomain: strings.TrimPrefix(refreshServer.URL, "http://"),
 		CacheRefreshScheme:       "http",
@@ -48,7 +47,6 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 	t.Cleanup(func() {
 		hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
 			CnameTarget:              th.CnameTargetTest,
-			PreviewCnameTarget:       th.PreviewCnameTargetTest,
 			PreviewZoneID:            th.MappableDomainZoneTestID,
 			DefaultTrustCenterDomain: th.DefaultDomainTest,
 		})

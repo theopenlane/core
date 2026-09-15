@@ -34,7 +34,7 @@ import (
 
 const (
 	fgaModuleFile             = "../../../fga/model/fga.mod"
-	previewCnameTargetTest    = "preview-cname.test.net"
+	cnameTargetTest           = "cname.test.net"
 	previewMappableZoneIDTest = "preview-zone-id"
 )
 
@@ -67,13 +67,13 @@ func (suite *HookTestSuite) SetupSuite() {
 	suite.client = suite.setupClient()
 
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
-		PreviewCnameTarget: previewCnameTargetTest,
-		PreviewZoneID:      previewMappableZoneIDTest,
+		CnameTarget:   cnameTargetTest,
+		PreviewZoneID: previewMappableZoneIDTest,
 	})
 
 	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
 	_, err := suite.client.MappableDomain.Create().
-		SetName(previewCnameTargetTest).
+		SetName(cnameTargetTest).
 		SetZoneID(previewMappableZoneIDTest).
 		Save(ctx)
 	require.NoError(suite.T(), err)

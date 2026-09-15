@@ -35,11 +35,9 @@ import (
 )
 
 var (
-	MaxResultLimit                = 10
-	TrustCenterCnameTarget        = "cname.test.net"
-	TrustCenterDefaultDomain      = "trust.test.net"
-	TrustCenterPreviewCnameTarget = "preview-cname-target.test.com"
-	TrustCenterPreviewZoneID      = "mappable-domain-zone-id"
+	MaxResultLimit           = 10
+	TrustCenterCnameTarget   = "cname.test.net"
+	TrustCenterDefaultDomain = "trust.test.net"
 )
 
 // localRoundTripper is an http.RoundTripper that executes HTTP transactions
@@ -177,8 +175,6 @@ func testGraphServer(c *ent.Client, u *objects.Service) *handler.Server {
 	r := graphapi.NewResolver(c, u).
 		WithMaxResultLimit(MaxResultLimit).
 		WithTrustCenterCnameTarget(TrustCenterCnameTarget).
-		WithTrustCenterPreviewCnameTarget(TrustCenterPreviewCnameTarget).
-		WithTrustCenterPreviewZoneID(TrustCenterPreviewZoneID).
 		WithTrustCenterDefaultDomain(TrustCenterDefaultDomain).
 		WithSubscriptions(true, nil)
 

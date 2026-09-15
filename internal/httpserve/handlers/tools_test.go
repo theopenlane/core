@@ -76,7 +76,7 @@ var (
 const (
 	fgaModuleFile                   = "../../../fga/model/fga.mod"
 	seedStripeSubscriptionID        = "sub_test_subscription"
-	previewCnameTargetTest          = "preview-cname.test.net"
+	cnameTargetTest                 = "cname.test.net"
 	previewMappableDomainZoneIDTest = "preview-zone-id"
 )
 
@@ -225,13 +225,13 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	suite.galaDB = galaDB
 
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
-		PreviewCnameTarget: previewCnameTargetTest,
-		PreviewZoneID:      previewMappableDomainZoneIDTest,
+		CnameTarget:   cnameTargetTest,
+		PreviewZoneID: previewMappableDomainZoneIDTest,
 	})
 
 	previewDomainCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
 	_, err = suite.galaDB.MappableDomain.Create().
-		SetName(previewCnameTargetTest).
+		SetName(cnameTargetTest).
 		SetZoneID(previewMappableDomainZoneIDTest).
 		Save(previewDomainCtx)
 	require.NoError(suite.T(), err)

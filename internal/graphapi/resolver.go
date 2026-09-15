@@ -56,9 +56,7 @@ type Resolver struct {
 // trustCenterSettings holds the settings for trust center domains
 type trustCenterSettings struct {
 	// trustCenterCnameTarget is the cname target for trust center domains
-	trustCenterCnameTarget        string
-	trustCenterPreviewCnameTarget string
-	trustCenterPreviewZoneID      string
+	trustCenterCnameTarget string
 	// defaultTrustCenterDomain is the default domain for trust center
 	defaultTrustCenterDomain string
 }
