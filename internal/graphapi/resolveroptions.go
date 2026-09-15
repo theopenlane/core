@@ -21,6 +21,18 @@ func (r Resolver) WithTrustCenterCnameTarget(cname string) *Resolver {
 	return &r
 }
 
+func (r Resolver) WithTrustCenterPreviewCnameTarget(cname string) *Resolver {
+	r.trustCenterPreviewCnameTarget = cname
+
+	return &r
+}
+
+func (r Resolver) WithTrustCenterPreviewZoneID(zoneID string) *Resolver {
+	r.trustCenterPreviewZoneID = zoneID
+
+	return &r
+}
+
 // WithTrustCenterDefaultDomain sets the default trust center domain for the resolver
 func (r Resolver) WithTrustCenterDefaultDomain(domain string) *Resolver {
 	r.defaultTrustCenterDomain = domain
