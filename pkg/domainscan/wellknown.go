@@ -211,45 +211,6 @@ func wellKnownBaseURL(domain string) (string, error) {
 	return "https://" + host, nil
 }
 
-// fetchWellKnown GETs rawURL and returns its body as text. ok is false for a transport
-// error, a non-2xx status, or a body that isn't plain text, since a site serving its
-// SPA shell for every path would otherwise look like it publishes every well-known file
-func fetchWellKnown(ctx context.Context, rawURL string) (body string, finalURL string, ok bool) {
-	requester, err := scanRequester()
-	if err != nil {
-		return "", "", false
-	}
-
-	resp, err := requester.SendWithContext(ctx, httpsling.Get(rawURL))
-	if err != nil {
-		return "", "", false
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		_ = resp.Body.Close()
-
-		return "", "", false
-	}
-
-	if ct := resp.Header.Get(httpsling.HeaderContentType); ct != "" && !isPlainTextContentType(ct) {
-		_ = resp.Body.Close()
-
-		return "", "", false
-	}
-
-	raw, err := urlx.ReadBody(resp, urlx.MaxSizeValidator(maxWellKnownBodyBytes))
-	if err != nil {
-		return "", "", false
-	}
-
-	finalURL = rawURL
-	if resp.Request != nil && resp.Request.URL != nil {
-		finalURL = resp.Request.URL.String()
-	}
-
-	return string(raw), finalURL, true
-}
-
 // isPlainTextContentType reports whether ct is a text media type a well-known file
 // would plausibly be served as, excluding text/html which indicates a soft 404
 func isPlainTextContentType(ct string) bool {
@@ -267,7 +228,7 @@ func isPlainTextContentType(ct string) bool {
 // well-known location and falling back to the legacy document root
 func probeSecurityTxt(ctx context.Context, base string) *SecurityTxt {
 	for _, path := range []string{"/.well-known/security.txt", "/security.txt"} {
-		body, finalURL, ok := fetchWellKnown(ctx, base+path)
+		body, finalURL, ok := fetchBody(ctx, base+path, maxWellKnownBodyBytes, isPlainTextContentType)
 		if !ok {
 			continue
 		}
@@ -347,7 +308,7 @@ func parseSecurityTxt(body string) *SecurityTxt {
 
 // probeRobotsTxt fetches and parses a domain's robots.txt
 func probeRobotsTxt(ctx context.Context, base string) *RobotsTxt {
-	body, _, ok := fetchWellKnown(ctx, base+"/robots.txt")
+	body, _, ok := fetchBody(ctx, base+"/robots.txt", maxWellKnownBodyBytes, isPlainTextContentType)
 	if !ok {
 		return &RobotsTxt{Present: false}
 	}
@@ -507,7 +468,7 @@ func sortedKeys(m map[string]bool) []string {
 // companion llms-full.txt exists. Neither is part of Cloudflare's agent-readiness
 // assessment, so this is additive rather than duplicative
 func probeLLMsTxt(ctx context.Context, base string) *LLMsTxt {
-	body, finalURL, ok := fetchWellKnown(ctx, base+"/llms.txt")
+	body, finalURL, ok := fetchBody(ctx, base+"/llms.txt", maxWellKnownBodyBytes, isPlainTextContentType)
 	if !ok {
 		return &LLMsTxt{Present: false}
 	}
@@ -515,7 +476,7 @@ func probeLLMsTxt(ctx context.Context, base string) *LLMsTxt {
 	out := parseLLMsTxt(body)
 	out.URL = finalURL
 
-	if _, _, fullOK := fetchWellKnown(ctx, base+"/llms-full.txt"); fullOK {
+	if _, _, fullOK := fetchBody(ctx, base+"/llms-full.txt", maxWellKnownBodyBytes, isPlainTextContentType); fullOK {
 		out.FullPresent = true
 	}
 

@@ -1,7 +1,6 @@
 package domainscan
 
 import (
-	"slices"
 	"strings"
 )
 
@@ -158,8 +157,8 @@ func newFindingsMerge() *findingsMerge {
 }
 
 func (f *findingsMerge) add(domain string, findings Findings) {
-	f.securityViolations = unionStrings(f.securityViolations, findings.SecurityViolations)
-	f.risks = unionStrings(f.risks, findings.Risks)
+	f.securityViolations = mergeStrings(f.securityViolations, findings.SecurityViolations)
+	f.risks = mergeStrings(f.risks, findings.Risks)
 
 	if findings.IsMalicious {
 		f.isMalicious = true
@@ -188,15 +187,4 @@ func (f *findingsMerge) result() Findings {
 	}
 
 	return findings
-}
-
-// unionStrings appends values from add not already present in existing, preserving order
-func unionStrings(existing, add []string) []string {
-	for _, v := range add {
-		if !slices.Contains(existing, v) {
-			existing = append(existing, v)
-		}
-	}
-
-	return existing
 }

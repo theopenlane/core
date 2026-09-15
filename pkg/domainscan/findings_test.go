@@ -53,7 +53,7 @@ func TestBuildAgentReadinessChecklistMarkdown(t *testing.T) {
 	assert.Check(t, is.Equal(want, got))
 }
 
-func TestWalkAgentReadinessChecks(t *testing.T) {
+func TestAgentReadinessResultFailed(t *testing.T) {
 	node := map[string]any{
 		"markdown": map[string]any{
 			"status":  "fail",
@@ -71,20 +71,17 @@ func TestWalkAgentReadinessChecks(t *testing.T) {
 		},
 	}
 
-	var failedChecks []map[string]any
+	var checks []AgentReadinessCheck
 
-	walkAgentReadinessChecks(node, "", &failedChecks)
+	collectAgentReadinessChecks(node, "", &checks)
+	sort.Slice(checks, func(i, j int) bool { return checks[i].Check < checks[j].Check })
 
-	sort.Slice(failedChecks, func(i, j int) bool {
-		return failedChecks[i]["check"].(string) < failedChecks[j]["check"].(string)
-	})
-
-	want := []map[string]any{
-		{"check": "markdown", "message": "missing markdown negotiation"},
-		{"check": "nested.deep", "message": "deep failure"},
+	want := []AgentReadinessCheck{
+		{Check: "markdown", Status: "fail", Message: "missing markdown negotiation"},
+		{Check: "nested.deep", Status: "fail", Message: "deep failure"},
 	}
 
-	assert.Check(t, is.DeepEqual(want, failedChecks))
+	assert.Check(t, is.DeepEqual(want, agentReadinessResult{Checks: checks}.failed()))
 }
 
 func TestCollectAgentReadinessChecks(t *testing.T) {
@@ -138,17 +135,30 @@ func TestCollectAgentReadinessChecksIgnoresIncompleteLeaves(t *testing.T) {
 	assert.Equal(t, checks[0].Check, "real")
 }
 
-func TestWalkAgentReadinessChecksStillReportsOnlyFailures(t *testing.T) {
+func TestAgentReadinessResultFailedReportsOnlyFailures(t *testing.T) {
 	node := map[string]any{
 		"a": map[string]any{"status": "pass", "message": "fine"},
 		"b": map[string]any{"status": "fail", "message": "broken"},
 	}
 
-	var failedChecks []map[string]any
+	var checks []AgentReadinessCheck
 
-	walkAgentReadinessChecks(node, "", &failedChecks)
+	collectAgentReadinessChecks(node, "", &checks)
 
-	assert.Equal(t, len(failedChecks), 1)
-	assert.Equal(t, failedChecks[0]["check"], "b")
-	assert.Equal(t, failedChecks[0]["message"], "broken")
+	failures := agentReadinessResult{Checks: checks}.failed()
+
+	assert.Assert(t, is.Len(failures, 1))
+	assert.Equal(t, failures[0].Check, "b")
+	assert.Equal(t, failures[0].Message, "broken")
+}
+
+// the Markdown checklist is what the console renders, so it stays one unchecked item per
+// failing check regardless of how the failures were collected
+func TestBuildAgentReadinessChecklistMarkdown(t *testing.T) {
+	got := buildAgentReadinessChecklistMarkdown([]AgentReadinessCheck{
+		{Check: "markdown", Status: "fail", Message: "missing markdown negotiation"},
+		{Check: "nested.deep", Status: "fail", Message: "deep failure"},
+	})
+
+	assert.Equal(t, got, "- [ ] missing markdown negotiation\n- [ ] deep failure")
 }
