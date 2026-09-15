@@ -14,14 +14,13 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
-	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 )
 
 // provenanceConversionDefinitionID is the shared test integration definition every conversion
 // fixture installation installs under; it is registered on suite.IntegrationsRT at harness setup
-// so EnsureInstallationConverted can resolve a definition for both installations
+// so BackfillInstallationProvenance can resolve a definition for both installations
 var provenanceConversionDefinitionID = testint.DefinitionID.ID()
 
 // provenanceConversionDefinitionVersion is the definition version the conversion must copy onto stamped rows
@@ -83,25 +82,9 @@ func findingProvenance(ctx context.Context, t *testing.T, id string) provenanceS
 	}
 }
 
-// installationProvenanceVersion reloads the installation and returns the provenance version recorded
-// in its provider state for the shared test integration definition
-func installationProvenanceVersion(ctx context.Context, t *testing.T, id string) string {
-	t.Helper()
-
-	row := reloadIntegration(t, ctx, id)
-
-	def, ok := suite.IntegrationsRT.Registry().Definition(provenanceConversionDefinitionID)
-	assert.Assert(t, ok, "shared test integration definition must be registered on suite.IntegrationsRT")
-
-	state, err := def.ProviderState(row.ProviderState)
-	th.RequireNoError(t, err)
-
-	return state.ProvenanceVersion
-}
-
 // provenanceConversionProviderState returns the provider state every fixture installation must
 // persist so it resolves as connected through the shared definition's OAuth connection instead of
-// as never-connected, which is what lets EnsureInstallationConverted stamp its rows
+// as never-connected, which is what lets BackfillInstallationProvenance stamp its rows
 func provenanceConversionProviderState(t *testing.T) openapi.IntegrationProviderState {
 	t.Helper()
 
@@ -114,14 +97,14 @@ func provenanceConversionProviderState(t *testing.T) openapi.IntegrationProvider
 	return state
 }
 
-// TestEnsureInstallationConvertedStampsOrganizationRows verifies EnsureInstallationConverted fills
+// TestBackfillInstallationProvenanceStampsOrganizationRows verifies BackfillInstallationProvenance fills
 // source_definition_id, source_definition_version, source_instance_id, and managed_by on rows linked
 // to exactly one installation whose provenance is missing, re-stamps rows already managed by any
 // installation in the caller's organization onto that installation's current resolved instance id
 // regardless of which installation they are linked to, leaves rows linked to several installations
-// untouched, persists the provenance conversion marker and resolved instance id on every installation
+// untouched, persists the resolved instance id on every installation
 // it converts in the caller's organization, and is idempotent on a second call
-func TestEnsureInstallationConvertedStampsOrganizationRows(t *testing.T) {
+func TestBackfillInstallationProvenanceStampsOrganizationRows(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
@@ -241,10 +224,14 @@ func TestEnsureInstallationConvertedStampsOrganizationRows(t *testing.T) {
 
 	sharedBefore := findingProvenance(ctx, t, sharedFinding.ID)
 
-	th.RequireNoError(t, suite.IntegrationsRT.EnsureInstallationConverted(ctx, installation))
+	th.RequireNoError(t, suite.IntegrationsRT.BackfillInstallationInstanceID(ctx, installation))
+	th.RequireNoError(t, suite.IntegrationsRT.BackfillInstallationInstanceID(ctx, other))
 
-	assert.Check(t, is.Equal(intruntime.ProvenanceSchemeVersion, installationProvenanceVersion(ctx, t, installation.ID)), "the caller installation must persist the provenance conversion marker")
-	assert.Check(t, is.Equal(intruntime.ProvenanceSchemeVersion, installationProvenanceVersion(ctx, t, other.ID)), "every other installation in the caller's organization must also be converted")
+	_, err = suite.IntegrationsRT.BackfillInstallationProvenance(ctx, installation)
+	th.RequireNoError(t, err)
+
+	_, err = suite.IntegrationsRT.BackfillInstallationProvenance(ctx, other)
+	th.RequireNoError(t, err)
 
 	assert.Check(t, is.Equal(installation.ID, reloadIntegration(t, ctx, installation.ID).InstallationMetadata.Display.ExternalID), "the caller installation's stored external id must become its own instance id")
 	assert.Check(t, is.Equal(other.ID, reloadIntegration(t, ctx, other.ID).InstallationMetadata.Display.ExternalID), "every other installation's stored external id must also become its own instance id")
@@ -296,7 +283,8 @@ func TestEnsureInstallationConvertedStampsOrganizationRows(t *testing.T) {
 	assert.Check(t, is.Equal("", sharedAfter.ManagedBy))
 	assert.Check(t, is.Equal("", sharedAfter.DefinitionID))
 
-	th.RequireNoError(t, suite.IntegrationsRT.EnsureInstallationConverted(ctx, installation))
+	_, err = suite.IntegrationsRT.BackfillInstallationProvenance(ctx, installation)
+	th.RequireNoError(t, err)
 
 	assert.Check(t, is.DeepEqual(unclaimedAfter, directoryAccountProvenance(ctx, t, unclaimedAccount.ID)), "a second call must not rewrite an already stamped FK-linked row")
 	assert.Check(t, is.DeepEqual(partialAfter, directoryAccountProvenance(ctx, t, partialAccount.ID)), "a second call must not rewrite an already stamped self-managed row")

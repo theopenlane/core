@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
@@ -40,22 +41,39 @@ var backfillTopic = gala.NamespacedTopic[backfillRequest](gala.System, "startup.
 // backfillRoutineTopic carries one scheduled routine, so every routine retries and fails independently of its siblings
 var backfillRoutineTopic = gala.NamespacedTopic[backfillRoutineRequest](gala.System, "startup.backfill.routine")
 
+// backfillCompletedTopic announces that the backfill has finished for this release, so startup work
+// that must observe the backfilled state (integration loop seeding) can begin
+var backfillCompletedTopic = gala.NamespacedTopic[backfillCompleted](gala.System, "startup.backfill.completed")
+
 // schedulerKeyPrefix is the base of the scheduling run's uniqueness key
 const schedulerKeyPrefix = "startup-backfill-v5"
 
 // routineKeyPrefix seeds each routine's run-once key
 const routineKeyPrefix = "startup-backfill-routine"
 
-// schedulerKey is the scheduling run's uniqueness key. It carries the application version the
-// binary was built from, so every pod in a rollout shares one key and the next release schedules
-// again. An unstamped build, e.g. local development, has no application version and falls back to
-// the bare prefix
-func schedulerKey() string {
+// backfillCompletedKeyPrefix is the base of the completed event's uniqueness key
+const backfillCompletedKeyPrefix = "startup-backfill-completed"
+
+// versionedKey appends the application version the binary was built from to a key prefix, so
+// every pod in a rollout shares one key and the next release keys again. An unstamped build,
+// e.g. local development, has no application version and falls back to the bare prefix
+func versionedKey(prefix string) string {
 	if version.Version == "" {
-		return schedulerKeyPrefix
+		return prefix
 	}
 
-	return schedulerKeyPrefix + "-" + version.Version
+	return prefix + "-" + version.Version
+}
+
+// schedulerKey is the scheduling run's uniqueness key
+func schedulerKey() string {
+	return versionedKey(schedulerKeyPrefix)
+}
+
+// backfillCompletedKey is the completed event's uniqueness key, so a restart of the same release does
+// not re-run the startup work downstream of the backfill
+func backfillCompletedKey() string {
+	return versionedKey(backfillCompletedKeyPrefix)
 }
 
 // routineUniqueKey is the routine's run-once key that will be unique unless a version of the routine is changed
@@ -70,6 +88,9 @@ type backfillRequest struct{}
 type backfillRoutineRequest struct {
 	Name string `json:"name"`
 }
+
+// backfillCompleted is the payload of the completed event
+type backfillCompleted struct{}
 
 // backfillDeps are the dependencies handed to every routine
 type backfillDeps struct {
@@ -99,8 +120,12 @@ type backfillRoutine struct {
 	Run func(context.Context, backfillDeps) error
 }
 
-// backfillRoutines are the registered backfill routines. Add a routine here to have the scheduling run pick it up
-// Mark as enabled=false to keep it here but do not schedule it
+// backfillRoutines are the registered backfill routines, each scheduled as its own job so they run
+// independently and concurrently. Add a routine here to have the scheduling run pick it up; mark it
+// enabled=false to keep it registered but unscheduled. The ingest-batching routine runs the ordered
+// ingest migration (batching purge, then instance-id resolution, then provenance) as a single unit,
+// since provenance must stamp the instance id that resolution wrote, and signals completion so
+// integration loop seeding runs against the migrated state
 var backfillRoutines = []backfillRoutine{
 	{
 		Name:    "reconcile-loops",
@@ -134,12 +159,14 @@ var backfillRoutines = []backfillRoutine{
 	},
 	{
 		Name:    "ingest-batching",
-		Version: "v1",
+		Version: "v2",
 		Enabled: true,
 		Run: func(ctx context.Context, deps backfillDeps) error {
 			backfillIngestBatching(ctx, deps.Client, deps.Runtime)
+			backfillInstanceIDs(ctx, deps.Client, deps.Runtime)
+			backfillProvenance(ctx, deps.Client, deps.Runtime)
 
-			return nil
+			return emitBackfillCompleted(ctx, deps.Gala)
 		},
 	},
 	{
@@ -154,51 +181,61 @@ var backfillRoutines = []backfillRoutine{
 
 // WithBackfill submits the config-gated backfill scheduling run as a gala job: every pod submits
 // the same unique key, so exactly one process schedules, and the run then fans out one job per
-// registered routine carrying that routine's own run-once semantics
+// registered routine carrying that routine's own run-once semantics. With backfills disabled the
+// completed event is submitted directly, under the same per-release key, so the startup work
+// downstream of the backfill still runs exactly once per release
 func WithBackfill(ctx context.Context, galaApp *gala.Gala) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if !s.Config.Settings.Backfill.Enabled {
-			return
-		}
-
-		if _, err := gala.Register(galaApp, gala.Definition[backfillRequest]{
-			Topic: backfillTopic,
-			Caller: func(*auth.Caller, backfillRequest) *auth.Caller {
-				return &auth.Caller{Capabilities: backfillBypassCaps}
-			},
-			Handle: func(handlerCtx gala.HandlerContext, _ backfillRequest) error {
-				return scheduleBackfillRoutines(handlerCtx.Context, galaApp)
-			},
-		}); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to register scheduling listener")
+			if err := emitBackfillCompleted(ctx, galaApp); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to submit completed event with backfills disabled")
+			}
 
 			return
 		}
 
-		if _, err := gala.Register(galaApp, gala.Definition[backfillRoutineRequest]{
-			Topic: backfillRoutineTopic,
-			Caller: func(*auth.Caller, backfillRoutineRequest) *auth.Caller {
-				return &auth.Caller{Capabilities: backfillBypassCaps}
-			},
-			Handle: func(handlerCtx gala.HandlerContext, req backfillRoutineRequest) error {
-				return runBackfillRoutine(handlerCtx, galaApp, req.Name, s.Config.Settings.Server)
-			},
-		}); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to register routine listener")
-
-			return
-		}
-
-		if _, err := galaApp.EmitWithHeaders(ctx, backfillTopic.Name, backfillRequest{}, gala.Headers{
-			UniqueKey:  schedulerKey(),
-			UniqueOnce: true,
-		}); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to submit scheduling run")
+		if err := StartBackfill(ctx, galaApp); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to start")
 		}
 	})
 }
 
-// scheduleBackfillRoutines emits one job per registered routine
+// StartBackfill registers the backfill listeners on galaApp and submits the scheduling run, which
+// fans out one job per enabled routine, each carrying its own run-once semantics
+func StartBackfill(ctx context.Context, galaApp *gala.Gala) error {
+	if _, err := gala.Register(galaApp, gala.Definition[backfillRequest]{
+		Topic: backfillTopic,
+		Caller: func(*auth.Caller, backfillRequest) *auth.Caller {
+			return &auth.Caller{Capabilities: backfillBypassCaps}
+		},
+		Handle: func(handlerCtx gala.HandlerContext, _ backfillRequest) error {
+			return scheduleBackfillRoutines(handlerCtx.Context, galaApp)
+		},
+	}); err != nil {
+		return err
+	}
+
+	if _, err := gala.Register(galaApp, gala.Definition[backfillRoutineRequest]{
+		Topic: backfillRoutineTopic,
+		Caller: func(*auth.Caller, backfillRoutineRequest) *auth.Caller {
+			return &auth.Caller{Capabilities: backfillBypassCaps}
+		},
+		Handle: func(handlerCtx gala.HandlerContext, req backfillRoutineRequest) error {
+			return runBackfillRoutine(handlerCtx, galaApp, req.Name)
+		},
+	}); err != nil {
+		return err
+	}
+
+	_, err := galaApp.EmitWithHeaders(ctx, backfillTopic.Name, backfillRequest{}, gala.Headers{
+		UniqueKey:  schedulerKey(),
+		UniqueOnce: true,
+	})
+
+	return err
+}
+
+// scheduleBackfillRoutines emits one job per enabled routine
 func scheduleBackfillRoutines(ctx context.Context, galaApp *gala.Gala) error {
 	for _, routine := range backfillRoutines {
 		if !routine.Enabled {
@@ -237,6 +274,16 @@ func runBackfillRoutine(handlerCtx gala.HandlerContext, galaApp *gala.Gala, name
 	})
 }
 
+// emitBackfillCompleted submits the completed event under its per-release run-once key
+func emitBackfillCompleted(ctx context.Context, galaApp *gala.Gala) error {
+	_, err := galaApp.EmitWithHeaders(ctx, backfillCompletedTopic.Name, backfillCompleted{}, gala.Headers{
+		UniqueKey:  backfillCompletedKey(),
+		UniqueOnce: true,
+	})
+
+	return err
+}
+
 // backfillReconcileLoops collapses each connected installation's recurring loops to exactly one
 // per operation: every active reconcile job is cancelled and a single fresh loop is emitted with
 // insert-time uniqueness, removing duplicate loops left by historical seeding races. Emitted
@@ -270,9 +317,10 @@ func backfillReconcileLoops(ctx context.Context, dbClient *ent.Client, rt *runti
 }
 
 // backfillIngestBatching transitions every installation from the fan-out ingest model to the
-// batched model: queued per-record ingest jobs are purged, since the next batched sync re-ingests
-// their records with provenance, and each connected installation's recurring loops are reset to
-// exactly one fresh loop per operation
+// batched model: queued per-record ingest jobs and every recurring reconcile loop are cancelled,
+// since the next batched sync re-ingests their records with provenance and loop seeding runs
+// fresh once the backfill completes. Loops are purged per operation rather than through the
+// installation-wide purge, which would also cancel in-flight one-shot operation runs
 func backfillIngestBatching(ctx context.Context, dbClient *ent.Client, rt *runtime.Runtime) {
 	installations, err := dbClient.Integration.Query().All(ctx)
 	if err != nil {
@@ -281,7 +329,7 @@ func backfillIngestBatching(ctx context.Context, dbClient *ent.Client, rt *runti
 		return
 	}
 
-	var purged int
+	var purgedIngest, purgedLoops int
 
 	for _, installation := range installations {
 		installCtx := intobvs.WithInstallation(ctx, installation)
@@ -293,12 +341,120 @@ func backfillIngestBatching(ctx context.Context, dbClient *ent.Client, rt *runti
 			continue
 		}
 
+		purgedIngest += count
+
+		count, err = purgeInstallationReconcileLoops(installCtx, rt, installation)
+		if err != nil {
+			logx.FromContext(installCtx).Error().Err(err).Msg("backfill: failed purging reconcile loops")
+
+			continue
+		}
+
+		purgedLoops += count
+	}
+
+	logx.FromContext(ctx).Info().Int("purged_ingest", purgedIngest).Int("purged_loops", purgedLoops).Int("reviewed", len(installations)).Msg("backfill: queued per-record ingest jobs and reconcile loops purged")
+}
+
+// purgeInstallationReconcileLoops cancels every live reconcile loop for each reconcilable operation
+// on the installation, matching the per-operation fragment the runtime's health handling purges with
+func purgeInstallationReconcileLoops(ctx context.Context, rt *runtime.Runtime, installation *ent.Integration) (int, error) {
+	def, ok := rt.Registry().Definition(installation.DefinitionID)
+	if !ok {
+		return 0, nil
+	}
+
+	var purged int
+
+	for _, op := range def.Operations {
+		if !op.Policy.Reconcile {
+			continue
+		}
+
+		fragment, err := types.PropertiesFragment(map[string]string{
+			"entityId":  installation.ID,
+			"operation": op.Name,
+			"runType":   enums.IntegrationRunTypeReconcile.String(),
+		})
+		if err != nil {
+			return purged, err
+		}
+
+		count, err := rt.Gala().PurgeActiveJobsWithMetadata(intobvs.WithOperation(ctx, op.Name), fragment)
+		if err != nil {
+			return purged, err
+		}
+
 		purged += count
 	}
 
-	logx.FromContext(ctx).Info().Int("purged", purged).Int("reviewed", len(installations)).Msg("backfill: queued per-record ingest jobs purged")
+	return purged, nil
+}
 
-	backfillReconcileLoops(ctx, dbClient, rt)
+// backfillInstanceIDs resolves and persists the current instance id for every operational installation
+// before provenance stamping and batched ingest run, overwriting a stale id left by a definition whose
+// instance-id derivation changed; never-connected installations resolve to nothing and are left for
+// their next reconnect to populate. Errored installations are skipped here and self-heal on recovery
+func backfillInstanceIDs(ctx context.Context, dbClient *ent.Client, rt *runtime.Runtime) {
+	installations, err := dbClient.Integration.Query().
+		Where(integration.StatusIn(enums.IntegrationOperationalStatuses...)).
+		All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to query integrations for instance id resolution")
+
+		return
+	}
+
+	var resolved, unresolved int
+
+	for _, installation := range installations {
+		installCtx := intobvs.WithInstallation(ctx, installation)
+
+		if err := rt.BackfillInstallationInstanceID(installCtx, installation); err != nil {
+			logx.FromContext(installCtx).Error().Err(err).Str("integration_id", installation.ID).Msg("backfill: failed resolving installation instance id")
+
+			unresolved++
+
+			continue
+		}
+
+		if installation.InstallationMetadata.Display.ExternalID == "" {
+			unresolved++
+
+			continue
+		}
+
+		resolved++
+	}
+
+	logx.FromContext(ctx).Info().Int("resolved", resolved).Int("unresolved", unresolved).Int("reviewed", len(installations)).Msg("backfill: installation instance id resolution completed")
+}
+
+// backfillProvenance stamps every ingest schema's fill-only provenance columns for every installation's existing records
+func backfillProvenance(ctx context.Context, dbClient *ent.Client, rt *runtime.Runtime) {
+	installations, err := dbClient.Integration.Query().All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to query integrations for provenance stamping")
+
+		return
+	}
+
+	var stamped int
+
+	for _, installation := range installations {
+		installCtx := intobvs.WithInstallation(ctx, installation)
+
+		count, err := rt.BackfillInstallationProvenance(installCtx, installation)
+		if err != nil {
+			logx.FromContext(installCtx).Error().Err(err).Str("integration_id", installation.ID).Msg("backfill: failed stamping installation provenance")
+
+			continue
+		}
+
+		stamped += count
+	}
+
+	logx.FromContext(ctx).Info().Int("stamped", stamped).Int("reviewed", len(installations)).Msg("backfill: installation provenance stamping completed")
 }
 
 // backfillIntegrationExpiry stamps expires_at on pending installations created before the

@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"slices"
-	"strconv"
 	"strings"
 	"time"
 
@@ -167,8 +166,9 @@ type snapshotSet struct {
 	stale int
 }
 
-// ProcessPayloadSets persists one batch of mapped payload sets synchronously; record
-// failures are skipped and reported in the result, never the error
+// ProcessPayloadSets persists one batch of mapped payload sets synchronously inside the run job;
+// record failures are skipped, requeued as durable per-record jobs when ic.Runtime is set, and
+// reported in the result, never the error
 func ProcessPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, policy types.ExecutionPolicy, payloadSets []types.IngestPayloadSet, options IngestOptions) (IngestResult, error) {
 	return applyPayloadSets(ctx, ic, operationName, contracts, policy, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) (ingestOutcome, error) {
 		id, changed, managed, err := record.schema.PersistIngest(handleCtx, ic.DB, ic.Integration, record.Payload)
@@ -177,22 +177,8 @@ func ProcessPayloadSets(ctx context.Context, ic IngestContext, operationName str
 	})
 }
 
-// EmitPayloadSets routes one batch of mapped payload sets to persistence according to the operation's delivery policy: fanout queues one durable job per record; batched (the default) persists the whole payload synchronously inside the run job
-func EmitPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, policy types.ExecutionPolicy, payloadSets []types.IngestPayloadSet, options IngestOptions) (IngestResult, error) {
-	if !policy.Fanout {
-		return ProcessPayloadSets(ctx, ic, operationName, contracts, policy, payloadSets, options)
-	}
-
-	if ic.Runtime == nil {
-		return IngestResult{}, ErrGalaRequired
-	}
-
-	return applyPayloadSets(ctx, ic, operationName, contracts, policy, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) (ingestOutcome, error) {
-		return ingestOutcome{}, emitMappedRecord(handleCtx, ic.Runtime, ic.Integration, operationName, record, options)
-	})
-}
-
-// applyPayloadSets is the shared core for both async emit and sync persist paths
+// applyPayloadSets maps, filters, links, and hands every record in the batch to handle, accumulating
+// the record-level result and the installation's failed-record tracking state
 func applyPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, policy types.ExecutionPolicy, payloadSets []types.IngestPayloadSet, options IngestOptions, handle func(context.Context, mappedIngestRecord) (ingestOutcome, error)) (result IngestResult, err error) {
 	definition, ok := ic.Registry.Definition(ic.Integration.DefinitionID)
 	if !ok {
@@ -217,20 +203,17 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		PrimaryDirectory: ic.Integration.PrimaryDirectory,
 	}
 
-	batched := !policy.Fanout
 	preload := lo.SumBy(payloadSets, func(payloadSet types.IngestPayloadSet) int { return len(payloadSet.Envelopes) }) >= ingestPreloadMinRecords
 
 	tracked := make(map[string]*models.FailedRecord)
 	dirty := false
 
-	if batched {
-		for i := range ic.Integration.Health.FailedRecords {
-			fr := ic.Integration.Health.FailedRecords[i]
-			tracked[trackingKey(fr.Schema, fr.Key)] = &fr
-		}
+	for i := range ic.Integration.Health.FailedRecords {
+		fr := ic.Integration.Health.FailedRecords[i]
+		tracked[trackingKey(fr.Schema, fr.Key)] = &fr
 	}
 
-	if batched && preload {
+	if preload {
 		ids, activeErr := ic.DB.Integration.Query().Where(integration.OwnerIDEQ(ic.Integration.OwnerID)).IDs(ctx)
 		if activeErr != nil {
 			return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, activeErr)
@@ -336,13 +319,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			}
 		}
 
-		if batched && sourceSchema.QueryByLookup != nil && sourceSchema.RepairLookupField != nil && len(sourceSchema.Lookup) > 0 {
-			if adoptErr := adoptLegacyLookupKeys(ctx, ic.DB, ic.Integration.OwnerID, sourceSchema, ready); adoptErr != nil {
-				return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, adoptErr)
-			}
-		}
-
-		if batched && preload && sourceSchema.QueryByLookup != nil && len(sourceSchema.Lookup) > 0 {
+		if preload && sourceSchema.QueryByLookup != nil && len(sourceSchema.Lookup) > 0 {
 			setCtx, prefetchErr := prefetchLookupMatches(ctx, ic.DB, ic.Integration.OwnerID, sourceSchema, ready)
 			if prefetchErr != nil {
 				return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, prefetchErr)
@@ -355,7 +332,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 
 		var set *snapshotSet
 
-		if batched && policy.Snapshot && payloadSet.SnapshotComplete && sourceSchema.SnapshotScope != nil {
+		if policy.Snapshot && payloadSet.SnapshotComplete && sourceSchema.SnapshotScope != nil {
 			rows, scopeErr := sourceSchema.SnapshotScope(ctx, ic.DB, ic.Integration.OwnerID, ic.Integration.DefinitionID, ic.Integration.InstallationMetadata.Display.ExternalID, ic.Integration.ID)
 			if scopeErr != nil {
 				return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, scopeErr)
@@ -380,11 +357,9 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		for _, p := range ready {
 			var recordKey, trackKey string
 
-			if batched {
-				if key, ok := failedRecordKey(sourceSchema, p.record.Payload); ok {
-					recordKey = key
-					trackKey = trackingKey(sourceSchema.Snake, key)
-				}
+			if key, ok := failedRecordKey(sourceSchema, p.record.Payload); ok {
+				recordKey = key
+				trackKey = trackingKey(sourceSchema.Snake, key)
 			}
 
 			if entry, excluded := tracked[trackKey]; excluded && trackKey != "" {
@@ -435,22 +410,20 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			case handleErr == nil:
 				result.Succeeded++
 
-				if batched {
-					if outcome.managed {
-						result.Persisted++
-					} else {
-						result.Skipped++
-					}
+				if outcome.managed {
+					result.Persisted++
+				} else {
+					result.Skipped++
+				}
 
-					if outcome.changed {
-						result.Changed++
-					}
+				if outcome.changed {
+					result.Changed++
+				}
 
-					if trackKey != "" {
-						if _, excluded := tracked[trackKey]; excluded {
-							delete(tracked, trackKey)
-							dirty = true
-						}
+				if trackKey != "" {
+					if _, excluded := tracked[trackKey]; excluded {
+						delete(tracked, trackKey)
+						dirty = true
 					}
 				}
 
@@ -475,7 +448,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 
 				requeued := false
 
-				if batched && ic.Runtime != nil {
+				if ic.Runtime != nil {
 					if requeueErr := emitMappedRecord(p.ctx, ic.Runtime, ic.Integration, operationName, p.record, options); requeueErr != nil {
 						logx.FromContext(p.ctx).Warn().Err(requeueErr).Msg("ingest failure requeue failed")
 					} else {
@@ -494,7 +467,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 	switch {
 	case result.Failed > 0:
 		logx.FromContext(ctx).Warn().Int("failed", result.Failed).Int("attempted", result.Attempted).Msg("ingest skipped records that could not be imported")
-	case batched:
+	default:
 		for _, set := range snapshotSets {
 			if set.stale > 0 {
 				logx.FromContext(ctx).Debug().Str("schema", set.schema.Snake).Int("stale", set.stale).Msg("ingest skipped snapshot removal for stale run")
@@ -522,7 +495,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		logx.FromContext(ctx).Info().Int("skipped", result.Skipped).Msg("ingest left records unmanaged by this installation")
 	}
 
-	if batched && dirty {
+	if dirty {
 		if healthErr := persistFailedRecords(ctx, ic, failedRecordsFromTracked(tracked)); healthErr != nil {
 			return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, healthErr)
 		}
@@ -721,105 +694,6 @@ func failedRecordsFromTracked(tracked map[string]*models.FailedRecord) []models.
 	})
 
 	return records
-}
-
-// legacyScientificKey converts a numeric key like "147884153" into the "1.47884153e+08" form the
-// old CEL double conversion stored, so rows written before the fix can still be found; returns
-// false for non-numeric keys and for numbers whose two forms are identical
-func legacyScientificKey(value string) (string, bool) {
-	parsed, err := strconv.ParseFloat(value, 64)
-	if err != nil {
-		return "", false
-	}
-
-	legacy := strconv.FormatFloat(parsed, 'g', -1, 64)
-	if legacy == value {
-		return "", false
-	}
-
-	return legacy, true
-}
-
-// legacyLookup pairs one record's lookup alternative with the legacy-form key tuple to search for
-// and the canonical values to repair matched rows to
-type legacyLookup struct {
-	alternative int
-	legacy      entityops.LookupValues
-	canonical   entityops.LookupValues
-}
-
-// adoptLegacyLookupKeys finds rows still keyed by the scientific-notation form of a numeric lookup
-// value and rewrites them to the canonical key in place, so the upsert lookup that follows resolves
-// them under the key the mapping now emits instead of creating a duplicate
-func adoptLegacyLookupKeys(ctx context.Context, db *ent.Client, ownerID string, schema *entityops.Schema, ready []preparedIngestRecord) error {
-	var lookups []legacyLookup
-
-	for _, p := range ready {
-		alternative, values, ok := lookupKeyFor(schema, p.record.Payload)
-		if !ok {
-			continue
-		}
-
-		legacy := make(entityops.LookupValues, len(values))
-		converted := false
-
-		for name, value := range values {
-			legacy[name] = value
-
-			if form, ok := legacyScientificKey(value); ok {
-				legacy[name] = form
-				converted = true
-			}
-		}
-
-		if converted {
-			lookups = append(lookups, legacyLookup{alternative: alternative, legacy: legacy, canonical: values})
-		}
-	}
-
-	for alternative, group := range lo.GroupBy(lookups, func(l legacyLookup) int { return l.alternative }) {
-		alt := schema.Lookup[alternative]
-
-		canonicalByKey := make(map[string]entityops.LookupValues, len(group))
-		for _, l := range group {
-			canonicalByKey[entityops.EncodeLookupKey(alt, l.legacy)] = l.canonical
-		}
-
-		keys := lo.Map(group, func(l legacyLookup, _ int) entityops.LookupValues { return l.legacy })
-
-		for _, chunk := range lo.Chunk(keys, ingestQueryChunk) {
-			rows, err := schema.QueryByLookup(ctx, db, ownerID, alternative, chunk)
-			if err != nil {
-				return err
-			}
-
-			for _, row := range rows {
-				rowValues := make(entityops.LookupValues, len(alt.Fields))
-				for _, name := range alt.Fields {
-					rowValues[name] = entityops.FieldValue(row, name)
-				}
-
-				canonical, ok := canonicalByKey[entityops.EncodeLookupKey(alt, rowValues)]
-				if !ok {
-					continue
-				}
-
-				for _, name := range alt.Fields {
-					if rowValues[name] == canonical[name] {
-						continue
-					}
-
-					if err := schema.RepairLookupField(ctx, db, entityops.FieldValue(row, fieldID), name, canonical[name]); err != nil {
-						return err
-					}
-
-					logx.FromContext(ctx).Info().Str("schema", schema.Snake).Str("field", name).Str("legacy", rowValues[name]).Str("canonical", canonical[name]).Msg("ingest adopted legacy lookup key")
-				}
-			}
-		}
-	}
-
-	return nil
 }
 
 // mapIngestRecord applies the resolved mapping's filters and map expression to one data envelope,

@@ -14,6 +14,7 @@ import (
 	"github.com/riverqueue/river"
 	"github.com/riverqueue/river/rivertype"
 	"github.com/samber/do/v2"
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
@@ -78,9 +79,16 @@ func newTestGala(t *testing.T, client riverInsertClient) *Gala {
 	}
 
 	g.insertClient = client
-	g.defaultQueue = DefaultQueueName
+	g.kindQueues = testKindQueues()
 
 	return g
+}
+
+// testKindQueues maps every default job kind to its queue for stub-client runtimes
+func testKindQueues() map[string]string {
+	return lo.SliceToMap(JobKinds(), func(kind Namespace) (string, string) {
+		return kind.Kind(), kind.Queue()
+	})
 }
 
 // testCaller returns a minimal caller for dispatch tests
@@ -515,13 +523,6 @@ type runtimeOperationPayload struct {
 // PayloadOperation returns the fixture operation for routing tests
 func (p runtimeOperationPayload) PayloadOperation() string {
 	return p.Operation
-}
-
-// WithPayloadOperation returns a copy of the fixture carrying the renamed operation
-func (p runtimeOperationPayload) WithPayloadOperation(operation string) any {
-	p.Operation = operation
-
-	return p
 }
 
 func TestTopicPayloadErrorPaths(t *testing.T) {

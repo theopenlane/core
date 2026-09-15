@@ -10,7 +10,6 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -178,47 +177,4 @@ func LastSuccessfulRunAt(ctx context.Context, db *ent.Client, integrationID, ope
 	}
 
 	return run.FinishedAt, nil
-}
-
-// LastSuccessfulRunID returns the id of the most recent successful run for the installation and operation
-func LastSuccessfulRunID(ctx context.Context, db *ent.Client, integrationID, operationName string) (string, error) {
-	run, err := db.IntegrationRun.Query().
-		Where(
-			integrationrun.IntegrationIDEQ(integrationID),
-			integrationrun.OperationNameEQ(operationName),
-			integrationrun.StatusEQ(enums.IntegrationRunStatusSuccess),
-			integrationrun.FinishedAtNotNil(),
-		).
-		Order(integrationrun.ByFinishedAt(sql.OrderDesc())).
-		Select(integrationrun.FieldID).
-		First(ctx)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			return "", nil
-		}
-
-		return "", err
-	}
-
-	return run.ID, nil
-}
-
-// LinkedRecordCount returns the total number of ingested records linked to the run across all ingest schemas
-func LinkedRecordCount(ctx context.Context, db *ent.Client, ownerID, runID string) (int, error) {
-	total := 0
-
-	for _, s := range entityops.AllSchemas() {
-		if s.Ingest == nil || s.CountByKey == nil {
-			continue
-		}
-
-		n, err := s.CountByKey(ctx, db, ownerID, entityops.FieldIntegrationRunID, []string{runID})
-		if err != nil {
-			return 0, err
-		}
-
-		total += n
-	}
-
-	return total, nil
 }

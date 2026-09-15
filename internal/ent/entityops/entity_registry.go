@@ -153,6 +153,8 @@ type Schema struct {
 	SnapshotScope func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID, managedBy string) ([]json.RawMessage, error)
 	// MarkRemoved bulk-marks the given ids removed at the given time under the given integration run
 	MarkRemoved func(ctx context.Context, client *generated.Client, ids []string, at time.Time, runID string) error
+	// FillProvenance fills missing provenance on rows linked to the installation and reports rows written
+	FillProvenance func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error)
 	// Load loads a single entity by ID and returns its JSON representation
 	Load func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error)
 	// LoadObject loads the native generated Ent object for consumers that require its interfaces;
@@ -22503,6 +22505,479 @@ func init() {
 		}
 
 		return nil
+	}
+	SchemaActionPlan.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
+		ref := SchemaRef{Schema: "action_plan", Operation: refOpUpdate}
+		instanceID := installation.InstallationMetadata.Display.ExternalID
+
+		predicates := []predicate.ActionPlan{
+			actionplan.And(
+				actionplan.HasIntegrationsWith(integration.ID(installation.ID)),
+				actionplan.Not(actionplan.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
+				actionplan.Or(actionplan.SourceDefinitionIDIsNil(), actionplan.SourceDefinitionID(""), actionplan.SourceInstanceIDIsNil(), actionplan.SourceInstanceID("")),
+				actionplan.Or(actionplan.ManagedByIsNil(), actionplan.ManagedBy(""), actionplan.ManagedBy(installation.ID)),
+			),
+		}
+
+		if instanceID != "" {
+			predicates = append(predicates, actionplan.And(
+				actionplan.ManagedBy(installation.ID),
+				actionplan.Or(actionplan.SourceInstanceIDIsNil(), actionplan.SourceInstanceIDNEQ(instanceID)),
+			))
+		}
+
+		update := client.ActionPlan.Update().
+			Where(actionplan.Or(predicates...)).
+			SetSourceDefinitionID(installation.DefinitionID).
+			SetManagedBy(installation.ID)
+
+		if installation.DefinitionVersion != "" {
+			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		}
+
+		if instanceID != "" {
+			update = update.SetSourceInstanceID(instanceID)
+		}
+
+		affected, err := update.Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return affected, nil
+	}
+	SchemaAsset.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
+		ref := SchemaRef{Schema: "asset", Operation: refOpUpdate}
+		instanceID := installation.InstallationMetadata.Display.ExternalID
+
+		predicates := []predicate.Asset{
+			asset.And(
+				asset.IntegrationID(installation.ID),
+				asset.Or(asset.SourceDefinitionIDIsNil(), asset.SourceDefinitionID(""), asset.SourceInstanceIDIsNil(), asset.SourceInstanceID("")),
+				asset.Or(asset.ManagedByIsNil(), asset.ManagedBy(""), asset.ManagedBy(installation.ID)),
+			),
+		}
+
+		if instanceID != "" {
+			predicates = append(predicates, asset.And(
+				asset.ManagedBy(installation.ID),
+				asset.Or(asset.SourceInstanceIDIsNil(), asset.SourceInstanceIDNEQ(instanceID)),
+			))
+		}
+
+		update := client.Asset.Update().
+			Where(asset.Or(predicates...)).
+			SetSourceDefinitionID(installation.DefinitionID).
+			SetManagedBy(installation.ID)
+
+		if installation.DefinitionVersion != "" {
+			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		}
+
+		if instanceID != "" {
+			update = update.SetSourceInstanceID(instanceID)
+		}
+
+		affected, err := update.Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return affected, nil
+	}
+	SchemaCheckResult.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
+		ref := SchemaRef{Schema: "check_result", Operation: refOpUpdate}
+		instanceID := installation.InstallationMetadata.Display.ExternalID
+
+		predicates := []predicate.CheckResult{
+			checkresult.And(
+				checkresult.IntegrationID(installation.ID),
+				checkresult.Or(checkresult.SourceDefinitionIDIsNil(), checkresult.SourceDefinitionID(""), checkresult.SourceInstanceIDIsNil(), checkresult.SourceInstanceID("")),
+				checkresult.Or(checkresult.ManagedByIsNil(), checkresult.ManagedBy(""), checkresult.ManagedBy(installation.ID)),
+			),
+		}
+
+		if instanceID != "" {
+			predicates = append(predicates, checkresult.And(
+				checkresult.ManagedBy(installation.ID),
+				checkresult.Or(checkresult.SourceInstanceIDIsNil(), checkresult.SourceInstanceIDNEQ(instanceID)),
+			))
+		}
+
+		update := client.CheckResult.Update().
+			Where(checkresult.Or(predicates...)).
+			SetSourceDefinitionID(installation.DefinitionID).
+			SetManagedBy(installation.ID)
+
+		if installation.DefinitionVersion != "" {
+			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		}
+
+		if instanceID != "" {
+			update = update.SetSourceInstanceID(instanceID)
+		}
+
+		affected, err := update.Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return affected, nil
+	}
+	SchemaContact.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
+		ref := SchemaRef{Schema: "contact", Operation: refOpUpdate}
+		instanceID := installation.InstallationMetadata.Display.ExternalID
+
+		predicates := []predicate.Contact{
+			contact.And(
+				contact.IntegrationID(installation.ID),
+				contact.Or(contact.SourceDefinitionIDIsNil(), contact.SourceDefinitionID(""), contact.SourceInstanceIDIsNil(), contact.SourceInstanceID("")),
+				contact.Or(contact.ManagedByIsNil(), contact.ManagedBy(""), contact.ManagedBy(installation.ID)),
+			),
+		}
+
+		if instanceID != "" {
+			predicates = append(predicates, contact.And(
+				contact.ManagedBy(installation.ID),
+				contact.Or(contact.SourceInstanceIDIsNil(), contact.SourceInstanceIDNEQ(instanceID)),
+			))
+		}
+
+		update := client.Contact.Update().
+			Where(contact.Or(predicates...)).
+			SetSourceDefinitionID(installation.DefinitionID).
+			SetManagedBy(installation.ID)
+
+		if installation.DefinitionVersion != "" {
+			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		}
+
+		if instanceID != "" {
+			update = update.SetSourceInstanceID(instanceID)
+		}
+
+		affected, err := update.Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return affected, nil
+	}
+	SchemaDirectoryAccount.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
+		ref := SchemaRef{Schema: "directory_account", Operation: refOpUpdate}
+		instanceID := installation.InstallationMetadata.Display.ExternalID
+
+		predicates := []predicate.DirectoryAccount{
+			directoryaccount.And(
+				directoryaccount.IntegrationID(installation.ID),
+				directoryaccount.Or(directoryaccount.SourceDefinitionIDIsNil(), directoryaccount.SourceDefinitionID(""), directoryaccount.SourceInstanceIDIsNil(), directoryaccount.SourceInstanceID("")),
+				directoryaccount.Or(directoryaccount.ManagedByIsNil(), directoryaccount.ManagedBy(""), directoryaccount.ManagedBy(installation.ID)),
+			),
+		}
+
+		if instanceID != "" {
+			predicates = append(predicates, directoryaccount.And(
+				directoryaccount.ManagedBy(installation.ID),
+				directoryaccount.Or(directoryaccount.SourceInstanceIDIsNil(), directoryaccount.SourceInstanceIDNEQ(instanceID)),
+			))
+		}
+
+		update := client.DirectoryAccount.Update().
+			Where(directoryaccount.Or(predicates...)).
+			SetSourceDefinitionID(installation.DefinitionID).
+			SetManagedBy(installation.ID)
+
+		if installation.DefinitionVersion != "" {
+			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		}
+
+		if instanceID != "" {
+			update = update.SetSourceInstanceID(instanceID)
+		}
+
+		affected, err := update.Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return affected, nil
+	}
+	SchemaDirectoryGroup.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
+		ref := SchemaRef{Schema: "directory_group", Operation: refOpUpdate}
+		instanceID := installation.InstallationMetadata.Display.ExternalID
+
+		predicates := []predicate.DirectoryGroup{
+			directorygroup.And(
+				directorygroup.IntegrationID(installation.ID),
+				directorygroup.Or(directorygroup.SourceDefinitionIDIsNil(), directorygroup.SourceDefinitionID(""), directorygroup.SourceInstanceIDIsNil(), directorygroup.SourceInstanceID("")),
+				directorygroup.Or(directorygroup.ManagedByIsNil(), directorygroup.ManagedBy(""), directorygroup.ManagedBy(installation.ID)),
+			),
+		}
+
+		if instanceID != "" {
+			predicates = append(predicates, directorygroup.And(
+				directorygroup.ManagedBy(installation.ID),
+				directorygroup.Or(directorygroup.SourceInstanceIDIsNil(), directorygroup.SourceInstanceIDNEQ(instanceID)),
+			))
+		}
+
+		update := client.DirectoryGroup.Update().
+			Where(directorygroup.Or(predicates...)).
+			SetSourceDefinitionID(installation.DefinitionID).
+			SetManagedBy(installation.ID)
+
+		if installation.DefinitionVersion != "" {
+			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		}
+
+		if instanceID != "" {
+			update = update.SetSourceInstanceID(instanceID)
+		}
+
+		affected, err := update.Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return affected, nil
+	}
+	SchemaDirectoryMembership.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
+		ref := SchemaRef{Schema: "directory_membership", Operation: refOpUpdate}
+		instanceID := installation.InstallationMetadata.Display.ExternalID
+
+		predicates := []predicate.DirectoryMembership{
+			directorymembership.And(
+				directorymembership.IntegrationID(installation.ID),
+				directorymembership.Or(directorymembership.SourceDefinitionIDIsNil(), directorymembership.SourceDefinitionID(""), directorymembership.SourceInstanceIDIsNil(), directorymembership.SourceInstanceID("")),
+				directorymembership.Or(directorymembership.ManagedByIsNil(), directorymembership.ManagedBy(""), directorymembership.ManagedBy(installation.ID)),
+			),
+		}
+
+		if instanceID != "" {
+			predicates = append(predicates, directorymembership.And(
+				directorymembership.ManagedBy(installation.ID),
+				directorymembership.Or(directorymembership.SourceInstanceIDIsNil(), directorymembership.SourceInstanceIDNEQ(instanceID)),
+			))
+		}
+
+		update := client.DirectoryMembership.Update().
+			Where(directorymembership.Or(predicates...)).
+			SetSourceDefinitionID(installation.DefinitionID).
+			SetManagedBy(installation.ID)
+
+		if installation.DefinitionVersion != "" {
+			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		}
+
+		if instanceID != "" {
+			update = update.SetSourceInstanceID(instanceID)
+		}
+
+		affected, err := update.Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return affected, nil
+	}
+	SchemaEntity.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
+		ref := SchemaRef{Schema: "entity", Operation: refOpUpdate}
+		instanceID := installation.InstallationMetadata.Display.ExternalID
+
+		predicates := []predicate.Entity{
+			entity.And(
+				entity.HasIntegrationsWith(integration.ID(installation.ID)),
+				entity.Not(entity.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
+				entity.Or(entity.SourceDefinitionIDIsNil(), entity.SourceDefinitionID(""), entity.SourceInstanceIDIsNil(), entity.SourceInstanceID("")),
+				entity.Or(entity.ManagedByIsNil(), entity.ManagedBy(""), entity.ManagedBy(installation.ID)),
+			),
+		}
+
+		if instanceID != "" {
+			predicates = append(predicates, entity.And(
+				entity.ManagedBy(installation.ID),
+				entity.Or(entity.SourceInstanceIDIsNil(), entity.SourceInstanceIDNEQ(instanceID)),
+			))
+		}
+
+		update := client.Entity.Update().
+			Where(entity.Or(predicates...)).
+			SetSourceDefinitionID(installation.DefinitionID).
+			SetManagedBy(installation.ID)
+
+		if installation.DefinitionVersion != "" {
+			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		}
+
+		if instanceID != "" {
+			update = update.SetSourceInstanceID(instanceID)
+		}
+
+		affected, err := update.Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return affected, nil
+	}
+	SchemaFinding.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
+		ref := SchemaRef{Schema: "finding", Operation: refOpUpdate}
+		instanceID := installation.InstallationMetadata.Display.ExternalID
+
+		predicates := []predicate.Finding{
+			finding.And(
+				finding.HasIntegrationsWith(integration.ID(installation.ID)),
+				finding.Not(finding.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
+				finding.Or(finding.SourceDefinitionIDIsNil(), finding.SourceDefinitionID(""), finding.SourceInstanceIDIsNil(), finding.SourceInstanceID("")),
+				finding.Or(finding.ManagedByIsNil(), finding.ManagedBy(""), finding.ManagedBy(installation.ID)),
+			),
+		}
+
+		if instanceID != "" {
+			predicates = append(predicates, finding.And(
+				finding.ManagedBy(installation.ID),
+				finding.Or(finding.SourceInstanceIDIsNil(), finding.SourceInstanceIDNEQ(instanceID)),
+			))
+		}
+
+		update := client.Finding.Update().
+			Where(finding.Or(predicates...)).
+			SetSourceDefinitionID(installation.DefinitionID).
+			SetManagedBy(installation.ID)
+
+		if installation.DefinitionVersion != "" {
+			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		}
+
+		if instanceID != "" {
+			update = update.SetSourceInstanceID(instanceID)
+		}
+
+		affected, err := update.Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return affected, nil
+	}
+	SchemaInternalPolicy.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
+		ref := SchemaRef{Schema: "internal_policy", Operation: refOpUpdate}
+		instanceID := installation.InstallationMetadata.Display.ExternalID
+
+		predicates := []predicate.InternalPolicy{
+			internalpolicy.And(
+				internalpolicy.HasIntegrationsWith(integration.ID(installation.ID)),
+				internalpolicy.Not(internalpolicy.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
+				internalpolicy.Or(internalpolicy.SourceDefinitionIDIsNil(), internalpolicy.SourceDefinitionID(""), internalpolicy.SourceInstanceIDIsNil(), internalpolicy.SourceInstanceID("")),
+				internalpolicy.Or(internalpolicy.ManagedByIsNil(), internalpolicy.ManagedBy(""), internalpolicy.ManagedBy(installation.ID)),
+			),
+		}
+
+		if instanceID != "" {
+			predicates = append(predicates, internalpolicy.And(
+				internalpolicy.ManagedBy(installation.ID),
+				internalpolicy.Or(internalpolicy.SourceInstanceIDIsNil(), internalpolicy.SourceInstanceIDNEQ(instanceID)),
+			))
+		}
+
+		update := client.InternalPolicy.Update().
+			Where(internalpolicy.Or(predicates...)).
+			SetSourceDefinitionID(installation.DefinitionID).
+			SetManagedBy(installation.ID)
+
+		if installation.DefinitionVersion != "" {
+			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		}
+
+		if instanceID != "" {
+			update = update.SetSourceInstanceID(instanceID)
+		}
+
+		affected, err := update.Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return affected, nil
+	}
+	SchemaRisk.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
+		ref := SchemaRef{Schema: "risk", Operation: refOpUpdate}
+		instanceID := installation.InstallationMetadata.Display.ExternalID
+
+		predicates := []predicate.Risk{
+			risk.And(
+				risk.IntegrationID(installation.ID),
+				risk.Or(risk.SourceDefinitionIDIsNil(), risk.SourceDefinitionID(""), risk.SourceInstanceIDIsNil(), risk.SourceInstanceID("")),
+				risk.Or(risk.ManagedByIsNil(), risk.ManagedBy(""), risk.ManagedBy(installation.ID)),
+			),
+		}
+
+		if instanceID != "" {
+			predicates = append(predicates, risk.And(
+				risk.ManagedBy(installation.ID),
+				risk.Or(risk.SourceInstanceIDIsNil(), risk.SourceInstanceIDNEQ(instanceID)),
+			))
+		}
+
+		update := client.Risk.Update().
+			Where(risk.Or(predicates...)).
+			SetSourceDefinitionID(installation.DefinitionID).
+			SetManagedBy(installation.ID)
+
+		if installation.DefinitionVersion != "" {
+			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		}
+
+		if instanceID != "" {
+			update = update.SetSourceInstanceID(instanceID)
+		}
+
+		affected, err := update.Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return affected, nil
+	}
+	SchemaVulnerability.FillProvenance = func(ctx context.Context, client *generated.Client, installation *generated.Integration) (int, error) {
+		ref := SchemaRef{Schema: "vulnerability", Operation: refOpUpdate}
+		instanceID := installation.InstallationMetadata.Display.ExternalID
+
+		predicates := []predicate.Vulnerability{
+			vulnerability.And(
+				vulnerability.HasIntegrationsWith(integration.ID(installation.ID)),
+				vulnerability.Not(vulnerability.HasIntegrationsWith(integration.IDNEQ(installation.ID))),
+				vulnerability.Or(vulnerability.SourceDefinitionIDIsNil(), vulnerability.SourceDefinitionID(""), vulnerability.SourceInstanceIDIsNil(), vulnerability.SourceInstanceID("")),
+				vulnerability.Or(vulnerability.ManagedByIsNil(), vulnerability.ManagedBy(""), vulnerability.ManagedBy(installation.ID)),
+			),
+		}
+
+		if instanceID != "" {
+			predicates = append(predicates, vulnerability.And(
+				vulnerability.ManagedBy(installation.ID),
+				vulnerability.Or(vulnerability.SourceInstanceIDIsNil(), vulnerability.SourceInstanceIDNEQ(instanceID)),
+			))
+		}
+
+		update := client.Vulnerability.Update().
+			Where(vulnerability.Or(predicates...)).
+			SetSourceDefinitionID(installation.DefinitionID).
+			SetManagedBy(installation.ID)
+
+		if installation.DefinitionVersion != "" {
+			update = update.SetSourceDefinitionVersion(installation.DefinitionVersion)
+		}
+
+		if instanceID != "" {
+			update = update.SetSourceInstanceID(instanceID)
+		}
+
+		affected, err := update.Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return affected, nil
 	}
 	SchemaActionPlan.Ingest.persist = defaultIngestPersist(SchemaActionPlan)
 	SchemaAsset.Ingest.persist = defaultIngestPersist(SchemaAsset)

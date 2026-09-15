@@ -10,12 +10,13 @@ import (
 	"github.com/theopenlane/core/v2/internal/keystore"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // WithIntegrationsRuntime builds the integration runtime from server settings and wires it
 // into the handler. When a workflow engine is present it also injects integration dependencies.
 // Initialization is skipped if the database client or Gala runtime is nil.
-func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInstance *gala.Gala) ServerOption {
+func WithIntegrationsRuntime(dbClient *ent.Client, galaInstance *gala.Gala) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		s.Config.Handler.IntegrationsConfig = s.Config.Settings.Integrations
 
@@ -56,12 +57,16 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 			log.Panic().Err(err).Msg("failed to attach integration runtime to gala injector")
 		}
 
-		// ensure all connected integrations have a corresponding job
-		go func() {
-			if err := rt.SeedReconcileJobs(ctx); err != nil {
-				log.Warn().Err(err).Msg("failed to seed one or more missing reconcile jobs at startup")
-			}
-		}()
+		if _, err := gala.Register(galaInstance, gala.Definition[backfillCompleted]{
+			Topic: backfillCompletedTopic,
+			Handle: func(handlerCtx gala.HandlerContext, _ backfillCompleted) error {
+				seedIntegrationLoops(handlerCtx.Context, rt)
+
+				return nil
+			},
+		}); err != nil {
+			log.Panic().Err(err).Msg("failed to register integration loop seeding listener")
+		}
 
 		if wf == nil {
 			return
@@ -73,4 +78,16 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 			log.Panic().Err(err).Msg("failed to wire integration deps into workflow engine")
 		}
 	})
+}
+
+// seedIntegrationLoops ensures every connected installation's reconcilable operations and every
+// scheduled operation have a live loop, logging whatever could not be seeded
+func seedIntegrationLoops(ctx context.Context, rt *runtime.Runtime) {
+	if err := rt.SeedReconcileJobs(ctx); err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Msg("failed to seed one or more missing reconcile jobs")
+	}
+
+	if err := rt.SeedScheduledOperations(ctx); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to seed one or more scheduled operation listeners")
+	}
 }

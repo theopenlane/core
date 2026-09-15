@@ -45,8 +45,6 @@ type ExecutionPolicy struct {
 	Scheduled bool `json:"scheduled,omitempty"`
 	// SkipRunRecord indicates the IntegrationRun record creation should be skipped
 	SkipRunRecord bool `json:"skipRunRecord,omitempty"`
-	// Fanout emits one durable job per record instead of persisting the batch in the run job
-	Fanout bool `json:"fanout,omitempty"`
 	// Snapshot marks a full-snapshot sync that owns a directory sync run and removal inference
 	Snapshot bool `json:"snapshot,omitempty"`
 }

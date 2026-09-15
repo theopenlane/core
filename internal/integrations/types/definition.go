@@ -163,8 +163,6 @@ func (d Definition) ConnectionRegistration(ref CredentialSlotID) (ConnectionRegi
 type DefinitionProviderState struct {
 	// CredentialRef identifies which credential-schema-selected connection mode is active for the installation
 	CredentialRef CredentialSlotID `json:"credentialRef"`
-	// ProvenanceVersion records the provenance scheme the installation's existing records were converted to
-	ProvenanceVersion string `json:"provenanceVersion,omitempty"`
 }
 
 // ProviderState returns the persisted provider state for this definition

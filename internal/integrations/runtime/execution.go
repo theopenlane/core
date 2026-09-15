@@ -198,28 +198,9 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 	}
 
 	delta := ingestResult.Changed
-	fanout := operation.Policy.Fanout
 
 	metrics := operations.IngestMetrics(ingestResult)
 	metrics["response"] = jsonx.DecodeAnyOrNil(response)
-
-	if fanout {
-		prevRunID, runIDErr := operations.LastSuccessfulRunID(ctx, db, src.IntegrationID, envelope.Operation)
-		if runIDErr != nil {
-			return 0, runIDErr
-		}
-
-		if prevRunID != "" {
-			linked, countErr := operations.LinkedRecordCount(ctx, db, installation.OwnerID, prevRunID)
-			if countErr != nil {
-				return 0, countErr
-			}
-
-			delta = linked
-		} else {
-			delta = 0
-		}
-	}
 
 	logx.FromContext(ctx).Info().Int("records", ingestResult.Attempted).Int("changed", delta).Msg("reconcile operation completed")
 
@@ -485,10 +466,6 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 	}
 
 	if operation.IngestHandle != nil {
-		if err := r.EnsureInstallationConverted(ctx, integration); err != nil {
-			return nil, operations.IngestResult{}, err
-		}
-
 		payloadSets, err := operation.IngestHandle(ctx, req)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("ingest handle failed")
@@ -503,7 +480,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 
 		logx.FromContext(ctx).Info().Int("payload_sets", len(payloadSets)).Int("envelopes", totalEnvelopes).Msg("ingest handle completed")
 
-		result, err := operations.EmitPayloadSets(ctx, operations.IngestContext{
+		result, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
 			Registry:    r.Registry(),
 			DB:          r.DB(),
 			Runtime:     r.Gala(),

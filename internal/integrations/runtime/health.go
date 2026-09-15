@@ -345,6 +345,10 @@ func (r *Runtime) RunHealthAssessment(ctx context.Context, installation *ent.Int
 		}
 	}
 
+	if err := r.RefreshInstallationMetadata(ctx, installation); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("health assessment: instance id refresh failed")
+	}
+
 	if installation.Status == enums.IntegrationStatusErrored {
 		if err := r.ClearIntegrationUnhealthy(ctx, installation); err != nil {
 			return HealthAssessment{}, err

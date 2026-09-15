@@ -193,41 +193,7 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 
 	r.keystore().InvalidateClients(installation.ID)
 
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	state, err := def.ProviderState(installation.ProviderState)
-	if err != nil {
-		return err
-	}
-
-	if state.CredentialRef == (types.CredentialSlotID{}) {
-		if len(def.Connections) > 0 {
-			return nil
-		}
-
-		return r.saveInstallationMetadata(systemCtx, installation, selfInstanceMetadata(installation))
-	}
-
-	connection, err := def.ConnectionRegistration(state.CredentialRef)
-	if err != nil {
-		return err
-	}
-
-	bindings, err := r.loadCredentials(systemCtx, installation, connection.CredentialRefs)
-	if err != nil {
-		return err
-	}
-
-	metadata, err := resolveConnectionIdentity(systemCtx, installation, connection, bindings, nil)
-	if err != nil {
-		return err
-	}
-
-	if err := checkInstallationInstanceMatch(systemCtx, installation, metadata); err != nil {
-		return err
-	}
-
-	return r.saveInstallationMetadata(systemCtx, installation, metadata)
+	return r.RefreshInstallationMetadata(ctx, installation)
 }
 
 // selfInstanceMetadata identifies an installation whose definition names no external instance by its own id
@@ -368,6 +334,10 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 	}
 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	if err := r.RefreshInstallationMetadata(systemCtx, installation); err != nil {
+		logx.FromContext(systemCtx).Debug().Err(err).Msg("reconcile: instance id refresh before match check failed; comparing against stored id")
+	}
 
 	metadata, err := resolveConnectionIdentity(systemCtx, installation, connection, bindings, installationInput)
 	if err != nil {

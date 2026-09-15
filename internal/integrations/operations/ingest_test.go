@@ -499,6 +499,28 @@ func testDefinition(t *testing.T, mappings []types.MappingRegistration) (*regist
 // testInstallationMetadata carries the instance id every ingest installation must have
 var testInstallationMetadata = openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-test"}}
 
+// applySingleEnvelopes runs each envelope through applyPayloadSets as its own one-record batch,
+// staying below ingestPreloadMinRecords so the DB-less IngestContext these tests build never issues
+// the batch preload queries, and returns how many records reached the handle
+func applySingleEnvelopes(t *testing.T, ic IngestContext, operationName, schema string, envelopes ...types.MappingEnvelope) int {
+	t.Helper()
+
+	contracts := []types.IngestContract{{Schema: schema}}
+	handled := 0
+
+	for _, envelope := range envelopes {
+		payloadSets := []types.IngestPayloadSet{{Schema: schema, Envelopes: []types.MappingEnvelope{envelope}}}
+
+		_, err := applyPayloadSets(context.Background(), ic, operationName, contracts, types.ExecutionPolicy{}, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+			handled++
+			return ingestOutcome{}, nil
+		})
+		assert.NilError(t, err)
+	}
+
+	return handled
+}
+
 func TestProcessPayloadSets_DefinitionNotFound(t *testing.T) {
 	t.Parallel()
 
@@ -703,73 +725,12 @@ func TestProcessPayloadSets_FilteredEnvelopes(t *testing.T) {
 		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
 	}
 
-	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema: entityops.SchemaAsset.Name,
-			Envelopes: []types.MappingEnvelope{
-				{Resource: "unwanted", Payload: json.RawMessage(`{"name":"skip"}`)},
-				{Resource: "wanted", Payload: json.RawMessage(`{"name":"keep"}`)},
-			},
-		},
-	}
+	handled := applySingleEnvelopes(t, ic, "", entityops.SchemaAsset.Name,
+		types.MappingEnvelope{Resource: "unwanted", Payload: json.RawMessage(`{"name":"skip"}`)},
+		types.MappingEnvelope{Resource: "wanted", Payload: json.RawMessage(`{"name":"keep"}`)},
+	)
 
-	var handled int
-
-	// fanout skips the batched preload query, which would otherwise nil-panic on the DB-less
-	// IngestContext this test builds
-	_, err := applyPayloadSets(context.Background(), ic, "", contracts, types.ExecutionPolicy{Fanout: true}, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
-		handled++
-		return ingestOutcome{}, nil
-	})
-
-	assert.NilError(t, err)
 	assert.Equal(t, handled, 1)
-}
-
-func TestProcessPayloadSets_HandleError(t *testing.T) {
-	t.Parallel()
-
-	reg, _ := testDefinition(t, []types.MappingRegistration{
-		{
-			Schema:  entityops.SchemaAsset.Name,
-			Variant: "",
-			Spec:    types.MappingOverride{MapExpr: `payload`},
-		},
-	})
-
-	ic := IngestContext{
-		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
-	}
-
-	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema: entityops.SchemaAsset.Name,
-			Envelopes: []types.MappingEnvelope{
-				{Payload: json.RawMessage(`{"name":"first"}`)},
-				{Payload: json.RawMessage(`{"name":"second"}`)},
-			},
-		},
-	}
-
-	handleErr := errors.New("persist failed")
-	handled := 0
-
-	// fanout skips the batched preload query, which would otherwise nil-panic on the DB-less
-	// IngestContext this test builds
-	_, err := applyPayloadSets(context.Background(), ic, "", contracts, types.ExecutionPolicy{Fanout: true}, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
-		handled++
-		if handled == 1 {
-			return ingestOutcome{}, handleErr
-		}
-
-		return ingestOutcome{}, nil
-	})
-
-	assert.NilError(t, err, "record failures are skipped, not fatal")
-	assert.Equal(t, 2, handled, "a failing record must not abort the remaining records")
 }
 
 // TestProcessPayloadSets_NestedInstallationFilter verifies that a filterExpr stored inside a
@@ -829,27 +790,12 @@ func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
 		},
 	}
 
-	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema: entityops.SchemaAsset.Name,
-			Envelopes: []types.MappingEnvelope{
-				{Payload: json.RawMessage(`{"name":"private-repo","is_private":true}`)},
-				{Payload: json.RawMessage(`{"name":"public-repo","is_private":false}`)},
-				{Payload: json.RawMessage(`{"name":"another-private","is_private":true}`)},
-			},
-		},
-	}
+	handled := applySingleEnvelopes(t, ic, "repo-sync", entityops.SchemaAsset.Name,
+		types.MappingEnvelope{Payload: json.RawMessage(`{"name":"private-repo","is_private":true}`)},
+		types.MappingEnvelope{Payload: json.RawMessage(`{"name":"public-repo","is_private":false}`)},
+		types.MappingEnvelope{Payload: json.RawMessage(`{"name":"another-private","is_private":true}`)},
+	)
 
-	var handled int
-	// fanout skips the batched preload query, which would otherwise nil-panic on the DB-less
-	// IngestContext this test builds
-	_, err := applyPayloadSets(context.Background(), ic, "repo-sync", contracts, types.ExecutionPolicy{Fanout: true}, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
-		handled++
-		return ingestOutcome{}, nil
-	})
-
-	assert.NilError(t, err)
 	assert.Equal(t, handled, 2) // private repos pass; public-repo is filtered
 }
 
@@ -928,26 +874,12 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 		},
 	}
 
-	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema: entityops.SchemaAsset.Name,
-			Envelopes: []types.MappingEnvelope{
-				{Payload: json.RawMessage(`{"name":"asset-001"}`)},
-				{Payload: json.RawMessage(`{"name":"asset-002"}`)},
-			},
-		},
-	}
+	// running as asset-sync: the findingSync filterExpr must NOT apply
+	handled := applySingleEnvelopes(t, ic, "asset-sync", entityops.SchemaAsset.Name,
+		types.MappingEnvelope{Payload: json.RawMessage(`{"name":"asset-001"}`)},
+		types.MappingEnvelope{Payload: json.RawMessage(`{"name":"asset-002"}`)},
+	)
 
-	var handled int
-	// running as asset-sync: the findingSync filterExpr must NOT apply; fanout skips the batched
-	// preload query, which would otherwise nil-panic on the DB-less IngestContext this test builds
-	_, err := applyPayloadSets(context.Background(), ic, "asset-sync", contracts, types.ExecutionPolicy{Fanout: true}, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
-		handled++
-		return ingestOutcome{}, nil
-	})
-
-	assert.NilError(t, err)
 	assert.Equal(t, handled, 2) // both pass — asset-sync has no filter
 }
 
@@ -971,30 +903,4 @@ func TestStampProvenanceOverridesMappedValues(t *testing.T) {
 	assert.Equal(t, "def_dir", entityops.FieldValue(stamped, entityops.FieldSourceDefinitionID), "a mapping must not pick the source definition")
 	assert.Equal(t, "run_1", entityops.FieldValue(stamped, entityops.FieldIntegrationRunID))
 	assert.Equal(t, "acct-1", entityops.FieldValue(stamped, "external_id"), "mapped non-provenance fields pass through")
-}
-
-func TestLegacyScientificKey(t *testing.T) {
-	t.Parallel()
-
-	tests := []struct {
-		name   string
-		value  string
-		legacy string
-		ok     bool
-	}{
-		{name: "large numeric key has a scientific form", value: "147884153", legacy: "1.47884153e+08", ok: true},
-		{name: "small numeric key is identical in both forms", value: "123", ok: false},
-		{name: "non numeric key has no legacy form", value: "acct-1", ok: false},
-		{name: "empty key has no legacy form", value: "", ok: false},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			legacy, ok := legacyScientificKey(tc.value)
-			assert.Equal(t, tc.ok, ok)
-			assert.Equal(t, tc.legacy, legacy)
-		})
-	}
 }

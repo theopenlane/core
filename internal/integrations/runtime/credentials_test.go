@@ -480,3 +480,20 @@ func TestResolveConnectionIdentityDoesNotRejectInstanceMismatch(t *testing.T) {
 		t.Fatalf("expected tenant-b, got %q", metadata.Display.ExternalID)
 	}
 }
+
+func TestResolveConnectionIdentityRejectsResolverWithoutInstanceID(t *testing.T) {
+	t.Parallel()
+
+	connection := types.ConnectionRegistration{
+		Integration: &types.InstallationRegistration{
+			Resolve: func(context.Context, types.InstallationRequest) (types.IntegrationInstallationMetadata, bool, error) {
+				return types.IntegrationInstallationMetadata{}, false, nil
+			},
+		},
+	}
+
+	_, err := resolveConnectionIdentity(context.Background(), &ent.Integration{}, connection, nil, nil)
+	if !errors.Is(err, ErrInstallationInstanceIDRequired) {
+		t.Fatalf("expected ErrInstallationInstanceIDRequired, got %v", err)
+	}
+}

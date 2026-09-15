@@ -47,8 +47,8 @@ func (c *riverTestInsertClient) Insert(_ context.Context, args river.JobArgs, op
 }
 
 // newDispatchTestGala builds a durable-mode gala around a stub insert client
-func newDispatchTestGala(client riverInsertClient, defaultQueue string) *Gala {
-	return &Gala{insertClient: client, defaultQueue: defaultQueue}
+func newDispatchTestGala(client riverInsertClient) *Gala {
+	return &Gala{insertClient: client, kindQueues: testKindQueues()}
 }
 
 // TestRiverDispatchArgsRoundTrip verifies args envelope encode/decode round-trips.
@@ -64,7 +64,7 @@ func TestRiverDispatchArgsRoundTrip(t *testing.T) {
 		t.Fatalf("unexpected args build error: %v", err)
 	}
 
-	if args.Kind() != riverDispatchJobKind {
+	if args.Kind() != envelopeWorkerKind {
 		t.Fatalf("unexpected job kind %q", args.Kind())
 	}
 
@@ -85,12 +85,13 @@ func TestRiverDispatchArgsRoundTrip(t *testing.T) {
 // TestRiverDispatcherDispatchInsertsWithQueueMapping verifies queue selection and job insertion.
 func TestRiverDispatcherDispatchInsertsWithQueueMapping(t *testing.T) {
 	client := &riverTestInsertClient{}
-	runtime := newDispatchTestGala(client, "queue_workflow")
+	runtime := newDispatchTestGala(client)
 
 	envelope := Envelope{
 		ID:      NewEventID(),
 		Topic:   TopicName("gala.test.durable"),
 		Payload: []byte(`{"message":"hello"}`),
+		Headers: Headers{Kind: Workflow.Kind()},
 	}
 
 	if err := runtime.dispatchDurable(context.Background(), envelope); err != nil {
@@ -101,7 +102,7 @@ func TestRiverDispatcherDispatchInsertsWithQueueMapping(t *testing.T) {
 		t.Fatalf("expected one insert call, got %d", client.called)
 	}
 
-	if client.lastOpts == nil || client.lastOpts.Queue != "queue_workflow" {
+	if client.lastOpts == nil || client.lastOpts.Queue != Workflow.Queue() {
 		t.Fatalf("unexpected queue opts: %#v", client.lastOpts)
 	}
 
@@ -130,8 +131,7 @@ func TestRiverDispatcherReportsDuplicateHolder(t *testing.T) {
 		Job:                      holder,
 		UniqueSkippedAsDuplicate: true,
 	}}
-	runtime := newDispatchTestGala(client, "events")
-	runtime.kindQueues = map[string]string{Mutation.Kind(): Mutation.Queue()}
+	runtime := newDispatchTestGala(client)
 
 	result, err := runtime.insertEnvelope(context.Background(), Envelope{
 		Topic: TopicName("mutation.gala.test.duplicate_holder"),
@@ -160,8 +160,7 @@ func TestRiverDispatcherRejectsTerminalFailedDuplicateHolder(t *testing.T) {
 		},
 		UniqueSkippedAsDuplicate: true,
 	}}
-	runtime := newDispatchTestGala(client, "events")
-	runtime.kindQueues = map[string]string{Mutation.Kind(): Mutation.Queue()}
+	runtime := newDispatchTestGala(client)
 
 	err := runtime.dispatchDurable(context.Background(), Envelope{
 		Topic: TopicName("mutation.gala.test.cancelled_duplicate_holder"),
@@ -290,28 +289,9 @@ func TestRiverDispatchArgsDecodeEnvelopeErrors(t *testing.T) {
 	}
 }
 
-func TestRiverDispatcherQueueSelectionUsesCustomDefaultQueue(t *testing.T) {
-	client := &riverTestInsertClient{}
-	runtime := newDispatchTestGala(client, "queue_custom_default")
-
-	envelope := Envelope{
-		ID:      NewEventID(),
-		Topic:   TopicName("gala.test.queue_selection"),
-		Payload: []byte(`{"message":"hello"}`),
-	}
-
-	if err := runtime.dispatchDurable(context.Background(), envelope); err != nil {
-		t.Fatalf("unexpected dispatch error: %v", err)
-	}
-
-	if client.lastOpts == nil || client.lastOpts.Queue != "queue_custom_default" {
-		t.Fatalf("expected custom default queue, got %#v", client.lastOpts)
-	}
-}
-
 func TestRiverDispatcherPassesHeaderScheduledAt(t *testing.T) {
 	client := &riverTestInsertClient{}
-	runtime := newDispatchTestGala(client, "queue_custom_default")
+	runtime := newDispatchTestGala(client)
 
 	scheduledAt := time.Date(2026, 4, 1, 12, 0, 0, 0, time.UTC)
 
@@ -320,6 +300,7 @@ func TestRiverDispatcherPassesHeaderScheduledAt(t *testing.T) {
 		Topic:   TopicName("gala.test.scheduled_at"),
 		Payload: []byte(`{"message":"hello"}`),
 		Headers: Headers{
+			Kind:        System.Kind(),
 			ScheduledAt: &scheduledAt,
 		},
 	}
@@ -335,12 +316,13 @@ func TestRiverDispatcherPassesHeaderScheduledAt(t *testing.T) {
 
 func TestRiverDispatcherOmitsScheduledAtWhenNil(t *testing.T) {
 	client := &riverTestInsertClient{}
-	runtime := newDispatchTestGala(client, "queue_custom_default")
+	runtime := newDispatchTestGala(client)
 
 	envelope := Envelope{
 		ID:      NewEventID(),
 		Topic:   TopicName("gala.test.no_scheduled_at"),
 		Payload: []byte(`{"message":"hello"}`),
+		Headers: Headers{Kind: System.Kind()},
 	}
 
 	if err := runtime.dispatchDurable(context.Background(), envelope); err != nil {
@@ -357,42 +339,39 @@ func TestRiverDispatcherOmitsScheduledAtWhenNil(t *testing.T) {
 }
 
 // TestRiverDispatcherKindRouting verifies registered kinds route to their queue and
-// unregistered kinds fall back to the legacy kind on the default queue.
+// unregistered or empty kinds fail before any insert.
 func TestRiverDispatcherKindRouting(t *testing.T) {
 	client := &riverTestInsertClient{}
-	runtime := newDispatchTestGala(client, "events")
-	runtime.kindQueues = map[string]string{"gala.mutation": "gala_mutation"}
+	runtime := newDispatchTestGala(client)
 
 	envelope := Envelope{
 		ID:      NewEventID(),
 		Topic:   TopicName("gala.test.kinds"),
 		Payload: []byte(`{}`),
-		Headers: Headers{Kind: "gala.mutation"},
+		Headers: Headers{Kind: Mutation.Kind()},
 	}
 
 	if err := runtime.dispatchDurable(context.Background(), envelope); err != nil {
 		t.Fatalf("unexpected dispatch error: %v", err)
 	}
 
-	if kind := client.lastArgs.Kind(); kind != "gala.mutation" {
+	if kind := client.lastArgs.Kind(); kind != Mutation.Kind() {
 		t.Fatalf("expected registered kind on insert, got %q", kind)
 	}
 
-	if client.lastOpts.Queue != "gala_mutation" {
+	if client.lastOpts.Queue != Mutation.Queue() {
 		t.Fatalf("expected kind queue, got %q", client.lastOpts.Queue)
 	}
 
-	envelope.Headers.Kind = "gala.unknown"
-	if err := runtime.dispatchDurable(context.Background(), envelope); err != nil {
-		t.Fatalf("unexpected dispatch error: %v", err)
+	for _, kind := range []string{"gala.unknown", ""} {
+		envelope.Headers.Kind = kind
+		if err := runtime.dispatchDurable(context.Background(), envelope); !errors.Is(err, ErrJobKindNotRegistered) {
+			t.Fatalf("expected ErrJobKindNotRegistered for kind %q, got %v", kind, err)
+		}
 	}
 
-	if kind := client.lastArgs.Kind(); kind != riverDispatchJobKind {
-		t.Fatalf("expected legacy fallback kind, got %q", kind)
-	}
-
-	if client.lastOpts.Queue != "events" {
-		t.Fatalf("expected default queue for fallback, got %q", client.lastOpts.Queue)
+	if client.called != 1 {
+		t.Fatalf("expected unregistered kinds to skip insert, got %d insert calls", client.called)
 	}
 }
 

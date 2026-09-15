@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	openapi "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 )
@@ -132,57 +131,6 @@ func TestDirectoryIngestExcludedRecordSkipsPersist(t *testing.T) {
 
 	stillExcluded := directoryAccountByExternalID(ctx, t, excludedExternalID)
 	assert.Check(t, stillExcluded.RemovedAt == nil, "the excluded record present in the snapshot must stay active")
-}
-
-// TestDirectorySyncAdoptsLegacyScientificKeys verifies an account row still keyed by the scientific notation form of its numeric external id is re-keyed in place by the next sync instead of duplicated
-func TestDirectorySyncAdoptsLegacyScientificKeys(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
-
-	const (
-		canonicalExternalID = "147884153"
-		legacyExternalID    = "1.47884153e+08"
-	)
-
-	integration, err := suite.Client.DB.Integration.Create().
-		SetName("Legacy Key Adoption Test").
-		SetKind("dirlegacykeytest").
-		SetDefinitionID("def_dirlegacykeytest").
-		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-dirlegacykey"}}).
-		Save(ctx)
-	th.RequireNoError(t, err)
-
-	seeded, err := suite.Client.DB.DirectoryAccount.Create().
-		SetExternalID(legacyExternalID).
-		SetDisplayName("Legacy Keyed User").
-		SetOwnerID(th.SharedTestUser1.OrganizationID).
-		SetIntegrationID(integration.ID).
-		SetManagedBy(integration.ID).
-		SetSourceDefinitionID(integration.DefinitionID).
-		SetSourceInstanceID("tenant-dirlegacykey").
-		Save(ctx)
-	th.RequireNoError(t, err)
-
-	t.Cleanup(func() {
-		(&th.Cleanup[*ent.DirectoryAccountDeleteOne]{Client: suite.Client.DB.DirectoryAccount, ID: seeded.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
-		(&th.Cleanup[*ent.IntegrationDeleteOne]{Client: suite.Client.DB.Integration, ID: integration.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
-	})
-
-	snapshot := directorySnapshot{Accounts: []directoryAccountRecord{newDirectoryAccountRecord(canonicalExternalID, "Legacy Keyed User")}}
-
-	result := ingestDirectorySnapshotFixture(ctx, t, integration, snapshot, true)
-	assert.Check(t, is.Equal(0, result.Failed))
-	assert.Check(t, is.Equal(0, result.Removed), "the adopted row is seen by the snapshot, never removed")
-
-	count, err := suite.Client.DB.DirectoryAccount.Query().
-		Where(directoryaccount.ExternalIDIn(canonicalExternalID, legacyExternalID), directoryaccount.OwnerID(th.SharedTestUser1.OrganizationID)).
-		Count(ctx)
-	th.RequireNoError(t, err)
-	assert.Check(t, is.Equal(1, count), "adoption must not create a second row")
-
-	adopted, err := suite.Client.DB.DirectoryAccount.Get(ctx, seeded.ID)
-	th.RequireNoError(t, err)
-	assert.Check(t, is.Equal(canonicalExternalID, adopted.ExternalID), "the legacy key is repaired in place")
-	assert.Check(t, adopted.RemovedAt == nil)
 }
 
 // TestRetryRunCreatesFreshPendingRun verifies a re-executed attempt of a terminal run continues under a new pending run that records the run it retries

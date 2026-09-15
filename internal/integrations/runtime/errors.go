@@ -31,6 +31,4 @@ var (
 	ErrInstallationInstanceIDRequired = errors.New("integrations/runtime: installation instance id required")
 	// ErrInstallationInstanceMismatch indicates the credential resolves to a different external instance than the one the installation already records
 	ErrInstallationInstanceMismatch = errors.New("integrations/runtime: installation instance mismatch")
-	// ErrInstallationConversionFailed indicates the installation could not be converted to the current provenance scheme
-	ErrInstallationConversionFailed = errors.New("integrations/runtime: installation provenance conversion failed")
 )

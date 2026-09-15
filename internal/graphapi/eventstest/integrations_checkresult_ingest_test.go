@@ -175,3 +175,40 @@ func TestCheckResultFailedRecordExclusionAcrossBatchedRuns(t *testing.T) {
 	th.RequireNoError(t, err)
 	assert.Check(t, is.Len(reloaded.Health.FailedRecords, 0), "a key must drop out of tracking once it reaches the retention ceiling")
 }
+
+// TestCheckResultFailedRecordDoesNotAbortBatch verifies a record failing validation inside a batched
+// run is counted Failed while the records after it in the same batch still persist
+func TestCheckResultFailedRecordDoesNotAbortBatch(t *testing.T) {
+	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+
+	installation, err := suite.Client.DB.Integration.Create().
+		SetName("CheckResult Batch Continuation Test").
+		SetKind("checkresultbatch").
+		SetDefinitionID("def_checkresultbatch").
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-checkresultbatch"}}).
+		Save(ctx)
+	th.RequireNoError(t, err)
+
+	t.Cleanup(func() {
+		results, err := suite.Client.DB.CheckResult.Query().Where(checkresult.ParentExternalIDHasPrefix("checkbatch-")).All(ctx)
+		th.RequireNoError(t, err)
+
+		if len(results) > 0 {
+			(&th.Cleanup[*ent.CheckResultDeleteOne]{Client: suite.Client.DB.CheckResult, IDs: lo.Map(results, func(cr *ent.CheckResult, _ int) string { return cr.ID })}).MustDelete(th.SharedTestUser1.UserCtx, t)
+		}
+
+		(&th.Cleanup[*ent.IntegrationDeleteOne]{Client: suite.Client.DB.Integration, ID: installation.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	})
+
+	invalid := `{"parent_external_id":"checkbatch-1","status":"not-a-real-status","details":"invalid status"}`
+	valid := `{"parent_external_id":"checkbatch-2","source":"checkresult-test","details":"valid details"}`
+
+	result := ingestCheckResultPayloads(ctx, t, installation, invalid, valid)
+	assert.Check(t, is.Equal(2, result.Attempted))
+	assert.Check(t, is.Equal(1, result.Failed), "the invalid record must count as Failed")
+	assert.Check(t, is.Equal(1, result.Persisted), "a failing record must not abort the remaining records in the batch")
+	assert.Check(t, is.Equal(1, result.Changed))
+
+	persisted := checkResultByParentExternalID(ctx, t, "checkbatch-2")
+	assert.Check(t, is.Equal("valid details", lo.FromPtr(persisted.Details)))
+}
