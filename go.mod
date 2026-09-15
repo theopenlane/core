@@ -108,7 +108,7 @@ require (
 	github.com/spf13/pflag v1.0.10
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.12.1
-	github.com/stripe/stripe-go/v86 v86.2.0
+	github.com/stripe/stripe-go/v86 v86.4.1
 	github.com/tailscale/tailscale-client-go/v2 v2.0.0-20250129222324-74c8fc3cb4d7
 	github.com/testcontainers/testcontainers-go v0.44.0
 	github.com/theopenlane/core/common v1.1.0
