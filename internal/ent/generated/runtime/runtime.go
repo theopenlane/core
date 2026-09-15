@@ -7236,6 +7236,8 @@ func init() {
 	task.Hooks[13] = taskHooks[1]
 
 	task.Hooks[14] = taskHooks[2]
+
+	task.Hooks[15] = taskHooks[3]
 	taskMixinInters3 := taskMixin[3].Interceptors()
 	taskMixinInters7 := taskMixin[7].Interceptors()
 	task.Interceptors[0] = taskMixinInters3[0]
