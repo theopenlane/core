@@ -21,11 +21,13 @@ type Enrichment struct {
 	Compliance *CompliancePage `json:"compliance,omitempty"`
 	// DNS includes DNS probed data
 	DNS *DNSVendorInfo `json:"dns,omitempty"`
+	// WellKnown includes the well-known file and transport security probes
+	WellKnown *WellKnown `json:"well_known,omitempty"`
 }
 
 // IsEmpty reports whether no enrichment lookup produced any data
 func (e Enrichment) IsEmpty() bool {
-	return e.Company == nil && e.Branding == nil && e.Compliance == nil && e.DNS == nil
+	return e.Company == nil && e.Branding == nil && e.Compliance == nil && e.DNS == nil && e.WellKnown == nil
 }
 
 // EnrichmentErrors holds the per-lookup errors from GatherEnrichment, each nil on success
@@ -34,6 +36,7 @@ type EnrichmentErrors struct {
 	Branding   error
 	Compliance error
 	DNS        error
+	WellKnown  error
 }
 
 // ReportConfig configures how BuildScanReport classifies vendors versus
@@ -105,6 +108,16 @@ func (c *Config) GatherEnrichment(ctx context.Context, domain string, timeout ti
 		return nil
 	})
 
+	g.Go(func() error {
+		if wellKnown, err := GetWellKnown(ctx, domain); err != nil {
+			errs.WellKnown = err
+		} else {
+			enrichment.WellKnown = wellKnown
+		}
+
+		return nil
+	})
+
 	_ = g.Wait() // per-lookup errors are captured in errs above; this never fails
 
 	return enrichment, errs
@@ -129,6 +142,12 @@ func BuildScanReport(result *url_scanner.ScanGetResponse, enrichment Enrichment,
 	report.Platform = buildPlatform(enrichment)
 	report.Systems = buildSystems(enrichment)
 	report.Compliance = buildComplianceSection(enrichment)
+	report.WellKnown = enrichment.WellKnown
+	report.EmailAuth = buildEmailAuth(enrichment)
+
+	if result != nil {
+		report.AgentReadiness = buildAgentReadinessAssessment(result.Meta.Processors.AgentReadiness)
+	}
 
 	data, _ := jsonx.ToMap(report)
 
