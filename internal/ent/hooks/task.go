@@ -98,7 +98,6 @@ func HookTaskPermissions() ent.Hook {
 func HookTaskTemplatePermissions() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return hook.TaskFunc(func(ctx context.Context, m *generated.TaskMutation) (generated.Value, error) {
-
 			isTemplate, _ := m.IsTemplate()
 			if m.Op().Is(ent.OpCreate) && !isTemplate {
 				return next.Mutate(ctx, m)
