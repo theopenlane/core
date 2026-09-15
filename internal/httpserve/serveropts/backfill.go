@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 	"github.com/theopenlane/core/v2/pkg/version"
 )
 
@@ -41,7 +42,7 @@ var backfillTopic = gala.NamespacedTopic[backfillRequest](gala.System, "startup.
 var backfillRoutineTopic = gala.NamespacedTopic[backfillRoutineRequest](gala.System, "startup.backfill.routine")
 
 // schedulerKeyPrefix is the base of the scheduling run's uniqueness key
-const schedulerKeyPrefix = "startup-backfill-v5"
+const schedulerKeyPrefix = "startup-backfill-v4"
 
 // routineKeyPrefix seeds each routine's run-once key
 const routineKeyPrefix = "startup-backfill-routine"
@@ -144,7 +145,7 @@ var backfillRoutines = []backfillRoutine{
 	},
 	{
 		Name:    "recreate-preview-domains",
-		Version: "v2",
+		Version: "v1",
 		Enabled: true,
 		Run: func(ctx context.Context, deps backfillDeps) error {
 			return backfillPreviewDomains(ctx, deps.Client, deps.ServerConfig)
@@ -467,6 +468,19 @@ func backfillPreviewDomains(ctx context.Context, client *ent.Client, cfg config.
 		return nil
 	}
 
+	cnameRecord := cfg.TrustCenterPreviewCnameTarget
+	if normalized, err := urlx.NormalizeHostname(cnameRecord); err == nil {
+		cnameRecord = normalized
+	}
+
+	mappableDomain, err := client.MappableDomain.Query().
+		Where(mappabledomain.NameEqualFold(cnameRecord)).
+		Select(mappabledomain.FieldZoneID).
+		Only(ctx)
+	if err != nil {
+		return err
+	}
+
 	var queuedCounter int
 
 	for _, domain := range domains {
@@ -491,7 +505,7 @@ func backfillPreviewDomains(ctx context.Context, client *ent.Client, cfg config.
 
 		_, err = client.Job.Insert(ctx, jobspec.CreatePreviewDomainArgs{
 			TrustCenterID:            domain.TrustCenterID,
-			TrustCenterPreviewZoneID: cfg.TrustCenterPreviewZoneID,
+			TrustCenterPreviewZoneID: mappableDomain.ZoneID,
 			TrustCenterCnameTarget:   cfg.TrustCenterPreviewCnameTarget,
 		}, nil)
 

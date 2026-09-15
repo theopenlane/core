@@ -123,7 +123,7 @@ coreConfiguration:
     # Used for mapping the vanity domains to the trust centers
     trustcentercnametarget: "cname.openlane-dns.com"  # @schema type:string; default:cname.openlane-dns.com
     # -- TrustCenterPreviewCnameTarget is the cname target for trust center preview domains
-    trustcenterpreviewcnametarget: "cname.openlane-dns.com"  # @schema type:string; default:cname.openlane-dns.com
+    trustcenterpreviewcnametarget: "theopenlane.net"  # @schema type:string; default:theopenlane.net
     # -- NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
     # Unread notifications are always pulled regardless of this setting
     notificationlookbackdays: 30  # @schema type:integer; default:30

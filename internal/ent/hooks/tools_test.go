@@ -68,7 +68,6 @@ func (suite *HookTestSuite) SetupSuite() {
 
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
 		PreviewCnameTarget: previewCnameTargetTest,
-		PreviewZoneID:      previewMappableZoneIDTest,
 	})
 
 	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
