@@ -124,7 +124,7 @@ func HookTaskTemplatePermissions() ent.Hook {
 				return nil, err
 			}
 
-			// if op.entcreate, this will be true
+			// if op.entcreate or ent.updateone, this will be true
 			if task, ok := v.(*generated.Task); ok {
 				tasks = []*generated.Task{task}
 			}
@@ -145,6 +145,9 @@ func HookTaskTemplatePermissions() ent.Hook {
 					return
 				}
 
+				// fga client ignores missing tuples so fine to do this
+				// else we'd really want to run through old values per task to make sure
+				// we are only deleting the tuples that exists already
 				deleteKeys = append(deleteKeys, tuple)
 			})
 
