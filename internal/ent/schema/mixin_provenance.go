@@ -35,30 +35,35 @@ func (ProvenanceMixin) Fields() []ent.Field {
 			Comment("canonical id of the integration definition that created or last enriched the record").
 			Optional().
 			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 				entx.IntegrationMappingField().SystemControlled(),
 			),
 		field.String("source_definition_version").
 			Comment("integration definition version recorded when the record was created or last enriched").
 			Optional().
 			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 				entx.IntegrationMappingField().SystemControlled().Volatile(),
 			),
 		field.String("source_instance_id").
 			Comment("stable identifier of the external system instance the record was sourced from").
 			Optional().
 			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 				entx.IntegrationMappingField().SystemControlled(),
 			),
 		field.String("managed_by").
 			Comment("id of the integration installation managing the record, empty when the record is unclaimed").
 			Optional().
 			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 				entx.IntegrationMappingField().SystemControlled(),
 			),
 		field.String("integration_run_id").
 			Comment("id of the integration run that last wrote this record").
 			Optional().
 			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 				entx.IntegrationMappingField().SystemControlled().Volatile(),
 			),
 	}

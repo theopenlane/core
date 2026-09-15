@@ -11,6 +11,31 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
+// TestResolveInstallationMetadataFromCredential verifies the bound credential's installation id wins over
+// callback input and stored metadata, so a credential for a different installation resolves to that installation
+func TestResolveInstallationMetadataFromCredential(t *testing.T) {
+	t.Parallel()
+
+	meta, ok, err := resolveInstallationMetadata(context.Background(), types.InstallationRequest{
+		Integration: &generated.Integration{
+			InstallationMetadata: types.IntegrationInstallationMetadata{
+				Attributes: json.RawMessage(`{"installationId":"11","organizationName":"stored-org"}`),
+			},
+		},
+		Credentials: types.CredentialBindings{{
+			Ref: gitHubAppCredential.ID(),
+			Credential: types.CredentialSet{
+				Data: json.RawMessage(`{"appId":1,"installationId":222,"accessToken":"token","organizationName":"cred-org"}`),
+			},
+		}},
+		Input: json.RawMessage(`{"installationId":"77","organizationName":"input-org"}`),
+	})
+	require.NoError(t, err)
+	require.True(t, ok)
+	require.Equal(t, "222", meta.InstallationID)
+	require.Equal(t, "cred-org", meta.OrganizationName)
+}
+
 // TestResolveInstallationMetadataFromInput verifies callback input wins when it carries an installation id
 func TestResolveInstallationMetadataFromInput(t *testing.T) {
 	t.Parallel()

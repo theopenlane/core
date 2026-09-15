@@ -37,9 +37,9 @@ type directoryAccountRecord struct {
 	ExternalID string `json:"external_id"`
 	// CanonicalEmail is the account's primary email address
 	CanonicalEmail string `json:"canonical_email,omitempty"`
-	// DisplayName is the provider supplied display name, a material (non-Volatile) field
+	// DisplayName is the provider supplied display name, a material field
 	DisplayName string `json:"display_name,omitempty"`
-	// Profile is the flattened attribute bag, and is Volatile
+	// Profile is the flattened attribute bag, a material field
 	Profile map[string]any `json:"profile,omitempty"`
 }
 
@@ -47,9 +47,9 @@ type directoryAccountRecord struct {
 type directoryGroupRecord struct {
 	// ExternalID is the stable identifier from the directory system, and the group's lookup key
 	ExternalID string `json:"external_id"`
-	// DisplayName is the directory supplied display name, a material (non-Volatile) field
+	// DisplayName is the directory supplied display name, a material field
 	DisplayName string `json:"display_name,omitempty"`
-	// Profile is the flattened attribute bag, and is Volatile
+	// Profile is the flattened attribute bag, a material field
 	Profile map[string]any `json:"profile,omitempty"`
 }
 
@@ -59,9 +59,9 @@ type directoryMembershipRecord struct {
 	DirectoryAccountID string `json:"directory_account_id"`
 	// DirectoryGroupID references the group by its external id
 	DirectoryGroupID string `json:"directory_group_id"`
-	// Role is the membership role reported by the provider, a material (non-Volatile) field
+	// Role is the membership role reported by the provider, a material field
 	Role string `json:"role,omitempty"`
-	// Metadata is the raw provider metadata, a Volatile field
+	// Metadata is the raw provider metadata, a material field
 	Metadata map[string]any `json:"metadata,omitempty"`
 }
 
@@ -175,23 +175,6 @@ func (s directorySnapshot) identical() directorySnapshot {
 	return s.clone()
 }
 
-// withAccountProfileChurn returns a snapshot where the account matching externalID has advanced its profile's lastLoginTime and nothing else
-func (s directorySnapshot) withAccountProfileChurn(externalID string) directorySnapshot {
-	out := s.clone()
-
-	for i, account := range out.Accounts {
-		if account.ExternalID != externalID {
-			continue
-		}
-
-		profile := maps.Clone(account.Profile)
-		profile["lastLoginTime"] = directoryProfileChurnedLastLogin
-		out.Accounts[i].Profile = profile
-	}
-
-	return out
-}
-
 // withAccountMaterialChange returns a snapshot where the account matching externalID has a new display_name
 func (s directorySnapshot) withAccountMaterialChange(externalID string) directorySnapshot {
 	out := s.clone()
@@ -289,17 +272,6 @@ func (s directorySnapshot) withoutGroup(externalID string) directorySnapshot {
 
 	out.Groups = lo.Reject(out.Groups, func(g directoryGroupRecord, _ int) bool { return g.ExternalID == externalID })
 	out.Memberships = lo.Reject(out.Memberships, func(m directoryMembershipRecord, _ int) bool { return m.DirectoryGroupID == externalID })
-
-	return out
-}
-
-// withNewAccount returns a snapshot with one additional account, identified by externalID, and one membership linking it to the first group
-func (s directorySnapshot) withNewAccount(externalID string) directorySnapshot {
-	out := s.clone()
-
-	account := newDirectoryAccountRecord(externalID, "New Account")
-	out.Accounts = append(out.Accounts, account)
-	out.Memberships = append(out.Memberships, newDirectoryMembershipRecord(account, out.Groups[0].ExternalID, enums.DirectoryMembershipRoleMember.String()))
 
 	return out
 }

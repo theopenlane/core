@@ -267,12 +267,10 @@ func TestDirectorySyncIngestUnchangedFieldGate(t *testing.T) {
 	})
 }
 
-// TestDirectoryAccountReinstallRelinkNoUpdate verifies that a reinstall under a new installation of
-// the same source definition and instance is recognized as unchanged: integration_id and managed_by
-// are Volatile on the generated DirectoryAccount descriptor, so a payload that differs only in those
-// columns prunes to an empty change set and no per-row update or mutation event fires. Provenance
-// repoints only ride along an actual write, so with nothing else to write, integration_id stays on
-// the original installation until some other field changes.
+// TestDirectoryAccountReinstallRelinkNoUpdate verifies that a second live installation of the same
+// source definition and instance does not write a row the first installation still manages:
+// applyIngestClaim returns not-owned while the manager exists, so no per-row update or mutation
+// event fires and integration_id and managed_by stay on the original installation
 func TestDirectoryAccountReinstallRelinkNoUpdate(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 

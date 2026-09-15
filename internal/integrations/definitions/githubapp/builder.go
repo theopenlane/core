@@ -44,6 +44,7 @@ func Builder(cfg Config) registry.Builder {
 					Ref:         gitHubAppCredential.ID(),
 					Name:        "GitHub App Credential",
 					Description: "Integration credential managed by the GitHub App install flow.",
+					Schema:      gitHubAppCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
