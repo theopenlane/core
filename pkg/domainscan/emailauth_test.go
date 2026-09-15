@@ -4,13 +4,14 @@ import (
 	"testing"
 
 	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestSPFAllQualifier(t *testing.T) {
 	tests := []struct {
 		name   string
 		record string
-		want   string
+		want   SPFPolicy
 	}{
 		{name: "empty record", record: "", want: ""},
 		{name: "hard fail", record: "v=spf1 include:_spf.google.com -all", want: SPFPolicyHardFail},
@@ -51,12 +52,35 @@ func TestDMARCPercentage(t *testing.T) {
 	}
 }
 
-func TestNormalizeDMARCPolicy(t *testing.T) {
-	assert.Equal(t, normalizeDMARCPolicy("reject"), DMARCPolicyReject)
-	assert.Equal(t, normalizeDMARCPolicy("  QUARANTINE "), DMARCPolicyQuarantine)
-	assert.Equal(t, normalizeDMARCPolicy("none"), DMARCPolicyNone)
-	assert.Equal(t, normalizeDMARCPolicy("blocklist"), "")
-	assert.Equal(t, normalizeDMARCPolicy(""), "")
+func TestParseDMARCPolicy(t *testing.T) {
+	tests := []struct {
+		name   string
+		value  string
+		want   DMARCPolicy
+		wantOK bool
+	}{
+		{name: "reject", value: "reject", want: DMARCPolicyReject, wantOK: true},
+		{name: "case and whitespace folded", value: "  QUARANTINE ", want: DMARCPolicyQuarantine, wantOK: true},
+		{name: "none", value: "none", want: DMARCPolicyNone, wantOK: true},
+		{name: "unknown is invalid", value: "blocklist", want: "blocklist", wantOK: false},
+		{name: "empty is invalid", value: "", want: "", wantOK: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, ok := ParseDMARCPolicy(tt.value)
+
+			assert.Check(t, is.Equal(tt.wantOK, ok))
+			assert.Check(t, is.Equal(tt.want, got))
+		})
+	}
+}
+
+func TestSPFPolicyValid(t *testing.T) {
+	assert.Check(t, SPFPolicyHardFail.Valid())
+	assert.Check(t, SPFPolicyPassAll.Valid())
+	assert.Check(t, !SPFPolicy("").Valid())
+	assert.Check(t, !SPFPolicy("strict").Valid())
 }
 
 func TestDMARCReportingURIs(t *testing.T) {
@@ -117,6 +141,6 @@ func TestBuildEmailAuth(t *testing.T) {
 		got := buildEmailAuth(Enrichment{DNS: &DNSVendorInfo{MXHosts: []string{"mx.example.com"}}})
 
 		assert.Assert(t, got != nil)
-		assert.Equal(t, got.DMARCPolicy, "")
+		assert.Equal(t, got.DMARCPolicy, DMARCPolicy(""))
 	})
 }
