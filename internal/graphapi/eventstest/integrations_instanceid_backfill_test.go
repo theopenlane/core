@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/v2/config"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
@@ -309,7 +310,7 @@ func TestBackfillChainResolvesInstanceIDThenStampsProvenance(t *testing.T) {
 		(&th.Cleanup[*ent.IntegrationDeleteOne]{Client: suite.Client.DB.Integration, ID: install.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	})
 
-	th.RequireNoError(t, serveropts.StartBackfill(ctx, suite.GalaRuntime))
+	th.RequireNoError(t, serveropts.StartBackfill(ctx, suite.GalaRuntime, config.Server{TrustCenterPreviewCnameTarget: th.PreviewCnameTargetTest}))
 
 	waitForEvents()
 

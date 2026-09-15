@@ -36,14 +36,14 @@ import (
 const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation | auth.CapBypassManagedGroup
 
 // backfillTopic is the gala topic the backfill scheduling run is submitted on
-var backfillTopic = gala.NamespacedTopic[backfillRequest](gala.System, "startup.backfill")
+var backfillTopic = gala.NamespacedTopic[backfillRequest](gala.SystemVersioned, "startup.backfill")
 
 // backfillRoutineTopic carries one scheduled routine, so every routine retries and fails independently of its siblings
-var backfillRoutineTopic = gala.NamespacedTopic[backfillRoutineRequest](gala.System, "startup.backfill.routine")
+var backfillRoutineTopic = gala.NamespacedTopic[backfillRoutineRequest](gala.SystemVersioned, "startup.backfill.routine")
 
 // backfillCompletedTopic announces that the backfill has finished for this release, so startup work
 // that must observe the backfilled state (integration loop seeding) can begin
-var backfillCompletedTopic = gala.NamespacedTopic[backfillCompleted](gala.System, "startup.backfill.completed")
+var backfillCompletedTopic = gala.NamespacedTopic[backfillCompleted](gala.SystemVersioned, "startup.backfill.completed")
 
 // schedulerKeyPrefix is the base of the scheduling run's uniqueness key
 const schedulerKeyPrefix = "startup-backfill-v5"
@@ -194,7 +194,7 @@ func WithBackfill(ctx context.Context, galaApp *gala.Gala) ServerOption {
 			return
 		}
 
-		if err := StartBackfill(ctx, galaApp); err != nil {
+		if err := StartBackfill(ctx, galaApp, s.Config.Settings.Server); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to start")
 		}
 	})
@@ -202,7 +202,7 @@ func WithBackfill(ctx context.Context, galaApp *gala.Gala) ServerOption {
 
 // StartBackfill registers the backfill listeners on galaApp and submits the scheduling run, which
 // fans out one job per enabled routine, each carrying its own run-once semantics
-func StartBackfill(ctx context.Context, galaApp *gala.Gala) error {
+func StartBackfill(ctx context.Context, galaApp *gala.Gala, serverConfig config.Server) error {
 	if _, err := gala.Register(galaApp, gala.Definition[backfillRequest]{
 		Topic: backfillTopic,
 		Caller: func(*auth.Caller, backfillRequest) *auth.Caller {
@@ -221,7 +221,7 @@ func StartBackfill(ctx context.Context, galaApp *gala.Gala) error {
 			return &auth.Caller{Capabilities: backfillBypassCaps}
 		},
 		Handle: func(handlerCtx gala.HandlerContext, req backfillRoutineRequest) error {
-			return runBackfillRoutine(handlerCtx, galaApp, req.Name)
+			return runBackfillRoutine(handlerCtx, galaApp, req.Name, serverConfig)
 		},
 	}); err != nil {
 		return err
