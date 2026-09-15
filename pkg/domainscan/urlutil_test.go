@@ -100,7 +100,7 @@ func TestAbsoluteURL(t *testing.T) {
 		want   string
 		wantOK bool
 	}{
-		{name: "bare host gets https", rawURL: "www.stronta.com", want: "https://www.stronta.com", wantOK: true},
+		{name: "bare host gets https", rawURL: "www.example.com", want: "https://www.example.com", wantOK: true},
 		{name: "existing url is kept", rawURL: "http://example.com/path?x=1", want: "http://example.com/path?x=1", wantOK: true},
 		{name: "empty fails", rawURL: "", wantOK: false},
 	}
