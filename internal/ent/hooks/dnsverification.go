@@ -25,7 +25,7 @@ func HookDNSVerificationDelete() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			if trustCenterConfig.PreviewCnameTarget == "" {
+			if trustCenterConfig.PreviewZoneID == "" {
 				return next.Mutate(ctx, m)
 			}
 

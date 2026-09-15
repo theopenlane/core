@@ -38,7 +38,6 @@ func SetTrustCenterConfig(cfg TrustCenterConfig) {
 // TrustCenterConfig holds the trust center configuration
 type TrustCenterConfig struct {
 	CnameTarget              string
-	PreviewCnameTarget       string
 	PreviewZoneID            string
 	DefaultTrustCenterDomain string
 	CacheRefreshScheme       string
@@ -176,7 +175,7 @@ func HookTrustCenterSettingCreatePreview() ent.Hook {
 			if err = enqueueJob(ctx, m.Job, jobspec.CreatePreviewDomainArgs{
 				TrustCenterID:            trustCenterID,
 				TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
-				TrustCenterCnameTarget:   trustCenterConfig.PreviewCnameTarget,
+				TrustCenterCnameTarget:   trustCenterConfig.CnameTarget,
 			}, nil); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to enqueue create preview domain job")
 
