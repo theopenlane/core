@@ -144,7 +144,7 @@ var backfillRoutines = []backfillRoutine{
 	},
 	{
 		Name:    "recreate-preview-domains",
-		Version: "v1",
+		Version: "v2",
 		Enabled: true,
 		Run: func(ctx context.Context, deps backfillDeps) error {
 			return backfillPreviewDomains(ctx, deps.Client, deps.ServerConfig)
