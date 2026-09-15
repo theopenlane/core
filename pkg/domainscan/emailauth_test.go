@@ -20,7 +20,7 @@ func TestSPFAllQualifier(t *testing.T) {
 		{name: "bare all is pass all", record: "v=spf1 all", want: SPFPolicyPassAll},
 		{name: "uppercase qualifier", record: "v=spf1 -ALL", want: SPFPolicyHardFail},
 		{name: "no all mechanism at all", record: "v=spf1 include:_spf.google.com", want: ""},
-		{name: "last all mechanism wins", record: "v=spf1 ~all -all", want: SPFPolicyHardFail},
+		{name: "first all mechanism wins", record: "v=spf1 ~all -all", want: SPFPolicySoftFail},
 	}
 
 	for _, tt := range tests {
@@ -40,7 +40,8 @@ func TestDMARCPercentage(t *testing.T) {
 		{name: "explicit pct", record: "v=DMARC1; p=reject; pct=10", want: 10},
 		{name: "pct of zero is honored", record: "v=DMARC1; p=reject; pct=0", want: 0},
 		{name: "unparsable pct falls back to 100", record: "v=DMARC1; p=reject; pct=most", want: 100},
-		{name: "out of range pct clamps to 100", record: "v=DMARC1; p=reject; pct=250", want: 100},
+		{name: "out of range pct falls back to 100", record: "v=DMARC1; p=reject; pct=250", want: 100},
+		{name: "negative pct falls back to 100", record: "v=DMARC1; p=reject; pct=-5", want: 100},
 	}
 
 	for _, tt := range tests {

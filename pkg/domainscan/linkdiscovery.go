@@ -20,14 +20,7 @@ var hrefPattern = regexp.MustCompile(`(?i)href\s*=\s*["']([^"']+)["']`)
 const linkFallbackPath = "legal"
 
 // GatherComplianceLinks finds a site's published legal documents by reading the links on its
-// homepage. Publishing these is only half of it: a buyer or a regulator has to be able to find
-// them without searching, which in practice means the footer, which in turn means they are in
-// the homepage markup. So the presence of the link is the thing worth checking, and checking it
-// needs no page rendering, no extraction model and no guessing at URL spellings: the site's own
-// hrefs say where its privacy policy is and what it is called.
-//
-// Every anchor in the document is considered rather than only those inside a <footer>, since
-// the element is not reliably used and a link in a nav or a cookie banner counts just as much.
+// homepage, usually linked in the footer
 func GatherComplianceLinks(ctx context.Context, domain string) []ComplianceLink {
 	if links := complianceLinksAt(ctx, domain); len(links) > 0 {
 		return links
@@ -89,9 +82,7 @@ func complianceLinksFromHTML(body, base string) []ComplianceLink {
 
 // complianceTypeFromHref resolves a link target to a compliance document type using its last
 // path segment, so "/legal/cookie-policy" resolves to cookie_policy and "/legal/privacy" to
-// privacy_policy via the same aliases the extraction output goes through. Matching the segment
-// rather than searching the whole href is what keeps "/legal/cookie-settings", a preferences
-// dialog, from being counted as a published cookie policy
+// privacy_policy via the same aliases the extraction output goes through
 func complianceTypeFromHref(href string) string {
 	if href == "" || strings.HasPrefix(href, "#") || strings.HasPrefix(href, "mailto:") {
 		return ""
@@ -140,9 +131,7 @@ var statusPageHosts = []string{
 // A status page is a host rather than a path, and almost always status.<domain>, so that is
 // probed first: one request settles it for most companies, with no dependence on the page
 // linking it anywhere. Scanning the homepage's links is the fallback, for the company on a
-// hosted provider such as statuspage.io or one using a different label. Between them the two
-// cover a status page that is linked but not where we would derive it, and one that is where we
-// would derive it but linked nowhere at all
+// hosted provider such as statuspage.io or one using a different label
 func GatherStatusPage(ctx context.Context, domain string) string {
 	if candidate, ok := statusPageURL(domain); ok {
 		if resolved, reachable := urlReachable(ctx, candidate); reachable {

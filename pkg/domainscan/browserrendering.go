@@ -48,34 +48,26 @@ const (
 	// surfaces a company runs, so a larger cap only leaves room for the marketing features it
 	// tells the model to exclude
 	maxSystemItems = 5
-
 	// maxTechnologyItems caps the technologies array at the same number the prompt asks for
 	maxTechnologyItems = 15
-
 	// maxCustomerItems caps the customers array. A logo wall is unbounded and the report shows
 	// a sample of it, so enumerating every name only risks the response not closing
 	maxCustomerItems = 15
-
 	// maxDiscoveryItems caps the arrays whose entries are long: a URL or a service category
 	// costs several times what a vendor name does
 	maxDiscoveryItems = 10
-
 	// maxFrameworkItems caps a framework or certification list. Names are short, and a company
 	// claiming more than twenty distinct frameworks is listing the same ones twice
 	maxFrameworkItems = 20
-
 	// maxControlItems caps the security practices read off a page. These are sentences rather
 	// than names, so the array is bounded well below the framework list
-	maxControlItems = 20
-
+	maxControlItems = 100
 	// maxSubprocessorItems caps a subprocessor list, the one array on a legal page that is
 	// legitimately long. It is still bounded: the report shows who a company shares data with,
 	// which a list this size answers, and an unbounded one risks the response not closing
 	maxSubprocessorItems = 60
-
 	// maxLinkItems caps the arrays of URLs, which cost several tokens each
 	maxLinkItems = 20
-
 	// maxProseLength caps a free-text field. Cloudflare's JSON extraction fails the whole
 	// request when the model runs past its output limit, and it fails opaquely: the response
 	// comes back truncated mid-token, unparsable, and every retry reproduces it. Unbounded
@@ -136,11 +128,7 @@ func (c *Config) GetComplianceData(ctx context.Context, domain string) (*Complia
 		return nil, err
 	}
 
-	// the site's own links say where its legal documents are and what they are called, so the
-	// pages to analyze are discovered rather than guessed. Guessing a fixed list of subpaths
-	// spent a probe on each spelling a site might use and still missed the ones it did: for a
-	// site serving /legal/privacy and /legal/terms-of-service, a list carrying /privacy,
-	// /terms-of-service and /legal/terms reaches exactly one of the two documents
+	// look for compliance links
 	links := GatherComplianceLinks(ctx, domain)
 
 	pages := make([]*CompliancePage, len(links))
@@ -169,8 +157,6 @@ func (c *Config) GetComplianceData(ctx context.Context, domain string) (*Complia
 		comp = homepage
 	}
 
-	// the discovered links are merged in first: they were read from the site's markup, so they
-	// win over anything the extraction inferred about the same URL
 	comp.ComplianceLinks = mergeComplianceLinks(links, comp.ComplianceLinks)
 
 	candidates, ok := trustCenterURLs(domain)
@@ -332,14 +318,9 @@ func (c *Config) GetCompanyData(ctx context.Context, url string) (*CompanyProfil
 			". Treat each as strong evidence of a real, separate system and factor them into the systems list even if they aren't mentioned or linked anywhere on the rendered page."
 	}
 
-	// a failed homepage render is not fatal. The subpath renders and the status page lookup do
-	// not depend on it, and a homepage that fails to render is exactly when they matter most: a
-	// company whose marketing page defeats the extraction still has a pricing page, a legal hub
-	// and a status page to be found. Aborting here discarded all of it and reported the company
-	// as having none of them
 	homepage, err := c.fetchCompanyProfilePage(ctx, url, promptSuffix)
 	if err != nil {
-		logx.FromContext(ctx).Debug().Err(err).Str("url", url).Msg("domainscan: company profile homepage failed to render, continuing with subpaths")
+		logx.FromContext(ctx).Info().Err(err).Str("url", url).Msg("domainscan: company profile homepage failed to render, continuing with subpaths")
 
 		homepage = nil
 	}
@@ -382,9 +363,6 @@ func (c *Config) GetCompanyData(ctx context.Context, url string) (*CompanyProfil
 		rendered = rendered || page != nil
 	}
 
-	// nothing rendered at all means the extraction learned nothing about this company, which is
-	// the homepage error's to report. A status page found without it would be a profile made
-	// entirely of one URL
 	if !rendered {
 		return nil, err
 	}
@@ -578,11 +556,7 @@ func buildCompanyProfileSchema() ResponseFormat {
 						Type:        "object",
 						Description: "A single technical system, not a product module, capability, or marketing feature name",
 						Properties: map[string]JSONSchemaProperty{
-							"name": {Type: "string", Description: "The system name (e.g. Console, API, Mobile App, Storage Backend) — never a marketing feature or module name"},
-							// only one description per system is asked for, because only one is kept:
-							// buildSystems takes full_description or falls back to summary. Asking for
-							// both spent output tokens on a field that was discarded, and unbounded
-							// prose in a repeated object is what ran the response past its limit
+							"name":    {Type: "string", Description: "The system name (e.g. Console, API, Mobile App, Storage Backend) — never a marketing feature or module name"},
 							"summary": {Type: "string", Description: "A 1-2 sentence description of what this system does and what data it handles", MaxLength: maxProseLength},
 						},
 					},

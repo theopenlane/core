@@ -15,7 +15,6 @@ var complianceDocumentTypes = []string{
 	"trust_center",
 	"dpa",
 	"soc2_report",
-	"security",
 	"subprocessors",
 	"gdpr",
 	"cookie_policy",
@@ -42,7 +41,6 @@ var complianceTypeAliases = map[string]string{
 	"subprocessorlist":        "subprocessors",
 	"trust":                   "trust_center",
 	"cookies":                 "cookie_policy",
-	"securitypolicy":          "security",
 }
 
 // canonicalComplianceTypes maps each recognized document type's compacted form back to the
@@ -62,13 +60,7 @@ var canonicalComplianceTypes = func() map[string]string {
 }()
 
 // NormalizeComplianceType folds a document type onto its canonical form, tolerating case,
-// spacing, hyphenation and the alternative names above. A value it does not recognize is
-// returned in normalized form rather than dropped, so a caller can still compare it and a
-// type added to the vocabulary later needs no alias to work.
-//
-// Every consumer of a compliance document type goes through this. Comparing raw strings works
-// right up until a footer links "/legal/privacy", at which point a document the site plainly
-// publishes is reported as missing
+// spacing, hyphenation and the alternative names above
 func NormalizeComplianceType(value string) string {
 	normalized := normalizeComplianceSeparators(value)
 	if normalized == "" {

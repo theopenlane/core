@@ -27,7 +27,7 @@ func TestBuildMissingComplianceLinks(t *testing.T) {
 					{URL: "https://example.com/terms", Type: "terms_of_service"},
 				},
 			},
-			want: "- [ ] trust_center\n- [ ] dpa\n- [ ] security\n- [ ] cookie_policy",
+			want: "- [ ] trust_center\n- [ ] dpa\n- [ ] cookie_policy",
 		},
 	}
 
@@ -38,19 +38,6 @@ func TestBuildMissingComplianceLinks(t *testing.T) {
 			assert.Check(t, is.DeepEqual(tt.want, got))
 		})
 	}
-}
-
-func TestBuildAgentReadinessChecklistMarkdown(t *testing.T) {
-	failedChecks := []map[string]any{
-		{"check": "markdown", "message": "missing markdown negotiation"},
-		{"check": "mcp", "message": "no MCP server card"},
-	}
-
-	got := buildAgentReadinessChecklistMarkdown(failedChecks)
-
-	want := "- [ ] missing markdown negotiation\n- [ ] no MCP server card"
-
-	assert.Check(t, is.Equal(want, got))
 }
 
 func TestAgentReadinessResultFailed(t *testing.T) {

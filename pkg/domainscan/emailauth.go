@@ -113,21 +113,11 @@ func normalizeDMARCPolicy(policy string) string {
 	}
 }
 
-// dmarcPercentage reads the pct= tag, defaulting to 100 when absent or unparsable
-// and clamping to the 0-100 range the specification allows
+// dmarcPercentage reads the pct= tag, defaulting to 100 when absent, unparsable or outside 0-100
 func dmarcPercentage(record string) int {
-	raw := dmarcTagValue(record, "pct")
-	if raw == "" {
+	pct, err := strconv.Atoi(dmarcTagValue(record, "pct"))
+	if err != nil || pct < 0 || pct > defaultDMARCPercentage {
 		return defaultDMARCPercentage
-	}
-
-	pct, err := strconv.Atoi(raw)
-	if err != nil || pct > defaultDMARCPercentage {
-		return defaultDMARCPercentage
-	}
-
-	if pct < 0 {
-		return 0
 	}
 
 	return pct
@@ -151,28 +141,21 @@ func dmarcReportingURIs(record string) []string {
 	return uris
 }
 
-// spfAllQualifier finds the qualifier on the record's trailing all mechanism. The last
-// all mechanism wins, since evaluation stops at the first match and anything after it
-// is unreachable
+// spfAllQualifier finds the qualifier on the record's all mechanism. The first one wins,
+// since evaluation stops at the first match and anything after it is unreachable
 func spfAllQualifier(record string) string {
-	if strings.TrimSpace(record) == "" {
-		return ""
-	}
-
-	policy := ""
-
 	for _, field := range strings.Fields(record) {
 		switch strings.ToLower(field) {
 		case "-all":
-			policy = SPFPolicyHardFail
+			return SPFPolicyHardFail
 		case "~all":
-			policy = SPFPolicySoftFail
+			return SPFPolicySoftFail
 		case "?all":
-			policy = SPFPolicyNeutral
+			return SPFPolicyNeutral
 		case "all", "+all":
-			policy = SPFPolicyPassAll
+			return SPFPolicyPassAll
 		}
 	}
 
-	return policy
+	return ""
 }

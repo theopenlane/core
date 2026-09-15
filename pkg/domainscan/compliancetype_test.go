@@ -31,7 +31,6 @@ func TestNormalizeComplianceType(t *testing.T) {
 		{value: "subprocessor", want: "subprocessors"},
 		{value: "trust", want: "trust_center"},
 		{value: "cookies", want: "cookie_policy"},
-		{value: "security_policy", want: "security"},
 		{value: "", want: ""},
 		{value: "   ", want: ""},
 		// an unrecognized value is returned normalized rather than dropped, so a caller can

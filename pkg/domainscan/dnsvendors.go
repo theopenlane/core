@@ -110,19 +110,38 @@ func scanSubdomains(ctx context.Context, parentHost string, maxDepth int, addVen
 	return results
 }
 
-// probeDKIMSelectors checks host for each of commonDKIMSelectors, returning the labels that resolve
+// probeDKIMSelectors checks host for each of commonDKIMSelectors, returning the labels that hold a DKIM key record
 func probeDKIMSelectors(ctx context.Context, host string) []string {
 	var found []string
 
 	for _, selector := range commonDKIMSelectors {
+		if ctx.Err() != nil {
+			break
+		}
+
 		name := selector.label + "._domainkey." + host
 
-		if records, err := net.DefaultResolver.LookupTXT(ctx, fqdn(name)); err == nil && len(records) > 0 {
-			found = append(found, selector.label)
+		records, err := net.DefaultResolver.LookupTXT(ctx, fqdn(name))
+		if err != nil {
+			continue
+		}
+
+		for _, record := range records {
+			if isDKIMRecord(record) {
+				found = append(found, selector.label)
+				break
+			}
 		}
 	}
 
 	return found
+}
+
+// isDKIMRecord reports whether a TXT record looks like a DKIM key
+func isDKIMRecord(record string) bool {
+	lower := strings.ToLower(record)
+
+	return strings.Contains(lower, "v=dkim1") || strings.Contains(lower, "p=")
 }
 
 // dkimSelectorVendor looks up the vendor for a resolved DKIM selector label
