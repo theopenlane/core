@@ -480,7 +480,7 @@ server:
         enabled: false
     trustcentercnametarget: cname.openlane-dns.com
     trustcentercnametargetzoneid: ""
-    trustcenterpreviewcnametarget: theopenlane.net
+    trustcenterpreviewcnametarget: cname.openlane-dns.com
     trustcenterpreviewzoneid: ""
     writetimeout: 15000000000
 sessions:
