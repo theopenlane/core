@@ -32,11 +32,7 @@ func buildFindings(result *url_scanner.ScanGetResponse, enrichment Enrichment) F
 }
 
 // expectedComplianceLinkTypes are the compliance document types a company site is generally
-// expected to publish.
-//
-// "security" is deliberately not among them. A security page and a trust center are the same
-// document for most companies, so listing both asked a company that publishes one to publish
-// it again, and the checklist item read as a different requirement than it was
+// expected to publish
 var expectedComplianceLinkTypes = []string{"privacy_policy", "terms_of_service", "trust_center", "dpa", "cookie_policy"}
 
 // buildMissingComplianceLinks renders a GitHub-flavored Markdown task list, one unchecked
@@ -47,9 +43,6 @@ func buildMissingComplianceLinks(enrichment Enrichment) string {
 		return ""
 	}
 
-	// types are normalized before comparison: the extraction is constrained to the canonical
-	// set now, but a model that answers "Privacy Policy" or "tos" has found the document just
-	// the same, and reporting it as missing sends the reader looking for a page they published
 	found := make(map[string]bool, len(enrichment.Compliance.ComplianceLinks))
 	for _, link := range enrichment.Compliance.ComplianceLinks {
 		if normalized := NormalizeComplianceType(link.Type); normalized != "" {
