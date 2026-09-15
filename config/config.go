@@ -151,7 +151,7 @@ type Server struct {
 	TrustCenterCnameTarget       string `json:"trustcentercnametarget" koanf:"trustcentercnametarget" default:"cname.openlane-dns.com"`
 	TrustCenterCnameTargetZoneID string `json:"trustcentercnametargetzoneid" koanf:"trustcentercnametargetzoneid" default:"" sensitive:"true"`
 	// TrustCenterPreviewCnameTarget is the cname target for trust center preview domains
-	TrustCenterPreviewCnameTarget string `json:"trustcenterpreviewcnametarget" koanf:"trustcenterpreviewcnametarget" default:"theopenlane.net"`
+	TrustCenterPreviewCnameTarget string `json:"trustcenterpreviewcnametarget" koanf:"trustcenterpreviewcnametarget" default:"cname.openlane-dns.com"`
 	TrustCenterPreviewZoneID      string `json:"trustcenterpreviewzoneid" koanf:"trustcenterpreviewzoneid" default:"" sensitive:"true"`
 	// NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
 	// Unread notifications are always pulled regardless of this setting

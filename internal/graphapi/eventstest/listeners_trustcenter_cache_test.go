@@ -41,6 +41,7 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
 		CnameTarget:              th.CnameTargetTest,
 		PreviewCnameTarget:       th.PreviewCnameTargetTest,
+		PreviewZoneID:            th.MappableDomainZoneTestID,
 		DefaultTrustCenterDomain: strings.TrimPrefix(refreshServer.URL, "http://"),
 		CacheRefreshScheme:       "http",
 	})
@@ -48,6 +49,7 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 		hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
 			CnameTarget:              th.CnameTargetTest,
 			PreviewCnameTarget:       th.PreviewCnameTargetTest,
+			PreviewZoneID:            th.MappableDomainZoneTestID,
 			DefaultTrustCenterDomain: th.DefaultDomainTest,
 		})
 	})

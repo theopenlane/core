@@ -226,6 +226,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
 		PreviewCnameTarget: previewCnameTargetTest,
+		PreviewZoneID:      previewMappableDomainZoneIDTest,
 	})
 
 	previewDomainCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
