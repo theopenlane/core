@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
@@ -127,6 +128,16 @@ var backfillRoutines = []backfillRoutine{
 		Enabled: false,
 		Run: func(ctx context.Context, deps backfillDeps) error {
 			backfillIntegrationExpiry(ctx, deps.Client)
+
+			return nil
+		},
+	},
+	{
+		Name:    "mappable-domain",
+		Version: "v2",
+		Enabled: false,
+		Run: func(ctx context.Context, deps backfillDeps) error {
+			backfillMappableDomains(ctx, deps.Client, deps.ServerConfig)
 
 			return nil
 		},
@@ -364,6 +375,70 @@ func backfillFileBackups(ctx context.Context, dbClient *ent.Client, galaApp *gal
 	}
 
 	logx.FromContext(ctx).Info().Int("enqueued_files", enqueuedCounter).Int("failed_files", failedCounter).Int("total_candidate_files", totalFiles).Msg("backfill: file backups enqueued")
+}
+
+func backfillMappableDomains(ctx context.Context, dbClient *ent.Client, cfg config.Server) {
+	targets := []struct {
+		Cname  string
+		ZoneID string
+	}{
+		{Cname: cfg.TrustCenterCnameTarget, ZoneID: cfg.TrustCenterCnameTargetZoneID},
+		{Cname: cfg.TrustCenterPreviewCnameTarget, ZoneID: cfg.TrustCenterPreviewZoneID},
+	}
+
+	// creates the mappable domain.
+	// if the cname does not exists, it is created.
+	//
+	// but if it exists, it checks if the zone id from the db matches what is in the configuration
+	// if it differs, the old entry is deleted and re-created. else it is left alone
+	for _, target := range targets {
+		if target.Cname == "" || target.ZoneID == "" {
+			continue
+		}
+
+		domain, err := dbClient.MappableDomain.Query().
+			Where(mappabledomain.Name(target.Cname)).
+			Select(mappabledomain.FieldID, mappabledomain.FieldZoneID).
+			Only(ctx)
+
+		if ent.IsNotFound(err) {
+			_, err = dbClient.MappableDomain.Create().
+				SetName(target.Cname).
+				SetZoneID(target.ZoneID).
+				Save(ctx)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("cname", target.Cname).Msg("backfill: failed to create mappable domain")
+			}
+
+			continue
+		}
+
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("cname", target.Cname).Msg("backfill: failed to query mappable domain")
+
+			continue
+		}
+
+		if domain.ZoneID == target.ZoneID {
+			continue
+		}
+
+		if err := dbClient.MappableDomain.DeleteOneID(domain.ID).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("cname", target.Cname).Msg("backfill: failed to delete mappable domain")
+
+			continue
+		}
+
+		_, err = dbClient.MappableDomain.Create().
+			SetName(target.Cname).
+			SetZoneID(target.ZoneID).
+			Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("cname", target.Cname).Msg("backfill: failed to reconcile mappable domain")
+		}
+	}
+
+	logx.FromContext(ctx).Info().Msg("backfill: mappable domains backfill completed")
 }
 
 func backfillPreviewDomains(ctx context.Context, client *ent.Client, cfg config.Server) error {
