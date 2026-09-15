@@ -982,9 +982,6 @@
                       "policy": {
                         "description": "ExecutionPolicy controls synchronous execution behavior for one operation",
                         "properties": {
-                          "fanout": {
-                            "type": "boolean"
-                          },
                           "inline": {
                             "type": "boolean"
                           },

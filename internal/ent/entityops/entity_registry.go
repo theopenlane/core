@@ -129,8 +129,6 @@ type Schema struct {
 	// field matches any of the provided values, pushing the predicate into the database; emitted
 	// only for integration-mapped schemas and link-rule targets with match-key columns
 	QueryByKey func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error)
-	// CountByKey counts org-scoped entities whose given snake_case field matches any of the values
-	CountByKey func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error)
 	// IntegrationFKField is the schema's mutable FK column to Integration, if any
 	IntegrationFKField string
 	// IntegrationM2MEdge is the name of the schema's to-many edge to Integration, if any
@@ -147,8 +145,6 @@ type Schema struct {
 	InstanceScoped bool
 	// QueryByLookup returns rows matching one of the given key tuples for a declared lookup alternative
 	QueryByLookup func(ctx context.Context, client *generated.Client, ownerID string, alternative int, keys []LookupValues) ([]json.RawMessage, error)
-	// RepairLookupField rewrites one lookup field on one row, bypassing immutability
-	RepairLookupField func(ctx context.Context, client *generated.Client, entityID, field, value string) error
 	// SnapshotScope returns the non-removed rows one installation manages for a definition and instance
 	SnapshotScope func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID, managedBy string) ([]json.RawMessage, error)
 	// MarkRemoved bulk-marks the given ids removed at the given time under the given integration run
@@ -18919,24 +18915,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaActionPlan.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "action_plan", Operation: refOpQuery}
-
-		if !SchemaActionPlan.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "action_plan"))
-		}
-
-		count, err := client.ActionPlan.Query().
-			Where(actionplan.OwnerID(orgID)).
-			Where(predicate.ActionPlan(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaAssessmentResponse.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "assessment_response", Operation: refOpQuery}
 
@@ -18964,24 +18942,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaAssessmentResponse.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "assessment_response", Operation: refOpQuery}
-
-		if !SchemaAssessmentResponse.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "assessment_response"))
-		}
-
-		count, err := client.AssessmentResponse.Query().
-			Where(assessmentresponse.OwnerID(orgID)).
-			Where(predicate.AssessmentResponse(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaAsset.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "asset", Operation: refOpQuery}
@@ -19011,24 +18971,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaAsset.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "asset", Operation: refOpQuery}
-
-		if !SchemaAsset.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "asset"))
-		}
-
-		count, err := client.Asset.Query().
-			Where(asset.OwnerID(orgID)).
-			Where(predicate.Asset(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaCampaign.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "campaign", Operation: refOpQuery}
 
@@ -19056,24 +18998,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaCampaign.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "campaign", Operation: refOpQuery}
-
-		if !SchemaCampaign.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "campaign"))
-		}
-
-		count, err := client.Campaign.Query().
-			Where(campaign.OwnerID(orgID)).
-			Where(predicate.Campaign(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaCampaignTarget.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "campaign_target", Operation: refOpQuery}
@@ -19103,24 +19027,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaCampaignTarget.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "campaign_target", Operation: refOpQuery}
-
-		if !SchemaCampaignTarget.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "campaign_target"))
-		}
-
-		count, err := client.CampaignTarget.Query().
-			Where(campaigntarget.OwnerID(orgID)).
-			Where(predicate.CampaignTarget(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaContact.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "contact", Operation: refOpQuery}
 
@@ -19148,24 +19054,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaContact.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "contact", Operation: refOpQuery}
-
-		if !SchemaContact.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "contact"))
-		}
-
-		count, err := client.Contact.Query().
-			Where(contact.OwnerID(orgID)).
-			Where(predicate.Contact(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaControl.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "control", Operation: refOpQuery}
@@ -19195,24 +19083,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaControl.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "control", Operation: refOpQuery}
-
-		if !SchemaControl.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "control"))
-		}
-
-		count, err := client.Control.Query().
-			Where(control.OwnerID(orgID)).
-			Where(predicate.Control(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaControlImplementation.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "control_implementation", Operation: refOpQuery}
 
@@ -19240,24 +19110,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaControlImplementation.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "control_implementation", Operation: refOpQuery}
-
-		if !SchemaControlImplementation.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "control_implementation"))
-		}
-
-		count, err := client.ControlImplementation.Query().
-			Where(controlimplementation.OwnerID(orgID)).
-			Where(predicate.ControlImplementation(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaControlObjective.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "control_objective", Operation: refOpQuery}
@@ -19287,24 +19139,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaControlObjective.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "control_objective", Operation: refOpQuery}
-
-		if !SchemaControlObjective.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "control_objective"))
-		}
-
-		count, err := client.ControlObjective.Query().
-			Where(controlobjective.OwnerID(orgID)).
-			Where(predicate.ControlObjective(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaCustomTypeEnum.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "custom_type_enum", Operation: refOpQuery}
 
@@ -19332,24 +19166,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaCustomTypeEnum.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "custom_type_enum", Operation: refOpQuery}
-
-		if !SchemaCustomTypeEnum.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "custom_type_enum"))
-		}
-
-		count, err := client.CustomTypeEnum.Query().
-			Where(customtypeenum.OwnerID(orgID)).
-			Where(predicate.CustomTypeEnum(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaDirectoryAccount.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_account", Operation: refOpQuery}
@@ -19379,24 +19195,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaDirectoryAccount.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "directory_account", Operation: refOpQuery}
-
-		if !SchemaDirectoryAccount.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "directory_account"))
-		}
-
-		count, err := client.DirectoryAccount.Query().
-			Where(directoryaccount.OwnerID(orgID)).
-			Where(predicate.DirectoryAccount(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaDirectoryGroup.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_group", Operation: refOpQuery}
 
@@ -19424,24 +19222,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaDirectoryGroup.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "directory_group", Operation: refOpQuery}
-
-		if !SchemaDirectoryGroup.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "directory_group"))
-		}
-
-		count, err := client.DirectoryGroup.Query().
-			Where(directorygroup.OwnerID(orgID)).
-			Where(predicate.DirectoryGroup(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaDirectoryMembership.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_membership", Operation: refOpQuery}
@@ -19471,24 +19251,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaDirectoryMembership.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "directory_membership", Operation: refOpQuery}
-
-		if !SchemaDirectoryMembership.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "directory_membership"))
-		}
-
-		count, err := client.DirectoryMembership.Query().
-			Where(directorymembership.OwnerID(orgID)).
-			Where(predicate.DirectoryMembership(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaDiscussion.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "discussion", Operation: refOpQuery}
 
@@ -19516,24 +19278,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaDiscussion.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "discussion", Operation: refOpQuery}
-
-		if !SchemaDiscussion.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "discussion"))
-		}
-
-		count, err := client.Discussion.Query().
-			Where(discussion.OwnerID(orgID)).
-			Where(predicate.Discussion(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaDocumentData.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "document_data", Operation: refOpQuery}
@@ -19563,24 +19307,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaDocumentData.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "document_data", Operation: refOpQuery}
-
-		if !SchemaDocumentData.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "document_data"))
-		}
-
-		count, err := client.DocumentData.Query().
-			Where(documentdata.OwnerID(orgID)).
-			Where(predicate.DocumentData(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaEntity.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "entity", Operation: refOpQuery}
 
@@ -19608,24 +19334,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaEntity.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "entity", Operation: refOpQuery}
-
-		if !SchemaEntity.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "entity"))
-		}
-
-		count, err := client.Entity.Query().
-			Where(entity.OwnerID(orgID)).
-			Where(predicate.Entity(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaEntityType.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "entity_type", Operation: refOpQuery}
@@ -19655,24 +19363,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaEntityType.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "entity_type", Operation: refOpQuery}
-
-		if !SchemaEntityType.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "entity_type"))
-		}
-
-		count, err := client.EntityType.Query().
-			Where(entitytype.OwnerID(orgID)).
-			Where(predicate.EntityType(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaFinding.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "finding", Operation: refOpQuery}
 
@@ -19700,24 +19390,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaFinding.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "finding", Operation: refOpQuery}
-
-		if !SchemaFinding.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "finding"))
-		}
-
-		count, err := client.Finding.Query().
-			Where(finding.OwnerID(orgID)).
-			Where(predicate.Finding(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaFindingControl.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "finding_control", Operation: refOpQuery}
@@ -19747,24 +19419,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaFindingControl.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "finding_control", Operation: refOpQuery}
-
-		if !SchemaFindingControl.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "finding_control"))
-		}
-
-		count, err := client.FindingControl.Query().
-			Where(findingcontrol.OwnerID(orgID)).
-			Where(predicate.FindingControl(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaGroup.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "group", Operation: refOpQuery}
 
@@ -19792,24 +19446,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaGroup.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "group", Operation: refOpQuery}
-
-		if !SchemaGroup.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "group"))
-		}
-
-		count, err := client.Group.Query().
-			Where(group.OwnerID(orgID)).
-			Where(predicate.Group(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaIdentityHolder.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "identity_holder", Operation: refOpQuery}
@@ -19839,24 +19475,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaIdentityHolder.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "identity_holder", Operation: refOpQuery}
-
-		if !SchemaIdentityHolder.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "identity_holder"))
-		}
-
-		count, err := client.IdentityHolder.Query().
-			Where(identityholder.OwnerID(orgID)).
-			Where(predicate.IdentityHolder(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaIntegration.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "integration", Operation: refOpQuery}
 
@@ -19884,24 +19502,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaIntegration.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "integration", Operation: refOpQuery}
-
-		if !SchemaIntegration.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "integration"))
-		}
-
-		count, err := client.Integration.Query().
-			Where(integration.OwnerID(orgID)).
-			Where(predicate.Integration(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaIntegrationRun.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "integration_run", Operation: refOpQuery}
@@ -19931,24 +19531,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaIntegrationRun.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "integration_run", Operation: refOpQuery}
-
-		if !SchemaIntegrationRun.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "integration_run"))
-		}
-
-		count, err := client.IntegrationRun.Query().
-			Where(integrationrun.OwnerID(orgID)).
-			Where(predicate.IntegrationRun(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaInternalPolicy.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "internal_policy", Operation: refOpQuery}
 
@@ -19976,24 +19558,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaInternalPolicy.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "internal_policy", Operation: refOpQuery}
-
-		if !SchemaInternalPolicy.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "internal_policy"))
-		}
-
-		count, err := client.InternalPolicy.Query().
-			Where(internalpolicy.OwnerID(orgID)).
-			Where(predicate.InternalPolicy(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaNarrative.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "narrative", Operation: refOpQuery}
@@ -20023,24 +19587,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaNarrative.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "narrative", Operation: refOpQuery}
-
-		if !SchemaNarrative.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "narrative"))
-		}
-
-		count, err := client.Narrative.Query().
-			Where(narrative.OwnerID(orgID)).
-			Where(predicate.Narrative(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaNote.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "note", Operation: refOpQuery}
 
@@ -20068,24 +19614,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaNote.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "note", Operation: refOpQuery}
-
-		if !SchemaNote.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "note"))
-		}
-
-		count, err := client.Note.Query().
-			Where(note.OwnerID(orgID)).
-			Where(predicate.Note(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaPlatform.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "platform", Operation: refOpQuery}
@@ -20115,24 +19643,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaPlatform.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "platform", Operation: refOpQuery}
-
-		if !SchemaPlatform.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "platform"))
-		}
-
-		count, err := client.Platform.Query().
-			Where(platform.OwnerID(orgID)).
-			Where(predicate.Platform(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaProcedure.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "procedure", Operation: refOpQuery}
 
@@ -20160,24 +19670,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaProcedure.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "procedure", Operation: refOpQuery}
-
-		if !SchemaProcedure.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "procedure"))
-		}
-
-		count, err := client.Procedure.Query().
-			Where(procedure.OwnerID(orgID)).
-			Where(predicate.Procedure(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaProgram.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "program", Operation: refOpQuery}
@@ -20207,24 +19699,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaProgram.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "program", Operation: refOpQuery}
-
-		if !SchemaProgram.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "program"))
-		}
-
-		count, err := client.Program.Query().
-			Where(program.OwnerID(orgID)).
-			Where(predicate.Program(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaRemediation.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "remediation", Operation: refOpQuery}
 
@@ -20252,24 +19726,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaRemediation.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "remediation", Operation: refOpQuery}
-
-		if !SchemaRemediation.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "remediation"))
-		}
-
-		count, err := client.Remediation.Query().
-			Where(remediation.OwnerID(orgID)).
-			Where(predicate.Remediation(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaReview.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "review", Operation: refOpQuery}
@@ -20299,24 +19755,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaReview.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "review", Operation: refOpQuery}
-
-		if !SchemaReview.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "review"))
-		}
-
-		count, err := client.Review.Query().
-			Where(review.OwnerID(orgID)).
-			Where(predicate.Review(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaRisk.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "risk", Operation: refOpQuery}
 
@@ -20344,24 +19782,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaRisk.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "risk", Operation: refOpQuery}
-
-		if !SchemaRisk.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "risk"))
-		}
-
-		count, err := client.Risk.Query().
-			Where(risk.OwnerID(orgID)).
-			Where(predicate.Risk(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaScan.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "scan", Operation: refOpQuery}
@@ -20391,24 +19811,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaScan.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "scan", Operation: refOpQuery}
-
-		if !SchemaScan.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "scan"))
-		}
-
-		count, err := client.Scan.Query().
-			Where(scan.OwnerID(orgID)).
-			Where(predicate.Scan(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaSubcontrol.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "subcontrol", Operation: refOpQuery}
 
@@ -20436,24 +19838,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaSubcontrol.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "subcontrol", Operation: refOpQuery}
-
-		if !SchemaSubcontrol.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "subcontrol"))
-		}
-
-		count, err := client.Subcontrol.Query().
-			Where(subcontrol.OwnerID(orgID)).
-			Where(predicate.Subcontrol(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaSubprocessor.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "subprocessor", Operation: refOpQuery}
@@ -20483,24 +19867,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaSubprocessor.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "subprocessor", Operation: refOpQuery}
-
-		if !SchemaSubprocessor.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "subprocessor"))
-		}
-
-		count, err := client.Subprocessor.Query().
-			Where(subprocessor.OwnerID(orgID)).
-			Where(predicate.Subprocessor(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaSubscriber.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "subscriber", Operation: refOpQuery}
 
@@ -20528,24 +19894,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaSubscriber.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "subscriber", Operation: refOpQuery}
-
-		if !SchemaSubscriber.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "subscriber"))
-		}
-
-		count, err := client.Subscriber.Query().
-			Where(subscriber.OwnerID(orgID)).
-			Where(predicate.Subscriber(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaSystemDetail.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "system_detail", Operation: refOpQuery}
@@ -20575,24 +19923,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaSystemDetail.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "system_detail", Operation: refOpQuery}
-
-		if !SchemaSystemDetail.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "system_detail"))
-		}
-
-		count, err := client.SystemDetail.Query().
-			Where(systemdetail.OwnerID(orgID)).
-			Where(predicate.SystemDetail(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaTask.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "task", Operation: refOpQuery}
 
@@ -20620,24 +19950,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaTask.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "task", Operation: refOpQuery}
-
-		if !SchemaTask.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "task"))
-		}
-
-		count, err := client.Task.Query().
-			Where(task.OwnerID(orgID)).
-			Where(predicate.Task(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaVendorRiskScore.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpQuery}
@@ -20667,24 +19979,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaVendorRiskScore.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpQuery}
-
-		if !SchemaVendorRiskScore.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "vendor_risk_score"))
-		}
-
-		count, err := client.VendorRiskScore.Query().
-			Where(vendorriskscore.OwnerID(orgID)).
-			Where(predicate.VendorRiskScore(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaVulnerability.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "vulnerability", Operation: refOpQuery}
 
@@ -20713,24 +20007,6 @@ func init() {
 
 		return results, nil
 	}
-
-	SchemaVulnerability.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "vulnerability", Operation: refOpQuery}
-
-		if !SchemaVulnerability.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "vulnerability"))
-		}
-
-		count, err := client.Vulnerability.Query().
-			Where(vulnerability.OwnerID(orgID)).
-			Where(predicate.Vulnerability(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
-	}
 	SchemaWorkflowObjectRef.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "workflow_object_ref", Operation: refOpQuery}
 
@@ -20758,24 +20034,6 @@ func init() {
 		}
 
 		return results, nil
-	}
-
-	SchemaWorkflowObjectRef.CountByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) (int, error) {
-		ref := SchemaRef{Schema: "workflow_object_ref", Operation: refOpQuery}
-
-		if !SchemaWorkflowObjectRef.MatchKeyField(field) {
-			return 0, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "workflow_object_ref"))
-		}
-
-		count, err := client.WorkflowObjectRef.Query().
-			Where(workflowobjectref.OwnerID(orgID)).
-			Where(predicate.WorkflowObjectRef(matchKeyIn(field, values))).
-			Count(ctx)
-		if err != nil {
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
-		}
-
-		return count, nil
 	}
 	SchemaActionPlan.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
 		ref := SchemaRef{Schema: "action_plan", Operation: refOpCreate}
@@ -22189,175 +21447,6 @@ func init() {
 		}
 
 		return filterByAlternativeFields(results, fields, keys), nil
-	}
-	SchemaActionPlan.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
-		ref := SchemaRef{Schema: "action_plan", Operation: refOpUpdate}
-
-		if err := client.ActionPlan.UpdateOneID(entityID).
-			Modify(func(u *sql.UpdateBuilder) {
-				u.Set(field, value)
-			}).
-			Exec(WithEmissionVetoed(ctx)); err != nil {
-			return logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return nil
-	}
-	SchemaAsset.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
-		ref := SchemaRef{Schema: "asset", Operation: refOpUpdate}
-
-		if err := client.Asset.UpdateOneID(entityID).
-			Modify(func(u *sql.UpdateBuilder) {
-				u.Set(field, value)
-			}).
-			Exec(WithEmissionVetoed(ctx)); err != nil {
-			return logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return nil
-	}
-	SchemaCheckResult.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
-		ref := SchemaRef{Schema: "check_result", Operation: refOpUpdate}
-
-		if err := client.CheckResult.UpdateOneID(entityID).
-			Modify(func(u *sql.UpdateBuilder) {
-				u.Set(field, value)
-			}).
-			Exec(WithEmissionVetoed(ctx)); err != nil {
-			return logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return nil
-	}
-	SchemaContact.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
-		ref := SchemaRef{Schema: "contact", Operation: refOpUpdate}
-
-		if err := client.Contact.UpdateOneID(entityID).
-			Modify(func(u *sql.UpdateBuilder) {
-				u.Set(field, value)
-			}).
-			Exec(WithEmissionVetoed(ctx)); err != nil {
-			return logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return nil
-	}
-	SchemaDirectoryAccount.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
-		ref := SchemaRef{Schema: "directory_account", Operation: refOpUpdate}
-
-		if err := client.DirectoryAccount.UpdateOneID(entityID).
-			Modify(func(u *sql.UpdateBuilder) {
-				u.Set(field, value)
-			}).
-			Exec(WithEmissionVetoed(ctx)); err != nil {
-			return logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return nil
-	}
-	SchemaDirectoryGroup.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
-		ref := SchemaRef{Schema: "directory_group", Operation: refOpUpdate}
-
-		if err := client.DirectoryGroup.UpdateOneID(entityID).
-			Modify(func(u *sql.UpdateBuilder) {
-				u.Set(field, value)
-			}).
-			Exec(WithEmissionVetoed(ctx)); err != nil {
-			return logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return nil
-	}
-	SchemaDirectoryMembership.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
-		ref := SchemaRef{Schema: "directory_membership", Operation: refOpUpdate}
-
-		if err := client.DirectoryMembership.UpdateOneID(entityID).
-			Modify(func(u *sql.UpdateBuilder) {
-				u.Set(field, value)
-			}).
-			Exec(WithEmissionVetoed(ctx)); err != nil {
-			return logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return nil
-	}
-	SchemaEntity.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
-		ref := SchemaRef{Schema: "entity", Operation: refOpUpdate}
-
-		if err := client.Entity.UpdateOneID(entityID).
-			Modify(func(u *sql.UpdateBuilder) {
-				u.Set(field, value)
-			}).
-			Exec(WithEmissionVetoed(ctx)); err != nil {
-			return logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return nil
-	}
-	SchemaFinding.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
-		ref := SchemaRef{Schema: "finding", Operation: refOpUpdate}
-
-		if err := client.Finding.UpdateOneID(entityID).
-			Modify(func(u *sql.UpdateBuilder) {
-				u.Set(field, value)
-			}).
-			Exec(WithEmissionVetoed(ctx)); err != nil {
-			return logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return nil
-	}
-	SchemaInternalPolicy.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
-		ref := SchemaRef{Schema: "internal_policy", Operation: refOpUpdate}
-
-		if err := client.InternalPolicy.UpdateOneID(entityID).
-			Modify(func(u *sql.UpdateBuilder) {
-				u.Set(field, value)
-			}).
-			Exec(WithEmissionVetoed(ctx)); err != nil {
-			return logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return nil
-	}
-	SchemaProcedure.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
-		ref := SchemaRef{Schema: "procedure", Operation: refOpUpdate}
-
-		if err := client.Procedure.UpdateOneID(entityID).
-			Modify(func(u *sql.UpdateBuilder) {
-				u.Set(field, value)
-			}).
-			Exec(WithEmissionVetoed(ctx)); err != nil {
-			return logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return nil
-	}
-	SchemaRisk.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
-		ref := SchemaRef{Schema: "risk", Operation: refOpUpdate}
-
-		if err := client.Risk.UpdateOneID(entityID).
-			Modify(func(u *sql.UpdateBuilder) {
-				u.Set(field, value)
-			}).
-			Exec(WithEmissionVetoed(ctx)); err != nil {
-			return logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return nil
-	}
-	SchemaVulnerability.RepairLookupField = func(ctx context.Context, client *generated.Client, entityID, field, value string) error {
-		ref := SchemaRef{Schema: "vulnerability", Operation: refOpUpdate}
-
-		if err := client.Vulnerability.UpdateOneID(entityID).
-			Modify(func(u *sql.UpdateBuilder) {
-				u.Set(field, value)
-			}).
-			Exec(WithEmissionVetoed(ctx)); err != nil {
-			return logPersistError(ctx, ref, ErrUpdateFailed, err)
-		}
-
-		return nil
 	}
 	SchemaDirectoryAccount.SnapshotScope = func(ctx context.Context, client *generated.Client, ownerID, definitionID, instanceID, managedBy string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "directory_account", Operation: refOpQuery}
