@@ -81,6 +81,7 @@ func TestNullArrayPayloads(t *testing.T) {
 		assert.Equal(t, "", mapped["first_patched_version"])
 		assert.DeepEqual(t, []any{}, mapped["references"])
 		assert.Equal(t, float64(0), mapped["score"])
+		assert.Equal(t, mappingtest.Installation.Name, mapped["source"])
 	})
 }
 
@@ -119,6 +120,7 @@ func TestExamplePayloads(t *testing.T) {
 			"https://lore.kernel.org/netfilter-devel/cd9428b6-7ffb-dd22-d949-d86f4869f452@randorisec.fr/T/",
 			"https://www.debian.org/security/2022/dsa-5191",
 		}, mapped["references"])
+		assert.Equal(t, mappingtest.Installation.Name, mapped["source"])
 	})
 
 	t.Run("finding_json", func(t *testing.T) {

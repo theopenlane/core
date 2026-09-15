@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 )
 
 // CheckResultCreate is the builder for creating a CheckResult entity.
@@ -130,6 +131,76 @@ func (_c *CheckResultCreate) SetTags(v []string) *CheckResultCreate {
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *CheckResultCreate) SetSourceDefinitionID(v string) *CheckResultCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *CheckResultCreate) SetNillableSourceDefinitionID(v *string) *CheckResultCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *CheckResultCreate) SetSourceDefinitionVersion(v string) *CheckResultCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *CheckResultCreate) SetNillableSourceDefinitionVersion(v *string) *CheckResultCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *CheckResultCreate) SetSourceInstanceID(v string) *CheckResultCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *CheckResultCreate) SetNillableSourceInstanceID(v *string) *CheckResultCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *CheckResultCreate) SetManagedBy(v string) *CheckResultCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *CheckResultCreate) SetNillableManagedBy(v *string) *CheckResultCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *CheckResultCreate) SetIntegrationRunID(v string) *CheckResultCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *CheckResultCreate) SetNillableIntegrationRunID(v *string) *CheckResultCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
 // SetStatus sets the "status" field.
 func (_c *CheckResultCreate) SetStatus(v enums.CheckStatus) *CheckResultCreate {
 	_c.mutation.SetStatus(v)
@@ -232,6 +303,21 @@ func (_c *CheckResultCreate) SetNillableID(v *string) *CheckResultCreate {
 		_c.SetID(*v)
 	}
 	return _c
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_c *CheckResultCreate) AddIntegrationRunIDs(ids ...string) *CheckResultCreate {
+	_c.mutation.AddIntegrationRunIDs(ids...)
+	return _c
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_c *CheckResultCreate) AddIntegrationRuns(v ...*IntegrationRun) *CheckResultCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationRunIDs(ids...)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
@@ -463,6 +549,26 @@ func (_c *CheckResultCreate) createSpec() (*CheckResult, *sqlgraph.CreateSpec) {
 		_spec.SetField(checkresult.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(checkresult.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(checkresult.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(checkresult.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(checkresult.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(checkresult.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(checkresult.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
@@ -486,6 +592,22 @@ func (_c *CheckResultCreate) createSpec() (*CheckResult, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ParentExternalID(); ok {
 		_spec.SetField(checkresult.FieldParentExternalID, field.TypeString, value)
 		_node.ParentExternalID = value
+	}
+	if nodes := _c.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   checkresult.IntegrationRunsTable,
+			Columns: checkresult.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

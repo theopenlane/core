@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
@@ -155,6 +156,76 @@ func (_c *ProcedureCreate) SetRevision(v string) *ProcedureCreate {
 func (_c *ProcedureCreate) SetNillableRevision(v *string) *ProcedureCreate {
 	if v != nil {
 		_c.SetRevision(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *ProcedureCreate) SetSourceDefinitionID(v string) *ProcedureCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableSourceDefinitionID(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *ProcedureCreate) SetSourceDefinitionVersion(v string) *ProcedureCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableSourceDefinitionVersion(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *ProcedureCreate) SetSourceInstanceID(v string) *ProcedureCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableSourceInstanceID(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *ProcedureCreate) SetManagedBy(v string) *ProcedureCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableManagedBy(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *ProcedureCreate) SetIntegrationRunID(v string) *ProcedureCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableIntegrationRunID(v *string) *ProcedureCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
 	}
 	return _c
 }
@@ -555,6 +626,21 @@ func (_c *ProcedureCreate) SetNillableID(v *string) *ProcedureCreate {
 		_c.SetID(*v)
 	}
 	return _c
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_c *ProcedureCreate) AddIntegrationRunIDs(ids ...string) *ProcedureCreate {
+	_c.mutation.AddIntegrationRunIDs(ids...)
+	return _c
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_c *ProcedureCreate) AddIntegrationRuns(v ...*IntegrationRun) *ProcedureCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationRunIDs(ids...)
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
@@ -1011,6 +1097,26 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 		_spec.SetField(procedure.FieldRevision, field.TypeString, value)
 		_node.Revision = value
 	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(procedure.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(procedure.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(procedure.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(procedure.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(procedure.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(procedure.FieldName, field.TypeString, value)
 		_node.Name = value
@@ -1110,6 +1216,22 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(procedure.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
+	}
+	if nodes := _c.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   procedure.IntegrationRunsTable,
+			Columns: procedure.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

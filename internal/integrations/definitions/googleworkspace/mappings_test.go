@@ -57,7 +57,7 @@ func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
 			"lastLoginTime":"2026-03-15T10:00:00Z",
 			"customerId":"C123"
 		}`),
-	})
+	}, types.MappingInstallation{})
 	require.NoError(t, err)
 
 	accountMapped, err := jsonx.ToMap(accountRaw)
@@ -81,7 +81,7 @@ func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
 			"adminCreated":false,
 			"etag":"group-etag"
 		}`),
-	})
+	}, types.MappingInstallation{})
 	require.NoError(t, err)
 
 	groupMapped, err := jsonx.ToMap(groupRaw)
@@ -94,21 +94,21 @@ func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
 	assert.Equal(t, "ACTIVE", groupMapped["status"])
 
 	membershipRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, entityops.SchemaDirectoryMembership.Name).MapExpr, types.MappingEnvelope{
-		Resource: "eng@example.com",
+		Resource: "group-123",
 		Payload: json.RawMessage(`{
 			"email":"alice@example.com",
 			"role":"OWNER",
 			"type":"USER",
 			"id":"member-123"
 		}`),
-	})
+	}, types.MappingInstallation{})
 	require.NoError(t, err)
 
 	membershipMapped, err := jsonx.ToMap(membershipRaw)
 	require.NoError(t, err)
 
-	assert.Equal(t, "alice@example.com", membershipMapped["directory_account_id"])
-	assert.Equal(t, "eng@example.com", membershipMapped["directory_group_id"])
+	assert.Equal(t, "member-123", membershipMapped["directory_account_id"], "the membership references the member's user id, which is the account's external id")
+	assert.Equal(t, "group-123", membershipMapped["directory_group_id"], "the membership references the group id, which is the group's external id")
 	assert.Equal(t, "OWNER", membershipMapped["role"])
 }
 
@@ -117,7 +117,7 @@ func TestGoogleWorkspaceMappingsFallbacks(t *testing.T) {
 	accountRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, entityops.SchemaDirectoryAccount.Name).MapExpr, types.MappingEnvelope{
 		Resource: "sparse@example.com",
 		Payload:  json.RawMessage(`{"id":"user-sparse","primaryEmail":"sparse@example.com"}`),
-	})
+	}, types.MappingInstallation{})
 	require.NoError(t, err)
 
 	accountMapped, err := jsonx.ToMap(accountRaw)
@@ -135,7 +135,7 @@ func TestGoogleWorkspaceMappingsFallbacks(t *testing.T) {
 	membershipRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, entityops.SchemaDirectoryMembership.Name).MapExpr, types.MappingEnvelope{
 		Resource: "eng@example.com",
 		Payload:  json.RawMessage(`{"email":"norole@example.com","type":"USER","id":"member-norole"}`),
-	})
+	}, types.MappingInstallation{})
 	require.NoError(t, err)
 
 	membershipMapped, err := jsonx.ToMap(membershipRaw)
@@ -146,7 +146,7 @@ func TestGoogleWorkspaceMappingsFallbacks(t *testing.T) {
 	emptyRoleRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, entityops.SchemaDirectoryMembership.Name).MapExpr, types.MappingEnvelope{
 		Resource: "eng@example.com",
 		Payload:  json.RawMessage(`{"email":"emptyrole@example.com","role":"","type":"USER","id":"member-emptyrole"}`),
-	})
+	}, types.MappingInstallation{})
 	require.NoError(t, err)
 
 	emptyRoleMapped, err := jsonx.ToMap(emptyRoleRaw)

@@ -8,6 +8,8 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -80,7 +82,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					Topic:          DefinitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:      cloudflareClient.ID(),
 					ConfigSchema:   directorySyncSchema,
-					Policy:         types.ExecutionPolicy{Reconcile: true},
+					Policy:         types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 					Ingest: []types.IngestContract{
@@ -231,6 +233,18 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					Spec: types.MappingOverride{
 						FilterExpr: "true",
 						MapExpr:    mapExprDirectoryMembership,
+						Links: []types.LinkRule{
+							{
+								TargetSchema: entityops.SchemaDirectoryAccount.Name,
+								TargetField:  directoryaccount.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
+							},
+							{
+								TargetSchema: entityops.SchemaDirectoryGroup.Name,
+								TargetField:  directorygroup.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
+							},
+						},
 					},
 				},
 				{
@@ -242,8 +256,8 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 							{
 								TargetSchema: entityops.SchemaControl.Name,
 								TargetField:  control.FieldRefCode,
-								SourceField:  entityops.InputKeyFindingCategory,
-								SourceList:   entityops.InputKeyFindingCategories,
+								SourceField:  entityops.FindingFields.Category.InputKey,
+								SourceList:   entityops.FindingFields.Categories.InputKey,
 							},
 						},
 					},

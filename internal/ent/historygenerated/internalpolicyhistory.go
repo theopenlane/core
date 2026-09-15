@@ -48,6 +48,16 @@ type InternalPolicyHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision string `json:"revision,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -128,7 +138,7 @@ func (*InternalPolicyHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case internalpolicyhistory.FieldSystemOwned, internalpolicyhistory.FieldApprovalRequired, internalpolicyhistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldUpdatedByImpersonator, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldInternalNotes, internalpolicyhistory.FieldSystemInternalID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldManagementMode, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID, internalpolicyhistory.FieldSummary, internalpolicyhistory.FieldURL, internalpolicyhistory.FieldFileID, internalpolicyhistory.FieldExternalFileID, internalpolicyhistory.FieldExternalContents, internalpolicyhistory.FieldInternalPolicyKindName, internalpolicyhistory.FieldInternalPolicyKindID, internalpolicyhistory.FieldEnvironmentName, internalpolicyhistory.FieldEnvironmentID, internalpolicyhistory.FieldScopeName, internalpolicyhistory.FieldScopeID, internalpolicyhistory.FieldExternalUUID:
+		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldUpdatedByImpersonator, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldSourceDefinitionID, internalpolicyhistory.FieldSourceDefinitionVersion, internalpolicyhistory.FieldSourceInstanceID, internalpolicyhistory.FieldManagedBy, internalpolicyhistory.FieldIntegrationRunID, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldInternalNotes, internalpolicyhistory.FieldSystemInternalID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldManagementMode, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID, internalpolicyhistory.FieldSummary, internalpolicyhistory.FieldURL, internalpolicyhistory.FieldFileID, internalpolicyhistory.FieldExternalFileID, internalpolicyhistory.FieldExternalContents, internalpolicyhistory.FieldInternalPolicyKindName, internalpolicyhistory.FieldInternalPolicyKindID, internalpolicyhistory.FieldEnvironmentName, internalpolicyhistory.FieldEnvironmentID, internalpolicyhistory.FieldScopeName, internalpolicyhistory.FieldScopeID, internalpolicyhistory.FieldExternalUUID:
 			values[i] = new(sql.NullString)
 		case internalpolicyhistory.FieldHistoryTime, internalpolicyhistory.FieldCreatedAt, internalpolicyhistory.FieldUpdatedAt, internalpolicyhistory.FieldDeletedAt, internalpolicyhistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -233,6 +243,36 @@ func (_m *InternalPolicyHistory) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
 				_m.Revision = value.String
+			}
+		case internalpolicyhistory.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case internalpolicyhistory.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case internalpolicyhistory.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case internalpolicyhistory.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case internalpolicyhistory.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
 			}
 		case internalpolicyhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -529,6 +569,21 @@ func (_m *InternalPolicyHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("revision=")
 	builder.WriteString(_m.Revision)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)

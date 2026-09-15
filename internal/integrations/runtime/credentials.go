@@ -193,46 +193,50 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 
 	r.keystore().InvalidateClients(installation.ID)
 
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	return r.RefreshInstallationMetadata(ctx, installation)
+}
 
-	state, err := def.ProviderState(installation.ProviderState)
-	if err != nil {
-		return err
-	}
+// selfInstanceMetadata identifies an installation whose definition names no external instance by its own id
+func selfInstanceMetadata(installation *ent.Integration) types.IntegrationInstallationMetadata {
+	return types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: installation.ID}}
+}
 
-	if state.CredentialRef == (types.CredentialSlotID{}) {
-		return nil
-	}
-
-	connection, err := def.ConnectionRegistration(state.CredentialRef)
-	if err != nil {
-		return err
-	}
-
-	bindings, err := r.loadCredentials(systemCtx, installation, connection.CredentialRefs)
-	if err != nil {
-		return err
-	}
-
+// resolveConnectionIdentity resolves installation metadata through the connection's resolver, falling to the installation's own id when the connection declares none, and rejects a resolver answer without an instance id
+func resolveConnectionIdentity(ctx context.Context, installation *ent.Integration, connection types.ConnectionRegistration, bindings types.CredentialBindings, input json.RawMessage) (types.IntegrationInstallationMetadata, error) {
 	if connection.Integration == nil {
-		return nil
+		return selfInstanceMetadata(installation), nil
 	}
 
-	metadata, ok, err := connection.Integration.Resolve(systemCtx, types.InstallationRequest{
+	metadata, ok, err := connection.Integration.Resolve(ctx, types.InstallationRequest{
 		Integration: installation,
 		Connection:  connection,
 		Credentials: bindings,
 		Config:      installation.Config,
+		Input:       input,
 	})
 	if err != nil {
-		return err
+		return types.IntegrationInstallationMetadata{}, err
 	}
 
-	if !ok {
-		return r.saveInstallationMetadata(systemCtx, installation, types.IntegrationInstallationMetadata{})
+	if !ok || metadata.Display.ExternalID == "" {
+		return types.IntegrationInstallationMetadata{}, ErrInstallationInstanceIDRequired
 	}
 
-	return r.saveInstallationMetadata(systemCtx, installation, metadata)
+	return metadata, nil
+}
+
+// checkInstallationInstanceMatch rejects resolved metadata whose external id differs from a non-empty external id already stored for the installation, so a credential write cannot silently rebind an installation onto a different backing instance
+func checkInstallationInstanceMatch(ctx context.Context, installation *ent.Integration, metadata types.IntegrationInstallationMetadata) error {
+	stored := installation.InstallationMetadata.Display.ExternalID
+	resolved := metadata.Display.ExternalID
+
+	if stored == "" || stored == resolved {
+		return nil
+	}
+
+	logx.FromContext(ctx).Error().Str("stored_instance_id", stored).Str("resolved_instance_id", resolved).Msg("installation credential resolves to a different instance")
+
+	return ErrInstallationInstanceMismatch
 }
 
 // saveInstallationMetadata persists installation metadata and syncs the normalized
@@ -252,6 +256,50 @@ func (r *Runtime) saveInstallationMetadata(ctx context.Context, installation *en
 	installation.Metadata = merged
 
 	return nil
+}
+
+// RefreshInstallationMetadata re-resolves and persists the installation's metadata from its
+// connected credential; installations without a connected credential or metadata resolver, or
+// whose resolver reports none, keep their stored metadata
+func (r *Runtime) RefreshInstallationMetadata(ctx context.Context, installation *ent.Integration) error {
+	def, err := r.resolveDefinitionForInstallation(installation)
+	if err != nil {
+		return err
+	}
+
+	state, err := def.ProviderState(installation.ProviderState)
+	if err != nil {
+		return err
+	}
+
+	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	if state.CredentialRef == (types.CredentialSlotID{}) {
+		if len(def.Connections) > 0 {
+			return nil
+		}
+
+		return r.saveInstallationMetadata(systemCtx, installation, selfInstanceMetadata(installation))
+	}
+
+	connection, err := def.ConnectionRegistration(state.CredentialRef)
+	if err != nil {
+		return err
+	}
+
+	bindings, err := r.loadCredentials(systemCtx, installation, connection.CredentialRefs)
+	if err != nil {
+		return err
+	}
+
+	metadata, err := resolveConnectionIdentity(systemCtx, installation, connection, bindings, nil)
+	if err != nil {
+		return err
+	}
+
+	metadata.Display.CredentialRef = state.CredentialRef.String()
+
+	return r.saveInstallationMetadata(systemCtx, installation, metadata)
 }
 
 // reconcileCredential validates, health-checks, and persists one credential for an installation
@@ -287,6 +335,21 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
+	if err := r.RefreshInstallationMetadata(systemCtx, installation); err != nil {
+		logx.FromContext(systemCtx).Debug().Err(err).Msg("reconcile: instance id refresh before match check failed; comparing against stored id")
+	}
+
+	metadata, err := resolveConnectionIdentity(systemCtx, installation, connection, bindings, installationInput)
+	if err != nil {
+		return err
+	}
+
+	if err := checkInstallationInstanceMatch(systemCtx, installation, metadata); err != nil {
+		return err
+	}
+
+	metadata.Display.CredentialRef = credentialRef.String()
+
 	if err := r.keystore().SaveCredential(systemCtx, installation, registration.Ref, credential); err != nil {
 		return err
 	}
@@ -294,27 +357,6 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 	if err := r.persistConnectionState(systemCtx, installation, def, connection.CredentialRef); err != nil {
 		return err
 	}
-
-	var metadata types.IntegrationInstallationMetadata
-
-	if connection.Integration != nil {
-		resolved, ok, err := connection.Integration.Resolve(systemCtx, types.InstallationRequest{
-			Integration: installation,
-			Connection:  connection,
-			Credentials: bindings,
-			Config:      installation.Config,
-			Input:       installationInput,
-		})
-		if err != nil {
-			return err
-		}
-
-		if ok {
-			metadata = resolved
-		}
-	}
-
-	metadata.Display.CredentialRef = credentialRef.String()
 
 	if err := r.saveInstallationMetadata(systemCtx, installation, metadata); err != nil {
 		return err

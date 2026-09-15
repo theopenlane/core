@@ -1084,30 +1084,6 @@ type DirectoryMembershipUpdatePayload struct {
 	DirectoryMembership *generated.DirectoryMembership `json:"directoryMembership"`
 }
 
-// Return response for createBulkDirectorySyncRun mutation
-type DirectorySyncRunBulkCreatePayload struct {
-	// Created directorySyncRuns
-	DirectorySyncRuns []*generated.DirectorySyncRun `json:"directorySyncRuns,omitempty"`
-}
-
-// Return response for createDirectorySyncRun mutation
-type DirectorySyncRunCreatePayload struct {
-	// Created directorySyncRun
-	DirectorySyncRun *generated.DirectorySyncRun `json:"directorySyncRun"`
-}
-
-// Return response for deleteDirectorySyncRun mutation
-type DirectorySyncRunDeletePayload struct {
-	// Deleted directorySyncRun ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateDirectorySyncRun mutation
-type DirectorySyncRunUpdatePayload struct {
-	// Updated directorySyncRun
-	DirectorySyncRun *generated.DirectorySyncRun `json:"directorySyncRun"`
-}
-
 // Return response for createBulkDiscussion mutation
 type DiscussionBulkCreatePayload struct {
 	// Created discussions

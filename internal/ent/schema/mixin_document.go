@@ -6,8 +6,10 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"entgo.io/ent/schema/mixin"
 
 	"github.com/theopenlane/entx"
@@ -45,6 +47,14 @@ func (d DocumentMixin) Fields() []ent.Field {
 // Edges of the DocumentMixin.
 func (d DocumentMixin) Edges() []ent.Edge {
 	return getApproverEdges(d.DocumentType)
+}
+
+// Indexes of the DocumentMixin.
+func (d DocumentMixin) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("external_file_id", ownerFieldName).
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+	}
 }
 
 // Hooks of the DocumentMixin.

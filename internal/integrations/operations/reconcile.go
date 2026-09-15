@@ -36,14 +36,6 @@ func ReconcileUniqueKey(e ReconcileEnvelope) string {
 // under the reconcile namespace, and every emission carries the loop uniqueness key
 var ReconcileTopic = gala.NamespacedTopicFor(gala.IntegrationReconcile, gala.WithUniqueKey(ReconcileUniqueKey))
 
-// LegacyTopicRenames maps the historical reconcile topic to its designated topic
-func LegacyTopicRenames() map[gala.TopicName]gala.TopicName {
-	return map[gala.TopicName]gala.TopicName{
-		// the pre-namespace reconcile topic name
-		"integration.ReconcileEnvelope": ReconcileTopic.Name,
-	}
-}
-
 // ReconcileDefinition builds the Gala listener definition driving every recurring operation
 // cycle: installation-bound reconciliation and runtime-bound scheduled operations
 func ReconcileDefinition(reg *registry.Registry, handle func(context.Context, ReconcileEnvelope) (int, error), onExhausted func(context.Context, ReconcileEnvelope, error), schedule gala.Schedule) gala.Definition[ReconcileEnvelope] {

@@ -16,16 +16,16 @@ import (
 // galaProvider resolves the gala instance used by River workers
 type galaProvider func() *Gala
 
-// riverDispatchWorker processes legacy-kind durable gala dispatch jobs from River
+// riverDispatchWorker processes durable gala dispatch jobs from River
 type riverDispatchWorker struct {
 	river.WorkerDefaults[EnvelopeArgs]
 
 	galaProvider galaProvider
 }
 
-// riverDispatchJobKind is the legacy River job kind, retained as the registered fallback
-// so pre-kind jobs and unkinded emissions always have a worker
-const riverDispatchJobKind = "gala_dispatch_v1"
+// envelopeWorkerKind is the worker's registered kind; every namespaced kind is an alias of it and
+// no emission is ever enqueued under it
+const envelopeWorkerKind = "gala_dispatch_v1"
 
 // DefaultQueueName is the default queue used for gala durable dispatch jobs
 const DefaultQueueName = "events"
@@ -130,18 +130,15 @@ func (g *Gala) insertEnvelope(ctx context.Context, envelope Envelope) (dispatchR
 	}
 
 	kind := strings.TrimSpace(envelope.Headers.Kind)
-	if _, registered := g.kindQueues[kind]; kind != "" && !registered {
-		logx.FromContext(ctx).Warn().Str("kind", kind).Str("topic", string(envelope.Topic)).Msg("gala: unregistered job kind, dispatching under the default kind")
 
-		kind = ""
+	queueName, registered := g.kindQueues[kind]
+	if !registered {
+		logx.FromContext(ctx).Error().Str("kind", kind).Str("topic", string(envelope.Topic)).Msg("gala: job kind is not registered, refusing dispatch")
+
+		return dispatchResult{}, ErrJobKindNotRegistered
 	}
 
 	args := kindedEnvelopeArgs{EnvelopeArgs: envelopeArgs, kind: kind}
-
-	queueName := g.kindQueues[kind]
-	if queueName == "" {
-		queueName = g.defaultQueue
-	}
 
 	insertOpts := &river.InsertOpts{
 		Queue: queueName,

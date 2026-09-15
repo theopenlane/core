@@ -34,6 +34,16 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldSourceDefinitionID holds the string denoting the source_definition_id field in the database.
+	FieldSourceDefinitionID = "source_definition_id"
+	// FieldSourceDefinitionVersion holds the string denoting the source_definition_version field in the database.
+	FieldSourceDefinitionVersion = "source_definition_version"
+	// FieldSourceInstanceID holds the string denoting the source_instance_id field in the database.
+	FieldSourceInstanceID = "source_instance_id"
+	// FieldManagedBy holds the string denoting the managed_by field in the database.
+	FieldManagedBy = "managed_by"
+	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
+	FieldIntegrationRunID = "integration_run_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldSource holds the string denoting the source field in the database.
@@ -48,6 +58,8 @@ const (
 	FieldParentExternalID = "parent_external_id"
 	// FieldIntegrationID holds the string denoting the integration_id field in the database.
 	FieldIntegrationID = "integration_id"
+	// EdgeIntegrationRuns holds the string denoting the integration_runs edge name in mutations.
+	EdgeIntegrationRuns = "integration_runs"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
@@ -62,6 +74,11 @@ const (
 	EdgeIntegration = "integration"
 	// Table holds the table name of the checkresult in the database.
 	Table = "check_results"
+	// IntegrationRunsTable is the table that holds the integration_runs relation/edge. The primary key declared below.
+	IntegrationRunsTable = "check_result_integration_runs"
+	// IntegrationRunsInverseTable is the table name for the IntegrationRun entity.
+	// It exists in this package in order to avoid circular dependency with the "integrationrun" package.
+	IntegrationRunsInverseTable = "integration_runs"
 	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
 	BlockedGroupsTable = "groups"
 	// BlockedGroupsInverseTable is the table name for the Group entity.
@@ -113,6 +130,11 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldSourceDefinitionID,
+	FieldSourceDefinitionVersion,
+	FieldSourceInstanceID,
+	FieldManagedBy,
+	FieldIntegrationRunID,
 	FieldStatus,
 	FieldSource,
 	FieldLastObservedAt,
@@ -123,6 +145,9 @@ var Columns = []string{
 }
 
 var (
+	// IntegrationRunsPrimaryKey and IntegrationRunsColumn2 are the table columns denoting the
+	// primary key for the integration_runs relation (M2M).
+	IntegrationRunsPrimaryKey = []string{"check_result_id", "integration_run_id"}
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"check_result_id", "control_id"}
@@ -217,6 +242,31 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// BySourceDefinitionID orders the results by the source_definition_id field.
+func BySourceDefinitionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionID, opts...).ToFunc()
+}
+
+// BySourceDefinitionVersion orders the results by the source_definition_version field.
+func BySourceDefinitionVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionVersion, opts...).ToFunc()
+}
+
+// BySourceInstanceID orders the results by the source_instance_id field.
+func BySourceInstanceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceInstanceID, opts...).ToFunc()
+}
+
+// ByManagedBy orders the results by the managed_by field.
+func ByManagedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldManagedBy, opts...).ToFunc()
+}
+
+// ByIntegrationRunID orders the results by the integration_run_id field.
+func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
+}
+
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
@@ -250,6 +300,20 @@ func ByParentExternalID(opts ...sql.OrderTermOption) OrderOption {
 // ByIntegrationID orders the results by the integration_id field.
 func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIntegrationID, opts...).ToFunc()
+}
+
+// ByIntegrationRunsCount orders the results by integration_runs count.
+func ByIntegrationRunsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationRunsStep(), opts...)
+	}
+}
+
+// ByIntegrationRuns orders the results by integration_runs terms.
+func ByIntegrationRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
 }
 
 // ByBlockedGroupsCount orders the results by blocked_groups count.
@@ -327,6 +391,13 @@ func ByIntegrationField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newIntegrationStep(), sql.OrderByField(field, opts...))
 	}
+}
+func newIntegrationRunsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationRunsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, IntegrationRunsTable, IntegrationRunsPrimaryKey...),
+	)
 }
 func newBlockedGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

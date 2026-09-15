@@ -73,7 +73,7 @@ func TestGCPSCCMappingsEvalMap(t *testing.T) {
 			}`),
 		}
 
-		raw, err := providerkit.EvalMap(context.Background(), testMappings(t)[1].Spec.MapExpr, envelope)
+		raw, err := providerkit.EvalMap(context.Background(), testMappings(t)[1].Spec.MapExpr, envelope, types.MappingInstallation{})
 		require.NoError(t, err)
 
 		mapped, err := jsonx.ToMap(raw)
@@ -110,7 +110,7 @@ func TestGCPSCCMappingsEvalMap(t *testing.T) {
 			}`),
 		}
 
-		raw, err := providerkit.EvalMap(context.Background(), testMappings(t)[1].Spec.MapExpr, envelope)
+		raw, err := providerkit.EvalMap(context.Background(), testMappings(t)[1].Spec.MapExpr, envelope, types.MappingInstallation{})
 		require.NoError(t, err)
 
 		mapped, err := jsonx.ToMap(raw)
@@ -135,7 +135,7 @@ func TestGCPSCCMappingsFindingExample(t *testing.T) {
 	}
 
 	// mappings[2] is the finding schema
-	raw, err := providerkit.EvalMap(context.Background(), testMappings(t)[2].Spec.MapExpr, envelope)
+	raw, err := providerkit.EvalMap(context.Background(), testMappings(t)[2].Spec.MapExpr, envelope, types.MappingInstallation{})
 	require.NoError(t, err)
 
 	mapped, err := jsonx.ToMap(raw)
@@ -173,7 +173,7 @@ func TestGCPSCCMappingsVulnerabilityExample(t *testing.T) {
 	}
 
 	// mappings[1] is the vulnerability schema
-	raw, err := providerkit.EvalMap(context.Background(), testMappings(t)[1].Spec.MapExpr, envelope)
+	raw, err := providerkit.EvalMap(context.Background(), testMappings(t)[1].Spec.MapExpr, envelope, types.MappingInstallation{})
 	require.NoError(t, err)
 
 	mapped, err := jsonx.ToMap(raw)

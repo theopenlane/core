@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/schema/mixin"
 
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 )
 
@@ -73,7 +74,10 @@ func (c CustomEnumMixin) Fields() []ent.Field {
 	fields := []ent.Field{
 		field.String(c.getEnumFieldName()).
 			Comment("the " + c.fieldName + " of the " + schema.Name()).
-			Optional(),
+			Optional().
+			Annotations(
+				entx.FieldCaseInsensitive(),
+			),
 		field.String(c.getEnumEdgeName() + "_id").
 			Comment("the " + c.fieldName + " of the " + schema.Name()).
 			Optional(),

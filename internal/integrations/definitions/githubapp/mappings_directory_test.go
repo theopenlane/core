@@ -21,7 +21,7 @@ func TestGitHubDirectoryMembershipMapping(t *testing.T) {
 	maintainerRaw, err := providerkit.EvalMap(context.Background(), spec.MapExpr, types.MappingEnvelope{
 		Resource: "acme/security",
 		Payload:  json.RawMessage(`{"Org":"acme","Team":{"DatabaseID":42,"Slug":"security"},"Member":{"DatabaseID":7,"Login":"kwaters"},"Role":"MAINTAINER"}`),
-	})
+	}, types.MappingInstallation{})
 	assert.NilError(t, err)
 
 	maintainerMapped, err := jsonx.ToMap(maintainerRaw)
@@ -34,7 +34,7 @@ func TestGitHubDirectoryMembershipMapping(t *testing.T) {
 	noRoleRaw, err := providerkit.EvalMap(context.Background(), spec.MapExpr, types.MappingEnvelope{
 		Resource: "acme/security",
 		Payload:  json.RawMessage(`{"Org":"acme","Team":{"DatabaseID":42,"Slug":"security"},"Member":{"DatabaseID":8,"Login":"sfunk"},"Role":""}`),
-	})
+	}, types.MappingInstallation{})
 	assert.NilError(t, err)
 
 	noRoleMapped, err := jsonx.ToMap(noRoleRaw)
@@ -45,7 +45,7 @@ func TestGitHubDirectoryMembershipMapping(t *testing.T) {
 	largeIDRaw, err := providerkit.EvalMap(context.Background(), spec.MapExpr, types.MappingEnvelope{
 		Resource: "acme/security",
 		Payload:  json.RawMessage(`{"Org":"acme","Team":{"DatabaseID":17146926,"Slug":"security"},"Member":{"DatabaseID":147884153,"Login":"bigid"},"Role":"MEMBER"}`),
-	})
+	}, types.MappingInstallation{})
 	assert.NilError(t, err)
 
 	largeIDMapped, err := jsonx.ToMap(largeIDRaw)
@@ -62,7 +62,7 @@ func TestGitHubDirectoryAccountMapping(t *testing.T) {
 	withAliasesRaw, err := providerkit.EvalMap(context.Background(), spec.MapExpr, types.MappingEnvelope{
 		Resource: "acme",
 		Payload:  json.RawMessage(`{"DatabaseID":7,"Login":"kwaters","Name":"Kelsey Waters","Email":"","AvatarURL":"https://avatars.example.com/7","OrganizationVerifiedDomainEmails":[],"Org":"acme","CanonicalEmail":"kwaters@example.com","EmailAliases":["kelsey@example.com","kw@example.dev"],"GivenName":"Kelsey","FamilyName":"Waters"}`),
-	})
+	}, types.MappingInstallation{})
 	assert.NilError(t, err)
 
 	withAliasesMapped, err := jsonx.ToMap(withAliasesRaw)
@@ -74,7 +74,7 @@ func TestGitHubDirectoryAccountMapping(t *testing.T) {
 	noAliasesRaw, err := providerkit.EvalMap(context.Background(), spec.MapExpr, types.MappingEnvelope{
 		Resource: "acme",
 		Payload:  json.RawMessage(`{"DatabaseID":8,"Login":"sfunk","Name":"Sarah Funkhouser","Email":"","AvatarURL":"","OrganizationVerifiedDomainEmails":[],"Org":"acme","CanonicalEmail":"sfunk@example.com","EmailAliases":null,"GivenName":"","FamilyName":""}`),
-	})
+	}, types.MappingInstallation{})
 	assert.NilError(t, err)
 
 	noAliasesMapped, err := jsonx.ToMap(noAliasesRaw)

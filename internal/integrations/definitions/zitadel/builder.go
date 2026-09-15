@@ -89,7 +89,7 @@ func Builder() registry.Builder {
 					Topic:               definitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:           zitadelClient.ID(),
 					ConfigSchema:        directorySyncSchema,
-					Policy:              types.ExecutionPolicy{Reconcile: true},
+					Policy:              types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					SkipDefaultLookback: true,
 					Ingest: []types.IngestContract{
 						{

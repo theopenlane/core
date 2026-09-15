@@ -12,8 +12,9 @@ var (
 	DefinitionID = types.NewDefinitionRef("def_01K0GHAPP000000000000000001")
 	// installation is the typed installation metadata handle for the GitHub App definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// gitHubAppCredential is the credential schema for GitHub App credentials
-	_, gitHubAppCredential = providerkit.CredentialSchema[githubAppCredential]()
+	// gitHubAppCredentialSchema is the JSON schema validating GitHub App credential payloads, and
+	// gitHubAppCredential is the typed credential handle for them
+	gitHubAppCredentialSchema, gitHubAppCredential = providerkit.CredentialSchema[githubAppCredential]()
 	// GitHubClient is the client ref for the GitHub GraphQL client used by this definition
 	gitHubClient = types.NewClientRef[GraphQLClient]()
 	// InstallationEventsWebhook is the webhook ref for GitHub App installation-scoped deliveries

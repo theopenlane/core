@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/celx"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 const (
@@ -36,6 +37,8 @@ const (
 	celVarAction = "action"
 	// celVarPayload is the CEL variable name bound to the envelope payload field
 	celVarPayload = "payload"
+	// celVarInstallation is the CEL variable name bound to the writing installation in map expressions
+	celVarInstallation = "installation"
 
 	// maxSafeInteger is the largest float64 that can still hold every integer exactly (2^53)
 	maxSafeInteger = float64(1 << 53)
@@ -84,6 +87,7 @@ func buildEnvelopeEnv() (*cel.Env, error) {
 		decls.NewVariable(celVarResource, celtypes.DynType),
 		decls.NewVariable(celVarAction, celtypes.DynType),
 		decls.NewVariable(celVarPayload, celtypes.DynType),
+		decls.NewVariable(celVarInstallation, celtypes.DynType),
 	))
 }
 
@@ -114,6 +118,19 @@ func normalizeIntegralNumbers(value any) any {
 	}
 }
 
+// mappingVars builds the CEL variable map shared by filter and map evaluation, binding the envelope and the writing installation
+func mappingVars(envelope types.MappingEnvelope, installation types.MappingInstallation) (map[string]any, error) {
+	installationVars, err := jsonx.ToMap(installation)
+	if err != nil {
+		return nil, err
+	}
+
+	vars := envelopeToVars(envelope)
+	vars[celVarInstallation] = installationVars
+
+	return vars, nil
+}
+
 // envelopeToVars converts a MappingEnvelope into the CEL variable map
 func envelopeToVars(envelope types.MappingEnvelope) map[string]any {
 	var payload any
@@ -140,10 +157,10 @@ func envelopeToVars(envelope types.MappingEnvelope) map[string]any {
 	}
 }
 
-// EvalFilter evaluates a CEL filter expression against a MappingEnvelope
+// EvalFilter evaluates a CEL filter expression against a MappingEnvelope and the writing installation
 // An empty expr returns true (pass-through). Returns false when the expression excludes the envelope,
 // or a wrapped ErrFilterExprEval on evaluation failure
-func EvalFilter(ctx context.Context, expr string, envelope types.MappingEnvelope) (bool, error) {
+func EvalFilter(ctx context.Context, expr string, envelope types.MappingEnvelope, installation types.MappingInstallation) (bool, error) {
 	if expr == "" {
 		return true, nil
 	}
@@ -153,7 +170,12 @@ func EvalFilter(ctx context.Context, expr string, envelope types.MappingEnvelope
 		return false, fmt.Errorf("%w: %w", ErrFilterExprEval, err)
 	}
 
-	out, _, err := ev.Evaluate(ctx, expr, envelopeToVars(envelope))
+	vars, err := mappingVars(envelope, installation)
+	if err != nil {
+		return false, fmt.Errorf("%w: %w", ErrFilterExprEval, err)
+	}
+
+	out, _, err := ev.Evaluate(ctx, expr, vars)
 	if err != nil {
 		return false, fmt.Errorf("%w: %w", ErrFilterExprEval, err)
 	}
@@ -170,10 +192,10 @@ func EvalFilter(ctx context.Context, expr string, envelope types.MappingEnvelope
 	return value, nil
 }
 
-// EvalMap evaluates a CEL map expression against a MappingEnvelope and returns a JSON payload
+// EvalMap evaluates a CEL map expression against a MappingEnvelope and the writing installation and returns a JSON payload
 // An empty expr returns the original envelope.Payload (pass-through)
 // Returns a wrapped ErrMapExprEval on failure
-func EvalMap(ctx context.Context, expr string, envelope types.MappingEnvelope) (json.RawMessage, error) {
+func EvalMap(ctx context.Context, expr string, envelope types.MappingEnvelope, installation types.MappingInstallation) (json.RawMessage, error) {
 	if expr == "" {
 		return envelope.Payload, nil
 	}
@@ -183,7 +205,12 @@ func EvalMap(ctx context.Context, expr string, envelope types.MappingEnvelope) (
 		return nil, fmt.Errorf("%w: %w", ErrMapExprEval, err)
 	}
 
-	result, err := ev.EvaluateJSONMap(ctx, expr, envelopeToVars(envelope))
+	vars, err := mappingVars(envelope, installation)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrMapExprEval, err)
+	}
+
+	result, err := ev.EvaluateJSONMap(ctx, expr, vars)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrMapExprEval, err)
 	}

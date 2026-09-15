@@ -6,30 +6,34 @@ import (
 )
 
 // mapExprDirectoryAccount is the CEL mapping expression for SCIM user payloads mapped to DirectoryAccount
-var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
-	{Key: entityops.InputKeyDirectoryAccountExternalID, Expr: `'externalId' in payload && payload.externalId != "" ? payload.externalId : ('userName' in payload && payload.userName != "" ? payload.userName : ('emails' in payload && size(payload.emails) > 0 && payload.emails[0] != null && 'value' in payload.emails[0] ? payload.emails[0].value : ""))`},
-	{Key: entityops.InputKeyDirectoryAccountCanonicalEmail, Expr: `'emails' in payload && size(payload.emails) > 0 && payload.emails[0] != null && 'value' in payload.emails[0] && payload.emails[0].value != "" ? payload.emails[0].value : ('userName' in payload ? payload.userName : "")`},
-	{Key: entityops.InputKeyDirectoryAccountDisplayName, Expr: `'displayName' in payload && payload.displayName != "" ? payload.displayName : ('name' in payload && payload.name != null && 'givenName' in payload.name && 'familyName' in payload.name ? payload.name.givenName + " " + payload.name.familyName : ('userName' in payload ? payload.userName : ""))`},
-	{Key: entityops.InputKeyDirectoryAccountGivenName, Expr: `'name' in payload && payload.name != null && 'givenName' in payload.name ? payload.name.givenName : ""`},
-	{Key: entityops.InputKeyDirectoryAccountFamilyName, Expr: `'name' in payload && payload.name != null && 'familyName' in payload.name ? payload.name.familyName : ""`},
-	{Key: entityops.InputKeyDirectoryAccountStatus, Expr: `dyn(action == "delete" ? "DELETED" : ('active' in payload ? (payload.active ? "ACTIVE" : "INACTIVE") : "ACTIVE"))`},
-	{Key: entityops.InputKeyDirectoryAccountMfaState, Expr: `dyn("UNKNOWN")`},
-	{Key: entityops.InputKeyDirectoryAccountProfile, Expr: "payload"},
-})
+var mapExprDirectoryAccount = providerkit.CelMapExpr(
+	entityops.DirectoryAccountFields.ExternalID.Expr(`'externalId' in payload && payload.externalId != "" ? payload.externalId : ('userName' in payload && payload.userName != "" ? payload.userName : ('emails' in payload && size(payload.emails) > 0 && payload.emails[0] != null && 'value' in payload.emails[0] ? payload.emails[0].value : ""))`),
+	entityops.DirectoryAccountFields.CanonicalEmail.Expr(`'emails' in payload && size(payload.emails) > 0 && payload.emails[0] != null && 'value' in payload.emails[0] && payload.emails[0].value != "" ? payload.emails[0].value : ('userName' in payload ? payload.userName : "")`),
+	entityops.DirectoryAccountFields.DisplayName.Expr(`'displayName' in payload && payload.displayName != "" ? payload.displayName : ('name' in payload && payload.name != null && 'givenName' in payload.name && 'familyName' in payload.name ? payload.name.givenName + " " + payload.name.familyName : ('userName' in payload ? payload.userName : ""))`),
+	entityops.DirectoryAccountFields.GivenName.Expr(`'name' in payload && payload.name != null && 'givenName' in payload.name ? payload.name.givenName : ""`),
+	entityops.DirectoryAccountFields.FamilyName.Expr(`'name' in payload && payload.name != null && 'familyName' in payload.name ? payload.name.familyName : ""`),
+	entityops.DirectoryAccountFields.Status.Expr(`dyn(action == "delete" ? "DELETED" : ('active' in payload ? (payload.active ? "ACTIVE" : "INACTIVE") : "ACTIVE"))`),
+	entityops.DirectoryAccountFields.MfaState.Expr(`dyn("UNKNOWN")`),
+	entityops.DirectoryAccountFields.Profile.Expr("payload"),
+	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
+)
 
 // mapExprDirectoryGroup is the CEL mapping expression for SCIM group payloads mapped to DirectoryGroup
-var mapExprDirectoryGroup = providerkit.CelMapExpr([]providerkit.CelMapEntry{
-	{Key: entityops.InputKeyDirectoryGroupExternalID, Expr: `'externalId' in payload && payload.externalId != "" ? payload.externalId : ('displayName' in payload ? payload.displayName : "")`},
-	{Key: entityops.InputKeyDirectoryGroupDisplayName, Expr: `'displayName' in payload ? payload.displayName : ""`},
-	{Key: entityops.InputKeyDirectoryGroupClassification, Expr: `dyn("TEAM")`},
-	{Key: entityops.InputKeyDirectoryGroupStatus, Expr: `dyn(action == "delete" ? "DELETED" : ('active' in payload ? (payload.active ? "ACTIVE" : "INACTIVE") : "ACTIVE"))`},
-	{Key: entityops.InputKeyDirectoryGroupProfile, Expr: "payload"},
-})
+var mapExprDirectoryGroup = providerkit.CelMapExpr(
+	entityops.DirectoryGroupFields.ExternalID.Expr(`'externalId' in payload && payload.externalId != "" ? payload.externalId : ('displayName' in payload ? payload.displayName : "")`),
+	entityops.DirectoryGroupFields.DisplayName.Expr(`'displayName' in payload ? payload.displayName : ""`),
+	entityops.DirectoryGroupFields.Classification.Expr(`dyn("TEAM")`),
+	entityops.DirectoryGroupFields.Status.Expr(`dyn(action == "delete" ? "DELETED" : ('active' in payload ? (payload.active ? "ACTIVE" : "INACTIVE") : "ACTIVE"))`),
+	entityops.DirectoryGroupFields.Profile.Expr("payload"),
+	entityops.DirectoryGroupFields.DirectoryName.Expr("installation.name"),
+)
 
 // mapExprDirectoryMembership is the CEL mapping expression for SCIM group membership payloads mapped to DirectoryMembership
-var mapExprDirectoryMembership = providerkit.CelMapExpr([]providerkit.CelMapEntry{
-	{Key: entityops.InputKeyDirectoryMembershipDirectoryAccountID, Expr: `'member' in payload && payload.member != null && 'value' in payload.member ? payload.member.value : ""`},
-	{Key: entityops.InputKeyDirectoryMembershipDirectoryGroupID, Expr: `'group' in payload && payload.group != null && 'externalId' in payload.group ? payload.group.externalId : ""`},
-	{Key: entityops.InputKeyDirectoryMembershipRole, Expr: `dyn("MEMBER")`},
-	{Key: entityops.InputKeyDirectoryMembershipMetadata, Expr: "payload"},
-})
+var mapExprDirectoryMembership = providerkit.CelMapExpr(
+	entityops.DirectoryMembershipFields.DirectoryAccountID.Expr(`'member' in payload && payload.member != null && 'value' in payload.member ? payload.member.value : ""`),
+	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`'group' in payload && payload.group != null && 'externalId' in payload.group ? payload.group.externalId : ""`),
+	entityops.DirectoryMembershipFields.Role.Expr(`dyn("MEMBER")`),
+	entityops.DirectoryMembershipFields.Metadata.Expr("payload"),
+	entityops.DirectoryMembershipFields.DirectoryName.Expr("installation.name"),
+)

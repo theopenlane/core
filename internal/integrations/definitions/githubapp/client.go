@@ -4,12 +4,12 @@ import (
 	"context"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/shurcooL/graphql"
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // GraphQLClient is the subset of the GitHub GraphQL client used by this definition
@@ -52,17 +52,35 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, e
 	)
 	httpClient := oauth2.NewClient(ctx, tokenSource)
 
-	return newGraphQLClient(httpClient, c.AppConfig.APIURL), nil
+	return newGraphQLClient(httpClient, c.AppConfig.APIURL)
 }
 
+// enterpriseAPIPath is the REST API path under a GitHub Enterprise Server host, trailing slash required by go-github
+const enterpriseAPIPath = "api/v3/"
+
+// enterpriseUploadPath is the upload API path under a GitHub Enterprise Server host, trailing slash required by go-github
+const enterpriseUploadPath = "api/uploads/"
+
+// enterpriseGraphQLPath is the GraphQL API path under a GitHub Enterprise Server host
+const enterpriseGraphQLPath = "api/graphql"
+
+// defaultGraphQLEndpoint is the GraphQL endpoint for github.com
+const defaultGraphQLEndpoint = "https://api.github.com/graphql"
+
 // newGraphQLClient constructs a GitHub GraphQL client targeting the given API URL
-func newGraphQLClient(httpClient *http.Client, apiURL string) GraphQLClient {
-	endpoint := "https://api.github.com/graphql"
+func newGraphQLClient(httpClient *http.Client, apiURL string) (GraphQLClient, error) {
+	endpoint := defaultGraphQLEndpoint
+
 	if apiURL != "" {
-		endpoint = strings.TrimRight(apiURL, "/") + "/api/graphql"
+		parsed, err := urlx.ParseAbsolute(apiURL)
+		if err != nil {
+			return nil, err
+		}
+
+		endpoint = parsed.JoinPath(enterpriseGraphQLPath).String()
 	}
 
-	return &graphQLClient{client: graphql.NewClient(endpoint, httpClient)}
+	return &graphQLClient{client: graphql.NewClient(endpoint, httpClient)}, nil
 }
 
 // installationTokenSource re-mints GitHub App installation tokens when the cached token expires.

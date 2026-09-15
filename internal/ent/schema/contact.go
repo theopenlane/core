@@ -74,7 +74,7 @@ func (Contact) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("email"),
-				entx.IntegrationMappingField().LookupKey(),
+				entx.IntegrationMappingField(),
 			).
 			Validate(func(email string) error {
 				_, err := mail.ParseAddress(email)
@@ -106,13 +106,13 @@ func (Contact) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("external_id"),
-				entx.IntegrationMappingField().LookupKey(),
+				entx.IntegrationMappingField(),
 			),
 		field.String("integration_id").
 			Comment("integration that sourced this contact, when populated via integration ingest").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
+				entx.IntegrationMappingField().SystemControlled(),
 			),
 		field.Time("observed_at").
 			Comment("time when this contact was last observed by the source integration").
@@ -129,6 +129,7 @@ func (Contact) Fields() []ent.Field {
 func (c Contact) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{SchemaType: c},
 			newOrgOwnedMixin(c),
 		},
 	}.getMixins(c)
@@ -175,6 +176,6 @@ func (c Contact) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaContact),
 		entx.NewExportable(),
-		entx.IntegrationMappingSchema().StockPersist(),
+		entx.IntegrationMappingSchema().StockPersist().LookupAlternative("external_id").LookupAlternative("email"),
 	}
 }

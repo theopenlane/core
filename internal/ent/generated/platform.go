@@ -235,8 +235,6 @@ type PlatformEdges struct {
 	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
 	// Integrations holds the value of the integrations edge.
 	Integrations []*Integration `json:"integrations,omitempty"`
-	// DirectorySyncRuns holds the value of the directory_sync_runs edge.
-	DirectorySyncRuns []*DirectorySyncRun `json:"directory_sync_runs,omitempty"`
 	// DirectoryAccounts holds the value of the directory_accounts edge.
 	DirectoryAccounts []*DirectoryAccount `json:"directory_accounts,omitempty"`
 	// DirectoryGroups holds the value of the directory_groups edge.
@@ -263,9 +261,9 @@ type PlatformEdges struct {
 	SystemDetails []*SystemDetail `json:"system_details,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [51]bool
+	loadedTypes [50]bool
 	// totalCount holds the count of the edges above.
-	totalCount [51]map[string]int
+	totalCount [50]map[string]int
 
 	namedBlockedGroups         map[string][]*Group
 	namedEditors               map[string][]*Group
@@ -284,7 +282,6 @@ type PlatformEdges struct {
 	namedTasks                 map[string][]*Task
 	namedIdentityHolders       map[string][]*IdentityHolder
 	namedIntegrations          map[string][]*Integration
-	namedDirectorySyncRuns     map[string][]*DirectorySyncRun
 	namedDirectoryAccounts     map[string][]*DirectoryAccount
 	namedDirectoryGroups       map[string][]*DirectoryGroup
 	namedDirectoryMemberships  map[string][]*DirectoryMembership
@@ -682,19 +679,10 @@ func (e PlatformEdges) IntegrationsOrErr() ([]*Integration, error) {
 	return nil, &NotLoadedError{edge: "integrations"}
 }
 
-// DirectorySyncRunsOrErr returns the DirectorySyncRuns value or an error if the edge
-// was not loaded in eager-loading.
-func (e PlatformEdges) DirectorySyncRunsOrErr() ([]*DirectorySyncRun, error) {
-	if e.loadedTypes[38] {
-		return e.DirectorySyncRuns, nil
-	}
-	return nil, &NotLoadedError{edge: "directory_sync_runs"}
-}
-
 // DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
-	if e.loadedTypes[39] {
+	if e.loadedTypes[38] {
 		return e.DirectoryAccounts, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_accounts"}
@@ -703,7 +691,7 @@ func (e PlatformEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
 // DirectoryGroupsOrErr returns the DirectoryGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
-	if e.loadedTypes[40] {
+	if e.loadedTypes[39] {
 		return e.DirectoryGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_groups"}
@@ -712,7 +700,7 @@ func (e PlatformEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
 // DirectoryMembershipsOrErr returns the DirectoryMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, error) {
-	if e.loadedTypes[41] {
+	if e.loadedTypes[40] {
 		return e.DirectoryMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_memberships"}
@@ -721,7 +709,7 @@ func (e PlatformEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, erro
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[42] {
+	if e.loadedTypes[41] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -730,7 +718,7 @@ func (e PlatformEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 // SourceAssetsOrErr returns the SourceAssets value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) SourceAssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[43] {
+	if e.loadedTypes[42] {
 		return e.SourceAssets, nil
 	}
 	return nil, &NotLoadedError{edge: "source_assets"}
@@ -739,7 +727,7 @@ func (e PlatformEdges) SourceAssetsOrErr() ([]*Asset, error) {
 // SourceEntitiesOrErr returns the SourceEntities value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) SourceEntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[44] {
+	if e.loadedTypes[43] {
 		return e.SourceEntities, nil
 	}
 	return nil, &NotLoadedError{edge: "source_entities"}
@@ -748,7 +736,7 @@ func (e PlatformEdges) SourceEntitiesOrErr() ([]*Entity, error) {
 // OutOfScopeAssetsOrErr returns the OutOfScopeAssets value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) OutOfScopeAssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[45] {
+	if e.loadedTypes[44] {
 		return e.OutOfScopeAssets, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_assets"}
@@ -757,7 +745,7 @@ func (e PlatformEdges) OutOfScopeAssetsOrErr() ([]*Asset, error) {
 // OutOfScopeVendorsOrErr returns the OutOfScopeVendors value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) OutOfScopeVendorsOrErr() ([]*Entity, error) {
-	if e.loadedTypes[46] {
+	if e.loadedTypes[45] {
 		return e.OutOfScopeVendors, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_vendors"}
@@ -766,7 +754,7 @@ func (e PlatformEdges) OutOfScopeVendorsOrErr() ([]*Entity, error) {
 // ApplicableFrameworksOrErr returns the ApplicableFrameworks value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) ApplicableFrameworksOrErr() ([]*Standard, error) {
-	if e.loadedTypes[47] {
+	if e.loadedTypes[46] {
 		return e.ApplicableFrameworks, nil
 	}
 	return nil, &NotLoadedError{edge: "applicable_frameworks"}
@@ -775,7 +763,7 @@ func (e PlatformEdges) ApplicableFrameworksOrErr() ([]*Standard, error) {
 // GeneratedScansOrErr returns the GeneratedScans value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) GeneratedScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[48] {
+	if e.loadedTypes[47] {
 		return e.GeneratedScans, nil
 	}
 	return nil, &NotLoadedError{edge: "generated_scans"}
@@ -786,7 +774,7 @@ func (e PlatformEdges) GeneratedScansOrErr() ([]*Scan, error) {
 func (e PlatformEdges) PlatformOwnerOrErr() (*User, error) {
 	if e.PlatformOwner != nil {
 		return e.PlatformOwner, nil
-	} else if e.loadedTypes[49] {
+	} else if e.loadedTypes[48] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "platform_owner"}
@@ -795,7 +783,7 @@ func (e PlatformEdges) PlatformOwnerOrErr() (*User, error) {
 // SystemDetailsOrErr returns the SystemDetails value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) SystemDetailsOrErr() ([]*SystemDetail, error) {
-	if e.loadedTypes[50] {
+	if e.loadedTypes[49] {
 		return e.SystemDetails, nil
 	}
 	return nil, &NotLoadedError{edge: "system_details"}
@@ -1437,11 +1425,6 @@ func (_m *Platform) QueryIdentityHolders() *IdentityHolderQuery {
 // QueryIntegrations queries the "integrations" edge of the Platform entity.
 func (_m *Platform) QueryIntegrations() *IntegrationQuery {
 	return NewPlatformClient(_m.config).QueryIntegrations(_m)
-}
-
-// QueryDirectorySyncRuns queries the "directory_sync_runs" edge of the Platform entity.
-func (_m *Platform) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
-	return NewPlatformClient(_m.config).QueryDirectorySyncRuns(_m)
 }
 
 // QueryDirectoryAccounts queries the "directory_accounts" edge of the Platform entity.
@@ -2127,30 +2110,6 @@ func (_m *Platform) appendNamedIntegrations(name string, edges ...*Integration) 
 		_m.Edges.namedIntegrations[name] = []*Integration{}
 	} else {
 		_m.Edges.namedIntegrations[name] = append(_m.Edges.namedIntegrations[name], edges...)
-	}
-}
-
-// NamedDirectorySyncRuns returns the DirectorySyncRuns named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Platform) NamedDirectorySyncRuns(name string) ([]*DirectorySyncRun, error) {
-	if _m.Edges.namedDirectorySyncRuns == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedDirectorySyncRuns[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Platform) appendNamedDirectorySyncRuns(name string, edges ...*DirectorySyncRun) {
-	if _m.Edges.namedDirectorySyncRuns == nil {
-		_m.Edges.namedDirectorySyncRuns = make(map[string][]*DirectorySyncRun)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedDirectorySyncRuns[name] = []*DirectorySyncRun{}
-	} else {
-		_m.Edges.namedDirectorySyncRuns[name] = append(_m.Edges.namedDirectorySyncRuns[name], edges...)
 	}
 }
 

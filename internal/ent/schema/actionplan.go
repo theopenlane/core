@@ -143,6 +143,7 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 	return mixinConfig{
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{SchemaType: a},
 			NewDocumentMixin(a),
 			newObjectOwnedMixin[generated.ActionPlan](a,
 				withParents(Program{}, Control{}, Review{}),

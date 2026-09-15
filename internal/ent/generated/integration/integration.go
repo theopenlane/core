@@ -124,8 +124,6 @@ const (
 	EdgeDirectoryGroups = "directory_groups"
 	// EdgeDirectoryMemberships holds the string denoting the directory_memberships edge name in mutations.
 	EdgeDirectoryMemberships = "directory_memberships"
-	// EdgeDirectorySyncRuns holds the string denoting the directory_sync_runs edge name in mutations.
-	EdgeDirectorySyncRuns = "directory_sync_runs"
 	// EdgeCheckResults holds the string denoting the check_results edge name in mutations.
 	EdgeCheckResults = "check_results"
 	// EdgePlatform holds the string denoting the platform edge name in mutations.
@@ -247,13 +245,6 @@ const (
 	DirectoryMembershipsInverseTable = "directory_memberships"
 	// DirectoryMembershipsColumn is the table column denoting the directory_memberships relation/edge.
 	DirectoryMembershipsColumn = "integration_id"
-	// DirectorySyncRunsTable is the table that holds the directory_sync_runs relation/edge.
-	DirectorySyncRunsTable = "directory_sync_runs"
-	// DirectorySyncRunsInverseTable is the table name for the DirectorySyncRun entity.
-	// It exists in this package in order to avoid circular dependency with the "directorysyncrun" package.
-	DirectorySyncRunsInverseTable = "directory_sync_runs"
-	// DirectorySyncRunsColumn is the table column denoting the directory_sync_runs relation/edge.
-	DirectorySyncRunsColumn = "integration_id"
 	// CheckResultsTable is the table that holds the check_results relation/edge.
 	CheckResultsTable = "check_results"
 	// CheckResultsInverseTable is the table name for the CheckResult entity.
@@ -811,20 +802,6 @@ func ByDirectoryMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpt
 	}
 }
 
-// ByDirectorySyncRunsCount orders the results by directory_sync_runs count.
-func ByDirectorySyncRunsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newDirectorySyncRunsStep(), opts...)
-	}
-}
-
-// ByDirectorySyncRuns orders the results by directory_sync_runs terms.
-func ByDirectorySyncRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDirectorySyncRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByCheckResultsCount orders the results by check_results count.
 func ByCheckResultsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1046,13 +1023,6 @@ func newDirectoryMembershipsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DirectoryMembershipsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryMembershipsTable, DirectoryMembershipsColumn),
-	)
-}
-func newDirectorySyncRunsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DirectorySyncRunsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
 	)
 }
 func newCheckResultsStep() *sqlgraph.Step {

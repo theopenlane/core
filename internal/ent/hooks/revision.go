@@ -8,6 +8,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -25,6 +26,28 @@ type MutationWithRevision interface {
 	OldField(ctx context.Context, name string) (ent.Value, error)
 
 	utils.GenericMutation
+}
+
+// systemControlledOnly reports whether every field the mutation sets or clears resolves to a system-controlled column, judging fields only and ignoring edge changes
+func systemControlledOnly(m ent.Mutation) bool {
+	fields := append(m.Fields(), m.ClearedFields()...)
+	if len(fields) == 0 {
+		return false
+	}
+
+	schema, ok := entityops.LookupSchema(m.Type())
+	if !ok {
+		return false
+	}
+
+	for _, name := range fields {
+		field, ok := schema.FieldByName(name)
+		if !ok || !field.SystemControlled {
+			return false
+		}
+	}
+
+	return true
 }
 
 // HookRevisionUpdate is a hook that runs on update mutations
@@ -45,6 +68,11 @@ func HookRevisionUpdate() ent.Hook {
 				// if the revision is cleared, set it to the default
 				mut.SetRevision(models.DefaultRevision)
 
+				return next.Mutate(ctx, m)
+			}
+
+			_, explicitBump := models.VersionBumpFromRequestContext(ctx)
+			if !explicitBump && systemControlledOnly(m) {
 				return next.Mutate(ctx, m)
 			}
 

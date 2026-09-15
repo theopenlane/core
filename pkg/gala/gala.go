@@ -49,14 +49,9 @@ type Config struct {
 	// FetchPollInterval is the fallback polling interval when LISTEN/NOTIFY misses events (default 1s)
 	// This is only used when LISTEN/NOTIFY fails to deliver notifications.
 	FetchPollInterval time.Duration
-	// Kinds are the envelope kind namespaces this runtime registers alongside the default
-	// dispatch kind; each kind gets a dedicated queue and shares the envelope worker
+	// Kinds are the envelope kind namespaces this runtime registers; each kind gets a
+	// dedicated queue and shares the envelope worker
 	Kinds []Namespace
-	// TopicRenames maps retired topic names to their designated replacements, applied to
-	// queued envelopes at dispatch and during job migration
-	TopicRenames map[TopicName]TopicName
-	// OperationRenames maps retired payload operation strings to their designated replacements
-	OperationRenames map[string]string
 	// JobTimeout is the maximum run time for one dispatch job; long-running batch
 	// operations need far more than River's one-minute default
 	JobTimeout time.Duration
@@ -80,18 +75,12 @@ type Gala struct {
 	insertClient riverInsertClient
 	// jobController manages durable jobs after insertion
 	jobController riverJobController
-	// defaultQueue is the default River queue for dispatch jobs
-	defaultQueue string
 	// kindQueues maps each registered job kind to its dedicated queue
 	kindQueues map[string]string
 	// durableQueues tracks River queues this runtime is responsible for.
 	durableQueues []string
 	// dispatchMode captures the runtime dispatch mode.
 	dispatchMode DispatchMode
-	// topicRenames maps retired topic names to their designated replacements
-	topicRenames map[TopicName]TopicName
-	// operationRenames maps retired payload operation strings to their designated replacements
-	operationRenames map[string]string
 	// inMemoryPool backs in-process dispatch when DispatchModeInMemory is enabled.
 	inMemoryPool *Pool
 }
@@ -122,7 +111,7 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 		return nil, err
 	}
 
-	queues := map[string]river.QueueConfig{config.QueueName: {MaxWorkers: config.WorkerCount}}
+	queues := map[string]river.QueueConfig{}
 	kindQueues := map[string]string{}
 
 	for _, kind := range config.Kinds {
@@ -181,11 +170,8 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 	app.jobClient = jobClient
 	app.insertClient = jobClient
 	app.jobController = jobClient.GetRiverClient()
-	app.defaultQueue = config.QueueName
 	app.kindQueues = kindQueues
-	app.durableQueues = append([]string{config.QueueName}, lo.Values(kindQueues)...)
-	app.topicRenames = config.TopicRenames
-	app.operationRenames = config.OperationRenames
+	app.durableQueues = lo.Values(kindQueues)
 
 	return app, nil
 }
@@ -196,7 +182,6 @@ func (g *Gala) initialize(dispatchMode DispatchMode) error {
 	contextManager, err := newContextManager(
 		NewKeyCodec("caller", auth.CallerKey),
 		NewKeyCodec("workflow_flags", WorkflowFlagsKey),
-		NewKeyCodec("integration_directory_sync_run_id", DirectorySyncRunIDKey),
 		NewKeyCodec("active_trust_center_id", auth.ActiveTrustCenterIDKey),
 		OperationContextCodec(),
 		logFieldsCodec(),
@@ -428,16 +413,7 @@ func (g *Gala) dispatch(ctx context.Context, envelope Envelope) error {
 func (g *Gala) dispatchEnvelope(ctx context.Context, envelope Envelope) error {
 	registration, err := g.registry.topicRegistration(envelope.Topic)
 	if err != nil {
-		renamed, renameOK := g.topicRenames[envelope.Topic]
-		if !renameOK {
-			return err
-		}
-
-		envelope.Topic = renamed
-
-		if registration, err = g.registry.topicRegistration(renamed); err != nil {
-			return err
-		}
+		return err
 	}
 
 	decodedPayload, err := registration.decode(envelope.Payload)
@@ -451,10 +427,6 @@ func (g *Gala) dispatchEnvelope(ctx context.Context, envelope Envelope) error {
 	}
 
 	operation := payloadOperation(decodedPayload)
-	if renamed, ok := g.operationRenames[operation]; ok {
-		operation = renamed
-		decodedPayload = payloadWithOperation(decodedPayload, renamed)
-	}
 
 	logx.FromContext(restoredContext).Debug().Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("operation", operation).Msg("gala processing event")
 
@@ -488,21 +460,6 @@ func (g *Gala) dispatchEnvelope(ctx context.Context, envelope Envelope) error {
 // without it dispatch with an empty operation
 type PayloadOperation interface {
 	PayloadOperation() string
-}
-
-// PayloadOperationRenamer is an optional payload contract for operation renames, returning
-// a copy of the payload carrying the renamed operation
-type PayloadOperationRenamer interface {
-	WithPayloadOperation(operation string) any
-}
-
-// payloadWithOperation returns the payload with its operation replaced when supported
-func payloadWithOperation(payload any, operation string) any {
-	if renamer, ok := payload.(PayloadOperationRenamer); ok {
-		return renamer.WithPayloadOperation(operation)
-	}
-
-	return payload
 }
 
 // payloadOperation extracts the payload's operation when the payload declares one

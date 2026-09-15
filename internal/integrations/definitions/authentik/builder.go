@@ -2,6 +2,8 @@ package authentik
 
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -61,13 +63,12 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:                directorySyncOperation.Name(),
-					Description:         "Collect Authentik directory users, groups, and memberships as directory accounts",
-					Topic:               definitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:           authentikClient.ID(),
-					ConfigSchema:        directorySyncSchema,
-					Policy:              types.ExecutionPolicy{Reconcile: true},
-					SkipDefaultLookback: true,
+					Name:         directorySyncOperation.Name(),
+					Description:  "Collect Authentik directory users, groups, and memberships as directory accounts",
+					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
+					ClientRef:    authentikClient.ID(),
+					ConfigSchema: directorySyncSchema,
+					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -102,6 +103,18 @@ func Builder() registry.Builder {
 					Spec: types.MappingOverride{
 						FilterExpr: "true",
 						MapExpr:    mapExprDirectoryMembership,
+						Links: []types.LinkRule{
+							{
+								TargetSchema: entityops.SchemaDirectoryAccount.Name,
+								TargetField:  directoryaccount.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
+							},
+							{
+								TargetSchema: entityops.SchemaDirectoryGroup.Name,
+								TargetField:  directorygroup.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
+							},
+						},
 					},
 				},
 			},

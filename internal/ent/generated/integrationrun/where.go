@@ -116,11 +116,6 @@ func OperationName(v string) predicate.IntegrationRun {
 	return predicate.IntegrationRun(sql.FieldEQ(FieldOperationName, v))
 }
 
-// MappingVersion applies equality check predicate on the "mapping_version" field. It's identical to MappingVersionEQ.
-func MappingVersion(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldMappingVersion, v))
-}
-
 // StartedAt applies equality check predicate on the "started_at" field. It's identical to StartedAtEQ.
 func StartedAt(v time.Time) predicate.IntegrationRun {
 	return predicate.IntegrationRun(sql.FieldEQ(FieldStartedAt, v))
@@ -134,26 +129,6 @@ func FinishedAt(v time.Time) predicate.IntegrationRun {
 // DurationMs applies equality check predicate on the "duration_ms" field. It's identical to DurationMsEQ.
 func DurationMs(v int) predicate.IntegrationRun {
 	return predicate.IntegrationRun(sql.FieldEQ(FieldDurationMs, v))
-}
-
-// RequestFileID applies equality check predicate on the "request_file_id" field. It's identical to RequestFileIDEQ.
-func RequestFileID(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldRequestFileID, v))
-}
-
-// ResponseFileID applies equality check predicate on the "response_file_id" field. It's identical to ResponseFileIDEQ.
-func ResponseFileID(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldResponseFileID, v))
-}
-
-// EventID applies equality check predicate on the "event_id" field. It's identical to EventIDEQ.
-func EventID(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldEventID, v))
-}
-
-// AssessmentResponseID applies equality check predicate on the "assessment_response_id" field. It's identical to AssessmentResponseIDEQ.
-func AssessmentResponseID(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldAssessmentResponseID, v))
 }
 
 // Summary applies equality check predicate on the "summary" field. It's identical to SummaryEQ.
@@ -931,81 +906,6 @@ func OperationConfigNotNil() predicate.IntegrationRun {
 	return predicate.IntegrationRun(sql.FieldNotNull(FieldOperationConfig))
 }
 
-// MappingVersionEQ applies the EQ predicate on the "mapping_version" field.
-func MappingVersionEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldMappingVersion, v))
-}
-
-// MappingVersionNEQ applies the NEQ predicate on the "mapping_version" field.
-func MappingVersionNEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNEQ(FieldMappingVersion, v))
-}
-
-// MappingVersionIn applies the In predicate on the "mapping_version" field.
-func MappingVersionIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldIn(FieldMappingVersion, vs...))
-}
-
-// MappingVersionNotIn applies the NotIn predicate on the "mapping_version" field.
-func MappingVersionNotIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNotIn(FieldMappingVersion, vs...))
-}
-
-// MappingVersionGT applies the GT predicate on the "mapping_version" field.
-func MappingVersionGT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGT(FieldMappingVersion, v))
-}
-
-// MappingVersionGTE applies the GTE predicate on the "mapping_version" field.
-func MappingVersionGTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGTE(FieldMappingVersion, v))
-}
-
-// MappingVersionLT applies the LT predicate on the "mapping_version" field.
-func MappingVersionLT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLT(FieldMappingVersion, v))
-}
-
-// MappingVersionLTE applies the LTE predicate on the "mapping_version" field.
-func MappingVersionLTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLTE(FieldMappingVersion, v))
-}
-
-// MappingVersionContains applies the Contains predicate on the "mapping_version" field.
-func MappingVersionContains(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContains(FieldMappingVersion, v))
-}
-
-// MappingVersionHasPrefix applies the HasPrefix predicate on the "mapping_version" field.
-func MappingVersionHasPrefix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasPrefix(FieldMappingVersion, v))
-}
-
-// MappingVersionHasSuffix applies the HasSuffix predicate on the "mapping_version" field.
-func MappingVersionHasSuffix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasSuffix(FieldMappingVersion, v))
-}
-
-// MappingVersionIsNil applies the IsNil predicate on the "mapping_version" field.
-func MappingVersionIsNil() predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldIsNull(FieldMappingVersion))
-}
-
-// MappingVersionNotNil applies the NotNil predicate on the "mapping_version" field.
-func MappingVersionNotNil() predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNotNull(FieldMappingVersion))
-}
-
-// MappingVersionEqualFold applies the EqualFold predicate on the "mapping_version" field.
-func MappingVersionEqualFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEqualFold(FieldMappingVersion, v))
-}
-
-// MappingVersionContainsFold applies the ContainsFold predicate on the "mapping_version" field.
-func MappingVersionContainsFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContainsFold(FieldMappingVersion, v))
-}
-
 // StatusEQ applies the EQ predicate on the "status" field.
 func StatusEQ(v enums.IntegrationRunStatus) predicate.IntegrationRun {
 	vc := v
@@ -1174,306 +1074,6 @@ func DurationMsIsNil() predicate.IntegrationRun {
 // DurationMsNotNil applies the NotNil predicate on the "duration_ms" field.
 func DurationMsNotNil() predicate.IntegrationRun {
 	return predicate.IntegrationRun(sql.FieldNotNull(FieldDurationMs))
-}
-
-// RequestFileIDEQ applies the EQ predicate on the "request_file_id" field.
-func RequestFileIDEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldRequestFileID, v))
-}
-
-// RequestFileIDNEQ applies the NEQ predicate on the "request_file_id" field.
-func RequestFileIDNEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNEQ(FieldRequestFileID, v))
-}
-
-// RequestFileIDIn applies the In predicate on the "request_file_id" field.
-func RequestFileIDIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldIn(FieldRequestFileID, vs...))
-}
-
-// RequestFileIDNotIn applies the NotIn predicate on the "request_file_id" field.
-func RequestFileIDNotIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNotIn(FieldRequestFileID, vs...))
-}
-
-// RequestFileIDGT applies the GT predicate on the "request_file_id" field.
-func RequestFileIDGT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGT(FieldRequestFileID, v))
-}
-
-// RequestFileIDGTE applies the GTE predicate on the "request_file_id" field.
-func RequestFileIDGTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGTE(FieldRequestFileID, v))
-}
-
-// RequestFileIDLT applies the LT predicate on the "request_file_id" field.
-func RequestFileIDLT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLT(FieldRequestFileID, v))
-}
-
-// RequestFileIDLTE applies the LTE predicate on the "request_file_id" field.
-func RequestFileIDLTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLTE(FieldRequestFileID, v))
-}
-
-// RequestFileIDContains applies the Contains predicate on the "request_file_id" field.
-func RequestFileIDContains(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContains(FieldRequestFileID, v))
-}
-
-// RequestFileIDHasPrefix applies the HasPrefix predicate on the "request_file_id" field.
-func RequestFileIDHasPrefix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasPrefix(FieldRequestFileID, v))
-}
-
-// RequestFileIDHasSuffix applies the HasSuffix predicate on the "request_file_id" field.
-func RequestFileIDHasSuffix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasSuffix(FieldRequestFileID, v))
-}
-
-// RequestFileIDIsNil applies the IsNil predicate on the "request_file_id" field.
-func RequestFileIDIsNil() predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldIsNull(FieldRequestFileID))
-}
-
-// RequestFileIDNotNil applies the NotNil predicate on the "request_file_id" field.
-func RequestFileIDNotNil() predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNotNull(FieldRequestFileID))
-}
-
-// RequestFileIDEqualFold applies the EqualFold predicate on the "request_file_id" field.
-func RequestFileIDEqualFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEqualFold(FieldRequestFileID, v))
-}
-
-// RequestFileIDContainsFold applies the ContainsFold predicate on the "request_file_id" field.
-func RequestFileIDContainsFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContainsFold(FieldRequestFileID, v))
-}
-
-// ResponseFileIDEQ applies the EQ predicate on the "response_file_id" field.
-func ResponseFileIDEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldResponseFileID, v))
-}
-
-// ResponseFileIDNEQ applies the NEQ predicate on the "response_file_id" field.
-func ResponseFileIDNEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNEQ(FieldResponseFileID, v))
-}
-
-// ResponseFileIDIn applies the In predicate on the "response_file_id" field.
-func ResponseFileIDIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldIn(FieldResponseFileID, vs...))
-}
-
-// ResponseFileIDNotIn applies the NotIn predicate on the "response_file_id" field.
-func ResponseFileIDNotIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNotIn(FieldResponseFileID, vs...))
-}
-
-// ResponseFileIDGT applies the GT predicate on the "response_file_id" field.
-func ResponseFileIDGT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGT(FieldResponseFileID, v))
-}
-
-// ResponseFileIDGTE applies the GTE predicate on the "response_file_id" field.
-func ResponseFileIDGTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGTE(FieldResponseFileID, v))
-}
-
-// ResponseFileIDLT applies the LT predicate on the "response_file_id" field.
-func ResponseFileIDLT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLT(FieldResponseFileID, v))
-}
-
-// ResponseFileIDLTE applies the LTE predicate on the "response_file_id" field.
-func ResponseFileIDLTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLTE(FieldResponseFileID, v))
-}
-
-// ResponseFileIDContains applies the Contains predicate on the "response_file_id" field.
-func ResponseFileIDContains(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContains(FieldResponseFileID, v))
-}
-
-// ResponseFileIDHasPrefix applies the HasPrefix predicate on the "response_file_id" field.
-func ResponseFileIDHasPrefix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasPrefix(FieldResponseFileID, v))
-}
-
-// ResponseFileIDHasSuffix applies the HasSuffix predicate on the "response_file_id" field.
-func ResponseFileIDHasSuffix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasSuffix(FieldResponseFileID, v))
-}
-
-// ResponseFileIDIsNil applies the IsNil predicate on the "response_file_id" field.
-func ResponseFileIDIsNil() predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldIsNull(FieldResponseFileID))
-}
-
-// ResponseFileIDNotNil applies the NotNil predicate on the "response_file_id" field.
-func ResponseFileIDNotNil() predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNotNull(FieldResponseFileID))
-}
-
-// ResponseFileIDEqualFold applies the EqualFold predicate on the "response_file_id" field.
-func ResponseFileIDEqualFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEqualFold(FieldResponseFileID, v))
-}
-
-// ResponseFileIDContainsFold applies the ContainsFold predicate on the "response_file_id" field.
-func ResponseFileIDContainsFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContainsFold(FieldResponseFileID, v))
-}
-
-// EventIDEQ applies the EQ predicate on the "event_id" field.
-func EventIDEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldEventID, v))
-}
-
-// EventIDNEQ applies the NEQ predicate on the "event_id" field.
-func EventIDNEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNEQ(FieldEventID, v))
-}
-
-// EventIDIn applies the In predicate on the "event_id" field.
-func EventIDIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldIn(FieldEventID, vs...))
-}
-
-// EventIDNotIn applies the NotIn predicate on the "event_id" field.
-func EventIDNotIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNotIn(FieldEventID, vs...))
-}
-
-// EventIDGT applies the GT predicate on the "event_id" field.
-func EventIDGT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGT(FieldEventID, v))
-}
-
-// EventIDGTE applies the GTE predicate on the "event_id" field.
-func EventIDGTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGTE(FieldEventID, v))
-}
-
-// EventIDLT applies the LT predicate on the "event_id" field.
-func EventIDLT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLT(FieldEventID, v))
-}
-
-// EventIDLTE applies the LTE predicate on the "event_id" field.
-func EventIDLTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLTE(FieldEventID, v))
-}
-
-// EventIDContains applies the Contains predicate on the "event_id" field.
-func EventIDContains(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContains(FieldEventID, v))
-}
-
-// EventIDHasPrefix applies the HasPrefix predicate on the "event_id" field.
-func EventIDHasPrefix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasPrefix(FieldEventID, v))
-}
-
-// EventIDHasSuffix applies the HasSuffix predicate on the "event_id" field.
-func EventIDHasSuffix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasSuffix(FieldEventID, v))
-}
-
-// EventIDIsNil applies the IsNil predicate on the "event_id" field.
-func EventIDIsNil() predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldIsNull(FieldEventID))
-}
-
-// EventIDNotNil applies the NotNil predicate on the "event_id" field.
-func EventIDNotNil() predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNotNull(FieldEventID))
-}
-
-// EventIDEqualFold applies the EqualFold predicate on the "event_id" field.
-func EventIDEqualFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEqualFold(FieldEventID, v))
-}
-
-// EventIDContainsFold applies the ContainsFold predicate on the "event_id" field.
-func EventIDContainsFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContainsFold(FieldEventID, v))
-}
-
-// AssessmentResponseIDEQ applies the EQ predicate on the "assessment_response_id" field.
-func AssessmentResponseIDEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEQ(FieldAssessmentResponseID, v))
-}
-
-// AssessmentResponseIDNEQ applies the NEQ predicate on the "assessment_response_id" field.
-func AssessmentResponseIDNEQ(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNEQ(FieldAssessmentResponseID, v))
-}
-
-// AssessmentResponseIDIn applies the In predicate on the "assessment_response_id" field.
-func AssessmentResponseIDIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldIn(FieldAssessmentResponseID, vs...))
-}
-
-// AssessmentResponseIDNotIn applies the NotIn predicate on the "assessment_response_id" field.
-func AssessmentResponseIDNotIn(vs ...string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNotIn(FieldAssessmentResponseID, vs...))
-}
-
-// AssessmentResponseIDGT applies the GT predicate on the "assessment_response_id" field.
-func AssessmentResponseIDGT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGT(FieldAssessmentResponseID, v))
-}
-
-// AssessmentResponseIDGTE applies the GTE predicate on the "assessment_response_id" field.
-func AssessmentResponseIDGTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldGTE(FieldAssessmentResponseID, v))
-}
-
-// AssessmentResponseIDLT applies the LT predicate on the "assessment_response_id" field.
-func AssessmentResponseIDLT(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLT(FieldAssessmentResponseID, v))
-}
-
-// AssessmentResponseIDLTE applies the LTE predicate on the "assessment_response_id" field.
-func AssessmentResponseIDLTE(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldLTE(FieldAssessmentResponseID, v))
-}
-
-// AssessmentResponseIDContains applies the Contains predicate on the "assessment_response_id" field.
-func AssessmentResponseIDContains(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContains(FieldAssessmentResponseID, v))
-}
-
-// AssessmentResponseIDHasPrefix applies the HasPrefix predicate on the "assessment_response_id" field.
-func AssessmentResponseIDHasPrefix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasPrefix(FieldAssessmentResponseID, v))
-}
-
-// AssessmentResponseIDHasSuffix applies the HasSuffix predicate on the "assessment_response_id" field.
-func AssessmentResponseIDHasSuffix(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldHasSuffix(FieldAssessmentResponseID, v))
-}
-
-// AssessmentResponseIDIsNil applies the IsNil predicate on the "assessment_response_id" field.
-func AssessmentResponseIDIsNil() predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldIsNull(FieldAssessmentResponseID))
-}
-
-// AssessmentResponseIDNotNil applies the NotNil predicate on the "assessment_response_id" field.
-func AssessmentResponseIDNotNil() predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldNotNull(FieldAssessmentResponseID))
-}
-
-// AssessmentResponseIDEqualFold applies the EqualFold predicate on the "assessment_response_id" field.
-func AssessmentResponseIDEqualFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldEqualFold(FieldAssessmentResponseID, v))
-}
-
-// AssessmentResponseIDContainsFold applies the ContainsFold predicate on the "assessment_response_id" field.
-func AssessmentResponseIDContainsFold(v string) predicate.IntegrationRun {
-	return predicate.IntegrationRun(sql.FieldContainsFold(FieldAssessmentResponseID, v))
 }
 
 // SummaryEQ applies the EQ predicate on the "summary" field.
@@ -1682,21 +1282,21 @@ func HasIntegrationWith(preds ...predicate.Integration) predicate.IntegrationRun
 	})
 }
 
-// HasRequestFile applies the HasEdge predicate on the "request_file" edge.
-func HasRequestFile() predicate.IntegrationRun {
+// HasActionPlans applies the HasEdge predicate on the "action_plans" edge.
+func HasActionPlans() predicate.IntegrationRun {
 	return predicate.IntegrationRun(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, RequestFileTable, RequestFileColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, ActionPlansTable, ActionPlansPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasRequestFileWith applies the HasEdge predicate on the "request_file" edge with a given conditions (other predicates).
-func HasRequestFileWith(preds ...predicate.File) predicate.IntegrationRun {
+// HasActionPlansWith applies the HasEdge predicate on the "action_plans" edge with a given conditions (other predicates).
+func HasActionPlansWith(preds ...predicate.ActionPlan) predicate.IntegrationRun {
 	return predicate.IntegrationRun(func(s *sql.Selector) {
-		step := newRequestFileStep()
+		step := newActionPlansStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1705,21 +1305,21 @@ func HasRequestFileWith(preds ...predicate.File) predicate.IntegrationRun {
 	})
 }
 
-// HasResponseFile applies the HasEdge predicate on the "response_file" edge.
-func HasResponseFile() predicate.IntegrationRun {
+// HasAssets applies the HasEdge predicate on the "assets" edge.
+func HasAssets() predicate.IntegrationRun {
 	return predicate.IntegrationRun(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, ResponseFileTable, ResponseFileColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, AssetsTable, AssetsPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasResponseFileWith applies the HasEdge predicate on the "response_file" edge with a given conditions (other predicates).
-func HasResponseFileWith(preds ...predicate.File) predicate.IntegrationRun {
+// HasAssetsWith applies the HasEdge predicate on the "assets" edge with a given conditions (other predicates).
+func HasAssetsWith(preds ...predicate.Asset) predicate.IntegrationRun {
 	return predicate.IntegrationRun(func(s *sql.Selector) {
-		step := newResponseFileStep()
+		step := newAssetsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1728,21 +1328,21 @@ func HasResponseFileWith(preds ...predicate.File) predicate.IntegrationRun {
 	})
 }
 
-// HasEvent applies the HasEdge predicate on the "event" edge.
-func HasEvent() predicate.IntegrationRun {
+// HasCheckResults applies the HasEdge predicate on the "check_results" edge.
+func HasCheckResults() predicate.IntegrationRun {
 	return predicate.IntegrationRun(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, EventTable, EventColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, CheckResultsTable, CheckResultsPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasEventWith applies the HasEdge predicate on the "event" edge with a given conditions (other predicates).
-func HasEventWith(preds ...predicate.Event) predicate.IntegrationRun {
+// HasCheckResultsWith applies the HasEdge predicate on the "check_results" edge with a given conditions (other predicates).
+func HasCheckResultsWith(preds ...predicate.CheckResult) predicate.IntegrationRun {
 	return predicate.IntegrationRun(func(s *sql.Selector) {
-		step := newEventStep()
+		step := newCheckResultsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1751,21 +1351,228 @@ func HasEventWith(preds ...predicate.Event) predicate.IntegrationRun {
 	})
 }
 
-// HasAssessmentResponse applies the HasEdge predicate on the "assessment_response" edge.
-func HasAssessmentResponse() predicate.IntegrationRun {
+// HasContacts applies the HasEdge predicate on the "contacts" edge.
+func HasContacts() predicate.IntegrationRun {
 	return predicate.IntegrationRun(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, AssessmentResponseTable, AssessmentResponseColumn),
+			sqlgraph.Edge(sqlgraph.M2M, true, ContactsTable, ContactsPrimaryKey...),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasAssessmentResponseWith applies the HasEdge predicate on the "assessment_response" edge with a given conditions (other predicates).
-func HasAssessmentResponseWith(preds ...predicate.AssessmentResponse) predicate.IntegrationRun {
+// HasContactsWith applies the HasEdge predicate on the "contacts" edge with a given conditions (other predicates).
+func HasContactsWith(preds ...predicate.Contact) predicate.IntegrationRun {
 	return predicate.IntegrationRun(func(s *sql.Selector) {
-		step := newAssessmentResponseStep()
+		step := newContactsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDirectoryAccounts applies the HasEdge predicate on the "directory_accounts" edge.
+func HasDirectoryAccounts() predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, DirectoryAccountsTable, DirectoryAccountsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDirectoryAccountsWith applies the HasEdge predicate on the "directory_accounts" edge with a given conditions (other predicates).
+func HasDirectoryAccountsWith(preds ...predicate.DirectoryAccount) predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := newDirectoryAccountsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDirectoryGroups applies the HasEdge predicate on the "directory_groups" edge.
+func HasDirectoryGroups() predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, DirectoryGroupsTable, DirectoryGroupsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDirectoryGroupsWith applies the HasEdge predicate on the "directory_groups" edge with a given conditions (other predicates).
+func HasDirectoryGroupsWith(preds ...predicate.DirectoryGroup) predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := newDirectoryGroupsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDirectoryMemberships applies the HasEdge predicate on the "directory_memberships" edge.
+func HasDirectoryMemberships() predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, DirectoryMembershipsTable, DirectoryMembershipsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDirectoryMembershipsWith applies the HasEdge predicate on the "directory_memberships" edge with a given conditions (other predicates).
+func HasDirectoryMembershipsWith(preds ...predicate.DirectoryMembership) predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := newDirectoryMembershipsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEntities applies the HasEdge predicate on the "entities" edge.
+func HasEntities() predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, EntitiesTable, EntitiesPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEntitiesWith applies the HasEdge predicate on the "entities" edge with a given conditions (other predicates).
+func HasEntitiesWith(preds ...predicate.Entity) predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := newEntitiesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFindings applies the HasEdge predicate on the "findings" edge.
+func HasFindings() predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingsWith applies the HasEdge predicate on the "findings" edge with a given conditions (other predicates).
+func HasFindingsWith(preds ...predicate.Finding) predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := newFindingsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasInternalPolicies applies the HasEdge predicate on the "internal_policies" edge.
+func HasInternalPolicies() predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalPoliciesWith applies the HasEdge predicate on the "internal_policies" edge with a given conditions (other predicates).
+func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := newInternalPoliciesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProcedures applies the HasEdge predicate on the "procedures" edge.
+func HasProcedures() predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ProceduresTable, ProceduresPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProceduresWith applies the HasEdge predicate on the "procedures" edge with a given conditions (other predicates).
+func HasProceduresWith(preds ...predicate.Procedure) predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := newProceduresStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRisks applies the HasEdge predicate on the "risks" edge.
+func HasRisks() predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, RisksTable, RisksPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRisksWith applies the HasEdge predicate on the "risks" edge with a given conditions (other predicates).
+func HasRisksWith(preds ...predicate.Risk) predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := newRisksStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasVulnerabilities applies the HasEdge predicate on the "vulnerabilities" edge.
+func HasVulnerabilities() predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVulnerabilitiesWith applies the HasEdge predicate on the "vulnerabilities" edge with a given conditions (other predicates).
+func HasVulnerabilitiesWith(preds ...predicate.Vulnerability) predicate.IntegrationRun {
+	return predicate.IntegrationRun(func(s *sql.Selector) {
+		step := newVulnerabilitiesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

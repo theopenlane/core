@@ -145,14 +145,13 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 					Topic:        DefinitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:    slackClient.ID(),
 					ConfigSchema: directorySyncSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true},
+					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
-					SkipDefaultLookback: true,
 					RequiredPermissions: scopes,
 					Disabled:            providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
 					ConfigResolver:      providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),

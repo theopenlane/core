@@ -578,7 +578,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			},
 			client:           suite.Client.API,
 			ctx:              th.SharedViewOnlyUser.UserCtx,
-			expectedRevision: "v1.0.1", // only comment added, should be a patch update
+			expectedRevision: "v1.0.0", // only comment added (edge-only), no revision bump
 		},
 		{
 			name:     "member not allowed to update details",
@@ -611,7 +611,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			},
 			client:           suite.Client.API,
 			ctx:              th.SharedAdminUser.UserCtx,
-			expectedRevision: "v1.0.2", // no details updated, should be a patch update
+			expectedRevision: "v1.0.1", // no details updated, should be a patch update
 		},
 		{
 			name:     "member update allowed, user in editor group",
@@ -621,7 +621,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			},
 			client:           suite.Client.API,
 			ctx:              anotherViewerUser.UserCtx, // user assigned to the group which has editor permissions
-			expectedRevision: "v1.0.3",                  // no details updated, should be a patch update
+			expectedRevision: "v1.0.2",                  // no details updated, should be a patch update
 		},
 		{
 			name:     "member update allowed, user in editor group as admin",
@@ -631,7 +631,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			},
 			client:           suite.Client.API,
 			ctx:              anotherViewerGroupAdminUser.UserCtx, // user assigned to the group which has editor permissions as admin
-			expectedRevision: "v1.0.4",                            // no details updated, should be a patch update
+			expectedRevision: "v1.0.3",                            // no details updated, should be a patch update
 		},
 		{
 			name:     "happy path, block the group from editing",
@@ -641,7 +641,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			},
 			client:           suite.Client.API,
 			ctx:              th.SharedTestUser1.UserCtx,
-			expectedRevision: "v1.0.5", // no details updated, should be a patch update
+			expectedRevision: "v1.0.3", // edge-only, no revision bump
 		},
 		{
 			name:     "member update no longer allowed, user in blocked group",
@@ -661,7 +661,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			},
 			client:           suite.Client.API,
 			ctx:              th.SharedTestUser1.UserCtx,
-			expectedRevision: "v1.0.6", // no details updated, should be a patch update
+			expectedRevision: "v1.0.3", // edge-only, no revision bump
 		},
 		{
 			name:     "update not allowed, editor group was removed",

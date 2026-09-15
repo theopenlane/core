@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/url"
 	"strings"
 
 	"github.com/theopenlane/newman"
@@ -125,14 +124,19 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 	return markCampaignTargetSent(ctx, db, campaignTargetID)
 }
 
+// questionnairePath is the product route serving questionnaire access links
+const questionnairePath = "questionnaire"
+
 // QuestionnaireAuthURL generates an anonymous access token URL for questionnaire access.
 // When isTest is true the token is marked as a sender preview so the questionnaire resolves
 // to the test response rather than a real recipient's response
 func QuestionnaireAuthURL(ctx context.Context, db *generated.Client, assessmentID, ownerID, recipientEmail string, isTest bool) (string, error) {
-	baseURL, err := url.Parse(db.EntConfig.QuestionnaireProductURL + "/questionnaire")
+	productURL, err := urlx.ParseAbsolute(db.EntConfig.QuestionnaireProductURL)
 	if err != nil {
 		return "", fmt.Errorf("parse questionnaire URL: %w", err)
 	}
+
+	baseURL := productURL.JoinPath(questionnairePath)
 
 	result, err := urlx.GenerateAnonTokenURL(ctx, db.TokenManager, db.Shortlinks, *baseURL, urlx.AnonTokenRequest{
 		Prefix:    authmanager.AnonQuestionnaireJWTPrefix,

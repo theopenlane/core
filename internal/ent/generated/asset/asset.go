@@ -34,6 +34,16 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldSourceDefinitionID holds the string denoting the source_definition_id field in the database.
+	FieldSourceDefinitionID = "source_definition_id"
+	// FieldSourceDefinitionVersion holds the string denoting the source_definition_version field in the database.
+	FieldSourceDefinitionVersion = "source_definition_version"
+	// FieldSourceInstanceID holds the string denoting the source_instance_id field in the database.
+	FieldSourceInstanceID = "source_instance_id"
+	// FieldManagedBy holds the string denoting the managed_by field in the database.
+	FieldManagedBy = "managed_by"
+	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
+	FieldIntegrationRunID = "integration_run_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldInternalOwner holds the string denoting the internal_owner field in the database.
@@ -120,6 +130,8 @@ const (
 	FieldIntegrationID = "integration_id"
 	// FieldObservedAt holds the string denoting the observed_at field in the database.
 	FieldObservedAt = "observed_at"
+	// EdgeIntegrationRuns holds the string denoting the integration_runs edge name in mutations.
+	EdgeIntegrationRuns = "integration_runs"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -186,6 +198,11 @@ const (
 	EdgeConnectedFrom = "connected_from"
 	// Table holds the table name of the asset in the database.
 	Table = "assets"
+	// IntegrationRunsTable is the table that holds the integration_runs relation/edge. The primary key declared below.
+	IntegrationRunsTable = "asset_integration_runs"
+	// IntegrationRunsInverseTable is the table name for the IntegrationRun entity.
+	// It exists in this package in order to avoid circular dependency with the "integrationrun" package.
+	IntegrationRunsInverseTable = "integration_runs"
 	// OwnerTable is the table that holds the owner relation/edge.
 	OwnerTable = "assets"
 	// OwnerInverseTable is the table name for the Organization entity.
@@ -387,6 +404,11 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldSourceDefinitionID,
+	FieldSourceDefinitionVersion,
+	FieldSourceInstanceID,
+	FieldManagedBy,
+	FieldIntegrationRunID,
 	FieldOwnerID,
 	FieldInternalOwner,
 	FieldInternalOwnerUserID,
@@ -439,6 +461,9 @@ var ForeignKeys = []string{
 }
 
 var (
+	// IntegrationRunsPrimaryKey and IntegrationRunsColumn2 are the table columns denoting the
+	// primary key for the integration_runs relation (M2M).
+	IntegrationRunsPrimaryKey = []string{"asset_id", "integration_run_id"}
 	// ScansPrimaryKey and ScansColumn2 are the table columns denoting the
 	// primary key for the scans relation (M2M).
 	ScansPrimaryKey = []string{"scan_id", "asset_id"}
@@ -507,7 +532,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [20]ent.Hook
+	Hooks        [21]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -597,6 +622,31 @@ func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDeletedBy orders the results by the deleted_by field.
 func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
+}
+
+// BySourceDefinitionID orders the results by the source_definition_id field.
+func BySourceDefinitionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionID, opts...).ToFunc()
+}
+
+// BySourceDefinitionVersion orders the results by the source_definition_version field.
+func BySourceDefinitionVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionVersion, opts...).ToFunc()
+}
+
+// BySourceInstanceID orders the results by the source_instance_id field.
+func BySourceInstanceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceInstanceID, opts...).ToFunc()
+}
+
+// ByManagedBy orders the results by the managed_by field.
+func ByManagedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldManagedBy, opts...).ToFunc()
+}
+
+// ByIntegrationRunID orders the results by the integration_run_id field.
+func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.
@@ -807,6 +857,20 @@ func ByIntegrationID(opts ...sql.OrderTermOption) OrderOption {
 // ByObservedAt orders the results by the observed_at field.
 func ByObservedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldObservedAt, opts...).ToFunc()
+}
+
+// ByIntegrationRunsCount orders the results by integration_runs count.
+func ByIntegrationRunsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationRunsStep(), opts...)
+	}
+}
+
+// ByIntegrationRuns orders the results by integration_runs terms.
+func ByIntegrationRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
 }
 
 // ByOwnerField orders the results by owner field.
@@ -1157,6 +1221,13 @@ func ByConnectedFrom(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newConnectedFromStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
+}
+func newIntegrationRunsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationRunsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, IntegrationRunsTable, IntegrationRunsPrimaryKey...),
+	)
 }
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

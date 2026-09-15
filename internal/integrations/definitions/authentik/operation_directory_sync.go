@@ -2,7 +2,6 @@ package authentik
 
 import (
 	"context"
-	"time"
 
 	authentikSDK "goauthentik.io/api/v3"
 
@@ -23,22 +22,18 @@ type DirectorySync struct{}
 func (d DirectorySync) IngestHandle() types.IngestHandler {
 	return providerkit.WithClientRequest(authentikClient, func(ctx context.Context, request types.OperationRequest, c *authentikSDK.APIClient) ([]types.IngestPayloadSet, error) {
 		var cfg UserInput
+
 		if request.Integration != nil {
 			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
 		}
 
-		return d.Run(ctx, c, cfg, request.LastRunAt)
+		return d.Run(ctx, c, cfg)
 	})
 }
 
 // Run collects Authentik directory users, groups, and memberships
-func (DirectorySync) Run(ctx context.Context, c *authentikSDK.APIClient, cfg UserInput, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
-	// groups embed their memberships, so group sync needs the full user set
-	userSince := lastRunAt
-	if !cfg.DisableGroupSync {
-		userSince = nil
-	}
-	users, err := listDirectoryUsers(ctx, c, userSince)
+func (DirectorySync) Run(ctx context.Context, c *authentikSDK.APIClient, cfg UserInput) ([]types.IngestPayloadSet, error) {
+	users, err := listDirectoryUsers(ctx, c)
 	if err != nil {
 		return nil, err
 	}
@@ -58,12 +53,11 @@ func (DirectorySync) Run(ctx context.Context, c *authentikSDK.APIClient, cfg Use
 		includedUsers[resourceID] = struct{}{}
 	}
 
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema:    entityops.SchemaDirectoryAccount.Name,
-			Envelopes: accountEnvelopes,
-		},
-	}
+	payloadSets := []types.IngestPayloadSet{{
+		Schema:           entityops.SchemaDirectoryAccount.Name,
+		Envelopes:        accountEnvelopes,
+		SnapshotComplete: true,
+	}}
 
 	if cfg.DisableGroupSync {
 		return payloadSets, nil
@@ -103,14 +97,14 @@ func (DirectorySync) Run(ctx context.Context, c *authentikSDK.APIClient, cfg Use
 
 	payloadSets = append(payloadSets,
 		types.IngestPayloadSet{
-			Schema:    entityops.SchemaDirectoryGroup.Name,
-			Envelopes: groupEnvelopes,
+			Schema:           entityops.SchemaDirectoryGroup.Name,
+			Envelopes:        groupEnvelopes,
+			SnapshotComplete: true,
 		},
 		types.IngestPayloadSet{
-			Schema:    entityops.SchemaDirectoryMembership.Name,
-			Envelopes: membershipEnvelopes,
-			// memberships derived from an incremental user fetch are incomplete
-			SnapshotComplete: userSince == nil,
+			Schema:           entityops.SchemaDirectoryMembership.Name,
+			Envelopes:        membershipEnvelopes,
+			SnapshotComplete: true,
 		},
 	)
 
@@ -118,7 +112,7 @@ func (DirectorySync) Run(ctx context.Context, c *authentikSDK.APIClient, cfg Use
 }
 
 // listDirectoryUsers pages through all Authentik users
-func listDirectoryUsers(ctx context.Context, c *authentikSDK.APIClient, lastRunAt *time.Time) ([]authentikSDK.User, error) {
+func listDirectoryUsers(ctx context.Context, c *authentikSDK.APIClient) ([]authentikSDK.User, error) {
 	users := make([]authentikSDK.User, 0)
 	page := int32(1)
 
@@ -127,15 +121,10 @@ func listDirectoryUsers(ctx context.Context, c *authentikSDK.APIClient, lastRunA
 			return nil, err
 		}
 
-		req := c.CoreApi.CoreUsersList(ctx).
+		result, resp, err := c.CoreApi.CoreUsersList(ctx).
 			Page(page).
-			PageSize(directoryDefaultPageSize)
-
-		if lastRunAt != nil {
-			req = req.LastUpdatedGt(*lastRunAt)
-		}
-
-		result, resp, err := req.Execute()
+			PageSize(directoryDefaultPageSize).
+			Execute()
 		if resp != nil {
 			_ = resp.Body.Close()
 		}

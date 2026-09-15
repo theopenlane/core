@@ -20,6 +20,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 )
@@ -108,6 +110,106 @@ func (_u *DirectoryAccountUpdate) ClearTags() *DirectoryAccountUpdate {
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *DirectoryAccountUpdate) SetSourceDefinitionID(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableSourceDefinitionID(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *DirectoryAccountUpdate) ClearSourceDefinitionID() *DirectoryAccountUpdate {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *DirectoryAccountUpdate) SetSourceDefinitionVersion(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableSourceDefinitionVersion(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *DirectoryAccountUpdate) ClearSourceDefinitionVersion() *DirectoryAccountUpdate {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *DirectoryAccountUpdate) SetSourceInstanceID(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableSourceInstanceID(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *DirectoryAccountUpdate) ClearSourceInstanceID() *DirectoryAccountUpdate {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *DirectoryAccountUpdate) SetManagedBy(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableManagedBy(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *DirectoryAccountUpdate) ClearManagedBy() *DirectoryAccountUpdate {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *DirectoryAccountUpdate) SetIntegrationRunID(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableIntegrationRunID(v *string) *DirectoryAccountUpdate {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *DirectoryAccountUpdate) ClearIntegrationRunID() *DirectoryAccountUpdate {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
 // SetEnvironmentName sets the "environment_name" field.
 func (_u *DirectoryAccountUpdate) SetEnvironmentName(v string) *DirectoryAccountUpdate {
 	_u.mutation.SetEnvironmentName(v)
@@ -188,23 +290,23 @@ func (_u *DirectoryAccountUpdate) ClearScopeID() *DirectoryAccountUpdate {
 	return _u
 }
 
-// SetDirectoryInstanceID sets the "directory_instance_id" field.
-func (_u *DirectoryAccountUpdate) SetDirectoryInstanceID(v string) *DirectoryAccountUpdate {
-	_u.mutation.SetDirectoryInstanceID(v)
+// SetIntegrationID sets the "integration_id" field.
+func (_u *DirectoryAccountUpdate) SetIntegrationID(v string) *DirectoryAccountUpdate {
+	_u.mutation.SetIntegrationID(v)
 	return _u
 }
 
-// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
-func (_u *DirectoryAccountUpdate) SetNillableDirectoryInstanceID(v *string) *DirectoryAccountUpdate {
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdate) SetNillableIntegrationID(v *string) *DirectoryAccountUpdate {
 	if v != nil {
-		_u.SetDirectoryInstanceID(*v)
+		_u.SetIntegrationID(*v)
 	}
 	return _u
 }
 
-// ClearDirectoryInstanceID clears the value of the "directory_instance_id" field.
-func (_u *DirectoryAccountUpdate) ClearDirectoryInstanceID() *DirectoryAccountUpdate {
-	_u.mutation.ClearDirectoryInstanceID()
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *DirectoryAccountUpdate) ClearIntegrationID() *DirectoryAccountUpdate {
+	_u.mutation.ClearIntegrationID()
 	return _u
 }
 
@@ -574,66 +676,6 @@ func (_u *DirectoryAccountUpdate) ClearLastSeenIP() *DirectoryAccountUpdate {
 	return _u
 }
 
-// SetLastLoginAt sets the "last_login_at" field.
-func (_u *DirectoryAccountUpdate) SetLastLoginAt(v time.Time) *DirectoryAccountUpdate {
-	_u.mutation.SetLastLoginAt(v)
-	return _u
-}
-
-// SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
-func (_u *DirectoryAccountUpdate) SetNillableLastLoginAt(v *time.Time) *DirectoryAccountUpdate {
-	if v != nil {
-		_u.SetLastLoginAt(*v)
-	}
-	return _u
-}
-
-// ClearLastLoginAt clears the value of the "last_login_at" field.
-func (_u *DirectoryAccountUpdate) ClearLastLoginAt() *DirectoryAccountUpdate {
-	_u.mutation.ClearLastLoginAt()
-	return _u
-}
-
-// SetFirstSeenAt sets the "first_seen_at" field.
-func (_u *DirectoryAccountUpdate) SetFirstSeenAt(v time.Time) *DirectoryAccountUpdate {
-	_u.mutation.SetFirstSeenAt(v)
-	return _u
-}
-
-// SetNillableFirstSeenAt sets the "first_seen_at" field if the given value is not nil.
-func (_u *DirectoryAccountUpdate) SetNillableFirstSeenAt(v *time.Time) *DirectoryAccountUpdate {
-	if v != nil {
-		_u.SetFirstSeenAt(*v)
-	}
-	return _u
-}
-
-// ClearFirstSeenAt clears the value of the "first_seen_at" field.
-func (_u *DirectoryAccountUpdate) ClearFirstSeenAt() *DirectoryAccountUpdate {
-	_u.mutation.ClearFirstSeenAt()
-	return _u
-}
-
-// SetLastSeenAt sets the "last_seen_at" field.
-func (_u *DirectoryAccountUpdate) SetLastSeenAt(v time.Time) *DirectoryAccountUpdate {
-	_u.mutation.SetLastSeenAt(v)
-	return _u
-}
-
-// SetNillableLastSeenAt sets the "last_seen_at" field if the given value is not nil.
-func (_u *DirectoryAccountUpdate) SetNillableLastSeenAt(v *time.Time) *DirectoryAccountUpdate {
-	if v != nil {
-		_u.SetLastSeenAt(*v)
-	}
-	return _u
-}
-
-// ClearLastSeenAt clears the value of the "last_seen_at" field.
-func (_u *DirectoryAccountUpdate) ClearLastSeenAt() *DirectoryAccountUpdate {
-	_u.mutation.ClearLastSeenAt()
-	return _u
-}
-
 // SetAddedAt sets the "added_at" field.
 func (_u *DirectoryAccountUpdate) SetAddedAt(v time.Time) *DirectoryAccountUpdate {
 	_u.mutation.SetAddedAt(v)
@@ -671,20 +713,6 @@ func (_u *DirectoryAccountUpdate) SetNillableRemovedAt(v *time.Time) *DirectoryA
 // ClearRemovedAt clears the value of the "removed_at" field.
 func (_u *DirectoryAccountUpdate) ClearRemovedAt() *DirectoryAccountUpdate {
 	_u.mutation.ClearRemovedAt()
-	return _u
-}
-
-// SetProfileHash sets the "profile_hash" field.
-func (_u *DirectoryAccountUpdate) SetProfileHash(v string) *DirectoryAccountUpdate {
-	_u.mutation.SetProfileHash(v)
-	return _u
-}
-
-// SetNillableProfileHash sets the "profile_hash" field if the given value is not nil.
-func (_u *DirectoryAccountUpdate) SetNillableProfileHash(v *string) *DirectoryAccountUpdate {
-	if v != nil {
-		_u.SetProfileHash(*v)
-	}
 	return _u
 }
 
@@ -766,6 +794,21 @@ func (_u *DirectoryAccountUpdate) SetNillablePrimarySource(v *bool) *DirectoryAc
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *DirectoryAccountUpdate) AddIntegrationRunIDs(ids ...string) *DirectoryAccountUpdate {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *DirectoryAccountUpdate) AddIntegrationRuns(v ...*IntegrationRun) *DirectoryAccountUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *DirectoryAccountUpdate) SetEnvironment(v *CustomTypeEnum) *DirectoryAccountUpdate {
 	return _u.SetEnvironmentID(v.ID)
@@ -774,6 +817,11 @@ func (_u *DirectoryAccountUpdate) SetEnvironment(v *CustomTypeEnum) *DirectoryAc
 // SetScope sets the "scope" edge to the CustomTypeEnum entity.
 func (_u *DirectoryAccountUpdate) SetScope(v *CustomTypeEnum) *DirectoryAccountUpdate {
 	return _u.SetScopeID(v.ID)
+}
+
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_u *DirectoryAccountUpdate) SetIntegration(v *Integration) *DirectoryAccountUpdate {
+	return _u.SetIntegrationID(v.ID)
 }
 
 // SetIdentityHolder sets the "identity_holder" edge to the IdentityHolder entity.
@@ -865,6 +913,27 @@ func (_u *DirectoryAccountUpdate) Mutation() *DirectoryAccountMutation {
 	return _u.mutation
 }
 
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *DirectoryAccountUpdate) ClearIntegrationRuns() *DirectoryAccountUpdate {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *DirectoryAccountUpdate) RemoveIntegrationRunIDs(ids ...string) *DirectoryAccountUpdate {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *DirectoryAccountUpdate) RemoveIntegrationRuns(v ...*IntegrationRun) *DirectoryAccountUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
+}
+
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
 func (_u *DirectoryAccountUpdate) ClearEnvironment() *DirectoryAccountUpdate {
 	_u.mutation.ClearEnvironment()
@@ -874,6 +943,12 @@ func (_u *DirectoryAccountUpdate) ClearEnvironment() *DirectoryAccountUpdate {
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *DirectoryAccountUpdate) ClearScope() *DirectoryAccountUpdate {
 	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearIntegration clears the "integration" edge to the Integration entity.
+func (_u *DirectoryAccountUpdate) ClearIntegration() *DirectoryAccountUpdate {
+	_u.mutation.ClearIntegration()
 	return _u
 }
 
@@ -1017,6 +1092,11 @@ func (_u *DirectoryAccountUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *DirectoryAccountUpdate) check() error {
+	if v, ok := _u.mutation.IntegrationID(); ok {
+		if err := directoryaccount.IntegrationIDValidator(v); err != nil {
+			return &ValidationError{Name: "integration_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.integration_id": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.EmailAliases(); ok {
 		if err := directoryaccount.EmailAliasesValidator(v); err != nil {
 			return &ValidationError{Name: "email_aliases", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.email_aliases": %w`, err)}
@@ -1103,6 +1183,36 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(directoryaccount.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(directoryaccount.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(directoryaccount.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(directoryaccount.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(directoryaccount.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(directoryaccount.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(directoryaccount.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(directoryaccount.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(directoryaccount.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(directoryaccount.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(directoryaccount.FieldIntegrationRunID, field.TypeString)
+	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directoryaccount.FieldEnvironmentName, field.TypeString, value)
 	}
@@ -1114,12 +1224,6 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(directoryaccount.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.DirectoryInstanceID(); ok {
-		_spec.SetField(directoryaccount.FieldDirectoryInstanceID, field.TypeString, value)
-	}
-	if _u.mutation.DirectoryInstanceIDCleared() {
-		_spec.ClearField(directoryaccount.FieldDirectoryInstanceID, field.TypeString)
 	}
 	if value, ok := _u.mutation.DirectoryName(); ok {
 		_spec.SetField(directoryaccount.FieldDirectoryName, field.TypeString, value)
@@ -1222,24 +1326,6 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.LastSeenIPCleared() {
 		_spec.ClearField(directoryaccount.FieldLastSeenIP, field.TypeString)
 	}
-	if value, ok := _u.mutation.LastLoginAt(); ok {
-		_spec.SetField(directoryaccount.FieldLastLoginAt, field.TypeTime, value)
-	}
-	if _u.mutation.LastLoginAtCleared() {
-		_spec.ClearField(directoryaccount.FieldLastLoginAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.FirstSeenAt(); ok {
-		_spec.SetField(directoryaccount.FieldFirstSeenAt, field.TypeTime, value)
-	}
-	if _u.mutation.FirstSeenAtCleared() {
-		_spec.ClearField(directoryaccount.FieldFirstSeenAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.LastSeenAt(); ok {
-		_spec.SetField(directoryaccount.FieldLastSeenAt, field.TypeTime, value)
-	}
-	if _u.mutation.LastSeenAtCleared() {
-		_spec.ClearField(directoryaccount.FieldLastSeenAt, field.TypeTime)
-	}
 	if value, ok := _u.mutation.AddedAt(); ok {
 		_spec.SetField(directoryaccount.FieldAddedAt, field.TypeTime, value)
 	}
@@ -1251,9 +1337,6 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.RemovedAtCleared() {
 		_spec.ClearField(directoryaccount.FieldRemovedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.ProfileHash(); ok {
-		_spec.SetField(directoryaccount.FieldProfileHash, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Profile(); ok {
 		_spec.SetField(directoryaccount.FieldProfile, field.TypeJSON, value)
@@ -1281,6 +1364,51 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if value, ok := _u.mutation.PrimarySource(); ok {
 		_spec.SetField(directoryaccount.FieldPrimarySource, field.TypeBool, value)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   directoryaccount.IntegrationRunsTable,
+			Columns: directoryaccount.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   directoryaccount.IntegrationRunsTable,
+			Columns: directoryaccount.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   directoryaccount.IntegrationRunsTable,
+			Columns: directoryaccount.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1333,6 +1461,35 @@ func (_u *DirectoryAccountUpdate) sqlSave(ctx context.Context) (_node int, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directoryaccount.IntegrationTable,
+			Columns: []string{directoryaccount.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directoryaccount.IntegrationTable,
+			Columns: []string{directoryaccount.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1691,6 +1848,106 @@ func (_u *DirectoryAccountUpdateOne) ClearTags() *DirectoryAccountUpdateOne {
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *DirectoryAccountUpdateOne) SetSourceDefinitionID(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableSourceDefinitionID(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *DirectoryAccountUpdateOne) ClearSourceDefinitionID() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *DirectoryAccountUpdateOne) SetSourceDefinitionVersion(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableSourceDefinitionVersion(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *DirectoryAccountUpdateOne) ClearSourceDefinitionVersion() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *DirectoryAccountUpdateOne) SetSourceInstanceID(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableSourceInstanceID(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *DirectoryAccountUpdateOne) ClearSourceInstanceID() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *DirectoryAccountUpdateOne) SetManagedBy(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableManagedBy(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *DirectoryAccountUpdateOne) ClearManagedBy() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *DirectoryAccountUpdateOne) SetIntegrationRunID(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableIntegrationRunID(v *string) *DirectoryAccountUpdateOne {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *DirectoryAccountUpdateOne) ClearIntegrationRunID() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
 // SetEnvironmentName sets the "environment_name" field.
 func (_u *DirectoryAccountUpdateOne) SetEnvironmentName(v string) *DirectoryAccountUpdateOne {
 	_u.mutation.SetEnvironmentName(v)
@@ -1771,23 +2028,23 @@ func (_u *DirectoryAccountUpdateOne) ClearScopeID() *DirectoryAccountUpdateOne {
 	return _u
 }
 
-// SetDirectoryInstanceID sets the "directory_instance_id" field.
-func (_u *DirectoryAccountUpdateOne) SetDirectoryInstanceID(v string) *DirectoryAccountUpdateOne {
-	_u.mutation.SetDirectoryInstanceID(v)
+// SetIntegrationID sets the "integration_id" field.
+func (_u *DirectoryAccountUpdateOne) SetIntegrationID(v string) *DirectoryAccountUpdateOne {
+	_u.mutation.SetIntegrationID(v)
 	return _u
 }
 
-// SetNillableDirectoryInstanceID sets the "directory_instance_id" field if the given value is not nil.
-func (_u *DirectoryAccountUpdateOne) SetNillableDirectoryInstanceID(v *string) *DirectoryAccountUpdateOne {
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *DirectoryAccountUpdateOne) SetNillableIntegrationID(v *string) *DirectoryAccountUpdateOne {
 	if v != nil {
-		_u.SetDirectoryInstanceID(*v)
+		_u.SetIntegrationID(*v)
 	}
 	return _u
 }
 
-// ClearDirectoryInstanceID clears the value of the "directory_instance_id" field.
-func (_u *DirectoryAccountUpdateOne) ClearDirectoryInstanceID() *DirectoryAccountUpdateOne {
-	_u.mutation.ClearDirectoryInstanceID()
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *DirectoryAccountUpdateOne) ClearIntegrationID() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearIntegrationID()
 	return _u
 }
 
@@ -2157,66 +2414,6 @@ func (_u *DirectoryAccountUpdateOne) ClearLastSeenIP() *DirectoryAccountUpdateOn
 	return _u
 }
 
-// SetLastLoginAt sets the "last_login_at" field.
-func (_u *DirectoryAccountUpdateOne) SetLastLoginAt(v time.Time) *DirectoryAccountUpdateOne {
-	_u.mutation.SetLastLoginAt(v)
-	return _u
-}
-
-// SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
-func (_u *DirectoryAccountUpdateOne) SetNillableLastLoginAt(v *time.Time) *DirectoryAccountUpdateOne {
-	if v != nil {
-		_u.SetLastLoginAt(*v)
-	}
-	return _u
-}
-
-// ClearLastLoginAt clears the value of the "last_login_at" field.
-func (_u *DirectoryAccountUpdateOne) ClearLastLoginAt() *DirectoryAccountUpdateOne {
-	_u.mutation.ClearLastLoginAt()
-	return _u
-}
-
-// SetFirstSeenAt sets the "first_seen_at" field.
-func (_u *DirectoryAccountUpdateOne) SetFirstSeenAt(v time.Time) *DirectoryAccountUpdateOne {
-	_u.mutation.SetFirstSeenAt(v)
-	return _u
-}
-
-// SetNillableFirstSeenAt sets the "first_seen_at" field if the given value is not nil.
-func (_u *DirectoryAccountUpdateOne) SetNillableFirstSeenAt(v *time.Time) *DirectoryAccountUpdateOne {
-	if v != nil {
-		_u.SetFirstSeenAt(*v)
-	}
-	return _u
-}
-
-// ClearFirstSeenAt clears the value of the "first_seen_at" field.
-func (_u *DirectoryAccountUpdateOne) ClearFirstSeenAt() *DirectoryAccountUpdateOne {
-	_u.mutation.ClearFirstSeenAt()
-	return _u
-}
-
-// SetLastSeenAt sets the "last_seen_at" field.
-func (_u *DirectoryAccountUpdateOne) SetLastSeenAt(v time.Time) *DirectoryAccountUpdateOne {
-	_u.mutation.SetLastSeenAt(v)
-	return _u
-}
-
-// SetNillableLastSeenAt sets the "last_seen_at" field if the given value is not nil.
-func (_u *DirectoryAccountUpdateOne) SetNillableLastSeenAt(v *time.Time) *DirectoryAccountUpdateOne {
-	if v != nil {
-		_u.SetLastSeenAt(*v)
-	}
-	return _u
-}
-
-// ClearLastSeenAt clears the value of the "last_seen_at" field.
-func (_u *DirectoryAccountUpdateOne) ClearLastSeenAt() *DirectoryAccountUpdateOne {
-	_u.mutation.ClearLastSeenAt()
-	return _u
-}
-
 // SetAddedAt sets the "added_at" field.
 func (_u *DirectoryAccountUpdateOne) SetAddedAt(v time.Time) *DirectoryAccountUpdateOne {
 	_u.mutation.SetAddedAt(v)
@@ -2254,20 +2451,6 @@ func (_u *DirectoryAccountUpdateOne) SetNillableRemovedAt(v *time.Time) *Directo
 // ClearRemovedAt clears the value of the "removed_at" field.
 func (_u *DirectoryAccountUpdateOne) ClearRemovedAt() *DirectoryAccountUpdateOne {
 	_u.mutation.ClearRemovedAt()
-	return _u
-}
-
-// SetProfileHash sets the "profile_hash" field.
-func (_u *DirectoryAccountUpdateOne) SetProfileHash(v string) *DirectoryAccountUpdateOne {
-	_u.mutation.SetProfileHash(v)
-	return _u
-}
-
-// SetNillableProfileHash sets the "profile_hash" field if the given value is not nil.
-func (_u *DirectoryAccountUpdateOne) SetNillableProfileHash(v *string) *DirectoryAccountUpdateOne {
-	if v != nil {
-		_u.SetProfileHash(*v)
-	}
 	return _u
 }
 
@@ -2349,6 +2532,21 @@ func (_u *DirectoryAccountUpdateOne) SetNillablePrimarySource(v *bool) *Director
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *DirectoryAccountUpdateOne) AddIntegrationRunIDs(ids ...string) *DirectoryAccountUpdateOne {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *DirectoryAccountUpdateOne) AddIntegrationRuns(v ...*IntegrationRun) *DirectoryAccountUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *DirectoryAccountUpdateOne) SetEnvironment(v *CustomTypeEnum) *DirectoryAccountUpdateOne {
 	return _u.SetEnvironmentID(v.ID)
@@ -2357,6 +2555,11 @@ func (_u *DirectoryAccountUpdateOne) SetEnvironment(v *CustomTypeEnum) *Director
 // SetScope sets the "scope" edge to the CustomTypeEnum entity.
 func (_u *DirectoryAccountUpdateOne) SetScope(v *CustomTypeEnum) *DirectoryAccountUpdateOne {
 	return _u.SetScopeID(v.ID)
+}
+
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_u *DirectoryAccountUpdateOne) SetIntegration(v *Integration) *DirectoryAccountUpdateOne {
+	return _u.SetIntegrationID(v.ID)
 }
 
 // SetIdentityHolder sets the "identity_holder" edge to the IdentityHolder entity.
@@ -2448,6 +2651,27 @@ func (_u *DirectoryAccountUpdateOne) Mutation() *DirectoryAccountMutation {
 	return _u.mutation
 }
 
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *DirectoryAccountUpdateOne) ClearIntegrationRuns() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *DirectoryAccountUpdateOne) RemoveIntegrationRunIDs(ids ...string) *DirectoryAccountUpdateOne {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *DirectoryAccountUpdateOne) RemoveIntegrationRuns(v ...*IntegrationRun) *DirectoryAccountUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
+}
+
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
 func (_u *DirectoryAccountUpdateOne) ClearEnvironment() *DirectoryAccountUpdateOne {
 	_u.mutation.ClearEnvironment()
@@ -2457,6 +2681,12 @@ func (_u *DirectoryAccountUpdateOne) ClearEnvironment() *DirectoryAccountUpdateO
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *DirectoryAccountUpdateOne) ClearScope() *DirectoryAccountUpdateOne {
 	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearIntegration clears the "integration" edge to the Integration entity.
+func (_u *DirectoryAccountUpdateOne) ClearIntegration() *DirectoryAccountUpdateOne {
+	_u.mutation.ClearIntegration()
 	return _u
 }
 
@@ -2613,6 +2843,11 @@ func (_u *DirectoryAccountUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *DirectoryAccountUpdateOne) check() error {
+	if v, ok := _u.mutation.IntegrationID(); ok {
+		if err := directoryaccount.IntegrationIDValidator(v); err != nil {
+			return &ValidationError{Name: "integration_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.integration_id": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.EmailAliases(); ok {
 		if err := directoryaccount.EmailAliasesValidator(v); err != nil {
 			return &ValidationError{Name: "email_aliases", err: fmt.Errorf(`generated: validator failed for field "DirectoryAccount.email_aliases": %w`, err)}
@@ -2716,6 +2951,36 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(directoryaccount.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(directoryaccount.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(directoryaccount.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(directoryaccount.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(directoryaccount.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(directoryaccount.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(directoryaccount.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(directoryaccount.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(directoryaccount.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(directoryaccount.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(directoryaccount.FieldIntegrationRunID, field.TypeString)
+	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directoryaccount.FieldEnvironmentName, field.TypeString, value)
 	}
@@ -2727,12 +2992,6 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(directoryaccount.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.DirectoryInstanceID(); ok {
-		_spec.SetField(directoryaccount.FieldDirectoryInstanceID, field.TypeString, value)
-	}
-	if _u.mutation.DirectoryInstanceIDCleared() {
-		_spec.ClearField(directoryaccount.FieldDirectoryInstanceID, field.TypeString)
 	}
 	if value, ok := _u.mutation.DirectoryName(); ok {
 		_spec.SetField(directoryaccount.FieldDirectoryName, field.TypeString, value)
@@ -2835,24 +3094,6 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	if _u.mutation.LastSeenIPCleared() {
 		_spec.ClearField(directoryaccount.FieldLastSeenIP, field.TypeString)
 	}
-	if value, ok := _u.mutation.LastLoginAt(); ok {
-		_spec.SetField(directoryaccount.FieldLastLoginAt, field.TypeTime, value)
-	}
-	if _u.mutation.LastLoginAtCleared() {
-		_spec.ClearField(directoryaccount.FieldLastLoginAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.FirstSeenAt(); ok {
-		_spec.SetField(directoryaccount.FieldFirstSeenAt, field.TypeTime, value)
-	}
-	if _u.mutation.FirstSeenAtCleared() {
-		_spec.ClearField(directoryaccount.FieldFirstSeenAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.LastSeenAt(); ok {
-		_spec.SetField(directoryaccount.FieldLastSeenAt, field.TypeTime, value)
-	}
-	if _u.mutation.LastSeenAtCleared() {
-		_spec.ClearField(directoryaccount.FieldLastSeenAt, field.TypeTime)
-	}
 	if value, ok := _u.mutation.AddedAt(); ok {
 		_spec.SetField(directoryaccount.FieldAddedAt, field.TypeTime, value)
 	}
@@ -2864,9 +3105,6 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	}
 	if _u.mutation.RemovedAtCleared() {
 		_spec.ClearField(directoryaccount.FieldRemovedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.ProfileHash(); ok {
-		_spec.SetField(directoryaccount.FieldProfileHash, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Profile(); ok {
 		_spec.SetField(directoryaccount.FieldProfile, field.TypeJSON, value)
@@ -2894,6 +3132,51 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 	}
 	if value, ok := _u.mutation.PrimarySource(); ok {
 		_spec.SetField(directoryaccount.FieldPrimarySource, field.TypeBool, value)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   directoryaccount.IntegrationRunsTable,
+			Columns: directoryaccount.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   directoryaccount.IntegrationRunsTable,
+			Columns: directoryaccount.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   directoryaccount.IntegrationRunsTable,
+			Columns: directoryaccount.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2946,6 +3229,35 @@ func (_u *DirectoryAccountUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directoryaccount.IntegrationTable,
+			Columns: []string{directoryaccount.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directoryaccount.IntegrationTable,
+			Columns: []string{directoryaccount.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
