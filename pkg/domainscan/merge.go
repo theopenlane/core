@@ -143,13 +143,14 @@ func (a *assetMerge) result() *Assets {
 }
 
 // findingsMerge unions security_violations and risks, ORs is_malicious, concatenates
-// missing_compliance_links, and collects agent_readiness across every domain's findings section
+// missing_compliance_links, and collects agent_readiness and posture across every domain's findings section
 type findingsMerge struct {
 	securityViolations []string
 	risks              []string
 	isMalicious        bool
 	missingLinks       []string
 	agentReadiness     []AgentReadinessFinding
+	posture            []PostureFinding
 }
 
 func newFindingsMerge() *findingsMerge {
@@ -172,6 +173,11 @@ func (f *findingsMerge) add(domain string, findings Findings) {
 		finding.Domain = domain
 		f.agentReadiness = append(f.agentReadiness, finding)
 	}
+
+	for _, finding := range findings.Posture {
+		finding.Domain = domain
+		f.posture = append(f.posture, finding)
+	}
 }
 
 func (f *findingsMerge) result() Findings {
@@ -180,6 +186,7 @@ func (f *findingsMerge) result() Findings {
 		Risks:              f.risks,
 		IsMalicious:        f.isMalicious,
 		AgentReadiness:     f.agentReadiness,
+		Posture:            f.posture,
 	}
 
 	if len(f.missingLinks) > 0 {

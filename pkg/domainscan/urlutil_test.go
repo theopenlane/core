@@ -93,6 +93,28 @@ func TestTrustCenterURLs(t *testing.T) {
 	}
 }
 
+func TestAbsoluteURL(t *testing.T) {
+	tests := []struct {
+		name   string
+		rawURL string
+		want   string
+		wantOK bool
+	}{
+		{name: "bare host gets https", rawURL: "www.stronta.com", want: "https://www.stronta.com", wantOK: true},
+		{name: "existing url is kept", rawURL: "http://example.com/path?x=1", want: "http://example.com/path?x=1", wantOK: true},
+		{name: "empty fails", rawURL: "", wantOK: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, ok := absoluteURL(tt.rawURL)
+
+			assert.Check(t, is.Equal(tt.wantOK, ok))
+			assert.Check(t, is.Equal(tt.want, got))
+		})
+	}
+}
+
 func TestSubpathURL(t *testing.T) {
 	tests := []struct {
 		name   string

@@ -20,13 +20,18 @@ var hrefPattern = regexp.MustCompile(`(?i)href\s*=\s*["']([^"']+)["']`)
 const linkFallbackPath = "legal"
 
 // GatherComplianceLinks finds a site's published legal documents by reading the links on its
-// homepage, usually linked in the footer
+// homepage, usually linked in the footer. domain may be a bare host or a URL
 func GatherComplianceLinks(ctx context.Context, domain string) []ComplianceLink {
-	if links := complianceLinksAt(ctx, domain); len(links) > 0 {
+	homepage, ok := absoluteURL(domain)
+	if !ok {
+		return nil
+	}
+
+	if links := complianceLinksAt(ctx, homepage); len(links) > 0 {
 		return links
 	}
 
-	fallback, ok := subpathURL(domain, linkFallbackPath)
+	fallback, ok := subpathURL(homepage, linkFallbackPath)
 	if !ok {
 		return nil
 	}
@@ -133,13 +138,18 @@ var statusPageHosts = []string{
 // linking it anywhere. Scanning the homepage's links is the fallback, for the company on a
 // hosted provider such as statuspage.io or one using a different label
 func GatherStatusPage(ctx context.Context, domain string) string {
-	if candidate, ok := statusPageURL(domain); ok {
+	homepage, ok := absoluteURL(domain)
+	if !ok {
+		return ""
+	}
+
+	if candidate, ok := statusPageURL(homepage); ok {
 		if resolved, reachable := urlReachable(ctx, candidate); reachable {
 			return resolved
 		}
 	}
 
-	body, finalURL, ok := fetchBody(ctx, domain, maxLinkScanBodyBytes, nil)
+	body, finalURL, ok := fetchBody(ctx, homepage, maxLinkScanBodyBytes, nil)
 	if !ok {
 		return ""
 	}

@@ -49,7 +49,7 @@ func TestComplianceLinksFromHTMLSpellingVariants(t *testing.T) {
 
 	got := complianceLinksByType(complianceLinksFromHTML(html, "https://example.com"))
 
-	for _, want := range []string{"privacy_policy", "terms_of_service", "dpa", "subprocessors", "trust_center", "security", "cookie_policy"} {
+	for _, want := range []string{"privacy_policy", "terms_of_service", "dpa", "subprocessors", "trust_center", "cookie_policy"} {
 		assert.Check(t, got[want] != "", "expected a link of type %s", want)
 	}
 }

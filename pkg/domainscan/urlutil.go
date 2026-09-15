@@ -42,6 +42,17 @@ func parseApex(rawURL string) (*url.URL, string, bool) {
 	return parsed, host, true
 }
 
+// absoluteURL returns rawURL with a scheme, so a bare host such as "example.com" becomes
+// "https://example.com" and can be requested
+func absoluteURL(rawURL string) (string, bool) {
+	parsed, err := urlx.Parse(rawURL)
+	if err != nil {
+		return "", false
+	}
+
+	return parsed.String(), true
+}
+
 // subdomainURL returns rawURL pointed at sub.<apex>, with any path, query and fragment
 // dropped, e.g. subdomainURL("https://www.example.com/pricing", "status") ->
 // "https://status.example.com"

@@ -106,6 +106,21 @@ type AgentReadinessAssessment struct {
 	Checks []AgentReadinessCheck `json:"checks,omitempty"`
 }
 
+// PostureFinding is one failing email authentication or well-known file check, shaped to
+// import directly as a Finding record
+type PostureFinding struct {
+	// Check identifies the check, e.g. "dmarc" or "security_txt"
+	Check string `json:"check"`
+	// Title is the short headline of what failed
+	Title string `json:"title"`
+	// Description explains the failure and what to do about it
+	Description string `json:"description"`
+	// Severity is high, medium or low
+	Severity string `json:"severity"`
+	// Domain is the domain this finding was raised against, set only once merged across domains
+	Domain string `json:"domain,omitempty"`
+}
+
 // Findings is the findings section of a scan report
 type Findings struct {
 	// SecurityViolations are the scan's overall verdict categories
@@ -119,6 +134,8 @@ type Findings struct {
 	MissingComplianceLinks string `json:"missing_compliance_links,omitempty"`
 	// AgentReadiness is the scan's agent-readiness assessment findings
 	AgentReadiness []AgentReadinessFinding `json:"agent_readiness,omitempty"`
+	// Posture are the failing email authentication and well-known file checks
+	Posture []PostureFinding `json:"posture,omitempty"`
 }
 
 // Geolocation is the scanned site's resolved geographic location

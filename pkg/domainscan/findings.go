@@ -10,8 +10,8 @@ import (
 )
 
 // buildFindings reports the scan's overall security verdict, any failing agent-readiness checks,
-// and any expected compliance links that weren't found. result may be nil, in which case only
-// the enrichment-derived missing-compliance-links finding is included
+// any expected compliance links that weren't found, and any failing posture checks. result may
+// be nil, in which case only the enrichment-derived findings are included
 func buildFindings(result *url_scanner.ScanGetResponse, enrichment Enrichment) Findings {
 	var findings Findings
 
@@ -26,6 +26,7 @@ func buildFindings(result *url_scanner.ScanGetResponse, enrichment Enrichment) F
 	}
 
 	findings.MissingComplianceLinks = buildMissingComplianceLinks(enrichment)
+	findings.Posture = buildPostureFindings(enrichment)
 
 	return findings
 }
