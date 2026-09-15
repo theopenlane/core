@@ -41,11 +41,6 @@ func HookDNSVerificationDelete() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			previewZoneID, err := getTrustCenterPreviewZoneID(ctx, m.Client())
-			if err != nil {
-				return nil, err
-			}
-
 			for _, cd := range customDomains {
 				exists, err := m.Client().TrustCenter.Query().
 					Where(trustcenter.PreviewDomainID(cd.ID)).
@@ -59,7 +54,7 @@ func HookDNSVerificationDelete() ent.Hook {
 
 				if err := enqueueJob(ctx, m.Job, jobspec.DeletePreviewDomainArgs{
 					CustomDomainID:           cd.ID,
-					TrustCenterPreviewZoneID: previewZoneID,
+					TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
 				}, nil); err != nil {
 					return nil, err
 				}

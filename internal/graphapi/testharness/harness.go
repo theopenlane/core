@@ -354,6 +354,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
 		CnameTarget:              CnameTargetTest,
 		PreviewCnameTarget:       PreviewCnameTargetTest,
+		PreviewZoneID:            MappableDomainZoneTestID,
 		DefaultTrustCenterDomain: DefaultDomainTest,
 	})
 
