@@ -103,21 +103,19 @@ func mergeComplianceLinks(a, b []ComplianceLink) []ComplianceLink {
 func mergeCompliancePages(pages ...*CompliancePage) *CompliancePage {
 	merged := &CompliancePage{}
 
-	var any bool
+	var exists bool
 
 	for _, page := range pages {
 		if page == nil {
 			continue
 		}
 
-		any = true
+		exists = true
 
 		if merged.URL == "" {
 			merged.URL = page.URL
 		}
 
-		// the homepage is rarely a compliance document itself, so a more specific page's
-		// classification is the better one to keep
 		if merged.PageType == "" || merged.PageType == "other" {
 			merged.PageType = page.PageType
 		}
@@ -150,7 +148,7 @@ func mergeCompliancePages(pages ...*CompliancePage) *CompliancePage {
 		merged.ComplianceLinks = mergeComplianceLinks(merged.ComplianceLinks, page.ComplianceLinks)
 	}
 
-	if !any {
+	if !exists {
 		return nil
 	}
 

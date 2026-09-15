@@ -27,14 +27,7 @@ func apexDomain(rawURL string) (string, bool) {
 	return host, ok
 }
 
-// parseApex parses rawURL and returns it alongside its registrable domain.
-//
-// This deliberately does not use vendors.go's icannRegistrableDomain, which answers a
-// different question. That one narrows to ICANN suffixes so vendor detections pointing at the
-// same site group together, and for a host under a private suffix it returns the suffix
-// itself: "acme.pages.dev" gives "pages.dev". That is right for grouping vendors and wrong
-// here, where deriving "status.pages.dev" instead of "status.acme.pages.dev" would probe a
-// host belonging to someone else entirely
+// parseApex parses rawURL and returns it alongside its registrable domain
 func parseApex(rawURL string) (*url.URL, string, bool) {
 	parsed, err := urlx.Parse(rawURL)
 	if err != nil {
@@ -176,11 +169,7 @@ type contentTypeGuard func(mediaType string) bool
 // fetchBody GETs rawURL and returns its body as text along with the URL it was finally served
 // from, so relative references resolve against the right origin after a redirect. ok is false
 // for a transport error, a non-200 status, a body over maxBytes, or a media type the guard
-// rejects. A nil guard accepts any media type.
-//
-// The guard is what keeps a site that serves its single-page-application shell for every path
-// from looking like it publishes every file asked of it, so a caller reading a file whose
-// format it knows should pass one
+// rejects.
 func fetchBody(ctx context.Context, rawURL string, maxBytes int64, accept contentTypeGuard) (body, finalURL string, ok bool) {
 	requester, err := scanRequester()
 	if err != nil {

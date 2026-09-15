@@ -13,7 +13,6 @@ func TestNormalizeComplianceType(t *testing.T) {
 		want  string
 	}{
 		{value: "privacy_policy", want: "privacy_policy"},
-		// punctuation and case are handled mechanically, so none of these needs an alias entry
 		{value: "Privacy Policy", want: "privacy_policy"},
 		{value: "privacy-policy", want: "privacy_policy"},
 		{value: "privacypolicy", want: "privacy_policy"},
@@ -22,7 +21,6 @@ func TestNormalizeComplianceType(t *testing.T) {
 		{value: "TERMS_OF_SERVICE", want: "terms_of_service"},
 		{value: "termsofservice", want: "terms_of_service"},
 		{value: "sub-processors", want: "subprocessors"},
-		// these are different words for the same document, which is what the alias table is for
 		{value: "privacy", want: "privacy_policy"},
 		{value: "tos", want: "terms_of_service"},
 		{value: "terms of use", want: "terms_of_service"},
@@ -33,8 +31,6 @@ func TestNormalizeComplianceType(t *testing.T) {
 		{value: "cookies", want: "cookie_policy"},
 		{value: "", want: ""},
 		{value: "   ", want: ""},
-		// an unrecognized value is returned normalized rather than dropped, so a caller can
-		// still compare it and a future type needs no alias to work
 		{value: "Bug Bounty", want: "bug_bounty"},
 	}
 
@@ -57,5 +53,5 @@ func TestMatchesComplianceType(t *testing.T) {
 	assert.Check(t, MatchesComplianceType("Privacy Policy", "privacy_policy"))
 	assert.Check(t, MatchesComplianceType("tos", "terms_of_service"))
 	assert.Check(t, !MatchesComplianceType("", "privacy_policy"))
-	assert.Check(t, !MatchesComplianceType("security", "privacy_policy"))
+	assert.Check(t, !MatchesComplianceType("subprocessor", "privacy_policy"))
 }
