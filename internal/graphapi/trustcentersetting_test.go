@@ -321,7 +321,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 							Args: jobspec.CreatePreviewDomainArgs{
 								TrustCenterID:            *resp.UpdateTrustCenterSetting.TrustCenterSetting.TrustCenterID,
 								TrustCenterPreviewZoneID: th.MappableDomainZoneTestID,
-								TrustCenterCnameTarget:   th.PreviewCnameTargetTest,
+								TrustCenterCnameTarget:   th.CnameTargetTest,
 							},
 						},
 					})

@@ -148,9 +148,9 @@ type Server struct {
 	DefaultTrustCenterDomain string `json:"defaulttrustcenterdomain" koanf:"defaulttrustcenterdomain" default:"trust.theopenlane.net"`
 	// TrustCenterCnameTarget is the cname target for the trust center
 	// Used for mapping the vanity domains to the trust centers
-	TrustCenterCnameTarget string `json:"trustcentercnametarget" koanf:"trustcentercnametarget" default:""`
-	// TrustCenterPreviewCnameTarget is the cname target for trust center preview domains
-	TrustCenterPreviewCnameTarget string `json:"trustcenterpreviewcnametarget" koanf:"trustcenterpreviewcnametarget" default:""`
+	TrustCenterCnameTarget string `json:"trustcentercnametarget" koanf:"trustcentercnametarget" default:"cname.openlane-dns.com"`
+	// TrustCenterPreviewZoneID is the cloudflare zone id that holds trust center preview domain records
+	TrustCenterPreviewZoneID string `json:"trustcenterpreviewzoneid" koanf:"trustcenterpreviewzoneid" default:"" sensitive:"true"`
 	// NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
 	// Unread notifications are always pulled regardless of this setting
 	NotificationLookbackDays int `json:"notificationlookbackdays" koanf:"notificationlookbackdays" default:"30"`

@@ -3,8 +3,10 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
@@ -154,6 +156,16 @@ func (f File) Edges() []ent.Edge {
 			t:          TrustCenterDoc.Type,
 			name:       "original_trust_center_doc",
 		}),
+	}
+}
+
+// Indexes of the File
+func (File) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("category_name", "created_at").
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("created_at").
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 
