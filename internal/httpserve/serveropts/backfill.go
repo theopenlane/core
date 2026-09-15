@@ -10,13 +10,17 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/jobspec"
 
 	"github.com/theopenlane/core/v2/config"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/runtime"
@@ -37,7 +41,7 @@ var backfillTopic = gala.NamespacedTopic[backfillRequest](gala.System, "startup.
 var backfillRoutineTopic = gala.NamespacedTopic[backfillRoutineRequest](gala.System, "startup.backfill.routine")
 
 // schedulerKeyPrefix is the base of the scheduling run's uniqueness key
-const schedulerKeyPrefix = "startup-backfill-v3"
+const schedulerKeyPrefix = "startup-backfill-v5"
 
 // routineKeyPrefix seeds each routine's run-once key
 const routineKeyPrefix = "startup-backfill-routine"
@@ -129,13 +133,11 @@ var backfillRoutines = []backfillRoutine{
 		},
 	},
 	{
-		Name:    "mappable-domain",
-		Version: "v2",
+		Name:    "recreate-preview-domains",
+		Version: "v3",
 		Enabled: true,
 		Run: func(ctx context.Context, deps backfillDeps) error {
-			backfillMappableDomains(ctx, deps.Client, deps.ServerConfig)
-
-			return nil
+			return backfillPreviewDomains(ctx, deps.Client, deps.ServerConfig)
 		},
 	},
 }
@@ -365,66 +367,106 @@ func backfillFileBackups(ctx context.Context, dbClient *ent.Client, galaApp *gal
 	logx.FromContext(ctx).Info().Int("enqueued_files", enqueuedCounter).Int("failed_files", failedCounter).Int("total_candidate_files", totalFiles).Msg("backfill: file backups enqueued")
 }
 
-func backfillMappableDomains(ctx context.Context, dbClient *ent.Client, cfg config.Server) {
-	targets := []struct {
-		Cname  string
-		ZoneID string
-	}{
-		{Cname: cfg.TrustCenterCnameTarget, ZoneID: cfg.TrustCenterCnameTargetZoneID},
-		{Cname: cfg.TrustCenterPreviewCnameTarget, ZoneID: cfg.TrustCenterPreviewZoneID},
+func backfillPreviewDomains(ctx context.Context, client *ent.Client, cfg config.Server) error {
+	if client.Job == nil {
+		logx.FromContext(ctx).Warn().Msg("backfill: job client is nil, skipping preview domains backfill")
+
+		return nil
 	}
 
-	// creates the mappable domain.
-	// if the cname does not exists, it is created.
-	//
-	// but if it exists, it checks if the zone id from the db matches what is in the configuration
-	// if it differs, the old entry is deleted and re-created. else it is left alone
-	for _, target := range targets {
-		if target.Cname == "" || target.ZoneID == "" {
-			continue
-		}
+	// a preview domain is stale when cloudflare blocked its hostname or when it hangs off a mappable domain other than the configured target
+	domains, err := client.CustomDomain.Query().
+		Where(
+			customdomain.DomainTypeEQ(enums.CustomDomainTypePreview),
+			customdomain.TrustCenterIDNEQ(""), // must be linked to a trustcenter
+			customdomain.Or(
+				customdomain.HasDNSVerificationWith(
+					dnsverification.DNSVerificationStatusEQ(enums.DNSVerificationStatusBlocked),
+				),
+				customdomain.HasMappableDomainWith(
+					mappabledomain.NameNEQ(cfg.TrustCenterCnameTarget),
+				),
+			),
+		).
+		WithMappableDomain().
+		// fine to do this as items <= 50
+		All(ctx)
+	if err != nil {
+		return err
+	}
 
-		domain, err := dbClient.MappableDomain.Query().
-			Where(mappabledomain.Name(target.Cname)).
-			Select(mappabledomain.FieldID, mappabledomain.FieldZoneID).
-			Only(ctx)
+	if len(domains) == 0 {
+		return nil
+	}
 
-		if ent.IsNotFound(err) {
-			_, err = dbClient.MappableDomain.Create().
-				SetName(target.Cname).
-				SetZoneID(target.ZoneID).
-				Save(ctx)
-			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("cname", target.Cname).Msg("backfill: failed to create mappable domain")
-			}
+	var queuedCounter, deleteCounter int
 
-			continue
-		}
-
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("cname", target.Cname).Msg("backfill: failed to query mappable domain")
-
-			continue
-		}
-
-		if domain.ZoneID == target.ZoneID {
-			continue
-		}
-
-		if err := dbClient.MappableDomain.DeleteOneID(domain.ID).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("cname", target.Cname).Msg("backfill: failed to delete mappable domain")
-
-			continue
-		}
-
-		_, err = dbClient.MappableDomain.Create().
-			SetName(target.Cname).
-			SetZoneID(target.ZoneID).
+	for _, domain := range domains {
+		// make sure to clear out the preview domain. if not done, the resolver will always fail
+		// when the job calls creation of a new trustcenter domain as we validate the presence of the domain
+		// if a domain is set, you cannot create another one through the createTrustcenterDomain resolver
+		cleared, err := client.TrustCenter.Update().
+			Where(
+				trustcenter.ID(domain.TrustCenterID),
+				trustcenter.PreviewDomainID(domain.ID),
+			).
+			ClearPreviewDomainID().
 			Save(ctx)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("cname", target.Cname).Msg("backfill: failed to reconcile mappable domain")
+			logx.FromContext(ctx).Error().Err(err).
+				Str("trust_center_id", domain.TrustCenterID).
+				Msg("backfill: failed to clear blocked preview domain")
+
+			return err
 		}
+
+		// only recreate when this row was still the trust center's preview domain, otherwise a newer one already replaced it
+		if cleared > 0 {
+			_, err = client.Job.Insert(ctx, jobspec.CreatePreviewDomainArgs{
+				TrustCenterID:            domain.TrustCenterID,
+				TrustCenterPreviewZoneID: cfg.TrustCenterPreviewZoneID,
+				TrustCenterCnameTarget:   cfg.TrustCenterCnameTarget,
+			}, nil)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).
+					Str("custom_domain_id", domain.ID).
+					Str("domain", domain.CnameRecord).
+					Msg("backfill: failed to queue preview domain creation")
+
+				return err
+			}
+
+			queuedCounter++
+		}
+
+		if domain.Edges.MappableDomain == nil {
+			logx.FromContext(ctx).Warn().
+				Str("custom_domain_id", domain.ID).
+				Str("domain", domain.CnameRecord).
+				Msg("backfill: stale preview domain has no mappable domain, skipping cleanup")
+
+			continue
+		}
+
+		// the stale cname record was written into the zone of the mappable domain the row was linked to
+		_, err = client.Job.Insert(ctx, jobspec.DeletePreviewDomainArgs{
+			CustomDomainID:           domain.ID,
+			TrustCenterPreviewZoneID: domain.Edges.MappableDomain.ZoneID,
+		}, nil)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).
+				Str("custom_domain_id", domain.ID).
+				Str("domain", domain.CnameRecord).
+				Msg("backfill: failed to queue stale preview domain deletion")
+
+			return err
+		}
+
+		deleteCounter++
 	}
 
-	logx.FromContext(ctx).Info().Msg("backfill: mappable domains backfill completed")
+	logx.FromContext(ctx).Info().Int("queued", queuedCounter).Int("deleting", deleteCounter).
+		Msg("backfill: stale preview domains queued for recreation and cleanup")
+
+	return nil
 }

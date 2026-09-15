@@ -7,9 +7,12 @@ import (
 	"testing"
 
 	"github.com/theopenlane/iam/auth"
+
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 )
 
-// CleanupOrganizationDataWithContext removes the caller's organization
+// CleanupOrganizationDataWithContext soft deletes the caller's organization without the cascade
+// listener, the rest of the data is discarded with the test database
 func CleanupOrganizationDataWithContext(ctx context.Context, t *testing.T) {
 	t.Helper()
 
@@ -18,6 +21,8 @@ func CleanupOrganizationDataWithContext(ctx context.Context, t *testing.T) {
 		FailNow(t)
 	}
 
-	_, err := Suite.Client.API.DeleteOrganization(ctx, caller.OrganizationID)
+	ctx = entityops.WithEmissionVetoed(SetContext(ctx, Suite.Client.DB))
+
+	err := Suite.Client.DB.Organization.DeleteOneID(caller.OrganizationID).Exec(ctx)
 	RequireNoError(t, err)
 }

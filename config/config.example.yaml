@@ -479,8 +479,6 @@ server:
         certkey: server.key
         enabled: false
     trustcentercnametarget: cname.openlane-dns.com
-    trustcentercnametargetzoneid: ""
-    trustcenterpreviewcnametarget: theopenlane.net
     trustcenterpreviewzoneid: ""
     writetimeout: 15000000000
 sessions:
