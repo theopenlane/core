@@ -1,7 +1,6 @@
 package domainscan
 
 import (
-	"slices"
 	"strings"
 )
 
@@ -41,6 +40,9 @@ func MergeReports(results []Result, reports []ScanReportInput) Report {
 		firstNonNil(&merged.Compliance, report.Compliance)
 		firstNonNil(&merged.Meta, report.Meta)
 		firstNonNil(&merged.Branding, report.Branding)
+		firstNonNil(&merged.WellKnown, report.WellKnown)
+		firstNonNil(&merged.AgentReadiness, report.AgentReadiness)
+		firstNonNil(&merged.EmailAuth, report.EmailAuth)
 	}
 
 	merged.Vendors = vendors.entries()
@@ -141,13 +143,14 @@ func (a *assetMerge) result() *Assets {
 }
 
 // findingsMerge unions security_violations and risks, ORs is_malicious, concatenates
-// missing_compliance_links, and collects agent_readiness across every domain's findings section
+// missing_compliance_links, and collects agent_readiness and posture across every domain's findings section
 type findingsMerge struct {
 	securityViolations []string
 	risks              []string
 	isMalicious        bool
 	missingLinks       []string
 	agentReadiness     []AgentReadinessFinding
+	posture            []PostureFinding
 }
 
 func newFindingsMerge() *findingsMerge {
@@ -155,8 +158,8 @@ func newFindingsMerge() *findingsMerge {
 }
 
 func (f *findingsMerge) add(domain string, findings Findings) {
-	f.securityViolations = unionStrings(f.securityViolations, findings.SecurityViolations)
-	f.risks = unionStrings(f.risks, findings.Risks)
+	f.securityViolations = mergeStrings(f.securityViolations, findings.SecurityViolations)
+	f.risks = mergeStrings(f.risks, findings.Risks)
 
 	if findings.IsMalicious {
 		f.isMalicious = true
@@ -170,6 +173,11 @@ func (f *findingsMerge) add(domain string, findings Findings) {
 		finding.Domain = domain
 		f.agentReadiness = append(f.agentReadiness, finding)
 	}
+
+	for _, finding := range findings.Posture {
+		finding.Domain = domain
+		f.posture = append(f.posture, finding)
+	}
 }
 
 func (f *findingsMerge) result() Findings {
@@ -178,6 +186,7 @@ func (f *findingsMerge) result() Findings {
 		Risks:              f.risks,
 		IsMalicious:        f.isMalicious,
 		AgentReadiness:     f.agentReadiness,
+		Posture:            f.posture,
 	}
 
 	if len(f.missingLinks) > 0 {
@@ -185,15 +194,4 @@ func (f *findingsMerge) result() Findings {
 	}
 
 	return findings
-}
-
-// unionStrings appends values from add not already present in existing, preserving order
-func unionStrings(existing, add []string) []string {
-	for _, v := range add {
-		if !slices.Contains(existing, v) {
-			existing = append(existing, v)
-		}
-	}
-
-	return existing
 }
