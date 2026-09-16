@@ -8,6 +8,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
@@ -58,6 +59,23 @@ func HookAssetInternalOwner() ent.Hook {
 					user.HasOrgMembershipsWith(orgmembership.OrganizationID(ownerID)),
 				).
 				OnlyID(allowCtx)
+
+			switch {
+			case err == nil:
+				m.SetInternalOwnerUserID(userID)
+				m.ClearInternalOwner()
+
+				return next.Mutate(ctx, m)
+			case !generated.IsNotFound(err):
+				return nil, err
+			}
+
+			holderID, err := m.Client().IdentityHolder.Query().
+				Where(
+					identityholder.OwnerID(ownerID),
+					emailOrAliasMatch(identityholder.FieldEmail, identityholder.FieldEmailAliases, []string{address.Address}),
+				).
+				FirstID(allowCtx)
 			if err != nil {
 				if generated.IsNotFound(err) {
 					return next.Mutate(ctx, m)
@@ -66,7 +84,7 @@ func HookAssetInternalOwner() ent.Hook {
 				return nil, err
 			}
 
-			m.SetInternalOwnerUserID(userID)
+			m.SetInternalOwnerIdentityHolderID(holderID)
 			m.ClearInternalOwner()
 
 			return next.Mutate(ctx, m)

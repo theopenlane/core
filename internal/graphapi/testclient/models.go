@@ -5969,16 +5969,6 @@ type CreateActionPlanInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision *string `json:"revision,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy *string `json:"managedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// the name of the action_plan
 	Name string `json:"name"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
@@ -6149,16 +6139,6 @@ type CreateAssessmentTemplateInput struct {
 type CreateAssetInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy *string `json:"managedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// the internal owner for the asset when no user, group, or identity holder is linked
 	InternalOwner *string `json:"internalOwner,omitempty"`
 	// the subtype of the asset
@@ -6364,16 +6344,6 @@ type CreateCampaignWithTargetsInput struct {
 type CreateCheckResultInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy *string `json:"managedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// current status of the control
 	Status *enums.CheckStatus `json:"status,omitempty"`
 	// source that set the check result
@@ -6400,16 +6370,6 @@ type CreateCheckResultInput struct {
 type CreateContactInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy *string `json:"managedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// the full name of the contact
 	FullName *string `json:"fullName,omitempty"`
 	// the title of the contact
@@ -6709,16 +6669,6 @@ type CreateDNSVerificationInput struct {
 type CreateDirectoryAccountInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy *string `json:"managedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// the environment of the directory_account
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the directory_account
@@ -6790,16 +6740,6 @@ type CreateDirectoryAccountInput struct {
 type CreateDirectoryGroupInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy *string `json:"managedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// the environment of the directory_group
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the directory_group
@@ -6846,16 +6786,6 @@ type CreateDirectoryGroupInput struct {
 // CreateDirectoryMembershipInput is used for create DirectoryMembership object.
 // Input was generated by ent.
 type CreateDirectoryMembershipInput struct {
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy *string `json:"managedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// the environment of the directory_membership
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the directory_membership
@@ -6981,16 +6911,6 @@ type CreateEmailTemplateInput struct {
 type CreateEntityInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy *string `json:"managedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// the internal owner for the entity when no user, group, or identity holder is linked
 	InternalOwner *string `json:"internalOwner,omitempty"`
 	// who reviewed the entity when no user, group, or identity holder is linked
@@ -7331,16 +7251,6 @@ type CreateFindingControlInput struct {
 type CreateFindingInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy *string `json:"managedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// who reviewed the finding when no user, group, or identity holder is linked
 	ReviewedBy *string `json:"reviewedBy,omitempty"`
 	// who the finding is assigned to when no user, group, or identity holder is linked
@@ -7693,16 +7603,6 @@ type CreateInternalPolicyInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision *string `json:"revision,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy *string `json:"managedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes *string `json:"internalNotes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
@@ -8433,16 +8333,6 @@ type CreateProcedureInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision *string `json:"revision,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy *string `json:"managedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// the name of the procedure
 	Name string `json:"name"`
 	// status of the procedure, e.g. draft, published, archived, etc.
@@ -8755,16 +8645,6 @@ type CreateReviewInput struct {
 type CreateRiskInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy *string `json:"managedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// the kind of the risk
 	RiskKindName *string `json:"riskKindName,omitempty"`
 	// the category of the risk
@@ -9680,16 +9560,6 @@ type CreateVendorScoringConfigInput struct {
 type CreateVulnerabilityInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID *string `json:"sourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion *string `json:"sourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID *string `json:"sourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy *string `json:"managedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID *string `json:"integrationRunID,omitempty"`
 	// who reviewed the vulnerability when no user, group, or identity holder is linked
 	ReviewedBy *string `json:"reviewedBy,omitempty"`
 	// who the vulnerability is assigned to when no user, group, or identity holder is linked
@@ -35987,21 +35857,6 @@ type UpdateActionPlanInput struct {
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision      *string `json:"revision,omitempty"`
 	ClearRevision *bool   `json:"clearRevision,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID      *string `json:"sourceDefinitionID,omitempty"`
-	ClearSourceDefinitionID *bool   `json:"clearSourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion      *string `json:"sourceDefinitionVersion,omitempty"`
-	ClearSourceDefinitionVersion *bool   `json:"clearSourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID      *string `json:"sourceInstanceID,omitempty"`
-	ClearSourceInstanceID *bool   `json:"clearSourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy      *string `json:"managedBy,omitempty"`
-	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
-	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
 	// the name of the action_plan
 	Name *string `json:"name,omitempty"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
@@ -36220,21 +36075,6 @@ type UpdateAssetInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID      *string `json:"sourceDefinitionID,omitempty"`
-	ClearSourceDefinitionID *bool   `json:"clearSourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion      *string `json:"sourceDefinitionVersion,omitempty"`
-	ClearSourceDefinitionVersion *bool   `json:"clearSourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID      *string `json:"sourceInstanceID,omitempty"`
-	ClearSourceInstanceID *bool   `json:"clearSourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy      *string `json:"managedBy,omitempty"`
-	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
-	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
 	// the internal owner for the asset when no user, group, or identity holder is linked
 	InternalOwner      *string `json:"internalOwner,omitempty"`
 	ClearInternalOwner *bool   `json:"clearInternalOwner,omitempty"`
@@ -36570,21 +36410,6 @@ type UpdateCheckResultInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID      *string `json:"sourceDefinitionID,omitempty"`
-	ClearSourceDefinitionID *bool   `json:"clearSourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion      *string `json:"sourceDefinitionVersion,omitempty"`
-	ClearSourceDefinitionVersion *bool   `json:"clearSourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID      *string `json:"sourceInstanceID,omitempty"`
-	ClearSourceInstanceID *bool   `json:"clearSourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy      *string `json:"managedBy,omitempty"`
-	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
-	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
 	// current status of the control
 	Status *enums.CheckStatus `json:"status,omitempty"`
 	// source that set the check result
@@ -36630,21 +36455,6 @@ type UpdateContactInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID      *string `json:"sourceDefinitionID,omitempty"`
-	ClearSourceDefinitionID *bool   `json:"clearSourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion      *string `json:"sourceDefinitionVersion,omitempty"`
-	ClearSourceDefinitionVersion *bool   `json:"clearSourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID      *string `json:"sourceInstanceID,omitempty"`
-	ClearSourceInstanceID *bool   `json:"clearSourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy      *string `json:"managedBy,omitempty"`
-	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
-	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
 	// the full name of the contact
 	FullName      *string `json:"fullName,omitempty"`
 	ClearFullName *bool   `json:"clearFullName,omitempty"`
@@ -37160,21 +36970,6 @@ type UpdateDirectoryAccountInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID      *string `json:"sourceDefinitionID,omitempty"`
-	ClearSourceDefinitionID *bool   `json:"clearSourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion      *string `json:"sourceDefinitionVersion,omitempty"`
-	ClearSourceDefinitionVersion *bool   `json:"clearSourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID      *string `json:"sourceInstanceID,omitempty"`
-	ClearSourceInstanceID *bool   `json:"clearSourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy      *string `json:"managedBy,omitempty"`
-	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
-	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
 	// the environment of the directory_account
 	EnvironmentName      *string `json:"environmentName,omitempty"`
 	ClearEnvironmentName *bool   `json:"clearEnvironmentName,omitempty"`
@@ -37276,21 +37071,6 @@ type UpdateDirectoryGroupInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID      *string `json:"sourceDefinitionID,omitempty"`
-	ClearSourceDefinitionID *bool   `json:"clearSourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion      *string `json:"sourceDefinitionVersion,omitempty"`
-	ClearSourceDefinitionVersion *bool   `json:"clearSourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID      *string `json:"sourceInstanceID,omitempty"`
-	ClearSourceInstanceID *bool   `json:"clearSourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy      *string `json:"managedBy,omitempty"`
-	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
-	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
 	// the environment of the directory_group
 	EnvironmentName      *string `json:"environmentName,omitempty"`
 	ClearEnvironmentName *bool   `json:"clearEnvironmentName,omitempty"`
@@ -37352,21 +37132,6 @@ type UpdateDirectoryGroupInput struct {
 // UpdateDirectoryMembershipInput is used for update DirectoryMembership object.
 // Input was generated by ent.
 type UpdateDirectoryMembershipInput struct {
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID      *string `json:"sourceDefinitionID,omitempty"`
-	ClearSourceDefinitionID *bool   `json:"clearSourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion      *string `json:"sourceDefinitionVersion,omitempty"`
-	ClearSourceDefinitionVersion *bool   `json:"clearSourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID      *string `json:"sourceInstanceID,omitempty"`
-	ClearSourceInstanceID *bool   `json:"clearSourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy      *string `json:"managedBy,omitempty"`
-	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
-	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
 	// the environment of the directory_membership
 	EnvironmentName      *string `json:"environmentName,omitempty"`
 	ClearEnvironmentName *bool   `json:"clearEnvironmentName,omitempty"`
@@ -37560,21 +37325,6 @@ type UpdateEntityInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID      *string `json:"sourceDefinitionID,omitempty"`
-	ClearSourceDefinitionID *bool   `json:"clearSourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion      *string `json:"sourceDefinitionVersion,omitempty"`
-	ClearSourceDefinitionVersion *bool   `json:"clearSourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID      *string `json:"sourceInstanceID,omitempty"`
-	ClearSourceInstanceID *bool   `json:"clearSourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy      *string `json:"managedBy,omitempty"`
-	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
-	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
 	// the internal owner for the entity when no user, group, or identity holder is linked
 	InternalOwner      *string `json:"internalOwner,omitempty"`
 	ClearInternalOwner *bool   `json:"clearInternalOwner,omitempty"`
@@ -38176,21 +37926,6 @@ type UpdateFindingInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID      *string `json:"sourceDefinitionID,omitempty"`
-	ClearSourceDefinitionID *bool   `json:"clearSourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion      *string `json:"sourceDefinitionVersion,omitempty"`
-	ClearSourceDefinitionVersion *bool   `json:"clearSourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID      *string `json:"sourceInstanceID,omitempty"`
-	ClearSourceInstanceID *bool   `json:"clearSourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy      *string `json:"managedBy,omitempty"`
-	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
-	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
 	// who reviewed the finding when no user, group, or identity holder is linked
 	ReviewedBy      *string `json:"reviewedBy,omitempty"`
 	ClearReviewedBy *bool   `json:"clearReviewedBy,omitempty"`
@@ -38829,21 +38564,6 @@ type UpdateInternalPolicyInput struct {
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision      *string `json:"revision,omitempty"`
 	ClearRevision *bool   `json:"clearRevision,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID      *string `json:"sourceDefinitionID,omitempty"`
-	ClearSourceDefinitionID *bool   `json:"clearSourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion      *string `json:"sourceDefinitionVersion,omitempty"`
-	ClearSourceDefinitionVersion *bool   `json:"clearSourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID      *string `json:"sourceInstanceID,omitempty"`
-	ClearSourceInstanceID *bool   `json:"clearSourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy      *string `json:"managedBy,omitempty"`
-	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
-	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
 	InternalNotes      *string `json:"internalNotes,omitempty"`
 	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
@@ -40158,21 +39878,6 @@ type UpdateProcedureInput struct {
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision      *string `json:"revision,omitempty"`
 	ClearRevision *bool   `json:"clearRevision,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID      *string `json:"sourceDefinitionID,omitempty"`
-	ClearSourceDefinitionID *bool   `json:"clearSourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion      *string `json:"sourceDefinitionVersion,omitempty"`
-	ClearSourceDefinitionVersion *bool   `json:"clearSourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID      *string `json:"sourceInstanceID,omitempty"`
-	ClearSourceInstanceID *bool   `json:"clearSourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy      *string `json:"managedBy,omitempty"`
-	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
-	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
 	// the name of the procedure
 	Name *string `json:"name,omitempty"`
 	// status of the procedure, e.g. draft, published, archived, etc.
@@ -40723,21 +40428,6 @@ type UpdateRiskInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID      *string `json:"sourceDefinitionID,omitempty"`
-	ClearSourceDefinitionID *bool   `json:"clearSourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion      *string `json:"sourceDefinitionVersion,omitempty"`
-	ClearSourceDefinitionVersion *bool   `json:"clearSourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID      *string `json:"sourceInstanceID,omitempty"`
-	ClearSourceInstanceID *bool   `json:"clearSourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy      *string `json:"managedBy,omitempty"`
-	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
-	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
 	// the kind of the risk
 	RiskKindName      *string `json:"riskKindName,omitempty"`
 	ClearRiskKindName *bool   `json:"clearRiskKindName,omitempty"`
@@ -42206,21 +41896,6 @@ type UpdateVulnerabilityInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// canonical id of the integration definition that created or last enriched the record
-	SourceDefinitionID      *string `json:"sourceDefinitionID,omitempty"`
-	ClearSourceDefinitionID *bool   `json:"clearSourceDefinitionID,omitempty"`
-	// integration definition version recorded when the record was created or last enriched
-	SourceDefinitionVersion      *string `json:"sourceDefinitionVersion,omitempty"`
-	ClearSourceDefinitionVersion *bool   `json:"clearSourceDefinitionVersion,omitempty"`
-	// stable identifier of the external system instance the record was sourced from
-	SourceInstanceID      *string `json:"sourceInstanceID,omitempty"`
-	ClearSourceInstanceID *bool   `json:"clearSourceInstanceID,omitempty"`
-	// id of the integration installation managing the record, empty when the record is unclaimed
-	ManagedBy      *string `json:"managedBy,omitempty"`
-	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// id of the integration run that last wrote this record
-	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
-	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
 	// who reviewed the vulnerability when no user, group, or identity holder is linked
 	ReviewedBy      *string `json:"reviewedBy,omitempty"`
 	ClearReviewedBy *bool   `json:"clearReviewedBy,omitempty"`

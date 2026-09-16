@@ -203927,7 +203927,7 @@ func (ec *executionContext) unmarshalInputCreateActionPlanInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "revision", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "name", "status", "managementMode", "details", "detailsJSON", "approvalRequired", "reviewDue", "reviewFrequency", "tagSuggestions", "dismissedTagSuggestions", "controlSuggestions", "dismissedControlSuggestions", "improvementSuggestions", "dismissedImprovementSuggestions", "url", "externalFileID", "externalContents", "internalNotes", "systemInternalID", "actionPlanKindName", "workflowEligibleMarker", "title", "description", "dueDate", "completedAt", "priority", "requiresApproval", "blocked", "blockerReason", "metadata", "rawPayload", "source", "integrationRunIDs", "approverID", "delegateID", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "actionPlanKindID", "riskIDs", "controlIDs", "programIDs", "findingIDs", "vulnerabilityIDs", "scanIDs", "reviewIDs", "remediationIDs", "taskIDs", "integrationIDs", "fileID", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"tags", "revision", "name", "status", "managementMode", "details", "detailsJSON", "approvalRequired", "reviewDue", "reviewFrequency", "tagSuggestions", "dismissedTagSuggestions", "controlSuggestions", "dismissedControlSuggestions", "improvementSuggestions", "dismissedImprovementSuggestions", "url", "externalFileID", "externalContents", "internalNotes", "systemInternalID", "actionPlanKindName", "workflowEligibleMarker", "title", "description", "dueDate", "completedAt", "priority", "requiresApproval", "blocked", "blockerReason", "metadata", "rawPayload", "source", "integrationRunIDs", "approverID", "delegateID", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "actionPlanKindID", "riskIDs", "controlIDs", "programIDs", "findingIDs", "vulnerabilityIDs", "scanIDs", "reviewIDs", "remediationIDs", "taskIDs", "integrationIDs", "fileID", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -203948,41 +203948,6 @@ func (ec *executionContext) unmarshalInputCreateActionPlanInput(ctx context.Cont
 				return it, err
 			}
 			it.Revision = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalNString2string(ctx, v)
@@ -204743,7 +204708,7 @@ func (ec *executionContext) unmarshalInputCreateAssetInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "internalOwner", "assetSubtypeName", "assetDataClassificationName", "environmentName", "scopeName", "accessModelName", "encryptionStatusName", "securityTierName", "criticalityName", "internalNotes", "systemInternalID", "assetType", "name", "displayName", "description", "identifier", "website", "physicalLocation", "region", "containsPii", "sourceType", "sourceIdentifier", "costCenter", "estimatedMonthlyCost", "purchaseDate", "cpe", "categories", "observedAt", "integrationRunIDs", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "internalOwnerUserID", "internalOwnerGroupID", "internalOwnerIdentityHolderID", "assetSubtypeID", "assetDataClassificationID", "environmentID", "scopeID", "accessModelID", "encryptionStatusID", "securityTierID", "criticalityID", "scanIDs", "entityIDs", "platformIDs", "systemDetailIDs", "outOfScopePlatformIDs", "identityHolderIDs", "controlIDs", "subcontrolIDs", "internalPolicyIDs", "findingIDs", "vulnerabilityIDs", "reviewIDs", "remediationIDs", "sourcePlatformID", "integrationID", "connectedAssetIDs", "connectedFromIDs"}
+	fieldsInOrder := [...]string{"tags", "internalOwner", "assetSubtypeName", "assetDataClassificationName", "environmentName", "scopeName", "accessModelName", "encryptionStatusName", "securityTierName", "criticalityName", "internalNotes", "systemInternalID", "assetType", "name", "displayName", "description", "identifier", "website", "physicalLocation", "region", "containsPii", "sourceType", "sourceIdentifier", "costCenter", "estimatedMonthlyCost", "purchaseDate", "cpe", "categories", "observedAt", "integrationRunIDs", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "internalOwnerUserID", "internalOwnerGroupID", "internalOwnerIdentityHolderID", "assetSubtypeID", "assetDataClassificationID", "environmentID", "scopeID", "accessModelID", "encryptionStatusID", "securityTierID", "criticalityID", "scanIDs", "entityIDs", "platformIDs", "systemDetailIDs", "outOfScopePlatformIDs", "identityHolderIDs", "controlIDs", "subcontrolIDs", "internalPolicyIDs", "findingIDs", "vulnerabilityIDs", "reviewIDs", "remediationIDs", "sourcePlatformID", "integrationID", "connectedAssetIDs", "connectedFromIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -204757,41 +204722,6 @@ func (ec *executionContext) unmarshalInputCreateAssetInput(ctx context.Context, 
 				return it, err
 			}
 			it.Tags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
 		case "internalOwner":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwner"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -205735,7 +205665,7 @@ func (ec *executionContext) unmarshalInputCreateCheckResultInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "status", "source", "lastObservedAt", "externalURI", "details", "parentExternalID", "integrationRunIDs", "blockedGroupIDs", "editorIDs", "viewerIDs", "controlIDs", "findingIDs", "integrationID"}
+	fieldsInOrder := [...]string{"tags", "status", "source", "lastObservedAt", "externalURI", "details", "parentExternalID", "integrationRunIDs", "blockedGroupIDs", "editorIDs", "viewerIDs", "controlIDs", "findingIDs", "integrationID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -205749,41 +205679,6 @@ func (ec *executionContext) unmarshalInputCreateCheckResultInput(ctx context.Con
 				return it, err
 			}
 			it.Tags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
 		case "status":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
 			data, err := ec.unmarshalOCheckResultCheckStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐCheckStatus(ctx, v)
@@ -205891,7 +205786,7 @@ func (ec *executionContext) unmarshalInputCreateContactInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "fullName", "title", "company", "email", "phoneNumber", "address", "status", "externalID", "integrationID", "observedAt", "integrationRunIDs", "ownerID", "entityIDs", "campaignIDs", "campaignTargetIDs", "fileIDs", "subscriberIDs"}
+	fieldsInOrder := [...]string{"tags", "fullName", "title", "company", "email", "phoneNumber", "address", "status", "externalID", "integrationID", "observedAt", "integrationRunIDs", "ownerID", "entityIDs", "campaignIDs", "campaignTargetIDs", "fileIDs", "subscriberIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -205905,41 +205800,6 @@ func (ec *executionContext) unmarshalInputCreateContactInput(ctx context.Context
 				return it, err
 			}
 			it.Tags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
 		case "fullName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fullName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -207631,7 +207491,7 @@ func (ec *executionContext) unmarshalInputCreateDirectoryAccountInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "environmentName", "scopeName", "directoryName", "externalID", "secondaryKey", "canonicalEmail", "emailAliases", "phoneNumber", "displayName", "avatarRemoteURL", "avatarUpdatedAt", "givenName", "familyName", "jobTitle", "department", "organizationUnit", "accountType", "status", "mfaState", "lastSeenIP", "addedAt", "removedAt", "observedAt", "profile", "metadata", "sourceVersion", "primarySource", "integrationRunIDs", "ownerID", "environmentID", "scopeID", "integrationID", "platformID", "identityHolderID", "avatarFileID", "findingIDs", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"tags", "environmentName", "scopeName", "directoryName", "externalID", "secondaryKey", "canonicalEmail", "emailAliases", "phoneNumber", "displayName", "avatarRemoteURL", "avatarUpdatedAt", "givenName", "familyName", "jobTitle", "department", "organizationUnit", "accountType", "status", "mfaState", "lastSeenIP", "addedAt", "removedAt", "observedAt", "profile", "metadata", "sourceVersion", "primarySource", "integrationRunIDs", "ownerID", "environmentID", "scopeID", "integrationID", "platformID", "identityHolderID", "avatarFileID", "findingIDs", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -207645,41 +207505,6 @@ func (ec *executionContext) unmarshalInputCreateDirectoryAccountInput(ctx contex
 				return it, err
 			}
 			it.Tags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -207955,7 +207780,7 @@ func (ec *executionContext) unmarshalInputCreateDirectoryGroupInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "environmentName", "scopeName", "externalID", "email", "displayName", "description", "classification", "status", "externalSharingAllowed", "memberCount", "addedAt", "removedAt", "observedAt", "profile", "metadata", "sourceVersion", "directoryName", "integrationRunIDs", "ownerID", "environmentID", "scopeID", "integrationID", "platformID", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"tags", "environmentName", "scopeName", "externalID", "email", "displayName", "description", "classification", "status", "externalSharingAllowed", "memberCount", "addedAt", "removedAt", "observedAt", "profile", "metadata", "sourceVersion", "directoryName", "integrationRunIDs", "ownerID", "environmentID", "scopeID", "integrationID", "platformID", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -207969,41 +207794,6 @@ func (ec *executionContext) unmarshalInputCreateDirectoryGroupInput(ctx context.
 				return it, err
 			}
 			it.Tags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -208188,48 +207978,13 @@ func (ec *executionContext) unmarshalInputCreateDirectoryMembershipInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "environmentName", "scopeName", "role", "source", "directoryName", "addedAt", "removedAt", "observedAt", "metadata", "integrationRunIDs", "ownerID", "environmentID", "scopeID", "integrationID", "platformID", "directoryAccountID", "directoryGroupID", "eventIDs", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"environmentName", "scopeName", "role", "source", "directoryName", "addedAt", "removedAt", "observedAt", "metadata", "integrationRunIDs", "ownerID", "environmentID", "scopeID", "integrationID", "platformID", "directoryAccountID", "directoryGroupID", "eventIDs", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -208834,7 +208589,7 @@ func (ec *executionContext) unmarshalInputCreateEntityInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "internalOwner", "reviewedBy", "lastReviewedAt", "internalNotes", "systemInternalID", "entityRelationshipStateName", "entitySecurityQuestionnaireStatusName", "entitySourceTypeName", "environmentName", "scopeName", "name", "displayName", "description", "domains", "aliases", "status", "approvedForUse", "linkedAssetIds", "hasSoc2", "soc2PeriodEnd", "contractStartDate", "contractEndDate", "autoRenews", "terminationNoticeDays", "annualSpend", "spendCurrency", "billingModel", "renewalRisk", "ssoEnforced", "mfaSupported", "mfaEnforced", "statusPageURL", "providedServices", "links", "riskRating", "riskScore", "tier", "reviewFrequency", "nextReviewAt", "contractRenewalAt", "vendorMetadata", "logoRemoteURL", "externalID", "observedAt", "integrationRunIDs", "ownerID", "blockedGroupIDs", "editorIDs", "internalOwnerUserID", "internalOwnerGroupID", "internalOwnerIdentityHolderID", "reviewedByUserID", "reviewedByGroupID", "reviewedByIdentityHolderID", "entityRelationshipStateID", "entitySecurityQuestionnaireStatusID", "entitySourceTypeID", "environmentID", "scopeID", "contactIDs", "documentIDs", "noteIDs", "fileIDs", "assetIDs", "systemDetailIDs", "scanIDs", "campaignIDs", "assessmentResponseIDs", "vendorRiskScoreIDs", "integrationIDs", "subprocessorIDs", "authMethodIDs", "employerIdentityHolderIDs", "identityHolderIDs", "controlIDs", "subcontrolIDs", "findingIDs", "vulnerabilityIDs", "reviewIDs", "remediationIDs", "platformIDs", "outOfScopePlatformIDs", "sourcePlatformIDs", "entityTypeID", "logoFileID", "internalPolicyIDs", "note"}
+	fieldsInOrder := [...]string{"tags", "internalOwner", "reviewedBy", "lastReviewedAt", "internalNotes", "systemInternalID", "entityRelationshipStateName", "entitySecurityQuestionnaireStatusName", "entitySourceTypeName", "environmentName", "scopeName", "name", "displayName", "description", "domains", "aliases", "status", "approvedForUse", "linkedAssetIds", "hasSoc2", "soc2PeriodEnd", "contractStartDate", "contractEndDate", "autoRenews", "terminationNoticeDays", "annualSpend", "spendCurrency", "billingModel", "renewalRisk", "ssoEnforced", "mfaSupported", "mfaEnforced", "statusPageURL", "providedServices", "links", "riskRating", "riskScore", "tier", "reviewFrequency", "nextReviewAt", "contractRenewalAt", "vendorMetadata", "logoRemoteURL", "externalID", "observedAt", "integrationRunIDs", "ownerID", "blockedGroupIDs", "editorIDs", "internalOwnerUserID", "internalOwnerGroupID", "internalOwnerIdentityHolderID", "reviewedByUserID", "reviewedByGroupID", "reviewedByIdentityHolderID", "entityRelationshipStateID", "entitySecurityQuestionnaireStatusID", "entitySourceTypeID", "environmentID", "scopeID", "contactIDs", "documentIDs", "noteIDs", "fileIDs", "assetIDs", "systemDetailIDs", "scanIDs", "campaignIDs", "assessmentResponseIDs", "vendorRiskScoreIDs", "integrationIDs", "subprocessorIDs", "authMethodIDs", "employerIdentityHolderIDs", "identityHolderIDs", "controlIDs", "subcontrolIDs", "findingIDs", "vulnerabilityIDs", "reviewIDs", "remediationIDs", "platformIDs", "outOfScopePlatformIDs", "sourcePlatformIDs", "entityTypeID", "logoFileID", "internalPolicyIDs", "note"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -208848,41 +208603,6 @@ func (ec *executionContext) unmarshalInputCreateEntityInput(ctx context.Context,
 				return it, err
 			}
 			it.Tags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
 		case "internalOwner":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwner"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -210569,7 +210289,7 @@ func (ec *executionContext) unmarshalInputCreateFindingInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "reviewedBy", "assignedTo", "internalNotes", "systemInternalID", "environmentName", "scopeName", "findingStatusName", "workflowEligibleMarker", "externalID", "externalOwnerID", "source", "resourceName", "displayName", "state", "category", "categories", "findingClass", "severity", "numericSeverity", "score", "impact", "exploitability", "priority", "open", "blocksProduction", "production", "public", "validated", "assessmentID", "description", "recommendation", "recommendedActions", "references", "stepsToReproduce", "targets", "targetDetails", "vector", "remediationSLA", "eventTime", "reportedAt", "sourceUpdatedAt", "externalURI", "metadata", "rawPayload", "integrationRunIDs", "ownerID", "blockedGroupIDs", "editorIDs", "reviewedByUserID", "reviewedByGroupID", "reviewedByIdentityHolderID", "assignedToUserID", "assignedToGroupID", "assignedToIdentityHolderID", "environmentID", "scopeID", "findingStatusID", "integrationIDs", "vulnerabilityIDs", "actionPlanIDs", "subcontrolIDs", "riskIDs", "programIDs", "assetIDs", "entityIDs", "scanIDs", "taskIDs", "directoryAccountIDs", "identityHolderIDs", "remediationIDs", "reviewIDs", "commentIDs", "fileIDs", "workflowObjectRefIDs", "checkResultIDs"}
+	fieldsInOrder := [...]string{"tags", "reviewedBy", "assignedTo", "internalNotes", "systemInternalID", "environmentName", "scopeName", "findingStatusName", "workflowEligibleMarker", "externalID", "externalOwnerID", "source", "resourceName", "displayName", "state", "category", "categories", "findingClass", "severity", "numericSeverity", "score", "impact", "exploitability", "priority", "open", "blocksProduction", "production", "public", "validated", "assessmentID", "description", "recommendation", "recommendedActions", "references", "stepsToReproduce", "targets", "targetDetails", "vector", "remediationSLA", "eventTime", "reportedAt", "sourceUpdatedAt", "externalURI", "metadata", "rawPayload", "integrationRunIDs", "ownerID", "blockedGroupIDs", "editorIDs", "reviewedByUserID", "reviewedByGroupID", "reviewedByIdentityHolderID", "assignedToUserID", "assignedToGroupID", "assignedToIdentityHolderID", "environmentID", "scopeID", "findingStatusID", "integrationIDs", "vulnerabilityIDs", "actionPlanIDs", "subcontrolIDs", "riskIDs", "programIDs", "assetIDs", "entityIDs", "scanIDs", "taskIDs", "directoryAccountIDs", "identityHolderIDs", "remediationIDs", "reviewIDs", "commentIDs", "fileIDs", "workflowObjectRefIDs", "checkResultIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -210583,41 +210303,6 @@ func (ec *executionContext) unmarshalInputCreateFindingInput(ctx context.Context
 				return it, err
 			}
 			it.Tags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
 		case "reviewedBy":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedBy"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -212317,7 +212002,7 @@ func (ec *executionContext) unmarshalInputCreateInternalPolicyInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "revision", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "internalNotes", "systemInternalID", "name", "status", "managementMode", "details", "detailsJSON", "approvalRequired", "reviewDue", "reviewFrequency", "tagSuggestions", "dismissedTagSuggestions", "controlSuggestions", "dismissedControlSuggestions", "improvementSuggestions", "dismissedImprovementSuggestions", "url", "externalFileID", "externalContents", "internalPolicyKindName", "environmentName", "scopeName", "workflowEligibleMarker", "externalUUID", "integrationRunIDs", "ownerID", "blockedGroupIDs", "editorIDs", "approverID", "delegateID", "internalPolicyKindID", "environmentID", "scopeID", "controlObjectiveIDs", "controlImplementationIDs", "controlIDs", "subcontrolIDs", "procedureIDs", "narrativeIDs", "taskIDs", "riskIDs", "programIDs", "fileID", "commentIDs", "discussionIDs", "workflowObjectRefIDs", "assetIDs", "entityIDs", "identityHolderIDs", "reviewIDs", "integrationIDs"}
+	fieldsInOrder := [...]string{"tags", "revision", "internalNotes", "systemInternalID", "name", "status", "managementMode", "details", "detailsJSON", "approvalRequired", "reviewDue", "reviewFrequency", "tagSuggestions", "dismissedTagSuggestions", "controlSuggestions", "dismissedControlSuggestions", "improvementSuggestions", "dismissedImprovementSuggestions", "url", "externalFileID", "externalContents", "internalPolicyKindName", "environmentName", "scopeName", "workflowEligibleMarker", "externalUUID", "integrationRunIDs", "ownerID", "blockedGroupIDs", "editorIDs", "approverID", "delegateID", "internalPolicyKindID", "environmentID", "scopeID", "controlObjectiveIDs", "controlImplementationIDs", "controlIDs", "subcontrolIDs", "procedureIDs", "narrativeIDs", "taskIDs", "riskIDs", "programIDs", "fileID", "commentIDs", "discussionIDs", "workflowObjectRefIDs", "assetIDs", "entityIDs", "identityHolderIDs", "reviewIDs", "integrationIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -212338,41 +212023,6 @@ func (ec *executionContext) unmarshalInputCreateInternalPolicyInput(ctx context.
 				return it, err
 			}
 			it.Revision = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
 		case "internalNotes":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotes"))
 			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
@@ -216086,7 +215736,7 @@ func (ec *executionContext) unmarshalInputCreateProcedureInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "revision", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "name", "status", "managementMode", "details", "detailsJSON", "approvalRequired", "reviewDue", "reviewFrequency", "tagSuggestions", "dismissedTagSuggestions", "controlSuggestions", "dismissedControlSuggestions", "improvementSuggestions", "dismissedImprovementSuggestions", "url", "externalFileID", "externalContents", "internalNotes", "systemInternalID", "procedureKindName", "environmentName", "scopeName", "workflowEligibleMarker", "integrationRunIDs", "ownerID", "blockedGroupIDs", "editorIDs", "approverID", "delegateID", "procedureKindID", "environmentID", "scopeID", "controlIDs", "subcontrolIDs", "internalPolicyIDs", "programIDs", "narrativeIDs", "riskIDs", "taskIDs", "commentIDs", "discussionIDs", "fileID", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"tags", "revision", "name", "status", "managementMode", "details", "detailsJSON", "approvalRequired", "reviewDue", "reviewFrequency", "tagSuggestions", "dismissedTagSuggestions", "controlSuggestions", "dismissedControlSuggestions", "improvementSuggestions", "dismissedImprovementSuggestions", "url", "externalFileID", "externalContents", "internalNotes", "systemInternalID", "procedureKindName", "environmentName", "scopeName", "workflowEligibleMarker", "integrationRunIDs", "ownerID", "blockedGroupIDs", "editorIDs", "approverID", "delegateID", "procedureKindID", "environmentID", "scopeID", "controlIDs", "subcontrolIDs", "internalPolicyIDs", "programIDs", "narrativeIDs", "riskIDs", "taskIDs", "commentIDs", "discussionIDs", "fileID", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -216107,41 +215757,6 @@ func (ec *executionContext) unmarshalInputCreateProcedureInput(ctx context.Conte
 				return it, err
 			}
 			it.Revision = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalNString2string(ctx, v)
@@ -217605,7 +217220,7 @@ func (ec *executionContext) unmarshalInputCreateRiskInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "riskKindName", "riskCategoryName", "environmentName", "scopeName", "workflowEligibleMarker", "externalID", "integrationID", "observedAt", "externalUUID", "name", "status", "impact", "likelihood", "score", "mitigation", "mitigationJSON", "details", "detailsJSON", "businessCosts", "businessCostsJSON", "mitigatedAt", "reviewRequired", "lastReviewedAt", "reviewFrequency", "dueDate", "nextReviewDueAt", "residualScore", "riskDecision", "integrationRunIDs", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "riskKindID", "riskCategoryID", "environmentID", "scopeID", "controlIDs", "subcontrolIDs", "procedureIDs", "internalPolicyIDs", "programIDs", "platformIDs", "actionPlanIDs", "taskIDs", "assetIDs", "entityIDs", "scanIDs", "stakeholderID", "delegateID", "commentIDs", "discussionIDs", "reviewIDs", "remediationIDs", "vulnerabilityIDs", "findingIDs", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"tags", "riskKindName", "riskCategoryName", "environmentName", "scopeName", "workflowEligibleMarker", "externalID", "integrationID", "observedAt", "externalUUID", "name", "status", "impact", "likelihood", "score", "mitigation", "mitigationJSON", "details", "detailsJSON", "businessCosts", "businessCostsJSON", "mitigatedAt", "reviewRequired", "lastReviewedAt", "reviewFrequency", "dueDate", "nextReviewDueAt", "residualScore", "riskDecision", "integrationRunIDs", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "riskKindID", "riskCategoryID", "environmentID", "scopeID", "controlIDs", "subcontrolIDs", "procedureIDs", "internalPolicyIDs", "programIDs", "platformIDs", "actionPlanIDs", "taskIDs", "assetIDs", "entityIDs", "scanIDs", "stakeholderID", "delegateID", "commentIDs", "discussionIDs", "reviewIDs", "remediationIDs", "vulnerabilityIDs", "findingIDs", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -217619,41 +217234,6 @@ func (ec *executionContext) unmarshalInputCreateRiskInput(ctx context.Context, o
 				return it, err
 			}
 			it.Tags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
 		case "riskKindName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("riskKindName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -222100,7 +221680,7 @@ func (ec *executionContext) unmarshalInputCreateVulnerabilityInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "sourceDefinitionID", "sourceDefinitionVersion", "sourceInstanceID", "managedBy", "integrationRunID", "reviewedBy", "assignedTo", "internalNotes", "systemInternalID", "environmentName", "scopeName", "vulnerabilityStatusName", "workflowEligibleMarker", "externalOwnerID", "externalID", "cveID", "source", "displayName", "category", "severity", "score", "impact", "exploitability", "priority", "summary", "description", "vector", "remediationSLA", "open", "blocking", "production", "public", "validated", "references", "impacts", "cweIds", "vulnerableVersionRange", "firstPatchedVersion", "fixAvailable", "packageName", "packageEcosystem", "manifestPath", "dependencyScope", "publishedAt", "discoveredAt", "sourceUpdatedAt", "dismissedAt", "dismissedReason", "dismissedComment", "fixedAt", "autoDismissedAt", "externalURI", "metadata", "rawPayload", "integrationRunIDs", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "reviewedByUserID", "reviewedByGroupID", "reviewedByIdentityHolderID", "assignedToUserID", "assignedToGroupID", "assignedToIdentityHolderID", "environmentID", "scopeID", "vulnerabilityStatusID", "integrationIDs", "findingIDs", "actionPlanIDs", "controlIDs", "subcontrolIDs", "riskIDs", "programIDs", "assetIDs", "entityIDs", "scanIDs", "taskIDs", "remediationIDs", "reviewIDs", "commentIDs", "fileIDs", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"tags", "reviewedBy", "assignedTo", "internalNotes", "systemInternalID", "environmentName", "scopeName", "vulnerabilityStatusName", "workflowEligibleMarker", "externalOwnerID", "externalID", "cveID", "source", "displayName", "category", "severity", "score", "impact", "exploitability", "priority", "summary", "description", "vector", "remediationSLA", "open", "blocking", "production", "public", "validated", "references", "impacts", "cweIds", "vulnerableVersionRange", "firstPatchedVersion", "fixAvailable", "packageName", "packageEcosystem", "manifestPath", "dependencyScope", "publishedAt", "discoveredAt", "sourceUpdatedAt", "dismissedAt", "dismissedReason", "dismissedComment", "fixedAt", "autoDismissedAt", "externalURI", "metadata", "rawPayload", "integrationRunIDs", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "reviewedByUserID", "reviewedByGroupID", "reviewedByIdentityHolderID", "assignedToUserID", "assignedToGroupID", "assignedToIdentityHolderID", "environmentID", "scopeID", "vulnerabilityStatusID", "integrationIDs", "findingIDs", "actionPlanIDs", "controlIDs", "subcontrolIDs", "riskIDs", "programIDs", "assetIDs", "entityIDs", "scanIDs", "taskIDs", "remediationIDs", "reviewIDs", "commentIDs", "fileIDs", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -222114,41 +221694,6 @@ func (ec *executionContext) unmarshalInputCreateVulnerabilityInput(ctx context.C
 				return it, err
 			}
 			it.Tags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
 		case "reviewedBy":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedBy"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -329997,7 +329542,7 @@ func (ec *executionContext) unmarshalInputUpdateActionPlanInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "revision", "clearRevision", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "name", "status", "clearStatus", "managementMode", "clearManagementMode", "details", "clearDetails", "detailsJSON", "appendDetailsJSON", "clearDetailsJSON", "approvalRequired", "clearApprovalRequired", "reviewDue", "clearReviewDue", "reviewFrequency", "clearReviewFrequency", "tagSuggestions", "appendTagSuggestions", "clearTagSuggestions", "dismissedTagSuggestions", "appendDismissedTagSuggestions", "clearDismissedTagSuggestions", "controlSuggestions", "appendControlSuggestions", "clearControlSuggestions", "dismissedControlSuggestions", "appendDismissedControlSuggestions", "clearDismissedControlSuggestions", "improvementSuggestions", "appendImprovementSuggestions", "clearImprovementSuggestions", "dismissedImprovementSuggestions", "appendDismissedImprovementSuggestions", "clearDismissedImprovementSuggestions", "url", "clearURL", "externalFileID", "clearExternalFileID", "externalContents", "clearExternalContents", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "actionPlanKindName", "clearActionPlanKindName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "title", "description", "clearDescription", "dueDate", "clearDueDate", "completedAt", "clearCompletedAt", "priority", "clearPriority", "requiresApproval", "blocked", "blockerReason", "clearBlockerReason", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "source", "clearSource", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "approverID", "clearApprover", "delegateID", "clearDelegate", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "actionPlanKindID", "clearActionPlanKind", "addRiskIDs", "removeRiskIDs", "clearRisks", "addControlIDs", "removeControlIDs", "clearControls", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addFindingIDs", "removeFindingIDs", "clearFindings", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addScanIDs", "removeScanIDs", "clearScans", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addTaskIDs", "removeTaskIDs", "clearTasks", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "fileID", "clearFile", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "RevisionBump"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "revision", "clearRevision", "name", "status", "clearStatus", "managementMode", "clearManagementMode", "details", "clearDetails", "detailsJSON", "appendDetailsJSON", "clearDetailsJSON", "approvalRequired", "clearApprovalRequired", "reviewDue", "clearReviewDue", "reviewFrequency", "clearReviewFrequency", "tagSuggestions", "appendTagSuggestions", "clearTagSuggestions", "dismissedTagSuggestions", "appendDismissedTagSuggestions", "clearDismissedTagSuggestions", "controlSuggestions", "appendControlSuggestions", "clearControlSuggestions", "dismissedControlSuggestions", "appendDismissedControlSuggestions", "clearDismissedControlSuggestions", "improvementSuggestions", "appendImprovementSuggestions", "clearImprovementSuggestions", "dismissedImprovementSuggestions", "appendDismissedImprovementSuggestions", "clearDismissedImprovementSuggestions", "url", "clearURL", "externalFileID", "clearExternalFileID", "externalContents", "clearExternalContents", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "actionPlanKindName", "clearActionPlanKindName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "title", "description", "clearDescription", "dueDate", "clearDueDate", "completedAt", "clearCompletedAt", "priority", "clearPriority", "requiresApproval", "blocked", "blockerReason", "clearBlockerReason", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "source", "clearSource", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "approverID", "clearApprover", "delegateID", "clearDelegate", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "actionPlanKindID", "clearActionPlanKind", "addRiskIDs", "removeRiskIDs", "clearRisks", "addControlIDs", "removeControlIDs", "clearControls", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addFindingIDs", "removeFindingIDs", "clearFindings", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addScanIDs", "removeScanIDs", "clearScans", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addTaskIDs", "removeTaskIDs", "clearTasks", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "fileID", "clearFile", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "RevisionBump"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -330039,76 +329584,6 @@ func (ec *executionContext) unmarshalInputUpdateActionPlanInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearRevision = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "clearSourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "clearSourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionVersion"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "clearSourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceInstanceID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "clearManagedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearManagedBy"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
-		case "clearIntegrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrationRunID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearIntegrationRunID = data
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -331396,7 +330871,7 @@ func (ec *executionContext) unmarshalInputUpdateAssetInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "internalOwner", "clearInternalOwner", "assetSubtypeName", "clearAssetSubtypeName", "assetDataClassificationName", "clearAssetDataClassificationName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "accessModelName", "clearAccessModelName", "encryptionStatusName", "clearEncryptionStatusName", "securityTierName", "clearSecurityTierName", "criticalityName", "clearCriticalityName", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "assetType", "name", "displayName", "clearDisplayName", "description", "clearDescription", "identifier", "clearIdentifier", "website", "clearWebsite", "physicalLocation", "clearPhysicalLocation", "region", "clearRegion", "containsPii", "clearContainsPii", "sourceType", "sourceIdentifier", "clearSourceIdentifier", "costCenter", "clearCostCenter", "estimatedMonthlyCost", "clearEstimatedMonthlyCost", "purchaseDate", "clearPurchaseDate", "cpe", "clearCpe", "categories", "appendCategories", "clearCategories", "observedAt", "clearObservedAt", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "internalOwnerIdentityHolderID", "clearInternalOwnerIdentityHolder", "assetSubtypeID", "clearAssetSubtype", "assetDataClassificationID", "clearAssetDataClassification", "environmentID", "clearEnvironment", "scopeID", "clearScope", "accessModelID", "clearAccessModel", "encryptionStatusID", "clearEncryptionStatus", "securityTierID", "clearSecurityTier", "criticalityID", "clearCriticality", "addScanIDs", "removeScanIDs", "clearScans", "addEntityIDs", "removeEntityIDs", "clearEntities", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails", "addOutOfScopePlatformIDs", "removeOutOfScopePlatformIDs", "clearOutOfScopePlatforms", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addFindingIDs", "removeFindingIDs", "clearFindings", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "sourcePlatformID", "clearSourcePlatform", "integrationID", "clearIntegration", "addConnectedAssetIDs", "removeConnectedAssetIDs", "clearConnectedAssets", "addConnectedFromIDs", "removeConnectedFromIDs", "clearConnectedFrom"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "assetSubtypeName", "clearAssetSubtypeName", "assetDataClassificationName", "clearAssetDataClassificationName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "accessModelName", "clearAccessModelName", "encryptionStatusName", "clearEncryptionStatusName", "securityTierName", "clearSecurityTierName", "criticalityName", "clearCriticalityName", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "assetType", "name", "displayName", "clearDisplayName", "description", "clearDescription", "identifier", "clearIdentifier", "website", "clearWebsite", "physicalLocation", "clearPhysicalLocation", "region", "clearRegion", "containsPii", "clearContainsPii", "sourceType", "sourceIdentifier", "clearSourceIdentifier", "costCenter", "clearCostCenter", "estimatedMonthlyCost", "clearEstimatedMonthlyCost", "purchaseDate", "clearPurchaseDate", "cpe", "clearCpe", "categories", "appendCategories", "clearCategories", "observedAt", "clearObservedAt", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "internalOwnerIdentityHolderID", "clearInternalOwnerIdentityHolder", "assetSubtypeID", "clearAssetSubtype", "assetDataClassificationID", "clearAssetDataClassification", "environmentID", "clearEnvironment", "scopeID", "clearScope", "accessModelID", "clearAccessModel", "encryptionStatusID", "clearEncryptionStatus", "securityTierID", "clearSecurityTier", "criticalityID", "clearCriticality", "addScanIDs", "removeScanIDs", "clearScans", "addEntityIDs", "removeEntityIDs", "clearEntities", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails", "addOutOfScopePlatformIDs", "removeOutOfScopePlatformIDs", "clearOutOfScopePlatforms", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addFindingIDs", "removeFindingIDs", "clearFindings", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "sourcePlatformID", "clearSourcePlatform", "integrationID", "clearIntegration", "addConnectedAssetIDs", "removeConnectedAssetIDs", "clearConnectedAssets", "addConnectedFromIDs", "removeConnectedFromIDs", "clearConnectedFrom"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -331424,76 +330899,6 @@ func (ec *executionContext) unmarshalInputUpdateAssetInput(ctx context.Context, 
 				return it, err
 			}
 			it.ClearTags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "clearSourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "clearSourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionVersion"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "clearSourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceInstanceID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "clearManagedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearManagedBy"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
-		case "clearIntegrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrationRunID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearIntegrationRunID = data
 		case "internalOwner":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwner"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -333404,7 +332809,7 @@ func (ec *executionContext) unmarshalInputUpdateCheckResultInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "status", "source", "lastObservedAt", "clearLastObservedAt", "externalURI", "clearExternalURI", "details", "clearDetails", "parentExternalID", "clearParentExternalID", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "addControlIDs", "removeControlIDs", "clearControls", "addFindingIDs", "removeFindingIDs", "clearFindings", "integrationID", "clearIntegration"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "status", "source", "lastObservedAt", "clearLastObservedAt", "externalURI", "clearExternalURI", "details", "clearDetails", "parentExternalID", "clearParentExternalID", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "addControlIDs", "removeControlIDs", "clearControls", "addFindingIDs", "removeFindingIDs", "clearFindings", "integrationID", "clearIntegration"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -333432,76 +332837,6 @@ func (ec *executionContext) unmarshalInputUpdateCheckResultInput(ctx context.Con
 				return it, err
 			}
 			it.ClearTags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "clearSourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "clearSourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionVersion"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "clearSourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceInstanceID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "clearManagedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearManagedBy"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
-		case "clearIntegrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrationRunID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearIntegrationRunID = data
 		case "status":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
 			data, err := ec.unmarshalOCheckResultCheckStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐCheckStatus(ctx, v)
@@ -333728,7 +333063,7 @@ func (ec *executionContext) unmarshalInputUpdateContactInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "fullName", "clearFullName", "title", "clearTitle", "company", "clearCompany", "email", "clearEmail", "phoneNumber", "clearPhoneNumber", "address", "clearAddress", "status", "externalID", "clearExternalID", "integrationID", "clearIntegrationID", "observedAt", "clearObservedAt", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "ownerID", "clearOwner", "addEntityIDs", "removeEntityIDs", "clearEntities", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addCampaignTargetIDs", "removeCampaignTargetIDs", "clearCampaignTargets", "addFileIDs", "removeFileIDs", "clearFiles", "addSubscriberIDs", "removeSubscriberIDs", "clearSubscribers"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "fullName", "clearFullName", "title", "clearTitle", "company", "clearCompany", "email", "clearEmail", "phoneNumber", "clearPhoneNumber", "address", "clearAddress", "status", "externalID", "clearExternalID", "integrationID", "clearIntegrationID", "observedAt", "clearObservedAt", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "ownerID", "clearOwner", "addEntityIDs", "removeEntityIDs", "clearEntities", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addCampaignTargetIDs", "removeCampaignTargetIDs", "clearCampaignTargets", "addFileIDs", "removeFileIDs", "clearFiles", "addSubscriberIDs", "removeSubscriberIDs", "clearSubscribers"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -333756,76 +333091,6 @@ func (ec *executionContext) unmarshalInputUpdateContactInput(ctx context.Context
 				return it, err
 			}
 			it.ClearTags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "clearSourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "clearSourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionVersion"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "clearSourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceInstanceID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "clearManagedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearManagedBy"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
-		case "clearIntegrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrationRunID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearIntegrationRunID = data
 		case "fullName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fullName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -337279,7 +336544,7 @@ func (ec *executionContext) unmarshalInputUpdateDirectoryAccountInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "directoryName", "clearDirectoryName", "secondaryKey", "clearSecondaryKey", "canonicalEmail", "clearCanonicalEmail", "emailAliases", "appendEmailAliases", "clearEmailAliases", "phoneNumber", "clearPhoneNumber", "displayName", "clearDisplayName", "avatarRemoteURL", "clearAvatarRemoteURL", "avatarUpdatedAt", "clearAvatarUpdatedAt", "givenName", "clearGivenName", "familyName", "clearFamilyName", "jobTitle", "clearJobTitle", "department", "clearDepartment", "organizationUnit", "clearOrganizationUnit", "accountType", "clearAccountType", "status", "mfaState", "lastSeenIP", "clearLastSeenIP", "addedAt", "clearAddedAt", "removedAt", "clearRemovedAt", "profile", "clearProfile", "metadata", "clearMetadata", "sourceVersion", "clearSourceVersion", "primarySource", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "environmentID", "clearEnvironment", "scopeID", "clearScope", "integrationID", "clearIntegration", "identityHolderID", "clearIdentityHolder", "avatarFileID", "clearAvatarFile", "addFindingIDs", "removeFindingIDs", "clearFindings", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "directoryName", "clearDirectoryName", "secondaryKey", "clearSecondaryKey", "canonicalEmail", "clearCanonicalEmail", "emailAliases", "appendEmailAliases", "clearEmailAliases", "phoneNumber", "clearPhoneNumber", "displayName", "clearDisplayName", "avatarRemoteURL", "clearAvatarRemoteURL", "avatarUpdatedAt", "clearAvatarUpdatedAt", "givenName", "clearGivenName", "familyName", "clearFamilyName", "jobTitle", "clearJobTitle", "department", "clearDepartment", "organizationUnit", "clearOrganizationUnit", "accountType", "clearAccountType", "status", "mfaState", "lastSeenIP", "clearLastSeenIP", "addedAt", "clearAddedAt", "removedAt", "clearRemovedAt", "profile", "clearProfile", "metadata", "clearMetadata", "sourceVersion", "clearSourceVersion", "primarySource", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "environmentID", "clearEnvironment", "scopeID", "clearScope", "integrationID", "clearIntegration", "identityHolderID", "clearIdentityHolder", "avatarFileID", "clearAvatarFile", "addFindingIDs", "removeFindingIDs", "clearFindings", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -337307,76 +336572,6 @@ func (ec *executionContext) unmarshalInputUpdateDirectoryAccountInput(ctx contex
 				return it, err
 			}
 			it.ClearTags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "clearSourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "clearSourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionVersion"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "clearSourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceInstanceID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "clearManagedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearManagedBy"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
-		case "clearIntegrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrationRunID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearIntegrationRunID = data
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -337862,7 +337057,7 @@ func (ec *executionContext) unmarshalInputUpdateDirectoryGroupInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "email", "clearEmail", "displayName", "clearDisplayName", "description", "clearDescription", "classification", "status", "externalSharingAllowed", "clearExternalSharingAllowed", "memberCount", "clearMemberCount", "addedAt", "clearAddedAt", "removedAt", "clearRemovedAt", "profile", "clearProfile", "metadata", "clearMetadata", "sourceVersion", "clearSourceVersion", "directoryName", "clearDirectoryName", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "ownerID", "clearOwner", "environmentID", "clearEnvironment", "scopeID", "clearScope", "integrationID", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "email", "clearEmail", "displayName", "clearDisplayName", "description", "clearDescription", "classification", "status", "externalSharingAllowed", "clearExternalSharingAllowed", "memberCount", "clearMemberCount", "addedAt", "clearAddedAt", "removedAt", "clearRemovedAt", "profile", "clearProfile", "metadata", "clearMetadata", "sourceVersion", "clearSourceVersion", "directoryName", "clearDirectoryName", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "ownerID", "clearOwner", "environmentID", "clearEnvironment", "scopeID", "clearScope", "integrationID", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -337890,76 +337085,6 @@ func (ec *executionContext) unmarshalInputUpdateDirectoryGroupInput(ctx context.
 				return it, err
 			}
 			it.ClearTags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "clearSourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "clearSourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionVersion"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "clearSourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceInstanceID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "clearManagedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearManagedBy"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
-		case "clearIntegrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrationRunID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearIntegrationRunID = data
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -338263,83 +337388,13 @@ func (ec *executionContext) unmarshalInputUpdateDirectoryMembershipInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "role", "clearRole", "source", "clearSource", "directoryName", "clearDirectoryName", "addedAt", "clearAddedAt", "removedAt", "clearRemovedAt", "metadata", "clearMetadata", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "ownerID", "clearOwner", "environmentID", "clearEnvironment", "scopeID", "clearScope", "integrationID", "addEventIDs", "removeEventIDs", "clearEvents", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
+	fieldsInOrder := [...]string{"environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "role", "clearRole", "source", "clearSource", "directoryName", "clearDirectoryName", "addedAt", "clearAddedAt", "removedAt", "clearRemovedAt", "metadata", "clearMetadata", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "ownerID", "clearOwner", "environmentID", "clearEnvironment", "scopeID", "clearScope", "integrationID", "addEventIDs", "removeEventIDs", "clearEvents", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "clearSourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "clearSourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionVersion"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "clearSourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceInstanceID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "clearManagedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearManagedBy"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
-		case "clearIntegrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrationRunID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearIntegrationRunID = data
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -339381,7 +338436,7 @@ func (ec *executionContext) unmarshalInputUpdateEntityInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "internalOwner", "clearInternalOwner", "reviewedBy", "clearReviewedBy", "lastReviewedAt", "clearLastReviewedAt", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "entityRelationshipStateName", "clearEntityRelationshipStateName", "entitySecurityQuestionnaireStatusName", "clearEntitySecurityQuestionnaireStatusName", "entitySourceTypeName", "clearEntitySourceTypeName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "name", "clearName", "displayName", "clearDisplayName", "description", "clearDescription", "domains", "appendDomains", "clearDomains", "aliases", "appendAliases", "clearAliases", "status", "clearStatus", "approvedForUse", "clearApprovedForUse", "linkedAssetIds", "appendLinkedAssetIds", "clearLinkedAssetIds", "hasSoc2", "clearHasSoc2", "soc2PeriodEnd", "clearSoc2PeriodEnd", "contractStartDate", "clearContractStartDate", "contractEndDate", "clearContractEndDate", "autoRenews", "clearAutoRenews", "terminationNoticeDays", "clearTerminationNoticeDays", "annualSpend", "clearAnnualSpend", "spendCurrency", "clearSpendCurrency", "billingModel", "clearBillingModel", "renewalRisk", "clearRenewalRisk", "ssoEnforced", "clearSSOEnforced", "mfaSupported", "clearMfaSupported", "mfaEnforced", "clearMfaEnforced", "statusPageURL", "clearStatusPageURL", "providedServices", "appendProvidedServices", "clearProvidedServices", "links", "appendLinks", "clearLinks", "riskRating", "clearRiskRating", "riskScore", "clearRiskScore", "tier", "clearTier", "reviewFrequency", "clearReviewFrequency", "nextReviewAt", "clearNextReviewAt", "contractRenewalAt", "clearContractRenewalAt", "vendorMetadata", "clearVendorMetadata", "logoRemoteURL", "clearLogoRemoteURL", "externalID", "clearExternalID", "observedAt", "clearObservedAt", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "internalOwnerIdentityHolderID", "clearInternalOwnerIdentityHolder", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "entityRelationshipStateID", "clearEntityRelationshipState", "entitySecurityQuestionnaireStatusID", "clearEntitySecurityQuestionnaireStatus", "entitySourceTypeID", "clearEntitySourceType", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addContactIDs", "removeContactIDs", "clearContacts", "addDocumentIDs", "removeDocumentIDs", "clearDocuments", "addNoteIDs", "removeNoteIDs", "clearNotes", "addFileIDs", "removeFileIDs", "clearFiles", "addAssetIDs", "removeAssetIDs", "clearAssets", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails", "addScanIDs", "removeScanIDs", "clearScans", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addAssessmentResponseIDs", "removeAssessmentResponseIDs", "clearAssessmentResponses", "addVendorRiskScoreIDs", "removeVendorRiskScoreIDs", "clearVendorRiskScores", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addSubprocessorIDs", "removeSubprocessorIDs", "clearSubprocessors", "addAuthMethodIDs", "removeAuthMethodIDs", "clearAuthMethods", "addEmployerIdentityHolderIDs", "removeEmployerIdentityHolderIDs", "clearEmployerIdentityHolders", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addFindingIDs", "removeFindingIDs", "clearFindings", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addOutOfScopePlatformIDs", "removeOutOfScopePlatformIDs", "clearOutOfScopePlatforms", "addSourcePlatformIDs", "removeSourcePlatformIDs", "clearSourcePlatforms", "entityTypeID", "clearEntityType", "logoFileID", "clearLogoFile", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "note"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "reviewedBy", "clearReviewedBy", "lastReviewedAt", "clearLastReviewedAt", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "entityRelationshipStateName", "clearEntityRelationshipStateName", "entitySecurityQuestionnaireStatusName", "clearEntitySecurityQuestionnaireStatusName", "entitySourceTypeName", "clearEntitySourceTypeName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "name", "clearName", "displayName", "clearDisplayName", "description", "clearDescription", "domains", "appendDomains", "clearDomains", "aliases", "appendAliases", "clearAliases", "status", "clearStatus", "approvedForUse", "clearApprovedForUse", "linkedAssetIds", "appendLinkedAssetIds", "clearLinkedAssetIds", "hasSoc2", "clearHasSoc2", "soc2PeriodEnd", "clearSoc2PeriodEnd", "contractStartDate", "clearContractStartDate", "contractEndDate", "clearContractEndDate", "autoRenews", "clearAutoRenews", "terminationNoticeDays", "clearTerminationNoticeDays", "annualSpend", "clearAnnualSpend", "spendCurrency", "clearSpendCurrency", "billingModel", "clearBillingModel", "renewalRisk", "clearRenewalRisk", "ssoEnforced", "clearSSOEnforced", "mfaSupported", "clearMfaSupported", "mfaEnforced", "clearMfaEnforced", "statusPageURL", "clearStatusPageURL", "providedServices", "appendProvidedServices", "clearProvidedServices", "links", "appendLinks", "clearLinks", "riskRating", "clearRiskRating", "riskScore", "clearRiskScore", "tier", "clearTier", "reviewFrequency", "clearReviewFrequency", "nextReviewAt", "clearNextReviewAt", "contractRenewalAt", "clearContractRenewalAt", "vendorMetadata", "clearVendorMetadata", "logoRemoteURL", "clearLogoRemoteURL", "externalID", "clearExternalID", "observedAt", "clearObservedAt", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "internalOwnerIdentityHolderID", "clearInternalOwnerIdentityHolder", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "entityRelationshipStateID", "clearEntityRelationshipState", "entitySecurityQuestionnaireStatusID", "clearEntitySecurityQuestionnaireStatus", "entitySourceTypeID", "clearEntitySourceType", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addContactIDs", "removeContactIDs", "clearContacts", "addDocumentIDs", "removeDocumentIDs", "clearDocuments", "addNoteIDs", "removeNoteIDs", "clearNotes", "addFileIDs", "removeFileIDs", "clearFiles", "addAssetIDs", "removeAssetIDs", "clearAssets", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails", "addScanIDs", "removeScanIDs", "clearScans", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addAssessmentResponseIDs", "removeAssessmentResponseIDs", "clearAssessmentResponses", "addVendorRiskScoreIDs", "removeVendorRiskScoreIDs", "clearVendorRiskScores", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addSubprocessorIDs", "removeSubprocessorIDs", "clearSubprocessors", "addAuthMethodIDs", "removeAuthMethodIDs", "clearAuthMethods", "addEmployerIdentityHolderIDs", "removeEmployerIdentityHolderIDs", "clearEmployerIdentityHolders", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addFindingIDs", "removeFindingIDs", "clearFindings", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addOutOfScopePlatformIDs", "removeOutOfScopePlatformIDs", "clearOutOfScopePlatforms", "addSourcePlatformIDs", "removeSourcePlatformIDs", "clearSourcePlatforms", "entityTypeID", "clearEntityType", "logoFileID", "clearLogoFile", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "note"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -339409,76 +338464,6 @@ func (ec *executionContext) unmarshalInputUpdateEntityInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearTags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "clearSourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "clearSourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionVersion"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "clearSourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceInstanceID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "clearManagedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearManagedBy"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
-		case "clearIntegrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrationRunID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearIntegrationRunID = data
 		case "internalOwner":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwner"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -343048,7 +342033,7 @@ func (ec *executionContext) unmarshalInputUpdateFindingInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "findingStatusName", "clearFindingStatusName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalID", "clearExternalID", "externalOwnerID", "clearExternalOwnerID", "source", "clearSource", "resourceName", "clearResourceName", "displayName", "clearDisplayName", "state", "clearState", "category", "clearCategory", "categories", "appendCategories", "clearCategories", "findingClass", "clearFindingClass", "severity", "clearSeverity", "numericSeverity", "clearNumericSeverity", "score", "clearScore", "impact", "clearImpact", "exploitability", "clearExploitability", "priority", "clearPriority", "open", "clearOpen", "blocksProduction", "clearBlocksProduction", "production", "clearProduction", "public", "clearPublic", "validated", "clearValidated", "assessmentID", "clearAssessmentID", "description", "clearDescription", "recommendation", "clearRecommendation", "recommendedActions", "clearRecommendedActions", "references", "appendReferences", "clearReferences", "stepsToReproduce", "appendStepsToReproduce", "clearStepsToReproduce", "targets", "appendTargets", "clearTargets", "targetDetails", "clearTargetDetails", "vector", "clearVector", "remediationSLA", "clearRemediationSLA", "eventTime", "clearEventTime", "reportedAt", "clearReportedAt", "sourceUpdatedAt", "clearSourceUpdatedAt", "externalURI", "clearExternalURI", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "assignedToIdentityHolderID", "clearAssignedToIdentityHolder", "environmentID", "clearEnvironment", "scopeID", "clearScope", "findingStatusID", "clearFindingStatus", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addDirectoryAccountIDs", "removeDirectoryAccountIDs", "clearDirectoryAccounts", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addReviewIDs", "removeReviewIDs", "clearReviews", "addCommentIDs", "removeCommentIDs", "clearComments", "addFileIDs", "removeFileIDs", "clearFiles", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addCheckResultIDs", "removeCheckResultIDs", "clearCheckResults"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "findingStatusName", "clearFindingStatusName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalID", "clearExternalID", "externalOwnerID", "clearExternalOwnerID", "source", "clearSource", "resourceName", "clearResourceName", "displayName", "clearDisplayName", "state", "clearState", "category", "clearCategory", "categories", "appendCategories", "clearCategories", "findingClass", "clearFindingClass", "severity", "clearSeverity", "numericSeverity", "clearNumericSeverity", "score", "clearScore", "impact", "clearImpact", "exploitability", "clearExploitability", "priority", "clearPriority", "open", "clearOpen", "blocksProduction", "clearBlocksProduction", "production", "clearProduction", "public", "clearPublic", "validated", "clearValidated", "assessmentID", "clearAssessmentID", "description", "clearDescription", "recommendation", "clearRecommendation", "recommendedActions", "clearRecommendedActions", "references", "appendReferences", "clearReferences", "stepsToReproduce", "appendStepsToReproduce", "clearStepsToReproduce", "targets", "appendTargets", "clearTargets", "targetDetails", "clearTargetDetails", "vector", "clearVector", "remediationSLA", "clearRemediationSLA", "eventTime", "clearEventTime", "reportedAt", "clearReportedAt", "sourceUpdatedAt", "clearSourceUpdatedAt", "externalURI", "clearExternalURI", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "assignedToIdentityHolderID", "clearAssignedToIdentityHolder", "environmentID", "clearEnvironment", "scopeID", "clearScope", "findingStatusID", "clearFindingStatus", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addDirectoryAccountIDs", "removeDirectoryAccountIDs", "clearDirectoryAccounts", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addReviewIDs", "removeReviewIDs", "clearReviews", "addCommentIDs", "removeCommentIDs", "clearComments", "addFileIDs", "removeFileIDs", "clearFiles", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addCheckResultIDs", "removeCheckResultIDs", "clearCheckResults"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -343076,76 +342061,6 @@ func (ec *executionContext) unmarshalInputUpdateFindingInput(ctx context.Context
 				return it, err
 			}
 			it.ClearTags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "clearSourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "clearSourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionVersion"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "clearSourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceInstanceID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "clearManagedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearManagedBy"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
-		case "clearIntegrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrationRunID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearIntegrationRunID = data
 		case "reviewedBy":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedBy"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -346932,7 +345847,7 @@ func (ec *executionContext) unmarshalInputUpdateInternalPolicyInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "revision", "clearRevision", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "name", "status", "clearStatus", "managementMode", "clearManagementMode", "details", "clearDetails", "detailsJSON", "appendDetailsJSON", "clearDetailsJSON", "approvalRequired", "clearApprovalRequired", "reviewDue", "clearReviewDue", "reviewFrequency", "clearReviewFrequency", "tagSuggestions", "appendTagSuggestions", "clearTagSuggestions", "dismissedTagSuggestions", "appendDismissedTagSuggestions", "clearDismissedTagSuggestions", "controlSuggestions", "appendControlSuggestions", "clearControlSuggestions", "dismissedControlSuggestions", "appendDismissedControlSuggestions", "clearDismissedControlSuggestions", "improvementSuggestions", "appendImprovementSuggestions", "clearImprovementSuggestions", "dismissedImprovementSuggestions", "appendDismissedImprovementSuggestions", "clearDismissedImprovementSuggestions", "url", "clearURL", "externalFileID", "clearExternalFileID", "externalContents", "clearExternalContents", "internalPolicyKindName", "clearInternalPolicyKindName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalUUID", "clearExternalUUID", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "ownerID", "clearOwner", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "approverID", "clearApprover", "delegateID", "clearDelegate", "internalPolicyKindID", "clearInternalPolicyKind", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addControlImplementationIDs", "removeControlImplementationIDs", "clearControlImplementations", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addNarrativeIDs", "removeNarrativeIDs", "clearNarratives", "addTaskIDs", "removeTaskIDs", "clearTasks", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "fileID", "clearFile", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addReviewIDs", "removeReviewIDs", "clearReviews", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment", "RevisionBump"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "revision", "clearRevision", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "name", "status", "clearStatus", "managementMode", "clearManagementMode", "details", "clearDetails", "detailsJSON", "appendDetailsJSON", "clearDetailsJSON", "approvalRequired", "clearApprovalRequired", "reviewDue", "clearReviewDue", "reviewFrequency", "clearReviewFrequency", "tagSuggestions", "appendTagSuggestions", "clearTagSuggestions", "dismissedTagSuggestions", "appendDismissedTagSuggestions", "clearDismissedTagSuggestions", "controlSuggestions", "appendControlSuggestions", "clearControlSuggestions", "dismissedControlSuggestions", "appendDismissedControlSuggestions", "clearDismissedControlSuggestions", "improvementSuggestions", "appendImprovementSuggestions", "clearImprovementSuggestions", "dismissedImprovementSuggestions", "appendDismissedImprovementSuggestions", "clearDismissedImprovementSuggestions", "url", "clearURL", "externalFileID", "clearExternalFileID", "externalContents", "clearExternalContents", "internalPolicyKindName", "clearInternalPolicyKindName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalUUID", "clearExternalUUID", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "ownerID", "clearOwner", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "approverID", "clearApprover", "delegateID", "clearDelegate", "internalPolicyKindID", "clearInternalPolicyKind", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addControlImplementationIDs", "removeControlImplementationIDs", "clearControlImplementations", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addNarrativeIDs", "removeNarrativeIDs", "clearNarratives", "addTaskIDs", "removeTaskIDs", "clearTasks", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "fileID", "clearFile", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addReviewIDs", "removeReviewIDs", "clearReviews", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment", "RevisionBump"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -346974,76 +345889,6 @@ func (ec *executionContext) unmarshalInputUpdateInternalPolicyInput(ctx context.
 				return it, err
 			}
 			it.ClearRevision = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "clearSourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "clearSourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionVersion"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "clearSourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceInstanceID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "clearManagedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearManagedBy"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
-		case "clearIntegrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrationRunID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearIntegrationRunID = data
 		case "internalNotes":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotes"))
 			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
@@ -355077,7 +353922,7 @@ func (ec *executionContext) unmarshalInputUpdateProcedureInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "revision", "clearRevision", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "name", "status", "clearStatus", "managementMode", "clearManagementMode", "details", "clearDetails", "detailsJSON", "appendDetailsJSON", "clearDetailsJSON", "approvalRequired", "clearApprovalRequired", "reviewDue", "clearReviewDue", "reviewFrequency", "clearReviewFrequency", "tagSuggestions", "appendTagSuggestions", "clearTagSuggestions", "dismissedTagSuggestions", "appendDismissedTagSuggestions", "clearDismissedTagSuggestions", "controlSuggestions", "appendControlSuggestions", "clearControlSuggestions", "dismissedControlSuggestions", "appendDismissedControlSuggestions", "clearDismissedControlSuggestions", "improvementSuggestions", "appendImprovementSuggestions", "clearImprovementSuggestions", "dismissedImprovementSuggestions", "appendDismissedImprovementSuggestions", "clearDismissedImprovementSuggestions", "url", "clearURL", "externalFileID", "clearExternalFileID", "externalContents", "clearExternalContents", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "procedureKindName", "clearProcedureKindName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "ownerID", "clearOwner", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "approverID", "clearApprover", "delegateID", "clearDelegate", "procedureKindID", "clearProcedureKind", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addNarrativeIDs", "removeNarrativeIDs", "clearNarratives", "addRiskIDs", "removeRiskIDs", "clearRisks", "addTaskIDs", "removeTaskIDs", "clearTasks", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "fileID", "clearFile", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment", "RevisionBump"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "revision", "clearRevision", "name", "status", "clearStatus", "managementMode", "clearManagementMode", "details", "clearDetails", "detailsJSON", "appendDetailsJSON", "clearDetailsJSON", "approvalRequired", "clearApprovalRequired", "reviewDue", "clearReviewDue", "reviewFrequency", "clearReviewFrequency", "tagSuggestions", "appendTagSuggestions", "clearTagSuggestions", "dismissedTagSuggestions", "appendDismissedTagSuggestions", "clearDismissedTagSuggestions", "controlSuggestions", "appendControlSuggestions", "clearControlSuggestions", "dismissedControlSuggestions", "appendDismissedControlSuggestions", "clearDismissedControlSuggestions", "improvementSuggestions", "appendImprovementSuggestions", "clearImprovementSuggestions", "dismissedImprovementSuggestions", "appendDismissedImprovementSuggestions", "clearDismissedImprovementSuggestions", "url", "clearURL", "externalFileID", "clearExternalFileID", "externalContents", "clearExternalContents", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "procedureKindName", "clearProcedureKindName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "ownerID", "clearOwner", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "approverID", "clearApprover", "delegateID", "clearDelegate", "procedureKindID", "clearProcedureKind", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addNarrativeIDs", "removeNarrativeIDs", "clearNarratives", "addRiskIDs", "removeRiskIDs", "clearRisks", "addTaskIDs", "removeTaskIDs", "clearTasks", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "fileID", "clearFile", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment", "RevisionBump"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -355119,76 +353964,6 @@ func (ec *executionContext) unmarshalInputUpdateProcedureInput(ctx context.Conte
 				return it, err
 			}
 			it.ClearRevision = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "clearSourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "clearSourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionVersion"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "clearSourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceInstanceID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "clearManagedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearManagedBy"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
-		case "clearIntegrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrationRunID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearIntegrationRunID = data
 		case "name":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -358474,7 +357249,7 @@ func (ec *executionContext) unmarshalInputUpdateRiskInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "riskKindName", "clearRiskKindName", "riskCategoryName", "clearRiskCategoryName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalID", "clearExternalID", "integrationID", "clearIntegrationID", "observedAt", "clearObservedAt", "externalUUID", "clearExternalUUID", "name", "status", "clearStatus", "impact", "clearImpact", "likelihood", "clearLikelihood", "score", "clearScore", "mitigation", "clearMitigation", "mitigationJSON", "appendMitigationJSON", "clearMitigationJSON", "details", "clearDetails", "detailsJSON", "appendDetailsJSON", "clearDetailsJSON", "businessCosts", "clearBusinessCosts", "businessCostsJSON", "appendBusinessCostsJSON", "clearBusinessCostsJSON", "mitigatedAt", "clearMitigatedAt", "reviewRequired", "clearReviewRequired", "lastReviewedAt", "clearLastReviewedAt", "reviewFrequency", "clearReviewFrequency", "dueDate", "clearDueDate", "nextReviewDueAt", "clearNextReviewDueAt", "residualScore", "clearResidualScore", "riskDecision", "clearRiskDecision", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "riskKindID", "clearRiskKind", "riskCategoryID", "clearRiskCategory", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "stakeholderID", "clearStakeholder", "delegateID", "clearDelegate", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addFindingIDs", "removeFindingIDs", "clearFindings", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "riskKindName", "clearRiskKindName", "riskCategoryName", "clearRiskCategoryName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalID", "clearExternalID", "integrationID", "clearIntegrationID", "observedAt", "clearObservedAt", "externalUUID", "clearExternalUUID", "name", "status", "clearStatus", "impact", "clearImpact", "likelihood", "clearLikelihood", "score", "clearScore", "mitigation", "clearMitigation", "mitigationJSON", "appendMitigationJSON", "clearMitigationJSON", "details", "clearDetails", "detailsJSON", "appendDetailsJSON", "clearDetailsJSON", "businessCosts", "clearBusinessCosts", "businessCostsJSON", "appendBusinessCostsJSON", "clearBusinessCostsJSON", "mitigatedAt", "clearMitigatedAt", "reviewRequired", "clearReviewRequired", "lastReviewedAt", "clearLastReviewedAt", "reviewFrequency", "clearReviewFrequency", "dueDate", "clearDueDate", "nextReviewDueAt", "clearNextReviewDueAt", "residualScore", "clearResidualScore", "riskDecision", "clearRiskDecision", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "riskKindID", "clearRiskKind", "riskCategoryID", "clearRiskCategory", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "stakeholderID", "clearStakeholder", "delegateID", "clearDelegate", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addFindingIDs", "removeFindingIDs", "clearFindings", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -358502,76 +357277,6 @@ func (ec *executionContext) unmarshalInputUpdateRiskInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearTags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "clearSourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "clearSourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionVersion"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "clearSourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceInstanceID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "clearManagedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearManagedBy"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
-		case "clearIntegrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrationRunID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearIntegrationRunID = data
 		case "riskKindName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("riskKindName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -367479,7 +366184,7 @@ func (ec *executionContext) unmarshalInputUpdateVulnerabilityInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "sourceDefinitionID", "clearSourceDefinitionID", "sourceDefinitionVersion", "clearSourceDefinitionVersion", "sourceInstanceID", "clearSourceInstanceID", "managedBy", "clearManagedBy", "integrationRunID", "clearIntegrationRunID", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "vulnerabilityStatusName", "clearVulnerabilityStatusName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalOwnerID", "clearExternalOwnerID", "externalID", "cveID", "clearCveID", "source", "clearSource", "displayName", "clearDisplayName", "category", "clearCategory", "severity", "clearSeverity", "score", "clearScore", "impact", "clearImpact", "exploitability", "clearExploitability", "priority", "clearPriority", "summary", "clearSummary", "description", "clearDescription", "vector", "clearVector", "remediationSLA", "clearRemediationSLA", "open", "clearOpen", "blocking", "clearBlocking", "production", "clearProduction", "public", "clearPublic", "validated", "clearValidated", "references", "appendReferences", "clearReferences", "impacts", "appendImpacts", "clearImpacts", "cweIds", "appendCweIds", "clearCweIds", "vulnerableVersionRange", "clearVulnerableVersionRange", "firstPatchedVersion", "clearFirstPatchedVersion", "fixAvailable", "clearFixAvailable", "packageName", "clearPackageName", "packageEcosystem", "clearPackageEcosystem", "manifestPath", "clearManifestPath", "dependencyScope", "clearDependencyScope", "publishedAt", "clearPublishedAt", "discoveredAt", "clearDiscoveredAt", "sourceUpdatedAt", "clearSourceUpdatedAt", "dismissedAt", "clearDismissedAt", "dismissedReason", "clearDismissedReason", "dismissedComment", "clearDismissedComment", "fixedAt", "clearFixedAt", "autoDismissedAt", "clearAutoDismissedAt", "externalURI", "clearExternalURI", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "assignedToIdentityHolderID", "clearAssignedToIdentityHolder", "environmentID", "clearEnvironment", "scopeID", "clearScope", "vulnerabilityStatusID", "clearVulnerabilityStatus", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addFindingIDs", "removeFindingIDs", "clearFindings", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addReviewIDs", "removeReviewIDs", "clearReviews", "addCommentIDs", "removeCommentIDs", "clearComments", "addFileIDs", "removeFileIDs", "clearFiles", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "vulnerabilityStatusName", "clearVulnerabilityStatusName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalOwnerID", "clearExternalOwnerID", "externalID", "cveID", "clearCveID", "source", "clearSource", "displayName", "clearDisplayName", "category", "clearCategory", "severity", "clearSeverity", "score", "clearScore", "impact", "clearImpact", "exploitability", "clearExploitability", "priority", "clearPriority", "summary", "clearSummary", "description", "clearDescription", "vector", "clearVector", "remediationSLA", "clearRemediationSLA", "open", "clearOpen", "blocking", "clearBlocking", "production", "clearProduction", "public", "clearPublic", "validated", "clearValidated", "references", "appendReferences", "clearReferences", "impacts", "appendImpacts", "clearImpacts", "cweIds", "appendCweIds", "clearCweIds", "vulnerableVersionRange", "clearVulnerableVersionRange", "firstPatchedVersion", "clearFirstPatchedVersion", "fixAvailable", "clearFixAvailable", "packageName", "clearPackageName", "packageEcosystem", "clearPackageEcosystem", "manifestPath", "clearManifestPath", "dependencyScope", "clearDependencyScope", "publishedAt", "clearPublishedAt", "discoveredAt", "clearDiscoveredAt", "sourceUpdatedAt", "clearSourceUpdatedAt", "dismissedAt", "clearDismissedAt", "dismissedReason", "clearDismissedReason", "dismissedComment", "clearDismissedComment", "fixedAt", "clearFixedAt", "autoDismissedAt", "clearAutoDismissedAt", "externalURI", "clearExternalURI", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "addIntegrationRunIDs", "removeIntegrationRunIDs", "clearIntegrationRuns", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "assignedToIdentityHolderID", "clearAssignedToIdentityHolder", "environmentID", "clearEnvironment", "scopeID", "clearScope", "vulnerabilityStatusID", "clearVulnerabilityStatus", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addFindingIDs", "removeFindingIDs", "clearFindings", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addReviewIDs", "removeReviewIDs", "clearReviews", "addCommentIDs", "removeCommentIDs", "clearComments", "addFileIDs", "removeFileIDs", "clearFiles", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -367507,76 +366212,6 @@ func (ec *executionContext) unmarshalInputUpdateVulnerabilityInput(ctx context.C
 				return it, err
 			}
 			it.ClearTags = data
-		case "sourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionID = data
-		case "clearSourceDefinitionID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionID = data
-		case "sourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceDefinitionVersion"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceDefinitionVersion = data
-		case "clearSourceDefinitionVersion":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceDefinitionVersion"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceDefinitionVersion = data
-		case "sourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceInstanceID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.SourceInstanceID = data
-		case "clearSourceInstanceID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceInstanceID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearSourceInstanceID = data
-		case "managedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("managedBy"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ManagedBy = data
-		case "clearManagedBy":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearManagedBy"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearManagedBy = data
-		case "integrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationRunID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.IntegrationRunID = data
-		case "clearIntegrationRunID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearIntegrationRunID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearIntegrationRunID = data
 		case "reviewedBy":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedBy"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)

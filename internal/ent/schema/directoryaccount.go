@@ -213,7 +213,7 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Comment("flattened attribute bag used for filtering/diffing").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField(),
+				entx.IntegrationMappingField().Volatile(),
 			),
 		field.JSON("metadata", map[string]any{}).
 			Comment("provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl").
