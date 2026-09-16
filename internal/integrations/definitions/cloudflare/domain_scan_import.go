@@ -207,26 +207,21 @@ func applyBrandingToTrustCenter(ctx context.Context, client *generated.Client, b
 			tcEnvironment = enums.TrustCenterEnvironmentPreview
 		}
 
-		settings, err := tx.TrustCenterSetting.Query().
+		setting, err := tx.TrustCenterSetting.Query().
 			Where(
 				trustcentersetting.TrustCenterIDEQ(tc.ID),
 				trustcentersetting.EnvironmentEQ(tcEnvironment)).
-			All(ctx)
+			Only(ctx)
 		if err != nil {
 			return false, fmt.Errorf("could not fetch trust center settings for brand design: %w", err)
 		}
 
-		updated := false
-		for _, setting := range settings {
-			settingUpdated, err := updateTrustcenterBrandDesignSetting(ctx, setting, brandDesign)
-			if err != nil {
-				return false, err
-			}
-
-			updated = updated || settingUpdated
+		ok, err := updateTrustcenterBrandDesignSetting(ctx, setting, brandDesign)
+		if err != nil {
+			return false, err
 		}
 
-		return updated, nil
+		return ok, nil
 	})
 }
 
