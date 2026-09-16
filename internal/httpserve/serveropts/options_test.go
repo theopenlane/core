@@ -1,6 +1,7 @@
 package serveropts
 
 import (
+	"context"
 	"os"
 	"testing"
 
@@ -35,7 +36,7 @@ func TestWithIntegrationsRuntime_NilDB(t *testing.T) {
 		},
 	}
 
-	WithIntegrationsRuntime(nil, nil).apply(so)
+	WithIntegrationsRuntime(context.Background(), nil, nil).apply(so)
 
 	if so.Config.Handler.IntegrationsRuntime != nil {
 		t.Fatalf("expected integrations runtime to remain nil when DB is nil")

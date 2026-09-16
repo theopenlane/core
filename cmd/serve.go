@@ -305,7 +305,7 @@ func serve(ctx context.Context) error {
 	// add auth and integration options
 	so.AddServerOptions(
 		serveropts.WithAuth(),
-		serveropts.WithIntegrationsRuntime(dbClient, galaApp),
+		serveropts.WithIntegrationsRuntime(ctx, dbClient, galaApp),
 	)
 
 	// backfills run after the integrations runtime so they can use it
