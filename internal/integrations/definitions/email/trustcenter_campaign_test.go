@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/theopenlane/core/v2/internal/audiences"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
@@ -34,7 +35,7 @@ func TestRenderTrustCenterCampaignMessages(t *testing.T) {
 			ID:       "ct_1",
 			Email:    "dolores@example.com",
 			FullName: "Dolores Abernathy",
-			Metadata: map[string]any{MetadataUnsubscribeTokenKey: "tok_dolores"},
+			Metadata: map[string]any{audiences.MetadataUnsubscribeTokenKey: "tok_dolores"},
 		},
 	}
 

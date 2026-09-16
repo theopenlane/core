@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/v2/internal/audiences"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
@@ -25,9 +26,6 @@ const (
 	// sendRateInterval is the minimum interval between individual sends to stay
 	// within the provider rate limit of 20 messages per second
 	sendRateInterval = 50 * time.Millisecond
-	// MetadataUnsubscribeTokenKey is the campaign target metadata key under which the trust center
-	// subscriber snapshot stores the per-recipient unsubscribe token consumed at render time
-	MetadataUnsubscribeTokenKey = "unsubscribeToken"
 )
 
 // CampaignDispatchInput holds the shared dispatch parameters for campaign operations
@@ -318,7 +316,7 @@ func sendCampaignIndividual(ctx context.Context, db *generated.Client, client *C
 // unsubscribeTokenFromMetadata extracts the per-recipient unsubscribe token stashed on a
 // campaign target's metadata by the trust center subscriber snapshot, returning empty when absent
 func unsubscribeTokenFromMetadata(metadata map[string]any) string {
-	token, _ := metadata[MetadataUnsubscribeTokenKey].(string)
+	token, _ := metadata[audiences.MetadataUnsubscribeTokenKey].(string)
 
 	return token
 }

@@ -401,3 +401,5 @@ require (
 	google.golang.org/grpc v1.83.2 // indirect
 	gotest.tools/gotestsum v1.13.0 // indirect
 )
+
+replace github.com/theopenlane/entx => ../entx/

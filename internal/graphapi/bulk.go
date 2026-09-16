@@ -758,6 +758,444 @@ func (r *mutationResolver) bulkUpdateCSVAsset(ctx context.Context, inputs []*csv
 	}, nil
 }
 
+// bulkCreateAudience uses the CreateBulk function to create multiple Audience entities
+func (r *mutationResolver) bulkCreateAudience(ctx context.Context, input []*generated.CreateAudienceInput) (*model.AudienceBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.AudienceCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Audience.Create().SetInput(*data)
+	}
+
+	res, err := c.Audience.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "audience"})
+	}
+
+	// return response
+	return &model.AudienceBulkCreatePayload{
+		Audiences: res,
+	}, nil
+}
+
+// bulkUpdateAudience updates multiple Audience entities
+func (r *mutationResolver) bulkUpdateAudience(ctx context.Context, ids []string, input generated.UpdateAudienceInput) (*model.AudienceBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	originalIDs := append([]string(nil), ids...)
+	ids = r.filterAuthorizedIDs(ctx, ids, "audience", fgax.CanEdit)
+	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
+		return &model.AudienceBulkUpdatePayload{
+			Audiences:     []*generated.Audience{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
+		}, nil
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.Audience, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each audience individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for audience")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.Audience.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("audience_id", id).Msg("failed to get audience in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("audience_id", id).Msg("failed to update audience in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
+	return &model.AudienceBulkUpdatePayload{
+		Audiences:     results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
+	}, nil
+}
+
+// bulkUpdateCSVAudience updates multiple Audience entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVAudience(ctx context.Context, inputs []*csvgenerated.AudienceCSVUpdateInput) (*model.AudienceBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.Audience, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each audience individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for audience")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.Audience.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("audience_id", input.ID).Msg("failed to get audience in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("audience_id", input.ID).Msg("failed to update audience in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "audience"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.AudienceBulkUpdatePayload{
+		Audiences:  results,
+		UpdatedIDs: updatedIDs,
+	}, nil
+}
+
+// bulkDeleteAudience deletes multiple Audience entities by their IDs
+func (r *mutationResolver) bulkDeleteAudience(ctx context.Context, ids []string) (*model.AudienceBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	originalIDs := append([]string(nil), ids...)
+	ids = r.filterAuthorizedIDs(ctx, ids, "audience", fgax.CanDelete)
+	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
+		return &model.AudienceBulkDeletePayload{
+			DeletedIDs:    []string{},
+			NotDeletedIDs: originalIDs,
+			Error:         &err,
+		}, nil
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each audience individually to ensure proper cleanup
+			if err := r.db.Audience.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("audience_id", id).Msg("failed to delete audience in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.AudienceEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("audience_id", id).Msg("failed to cleanup audience edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some audience deletions failed")
+	}
+
+	deleted := make(map[string]struct{}, len(deletedIDs))
+	for _, id := range deletedIDs {
+		deleted[id] = struct{}{}
+	}
+
+	notDeletedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := deleted[id]; !ok {
+			notDeletedIDs = append(notDeletedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notDeletedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
+	return &model.AudienceBulkDeletePayload{
+		DeletedIDs:    deletedIDs,
+		NotDeletedIDs: notDeletedIDs,
+		Error:         err,
+	}, nil
+}
+
+// bulkCreateAudienceMember uses the CreateBulk function to create multiple AudienceMember entities
+func (r *mutationResolver) bulkCreateAudienceMember(ctx context.Context, input []*generated.CreateAudienceMemberInput) (*model.AudienceMemberBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.AudienceMemberCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.AudienceMember.Create().SetInput(*data)
+	}
+
+	res, err := c.AudienceMember.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "audiencemember"})
+	}
+
+	// return response
+	return &model.AudienceMemberBulkCreatePayload{
+		AudienceMembers: res,
+	}, nil
+}
+
+// bulkUpdateAudienceMember updates multiple AudienceMember entities
+func (r *mutationResolver) bulkUpdateAudienceMember(ctx context.Context, ids []string, input generated.UpdateAudienceMemberInput) (*model.AudienceMemberBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	originalIDs := append([]string(nil), ids...)
+	ids = r.filterAuthorizedIDs(ctx, ids, "audience_member", fgax.CanEdit)
+	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
+		return &model.AudienceMemberBulkUpdatePayload{
+			AudienceMembers: []*generated.AudienceMember{},
+			UpdatedIDs:      []string{},
+			NotUpdatedIDs:   originalIDs,
+			Error:           &err,
+		}, nil
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.AudienceMember, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each audiencemember individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for audiencemember")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.AudienceMember.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("audiencemember_id", id).Msg("failed to get audiencemember in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).AppendTags(input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("audiencemember_id", id).Msg("failed to update audiencemember in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
+	return &model.AudienceMemberBulkUpdatePayload{
+		AudienceMembers: results,
+		UpdatedIDs:      updatedIDs,
+		NotUpdatedIDs:   notUpdatedIDs,
+		Error:           err,
+	}, nil
+}
+
+// bulkUpdateCSVAudienceMember updates multiple AudienceMember entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVAudienceMember(ctx context.Context, inputs []*csvgenerated.AudienceMemberCSVUpdateInput) (*model.AudienceMemberBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.AudienceMember, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each audiencemember individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for audiencemember")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.AudienceMember.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("audiencemember_id", input.ID).Msg("failed to get audiencemember in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).AppendTags(input.Input.AppendTags).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("audiencemember_id", input.ID).Msg("failed to update audiencemember in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "audiencemember"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.AudienceMemberBulkUpdatePayload{
+		AudienceMembers: results,
+		UpdatedIDs:      updatedIDs,
+	}, nil
+}
+
+// bulkDeleteAudienceMember deletes multiple AudienceMember entities by their IDs
+func (r *mutationResolver) bulkDeleteAudienceMember(ctx context.Context, ids []string) (*model.AudienceMemberBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	originalIDs := append([]string(nil), ids...)
+	ids = r.filterAuthorizedIDs(ctx, ids, "audience_member", fgax.CanDelete)
+	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
+		return &model.AudienceMemberBulkDeletePayload{
+			DeletedIDs:    []string{},
+			NotDeletedIDs: originalIDs,
+			Error:         &err,
+		}, nil
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each audiencemember individually to ensure proper cleanup
+			if err := r.db.AudienceMember.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("audiencemember_id", id).Msg("failed to delete audiencemember in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.AudienceMemberEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("audiencemember_id", id).Msg("failed to cleanup audiencemember edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some audiencemember deletions failed")
+	}
+
+	deleted := make(map[string]struct{}, len(deletedIDs))
+	for _, id := range deletedIDs {
+		deleted[id] = struct{}{}
+	}
+
+	notDeletedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := deleted[id]; !ok {
+			notDeletedIDs = append(notDeletedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notDeletedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
+	return &model.AudienceMemberBulkDeletePayload{
+		DeletedIDs:    deletedIDs,
+		NotDeletedIDs: notDeletedIDs,
+		Error:         err,
+	}, nil
+}
+
 // bulkCreateCampaign uses the CreateBulk function to create multiple Campaign entities
 func (r *mutationResolver) bulkCreateCampaign(ctx context.Context, input []*generated.CreateCampaignInput) (*model.CampaignBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

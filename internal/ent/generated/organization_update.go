@@ -17,6 +17,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audience"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
@@ -412,6 +414,36 @@ func (_u *OrganizationUpdate) AddAssetCreators(v ...*Group) *OrganizationUpdate 
 		ids[i] = v[i].ID
 	}
 	return _u.AddAssetCreatorIDs(ids...)
+}
+
+// AddAudienceCreatorIDs adds the "audience_creators" edge to the Group entity by IDs.
+func (_u *OrganizationUpdate) AddAudienceCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddAudienceCreatorIDs(ids...)
+	return _u
+}
+
+// AddAudienceCreators adds the "audience_creators" edges to the Group entity.
+func (_u *OrganizationUpdate) AddAudienceCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAudienceCreatorIDs(ids...)
+}
+
+// AddAudienceMemberCreatorIDs adds the "audience_member_creators" edge to the Group entity by IDs.
+func (_u *OrganizationUpdate) AddAudienceMemberCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddAudienceMemberCreatorIDs(ids...)
+	return _u
+}
+
+// AddAudienceMemberCreators adds the "audience_member_creators" edges to the Group entity.
+func (_u *OrganizationUpdate) AddAudienceMemberCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAudienceMemberCreatorIDs(ids...)
 }
 
 // AddCampaignCreatorIDs adds the "campaign_creators" edge to the Group entity by IDs.
@@ -2312,6 +2344,36 @@ func (_u *OrganizationUpdate) AddExports(v ...*Export) *OrganizationUpdate {
 	return _u.AddExportIDs(ids...)
 }
 
+// AddAudienceIDs adds the "audiences" edge to the Audience entity by IDs.
+func (_u *OrganizationUpdate) AddAudienceIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddAudienceIDs(ids...)
+	return _u
+}
+
+// AddAudiences adds the "audiences" edges to the Audience entity.
+func (_u *OrganizationUpdate) AddAudiences(v ...*Audience) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAudienceIDs(ids...)
+}
+
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by IDs.
+func (_u *OrganizationUpdate) AddAudienceMemberIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddAudienceMemberIDs(ids...)
+	return _u
+}
+
+// AddAudienceMembers adds the "audience_members" edges to the AudienceMember entity.
+func (_u *OrganizationUpdate) AddAudienceMembers(v ...*AudienceMember) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAudienceMemberIDs(ids...)
+}
+
 // AddTrustCenterWatermarkConfigIDs adds the "trust_center_watermark_configs" edge to the TrustCenterWatermarkConfig entity by IDs.
 func (_u *OrganizationUpdate) AddTrustCenterWatermarkConfigIDs(ids ...string) *OrganizationUpdate {
 	_u.mutation.AddTrustCenterWatermarkConfigIDs(ids...)
@@ -2804,6 +2866,48 @@ func (_u *OrganizationUpdate) RemoveAssetCreators(v ...*Group) *OrganizationUpda
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAssetCreatorIDs(ids...)
+}
+
+// ClearAudienceCreators clears all "audience_creators" edges to the Group entity.
+func (_u *OrganizationUpdate) ClearAudienceCreators() *OrganizationUpdate {
+	_u.mutation.ClearAudienceCreators()
+	return _u
+}
+
+// RemoveAudienceCreatorIDs removes the "audience_creators" edge to Group entities by IDs.
+func (_u *OrganizationUpdate) RemoveAudienceCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveAudienceCreatorIDs(ids...)
+	return _u
+}
+
+// RemoveAudienceCreators removes "audience_creators" edges to Group entities.
+func (_u *OrganizationUpdate) RemoveAudienceCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAudienceCreatorIDs(ids...)
+}
+
+// ClearAudienceMemberCreators clears all "audience_member_creators" edges to the Group entity.
+func (_u *OrganizationUpdate) ClearAudienceMemberCreators() *OrganizationUpdate {
+	_u.mutation.ClearAudienceMemberCreators()
+	return _u
+}
+
+// RemoveAudienceMemberCreatorIDs removes the "audience_member_creators" edge to Group entities by IDs.
+func (_u *OrganizationUpdate) RemoveAudienceMemberCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveAudienceMemberCreatorIDs(ids...)
+	return _u
+}
+
+// RemoveAudienceMemberCreators removes "audience_member_creators" edges to Group entities.
+func (_u *OrganizationUpdate) RemoveAudienceMemberCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAudienceMemberCreatorIDs(ids...)
 }
 
 // ClearCampaignCreators clears all "campaign_creators" edges to the Group entity.
@@ -5422,6 +5526,48 @@ func (_u *OrganizationUpdate) RemoveExports(v ...*Export) *OrganizationUpdate {
 	return _u.RemoveExportIDs(ids...)
 }
 
+// ClearAudiences clears all "audiences" edges to the Audience entity.
+func (_u *OrganizationUpdate) ClearAudiences() *OrganizationUpdate {
+	_u.mutation.ClearAudiences()
+	return _u
+}
+
+// RemoveAudienceIDs removes the "audiences" edge to Audience entities by IDs.
+func (_u *OrganizationUpdate) RemoveAudienceIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveAudienceIDs(ids...)
+	return _u
+}
+
+// RemoveAudiences removes "audiences" edges to Audience entities.
+func (_u *OrganizationUpdate) RemoveAudiences(v ...*Audience) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAudienceIDs(ids...)
+}
+
+// ClearAudienceMembers clears all "audience_members" edges to the AudienceMember entity.
+func (_u *OrganizationUpdate) ClearAudienceMembers() *OrganizationUpdate {
+	_u.mutation.ClearAudienceMembers()
+	return _u
+}
+
+// RemoveAudienceMemberIDs removes the "audience_members" edge to AudienceMember entities by IDs.
+func (_u *OrganizationUpdate) RemoveAudienceMemberIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveAudienceMemberIDs(ids...)
+	return _u
+}
+
+// RemoveAudienceMembers removes "audience_members" edges to AudienceMember entities.
+func (_u *OrganizationUpdate) RemoveAudienceMembers(v ...*AudienceMember) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAudienceMemberIDs(ids...)
+}
+
 // ClearTrustCenterWatermarkConfigs clears all "trust_center_watermark_configs" edges to the TrustCenterWatermarkConfig entity.
 func (_u *OrganizationUpdate) ClearTrustCenterWatermarkConfigs() *OrganizationUpdate {
 	_u.mutation.ClearTrustCenterWatermarkConfigs()
@@ -6322,6 +6468,96 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 			Inverse: false,
 			Table:   organization.AssetCreatorsTable,
 			Columns: []string{organization.AssetCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AudienceCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceCreatorsTable,
+			Columns: []string{organization.AudienceCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAudienceCreatorsIDs(); len(nodes) > 0 && !_u.mutation.AudienceCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceCreatorsTable,
+			Columns: []string{organization.AudienceCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AudienceCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceCreatorsTable,
+			Columns: []string{organization.AudienceCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AudienceMemberCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceMemberCreatorsTable,
+			Columns: []string{organization.AudienceMemberCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAudienceMemberCreatorsIDs(); len(nodes) > 0 && !_u.mutation.AudienceMemberCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceMemberCreatorsTable,
+			Columns: []string{organization.AudienceMemberCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AudienceMemberCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceMemberCreatorsTable,
+			Columns: []string{organization.AudienceMemberCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -11991,6 +12227,96 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.AudiencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudiencesTable,
+			Columns: []string{organization.AudiencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audience.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAudiencesIDs(); len(nodes) > 0 && !_u.mutation.AudiencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudiencesTable,
+			Columns: []string{organization.AudiencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audience.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AudiencesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudiencesTable,
+			Columns: []string{organization.AudiencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audience.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceMembersTable,
+			Columns: []string{organization.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAudienceMembersIDs(); len(nodes) > 0 && !_u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceMembersTable,
+			Columns: []string{organization.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AudienceMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceMembersTable,
+			Columns: []string{organization.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.TrustCenterWatermarkConfigsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -13530,6 +13856,36 @@ func (_u *OrganizationUpdateOne) AddAssetCreators(v ...*Group) *OrganizationUpda
 		ids[i] = v[i].ID
 	}
 	return _u.AddAssetCreatorIDs(ids...)
+}
+
+// AddAudienceCreatorIDs adds the "audience_creators" edge to the Group entity by IDs.
+func (_u *OrganizationUpdateOne) AddAudienceCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddAudienceCreatorIDs(ids...)
+	return _u
+}
+
+// AddAudienceCreators adds the "audience_creators" edges to the Group entity.
+func (_u *OrganizationUpdateOne) AddAudienceCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAudienceCreatorIDs(ids...)
+}
+
+// AddAudienceMemberCreatorIDs adds the "audience_member_creators" edge to the Group entity by IDs.
+func (_u *OrganizationUpdateOne) AddAudienceMemberCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddAudienceMemberCreatorIDs(ids...)
+	return _u
+}
+
+// AddAudienceMemberCreators adds the "audience_member_creators" edges to the Group entity.
+func (_u *OrganizationUpdateOne) AddAudienceMemberCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAudienceMemberCreatorIDs(ids...)
 }
 
 // AddCampaignCreatorIDs adds the "campaign_creators" edge to the Group entity by IDs.
@@ -15430,6 +15786,36 @@ func (_u *OrganizationUpdateOne) AddExports(v ...*Export) *OrganizationUpdateOne
 	return _u.AddExportIDs(ids...)
 }
 
+// AddAudienceIDs adds the "audiences" edge to the Audience entity by IDs.
+func (_u *OrganizationUpdateOne) AddAudienceIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddAudienceIDs(ids...)
+	return _u
+}
+
+// AddAudiences adds the "audiences" edges to the Audience entity.
+func (_u *OrganizationUpdateOne) AddAudiences(v ...*Audience) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAudienceIDs(ids...)
+}
+
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by IDs.
+func (_u *OrganizationUpdateOne) AddAudienceMemberIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddAudienceMemberIDs(ids...)
+	return _u
+}
+
+// AddAudienceMembers adds the "audience_members" edges to the AudienceMember entity.
+func (_u *OrganizationUpdateOne) AddAudienceMembers(v ...*AudienceMember) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAudienceMemberIDs(ids...)
+}
+
 // AddTrustCenterWatermarkConfigIDs adds the "trust_center_watermark_configs" edge to the TrustCenterWatermarkConfig entity by IDs.
 func (_u *OrganizationUpdateOne) AddTrustCenterWatermarkConfigIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddTrustCenterWatermarkConfigIDs(ids...)
@@ -15922,6 +16308,48 @@ func (_u *OrganizationUpdateOne) RemoveAssetCreators(v ...*Group) *OrganizationU
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveAssetCreatorIDs(ids...)
+}
+
+// ClearAudienceCreators clears all "audience_creators" edges to the Group entity.
+func (_u *OrganizationUpdateOne) ClearAudienceCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearAudienceCreators()
+	return _u
+}
+
+// RemoveAudienceCreatorIDs removes the "audience_creators" edge to Group entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveAudienceCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveAudienceCreatorIDs(ids...)
+	return _u
+}
+
+// RemoveAudienceCreators removes "audience_creators" edges to Group entities.
+func (_u *OrganizationUpdateOne) RemoveAudienceCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAudienceCreatorIDs(ids...)
+}
+
+// ClearAudienceMemberCreators clears all "audience_member_creators" edges to the Group entity.
+func (_u *OrganizationUpdateOne) ClearAudienceMemberCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearAudienceMemberCreators()
+	return _u
+}
+
+// RemoveAudienceMemberCreatorIDs removes the "audience_member_creators" edge to Group entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveAudienceMemberCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveAudienceMemberCreatorIDs(ids...)
+	return _u
+}
+
+// RemoveAudienceMemberCreators removes "audience_member_creators" edges to Group entities.
+func (_u *OrganizationUpdateOne) RemoveAudienceMemberCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAudienceMemberCreatorIDs(ids...)
 }
 
 // ClearCampaignCreators clears all "campaign_creators" edges to the Group entity.
@@ -18540,6 +18968,48 @@ func (_u *OrganizationUpdateOne) RemoveExports(v ...*Export) *OrganizationUpdate
 	return _u.RemoveExportIDs(ids...)
 }
 
+// ClearAudiences clears all "audiences" edges to the Audience entity.
+func (_u *OrganizationUpdateOne) ClearAudiences() *OrganizationUpdateOne {
+	_u.mutation.ClearAudiences()
+	return _u
+}
+
+// RemoveAudienceIDs removes the "audiences" edge to Audience entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveAudienceIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveAudienceIDs(ids...)
+	return _u
+}
+
+// RemoveAudiences removes "audiences" edges to Audience entities.
+func (_u *OrganizationUpdateOne) RemoveAudiences(v ...*Audience) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAudienceIDs(ids...)
+}
+
+// ClearAudienceMembers clears all "audience_members" edges to the AudienceMember entity.
+func (_u *OrganizationUpdateOne) ClearAudienceMembers() *OrganizationUpdateOne {
+	_u.mutation.ClearAudienceMembers()
+	return _u
+}
+
+// RemoveAudienceMemberIDs removes the "audience_members" edge to AudienceMember entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveAudienceMemberIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveAudienceMemberIDs(ids...)
+	return _u
+}
+
+// RemoveAudienceMembers removes "audience_members" edges to AudienceMember entities.
+func (_u *OrganizationUpdateOne) RemoveAudienceMembers(v ...*AudienceMember) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAudienceMemberIDs(ids...)
+}
+
 // ClearTrustCenterWatermarkConfigs clears all "trust_center_watermark_configs" edges to the TrustCenterWatermarkConfig entity.
 func (_u *OrganizationUpdateOne) ClearTrustCenterWatermarkConfigs() *OrganizationUpdateOne {
 	_u.mutation.ClearTrustCenterWatermarkConfigs()
@@ -19470,6 +19940,96 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			Inverse: false,
 			Table:   organization.AssetCreatorsTable,
 			Columns: []string{organization.AssetCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AudienceCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceCreatorsTable,
+			Columns: []string{organization.AudienceCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAudienceCreatorsIDs(); len(nodes) > 0 && !_u.mutation.AudienceCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceCreatorsTable,
+			Columns: []string{organization.AudienceCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AudienceCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceCreatorsTable,
+			Columns: []string{organization.AudienceCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AudienceMemberCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceMemberCreatorsTable,
+			Columns: []string{organization.AudienceMemberCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAudienceMemberCreatorsIDs(); len(nodes) > 0 && !_u.mutation.AudienceMemberCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceMemberCreatorsTable,
+			Columns: []string{organization.AudienceMemberCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AudienceMemberCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceMemberCreatorsTable,
+			Columns: []string{organization.AudienceMemberCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -25132,6 +25692,96 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AudiencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudiencesTable,
+			Columns: []string{organization.AudiencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audience.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAudiencesIDs(); len(nodes) > 0 && !_u.mutation.AudiencesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudiencesTable,
+			Columns: []string{organization.AudiencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audience.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AudiencesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudiencesTable,
+			Columns: []string{organization.AudiencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audience.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceMembersTable,
+			Columns: []string{organization.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAudienceMembersIDs(); len(nodes) > 0 && !_u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceMembersTable,
+			Columns: []string{organization.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AudienceMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceMembersTable,
+			Columns: []string{organization.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
