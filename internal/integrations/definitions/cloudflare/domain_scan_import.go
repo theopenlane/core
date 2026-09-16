@@ -216,12 +216,7 @@ func applyBrandingToTrustCenter(ctx context.Context, client *generated.Client, b
 			return false, fmt.Errorf("could not fetch trust center settings for brand design: %w", err)
 		}
 
-		ok, err := updateTrustcenterBrandDesignSetting(ctx, setting, brandDesign)
-		if err != nil {
-			return false, err
-		}
-
-		return ok, nil
+		return updateTrustcenterBrandDesignSetting(ctx, setting, brandDesign)
 	})
 }
 
