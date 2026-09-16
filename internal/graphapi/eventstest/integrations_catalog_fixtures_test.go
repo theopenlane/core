@@ -27,7 +27,7 @@ import (
 const catalogFixtureIngestOperation = "catalog.fixture.ingest"
 
 // catalogFixtureDefinition builds a minimal ingest definition for schemaName whose mapping passes provider payloads through unchanged
-func catalogFixtureDefinition(defID string, schemaName string) integrationtypes.Definition {
+func catalogFixtureDefinition(defID, schemaName string) integrationtypes.Definition {
 	passthrough := integrationtypes.MappingOverride{MapExpr: "payload"}
 
 	return integrationtypes.Definition{

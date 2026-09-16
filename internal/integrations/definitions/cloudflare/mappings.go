@@ -15,7 +15,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.MfaState.Expr(`dyn('two_factor_enabled' in payload && payload.two_factor_enabled ? "ENABLED" : "DISABLED")`),
 	entityops.DirectoryAccountFields.Status.Expr(`dyn('status' in payload && payload.status == "accepted" ? "ACTIVE" : "INACTIVE")`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
-	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
@@ -24,7 +24,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.ExternalID.Expr(`payload.id`),
 	entityops.DirectoryGroupFields.DisplayName.Expr(`payload.name`),
 	entityops.DirectoryGroupFields.Profile.Expr(`payload`),
-	entityops.DirectoryGroupFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryGroupFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
 // mapExprDirectoryMembership is the CEL mapping expression for Cloudflare policy payloads mapped to DirectoryMembership
@@ -32,7 +32,7 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`payload.group_id`),
 	entityops.DirectoryMembershipFields.DirectoryAccountID.Expr(`'user_id' in payload && payload.user_id != "" ? payload.user_id : ('email' in payload ? payload.email : "")`),
 	entityops.DirectoryMembershipFields.Metadata.Expr("payload"),
-	entityops.DirectoryMembershipFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryMembershipFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
 // mapExprFinding is the CEL mapping expression for Cloudflare Security Center insight payloads mapped to Finding

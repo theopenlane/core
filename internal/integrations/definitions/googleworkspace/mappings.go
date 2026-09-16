@@ -24,7 +24,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
 	entityops.DirectoryAccountFields.AddedAt.Expr(`'creationTime' in payload ? payload.creationTime : ""`),
 	entityops.DirectoryAccountFields.AvatarRemoteURL.Expr(`'thumbnailPhotoUrl' in payload ? payload.thumbnailPhotoUrl : null`),
-	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
@@ -37,7 +37,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.Status.Expr(`"ACTIVE"`),
 	entityops.DirectoryGroupFields.SourceVersion.Expr(`'etag' in payload ? payload.etag : ""`),
 	entityops.DirectoryGroupFields.Profile.Expr("payload"),
-	entityops.DirectoryGroupFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryGroupFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
 // mapExprDirectoryMembership is the CEL mapping expression for Google Workspace membership payloads mapped to DirectoryMembership
@@ -46,5 +46,5 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`resource`),
 	entityops.DirectoryMembershipFields.Role.Expr(`dyn('role' in payload && payload.role != "" ? payload.role : "MEMBER")`),
 	entityops.DirectoryMembershipFields.Metadata.Expr("payload"),
-	entityops.DirectoryMembershipFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryMembershipFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )

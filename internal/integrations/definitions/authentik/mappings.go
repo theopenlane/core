@@ -16,7 +16,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.ObservedAt.Expr(`'last_updated' in payload ? payload.last_updated : null`),
 	entityops.DirectoryAccountFields.Metadata.Expr(`'attributes' in payload ? payload.attributes : {}`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
-	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
@@ -27,7 +27,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.Status.Expr(`dyn("ACTIVE")`),
 	entityops.DirectoryGroupFields.Metadata.Expr(`'attributes' in payload ? payload.attributes : {}`),
 	entityops.DirectoryGroupFields.Profile.Expr("payload"),
-	entityops.DirectoryGroupFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryGroupFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
 // mapExprDirectoryMembership is the CEL mapping expression for Authentik membership payloads mapped to DirectoryMembership
@@ -36,5 +36,5 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`resource != "" ? resource : ""`),
 	entityops.DirectoryMembershipFields.Role.Expr(`dyn("MEMBER")`),
 	entityops.DirectoryMembershipFields.Metadata.Expr("payload"),
-	entityops.DirectoryMembershipFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryMembershipFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )

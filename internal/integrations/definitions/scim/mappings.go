@@ -15,7 +15,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.Status.Expr(`dyn(action == "delete" ? "DELETED" : ('active' in payload ? (payload.active ? "ACTIVE" : "INACTIVE") : "ACTIVE"))`),
 	entityops.DirectoryAccountFields.MfaState.Expr(`dyn("UNKNOWN")`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
-	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
@@ -26,7 +26,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.Classification.Expr(`dyn("TEAM")`),
 	entityops.DirectoryGroupFields.Status.Expr(`dyn(action == "delete" ? "DELETED" : ('active' in payload ? (payload.active ? "ACTIVE" : "INACTIVE") : "ACTIVE"))`),
 	entityops.DirectoryGroupFields.Profile.Expr("payload"),
-	entityops.DirectoryGroupFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryGroupFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
 // mapExprDirectoryMembership is the CEL mapping expression for SCIM group membership payloads mapped to DirectoryMembership
@@ -35,5 +35,5 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`'group' in payload && payload.group != null && 'externalId' in payload.group ? payload.group.externalId : ""`),
 	entityops.DirectoryMembershipFields.Role.Expr(`dyn("MEMBER")`),
 	entityops.DirectoryMembershipFields.Metadata.Expr("payload"),
-	entityops.DirectoryMembershipFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryMembershipFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )

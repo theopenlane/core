@@ -85,7 +85,7 @@ var mapExprVuln = providerkit.CelMapExpr(
 	entityops.VulnerabilityFields.Score.Expr(`'vulnerability' in payload && payload.vulnerability != null && 'cve' in payload.vulnerability && payload.vulnerability.cve != null && 'cvssv3' in payload.vulnerability.cve && payload.vulnerability.cve.cvssv3 != null && 'base_score' in payload.vulnerability.cve.cvssv3 ? payload.vulnerability.cve.cvssv3.base_score : null`),
 	entityops.VulnerabilityFields.Vector.Expr(`'vulnerability' in payload && payload.vulnerability != null && 'cve' in payload.vulnerability && payload.vulnerability.cve != null && 'cvssv3' in payload.vulnerability.cve && payload.vulnerability.cve.cvssv3 != null && 'attack_vector' in payload.vulnerability.cve.cvssv3 ? payload.vulnerability.cve.cvssv3.attack_vector : null`),
 	entityops.VulnerabilityFields.DependencyScope.Expr(`'category' in payload && payload.category  == 'GKE_RUNTIME_OS_VULNERABILITY' ? "RUNTIME" : ""`),
-	entityops.VulnerabilityFields.Source.Expr("installation.name"),
+	entityops.VulnerabilityFields.Source.Expr(providerkit.ExprInstallationName),
 )
 
 // mapExprRisk is the CEL mapping expression for GCP Security Command Center risk payloads

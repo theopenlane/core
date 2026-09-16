@@ -39,6 +39,8 @@ const (
 	celVarPayload = "payload"
 	// celVarInstallation is the CEL variable name bound to the writing installation in map expressions
 	celVarInstallation = "installation"
+	// ExprInstallationName is the map expression yielding the writing installation's name
+	ExprInstallationName = celVarInstallation + ".name"
 
 	// maxSafeInteger is the largest float64 that can still hold every integer exactly (2^53)
 	maxSafeInteger = float64(1 << 53)

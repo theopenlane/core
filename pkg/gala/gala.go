@@ -363,15 +363,9 @@ func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any
 	}
 
 	if envelope.Headers.UniqueKey == "" && !envelope.Headers.SkipUniqueKey && registration.uniqueKey != nil {
-		uniqueKey := registration.uniqueKey(payload)
-		// decode raw emits so dedup keys match typed emits on the same topic
-		if uniqueKey == "" && rawPayload {
-			decodedPayload, err := registration.decode(envelope.Payload)
-			if err != nil {
-				return "", err
-			}
-
-			uniqueKey = registration.uniqueKey(decodedPayload)
+		uniqueKey, err := registration.deriveUniqueKey(payload, envelope.Payload, rawPayload)
+		if err != nil {
+			return "", err
 		}
 
 		envelope.Headers.UniqueKey = uniqueKey

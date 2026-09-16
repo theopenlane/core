@@ -146,13 +146,7 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 	}
 
 	if wasErrored {
-		if credential == nil {
-			if err := r.verifyInstallationHealth(ctx, installation, def); err != nil {
-				return err
-			}
-		}
-
-		if err := r.ClearIntegrationUnhealthy(ctx, installation); err != nil {
+		if err := r.recoverErroredInstallation(ctx, installation, def, credential == nil); err != nil {
 			return err
 		}
 	}
@@ -162,6 +156,17 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 	}
 
 	return nil
+}
+
+// recoverErroredInstallation clears an errored installation's unhealthy state, verifying its health first when asked
+func (r *Runtime) recoverErroredInstallation(ctx context.Context, installation *ent.Integration, def types.Definition, verify bool) error {
+	if verify {
+		if err := r.verifyInstallationHealth(ctx, installation, def); err != nil {
+			return err
+		}
+	}
+
+	return r.ClearIntegrationUnhealthy(ctx, installation)
 }
 
 // reconcileUserInput validates and persists user input for one installation
@@ -362,6 +367,11 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		return err
 	}
 
+	return r.activateReconciledInstallation(systemCtx, installation, def)
+}
+
+// activateReconciledInstallation records the reconciled credential on the installation and runs first-connection setup
+func (r *Runtime) activateReconciledInstallation(ctx context.Context, installation *ent.Integration, def types.Definition) error {
 	wasFirstConnection := installation.Status == enums.IntegrationStatusPending
 	wasErrored := installation.Status == enums.IntegrationStatusErrored
 
@@ -378,7 +388,7 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		update = update.SetStatus(enums.IntegrationStatusConnected)
 	}
 
-	if err := update.Exec(systemCtx); err != nil {
+	if err := update.Exec(ctx); err != nil {
 		return err
 	}
 
@@ -386,19 +396,19 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		installation.Status = enums.IntegrationStatusConnected
 	}
 
-	if err := r.reconcileInstallationWebhooks(systemCtx, installation, ""); err != nil {
+	if err := r.reconcileInstallationWebhooks(ctx, installation, ""); err != nil {
 		return err
 	}
 
-	if wasFirstConnection {
-		if err := r.reconcileOperations(systemCtx, installation); err != nil {
-			return err
-		}
+	if !wasFirstConnection {
+		return nil
 	}
 
-	if wasFirstConnection {
-		r.notifyIntegrationInstalled(systemCtx, installation, def)
+	if err := r.reconcileOperations(ctx, installation); err != nil {
+		return err
 	}
+
+	r.notifyIntegrationInstalled(ctx, installation, def)
 
 	return nil
 }

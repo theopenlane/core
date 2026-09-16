@@ -56,7 +56,7 @@ var mapExprVulnerability = providerkit.CelMapExpr(
 	// CVSS score from Vulnerabilities[0].Cvss
 	entityops.VulnerabilityFields.Score.Expr(`'Vulnerabilities' in payload && payload.Vulnerabilities != null && size(payload.Vulnerabilities) > 0 && payload.Vulnerabilities[0] != null && 'Cvss' in payload.Vulnerabilities[0] && payload.Vulnerabilities[0].Cvss != null && size(payload.Vulnerabilities[0].Cvss) > 0 ? (payload.Vulnerabilities[0].Cvss.filter(c, 'Version' in c && c.Version.startsWith("3")).size() > 0 ? payload.Vulnerabilities[0].Cvss.filter(c, 'Version' in c && c.Version.startsWith("3"))[0].BaseScore : payload.Vulnerabilities[0].Cvss[0].BaseScore) : 0.0`),
 	entityops.VulnerabilityFields.RawPayload.Expr("payload"),
-	entityops.VulnerabilityFields.Source.Expr("installation.name"),
+	entityops.VulnerabilityFields.Source.Expr(providerkit.ExprInstallationName),
 )
 
 // mapExprDirectoryAccount maps AWS IAM user payloads to DirectoryAccount
@@ -66,7 +66,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.CanonicalEmail.Expr(`'userName' in payload ? payload.userName : ""`),
 	entityops.DirectoryAccountFields.OrganizationUnit.Expr(`'path' in payload ? payload.path : ""`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
-	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
@@ -75,7 +75,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.ExternalID.Expr(`'id' in payload ? payload.id : ""`),
 	entityops.DirectoryGroupFields.DisplayName.Expr(`'name' in payload && payload.name != "" ? payload.name : ('id' in payload ? payload.id : "")`),
 	entityops.DirectoryGroupFields.Profile.Expr("payload"),
-	entityops.DirectoryGroupFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryGroupFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
 // mapExprDirectoryMembership maps AWS IAM membership payloads to DirectoryMembership
@@ -84,5 +84,5 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`'group' in payload && payload.group != null && 'id' in payload.group ? payload.group.id : ""`),
 	entityops.DirectoryMembershipFields.Role.Expr(`dyn("MEMBER")`),
 	entityops.DirectoryMembershipFields.Metadata.Expr("payload"),
-	entityops.DirectoryMembershipFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryMembershipFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )

@@ -16,7 +16,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.JobTitle.Expr(`'profile' in payload && payload.profile != null && 'title' in payload.profile && payload.profile.title != null ? payload.profile.title : ""`),
 	entityops.DirectoryAccountFields.Status.Expr(`dyn('status' in payload ? (payload.status == "DEPROVISIONED" ? "DELETED" : (payload.status == "SUSPENDED" ? "SUSPENDED" : (payload.status == "STAGED" || payload.status == "PROVISIONED" ? "INACTIVE" : "ACTIVE"))) : "ACTIVE")`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
-	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryAccountFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
@@ -28,7 +28,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.Classification.Expr(`dyn('type' in payload && payload.type == "OKTA_GROUP" ? "TEAM" : "DISTRIBUTION")`),
 	entityops.DirectoryGroupFields.Status.Expr(`dyn("ACTIVE")`),
 	entityops.DirectoryGroupFields.Profile.Expr("payload"),
-	entityops.DirectoryGroupFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryGroupFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
 // mapExprDirectoryMembership is the CEL mapping expression for Okta membership payloads mapped to DirectoryMembership
@@ -37,5 +37,5 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`'group' in payload && payload.group != null && 'id' in payload.group ? payload.group.id : ""`),
 	entityops.DirectoryMembershipFields.Role.Expr(`dyn("MEMBER")`),
 	entityops.DirectoryMembershipFields.Metadata.Expr("payload"),
-	entityops.DirectoryMembershipFields.DirectoryName.Expr("installation.name"),
+	entityops.DirectoryMembershipFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
