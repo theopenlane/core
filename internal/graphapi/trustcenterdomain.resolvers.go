@@ -9,13 +9,14 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/urlx"
-	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTrustCenterDomain is the resolver for the createTrustCenterDomain field.

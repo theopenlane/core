@@ -18,6 +18,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -89,6 +90,55 @@ func TestQueryTask(t *testing.T) {
 
 	// cleanup
 	th.CleanupOrganizationDataWithContext(testUser.UserCtx, t)
+}
+
+func TestQueryTaskTemplates(t *testing.T) {
+	t.Parallel()
+
+	freshOrg := suite.SeedFreshOrgUsers(t)
+
+	t.Cleanup(func() {
+		th.CleanupOrganizationDataWithContext(freshOrg.Owner.UserCtx, t)
+	})
+
+	taskWithTemplate, err := suite.Client.API.CreateTask(freshOrg.Owner.UserCtx, testclient.CreateTaskInput{
+		Title:      "New task template",
+		IsTemplate: lo.ToPtr(true),
+	})
+	assert.NilError(t, err)
+
+	taskTemplateID := taskWithTemplate.CreateTask.Task.ID
+
+	task := (&th.TaskBuilder{Client: suite.Client}).MustNew(freshOrg.Owner.UserCtx, t)
+
+	for _, ctx := range []context.Context{
+		freshOrg.Member.UserCtx, freshOrg.Auditor.UserCtx,
+	} {
+
+		// make sure we can read this since it is a template task
+		resp, err := suite.Client.API.GetTaskByID(ctx, taskTemplateID)
+		assert.NilError(t, err)
+		assert.Equal(t, resp.Task.ID, taskTemplateID)
+
+		// none should be able to read this since it is created by the owner
+		_, err = suite.Client.API.GetTaskByID(ctx, task.ID)
+		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
+
+		tasks, err := suite.Client.API.GetTasks(ctx, nil, nil, nil, nil, nil, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(tasks.Tasks.Edges, 1))
+		assert.Equal(t, tasks.Tasks.Edges[0].Node.ID, taskTemplateID)
+	}
+
+	// convert it to a non templated task
+	_, err = suite.Client.API.UpdateTask(freshOrg.Owner.UserCtx, taskTemplateID, testclient.UpdateTaskInput{
+		IsTemplate: lo.ToPtr(false),
+	})
+	assert.NilError(t, err)
+
+	// verify it cannot be read again
+	_, err = suite.Client.API.GetTaskByID(freshOrg.Member.UserCtx, taskTemplateID)
+	assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 }
 
 func TestQueryTasks(t *testing.T) {
