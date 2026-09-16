@@ -52,6 +52,17 @@ var SessionSkipperFunc = func(c echo.Context) bool {
 	return auth.GetAuthTypeFromEchoContext(c) != auth.JWTAuthentication
 }
 
+// SessionFallbackUserID resolves the authenticated caller to mint a session for when the request carries none
+var SessionFallbackUserID = func(ctx context.Context) (string, bool) {
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.IsImpersonated() {
+		return "", false
+	}
+
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
+
+	return subjectID, err == nil
+}
+
 // AuthenticateSkipperFuncForImpersonation determines whether Authenticate middleware should be skipped
 // based on the presence of impersonation token
 var AuthenticateSkipperFuncForImpersonation = func(c echo.Context) bool {
