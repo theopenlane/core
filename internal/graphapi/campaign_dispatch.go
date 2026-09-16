@@ -11,6 +11,8 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
@@ -20,7 +22,6 @@ import (
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
-	"github.com/theopenlane/utils/rout"
 )
 
 // Campaign dispatch action aliases keep gql layer aligned with jobspec values.
@@ -205,9 +206,14 @@ func (r *mutationResolver) processDispatchTargets(ctx context.Context, state *ca
 		return nil
 	}
 
+	hasAudiences, err := state.campaignObj.QueryAudiences().Exist(ctx)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "audience"})
+	}
+
 	// trust center update campaigns materialize their targets from the trust center's subscribers
 	// at send time (inside the email operation), so dispatch even when no targets exist yet
-	if totalCount == 0 && state.campaignObj.CampaignType != enums.CampaignTypeTrustCenterUpdate {
+	if totalCount == 0 && !hasAudiences && state.campaignObj.CampaignType != enums.CampaignTypeTrustCenterUpdate {
 		return nil
 	}
 
@@ -228,7 +234,7 @@ func (r *mutationResolver) dispatchCampaignOperation(ctx context.Context, state 
 		return err
 	}
 
-	if _, err := rt.Dispatch(ctx, req); err != nil {
+	if _, err := rt.Dispatch(withCampaignDispatchCapabilities(ctx), req); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", state.campaignObj.ID).Msg("failed dispatching campaign operation")
 
 		return err
@@ -418,13 +424,22 @@ func (r *mutationResolver) enqueueCampaignDispatchJob(ctx context.Context, state
 		return err
 	}
 
-	if _, err := rt.Dispatch(ctx, req); err != nil {
+	if _, err := rt.Dispatch(withCampaignDispatchCapabilities(ctx), req); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", state.campaignObj.ID).Msg("failed scheduling campaign dispatch")
 
 		return err
 	}
 
 	return nil
+}
+
+func withCampaignDispatchCapabilities(ctx context.Context) context.Context {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return ctx
+	}
+
+	return auth.WithCaller(ctx, caller.WithCapabilities(auth.CapInternalOperation))
 }
 
 // ensureCampaignEditAccess verifies the caller can edit the campaign.

@@ -339878,7 +339878,7 @@ func (ec *executionContext) unmarshalInputUpdateAudienceInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "name", "description", "clearDescription", "audienceType", "filters", "clearFilters", "metadata", "clearMetadata", "ownerID", "clearOwner", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "addAudienceMemberIDs", "removeAudienceMemberIDs", "clearAudienceMembers", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "name", "description", "clearDescription", "filters", "clearFilters", "metadata", "clearMetadata", "ownerID", "clearOwner", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "addAudienceMemberIDs", "removeAudienceMemberIDs", "clearAudienceMembers", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -339927,13 +339927,6 @@ func (ec *executionContext) unmarshalInputUpdateAudienceInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearDescription = data
-		case "audienceType":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("audienceType"))
-			data, err := ec.unmarshalOAudienceAudienceType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐAudienceType(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AudienceType = data
 		case "filters":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filters"))
 			data, err := ec.unmarshalOMap2map(ctx, v)

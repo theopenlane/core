@@ -2198,8 +2198,7 @@ type UpdateAudienceInput struct {
 	AppendTags              []string
 	Name                    *string `json:"name,omitempty"`
 	ClearDescription        bool
-	Description             *string             `json:"description,omitempty"`
-	AudienceType            *enums.AudienceType `json:"audience_type,omitempty"`
+	Description             *string `json:"description,omitempty"`
 	ClearFilters            bool
 	Filters                 map[string]interface{} `json:"filters,omitempty"`
 	ClearMetadata           bool
@@ -2242,9 +2241,6 @@ func (i *UpdateAudienceInput) Mutate(m *AudienceMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
-	}
-	if v := i.AudienceType; v != nil {
-		m.SetAudienceType(*v)
 	}
 	if i.ClearFilters {
 		m.ClearFilters()

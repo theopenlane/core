@@ -37128,8 +37128,6 @@ type UpdateAudienceInput struct {
 	// the description of the audience
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
-	// the audience resolution type
-	AudienceType *enums.AudienceType `json:"audienceType,omitempty"`
 	// selector filters for dynamic audiences
 	Filters      map[string]any `json:"filters,omitempty"`
 	ClearFilters *bool          `json:"clearFilters,omitempty"`

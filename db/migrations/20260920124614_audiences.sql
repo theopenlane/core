@@ -2,8 +2,8 @@
 CREATE TABLE "audiences" ("id" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "updated_by_impersonator" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "name" character varying NOT NULL, "description" character varying NULL, "audience_type" character varying NOT NULL DEFAULT 'MANUAL', "filters" jsonb NULL, "metadata" jsonb NULL, "owner_id" character varying NULL, PRIMARY KEY ("id"), CONSTRAINT "audiences_organizations_audiences" FOREIGN KEY ("owner_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE SET NULL);
 -- Create index "audience_display_id_owner_id" to table: "audiences"
 CREATE UNIQUE INDEX "audience_display_id_owner_id" ON "audiences" ("display_id", "owner_id");
--- Create index "audience_name_owner_id" to table: "audiences"
-CREATE INDEX "audience_name_owner_id" ON "audiences" ("name", "owner_id") WHERE (deleted_at IS NULL);
+-- Create index "audience_name_audience_type_owner_id_filters" to table: "audiences"
+CREATE INDEX "audience_name_audience_type_owner_id_filters" ON "audiences" ("name", "audience_type", "owner_id", "filters") WHERE (deleted_at IS NULL);
 -- Create index "audience_owner_id_idx" to table: "audiences"
 CREATE INDEX "audience_owner_id_idx" ON "audiences" ("owner_id");
 -- Modify "groups" table

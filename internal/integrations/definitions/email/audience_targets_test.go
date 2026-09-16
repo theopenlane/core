@@ -10,7 +10,7 @@ import (
 )
 
 func TestSetDedupe(t *testing.T) {
-	set := &set{
+	set := &campaignTargetSet{
 		seen: map[string]struct{}{
 			"existing@example.com": {},
 		},

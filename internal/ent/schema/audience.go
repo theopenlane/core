@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
@@ -61,6 +62,7 @@ func (Audience) Fields() []ent.Field {
 			Comment("the audience resolution type").
 			GoType(enums.AudienceType("")).
 			Default(enums.AudienceTypeManual.String()).
+			Immutable().
 			Annotations(
 				entgql.OrderField("AUDIENCE_TYPE"),
 			),
@@ -95,7 +97,7 @@ func (a Audience) Edges() []ent.Edge {
 // Indexes of the Audience.
 func (Audience) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("name", ownerFieldName).
+		index.Fields("name", "audience_type", ownerFieldName, "filters").
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }

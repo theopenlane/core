@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated/audience"
 	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
@@ -196,20 +195,6 @@ func (_u *AudienceUpdate) SetNillableDescription(v *string) *AudienceUpdate {
 // ClearDescription clears the value of the "description" field.
 func (_u *AudienceUpdate) ClearDescription() *AudienceUpdate {
 	_u.mutation.ClearDescription()
-	return _u
-}
-
-// SetAudienceType sets the "audience_type" field.
-func (_u *AudienceUpdate) SetAudienceType(v enums.AudienceType) *AudienceUpdate {
-	_u.mutation.SetAudienceType(v)
-	return _u
-}
-
-// SetNillableAudienceType sets the "audience_type" field if the given value is not nil.
-func (_u *AudienceUpdate) SetNillableAudienceType(v *enums.AudienceType) *AudienceUpdate {
-	if v != nil {
-		_u.SetAudienceType(*v)
-	}
 	return _u
 }
 
@@ -487,11 +472,6 @@ func (_u *AudienceUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Audience.name": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.AudienceType(); ok {
-		if err := audience.AudienceTypeValidator(v); err != nil {
-			return &ValidationError{Name: "audience_type", err: fmt.Errorf(`generated: validator failed for field "Audience.audience_type": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -568,9 +548,6 @@ func (_u *AudienceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(audience.FieldDescription, field.TypeString)
-	}
-	if value, ok := _u.mutation.AudienceType(); ok {
-		_spec.SetField(audience.FieldAudienceType, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.Filters(); ok {
 		_spec.SetField(audience.FieldFilters, field.TypeJSON, value)
@@ -1024,20 +1001,6 @@ func (_u *AudienceUpdateOne) ClearDescription() *AudienceUpdateOne {
 	return _u
 }
 
-// SetAudienceType sets the "audience_type" field.
-func (_u *AudienceUpdateOne) SetAudienceType(v enums.AudienceType) *AudienceUpdateOne {
-	_u.mutation.SetAudienceType(v)
-	return _u
-}
-
-// SetNillableAudienceType sets the "audience_type" field if the given value is not nil.
-func (_u *AudienceUpdateOne) SetNillableAudienceType(v *enums.AudienceType) *AudienceUpdateOne {
-	if v != nil {
-		_u.SetAudienceType(*v)
-	}
-	return _u
-}
-
 // SetFilters sets the "filters" field.
 func (_u *AudienceUpdateOne) SetFilters(v map[string]interface{}) *AudienceUpdateOne {
 	_u.mutation.SetFilters(v)
@@ -1325,11 +1288,6 @@ func (_u *AudienceUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Audience.name": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.AudienceType(); ok {
-		if err := audience.AudienceTypeValidator(v); err != nil {
-			return &ValidationError{Name: "audience_type", err: fmt.Errorf(`generated: validator failed for field "Audience.audience_type": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -1423,9 +1381,6 @@ func (_u *AudienceUpdateOne) sqlSave(ctx context.Context) (_node *Audience, err 
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(audience.FieldDescription, field.TypeString)
-	}
-	if value, ok := _u.mutation.AudienceType(); ok {
-		_spec.SetField(audience.FieldAudienceType, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.Filters(); ok {
 		_spec.SetField(audience.FieldFilters, field.TypeJSON, value)

@@ -131335,10 +131335,6 @@ input UpdateAudienceInput {
   description: String
   clearDescription: Boolean
   """
-  the audience resolution type
-  """
-  audienceType: AudienceAudienceType
-  """
   selector filters for dynamic audiences
   """
   filters: Map

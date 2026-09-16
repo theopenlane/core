@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 )
 
 const (
@@ -29,15 +30,15 @@ const (
 )
 
 var (
-	errAudienceFiltersRequired       = errors.New("audience filters must include at least one selector")
-	errManualAudienceFilters         = errors.New("manual audiences cannot define filters")
-	errDynamicAudienceFiltersMissing = errors.New("dynamic audiences require filters")
-	errUnsupportedAudienceType       = errors.New("unsupported audience type")
-	errSelectorSchemaRequired        = errors.New("selector schema is required")
-	errSchemaNotRegistered           = errors.New("schema is not registered")
-	errUnsupportedRecipientSource    = errors.New("schema cannot be used as an audience recipient source")
-	errKeyMatchUnsupported           = errors.New("key_match is not supported for audience selectors yet")
-	errSourceSelectorsUnsupported    = errors.New("source selectors are not supported for audience selectors yet")
+	errAudienceFiltersRequired    = errors.New("audience filters must include at least one selector")
+	errManualAudienceFilters      = errors.New("manual audiences cannot define filters")
+	errAudienceFiltersMissing     = errors.New("dynamic audiences require filters")
+	errUnsupportedAudienceType    = errors.New("unsupported audience type")
+	errSelectorSchemaRequired     = errors.New("selector schema is required")
+	errSchemaNotRegistered        = errors.New("schema is not registered")
+	errUnsupportedRecipientSource = errors.New("schema cannot be used as an audience recipient source")
+	errKeyMatchUnsupported        = errors.New("key_match is not supported for audience selectors yet")
+	errSourceSelectorsUnsupported = errors.New("source selectors are not supported for audience selectors yet")
 )
 
 type filterSet struct {
@@ -91,38 +92,31 @@ func parseSelectors(filters map[string]any) ([]entityops.TargetSelector, error) 
 
 // ValidateFilters validates the filters and selectors provided. and also sets some
 // basic rules like ensure manual audiences cannot have filters.
-func ValidateFilters(audienceType enums.AudienceType, filters map[string]any) error {
-	switch audienceType {
-	case enums.AudienceTypeManual:
-		if len(filters) > 0 {
-			return errManualAudienceFilters
-		}
-
-		return nil
-	case enums.AudienceTypeDynamic:
-		if len(filters) == 0 {
-			return errDynamicAudienceFiltersMissing
-		}
-
-		selectors, err := parseSelectors(filters)
-		if err != nil {
-			return err
-		}
-
-		if len(selectors) == 0 {
-			return errAudienceFiltersRequired
-		}
-
-		for i, selector := range selectors {
-			if err := validateSelector(selector); err != nil {
-				return fmt.Errorf("selector %d: %w", i, err)
-			}
-		}
-
-		return nil
-	default:
-		return fmt.Errorf("%w: %q", errUnsupportedAudienceType, audienceType)
+func ValidateFilters(typ enums.AudienceType, filters map[string]any) error {
+	if typ != enums.AudienceTypeDynamic {
+		return fmt.Errorf("%w: %q", errUnsupportedAudienceType, typ)
 	}
+
+	if len(filters) == 0 {
+		return errAudienceFiltersMissing
+	}
+
+	selectors, err := parseSelectors(filters)
+	if err != nil {
+		return err
+	}
+
+	if len(selectors) == 0 {
+		return errAudienceFiltersRequired
+	}
+
+	for i, selector := range selectors {
+		if err := validateSelector(selector); err != nil {
+			return fmt.Errorf("selector %d: %w", i, err)
+		}
+	}
+
+	return nil
 }
 
 // ResolveRecipients finds recipients that match the provided cel filters and then processes them in batches
@@ -219,6 +213,16 @@ func resolveSelectors(ctx context.Context, db *generated.Client, selector entity
 
 	case entityops.SchemaGroup.Snake:
 
+		fetchUsersFromGroup := func(groups []ResolvedRecipient) error {
+			for _, g := range groups {
+				if err := resolveUserRecipients(ctx, db, entityops.TargetSelector{}, g.GroupID, handlerFn); err != nil {
+					return err
+				}
+			}
+
+			return nil
+		}
+
 		return resolveSelector(ctx, selector, recipientSelectorOptions[*generated.Group]{
 			targetType: reflect.TypeFor[entityops.GroupProjection](),
 			fetchFn: func(lastKnownID string) ([]*generated.Group, error) {
@@ -243,16 +247,10 @@ func resolveSelectors(ctx context.Context, db *generated.Client, selector entity
 					},
 				}
 			},
-		}, func(groups []ResolvedRecipient) error {
-			for _, g := range groups {
-				if err := resolveUserRecipients(ctx, db, entityops.TargetSelector{}, g.GroupID, handlerFn); err != nil {
-					return err
-				}
-			}
-			return nil
-		})
+		}, fetchUsersFromGroup)
 
 	case entityops.SchemaContact.Snake:
+
 		return resolveSelector(ctx, selector, recipientSelectorOptions[*generated.Contact]{
 			targetType: reflect.TypeFor[entityops.ContactProjection](),
 			fetchFn: func(lastKnownID string) ([]*generated.Contact, error) {
@@ -318,6 +316,7 @@ func resolveSelectors(ctx context.Context, db *generated.Client, selector entity
 				}
 			},
 		}, handlerFn)
+
 	default:
 		return fmt.Errorf("%w: %q", errUnsupportedRecipientSource, schema.Snake)
 	}
@@ -337,7 +336,6 @@ func resolveUserRecipients(ctx context.Context, db *generated.Client, selector e
 				Limit(resolveBatchSize).
 				Order(user.ByID()).
 				Where(
-					user.EmailNEQ(""),
 					user.HasOrgMembershipsWith(orgmembership.OrganizationIDIn(caller.OrgIDs()...)),
 				)
 
@@ -349,7 +347,13 @@ func resolveUserRecipients(ctx context.Context, db *generated.Client, selector e
 				query.Where(user.IDGT(lastKnownID))
 			}
 
-			return query.All(ctx)
+			// internal ctx skips the user traversal interceptor
+			items, err := query.All(rule.WithInternalContext(ctx))
+			if err != nil {
+				return nil, err
+			}
+
+			return items, nil
 		},
 
 		id: func(u *generated.User) string { return u.ID },
@@ -376,7 +380,7 @@ func resolveUserRecipients(ctx context.Context, db *generated.Client, selector e
 	}, handlerFn)
 }
 
-func resolveSelector[T any](ctx context.Context, selector entityops.TargetSelector, opts recipientSelectorOptions[T], handlerFn func([]ResolvedRecipient) error) error {
+func resolveSelector[T any](ctx context.Context, selector entityops.TargetSelector, opts recipientSelectorOptions[T], resolveHandlerFn func([]ResolvedRecipient) error) error {
 	evaluator, err := entityops.NewEvaluator(opts.targetType, nil)
 	if err != nil {
 		return err
@@ -408,7 +412,7 @@ func resolveSelector[T any](ctx context.Context, selector entityops.TargetSelect
 		}
 
 		if len(recipients) > 0 {
-			if err := handlerFn(recipients); err != nil {
+			if err := resolveHandlerFn(recipients); err != nil {
 				return err
 			}
 		}

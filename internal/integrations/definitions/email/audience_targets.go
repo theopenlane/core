@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
-	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 )
 
 const (
@@ -40,17 +39,19 @@ type recipientResolveOptions struct {
 type recipientHandlerFunc func([]audiences.ResolvedRecipient) error
 
 func snapshotCampaignAudiences(ctx context.Context, db *generated.Client, camp *generated.Campaign) error {
-	records, err := camp.QueryAudiences().All(ctx)
+	// fetch existing audiences for the campaign so we can precompute the needed
+	// users
+	audiences, err := camp.QueryAudiences().All(ctx)
 	if err != nil {
 		return err
 	}
 
-	if len(records) == 0 {
+	if len(audiences) == 0 {
 		return nil
 	}
 
 	return snapshotCampaignRecipients(ctx, db, camp, func(handle recipientHandlerFunc) error {
-		for _, aud := range records {
+		for _, aud := range audiences {
 			opts := recipientResolveOptions{
 				audienceID:   aud.ID,
 				audienceType: aud.AudienceType,
@@ -59,7 +60,7 @@ func snapshotCampaignAudiences(ctx context.Context, db *generated.Client, camp *
 				filters:      aud.Filters,
 			}
 
-			if err := resolveAudienceRecipients(ctx, opts, handle); err != nil {
+			if err := resolveRecipientsForAudience(ctx, opts, handle); err != nil {
 				return err
 			}
 		}
@@ -69,166 +70,123 @@ func snapshotCampaignAudiences(ctx context.Context, db *generated.Client, camp *
 }
 
 func snapshotCampaignRecipients(ctx context.Context, db *generated.Client, camp *generated.Campaign, resolveFn func(recipientHandlerFunc) error) error {
-	recipients := &set{
+	// use a set to prevent a recipient appearing multiple times.
+	// If for some weird reason, the campaign run fails and is retried, we do not want to create the same target again
+	// so fetch the existing ones, then dedupe
+	//
+	// Or even if the target is created outside the run via api
+	targets := &campaignTargetSet{
 		seen: map[string]struct{}{},
 	}
-	if err := recipients.loadExistingCampaignTargets(ctx, db, camp.ID); err != nil {
+
+	if err := targets.load(ctx, db, camp.ID); err != nil {
 		return err
 	}
 
 	builders := make([]*generated.CampaignTargetCreate, 0, audienceTargetBatchSize)
+
 	createTargetsFn := func() error {
 		if len(builders) == 0 {
 			return nil
 		}
-
 		if err := db.CampaignTarget.CreateBulk(builders...).Exec(ctx); err != nil {
 			return err
 		}
 
 		builders = builders[:0]
-
 		return nil
 	}
 
-	err := resolveFn(func(page []audiences.ResolvedRecipient) error {
-		for _, recipient := range page {
-			if !recipients.add(recipient) {
+	handlerFn := func(recipients []audiences.ResolvedRecipient) error {
+		for _, recipient := range recipients {
+			if !targets.add(recipient) {
 				continue
 			}
 
 			builders = append(builders, buildAudienceCampaignTarget(db, camp, recipient))
+
+			// if we are at bulk max size, flush and reset
 			if len(builders) == audienceTargetBatchSize {
 				if err := createTargetsFn(); err != nil {
 					return err
 				}
 			}
 		}
-
 		return nil
-	})
-	if err != nil {
+	}
+
+	if err := resolveFn(handlerFn); err != nil {
 		return err
 	}
 
+	// make sure to flush out the remaining builders
 	return createTargetsFn()
 }
 
-type set struct {
-	seen map[string]struct{}
-}
+func resolveRecipientsForAudience(ctx context.Context, opts recipientResolveOptions, handlerFn recipientHandlerFunc) error {
 
-func (s *set) loadExistingCampaignTargets(ctx context.Context, db *generated.Client, campaignID string) error {
+	if opts.audienceType == enums.AudienceTypeDynamic {
+		return audiences.ResolveRecipients(ctx, opts.client, opts.filters, func(recipients []audiences.ResolvedRecipient) error {
+			for i := range recipients {
+				recipients[i].AudienceID = opts.audienceID
+			}
+
+			return handlerFn(recipients)
+		})
+	}
+
 	var lastID string
+
 	for {
-		query := db.CampaignTarget.Query().
-			Where(campaigntarget.CampaignIDEQ(campaignID)).
-			Select(campaigntarget.FieldID, campaigntarget.FieldEmail).
-			Order(campaigntarget.ByID()).
+		query := opts.audience.QueryAudienceMembers().
+			Order(audiencemember.ByID()).
 			Limit(audienceTargetBatchSize)
 
 		if lastID != "" {
-			query.Where(campaigntarget.IDGT(lastID))
+			query.Where(audiencemember.IDGT(lastID))
 		}
 
-		targets, err := query.All(ctx)
+		members, err := query.All(ctx)
 		if err != nil {
 			return err
 		}
 
-		for _, target := range targets {
-			lastID = target.ID
-			key := canonicalizeEmail(target.Email)
-			if key != "" {
-				s.seen[key] = struct{}{}
+		recipients := make([]audiences.ResolvedRecipient, 0, len(members))
+
+		for _, member := range members {
+
+			lastID = member.ID
+
+			recipients = append(recipients, audiences.ResolvedRecipient{
+				Source:         audiencemember.Label,
+				SourceObjectID: member.ID,
+				AudienceMemberProjection: entityops.AudienceMemberProjection{
+					Email:        member.Email,
+					FullName:     member.FullName,
+					ContactID:    member.ContactID,
+					UserID:       member.UserID,
+					GroupID:      member.GroupID,
+					SubscriberID: member.SubscriberID,
+					AudienceID:   opts.audienceID,
+					Metadata:     member.Metadata,
+				},
+			})
+		}
+
+		if len(recipients) > 0 {
+			if err := handlerFn(recipients); err != nil {
+				return err
 			}
 		}
 
-		if len(targets) < audienceTargetBatchSize {
+		// no more data to process so return
+		if len(members) < audienceTargetBatchSize {
 			break
 		}
 	}
 
 	return nil
-}
 
-func (s *set) add(recipient audiences.ResolvedRecipient) bool {
-	key := canonicalizeEmail(recipient.Email)
-	if key == "" {
-		return false
-	}
-
-	if _, ok := s.seen[key]; ok {
-		return false
-	}
-
-	s.seen[key] = struct{}{}
-	return true
-}
-
-func resolveAudienceRecipients(ctx context.Context, opts recipientResolveOptions, handlerFn recipientHandlerFunc) error {
-	switch opts.audienceType {
-	case enums.AudienceTypeManual:
-		var lastID string
-
-		for {
-			query := opts.audience.QueryAudienceMembers().
-				Order(audiencemember.ByID()).
-				Limit(audienceTargetBatchSize)
-
-			if lastID != "" {
-				query.Where(audiencemember.IDGT(lastID))
-			}
-
-			members, err := query.All(ctx)
-			if err != nil {
-				return err
-			}
-
-			recipients := make([]audiences.ResolvedRecipient, 0, len(members))
-			for _, member := range members {
-				lastID = member.ID
-				recipients = append(recipients, audiences.ResolvedRecipient{
-					AudienceMemberProjection: entityops.AudienceMemberProjection{
-						Email:        member.Email,
-						FullName:     member.FullName,
-						ContactID:    member.ContactID,
-						UserID:       member.UserID,
-						GroupID:      member.GroupID,
-						SubscriberID: member.SubscriberID,
-						AudienceID:   opts.audienceID,
-						Metadata:     member.Metadata,
-					},
-					Source:         audiencemember.Label,
-					SourceObjectID: member.ID,
-				})
-			}
-
-			if len(recipients) > 0 {
-				if err := handlerFn(recipients); err != nil {
-					return err
-				}
-			}
-
-			if len(members) < audienceTargetBatchSize {
-				break
-			}
-		}
-
-		return nil
-	case enums.AudienceTypeDynamic:
-
-		return audiences.ResolveRecipients(ctx, opts.client, opts.filters, func(page []audiences.ResolvedRecipient) error {
-			for i := range page {
-				page[i].AudienceID = opts.audienceID
-			}
-
-			return handlerFn(page)
-
-		})
-	default:
-		return fmt.Errorf("%w: %q", errUnsupportedAudienceType, opts.audienceType)
-	}
 }
 
 func resolveTrustCenterSubscriberRecipients(ctx context.Context, db *generated.Client, camp *generated.Campaign, handle recipientHandlerFunc) error {
@@ -236,7 +194,7 @@ func resolveTrustCenterSubscriberRecipients(ctx context.Context, db *generated.C
 		"schema": entityops.SchemaSubscriber.Snake,
 		"expression": fmt.Sprintf(
 			"target.trust_center_id == %q && target.active && target.verified_email && !target.unsubscribed",
-			*camp.TrustCenterID,
+			camp.TrustCenterID,
 		),
 	}
 

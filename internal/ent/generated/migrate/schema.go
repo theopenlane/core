@@ -648,9 +648,9 @@ var (
 				Columns: []*schema.Column{AudiencesColumns[15]},
 			},
 			{
-				Name:    "audience_name_owner_id",
+				Name:    "audience_name_audience_type_owner_id_filters",
 				Unique:  false,
-				Columns: []*schema.Column{AudiencesColumns[10], AudiencesColumns[15]},
+				Columns: []*schema.Column{AudiencesColumns[10], AudiencesColumns[12], AudiencesColumns[15], AudiencesColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},

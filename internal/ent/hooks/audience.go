@@ -30,18 +30,18 @@ func HookAudienceValidateFilters() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			typ, err := getAudienceType(ctx, m)
+			typ, ok, err := getAudienceType(ctx, m)
 			if err != nil {
 				return nil, err
 			}
-
-			filters, err := getAudienceFilters(ctx, m)
-			if err != nil {
-				return nil, err
+			if !ok {
+				return next.Mutate(ctx, m)
 			}
 
-			if err := audiences.ValidateFilters(typ, filters); err != nil {
-				return nil, fmt.Errorf("%w: %w", ErrInvalidInput, err)
+			if filters, ok := m.Filters(); ok && typ == enums.AudienceTypeDynamic {
+				if err := audiences.ValidateFilters(typ, filters); err != nil {
+					return nil, fmt.Errorf("%w: %w", ErrInvalidInput, err)
+				}
 			}
 
 			return next.Mutate(ctx, m)
@@ -49,45 +49,27 @@ func HookAudienceValidateFilters() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
 }
 
-func getAudienceType(ctx context.Context, m *generated.AudienceMutation) (enums.AudienceType, error) {
-	if audienceType, ok := m.AudienceType(); ok {
-		return audienceType, nil
+func getAudienceType(ctx context.Context, m *generated.AudienceMutation) (enums.AudienceType, bool, error) {
+	if typ, ok := m.AudienceType(); ok {
+		return typ, true, nil
 	}
 
 	if m.Op().Is(ent.OpUpdateOne) {
-		return m.OldAudienceType(ctx)
+		typ, err := m.OldAudienceType(ctx)
+		if err != nil {
+			return "", false, err
+		}
+
+		return typ, true, nil
 	}
 
 	if m.Op().Is(ent.OpUpdate) {
 		if _, ok := m.Filters(); ok || m.FiltersCleared() {
-			return "", fmt.Errorf("%w: %w", ErrInvalidInput, errAudienceFilterMissingBulkType)
+			return "", false, fmt.Errorf("%w: %w", ErrInvalidInput, errAudienceFilterMissingBulkType)
 		}
+
+		return "", false, nil
 	}
 
-	return enums.AudienceTypeManual, nil
-}
-
-func getAudienceFilters(ctx context.Context, m *generated.AudienceMutation) (map[string]any, error) {
-	if m.FiltersCleared() {
-		return map[string]any{}, nil
-	}
-
-	if f, ok := m.Filters(); ok {
-		return f, nil
-	}
-
-	if m.Op().Is(ent.OpUpdateOne) {
-		return m.OldFilters(ctx)
-	}
-
-	audienceType, ok := m.AudienceType()
-	if m.Op().Is(ent.OpUpdate) && ok && audienceType == enums.AudienceTypeDynamic {
-		return nil, fmt.Errorf("%w: %w", ErrInvalidInput, errAudienceFilterUnsupportedOp)
-	}
-
-	if m.Op().Is(ent.OpUpdate) && ok && audienceType == enums.AudienceTypeManual {
-		return nil, fmt.Errorf("%w: %w", ErrInvalidInput, errAudienceFilterManualBulk)
-	}
-
-	return map[string]any{}, nil
+	return enums.AudienceTypeManual, true, nil
 }
