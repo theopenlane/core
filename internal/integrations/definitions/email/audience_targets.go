@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 const (
@@ -41,9 +40,7 @@ type recipientResolveOptions struct {
 type recipientHandlerFunc func([]audiences.ResolvedRecipient) error
 
 func snapshotCampaignAudiences(ctx context.Context, db *generated.Client, camp *generated.Campaign) error {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	records, err := camp.QueryAudiences().All(allowCtx)
+	records, err := camp.QueryAudiences().All(ctx)
 	if err != nil {
 		return err
 	}
@@ -52,7 +49,7 @@ func snapshotCampaignAudiences(ctx context.Context, db *generated.Client, camp *
 		return nil
 	}
 
-	return snapshotCampaignRecipients(allowCtx, db, camp, func(handle recipientHandlerFunc) error {
+	return snapshotCampaignRecipients(ctx, db, camp, func(handle recipientHandlerFunc) error {
 		for _, aud := range records {
 			opts := recipientResolveOptions{
 				audienceID:   aud.ID,
@@ -62,7 +59,7 @@ func snapshotCampaignAudiences(ctx context.Context, db *generated.Client, camp *
 				filters:      aud.Filters,
 			}
 
-			if err := resolveAudienceRecipients(allowCtx, opts, handle); err != nil {
+			if err := resolveAudienceRecipients(ctx, opts, handle); err != nil {
 				return err
 			}
 		}
