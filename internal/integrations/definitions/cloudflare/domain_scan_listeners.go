@@ -76,8 +76,10 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, 
 			Exec(systemCtx)
 	}
 
-	if applyBrandDesign && result.Enrichment.Branding.Error == "" {
-		if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), buildBrandDesignImport(result.Enrichment.Branding)); err != nil {
+	if result.Enrichment.Branding.Error == "" {
+		result.Enrichment.Branding.ApplyToPreviewTrustcenter = !applyBrandDesign
+
+		if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), *result.Enrichment.Branding); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed applying brand design to trust center")
 		}
 	}
@@ -108,20 +110,6 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, 
 	}
 
 	return nil
-}
-
-func buildBrandDesignImport(brandDesign *domainscan.BrandDesignProfile) DomainScanImportBranding {
-	return DomainScanImportBranding{
-		LogoURL:                  brandDesign.LogoURL,
-		FaviconURL:               brandDesign.FaviconURL,
-		PrimaryColor:             brandDesign.PrimaryColor,
-		Font:                     brandDesign.Font,
-		ForegroundColor:          brandDesign.ForegroundColor,
-		BackgroundColor:          brandDesign.BackgroundColor,
-		AccentColor:              brandDesign.AccentColor,
-		SecondaryBackgroundColor: brandDesign.SecondaryBackgroundColor,
-		SecondaryForegroundColor: brandDesign.SecondaryForegroundColor,
-	}
 }
 
 // domainScanListeners declares the standalone gala listeners implementing the domain scan saga
@@ -344,17 +332,15 @@ func (s domainScanSaga) persistDomainScanEnrichment(ctx context.Context, organiz
 		return err
 	}
 
-	if !applyBrandDesign {
-		return nil
-	}
-
 	if enrichment.Branding == nil || enrichment.Branding.Error != "" {
 		logx.FromContext(ctx).Info().Msg("domain scan: no brand design found, skipping trust center update")
 
 		return nil
 	}
 
-	if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), buildBrandDesignImport(enrichment.Branding)); err != nil {
+	enrichment.Branding.ApplyToPreviewTrustcenter = !applyBrandDesign
+
+	if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), *enrichment.Branding); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed applying brand design to trust center")
 	}
 

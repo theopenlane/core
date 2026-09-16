@@ -191,7 +191,7 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 	return summary, nil
 }
 
-func applyBrandingToTrustCenter(ctx context.Context, client *generated.Client, brandDesign DomainScanImportBranding) (bool, error) {
+func applyBrandingToTrustCenter(ctx context.Context, client *generated.Client, brandDesign domainscan.BrandDesignProfile) (bool, error) {
 	return workflows.WithTx(ctx, client, nil, func(tx *generated.Tx) (bool, error) {
 		tc, err := tx.TrustCenter.Query().First(ctx)
 		if generated.IsNotFound(err) {
@@ -202,13 +202,16 @@ func applyBrandingToTrustCenter(ctx context.Context, client *generated.Client, b
 			return false, fmt.Errorf("could not find trustcenter for brand design: %w", err)
 		}
 
-		settings, err := tx.TrustCenterSetting.Query().Where(
-			trustcentersetting.TrustCenterIDEQ(tc.ID),
-			trustcentersetting.EnvironmentIn(
-				enums.TrustCenterEnvironmentLive,
-				enums.TrustCenterEnvironmentPreview,
-			),
-		).All(ctx)
+		tcEnvironment := enums.TrustCenterEnvironmentLive
+		if brandDesign.ApplyToPreviewTrustcenter {
+			tcEnvironment = enums.TrustCenterEnvironmentPreview
+		}
+
+		settings, err := tx.TrustCenterSetting.Query().
+			Where(
+				trustcentersetting.TrustCenterIDEQ(tc.ID),
+				trustcentersetting.EnvironmentEQ(tcEnvironment)).
+			All(ctx)
 		if err != nil {
 			return false, fmt.Errorf("could not fetch trust center settings for brand design: %w", err)
 		}
@@ -236,7 +239,7 @@ func chooseTrustCenterBrandColor(newColor, existingColor string) (string, bool) 
 	return color, color != existingColor
 }
 
-func updateTrustcenterBrandDesignSetting(ctx context.Context, setting *generated.TrustCenterSetting, brandDesign DomainScanImportBranding) (bool, error) {
+func updateTrustcenterBrandDesignSetting(ctx context.Context, setting *generated.TrustCenterSetting, brandDesign domainscan.BrandDesignProfile) (bool, error) {
 	input := generated.UpdateTrustCenterSettingInput{}
 	isChanged := false
 

@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/domainscan"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -172,7 +173,7 @@ func buildDomainScanImportEnvelope(organizationID string, input model.ImportDoma
 	}
 
 	if input.Branding != nil {
-		envelope.Branding = &cloudflare.DomainScanImportBranding{
+		envelope.Branding = &domainscan.BrandDesignProfile{
 			LogoURL:                  lo.FromPtr(input.Branding.LogoURL),
 			FaviconURL:               lo.FromPtr(input.Branding.FaviconURL),
 			PrimaryColor:             lo.FromPtr(input.Branding.PrimaryColor),
