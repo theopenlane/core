@@ -105,4 +105,8 @@ func logDomainScanEnrichmentErrors(ctx context.Context, errs domainscan.Enrichme
 	if errs.DNS != nil {
 		logx.FromContext(ctx).Warn().Err(errs.DNS).Msg("domain scan: failed to get dns vendor info")
 	}
+
+	if errs.WellKnown != nil {
+		logx.FromContext(ctx).Warn().Err(errs.WellKnown).Msg("domain scan: failed to probe well-known files")
+	}
 }

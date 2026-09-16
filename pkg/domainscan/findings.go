@@ -10,8 +10,8 @@ import (
 )
 
 // buildFindings reports the scan's overall security verdict, any failing agent-readiness checks,
-// and any expected compliance links that weren't found. result may be nil, in which case only
-// the enrichment-derived missing-compliance-links finding is included
+// any expected compliance links that weren't found, and any failing posture checks. result may
+// be nil, in which case only the enrichment-derived findings are included
 func buildFindings(result *url_scanner.ScanGetResponse, enrichment Enrichment) Findings {
 	var findings Findings
 
@@ -26,13 +26,14 @@ func buildFindings(result *url_scanner.ScanGetResponse, enrichment Enrichment) F
 	}
 
 	findings.MissingComplianceLinks = buildMissingComplianceLinks(enrichment)
+	findings.Posture = buildPostureFindings(enrichment)
 
 	return findings
 }
 
-// expectedComplianceLinkTypes are the compliance document types a company
-// site is generally expected to publish
-var expectedComplianceLinkTypes = []string{"privacy_policy", "terms_of_service", "trust_center", "dpa", "security", "cookie_policy"}
+// expectedComplianceLinkTypes are the compliance document types a company site is generally
+// expected to publish
+var expectedComplianceLinkTypes = []string{"privacy_policy", "terms_of_service", "trust_center", "dpa", "cookie_policy"}
 
 // buildMissingComplianceLinks renders a GitHub-flavored Markdown task list, one unchecked
 // item per expectedComplianceLinkTypes entry not found in the domainscan enrichment's
@@ -44,11 +45,13 @@ func buildMissingComplianceLinks(enrichment Enrichment) string {
 
 	found := make(map[string]bool, len(enrichment.Compliance.ComplianceLinks))
 	for _, link := range enrichment.Compliance.ComplianceLinks {
-		found[link.Type] = true
+		if normalized := NormalizeComplianceType(link.Type); normalized != "" {
+			found[normalized] = true
+		}
 	}
 
-	if enrichment.Compliance.PageType != "" {
-		found[enrichment.Compliance.PageType] = true
+	if normalized := NormalizeComplianceType(enrichment.Compliance.PageType); normalized != "" {
+		found[normalized] = true
 	}
 
 	items := make([]string, 0, len(expectedComplianceLinkTypes))
@@ -62,12 +65,24 @@ func buildMissingComplianceLinks(enrichment Enrichment) string {
 	return strings.Join(items, "\n")
 }
 
-// buildAgentReadinessFindings reports the failing checks from the scan's agent-readiness assessment
-// (e.g. missing markdown negotiation, no MCP server card)
-func buildAgentReadinessFindings(processor url_scanner.ScanGetResponseMetaProcessorsAgentReadiness) *AgentReadinessFinding {
+// agentReadinessResult is the scan's agent-readiness assessment, parsed once from the
+// processor payload. Both report shapes are derived from it rather than each unmarshalling and
+// sorting the same JSON again
+type agentReadinessResult struct {
+	// Level is the assessment's score
+	Level int64
+	// LevelName is the human-readable name for Level
+	LevelName string
+	// Checks are every check that reported a status, ordered by check path
+	Checks []AgentReadinessCheck
+}
+
+// parseAgentReadiness decodes the processor payload and flattens its nested check tree. ok is
+// false when the processor reported nothing, which is different from reporting no failures
+func parseAgentReadiness(processor url_scanner.ScanGetResponseMetaProcessorsAgentReadiness) (agentReadinessResult, bool) {
 	raw := processor.JSON.RawJSON()
 	if raw == "" {
-		return nil
+		return agentReadinessResult{}, false
 	}
 
 	var parsed struct {
@@ -77,24 +92,53 @@ func buildAgentReadinessFindings(processor url_scanner.ScanGetResponseMetaProces
 	}
 
 	if err := json.Unmarshal([]byte(raw), &parsed); err != nil || len(parsed.Checks) == 0 {
+		return agentReadinessResult{}, false
+	}
+
+	var checks []AgentReadinessCheck
+
+	collectAgentReadinessChecks(parsed.Checks, "", &checks)
+
+	if len(checks) == 0 {
+		return agentReadinessResult{}, false
+	}
+
+	sort.Slice(checks, func(i, j int) bool { return checks[i].Check < checks[j].Check })
+
+	return agentReadinessResult{Level: parsed.Level, LevelName: parsed.LevelName, Checks: checks}, true
+}
+
+// failed returns the checks that did not pass, in check-path order
+func (r agentReadinessResult) failed() []AgentReadinessCheck {
+	failures := make([]AgentReadinessCheck, 0, len(r.Checks))
+
+	for _, check := range r.Checks {
+		if check.Status == agentReadinessStatusFail {
+			failures = append(failures, check)
+		}
+	}
+
+	return failures
+}
+
+// buildAgentReadinessFindings reports the failing checks from the scan's agent-readiness
+// assessment, as one finding carrying a Markdown checklist. A domain with no failures raises
+// no finding
+func buildAgentReadinessFindings(processor url_scanner.ScanGetResponseMetaProcessorsAgentReadiness) *AgentReadinessFinding {
+	result, ok := parseAgentReadiness(processor)
+	if !ok {
 		return nil
 	}
 
-	failedChecks := []map[string]any{}
-	walkAgentReadinessChecks(parsed.Checks, "", &failedChecks)
-
-	if len(failedChecks) == 0 {
+	failures := result.failed()
+	if len(failures) == 0 {
 		return nil
 	}
-
-	sort.Slice(failedChecks, func(i, j int) bool {
-		return failedChecks[i]["check"].(string) < failedChecks[j]["check"].(string)
-	})
 
 	return &AgentReadinessFinding{
-		Level:     parsed.Level,
-		LevelName: parsed.LevelName,
-		Checklist: buildAgentReadinessChecklistMarkdown(failedChecks),
+		Level:     result.Level,
+		LevelName: result.LevelName,
+		Checklist: buildAgentReadinessChecklistMarkdown(failures),
 		Reference: agentReadinessReferenceURL,
 	}
 }
@@ -103,31 +147,38 @@ func buildAgentReadinessFindings(processor url_scanner.ScanGetResponseMetaProces
 // assessment measures and why, for context alongside the failed-check checklist
 const agentReadinessReferenceURL = "https://blog.cloudflare.com/agent-readiness/"
 
-// buildAgentReadinessChecklistMarkdown renders failedChecks as a single GitHub-flavored
-// Markdown task list, one unchecked item per failing check, so the assessment surfaces
-// as one finding instead of one per check
-func buildAgentReadinessChecklistMarkdown(failedChecks []map[string]any) string {
-	items := make([]string, 0, len(failedChecks))
+// buildAgentReadinessChecklistMarkdown renders checks as a single GitHub-flavored Markdown
+// task list, one unchecked item each, so the assessment surfaces as one finding rather than
+// one per check
+func buildAgentReadinessChecklistMarkdown(checks []AgentReadinessCheck) string {
+	items := make([]string, 0, len(checks))
 
-	for _, c := range failedChecks {
-		items = append(items, fmt.Sprintf("- [ ] %s", fmt.Sprint(c["message"])))
+	for _, check := range checks {
+		items = append(items, fmt.Sprintf("- [ ] %s", check.Message))
 	}
 
 	return strings.Join(items, "\n")
 }
 
-// walkAgentReadinessChecks recursively descends a generic agent-readiness check result
-func walkAgentReadinessChecks(node map[string]any, path string, failedChecks *[]map[string]any) {
+// agentReadinessStatusFail is the status Cloudflare reports for a check that did not pass
+const agentReadinessStatusFail = "fail"
+
+// agentReadinessStatusPass is the status Cloudflare reports for a check that passed
+const agentReadinessStatusPass = "pass"
+
+// collectAgentReadinessChecks recursively descends a generic agent-readiness check result,
+// appending every leaf that reports a status. A leaf is a node carrying both a status and a
+// message; everything else is treated as a container and descended into
+func collectAgentReadinessChecks(node map[string]any, path string, checks *[]AgentReadinessCheck) {
 	status, hasStatus := node["status"].(string)
 	message, hasMessage := node["message"].(string)
 
 	if hasStatus && hasMessage {
-		if status == "fail" {
-			*failedChecks = append(*failedChecks, map[string]any{
-				"check":   path,
-				"message": message,
-			})
-		}
+		*checks = append(*checks, AgentReadinessCheck{
+			Check:   path,
+			Status:  status,
+			Message: message,
+		})
 
 		return
 	}
@@ -143,6 +194,35 @@ func walkAgentReadinessChecks(node map[string]any, path string, failedChecks *[]
 			childPath = path + "." + key
 		}
 
-		walkAgentReadinessChecks(child, childPath, failedChecks)
+		collectAgentReadinessChecks(child, childPath, checks)
 	}
+}
+
+// buildAgentReadinessAssessment reports the full agent-readiness assessment, including the
+// checks that passed, so a domain with a perfect score is distinguishable from one the
+// processor said nothing about
+func buildAgentReadinessAssessment(processor url_scanner.ScanGetResponseMetaProcessorsAgentReadiness) *AgentReadinessAssessment {
+	result, ok := parseAgentReadiness(processor)
+	if !ok {
+		return nil
+	}
+
+	assessment := &AgentReadinessAssessment{
+		Level:       result.Level,
+		LevelName:   result.LevelName,
+		Reference:   agentReadinessReferenceURL,
+		TotalChecks: len(result.Checks),
+		Checks:      result.Checks,
+	}
+
+	for _, check := range result.Checks {
+		switch check.Status {
+		case agentReadinessStatusPass:
+			assessment.PassedChecks++
+		case agentReadinessStatusFail:
+			assessment.FailedChecks++
+		}
+	}
+
+	return assessment
 }

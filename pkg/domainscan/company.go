@@ -116,6 +116,8 @@ func buildComplianceSection(enrichment Enrichment) *Compliance {
 		Controls:            compliance.Controls,
 		TrustCenterHostedBy: compliance.TrustCenterHostedBy,
 		Documents:           compliance.Documents,
+		PageType:            compliance.PageType,
+		Links:               compliance.ComplianceLinks,
 	}
 
 	return &section
