@@ -1140,10 +1140,6 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		SchemaName: "DirectoryMembership",
 		Rules:      []CSVReferenceRule{},
 	},
-	"DirectorySyncRun": {
-		SchemaName: "DirectorySyncRun",
-		Rules:      []CSVReferenceRule{},
-	},
 	"Discussion": {
 		SchemaName: "Discussion",
 		Rules:      []CSVReferenceRule{},
@@ -2447,24 +2443,6 @@ type DirectoryMembershipCSVUpdateInput struct {
 
 // CSVInputWrapper marks DirectoryMembershipCSVUpdateInput for CSV header preprocessing.
 func (DirectoryMembershipCSVUpdateInput) CSVInputWrapper() {}
-
-// DirectorySyncRunCSVInput wraps CreateDirectorySyncRunInput with CSV reference columns.
-type DirectorySyncRunCSVInput struct {
-	Input generated.CreateDirectorySyncRunInput
-}
-
-// CSVInputWrapper marks DirectorySyncRunCSVInput for CSV header preprocessing.
-func (DirectorySyncRunCSVInput) CSVInputWrapper() {}
-
-// DirectorySyncRunCSVUpdateInput wraps UpdateDirectorySyncRunInput with CSV reference columns for bulk updates.
-type DirectorySyncRunCSVUpdateInput struct {
-	// ID is the entity ID to update
-	ID    string `csv:"ID"`
-	Input generated.UpdateDirectorySyncRunInput
-}
-
-// CSVInputWrapper marks DirectorySyncRunCSVUpdateInput for CSV header preprocessing.
-func (DirectorySyncRunCSVUpdateInput) CSVInputWrapper() {}
 
 // DiscussionCSVInput wraps CreateDiscussionInput with CSV reference columns.
 type DiscussionCSVInput struct {

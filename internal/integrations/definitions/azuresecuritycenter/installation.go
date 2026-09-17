@@ -13,8 +13,8 @@ func resolveInstallationMetadata(_ context.Context, req types.InstallationReques
 		return InstallationMetadata{}, false, ErrCredentialInvalid
 	}
 
-	if cred.TenantID == "" && cred.ClientID == "" && cred.SubscriptionID == "" {
-		return InstallationMetadata{}, false, nil
+	if cred.SubscriptionID == "" {
+		return InstallationMetadata{}, false, ErrSubscriptionIDMissing
 	}
 
 	return InstallationMetadata{

@@ -39,9 +39,19 @@ func EmitGalaEventHook(runtimes ...*gala.Gala) ent.Hook {
 			ctx = entityops.WithEmissionVeto(ctx)
 
 			changeSet := entityops.ChangeSetFromMutation(mutation)
-			ids, oldValues, snapshotErr := snapshotMutation(ctx, mutation, galaRuntimes, op, changeSet)
-			if snapshotErr != nil {
-				return nil, snapshotErr
+
+			var (
+				ids       []string
+				oldValues map[string]map[string]any
+			)
+
+			if !entityops.EmissionVetoed(ctx) {
+				var snapshotErr error
+
+				ids, oldValues, snapshotErr = snapshotMutation(ctx, mutation, galaRuntimes, op, changeSet)
+				if snapshotErr != nil {
+					return nil, snapshotErr
+				}
 			}
 
 			retVal, err := next.Mutate(ctx, mutation)

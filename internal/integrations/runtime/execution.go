@@ -99,27 +99,8 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 
 	ctx = auth.EnsureIntegrationCaller(ctx, installation.OwnerID)
 
-	if !lo.Contains(enums.IntegrationOperationalStatuses, installation.Status) {
-		logx.FromContext(ctx).Info().Str("status", installation.Status.String()).Msg("integration is not operational, skipping current run")
-
-		return 0, operations.ErrOperationDisabled
-	}
-
-	if _, failing := installation.Health.UnhealthyOperations[envelope.Operation]; failing {
-		logx.FromContext(ctx).Info().Msg("operation is marked unhealthy, stopping cycle")
-
-		return 0, operations.ErrOperationDisabled
-	}
-
-	ok, err := r.isOrgSubscriptionActive(ctx, installation.OwnerID)
-	if err != nil {
+	if err := r.reconcileCyclePreflight(ctx, installation, envelope.Operation); err != nil {
 		return 0, err
-	}
-
-	if !ok {
-		logx.FromContext(ctx).Info().Msg("owner subscription is not active, stopping reconcile cycle")
-
-		return 0, operations.ErrOperationDisabled
 	}
 
 	db := r.DB()
@@ -138,7 +119,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, operations.ErrOperationDisabled
 	}
 
-	runRecord, err := operations.CreatePendingRun(ctx, db, installation, envelope.Operation, enums.IntegrationRunTypeReconcile, nil)
+	runRecord, err := operations.CreatePendingRun(ctx, db, installation, operation, enums.IntegrationRunTypeReconcile, nil)
 	if err != nil {
 		return 0, err
 	}
@@ -151,78 +132,138 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 	_ = gala.SetAttributes(&oc, src)
 	ctx = intobvs.WithContext(ctx, oc)
 
-	ingestOptions := operations.IngestOptionsFromOperationContext(oc)
+	cycle := reconcileCycle{installation: installation, operation: envelope.Operation, src: src, runID: runRecord.ID, startedAt: startedAt}
 
-	response, recordCount, execErr := r.executeResolvedOperation(ctx, installation, operation, nil, nil, false, ingestOptions)
-
+	response, ingestResult, execErr := r.executeResolvedOperation(ctx, installation, operation, nil, nil, false, operations.IngestOptionsFromOperationContext(oc))
 	if execErr != nil {
-		logx.FromContext(ctx).Error().Err(execErr).Msg("reconcile operation failed")
-
-		if completeErr := operations.CompleteRun(ctx, db, runRecord.ID, startedAt, operations.RunResult{
-			Status: enums.IntegrationRunStatusFailed,
-			Error:  execErr.Error(),
-			Metrics: map[string]any{
-				"response": jsonx.DecodeAnyOrNil(response),
-			},
-		}); completeErr != nil {
-			return 0, errors.Join(execErr, completeErr)
-		}
-
-		if outputErr := river.RecordOutput(ctx, reconcileOutput{
-			IntegrationID: src.IntegrationID,
-			DefinitionID:  src.DefinitionID,
-			Operation:     envelope.Operation,
-			RunID:         runRecord.ID,
-			Status:        enums.IntegrationRunStatusFailed,
-			Error:         execErr.Error(),
-			DurationMS:    time.Since(startedAt).Milliseconds(),
-		}); outputErr != nil {
-			logx.FromContext(ctx).Error().Err(outputErr).Msg("failed to record river output")
-		}
-
-		unhealthy, isUnhealthy := types.UnhealthyFrom(execErr)
-		degraded, isDegraded := types.DegradedFrom(execErr)
-
-		switch {
-		case isUnhealthy:
-			if markErr := r.MarkIntegrationUnhealthy(ctx, installation, unhealthy.Reason); markErr != nil {
-				logx.FromContext(ctx).Error().Err(markErr).Msg("failed marking integration unhealthy after terminal operation failure")
-			}
-		case isDegraded:
-			if markErr := r.MarkOperationUnhealthy(ctx, installation, envelope.Operation, degraded.Reason); markErr != nil {
-				logx.FromContext(ctx).Error().Err(markErr).Msg("failed marking operation unhealthy after terminal operation failure")
-			}
-		}
-
-		return 0, execErr
+		return 0, r.failReconcileCycle(ctx, cycle, response, ingestResult, execErr)
 	}
 
-	logx.FromContext(ctx).Info().Int("records", recordCount).Msg("reconcile operation completed")
+	return r.completeReconcileCycle(ctx, cycle, operation, response, ingestResult)
+}
 
-	if err := operations.CompleteRun(ctx, db, runRecord.ID, startedAt, operations.RunResult{
-		Status:  enums.IntegrationRunStatusSuccess,
-		Summary: "operation completed",
-		Metrics: map[string]any{
-			"records":  recordCount,
-			"response": jsonx.DecodeAnyOrNil(response),
-		},
-	}); err != nil {
-		return recordCount, err
+// reconcileCycle is one recurring operation cycle's run identity
+type reconcileCycle struct {
+	installation *ent.Integration
+	operation    string
+	src          types.IntegrationSource
+	runID        string
+	startedAt    time.Time
+}
+
+// reconcileCyclePreflight reports whether the installation may run the operation's reconcile cycle
+func (r *Runtime) reconcileCyclePreflight(ctx context.Context, installation *ent.Integration, operationName string) error {
+	if !lo.Contains(enums.IntegrationOperationalStatuses, installation.Status) {
+		logx.FromContext(ctx).Info().Str("status", installation.Status.String()).Msg("integration is not operational, skipping current run")
+
+		return operations.ErrOperationDisabled
+	}
+
+	if _, failing := installation.Health.UnhealthyOperations[operationName]; failing {
+		logx.FromContext(ctx).Info().Msg("operation is marked unhealthy, stopping cycle")
+
+		return operations.ErrOperationDisabled
+	}
+
+	ok, err := r.isOrgSubscriptionActive(ctx, installation.OwnerID)
+	if err != nil {
+		return err
+	}
+
+	if !ok {
+		logx.FromContext(ctx).Info().Msg("owner subscription is not active, stopping reconcile cycle")
+
+		return operations.ErrOperationDisabled
+	}
+
+	return nil
+}
+
+// failReconcileCycle records a failed cycle on its run, river output, and installation health
+func (r *Runtime) failReconcileCycle(ctx context.Context, cycle reconcileCycle, response json.RawMessage, ingestResult operations.IngestResult, execErr error) error {
+	logx.FromContext(ctx).Error().Err(execErr).Msg("reconcile operation failed")
+
+	metrics := operations.IngestMetrics(ingestResult)
+	metrics["response"] = jsonx.DecodeAnyOrNil(response)
+
+	if completeErr := operations.CompleteRun(ctx, r.DB(), cycle.runID, cycle.startedAt, operations.RunResult{
+		Status:  enums.IntegrationRunStatusFailed,
+		Error:   execErr.Error(),
+		Metrics: metrics,
+	}); completeErr != nil {
+		return errors.Join(execErr, completeErr)
 	}
 
 	if outputErr := river.RecordOutput(ctx, reconcileOutput{
-		IntegrationID: src.IntegrationID,
-		DefinitionID:  src.DefinitionID,
-		Operation:     envelope.Operation,
-		RunID:         runRecord.ID,
-		Records:       recordCount,
-		Status:        enums.IntegrationRunStatusSuccess,
-		DurationMS:    time.Since(startedAt).Milliseconds(),
+		IntegrationID: cycle.src.IntegrationID,
+		DefinitionID:  cycle.src.DefinitionID,
+		Operation:     cycle.operation,
+		RunID:         cycle.runID,
+		Status:        enums.IntegrationRunStatusFailed,
+		Error:         execErr.Error(),
+		DurationMS:    time.Since(cycle.startedAt).Milliseconds(),
 	}); outputErr != nil {
-		return recordCount, outputErr
+		logx.FromContext(ctx).Error().Err(outputErr).Msg("failed to record river output")
 	}
 
-	return recordCount, nil
+	unhealthy, isUnhealthy := types.UnhealthyFrom(execErr)
+	degraded, isDegraded := types.DegradedFrom(execErr)
+
+	switch {
+	case isUnhealthy:
+		if markErr := r.MarkIntegrationUnhealthy(ctx, cycle.installation, unhealthy.Reason); markErr != nil {
+			logx.FromContext(ctx).Error().Err(markErr).Msg("failed marking integration unhealthy after terminal operation failure")
+		}
+	case isDegraded:
+		if markErr := r.MarkOperationUnhealthy(ctx, cycle.installation, cycle.operation, degraded.Reason); markErr != nil {
+			logx.FromContext(ctx).Error().Err(markErr).Msg("failed marking operation unhealthy after terminal operation failure")
+		}
+	}
+
+	return execErr
+}
+
+// completeReconcileCycle records a successful cycle on its run and river output, returning the change delta
+func (r *Runtime) completeReconcileCycle(ctx context.Context, cycle reconcileCycle, operation types.OperationRegistration, response json.RawMessage, ingestResult operations.IngestResult) (int, error) {
+	delta := ingestResult.Changed
+
+	metrics := operations.IngestMetrics(ingestResult)
+	metrics["response"] = jsonx.DecodeAnyOrNil(response)
+
+	logx.FromContext(ctx).Info().Int("records", ingestResult.Attempted).Int("changed", delta).Msg("reconcile operation completed")
+
+	summary := "operation completed"
+	if operation.IngestHandle != nil {
+		summary = operations.IngestRunSummary(ingestResult)
+	}
+
+	runResult := operations.RunResult{
+		Status:  enums.IntegrationRunStatusSuccess,
+		Summary: summary,
+		Metrics: metrics,
+	}
+
+	if ingestResult.Failed > 0 {
+		runResult.Error = operations.RecordFailureSummary(ingestResult)
+	}
+
+	if err := operations.CompleteRun(ctx, r.DB(), cycle.runID, cycle.startedAt, runResult); err != nil {
+		return delta, err
+	}
+
+	if outputErr := river.RecordOutput(ctx, reconcileOutput{
+		IntegrationID: cycle.src.IntegrationID,
+		DefinitionID:  cycle.src.DefinitionID,
+		Operation:     cycle.operation,
+		RunID:         cycle.runID,
+		Records:       ingestResult.Attempted,
+		Status:        enums.IntegrationRunStatusSuccess,
+		DurationMS:    time.Since(cycle.startedAt).Milliseconds(),
+	}); outputErr != nil {
+		return delta, outputErr
+	}
+
+	return delta, nil
 }
 
 // ExecuteOperation runs one integration operation inline without run tracking
@@ -290,14 +331,15 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		integration, bootstrapErr = r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: src.IntegrationID})
 	}
 
-	failRun := func(execErr error, response json.RawMessage) error {
+	failRun := func(execErr error, response json.RawMessage, ingestResult operations.IngestResult) error {
 		if tracked {
+			metrics := operations.IngestMetrics(ingestResult)
+			metrics["response"] = jsonx.DecodeAnyOrNil(response)
+
 			if completeErr := operations.CompleteRun(ctx, db, src.RunID, startedAt, operations.RunResult{
-				Status: enums.IntegrationRunStatusFailed,
-				Error:  execErr.Error(),
-				Metrics: map[string]any{
-					"response": jsonx.DecodeAnyOrNil(response),
-				},
+				Status:  enums.IntegrationRunStatusFailed,
+				Error:   execErr.Error(),
+				Metrics: metrics,
 			}); completeErr != nil {
 				execErr = errors.Join(execErr, completeErr)
 			}
@@ -313,7 +355,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	logx.FromContext(ctx).Debug().Msg("operation started")
 
 	if bootstrapErr != nil {
-		return failRun(bootstrapErr, nil)
+		return failRun(bootstrapErr, nil, operations.IngestResult{})
 	}
 
 	if integration != nil {
@@ -321,37 +363,52 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	}
 
 	if tracked {
-		if err := operations.MarkRunRunning(ctx, db, src.RunID); err != nil {
-			return failRun(err, nil)
+		resumedCtx, err := r.resumeTrackedRun(ctx, &oc, &src)
+		if err != nil {
+			return failRun(err, nil, operations.IngestResult{})
 		}
+
+		ctx = resumedCtx
 	}
 
 	operation, err := r.Registry().Operation(src.DefinitionID, envelope.Operation)
 	if err != nil {
-		return failRun(err, nil)
+		return failRun(err, nil, operations.IngestResult{})
 	}
 
 	ingestOptions := operations.IngestOptionsFromOperationContext(oc)
 
-	response, _, err := r.executeResolvedOperation(ctx, integration, operation, nil, envelope.Config, envelope.ForceClientRebuild, ingestOptions)
+	response, ingestResult, err := r.executeResolvedOperation(ctx, integration, operation, nil, envelope.Config, envelope.ForceClientRebuild, ingestOptions)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("operation failed")
 
-		return failRun(err, response)
+		return failRun(err, response, ingestResult)
 	}
 
 	logx.FromContext(ctx).Info().Msg("operation completed")
 
+	summary := "operation completed"
+	if operation.IngestHandle != nil {
+		summary = operations.IngestRunSummary(ingestResult)
+	}
+
+	metrics := operations.IngestMetrics(ingestResult)
+	metrics["response"] = jsonx.DecodeAnyOrNil(response)
+
+	runResult := operations.RunResult{
+		Status:  enums.IntegrationRunStatusSuccess,
+		Summary: summary,
+		Metrics: metrics,
+	}
+
+	if ingestResult.Failed > 0 {
+		runResult.Error = operations.RecordFailureSummary(ingestResult)
+	}
+
 	var completeErr error
 
 	if tracked {
-		completeErr = operations.CompleteRun(ctx, db, src.RunID, startedAt, operations.RunResult{
-			Status:  enums.IntegrationRunStatusSuccess,
-			Summary: "operation completed",
-			Metrics: map[string]any{
-				"response": jsonx.DecodeAnyOrNil(response),
-			},
-		})
+		completeErr = operations.CompleteRun(ctx, db, src.RunID, startedAt, runResult)
 	}
 
 	if r.postExecutionHook != nil {
@@ -359,6 +416,35 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	}
 
 	return completeErr
+}
+
+// resumeTrackedRun marks the envelope's run running, continuing under a retry run when the run already left pending
+func (r *Runtime) resumeTrackedRun(ctx context.Context, oc *gala.OperationContext, src *types.IntegrationSource) (context.Context, error) {
+	db := r.DB()
+
+	run, err := db.IntegrationRun.Get(ctx, src.RunID)
+	if err != nil {
+		return ctx, err
+	}
+
+	if run.Status != enums.IntegrationRunStatusPending {
+		retry, err := operations.RetryRun(ctx, db, run)
+		if err != nil {
+			return ctx, err
+		}
+
+		logx.FromContext(ctx).Info().Str("retry_of", run.ID).Str("run_id", retry.ID).Msg("operation attempt continues under a new run")
+
+		src.RunID = retry.ID
+		_ = gala.SetAttributes(oc, *src)
+		ctx = intobvs.WithContext(ctx, *oc)
+	}
+
+	if err := operations.MarkRunRunning(ctx, db, src.RunID); err != nil {
+		return ctx, err
+	}
+
+	return ctx, nil
 }
 
 // BuildClientForIntegration builds a typed client for a specific integration installation.
@@ -379,11 +465,11 @@ func (r *Runtime) BuildClientForIntegration(ctx context.Context, integration *en
 
 // executeResolvedOperation executes the given operation with the input integration and registered Operation.
 // When integration is nil the client is resolved from the registry's runtime client.
-// Returns the response payload, the number of ingest records processed (0 for non-ingest operations), and any error
-func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, int, error) {
+// Returns the response payload, the ingest result (zero-valued for non-ingest operations), and any error
+func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, operations.IngestResult, error) {
 	client, credentials, _, err := r.resolveOperationClient(ctx, integration, operation, credentials, config, clientForce)
 	if err != nil {
-		return nil, 0, err
+		return nil, operations.IngestResult{}, err
 	}
 
 	var lastRunAt *time.Time
@@ -404,11 +490,11 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 
 	allowed, err := r.checkRateLimit(ctx, operation)
 	if err != nil {
-		return nil, 0, err
+		return nil, operations.IngestResult{}, err
 	}
 
 	if !allowed {
-		return nil, 0, ErrOperationRateLimited
+		return nil, operations.IngestResult{}, ErrOperationRateLimited
 	}
 
 	req := types.OperationRequest{
@@ -427,7 +513,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("ingest handle failed")
 
-			return nil, 0, err
+			return nil, operations.IngestResult{}, err
 		}
 
 		var totalEnvelopes int
@@ -437,29 +523,29 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 
 		logx.FromContext(ctx).Info().Int("payload_sets", len(payloadSets)).Int("envelopes", totalEnvelopes).Msg("ingest handle completed")
 
-		result, err := operations.EmitPayloadSets(ctx, operations.IngestContext{
+		result, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
 			Registry:    r.Registry(),
 			DB:          r.DB(),
 			Runtime:     r.Gala(),
 			Integration: integration,
-		}, operation.Name, operation.Ingest, payloadSets, ingestOptions)
+		}, operation.Name, operation.Ingest, operation.Policy, payloadSets, ingestOptions)
 		if err != nil {
-			return nil, 0, err
+			return nil, result, err
 		}
 
 		response, marshalErr := json.Marshal(result)
 		if marshalErr != nil {
-			return nil, 0, marshalErr
+			return nil, operations.IngestResult{}, marshalErr
 		}
-		return response, result.Attempted, nil
+		return response, result, nil
 	}
 
 	response, err := operation.Handle(ctx, req)
 	if err != nil {
-		return response, 0, err
+		return response, operations.IngestResult{}, err
 	}
 
-	return response, 0, nil
+	return response, operations.IngestResult{}, nil
 }
 
 // SeedReconcileJobs ensures every connected integration with reconcilable operations
@@ -630,6 +716,17 @@ func (r *Runtime) PurgeInstallationJobs(ctx context.Context, integrationID strin
 	return purged, nil
 }
 
+// PurgeInstallationIngestJobs removes every queued per-record ingest job bound to the installation
+// and returns how many were purged, leaving its operation-context jobs in place
+func (r *Runtime) PurgeInstallationIngestJobs(ctx context.Context, integrationID string) (int, error) {
+	fragment, err := installationIngestJobFragment(integrationID)
+	if err != nil {
+		return 0, err
+	}
+
+	return r.Gala().PurgeActiveJobsWithMetadata(ctx, fragment)
+}
+
 // installationJobFragments builds the JSONB containment fragments matching every job family
 // bound to one installation
 func installationJobFragments(integrationID string) ([]string, error) {
@@ -638,12 +735,18 @@ func installationJobFragments(integrationID string) ([]string, error) {
 		return nil, err
 	}
 
-	ingestJobs, err := types.PropertiesFragment(map[string]string{"integration_id": integrationID})
+	ingestJobs, err := installationIngestJobFragment(integrationID)
 	if err != nil {
 		return nil, err
 	}
 
 	return []string{operationJobs, ingestJobs}, nil
+}
+
+// installationIngestJobFragment builds the JSONB containment fragment matching the per-record
+// ingest jobs bound to one installation
+func installationIngestJobFragment(integrationID string) (string, error) {
+	return types.PropertiesFragment(map[string]string{"integration_id": integrationID})
 }
 
 // resolveOperationClient resolves the client for an operation. When integration

@@ -735,6 +735,8 @@ components:
                                                     type: boolean
                                                 skipRunRecord:
                                                     type: boolean
+                                                snapshot:
+                                                    type: boolean
                                             type: object
                                         requiredPermissions:
                                             items:

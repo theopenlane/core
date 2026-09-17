@@ -197,7 +197,6 @@ func (i Integration) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, DirectoryAccount{}),
 		defaultEdgeToWithPagination(i, DirectoryGroup{}),
 		defaultEdgeToWithPagination(i, DirectoryMembership{}),
-		defaultEdgeToWithPagination(i, DirectorySyncRun{}),
 		defaultEdgeToWithPagination(i, CheckResult{}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: i,
@@ -216,13 +215,7 @@ func (i Integration) Edges() []ent.Edge {
 				entgql.Skip(entgql.SkipAll),
 			},
 		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema: i,
-			edgeSchema: IntegrationRun{},
-			annotations: []schema.Annotation{
-				entgql.Skip(entgql.SkipAll),
-			},
-		}),
+		defaultEdgeToWithPagination(i, IntegrationRun{}),
 		defaultEdgeFromWithPagination(i, Entity{}),
 	}
 }

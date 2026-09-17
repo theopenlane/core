@@ -2,13 +2,12 @@ package onedrive
 
 import (
 	"context"
-	"net/mail"
-	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/ssoutils"
 )
 
 // resolveInstallationMetadata derives OneDrive installation metadata from the persisted access token
@@ -48,25 +47,6 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 
 	return InstallationMetadata{
 		TenantID: tenantID,
-		Domain:   domainFromEmail(upn),
+		Domain:   ssoutils.EmailDomain(upn),
 	}, true, nil
-}
-
-// domainFromEmail extracts the domain portion from an email address
-func domainFromEmail(email string) string {
-	if email == "" {
-		return ""
-	}
-
-	addr, err := mail.ParseAddress(email)
-	if err != nil {
-		return ""
-	}
-
-	_, domain, ok := strings.Cut(addr.Address, "@")
-	if !ok || domain == "" {
-		return ""
-	}
-
-	return domain
 }

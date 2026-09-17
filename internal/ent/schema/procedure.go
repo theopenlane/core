@@ -147,6 +147,7 @@ func (p Procedure) Mixin() []ent.Mixin {
 		prefix:          "PRD",
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{SchemaType: p},
 			newOrgOwnedMixin(p),
 			// add group edit permissions to the procedure
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor(), withWorkflowGroupEdges()),

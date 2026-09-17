@@ -63,7 +63,7 @@ func (Risk) Fields() []ent.Field {
 			Comment("integration that surfaced this risk, when sourced via integration ingest").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
+				entx.IntegrationMappingField().SystemControlled(),
 			),
 		field.Time("observed_at").
 			Comment("time when this risk was last observed by the source integration").
@@ -72,6 +72,7 @@ func (Risk) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entgql.OrderField("observed_at"),
+				entx.IntegrationMappingField().Volatile(),
 			),
 		field.String("external_uuid").
 			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
@@ -390,6 +391,8 @@ func (Risk) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("external_uuid", ownerFieldName).
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("external_id", ownerFieldName).
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 
@@ -418,6 +421,7 @@ func (r Risk) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "RSK",
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{SchemaType: r},
 			// risks inherit permissions from the associated programs, but must have an organization as well
 			// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
 			// it will also create program parent tuples for the risk when a program is associated to the risk

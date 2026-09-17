@@ -9,10 +9,18 @@ var (
 	ErrCredentialMetadataInvalid = errors.New("awssecurityhub: credential metadata invalid")
 	// ErrRoleARNMissing indicates the IAM role ARN is missing from the credential
 	ErrRoleARNMissing = errors.New("awssecurityhub: roleArn required")
+	// ErrRoleARNInvalid is returned when the assume-role ARN does not carry an account id
+	ErrRoleARNInvalid = errors.New("awssecurityhub: assume role arn missing account id")
 	// ErrRegionMissing indicates the home region is missing from the credential
 	ErrRegionMissing = errors.New("awssecurityhub: homeRegion required")
 	// ErrAWSConfigBuildFailed indicates the AWS SDK config could not be constructed
 	ErrAWSConfigBuildFailed = errors.New("awssecurityhub: aws config build failed")
+	// ErrCallerIdentityFetchFailed indicates STS GetCallerIdentity failed
+	ErrCallerIdentityFetchFailed = errors.New("awssecurityhub: caller identity fetch failed")
+	// ErrAccountIDMissing indicates STS GetCallerIdentity returned no account id for the installation identity
+	ErrAccountIDMissing = errors.New("awssecurityhub: account id missing")
+	// ErrAccountIDMismatch is returned when the configured account id disagrees with the account in the role ARN
+	ErrAccountIDMismatch = errors.New("awssecurityhub: configured account id does not match role arn account")
 	// ErrDescribeHubFailed indicates DescribeHub failed
 	ErrDescribeHubFailed = errors.New("awssecurityhub: describe hub failed")
 	// ErrDescribeHubFailed indicates DescribeHub failed

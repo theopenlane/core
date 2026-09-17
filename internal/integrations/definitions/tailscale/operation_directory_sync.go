@@ -59,12 +59,11 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 		accountEnvelopes = append(accountEnvelopes, envelope)
 	}
 
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema:    entityops.SchemaDirectoryAccount.Name,
-			Envelopes: accountEnvelopes,
-		},
-	}
+	payloadSets := []types.IngestPayloadSet{{
+		Schema:           entityops.SchemaDirectoryAccount.Name,
+		Envelopes:        accountEnvelopes,
+		SnapshotComplete: true,
+	}}
 
 	if cfg.DisableGroupSync {
 		logx.FromContext(ctx).Debug().Int("user_count", len(accountEnvelopes)).Msg("tailscale: collected users; group sync disabled")
@@ -170,8 +169,9 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 
 	payloadSets = append(payloadSets,
 		types.IngestPayloadSet{
-			Schema:    entityops.SchemaDirectoryGroup.Name,
-			Envelopes: groupEnvelopes,
+			Schema:           entityops.SchemaDirectoryGroup.Name,
+			Envelopes:        groupEnvelopes,
+			SnapshotComplete: membershipsComplete,
 		},
 		types.IngestPayloadSet{
 			Schema:    entityops.SchemaDirectoryMembership.Name,

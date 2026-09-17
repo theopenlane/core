@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/url"
 	"strings"
 
 	"github.com/samber/lo"
@@ -16,7 +15,14 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
+
+// templatePlaceholderOpen marks a still-unrendered template expression in a per-recipient value
+const templatePlaceholderOpen = "{{"
+
+// oneClickUnsubscribePath is the API route the RFC 8058 List-Unsubscribe header targets
+const oneClickUnsubscribePath = "/api/unsubscribe"
 
 // Recipient is implemented by all email operation input types to provide recipient information
 type Recipient interface {
@@ -323,11 +329,14 @@ func renderMessage(client *Client, theme *render.Theme, recipient RecipientInfo,
 	// page; the header must hit the POST one-click API route instead, derived from the same per-recipient
 	// URL — its origin + token, pointed at /api/unsubscribe (the token alone identifies the subscriber, so
 	// the page slug is dropped). A still-templated URL is skipped so a placeholder is never sent
-	if cfg, ok := content.Config.(RuntimeEmailConfig); ok && cfg.UnsubscribeURL != "" && !strings.Contains(cfg.UnsubscribeURL, "{{") {
-		if u, err := url.Parse(cfg.UnsubscribeURL); err == nil && u.Host != "" {
-			oneClickURL := fmt.Sprintf("%s://%s/api/unsubscribe?%s", u.Scheme, u.Host, u.RawQuery)
+	if cfg, ok := content.Config.(RuntimeEmailConfig); ok && cfg.UnsubscribeURL != "" && !strings.Contains(cfg.UnsubscribeURL, templatePlaceholderOpen) {
+		if u, err := urlx.ParseAbsolute(cfg.UnsubscribeURL); err == nil {
+			u.Path = oneClickUnsubscribePath
+			u.RawPath = ""
+			u.Fragment = ""
+
 			opts = append(opts,
-				newman.WithHeader("List-Unsubscribe", "<"+oneClickURL+">"),
+				newman.WithHeader("List-Unsubscribe", "<"+u.String()+">"),
 				newman.WithHeader("List-Unsubscribe-Post", "List-Unsubscribe=One-Click"),
 			)
 		}

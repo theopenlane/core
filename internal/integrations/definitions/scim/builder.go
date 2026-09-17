@@ -2,6 +2,7 @@ package scim
 
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -68,6 +69,13 @@ func Builder() registry.Builder {
 					Spec: types.MappingOverride{
 						FilterExpr: "true",
 						MapExpr:    mapExprDirectoryMembership,
+						Links: []types.LinkRule{
+							{
+								TargetSchema: entityops.SchemaDirectoryGroup.Name,
+								TargetField:  directorygroup.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
+							},
+						},
 					},
 				},
 			},

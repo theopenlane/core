@@ -993,6 +993,9 @@
                           },
                           "skipRunRecord": {
                             "type": "boolean"
+                          },
+                          "snapshot": {
+                            "type": "boolean"
                           }
                         },
                         "type": "object"

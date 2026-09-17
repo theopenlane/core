@@ -12,8 +12,6 @@ import (
 var (
 	// definitionID is the stable identifier for the AWS Security Hub integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AWSSECHUB0000000000001")
-	// installation is the typed installation metadata handle for the AWS Security Hub definition
-	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// awsAssumeRoleScheme is the cred schema for AWS STS auth
 	awsAssumeRoleSchema, awsAssumeRoleCredential = providerkit.CredentialSchema[AssumeRoleCredentialSchema]()
 	// awsServiceAccountSchema is the cred schema for AWS service account credentials
@@ -87,7 +85,7 @@ type AssumeRoleCredentialSchema struct {
 	ExternalID string `json:"externalId"                jsonschema:"required,title=External ID,description=External ID required in the tenant role trust policy." jsonschema_extras:"generate=true"`
 	// HomeRegion is the AWS region where Security Hub cross-region aggregation is managed
 	HomeRegion string `json:"homeRegion"                jsonschema:"required,title=Home Region,description=AWS region used for Security Hub aggregation and other service API calls (e.g. us-east-1)."`
-	// AccountID is the AWS account ID for reference in assessment summaries and run metadata
+	// AccountID is the AWS account ID; when provided it must match the account segment of RoleARN, otherwise the account is derived from RoleARN
 	AccountID string `json:"accountId,omitempty"       jsonschema:"title=Account ID,description=Optional AWS account ID for reference in results and reporting."`
 	// AccountScope controls whether collection covers all delegated accounts or a subset
 	AccountScope string `json:"accountScope,omitempty"    jsonschema:"title=Account Scope,description=Collect from all delegated accounts or restrict to specific account IDs.,enum=all,enum=specific"`

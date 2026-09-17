@@ -23,7 +23,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/event"
@@ -872,21 +871,6 @@ func (_u *IntegrationUpdate) AddDirectoryMemberships(v ...*DirectoryMembership) 
 	return _u.AddDirectoryMembershipIDs(ids...)
 }
 
-// AddDirectorySyncRunIDs adds the "directory_sync_runs" edge to the DirectorySyncRun entity by IDs.
-func (_u *IntegrationUpdate) AddDirectorySyncRunIDs(ids ...string) *IntegrationUpdate {
-	_u.mutation.AddDirectorySyncRunIDs(ids...)
-	return _u
-}
-
-// AddDirectorySyncRuns adds the "directory_sync_runs" edges to the DirectorySyncRun entity.
-func (_u *IntegrationUpdate) AddDirectorySyncRuns(v ...*DirectorySyncRun) *IntegrationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddDirectorySyncRunIDs(ids...)
-}
-
 // AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
 func (_u *IntegrationUpdate) AddCheckResultIDs(ids ...string) *IntegrationUpdate {
 	_u.mutation.AddCheckResultIDs(ids...)
@@ -1307,27 +1291,6 @@ func (_u *IntegrationUpdate) RemoveDirectoryMemberships(v ...*DirectoryMembershi
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDirectoryMembershipIDs(ids...)
-}
-
-// ClearDirectorySyncRuns clears all "directory_sync_runs" edges to the DirectorySyncRun entity.
-func (_u *IntegrationUpdate) ClearDirectorySyncRuns() *IntegrationUpdate {
-	_u.mutation.ClearDirectorySyncRuns()
-	return _u
-}
-
-// RemoveDirectorySyncRunIDs removes the "directory_sync_runs" edge to DirectorySyncRun entities by IDs.
-func (_u *IntegrationUpdate) RemoveDirectorySyncRunIDs(ids ...string) *IntegrationUpdate {
-	_u.mutation.RemoveDirectorySyncRunIDs(ids...)
-	return _u
-}
-
-// RemoveDirectorySyncRuns removes "directory_sync_runs" edges to DirectorySyncRun entities.
-func (_u *IntegrationUpdate) RemoveDirectorySyncRuns(v ...*DirectorySyncRun) *IntegrationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveDirectorySyncRunIDs(ids...)
 }
 
 // ClearCheckResults clears all "check_results" edges to the CheckResult entity.
@@ -2438,51 +2401,6 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.DirectorySyncRunsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   integration.DirectorySyncRunsTable,
-			Columns: []string{integration.DirectorySyncRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedDirectorySyncRunsIDs(); len(nodes) > 0 && !_u.mutation.DirectorySyncRunsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   integration.DirectorySyncRunsTable,
-			Columns: []string{integration.DirectorySyncRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.DirectorySyncRunsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   integration.DirectorySyncRunsTable,
-			Columns: []string{integration.DirectorySyncRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -3642,21 +3560,6 @@ func (_u *IntegrationUpdateOne) AddDirectoryMemberships(v ...*DirectoryMembershi
 	return _u.AddDirectoryMembershipIDs(ids...)
 }
 
-// AddDirectorySyncRunIDs adds the "directory_sync_runs" edge to the DirectorySyncRun entity by IDs.
-func (_u *IntegrationUpdateOne) AddDirectorySyncRunIDs(ids ...string) *IntegrationUpdateOne {
-	_u.mutation.AddDirectorySyncRunIDs(ids...)
-	return _u
-}
-
-// AddDirectorySyncRuns adds the "directory_sync_runs" edges to the DirectorySyncRun entity.
-func (_u *IntegrationUpdateOne) AddDirectorySyncRuns(v ...*DirectorySyncRun) *IntegrationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddDirectorySyncRunIDs(ids...)
-}
-
 // AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
 func (_u *IntegrationUpdateOne) AddCheckResultIDs(ids ...string) *IntegrationUpdateOne {
 	_u.mutation.AddCheckResultIDs(ids...)
@@ -4077,27 +3980,6 @@ func (_u *IntegrationUpdateOne) RemoveDirectoryMemberships(v ...*DirectoryMember
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDirectoryMembershipIDs(ids...)
-}
-
-// ClearDirectorySyncRuns clears all "directory_sync_runs" edges to the DirectorySyncRun entity.
-func (_u *IntegrationUpdateOne) ClearDirectorySyncRuns() *IntegrationUpdateOne {
-	_u.mutation.ClearDirectorySyncRuns()
-	return _u
-}
-
-// RemoveDirectorySyncRunIDs removes the "directory_sync_runs" edge to DirectorySyncRun entities by IDs.
-func (_u *IntegrationUpdateOne) RemoveDirectorySyncRunIDs(ids ...string) *IntegrationUpdateOne {
-	_u.mutation.RemoveDirectorySyncRunIDs(ids...)
-	return _u
-}
-
-// RemoveDirectorySyncRuns removes "directory_sync_runs" edges to DirectorySyncRun entities.
-func (_u *IntegrationUpdateOne) RemoveDirectorySyncRuns(v ...*DirectorySyncRun) *IntegrationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveDirectorySyncRunIDs(ids...)
 }
 
 // ClearCheckResults clears all "check_results" edges to the CheckResult entity.
@@ -5238,51 +5120,6 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.DirectorySyncRunsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   integration.DirectorySyncRunsTable,
-			Columns: []string{integration.DirectorySyncRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedDirectorySyncRunsIDs(); len(nodes) > 0 && !_u.mutation.DirectorySyncRunsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   integration.DirectorySyncRunsTable,
-			Columns: []string{integration.DirectorySyncRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.DirectorySyncRunsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   integration.DirectorySyncRunsTable,
-			Columns: []string{integration.DirectorySyncRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

@@ -19,7 +19,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
@@ -1254,21 +1253,6 @@ func (_c *PlatformCreate) AddIntegrations(v ...*Integration) *PlatformCreate {
 	return _c.AddIntegrationIDs(ids...)
 }
 
-// AddDirectorySyncRunIDs adds the "directory_sync_runs" edge to the DirectorySyncRun entity by IDs.
-func (_c *PlatformCreate) AddDirectorySyncRunIDs(ids ...string) *PlatformCreate {
-	_c.mutation.AddDirectorySyncRunIDs(ids...)
-	return _c
-}
-
-// AddDirectorySyncRuns adds the "directory_sync_runs" edges to the DirectorySyncRun entity.
-func (_c *PlatformCreate) AddDirectorySyncRuns(v ...*DirectorySyncRun) *PlatformCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddDirectorySyncRunIDs(ids...)
-}
-
 // AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
 func (_c *PlatformCreate) AddDirectoryAccountIDs(ids ...string) *PlatformCreate {
 	_c.mutation.AddDirectoryAccountIDs(ids...)
@@ -2376,22 +2360,6 @@ func (_c *PlatformCreate) createSpec() (*Platform, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.DirectorySyncRunsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   platform.DirectorySyncRunsTable,
-			Columns: []string{platform.DirectorySyncRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

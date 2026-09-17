@@ -63,6 +63,11 @@ func TestEvalFilter(t *testing.T) {
 			expr:    `???invalid`,
 			wantErr: ErrFilterExprEval,
 		},
+		{
+			name: "installation variable is bound",
+			expr: `installation.instance_id == "tenant-1" && installation.primary_directory`,
+			want: true,
+		},
 	}
 
 	ctx := context.Background()
@@ -71,7 +76,7 @@ func TestEvalFilter(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := EvalFilter(ctx, tc.expr, tc.envelope)
+			got, err := EvalFilter(ctx, tc.expr, tc.envelope, types.MappingInstallation{InstanceID: "tenant-1", PrimaryDirectory: true})
 			if tc.wantErr != nil {
 				if err == nil {
 					t.Fatalf("expected error wrapping %v, got nil", tc.wantErr)
@@ -138,7 +143,7 @@ func TestEvalMap(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := EvalMap(ctx, tc.expr, tc.envelope)
+			got, err := EvalMap(ctx, tc.expr, tc.envelope, types.MappingInstallation{})
 			if tc.wantErr != nil {
 				if err == nil {
 					t.Fatalf("expected error wrapping %v, got nil", tc.wantErr)
@@ -185,7 +190,7 @@ func TestEvalFilter_NonBoolResult(t *testing.T) {
 
 	// Expression that returns a string instead of a bool should return ErrFilterExprEval
 	ctx := context.Background()
-	_, err := EvalFilter(ctx, `"not-a-bool"`, types.MappingEnvelope{})
+	_, err := EvalFilter(ctx, `"not-a-bool"`, types.MappingEnvelope{}, types.MappingInstallation{})
 
 	if err == nil {
 		t.Fatal("expected error for non-bool result")
@@ -207,7 +212,7 @@ func TestEvalMap_PayloadTransform(t *testing.T) {
 		Payload:  json.RawMessage(`{"severity":"HIGH","id":42}`),
 	}
 
-	got, err := EvalMap(ctx, `{"sev": payload.severity, "src": resource}`, env)
+	got, err := EvalMap(ctx, `{"sev": payload.severity, "src": resource}`, env, types.MappingInstallation{})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

@@ -423,10 +423,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "integration",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
-}, "directory_sync_run": {
-	ObjectType:      "directory_sync_run",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
 }, "groups": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
@@ -446,10 +442,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "integration": {
 	ObjectType:      "integration",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "directory_sync_run": {
-	ObjectType:      "directory_sync_run",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "accounts": {
@@ -473,10 +465,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "integration",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
-}, "directory_sync_run": {
-	ObjectType:      "directory_sync_run",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
 }, "directory_account": {
 	ObjectType:      "directory_account",
 	SkipEditCheck:   true,
@@ -491,27 +479,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "workflow_object_refs": {
 	ObjectType:      "workflow_object_ref",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-},
-}, "directory_sync_run": {"owner": {
-	ObjectType:      "owner",
-	SkipEditCheck:   true,
-	CheckViewAccess: false,
-}, "integration": {
-	ObjectType:      "integration",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "directory_accounts": {
-	ObjectType:      "directory_account",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "directory_groups": {
-	ObjectType:      "directory_group",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "directory_memberships": {
-	ObjectType:      "directory_membership",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
@@ -1134,10 +1101,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "directory_memberships": {
 	ObjectType:      "directory_membership",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "directory_sync_runs": {
-	ObjectType:      "directory_sync_run",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
@@ -1841,10 +1804,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "directory_memberships": {
 	ObjectType:      "directory_membership",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "directory_sync_runs": {
-	ObjectType:      "directory_sync_run",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "discussions": {

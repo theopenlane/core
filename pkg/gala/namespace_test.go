@@ -174,9 +174,9 @@ func TestUniqueOnceExtendsByStateToTerminal(t *testing.T) {
 	t.Parallel()
 
 	client := &capturingInsertClient{}
-	runtime := &Gala{insertClient: client, defaultQueue: DefaultQueueName}
+	runtime := newDispatchTestGala(client)
 
-	if err := runtime.dispatchDurable(context.Background(), Envelope{Headers: Headers{UniqueKey: "once", UniqueOnce: true}}); err != nil {
+	if err := runtime.dispatchDurable(context.Background(), Envelope{Headers: Headers{Kind: System.Kind(), UniqueKey: "once", UniqueOnce: true}}); err != nil {
 		t.Fatalf("unexpected dispatch error: %v", err)
 	}
 
@@ -191,7 +191,7 @@ func TestUniqueOnceExtendsByStateToTerminal(t *testing.T) {
 		}
 	}
 
-	if err := runtime.dispatchDurable(context.Background(), Envelope{Headers: Headers{UniqueKey: "live-only"}}); err != nil {
+	if err := runtime.dispatchDurable(context.Background(), Envelope{Headers: Headers{Kind: System.Kind(), UniqueKey: "live-only"}}); err != nil {
 		t.Fatalf("unexpected dispatch error: %v", err)
 	}
 

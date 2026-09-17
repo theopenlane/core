@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
@@ -153,6 +154,76 @@ func (_c *FindingCreate) SetDisplayID(v string) *FindingCreate {
 // SetTags sets the "tags" field.
 func (_c *FindingCreate) SetTags(v []string) *FindingCreate {
 	_c.mutation.SetTags(v)
+	return _c
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *FindingCreate) SetSourceDefinitionID(v string) *FindingCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableSourceDefinitionID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *FindingCreate) SetSourceDefinitionVersion(v string) *FindingCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableSourceDefinitionVersion(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *FindingCreate) SetSourceInstanceID(v string) *FindingCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableSourceInstanceID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *FindingCreate) SetManagedBy(v string) *FindingCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableManagedBy(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *FindingCreate) SetIntegrationRunID(v string) *FindingCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableIntegrationRunID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
 	return _c
 }
 
@@ -898,6 +969,21 @@ func (_c *FindingCreate) SetNillableID(v *string) *FindingCreate {
 	return _c
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_c *FindingCreate) AddIntegrationRunIDs(ids ...string) *FindingCreate {
+	_c.mutation.AddIntegrationRunIDs(ids...)
+	return _c
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_c *FindingCreate) AddIntegrationRuns(v ...*IntegrationRun) *FindingCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationRunIDs(ids...)
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_c *FindingCreate) SetOwner(v *Organization) *FindingCreate {
 	return _c.SetOwnerID(v.ID)
@@ -1466,6 +1552,26 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 		_spec.SetField(finding.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(finding.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(finding.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(finding.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(finding.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(finding.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
 	if value, ok := _c.mutation.ReviewedBy(); ok {
 		_spec.SetField(finding.FieldReviewedBy, field.TypeString, value)
 		_node.ReviewedBy = value
@@ -1649,6 +1755,22 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.RawPayload(); ok {
 		_spec.SetField(finding.FieldRawPayload, field.TypeJSON, value)
 		_node.RawPayload = value
+	}
+	if nodes := _c.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.IntegrationRunsTable,
+			Columns: finding.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

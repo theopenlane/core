@@ -166,7 +166,7 @@ func (suite *HookTestSuite) TestOnboardingProgramFrameworkSelections() {
 			ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 			onboarding, err := suite.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
-				CompanyName: gofakeit.Company(),
+				CompanyName: "Onboarding Co " + gofakeit.LetterN(8),
 				Compliance:  tc.compliance,
 			}).Save(ctx)
 

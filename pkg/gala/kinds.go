@@ -30,9 +30,9 @@ type EnvelopeArgs struct {
 	UniqueKey string `json:"unique_key,omitempty" river:"unique"`
 }
 
-// Kind satisfies river.JobArgs with the legacy dispatch kind
+// Kind satisfies river.JobArgs with the worker's registered kind
 func (EnvelopeArgs) Kind() string {
-	return riverDispatchJobKind
+	return envelopeWorkerKind
 }
 
 // KindAliases registers the shared envelope worker for every configured job kind
@@ -55,11 +55,7 @@ type kindedEnvelopeArgs struct {
 	kind string
 }
 
-// Kind returns the stamped kind, falling back to the legacy dispatch kind
+// Kind returns the stamped kind
 func (a kindedEnvelopeArgs) Kind() string {
-	if a.kind == "" {
-		return riverDispatchJobKind
-	}
-
 	return a.kind
 }

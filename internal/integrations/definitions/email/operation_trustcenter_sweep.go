@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/trustcenterurl"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // trustCenterNotificationGrace is the debounce window a post or subprocessor change must be stable
@@ -416,12 +417,21 @@ func sendSubprocessorNotification(ctx context.Context, req types.OperationReques
 
 const logoCheckTimeout = 5 * time.Second
 
-// logoURLReachable reports whether a logo URL currently serves a successful response
+// logoURLReachable reports whether a logo URL is an absolute http(s) URL that currently serves a successful response
 func logoURLReachable(ctx context.Context, rawURL string) bool {
-	resp, err := httpsling.SendWithContext(ctx,
+	logoURL, err := urlx.ParseAbsolute(rawURL)
+	if err != nil {
+		return false
+	}
+
+	requester, err := urlx.NewRequester(httpsling.Client(httpclient.Timeout(logoCheckTimeout)))
+	if err != nil {
+		return false
+	}
+
+	resp, err := requester.SendWithContext(ctx,
 		httpsling.Get(),
-		httpsling.URL(rawURL),
-		httpsling.Client(httpclient.Timeout(logoCheckTimeout)),
+		httpsling.URL(logoURL.String()),
 	)
 	if err != nil {
 		return false

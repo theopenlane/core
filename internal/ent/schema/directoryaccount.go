@@ -56,17 +56,8 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Comment("optional integration that owns this directory account when sourced by an integration").
 			Optional().
 			NotEmpty().
-			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
-			),
-		field.String("directory_sync_run_id").
-			Comment("optional sync run that produced this snapshot").
-			Optional().
-			NotEmpty().
-			Immutable().
-			Annotations(
-				entx.IntegrationMappingField(),
+				entx.IntegrationMappingField().SystemControlled(),
 			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory account").
@@ -74,14 +65,7 @@ func (DirectoryAccount) Fields() []ent.Field {
 			NotEmpty().
 			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
-			),
-		field.String("directory_instance_id").
-			Comment("stable external workspace, tenant, or installation identifier used to correlate accounts across multiple integrations pointed at the same directory instance").
-			Optional().
-			Nillable().
-			Annotations(
-				entgql.OrderField("directory_instance_id"),
+				entx.IntegrationMappingField().SystemControlled(),
 			),
 		field.String("identity_holder_id").
 			Comment("deduplicated identity holder linked to this directory account").
@@ -206,24 +190,6 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Comment("last IP address observed by the provider, if any").
 			Optional().
 			Nillable(),
-		field.Time("last_login_at").
-			Comment("timestamp of the most recent login reported by the provider").
-			Optional().
-			Nillable(),
-		field.Time("first_seen_at").
-			Comment("time this account was first observed by Openlane from directory ingest").
-			Optional().
-			Nillable().
-			Annotations(
-				entx.IntegrationMappingField(),
-			),
-		field.Time("last_seen_at").
-			Comment("time this account was most recently confirmed by directory ingest").
-			Optional().
-			Nillable().
-			Annotations(
-				entx.IntegrationMappingField(),
-			),
 		field.Time("added_at").
 			Comment("provider-reported time the account was added or provisioned in the source directory").
 			Optional().
@@ -237,17 +203,18 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entx.IntegrationMappingField(),
+				entx.SnapshotRemoval(),
 			),
 		field.Time("observed_at").
 			Comment("time when this snapshot was recorded").
 			Default(time.Now).
 			Immutable(),
-		field.String("profile_hash").
-			Comment("hash of the normalized profile payload for change detection").
-			Default(""),
 		field.JSON("profile", map[string]any{}).
 			Comment("flattened attribute bag used for filtering/diffing").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField().Volatile(),
+			),
 		field.JSON("metadata", map[string]any{}).
 			Comment("provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl").
 			Optional().
@@ -277,8 +244,9 @@ func (d DirectoryAccount) Mixin() []ent.Mixin {
 		prefix:            "DAC",
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{SchemaType: d},
 			newObjectOwnedMixin[generated.DirectoryAccount](d,
-				withParents(IdentityHolder{}, Platform{}, Integration{}, DirectorySyncRun{}),
+				withParents(IdentityHolder{}, Platform{}, Integration{}),
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
 			),
@@ -295,18 +263,10 @@ func (d DirectoryAccount) Edges() []ent.Edge {
 			fromSchema: d,
 			edgeSchema: Integration{},
 			field:      "integration_id",
-			immutable:  true,
 			comment:    "integration that owns this directory account",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Organization{}.Name()),
 			},
-		}),
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: d,
-			edgeSchema: DirectorySyncRun{},
-			field:      "directory_sync_run_id",
-			immutable:  true,
-			comment:    "sync run that produced this snapshot",
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: d,
@@ -353,12 +313,7 @@ func (d DirectoryAccount) Edges() []ent.Edge {
 // Indexes of the DirectoryAccount
 func (DirectoryAccount) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("integration_id", "external_id", "directory_sync_run_id").
-			Unique(),
-		index.Fields("directory_instance_id", "external_id"),
-		index.Fields("directory_instance_id", "canonical_email"),
 		index.Fields("platform_id", "external_id"),
-		index.Fields("directory_sync_run_id", "canonical_email"),
 		index.Fields("integration_id", "canonical_email"),
 		index.Fields("platform_id", "canonical_email"),
 		index.Fields("identity_holder_id"),
@@ -397,7 +352,7 @@ func (d DirectoryAccount) Annotations() []schema.Annotation {
 				},
 			},
 		),
-		entx.IntegrationMappingSchema().StockPersist(),
+		entx.IntegrationMappingSchema().StockPersist().InstanceScoped(),
 		history.Annotations{
 			Exclude: true,
 		},
