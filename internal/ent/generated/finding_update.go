@@ -266,6 +266,86 @@ func (_u *FindingUpdate) ClearIntegrationRunID() *FindingUpdate {
 	return _u
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_u *FindingUpdate) SetInternalOwner(v string) *FindingUpdate {
+	_u.mutation.SetInternalOwner(v)
+	return _u
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableInternalOwner(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetInternalOwner(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (_u *FindingUpdate) ClearInternalOwner() *FindingUpdate {
+	_u.mutation.ClearInternalOwner()
+	return _u
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_u *FindingUpdate) SetInternalOwnerUserID(v string) *FindingUpdate {
+	_u.mutation.SetInternalOwnerUserID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableInternalOwnerUserID(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetInternalOwnerUserID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (_u *FindingUpdate) ClearInternalOwnerUserID() *FindingUpdate {
+	_u.mutation.ClearInternalOwnerUserID()
+	return _u
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_u *FindingUpdate) SetInternalOwnerGroupID(v string) *FindingUpdate {
+	_u.mutation.SetInternalOwnerGroupID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableInternalOwnerGroupID(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetInternalOwnerGroupID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (_u *FindingUpdate) ClearInternalOwnerGroupID() *FindingUpdate {
+	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *FindingUpdate) SetInternalOwnerIdentityHolderID(v string) *FindingUpdate {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableInternalOwnerIdentityHolderID(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *FindingUpdate) ClearInternalOwnerIdentityHolderID() *FindingUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetReviewedBy sets the "reviewed_by" field.
 func (_u *FindingUpdate) SetReviewedBy(v string) *FindingUpdate {
 	_u.mutation.SetReviewedBy(v)
@@ -1394,6 +1474,21 @@ func (_u *FindingUpdate) AddEditors(v ...*Group) *FindingUpdate {
 	return _u.AddEditorIDs(ids...)
 }
 
+// SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
+func (_u *FindingUpdate) SetInternalOwnerUser(v *User) *FindingUpdate {
+	return _u.SetInternalOwnerUserID(v.ID)
+}
+
+// SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
+func (_u *FindingUpdate) SetInternalOwnerGroup(v *Group) *FindingUpdate {
+	return _u.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *FindingUpdate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *FindingUpdate {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
 func (_u *FindingUpdate) SetReviewedByUser(v *User) *FindingUpdate {
 	return _u.SetReviewedByUserID(v.ID)
@@ -1805,6 +1900,24 @@ func (_u *FindingUpdate) RemoveEditors(v ...*Group) *FindingUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
+}
+
+// ClearInternalOwnerUser clears the "internal_owner_user" edge to the User entity.
+func (_u *FindingUpdate) ClearInternalOwnerUser() *FindingUpdate {
+	_u.mutation.ClearInternalOwnerUser()
+	return _u
+}
+
+// ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
+func (_u *FindingUpdate) ClearInternalOwnerGroup() *FindingUpdate {
+	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *FindingUpdate) ClearInternalOwnerIdentityHolder() *FindingUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
+	return _u
 }
 
 // ClearReviewedByUser clears the "reviewed_by_user" edge to the User entity.
@@ -2428,6 +2541,12 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(finding.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.InternalOwner(); ok {
+		_spec.SetField(finding.FieldInternalOwner, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(finding.FieldInternalOwner, field.TypeString)
+	}
 	if value, ok := _u.mutation.ReviewedBy(); ok {
 		_spec.SetField(finding.FieldReviewedBy, field.TypeString, value)
 	}
@@ -2864,6 +2983,93 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.InternalOwnerUserTable,
+			Columns: []string{finding.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.InternalOwnerUserTable,
+			Columns: []string{finding.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.InternalOwnerGroupTable,
+			Columns: []string{finding.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.InternalOwnerGroupTable,
+			Columns: []string{finding.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.InternalOwnerIdentityHolderTable,
+			Columns: []string{finding.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.InternalOwnerIdentityHolderTable,
+			Columns: []string{finding.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -4285,6 +4491,86 @@ func (_u *FindingUpdateOne) ClearIntegrationRunID() *FindingUpdateOne {
 	return _u
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_u *FindingUpdateOne) SetInternalOwner(v string) *FindingUpdateOne {
+	_u.mutation.SetInternalOwner(v)
+	return _u
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableInternalOwner(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetInternalOwner(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (_u *FindingUpdateOne) ClearInternalOwner() *FindingUpdateOne {
+	_u.mutation.ClearInternalOwner()
+	return _u
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_u *FindingUpdateOne) SetInternalOwnerUserID(v string) *FindingUpdateOne {
+	_u.mutation.SetInternalOwnerUserID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableInternalOwnerUserID(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerUserID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (_u *FindingUpdateOne) ClearInternalOwnerUserID() *FindingUpdateOne {
+	_u.mutation.ClearInternalOwnerUserID()
+	return _u
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_u *FindingUpdateOne) SetInternalOwnerGroupID(v string) *FindingUpdateOne {
+	_u.mutation.SetInternalOwnerGroupID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableInternalOwnerGroupID(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerGroupID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (_u *FindingUpdateOne) ClearInternalOwnerGroupID() *FindingUpdateOne {
+	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *FindingUpdateOne) SetInternalOwnerIdentityHolderID(v string) *FindingUpdateOne {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableInternalOwnerIdentityHolderID(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *FindingUpdateOne) ClearInternalOwnerIdentityHolderID() *FindingUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetReviewedBy sets the "reviewed_by" field.
 func (_u *FindingUpdateOne) SetReviewedBy(v string) *FindingUpdateOne {
 	_u.mutation.SetReviewedBy(v)
@@ -5413,6 +5699,21 @@ func (_u *FindingUpdateOne) AddEditors(v ...*Group) *FindingUpdateOne {
 	return _u.AddEditorIDs(ids...)
 }
 
+// SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
+func (_u *FindingUpdateOne) SetInternalOwnerUser(v *User) *FindingUpdateOne {
+	return _u.SetInternalOwnerUserID(v.ID)
+}
+
+// SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
+func (_u *FindingUpdateOne) SetInternalOwnerGroup(v *Group) *FindingUpdateOne {
+	return _u.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *FindingUpdateOne) SetInternalOwnerIdentityHolder(v *IdentityHolder) *FindingUpdateOne {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
 func (_u *FindingUpdateOne) SetReviewedByUser(v *User) *FindingUpdateOne {
 	return _u.SetReviewedByUserID(v.ID)
@@ -5824,6 +6125,24 @@ func (_u *FindingUpdateOne) RemoveEditors(v ...*Group) *FindingUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEditorIDs(ids...)
+}
+
+// ClearInternalOwnerUser clears the "internal_owner_user" edge to the User entity.
+func (_u *FindingUpdateOne) ClearInternalOwnerUser() *FindingUpdateOne {
+	_u.mutation.ClearInternalOwnerUser()
+	return _u
+}
+
+// ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
+func (_u *FindingUpdateOne) ClearInternalOwnerGroup() *FindingUpdateOne {
+	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *FindingUpdateOne) ClearInternalOwnerIdentityHolder() *FindingUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
+	return _u
 }
 
 // ClearReviewedByUser clears the "reviewed_by_user" edge to the User entity.
@@ -6477,6 +6796,12 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(finding.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.InternalOwner(); ok {
+		_spec.SetField(finding.FieldInternalOwner, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(finding.FieldInternalOwner, field.TypeString)
+	}
 	if value, ok := _u.mutation.ReviewedBy(); ok {
 		_spec.SetField(finding.FieldReviewedBy, field.TypeString, value)
 	}
@@ -6913,6 +7238,93 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.InternalOwnerUserTable,
+			Columns: []string{finding.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.InternalOwnerUserTable,
+			Columns: []string{finding.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.InternalOwnerGroupTable,
+			Columns: []string{finding.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.InternalOwnerGroupTable,
+			Columns: []string{finding.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.InternalOwnerIdentityHolderTable,
+			Columns: []string{finding.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.InternalOwnerIdentityHolderTable,
+			Columns: []string{finding.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

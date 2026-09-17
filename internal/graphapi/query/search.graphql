@@ -245,6 +245,7 @@ query GlobalSearch($query: String!) {
           externalID
           externalOwnerID
           id
+          internalOwner
           severity
           tags
         }
@@ -491,9 +492,11 @@ query GlobalSearch($query: String!) {
       }
       edges {
         node {
+          delegateName
           displayID
           id
           name
+          stakeholderName
           tags
         }
       }
@@ -690,6 +693,7 @@ query GlobalSearch($query: String!) {
           externalID
           externalOwnerID
           id
+          internalOwner
           packageName
           severity
           tags

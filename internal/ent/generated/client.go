@@ -10782,6 +10782,54 @@ func (c *FindingClient) QueryEditors(_m *Finding) *GroupQuery {
 	return query
 }
 
+// QueryInternalOwnerUser queries the internal_owner_user edge of a Finding.
+func (c *FindingClient) QueryInternalOwnerUser(_m *Finding) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.InternalOwnerUserTable, finding.InternalOwnerUserColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerGroup queries the internal_owner_group edge of a Finding.
+func (c *FindingClient) QueryInternalOwnerGroup(_m *Finding) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.InternalOwnerGroupTable, finding.InternalOwnerGroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerIdentityHolder queries the internal_owner_identity_holder edge of a Finding.
+func (c *FindingClient) QueryInternalOwnerIdentityHolder(_m *Finding) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.InternalOwnerIdentityHolderTable, finding.InternalOwnerIdentityHolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryReviewedByUser queries the reviewed_by_user edge of a Finding.
 func (c *FindingClient) QueryReviewedByUser(_m *Finding) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
@@ -24682,6 +24730,102 @@ func (c *RiskClient) QueryViewers(_m *Risk) *GroupQuery {
 	return query
 }
 
+// QueryStakeholderUser queries the stakeholder_user edge of a Risk.
+func (c *RiskClient) QueryStakeholderUser(_m *Risk) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.StakeholderUserTable, risk.StakeholderUserColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryStakeholderGroup queries the stakeholder_group edge of a Risk.
+func (c *RiskClient) QueryStakeholderGroup(_m *Risk) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.StakeholderGroupTable, risk.StakeholderGroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryStakeholderIdentityHolder queries the stakeholder_identity_holder edge of a Risk.
+func (c *RiskClient) QueryStakeholderIdentityHolder(_m *Risk) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.StakeholderIdentityHolderTable, risk.StakeholderIdentityHolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDelegateUser queries the delegate_user edge of a Risk.
+func (c *RiskClient) QueryDelegateUser(_m *Risk) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.DelegateUserTable, risk.DelegateUserColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDelegateGroup queries the delegate_group edge of a Risk.
+func (c *RiskClient) QueryDelegateGroup(_m *Risk) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.DelegateGroupTable, risk.DelegateGroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDelegateIdentityHolder queries the delegate_identity_holder edge of a Risk.
+func (c *RiskClient) QueryDelegateIdentityHolder(_m *Risk) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.DelegateIdentityHolderTable, risk.DelegateIdentityHolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryRiskKind queries the risk_kind edge of a Risk.
 func (c *RiskClient) QueryRiskKind(_m *Risk) *CustomTypeEnumQuery {
 	query := (&CustomTypeEnumClient{config: c.config}).Query()
@@ -31922,6 +32066,54 @@ func (c *VulnerabilityClient) QueryViewers(_m *Vulnerability) *GroupQuery {
 			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.ViewersTable, vulnerability.ViewersColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerUser queries the internal_owner_user edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryInternalOwnerUser(_m *Vulnerability) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vulnerability.InternalOwnerUserTable, vulnerability.InternalOwnerUserColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerGroup queries the internal_owner_group edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryInternalOwnerGroup(_m *Vulnerability) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vulnerability.InternalOwnerGroupTable, vulnerability.InternalOwnerGroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerIdentityHolder queries the internal_owner_identity_holder edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryInternalOwnerIdentityHolder(_m *Vulnerability) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vulnerability.InternalOwnerIdentityHolderTable, vulnerability.InternalOwnerIdentityHolderColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

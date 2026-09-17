@@ -173,7 +173,7 @@ func (Risk) Fields() []ent.Field {
 			Optional().
 			Unique().
 			Annotations(
-				entx.CSVRef().FromColumn("StakeholderGroupName").MatchOn("name"),
+				entgql.Directives(entgql.Deprecated("use stakeholder_group_id instead")),
 			).
 			Comment("the id of the group responsible for risk oversight"),
 		field.String("delegate_id").
@@ -181,6 +181,7 @@ func (Risk) Fields() []ent.Field {
 			Unique().
 			Annotations(
 				entx.CSVRef().FromColumn("RiskDelegateGroupName").MatchOn("name"),
+				entgql.Directives(entgql.Deprecated("use delegate_group_id instead")),
 			).
 			Comment("the id of the group responsible for risk oversight on behalf of the stakeholder"),
 		field.Time("mitigated_at").
@@ -320,6 +321,7 @@ func (r Risk) Edges() []ent.Edge {
 			comment:    "the group of users who are responsible for risk oversight",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Group{}.Name()),
+				entgql.Directives(entgql.Deprecated("use stakeholder_group instead")),
 			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
@@ -330,6 +332,7 @@ func (r Risk) Edges() []ent.Edge {
 			comment:    "temporary delegates for the risk, used for temporary ownership",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Group{}.Name()),
+				entgql.Directives(entgql.Deprecated("use delegate_group instead")),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -433,6 +436,7 @@ func (r Risk) Mixin() []ent.Mixin {
 			),
 			// add groups permissions with viewer, editor, and blocked groups
 			newGroupPermissionsMixin(),
+			newResponsibilityMixin(r, withStakeholder(), withDelegate()),
 			newCustomEnumMixin(r),
 			newCustomEnumMixin(r, withEnumFieldName("category")),
 			newCustomEnumMixin(r, withEnumFieldName("environment"), withGlobalEnum()),

@@ -36798,6 +36798,58 @@ type FindingWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
+	// "internal_owner" field predicates.
+	InternalOwner             *string  `json:"internalOwner,omitempty"`
+	InternalOwnerNEQ          *string  `json:"internalOwnerNEQ,omitempty"`
+	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
+	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
+	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
+	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
+	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
+	InternalOwnerIsNil        bool     `json:"internalOwnerIsNil,omitempty"`
+	InternalOwnerNotNil       bool     `json:"internalOwnerNotNil,omitempty"`
+	InternalOwnerEqualFold    *string  `json:"internalOwnerEqualFold,omitempty"`
+	InternalOwnerContainsFold *string  `json:"internalOwnerContainsFold,omitempty"`
+
+	// "internal_owner_user_id" field predicates.
+	InternalOwnerUserID             *string  `json:"internalOwnerUserID,omitempty"`
+	InternalOwnerUserIDNEQ          *string  `json:"internalOwnerUserIDNEQ,omitempty"`
+	InternalOwnerUserIDIn           []string `json:"internalOwnerUserIDIn,omitempty"`
+	InternalOwnerUserIDNotIn        []string `json:"internalOwnerUserIDNotIn,omitempty"`
+	InternalOwnerUserIDContains     *string  `json:"internalOwnerUserIDContains,omitempty"`
+	InternalOwnerUserIDHasPrefix    *string  `json:"internalOwnerUserIDHasPrefix,omitempty"`
+	InternalOwnerUserIDHasSuffix    *string  `json:"internalOwnerUserIDHasSuffix,omitempty"`
+	InternalOwnerUserIDIsNil        bool     `json:"internalOwnerUserIDIsNil,omitempty"`
+	InternalOwnerUserIDNotNil       bool     `json:"internalOwnerUserIDNotNil,omitempty"`
+	InternalOwnerUserIDEqualFold    *string  `json:"internalOwnerUserIDEqualFold,omitempty"`
+	InternalOwnerUserIDContainsFold *string  `json:"internalOwnerUserIDContainsFold,omitempty"`
+
+	// "internal_owner_group_id" field predicates.
+	InternalOwnerGroupID             *string  `json:"internalOwnerGroupID,omitempty"`
+	InternalOwnerGroupIDNEQ          *string  `json:"internalOwnerGroupIDNEQ,omitempty"`
+	InternalOwnerGroupIDIn           []string `json:"internalOwnerGroupIDIn,omitempty"`
+	InternalOwnerGroupIDNotIn        []string `json:"internalOwnerGroupIDNotIn,omitempty"`
+	InternalOwnerGroupIDContains     *string  `json:"internalOwnerGroupIDContains,omitempty"`
+	InternalOwnerGroupIDHasPrefix    *string  `json:"internalOwnerGroupIDHasPrefix,omitempty"`
+	InternalOwnerGroupIDHasSuffix    *string  `json:"internalOwnerGroupIDHasSuffix,omitempty"`
+	InternalOwnerGroupIDIsNil        bool     `json:"internalOwnerGroupIDIsNil,omitempty"`
+	InternalOwnerGroupIDNotNil       bool     `json:"internalOwnerGroupIDNotNil,omitempty"`
+	InternalOwnerGroupIDEqualFold    *string  `json:"internalOwnerGroupIDEqualFold,omitempty"`
+	InternalOwnerGroupIDContainsFold *string  `json:"internalOwnerGroupIDContainsFold,omitempty"`
+
+	// "internal_owner_identity_holder_id" field predicates.
+	InternalOwnerIdentityHolderID             *string  `json:"internalOwnerIdentityHolderID,omitempty"`
+	InternalOwnerIdentityHolderIDNEQ          *string  `json:"internalOwnerIdentityHolderIDNEQ,omitempty"`
+	InternalOwnerIdentityHolderIDIn           []string `json:"internalOwnerIdentityHolderIDIn,omitempty"`
+	InternalOwnerIdentityHolderIDNotIn        []string `json:"internalOwnerIdentityHolderIDNotIn,omitempty"`
+	InternalOwnerIdentityHolderIDContains     *string  `json:"internalOwnerIdentityHolderIDContains,omitempty"`
+	InternalOwnerIdentityHolderIDHasPrefix    *string  `json:"internalOwnerIdentityHolderIDHasPrefix,omitempty"`
+	InternalOwnerIdentityHolderIDHasSuffix    *string  `json:"internalOwnerIdentityHolderIDHasSuffix,omitempty"`
+	InternalOwnerIdentityHolderIDIsNil        bool     `json:"internalOwnerIdentityHolderIDIsNil,omitempty"`
+	InternalOwnerIdentityHolderIDNotNil       bool     `json:"internalOwnerIdentityHolderIDNotNil,omitempty"`
+	InternalOwnerIdentityHolderIDEqualFold    *string  `json:"internalOwnerIdentityHolderIDEqualFold,omitempty"`
+	InternalOwnerIdentityHolderIDContainsFold *string  `json:"internalOwnerIdentityHolderIDContainsFold,omitempty"`
+
 	// "reviewed_by" field predicates.
 	ReviewedBy             *string  `json:"reviewedBy,omitempty"`
 	ReviewedByNEQ          *string  `json:"reviewedByNEQ,omitempty"`
@@ -37380,6 +37432,18 @@ type FindingWhereInput struct {
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 
+	// "internal_owner_user" edge predicates.
+	HasInternalOwnerUser     *bool             `json:"hasInternalOwnerUser,omitempty"`
+	HasInternalOwnerUserWith []*UserWhereInput `json:"hasInternalOwnerUserWith,omitempty"`
+
+	// "internal_owner_group" edge predicates.
+	HasInternalOwnerGroup     *bool              `json:"hasInternalOwnerGroup,omitempty"`
+	HasInternalOwnerGroupWith []*GroupWhereInput `json:"hasInternalOwnerGroupWith,omitempty"`
+
+	// "internal_owner_identity_holder" edge predicates.
+	HasInternalOwnerIdentityHolder     *bool                       `json:"hasInternalOwnerIdentityHolder,omitempty"`
+	HasInternalOwnerIdentityHolderWith []*IdentityHolderWhereInput `json:"hasInternalOwnerIdentityHolderWith,omitempty"`
+
 	// "reviewed_by_user" edge predicates.
 	HasReviewedByUser     *bool             `json:"hasReviewedByUser,omitempty"`
 	HasReviewedByUserWith []*UserWhereInput `json:"hasReviewedByUserWith,omitempty"`
@@ -37951,6 +38015,138 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, finding.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.InternalOwner != nil {
+		predicates = append(predicates, finding.InternalOwnerEQ(*i.InternalOwner))
+	}
+	if i.InternalOwnerNEQ != nil {
+		predicates = append(predicates, finding.InternalOwnerNEQ(*i.InternalOwnerNEQ))
+	}
+	if len(i.InternalOwnerIn) > 0 {
+		predicates = append(predicates, finding.InternalOwnerIn(i.InternalOwnerIn...))
+	}
+	if len(i.InternalOwnerNotIn) > 0 {
+		predicates = append(predicates, finding.InternalOwnerNotIn(i.InternalOwnerNotIn...))
+	}
+	if i.InternalOwnerContains != nil {
+		predicates = append(predicates, finding.InternalOwnerContains(*i.InternalOwnerContains))
+	}
+	if i.InternalOwnerHasPrefix != nil {
+		predicates = append(predicates, finding.InternalOwnerHasPrefix(*i.InternalOwnerHasPrefix))
+	}
+	if i.InternalOwnerHasSuffix != nil {
+		predicates = append(predicates, finding.InternalOwnerHasSuffix(*i.InternalOwnerHasSuffix))
+	}
+	if i.InternalOwnerIsNil {
+		predicates = append(predicates, finding.InternalOwnerIsNil())
+	}
+	if i.InternalOwnerNotNil {
+		predicates = append(predicates, finding.InternalOwnerNotNil())
+	}
+	if i.InternalOwnerEqualFold != nil {
+		predicates = append(predicates, finding.InternalOwnerEqualFold(*i.InternalOwnerEqualFold))
+	}
+	if i.InternalOwnerContainsFold != nil {
+		predicates = append(predicates, finding.InternalOwnerContainsFold(*i.InternalOwnerContainsFold))
+	}
+	if i.InternalOwnerUserID != nil {
+		predicates = append(predicates, finding.InternalOwnerUserIDEQ(*i.InternalOwnerUserID))
+	}
+	if i.InternalOwnerUserIDNEQ != nil {
+		predicates = append(predicates, finding.InternalOwnerUserIDNEQ(*i.InternalOwnerUserIDNEQ))
+	}
+	if len(i.InternalOwnerUserIDIn) > 0 {
+		predicates = append(predicates, finding.InternalOwnerUserIDIn(i.InternalOwnerUserIDIn...))
+	}
+	if len(i.InternalOwnerUserIDNotIn) > 0 {
+		predicates = append(predicates, finding.InternalOwnerUserIDNotIn(i.InternalOwnerUserIDNotIn...))
+	}
+	if i.InternalOwnerUserIDContains != nil {
+		predicates = append(predicates, finding.InternalOwnerUserIDContains(*i.InternalOwnerUserIDContains))
+	}
+	if i.InternalOwnerUserIDHasPrefix != nil {
+		predicates = append(predicates, finding.InternalOwnerUserIDHasPrefix(*i.InternalOwnerUserIDHasPrefix))
+	}
+	if i.InternalOwnerUserIDHasSuffix != nil {
+		predicates = append(predicates, finding.InternalOwnerUserIDHasSuffix(*i.InternalOwnerUserIDHasSuffix))
+	}
+	if i.InternalOwnerUserIDIsNil {
+		predicates = append(predicates, finding.InternalOwnerUserIDIsNil())
+	}
+	if i.InternalOwnerUserIDNotNil {
+		predicates = append(predicates, finding.InternalOwnerUserIDNotNil())
+	}
+	if i.InternalOwnerUserIDEqualFold != nil {
+		predicates = append(predicates, finding.InternalOwnerUserIDEqualFold(*i.InternalOwnerUserIDEqualFold))
+	}
+	if i.InternalOwnerUserIDContainsFold != nil {
+		predicates = append(predicates, finding.InternalOwnerUserIDContainsFold(*i.InternalOwnerUserIDContainsFold))
+	}
+	if i.InternalOwnerGroupID != nil {
+		predicates = append(predicates, finding.InternalOwnerGroupIDEQ(*i.InternalOwnerGroupID))
+	}
+	if i.InternalOwnerGroupIDNEQ != nil {
+		predicates = append(predicates, finding.InternalOwnerGroupIDNEQ(*i.InternalOwnerGroupIDNEQ))
+	}
+	if len(i.InternalOwnerGroupIDIn) > 0 {
+		predicates = append(predicates, finding.InternalOwnerGroupIDIn(i.InternalOwnerGroupIDIn...))
+	}
+	if len(i.InternalOwnerGroupIDNotIn) > 0 {
+		predicates = append(predicates, finding.InternalOwnerGroupIDNotIn(i.InternalOwnerGroupIDNotIn...))
+	}
+	if i.InternalOwnerGroupIDContains != nil {
+		predicates = append(predicates, finding.InternalOwnerGroupIDContains(*i.InternalOwnerGroupIDContains))
+	}
+	if i.InternalOwnerGroupIDHasPrefix != nil {
+		predicates = append(predicates, finding.InternalOwnerGroupIDHasPrefix(*i.InternalOwnerGroupIDHasPrefix))
+	}
+	if i.InternalOwnerGroupIDHasSuffix != nil {
+		predicates = append(predicates, finding.InternalOwnerGroupIDHasSuffix(*i.InternalOwnerGroupIDHasSuffix))
+	}
+	if i.InternalOwnerGroupIDIsNil {
+		predicates = append(predicates, finding.InternalOwnerGroupIDIsNil())
+	}
+	if i.InternalOwnerGroupIDNotNil {
+		predicates = append(predicates, finding.InternalOwnerGroupIDNotNil())
+	}
+	if i.InternalOwnerGroupIDEqualFold != nil {
+		predicates = append(predicates, finding.InternalOwnerGroupIDEqualFold(*i.InternalOwnerGroupIDEqualFold))
+	}
+	if i.InternalOwnerGroupIDContainsFold != nil {
+		predicates = append(predicates, finding.InternalOwnerGroupIDContainsFold(*i.InternalOwnerGroupIDContainsFold))
+	}
+	if i.InternalOwnerIdentityHolderID != nil {
+		predicates = append(predicates, finding.InternalOwnerIdentityHolderIDEQ(*i.InternalOwnerIdentityHolderID))
+	}
+	if i.InternalOwnerIdentityHolderIDNEQ != nil {
+		predicates = append(predicates, finding.InternalOwnerIdentityHolderIDNEQ(*i.InternalOwnerIdentityHolderIDNEQ))
+	}
+	if len(i.InternalOwnerIdentityHolderIDIn) > 0 {
+		predicates = append(predicates, finding.InternalOwnerIdentityHolderIDIn(i.InternalOwnerIdentityHolderIDIn...))
+	}
+	if len(i.InternalOwnerIdentityHolderIDNotIn) > 0 {
+		predicates = append(predicates, finding.InternalOwnerIdentityHolderIDNotIn(i.InternalOwnerIdentityHolderIDNotIn...))
+	}
+	if i.InternalOwnerIdentityHolderIDContains != nil {
+		predicates = append(predicates, finding.InternalOwnerIdentityHolderIDContains(*i.InternalOwnerIdentityHolderIDContains))
+	}
+	if i.InternalOwnerIdentityHolderIDHasPrefix != nil {
+		predicates = append(predicates, finding.InternalOwnerIdentityHolderIDHasPrefix(*i.InternalOwnerIdentityHolderIDHasPrefix))
+	}
+	if i.InternalOwnerIdentityHolderIDHasSuffix != nil {
+		predicates = append(predicates, finding.InternalOwnerIdentityHolderIDHasSuffix(*i.InternalOwnerIdentityHolderIDHasSuffix))
+	}
+	if i.InternalOwnerIdentityHolderIDIsNil {
+		predicates = append(predicates, finding.InternalOwnerIdentityHolderIDIsNil())
+	}
+	if i.InternalOwnerIdentityHolderIDNotNil {
+		predicates = append(predicates, finding.InternalOwnerIdentityHolderIDNotNil())
+	}
+	if i.InternalOwnerIdentityHolderIDEqualFold != nil {
+		predicates = append(predicates, finding.InternalOwnerIdentityHolderIDEqualFold(*i.InternalOwnerIdentityHolderIDEqualFold))
+	}
+	if i.InternalOwnerIdentityHolderIDContainsFold != nil {
+		predicates = append(predicates, finding.InternalOwnerIdentityHolderIDContainsFold(*i.InternalOwnerIdentityHolderIDContainsFold))
 	}
 	if i.ReviewedBy != nil {
 		predicates = append(predicates, finding.ReviewedByEQ(*i.ReviewedBy))
@@ -39428,6 +39624,63 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, finding.HasEditorsWith(with...))
+	}
+	if i.HasInternalOwnerUser != nil {
+		p := finding.HasInternalOwnerUser()
+		if !*i.HasInternalOwnerUser {
+			p = finding.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalOwnerUserWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasInternalOwnerUserWith))
+		with = append(with, user.DeletedAtIsNil())
+		for _, w := range i.HasInternalOwnerUserWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalOwnerUserWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, finding.HasInternalOwnerUserWith(with...))
+	}
+	if i.HasInternalOwnerGroup != nil {
+		p := finding.HasInternalOwnerGroup()
+		if !*i.HasInternalOwnerGroup {
+			p = finding.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalOwnerGroupWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasInternalOwnerGroupWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasInternalOwnerGroupWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalOwnerGroupWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, finding.HasInternalOwnerGroupWith(with...))
+	}
+	if i.HasInternalOwnerIdentityHolder != nil {
+		p := finding.HasInternalOwnerIdentityHolder()
+		if !*i.HasInternalOwnerIdentityHolder {
+			p = finding.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalOwnerIdentityHolderWith) > 0 {
+		with := make([]predicate.IdentityHolder, 0, len(i.HasInternalOwnerIdentityHolderWith))
+		with = append(with, identityholder.DeletedAtIsNil())
+		for _, w := range i.HasInternalOwnerIdentityHolderWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalOwnerIdentityHolderWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, finding.HasInternalOwnerIdentityHolderWith(with...))
 	}
 	if i.HasReviewedByUser != nil {
 		p := finding.HasReviewedByUser()
@@ -76737,6 +76990,110 @@ type RiskWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
+	// "stakeholder_name" field predicates.
+	StakeholderName             *string  `json:"stakeholderName,omitempty"`
+	StakeholderNameNEQ          *string  `json:"stakeholderNameNEQ,omitempty"`
+	StakeholderNameIn           []string `json:"stakeholderNameIn,omitempty"`
+	StakeholderNameNotIn        []string `json:"stakeholderNameNotIn,omitempty"`
+	StakeholderNameContains     *string  `json:"stakeholderNameContains,omitempty"`
+	StakeholderNameHasPrefix    *string  `json:"stakeholderNameHasPrefix,omitempty"`
+	StakeholderNameHasSuffix    *string  `json:"stakeholderNameHasSuffix,omitempty"`
+	StakeholderNameIsNil        bool     `json:"stakeholderNameIsNil,omitempty"`
+	StakeholderNameNotNil       bool     `json:"stakeholderNameNotNil,omitempty"`
+	StakeholderNameEqualFold    *string  `json:"stakeholderNameEqualFold,omitempty"`
+	StakeholderNameContainsFold *string  `json:"stakeholderNameContainsFold,omitempty"`
+
+	// "stakeholder_user_id" field predicates.
+	StakeholderUserID             *string  `json:"stakeholderUserID,omitempty"`
+	StakeholderUserIDNEQ          *string  `json:"stakeholderUserIDNEQ,omitempty"`
+	StakeholderUserIDIn           []string `json:"stakeholderUserIDIn,omitempty"`
+	StakeholderUserIDNotIn        []string `json:"stakeholderUserIDNotIn,omitempty"`
+	StakeholderUserIDContains     *string  `json:"stakeholderUserIDContains,omitempty"`
+	StakeholderUserIDHasPrefix    *string  `json:"stakeholderUserIDHasPrefix,omitempty"`
+	StakeholderUserIDHasSuffix    *string  `json:"stakeholderUserIDHasSuffix,omitempty"`
+	StakeholderUserIDIsNil        bool     `json:"stakeholderUserIDIsNil,omitempty"`
+	StakeholderUserIDNotNil       bool     `json:"stakeholderUserIDNotNil,omitempty"`
+	StakeholderUserIDEqualFold    *string  `json:"stakeholderUserIDEqualFold,omitempty"`
+	StakeholderUserIDContainsFold *string  `json:"stakeholderUserIDContainsFold,omitempty"`
+
+	// "stakeholder_group_id" field predicates.
+	StakeholderGroupID             *string  `json:"stakeholderGroupID,omitempty"`
+	StakeholderGroupIDNEQ          *string  `json:"stakeholderGroupIDNEQ,omitempty"`
+	StakeholderGroupIDIn           []string `json:"stakeholderGroupIDIn,omitempty"`
+	StakeholderGroupIDNotIn        []string `json:"stakeholderGroupIDNotIn,omitempty"`
+	StakeholderGroupIDContains     *string  `json:"stakeholderGroupIDContains,omitempty"`
+	StakeholderGroupIDHasPrefix    *string  `json:"stakeholderGroupIDHasPrefix,omitempty"`
+	StakeholderGroupIDHasSuffix    *string  `json:"stakeholderGroupIDHasSuffix,omitempty"`
+	StakeholderGroupIDIsNil        bool     `json:"stakeholderGroupIDIsNil,omitempty"`
+	StakeholderGroupIDNotNil       bool     `json:"stakeholderGroupIDNotNil,omitempty"`
+	StakeholderGroupIDEqualFold    *string  `json:"stakeholderGroupIDEqualFold,omitempty"`
+	StakeholderGroupIDContainsFold *string  `json:"stakeholderGroupIDContainsFold,omitempty"`
+
+	// "stakeholder_identity_holder_id" field predicates.
+	StakeholderIdentityHolderID             *string  `json:"stakeholderIdentityHolderID,omitempty"`
+	StakeholderIdentityHolderIDNEQ          *string  `json:"stakeholderIdentityHolderIDNEQ,omitempty"`
+	StakeholderIdentityHolderIDIn           []string `json:"stakeholderIdentityHolderIDIn,omitempty"`
+	StakeholderIdentityHolderIDNotIn        []string `json:"stakeholderIdentityHolderIDNotIn,omitempty"`
+	StakeholderIdentityHolderIDContains     *string  `json:"stakeholderIdentityHolderIDContains,omitempty"`
+	StakeholderIdentityHolderIDHasPrefix    *string  `json:"stakeholderIdentityHolderIDHasPrefix,omitempty"`
+	StakeholderIdentityHolderIDHasSuffix    *string  `json:"stakeholderIdentityHolderIDHasSuffix,omitempty"`
+	StakeholderIdentityHolderIDIsNil        bool     `json:"stakeholderIdentityHolderIDIsNil,omitempty"`
+	StakeholderIdentityHolderIDNotNil       bool     `json:"stakeholderIdentityHolderIDNotNil,omitempty"`
+	StakeholderIdentityHolderIDEqualFold    *string  `json:"stakeholderIdentityHolderIDEqualFold,omitempty"`
+	StakeholderIdentityHolderIDContainsFold *string  `json:"stakeholderIdentityHolderIDContainsFold,omitempty"`
+
+	// "delegate_name" field predicates.
+	DelegateName             *string  `json:"delegateName,omitempty"`
+	DelegateNameNEQ          *string  `json:"delegateNameNEQ,omitempty"`
+	DelegateNameIn           []string `json:"delegateNameIn,omitempty"`
+	DelegateNameNotIn        []string `json:"delegateNameNotIn,omitempty"`
+	DelegateNameContains     *string  `json:"delegateNameContains,omitempty"`
+	DelegateNameHasPrefix    *string  `json:"delegateNameHasPrefix,omitempty"`
+	DelegateNameHasSuffix    *string  `json:"delegateNameHasSuffix,omitempty"`
+	DelegateNameIsNil        bool     `json:"delegateNameIsNil,omitempty"`
+	DelegateNameNotNil       bool     `json:"delegateNameNotNil,omitempty"`
+	DelegateNameEqualFold    *string  `json:"delegateNameEqualFold,omitempty"`
+	DelegateNameContainsFold *string  `json:"delegateNameContainsFold,omitempty"`
+
+	// "delegate_user_id" field predicates.
+	DelegateUserID             *string  `json:"delegateUserID,omitempty"`
+	DelegateUserIDNEQ          *string  `json:"delegateUserIDNEQ,omitempty"`
+	DelegateUserIDIn           []string `json:"delegateUserIDIn,omitempty"`
+	DelegateUserIDNotIn        []string `json:"delegateUserIDNotIn,omitempty"`
+	DelegateUserIDContains     *string  `json:"delegateUserIDContains,omitempty"`
+	DelegateUserIDHasPrefix    *string  `json:"delegateUserIDHasPrefix,omitempty"`
+	DelegateUserIDHasSuffix    *string  `json:"delegateUserIDHasSuffix,omitempty"`
+	DelegateUserIDIsNil        bool     `json:"delegateUserIDIsNil,omitempty"`
+	DelegateUserIDNotNil       bool     `json:"delegateUserIDNotNil,omitempty"`
+	DelegateUserIDEqualFold    *string  `json:"delegateUserIDEqualFold,omitempty"`
+	DelegateUserIDContainsFold *string  `json:"delegateUserIDContainsFold,omitempty"`
+
+	// "delegate_group_id" field predicates.
+	DelegateGroupID             *string  `json:"delegateGroupID,omitempty"`
+	DelegateGroupIDNEQ          *string  `json:"delegateGroupIDNEQ,omitempty"`
+	DelegateGroupIDIn           []string `json:"delegateGroupIDIn,omitempty"`
+	DelegateGroupIDNotIn        []string `json:"delegateGroupIDNotIn,omitempty"`
+	DelegateGroupIDContains     *string  `json:"delegateGroupIDContains,omitempty"`
+	DelegateGroupIDHasPrefix    *string  `json:"delegateGroupIDHasPrefix,omitempty"`
+	DelegateGroupIDHasSuffix    *string  `json:"delegateGroupIDHasSuffix,omitempty"`
+	DelegateGroupIDIsNil        bool     `json:"delegateGroupIDIsNil,omitempty"`
+	DelegateGroupIDNotNil       bool     `json:"delegateGroupIDNotNil,omitempty"`
+	DelegateGroupIDEqualFold    *string  `json:"delegateGroupIDEqualFold,omitempty"`
+	DelegateGroupIDContainsFold *string  `json:"delegateGroupIDContainsFold,omitempty"`
+
+	// "delegate_identity_holder_id" field predicates.
+	DelegateIdentityHolderID             *string  `json:"delegateIdentityHolderID,omitempty"`
+	DelegateIdentityHolderIDNEQ          *string  `json:"delegateIdentityHolderIDNEQ,omitempty"`
+	DelegateIdentityHolderIDIn           []string `json:"delegateIdentityHolderIDIn,omitempty"`
+	DelegateIdentityHolderIDNotIn        []string `json:"delegateIdentityHolderIDNotIn,omitempty"`
+	DelegateIdentityHolderIDContains     *string  `json:"delegateIdentityHolderIDContains,omitempty"`
+	DelegateIdentityHolderIDHasPrefix    *string  `json:"delegateIdentityHolderIDHasPrefix,omitempty"`
+	DelegateIdentityHolderIDHasSuffix    *string  `json:"delegateIdentityHolderIDHasSuffix,omitempty"`
+	DelegateIdentityHolderIDIsNil        bool     `json:"delegateIdentityHolderIDIsNil,omitempty"`
+	DelegateIdentityHolderIDNotNil       bool     `json:"delegateIdentityHolderIDNotNil,omitempty"`
+	DelegateIdentityHolderIDEqualFold    *string  `json:"delegateIdentityHolderIDEqualFold,omitempty"`
+	DelegateIdentityHolderIDContainsFold *string  `json:"delegateIdentityHolderIDContainsFold,omitempty"`
+
 	// "risk_kind_name" field predicates.
 	RiskKindName             *string  `json:"riskKindName,omitempty"`
 	RiskKindNameNEQ          *string  `json:"riskKindNameNEQ,omitempty"`
@@ -77095,6 +77452,30 @@ type RiskWhereInput struct {
 	// "viewers" edge predicates.
 	HasViewers     *bool              `json:"hasViewers,omitempty"`
 	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
+
+	// "stakeholder_user" edge predicates.
+	HasStakeholderUser     *bool             `json:"hasStakeholderUser,omitempty"`
+	HasStakeholderUserWith []*UserWhereInput `json:"hasStakeholderUserWith,omitempty"`
+
+	// "stakeholder_group" edge predicates.
+	HasStakeholderGroup     *bool              `json:"hasStakeholderGroup,omitempty"`
+	HasStakeholderGroupWith []*GroupWhereInput `json:"hasStakeholderGroupWith,omitempty"`
+
+	// "stakeholder_identity_holder" edge predicates.
+	HasStakeholderIdentityHolder     *bool                       `json:"hasStakeholderIdentityHolder,omitempty"`
+	HasStakeholderIdentityHolderWith []*IdentityHolderWhereInput `json:"hasStakeholderIdentityHolderWith,omitempty"`
+
+	// "delegate_user" edge predicates.
+	HasDelegateUser     *bool             `json:"hasDelegateUser,omitempty"`
+	HasDelegateUserWith []*UserWhereInput `json:"hasDelegateUserWith,omitempty"`
+
+	// "delegate_group" edge predicates.
+	HasDelegateGroup     *bool              `json:"hasDelegateGroup,omitempty"`
+	HasDelegateGroupWith []*GroupWhereInput `json:"hasDelegateGroupWith,omitempty"`
+
+	// "delegate_identity_holder" edge predicates.
+	HasDelegateIdentityHolder     *bool                       `json:"hasDelegateIdentityHolder,omitempty"`
+	HasDelegateIdentityHolderWith []*IdentityHolderWhereInput `json:"hasDelegateIdentityHolderWith,omitempty"`
 
 	// "risk_kind" edge predicates.
 	HasRiskKind     *bool                       `json:"hasRiskKind,omitempty"`
@@ -77647,6 +78028,270 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, risk.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.StakeholderName != nil {
+		predicates = append(predicates, risk.StakeholderNameEQ(*i.StakeholderName))
+	}
+	if i.StakeholderNameNEQ != nil {
+		predicates = append(predicates, risk.StakeholderNameNEQ(*i.StakeholderNameNEQ))
+	}
+	if len(i.StakeholderNameIn) > 0 {
+		predicates = append(predicates, risk.StakeholderNameIn(i.StakeholderNameIn...))
+	}
+	if len(i.StakeholderNameNotIn) > 0 {
+		predicates = append(predicates, risk.StakeholderNameNotIn(i.StakeholderNameNotIn...))
+	}
+	if i.StakeholderNameContains != nil {
+		predicates = append(predicates, risk.StakeholderNameContains(*i.StakeholderNameContains))
+	}
+	if i.StakeholderNameHasPrefix != nil {
+		predicates = append(predicates, risk.StakeholderNameHasPrefix(*i.StakeholderNameHasPrefix))
+	}
+	if i.StakeholderNameHasSuffix != nil {
+		predicates = append(predicates, risk.StakeholderNameHasSuffix(*i.StakeholderNameHasSuffix))
+	}
+	if i.StakeholderNameIsNil {
+		predicates = append(predicates, risk.StakeholderNameIsNil())
+	}
+	if i.StakeholderNameNotNil {
+		predicates = append(predicates, risk.StakeholderNameNotNil())
+	}
+	if i.StakeholderNameEqualFold != nil {
+		predicates = append(predicates, risk.StakeholderNameEqualFold(*i.StakeholderNameEqualFold))
+	}
+	if i.StakeholderNameContainsFold != nil {
+		predicates = append(predicates, risk.StakeholderNameContainsFold(*i.StakeholderNameContainsFold))
+	}
+	if i.StakeholderUserID != nil {
+		predicates = append(predicates, risk.StakeholderUserIDEQ(*i.StakeholderUserID))
+	}
+	if i.StakeholderUserIDNEQ != nil {
+		predicates = append(predicates, risk.StakeholderUserIDNEQ(*i.StakeholderUserIDNEQ))
+	}
+	if len(i.StakeholderUserIDIn) > 0 {
+		predicates = append(predicates, risk.StakeholderUserIDIn(i.StakeholderUserIDIn...))
+	}
+	if len(i.StakeholderUserIDNotIn) > 0 {
+		predicates = append(predicates, risk.StakeholderUserIDNotIn(i.StakeholderUserIDNotIn...))
+	}
+	if i.StakeholderUserIDContains != nil {
+		predicates = append(predicates, risk.StakeholderUserIDContains(*i.StakeholderUserIDContains))
+	}
+	if i.StakeholderUserIDHasPrefix != nil {
+		predicates = append(predicates, risk.StakeholderUserIDHasPrefix(*i.StakeholderUserIDHasPrefix))
+	}
+	if i.StakeholderUserIDHasSuffix != nil {
+		predicates = append(predicates, risk.StakeholderUserIDHasSuffix(*i.StakeholderUserIDHasSuffix))
+	}
+	if i.StakeholderUserIDIsNil {
+		predicates = append(predicates, risk.StakeholderUserIDIsNil())
+	}
+	if i.StakeholderUserIDNotNil {
+		predicates = append(predicates, risk.StakeholderUserIDNotNil())
+	}
+	if i.StakeholderUserIDEqualFold != nil {
+		predicates = append(predicates, risk.StakeholderUserIDEqualFold(*i.StakeholderUserIDEqualFold))
+	}
+	if i.StakeholderUserIDContainsFold != nil {
+		predicates = append(predicates, risk.StakeholderUserIDContainsFold(*i.StakeholderUserIDContainsFold))
+	}
+	if i.StakeholderGroupID != nil {
+		predicates = append(predicates, risk.StakeholderGroupIDEQ(*i.StakeholderGroupID))
+	}
+	if i.StakeholderGroupIDNEQ != nil {
+		predicates = append(predicates, risk.StakeholderGroupIDNEQ(*i.StakeholderGroupIDNEQ))
+	}
+	if len(i.StakeholderGroupIDIn) > 0 {
+		predicates = append(predicates, risk.StakeholderGroupIDIn(i.StakeholderGroupIDIn...))
+	}
+	if len(i.StakeholderGroupIDNotIn) > 0 {
+		predicates = append(predicates, risk.StakeholderGroupIDNotIn(i.StakeholderGroupIDNotIn...))
+	}
+	if i.StakeholderGroupIDContains != nil {
+		predicates = append(predicates, risk.StakeholderGroupIDContains(*i.StakeholderGroupIDContains))
+	}
+	if i.StakeholderGroupIDHasPrefix != nil {
+		predicates = append(predicates, risk.StakeholderGroupIDHasPrefix(*i.StakeholderGroupIDHasPrefix))
+	}
+	if i.StakeholderGroupIDHasSuffix != nil {
+		predicates = append(predicates, risk.StakeholderGroupIDHasSuffix(*i.StakeholderGroupIDHasSuffix))
+	}
+	if i.StakeholderGroupIDIsNil {
+		predicates = append(predicates, risk.StakeholderGroupIDIsNil())
+	}
+	if i.StakeholderGroupIDNotNil {
+		predicates = append(predicates, risk.StakeholderGroupIDNotNil())
+	}
+	if i.StakeholderGroupIDEqualFold != nil {
+		predicates = append(predicates, risk.StakeholderGroupIDEqualFold(*i.StakeholderGroupIDEqualFold))
+	}
+	if i.StakeholderGroupIDContainsFold != nil {
+		predicates = append(predicates, risk.StakeholderGroupIDContainsFold(*i.StakeholderGroupIDContainsFold))
+	}
+	if i.StakeholderIdentityHolderID != nil {
+		predicates = append(predicates, risk.StakeholderIdentityHolderIDEQ(*i.StakeholderIdentityHolderID))
+	}
+	if i.StakeholderIdentityHolderIDNEQ != nil {
+		predicates = append(predicates, risk.StakeholderIdentityHolderIDNEQ(*i.StakeholderIdentityHolderIDNEQ))
+	}
+	if len(i.StakeholderIdentityHolderIDIn) > 0 {
+		predicates = append(predicates, risk.StakeholderIdentityHolderIDIn(i.StakeholderIdentityHolderIDIn...))
+	}
+	if len(i.StakeholderIdentityHolderIDNotIn) > 0 {
+		predicates = append(predicates, risk.StakeholderIdentityHolderIDNotIn(i.StakeholderIdentityHolderIDNotIn...))
+	}
+	if i.StakeholderIdentityHolderIDContains != nil {
+		predicates = append(predicates, risk.StakeholderIdentityHolderIDContains(*i.StakeholderIdentityHolderIDContains))
+	}
+	if i.StakeholderIdentityHolderIDHasPrefix != nil {
+		predicates = append(predicates, risk.StakeholderIdentityHolderIDHasPrefix(*i.StakeholderIdentityHolderIDHasPrefix))
+	}
+	if i.StakeholderIdentityHolderIDHasSuffix != nil {
+		predicates = append(predicates, risk.StakeholderIdentityHolderIDHasSuffix(*i.StakeholderIdentityHolderIDHasSuffix))
+	}
+	if i.StakeholderIdentityHolderIDIsNil {
+		predicates = append(predicates, risk.StakeholderIdentityHolderIDIsNil())
+	}
+	if i.StakeholderIdentityHolderIDNotNil {
+		predicates = append(predicates, risk.StakeholderIdentityHolderIDNotNil())
+	}
+	if i.StakeholderIdentityHolderIDEqualFold != nil {
+		predicates = append(predicates, risk.StakeholderIdentityHolderIDEqualFold(*i.StakeholderIdentityHolderIDEqualFold))
+	}
+	if i.StakeholderIdentityHolderIDContainsFold != nil {
+		predicates = append(predicates, risk.StakeholderIdentityHolderIDContainsFold(*i.StakeholderIdentityHolderIDContainsFold))
+	}
+	if i.DelegateName != nil {
+		predicates = append(predicates, risk.DelegateNameEQ(*i.DelegateName))
+	}
+	if i.DelegateNameNEQ != nil {
+		predicates = append(predicates, risk.DelegateNameNEQ(*i.DelegateNameNEQ))
+	}
+	if len(i.DelegateNameIn) > 0 {
+		predicates = append(predicates, risk.DelegateNameIn(i.DelegateNameIn...))
+	}
+	if len(i.DelegateNameNotIn) > 0 {
+		predicates = append(predicates, risk.DelegateNameNotIn(i.DelegateNameNotIn...))
+	}
+	if i.DelegateNameContains != nil {
+		predicates = append(predicates, risk.DelegateNameContains(*i.DelegateNameContains))
+	}
+	if i.DelegateNameHasPrefix != nil {
+		predicates = append(predicates, risk.DelegateNameHasPrefix(*i.DelegateNameHasPrefix))
+	}
+	if i.DelegateNameHasSuffix != nil {
+		predicates = append(predicates, risk.DelegateNameHasSuffix(*i.DelegateNameHasSuffix))
+	}
+	if i.DelegateNameIsNil {
+		predicates = append(predicates, risk.DelegateNameIsNil())
+	}
+	if i.DelegateNameNotNil {
+		predicates = append(predicates, risk.DelegateNameNotNil())
+	}
+	if i.DelegateNameEqualFold != nil {
+		predicates = append(predicates, risk.DelegateNameEqualFold(*i.DelegateNameEqualFold))
+	}
+	if i.DelegateNameContainsFold != nil {
+		predicates = append(predicates, risk.DelegateNameContainsFold(*i.DelegateNameContainsFold))
+	}
+	if i.DelegateUserID != nil {
+		predicates = append(predicates, risk.DelegateUserIDEQ(*i.DelegateUserID))
+	}
+	if i.DelegateUserIDNEQ != nil {
+		predicates = append(predicates, risk.DelegateUserIDNEQ(*i.DelegateUserIDNEQ))
+	}
+	if len(i.DelegateUserIDIn) > 0 {
+		predicates = append(predicates, risk.DelegateUserIDIn(i.DelegateUserIDIn...))
+	}
+	if len(i.DelegateUserIDNotIn) > 0 {
+		predicates = append(predicates, risk.DelegateUserIDNotIn(i.DelegateUserIDNotIn...))
+	}
+	if i.DelegateUserIDContains != nil {
+		predicates = append(predicates, risk.DelegateUserIDContains(*i.DelegateUserIDContains))
+	}
+	if i.DelegateUserIDHasPrefix != nil {
+		predicates = append(predicates, risk.DelegateUserIDHasPrefix(*i.DelegateUserIDHasPrefix))
+	}
+	if i.DelegateUserIDHasSuffix != nil {
+		predicates = append(predicates, risk.DelegateUserIDHasSuffix(*i.DelegateUserIDHasSuffix))
+	}
+	if i.DelegateUserIDIsNil {
+		predicates = append(predicates, risk.DelegateUserIDIsNil())
+	}
+	if i.DelegateUserIDNotNil {
+		predicates = append(predicates, risk.DelegateUserIDNotNil())
+	}
+	if i.DelegateUserIDEqualFold != nil {
+		predicates = append(predicates, risk.DelegateUserIDEqualFold(*i.DelegateUserIDEqualFold))
+	}
+	if i.DelegateUserIDContainsFold != nil {
+		predicates = append(predicates, risk.DelegateUserIDContainsFold(*i.DelegateUserIDContainsFold))
+	}
+	if i.DelegateGroupID != nil {
+		predicates = append(predicates, risk.DelegateGroupIDEQ(*i.DelegateGroupID))
+	}
+	if i.DelegateGroupIDNEQ != nil {
+		predicates = append(predicates, risk.DelegateGroupIDNEQ(*i.DelegateGroupIDNEQ))
+	}
+	if len(i.DelegateGroupIDIn) > 0 {
+		predicates = append(predicates, risk.DelegateGroupIDIn(i.DelegateGroupIDIn...))
+	}
+	if len(i.DelegateGroupIDNotIn) > 0 {
+		predicates = append(predicates, risk.DelegateGroupIDNotIn(i.DelegateGroupIDNotIn...))
+	}
+	if i.DelegateGroupIDContains != nil {
+		predicates = append(predicates, risk.DelegateGroupIDContains(*i.DelegateGroupIDContains))
+	}
+	if i.DelegateGroupIDHasPrefix != nil {
+		predicates = append(predicates, risk.DelegateGroupIDHasPrefix(*i.DelegateGroupIDHasPrefix))
+	}
+	if i.DelegateGroupIDHasSuffix != nil {
+		predicates = append(predicates, risk.DelegateGroupIDHasSuffix(*i.DelegateGroupIDHasSuffix))
+	}
+	if i.DelegateGroupIDIsNil {
+		predicates = append(predicates, risk.DelegateGroupIDIsNil())
+	}
+	if i.DelegateGroupIDNotNil {
+		predicates = append(predicates, risk.DelegateGroupIDNotNil())
+	}
+	if i.DelegateGroupIDEqualFold != nil {
+		predicates = append(predicates, risk.DelegateGroupIDEqualFold(*i.DelegateGroupIDEqualFold))
+	}
+	if i.DelegateGroupIDContainsFold != nil {
+		predicates = append(predicates, risk.DelegateGroupIDContainsFold(*i.DelegateGroupIDContainsFold))
+	}
+	if i.DelegateIdentityHolderID != nil {
+		predicates = append(predicates, risk.DelegateIdentityHolderIDEQ(*i.DelegateIdentityHolderID))
+	}
+	if i.DelegateIdentityHolderIDNEQ != nil {
+		predicates = append(predicates, risk.DelegateIdentityHolderIDNEQ(*i.DelegateIdentityHolderIDNEQ))
+	}
+	if len(i.DelegateIdentityHolderIDIn) > 0 {
+		predicates = append(predicates, risk.DelegateIdentityHolderIDIn(i.DelegateIdentityHolderIDIn...))
+	}
+	if len(i.DelegateIdentityHolderIDNotIn) > 0 {
+		predicates = append(predicates, risk.DelegateIdentityHolderIDNotIn(i.DelegateIdentityHolderIDNotIn...))
+	}
+	if i.DelegateIdentityHolderIDContains != nil {
+		predicates = append(predicates, risk.DelegateIdentityHolderIDContains(*i.DelegateIdentityHolderIDContains))
+	}
+	if i.DelegateIdentityHolderIDHasPrefix != nil {
+		predicates = append(predicates, risk.DelegateIdentityHolderIDHasPrefix(*i.DelegateIdentityHolderIDHasPrefix))
+	}
+	if i.DelegateIdentityHolderIDHasSuffix != nil {
+		predicates = append(predicates, risk.DelegateIdentityHolderIDHasSuffix(*i.DelegateIdentityHolderIDHasSuffix))
+	}
+	if i.DelegateIdentityHolderIDIsNil {
+		predicates = append(predicates, risk.DelegateIdentityHolderIDIsNil())
+	}
+	if i.DelegateIdentityHolderIDNotNil {
+		predicates = append(predicates, risk.DelegateIdentityHolderIDNotNil())
+	}
+	if i.DelegateIdentityHolderIDEqualFold != nil {
+		predicates = append(predicates, risk.DelegateIdentityHolderIDEqualFold(*i.DelegateIdentityHolderIDEqualFold))
+	}
+	if i.DelegateIdentityHolderIDContainsFold != nil {
+		predicates = append(predicates, risk.DelegateIdentityHolderIDContainsFold(*i.DelegateIdentityHolderIDContainsFold))
 	}
 	if i.RiskKindName != nil {
 		predicates = append(predicates, risk.RiskKindNameEQ(*i.RiskKindName))
@@ -78572,6 +79217,120 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, risk.HasViewersWith(with...))
+	}
+	if i.HasStakeholderUser != nil {
+		p := risk.HasStakeholderUser()
+		if !*i.HasStakeholderUser {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasStakeholderUserWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasStakeholderUserWith))
+		with = append(with, user.DeletedAtIsNil())
+		for _, w := range i.HasStakeholderUserWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasStakeholderUserWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasStakeholderUserWith(with...))
+	}
+	if i.HasStakeholderGroup != nil {
+		p := risk.HasStakeholderGroup()
+		if !*i.HasStakeholderGroup {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasStakeholderGroupWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasStakeholderGroupWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasStakeholderGroupWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasStakeholderGroupWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasStakeholderGroupWith(with...))
+	}
+	if i.HasStakeholderIdentityHolder != nil {
+		p := risk.HasStakeholderIdentityHolder()
+		if !*i.HasStakeholderIdentityHolder {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasStakeholderIdentityHolderWith) > 0 {
+		with := make([]predicate.IdentityHolder, 0, len(i.HasStakeholderIdentityHolderWith))
+		with = append(with, identityholder.DeletedAtIsNil())
+		for _, w := range i.HasStakeholderIdentityHolderWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasStakeholderIdentityHolderWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasStakeholderIdentityHolderWith(with...))
+	}
+	if i.HasDelegateUser != nil {
+		p := risk.HasDelegateUser()
+		if !*i.HasDelegateUser {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDelegateUserWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasDelegateUserWith))
+		with = append(with, user.DeletedAtIsNil())
+		for _, w := range i.HasDelegateUserWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDelegateUserWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasDelegateUserWith(with...))
+	}
+	if i.HasDelegateGroup != nil {
+		p := risk.HasDelegateGroup()
+		if !*i.HasDelegateGroup {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDelegateGroupWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasDelegateGroupWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasDelegateGroupWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDelegateGroupWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasDelegateGroupWith(with...))
+	}
+	if i.HasDelegateIdentityHolder != nil {
+		p := risk.HasDelegateIdentityHolder()
+		if !*i.HasDelegateIdentityHolder {
+			p = risk.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDelegateIdentityHolderWith) > 0 {
+		with := make([]predicate.IdentityHolder, 0, len(i.HasDelegateIdentityHolderWith))
+		with = append(with, identityholder.DeletedAtIsNil())
+		for _, w := range i.HasDelegateIdentityHolderWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDelegateIdentityHolderWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, risk.HasDelegateIdentityHolderWith(with...))
 	}
 	if i.HasRiskKind != nil {
 		p := risk.HasRiskKind()
@@ -102588,6 +103347,58 @@ type VulnerabilityWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
+	// "internal_owner" field predicates.
+	InternalOwner             *string  `json:"internalOwner,omitempty"`
+	InternalOwnerNEQ          *string  `json:"internalOwnerNEQ,omitempty"`
+	InternalOwnerIn           []string `json:"internalOwnerIn,omitempty"`
+	InternalOwnerNotIn        []string `json:"internalOwnerNotIn,omitempty"`
+	InternalOwnerContains     *string  `json:"internalOwnerContains,omitempty"`
+	InternalOwnerHasPrefix    *string  `json:"internalOwnerHasPrefix,omitempty"`
+	InternalOwnerHasSuffix    *string  `json:"internalOwnerHasSuffix,omitempty"`
+	InternalOwnerIsNil        bool     `json:"internalOwnerIsNil,omitempty"`
+	InternalOwnerNotNil       bool     `json:"internalOwnerNotNil,omitempty"`
+	InternalOwnerEqualFold    *string  `json:"internalOwnerEqualFold,omitempty"`
+	InternalOwnerContainsFold *string  `json:"internalOwnerContainsFold,omitempty"`
+
+	// "internal_owner_user_id" field predicates.
+	InternalOwnerUserID             *string  `json:"internalOwnerUserID,omitempty"`
+	InternalOwnerUserIDNEQ          *string  `json:"internalOwnerUserIDNEQ,omitempty"`
+	InternalOwnerUserIDIn           []string `json:"internalOwnerUserIDIn,omitempty"`
+	InternalOwnerUserIDNotIn        []string `json:"internalOwnerUserIDNotIn,omitempty"`
+	InternalOwnerUserIDContains     *string  `json:"internalOwnerUserIDContains,omitempty"`
+	InternalOwnerUserIDHasPrefix    *string  `json:"internalOwnerUserIDHasPrefix,omitempty"`
+	InternalOwnerUserIDHasSuffix    *string  `json:"internalOwnerUserIDHasSuffix,omitempty"`
+	InternalOwnerUserIDIsNil        bool     `json:"internalOwnerUserIDIsNil,omitempty"`
+	InternalOwnerUserIDNotNil       bool     `json:"internalOwnerUserIDNotNil,omitempty"`
+	InternalOwnerUserIDEqualFold    *string  `json:"internalOwnerUserIDEqualFold,omitempty"`
+	InternalOwnerUserIDContainsFold *string  `json:"internalOwnerUserIDContainsFold,omitempty"`
+
+	// "internal_owner_group_id" field predicates.
+	InternalOwnerGroupID             *string  `json:"internalOwnerGroupID,omitempty"`
+	InternalOwnerGroupIDNEQ          *string  `json:"internalOwnerGroupIDNEQ,omitempty"`
+	InternalOwnerGroupIDIn           []string `json:"internalOwnerGroupIDIn,omitempty"`
+	InternalOwnerGroupIDNotIn        []string `json:"internalOwnerGroupIDNotIn,omitempty"`
+	InternalOwnerGroupIDContains     *string  `json:"internalOwnerGroupIDContains,omitempty"`
+	InternalOwnerGroupIDHasPrefix    *string  `json:"internalOwnerGroupIDHasPrefix,omitempty"`
+	InternalOwnerGroupIDHasSuffix    *string  `json:"internalOwnerGroupIDHasSuffix,omitempty"`
+	InternalOwnerGroupIDIsNil        bool     `json:"internalOwnerGroupIDIsNil,omitempty"`
+	InternalOwnerGroupIDNotNil       bool     `json:"internalOwnerGroupIDNotNil,omitempty"`
+	InternalOwnerGroupIDEqualFold    *string  `json:"internalOwnerGroupIDEqualFold,omitempty"`
+	InternalOwnerGroupIDContainsFold *string  `json:"internalOwnerGroupIDContainsFold,omitempty"`
+
+	// "internal_owner_identity_holder_id" field predicates.
+	InternalOwnerIdentityHolderID             *string  `json:"internalOwnerIdentityHolderID,omitempty"`
+	InternalOwnerIdentityHolderIDNEQ          *string  `json:"internalOwnerIdentityHolderIDNEQ,omitempty"`
+	InternalOwnerIdentityHolderIDIn           []string `json:"internalOwnerIdentityHolderIDIn,omitempty"`
+	InternalOwnerIdentityHolderIDNotIn        []string `json:"internalOwnerIdentityHolderIDNotIn,omitempty"`
+	InternalOwnerIdentityHolderIDContains     *string  `json:"internalOwnerIdentityHolderIDContains,omitempty"`
+	InternalOwnerIdentityHolderIDHasPrefix    *string  `json:"internalOwnerIdentityHolderIDHasPrefix,omitempty"`
+	InternalOwnerIdentityHolderIDHasSuffix    *string  `json:"internalOwnerIdentityHolderIDHasSuffix,omitempty"`
+	InternalOwnerIdentityHolderIDIsNil        bool     `json:"internalOwnerIdentityHolderIDIsNil,omitempty"`
+	InternalOwnerIdentityHolderIDNotNil       bool     `json:"internalOwnerIdentityHolderIDNotNil,omitempty"`
+	InternalOwnerIdentityHolderIDEqualFold    *string  `json:"internalOwnerIdentityHolderIDEqualFold,omitempty"`
+	InternalOwnerIdentityHolderIDContainsFold *string  `json:"internalOwnerIdentityHolderIDContainsFold,omitempty"`
+
 	// "reviewed_by" field predicates.
 	ReviewedBy             *string  `json:"reviewedBy,omitempty"`
 	ReviewedByNEQ          *string  `json:"reviewedByNEQ,omitempty"`
@@ -103242,6 +104053,18 @@ type VulnerabilityWhereInput struct {
 	HasViewers     *bool              `json:"hasViewers,omitempty"`
 	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 
+	// "internal_owner_user" edge predicates.
+	HasInternalOwnerUser     *bool             `json:"hasInternalOwnerUser,omitempty"`
+	HasInternalOwnerUserWith []*UserWhereInput `json:"hasInternalOwnerUserWith,omitempty"`
+
+	// "internal_owner_group" edge predicates.
+	HasInternalOwnerGroup     *bool              `json:"hasInternalOwnerGroup,omitempty"`
+	HasInternalOwnerGroupWith []*GroupWhereInput `json:"hasInternalOwnerGroupWith,omitempty"`
+
+	// "internal_owner_identity_holder" edge predicates.
+	HasInternalOwnerIdentityHolder     *bool                       `json:"hasInternalOwnerIdentityHolder,omitempty"`
+	HasInternalOwnerIdentityHolderWith []*IdentityHolderWhereInput `json:"hasInternalOwnerIdentityHolderWith,omitempty"`
+
 	// "reviewed_by_user" edge predicates.
 	HasReviewedByUser     *bool             `json:"hasReviewedByUser,omitempty"`
 	HasReviewedByUserWith []*UserWhereInput `json:"hasReviewedByUserWith,omitempty"`
@@ -103797,6 +104620,138 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, vulnerability.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.InternalOwner != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerEQ(*i.InternalOwner))
+	}
+	if i.InternalOwnerNEQ != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerNEQ(*i.InternalOwnerNEQ))
+	}
+	if len(i.InternalOwnerIn) > 0 {
+		predicates = append(predicates, vulnerability.InternalOwnerIn(i.InternalOwnerIn...))
+	}
+	if len(i.InternalOwnerNotIn) > 0 {
+		predicates = append(predicates, vulnerability.InternalOwnerNotIn(i.InternalOwnerNotIn...))
+	}
+	if i.InternalOwnerContains != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerContains(*i.InternalOwnerContains))
+	}
+	if i.InternalOwnerHasPrefix != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerHasPrefix(*i.InternalOwnerHasPrefix))
+	}
+	if i.InternalOwnerHasSuffix != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerHasSuffix(*i.InternalOwnerHasSuffix))
+	}
+	if i.InternalOwnerIsNil {
+		predicates = append(predicates, vulnerability.InternalOwnerIsNil())
+	}
+	if i.InternalOwnerNotNil {
+		predicates = append(predicates, vulnerability.InternalOwnerNotNil())
+	}
+	if i.InternalOwnerEqualFold != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerEqualFold(*i.InternalOwnerEqualFold))
+	}
+	if i.InternalOwnerContainsFold != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerContainsFold(*i.InternalOwnerContainsFold))
+	}
+	if i.InternalOwnerUserID != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerUserIDEQ(*i.InternalOwnerUserID))
+	}
+	if i.InternalOwnerUserIDNEQ != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerUserIDNEQ(*i.InternalOwnerUserIDNEQ))
+	}
+	if len(i.InternalOwnerUserIDIn) > 0 {
+		predicates = append(predicates, vulnerability.InternalOwnerUserIDIn(i.InternalOwnerUserIDIn...))
+	}
+	if len(i.InternalOwnerUserIDNotIn) > 0 {
+		predicates = append(predicates, vulnerability.InternalOwnerUserIDNotIn(i.InternalOwnerUserIDNotIn...))
+	}
+	if i.InternalOwnerUserIDContains != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerUserIDContains(*i.InternalOwnerUserIDContains))
+	}
+	if i.InternalOwnerUserIDHasPrefix != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerUserIDHasPrefix(*i.InternalOwnerUserIDHasPrefix))
+	}
+	if i.InternalOwnerUserIDHasSuffix != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerUserIDHasSuffix(*i.InternalOwnerUserIDHasSuffix))
+	}
+	if i.InternalOwnerUserIDIsNil {
+		predicates = append(predicates, vulnerability.InternalOwnerUserIDIsNil())
+	}
+	if i.InternalOwnerUserIDNotNil {
+		predicates = append(predicates, vulnerability.InternalOwnerUserIDNotNil())
+	}
+	if i.InternalOwnerUserIDEqualFold != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerUserIDEqualFold(*i.InternalOwnerUserIDEqualFold))
+	}
+	if i.InternalOwnerUserIDContainsFold != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerUserIDContainsFold(*i.InternalOwnerUserIDContainsFold))
+	}
+	if i.InternalOwnerGroupID != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerGroupIDEQ(*i.InternalOwnerGroupID))
+	}
+	if i.InternalOwnerGroupIDNEQ != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerGroupIDNEQ(*i.InternalOwnerGroupIDNEQ))
+	}
+	if len(i.InternalOwnerGroupIDIn) > 0 {
+		predicates = append(predicates, vulnerability.InternalOwnerGroupIDIn(i.InternalOwnerGroupIDIn...))
+	}
+	if len(i.InternalOwnerGroupIDNotIn) > 0 {
+		predicates = append(predicates, vulnerability.InternalOwnerGroupIDNotIn(i.InternalOwnerGroupIDNotIn...))
+	}
+	if i.InternalOwnerGroupIDContains != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerGroupIDContains(*i.InternalOwnerGroupIDContains))
+	}
+	if i.InternalOwnerGroupIDHasPrefix != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerGroupIDHasPrefix(*i.InternalOwnerGroupIDHasPrefix))
+	}
+	if i.InternalOwnerGroupIDHasSuffix != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerGroupIDHasSuffix(*i.InternalOwnerGroupIDHasSuffix))
+	}
+	if i.InternalOwnerGroupIDIsNil {
+		predicates = append(predicates, vulnerability.InternalOwnerGroupIDIsNil())
+	}
+	if i.InternalOwnerGroupIDNotNil {
+		predicates = append(predicates, vulnerability.InternalOwnerGroupIDNotNil())
+	}
+	if i.InternalOwnerGroupIDEqualFold != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerGroupIDEqualFold(*i.InternalOwnerGroupIDEqualFold))
+	}
+	if i.InternalOwnerGroupIDContainsFold != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerGroupIDContainsFold(*i.InternalOwnerGroupIDContainsFold))
+	}
+	if i.InternalOwnerIdentityHolderID != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerIdentityHolderIDEQ(*i.InternalOwnerIdentityHolderID))
+	}
+	if i.InternalOwnerIdentityHolderIDNEQ != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerIdentityHolderIDNEQ(*i.InternalOwnerIdentityHolderIDNEQ))
+	}
+	if len(i.InternalOwnerIdentityHolderIDIn) > 0 {
+		predicates = append(predicates, vulnerability.InternalOwnerIdentityHolderIDIn(i.InternalOwnerIdentityHolderIDIn...))
+	}
+	if len(i.InternalOwnerIdentityHolderIDNotIn) > 0 {
+		predicates = append(predicates, vulnerability.InternalOwnerIdentityHolderIDNotIn(i.InternalOwnerIdentityHolderIDNotIn...))
+	}
+	if i.InternalOwnerIdentityHolderIDContains != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerIdentityHolderIDContains(*i.InternalOwnerIdentityHolderIDContains))
+	}
+	if i.InternalOwnerIdentityHolderIDHasPrefix != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerIdentityHolderIDHasPrefix(*i.InternalOwnerIdentityHolderIDHasPrefix))
+	}
+	if i.InternalOwnerIdentityHolderIDHasSuffix != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerIdentityHolderIDHasSuffix(*i.InternalOwnerIdentityHolderIDHasSuffix))
+	}
+	if i.InternalOwnerIdentityHolderIDIsNil {
+		predicates = append(predicates, vulnerability.InternalOwnerIdentityHolderIDIsNil())
+	}
+	if i.InternalOwnerIdentityHolderIDNotNil {
+		predicates = append(predicates, vulnerability.InternalOwnerIdentityHolderIDNotNil())
+	}
+	if i.InternalOwnerIdentityHolderIDEqualFold != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerIdentityHolderIDEqualFold(*i.InternalOwnerIdentityHolderIDEqualFold))
+	}
+	if i.InternalOwnerIdentityHolderIDContainsFold != nil {
+		predicates = append(predicates, vulnerability.InternalOwnerIdentityHolderIDContainsFold(*i.InternalOwnerIdentityHolderIDContainsFold))
 	}
 	if i.ReviewedBy != nil {
 		predicates = append(predicates, vulnerability.ReviewedByEQ(*i.ReviewedBy))
@@ -105457,6 +106412,63 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, vulnerability.HasViewersWith(with...))
+	}
+	if i.HasInternalOwnerUser != nil {
+		p := vulnerability.HasInternalOwnerUser()
+		if !*i.HasInternalOwnerUser {
+			p = vulnerability.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalOwnerUserWith) > 0 {
+		with := make([]predicate.User, 0, len(i.HasInternalOwnerUserWith))
+		with = append(with, user.DeletedAtIsNil())
+		for _, w := range i.HasInternalOwnerUserWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalOwnerUserWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, vulnerability.HasInternalOwnerUserWith(with...))
+	}
+	if i.HasInternalOwnerGroup != nil {
+		p := vulnerability.HasInternalOwnerGroup()
+		if !*i.HasInternalOwnerGroup {
+			p = vulnerability.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalOwnerGroupWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasInternalOwnerGroupWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasInternalOwnerGroupWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalOwnerGroupWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, vulnerability.HasInternalOwnerGroupWith(with...))
+	}
+	if i.HasInternalOwnerIdentityHolder != nil {
+		p := vulnerability.HasInternalOwnerIdentityHolder()
+		if !*i.HasInternalOwnerIdentityHolder {
+			p = vulnerability.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasInternalOwnerIdentityHolderWith) > 0 {
+		with := make([]predicate.IdentityHolder, 0, len(i.HasInternalOwnerIdentityHolderWith))
+		with = append(with, identityholder.DeletedAtIsNil())
+		for _, w := range i.HasInternalOwnerIdentityHolderWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasInternalOwnerIdentityHolderWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, vulnerability.HasInternalOwnerIdentityHolderWith(with...))
 	}
 	if i.HasReviewedByUser != nil {
 		p := vulnerability.HasReviewedByUser()

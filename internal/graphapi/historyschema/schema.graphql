@@ -10500,6 +10500,22 @@ type FindingHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	the internal owner for the finding when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	"""
+	the internal owner user id for the finding
+	"""
+	internalOwnerUserID: String
+	"""
+	the internal owner group id for the finding
+	"""
+	internalOwnerGroupID: String
+	"""
+	the internal owner identity holder id for the finding
+	"""
+	internalOwnerIdentityHolderID: String
+	"""
 	who reviewed the finding when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
@@ -10778,6 +10794,7 @@ enum FindingHistoryOrderField {
 	history_time
 	created_at
 	updated_at
+	internal_owner
 	external_id
 	security_level
 	external_owner_id
@@ -11000,6 +11017,62 @@ input FindingHistoryWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
+	"""
+	internal_owner field predicates
+	"""
+	internalOwner: String
+	internalOwnerNEQ: String
+	internalOwnerIn: [String!]
+	internalOwnerNotIn: [String!]
+	internalOwnerContains: String
+	internalOwnerHasPrefix: String
+	internalOwnerHasSuffix: String
+	internalOwnerIsNil: Boolean
+	internalOwnerNotNil: Boolean
+	internalOwnerEqualFold: String
+	internalOwnerContainsFold: String
+	"""
+	internal_owner_user_id field predicates
+	"""
+	internalOwnerUserID: String
+	internalOwnerUserIDNEQ: String
+	internalOwnerUserIDIn: [String!]
+	internalOwnerUserIDNotIn: [String!]
+	internalOwnerUserIDContains: String
+	internalOwnerUserIDHasPrefix: String
+	internalOwnerUserIDHasSuffix: String
+	internalOwnerUserIDIsNil: Boolean
+	internalOwnerUserIDNotNil: Boolean
+	internalOwnerUserIDEqualFold: String
+	internalOwnerUserIDContainsFold: String
+	"""
+	internal_owner_group_id field predicates
+	"""
+	internalOwnerGroupID: String
+	internalOwnerGroupIDNEQ: String
+	internalOwnerGroupIDIn: [String!]
+	internalOwnerGroupIDNotIn: [String!]
+	internalOwnerGroupIDContains: String
+	internalOwnerGroupIDHasPrefix: String
+	internalOwnerGroupIDHasSuffix: String
+	internalOwnerGroupIDIsNil: Boolean
+	internalOwnerGroupIDNotNil: Boolean
+	internalOwnerGroupIDEqualFold: String
+	internalOwnerGroupIDContainsFold: String
+	"""
+	internal_owner_identity_holder_id field predicates
+	"""
+	internalOwnerIdentityHolderID: String
+	internalOwnerIdentityHolderIDNEQ: String
+	internalOwnerIdentityHolderIDIn: [String!]
+	internalOwnerIdentityHolderIDNotIn: [String!]
+	internalOwnerIdentityHolderIDContains: String
+	internalOwnerIdentityHolderIDHasPrefix: String
+	internalOwnerIdentityHolderIDHasSuffix: String
+	internalOwnerIdentityHolderIDIsNil: Boolean
+	internalOwnerIdentityHolderIDNotNil: Boolean
+	internalOwnerIdentityHolderIDEqualFold: String
+	internalOwnerIdentityHolderIDContainsFold: String
 	"""
 	reviewed_by field predicates
 	"""
@@ -24005,6 +24078,38 @@ type RiskHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	the stakeholder for the risk when no user, group, or identity holder is linked
+	"""
+	stakeholderName: String
+	"""
+	the stakeholder user id for the risk
+	"""
+	stakeholderUserID: String
+	"""
+	the stakeholder group id for the risk
+	"""
+	stakeholderGroupID: String
+	"""
+	the stakeholder identity holder id for the risk
+	"""
+	stakeholderIdentityHolderID: String
+	"""
+	the delegate for the risk when no user, group, or identity holder is linked
+	"""
+	delegateName: String
+	"""
+	the delegate user id for the risk
+	"""
+	delegateUserID: String
+	"""
+	the delegate group id for the risk
+	"""
+	delegateGroupID: String
+	"""
+	the delegate identity holder id for the risk
+	"""
+	delegateIdentityHolderID: String
+	"""
 	the kind of the risk
 	"""
 	riskKindName: String
@@ -24103,11 +24208,11 @@ type RiskHistory implements Node {
 	"""
 	the id of the group responsible for risk oversight
 	"""
-	stakeholderID: String
+	stakeholderID: String @deprecated(reason: "use stakeholder_group_id instead")
 	"""
 	the id of the group responsible for risk oversight on behalf of the stakeholder
 	"""
-	delegateID: String
+	delegateID: String @deprecated(reason: "use delegate_group_id instead")
 	"""
 	the time when the risk was mitigated
 	"""
@@ -24208,6 +24313,8 @@ enum RiskHistoryOrderField {
 	history_time
 	created_at
 	updated_at
+	stakeholder_name
+	delegate_name
 	external_id
 	observed_at
 	name
@@ -24470,6 +24577,118 @@ input RiskHistoryWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
+	"""
+	stakeholder_name field predicates
+	"""
+	stakeholderName: String
+	stakeholderNameNEQ: String
+	stakeholderNameIn: [String!]
+	stakeholderNameNotIn: [String!]
+	stakeholderNameContains: String
+	stakeholderNameHasPrefix: String
+	stakeholderNameHasSuffix: String
+	stakeholderNameIsNil: Boolean
+	stakeholderNameNotNil: Boolean
+	stakeholderNameEqualFold: String
+	stakeholderNameContainsFold: String
+	"""
+	stakeholder_user_id field predicates
+	"""
+	stakeholderUserID: String
+	stakeholderUserIDNEQ: String
+	stakeholderUserIDIn: [String!]
+	stakeholderUserIDNotIn: [String!]
+	stakeholderUserIDContains: String
+	stakeholderUserIDHasPrefix: String
+	stakeholderUserIDHasSuffix: String
+	stakeholderUserIDIsNil: Boolean
+	stakeholderUserIDNotNil: Boolean
+	stakeholderUserIDEqualFold: String
+	stakeholderUserIDContainsFold: String
+	"""
+	stakeholder_group_id field predicates
+	"""
+	stakeholderGroupID: String
+	stakeholderGroupIDNEQ: String
+	stakeholderGroupIDIn: [String!]
+	stakeholderGroupIDNotIn: [String!]
+	stakeholderGroupIDContains: String
+	stakeholderGroupIDHasPrefix: String
+	stakeholderGroupIDHasSuffix: String
+	stakeholderGroupIDIsNil: Boolean
+	stakeholderGroupIDNotNil: Boolean
+	stakeholderGroupIDEqualFold: String
+	stakeholderGroupIDContainsFold: String
+	"""
+	stakeholder_identity_holder_id field predicates
+	"""
+	stakeholderIdentityHolderID: String
+	stakeholderIdentityHolderIDNEQ: String
+	stakeholderIdentityHolderIDIn: [String!]
+	stakeholderIdentityHolderIDNotIn: [String!]
+	stakeholderIdentityHolderIDContains: String
+	stakeholderIdentityHolderIDHasPrefix: String
+	stakeholderIdentityHolderIDHasSuffix: String
+	stakeholderIdentityHolderIDIsNil: Boolean
+	stakeholderIdentityHolderIDNotNil: Boolean
+	stakeholderIdentityHolderIDEqualFold: String
+	stakeholderIdentityHolderIDContainsFold: String
+	"""
+	delegate_name field predicates
+	"""
+	delegateName: String
+	delegateNameNEQ: String
+	delegateNameIn: [String!]
+	delegateNameNotIn: [String!]
+	delegateNameContains: String
+	delegateNameHasPrefix: String
+	delegateNameHasSuffix: String
+	delegateNameIsNil: Boolean
+	delegateNameNotNil: Boolean
+	delegateNameEqualFold: String
+	delegateNameContainsFold: String
+	"""
+	delegate_user_id field predicates
+	"""
+	delegateUserID: String
+	delegateUserIDNEQ: String
+	delegateUserIDIn: [String!]
+	delegateUserIDNotIn: [String!]
+	delegateUserIDContains: String
+	delegateUserIDHasPrefix: String
+	delegateUserIDHasSuffix: String
+	delegateUserIDIsNil: Boolean
+	delegateUserIDNotNil: Boolean
+	delegateUserIDEqualFold: String
+	delegateUserIDContainsFold: String
+	"""
+	delegate_group_id field predicates
+	"""
+	delegateGroupID: String
+	delegateGroupIDNEQ: String
+	delegateGroupIDIn: [String!]
+	delegateGroupIDNotIn: [String!]
+	delegateGroupIDContains: String
+	delegateGroupIDHasPrefix: String
+	delegateGroupIDHasSuffix: String
+	delegateGroupIDIsNil: Boolean
+	delegateGroupIDNotNil: Boolean
+	delegateGroupIDEqualFold: String
+	delegateGroupIDContainsFold: String
+	"""
+	delegate_identity_holder_id field predicates
+	"""
+	delegateIdentityHolderID: String
+	delegateIdentityHolderIDNEQ: String
+	delegateIdentityHolderIDIn: [String!]
+	delegateIdentityHolderIDNotIn: [String!]
+	delegateIdentityHolderIDContains: String
+	delegateIdentityHolderIDHasPrefix: String
+	delegateIdentityHolderIDHasSuffix: String
+	delegateIdentityHolderIDIsNil: Boolean
+	delegateIdentityHolderIDNotNil: Boolean
+	delegateIdentityHolderIDEqualFold: String
+	delegateIdentityHolderIDContainsFold: String
 	"""
 	risk_kind_name field predicates
 	"""
@@ -32778,6 +32997,22 @@ type VulnerabilityHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	the internal owner for the vulnerability when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	"""
+	the internal owner user id for the vulnerability
+	"""
+	internalOwnerUserID: String
+	"""
+	the internal owner group id for the vulnerability
+	"""
+	internalOwnerGroupID: String
+	"""
+	the internal owner identity holder id for the vulnerability
+	"""
+	internalOwnerIdentityHolderID: String
+	"""
 	who reviewed the vulnerability when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
@@ -33076,6 +33311,7 @@ enum VulnerabilityHistoryOrderField {
 	history_time
 	created_at
 	updated_at
+	internal_owner
 	external_owner_id
 	security_level
 	external_id
@@ -33298,6 +33534,62 @@ input VulnerabilityHistoryWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
+	"""
+	internal_owner field predicates
+	"""
+	internalOwner: String
+	internalOwnerNEQ: String
+	internalOwnerIn: [String!]
+	internalOwnerNotIn: [String!]
+	internalOwnerContains: String
+	internalOwnerHasPrefix: String
+	internalOwnerHasSuffix: String
+	internalOwnerIsNil: Boolean
+	internalOwnerNotNil: Boolean
+	internalOwnerEqualFold: String
+	internalOwnerContainsFold: String
+	"""
+	internal_owner_user_id field predicates
+	"""
+	internalOwnerUserID: String
+	internalOwnerUserIDNEQ: String
+	internalOwnerUserIDIn: [String!]
+	internalOwnerUserIDNotIn: [String!]
+	internalOwnerUserIDContains: String
+	internalOwnerUserIDHasPrefix: String
+	internalOwnerUserIDHasSuffix: String
+	internalOwnerUserIDIsNil: Boolean
+	internalOwnerUserIDNotNil: Boolean
+	internalOwnerUserIDEqualFold: String
+	internalOwnerUserIDContainsFold: String
+	"""
+	internal_owner_group_id field predicates
+	"""
+	internalOwnerGroupID: String
+	internalOwnerGroupIDNEQ: String
+	internalOwnerGroupIDIn: [String!]
+	internalOwnerGroupIDNotIn: [String!]
+	internalOwnerGroupIDContains: String
+	internalOwnerGroupIDHasPrefix: String
+	internalOwnerGroupIDHasSuffix: String
+	internalOwnerGroupIDIsNil: Boolean
+	internalOwnerGroupIDNotNil: Boolean
+	internalOwnerGroupIDEqualFold: String
+	internalOwnerGroupIDContainsFold: String
+	"""
+	internal_owner_identity_holder_id field predicates
+	"""
+	internalOwnerIdentityHolderID: String
+	internalOwnerIdentityHolderIDNEQ: String
+	internalOwnerIdentityHolderIDIn: [String!]
+	internalOwnerIdentityHolderIDNotIn: [String!]
+	internalOwnerIdentityHolderIDContains: String
+	internalOwnerIdentityHolderIDHasPrefix: String
+	internalOwnerIdentityHolderIDHasSuffix: String
+	internalOwnerIdentityHolderIDIsNil: Boolean
+	internalOwnerIdentityHolderIDNotNil: Boolean
+	internalOwnerIdentityHolderIDEqualFold: String
+	internalOwnerIdentityHolderIDContainsFold: String
 	"""
 	reviewed_by field predicates
 	"""

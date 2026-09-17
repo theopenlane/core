@@ -14336,6 +14336,10 @@ input CreateFindingInput {
 	"""
 	tags: [String!]
 	"""
+	the internal owner for the finding when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	"""
 	who reviewed the finding when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
@@ -14515,6 +14519,9 @@ input CreateFindingInput {
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
+	internalOwnerUserID: ID
+	internalOwnerGroupID: ID
+	internalOwnerIdentityHolderID: ID
 	reviewedByUserID: ID
 	reviewedByGroupID: ID
 	reviewedByIdentityHolderID: ID
@@ -16515,6 +16522,14 @@ input CreateRiskInput {
 	"""
 	tags: [String!]
 	"""
+	the stakeholder for the risk when no user, group, or identity holder is linked
+	"""
+	stakeholderName: String
+	"""
+	the delegate for the risk when no user, group, or identity holder is linked
+	"""
+	delegateName: String
+	"""
 	the kind of the risk
 	"""
 	riskKindName: String
@@ -16628,6 +16643,12 @@ input CreateRiskInput {
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	viewerIDs: [ID!]
+	stakeholderUserID: ID
+	stakeholderGroupID: ID
+	stakeholderIdentityHolderID: ID
+	delegateUserID: ID
+	delegateGroupID: ID
+	delegateIdentityHolderID: ID
 	riskKindID: ID
 	riskCategoryID: ID
 	environmentID: ID
@@ -17996,6 +18017,10 @@ input CreateVulnerabilityInput {
 	"""
 	tags: [String!]
 	"""
+	the internal owner for the vulnerability when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	"""
 	who reviewed the vulnerability when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
@@ -18196,6 +18221,9 @@ input CreateVulnerabilityInput {
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	viewerIDs: [ID!]
+	internalOwnerUserID: ID
+	internalOwnerGroupID: ID
+	internalOwnerIdentityHolderID: ID
 	reviewedByUserID: ID
 	reviewedByGroupID: ID
 	reviewedByIdentityHolderID: ID
@@ -29834,6 +29862,22 @@ type Finding implements Node @modules(names: ["vulnerability_management_module",
 	"""
 	ownerID: ID
 	"""
+	the internal owner for the finding when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	"""
+	the internal owner user id for the finding
+	"""
+	internalOwnerUserID: ID
+	"""
+	the internal owner group id for the finding
+	"""
+	internalOwnerGroupID: ID
+	"""
+	the internal owner identity holder id for the finding
+	"""
+	internalOwnerIdentityHolderID: ID
+	"""
 	who reviewed the finding when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
@@ -30147,6 +30191,9 @@ type Finding implements Node @modules(names: ["vulnerability_management_module",
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
+	internalOwnerUser: User
+	internalOwnerGroup: Group
+	internalOwnerIdentityHolder: IdentityHolder
 	reviewedByUser: User
 	reviewedByGroup: Group
 	reviewedByIdentityHolder: IdentityHolder
@@ -31211,6 +31258,7 @@ Properties by which Finding connections can be ordered.
 enum FindingOrderField {
 	created_at
 	updated_at
+	internal_owner
 	external_id
 	security_level
 	external_owner_id
@@ -31413,6 +31461,62 @@ input FindingWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
+	"""
+	internal_owner field predicates
+	"""
+	internalOwner: String
+	internalOwnerNEQ: String
+	internalOwnerIn: [String!]
+	internalOwnerNotIn: [String!]
+	internalOwnerContains: String
+	internalOwnerHasPrefix: String
+	internalOwnerHasSuffix: String
+	internalOwnerIsNil: Boolean
+	internalOwnerNotNil: Boolean
+	internalOwnerEqualFold: String
+	internalOwnerContainsFold: String
+	"""
+	internal_owner_user_id field predicates
+	"""
+	internalOwnerUserID: ID
+	internalOwnerUserIDNEQ: ID
+	internalOwnerUserIDIn: [ID!]
+	internalOwnerUserIDNotIn: [ID!]
+	internalOwnerUserIDContains: ID
+	internalOwnerUserIDHasPrefix: ID
+	internalOwnerUserIDHasSuffix: ID
+	internalOwnerUserIDIsNil: Boolean
+	internalOwnerUserIDNotNil: Boolean
+	internalOwnerUserIDEqualFold: ID
+	internalOwnerUserIDContainsFold: ID
+	"""
+	internal_owner_group_id field predicates
+	"""
+	internalOwnerGroupID: ID
+	internalOwnerGroupIDNEQ: ID
+	internalOwnerGroupIDIn: [ID!]
+	internalOwnerGroupIDNotIn: [ID!]
+	internalOwnerGroupIDContains: ID
+	internalOwnerGroupIDHasPrefix: ID
+	internalOwnerGroupIDHasSuffix: ID
+	internalOwnerGroupIDIsNil: Boolean
+	internalOwnerGroupIDNotNil: Boolean
+	internalOwnerGroupIDEqualFold: ID
+	internalOwnerGroupIDContainsFold: ID
+	"""
+	internal_owner_identity_holder_id field predicates
+	"""
+	internalOwnerIdentityHolderID: ID
+	internalOwnerIdentityHolderIDNEQ: ID
+	internalOwnerIdentityHolderIDIn: [ID!]
+	internalOwnerIdentityHolderIDNotIn: [ID!]
+	internalOwnerIdentityHolderIDContains: ID
+	internalOwnerIdentityHolderIDHasPrefix: ID
+	internalOwnerIdentityHolderIDHasSuffix: ID
+	internalOwnerIdentityHolderIDIsNil: Boolean
+	internalOwnerIdentityHolderIDNotNil: Boolean
+	internalOwnerIdentityHolderIDEqualFold: ID
+	internalOwnerIdentityHolderIDContainsFold: ID
 	"""
 	reviewed_by field predicates
 	"""
@@ -32032,6 +32136,21 @@ input FindingWhereInput {
 	"""
 	hasEditors: Boolean
 	hasEditorsWith: [GroupWhereInput!]
+	"""
+	internal_owner_user edge predicates
+	"""
+	hasInternalOwnerUser: Boolean
+	hasInternalOwnerUserWith: [UserWhereInput!]
+	"""
+	internal_owner_group edge predicates
+	"""
+	hasInternalOwnerGroup: Boolean
+	hasInternalOwnerGroupWith: [GroupWhereInput!]
+	"""
+	internal_owner_identity_holder edge predicates
+	"""
+	hasInternalOwnerIdentityHolder: Boolean
+	hasInternalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
 	reviewed_by_user edge predicates
 	"""
@@ -71582,6 +71701,38 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
 	"""
 	ownerID: ID
 	"""
+	the stakeholder for the risk when no user, group, or identity holder is linked
+	"""
+	stakeholderName: String
+	"""
+	the stakeholder user id for the risk
+	"""
+	stakeholderUserID: ID
+	"""
+	the stakeholder group id for the risk
+	"""
+	stakeholderGroupID: ID
+	"""
+	the stakeholder identity holder id for the risk
+	"""
+	stakeholderIdentityHolderID: ID
+	"""
+	the delegate for the risk when no user, group, or identity holder is linked
+	"""
+	delegateName: String
+	"""
+	the delegate user id for the risk
+	"""
+	delegateUserID: ID
+	"""
+	the delegate group id for the risk
+	"""
+	delegateGroupID: ID
+	"""
+	the delegate identity holder id for the risk
+	"""
+	delegateIdentityHolderID: ID
+	"""
 	the kind of the risk
 	"""
 	riskKindName: String
@@ -71680,11 +71831,11 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
 	"""
 	the id of the group responsible for risk oversight
 	"""
-	stakeholderID: ID
+	stakeholderID: ID @deprecated(reason: "use stakeholder_group_id instead")
 	"""
 	the id of the group responsible for risk oversight on behalf of the stakeholder
 	"""
-	delegateID: ID
+	delegateID: ID @deprecated(reason: "use delegate_group_id instead")
 	"""
 	the time when the risk was mitigated
 	"""
@@ -71839,6 +71990,12 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
+	stakeholderUser: User
+	stakeholderGroup: Group
+	stakeholderIdentityHolder: IdentityHolder
+	delegateUser: User
+	delegateGroup: Group
+	delegateIdentityHolder: IdentityHolder
 	riskKind: CustomTypeEnum
 	riskCategory: CustomTypeEnum
 	environment: CustomTypeEnum
@@ -72187,11 +72344,11 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
 	"""
 	the group of users who are responsible for risk oversight
 	"""
-	stakeholder: Group
+	stakeholder: Group @deprecated(reason: "use stakeholder_group instead")
 	"""
 	temporary delegates for the risk, used for temporary ownership
 	"""
-	delegate: Group
+	delegate: Group @deprecated(reason: "use delegate_group instead")
 	comments(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -72552,6 +72709,8 @@ Properties by which Risk connections can be ordered.
 enum RiskOrderField {
 	created_at
 	updated_at
+	stakeholder_name
+	delegate_name
 	external_id
 	observed_at
 	name
@@ -72798,6 +72957,118 @@ input RiskWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
+	"""
+	stakeholder_name field predicates
+	"""
+	stakeholderName: String
+	stakeholderNameNEQ: String
+	stakeholderNameIn: [String!]
+	stakeholderNameNotIn: [String!]
+	stakeholderNameContains: String
+	stakeholderNameHasPrefix: String
+	stakeholderNameHasSuffix: String
+	stakeholderNameIsNil: Boolean
+	stakeholderNameNotNil: Boolean
+	stakeholderNameEqualFold: String
+	stakeholderNameContainsFold: String
+	"""
+	stakeholder_user_id field predicates
+	"""
+	stakeholderUserID: ID
+	stakeholderUserIDNEQ: ID
+	stakeholderUserIDIn: [ID!]
+	stakeholderUserIDNotIn: [ID!]
+	stakeholderUserIDContains: ID
+	stakeholderUserIDHasPrefix: ID
+	stakeholderUserIDHasSuffix: ID
+	stakeholderUserIDIsNil: Boolean
+	stakeholderUserIDNotNil: Boolean
+	stakeholderUserIDEqualFold: ID
+	stakeholderUserIDContainsFold: ID
+	"""
+	stakeholder_group_id field predicates
+	"""
+	stakeholderGroupID: ID
+	stakeholderGroupIDNEQ: ID
+	stakeholderGroupIDIn: [ID!]
+	stakeholderGroupIDNotIn: [ID!]
+	stakeholderGroupIDContains: ID
+	stakeholderGroupIDHasPrefix: ID
+	stakeholderGroupIDHasSuffix: ID
+	stakeholderGroupIDIsNil: Boolean
+	stakeholderGroupIDNotNil: Boolean
+	stakeholderGroupIDEqualFold: ID
+	stakeholderGroupIDContainsFold: ID
+	"""
+	stakeholder_identity_holder_id field predicates
+	"""
+	stakeholderIdentityHolderID: ID
+	stakeholderIdentityHolderIDNEQ: ID
+	stakeholderIdentityHolderIDIn: [ID!]
+	stakeholderIdentityHolderIDNotIn: [ID!]
+	stakeholderIdentityHolderIDContains: ID
+	stakeholderIdentityHolderIDHasPrefix: ID
+	stakeholderIdentityHolderIDHasSuffix: ID
+	stakeholderIdentityHolderIDIsNil: Boolean
+	stakeholderIdentityHolderIDNotNil: Boolean
+	stakeholderIdentityHolderIDEqualFold: ID
+	stakeholderIdentityHolderIDContainsFold: ID
+	"""
+	delegate_name field predicates
+	"""
+	delegateName: String
+	delegateNameNEQ: String
+	delegateNameIn: [String!]
+	delegateNameNotIn: [String!]
+	delegateNameContains: String
+	delegateNameHasPrefix: String
+	delegateNameHasSuffix: String
+	delegateNameIsNil: Boolean
+	delegateNameNotNil: Boolean
+	delegateNameEqualFold: String
+	delegateNameContainsFold: String
+	"""
+	delegate_user_id field predicates
+	"""
+	delegateUserID: ID
+	delegateUserIDNEQ: ID
+	delegateUserIDIn: [ID!]
+	delegateUserIDNotIn: [ID!]
+	delegateUserIDContains: ID
+	delegateUserIDHasPrefix: ID
+	delegateUserIDHasSuffix: ID
+	delegateUserIDIsNil: Boolean
+	delegateUserIDNotNil: Boolean
+	delegateUserIDEqualFold: ID
+	delegateUserIDContainsFold: ID
+	"""
+	delegate_group_id field predicates
+	"""
+	delegateGroupID: ID
+	delegateGroupIDNEQ: ID
+	delegateGroupIDIn: [ID!]
+	delegateGroupIDNotIn: [ID!]
+	delegateGroupIDContains: ID
+	delegateGroupIDHasPrefix: ID
+	delegateGroupIDHasSuffix: ID
+	delegateGroupIDIsNil: Boolean
+	delegateGroupIDNotNil: Boolean
+	delegateGroupIDEqualFold: ID
+	delegateGroupIDContainsFold: ID
+	"""
+	delegate_identity_holder_id field predicates
+	"""
+	delegateIdentityHolderID: ID
+	delegateIdentityHolderIDNEQ: ID
+	delegateIdentityHolderIDIn: [ID!]
+	delegateIdentityHolderIDNotIn: [ID!]
+	delegateIdentityHolderIDContains: ID
+	delegateIdentityHolderIDHasPrefix: ID
+	delegateIdentityHolderIDHasSuffix: ID
+	delegateIdentityHolderIDIsNil: Boolean
+	delegateIdentityHolderIDNotNil: Boolean
+	delegateIdentityHolderIDEqualFold: ID
+	delegateIdentityHolderIDContainsFold: ID
 	"""
 	risk_kind_name field predicates
 	"""
@@ -73190,6 +73461,36 @@ input RiskWhereInput {
 	"""
 	hasViewers: Boolean
 	hasViewersWith: [GroupWhereInput!]
+	"""
+	stakeholder_user edge predicates
+	"""
+	hasStakeholderUser: Boolean
+	hasStakeholderUserWith: [UserWhereInput!]
+	"""
+	stakeholder_group edge predicates
+	"""
+	hasStakeholderGroup: Boolean
+	hasStakeholderGroupWith: [GroupWhereInput!]
+	"""
+	stakeholder_identity_holder edge predicates
+	"""
+	hasStakeholderIdentityHolder: Boolean
+	hasStakeholderIdentityHolderWith: [IdentityHolderWhereInput!]
+	"""
+	delegate_user edge predicates
+	"""
+	hasDelegateUser: Boolean
+	hasDelegateUserWith: [UserWhereInput!]
+	"""
+	delegate_group edge predicates
+	"""
+	hasDelegateGroup: Boolean
+	hasDelegateGroupWith: [GroupWhereInput!]
+	"""
+	delegate_identity_holder edge predicates
+	"""
+	hasDelegateIdentityHolder: Boolean
+	hasDelegateIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
 	risk_kind edge predicates
 	"""
@@ -88857,6 +89158,11 @@ input UpdateFindingInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	the internal owner for the finding when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	clearInternalOwner: Boolean
+	"""
 	who reviewed the finding when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
@@ -89089,6 +89395,12 @@ input UpdateFindingInput {
 	addEditorIDs: [ID!]
 	removeEditorIDs: [ID!]
 	clearEditors: Boolean
+	internalOwnerUserID: ID
+	clearInternalOwnerUser: Boolean
+	internalOwnerGroupID: ID
+	clearInternalOwnerGroup: Boolean
+	internalOwnerIdentityHolderID: ID
+	clearInternalOwnerIdentityHolder: Boolean
 	reviewedByUserID: ID
 	clearReviewedByUser: Boolean
 	reviewedByGroupID: ID
@@ -92092,6 +92404,16 @@ input UpdateRiskInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	the stakeholder for the risk when no user, group, or identity holder is linked
+	"""
+	stakeholderName: String
+	clearStakeholderName: Boolean
+	"""
+	the delegate for the risk when no user, group, or identity holder is linked
+	"""
+	delegateName: String
+	clearDelegateName: Boolean
+	"""
 	the kind of the risk
 	"""
 	riskKindName: String
@@ -92242,6 +92564,18 @@ input UpdateRiskInput {
 	addViewerIDs: [ID!]
 	removeViewerIDs: [ID!]
 	clearViewers: Boolean
+	stakeholderUserID: ID
+	clearStakeholderUser: Boolean
+	stakeholderGroupID: ID
+	clearStakeholderGroup: Boolean
+	stakeholderIdentityHolderID: ID
+	clearStakeholderIdentityHolder: Boolean
+	delegateUserID: ID
+	clearDelegateUser: Boolean
+	delegateGroupID: ID
+	clearDelegateGroup: Boolean
+	delegateIdentityHolderID: ID
+	clearDelegateIdentityHolder: Boolean
 	riskKindID: ID
 	clearRiskKind: Boolean
 	riskCategoryID: ID
@@ -94087,6 +94421,11 @@ input UpdateVulnerabilityInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	the internal owner for the vulnerability when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	clearInternalOwner: Boolean
+	"""
 	who reviewed the vulnerability when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
@@ -94345,6 +94684,12 @@ input UpdateVulnerabilityInput {
 	addViewerIDs: [ID!]
 	removeViewerIDs: [ID!]
 	clearViewers: Boolean
+	internalOwnerUserID: ID
+	clearInternalOwnerUser: Boolean
+	internalOwnerGroupID: ID
+	clearInternalOwnerGroup: Boolean
+	internalOwnerIdentityHolderID: ID
+	clearInternalOwnerIdentityHolder: Boolean
 	reviewedByUserID: ID
 	clearReviewedByUser: Boolean
 	reviewedByGroupID: ID
@@ -96972,6 +97317,22 @@ type Vulnerability implements Node @modules(names: ["vulnerability_management_mo
 	"""
 	ownerID: ID
 	"""
+	the internal owner for the vulnerability when no user, group, or identity holder is linked
+	"""
+	internalOwner: String
+	"""
+	the internal owner user id for the vulnerability
+	"""
+	internalOwnerUserID: ID
+	"""
+	the internal owner group id for the vulnerability
+	"""
+	internalOwnerGroupID: ID
+	"""
+	the internal owner identity holder id for the vulnerability
+	"""
+	internalOwnerIdentityHolderID: ID
+	"""
 	who reviewed the vulnerability when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
@@ -97336,6 +97697,9 @@ type Vulnerability implements Node @modules(names: ["vulnerability_management_mo
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
+	internalOwnerUser: User
+	internalOwnerGroup: Group
+	internalOwnerIdentityHolder: IdentityHolder
 	reviewedByUser: User
 	reviewedByGroup: Group
 	reviewedByIdentityHolder: IdentityHolder
@@ -97972,6 +98336,7 @@ Properties by which Vulnerability connections can be ordered.
 enum VulnerabilityOrderField {
 	created_at
 	updated_at
+	internal_owner
 	external_owner_id
 	security_level
 	external_id
@@ -98221,6 +98586,62 @@ input VulnerabilityWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
+	"""
+	internal_owner field predicates
+	"""
+	internalOwner: String
+	internalOwnerNEQ: String
+	internalOwnerIn: [String!]
+	internalOwnerNotIn: [String!]
+	internalOwnerContains: String
+	internalOwnerHasPrefix: String
+	internalOwnerHasSuffix: String
+	internalOwnerIsNil: Boolean
+	internalOwnerNotNil: Boolean
+	internalOwnerEqualFold: String
+	internalOwnerContainsFold: String
+	"""
+	internal_owner_user_id field predicates
+	"""
+	internalOwnerUserID: ID
+	internalOwnerUserIDNEQ: ID
+	internalOwnerUserIDIn: [ID!]
+	internalOwnerUserIDNotIn: [ID!]
+	internalOwnerUserIDContains: ID
+	internalOwnerUserIDHasPrefix: ID
+	internalOwnerUserIDHasSuffix: ID
+	internalOwnerUserIDIsNil: Boolean
+	internalOwnerUserIDNotNil: Boolean
+	internalOwnerUserIDEqualFold: ID
+	internalOwnerUserIDContainsFold: ID
+	"""
+	internal_owner_group_id field predicates
+	"""
+	internalOwnerGroupID: ID
+	internalOwnerGroupIDNEQ: ID
+	internalOwnerGroupIDIn: [ID!]
+	internalOwnerGroupIDNotIn: [ID!]
+	internalOwnerGroupIDContains: ID
+	internalOwnerGroupIDHasPrefix: ID
+	internalOwnerGroupIDHasSuffix: ID
+	internalOwnerGroupIDIsNil: Boolean
+	internalOwnerGroupIDNotNil: Boolean
+	internalOwnerGroupIDEqualFold: ID
+	internalOwnerGroupIDContainsFold: ID
+	"""
+	internal_owner_identity_holder_id field predicates
+	"""
+	internalOwnerIdentityHolderID: ID
+	internalOwnerIdentityHolderIDNEQ: ID
+	internalOwnerIdentityHolderIDIn: [ID!]
+	internalOwnerIdentityHolderIDNotIn: [ID!]
+	internalOwnerIdentityHolderIDContains: ID
+	internalOwnerIdentityHolderIDHasPrefix: ID
+	internalOwnerIdentityHolderIDHasSuffix: ID
+	internalOwnerIdentityHolderIDIsNil: Boolean
+	internalOwnerIdentityHolderIDNotNil: Boolean
+	internalOwnerIdentityHolderIDEqualFold: ID
+	internalOwnerIdentityHolderIDContainsFold: ID
 	"""
 	reviewed_by field predicates
 	"""
@@ -98923,6 +99344,21 @@ input VulnerabilityWhereInput {
 	"""
 	hasViewers: Boolean
 	hasViewersWith: [GroupWhereInput!]
+	"""
+	internal_owner_user edge predicates
+	"""
+	hasInternalOwnerUser: Boolean
+	hasInternalOwnerUserWith: [UserWhereInput!]
+	"""
+	internal_owner_group edge predicates
+	"""
+	hasInternalOwnerGroup: Boolean
+	hasInternalOwnerGroupWith: [GroupWhereInput!]
+	"""
+	internal_owner_identity_holder edge predicates
+	"""
+	hasInternalOwnerIdentityHolder: Boolean
+	hasInternalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
 	reviewed_by_user edge predicates
 	"""

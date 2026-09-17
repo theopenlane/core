@@ -68,6 +68,14 @@ type backfillRoutine struct {
 // backfillRoutines are the registered backfill routines
 var backfillRoutines = []backfillRoutine{
 	{
+		Name:    "backfill-schema-responsibilities",
+		Version: "v2",
+		Enabled: true,
+		Run: func(ctx context.Context, deps backfillDeps) error {
+			return backfillSchemaResponsibilities(ctx, deps.Client)
+		},
+	},
+	{
 		Name:    "ingest-batching",
 		Version: "v2",
 		Enabled: true,
@@ -278,7 +286,7 @@ func backfillProvenance(ctx context.Context, dbClient *ent.Client, rt *runtime.R
 	logx.FromContext(ctx).Info().Int("stamped", stamped).Int("reviewed", len(installations)).Msg("backfill: installation provenance stamping completed")
 }
 
-// backfillFileBackups enqueues a backup for existing files that still need one
+// BackfillFileBackups enqueues a backup for existing files that still need one
 func BackfillFileBackups(ctx context.Context, dbClient *ent.Client, galaApp *gala.Gala) {
 	if dbClient.ObjectManager == nil {
 		logx.FromContext(ctx).Warn().Msg("backfill: object manager is nil, skipping backfill for file backups")

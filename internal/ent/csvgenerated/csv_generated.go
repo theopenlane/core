@@ -1262,6 +1262,30 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				CreateIfMissing: false,
 			},
 			{
+				SourceColumn:    "InternalOwnerGroupName",
+				TargetField:     "InternalOwnerGroupID",
+				TargetEntity:    "Group",
+				MatchField:      "name",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "InternalOwnerIdentityHolderEmail",
+				TargetField:     "InternalOwnerIdentityHolderID",
+				TargetEntity:    "IdentityHolder",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "InternalOwnerUserEmail",
+				TargetField:     "InternalOwnerUserID",
+				TargetEntity:    "User",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
 				SourceColumn:    "ReviewedByGroupName",
 				TargetField:     "ReviewedByGroupID",
 				TargetEntity:    "Group",
@@ -1686,6 +1710,30 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				CreateIfMissing: false,
 			},
 			{
+				SourceColumn:    "DelegateGroupName",
+				TargetField:     "DelegateGroupID",
+				TargetEntity:    "Group",
+				MatchField:      "name",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "DelegateIdentityHolderEmail",
+				TargetField:     "DelegateIdentityHolderID",
+				TargetEntity:    "IdentityHolder",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "DelegateUserEmail",
+				TargetField:     "DelegateUserID",
+				TargetEntity:    "User",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
 				SourceColumn:    "EntityNames",
 				TargetField:     "EntityIDs",
 				TargetEntity:    "Entity",
@@ -1711,9 +1759,25 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 			},
 			{
 				SourceColumn:    "StakeholderGroupName",
-				TargetField:     "StakeholderID",
+				TargetField:     "StakeholderGroupID",
 				TargetEntity:    "Group",
 				MatchField:      "name",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "StakeholderIdentityHolderEmail",
+				TargetField:     "StakeholderIdentityHolderID",
+				TargetEntity:    "IdentityHolder",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "StakeholderUserEmail",
+				TargetField:     "StakeholderUserID",
+				TargetEntity:    "User",
+				MatchField:      "email",
 				IsSlice:         false,
 				CreateIfMissing: false,
 			},
@@ -2028,6 +2092,30 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				TargetEntity:    "Control",
 				MatchField:      "ref_code",
 				IsSlice:         true,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "InternalOwnerGroupName",
+				TargetField:     "InternalOwnerGroupID",
+				TargetEntity:    "Group",
+				MatchField:      "name",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "InternalOwnerIdentityHolderEmail",
+				TargetField:     "InternalOwnerIdentityHolderID",
+				TargetEntity:    "IdentityHolder",
+				MatchField:      "email",
+				IsSlice:         false,
+				CreateIfMissing: false,
+			},
+			{
+				SourceColumn:    "InternalOwnerUserEmail",
+				TargetField:     "InternalOwnerUserID",
+				TargetEntity:    "User",
+				MatchField:      "email",
+				IsSlice:         false,
 				CreateIfMissing: false,
 			},
 			{
@@ -2622,13 +2710,16 @@ func (FileCSVUpdateInput) CSVInputWrapper() {}
 
 // FindingCSVInput wraps CreateFindingInput with CSV reference columns.
 type FindingCSVInput struct {
-	Input                         generated.CreateFindingInput
-	AssignedToGroupName           string `csv:"AssignedToGroupName"`
-	AssignedToIdentityHolderEmail string `csv:"AssignedToIdentityHolderEmail"`
-	AssignedToUserEmail           string `csv:"AssignedToUserEmail"`
-	ReviewedByGroupName           string `csv:"ReviewedByGroupName"`
-	ReviewedByIdentityHolderEmail string `csv:"ReviewedByIdentityHolderEmail"`
-	ReviewedByUserEmail           string `csv:"ReviewedByUserEmail"`
+	Input                            generated.CreateFindingInput
+	AssignedToGroupName              string `csv:"AssignedToGroupName"`
+	AssignedToIdentityHolderEmail    string `csv:"AssignedToIdentityHolderEmail"`
+	AssignedToUserEmail              string `csv:"AssignedToUserEmail"`
+	InternalOwnerGroupName           string `csv:"InternalOwnerGroupName"`
+	InternalOwnerIdentityHolderEmail string `csv:"InternalOwnerIdentityHolderEmail"`
+	InternalOwnerUserEmail           string `csv:"InternalOwnerUserEmail"`
+	ReviewedByGroupName              string `csv:"ReviewedByGroupName"`
+	ReviewedByIdentityHolderEmail    string `csv:"ReviewedByIdentityHolderEmail"`
+	ReviewedByUserEmail              string `csv:"ReviewedByUserEmail"`
 }
 
 // CSVInputWrapper marks FindingCSVInput for CSV header preprocessing.
@@ -2637,14 +2728,17 @@ func (FindingCSVInput) CSVInputWrapper() {}
 // FindingCSVUpdateInput wraps UpdateFindingInput with CSV reference columns for bulk updates.
 type FindingCSVUpdateInput struct {
 	// ID is the entity ID to update
-	ID                            string `csv:"ID"`
-	Input                         generated.UpdateFindingInput
-	AssignedToGroupName           string `csv:"AssignedToGroupName"`
-	AssignedToIdentityHolderEmail string `csv:"AssignedToIdentityHolderEmail"`
-	AssignedToUserEmail           string `csv:"AssignedToUserEmail"`
-	ReviewedByGroupName           string `csv:"ReviewedByGroupName"`
-	ReviewedByIdentityHolderEmail string `csv:"ReviewedByIdentityHolderEmail"`
-	ReviewedByUserEmail           string `csv:"ReviewedByUserEmail"`
+	ID                               string `csv:"ID"`
+	Input                            generated.UpdateFindingInput
+	AssignedToGroupName              string `csv:"AssignedToGroupName"`
+	AssignedToIdentityHolderEmail    string `csv:"AssignedToIdentityHolderEmail"`
+	AssignedToUserEmail              string `csv:"AssignedToUserEmail"`
+	InternalOwnerGroupName           string `csv:"InternalOwnerGroupName"`
+	InternalOwnerIdentityHolderEmail string `csv:"InternalOwnerIdentityHolderEmail"`
+	InternalOwnerUserEmail           string `csv:"InternalOwnerUserEmail"`
+	ReviewedByGroupName              string `csv:"ReviewedByGroupName"`
+	ReviewedByIdentityHolderEmail    string `csv:"ReviewedByIdentityHolderEmail"`
+	ReviewedByUserEmail              string `csv:"ReviewedByUserEmail"`
 }
 
 // CSVInputWrapper marks FindingCSVUpdateInput for CSV header preprocessing.
@@ -3158,15 +3252,20 @@ func (ReviewCSVUpdateInput) CSVInputWrapper() {}
 
 // RiskCSVInput wraps CreateRiskInput with CSV reference columns.
 type RiskCSVInput struct {
-	Input                 generated.CreateRiskInput
-	ActionPlanNames       []string `csv:"ActionPlanNames"`
-	AssetNames            []string `csv:"AssetNames"`
-	ControlRefCodes       []string `csv:"ControlRefCodes"`
-	EntityNames           []string `csv:"EntityNames"`
-	PlatformNames         []string `csv:"PlatformNames"`
-	RiskDelegateGroupName string   `csv:"RiskDelegateGroupName"`
-	StakeholderGroupName  string   `csv:"StakeholderGroupName"`
-	SubcontrolRefCodes    []string `csv:"SubcontrolRefCodes"`
+	Input                          generated.CreateRiskInput
+	ActionPlanNames                []string `csv:"ActionPlanNames"`
+	AssetNames                     []string `csv:"AssetNames"`
+	ControlRefCodes                []string `csv:"ControlRefCodes"`
+	DelegateGroupName              string   `csv:"DelegateGroupName"`
+	DelegateIdentityHolderEmail    string   `csv:"DelegateIdentityHolderEmail"`
+	DelegateUserEmail              string   `csv:"DelegateUserEmail"`
+	EntityNames                    []string `csv:"EntityNames"`
+	PlatformNames                  []string `csv:"PlatformNames"`
+	RiskDelegateGroupName          string   `csv:"RiskDelegateGroupName"`
+	StakeholderGroupName           string   `csv:"StakeholderGroupName"`
+	StakeholderIdentityHolderEmail string   `csv:"StakeholderIdentityHolderEmail"`
+	StakeholderUserEmail           string   `csv:"StakeholderUserEmail"`
+	SubcontrolRefCodes             []string `csv:"SubcontrolRefCodes"`
 }
 
 // CSVInputWrapper marks RiskCSVInput for CSV header preprocessing.
@@ -3175,16 +3274,21 @@ func (RiskCSVInput) CSVInputWrapper() {}
 // RiskCSVUpdateInput wraps UpdateRiskInput with CSV reference columns for bulk updates.
 type RiskCSVUpdateInput struct {
 	// ID is the entity ID to update
-	ID                    string `csv:"ID"`
-	Input                 generated.UpdateRiskInput
-	ActionPlanNames       []string `csv:"ActionPlanNames"`
-	AssetNames            []string `csv:"AssetNames"`
-	ControlRefCodes       []string `csv:"ControlRefCodes"`
-	EntityNames           []string `csv:"EntityNames"`
-	PlatformNames         []string `csv:"PlatformNames"`
-	RiskDelegateGroupName string   `csv:"RiskDelegateGroupName"`
-	StakeholderGroupName  string   `csv:"StakeholderGroupName"`
-	SubcontrolRefCodes    []string `csv:"SubcontrolRefCodes"`
+	ID                             string `csv:"ID"`
+	Input                          generated.UpdateRiskInput
+	ActionPlanNames                []string `csv:"ActionPlanNames"`
+	AssetNames                     []string `csv:"AssetNames"`
+	ControlRefCodes                []string `csv:"ControlRefCodes"`
+	DelegateGroupName              string   `csv:"DelegateGroupName"`
+	DelegateIdentityHolderEmail    string   `csv:"DelegateIdentityHolderEmail"`
+	DelegateUserEmail              string   `csv:"DelegateUserEmail"`
+	EntityNames                    []string `csv:"EntityNames"`
+	PlatformNames                  []string `csv:"PlatformNames"`
+	RiskDelegateGroupName          string   `csv:"RiskDelegateGroupName"`
+	StakeholderGroupName           string   `csv:"StakeholderGroupName"`
+	StakeholderIdentityHolderEmail string   `csv:"StakeholderIdentityHolderEmail"`
+	StakeholderUserEmail           string   `csv:"StakeholderUserEmail"`
+	SubcontrolRefCodes             []string `csv:"SubcontrolRefCodes"`
 }
 
 // CSVInputWrapper marks RiskCSVUpdateInput for CSV header preprocessing.
@@ -3666,14 +3770,17 @@ func (VendorScoringConfigCSVUpdateInput) CSVInputWrapper() {}
 
 // VulnerabilityCSVInput wraps CreateVulnerabilityInput with CSV reference columns.
 type VulnerabilityCSVInput struct {
-	Input                         generated.CreateVulnerabilityInput
-	AssignedToGroupName           string   `csv:"AssignedToGroupName"`
-	AssignedToIdentityHolderEmail string   `csv:"AssignedToIdentityHolderEmail"`
-	AssignedToUserEmail           string   `csv:"AssignedToUserEmail"`
-	ControlRefCodes               []string `csv:"ControlRefCodes"`
-	ReviewedByGroupName           string   `csv:"ReviewedByGroupName"`
-	ReviewedByIdentityHolderEmail string   `csv:"ReviewedByIdentityHolderEmail"`
-	ReviewedByUserEmail           string   `csv:"ReviewedByUserEmail"`
+	Input                            generated.CreateVulnerabilityInput
+	AssignedToGroupName              string   `csv:"AssignedToGroupName"`
+	AssignedToIdentityHolderEmail    string   `csv:"AssignedToIdentityHolderEmail"`
+	AssignedToUserEmail              string   `csv:"AssignedToUserEmail"`
+	ControlRefCodes                  []string `csv:"ControlRefCodes"`
+	InternalOwnerGroupName           string   `csv:"InternalOwnerGroupName"`
+	InternalOwnerIdentityHolderEmail string   `csv:"InternalOwnerIdentityHolderEmail"`
+	InternalOwnerUserEmail           string   `csv:"InternalOwnerUserEmail"`
+	ReviewedByGroupName              string   `csv:"ReviewedByGroupName"`
+	ReviewedByIdentityHolderEmail    string   `csv:"ReviewedByIdentityHolderEmail"`
+	ReviewedByUserEmail              string   `csv:"ReviewedByUserEmail"`
 }
 
 // CSVInputWrapper marks VulnerabilityCSVInput for CSV header preprocessing.
@@ -3682,15 +3789,18 @@ func (VulnerabilityCSVInput) CSVInputWrapper() {}
 // VulnerabilityCSVUpdateInput wraps UpdateVulnerabilityInput with CSV reference columns for bulk updates.
 type VulnerabilityCSVUpdateInput struct {
 	// ID is the entity ID to update
-	ID                            string `csv:"ID"`
-	Input                         generated.UpdateVulnerabilityInput
-	AssignedToGroupName           string   `csv:"AssignedToGroupName"`
-	AssignedToIdentityHolderEmail string   `csv:"AssignedToIdentityHolderEmail"`
-	AssignedToUserEmail           string   `csv:"AssignedToUserEmail"`
-	ControlRefCodes               []string `csv:"ControlRefCodes"`
-	ReviewedByGroupName           string   `csv:"ReviewedByGroupName"`
-	ReviewedByIdentityHolderEmail string   `csv:"ReviewedByIdentityHolderEmail"`
-	ReviewedByUserEmail           string   `csv:"ReviewedByUserEmail"`
+	ID                               string `csv:"ID"`
+	Input                            generated.UpdateVulnerabilityInput
+	AssignedToGroupName              string   `csv:"AssignedToGroupName"`
+	AssignedToIdentityHolderEmail    string   `csv:"AssignedToIdentityHolderEmail"`
+	AssignedToUserEmail              string   `csv:"AssignedToUserEmail"`
+	ControlRefCodes                  []string `csv:"ControlRefCodes"`
+	InternalOwnerGroupName           string   `csv:"InternalOwnerGroupName"`
+	InternalOwnerIdentityHolderEmail string   `csv:"InternalOwnerIdentityHolderEmail"`
+	InternalOwnerUserEmail           string   `csv:"InternalOwnerUserEmail"`
+	ReviewedByGroupName              string   `csv:"ReviewedByGroupName"`
+	ReviewedByIdentityHolderEmail    string   `csv:"ReviewedByIdentityHolderEmail"`
+	ReviewedByUserEmail              string   `csv:"ReviewedByUserEmail"`
 }
 
 // CSVInputWrapper marks VulnerabilityCSVUpdateInput for CSV header preprocessing.

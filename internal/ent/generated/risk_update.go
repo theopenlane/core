@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
@@ -35,6 +36,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 )
@@ -260,6 +262,166 @@ func (_u *RiskUpdate) SetNillableIntegrationRunID(v *string) *RiskUpdate {
 // ClearIntegrationRunID clears the value of the "integration_run_id" field.
 func (_u *RiskUpdate) ClearIntegrationRunID() *RiskUpdate {
 	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
+// SetStakeholderName sets the "stakeholder_name" field.
+func (_u *RiskUpdate) SetStakeholderName(v string) *RiskUpdate {
+	_u.mutation.SetStakeholderName(v)
+	return _u
+}
+
+// SetNillableStakeholderName sets the "stakeholder_name" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableStakeholderName(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetStakeholderName(*v)
+	}
+	return _u
+}
+
+// ClearStakeholderName clears the value of the "stakeholder_name" field.
+func (_u *RiskUpdate) ClearStakeholderName() *RiskUpdate {
+	_u.mutation.ClearStakeholderName()
+	return _u
+}
+
+// SetStakeholderUserID sets the "stakeholder_user_id" field.
+func (_u *RiskUpdate) SetStakeholderUserID(v string) *RiskUpdate {
+	_u.mutation.SetStakeholderUserID(v)
+	return _u
+}
+
+// SetNillableStakeholderUserID sets the "stakeholder_user_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableStakeholderUserID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetStakeholderUserID(*v)
+	}
+	return _u
+}
+
+// ClearStakeholderUserID clears the value of the "stakeholder_user_id" field.
+func (_u *RiskUpdate) ClearStakeholderUserID() *RiskUpdate {
+	_u.mutation.ClearStakeholderUserID()
+	return _u
+}
+
+// SetStakeholderGroupID sets the "stakeholder_group_id" field.
+func (_u *RiskUpdate) SetStakeholderGroupID(v string) *RiskUpdate {
+	_u.mutation.SetStakeholderGroupID(v)
+	return _u
+}
+
+// SetNillableStakeholderGroupID sets the "stakeholder_group_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableStakeholderGroupID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetStakeholderGroupID(*v)
+	}
+	return _u
+}
+
+// ClearStakeholderGroupID clears the value of the "stakeholder_group_id" field.
+func (_u *RiskUpdate) ClearStakeholderGroupID() *RiskUpdate {
+	_u.mutation.ClearStakeholderGroupID()
+	return _u
+}
+
+// SetStakeholderIdentityHolderID sets the "stakeholder_identity_holder_id" field.
+func (_u *RiskUpdate) SetStakeholderIdentityHolderID(v string) *RiskUpdate {
+	_u.mutation.SetStakeholderIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableStakeholderIdentityHolderID sets the "stakeholder_identity_holder_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableStakeholderIdentityHolderID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetStakeholderIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearStakeholderIdentityHolderID clears the value of the "stakeholder_identity_holder_id" field.
+func (_u *RiskUpdate) ClearStakeholderIdentityHolderID() *RiskUpdate {
+	_u.mutation.ClearStakeholderIdentityHolderID()
+	return _u
+}
+
+// SetDelegateName sets the "delegate_name" field.
+func (_u *RiskUpdate) SetDelegateName(v string) *RiskUpdate {
+	_u.mutation.SetDelegateName(v)
+	return _u
+}
+
+// SetNillableDelegateName sets the "delegate_name" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableDelegateName(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetDelegateName(*v)
+	}
+	return _u
+}
+
+// ClearDelegateName clears the value of the "delegate_name" field.
+func (_u *RiskUpdate) ClearDelegateName() *RiskUpdate {
+	_u.mutation.ClearDelegateName()
+	return _u
+}
+
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (_u *RiskUpdate) SetDelegateUserID(v string) *RiskUpdate {
+	_u.mutation.SetDelegateUserID(v)
+	return _u
+}
+
+// SetNillableDelegateUserID sets the "delegate_user_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableDelegateUserID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetDelegateUserID(*v)
+	}
+	return _u
+}
+
+// ClearDelegateUserID clears the value of the "delegate_user_id" field.
+func (_u *RiskUpdate) ClearDelegateUserID() *RiskUpdate {
+	_u.mutation.ClearDelegateUserID()
+	return _u
+}
+
+// SetDelegateGroupID sets the "delegate_group_id" field.
+func (_u *RiskUpdate) SetDelegateGroupID(v string) *RiskUpdate {
+	_u.mutation.SetDelegateGroupID(v)
+	return _u
+}
+
+// SetNillableDelegateGroupID sets the "delegate_group_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableDelegateGroupID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetDelegateGroupID(*v)
+	}
+	return _u
+}
+
+// ClearDelegateGroupID clears the value of the "delegate_group_id" field.
+func (_u *RiskUpdate) ClearDelegateGroupID() *RiskUpdate {
+	_u.mutation.ClearDelegateGroupID()
+	return _u
+}
+
+// SetDelegateIdentityHolderID sets the "delegate_identity_holder_id" field.
+func (_u *RiskUpdate) SetDelegateIdentityHolderID(v string) *RiskUpdate {
+	_u.mutation.SetDelegateIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableDelegateIdentityHolderID sets the "delegate_identity_holder_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableDelegateIdentityHolderID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetDelegateIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearDelegateIdentityHolderID clears the value of the "delegate_identity_holder_id" field.
+func (_u *RiskUpdate) ClearDelegateIdentityHolderID() *RiskUpdate {
+	_u.mutation.ClearDelegateIdentityHolderID()
 	return _u
 }
 
@@ -1005,6 +1167,36 @@ func (_u *RiskUpdate) AddViewers(v ...*Group) *RiskUpdate {
 	return _u.AddViewerIDs(ids...)
 }
 
+// SetStakeholderUser sets the "stakeholder_user" edge to the User entity.
+func (_u *RiskUpdate) SetStakeholderUser(v *User) *RiskUpdate {
+	return _u.SetStakeholderUserID(v.ID)
+}
+
+// SetStakeholderGroup sets the "stakeholder_group" edge to the Group entity.
+func (_u *RiskUpdate) SetStakeholderGroup(v *Group) *RiskUpdate {
+	return _u.SetStakeholderGroupID(v.ID)
+}
+
+// SetStakeholderIdentityHolder sets the "stakeholder_identity_holder" edge to the IdentityHolder entity.
+func (_u *RiskUpdate) SetStakeholderIdentityHolder(v *IdentityHolder) *RiskUpdate {
+	return _u.SetStakeholderIdentityHolderID(v.ID)
+}
+
+// SetDelegateUser sets the "delegate_user" edge to the User entity.
+func (_u *RiskUpdate) SetDelegateUser(v *User) *RiskUpdate {
+	return _u.SetDelegateUserID(v.ID)
+}
+
+// SetDelegateGroup sets the "delegate_group" edge to the Group entity.
+func (_u *RiskUpdate) SetDelegateGroup(v *Group) *RiskUpdate {
+	return _u.SetDelegateGroupID(v.ID)
+}
+
+// SetDelegateIdentityHolder sets the "delegate_identity_holder" edge to the IdentityHolder entity.
+func (_u *RiskUpdate) SetDelegateIdentityHolder(v *IdentityHolder) *RiskUpdate {
+	return _u.SetDelegateIdentityHolderID(v.ID)
+}
+
 // SetRiskKind sets the "risk_kind" edge to the CustomTypeEnum entity.
 func (_u *RiskUpdate) SetRiskKind(v *CustomTypeEnum) *RiskUpdate {
 	return _u.SetRiskKindID(v.ID)
@@ -1392,6 +1584,42 @@ func (_u *RiskUpdate) RemoveViewers(v ...*Group) *RiskUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveViewerIDs(ids...)
+}
+
+// ClearStakeholderUser clears the "stakeholder_user" edge to the User entity.
+func (_u *RiskUpdate) ClearStakeholderUser() *RiskUpdate {
+	_u.mutation.ClearStakeholderUser()
+	return _u
+}
+
+// ClearStakeholderGroup clears the "stakeholder_group" edge to the Group entity.
+func (_u *RiskUpdate) ClearStakeholderGroup() *RiskUpdate {
+	_u.mutation.ClearStakeholderGroup()
+	return _u
+}
+
+// ClearStakeholderIdentityHolder clears the "stakeholder_identity_holder" edge to the IdentityHolder entity.
+func (_u *RiskUpdate) ClearStakeholderIdentityHolder() *RiskUpdate {
+	_u.mutation.ClearStakeholderIdentityHolder()
+	return _u
+}
+
+// ClearDelegateUser clears the "delegate_user" edge to the User entity.
+func (_u *RiskUpdate) ClearDelegateUser() *RiskUpdate {
+	_u.mutation.ClearDelegateUser()
+	return _u
+}
+
+// ClearDelegateGroup clears the "delegate_group" edge to the Group entity.
+func (_u *RiskUpdate) ClearDelegateGroup() *RiskUpdate {
+	_u.mutation.ClearDelegateGroup()
+	return _u
+}
+
+// ClearDelegateIdentityHolder clears the "delegate_identity_holder" edge to the IdentityHolder entity.
+func (_u *RiskUpdate) ClearDelegateIdentityHolder() *RiskUpdate {
+	_u.mutation.ClearDelegateIdentityHolder()
+	return _u
 }
 
 // ClearRiskKind clears the "risk_kind" edge to the CustomTypeEnum entity.
@@ -1980,6 +2208,18 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(risk.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.StakeholderName(); ok {
+		_spec.SetField(risk.FieldStakeholderName, field.TypeString, value)
+	}
+	if _u.mutation.StakeholderNameCleared() {
+		_spec.ClearField(risk.FieldStakeholderName, field.TypeString)
+	}
+	if value, ok := _u.mutation.DelegateName(); ok {
+		_spec.SetField(risk.FieldDelegateName, field.TypeString, value)
+	}
+	if _u.mutation.DelegateNameCleared() {
+		_spec.ClearField(risk.FieldDelegateName, field.TypeString)
+	}
 	if value, ok := _u.mutation.RiskKindName(); ok {
 		_spec.SetField(risk.FieldRiskKindName, field.TypeString, value)
 	}
@@ -2339,6 +2579,180 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.StakeholderUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderUserTable,
+			Columns: []string{risk.StakeholderUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.StakeholderUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderUserTable,
+			Columns: []string{risk.StakeholderUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.StakeholderGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderGroupTable,
+			Columns: []string{risk.StakeholderGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.StakeholderGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderGroupTable,
+			Columns: []string{risk.StakeholderGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.StakeholderIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderIdentityHolderTable,
+			Columns: []string{risk.StakeholderIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.StakeholderIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderIdentityHolderTable,
+			Columns: []string{risk.StakeholderIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DelegateUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateUserTable,
+			Columns: []string{risk.DelegateUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DelegateUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateUserTable,
+			Columns: []string{risk.DelegateUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DelegateGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateGroupTable,
+			Columns: []string{risk.DelegateGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DelegateGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateGroupTable,
+			Columns: []string{risk.DelegateGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DelegateIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateIdentityHolderTable,
+			Columns: []string{risk.DelegateIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DelegateIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateIdentityHolderTable,
+			Columns: []string{risk.DelegateIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -3562,6 +3976,166 @@ func (_u *RiskUpdateOne) ClearIntegrationRunID() *RiskUpdateOne {
 	return _u
 }
 
+// SetStakeholderName sets the "stakeholder_name" field.
+func (_u *RiskUpdateOne) SetStakeholderName(v string) *RiskUpdateOne {
+	_u.mutation.SetStakeholderName(v)
+	return _u
+}
+
+// SetNillableStakeholderName sets the "stakeholder_name" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableStakeholderName(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetStakeholderName(*v)
+	}
+	return _u
+}
+
+// ClearStakeholderName clears the value of the "stakeholder_name" field.
+func (_u *RiskUpdateOne) ClearStakeholderName() *RiskUpdateOne {
+	_u.mutation.ClearStakeholderName()
+	return _u
+}
+
+// SetStakeholderUserID sets the "stakeholder_user_id" field.
+func (_u *RiskUpdateOne) SetStakeholderUserID(v string) *RiskUpdateOne {
+	_u.mutation.SetStakeholderUserID(v)
+	return _u
+}
+
+// SetNillableStakeholderUserID sets the "stakeholder_user_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableStakeholderUserID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetStakeholderUserID(*v)
+	}
+	return _u
+}
+
+// ClearStakeholderUserID clears the value of the "stakeholder_user_id" field.
+func (_u *RiskUpdateOne) ClearStakeholderUserID() *RiskUpdateOne {
+	_u.mutation.ClearStakeholderUserID()
+	return _u
+}
+
+// SetStakeholderGroupID sets the "stakeholder_group_id" field.
+func (_u *RiskUpdateOne) SetStakeholderGroupID(v string) *RiskUpdateOne {
+	_u.mutation.SetStakeholderGroupID(v)
+	return _u
+}
+
+// SetNillableStakeholderGroupID sets the "stakeholder_group_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableStakeholderGroupID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetStakeholderGroupID(*v)
+	}
+	return _u
+}
+
+// ClearStakeholderGroupID clears the value of the "stakeholder_group_id" field.
+func (_u *RiskUpdateOne) ClearStakeholderGroupID() *RiskUpdateOne {
+	_u.mutation.ClearStakeholderGroupID()
+	return _u
+}
+
+// SetStakeholderIdentityHolderID sets the "stakeholder_identity_holder_id" field.
+func (_u *RiskUpdateOne) SetStakeholderIdentityHolderID(v string) *RiskUpdateOne {
+	_u.mutation.SetStakeholderIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableStakeholderIdentityHolderID sets the "stakeholder_identity_holder_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableStakeholderIdentityHolderID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetStakeholderIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearStakeholderIdentityHolderID clears the value of the "stakeholder_identity_holder_id" field.
+func (_u *RiskUpdateOne) ClearStakeholderIdentityHolderID() *RiskUpdateOne {
+	_u.mutation.ClearStakeholderIdentityHolderID()
+	return _u
+}
+
+// SetDelegateName sets the "delegate_name" field.
+func (_u *RiskUpdateOne) SetDelegateName(v string) *RiskUpdateOne {
+	_u.mutation.SetDelegateName(v)
+	return _u
+}
+
+// SetNillableDelegateName sets the "delegate_name" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableDelegateName(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetDelegateName(*v)
+	}
+	return _u
+}
+
+// ClearDelegateName clears the value of the "delegate_name" field.
+func (_u *RiskUpdateOne) ClearDelegateName() *RiskUpdateOne {
+	_u.mutation.ClearDelegateName()
+	return _u
+}
+
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (_u *RiskUpdateOne) SetDelegateUserID(v string) *RiskUpdateOne {
+	_u.mutation.SetDelegateUserID(v)
+	return _u
+}
+
+// SetNillableDelegateUserID sets the "delegate_user_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableDelegateUserID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetDelegateUserID(*v)
+	}
+	return _u
+}
+
+// ClearDelegateUserID clears the value of the "delegate_user_id" field.
+func (_u *RiskUpdateOne) ClearDelegateUserID() *RiskUpdateOne {
+	_u.mutation.ClearDelegateUserID()
+	return _u
+}
+
+// SetDelegateGroupID sets the "delegate_group_id" field.
+func (_u *RiskUpdateOne) SetDelegateGroupID(v string) *RiskUpdateOne {
+	_u.mutation.SetDelegateGroupID(v)
+	return _u
+}
+
+// SetNillableDelegateGroupID sets the "delegate_group_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableDelegateGroupID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetDelegateGroupID(*v)
+	}
+	return _u
+}
+
+// ClearDelegateGroupID clears the value of the "delegate_group_id" field.
+func (_u *RiskUpdateOne) ClearDelegateGroupID() *RiskUpdateOne {
+	_u.mutation.ClearDelegateGroupID()
+	return _u
+}
+
+// SetDelegateIdentityHolderID sets the "delegate_identity_holder_id" field.
+func (_u *RiskUpdateOne) SetDelegateIdentityHolderID(v string) *RiskUpdateOne {
+	_u.mutation.SetDelegateIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableDelegateIdentityHolderID sets the "delegate_identity_holder_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableDelegateIdentityHolderID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetDelegateIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearDelegateIdentityHolderID clears the value of the "delegate_identity_holder_id" field.
+func (_u *RiskUpdateOne) ClearDelegateIdentityHolderID() *RiskUpdateOne {
+	_u.mutation.ClearDelegateIdentityHolderID()
+	return _u
+}
+
 // SetRiskKindName sets the "risk_kind_name" field.
 func (_u *RiskUpdateOne) SetRiskKindName(v string) *RiskUpdateOne {
 	_u.mutation.SetRiskKindName(v)
@@ -4304,6 +4878,36 @@ func (_u *RiskUpdateOne) AddViewers(v ...*Group) *RiskUpdateOne {
 	return _u.AddViewerIDs(ids...)
 }
 
+// SetStakeholderUser sets the "stakeholder_user" edge to the User entity.
+func (_u *RiskUpdateOne) SetStakeholderUser(v *User) *RiskUpdateOne {
+	return _u.SetStakeholderUserID(v.ID)
+}
+
+// SetStakeholderGroup sets the "stakeholder_group" edge to the Group entity.
+func (_u *RiskUpdateOne) SetStakeholderGroup(v *Group) *RiskUpdateOne {
+	return _u.SetStakeholderGroupID(v.ID)
+}
+
+// SetStakeholderIdentityHolder sets the "stakeholder_identity_holder" edge to the IdentityHolder entity.
+func (_u *RiskUpdateOne) SetStakeholderIdentityHolder(v *IdentityHolder) *RiskUpdateOne {
+	return _u.SetStakeholderIdentityHolderID(v.ID)
+}
+
+// SetDelegateUser sets the "delegate_user" edge to the User entity.
+func (_u *RiskUpdateOne) SetDelegateUser(v *User) *RiskUpdateOne {
+	return _u.SetDelegateUserID(v.ID)
+}
+
+// SetDelegateGroup sets the "delegate_group" edge to the Group entity.
+func (_u *RiskUpdateOne) SetDelegateGroup(v *Group) *RiskUpdateOne {
+	return _u.SetDelegateGroupID(v.ID)
+}
+
+// SetDelegateIdentityHolder sets the "delegate_identity_holder" edge to the IdentityHolder entity.
+func (_u *RiskUpdateOne) SetDelegateIdentityHolder(v *IdentityHolder) *RiskUpdateOne {
+	return _u.SetDelegateIdentityHolderID(v.ID)
+}
+
 // SetRiskKind sets the "risk_kind" edge to the CustomTypeEnum entity.
 func (_u *RiskUpdateOne) SetRiskKind(v *CustomTypeEnum) *RiskUpdateOne {
 	return _u.SetRiskKindID(v.ID)
@@ -4691,6 +5295,42 @@ func (_u *RiskUpdateOne) RemoveViewers(v ...*Group) *RiskUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveViewerIDs(ids...)
+}
+
+// ClearStakeholderUser clears the "stakeholder_user" edge to the User entity.
+func (_u *RiskUpdateOne) ClearStakeholderUser() *RiskUpdateOne {
+	_u.mutation.ClearStakeholderUser()
+	return _u
+}
+
+// ClearStakeholderGroup clears the "stakeholder_group" edge to the Group entity.
+func (_u *RiskUpdateOne) ClearStakeholderGroup() *RiskUpdateOne {
+	_u.mutation.ClearStakeholderGroup()
+	return _u
+}
+
+// ClearStakeholderIdentityHolder clears the "stakeholder_identity_holder" edge to the IdentityHolder entity.
+func (_u *RiskUpdateOne) ClearStakeholderIdentityHolder() *RiskUpdateOne {
+	_u.mutation.ClearStakeholderIdentityHolder()
+	return _u
+}
+
+// ClearDelegateUser clears the "delegate_user" edge to the User entity.
+func (_u *RiskUpdateOne) ClearDelegateUser() *RiskUpdateOne {
+	_u.mutation.ClearDelegateUser()
+	return _u
+}
+
+// ClearDelegateGroup clears the "delegate_group" edge to the Group entity.
+func (_u *RiskUpdateOne) ClearDelegateGroup() *RiskUpdateOne {
+	_u.mutation.ClearDelegateGroup()
+	return _u
+}
+
+// ClearDelegateIdentityHolder clears the "delegate_identity_holder" edge to the IdentityHolder entity.
+func (_u *RiskUpdateOne) ClearDelegateIdentityHolder() *RiskUpdateOne {
+	_u.mutation.ClearDelegateIdentityHolder()
+	return _u
 }
 
 // ClearRiskKind clears the "risk_kind" edge to the CustomTypeEnum entity.
@@ -5309,6 +5949,18 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 	if _u.mutation.IntegrationRunIDCleared() {
 		_spec.ClearField(risk.FieldIntegrationRunID, field.TypeString)
 	}
+	if value, ok := _u.mutation.StakeholderName(); ok {
+		_spec.SetField(risk.FieldStakeholderName, field.TypeString, value)
+	}
+	if _u.mutation.StakeholderNameCleared() {
+		_spec.ClearField(risk.FieldStakeholderName, field.TypeString)
+	}
+	if value, ok := _u.mutation.DelegateName(); ok {
+		_spec.SetField(risk.FieldDelegateName, field.TypeString, value)
+	}
+	if _u.mutation.DelegateNameCleared() {
+		_spec.ClearField(risk.FieldDelegateName, field.TypeString)
+	}
 	if value, ok := _u.mutation.RiskKindName(); ok {
 		_spec.SetField(risk.FieldRiskKindName, field.TypeString, value)
 	}
@@ -5668,6 +6320,180 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.StakeholderUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderUserTable,
+			Columns: []string{risk.StakeholderUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.StakeholderUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderUserTable,
+			Columns: []string{risk.StakeholderUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.StakeholderGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderGroupTable,
+			Columns: []string{risk.StakeholderGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.StakeholderGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderGroupTable,
+			Columns: []string{risk.StakeholderGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.StakeholderIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderIdentityHolderTable,
+			Columns: []string{risk.StakeholderIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.StakeholderIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderIdentityHolderTable,
+			Columns: []string{risk.StakeholderIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DelegateUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateUserTable,
+			Columns: []string{risk.DelegateUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DelegateUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateUserTable,
+			Columns: []string{risk.DelegateUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DelegateGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateGroupTable,
+			Columns: []string{risk.DelegateGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DelegateGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateGroupTable,
+			Columns: []string{risk.DelegateGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DelegateIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateIdentityHolderTable,
+			Columns: []string{risk.DelegateIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DelegateIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateIdentityHolderTable,
+			Columns: []string{risk.DelegateIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

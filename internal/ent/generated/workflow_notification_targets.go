@@ -398,6 +398,16 @@ func (c *Client) resolveFindingNotificationTargets(ctx context.Context, objectID
 			return nil, err
 		}
 		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("INTERNAL_OWNER_USER"):
+		if obj.InternalOwnerUserID != "" {
+			return []string{obj.InternalOwnerUserID}, nil
+		}
+		return nil, nil
+	case NotificationTargetType("INTERNAL_OWNER_GROUP"):
+		if obj.InternalOwnerGroupID != "" {
+			return c.resolveGroupMemberIDs(ctx, obj.InternalOwnerGroupID)
+		}
+		return nil, nil
 	case NotificationTargetType("REVIEWED_BY_USER"):
 		if obj.ReviewedByUserID != "" {
 			return []string{obj.ReviewedByUserID}, nil
@@ -714,6 +724,26 @@ func (c *Client) resolveRiskNotificationTargets(ctx context.Context, objectID st
 			return nil, err
 		}
 		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("STAKEHOLDER_USER"):
+		if obj.StakeholderUserID != "" {
+			return []string{obj.StakeholderUserID}, nil
+		}
+		return nil, nil
+	case NotificationTargetType("STAKEHOLDER_GROUP"):
+		if obj.StakeholderGroupID != "" {
+			return c.resolveGroupMemberIDs(ctx, obj.StakeholderGroupID)
+		}
+		return nil, nil
+	case NotificationTargetType("DELEGATE_USER"):
+		if obj.DelegateUserID != "" {
+			return []string{obj.DelegateUserID}, nil
+		}
+		return nil, nil
+	case NotificationTargetType("DELEGATE_GROUP"):
+		if obj.DelegateGroupID != "" {
+			return c.resolveGroupMemberIDs(ctx, obj.DelegateGroupID)
+		}
+		return nil, nil
 	case NotificationTargetType("STAKEHOLDER"):
 		if obj.StakeholderID != "" {
 			return c.resolveGroupMemberIDs(ctx, obj.StakeholderID)
@@ -831,6 +861,16 @@ func (c *Client) resolveVulnerabilityNotificationTargets(ctx context.Context, ob
 			return nil, err
 		}
 		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("INTERNAL_OWNER_USER"):
+		if obj.InternalOwnerUserID != "" {
+			return []string{obj.InternalOwnerUserID}, nil
+		}
+		return nil, nil
+	case NotificationTargetType("INTERNAL_OWNER_GROUP"):
+		if obj.InternalOwnerGroupID != "" {
+			return c.resolveGroupMemberIDs(ctx, obj.InternalOwnerGroupID)
+		}
+		return nil, nil
 	case NotificationTargetType("REVIEWED_BY_USER"):
 		if obj.ReviewedByUserID != "" {
 			return []string{obj.ReviewedByUserID}, nil

@@ -59,6 +59,22 @@ type RiskHistory struct {
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the stakeholder for the risk when no user, group, or identity holder is linked
+	StakeholderName string `json:"stakeholder_name,omitempty"`
+	// the stakeholder user id for the risk
+	StakeholderUserID string `json:"stakeholder_user_id,omitempty"`
+	// the stakeholder group id for the risk
+	StakeholderGroupID string `json:"stakeholder_group_id,omitempty"`
+	// the stakeholder identity holder id for the risk
+	StakeholderIdentityHolderID string `json:"stakeholder_identity_holder_id,omitempty"`
+	// the delegate for the risk when no user, group, or identity holder is linked
+	DelegateName string `json:"delegate_name,omitempty"`
+	// the delegate user id for the risk
+	DelegateUserID string `json:"delegate_user_id,omitempty"`
+	// the delegate group id for the risk
+	DelegateGroupID string `json:"delegate_group_id,omitempty"`
+	// the delegate identity holder id for the risk
+	DelegateIdentityHolderID string `json:"delegate_identity_holder_id,omitempty"`
 	// the kind of the risk
 	RiskKindName string `json:"risk_kind_name,omitempty"`
 	// the kind of the risk
@@ -145,7 +161,7 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case riskhistory.FieldScore, riskhistory.FieldResidualScore:
 			values[i] = new(sql.NullInt64)
-		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldUpdatedByImpersonator, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldSourceDefinitionID, riskhistory.FieldSourceDefinitionVersion, riskhistory.FieldSourceInstanceID, riskhistory.FieldManagedBy, riskhistory.FieldIntegrationRunID, riskhistory.FieldOwnerID, riskhistory.FieldRiskKindName, riskhistory.FieldRiskKindID, riskhistory.FieldRiskCategoryName, riskhistory.FieldRiskCategoryID, riskhistory.FieldEnvironmentName, riskhistory.FieldEnvironmentID, riskhistory.FieldScopeName, riskhistory.FieldScopeID, riskhistory.FieldExternalID, riskhistory.FieldIntegrationID, riskhistory.FieldExternalUUID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID, riskhistory.FieldReviewFrequency, riskhistory.FieldRiskDecision:
+		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldUpdatedByImpersonator, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldSourceDefinitionID, riskhistory.FieldSourceDefinitionVersion, riskhistory.FieldSourceInstanceID, riskhistory.FieldManagedBy, riskhistory.FieldIntegrationRunID, riskhistory.FieldOwnerID, riskhistory.FieldStakeholderName, riskhistory.FieldStakeholderUserID, riskhistory.FieldStakeholderGroupID, riskhistory.FieldStakeholderIdentityHolderID, riskhistory.FieldDelegateName, riskhistory.FieldDelegateUserID, riskhistory.FieldDelegateGroupID, riskhistory.FieldDelegateIdentityHolderID, riskhistory.FieldRiskKindName, riskhistory.FieldRiskKindID, riskhistory.FieldRiskCategoryName, riskhistory.FieldRiskCategoryID, riskhistory.FieldEnvironmentName, riskhistory.FieldEnvironmentID, riskhistory.FieldScopeName, riskhistory.FieldScopeID, riskhistory.FieldExternalID, riskhistory.FieldIntegrationID, riskhistory.FieldExternalUUID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID, riskhistory.FieldReviewFrequency, riskhistory.FieldRiskDecision:
 			values[i] = new(sql.NullString)
 		case riskhistory.FieldHistoryTime, riskhistory.FieldCreatedAt, riskhistory.FieldUpdatedAt, riskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -280,6 +296,54 @@ func (_m *RiskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case riskhistory.FieldStakeholderName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stakeholder_name", values[i])
+			} else if value.Valid {
+				_m.StakeholderName = value.String
+			}
+		case riskhistory.FieldStakeholderUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stakeholder_user_id", values[i])
+			} else if value.Valid {
+				_m.StakeholderUserID = value.String
+			}
+		case riskhistory.FieldStakeholderGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stakeholder_group_id", values[i])
+			} else if value.Valid {
+				_m.StakeholderGroupID = value.String
+			}
+		case riskhistory.FieldStakeholderIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stakeholder_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.StakeholderIdentityHolderID = value.String
+			}
+		case riskhistory.FieldDelegateName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_name", values[i])
+			} else if value.Valid {
+				_m.DelegateName = value.String
+			}
+		case riskhistory.FieldDelegateUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_user_id", values[i])
+			} else if value.Valid {
+				_m.DelegateUserID = value.String
+			}
+		case riskhistory.FieldDelegateGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_group_id", values[i])
+			} else if value.Valid {
+				_m.DelegateGroupID = value.String
+			}
+		case riskhistory.FieldDelegateIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.DelegateIdentityHolderID = value.String
 			}
 		case riskhistory.FieldRiskKindName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -588,6 +652,30 @@ func (_m *RiskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("stakeholder_name=")
+	builder.WriteString(_m.StakeholderName)
+	builder.WriteString(", ")
+	builder.WriteString("stakeholder_user_id=")
+	builder.WriteString(_m.StakeholderUserID)
+	builder.WriteString(", ")
+	builder.WriteString("stakeholder_group_id=")
+	builder.WriteString(_m.StakeholderGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("stakeholder_identity_holder_id=")
+	builder.WriteString(_m.StakeholderIdentityHolderID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_name=")
+	builder.WriteString(_m.DelegateName)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_user_id=")
+	builder.WriteString(_m.DelegateUserID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_group_id=")
+	builder.WriteString(_m.DelegateGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_identity_holder_id=")
+	builder.WriteString(_m.DelegateIdentityHolderID)
 	builder.WriteString(", ")
 	builder.WriteString("risk_kind_name=")
 	builder.WriteString(_m.RiskKindName)
