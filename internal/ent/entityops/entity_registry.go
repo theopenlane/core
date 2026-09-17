@@ -755,6 +755,42 @@ func stampProvenanceKey(doc map[string]json.RawMessage, key string, value any) b
 	return true
 }
 
+// applyStampedFields sets the stamped provenance keys carried by payload on the mutation by name, for
+// fields the schema's GraphQL input type does not carry
+func applyStampedFields(mutation ent.Mutation, payload json.RawMessage, fields ...string) error {
+	for _, field := range fields {
+		v := lookupValue(payload, field)
+		if v == "" {
+			continue
+		}
+
+		if err := mutation.SetField(field, v); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// carryStampedKeys copies the stamped provenance keys carried by payload onto prepared, which was
+// re-encoded through the GraphQL create input type and so no longer holds them
+func carryStampedKeys(prepared, payload json.RawMessage, fields ...string) (json.RawMessage, error) {
+	for _, field := range fields {
+		v := lookupValue(payload, field)
+		if v == "" {
+			continue
+		}
+
+		var err error
+
+		if prepared, _, err = jsonx.SetObjectKey(prepared, field, v); err != nil {
+			return nil, err
+		}
+	}
+
+	return prepared, nil
+}
+
 // activeIntegrationsKey carries the ctx-scoped set of integration active answers
 var activeIntegrationsKey = contextx.NewKey[map[string]bool]()
 
@@ -1341,7 +1377,13 @@ var (
 				return "", logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			entity, err := client.ActionPlan.Create().SetInput(decoded).Save(ctx)
+			builder := client.ActionPlan.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
 			if err != nil {
 				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
 			}
@@ -1356,7 +1398,13 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.ActionPlan.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.ActionPlan.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -1428,7 +1476,9 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.Assessment.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.Assessment.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -1533,7 +1583,13 @@ var (
 				return "", logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			entity, err := client.Asset.Create().SetInput(decoded).Save(ctx)
+			builder := client.Asset.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
 			if err != nil {
 				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
 			}
@@ -1548,7 +1604,13 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.Asset.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.Asset.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -1613,7 +1675,9 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.Campaign.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.Campaign.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -1682,7 +1746,9 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.CampaignTarget.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.CampaignTarget.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -1756,7 +1822,13 @@ var (
 				return "", logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			entity, err := client.CheckResult.Create().SetInput(decoded).Save(ctx)
+			builder := client.CheckResult.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
 			if err != nil {
 				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
 			}
@@ -1771,7 +1843,13 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.CheckResult.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.CheckResult.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -1816,7 +1894,13 @@ var (
 				return "", logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			entity, err := client.Contact.Create().SetInput(decoded).Save(ctx)
+			builder := client.Contact.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
 			if err != nil {
 				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
 			}
@@ -1831,7 +1915,13 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.Contact.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.Contact.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -1896,7 +1986,9 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.Control.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.Control.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -2153,7 +2245,13 @@ var (
 				return "", logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			entity, err := client.DirectoryAccount.Create().SetInput(decoded).Save(ctx)
+			builder := client.DirectoryAccount.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
 			if err != nil {
 				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
 			}
@@ -2168,7 +2266,13 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.DirectoryAccount.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.DirectoryAccount.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -2238,7 +2342,13 @@ var (
 				return "", logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			entity, err := client.DirectoryGroup.Create().SetInput(decoded).Save(ctx)
+			builder := client.DirectoryGroup.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
 			if err != nil {
 				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
 			}
@@ -2253,7 +2363,13 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.DirectoryGroup.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.DirectoryGroup.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -2324,7 +2440,13 @@ var (
 				return "", logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			entity, err := client.DirectoryMembership.Create().SetInput(decoded).Save(ctx)
+			builder := client.DirectoryMembership.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
 			if err != nil {
 				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
 			}
@@ -2339,7 +2461,13 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.DirectoryMembership.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.DirectoryMembership.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -2544,7 +2672,13 @@ var (
 				return "", logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			entity, err := client.Entity.Create().SetInput(decoded).Save(ctx)
+			builder := client.Entity.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
 			if err != nil {
 				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
 			}
@@ -2559,7 +2693,13 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.Entity.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.Entity.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -2694,7 +2834,9 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.Evidence.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.Evidence.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -2813,7 +2955,13 @@ var (
 				return "", logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			entity, err := client.Finding.Create().SetInput(decoded).Save(ctx)
+			builder := client.Finding.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
 			if err != nil {
 				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
 			}
@@ -2828,7 +2976,13 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.Finding.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.Finding.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -3060,7 +3214,9 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.IdentityHolder.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.IdentityHolder.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -3277,7 +3433,13 @@ var (
 				return "", logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			entity, err := client.InternalPolicy.Create().SetInput(decoded).Save(ctx)
+			builder := client.InternalPolicy.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
 			if err != nil {
 				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
 			}
@@ -3292,7 +3454,13 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.InternalPolicy.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.InternalPolicy.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -3814,7 +3982,9 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.Platform.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.Platform.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -3890,7 +4060,13 @@ var (
 				return "", logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			entity, err := client.Procedure.Create().SetInput(decoded).Save(ctx)
+			builder := client.Procedure.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
 			if err != nil {
 				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
 			}
@@ -3905,7 +4081,13 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.Procedure.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.Procedure.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -4047,7 +4229,9 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.Remediation.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.Remediation.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -4169,7 +4353,13 @@ var (
 				return "", logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			entity, err := client.Risk.Create().SetInput(decoded).Save(ctx)
+			builder := client.Risk.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
 			if err != nil {
 				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
 			}
@@ -4184,7 +4374,13 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.Risk.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.Risk.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -4347,7 +4543,9 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.Subcontrol.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.Subcontrol.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -4600,7 +4798,9 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.Task.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.Task.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -5008,7 +5208,13 @@ var (
 				return "", logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			entity, err := client.Vulnerability.Create().SetInput(decoded).Save(ctx)
+			builder := client.Vulnerability.Create().SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return "", logError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			entity, err := builder.Save(ctx)
 			if err != nil {
 				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
 			}
@@ -5023,7 +5229,13 @@ var (
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
-			if err := client.Vulnerability.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+			builder := client.Vulnerability.UpdateOneID(entityID).SetInput(decoded)
+
+			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+				return logError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			if err := builder.Exec(ctx); err != nil {
 				return logPersistError(ctx, ref, ErrUpdateFailed, err)
 			}
 
@@ -20068,6 +20280,11 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
 		return prepared, nil
 	}
 	SchemaAsset.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
@@ -20096,6 +20313,11 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
 		return prepared, nil
 	}
 	SchemaCheckResult.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
@@ -20106,6 +20328,11 @@ func init() {
 			return nil, logError(ctx, ref, ErrDecodeFailed, err)
 		}
 		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -20141,6 +20368,11 @@ func init() {
 			}
 		}
 		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -20201,6 +20433,11 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
 		return prepared, nil
 	}
 	SchemaDirectoryGroup.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
@@ -20229,6 +20466,11 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
 		return prepared, nil
 	}
 	SchemaDirectoryMembership.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
@@ -20246,6 +20488,11 @@ func init() {
 			}
 		}
 		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -20313,6 +20560,11 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
 		return prepared, nil
 	}
 	SchemaFinding.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
@@ -20330,6 +20582,11 @@ func init() {
 			}
 		}
 		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -20362,6 +20619,11 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
 		return prepared, nil
 	}
 	SchemaProcedure.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
@@ -20390,6 +20652,11 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
 		return prepared, nil
 	}
 	SchemaRisk.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
@@ -20407,6 +20674,11 @@ func init() {
 			}
 		}
 		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
@@ -20432,6 +20704,11 @@ func init() {
 			return nil, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
+		prepared, err = carryStampedKeys(prepared, payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
 		return prepared, nil
 	}
 	SchemaActionPlan.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
@@ -20448,6 +20725,10 @@ func init() {
 		}
 
 		update := client.ActionPlan.UpdateOne(&existing).SetInput(input)
+
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
 
 		guarded := false
 
@@ -20483,6 +20764,10 @@ func init() {
 
 		update := client.Asset.UpdateOne(&existing).SetInput(input)
 
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
+
 		guarded := false
 
 		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
@@ -20516,6 +20801,10 @@ func init() {
 		}
 
 		update := client.CheckResult.UpdateOne(&existing).SetInput(input)
+
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
 
 		guarded := false
 
@@ -20551,6 +20840,10 @@ func init() {
 
 		update := client.Contact.UpdateOne(&existing).SetInput(input)
 
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
+
 		guarded := false
 
 		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
@@ -20584,6 +20877,10 @@ func init() {
 		}
 
 		update := client.DirectoryAccount.UpdateOne(&existing).SetInput(input)
+
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
 
 		guarded := false
 
@@ -20619,6 +20916,10 @@ func init() {
 
 		update := client.DirectoryGroup.UpdateOne(&existing).SetInput(input)
 
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
+
 		guarded := false
 
 		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
@@ -20652,6 +20953,10 @@ func init() {
 		}
 
 		update := client.DirectoryMembership.UpdateOne(&existing).SetInput(input)
+
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
 
 		guarded := false
 
@@ -20687,6 +20992,10 @@ func init() {
 
 		update := client.Entity.UpdateOne(&existing).SetInput(input)
 
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
+
 		guarded := false
 
 		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
@@ -20720,6 +21029,10 @@ func init() {
 		}
 
 		update := client.Finding.UpdateOne(&existing).SetInput(input)
+
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
 
 		guarded := false
 
@@ -20755,6 +21068,10 @@ func init() {
 
 		update := client.InternalPolicy.UpdateOne(&existing).SetInput(input)
 
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
+
 		guarded := false
 
 		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
@@ -20788,6 +21105,10 @@ func init() {
 		}
 
 		update := client.Procedure.UpdateOne(&existing).SetInput(input)
+
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
 
 		guarded := false
 
@@ -20823,6 +21144,10 @@ func init() {
 
 		update := client.Risk.UpdateOne(&existing).SetInput(input)
 
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
+
 		guarded := false
 
 		if runID := lookupValue(payload, FieldIntegrationRunID); runID != "" {
@@ -20856,6 +21181,10 @@ func init() {
 		}
 
 		update := client.Vulnerability.UpdateOne(&existing).SetInput(input)
+
+		if err := applyStampedFields(update.Mutation(), payload, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			return nil, nil, logError(ctx, ref, ErrUpdateFailed, err)
+		}
 
 		guarded := false
 

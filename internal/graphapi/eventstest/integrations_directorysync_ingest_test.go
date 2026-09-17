@@ -341,8 +341,8 @@ func TestDirectoryAccountReinstallRelinkNoUpdate(t *testing.T) {
 	assert.Check(t, is.Equal(installationA.ID, after.IntegrationID), "integration_id stays on the original installation: provenance repoints only ride along an actual write, and no other field changed to justify one")
 }
 
-// TestDirectoryAccountProfileChangePersisted verifies a change confined to the profile bag is a material update: it is written, counted, and emitted
-func TestDirectoryAccountProfileChangePersisted(t *testing.T) {
+// TestDirectoryAccountProfileChurnRidesAlongMaterialChange verifies a change confined to the profile bag is not written, counted, or emitted on its own, and lands once a material column changes in the same run
+func TestDirectoryAccountProfileChurnRidesAlongMaterialChange(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	var accountUpdates atomic.Int64
@@ -388,15 +388,28 @@ func TestDirectoryAccountProfileChangePersisted(t *testing.T) {
 
 	churned := `{"external_id":"churn-acct-1","canonical_email":"churn1@example.com","display_name":"Churn User","profile":{"id":"churn-acct-1","displayName":"Churn User","lastLoginTime":"2024-06-01T00:00:00Z"}}`
 
-	result := ingestDirectoryPayloads(ctx, t, installation, entityops.SchemaDirectoryAccount.Name, churned)
+	churnResult := ingestDirectoryPayloads(ctx, t, installation, entityops.SchemaDirectoryAccount.Name, churned)
 	waitForGala(t, setup.Runtime)
 
-	assert.Check(t, is.Equal(1, result.Changed), "a profile change must count as changed")
-	assert.Check(t, is.Equal(int64(1), accountUpdates.Load()), "a profile change must emit exactly one update mutation event")
+	assert.Check(t, is.Equal(0, churnResult.Changed), "a profile-only change must not count as changed")
+	assert.Check(t, is.Equal(int64(0), accountUpdates.Load()), "a profile-only change must not emit an update mutation event")
+
+	afterChurn := directoryAccountByExternalID(ctx, t, "churn-acct-1")
+	assert.Check(t, is.Equal("2024-01-01T00:00:00Z", before.Profile["lastLoginTime"]))
+	assert.Check(t, is.Equal("2024-01-01T00:00:00Z", afterChurn.Profile["lastLoginTime"]), "a profile-only change must not be written")
+	assert.Check(t, afterChurn.UpdatedAt.Equal(before.UpdatedAt), "a profile-only change must not rewrite the row")
+
+	materialized := `{"external_id":"churn-acct-1","canonical_email":"churn1@example.com","display_name":"Churn User Updated","profile":{"id":"churn-acct-1","displayName":"Churn User Updated","lastLoginTime":"2024-06-01T00:00:00Z"}}`
+
+	materialResult := ingestDirectoryPayloads(ctx, t, installation, entityops.SchemaDirectoryAccount.Name, materialized)
+	waitForGala(t, setup.Runtime)
+
+	assert.Check(t, is.Equal(1, materialResult.Changed), "a display-name change must count as changed")
+	assert.Check(t, is.Equal(int64(1), accountUpdates.Load()), "a display-name change must emit exactly one update mutation event")
 
 	after := directoryAccountByExternalID(ctx, t, "churn-acct-1")
-	assert.Check(t, is.Equal("2024-01-01T00:00:00Z", before.Profile["lastLoginTime"]))
-	assert.Check(t, is.Equal("2024-06-01T00:00:00Z", after.Profile["lastLoginTime"]), "the stored profile must carry the new value")
+	assert.Check(t, is.Equal("Churn User Updated", after.DisplayName))
+	assert.Check(t, is.Equal("2024-06-01T00:00:00Z", after.Profile["lastLoginTime"]), "the profile must ride along the material change")
 }
 
 // TestDirectoryMembershipStaleRunUnchangedNoop verifies a batched run whose id is older than the

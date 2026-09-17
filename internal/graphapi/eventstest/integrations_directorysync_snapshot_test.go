@@ -90,8 +90,8 @@ func TestDirectoryFullSnapshotIdleResyncWritesNothing(t *testing.T) {
 	assert.Check(t, is.Equal(materialChange.account(changedExternalID).DisplayName, after.DisplayName))
 }
 
-// TestDirectoryGroupProfileChangePersisted verifies a change confined to the group profile bag is a material update, and a later display-name change is one more
-func TestDirectoryGroupProfileChangePersisted(t *testing.T) {
+// TestDirectoryGroupProfileChurnRidesAlongMaterialChange verifies a change confined to the group profile bag is not written, counted, or emitted on its own, and lands once a display-name change follows
+func TestDirectoryGroupProfileChurnRidesAlongMaterialChange(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	const prefix = "grpchurn"
@@ -123,12 +123,13 @@ func TestDirectoryGroupProfileChangePersisted(t *testing.T) {
 	waitForGala(t, counters.Runtime)
 
 	assert.Check(t, is.Equal(0, churnResult.Failed))
-	assert.Check(t, is.Equal(1, churnResult.Changed), "a group profile change must count as changed")
-	assert.Check(t, is.Equal(int64(1), counters.GroupUpdates.Load()), "a group profile change must emit exactly one update mutation event")
+	assert.Check(t, is.Equal(0, churnResult.Changed), "a group profile-only change must not count as changed")
+	assert.Check(t, is.Equal(int64(0), counters.GroupUpdates.Load()), "a group profile-only change must not emit an update mutation event")
 
 	afterChurn := directoryGroupByExternalID(ctx, t, groupExternalID)
 	assert.Check(t, is.Equal(before.DisplayName, afterChurn.DisplayName), "a profile-only change must not touch other fields")
-	assert.Check(t, afterChurn.Profile["lastLoginTime"] == directoryProfileChurnedLastLogin, "the stored profile must carry the new value")
+	assert.Check(t, is.Equal(before.Profile["lastLoginTime"], afterChurn.Profile["lastLoginTime"]), "a profile-only change must not be written")
+	assert.Check(t, afterChurn.UpdatedAt.Equal(before.UpdatedAt), "a profile-only change must not rewrite the row")
 
 	materialized := churned.withGroupMaterialChange(groupExternalID)
 	materialResult := ingestDirectorySnapshotFixture(ctx, t, integration, materialized, true)
@@ -136,12 +137,12 @@ func TestDirectoryGroupProfileChangePersisted(t *testing.T) {
 
 	assert.Check(t, is.Equal(0, materialResult.Failed))
 	assert.Check(t, is.Equal(1, materialResult.Changed), "a display-name change must count as changed")
-	assert.Check(t, is.Equal(int64(2), counters.GroupUpdates.Load()), "a display-name change must emit one more update mutation event")
+	assert.Check(t, is.Equal(int64(1), counters.GroupUpdates.Load()), "a display-name change must emit exactly one update mutation event")
 
 	after := directoryGroupByExternalID(ctx, t, groupExternalID)
 	assert.Check(t, is.Equal(materialized.group(groupExternalID).DisplayName, after.DisplayName))
 	assert.Check(t, !after.UpdatedAt.Equal(afterChurn.UpdatedAt), "a material group change must rewrite the row")
-	assert.Check(t, after.Profile["lastLoginTime"] == directoryProfileChurnedLastLogin, "the profile value written by the earlier change must survive")
+	assert.Check(t, after.Profile["lastLoginTime"] == directoryProfileChurnedLastLogin, "the profile must ride along the material change")
 }
 
 // TestDirectoryMembershipMetadataChangePersisted verifies a change confined to membership metadata is a material update that is written and emitted
