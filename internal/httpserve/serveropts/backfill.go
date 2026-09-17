@@ -69,7 +69,7 @@ type backfillRoutine struct {
 var backfillRoutines = []backfillRoutine{
 	{
 		Name:    "backfill-schema-responsibilities",
-		Version: "v2",
+		Version: "v1",
 		Enabled: true,
 		Run: func(ctx context.Context, deps backfillDeps) error {
 			return backfillSchemaResponsibilities(ctx, deps.Client)
