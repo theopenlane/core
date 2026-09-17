@@ -147,8 +147,6 @@ require (
 	gotest.tools/v3 v3.5.2
 )
 
-replace github.com/theopenlane/iam => ../iam/
-
 require (
 	cel.dev/expr v0.25.2 // indirect
 	cloud.google.com/go v0.123.0 // indirect
