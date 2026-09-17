@@ -620,11 +620,14 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 }
 
 // enableModules enables the selected organization modules for the given organization
+// and deactivates any trial modules outside the selection so the org has exactly those modules
 func (o *OrganizationBuilder) enableModules(ctx context.Context, t *testing.T, orgID string) {
 	features := o.Features
 
 	if len(o.Features) == 0 {
 		features = models.AllOrgModules
+	} else {
+		o.deactivateModulesNotIn(ctx, t, orgID, features)
 	}
 
 	err := entitlements.CreateFeatureTuples(ctx, o.Client.FGA, orgID, features)
@@ -652,6 +655,24 @@ func (o *OrganizationBuilder) enableModules(ctx context.Context, t *testing.T, o
 		}
 	}
 
+}
+
+// deactivateModulesNotIn deactivates active org modules outside the given set one at a time
+// so the org module hook removes their feature tuples
+func (o *OrganizationBuilder) deactivateModulesNotIn(ctx context.Context, t *testing.T, orgID string, features []models.OrgModule) {
+	extra, err := o.Client.DB.OrgModule.Query().
+		Where(
+			orgmodule.OwnerID(orgID),
+			orgmodule.Active(true),
+			orgmodule.ModuleNotIn(features...),
+		).
+		All(ctx)
+	assert.NilError(t, err)
+
+	for _, mod := range extra {
+		_, err := o.Client.DB.OrgModule.UpdateOneID(mod.ID).SetActive(false).Save(ctx)
+		assert.NilError(t, err)
+	}
 }
 
 // MustNew user builder is used to create, without authz checks, users in the database

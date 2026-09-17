@@ -55,8 +55,8 @@ func (s SendBrandedCampaign) Handle() types.OperationHandler {
 	return providerkit.WithClientRequestConfig(emailClientRef, SendCampaignOp, ErrTemplateRenderFailed, s.Run)
 }
 
-// brandedCampaignEdges eager-loads the email template (with inline files) and trust center
-// setting edges needed to render branded campaign messages
+// brandedCampaignEdges eager-loads the email template (with inline files) edge needed to
+// render branded campaign messages
 func brandedCampaignEdges(q *generated.CampaignQuery) {
 	q.WithEmailTemplate(func(tq *generated.EmailTemplateQuery) {
 		tq.WithFiles(func(fq *generated.FileQuery) {
@@ -67,10 +67,23 @@ func brandedCampaignEdges(q *generated.CampaignQuery) {
 				file.FieldFileContents)
 		})
 	})
-	// trust center campaigns brand the email from the trust center setting
-	q.WithTrustCenter(func(tcq *generated.TrustCenterQuery) {
-		tcq.WithSetting()
-	})
+}
+
+// loadTrustCenterBranding loads the trust center and its setting onto the campaign edges for
+// trust center update campaigns only, so other campaign types never touch the trust center module
+func loadTrustCenterBranding(ctx context.Context, camp *generated.Campaign) error {
+	if camp.CampaignType != enums.CampaignTypeTrustCenterUpdate {
+		return nil
+	}
+
+	tc, err := camp.QueryTrustCenter().WithSetting().Only(ctx)
+	if err != nil {
+		return err
+	}
+
+	camp.Edges.TrustCenter = tc
+
+	return nil
 }
 
 // campaignOverlay builds the campaign template context shared by all recipients
@@ -93,6 +106,12 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 
 	camp, dispatchable, skipped, err := loadCampaignWithTargets(ctx, req.DB, cfg.CampaignDispatchInput, brandedCampaignEdges)
 	if err != nil {
+		return nil, err
+	}
+
+	if err := loadTrustCenterBranding(ctx, camp); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Msg("failed loading trust center branding")
+
 		return nil, err
 	}
 
@@ -131,6 +150,12 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 func sendBrandedCampaignTestEmail(ctx context.Context, db *generated.Client, client *Client, cfg SendBrandedCampaignRequest) (json.RawMessage, error) {
 	camp, err := loadCampaign(ctx, db, cfg.CampaignID, brandedCampaignEdges)
 	if err != nil {
+		return nil, err
+	}
+
+	if err := loadTrustCenterBranding(ctx, camp); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Msg("failed loading trust center branding")
+
 		return nil, err
 	}
 
