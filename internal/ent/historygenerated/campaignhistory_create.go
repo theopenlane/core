@@ -1019,7 +1019,7 @@ func (_c *CampaignHistoryCreate) createSpec() (*CampaignHistory, *sqlgraph.Creat
 	}
 	if value, ok := _c.mutation.TrustCenterID(); ok {
 		_spec.SetField(campaignhistory.FieldTrustCenterID, field.TypeString, value)
-		_node.TrustCenterID = value
+		_node.TrustCenterID = &value
 	}
 	return _node, _spec
 }

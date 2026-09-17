@@ -1827,7 +1827,10 @@ func (_q *CampaignQuery) loadTrustCenter(ctx context.Context, query *TrustCenter
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Campaign)
 	for i := range nodes {
-		fk := nodes[i].TrustCenterID
+		if nodes[i].TrustCenterID == nil {
+			continue
+		}
+		fk := *nodes[i].TrustCenterID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
