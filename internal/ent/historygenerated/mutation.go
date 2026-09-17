@@ -16041,7 +16041,7 @@ func (m *CampaignHistoryMutation) TrustCenterID() (r string, exists bool) {
 // OldTrustCenterID returns the old "trust_center_id" field's value of the CampaignHistory entity.
 // If the CampaignHistory object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *CampaignHistoryMutation) OldTrustCenterID(ctx context.Context) (v string, err error) {
+func (m *CampaignHistoryMutation) OldTrustCenterID(ctx context.Context) (v *string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldTrustCenterID is only allowed on UpdateOne operations")
 	}
