@@ -22,6 +22,26 @@ type ActionPlanHistory implements Node {
   """
   revision: String
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the name of the action_plan
   """
   name: String!
@@ -406,6 +426,76 @@ input ActionPlanHistoryWhereInput {
   revisionNotNil: Boolean
   revisionEqualFold: String
   revisionContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   name field predicates
   """
@@ -1623,6 +1713,26 @@ type AssetHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -1991,6 +2101,76 @@ input AssetHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -3689,6 +3869,26 @@ type ContactHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the organization id that owns the object
   """
   ownerID: String
@@ -3918,6 +4118,76 @@ input ContactHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -7117,6 +7387,26 @@ type EntityHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -7589,6 +7879,76 @@ input EntityHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -10025,6 +10385,26 @@ type FindingHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -10445,6 +10825,76 @@ input FindingHistoryWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -13030,6 +13480,26 @@ type InternalPolicyHistory implements Node {
   """
   revision: String
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the organization id that owns the object
   """
   ownerID: String
@@ -13389,6 +13859,76 @@ input InternalPolicyHistoryWhereInput {
   revisionNotNil: Boolean
   revisionEqualFold: String
   revisionContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -18414,6 +18954,26 @@ type ProcedureHistory implements Node {
   """
   revision: String
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the organization id that owns the object
   """
   ownerID: String
@@ -18769,6 +19329,76 @@ input ProcedureHistoryWhereInput {
   revisionNotNil: Boolean
   revisionEqualFold: String
   revisionContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -23236,6 +23866,26 @@ type RiskHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -23621,6 +24271,76 @@ input RiskHistoryWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """
@@ -31885,6 +32605,26 @@ type VulnerabilityHistory implements Node {
   """
   tags: [String!]
   """
+  canonical id of the integration definition that created or last enriched the record
+  """
+  sourceDefinitionID: String
+  """
+  integration definition version recorded when the record was created or last enriched
+  """
+  sourceDefinitionVersion: String
+  """
+  stable identifier of the external system instance the record was sourced from
+  """
+  sourceInstanceID: String
+  """
+  id of the integration installation managing the record, empty when the record is unclaimed
+  """
+  managedBy: String
+  """
+  id of the integration run that last wrote this record
+  """
+  integrationRunID: String
+  """
   the ID of the organization owner of the object
   """
   ownerID: String
@@ -32325,6 +33065,76 @@ input VulnerabilityHistoryWhereInput {
   displayIDHasSuffix: String
   displayIDEqualFold: String
   displayIDContainsFold: String
+  """
+  source_definition_id field predicates
+  """
+  sourceDefinitionID: String
+  sourceDefinitionIDNEQ: String
+  sourceDefinitionIDIn: [String!]
+  sourceDefinitionIDNotIn: [String!]
+  sourceDefinitionIDContains: String
+  sourceDefinitionIDHasPrefix: String
+  sourceDefinitionIDHasSuffix: String
+  sourceDefinitionIDIsNil: Boolean
+  sourceDefinitionIDNotNil: Boolean
+  sourceDefinitionIDEqualFold: String
+  sourceDefinitionIDContainsFold: String
+  """
+  source_definition_version field predicates
+  """
+  sourceDefinitionVersion: String
+  sourceDefinitionVersionNEQ: String
+  sourceDefinitionVersionIn: [String!]
+  sourceDefinitionVersionNotIn: [String!]
+  sourceDefinitionVersionContains: String
+  sourceDefinitionVersionHasPrefix: String
+  sourceDefinitionVersionHasSuffix: String
+  sourceDefinitionVersionIsNil: Boolean
+  sourceDefinitionVersionNotNil: Boolean
+  sourceDefinitionVersionEqualFold: String
+  sourceDefinitionVersionContainsFold: String
+  """
+  source_instance_id field predicates
+  """
+  sourceInstanceID: String
+  sourceInstanceIDNEQ: String
+  sourceInstanceIDIn: [String!]
+  sourceInstanceIDNotIn: [String!]
+  sourceInstanceIDContains: String
+  sourceInstanceIDHasPrefix: String
+  sourceInstanceIDHasSuffix: String
+  sourceInstanceIDIsNil: Boolean
+  sourceInstanceIDNotNil: Boolean
+  sourceInstanceIDEqualFold: String
+  sourceInstanceIDContainsFold: String
+  """
+  managed_by field predicates
+  """
+  managedBy: String
+  managedByNEQ: String
+  managedByIn: [String!]
+  managedByNotIn: [String!]
+  managedByContains: String
+  managedByHasPrefix: String
+  managedByHasSuffix: String
+  managedByIsNil: Boolean
+  managedByNotNil: Boolean
+  managedByEqualFold: String
+  managedByContainsFold: String
+  """
+  integration_run_id field predicates
+  """
+  integrationRunID: String
+  integrationRunIDNEQ: String
+  integrationRunIDIn: [String!]
+  integrationRunIDNotIn: [String!]
+  integrationRunIDContains: String
+  integrationRunIDHasPrefix: String
+  integrationRunIDHasSuffix: String
+  integrationRunIDIsNil: Boolean
+  integrationRunIDNotNil: Boolean
+  integrationRunIDEqualFold: String
+  integrationRunIDContainsFold: String
   """
   owner_id field predicates
   """

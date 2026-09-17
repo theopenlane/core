@@ -60,6 +60,8 @@ func TestExamplePayloads(t *testing.T) {
 		assert.Equal(t, "Doe", mapped["family_name"])
 		assert.Equal(t, "ACTIVE", mapped["status"])
 		assert.Equal(t, "USER", mapped["account_type"])
+		assert.Equal(t, mappingtest.Installation.Name, mapped["directory_name"])
+		assert.Equal(t, true, mapped["primary_source"])
 	})
 
 	t.Run("service_account_user_json", func(t *testing.T) {
@@ -88,6 +90,7 @@ func TestExamplePayloads(t *testing.T) {
 		assert.Equal(t, "488f8a0c-c0b6-4dce-bf79-82db3af7cdac", mapped["external_id"])
 		assert.Equal(t, "Engineering", mapped["display_name"])
 		assert.Equal(t, "ACTIVE", mapped["status"])
+		assert.Equal(t, mappingtest.Installation.Name, mapped["directory_name"])
 	})
 
 	t.Run("member_json", func(t *testing.T) {
@@ -105,6 +108,7 @@ func TestExamplePayloads(t *testing.T) {
 		assert.Equal(t, "8413c0cc-69a7-4726-a922-63e892264adc", mapped["directory_account_id"])
 		assert.Equal(t, "488f8a0c-c0b6-4dce-bf79-82db3af7cdac", mapped["directory_group_id"])
 		assert.Equal(t, "MEMBER", mapped["role"])
+		assert.Equal(t, mappingtest.Installation.Name, mapped["directory_name"])
 	})
 
 	t.Run("inactive_user", func(t *testing.T) {

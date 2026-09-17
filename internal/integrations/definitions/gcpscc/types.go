@@ -28,7 +28,21 @@ var (
 const (
 	// projectScopeSpecific indicates collection should target only the explicitly listed project IDs
 	projectScopeSpecific = "specific"
+	// organizationParentPrefix is the SCC resource name prefix for an organization-scoped parent
+	organizationParentPrefix = "organizations/"
+	// projectParentPrefix is the SCC resource name prefix for a project-scoped parent
+	projectParentPrefix = "projects/"
 )
+
+// organizationParent returns the SCC parent resource name for a GCP organization id
+func organizationParent(organizationID string) string {
+	return organizationParentPrefix + organizationID
+}
+
+// projectParent returns the SCC parent resource name for a GCP project id
+func projectParent(projectID string) string {
+	return projectParentPrefix + projectID
+}
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
@@ -108,7 +122,12 @@ type InstallationMetadata struct {
 
 // InstallationIdentity implements types.InstallationIdentifiable
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
-	return types.IntegrationInstallationIdentity{
-		ExternalID: m.OrganizationID,
+	switch {
+	case m.OrganizationID != "":
+		return types.IntegrationInstallationIdentity{ExternalID: organizationParent(m.OrganizationID)}
+	case m.ProjectID != "":
+		return types.IntegrationInstallationIdentity{ExternalID: projectParent(m.ProjectID)}
+	default:
+		return types.IntegrationInstallationIdentity{}
 	}
 }

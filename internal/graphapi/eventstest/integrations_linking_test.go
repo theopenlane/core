@@ -11,6 +11,7 @@ import (
 
 	"github.com/samber/lo"
 
+	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
@@ -68,7 +69,7 @@ func ingestFindings(ctx context.Context, t *testing.T, integration *ent.Integrat
 		Registry:    reg,
 		DB:          suite.Client.DB,
 		Integration: integration,
-	}, linkTestOperationName, def.Operations[0].Ingest, []integrationtypes.IngestPayloadSet{
+	}, linkTestOperationName, def.Operations[0].Ingest, def.Operations[0].Policy, []integrationtypes.IngestPayloadSet{
 		{Schema: entityops.SchemaFinding.Name, Envelopes: envelopes},
 	}, operations.IngestOptions{})
 
@@ -102,6 +103,7 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 		SetName("Link Test Integration").
 		SetKind("linktest").
 		SetDefinitionID("def_linktest").
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-linktest"}}).
 		Save(ctx)
 	th.RequireNoError(t, err)
 	assert.Assert(t, integration.OwnerID != "", "seeded integration must be org-owned")
@@ -134,8 +136,8 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 		{
 			TargetSchema: entityops.SchemaControl.Name,
 			TargetField:  control.FieldRefCode,
-			SourceField:  entityops.InputKeyFindingCategory,
-			SourceList:   entityops.InputKeyFindingCategories,
+			SourceField:  entityops.FindingFields.Category.InputKey,
+			SourceList:   entityops.FindingFields.Categories.InputKey,
 		},
 	}
 
@@ -221,13 +223,13 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 			{
 				TargetSchema: entityops.SchemaControl.Name,
 				TargetField:  control.FieldRefCode,
-				SourceField:  entityops.InputKeyFindingCategory,
+				SourceField:  entityops.FindingFields.Category.InputKey,
 			},
 			{
 				TargetSchema: entityops.SchemaControl.Name,
 				Edge:         "controls",
 				TargetField:  control.FieldRefCode,
-				SourceList:   entityops.InputKeyFindingCategories,
+				SourceList:   entityops.FindingFields.Categories.InputKey,
 			},
 		})
 

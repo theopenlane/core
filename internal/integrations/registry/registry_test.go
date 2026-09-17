@@ -424,6 +424,52 @@ func TestIndexOperationsIngestHandlerWithContracts(t *testing.T) {
 	}
 }
 
+// TestIndexOperationsSnapshotRequiresIngestHandle verifies Policy.Snapshot without an IngestHandle is rejected
+func TestIndexOperationsSnapshotRequiresIngestHandle(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_badsnapshot"},
+		Operations: []integrationtypes.OperationRegistration{
+			{
+				Name:   "bad_snapshot",
+				Topic:  gala.TopicName("bad_snapshot"),
+				Handle: newTestHandler(),
+				Policy: integrationtypes.ExecutionPolicy{Snapshot: true},
+			},
+		},
+	}
+
+	err := reg.Register(def)
+	if !errors.Is(err, ErrIngestSnapshotRequiresIngestHandle) {
+		t.Fatalf("expected ErrIngestSnapshotRequiresIngestHandle, got %v", err)
+	}
+}
+
+// TestIndexOperationsSnapshotWithIngestHandle verifies Policy.Snapshot with an IngestHandle succeeds
+func TestIndexOperationsSnapshotWithIngestHandle(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_goodsnapshot"},
+		Operations: []integrationtypes.OperationRegistration{
+			{
+				Name:         "good_snapshot",
+				Topic:        gala.TopicName("good_snapshot"),
+				Ingest:       []integrationtypes.IngestContract{{Schema: "directory_account"}},
+				IngestHandle: newTestIngestHandler(),
+				Policy:       integrationtypes.ExecutionPolicy{Snapshot: true},
+			},
+		},
+	}
+
+	if err := reg.Register(def); err != nil {
+		t.Fatalf("Register() error = %v", err)
+	}
+}
+
 // TestIndexOperationsClientRefNotFound verifies operation referencing unknown client is rejected
 func TestIndexOperationsClientRefNotFound(t *testing.T) {
 	t.Parallel()

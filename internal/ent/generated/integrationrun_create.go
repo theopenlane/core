@@ -11,12 +11,22 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/v2/internal/ent/generated/event"
-	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 )
 
 // IntegrationRunCreate is the builder for creating a IntegrationRun entity.
@@ -200,20 +210,6 @@ func (_c *IntegrationRunCreate) SetOperationConfig(v map[string]interface{}) *In
 	return _c
 }
 
-// SetMappingVersion sets the "mapping_version" field.
-func (_c *IntegrationRunCreate) SetMappingVersion(v string) *IntegrationRunCreate {
-	_c.mutation.SetMappingVersion(v)
-	return _c
-}
-
-// SetNillableMappingVersion sets the "mapping_version" field if the given value is not nil.
-func (_c *IntegrationRunCreate) SetNillableMappingVersion(v *string) *IntegrationRunCreate {
-	if v != nil {
-		_c.SetMappingVersion(*v)
-	}
-	return _c
-}
-
 // SetStatus sets the "status" field.
 func (_c *IntegrationRunCreate) SetStatus(v enums.IntegrationRunStatus) *IntegrationRunCreate {
 	_c.mutation.SetStatus(v)
@@ -266,62 +262,6 @@ func (_c *IntegrationRunCreate) SetDurationMs(v int) *IntegrationRunCreate {
 func (_c *IntegrationRunCreate) SetNillableDurationMs(v *int) *IntegrationRunCreate {
 	if v != nil {
 		_c.SetDurationMs(*v)
-	}
-	return _c
-}
-
-// SetRequestFileID sets the "request_file_id" field.
-func (_c *IntegrationRunCreate) SetRequestFileID(v string) *IntegrationRunCreate {
-	_c.mutation.SetRequestFileID(v)
-	return _c
-}
-
-// SetNillableRequestFileID sets the "request_file_id" field if the given value is not nil.
-func (_c *IntegrationRunCreate) SetNillableRequestFileID(v *string) *IntegrationRunCreate {
-	if v != nil {
-		_c.SetRequestFileID(*v)
-	}
-	return _c
-}
-
-// SetResponseFileID sets the "response_file_id" field.
-func (_c *IntegrationRunCreate) SetResponseFileID(v string) *IntegrationRunCreate {
-	_c.mutation.SetResponseFileID(v)
-	return _c
-}
-
-// SetNillableResponseFileID sets the "response_file_id" field if the given value is not nil.
-func (_c *IntegrationRunCreate) SetNillableResponseFileID(v *string) *IntegrationRunCreate {
-	if v != nil {
-		_c.SetResponseFileID(*v)
-	}
-	return _c
-}
-
-// SetEventID sets the "event_id" field.
-func (_c *IntegrationRunCreate) SetEventID(v string) *IntegrationRunCreate {
-	_c.mutation.SetEventID(v)
-	return _c
-}
-
-// SetNillableEventID sets the "event_id" field if the given value is not nil.
-func (_c *IntegrationRunCreate) SetNillableEventID(v *string) *IntegrationRunCreate {
-	if v != nil {
-		_c.SetEventID(*v)
-	}
-	return _c
-}
-
-// SetAssessmentResponseID sets the "assessment_response_id" field.
-func (_c *IntegrationRunCreate) SetAssessmentResponseID(v string) *IntegrationRunCreate {
-	_c.mutation.SetAssessmentResponseID(v)
-	return _c
-}
-
-// SetNillableAssessmentResponseID sets the "assessment_response_id" field if the given value is not nil.
-func (_c *IntegrationRunCreate) SetNillableAssessmentResponseID(v *string) *IntegrationRunCreate {
-	if v != nil {
-		_c.SetAssessmentResponseID(*v)
 	}
 	return _c
 }
@@ -384,24 +324,199 @@ func (_c *IntegrationRunCreate) SetIntegration(v *Integration) *IntegrationRunCr
 	return _c.SetIntegrationID(v.ID)
 }
 
-// SetRequestFile sets the "request_file" edge to the File entity.
-func (_c *IntegrationRunCreate) SetRequestFile(v *File) *IntegrationRunCreate {
-	return _c.SetRequestFileID(v.ID)
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (_c *IntegrationRunCreate) AddActionPlanIDs(ids ...string) *IntegrationRunCreate {
+	_c.mutation.AddActionPlanIDs(ids...)
+	return _c
 }
 
-// SetResponseFile sets the "response_file" edge to the File entity.
-func (_c *IntegrationRunCreate) SetResponseFile(v *File) *IntegrationRunCreate {
-	return _c.SetResponseFileID(v.ID)
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (_c *IntegrationRunCreate) AddActionPlans(v ...*ActionPlan) *IntegrationRunCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddActionPlanIDs(ids...)
 }
 
-// SetEvent sets the "event" edge to the Event entity.
-func (_c *IntegrationRunCreate) SetEvent(v *Event) *IntegrationRunCreate {
-	return _c.SetEventID(v.ID)
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (_c *IntegrationRunCreate) AddAssetIDs(ids ...string) *IntegrationRunCreate {
+	_c.mutation.AddAssetIDs(ids...)
+	return _c
 }
 
-// SetAssessmentResponse sets the "assessment_response" edge to the AssessmentResponse entity.
-func (_c *IntegrationRunCreate) SetAssessmentResponse(v *AssessmentResponse) *IntegrationRunCreate {
-	return _c.SetAssessmentResponseID(v.ID)
+// AddAssets adds the "assets" edges to the Asset entity.
+func (_c *IntegrationRunCreate) AddAssets(v ...*Asset) *IntegrationRunCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAssetIDs(ids...)
+}
+
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
+func (_c *IntegrationRunCreate) AddCheckResultIDs(ids ...string) *IntegrationRunCreate {
+	_c.mutation.AddCheckResultIDs(ids...)
+	return _c
+}
+
+// AddCheckResults adds the "check_results" edges to the CheckResult entity.
+func (_c *IntegrationRunCreate) AddCheckResults(v ...*CheckResult) *IntegrationRunCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCheckResultIDs(ids...)
+}
+
+// AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
+func (_c *IntegrationRunCreate) AddContactIDs(ids ...string) *IntegrationRunCreate {
+	_c.mutation.AddContactIDs(ids...)
+	return _c
+}
+
+// AddContacts adds the "contacts" edges to the Contact entity.
+func (_c *IntegrationRunCreate) AddContacts(v ...*Contact) *IntegrationRunCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddContactIDs(ids...)
+}
+
+// AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
+func (_c *IntegrationRunCreate) AddDirectoryAccountIDs(ids ...string) *IntegrationRunCreate {
+	_c.mutation.AddDirectoryAccountIDs(ids...)
+	return _c
+}
+
+// AddDirectoryAccounts adds the "directory_accounts" edges to the DirectoryAccount entity.
+func (_c *IntegrationRunCreate) AddDirectoryAccounts(v ...*DirectoryAccount) *IntegrationRunCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDirectoryAccountIDs(ids...)
+}
+
+// AddDirectoryGroupIDs adds the "directory_groups" edge to the DirectoryGroup entity by IDs.
+func (_c *IntegrationRunCreate) AddDirectoryGroupIDs(ids ...string) *IntegrationRunCreate {
+	_c.mutation.AddDirectoryGroupIDs(ids...)
+	return _c
+}
+
+// AddDirectoryGroups adds the "directory_groups" edges to the DirectoryGroup entity.
+func (_c *IntegrationRunCreate) AddDirectoryGroups(v ...*DirectoryGroup) *IntegrationRunCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDirectoryGroupIDs(ids...)
+}
+
+// AddDirectoryMembershipIDs adds the "directory_memberships" edge to the DirectoryMembership entity by IDs.
+func (_c *IntegrationRunCreate) AddDirectoryMembershipIDs(ids ...string) *IntegrationRunCreate {
+	_c.mutation.AddDirectoryMembershipIDs(ids...)
+	return _c
+}
+
+// AddDirectoryMemberships adds the "directory_memberships" edges to the DirectoryMembership entity.
+func (_c *IntegrationRunCreate) AddDirectoryMemberships(v ...*DirectoryMembership) *IntegrationRunCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDirectoryMembershipIDs(ids...)
+}
+
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (_c *IntegrationRunCreate) AddEntityIDs(ids ...string) *IntegrationRunCreate {
+	_c.mutation.AddEntityIDs(ids...)
+	return _c
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (_c *IntegrationRunCreate) AddEntities(v ...*Entity) *IntegrationRunCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEntityIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_c *IntegrationRunCreate) AddFindingIDs(ids ...string) *IntegrationRunCreate {
+	_c.mutation.AddFindingIDs(ids...)
+	return _c
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_c *IntegrationRunCreate) AddFindings(v ...*Finding) *IntegrationRunCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFindingIDs(ids...)
+}
+
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (_c *IntegrationRunCreate) AddInternalPolicyIDs(ids ...string) *IntegrationRunCreate {
+	_c.mutation.AddInternalPolicyIDs(ids...)
+	return _c
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (_c *IntegrationRunCreate) AddInternalPolicies(v ...*InternalPolicy) *IntegrationRunCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddInternalPolicyIDs(ids...)
+}
+
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
+func (_c *IntegrationRunCreate) AddProcedureIDs(ids ...string) *IntegrationRunCreate {
+	_c.mutation.AddProcedureIDs(ids...)
+	return _c
+}
+
+// AddProcedures adds the "procedures" edges to the Procedure entity.
+func (_c *IntegrationRunCreate) AddProcedures(v ...*Procedure) *IntegrationRunCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddProcedureIDs(ids...)
+}
+
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (_c *IntegrationRunCreate) AddRiskIDs(ids ...string) *IntegrationRunCreate {
+	_c.mutation.AddRiskIDs(ids...)
+	return _c
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (_c *IntegrationRunCreate) AddRisks(v ...*Risk) *IntegrationRunCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRiskIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_c *IntegrationRunCreate) AddVulnerabilityIDs(ids ...string) *IntegrationRunCreate {
+	_c.mutation.AddVulnerabilityIDs(ids...)
+	return _c
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_c *IntegrationRunCreate) AddVulnerabilities(v ...*Vulnerability) *IntegrationRunCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVulnerabilityIDs(ids...)
 }
 
 // Mutation returns the IntegrationRunMutation object of the builder.
@@ -583,10 +698,6 @@ func (_c *IntegrationRunCreate) createSpec() (*IntegrationRun, *sqlgraph.CreateS
 		_spec.SetField(integrationrun.FieldOperationConfig, field.TypeJSON, value)
 		_node.OperationConfig = value
 	}
-	if value, ok := _c.mutation.MappingVersion(); ok {
-		_spec.SetField(integrationrun.FieldMappingVersion, field.TypeString, value)
-		_node.MappingVersion = value
-	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(integrationrun.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
@@ -649,72 +760,212 @@ func (_c *IntegrationRunCreate) createSpec() (*IntegrationRun, *sqlgraph.CreateS
 		_node.IntegrationID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.RequestFileIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ActionPlansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.RequestFileTable,
-			Columns: []string{integrationrun.RequestFileColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ActionPlansTable,
+			Columns: integrationrun.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.RequestFileID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.ResponseFileIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.AssetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.ResponseFileTable,
-			Columns: []string{integrationrun.ResponseFileColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.AssetsTable,
+			Columns: integrationrun.AssetsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.ResponseFileID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.EventIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.CheckResultsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.EventTable,
-			Columns: []string{integrationrun.EventColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.CheckResultsTable,
+			Columns: integrationrun.CheckResultsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.EventID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.AssessmentResponseIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ContactsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.AssessmentResponseTable,
-			Columns: []string{integrationrun.AssessmentResponseColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ContactsTable,
+			Columns: integrationrun.ContactsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.AssessmentResponseID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DirectoryAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryAccountsTable,
+			Columns: integrationrun.DirectoryAccountsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DirectoryGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryGroupsTable,
+			Columns: integrationrun.DirectoryGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DirectoryMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryMembershipsTable,
+			Columns: integrationrun.DirectoryMembershipsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.EntitiesTable,
+			Columns: integrationrun.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.FindingsTable,
+			Columns: integrationrun.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.InternalPoliciesTable,
+			Columns: integrationrun.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ProceduresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ProceduresTable,
+			Columns: integrationrun.ProceduresPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.RisksTable,
+			Columns: integrationrun.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.VulnerabilitiesTable,
+			Columns: integrationrun.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

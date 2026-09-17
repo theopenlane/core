@@ -50,26 +50,14 @@ func (DirectoryMembership) Fields() []ent.Field {
 		field.String("integration_id").
 			Comment("integration that owns this directory membership").
 			NotEmpty().
-			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
+				entx.IntegrationMappingField().SystemControlled(),
 			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory membership").
 			Optional().
 			NotEmpty().
 			Immutable(),
-		field.String("directory_instance_id").
-			Comment("stable external workspace, tenant, or installation identifier used to correlate memberships across multiple integrations pointed at the same directory instance").
-			Optional().
-			Nillable(),
-		field.String("directory_sync_run_id").
-			Comment("sync run that produced this snapshot").
-			NotEmpty().
-			Immutable().
-			Annotations(
-				entx.IntegrationMappingField(),
-			),
 		field.String("directory_account_id").
 			Comment("directory account participating in this membership").
 			NotEmpty().
@@ -100,20 +88,6 @@ func (DirectoryMembership) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("directory_name"),
 			),
-		field.Time("first_seen_at").
-			Comment("first time the membership was detected").
-			Optional().
-			Nillable().
-			Annotations(
-				entx.IntegrationMappingField(),
-			),
-		field.Time("last_seen_at").
-			Comment("most recent time the membership was confirmed by directory ingest").
-			Optional().
-			Nillable().
-			Annotations(
-				entx.IntegrationMappingField(),
-			),
 		field.Time("added_at").
 			Comment("provider-reported time the membership was added in the source directory").
 			Optional().
@@ -127,18 +101,18 @@ func (DirectoryMembership) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entx.IntegrationMappingField(),
+				entx.SnapshotRemoval().Episodic(),
 			),
 		field.Time("observed_at").
 			Comment("time when this record was created").
 			Default(time.Now).
 			Immutable(),
-		field.String("last_confirmed_run_id").
-			Comment("sync run identifier that most recently confirmed this membership").
-			Optional().
-			Nillable(),
 		field.JSON("metadata", map[string]any{}).
 			Comment("raw metadata associated with this membership from the provider").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField(),
+			),
 	}
 }
 
@@ -149,6 +123,7 @@ func (m DirectoryMembership) Mixin() []ent.Mixin {
 		excludeTags:       true,
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{SchemaType: m},
 			newOrgOwnedMixin(m),
 			newCustomEnumMixin(m, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(m, withEnumFieldName("scope"), withGlobalEnum()),
@@ -164,19 +139,10 @@ func (m DirectoryMembership) Edges() []ent.Edge {
 			edgeSchema: Integration{},
 			field:      "integration_id",
 			required:   true,
-			immutable:  true,
 			comment:    "integration that owns this directory membership",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Organization{}.Name()),
 			},
-		}),
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: m,
-			edgeSchema: DirectorySyncRun{},
-			field:      "directory_sync_run_id",
-			required:   true,
-			immutable:  true,
-			comment:    "sync run that produced this snapshot",
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: m,
@@ -218,18 +184,12 @@ func (m DirectoryMembership) Edges() []ent.Edge {
 // Indexes of the DirectoryMembership
 func (DirectoryMembership) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("directory_account_id", "directory_group_id", "directory_sync_run_id").
-			Unique(),
 		// declaring the pair index ourselves keeps ent from adding its own fully-unique version
 		// for the M2M through edges; the partial predicate limits uniqueness to active rows so
 		// removed membership episodes can accumulate per (account, group) pair
 		index.Fields("directory_account_id", "directory_group_id").
 			Unique().
 			Annotations(entsql.IndexWhere("removed_at is NULL")),
-		index.Fields("directory_instance_id", "directory_account_id", "directory_group_id"),
-		index.Fields("directory_sync_run_id"),
-		index.Fields("integration_id", "directory_sync_run_id"),
-		index.Fields("platform_id", "directory_sync_run_id"),
 	}
 }
 
@@ -248,7 +208,7 @@ func (DirectoryMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaSearchable(false),
 		entx.NewExportable(),
-		entx.IntegrationMappingSchema().StockPersist(),
+		entx.IntegrationMappingSchema().StockPersist().InstanceScoped(),
 		history.Annotations{
 			Exclude: true,
 		},

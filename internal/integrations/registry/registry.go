@@ -80,6 +80,7 @@ func (r *Registry) Register(def types.Definition) error {
 	}
 
 	r.definitions[def.ID] = entry
+
 	for _, operation := range entry.operations {
 		r.operationsByTopic[operation.Topic] = operation
 	}
@@ -536,6 +537,10 @@ func indexOperations(operations []types.OperationRegistration, clients map[types
 			return nil, ErrOperationHandlerAmbiguous
 		case operation.IngestHandle != nil && len(operation.Ingest) == 0:
 			return nil, ErrIngestContractsRequired
+		}
+
+		if operation.Policy.Snapshot && operation.IngestHandle == nil {
+			return nil, ErrIngestSnapshotRequiresIngestHandle
 		}
 
 		if operation.ClientRef.Valid() {

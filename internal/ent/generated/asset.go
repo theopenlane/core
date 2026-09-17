@@ -43,6 +43,16 @@ type Asset struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the internal owner for the asset when no user, group, or identity holder is linked
@@ -138,6 +148,8 @@ type Asset struct {
 
 // AssetEdges holds the relations/edges for other nodes in the graph.
 type AssetEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -204,10 +216,11 @@ type AssetEdges struct {
 	ConnectedFrom []*Asset `json:"connected_from,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [32]bool
+	loadedTypes [33]bool
 	// totalCount holds the count of the edges above.
-	totalCount [32]map[string]int
+	totalCount [33]map[string]int
 
+	namedIntegrationRuns     map[string][]*IntegrationRun
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
 	namedViewers             map[string][]*Group
@@ -228,12 +241,21 @@ type AssetEdges struct {
 	namedConnectedFrom       map[string][]*Asset
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssetEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e AssetEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -242,7 +264,7 @@ func (e AssetEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -251,7 +273,7 @@ func (e AssetEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -260,7 +282,7 @@ func (e AssetEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -271,7 +293,7 @@ func (e AssetEdges) ViewersOrErr() ([]*Group, error) {
 func (e AssetEdges) InternalOwnerUserOrErr() (*User, error) {
 	if e.InternalOwnerUser != nil {
 		return e.InternalOwnerUser, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_user"}
@@ -282,7 +304,7 @@ func (e AssetEdges) InternalOwnerUserOrErr() (*User, error) {
 func (e AssetEdges) InternalOwnerGroupOrErr() (*Group, error) {
 	if e.InternalOwnerGroup != nil {
 		return e.InternalOwnerGroup, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_group"}
@@ -293,7 +315,7 @@ func (e AssetEdges) InternalOwnerGroupOrErr() (*Group, error) {
 func (e AssetEdges) InternalOwnerIdentityHolderOrErr() (*IdentityHolder, error) {
 	if e.InternalOwnerIdentityHolder != nil {
 		return e.InternalOwnerIdentityHolder, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: identityholder.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_identity_holder"}
@@ -304,7 +326,7 @@ func (e AssetEdges) InternalOwnerIdentityHolderOrErr() (*IdentityHolder, error) 
 func (e AssetEdges) AssetSubtypeOrErr() (*CustomTypeEnum, error) {
 	if e.AssetSubtype != nil {
 		return e.AssetSubtype, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "asset_subtype"}
@@ -315,7 +337,7 @@ func (e AssetEdges) AssetSubtypeOrErr() (*CustomTypeEnum, error) {
 func (e AssetEdges) AssetDataClassificationOrErr() (*CustomTypeEnum, error) {
 	if e.AssetDataClassification != nil {
 		return e.AssetDataClassification, nil
-	} else if e.loadedTypes[8] {
+	} else if e.loadedTypes[9] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "asset_data_classification"}
@@ -326,7 +348,7 @@ func (e AssetEdges) AssetDataClassificationOrErr() (*CustomTypeEnum, error) {
 func (e AssetEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 	if e.Environment != nil {
 		return e.Environment, nil
-	} else if e.loadedTypes[9] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "environment"}
@@ -337,7 +359,7 @@ func (e AssetEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 func (e AssetEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	if e.Scope != nil {
 		return e.Scope, nil
-	} else if e.loadedTypes[10] {
+	} else if e.loadedTypes[11] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "scope"}
@@ -348,7 +370,7 @@ func (e AssetEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 func (e AssetEdges) AccessModelOrErr() (*CustomTypeEnum, error) {
 	if e.AccessModel != nil {
 		return e.AccessModel, nil
-	} else if e.loadedTypes[11] {
+	} else if e.loadedTypes[12] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "access_model"}
@@ -359,7 +381,7 @@ func (e AssetEdges) AccessModelOrErr() (*CustomTypeEnum, error) {
 func (e AssetEdges) EncryptionStatusOrErr() (*CustomTypeEnum, error) {
 	if e.EncryptionStatus != nil {
 		return e.EncryptionStatus, nil
-	} else if e.loadedTypes[12] {
+	} else if e.loadedTypes[13] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "encryption_status"}
@@ -370,7 +392,7 @@ func (e AssetEdges) EncryptionStatusOrErr() (*CustomTypeEnum, error) {
 func (e AssetEdges) SecurityTierOrErr() (*CustomTypeEnum, error) {
 	if e.SecurityTier != nil {
 		return e.SecurityTier, nil
-	} else if e.loadedTypes[13] {
+	} else if e.loadedTypes[14] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "security_tier"}
@@ -381,7 +403,7 @@ func (e AssetEdges) SecurityTierOrErr() (*CustomTypeEnum, error) {
 func (e AssetEdges) CriticalityOrErr() (*CustomTypeEnum, error) {
 	if e.Criticality != nil {
 		return e.Criticality, nil
-	} else if e.loadedTypes[14] {
+	} else if e.loadedTypes[15] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "criticality"}
@@ -390,7 +412,7 @@ func (e AssetEdges) CriticalityOrErr() (*CustomTypeEnum, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -399,7 +421,7 @@ func (e AssetEdges) ScansOrErr() ([]*Scan, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -408,7 +430,7 @@ func (e AssetEdges) EntitiesOrErr() ([]*Entity, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -417,7 +439,7 @@ func (e AssetEdges) PlatformsOrErr() ([]*Platform, error) {
 // SystemDetailsOrErr returns the SystemDetails value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) SystemDetailsOrErr() ([]*SystemDetail, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.SystemDetails, nil
 	}
 	return nil, &NotLoadedError{edge: "system_details"}
@@ -426,7 +448,7 @@ func (e AssetEdges) SystemDetailsOrErr() ([]*SystemDetail, error) {
 // OutOfScopePlatformsOrErr returns the OutOfScopePlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) OutOfScopePlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.OutOfScopePlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_platforms"}
@@ -435,7 +457,7 @@ func (e AssetEdges) OutOfScopePlatformsOrErr() ([]*Platform, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -444,7 +466,7 @@ func (e AssetEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -453,7 +475,7 @@ func (e AssetEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -462,7 +484,7 @@ func (e AssetEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[24] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -471,7 +493,7 @@ func (e AssetEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[25] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -480,7 +502,7 @@ func (e AssetEdges) FindingsOrErr() ([]*Finding, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[26] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -489,7 +511,7 @@ func (e AssetEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ReviewsOrErr returns the Reviews value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[27] {
 		return e.Reviews, nil
 	}
 	return nil, &NotLoadedError{edge: "reviews"}
@@ -498,7 +520,7 @@ func (e AssetEdges) ReviewsOrErr() ([]*Review, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[28] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -509,7 +531,7 @@ func (e AssetEdges) RemediationsOrErr() ([]*Remediation, error) {
 func (e AssetEdges) SourcePlatformOrErr() (*Platform, error) {
 	if e.SourcePlatform != nil {
 		return e.SourcePlatform, nil
-	} else if e.loadedTypes[28] {
+	} else if e.loadedTypes[29] {
 		return nil, &NotFoundError{label: platform.Label}
 	}
 	return nil, &NotLoadedError{edge: "source_platform"}
@@ -520,7 +542,7 @@ func (e AssetEdges) SourcePlatformOrErr() (*Platform, error) {
 func (e AssetEdges) IntegrationOrErr() (*Integration, error) {
 	if e.Integration != nil {
 		return e.Integration, nil
-	} else if e.loadedTypes[29] {
+	} else if e.loadedTypes[30] {
 		return nil, &NotFoundError{label: integration.Label}
 	}
 	return nil, &NotLoadedError{edge: "integration"}
@@ -529,7 +551,7 @@ func (e AssetEdges) IntegrationOrErr() (*Integration, error) {
 // ConnectedAssetsOrErr returns the ConnectedAssets value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ConnectedAssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[30] {
+	if e.loadedTypes[31] {
 		return e.ConnectedAssets, nil
 	}
 	return nil, &NotLoadedError{edge: "connected_assets"}
@@ -538,7 +560,7 @@ func (e AssetEdges) ConnectedAssetsOrErr() ([]*Asset, error) {
 // ConnectedFromOrErr returns the ConnectedFrom value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ConnectedFromOrErr() ([]*Asset, error) {
-	if e.loadedTypes[31] {
+	if e.loadedTypes[32] {
 		return e.ConnectedFrom, nil
 	}
 	return nil, &NotLoadedError{edge: "connected_from"}
@@ -557,7 +579,7 @@ func (*Asset) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case asset.FieldEstimatedMonthlyCost:
 			values[i] = new(sql.NullFloat64)
-		case asset.FieldID, asset.FieldCreatedBy, asset.FieldUpdatedBy, asset.FieldUpdatedByImpersonator, asset.FieldDeletedBy, asset.FieldOwnerID, asset.FieldInternalOwner, asset.FieldInternalOwnerUserID, asset.FieldInternalOwnerGroupID, asset.FieldInternalOwnerIdentityHolderID, asset.FieldAssetSubtypeName, asset.FieldAssetSubtypeID, asset.FieldAssetDataClassificationName, asset.FieldAssetDataClassificationID, asset.FieldEnvironmentName, asset.FieldEnvironmentID, asset.FieldScopeName, asset.FieldScopeID, asset.FieldAccessModelName, asset.FieldAccessModelID, asset.FieldEncryptionStatusName, asset.FieldEncryptionStatusID, asset.FieldSecurityTierName, asset.FieldSecurityTierID, asset.FieldCriticalityName, asset.FieldCriticalityID, asset.FieldInternalNotes, asset.FieldSystemInternalID, asset.FieldAssetType, asset.FieldName, asset.FieldDisplayName, asset.FieldDescription, asset.FieldIdentifier, asset.FieldWebsite, asset.FieldPhysicalLocation, asset.FieldRegion, asset.FieldSourceType, asset.FieldSourcePlatformID, asset.FieldSourceIdentifier, asset.FieldCostCenter, asset.FieldCpe, asset.FieldIntegrationID:
+		case asset.FieldID, asset.FieldCreatedBy, asset.FieldUpdatedBy, asset.FieldUpdatedByImpersonator, asset.FieldDeletedBy, asset.FieldSourceDefinitionID, asset.FieldSourceDefinitionVersion, asset.FieldSourceInstanceID, asset.FieldManagedBy, asset.FieldIntegrationRunID, asset.FieldOwnerID, asset.FieldInternalOwner, asset.FieldInternalOwnerUserID, asset.FieldInternalOwnerGroupID, asset.FieldInternalOwnerIdentityHolderID, asset.FieldAssetSubtypeName, asset.FieldAssetSubtypeID, asset.FieldAssetDataClassificationName, asset.FieldAssetDataClassificationID, asset.FieldEnvironmentName, asset.FieldEnvironmentID, asset.FieldScopeName, asset.FieldScopeID, asset.FieldAccessModelName, asset.FieldAccessModelID, asset.FieldEncryptionStatusName, asset.FieldEncryptionStatusID, asset.FieldSecurityTierName, asset.FieldSecurityTierID, asset.FieldCriticalityName, asset.FieldCriticalityID, asset.FieldInternalNotes, asset.FieldSystemInternalID, asset.FieldAssetType, asset.FieldName, asset.FieldDisplayName, asset.FieldDescription, asset.FieldIdentifier, asset.FieldWebsite, asset.FieldPhysicalLocation, asset.FieldRegion, asset.FieldSourceType, asset.FieldSourcePlatformID, asset.FieldSourceIdentifier, asset.FieldCostCenter, asset.FieldCpe, asset.FieldIntegrationID:
 			values[i] = new(sql.NullString)
 		case asset.FieldCreatedAt, asset.FieldUpdatedAt, asset.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -634,6 +656,36 @@ func (_m *Asset) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case asset.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case asset.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case asset.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case asset.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case asset.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
 			}
 		case asset.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -919,6 +971,11 @@ func (_m *Asset) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryIntegrationRuns queries the "integration_runs" edge of the Asset entity.
+func (_m *Asset) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewAssetClient(_m.config).QueryIntegrationRuns(_m)
+}
+
 // QueryOwner queries the "owner" edge of the Asset entity.
 func (_m *Asset) QueryOwner() *OrganizationQuery {
 	return NewAssetClient(_m.config).QueryOwner(_m)
@@ -1128,6 +1185,21 @@ func (_m *Asset) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -1266,6 +1338,30 @@ func (_m *Asset) String() string {
 	}
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Asset) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Asset) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not

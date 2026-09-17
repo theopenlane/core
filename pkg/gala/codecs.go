@@ -189,6 +189,3 @@ type WorkflowFlags struct {
 
 // WorkflowFlagsKey stores the workflow bypass controls in context
 var WorkflowFlagsKey = contextx.NewKey[WorkflowFlags]()
-
-// DirectorySyncRunIDKey carries the directory sync run id to downstream ingest handlers
-var DirectorySyncRunIDKey = contextx.NewKey[string]()

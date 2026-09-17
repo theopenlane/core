@@ -54,7 +54,9 @@ func TestInternalPolicyMappingWithWebURL(t *testing.T) {
 	assert.Equal(t, "01BYE5RZ6QN3ZWBTUFOFD3GSPGOHDJD36K", mapped["external_file_id"])
 	assert.Equal(t, "https://contoso.sharepoint.com/sites/policies/Shared%20Documents/Security%20Policy.docx", mapped["url"])
 	assert.Equal(t, "INTEGRATION", mapped["management_mode"])
-	assert.Equal(t, "DRAFT", mapped["status"])
+
+	_, hasStatus := mapped["status"]
+	assert.Assert(t, !hasStatus, "status must not be mapped so the schema default applies at create and updates leave it untouched")
 }
 
 func TestInternalPolicyMappingWithoutWebURL(t *testing.T) {
@@ -74,5 +76,7 @@ func TestInternalPolicyMappingWithoutWebURL(t *testing.T) {
 	assert.Equal(t, "01BYE5RZ6QN3ZWBTUFOFD3GSPGOHDJD36K", mapped["external_file_id"])
 	assert.Equal(t, nil, mapped["url"])
 	assert.Equal(t, "INTEGRATION", mapped["management_mode"])
-	assert.Equal(t, "DRAFT", mapped["status"])
+
+	_, hasStatus := mapped["status"]
+	assert.Assert(t, !hasStatus, "status must not be mapped so the schema default applies at create and updates leave it untouched")
 }

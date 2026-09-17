@@ -135,6 +135,7 @@ func (d DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.I
 	userAccountEnvelopes := make([]types.MappingEnvelope, 0)
 	groupEnvelopes := make([]types.MappingEnvelope, 0)
 	membershipEnvelopes := make([]types.MappingEnvelope, 0)
+	groupsComplete := true
 
 	for _, org := range orgs {
 		samlMap, err := queryExternalIdentities(ctx, client, org.Login)
@@ -178,6 +179,8 @@ func (d DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.I
 		teams, memberships, err := queryOrganizationTeams(ctx, client, org.Login)
 		if err != nil {
 			logx.FromContext(ctx).Warn().Err(err).Str("org", org.Login).Msg("githubapp_directorysync: team query failed, continuing without group data")
+			groupsComplete = false
+
 			continue
 		}
 
@@ -212,21 +215,23 @@ func (d DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.I
 
 	payloadSets := []types.IngestPayloadSet{
 		{
-			Schema:    entityops.SchemaDirectoryAccount.Name,
-			Envelopes: userAccountEnvelopes,
+			Schema:           entityops.SchemaDirectoryAccount.Name,
+			Envelopes:        userAccountEnvelopes,
+			SnapshotComplete: true,
 		},
 	}
 
 	if !d.DisableGroupSync {
 		payloadSets = append(payloadSets,
 			types.IngestPayloadSet{
-				Schema:    entityops.SchemaDirectoryGroup.Name,
-				Envelopes: groupEnvelopes,
+				Schema:           entityops.SchemaDirectoryGroup.Name,
+				Envelopes:        groupEnvelopes,
+				SnapshotComplete: groupsComplete,
 			},
 			types.IngestPayloadSet{
 				Schema:           entityops.SchemaDirectoryMembership.Name,
 				Envelopes:        membershipEnvelopes,
-				SnapshotComplete: true,
+				SnapshotComplete: groupsComplete,
 			},
 		)
 	}

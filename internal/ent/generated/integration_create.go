@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/event"
@@ -759,21 +758,6 @@ func (_c *IntegrationCreate) AddDirectoryMemberships(v ...*DirectoryMembership) 
 	return _c.AddDirectoryMembershipIDs(ids...)
 }
 
-// AddDirectorySyncRunIDs adds the "directory_sync_runs" edge to the DirectorySyncRun entity by IDs.
-func (_c *IntegrationCreate) AddDirectorySyncRunIDs(ids ...string) *IntegrationCreate {
-	_c.mutation.AddDirectorySyncRunIDs(ids...)
-	return _c
-}
-
-// AddDirectorySyncRuns adds the "directory_sync_runs" edges to the DirectorySyncRun entity.
-func (_c *IntegrationCreate) AddDirectorySyncRuns(v ...*DirectorySyncRun) *IntegrationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddDirectorySyncRunIDs(ids...)
-}
-
 // AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
 func (_c *IntegrationCreate) AddCheckResultIDs(ids ...string) *IntegrationCreate {
 	_c.mutation.AddCheckResultIDs(ids...)
@@ -1425,22 +1409,6 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.DirectorySyncRunsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   integration.DirectorySyncRunsTable,
-			Columns: []string{integration.DirectorySyncRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

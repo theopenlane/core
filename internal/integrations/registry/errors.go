@@ -23,6 +23,8 @@ var (
 	ErrOperationHandlerAmbiguous = errors.New("integrations/registry: operation must specify exactly one of Handle or IngestHandle")
 	// ErrIngestContractsRequired indicates an IngestHandle is registered without any Ingest contracts
 	ErrIngestContractsRequired = errors.New("integrations/registry: IngestHandle requires at least one Ingest contract")
+	// ErrIngestSnapshotRequiresIngestHandle indicates an operation's Policy.Snapshot is set without an IngestHandle
+	ErrIngestSnapshotRequiresIngestHandle = errors.New("integrations/registry: policy snapshot requires an IngestHandle")
 	// ErrWebhookEventResolverRequired indicates a webhook registration is missing its event resolver
 	ErrWebhookEventResolverRequired = errors.New("integrations/registry: webhook event resolver required")
 	// ErrWebhookEventHandlerRequired indicates a webhook event registration is missing its handler

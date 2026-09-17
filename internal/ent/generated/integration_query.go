@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/event"
@@ -68,7 +67,6 @@ type IntegrationQuery struct {
 	withDirectoryAccounts          *DirectoryAccountQuery
 	withDirectoryGroups            *DirectoryGroupQuery
 	withDirectoryMemberships       *DirectoryMembershipQuery
-	withDirectorySyncRuns          *DirectorySyncRunQuery
 	withCheckResults               *CheckResultQuery
 	withPlatform                   *PlatformQuery
 	withNotificationTemplates      *NotificationTemplateQuery
@@ -94,7 +92,6 @@ type IntegrationQuery struct {
 	withNamedDirectoryAccounts     map[string]*DirectoryAccountQuery
 	withNamedDirectoryGroups       map[string]*DirectoryGroupQuery
 	withNamedDirectoryMemberships  map[string]*DirectoryMembershipQuery
-	withNamedDirectorySyncRuns     map[string]*DirectorySyncRunQuery
 	withNamedCheckResults          map[string]*CheckResultQuery
 	withNamedNotificationTemplates map[string]*NotificationTemplateQuery
 	withNamedEmailTemplates        map[string]*EmailTemplateQuery
@@ -512,28 +509,6 @@ func (_q *IntegrationQuery) QueryDirectoryMemberships() *DirectoryMembershipQuer
 	return query
 }
 
-// QueryDirectorySyncRuns chains the current query on the "directory_sync_runs" edge.
-func (_q *IntegrationQuery) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
-	query := (&DirectorySyncRunClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(integration.Table, integration.FieldID, selector),
-			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, integration.DirectorySyncRunsTable, integration.DirectorySyncRunsColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryCheckResults chains the current query on the "check_results" edge.
 func (_q *IntegrationQuery) QueryCheckResults() *CheckResultQuery {
 	query := (&CheckResultClient{config: _q.config}).Query()
@@ -919,7 +894,6 @@ func (_q *IntegrationQuery) Clone() *IntegrationQuery {
 		withDirectoryAccounts:     _q.withDirectoryAccounts.Clone(),
 		withDirectoryGroups:       _q.withDirectoryGroups.Clone(),
 		withDirectoryMemberships:  _q.withDirectoryMemberships.Clone(),
-		withDirectorySyncRuns:     _q.withDirectorySyncRuns.Clone(),
 		withCheckResults:          _q.withCheckResults.Clone(),
 		withPlatform:              _q.withPlatform.Clone(),
 		withNotificationTemplates: _q.withNotificationTemplates.Clone(),
@@ -1122,17 +1096,6 @@ func (_q *IntegrationQuery) WithDirectoryMemberships(opts ...func(*DirectoryMemb
 	return _q
 }
 
-// WithDirectorySyncRuns tells the query-builder to eager-load the nodes that are connected to
-// the "directory_sync_runs" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *IntegrationQuery) WithDirectorySyncRuns(opts ...func(*DirectorySyncRunQuery)) *IntegrationQuery {
-	query := (&DirectorySyncRunClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withDirectorySyncRuns = query
-	return _q
-}
-
 // WithCheckResults tells the query-builder to eager-load the nodes that are connected to
 // the "check_results" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *IntegrationQuery) WithCheckResults(opts ...func(*CheckResultQuery)) *IntegrationQuery {
@@ -1306,7 +1269,7 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*Integration{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [26]bool{
+		loadedTypes = [25]bool{
 			_q.withOwner != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
@@ -1324,7 +1287,6 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withDirectoryAccounts != nil,
 			_q.withDirectoryGroups != nil,
 			_q.withDirectoryMemberships != nil,
-			_q.withDirectorySyncRuns != nil,
 			_q.withCheckResults != nil,
 			_q.withPlatform != nil,
 			_q.withNotificationTemplates != nil,
@@ -1477,15 +1439,6 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			func(n *Integration) { n.Edges.DirectoryMemberships = []*DirectoryMembership{} },
 			func(n *Integration, e *DirectoryMembership) {
 				n.Edges.DirectoryMemberships = append(n.Edges.DirectoryMemberships, e)
-			}); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withDirectorySyncRuns; query != nil {
-		if err := _q.loadDirectorySyncRuns(ctx, query, nodes,
-			func(n *Integration) { n.Edges.DirectorySyncRuns = []*DirectorySyncRun{} },
-			func(n *Integration, e *DirectorySyncRun) {
-				n.Edges.DirectorySyncRuns = append(n.Edges.DirectorySyncRuns, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -1644,13 +1597,6 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := _q.loadDirectoryMemberships(ctx, query, nodes,
 			func(n *Integration) { n.appendNamedDirectoryMemberships(name) },
 			func(n *Integration, e *DirectoryMembership) { n.appendNamedDirectoryMemberships(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedDirectorySyncRuns {
-		if err := _q.loadDirectorySyncRuns(ctx, query, nodes,
-			func(n *Integration) { n.appendNamedDirectorySyncRuns(name) },
-			func(n *Integration, e *DirectorySyncRun) { n.appendNamedDirectorySyncRuns(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2469,36 +2415,6 @@ func (_q *IntegrationQuery) loadDirectoryMemberships(ctx context.Context, query 
 	}
 	return nil
 }
-func (_q *IntegrationQuery) loadDirectorySyncRuns(ctx context.Context, query *DirectorySyncRunQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *DirectorySyncRun)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Integration)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(directorysyncrun.FieldIntegrationID)
-	}
-	query.Where(predicate.DirectorySyncRun(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(integration.DirectorySyncRunsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.IntegrationID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "integration_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
 func (_q *IntegrationQuery) loadCheckResults(ctx context.Context, query *CheckResultQuery, nodes []*Integration, init func(*Integration), assign func(*Integration, *CheckResult)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Integration)
@@ -3068,20 +2984,6 @@ func (_q *IntegrationQuery) WithNamedDirectoryMemberships(name string, opts ...f
 		_q.withNamedDirectoryMemberships = make(map[string]*DirectoryMembershipQuery)
 	}
 	_q.withNamedDirectoryMemberships[name] = query
-	return _q
-}
-
-// WithNamedDirectorySyncRuns tells the query-builder to eager-load the nodes that are connected to the "directory_sync_runs"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *IntegrationQuery) WithNamedDirectorySyncRuns(name string, opts ...func(*DirectorySyncRunQuery)) *IntegrationQuery {
-	query := (&DirectorySyncRunClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedDirectorySyncRuns == nil {
-		_q.withNamedDirectorySyncRuns = make(map[string]*DirectorySyncRunQuery)
-	}
-	_q.withNamedDirectorySyncRuns[name] = query
 	return _q
 }
 

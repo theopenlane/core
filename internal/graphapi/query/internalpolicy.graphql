@@ -21,9 +21,11 @@ mutation CreateBulkCSVInternalPolicy ($input: Upload!) {
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			internalPolicyKindID
 			internalPolicyKindName
+			managedBy
 			managementMode
 			name
 			ownerID
@@ -32,6 +34,9 @@ mutation CreateBulkCSVInternalPolicy ($input: Upload!) {
 			revision
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			summary
 			systemInternalID
@@ -77,9 +82,11 @@ mutation CreateBulkInternalPolicy ($input: [CreateInternalPolicyInput!]) {
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			internalPolicyKindID
 			internalPolicyKindName
+			managedBy
 			managementMode
 			name
 			ownerID
@@ -88,6 +95,9 @@ mutation CreateBulkInternalPolicy ($input: [CreateInternalPolicyInput!]) {
 			revision
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			summary
 			systemInternalID
@@ -133,9 +143,11 @@ mutation CreateInternalPolicy ($input: CreateInternalPolicyInput!) {
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			internalPolicyKindID
 			internalPolicyKindName
+			managedBy
 			managementMode
 			name
 			ownerID
@@ -144,6 +156,9 @@ mutation CreateInternalPolicy ($input: CreateInternalPolicyInput!) {
 			revision
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			summary
 			systemInternalID
@@ -280,9 +295,11 @@ query GetAllInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: 
 				fileID
 				id
 				improvementSuggestions
+				integrationRunID
 				internalNotes
 				internalPolicyKindID
 				internalPolicyKindName
+				managedBy
 				managementMode
 				name
 				ownerID
@@ -291,6 +308,9 @@ query GetAllInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: 
 				revision
 				scopeID
 				scopeName
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				status
 				summary
 				systemInternalID
@@ -361,9 +381,11 @@ query GetInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cur
 				fileID
 				id
 				improvementSuggestions
+				integrationRunID
 				internalNotes
 				internalPolicyKindID
 				internalPolicyKindName
+				managedBy
 				managementMode
 				name
 				ownerID
@@ -372,6 +394,9 @@ query GetInternalPolicies ($first: Int, $last: Int, $after: Cursor, $before: Cur
 				revision
 				scopeID
 				scopeName
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				status
 				summary
 				systemInternalID
@@ -433,9 +458,11 @@ query GetInternalPolicyByID ($internalPolicyId: ID!) {
 		fileID
 		id
 		improvementSuggestions
+		integrationRunID
 		internalNotes
 		internalPolicyKindID
 		internalPolicyKindName
+		managedBy
 		managementMode
 		name
 		ownerID
@@ -444,6 +471,9 @@ query GetInternalPolicyByID ($internalPolicyId: ID!) {
 		revision
 		scopeID
 		scopeName
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		status
 		summary
 		systemInternalID
@@ -543,9 +573,11 @@ mutation UpdateBulkInternalPolicy ($ids: [ID!]!, $input: UpdateInternalPolicyInp
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			internalPolicyKindID
 			internalPolicyKindName
+			managedBy
 			managementMode
 			name
 			ownerID
@@ -554,6 +586,9 @@ mutation UpdateBulkInternalPolicy ($ids: [ID!]!, $input: UpdateInternalPolicyInp
 			revision
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			summary
 			systemInternalID
@@ -602,9 +637,11 @@ mutation UpdateInternalPolicy ($updateInternalPolicyId: ID!, $input: UpdateInter
 			fileID
 			id
 			improvementSuggestions
+			integrationRunID
 			internalNotes
 			internalPolicyKindID
 			internalPolicyKindName
+			managedBy
 			managementMode
 			name
 			ownerID
@@ -613,6 +650,9 @@ mutation UpdateInternalPolicy ($updateInternalPolicyId: ID!, $input: UpdateInter
 			revision
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			summary
 			systemInternalID

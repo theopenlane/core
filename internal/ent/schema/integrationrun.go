@@ -79,9 +79,6 @@ func (IntegrationRun) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
 			),
-		field.String("mapping_version").
-			Comment("mapping version used to produce outputs").
-			Optional(),
 		field.Enum("status").
 			Comment("status of the run").
 			GoType(enums.IntegrationRunStatus("")).
@@ -108,18 +105,6 @@ func (IntegrationRun) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("DURATION_MS"),
 			),
-		field.String("request_file_id").
-			Comment("file reference for the run request payload").
-			Optional(),
-		field.String("response_file_id").
-			Comment("file reference for the run response payload").
-			Optional(),
-		field.String("event_id").
-			Comment("event reference for this run").
-			Optional(),
-		field.String("assessment_response_id").
-			Comment("assessment response that triggered this run").
-			Optional(),
 		field.String("summary").
 			Comment("summary of the run outcome").
 			Optional(),
@@ -140,11 +125,6 @@ func (IntegrationRun) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("integration_id", "started_at").
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
-		index.Fields("assessment_response_id", "started_at").
-			Annotations(entsql.IndexWhere("deleted_at is NULL")),
-		index.Fields("assessment_response_id", "operation_name").
-			Unique().
-			Annotations(entsql.IndexWhere("deleted_at is NULL AND assessment_response_id IS NOT NULL")),
 	}
 }
 
@@ -159,29 +139,19 @@ func (r IntegrationRun) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Organization{}.Name()),
 			},
 		}),
-		uniqueEdgeTo(&edgeDefinition{
-			fromSchema: r,
-			field:      "request_file_id",
-			name:       "request_file",
-			t:          File.Type,
-		}),
-		uniqueEdgeTo(&edgeDefinition{
-			fromSchema: r,
-			field:      "response_file_id",
-			name:       "response_file",
-			t:          File.Type,
-		}),
-		uniqueEdgeTo(&edgeDefinition{
-			fromSchema: r,
-			edgeSchema: Event{},
-			field:      "event_id",
-		}),
-		uniqueEdgeTo(&edgeDefinition{
-			fromSchema: r,
-			name:       "assessment_response",
-			t:          AssessmentResponse.Type,
-			field:      "assessment_response_id",
-		}),
+		defaultEdgeFromWithPagination(r, ActionPlan{}),
+		defaultEdgeFromWithPagination(r, Asset{}),
+		defaultEdgeFromWithPagination(r, CheckResult{}),
+		defaultEdgeFromWithPagination(r, Contact{}),
+		defaultEdgeFromWithPagination(r, DirectoryAccount{}),
+		defaultEdgeFromWithPagination(r, DirectoryGroup{}),
+		defaultEdgeFromWithPagination(r, DirectoryMembership{}),
+		defaultEdgeFromWithPagination(r, Entity{}),
+		defaultEdgeFromWithPagination(r, Finding{}),
+		defaultEdgeFromWithPagination(r, InternalPolicy{}),
+		defaultEdgeFromWithPagination(r, Procedure{}),
+		defaultEdgeFromWithPagination(r, Risk{}),
+		defaultEdgeFromWithPagination(r, Vulnerability{}),
 	}
 }
 
@@ -192,9 +162,9 @@ func (r IntegrationRun) Mixin() []ent.Mixin {
 		excludeAnnotations: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.IntegrationRun](r,
-				withOrganizationOwnerServiceOnly(),
+				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
-				withParents(Integration{}, AssessmentResponse{}),
+				withParents(Integration{}),
 			),
 		},
 	}.getMixins(r)
@@ -211,7 +181,9 @@ func (IntegrationRun) Modules() []models.OrgModule {
 func (r IntegrationRun) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaIntegrationRun),
-		entgql.Skip(entgql.SkipAll),
+		entgql.QueryField(),
+		entgql.RelayConnection(),
+		entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
 		history.Annotations{

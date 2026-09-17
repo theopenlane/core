@@ -21,7 +21,7 @@ func (g *Gala) RemoveListeners(ctx context.Context, ids ...ListenerID) error {
 	}
 
 	if g.jobController != nil {
-		for topic := range g.listenerRemovalTopics(topics) {
+		for _, topic := range topics {
 			fragment, err := listenerTopicMetadataFragment(topic)
 			if err != nil {
 				return errors.Join(ErrRiverListenerCleanupFailed, err)
@@ -56,22 +56,6 @@ func (g *Gala) RemoveListeners(ctx context.Context, ids ...ListenerID) error {
 	return nil
 }
 
-// listenerRemovalTopics expands affected topics to include retired aliases
-func (g *Gala) listenerRemovalTopics(topics []TopicName) map[TopicName]struct{} {
-	affected := make(map[TopicName]struct{}, len(topics))
-	for _, topic := range topics {
-		affected[topic] = struct{}{}
-	}
-
-	for retired, replacement := range g.topicRenames {
-		if _, ok := affected[replacement]; ok {
-			affected[retired] = struct{}{}
-		}
-	}
-
-	return affected
-}
-
 func listenerTopicMetadataFragment(topic TopicName) (string, error) {
 	fragment, err := json.Marshal(map[string]string{"topic": string(topic)})
 
@@ -94,16 +78,7 @@ func decodeRiverJobEnvelope(job *rivertype.JobRow) (Envelope, error) {
 func (g *Gala) envelopeHasMatchingListener(envelope Envelope) (bool, error) {
 	registration, err := g.registry.topicRegistration(envelope.Topic)
 	if err != nil {
-		renamed, ok := g.topicRenames[envelope.Topic]
-		if !ok {
-			return false, nil
-		}
-
-		envelope.Topic = renamed
-		registration, err = g.registry.topicRegistration(renamed)
-		if err != nil {
-			return false, nil
-		}
+		return false, nil
 	}
 
 	listeners := g.registry.registeredListeners(envelope.Topic)
@@ -117,9 +92,6 @@ func (g *Gala) envelopeHasMatchingListener(envelope Envelope) (bool, error) {
 	}
 
 	operation := payloadOperation(payload)
-	if renamed, ok := g.operationRenames[operation]; ok {
-		operation = renamed
-	}
 
 	for _, listener := range listeners {
 		if listenerMatches(listener, operation) {

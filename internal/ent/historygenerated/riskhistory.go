@@ -47,6 +47,16 @@ type RiskHistory struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the kind of the risk
@@ -135,7 +145,7 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case riskhistory.FieldScore, riskhistory.FieldResidualScore:
 			values[i] = new(sql.NullInt64)
-		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldUpdatedByImpersonator, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldOwnerID, riskhistory.FieldRiskKindName, riskhistory.FieldRiskKindID, riskhistory.FieldRiskCategoryName, riskhistory.FieldRiskCategoryID, riskhistory.FieldEnvironmentName, riskhistory.FieldEnvironmentID, riskhistory.FieldScopeName, riskhistory.FieldScopeID, riskhistory.FieldExternalID, riskhistory.FieldIntegrationID, riskhistory.FieldExternalUUID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID, riskhistory.FieldReviewFrequency, riskhistory.FieldRiskDecision:
+		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldUpdatedByImpersonator, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldSourceDefinitionID, riskhistory.FieldSourceDefinitionVersion, riskhistory.FieldSourceInstanceID, riskhistory.FieldManagedBy, riskhistory.FieldIntegrationRunID, riskhistory.FieldOwnerID, riskhistory.FieldRiskKindName, riskhistory.FieldRiskKindID, riskhistory.FieldRiskCategoryName, riskhistory.FieldRiskCategoryID, riskhistory.FieldEnvironmentName, riskhistory.FieldEnvironmentID, riskhistory.FieldScopeName, riskhistory.FieldScopeID, riskhistory.FieldExternalID, riskhistory.FieldIntegrationID, riskhistory.FieldExternalUUID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID, riskhistory.FieldReviewFrequency, riskhistory.FieldRiskDecision:
 			values[i] = new(sql.NullString)
 		case riskhistory.FieldHistoryTime, riskhistory.FieldCreatedAt, riskhistory.FieldUpdatedAt, riskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -234,6 +244,36 @@ func (_m *RiskHistory) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case riskhistory.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case riskhistory.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case riskhistory.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case riskhistory.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case riskhistory.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
 			}
 		case riskhistory.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -530,6 +570,21 @@ func (_m *RiskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)

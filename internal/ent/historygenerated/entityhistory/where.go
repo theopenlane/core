@@ -114,6 +114,31 @@ func DeletedBy(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// SourceDefinitionID applies equality check predicate on the "source_definition_id" field. It's identical to SourceDefinitionIDEQ.
+func SourceDefinitionID(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionVersion applies equality check predicate on the "source_definition_version" field. It's identical to SourceDefinitionVersionEQ.
+func SourceDefinitionVersion(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSourceDefinitionVersion, v))
+}
+
+// SourceInstanceID applies equality check predicate on the "source_instance_id" field. It's identical to SourceInstanceIDEQ.
+func SourceInstanceID(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSourceInstanceID, v))
+}
+
+// ManagedBy applies equality check predicate on the "managed_by" field. It's identical to ManagedByEQ.
+func ManagedBy(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldManagedBy, v))
+}
+
+// IntegrationRunID applies equality check predicate on the "integration_run_id" field. It's identical to IntegrationRunIDEQ.
+func IntegrationRunID(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldIntegrationRunID, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldOwnerID, v))
@@ -962,6 +987,381 @@ func TagsIsNil() predicate.EntityHistory {
 // TagsNotNil applies the NotNil predicate on the "tags" field.
 func TagsNotNil() predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldNotNull(FieldTags))
+}
+
+// SourceDefinitionIDEQ applies the EQ predicate on the "source_definition_id" field.
+func SourceDefinitionIDEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDNEQ applies the NEQ predicate on the "source_definition_id" field.
+func SourceDefinitionIDNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDIn applies the In predicate on the "source_definition_id" field.
+func SourceDefinitionIDIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldSourceDefinitionID, vs...))
+}
+
+// SourceDefinitionIDNotIn applies the NotIn predicate on the "source_definition_id" field.
+func SourceDefinitionIDNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldSourceDefinitionID, vs...))
+}
+
+// SourceDefinitionIDGT applies the GT predicate on the "source_definition_id" field.
+func SourceDefinitionIDGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDGTE applies the GTE predicate on the "source_definition_id" field.
+func SourceDefinitionIDGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDLT applies the LT predicate on the "source_definition_id" field.
+func SourceDefinitionIDLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDLTE applies the LTE predicate on the "source_definition_id" field.
+func SourceDefinitionIDLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDContains applies the Contains predicate on the "source_definition_id" field.
+func SourceDefinitionIDContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDHasPrefix applies the HasPrefix predicate on the "source_definition_id" field.
+func SourceDefinitionIDHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDHasSuffix applies the HasSuffix predicate on the "source_definition_id" field.
+func SourceDefinitionIDHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDIsNil applies the IsNil predicate on the "source_definition_id" field.
+func SourceDefinitionIDIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldSourceDefinitionID))
+}
+
+// SourceDefinitionIDNotNil applies the NotNil predicate on the "source_definition_id" field.
+func SourceDefinitionIDNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldSourceDefinitionID))
+}
+
+// SourceDefinitionIDEqualFold applies the EqualFold predicate on the "source_definition_id" field.
+func SourceDefinitionIDEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDContainsFold applies the ContainsFold predicate on the "source_definition_id" field.
+func SourceDefinitionIDContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionVersionEQ applies the EQ predicate on the "source_definition_version" field.
+func SourceDefinitionVersionEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionNEQ applies the NEQ predicate on the "source_definition_version" field.
+func SourceDefinitionVersionNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionIn applies the In predicate on the "source_definition_version" field.
+func SourceDefinitionVersionIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldSourceDefinitionVersion, vs...))
+}
+
+// SourceDefinitionVersionNotIn applies the NotIn predicate on the "source_definition_version" field.
+func SourceDefinitionVersionNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldSourceDefinitionVersion, vs...))
+}
+
+// SourceDefinitionVersionGT applies the GT predicate on the "source_definition_version" field.
+func SourceDefinitionVersionGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionGTE applies the GTE predicate on the "source_definition_version" field.
+func SourceDefinitionVersionGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionLT applies the LT predicate on the "source_definition_version" field.
+func SourceDefinitionVersionLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionLTE applies the LTE predicate on the "source_definition_version" field.
+func SourceDefinitionVersionLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionContains applies the Contains predicate on the "source_definition_version" field.
+func SourceDefinitionVersionContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionHasPrefix applies the HasPrefix predicate on the "source_definition_version" field.
+func SourceDefinitionVersionHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionHasSuffix applies the HasSuffix predicate on the "source_definition_version" field.
+func SourceDefinitionVersionHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionIsNil applies the IsNil predicate on the "source_definition_version" field.
+func SourceDefinitionVersionIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldSourceDefinitionVersion))
+}
+
+// SourceDefinitionVersionNotNil applies the NotNil predicate on the "source_definition_version" field.
+func SourceDefinitionVersionNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldSourceDefinitionVersion))
+}
+
+// SourceDefinitionVersionEqualFold applies the EqualFold predicate on the "source_definition_version" field.
+func SourceDefinitionVersionEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionContainsFold applies the ContainsFold predicate on the "source_definition_version" field.
+func SourceDefinitionVersionContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldSourceDefinitionVersion, v))
+}
+
+// SourceInstanceIDEQ applies the EQ predicate on the "source_instance_id" field.
+func SourceInstanceIDEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDNEQ applies the NEQ predicate on the "source_instance_id" field.
+func SourceInstanceIDNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDIn applies the In predicate on the "source_instance_id" field.
+func SourceInstanceIDIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldSourceInstanceID, vs...))
+}
+
+// SourceInstanceIDNotIn applies the NotIn predicate on the "source_instance_id" field.
+func SourceInstanceIDNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldSourceInstanceID, vs...))
+}
+
+// SourceInstanceIDGT applies the GT predicate on the "source_instance_id" field.
+func SourceInstanceIDGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDGTE applies the GTE predicate on the "source_instance_id" field.
+func SourceInstanceIDGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDLT applies the LT predicate on the "source_instance_id" field.
+func SourceInstanceIDLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDLTE applies the LTE predicate on the "source_instance_id" field.
+func SourceInstanceIDLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDContains applies the Contains predicate on the "source_instance_id" field.
+func SourceInstanceIDContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDHasPrefix applies the HasPrefix predicate on the "source_instance_id" field.
+func SourceInstanceIDHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDHasSuffix applies the HasSuffix predicate on the "source_instance_id" field.
+func SourceInstanceIDHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDIsNil applies the IsNil predicate on the "source_instance_id" field.
+func SourceInstanceIDIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldSourceInstanceID))
+}
+
+// SourceInstanceIDNotNil applies the NotNil predicate on the "source_instance_id" field.
+func SourceInstanceIDNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldSourceInstanceID))
+}
+
+// SourceInstanceIDEqualFold applies the EqualFold predicate on the "source_instance_id" field.
+func SourceInstanceIDEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDContainsFold applies the ContainsFold predicate on the "source_instance_id" field.
+func SourceInstanceIDContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldSourceInstanceID, v))
+}
+
+// ManagedByEQ applies the EQ predicate on the "managed_by" field.
+func ManagedByEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldManagedBy, v))
+}
+
+// ManagedByNEQ applies the NEQ predicate on the "managed_by" field.
+func ManagedByNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldManagedBy, v))
+}
+
+// ManagedByIn applies the In predicate on the "managed_by" field.
+func ManagedByIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldManagedBy, vs...))
+}
+
+// ManagedByNotIn applies the NotIn predicate on the "managed_by" field.
+func ManagedByNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldManagedBy, vs...))
+}
+
+// ManagedByGT applies the GT predicate on the "managed_by" field.
+func ManagedByGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldManagedBy, v))
+}
+
+// ManagedByGTE applies the GTE predicate on the "managed_by" field.
+func ManagedByGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldManagedBy, v))
+}
+
+// ManagedByLT applies the LT predicate on the "managed_by" field.
+func ManagedByLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldManagedBy, v))
+}
+
+// ManagedByLTE applies the LTE predicate on the "managed_by" field.
+func ManagedByLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldManagedBy, v))
+}
+
+// ManagedByContains applies the Contains predicate on the "managed_by" field.
+func ManagedByContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldManagedBy, v))
+}
+
+// ManagedByHasPrefix applies the HasPrefix predicate on the "managed_by" field.
+func ManagedByHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldManagedBy, v))
+}
+
+// ManagedByHasSuffix applies the HasSuffix predicate on the "managed_by" field.
+func ManagedByHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldManagedBy, v))
+}
+
+// ManagedByIsNil applies the IsNil predicate on the "managed_by" field.
+func ManagedByIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldManagedBy))
+}
+
+// ManagedByNotNil applies the NotNil predicate on the "managed_by" field.
+func ManagedByNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldManagedBy))
+}
+
+// ManagedByEqualFold applies the EqualFold predicate on the "managed_by" field.
+func ManagedByEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldManagedBy, v))
+}
+
+// ManagedByContainsFold applies the ContainsFold predicate on the "managed_by" field.
+func ManagedByContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldManagedBy, v))
+}
+
+// IntegrationRunIDEQ applies the EQ predicate on the "integration_run_id" field.
+func IntegrationRunIDEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDNEQ applies the NEQ predicate on the "integration_run_id" field.
+func IntegrationRunIDNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDIn applies the In predicate on the "integration_run_id" field.
+func IntegrationRunIDIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldIntegrationRunID, vs...))
+}
+
+// IntegrationRunIDNotIn applies the NotIn predicate on the "integration_run_id" field.
+func IntegrationRunIDNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldIntegrationRunID, vs...))
+}
+
+// IntegrationRunIDGT applies the GT predicate on the "integration_run_id" field.
+func IntegrationRunIDGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDGTE applies the GTE predicate on the "integration_run_id" field.
+func IntegrationRunIDGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDLT applies the LT predicate on the "integration_run_id" field.
+func IntegrationRunIDLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDLTE applies the LTE predicate on the "integration_run_id" field.
+func IntegrationRunIDLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDContains applies the Contains predicate on the "integration_run_id" field.
+func IntegrationRunIDContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDHasPrefix applies the HasPrefix predicate on the "integration_run_id" field.
+func IntegrationRunIDHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDHasSuffix applies the HasSuffix predicate on the "integration_run_id" field.
+func IntegrationRunIDHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDIsNil applies the IsNil predicate on the "integration_run_id" field.
+func IntegrationRunIDIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldIntegrationRunID))
+}
+
+// IntegrationRunIDNotNil applies the NotNil predicate on the "integration_run_id" field.
+func IntegrationRunIDNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldIntegrationRunID))
+}
+
+// IntegrationRunIDEqualFold applies the EqualFold predicate on the "integration_run_id" field.
+func IntegrationRunIDEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDContainsFold applies the ContainsFold predicate on the "integration_run_id" field.
+func IntegrationRunIDContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldIntegrationRunID, v))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.

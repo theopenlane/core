@@ -20,10 +20,13 @@ import (
 	"github.com/theopenlane/httpsling/httpclient"
 
 	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 const (
 	scimContentType = "application/scim+json"
+	// scimRequestTimeout bounds each request the fixture sender issues
+	scimRequestTimeout = 15 * time.Second
 )
 
 type config struct {
@@ -60,9 +63,7 @@ func run() error {
 		return err
 	}
 
-	requester, err := httpsling.New(
-		httpsling.Client(httpclient.Timeout(15 * time.Second)),
-	)
+	requester, err := urlx.NewRequester(httpsling.Client(httpclient.Timeout(scimRequestTimeout)))
 	if err != nil {
 		return fmt.Errorf("create requester: %w", err)
 	}

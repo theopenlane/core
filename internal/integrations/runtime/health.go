@@ -316,33 +316,17 @@ func (r *Runtime) RunHealthAssessment(ctx context.Context, installation *ent.Int
 		return HealthAssessment{}, err
 	}
 
-	// connectionless definitions (push-based providers) have no credentials to exercise
-	var connection types.ConnectionRegistration
-
-	if len(def.Connections) > 0 {
-		connection, err = r.resolvePersistedConnection(def, installation)
-		if err != nil {
-			return HealthAssessment{}, err
-		}
+	failed, err := r.checkConnectionHealth(ctx, installation, def)
+	if err != nil {
+		return HealthAssessment{}, err
 	}
 
-	if connection.HealthCheck != nil {
-		bindings, err := r.loadCredentials(privacy.DecisionContext(ctx, privacy.Allow), installation, connection.CredentialRefs)
-		if err != nil {
-			return HealthAssessment{}, err
-		}
+	if failed != nil {
+		return *failed, nil
+	}
 
-		if checkErr := r.runConnectionHealthCheck(ctx, installation, connection, bindings); checkErr != nil {
-			if markErr := r.MarkIntegrationUnhealthy(ctx, installation, checkErr.Error()); markErr != nil {
-				logx.FromContext(ctx).Error().Err(markErr).Msg("failed marking integration unhealthy after failed health check")
-			}
-
-			return HealthAssessment{
-				Status:     enums.IntegrationStatusErrored,
-				Connection: ConnectionHealthResult{Reason: checkErr.Error()},
-				Operations: appendRecordedResults(nil, installation),
-			}, nil
-		}
+	if err := r.RefreshInstallationMetadata(ctx, installation); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("health assessment: instance id refresh failed")
 	}
 
 	if installation.Status == enums.IntegrationStatusErrored {
@@ -361,6 +345,43 @@ func (r *Runtime) RunHealthAssessment(ctx context.Context, installation *ent.Int
 		Status:     installation.Status,
 		Connection: ConnectionHealthResult{Healthy: true},
 		Operations: results,
+	}, nil
+}
+
+// checkConnectionHealth runs the persisted connection's health check, returning the errored assessment when it fails
+func (r *Runtime) checkConnectionHealth(ctx context.Context, installation *ent.Integration, def types.Definition) (*HealthAssessment, error) {
+	// connectionless definitions (push-based providers) have no credentials to exercise
+	if len(def.Connections) == 0 {
+		return nil, nil
+	}
+
+	connection, err := r.resolvePersistedConnection(def, installation)
+	if err != nil {
+		return nil, err
+	}
+
+	if connection.HealthCheck == nil {
+		return nil, nil
+	}
+
+	bindings, err := r.loadCredentials(privacy.DecisionContext(ctx, privacy.Allow), installation, connection.CredentialRefs)
+	if err != nil {
+		return nil, err
+	}
+
+	checkErr := r.runConnectionHealthCheck(ctx, installation, connection, bindings)
+	if checkErr == nil {
+		return nil, nil
+	}
+
+	if markErr := r.MarkIntegrationUnhealthy(ctx, installation, checkErr.Error()); markErr != nil {
+		logx.FromContext(ctx).Error().Err(markErr).Msg("failed marking integration unhealthy after failed health check")
+	}
+
+	return &HealthAssessment{
+		Status:     enums.IntegrationStatusErrored,
+		Connection: ConnectionHealthResult{Reason: checkErr.Error()},
+		Operations: appendRecordedResults(nil, installation),
 	}, nil
 }
 

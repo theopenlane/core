@@ -22,8 +22,7 @@ github.com/arbovm/levenshtein v0.0.0-20160628152529-48b4e1c0c4d0 h1:jfIu9sQUG6Ig
 github.com/arbovm/levenshtein v0.0.0-20160628152529-48b4e1c0c4d0/go.mod h1:t2tdKJDJF9BV14lnkjHmOQgcvEKgtqs5a1N3LNdJhGE=
 github.com/bmatcuk/doublestar v1.3.4 h1:gPypJ5xD31uhX6Tf54sDPUOBXTqKH4c9aPY66CyQrS0=
 github.com/bmatcuk/doublestar v1.3.4/go.mod h1:wiQtGV+rzVYxB7WIlirSN++5HPtPlXEo9MEoZQC/PmE=
-github.com/brianvoe/gofakeit/v7 v7.16.0 h1:LXNcvT4Klw72/hqpLNNdEWFIcP7G0VFPNsqvEIGONBE=
-github.com/brianvoe/gofakeit/v7 v7.16.0/go.mod h1:QXuPeBw164PJCzCUZVmgpgHJ3Llj49jSLVkKPMtxtxA=
+github.com/brianvoe/gofakeit/v7 v7.17.0 h1:usvHa73vmAjC1JmX4dpZAm1eQkR0riXaxvilScRTFb0=
 github.com/cespare/xxhash/v2 v2.3.0 h1:UL815xU9SqsFlibzuggzjXhog7bL6oX9BbNZnL2UFvs=
 github.com/cespare/xxhash/v2 v2.3.0/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
 github.com/coder/websocket v1.8.15 h1:6B2JPeOGlpff2Uz6vOEH1Vzpi0iUz20A+lPVhPHtNUA=
@@ -148,8 +147,8 @@ github.com/theopenlane/core/v2 v2.4.7 h1:RPCHGbGyoyg5VbjyswQkEKwDm0xVksxte19gU/O
 github.com/theopenlane/core/v2 v2.4.7/go.mod h1:/aG7LvUE0KWGSFgRbY//DO+x1NHm4cecst2poU2EQIM=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
-github.com/theopenlane/entx v0.33.5 h1:Ewf6ZtGzIu9jbmaev8w6njJClTJrgQDW3ODQvgtKNT8=
-github.com/theopenlane/entx v0.33.5/go.mod h1:ubJf45e2Ivax9rq6tDUog6/Rthe3MT9pWB1EHnp9ylA=
+github.com/theopenlane/entx v0.34.1 h1:jwdUceurjfD/ncxaoVH5Wv1YRjbbKjEMrxerh8QWhCA=
+github.com/theopenlane/entx v0.34.1/go.mod h1:c1H4hqMJeuTNNMTf3tnVZkVMRZ/FgHwQZbXydshBeAs=
 github.com/theopenlane/utils v0.7.1 h1:x+9kVMgOALYqAH6GaLaDb9tj16nzasoGM8X0v0XNTn8=
 github.com/theopenlane/utils v0.7.1/go.mod h1:uxiLqjtcqgH57yOpYl3tTfKuenGYyAROxHFMpXx6mDY=
 github.com/tidwall/gjson v1.14.2/go.mod h1:/wbyibRr2FHMks5tjHJ5F8dMZh3AcwJEMf5vlfC0lxk=

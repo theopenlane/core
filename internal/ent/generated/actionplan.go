@@ -41,6 +41,16 @@ type ActionPlan struct {
 	Tags []string `json:"tags,omitempty"`
 	// revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	Revision string `json:"revision,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
 	// the name of the action_plan
 	Name string `json:"name,omitempty"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
@@ -130,6 +140,8 @@ type ActionPlan struct {
 
 // ActionPlanEdges holds the relations/edges for other nodes in the graph.
 type ActionPlanEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// the group of users who are responsible for approving the action_plan
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the action_plan, used for temporary approval
@@ -170,10 +182,11 @@ type ActionPlanEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [19]bool
+	loadedTypes [20]bool
 	// totalCount holds the count of the edges above.
-	totalCount [19]map[string]int
+	totalCount [20]map[string]int
 
+	namedIntegrationRuns    map[string][]*IntegrationRun
 	namedBlockedGroups      map[string][]*Group
 	namedEditors            map[string][]*Group
 	namedViewers            map[string][]*Group
@@ -190,12 +203,21 @@ type ActionPlanEdges struct {
 	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e ActionPlanEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // ApproverOrErr returns the Approver value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ActionPlanEdges) ApproverOrErr() (*Group, error) {
 	if e.Approver != nil {
 		return e.Approver, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "approver"}
@@ -206,7 +228,7 @@ func (e ActionPlanEdges) ApproverOrErr() (*Group, error) {
 func (e ActionPlanEdges) DelegateOrErr() (*Group, error) {
 	if e.Delegate != nil {
 		return e.Delegate, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "delegate"}
@@ -217,7 +239,7 @@ func (e ActionPlanEdges) DelegateOrErr() (*Group, error) {
 func (e ActionPlanEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -226,7 +248,7 @@ func (e ActionPlanEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -235,7 +257,7 @@ func (e ActionPlanEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[5] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -244,7 +266,7 @@ func (e ActionPlanEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
@@ -255,7 +277,7 @@ func (e ActionPlanEdges) ViewersOrErr() ([]*Group, error) {
 func (e ActionPlanEdges) ActionPlanKindOrErr() (*CustomTypeEnum, error) {
 	if e.ActionPlanKind != nil {
 		return e.ActionPlanKind, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "action_plan_kind"}
@@ -264,7 +286,7 @@ func (e ActionPlanEdges) ActionPlanKindOrErr() (*CustomTypeEnum, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[8] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -273,7 +295,7 @@ func (e ActionPlanEdges) RisksOrErr() ([]*Risk, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -282,7 +304,7 @@ func (e ActionPlanEdges) ControlsOrErr() ([]*Control, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -291,7 +313,7 @@ func (e ActionPlanEdges) ProgramsOrErr() ([]*Program, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -300,7 +322,7 @@ func (e ActionPlanEdges) FindingsOrErr() ([]*Finding, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -309,7 +331,7 @@ func (e ActionPlanEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -318,7 +340,7 @@ func (e ActionPlanEdges) ScansOrErr() ([]*Scan, error) {
 // ReviewsOrErr returns the Reviews value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Reviews, nil
 	}
 	return nil, &NotLoadedError{edge: "reviews"}
@@ -327,7 +349,7 @@ func (e ActionPlanEdges) ReviewsOrErr() ([]*Review, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -336,7 +358,7 @@ func (e ActionPlanEdges) RemediationsOrErr() ([]*Remediation, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -345,7 +367,7 @@ func (e ActionPlanEdges) TasksOrErr() ([]*Task, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -356,7 +378,7 @@ func (e ActionPlanEdges) IntegrationsOrErr() ([]*Integration, error) {
 func (e ActionPlanEdges) FileOrErr() (*File, error) {
 	if e.File != nil {
 		return e.File, nil
-	} else if e.loadedTypes[17] {
+	} else if e.loadedTypes[18] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -365,7 +387,7 @@ func (e ActionPlanEdges) FileOrErr() (*File, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -380,7 +402,7 @@ func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case actionplan.FieldApprovalRequired, actionplan.FieldSystemOwned, actionplan.FieldWorkflowEligibleMarker, actionplan.FieldRequiresApproval, actionplan.FieldBlocked:
 			values[i] = new(sql.NullBool)
-		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldUpdatedByImpersonator, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldManagementMode, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldApproverID, actionplan.FieldDelegateID, actionplan.FieldSummary, actionplan.FieldURL, actionplan.FieldFileID, actionplan.FieldExternalFileID, actionplan.FieldExternalContents, actionplan.FieldOwnerID, actionplan.FieldInternalNotes, actionplan.FieldSystemInternalID, actionplan.FieldActionPlanKindName, actionplan.FieldActionPlanKindID, actionplan.FieldTitle, actionplan.FieldDescription, actionplan.FieldPriority, actionplan.FieldBlockerReason, actionplan.FieldSource:
+		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldUpdatedByImpersonator, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldSourceDefinitionID, actionplan.FieldSourceDefinitionVersion, actionplan.FieldSourceInstanceID, actionplan.FieldManagedBy, actionplan.FieldIntegrationRunID, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldManagementMode, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldApproverID, actionplan.FieldDelegateID, actionplan.FieldSummary, actionplan.FieldURL, actionplan.FieldFileID, actionplan.FieldExternalFileID, actionplan.FieldExternalContents, actionplan.FieldOwnerID, actionplan.FieldInternalNotes, actionplan.FieldSystemInternalID, actionplan.FieldActionPlanKindName, actionplan.FieldActionPlanKindID, actionplan.FieldTitle, actionplan.FieldDescription, actionplan.FieldPriority, actionplan.FieldBlockerReason, actionplan.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplan.FieldCreatedAt, actionplan.FieldUpdatedAt, actionplan.FieldDeletedAt, actionplan.FieldReviewDue, actionplan.FieldDueDate, actionplan.FieldCompletedAt:
 			values[i] = new(sql.NullTime)
@@ -467,6 +489,36 @@ func (_m *ActionPlan) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field revision", values[i])
 			} else if value.Valid {
 				_m.Revision = value.String
+			}
+		case actionplan.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case actionplan.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case actionplan.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case actionplan.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case actionplan.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
 			}
 		case actionplan.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -761,6 +813,11 @@ func (_m *ActionPlan) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryIntegrationRuns queries the "integration_runs" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewActionPlanClient(_m.config).QueryIntegrationRuns(_m)
+}
+
 // QueryApprover queries the "approver" edge of the ActionPlan entity.
 func (_m *ActionPlan) QueryApprover() *GroupQuery {
 	return NewActionPlanClient(_m.config).QueryApprover(_m)
@@ -908,6 +965,21 @@ func (_m *ActionPlan) String() string {
 	builder.WriteString("revision=")
 	builder.WriteString(_m.Revision)
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
 	builder.WriteString(", ")
@@ -1040,6 +1112,30 @@ func (_m *ActionPlan) String() string {
 	builder.WriteString(_m.Source)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ActionPlan) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ActionPlan) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not

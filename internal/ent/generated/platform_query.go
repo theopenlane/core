@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
@@ -86,7 +85,6 @@ type PlatformQuery struct {
 	withTasks                        *TaskQuery
 	withIdentityHolders              *IdentityHolderQuery
 	withIntegrations                 *IntegrationQuery
-	withDirectorySyncRuns            *DirectorySyncRunQuery
 	withDirectoryAccounts            *DirectoryAccountQuery
 	withDirectoryGroups              *DirectoryGroupQuery
 	withDirectoryMemberships         *DirectoryMembershipQuery
@@ -119,7 +117,6 @@ type PlatformQuery struct {
 	withNamedTasks                   map[string]*TaskQuery
 	withNamedIdentityHolders         map[string]*IdentityHolderQuery
 	withNamedIntegrations            map[string]*IntegrationQuery
-	withNamedDirectorySyncRuns       map[string]*DirectorySyncRunQuery
 	withNamedDirectoryAccounts       map[string]*DirectoryAccountQuery
 	withNamedDirectoryGroups         map[string]*DirectoryGroupQuery
 	withNamedDirectoryMemberships    map[string]*DirectoryMembershipQuery
@@ -1003,28 +1000,6 @@ func (_q *PlatformQuery) QueryIntegrations() *IntegrationQuery {
 	return query
 }
 
-// QueryDirectorySyncRuns chains the current query on the "directory_sync_runs" edge.
-func (_q *PlatformQuery) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
-	query := (&DirectorySyncRunClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(platform.Table, platform.FieldID, selector),
-			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, platform.DirectorySyncRunsTable, platform.DirectorySyncRunsColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryDirectoryAccounts chains the current query on the "directory_accounts" edge.
 func (_q *PlatformQuery) QueryDirectoryAccounts() *DirectoryAccountQuery {
 	query := (&DirectoryAccountClient{config: _q.config}).Query()
@@ -1519,7 +1494,6 @@ func (_q *PlatformQuery) Clone() *PlatformQuery {
 		withTasks:                        _q.withTasks.Clone(),
 		withIdentityHolders:              _q.withIdentityHolders.Clone(),
 		withIntegrations:                 _q.withIntegrations.Clone(),
-		withDirectorySyncRuns:            _q.withDirectorySyncRuns.Clone(),
 		withDirectoryAccounts:            _q.withDirectoryAccounts.Clone(),
 		withDirectoryGroups:              _q.withDirectoryGroups.Clone(),
 		withDirectoryMemberships:         _q.withDirectoryMemberships.Clone(),
@@ -1957,17 +1931,6 @@ func (_q *PlatformQuery) WithIntegrations(opts ...func(*IntegrationQuery)) *Plat
 	return _q
 }
 
-// WithDirectorySyncRuns tells the query-builder to eager-load the nodes that are connected to
-// the "directory_sync_runs" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *PlatformQuery) WithDirectorySyncRuns(opts ...func(*DirectorySyncRunQuery)) *PlatformQuery {
-	query := (&DirectorySyncRunClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withDirectorySyncRuns = query
-	return _q
-}
-
 // WithDirectoryAccounts tells the query-builder to eager-load the nodes that are connected to
 // the "directory_accounts" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *PlatformQuery) WithDirectoryAccounts(opts ...func(*DirectoryAccountQuery)) *PlatformQuery {
@@ -2185,7 +2148,7 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 		nodes       = []*Platform{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [51]bool{
+		loadedTypes = [50]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -2224,7 +2187,6 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 			_q.withTasks != nil,
 			_q.withIdentityHolders != nil,
 			_q.withIntegrations != nil,
-			_q.withDirectorySyncRuns != nil,
 			_q.withDirectoryAccounts != nil,
 			_q.withDirectoryGroups != nil,
 			_q.withDirectoryMemberships != nil,
@@ -2508,15 +2470,6 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 			return nil, err
 		}
 	}
-	if query := _q.withDirectorySyncRuns; query != nil {
-		if err := _q.loadDirectorySyncRuns(ctx, query, nodes,
-			func(n *Platform) { n.Edges.DirectorySyncRuns = []*DirectorySyncRun{} },
-			func(n *Platform, e *DirectorySyncRun) {
-				n.Edges.DirectorySyncRuns = append(n.Edges.DirectorySyncRuns, e)
-			}); err != nil {
-			return nil, err
-		}
-	}
 	if query := _q.withDirectoryAccounts; query != nil {
 		if err := _q.loadDirectoryAccounts(ctx, query, nodes,
 			func(n *Platform) { n.Edges.DirectoryAccounts = []*DirectoryAccount{} },
@@ -2722,13 +2675,6 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 		if err := _q.loadIntegrations(ctx, query, nodes,
 			func(n *Platform) { n.appendNamedIntegrations(name) },
 			func(n *Platform, e *Integration) { n.appendNamedIntegrations(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedDirectorySyncRuns {
-		if err := _q.loadDirectorySyncRuns(ctx, query, nodes,
-			func(n *Platform) { n.appendNamedDirectorySyncRuns(name) },
-			func(n *Platform, e *DirectorySyncRun) { n.appendNamedDirectorySyncRuns(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4343,36 +4289,6 @@ func (_q *PlatformQuery) loadIntegrations(ctx context.Context, query *Integratio
 	}
 	return nil
 }
-func (_q *PlatformQuery) loadDirectorySyncRuns(ctx context.Context, query *DirectorySyncRunQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *DirectorySyncRun)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Platform)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(directorysyncrun.FieldPlatformID)
-	}
-	query.Where(predicate.DirectorySyncRun(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(platform.DirectorySyncRunsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.PlatformID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "platform_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
 func (_q *PlatformQuery) loadDirectoryAccounts(ctx context.Context, query *DirectoryAccountQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *DirectoryAccount)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Platform)
@@ -5285,20 +5201,6 @@ func (_q *PlatformQuery) WithNamedIntegrations(name string, opts ...func(*Integr
 		_q.withNamedIntegrations = make(map[string]*IntegrationQuery)
 	}
 	_q.withNamedIntegrations[name] = query
-	return _q
-}
-
-// WithNamedDirectorySyncRuns tells the query-builder to eager-load the nodes that are connected to the "directory_sync_runs"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *PlatformQuery) WithNamedDirectorySyncRuns(name string, opts ...func(*DirectorySyncRunQuery)) *PlatformQuery {
-	query := (&DirectorySyncRunClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedDirectorySyncRuns == nil {
-		_q.withNamedDirectorySyncRuns = make(map[string]*DirectorySyncRunQuery)
-	}
-	_q.withNamedDirectorySyncRuns[name] = query
 	return _q
 }
 
