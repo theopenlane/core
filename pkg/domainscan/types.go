@@ -39,6 +39,7 @@ type BrandDesignProfile struct {
 	SecondaryForegroundColor string `json:"secondary_foreground_color,omitempty"`
 
 	ApplyToPreviewTrustcenter bool `json:"-"`
+	ApplyToLiveTrustcenter    bool `json:"-"`
 }
 
 // IsEmpty checks if branding data was found after the browser rendering job completes

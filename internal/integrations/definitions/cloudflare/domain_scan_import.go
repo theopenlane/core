@@ -192,6 +192,21 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 }
 
 func applyBrandingToTrustCenter(ctx context.Context, client *generated.Client, brandDesign domainscan.BrandDesignProfile) (bool, error) {
+
+	envs := []enums.TrustCenterEnvironment{}
+
+	if brandDesign.ApplyToPreviewTrustcenter {
+		envs = append(envs, enums.TrustCenterEnvironmentPreview)
+	}
+
+	if brandDesign.ApplyToLiveTrustcenter {
+		envs = append(envs, enums.TrustCenterEnvironmentLive)
+	}
+
+	if len(envs) == 0 {
+		return false, nil
+	}
+
 	return workflows.WithTx(ctx, client, nil, func(tx *generated.Tx) (bool, error) {
 		tc, err := tx.TrustCenter.Query().First(ctx)
 		if generated.IsNotFound(err) {
@@ -202,21 +217,29 @@ func applyBrandingToTrustCenter(ctx context.Context, client *generated.Client, b
 			return false, fmt.Errorf("could not find trustcenter for brand design: %w", err)
 		}
 
-		tcEnvironment := enums.TrustCenterEnvironmentLive
-		if brandDesign.ApplyToPreviewTrustcenter {
-			tcEnvironment = enums.TrustCenterEnvironmentPreview
-		}
+		var isUpdated bool
 
-		setting, err := tx.TrustCenterSetting.Query().
+		settings, err := tx.TrustCenterSetting.Query().
 			Where(
 				trustcentersetting.TrustCenterIDEQ(tc.ID),
-				trustcentersetting.EnvironmentEQ(tcEnvironment)).
-			Only(ctx)
+				trustcentersetting.EnvironmentIn(envs...)).
+			All(ctx)
+
 		if err != nil {
 			return false, fmt.Errorf("could not fetch trust center settings for brand design: %w", err)
 		}
 
-		return updateTrustcenterBrandDesignSetting(ctx, setting, brandDesign)
+		for _, setting := range settings {
+
+			ok, err := updateTrustcenterBrandDesignSetting(ctx, setting, brandDesign)
+			if err != nil {
+				return false, err
+			}
+
+			isUpdated = isUpdated || ok
+		}
+
+		return isUpdated, nil
 	})
 }
 

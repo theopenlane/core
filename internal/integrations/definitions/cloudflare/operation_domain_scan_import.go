@@ -100,7 +100,7 @@ type DomainScanImport struct {
 	Assets []DomainScanImportAsset `json:"assets"`
 	// Findings are the accepted findings
 	Findings []DomainScanImportFinding `json:"findings,omitempty"`
-	// Branding is the brand design config for a trust center preview
+	// Branding is the brand design config for a trust center environment
 	Branding *domainscan.BrandDesignProfile `json:"branding,omitempty"`
 }
 
