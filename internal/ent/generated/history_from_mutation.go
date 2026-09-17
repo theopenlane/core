@@ -2428,7 +2428,7 @@ func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	}
 
 	if trustCenterID, exists := m.TrustCenterID(); exists {
-		create = create.SetTrustCenterID(trustCenterID)
+		create = create.SetNillableTrustCenterID(&trustCenterID)
 	}
 
 	_, err := create.Save(ctx)
@@ -2718,9 +2718,9 @@ func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 		}
 
 		if trustCenterID, exists := m.TrustCenterID(); exists {
-			create = create.SetTrustCenterID(trustCenterID)
+			create = create.SetNillableTrustCenterID(&trustCenterID)
 		} else {
-			create = create.SetTrustCenterID(campaign.TrustCenterID)
+			create = create.SetNillableTrustCenterID(campaign.TrustCenterID)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -2803,7 +2803,7 @@ func (m *CampaignMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEmailTemplateID(campaign.EmailTemplateID).
 			SetIntegrationID(campaign.IntegrationID).
 			SetEmailBrandingID(campaign.EmailBrandingID).
-			SetTrustCenterID(campaign.TrustCenterID).
+			SetNillableTrustCenterID(campaign.TrustCenterID).
 			Save(ctx)
 		if err != nil {
 			return err

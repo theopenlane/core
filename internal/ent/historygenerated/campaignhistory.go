@@ -114,7 +114,7 @@ type CampaignHistory struct {
 	// the email branding associated with the campaign
 	EmailBrandingID string `json:"email_branding_id,omitempty"`
 	// the trust center this campaign sends updates for, if any
-	TrustCenterID string `json:"trust_center_id,omitempty"`
+	TrustCenterID *string `json:"trust_center_id,omitempty"`
 	selectValues  sql.SelectValues
 }
 
@@ -448,7 +448,8 @@ func (_m *CampaignHistory) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
 			} else if value.Valid {
-				_m.TrustCenterID = value.String
+				_m.TrustCenterID = new(string)
+				*_m.TrustCenterID = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -641,8 +642,10 @@ func (_m *CampaignHistory) String() string {
 	builder.WriteString("email_branding_id=")
 	builder.WriteString(_m.EmailBrandingID)
 	builder.WriteString(", ")
-	builder.WriteString("trust_center_id=")
-	builder.WriteString(_m.TrustCenterID)
+	if v := _m.TrustCenterID; v != nil {
+		builder.WriteString("trust_center_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

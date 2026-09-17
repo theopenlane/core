@@ -1902,9 +1902,12 @@ func (_q *TrustCenterQuery) loadCampaigns(ctx context.Context, query *CampaignQu
 	}
 	for _, n := range neighbors {
 		fk := n.TrustCenterID
-		node, ok := nodeids[fk]
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "trust_center_id" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_id" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
