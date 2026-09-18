@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"errors"
 	"slices"
 	"strings"
 
@@ -14,6 +15,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -86,6 +88,13 @@ func HookTags() ent.Hook {
 				if err := mut.Client().TagDefinition.Create().
 					SetInput(input).
 					Exec(ctx); err != nil {
+					// a user may be allowed to edit the object without being able to create org tag definitions
+					if errors.Is(err, generated.ErrPermissionDenied) || errors.Is(err, privacy.Deny) {
+						logx.FromContext(ctx).Debug().Str("tag", tag).Msg("user cannot create org tag definitions, skipping")
+
+						continue
+					}
+
 					logx.FromContext(ctx).Error().Err(err).Str("tag", tag).Msg("error creating tag definition")
 
 					return nil, err
