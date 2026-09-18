@@ -219,7 +219,7 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Comment("provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField(),
+				entx.IntegrationMappingField().Volatile(),
 			),
 		field.String("raw_profile_file_id").
 			Comment("object storage file identifier that holds the raw upstream payload").

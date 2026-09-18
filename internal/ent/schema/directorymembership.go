@@ -111,7 +111,7 @@ func (DirectoryMembership) Fields() []ent.Field {
 			Comment("raw metadata associated with this membership from the provider").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField(),
+				entx.IntegrationMappingField().Volatile(),
 			),
 	}
 }
@@ -189,6 +189,8 @@ func (DirectoryMembership) Indexes() []ent.Index {
 		// removed membership episodes can accumulate per (account, group) pair
 		index.Fields("directory_account_id", "directory_group_id").
 			Unique().
+			Annotations(entsql.IndexWhere("removed_at is NULL")),
+		index.Fields("owner_id", "managed_by", "source_definition_id", "source_instance_id").
 			Annotations(entsql.IndexWhere("removed_at is NULL")),
 	}
 }

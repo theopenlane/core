@@ -1900,6 +1900,14 @@ var (
 					Where: "removed_at is NULL",
 				},
 			},
+			{
+				Name:    "directorymembership_owner_id_managed_by_source_definition_id_source_instance_id",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryMembershipsColumns[26], DirectoryMembershipsColumns[10], DirectoryMembershipsColumns[7], DirectoryMembershipsColumns[9]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "removed_at is NULL",
+				},
+			},
 		},
 	}
 	// DiscussionsColumns holds the columns for the "discussions" table.
@@ -4441,6 +4449,14 @@ var (
 				Columns: []*schema.Column{IntegrationRunsColumns[19], IntegrationRunsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "integrationrun_integration_id_operation_name_finished_at",
+				Unique:  false,
+				Columns: []*schema.Column{IntegrationRunsColumns[19], IntegrationRunsColumns[8], IntegrationRunsColumns[14]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL AND status = 'SUCCESS' AND finished_at IS NOT NULL",
 				},
 			},
 		},

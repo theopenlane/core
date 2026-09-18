@@ -32,8 +32,13 @@ type DomainScanRequest struct {
 	ForceRefresh bool `json:"forceRefresh,omitempty" jsonschema:"title=Force Refresh,description=Bypass the render cache and force a fresh scan"`
 	// BrandDesignOnly extracts the brand design without running the full domain scan
 	BrandDesignOnly bool `json:"brandDesignOnly,omitempty" jsonschema:"title=Brand Design Only,description=Extract and apply the brand design without building a full domain scan report"`
-	// ApplyBrandDesign applies extracted brand design to Trust Center settings
-	ApplyBrandDesign bool `json:"applyBrandDesign,omitempty" jsonschema:"title=Apply Brand Design,description=Apply extracted brand design to Trust Center settings"`
+
+	// ApplyBrandDesignToPreview instructs the gala implementation to apply the extracted brand design to the preview trustcenter environment
+	ApplyBrandDesignToPreview bool `json:"applyBrandDesignToPreview,omitempty" jsonschema:"title=Apply Brand Design to Preview,description=Apply extracted brand design to preview Trust Center settings"`
+
+	// ApplyBrandDesignToLive instructs the gala implementation to apply the extracted brand design to the live trustcenter environment
+	ApplyBrandDesignToLive bool `json:"applyBrandDesignToLive,omitempty" jsonschema:"title=Apply Brand Design to Live,description=Apply extracted brand design to live Trust Center settings"`
+
 	// GroupID links this scan to sibling scans requested together so they can be recombined into a
 	// single notification once the whole group finishes
 	GroupID string `json:"groupId,omitempty"`
@@ -113,9 +118,8 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 			if cfg.BrandDesignOnly {
 				metadata[DomainScanBrandDesignOnlyMetadataKey] = true
 			}
-			if cfg.ApplyBrandDesign {
-				metadata[DomainScanApplyBrandDesignMetadataKey] = true
-			}
+			metadata[DomainScanApplyBrandDesignToPreviewMetadataKey] = cfg.ApplyBrandDesignToPreview
+			metadata[DomainScanApplyBrandDesignToLiveMetadataKey] = cfg.ApplyBrandDesignToLive
 			if groupID != "" {
 				metadata[DomainScanGroupMetadataKey] = groupID
 			}
@@ -140,9 +144,8 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 			}
 		} else if groupID != "" {
 			metadata := map[string]any{DomainScanGroupMetadataKey: groupID}
-			if cfg.ApplyBrandDesign {
-				metadata[DomainScanApplyBrandDesignMetadataKey] = true
-			}
+			metadata[DomainScanApplyBrandDesignToPreviewMetadataKey] = cfg.ApplyBrandDesignToPreview
+			metadata[DomainScanApplyBrandDesignToLiveMetadataKey] = cfg.ApplyBrandDesignToLive
 
 			scanRecord, err = scanRecord.Update().SetMetadata(metadata).Save(ctx)
 			if err != nil {
@@ -160,7 +163,15 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 		saga := domainScanSaga{services: request.Services}
 
 		if cfg.BrandDesignOnly {
-			if err := saga.runBrandDesignScan(ctx, organizationID, scanRecord.ID, cfg.Domain, cfg.ApplyBrandDesign); err != nil {
+			applyToPreview, _ := scanRecord.Metadata[DomainScanApplyBrandDesignToPreviewMetadataKey].(bool)
+			applyToLive, _ := scanRecord.Metadata[DomainScanApplyBrandDesignToLiveMetadataKey].(bool)
+			if err := saga.runBrandDesignScan(ctx, brandDesignScanOpts{
+				organizationID:            organizationID,
+				scanID:                    scanRecord.ID,
+				domain:                    cfg.Domain,
+				applyBrandDesignToPreview: applyToPreview,
+				applyBrandDesignToLive:    applyToLive,
+			}); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Str("scan_id", scanRecord.ID).Msg("domain scan: brand design scan failed")
 				saga.markDomainScanFailed(ctx, organizationID, scanRecord.ID)
 

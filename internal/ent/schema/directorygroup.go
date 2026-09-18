@@ -142,7 +142,7 @@ func (DirectoryGroup) Fields() []ent.Field {
 			Comment("provider-specific metadata captured alongside the normalized profile to preserve directory quirks without schema sprawl").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField(),
+				entx.IntegrationMappingField().Volatile(),
 			),
 		field.String("raw_profile_file_id").
 			Comment("object storage file identifier containing the raw upstream payload").
@@ -154,7 +154,10 @@ func (DirectoryGroup) Fields() []ent.Field {
 		field.String("source_version").
 			Comment("cursor or ETag supplied by the source system for auditing").
 			Optional().
-			Nillable(),
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField().Volatile(),
+			),
 		field.String("directory_name").
 			Comment("directory source label set by the integration (e.g. googleworkspace, github, slack)").
 			Optional().

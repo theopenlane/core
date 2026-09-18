@@ -125,6 +125,8 @@ func (IntegrationRun) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("integration_id", "started_at").
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("integration_id", "operation_name", "finished_at").
+			Annotations(entsql.IndexWhere("deleted_at is NULL AND status = 'SUCCESS' AND finished_at IS NOT NULL")),
 	}
 }
 

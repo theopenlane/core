@@ -82,10 +82,16 @@ func (ActionPlan) Fields() []ent.Field {
 			Comment("context on why the action plan is blocked"),
 		field.JSON("metadata", map[string]any{}).
 			Optional().
-			Comment("additional structured metadata for the action plan"),
+			Comment("additional structured metadata for the action plan").
+			Annotations(
+				entx.IntegrationMappingField().Volatile(),
+			),
 		field.JSON("raw_payload", map[string]any{}).
 			Optional().
-			Comment("raw payload received from the integration for auditing and troubleshooting"),
+			Comment("raw payload received from the integration for auditing and troubleshooting").
+			Annotations(
+				entx.IntegrationMappingField().Volatile(),
+			),
 		field.String("source").
 			Annotations(
 				entgql.OrderField("source"),
