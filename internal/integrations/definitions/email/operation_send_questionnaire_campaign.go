@@ -93,8 +93,6 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 		return err
 	}
 
-	fmt.Println(authURL)
-
 	tags := make([]newman.Tag, 0, maxQuestionnaireTags)
 	tags = append(tags, newman.Tag{Name: TagAssessmentResponseID, Value: response.ID})
 
