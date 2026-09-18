@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
+
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
@@ -285,10 +286,8 @@ func TestDisconnectReinstallReclaimsIngestedRecord(t *testing.T) {
 }
 
 // TestBackfillChainResolvesInstanceIDThenStampsProvenance drives the real gala startup backfill chain
-// with file-backups disabled: a mock installation connects and resolves a distinct external id, its id
-// is cleared to a legacy row, and one legacy unstamped record is left FK-linked to it. The chain must
-// re-resolve the instance id before stamping provenance, which the record carrying the re-resolved id
-// proves is the order instance-ids ran before provenance
+// against a legacy installation and an unstamped account. when routines are registered, the chain
+// must resolve the instance id before provenance gets stamped
 func TestBackfillChainResolvesInstanceIDThenStampsProvenance(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -313,11 +312,20 @@ func TestBackfillChainResolvesInstanceIDThenStampsProvenance(t *testing.T) {
 
 	waitForEvents()
 
-	assert.Check(t, is.Equal("tenant-mockhttp", reloadIntegration(t, ctx, install.ID).InstallationMetadata.Display.ExternalID), "the backfill re-resolves the distinct external id through the provider")
-
-	stamped, err := suite.Client.DB.DirectoryAccount.Get(ctx, account.ID)
+	resolved := reloadIntegration(t, ctx, install.ID)
+	after, err := suite.Client.DB.DirectoryAccount.Get(ctx, account.ID)
 	th.RequireNoError(t, err)
-	assert.Check(t, is.Equal("tenant-mockhttp", stamped.SourceInstanceID), "provenance stamps the re-resolved id, proving instance-ids ran before provenance")
-	assert.Check(t, is.Equal(install.ID, stamped.ManagedBy), "the stamped record is managed by the installation")
-	assert.Check(t, "tenant-mockhttp" != install.ID, "the resolved external id is distinct from the installation id")
+
+	// we don't want to have to be updating tests every time we register/unregister new backfill options
+	if serveropts.HasRoutines() {
+		assert.Check(t, is.Equal("tenant-mockhttp", resolved.InstallationMetadata.Display.ExternalID), "the backfill re-resolves the distinct external id through the provider")
+		assert.Check(t, is.Equal("tenant-mockhttp", after.SourceInstanceID), "provenance stamps the re-resolved id, proving instance-ids ran before provenance")
+		assert.Check(t, is.Equal(install.ID, after.ManagedBy), "the stamped record is managed by the installation")
+		return
+	}
+
+	assert.Check(t, is.Equal("", resolved.InstallationMetadata.Display.ExternalID), "startup without backfill routines must leave instance id unresolved")
+	assert.Check(t, is.Equal("", after.SourceInstanceID), "startup without backfill routines must not have a stamped provenance")
+	assert.Check(t, is.Equal("", after.ManagedBy), "startup without backfill routines must leave account unclaimed")
+	assert.Check(t, after.UpdatedAt.Equal(account.UpdatedAt), "startup without backfill routines cannot rewrite the account")
 }
