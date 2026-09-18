@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
@@ -44,6 +45,9 @@ func HookOrganization() ent.Hook {
 			// existingCaller is captured here so it can be mutated after org creation
 			// to propagate the new org ID back to the original caller pointer
 			var existingCaller *auth.Caller
+
+			// originalCtx is the caller context without the org creation bypass capabilities
+			originalCtx := ctx
 
 			if m.Op().Is(ent.OpCreate) {
 				// add bypass capabilities to the caller for the duration of org creation
@@ -101,6 +105,21 @@ func HookOrganization() ent.Hook {
 					return nil, err
 				}
 
+				// the bypass capabilities are only needed for the insert itself, the rest of the
+				// flow runs as the original caller scoped to the new org with an allow decision
+				if !orgCreated.PersonalOrg {
+					// propagate the new org ID back through the original caller pointer
+					// so that callers holding the same *Caller see the updated org
+					if existingCaller != nil {
+						existingCaller.OrganizationID = orgCreated.ID
+						if !lo.Contains(existingCaller.OrganizationIDs, orgCreated.ID) {
+							existingCaller.OrganizationIDs = append(existingCaller.OrganizationIDs, orgCreated.ID)
+						}
+					}
+
+					ctx = privacy.DecisionContext(originalCtx, privacy.Allow)
+				}
+
 				// create the admin organization member if not using an API token (which is not associated with a user)
 				// otherwise add the API token for admin access to the newly created organization
 				if err := createOrgMemberOwner(ctx, orgCreated.ID, m); err != nil {
@@ -115,15 +134,6 @@ func HookOrganization() ent.Hook {
 					ctx, err = updateUserAuthSession(ctx, am, orgCreated.ID)
 					if err != nil {
 						return v, err
-					}
-
-					// propagate the new org ID back through the original caller pointer
-					// so that callers holding the same *Caller see the updated org
-					if existingCaller != nil {
-						existingCaller.OrganizationID = orgCreated.ID
-						if !lo.Contains(existingCaller.OrganizationIDs, orgCreated.ID) {
-							existingCaller.OrganizationIDs = append(existingCaller.OrganizationIDs, orgCreated.ID)
-						}
 					}
 
 					ctx, err = postOrganizationCreation(ctx, orgCreated, m)
@@ -307,15 +317,6 @@ func createEntityTypes(ctx context.Context, orgID string, m *generated.Organizat
 
 // postOrganizationCreation runs after an organization is created to perform additional setup
 func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) (context.Context, error) {
-	// capture the original org id, ignore error as this will not be set in all cases
-	originalOrg, _ := auth.GetOrganizationIDFromContext(ctx) //nolint:errcheck
-
-	// set the new org id in the auth context to process the rest of the post creation steps
-	ctx, err := auth.SetOrganizationIDInAuthContext(ctx, orgCreated.ID)
-	if err != nil {
-		return ctx, err
-	}
-
 	// create default entity types, if configured
 	if err := createEntityTypes(ctx, orgCreated.ID, m); err != nil {
 		return ctx, err
@@ -349,14 +350,6 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 	if err := createDefaultSLADefinitions(ctx, orgCreated.ID, m.Client()); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error creating default SLA definitions")
 		return ctx, err
-	}
-
-	// reset the original org id in the auth context if it was previously set
-	if originalOrg != "" {
-		ctx, err = auth.SetOrganizationIDInAuthContext(ctx, originalOrg)
-		if err != nil {
-			return ctx, err
-		}
 	}
 
 	return ctx, nil
