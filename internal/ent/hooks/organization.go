@@ -114,11 +114,12 @@ func HookOrganization() ent.Hook {
 						existingCaller.OrganizationIDs = append(existingCaller.OrganizationIDs, orgCreated.ID)
 					}
 
-					newOrgCaller := *existingCaller
+					// the managed group bypass is still required to create the default groups
+					newOrgCaller := existingCaller.WithCapabilities(auth.CapBypassManagedGroup)
 					newOrgCaller.OrganizationID = orgCreated.ID
 					newOrgCaller.OrganizationIDs = []string{orgCreated.ID}
 
-					ctx = auth.WithCaller(originalCtx, &newOrgCaller)
+					ctx = auth.WithCaller(originalCtx, newOrgCaller)
 				}
 
 				// create the admin organization member if not using an API token (which is not associated with a user)
