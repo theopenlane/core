@@ -3,10 +3,12 @@ package hooks
 import (
 	"context"
 	"slices"
+	"strings"
 
 	"entgo.io/ent"
 
 	"github.com/samber/lo"
+	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/iam/auth"
 
@@ -56,28 +58,35 @@ func HookTags() ent.Hook {
 					continue
 				}
 
+				// match on slug as well as name, the unique index is on both and kebab casing collapses
+				// names that differ only in spacing or punctuation
 				exists, err := mut.Client().TagDefinition.Query().
-					Where(tagdefinition.NameEqualFold(tag)).
+					Where(
+						tagdefinition.Or(
+							tagdefinition.NameEqualFold(tag),
+							tagdefinition.SlugEqualFold(strcase.KebabCase(strings.TrimSpace(tag))),
+						),
+					).
 					Exist(ctx)
-				if !exists {
+				if err != nil {
+					logx.FromContext(ctx).Error().Err(err).Str("tag", tag).Msg("error querying tag definitions, skipping org tag creation")
 
-					input := generated.CreateTagDefinitionInput{
-						Name:    tag,
-						OwnerID: &orgID,
-					}
+					continue
+				}
 
-					if err := mut.Client().TagDefinition.Create().
-						SetInput(input).
-						Exec(ctx); err != nil {
-						if !generated.IsConstraintError(err) {
-							logx.FromContext(ctx).Warn().Err(err).Str("tag", tag).Msg("error creating tag definition")
-						}
+				if exists {
+					continue
+				}
 
-						// else, another process created it, so we can ignore the error
-						logx.FromContext(ctx).Debug().Str("tag", tag).Msg("tag definition already exists, skipping creation")
-					}
-				} else if err != nil {
-					logx.FromContext(ctx).Warn().Err(err).Msg("error querying tag definitions, skipping org tag creation")
+				input := generated.CreateTagDefinitionInput{
+					Name:    tag,
+					OwnerID: &orgID,
+				}
+
+				if err := mut.Client().TagDefinition.Create().
+					SetInput(input).
+					Exec(ctx); err != nil {
+					logx.FromContext(ctx).Error().Err(err).Str("tag", tag).Msg("error creating tag definition")
 				}
 			}
 
