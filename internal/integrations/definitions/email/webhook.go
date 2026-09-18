@@ -7,12 +7,14 @@ import (
 	"time"
 
 	"github.com/resend/resend-go/v3"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -113,6 +115,10 @@ func (ResendDeliveryEvent) Handle(ctx context.Context, req types.WebhookHandleRe
 
 	db := ent.FromContext(ctx)
 
+	flags := gala.WorkflowFlagsKey.GetOr(ctx, gala.WorkflowFlags{})
+	flags.Bypass = true
+	ctx = gala.WorkflowFlagsKey.Set(ctx, flags)
+
 	isTest := event.Data.Tags[TagIsTest] == "true"
 
 	if assessmentResponseID := event.Data.Tags[TagAssessmentResponseID]; assessmentResponseID != "" {
@@ -136,6 +142,8 @@ func updateAssessmentResponse(ctx context.Context, db *ent.Client, responseID st
 	if err != nil {
 		return err
 	}
+
+	ctx = auth.EnsureIntegrationCaller(ctx, resp.OwnerID)
 
 	update := db.AssessmentResponse.UpdateOneID(responseID)
 	eventTime := parseResendEventTime(event.Data.CreatedAt)
@@ -214,6 +222,8 @@ func updateCampaignTarget(ctx context.Context, db *ent.Client, targetID, campaig
 
 		return err
 	}
+
+	ctx = auth.EnsureIntegrationCaller(ctx, target.OwnerID)
 
 	update := db.CampaignTarget.UpdateOneID(target.ID)
 

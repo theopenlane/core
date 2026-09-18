@@ -1961,6 +1961,67 @@ func TestLogFieldsCodecCaptureAndRestore(t *testing.T) {
 	}
 }
 
+func TestLogFieldsCodecCaptureOmitsPerHopFields(t *testing.T) {
+	codec := logFieldsCodec()
+
+	ctx := logx.WithFields(context.Background(), map[string]any{
+		"integration_id":         "int_abc",
+		logx.FieldEventID:        "evt_parent",
+		logx.FieldTopic:          "integration.webhook.parent",
+		logx.FieldSubjectID:      "subject_parent",
+		logx.FieldSubjectEmail:   "parent@example.com",
+		logx.FieldOrganizationID: "org_parent",
+		logx.FieldCapabilities:   37,
+	})
+
+	raw, present, err := codec.capture(ctx)
+	if err != nil {
+		t.Fatalf("capture failed: %v", err)
+	}
+
+	if !present {
+		t.Fatalf("expected value present")
+	}
+
+	restored, err := codec.restore(context.Background(), raw)
+	if err != nil {
+		t.Fatalf("restore failed: %v", err)
+	}
+
+	fields := logx.FieldsFromContext(restored)
+	if fields["integration_id"] != "int_abc" {
+		t.Fatalf("expected integration_id 'int_abc', got %v", fields["integration_id"])
+	}
+
+	for _, key := range logx.PerHopFields {
+		if _, ok := fields[key]; ok {
+			t.Fatalf("expected %s omitted from captured log fields", key)
+		}
+	}
+}
+
+func TestLogFieldsCodecCaptureOnlyPerHopFieldsIsAbsent(t *testing.T) {
+	codec := logFieldsCodec()
+
+	ctx := logx.WithFields(context.Background(), map[string]any{
+		logx.FieldEventID: "evt_parent",
+		logx.FieldTopic:   "integration.webhook.parent",
+	})
+
+	raw, present, err := codec.capture(ctx)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if present {
+		t.Fatalf("expected not present when only per-hop fields are set")
+	}
+
+	if raw != nil {
+		t.Fatalf("expected nil raw message")
+	}
+}
+
 func TestLogFieldsCodecRestoreInvalidJSON(t *testing.T) {
 	codec := logFieldsCodec()
 

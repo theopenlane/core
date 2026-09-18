@@ -172,8 +172,8 @@ func wrapDefinitionHandle[T any](g *Gala, definition Definition[T]) func(Handler
 
 		handlerCtx.Context = logx.WithCallerIdentity(handlerCtx.Context)
 		handlerCtx.Context = logx.WithFields(handlerCtx.Context, map[string]any{
-			"event_id": string(handlerCtx.Envelope.ID),
-			"topic":    string(handlerCtx.Envelope.Topic),
+			logx.FieldEventID: string(handlerCtx.Envelope.ID),
+			logx.FieldTopic:   string(handlerCtx.Envelope.Topic),
 		})
 
 		if definition.LogFields != nil {
