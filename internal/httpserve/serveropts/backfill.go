@@ -71,7 +71,6 @@ var backfillRoutines = []backfillRoutine{
 	//	},
 }
 
-
 // WithBackfill submits the config-gated backfill scheduling run
 func WithBackfill(ctx context.Context, galaApp *gala.Gala) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {

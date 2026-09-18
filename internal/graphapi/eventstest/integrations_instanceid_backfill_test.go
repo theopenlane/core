@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
-	"github.com/theopenlane/core/v2/internal/httpserve/serveropts"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 )
@@ -284,4 +283,3 @@ func TestDisconnectReinstallReclaimsIngestedRecord(t *testing.T) {
 	assert.Check(t, is.Equal(second.ID, reclaimed.ManagedBy), "the reinstall re-owns the record on the shared instance id")
 	assert.Check(t, is.Equal("tenant-reinstall", reclaimed.SourceInstanceID), "the re-claimed record keeps the shared instance id")
 }
-
