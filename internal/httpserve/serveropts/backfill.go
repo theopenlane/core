@@ -71,10 +71,6 @@ var backfillRoutines = []backfillRoutine{
 	//	},
 }
 
-// HasRoutines checks if there are any backfilling operation to run
-func HasRoutines() bool {
-	return len(backfillRoutines) > 0
-}
 
 // WithBackfill submits the config-gated backfill scheduling run
 func WithBackfill(ctx context.Context, galaApp *gala.Gala) ServerOption {
