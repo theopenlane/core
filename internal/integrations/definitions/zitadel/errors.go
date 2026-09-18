@@ -17,6 +17,8 @@ var (
 	ErrClientBuildFailed = errors.New("zitadel: client build failed")
 	// ErrHealthCheckFailed indicates the health check request failed
 	ErrHealthCheckFailed = errors.New("zitadel: health check failed")
+	// ErrInstanceFetchFailed indicates the instance lookup request failed
+	ErrInstanceFetchFailed = errors.New("zitadel: instance fetch failed")
 	// ErrDirectoryUsersFetchFailed indicates the users listing failed
 	ErrDirectoryUsersFetchFailed = errors.New("zitadel: directory users fetch failed")
 	// ErrPayloadEncode indicates a provider payload could not be serialized

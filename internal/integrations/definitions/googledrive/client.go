@@ -18,6 +18,27 @@ type Client struct {
 	cfg Config
 }
 
+// tokenSource builds a refreshing OAuth2 token source for a Google Drive credential using the
+// operator's registered OAuth client id and secret, so a stored access token is refreshed via the
+// stored refresh token and expiry rather than reused statically until it expires
+func tokenSource(ctx context.Context, cfg Config, cred googleDriveCred) oauth2.TokenSource {
+	tok := &oauth2.Token{
+		AccessToken:  cred.AccessToken,
+		RefreshToken: cred.RefreshToken,
+		TokenType:    "Bearer",
+	}
+
+	if cred.Expiry != nil {
+		tok.Expiry = *cred.Expiry
+	}
+
+	return (&oauth2.Config{
+		ClientID:     cfg.ClientID,
+		ClientSecret: cfg.ClientSecret,
+		Endpoint:     google.Endpoint,
+	}).TokenSource(ctx, tok)
+}
+
 // Build constructs the Google Drive SDK client for one installation
 func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
 	cred, _, err := driveCredential.Resolve(req.Credentials)
@@ -31,22 +52,8 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, e
 		return nil, ErrOAuthTokenMissing
 	}
 
-	tok := &oauth2.Token{
-		AccessToken:  cred.AccessToken,
-		RefreshToken: cred.RefreshToken,
-		TokenType:    "Bearer",
-	}
-
-	if cred.Expiry != nil {
-		tok.Expiry = *cred.Expiry
-	}
-
 	// context background used intentionally in this slot
-	ts := (&oauth2.Config{
-		ClientID:     c.cfg.ClientID,
-		ClientSecret: c.cfg.ClientSecret,
-		Endpoint:     google.Endpoint,
-	}).TokenSource(context.Background(), tok)
+	ts := tokenSource(context.Background(), c.cfg, cred)
 
 	svc, err := drive.NewService(ctx, option.WithTokenSource(ts))
 	if err != nil {

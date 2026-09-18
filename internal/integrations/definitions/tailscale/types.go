@@ -60,11 +60,14 @@ type CredentialSchema struct {
 type InstallationMetadata struct {
 	// ClientID is the OAuth client ID used to connect this installation
 	ClientID string `json:"clientId,omitempty" jsonschema:"title=Client ID"`
+	// Tailnet is the name of the tailnet the OAuth client is scoped to
+	Tailnet string `json:"tailnet,omitempty" jsonschema:"title=Tailnet"`
 }
 
 // InstallationIdentity implements types.InstallationIdentifiable
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	return types.IntegrationInstallationIdentity{
-		ExternalID: m.ClientID,
+		ExternalID:   m.Tailnet,
+		ExternalName: m.Tailnet,
 	}
 }

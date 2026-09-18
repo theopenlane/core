@@ -12,12 +12,22 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/v2/internal/ent/generated/event"
-	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 )
 
 // IntegrationRunUpdate is the builder for updating IntegrationRun entities.
@@ -218,26 +228,6 @@ func (_u *IntegrationRunUpdate) ClearOperationConfig() *IntegrationRunUpdate {
 	return _u
 }
 
-// SetMappingVersion sets the "mapping_version" field.
-func (_u *IntegrationRunUpdate) SetMappingVersion(v string) *IntegrationRunUpdate {
-	_u.mutation.SetMappingVersion(v)
-	return _u
-}
-
-// SetNillableMappingVersion sets the "mapping_version" field if the given value is not nil.
-func (_u *IntegrationRunUpdate) SetNillableMappingVersion(v *string) *IntegrationRunUpdate {
-	if v != nil {
-		_u.SetMappingVersion(*v)
-	}
-	return _u
-}
-
-// ClearMappingVersion clears the value of the "mapping_version" field.
-func (_u *IntegrationRunUpdate) ClearMappingVersion() *IntegrationRunUpdate {
-	_u.mutation.ClearMappingVersion()
-	return _u
-}
-
 // SetStatus sets the "status" field.
 func (_u *IntegrationRunUpdate) SetStatus(v enums.IntegrationRunStatus) *IntegrationRunUpdate {
 	_u.mutation.SetStatus(v)
@@ -313,86 +303,6 @@ func (_u *IntegrationRunUpdate) ClearDurationMs() *IntegrationRunUpdate {
 	return _u
 }
 
-// SetRequestFileID sets the "request_file_id" field.
-func (_u *IntegrationRunUpdate) SetRequestFileID(v string) *IntegrationRunUpdate {
-	_u.mutation.SetRequestFileID(v)
-	return _u
-}
-
-// SetNillableRequestFileID sets the "request_file_id" field if the given value is not nil.
-func (_u *IntegrationRunUpdate) SetNillableRequestFileID(v *string) *IntegrationRunUpdate {
-	if v != nil {
-		_u.SetRequestFileID(*v)
-	}
-	return _u
-}
-
-// ClearRequestFileID clears the value of the "request_file_id" field.
-func (_u *IntegrationRunUpdate) ClearRequestFileID() *IntegrationRunUpdate {
-	_u.mutation.ClearRequestFileID()
-	return _u
-}
-
-// SetResponseFileID sets the "response_file_id" field.
-func (_u *IntegrationRunUpdate) SetResponseFileID(v string) *IntegrationRunUpdate {
-	_u.mutation.SetResponseFileID(v)
-	return _u
-}
-
-// SetNillableResponseFileID sets the "response_file_id" field if the given value is not nil.
-func (_u *IntegrationRunUpdate) SetNillableResponseFileID(v *string) *IntegrationRunUpdate {
-	if v != nil {
-		_u.SetResponseFileID(*v)
-	}
-	return _u
-}
-
-// ClearResponseFileID clears the value of the "response_file_id" field.
-func (_u *IntegrationRunUpdate) ClearResponseFileID() *IntegrationRunUpdate {
-	_u.mutation.ClearResponseFileID()
-	return _u
-}
-
-// SetEventID sets the "event_id" field.
-func (_u *IntegrationRunUpdate) SetEventID(v string) *IntegrationRunUpdate {
-	_u.mutation.SetEventID(v)
-	return _u
-}
-
-// SetNillableEventID sets the "event_id" field if the given value is not nil.
-func (_u *IntegrationRunUpdate) SetNillableEventID(v *string) *IntegrationRunUpdate {
-	if v != nil {
-		_u.SetEventID(*v)
-	}
-	return _u
-}
-
-// ClearEventID clears the value of the "event_id" field.
-func (_u *IntegrationRunUpdate) ClearEventID() *IntegrationRunUpdate {
-	_u.mutation.ClearEventID()
-	return _u
-}
-
-// SetAssessmentResponseID sets the "assessment_response_id" field.
-func (_u *IntegrationRunUpdate) SetAssessmentResponseID(v string) *IntegrationRunUpdate {
-	_u.mutation.SetAssessmentResponseID(v)
-	return _u
-}
-
-// SetNillableAssessmentResponseID sets the "assessment_response_id" field if the given value is not nil.
-func (_u *IntegrationRunUpdate) SetNillableAssessmentResponseID(v *string) *IntegrationRunUpdate {
-	if v != nil {
-		_u.SetAssessmentResponseID(*v)
-	}
-	return _u
-}
-
-// ClearAssessmentResponseID clears the value of the "assessment_response_id" field.
-func (_u *IntegrationRunUpdate) ClearAssessmentResponseID() *IntegrationRunUpdate {
-	_u.mutation.ClearAssessmentResponseID()
-	return _u
-}
-
 // SetSummary sets the "summary" field.
 func (_u *IntegrationRunUpdate) SetSummary(v string) *IntegrationRunUpdate {
 	_u.mutation.SetSummary(v)
@@ -450,24 +360,199 @@ func (_u *IntegrationRunUpdate) SetIntegration(v *Integration) *IntegrationRunUp
 	return _u.SetIntegrationID(v.ID)
 }
 
-// SetRequestFile sets the "request_file" edge to the File entity.
-func (_u *IntegrationRunUpdate) SetRequestFile(v *File) *IntegrationRunUpdate {
-	return _u.SetRequestFileID(v.ID)
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (_u *IntegrationRunUpdate) AddActionPlanIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.AddActionPlanIDs(ids...)
+	return _u
 }
 
-// SetResponseFile sets the "response_file" edge to the File entity.
-func (_u *IntegrationRunUpdate) SetResponseFile(v *File) *IntegrationRunUpdate {
-	return _u.SetResponseFileID(v.ID)
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (_u *IntegrationRunUpdate) AddActionPlans(v ...*ActionPlan) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionPlanIDs(ids...)
 }
 
-// SetEvent sets the "event" edge to the Event entity.
-func (_u *IntegrationRunUpdate) SetEvent(v *Event) *IntegrationRunUpdate {
-	return _u.SetEventID(v.ID)
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (_u *IntegrationRunUpdate) AddAssetIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
 }
 
-// SetAssessmentResponse sets the "assessment_response" edge to the AssessmentResponse entity.
-func (_u *IntegrationRunUpdate) SetAssessmentResponse(v *AssessmentResponse) *IntegrationRunUpdate {
-	return _u.SetAssessmentResponseID(v.ID)
+// AddAssets adds the "assets" edges to the Asset entity.
+func (_u *IntegrationRunUpdate) AddAssets(v ...*Asset) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssetIDs(ids...)
+}
+
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
+func (_u *IntegrationRunUpdate) AddCheckResultIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.AddCheckResultIDs(ids...)
+	return _u
+}
+
+// AddCheckResults adds the "check_results" edges to the CheckResult entity.
+func (_u *IntegrationRunUpdate) AddCheckResults(v ...*CheckResult) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCheckResultIDs(ids...)
+}
+
+// AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
+func (_u *IntegrationRunUpdate) AddContactIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.AddContactIDs(ids...)
+	return _u
+}
+
+// AddContacts adds the "contacts" edges to the Contact entity.
+func (_u *IntegrationRunUpdate) AddContacts(v ...*Contact) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddContactIDs(ids...)
+}
+
+// AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
+func (_u *IntegrationRunUpdate) AddDirectoryAccountIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.AddDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// AddDirectoryAccounts adds the "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *IntegrationRunUpdate) AddDirectoryAccounts(v ...*DirectoryAccount) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryAccountIDs(ids...)
+}
+
+// AddDirectoryGroupIDs adds the "directory_groups" edge to the DirectoryGroup entity by IDs.
+func (_u *IntegrationRunUpdate) AddDirectoryGroupIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.AddDirectoryGroupIDs(ids...)
+	return _u
+}
+
+// AddDirectoryGroups adds the "directory_groups" edges to the DirectoryGroup entity.
+func (_u *IntegrationRunUpdate) AddDirectoryGroups(v ...*DirectoryGroup) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryGroupIDs(ids...)
+}
+
+// AddDirectoryMembershipIDs adds the "directory_memberships" edge to the DirectoryMembership entity by IDs.
+func (_u *IntegrationRunUpdate) AddDirectoryMembershipIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.AddDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// AddDirectoryMemberships adds the "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *IntegrationRunUpdate) AddDirectoryMemberships(v ...*DirectoryMembership) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryMembershipIDs(ids...)
+}
+
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (_u *IntegrationRunUpdate) AddEntityIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (_u *IntegrationRunUpdate) AddEntities(v ...*Entity) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEntityIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *IntegrationRunUpdate) AddFindingIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *IntegrationRunUpdate) AddFindings(v ...*Finding) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
+}
+
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (_u *IntegrationRunUpdate) AddInternalPolicyIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (_u *IntegrationRunUpdate) AddInternalPolicies(v ...*InternalPolicy) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddInternalPolicyIDs(ids...)
+}
+
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
+func (_u *IntegrationRunUpdate) AddProcedureIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
+}
+
+// AddProcedures adds the "procedures" edges to the Procedure entity.
+func (_u *IntegrationRunUpdate) AddProcedures(v ...*Procedure) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddProcedureIDs(ids...)
+}
+
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (_u *IntegrationRunUpdate) AddRiskIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.AddRiskIDs(ids...)
+	return _u
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (_u *IntegrationRunUpdate) AddRisks(v ...*Risk) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRiskIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_u *IntegrationRunUpdate) AddVulnerabilityIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.AddVulnerabilityIDs(ids...)
+	return _u
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_u *IntegrationRunUpdate) AddVulnerabilities(v ...*Vulnerability) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVulnerabilityIDs(ids...)
 }
 
 // Mutation returns the IntegrationRunMutation object of the builder.
@@ -481,28 +566,277 @@ func (_u *IntegrationRunUpdate) ClearIntegration() *IntegrationRunUpdate {
 	return _u
 }
 
-// ClearRequestFile clears the "request_file" edge to the File entity.
-func (_u *IntegrationRunUpdate) ClearRequestFile() *IntegrationRunUpdate {
-	_u.mutation.ClearRequestFile()
+// ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
+func (_u *IntegrationRunUpdate) ClearActionPlans() *IntegrationRunUpdate {
+	_u.mutation.ClearActionPlans()
 	return _u
 }
 
-// ClearResponseFile clears the "response_file" edge to the File entity.
-func (_u *IntegrationRunUpdate) ClearResponseFile() *IntegrationRunUpdate {
-	_u.mutation.ClearResponseFile()
+// RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
+func (_u *IntegrationRunUpdate) RemoveActionPlanIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.RemoveActionPlanIDs(ids...)
 	return _u
 }
 
-// ClearEvent clears the "event" edge to the Event entity.
-func (_u *IntegrationRunUpdate) ClearEvent() *IntegrationRunUpdate {
-	_u.mutation.ClearEvent()
+// RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
+func (_u *IntegrationRunUpdate) RemoveActionPlans(v ...*ActionPlan) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionPlanIDs(ids...)
+}
+
+// ClearAssets clears all "assets" edges to the Asset entity.
+func (_u *IntegrationRunUpdate) ClearAssets() *IntegrationRunUpdate {
+	_u.mutation.ClearAssets()
 	return _u
 }
 
-// ClearAssessmentResponse clears the "assessment_response" edge to the AssessmentResponse entity.
-func (_u *IntegrationRunUpdate) ClearAssessmentResponse() *IntegrationRunUpdate {
-	_u.mutation.ClearAssessmentResponse()
+// RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
+func (_u *IntegrationRunUpdate) RemoveAssetIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.RemoveAssetIDs(ids...)
 	return _u
+}
+
+// RemoveAssets removes "assets" edges to Asset entities.
+func (_u *IntegrationRunUpdate) RemoveAssets(v ...*Asset) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssetIDs(ids...)
+}
+
+// ClearCheckResults clears all "check_results" edges to the CheckResult entity.
+func (_u *IntegrationRunUpdate) ClearCheckResults() *IntegrationRunUpdate {
+	_u.mutation.ClearCheckResults()
+	return _u
+}
+
+// RemoveCheckResultIDs removes the "check_results" edge to CheckResult entities by IDs.
+func (_u *IntegrationRunUpdate) RemoveCheckResultIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.RemoveCheckResultIDs(ids...)
+	return _u
+}
+
+// RemoveCheckResults removes "check_results" edges to CheckResult entities.
+func (_u *IntegrationRunUpdate) RemoveCheckResults(v ...*CheckResult) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCheckResultIDs(ids...)
+}
+
+// ClearContacts clears all "contacts" edges to the Contact entity.
+func (_u *IntegrationRunUpdate) ClearContacts() *IntegrationRunUpdate {
+	_u.mutation.ClearContacts()
+	return _u
+}
+
+// RemoveContactIDs removes the "contacts" edge to Contact entities by IDs.
+func (_u *IntegrationRunUpdate) RemoveContactIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.RemoveContactIDs(ids...)
+	return _u
+}
+
+// RemoveContacts removes "contacts" edges to Contact entities.
+func (_u *IntegrationRunUpdate) RemoveContacts(v ...*Contact) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveContactIDs(ids...)
+}
+
+// ClearDirectoryAccounts clears all "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *IntegrationRunUpdate) ClearDirectoryAccounts() *IntegrationRunUpdate {
+	_u.mutation.ClearDirectoryAccounts()
+	return _u
+}
+
+// RemoveDirectoryAccountIDs removes the "directory_accounts" edge to DirectoryAccount entities by IDs.
+func (_u *IntegrationRunUpdate) RemoveDirectoryAccountIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.RemoveDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryAccounts removes "directory_accounts" edges to DirectoryAccount entities.
+func (_u *IntegrationRunUpdate) RemoveDirectoryAccounts(v ...*DirectoryAccount) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryAccountIDs(ids...)
+}
+
+// ClearDirectoryGroups clears all "directory_groups" edges to the DirectoryGroup entity.
+func (_u *IntegrationRunUpdate) ClearDirectoryGroups() *IntegrationRunUpdate {
+	_u.mutation.ClearDirectoryGroups()
+	return _u
+}
+
+// RemoveDirectoryGroupIDs removes the "directory_groups" edge to DirectoryGroup entities by IDs.
+func (_u *IntegrationRunUpdate) RemoveDirectoryGroupIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.RemoveDirectoryGroupIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryGroups removes "directory_groups" edges to DirectoryGroup entities.
+func (_u *IntegrationRunUpdate) RemoveDirectoryGroups(v ...*DirectoryGroup) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryGroupIDs(ids...)
+}
+
+// ClearDirectoryMemberships clears all "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *IntegrationRunUpdate) ClearDirectoryMemberships() *IntegrationRunUpdate {
+	_u.mutation.ClearDirectoryMemberships()
+	return _u
+}
+
+// RemoveDirectoryMembershipIDs removes the "directory_memberships" edge to DirectoryMembership entities by IDs.
+func (_u *IntegrationRunUpdate) RemoveDirectoryMembershipIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.RemoveDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryMemberships removes "directory_memberships" edges to DirectoryMembership entities.
+func (_u *IntegrationRunUpdate) RemoveDirectoryMemberships(v ...*DirectoryMembership) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryMembershipIDs(ids...)
+}
+
+// ClearEntities clears all "entities" edges to the Entity entity.
+func (_u *IntegrationRunUpdate) ClearEntities() *IntegrationRunUpdate {
+	_u.mutation.ClearEntities()
+	return _u
+}
+
+// RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
+func (_u *IntegrationRunUpdate) RemoveEntityIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
+}
+
+// RemoveEntities removes "entities" edges to Entity entities.
+func (_u *IntegrationRunUpdate) RemoveEntities(v ...*Entity) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEntityIDs(ids...)
+}
+
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *IntegrationRunUpdate) ClearFindings() *IntegrationRunUpdate {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *IntegrationRunUpdate) RemoveFindingIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *IntegrationRunUpdate) RemoveFindings(v ...*Finding) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
+}
+
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (_u *IntegrationRunUpdate) ClearInternalPolicies() *IntegrationRunUpdate {
+	_u.mutation.ClearInternalPolicies()
+	return _u
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (_u *IntegrationRunUpdate) RemoveInternalPolicyIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
+}
+
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (_u *IntegrationRunUpdate) RemoveInternalPolicies(v ...*InternalPolicy) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveInternalPolicyIDs(ids...)
+}
+
+// ClearProcedures clears all "procedures" edges to the Procedure entity.
+func (_u *IntegrationRunUpdate) ClearProcedures() *IntegrationRunUpdate {
+	_u.mutation.ClearProcedures()
+	return _u
+}
+
+// RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
+func (_u *IntegrationRunUpdate) RemoveProcedureIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
+}
+
+// RemoveProcedures removes "procedures" edges to Procedure entities.
+func (_u *IntegrationRunUpdate) RemoveProcedures(v ...*Procedure) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveProcedureIDs(ids...)
+}
+
+// ClearRisks clears all "risks" edges to the Risk entity.
+func (_u *IntegrationRunUpdate) ClearRisks() *IntegrationRunUpdate {
+	_u.mutation.ClearRisks()
+	return _u
+}
+
+// RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
+func (_u *IntegrationRunUpdate) RemoveRiskIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.RemoveRiskIDs(ids...)
+	return _u
+}
+
+// RemoveRisks removes "risks" edges to Risk entities.
+func (_u *IntegrationRunUpdate) RemoveRisks(v ...*Risk) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRiskIDs(ids...)
+}
+
+// ClearVulnerabilities clears all "vulnerabilities" edges to the Vulnerability entity.
+func (_u *IntegrationRunUpdate) ClearVulnerabilities() *IntegrationRunUpdate {
+	_u.mutation.ClearVulnerabilities()
+	return _u
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to Vulnerability entities by IDs.
+func (_u *IntegrationRunUpdate) RemoveVulnerabilityIDs(ids ...string) *IntegrationRunUpdate {
+	_u.mutation.RemoveVulnerabilityIDs(ids...)
+	return _u
+}
+
+// RemoveVulnerabilities removes "vulnerabilities" edges to Vulnerability entities.
+func (_u *IntegrationRunUpdate) RemoveVulnerabilities(v ...*Vulnerability) *IntegrationRunUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVulnerabilityIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -645,12 +979,6 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.OperationConfigCleared() {
 		_spec.ClearField(integrationrun.FieldOperationConfig, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.MappingVersion(); ok {
-		_spec.SetField(integrationrun.FieldMappingVersion, field.TypeString, value)
-	}
-	if _u.mutation.MappingVersionCleared() {
-		_spec.ClearField(integrationrun.FieldMappingVersion, field.TypeString)
-	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(integrationrun.FieldStatus, field.TypeEnum, value)
 	}
@@ -719,28 +1047,44 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.RequestFileCleared() {
+	if _u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.RequestFileTable,
-			Columns: []string{integrationrun.RequestFileColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ActionPlansTable,
+			Columns: integrationrun.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.RequestFileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.RequestFileTable,
-			Columns: []string{integrationrun.RequestFileColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ActionPlansTable,
+			Columns: integrationrun.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ActionPlansTable,
+			Columns: integrationrun.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -748,28 +1092,44 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.ResponseFileCleared() {
+	if _u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.ResponseFileTable,
-			Columns: []string{integrationrun.ResponseFileColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.AssetsTable,
+			Columns: integrationrun.AssetsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.ResponseFileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.ResponseFileTable,
-			Columns: []string{integrationrun.ResponseFileColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.AssetsTable,
+			Columns: integrationrun.AssetsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.AssetsTable,
+			Columns: integrationrun.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -777,28 +1137,44 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.EventCleared() {
+	if _u.mutation.CheckResultsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.EventTable,
-			Columns: []string{integrationrun.EventColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.CheckResultsTable,
+			Columns: integrationrun.CheckResultsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.EventIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedCheckResultsIDs(); len(nodes) > 0 && !_u.mutation.CheckResultsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.EventTable,
-			Columns: []string{integrationrun.EventColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.CheckResultsTable,
+			Columns: integrationrun.CheckResultsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CheckResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.CheckResultsTable,
+			Columns: integrationrun.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -806,28 +1182,449 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.AssessmentResponseCleared() {
+	if _u.mutation.ContactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.AssessmentResponseTable,
-			Columns: []string{integrationrun.AssessmentResponseColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ContactsTable,
+			Columns: integrationrun.ContactsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.AssessmentResponseIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedContactsIDs(); len(nodes) > 0 && !_u.mutation.ContactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.AssessmentResponseTable,
-			Columns: []string{integrationrun.AssessmentResponseColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ContactsTable,
+			Columns: integrationrun.ContactsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ContactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ContactsTable,
+			Columns: integrationrun.ContactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryAccountsTable,
+			Columns: integrationrun.DirectoryAccountsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryAccountsTable,
+			Columns: integrationrun.DirectoryAccountsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryAccountsTable,
+			Columns: integrationrun.DirectoryAccountsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryGroupsTable,
+			Columns: integrationrun.DirectoryGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryGroupsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryGroupsTable,
+			Columns: integrationrun.DirectoryGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryGroupsTable,
+			Columns: integrationrun.DirectoryGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryMembershipsTable,
+			Columns: integrationrun.DirectoryMembershipsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryMembershipsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryMembershipsTable,
+			Columns: integrationrun.DirectoryMembershipsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryMembershipsTable,
+			Columns: integrationrun.DirectoryMembershipsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.EntitiesTable,
+			Columns: integrationrun.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.EntitiesTable,
+			Columns: integrationrun.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.EntitiesTable,
+			Columns: integrationrun.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.FindingsTable,
+			Columns: integrationrun.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.FindingsTable,
+			Columns: integrationrun.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.FindingsTable,
+			Columns: integrationrun.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.InternalPoliciesTable,
+			Columns: integrationrun.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.InternalPoliciesTable,
+			Columns: integrationrun.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.InternalPoliciesTable,
+			Columns: integrationrun.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ProceduresTable,
+			Columns: integrationrun.ProceduresPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ProceduresTable,
+			Columns: integrationrun.ProceduresPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ProceduresTable,
+			Columns: integrationrun.ProceduresPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.RisksTable,
+			Columns: integrationrun.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.RisksTable,
+			Columns: integrationrun.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.RisksTable,
+			Columns: integrationrun.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.VulnerabilitiesTable,
+			Columns: integrationrun.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.VulnerabilitiesTable,
+			Columns: integrationrun.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.VulnerabilitiesTable,
+			Columns: integrationrun.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1041,26 +1838,6 @@ func (_u *IntegrationRunUpdateOne) ClearOperationConfig() *IntegrationRunUpdateO
 	return _u
 }
 
-// SetMappingVersion sets the "mapping_version" field.
-func (_u *IntegrationRunUpdateOne) SetMappingVersion(v string) *IntegrationRunUpdateOne {
-	_u.mutation.SetMappingVersion(v)
-	return _u
-}
-
-// SetNillableMappingVersion sets the "mapping_version" field if the given value is not nil.
-func (_u *IntegrationRunUpdateOne) SetNillableMappingVersion(v *string) *IntegrationRunUpdateOne {
-	if v != nil {
-		_u.SetMappingVersion(*v)
-	}
-	return _u
-}
-
-// ClearMappingVersion clears the value of the "mapping_version" field.
-func (_u *IntegrationRunUpdateOne) ClearMappingVersion() *IntegrationRunUpdateOne {
-	_u.mutation.ClearMappingVersion()
-	return _u
-}
-
 // SetStatus sets the "status" field.
 func (_u *IntegrationRunUpdateOne) SetStatus(v enums.IntegrationRunStatus) *IntegrationRunUpdateOne {
 	_u.mutation.SetStatus(v)
@@ -1136,86 +1913,6 @@ func (_u *IntegrationRunUpdateOne) ClearDurationMs() *IntegrationRunUpdateOne {
 	return _u
 }
 
-// SetRequestFileID sets the "request_file_id" field.
-func (_u *IntegrationRunUpdateOne) SetRequestFileID(v string) *IntegrationRunUpdateOne {
-	_u.mutation.SetRequestFileID(v)
-	return _u
-}
-
-// SetNillableRequestFileID sets the "request_file_id" field if the given value is not nil.
-func (_u *IntegrationRunUpdateOne) SetNillableRequestFileID(v *string) *IntegrationRunUpdateOne {
-	if v != nil {
-		_u.SetRequestFileID(*v)
-	}
-	return _u
-}
-
-// ClearRequestFileID clears the value of the "request_file_id" field.
-func (_u *IntegrationRunUpdateOne) ClearRequestFileID() *IntegrationRunUpdateOne {
-	_u.mutation.ClearRequestFileID()
-	return _u
-}
-
-// SetResponseFileID sets the "response_file_id" field.
-func (_u *IntegrationRunUpdateOne) SetResponseFileID(v string) *IntegrationRunUpdateOne {
-	_u.mutation.SetResponseFileID(v)
-	return _u
-}
-
-// SetNillableResponseFileID sets the "response_file_id" field if the given value is not nil.
-func (_u *IntegrationRunUpdateOne) SetNillableResponseFileID(v *string) *IntegrationRunUpdateOne {
-	if v != nil {
-		_u.SetResponseFileID(*v)
-	}
-	return _u
-}
-
-// ClearResponseFileID clears the value of the "response_file_id" field.
-func (_u *IntegrationRunUpdateOne) ClearResponseFileID() *IntegrationRunUpdateOne {
-	_u.mutation.ClearResponseFileID()
-	return _u
-}
-
-// SetEventID sets the "event_id" field.
-func (_u *IntegrationRunUpdateOne) SetEventID(v string) *IntegrationRunUpdateOne {
-	_u.mutation.SetEventID(v)
-	return _u
-}
-
-// SetNillableEventID sets the "event_id" field if the given value is not nil.
-func (_u *IntegrationRunUpdateOne) SetNillableEventID(v *string) *IntegrationRunUpdateOne {
-	if v != nil {
-		_u.SetEventID(*v)
-	}
-	return _u
-}
-
-// ClearEventID clears the value of the "event_id" field.
-func (_u *IntegrationRunUpdateOne) ClearEventID() *IntegrationRunUpdateOne {
-	_u.mutation.ClearEventID()
-	return _u
-}
-
-// SetAssessmentResponseID sets the "assessment_response_id" field.
-func (_u *IntegrationRunUpdateOne) SetAssessmentResponseID(v string) *IntegrationRunUpdateOne {
-	_u.mutation.SetAssessmentResponseID(v)
-	return _u
-}
-
-// SetNillableAssessmentResponseID sets the "assessment_response_id" field if the given value is not nil.
-func (_u *IntegrationRunUpdateOne) SetNillableAssessmentResponseID(v *string) *IntegrationRunUpdateOne {
-	if v != nil {
-		_u.SetAssessmentResponseID(*v)
-	}
-	return _u
-}
-
-// ClearAssessmentResponseID clears the value of the "assessment_response_id" field.
-func (_u *IntegrationRunUpdateOne) ClearAssessmentResponseID() *IntegrationRunUpdateOne {
-	_u.mutation.ClearAssessmentResponseID()
-	return _u
-}
-
 // SetSummary sets the "summary" field.
 func (_u *IntegrationRunUpdateOne) SetSummary(v string) *IntegrationRunUpdateOne {
 	_u.mutation.SetSummary(v)
@@ -1273,24 +1970,199 @@ func (_u *IntegrationRunUpdateOne) SetIntegration(v *Integration) *IntegrationRu
 	return _u.SetIntegrationID(v.ID)
 }
 
-// SetRequestFile sets the "request_file" edge to the File entity.
-func (_u *IntegrationRunUpdateOne) SetRequestFile(v *File) *IntegrationRunUpdateOne {
-	return _u.SetRequestFileID(v.ID)
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (_u *IntegrationRunUpdateOne) AddActionPlanIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.AddActionPlanIDs(ids...)
+	return _u
 }
 
-// SetResponseFile sets the "response_file" edge to the File entity.
-func (_u *IntegrationRunUpdateOne) SetResponseFile(v *File) *IntegrationRunUpdateOne {
-	return _u.SetResponseFileID(v.ID)
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (_u *IntegrationRunUpdateOne) AddActionPlans(v ...*ActionPlan) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionPlanIDs(ids...)
 }
 
-// SetEvent sets the "event" edge to the Event entity.
-func (_u *IntegrationRunUpdateOne) SetEvent(v *Event) *IntegrationRunUpdateOne {
-	return _u.SetEventID(v.ID)
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (_u *IntegrationRunUpdateOne) AddAssetIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
 }
 
-// SetAssessmentResponse sets the "assessment_response" edge to the AssessmentResponse entity.
-func (_u *IntegrationRunUpdateOne) SetAssessmentResponse(v *AssessmentResponse) *IntegrationRunUpdateOne {
-	return _u.SetAssessmentResponseID(v.ID)
+// AddAssets adds the "assets" edges to the Asset entity.
+func (_u *IntegrationRunUpdateOne) AddAssets(v ...*Asset) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssetIDs(ids...)
+}
+
+// AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
+func (_u *IntegrationRunUpdateOne) AddCheckResultIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.AddCheckResultIDs(ids...)
+	return _u
+}
+
+// AddCheckResults adds the "check_results" edges to the CheckResult entity.
+func (_u *IntegrationRunUpdateOne) AddCheckResults(v ...*CheckResult) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddCheckResultIDs(ids...)
+}
+
+// AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
+func (_u *IntegrationRunUpdateOne) AddContactIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.AddContactIDs(ids...)
+	return _u
+}
+
+// AddContacts adds the "contacts" edges to the Contact entity.
+func (_u *IntegrationRunUpdateOne) AddContacts(v ...*Contact) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddContactIDs(ids...)
+}
+
+// AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
+func (_u *IntegrationRunUpdateOne) AddDirectoryAccountIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.AddDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// AddDirectoryAccounts adds the "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *IntegrationRunUpdateOne) AddDirectoryAccounts(v ...*DirectoryAccount) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryAccountIDs(ids...)
+}
+
+// AddDirectoryGroupIDs adds the "directory_groups" edge to the DirectoryGroup entity by IDs.
+func (_u *IntegrationRunUpdateOne) AddDirectoryGroupIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.AddDirectoryGroupIDs(ids...)
+	return _u
+}
+
+// AddDirectoryGroups adds the "directory_groups" edges to the DirectoryGroup entity.
+func (_u *IntegrationRunUpdateOne) AddDirectoryGroups(v ...*DirectoryGroup) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryGroupIDs(ids...)
+}
+
+// AddDirectoryMembershipIDs adds the "directory_memberships" edge to the DirectoryMembership entity by IDs.
+func (_u *IntegrationRunUpdateOne) AddDirectoryMembershipIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.AddDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// AddDirectoryMemberships adds the "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *IntegrationRunUpdateOne) AddDirectoryMemberships(v ...*DirectoryMembership) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryMembershipIDs(ids...)
+}
+
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (_u *IntegrationRunUpdateOne) AddEntityIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (_u *IntegrationRunUpdateOne) AddEntities(v ...*Entity) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEntityIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *IntegrationRunUpdateOne) AddFindingIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *IntegrationRunUpdateOne) AddFindings(v ...*Finding) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
+}
+
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (_u *IntegrationRunUpdateOne) AddInternalPolicyIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (_u *IntegrationRunUpdateOne) AddInternalPolicies(v ...*InternalPolicy) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddInternalPolicyIDs(ids...)
+}
+
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
+func (_u *IntegrationRunUpdateOne) AddProcedureIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
+}
+
+// AddProcedures adds the "procedures" edges to the Procedure entity.
+func (_u *IntegrationRunUpdateOne) AddProcedures(v ...*Procedure) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddProcedureIDs(ids...)
+}
+
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (_u *IntegrationRunUpdateOne) AddRiskIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.AddRiskIDs(ids...)
+	return _u
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (_u *IntegrationRunUpdateOne) AddRisks(v ...*Risk) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRiskIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_u *IntegrationRunUpdateOne) AddVulnerabilityIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.AddVulnerabilityIDs(ids...)
+	return _u
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_u *IntegrationRunUpdateOne) AddVulnerabilities(v ...*Vulnerability) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVulnerabilityIDs(ids...)
 }
 
 // Mutation returns the IntegrationRunMutation object of the builder.
@@ -1304,28 +2176,277 @@ func (_u *IntegrationRunUpdateOne) ClearIntegration() *IntegrationRunUpdateOne {
 	return _u
 }
 
-// ClearRequestFile clears the "request_file" edge to the File entity.
-func (_u *IntegrationRunUpdateOne) ClearRequestFile() *IntegrationRunUpdateOne {
-	_u.mutation.ClearRequestFile()
+// ClearActionPlans clears all "action_plans" edges to the ActionPlan entity.
+func (_u *IntegrationRunUpdateOne) ClearActionPlans() *IntegrationRunUpdateOne {
+	_u.mutation.ClearActionPlans()
 	return _u
 }
 
-// ClearResponseFile clears the "response_file" edge to the File entity.
-func (_u *IntegrationRunUpdateOne) ClearResponseFile() *IntegrationRunUpdateOne {
-	_u.mutation.ClearResponseFile()
+// RemoveActionPlanIDs removes the "action_plans" edge to ActionPlan entities by IDs.
+func (_u *IntegrationRunUpdateOne) RemoveActionPlanIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.RemoveActionPlanIDs(ids...)
 	return _u
 }
 
-// ClearEvent clears the "event" edge to the Event entity.
-func (_u *IntegrationRunUpdateOne) ClearEvent() *IntegrationRunUpdateOne {
-	_u.mutation.ClearEvent()
+// RemoveActionPlans removes "action_plans" edges to ActionPlan entities.
+func (_u *IntegrationRunUpdateOne) RemoveActionPlans(v ...*ActionPlan) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionPlanIDs(ids...)
+}
+
+// ClearAssets clears all "assets" edges to the Asset entity.
+func (_u *IntegrationRunUpdateOne) ClearAssets() *IntegrationRunUpdateOne {
+	_u.mutation.ClearAssets()
 	return _u
 }
 
-// ClearAssessmentResponse clears the "assessment_response" edge to the AssessmentResponse entity.
-func (_u *IntegrationRunUpdateOne) ClearAssessmentResponse() *IntegrationRunUpdateOne {
-	_u.mutation.ClearAssessmentResponse()
+// RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
+func (_u *IntegrationRunUpdateOne) RemoveAssetIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.RemoveAssetIDs(ids...)
 	return _u
+}
+
+// RemoveAssets removes "assets" edges to Asset entities.
+func (_u *IntegrationRunUpdateOne) RemoveAssets(v ...*Asset) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssetIDs(ids...)
+}
+
+// ClearCheckResults clears all "check_results" edges to the CheckResult entity.
+func (_u *IntegrationRunUpdateOne) ClearCheckResults() *IntegrationRunUpdateOne {
+	_u.mutation.ClearCheckResults()
+	return _u
+}
+
+// RemoveCheckResultIDs removes the "check_results" edge to CheckResult entities by IDs.
+func (_u *IntegrationRunUpdateOne) RemoveCheckResultIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.RemoveCheckResultIDs(ids...)
+	return _u
+}
+
+// RemoveCheckResults removes "check_results" edges to CheckResult entities.
+func (_u *IntegrationRunUpdateOne) RemoveCheckResults(v ...*CheckResult) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveCheckResultIDs(ids...)
+}
+
+// ClearContacts clears all "contacts" edges to the Contact entity.
+func (_u *IntegrationRunUpdateOne) ClearContacts() *IntegrationRunUpdateOne {
+	_u.mutation.ClearContacts()
+	return _u
+}
+
+// RemoveContactIDs removes the "contacts" edge to Contact entities by IDs.
+func (_u *IntegrationRunUpdateOne) RemoveContactIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.RemoveContactIDs(ids...)
+	return _u
+}
+
+// RemoveContacts removes "contacts" edges to Contact entities.
+func (_u *IntegrationRunUpdateOne) RemoveContacts(v ...*Contact) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveContactIDs(ids...)
+}
+
+// ClearDirectoryAccounts clears all "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *IntegrationRunUpdateOne) ClearDirectoryAccounts() *IntegrationRunUpdateOne {
+	_u.mutation.ClearDirectoryAccounts()
+	return _u
+}
+
+// RemoveDirectoryAccountIDs removes the "directory_accounts" edge to DirectoryAccount entities by IDs.
+func (_u *IntegrationRunUpdateOne) RemoveDirectoryAccountIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.RemoveDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryAccounts removes "directory_accounts" edges to DirectoryAccount entities.
+func (_u *IntegrationRunUpdateOne) RemoveDirectoryAccounts(v ...*DirectoryAccount) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryAccountIDs(ids...)
+}
+
+// ClearDirectoryGroups clears all "directory_groups" edges to the DirectoryGroup entity.
+func (_u *IntegrationRunUpdateOne) ClearDirectoryGroups() *IntegrationRunUpdateOne {
+	_u.mutation.ClearDirectoryGroups()
+	return _u
+}
+
+// RemoveDirectoryGroupIDs removes the "directory_groups" edge to DirectoryGroup entities by IDs.
+func (_u *IntegrationRunUpdateOne) RemoveDirectoryGroupIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.RemoveDirectoryGroupIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryGroups removes "directory_groups" edges to DirectoryGroup entities.
+func (_u *IntegrationRunUpdateOne) RemoveDirectoryGroups(v ...*DirectoryGroup) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryGroupIDs(ids...)
+}
+
+// ClearDirectoryMemberships clears all "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *IntegrationRunUpdateOne) ClearDirectoryMemberships() *IntegrationRunUpdateOne {
+	_u.mutation.ClearDirectoryMemberships()
+	return _u
+}
+
+// RemoveDirectoryMembershipIDs removes the "directory_memberships" edge to DirectoryMembership entities by IDs.
+func (_u *IntegrationRunUpdateOne) RemoveDirectoryMembershipIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.RemoveDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryMemberships removes "directory_memberships" edges to DirectoryMembership entities.
+func (_u *IntegrationRunUpdateOne) RemoveDirectoryMemberships(v ...*DirectoryMembership) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryMembershipIDs(ids...)
+}
+
+// ClearEntities clears all "entities" edges to the Entity entity.
+func (_u *IntegrationRunUpdateOne) ClearEntities() *IntegrationRunUpdateOne {
+	_u.mutation.ClearEntities()
+	return _u
+}
+
+// RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
+func (_u *IntegrationRunUpdateOne) RemoveEntityIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
+}
+
+// RemoveEntities removes "entities" edges to Entity entities.
+func (_u *IntegrationRunUpdateOne) RemoveEntities(v ...*Entity) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEntityIDs(ids...)
+}
+
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *IntegrationRunUpdateOne) ClearFindings() *IntegrationRunUpdateOne {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *IntegrationRunUpdateOne) RemoveFindingIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *IntegrationRunUpdateOne) RemoveFindings(v ...*Finding) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
+}
+
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (_u *IntegrationRunUpdateOne) ClearInternalPolicies() *IntegrationRunUpdateOne {
+	_u.mutation.ClearInternalPolicies()
+	return _u
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (_u *IntegrationRunUpdateOne) RemoveInternalPolicyIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
+}
+
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (_u *IntegrationRunUpdateOne) RemoveInternalPolicies(v ...*InternalPolicy) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveInternalPolicyIDs(ids...)
+}
+
+// ClearProcedures clears all "procedures" edges to the Procedure entity.
+func (_u *IntegrationRunUpdateOne) ClearProcedures() *IntegrationRunUpdateOne {
+	_u.mutation.ClearProcedures()
+	return _u
+}
+
+// RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
+func (_u *IntegrationRunUpdateOne) RemoveProcedureIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
+}
+
+// RemoveProcedures removes "procedures" edges to Procedure entities.
+func (_u *IntegrationRunUpdateOne) RemoveProcedures(v ...*Procedure) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveProcedureIDs(ids...)
+}
+
+// ClearRisks clears all "risks" edges to the Risk entity.
+func (_u *IntegrationRunUpdateOne) ClearRisks() *IntegrationRunUpdateOne {
+	_u.mutation.ClearRisks()
+	return _u
+}
+
+// RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
+func (_u *IntegrationRunUpdateOne) RemoveRiskIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.RemoveRiskIDs(ids...)
+	return _u
+}
+
+// RemoveRisks removes "risks" edges to Risk entities.
+func (_u *IntegrationRunUpdateOne) RemoveRisks(v ...*Risk) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRiskIDs(ids...)
+}
+
+// ClearVulnerabilities clears all "vulnerabilities" edges to the Vulnerability entity.
+func (_u *IntegrationRunUpdateOne) ClearVulnerabilities() *IntegrationRunUpdateOne {
+	_u.mutation.ClearVulnerabilities()
+	return _u
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to Vulnerability entities by IDs.
+func (_u *IntegrationRunUpdateOne) RemoveVulnerabilityIDs(ids ...string) *IntegrationRunUpdateOne {
+	_u.mutation.RemoveVulnerabilityIDs(ids...)
+	return _u
+}
+
+// RemoveVulnerabilities removes "vulnerabilities" edges to Vulnerability entities.
+func (_u *IntegrationRunUpdateOne) RemoveVulnerabilities(v ...*Vulnerability) *IntegrationRunUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVulnerabilityIDs(ids...)
 }
 
 // Where appends a list predicates to the IntegrationRunUpdate builder.
@@ -1498,12 +2619,6 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 	if _u.mutation.OperationConfigCleared() {
 		_spec.ClearField(integrationrun.FieldOperationConfig, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.MappingVersion(); ok {
-		_spec.SetField(integrationrun.FieldMappingVersion, field.TypeString, value)
-	}
-	if _u.mutation.MappingVersionCleared() {
-		_spec.ClearField(integrationrun.FieldMappingVersion, field.TypeString)
-	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(integrationrun.FieldStatus, field.TypeEnum, value)
 	}
@@ -1572,28 +2687,44 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.RequestFileCleared() {
+	if _u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.RequestFileTable,
-			Columns: []string{integrationrun.RequestFileColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ActionPlansTable,
+			Columns: integrationrun.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.RequestFileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.RequestFileTable,
-			Columns: []string{integrationrun.RequestFileColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ActionPlansTable,
+			Columns: integrationrun.ActionPlansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ActionPlansTable,
+			Columns: integrationrun.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1601,28 +2732,44 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.ResponseFileCleared() {
+	if _u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.ResponseFileTable,
-			Columns: []string{integrationrun.ResponseFileColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.AssetsTable,
+			Columns: integrationrun.AssetsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.ResponseFileIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.ResponseFileTable,
-			Columns: []string{integrationrun.ResponseFileColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.AssetsTable,
+			Columns: integrationrun.AssetsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.AssetsTable,
+			Columns: integrationrun.AssetsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1630,28 +2777,44 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.EventCleared() {
+	if _u.mutation.CheckResultsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.EventTable,
-			Columns: []string{integrationrun.EventColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.CheckResultsTable,
+			Columns: integrationrun.CheckResultsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.EventIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedCheckResultsIDs(); len(nodes) > 0 && !_u.mutation.CheckResultsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.EventTable,
-			Columns: []string{integrationrun.EventColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.CheckResultsTable,
+			Columns: integrationrun.CheckResultsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CheckResultsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.CheckResultsTable,
+			Columns: integrationrun.CheckResultsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1659,28 +2822,449 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.AssessmentResponseCleared() {
+	if _u.mutation.ContactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.AssessmentResponseTable,
-			Columns: []string{integrationrun.AssessmentResponseColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ContactsTable,
+			Columns: integrationrun.ContactsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.AssessmentResponseIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedContactsIDs(); len(nodes) > 0 && !_u.mutation.ContactsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   integrationrun.AssessmentResponseTable,
-			Columns: []string{integrationrun.AssessmentResponseColumn},
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ContactsTable,
+			Columns: integrationrun.ContactsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ContactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ContactsTable,
+			Columns: integrationrun.ContactsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryAccountsTable,
+			Columns: integrationrun.DirectoryAccountsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryAccountsTable,
+			Columns: integrationrun.DirectoryAccountsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryAccountsTable,
+			Columns: integrationrun.DirectoryAccountsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryGroupsTable,
+			Columns: integrationrun.DirectoryGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryGroupsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryGroupsTable,
+			Columns: integrationrun.DirectoryGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryGroupsTable,
+			Columns: integrationrun.DirectoryGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryMembershipsTable,
+			Columns: integrationrun.DirectoryMembershipsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryMembershipsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryMembershipsTable,
+			Columns: integrationrun.DirectoryMembershipsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.DirectoryMembershipsTable,
+			Columns: integrationrun.DirectoryMembershipsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.EntitiesTable,
+			Columns: integrationrun.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.EntitiesTable,
+			Columns: integrationrun.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.EntitiesTable,
+			Columns: integrationrun.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.FindingsTable,
+			Columns: integrationrun.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.FindingsTable,
+			Columns: integrationrun.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.FindingsTable,
+			Columns: integrationrun.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.InternalPoliciesTable,
+			Columns: integrationrun.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.InternalPoliciesTable,
+			Columns: integrationrun.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.InternalPoliciesTable,
+			Columns: integrationrun.InternalPoliciesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ProceduresTable,
+			Columns: integrationrun.ProceduresPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ProceduresTable,
+			Columns: integrationrun.ProceduresPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.ProceduresTable,
+			Columns: integrationrun.ProceduresPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.RisksTable,
+			Columns: integrationrun.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.RisksTable,
+			Columns: integrationrun.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.RisksTable,
+			Columns: integrationrun.RisksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.VulnerabilitiesTable,
+			Columns: integrationrun.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.VulnerabilitiesTable,
+			Columns: integrationrun.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   integrationrun.VulnerabilitiesTable,
+			Columns: integrationrun.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

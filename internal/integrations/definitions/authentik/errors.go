@@ -17,6 +17,10 @@ var (
 	ErrCredentialDecode = errors.New("authentik: credential decode failed")
 	// ErrHealthCheckFailed indicates the health check request failed
 	ErrHealthCheckFailed = errors.New("authentik: health check failed")
+	// ErrBrandFetchFailed indicates the default brand lookup request failed
+	ErrBrandFetchFailed = errors.New("authentik: brand fetch failed")
+	// ErrDefaultBrandMissing indicates the instance has no default brand to identify it by
+	ErrDefaultBrandMissing = errors.New("authentik: default brand missing")
 	// ErrDirectoryUsersFetchFailed indicates the users listing failed
 	ErrDirectoryUsersFetchFailed = errors.New("authentik: directory users fetch failed")
 	// ErrDirectoryGroupsFetchFailed indicates the groups listing failed

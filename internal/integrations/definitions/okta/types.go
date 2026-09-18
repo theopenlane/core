@@ -44,11 +44,14 @@ type CredentialSchema struct {
 type InstallationMetadata struct {
 	// OrgURL is the Okta organization URL configured for this installation
 	OrgURL string `json:"orgUrl,omitempty" jsonschema:"title=Org URL"`
+	// OrgID is the immutable Okta organization identifier resolved from the org settings API
+	OrgID string `json:"orgId,omitempty" jsonschema:"title=Org ID"`
 }
 
 // InstallationIdentity implements types.InstallationIdentifiable
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	return types.IntegrationInstallationIdentity{
 		ExternalName: m.OrgURL,
+		ExternalID:   m.OrgID,
 	}
 }

@@ -92,6 +92,22 @@ type MappingEnvelope struct {
 	Payload json.RawMessage `json:"payload,omitempty"`
 }
 
+// MappingInstallation is the writing installation as exposed to map expressions under the installation variable
+type MappingInstallation struct {
+	// ID is the installation id
+	ID string `json:"id"`
+	// Name is the installation's user-facing name
+	Name string `json:"name"`
+	// DefinitionID is the canonical id of the installed definition
+	DefinitionID string `json:"definition_id"`
+	// DefinitionName is the installed definition's display name
+	DefinitionName string `json:"definition_name"`
+	// InstanceID is the external system instance the installation connects to
+	InstanceID string `json:"instance_id"`
+	// PrimaryDirectory reports whether the installation is its organization's authoritative directory source
+	PrimaryDirectory bool `json:"primary_directory"`
+}
+
 // IngestPayloadSet groups mapping envelopes by normalized target schema
 type IngestPayloadSet struct {
 	// Schema is the normalized target schema emitted by the operation

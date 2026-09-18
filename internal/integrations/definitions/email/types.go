@@ -142,7 +142,7 @@ type Credential struct {
 	// APIKey is the email provider API key
 	APIKey string `json:"apiKey" jsonschema:"required,description=Email provider API key"`
 	// Provider is the email service provider name
-	Provider string `json:"provider" jsonschema:"required,enum=resend,enum=sendgrid,enum=postmark,description=Email service provider"`
+	Provider string `json:"provider" jsonschema:"required,enum=resend,description=Email service provider"`
 }
 
 // UserInput is the installation-scoped configuration that customers provide

@@ -29,7 +29,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
@@ -190,7 +189,6 @@ func checkColumn(t, c string) error {
 			directoryaccount.Table:           directoryaccount.ValidColumn,
 			directorygroup.Table:             directorygroup.ValidColumn,
 			directorymembership.Table:        directorymembership.ValidColumn,
-			directorysyncrun.Table:           directorysyncrun.ValidColumn,
 			discussion.Table:                 discussion.ValidColumn,
 			documentdata.Table:               documentdata.ValidColumn,
 			emailtemplate.Table:              emailtemplate.ValidColumn,

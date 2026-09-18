@@ -276,7 +276,7 @@ func (o ObjectOwnedMixin) Fields() []ent.Field {
 				Optional().  // Optional because it doesn't need to be provided as input
 				NotEmpty().  // NotEmpty because it is required to be set in the database
 				Annotations(
-					entx.IntegrationMappingField().FromIntegration(),
+					entx.IntegrationMappingField().SystemControlled(),
 				))
 	}
 

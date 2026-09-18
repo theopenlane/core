@@ -809,6 +809,29 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+      # evidence-scoped file access follows the evidence, not org membership
+      - user: user:ulid-of-member # org member without access to the evidence cannot view its file
+        object: evidence:evidence-file-scoped
+        assertions:
+          can_view: false
+      - user: user:ulid-of-member
+        object: file:file-evidence-scoped
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-evidence-program-member # member of the program the evidence is linked to can view its file
+        object: file:file-evidence-scoped
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner # org owner has full access to the file
+        object: file:file-evidence-scoped
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
     list_objects:
       - user: user:ulid-file-owner
         type: file
@@ -2459,3 +2482,37 @@ tests:
           can_edit: false
           can_delete: false
           audit_log_viewer: true
+  - name: integration_run
+    description: integration runs are service-driven and visible to org members via parent context
+    tuple_file: tuples/integration_runs.yaml
+    check:
+      - user: user:ulid-of-owner
+        object: integration_run:run-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-admin
+        object: integration_run:run-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-member
+        object: integration_run:run-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: service:ulid-of-service-editor
+        object: integration_run:run-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-owner-foobar # user of another org has no access
+        object: integration_run:run-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false

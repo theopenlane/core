@@ -176,7 +176,7 @@ func validateCampaignContentSource(campaignObj *generated.Campaign) error {
 	case enums.CampaignTypeTrustCenterUpdate:
 		// trust center update campaigns render through the system trust center update
 		// operation with content from the campaign metadata, so no template is required
-		if campaignObj.TrustCenterID == "" {
+		if campaignObj.TrustCenterID == nil {
 			return ErrCampaignMissingTrustCenter
 		}
 	default:

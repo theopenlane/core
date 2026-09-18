@@ -56,7 +56,7 @@ func TestSlackMappingsUserExample(t *testing.T) {
 	assert.NilError(t, err)
 
 	envelope := providerkit.RawEnvelope(outer.User.TeamID+"/"+outer.User.ID, rawPayload)
-	result, err := providerkit.EvalMap(context.Background(), testMappings(t)[0].Spec.MapExpr, envelope)
+	result, err := providerkit.EvalMap(context.Background(), testMappings(t)[0].Spec.MapExpr, envelope, types.MappingInstallation{})
 	assert.NilError(t, err)
 
 	mapped, err := jsonx.ToMap(result)
@@ -70,7 +70,6 @@ func TestSlackMappingsUserExample(t *testing.T) {
 	assert.Equal(t, "Senior Detective", mapped["job_title"])
 	assert.Equal(t, "DISABLED", mapped["mfa_state"])
 	assert.Equal(t, "ACTIVE", mapped["status"])
-	assert.Equal(t, "T123ABC456", mapped["directory_instance_id"])
 	assert.Equal(t, "USER", mapped["account_type"])
 }
 
@@ -89,7 +88,7 @@ func TestSlackMappingsServiceExample(t *testing.T) {
 	assert.NilError(t, err)
 
 	envelope := providerkit.RawEnvelope(outer.User.TeamID+"/"+outer.User.ID, rawPayload)
-	result, err := providerkit.EvalMap(context.Background(), testMappings(t)[0].Spec.MapExpr, envelope)
+	result, err := providerkit.EvalMap(context.Background(), testMappings(t)[0].Spec.MapExpr, envelope, types.MappingInstallation{})
 	assert.NilError(t, err)
 
 	mapped, err := jsonx.ToMap(result)
@@ -99,6 +98,5 @@ func TestSlackMappingsServiceExample(t *testing.T) {
 	assert.Equal(t, "sholmes@example.com", mapped["canonical_email"])
 	assert.Equal(t, "sherlock", mapped["display_name"])
 	assert.Equal(t, "ACTIVE", mapped["status"])
-	assert.Equal(t, "T123ABC456", mapped["directory_instance_id"])
 	assert.Equal(t, "SERVICE", mapped["account_type"])
 }

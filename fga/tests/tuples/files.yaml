@@ -72,3 +72,29 @@
 - user: user:ulid-other-org-owner
   relation: owner
   object: organization:other-org
+
+# evidence-scoped file: visibility must follow the evidence, not the organization
+- user: organization:openlane
+  relation: parent_context
+  object: program:program-evidence
+- user: organization:openlane
+  relation: parent_context
+  object: evidence:evidence-file-scoped
+- user: program:program-evidence
+  relation: parent
+  object: evidence:evidence-file-scoped
+- user: evidence:evidence-file-scoped
+  relation: parent
+  object: file:file-evidence-scoped
+- user: organization:openlane
+  relation: parent_context
+  object: file:file-evidence-scoped
+- user: user:ulid-evidence-program-member
+  relation: _self
+  object: user:ulid-evidence-program-member
+- user: user:ulid-evidence-program-member
+  relation: member
+  object: organization:openlane
+- user: user:ulid-evidence-program-member
+  relation: member
+  object: program:program-evidence

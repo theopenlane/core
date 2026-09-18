@@ -215,7 +215,7 @@ func TestR2Provider_ListBuckets(t *testing.T) {
 }
 
 const (
-	minioImage  = "minio/minio:latest"
+	minioImage  = "quay.io/minio/minio:latest"
 	minioUser   = "provider1"
 	minioSecret = "provider1secret"
 	minioBucket = "provider1-bucket"

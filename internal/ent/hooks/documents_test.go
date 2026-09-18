@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"errors"
 	"testing"
 
 	"entgo.io/ent"
@@ -134,6 +135,70 @@ func (m *mockStatusMutation) OldDelegateID(ctx context.Context) (string, error) 
 func (m *mockStatusMutation) ApprovalRequired() (bool, bool)                        { return true, true }
 func (m *mockStatusMutation) OldApprovalRequired(ctx context.Context) (bool, error) { return true, nil }
 func (m *mockStatusMutation) Client() *generated.Client                             { return m.client }
+
+// mockManagementModeMutation is a mock implementation of documentMutation for testing
+// managementModeFor without a live database or ent mutation
+type mockManagementModeMutation struct {
+	mode       enums.DocumentManagementMode
+	modeSet    bool
+	oldMode    enums.DocumentManagementMode
+	oldModeErr error
+}
+
+func (m *mockManagementModeMutation) ManagementMode() (enums.DocumentManagementMode, bool) {
+	return m.mode, m.modeSet
+}
+
+func (m *mockManagementModeMutation) OldManagementMode(context.Context) (enums.DocumentManagementMode, error) {
+	return m.oldMode, m.oldModeErr
+}
+
+func (m *mockManagementModeMutation) FileID() (string, bool) { return "", false }
+
+func (m *mockManagementModeMutation) OldFileID(context.Context) (*string, error) { return nil, nil }
+
+func (m *mockManagementModeMutation) FileIDCleared() bool { return false }
+
+func TestManagementModeFor(t *testing.T) {
+	ctx := context.Background()
+
+	tests := []struct {
+		name string
+		mut  *mockManagementModeMutation
+		want enums.DocumentManagementMode
+	}{
+		{
+			name: "management mode set on the mutation wins over the stored value",
+			mut: &mockManagementModeMutation{
+				mode:    enums.DocumentManagementModeIntegration,
+				modeSet: true,
+				oldMode: enums.DocumentManagementModeOpenlaneManaged,
+			},
+			want: enums.DocumentManagementModeIntegration,
+		},
+		{
+			name: "management mode absent from the mutation falls back to the stored value",
+			mut: &mockManagementModeMutation{
+				oldMode: enums.DocumentManagementModeIntegration,
+			},
+			want: enums.DocumentManagementModeIntegration,
+		},
+		{
+			name: "management mode absent and the stored value is unavailable defaults to openlane managed",
+			mut: &mockManagementModeMutation{
+				oldModeErr: errors.New("not an updateOne mutation"), //nolint:err113
+			},
+			want: enums.DocumentManagementModeOpenlaneManaged,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := managementModeFor(ctx, tt.mut)
+			assert.Check(t, is.Equal(got, tt.want))
+		})
+	}
+}
 
 func TestGetApproverDelegateIDs(t *testing.T) {
 	ctx := context.Background()

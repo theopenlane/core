@@ -6,17 +6,14 @@ mutation CreateBulkCSVDirectoryMembership ($input: Upload!) {
 			createdBy
 			directoryAccountID
 			directoryGroupID
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			environmentID
 			environmentName
-			firstSeenAt
 			id
 			integrationID
-			lastConfirmedRunID
-			lastSeenAt
+			integrationRunID
+			managedBy
 			metadata
 			observedAt
 			ownerID
@@ -26,6 +23,9 @@ mutation CreateBulkCSVDirectoryMembership ($input: Upload!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -40,17 +40,14 @@ mutation CreateBulkDirectoryMembership ($input: [CreateDirectoryMembershipInput!
 			createdBy
 			directoryAccountID
 			directoryGroupID
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			environmentID
 			environmentName
-			firstSeenAt
 			id
 			integrationID
-			lastConfirmedRunID
-			lastSeenAt
+			integrationRunID
+			managedBy
 			metadata
 			observedAt
 			ownerID
@@ -60,6 +57,9 @@ mutation CreateBulkDirectoryMembership ($input: [CreateDirectoryMembershipInput!
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -74,17 +74,14 @@ mutation CreateDirectoryMembership ($input: CreateDirectoryMembershipInput!) {
 			createdBy
 			directoryAccountID
 			directoryGroupID
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			environmentID
 			environmentName
-			firstSeenAt
 			id
 			integrationID
-			lastConfirmedRunID
-			lastSeenAt
+			integrationRunID
+			managedBy
 			metadata
 			observedAt
 			ownerID
@@ -94,6 +91,9 @@ mutation CreateDirectoryMembership ($input: CreateDirectoryMembershipInput!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -120,13 +120,9 @@ query GetAllDirectoryMemberships {
 				createdBy
 				directoryAccountID
 				directoryGroupID
-				directorySyncRunID
 				displayID
-				firstSeenAt
 				id
 				integrationID
-				lastConfirmedRunID
-				lastSeenAt
 				metadata
 				observedAt
 				ownerID
@@ -145,17 +141,14 @@ query GetDirectoryMembershipByID ($directoryMembershipId: ID!) {
 		createdBy
 		directoryAccountID
 		directoryGroupID
-		directoryInstanceID
 		directoryName
-		directorySyncRunID
 		displayID
 		environmentID
 		environmentName
-		firstSeenAt
 		id
 		integrationID
-		lastConfirmedRunID
-		lastSeenAt
+		integrationRunID
+		managedBy
 		metadata
 		observedAt
 		ownerID
@@ -165,6 +158,9 @@ query GetDirectoryMembershipByID ($directoryMembershipId: ID!) {
 		scopeID
 		scopeName
 		source
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		updatedAt
 		updatedBy
 		updatedByImpersonator
@@ -185,13 +181,9 @@ query GetDirectoryMemberships ($first: Int, $last: Int, $where: DirectoryMembers
 				createdBy
 				directoryAccountID
 				directoryGroupID
-				directorySyncRunID
 				displayID
-				firstSeenAt
 				id
 				integrationID
-				lastConfirmedRunID
-				lastSeenAt
 				metadata
 				observedAt
 				ownerID
@@ -211,17 +203,14 @@ mutation UpdateDirectoryMembership ($updateDirectoryMembershipId: ID!, $input: U
 			createdBy
 			directoryAccountID
 			directoryGroupID
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			environmentID
 			environmentName
-			firstSeenAt
 			id
 			integrationID
-			lastConfirmedRunID
-			lastSeenAt
+			integrationRunID
+			managedBy
 			metadata
 			observedAt
 			ownerID
@@ -231,6 +220,9 @@ mutation UpdateDirectoryMembership ($updateDirectoryMembershipId: ID!, $input: U
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			updatedAt
 			updatedBy
 			updatedByImpersonator

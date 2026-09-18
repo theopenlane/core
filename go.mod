@@ -35,7 +35,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.111.0
 	github.com/aws/aws-sdk-go-v2/service/securityhub v1.80.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.49.0
-	github.com/brianvoe/gofakeit/v7 v7.16.0
+	github.com/brianvoe/gofakeit/v7 v7.17.0
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v7 v7.10.0
 	github.com/coder/websocket v1.8.15
@@ -115,11 +115,11 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
-	github.com/theopenlane/entx v0.33.5
+	github.com/theopenlane/entx v0.34.2
 	github.com/theopenlane/go-client v0.14.0
 	github.com/theopenlane/gqlgen-plugins v0.18.0
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.38.2
+	github.com/theopenlane/iam v0.39.1
 	github.com/theopenlane/newman v0.4.3
 	github.com/theopenlane/riverboat v0.14.0
 	github.com/theopenlane/utils v0.7.1
@@ -141,7 +141,7 @@ require (
 	golang.org/x/sync v0.23.0
 	golang.org/x/text v0.41.0
 	golang.org/x/tools v0.49.0
-	google.golang.org/api v0.294.0
+	google.golang.org/api v0.297.0
 	google.golang.org/protobuf v1.36.12
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2

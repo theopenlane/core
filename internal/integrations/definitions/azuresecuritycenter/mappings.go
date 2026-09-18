@@ -11,21 +11,22 @@ import (
 // The ARM assessment resource ID is unique per (resource, policy) and serves as the upsert key.
 // Timestamps come from AssessmentStatusResponse: first_evaluated_at → discovered_at,
 // status_changed_at → source_updated_at.
-var mapExprAssessment = providerkit.CelMapExpr([]providerkit.CelMapEntry{
-	{Key: entityops.InputKeyVulnerabilityExternalID, Expr: `'id' in payload ? payload.id : ""`},
-	{Key: entityops.InputKeyVulnerabilityExternalOwnerID, Expr: `'resource_id' in payload && payload.resource_id != "" ? payload.resource_id : resource`},
-	{Key: entityops.InputKeyVulnerabilityDisplayName, Expr: `'display_name' in payload ? payload.display_name : ""`},
-	{Key: entityops.InputKeyVulnerabilitySummary, Expr: `'display_name' in payload ? payload.display_name : ""`},
-	{Key: entityops.InputKeyVulnerabilityDescription, Expr: `'description' in payload ? payload.description : ""`},
-	{Key: entityops.InputKeyVulnerabilitySeverity, Expr: `'severity' in payload ? payload.severity : ""`},
-	{Key: entityops.InputKeyVulnerabilityCategory, Expr: `'category' in payload ? payload.category : ""`},
-	{Key: entityops.InputKeyVulnerabilityVulnerabilityStatusName, Expr: `'status_code' in payload ? payload.status_code : ""`},
-	{Key: entityops.InputKeyVulnerabilityOpen, Expr: `dyn('status_code' in payload ? payload.status_code == "Unhealthy" : false)`},
-	{Key: entityops.InputKeyVulnerabilityExternalURI, Expr: `'external_uri' in payload ? payload.external_uri : ""`},
-	{Key: entityops.InputKeyVulnerabilityDiscoveredAt, Expr: `'first_evaluated_at' in payload ? payload.first_evaluated_at : null`},
-	{Key: entityops.InputKeyVulnerabilitySourceUpdatedAt, Expr: `'status_changed_at' in payload ? payload.status_changed_at : null`},
-	{Key: entityops.InputKeyVulnerabilityRawPayload, Expr: "payload"},
-})
+var mapExprAssessment = providerkit.CelMapExpr(
+	entityops.VulnerabilityFields.ExternalID.Expr(`'id' in payload ? payload.id : ""`),
+	entityops.VulnerabilityFields.ExternalOwnerID.Expr(`'resource_id' in payload && payload.resource_id != "" ? payload.resource_id : resource`),
+	entityops.VulnerabilityFields.DisplayName.Expr(`'display_name' in payload ? payload.display_name : ""`),
+	entityops.VulnerabilityFields.Summary.Expr(`'display_name' in payload ? payload.display_name : ""`),
+	entityops.VulnerabilityFields.Description.Expr(`paragraphs('description' in payload ? payload.description : "")`),
+	entityops.VulnerabilityFields.Severity.Expr(`'severity' in payload ? payload.severity : ""`),
+	entityops.VulnerabilityFields.Category.Expr(`'category' in payload ? payload.category : ""`),
+	entityops.VulnerabilityFields.VulnerabilityStatusName.Expr(`'status_code' in payload ? payload.status_code : ""`),
+	entityops.VulnerabilityFields.Open.Expr(`dyn('status_code' in payload ? payload.status_code == "Unhealthy" : false)`),
+	entityops.VulnerabilityFields.ExternalURI.Expr(`'external_uri' in payload ? payload.external_uri : ""`),
+	entityops.VulnerabilityFields.DiscoveredAt.Expr(`'first_evaluated_at' in payload ? payload.first_evaluated_at : null`),
+	entityops.VulnerabilityFields.SourceUpdatedAt.Expr(`'status_changed_at' in payload ? payload.status_changed_at : null`),
+	entityops.VulnerabilityFields.RawPayload.Expr("payload"),
+	entityops.VulnerabilityFields.Source.Expr(providerkit.ExprInstallationName),
+)
 
 // mapExprSubAssessment maps SubAssessmentPayload fields to the Vulnerability schema.
 //
@@ -38,18 +39,19 @@ var mapExprAssessment = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 // the Vulnerability schema enforces a (cve_id, owner_id) unique constraint that assumes
 // one record per CVE per organization, whereas Azure sub-assessments are scoped per
 // resource (the same CVE can appear on multiple container images or VMs).
-var mapExprSubAssessment = providerkit.CelMapExpr([]providerkit.CelMapEntry{
-	{Key: entityops.InputKeyVulnerabilityExternalID, Expr: `'id' in payload ? payload.id : ""`},
-	{Key: entityops.InputKeyVulnerabilityExternalOwnerID, Expr: `'resource_id' in payload && payload.resource_id != "" ? payload.resource_id : resource`},
-	{Key: entityops.InputKeyVulnerabilityDisplayName, Expr: `'display_name' in payload ? payload.display_name : ""`},
-	{Key: entityops.InputKeyVulnerabilitySummary, Expr: `'display_name' in payload ? payload.display_name : ""`},
-	{Key: entityops.InputKeyVulnerabilityDescription, Expr: `'description' in payload ? payload.description : ""`},
-	{Key: entityops.InputKeyVulnerabilitySeverity, Expr: `'severity' in payload ? payload.severity : ""`},
-	{Key: entityops.InputKeyVulnerabilityCategory, Expr: `'category' in payload ? payload.category : ""`},
-	{Key: entityops.InputKeyVulnerabilityVulnerabilityStatusName, Expr: `'status_code' in payload ? payload.status_code : ""`},
-	{Key: entityops.InputKeyVulnerabilityOpen, Expr: `dyn('status_code' in payload ? payload.status_code == "Unhealthy" : false)`},
-	{Key: entityops.InputKeyVulnerabilityScore, Expr: `'cvss_score' in payload && payload.cvss_score != null ? payload.cvss_score : null`},
-	{Key: entityops.InputKeyVulnerabilityDiscoveredAt, Expr: `'published_at' in payload ? payload.published_at : null`},
-	{Key: entityops.InputKeyVulnerabilitySourceUpdatedAt, Expr: `'time_generated' in payload ? payload.time_generated : null`},
-	{Key: entityops.InputKeyVulnerabilityRawPayload, Expr: "payload"},
-})
+var mapExprSubAssessment = providerkit.CelMapExpr(
+	entityops.VulnerabilityFields.ExternalID.Expr(`'id' in payload ? payload.id : ""`),
+	entityops.VulnerabilityFields.ExternalOwnerID.Expr(`'resource_id' in payload && payload.resource_id != "" ? payload.resource_id : resource`),
+	entityops.VulnerabilityFields.DisplayName.Expr(`'display_name' in payload ? payload.display_name : ""`),
+	entityops.VulnerabilityFields.Summary.Expr(`'display_name' in payload ? payload.display_name : ""`),
+	entityops.VulnerabilityFields.Description.Expr(`paragraphs('description' in payload ? payload.description : "")`),
+	entityops.VulnerabilityFields.Severity.Expr(`'severity' in payload ? payload.severity : ""`),
+	entityops.VulnerabilityFields.Category.Expr(`'category' in payload ? payload.category : ""`),
+	entityops.VulnerabilityFields.VulnerabilityStatusName.Expr(`'status_code' in payload ? payload.status_code : ""`),
+	entityops.VulnerabilityFields.Open.Expr(`dyn('status_code' in payload ? payload.status_code == "Unhealthy" : false)`),
+	entityops.VulnerabilityFields.Score.Expr(`'cvss_score' in payload && payload.cvss_score != null ? payload.cvss_score : null`),
+	entityops.VulnerabilityFields.DiscoveredAt.Expr(`'published_at' in payload ? payload.published_at : null`),
+	entityops.VulnerabilityFields.SourceUpdatedAt.Expr(`'time_generated' in payload ? payload.time_generated : null`),
+	entityops.VulnerabilityFields.RawPayload.Expr("payload"),
+	entityops.VulnerabilityFields.Source.Expr(providerkit.ExprInstallationName),
+)

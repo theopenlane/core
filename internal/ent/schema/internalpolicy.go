@@ -155,6 +155,7 @@ func (i InternalPolicy) Mixin() []ent.Mixin {
 		prefix:          "PLC",
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{SchemaType: i},
 			// all policies must be associated to an organization
 			// unless they are system owned to be used as templates
 			newOrgOwnedMixin(i),

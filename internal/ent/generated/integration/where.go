@@ -2432,29 +2432,6 @@ func HasDirectoryMembershipsWith(preds ...predicate.DirectoryMembership) predica
 	})
 }
 
-// HasDirectorySyncRuns applies the HasEdge predicate on the "directory_sync_runs" edge.
-func HasDirectorySyncRuns() predicate.Integration {
-	return predicate.Integration(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasDirectorySyncRunsWith applies the HasEdge predicate on the "directory_sync_runs" edge with a given conditions (other predicates).
-func HasDirectorySyncRunsWith(preds ...predicate.DirectorySyncRun) predicate.Integration {
-	return predicate.Integration(func(s *sql.Selector) {
-		step := newDirectorySyncRunsStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasCheckResults applies the HasEdge predicate on the "check_results" edge.
 func HasCheckResults() predicate.Integration {
 	return predicate.Integration(func(s *sql.Selector) {

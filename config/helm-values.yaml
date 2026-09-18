@@ -121,9 +121,7 @@ coreConfiguration:
     defaulttrustcenterdomain: "trust.theopenlane.net"  # @schema type:string; default:trust.theopenlane.net
     # -- TrustCenterCnameTarget is the cname target for the trust center
     # Used for mapping the vanity domains to the trust centers
-    trustcentercnametarget: ""  # @schema type:string
-    # -- TrustCenterPreviewCnameTarget is the cname target for trust center preview domains
-    trustcenterpreviewcnametarget: ""  # @schema type:string
+    trustcentercnametarget: "cname.openlane-dns.com"  # @schema type:string; default:cname.openlane-dns.com
     # -- NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
     # Unread notifications are always pulled regardless of this setting
     notificationlookbackdays: 30  # @schema type:integer; default:30
@@ -779,6 +777,14 @@ externalSecrets:
       secretKey: "CORE_SERVER_SECRETMANAGER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-server-secretmanager"  # @schema type:string
+    # -- core-server-trustcenterpreviewzoneid secret configuration
+    core-server-trustcenterpreviewzoneid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for server.trustcenterpreviewzoneid
+      secretKey: "CORE_SERVER_TRUSTCENTERPREVIEWZONEID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-server-trustcenterpreviewzoneid"  # @schema type:string
     # -- core-auth-providers-github-clientsecret secret configuration
     core-auth-providers-github-clientsecret:
       # -- Enable this external secret

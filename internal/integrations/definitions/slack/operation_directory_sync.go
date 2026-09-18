@@ -2,7 +2,6 @@ package slack
 
 import (
 	"context"
-	"time"
 
 	slackgo "github.com/slack-go/slack"
 
@@ -54,13 +53,13 @@ type slackUserPayload struct {
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(slackClient, func(ctx context.Context, request types.OperationRequest, client *SlackClient) ([]types.IngestPayloadSet, error) {
-		return d.Run(ctx, client.API, request.LastRunAt)
+	return providerkit.WithClientRequest(slackClient, func(ctx context.Context, _ types.OperationRequest, client *SlackClient) ([]types.IngestPayloadSet, error) {
+		return d.Run(ctx, client.API)
 	})
 }
 
 // Run collects Slack workspace users and emits directory account ingest payloads
-func (DirectorySync) Run(ctx context.Context, client *slackgo.Client, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
+func (DirectorySync) Run(ctx context.Context, client *slackgo.Client) ([]types.IngestPayloadSet, error) {
 	users, err := client.GetUsersContext(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("slack directory sync: failed to fetch users")
@@ -71,10 +70,6 @@ func (DirectorySync) Run(ctx context.Context, client *slackgo.Client, lastRunAt 
 
 	for _, user := range users {
 		if user.IsBot {
-			continue
-		}
-
-		if lastRunAt != nil && !time.Unix(int64(user.Updated), 0).After(*lastRunAt) {
 			continue
 		}
 
@@ -92,8 +87,9 @@ func (DirectorySync) Run(ctx context.Context, client *slackgo.Client, lastRunAt 
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    entityops.SchemaDirectoryAccount.Name,
-			Envelopes: envelopes,
+			Schema:           entityops.SchemaDirectoryAccount.Name,
+			Envelopes:        envelopes,
+			SnapshotComplete: true,
 		},
 	}, nil
 }

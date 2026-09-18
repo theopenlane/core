@@ -29,6 +29,7 @@ func MockRuntimeConfig() *RuntimeEmailConfig {
 		HeaderText:     "MITB Portal",
 		RootURL:        "https://example.com",
 		ProductURL:     "https://app.example.com",
+		APIURL:         "https://api.example.com",
 		DocsURL:        "https://docs.example.com",
 		TermsURL:       "https://example.com/terms",
 		PrivacyURL:     "https://example.com/privacy",

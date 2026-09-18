@@ -12,12 +12,13 @@ type task
     # tuple based permissions for edit, view, blocked, and audit log viewing
     define deleter: assigner or parent_editor or parent_deleter
     define editor: [user, service, group#member] or parent_editor or assignee or assigner
-    define viewer: [user, service, group#member] or editor or parent_viewer
+    define viewer: [user, service, group#member] or editor or parent_viewer or can_view_org from task_templates
     define blocked: [user, service, group#member]
     define audit_log_viewer: (([user, service, group#member] or audit_log_viewer from parent or audit_log_viewer from parent_context) and can_view) or can_view
 
     define assignee: [user]
     define assigner: [user]
+    define task_templates: [organization]
 
     # parent permissions derived based on `crud` permissions or parents
     define parent_editor: can_edit_task from parent_context or can_edit from parent
