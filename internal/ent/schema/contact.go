@@ -121,6 +121,7 @@ func (Contact) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entgql.OrderField("observed_at"),
+				entx.IntegrationMappingField().Volatile(),
 			),
 	}
 }

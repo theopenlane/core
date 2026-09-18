@@ -64,6 +64,7 @@ func (CheckResult) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entgql.OrderField("observed_at"),
+				entx.IntegrationMappingField().Volatile(),
 			),
 		field.String("external_uri").
 			Comment("link to the result in the source system").
