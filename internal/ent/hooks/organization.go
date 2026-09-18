@@ -22,7 +22,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
@@ -106,18 +105,20 @@ func HookOrganization() ent.Hook {
 				}
 
 				// the bypass capabilities are only needed for the insert itself, the rest of the
-				// flow runs as the original caller scoped to the new org with an allow decision
-				if !orgCreated.PersonalOrg {
+				// flow runs as the original caller scoped to only the new org
+				if !orgCreated.PersonalOrg && existingCaller != nil {
 					// propagate the new org ID back through the original caller pointer
 					// so that callers holding the same *Caller see the updated org
-					if existingCaller != nil {
-						existingCaller.OrganizationID = orgCreated.ID
-						if !lo.Contains(existingCaller.OrganizationIDs, orgCreated.ID) {
-							existingCaller.OrganizationIDs = append(existingCaller.OrganizationIDs, orgCreated.ID)
-						}
+					existingCaller.OrganizationID = orgCreated.ID
+					if !lo.Contains(existingCaller.OrganizationIDs, orgCreated.ID) {
+						existingCaller.OrganizationIDs = append(existingCaller.OrganizationIDs, orgCreated.ID)
 					}
 
-					ctx = privacy.DecisionContext(originalCtx, privacy.Allow)
+					newOrgCaller := *existingCaller
+					newOrgCaller.OrganizationID = orgCreated.ID
+					newOrgCaller.OrganizationIDs = []string{orgCreated.ID}
+
+					ctx = auth.WithCaller(originalCtx, &newOrgCaller)
 				}
 
 				// create the admin organization member if not using an API token (which is not associated with a user)
