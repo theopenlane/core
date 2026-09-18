@@ -920,7 +920,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filehistory.FieldMd5Hash:               {Type: field.TypeString, Column: filehistory.FieldMd5Hash},
 			filehistory.FieldDetectedContentType:   {Type: field.TypeString, Column: filehistory.FieldDetectedContentType},
 			filehistory.FieldStoreKey:              {Type: field.TypeString, Column: filehistory.FieldStoreKey},
-			filehistory.FieldCategoryType:          {Type: field.TypeString, Column: filehistory.FieldCategoryType},
 			filehistory.FieldURI:                   {Type: field.TypeString, Column: filehistory.FieldURI},
 			filehistory.FieldStorageScheme:         {Type: field.TypeString, Column: filehistory.FieldStorageScheme},
 			filehistory.FieldStorageVolume:         {Type: field.TypeString, Column: filehistory.FieldStorageVolume},
@@ -6726,11 +6725,6 @@ func (f *FileHistoryFilter) WhereDetectedContentType(p entql.StringP) {
 // WhereStoreKey applies the entql string predicate on the store_key field.
 func (f *FileHistoryFilter) WhereStoreKey(p entql.StringP) {
 	f.Where(p.Field(filehistory.FieldStoreKey))
-}
-
-// WhereCategoryType applies the entql string predicate on the category_type field.
-func (f *FileHistoryFilter) WhereCategoryType(p entql.StringP) {
-	f.Where(p.Field(filehistory.FieldCategoryType))
 }
 
 // WhereURI applies the entql string predicate on the uri field.
