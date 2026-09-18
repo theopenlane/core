@@ -2,9 +2,7 @@ package notifications
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -68,8 +66,23 @@ func Listeners() []gala.Registration {
 		entityops.MutationListener{
 			Concern: entityops.MutationConcernNotification,
 			Schema:  entityops.SchemaTask,
+			Fields:  []string{task.FieldAssigneeID},
+			Match: []entityops.FieldMatch{
+				{
+					Field: task.FieldStatus,
+					In:    []string{string(enums.TaskStatusOpen)},
+				},
+			},
 			Caller:  notificationCaller,
-			Handle:  handleTaskAssignmentMutation,
+			Notify: &entityops.NotifySpec{
+				Recipients: entityops.RecipientsFromField(task.FieldAssigneeID),
+				Content: entityops.NotificationContent{
+					Type:          enums.NotificationTypeUser,
+					Topic:         enums.NotificationTopicTaskAssignment,
+					TitleTemplate: "New task assigned",
+					BodyTemplate:  "Task {{ .Name }} has been assigned to you",
+				},
+			},
 		},
 		entityops.MutationListener{
 			Concern: entityops.MutationConcernNotification,
@@ -100,42 +113,4 @@ func Listeners() []gala.Registration {
 			Handle:     handleProgramMutation,
 		},
 	)
-}
-
-func handleTaskAssignmentMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
-	// we only care for sending notifications if assignment changes
-	if !payload.FieldChanged(task.FieldAssigneeID) {
-		return nil
-	}
-
-	assignee, ok := payload.StringValue(task.FieldAssigneeID)
-	oldAssignee, oldExists := payload.OldStringValue(task.FieldAssigneeID)
-
-	if ok == oldExists && assignee == oldAssignee {
-		return nil
-	}
-
-	task, found, err := entityops.LoadEntity(inv.Context, payload.EntityID, inv.Client.Task.Get)
-	if err != nil || !found {
-		return err
-	}
-
-	if task.Status == enums.TaskStatusCompleted || task.Status == enums.TaskStatusWontDo || task.AssigneeID == "" {
-		return nil
-	}
-
-	data := map[string]any{}
-	if url := entityops.ConsoleObjectPath(generated.TypeTask, task.ID); url != "" {
-		data["url"] = url
-	}
-
-	return entityops.CreateNotifications(inv.Context, inv.Client, []string{task.AssigneeID}, &generated.CreateNotificationInput{
-		NotificationType: enums.NotificationTypeUser,
-		Title:            "New task assigned",
-		Body:             fmt.Sprintf("Task %s has been assigned to you", task.Title),
-		Data:             data,
-		Topic:            lo.ToPtr(enums.NotificationTopicTaskAssignment),
-		ObjectType:       generated.TypeTask,
-		OwnerID:          &task.OwnerID,
-	})
 }
