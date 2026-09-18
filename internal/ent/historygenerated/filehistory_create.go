@@ -390,20 +390,6 @@ func (_c *FileHistoryCreate) SetNillableStoreKey(v *string) *FileHistoryCreate {
 	return _c
 }
 
-// SetCategoryType sets the "category_type" field.
-func (_c *FileHistoryCreate) SetCategoryType(v string) *FileHistoryCreate {
-	_c.mutation.SetCategoryType(v)
-	return _c
-}
-
-// SetNillableCategoryType sets the "category_type" field if the given value is not nil.
-func (_c *FileHistoryCreate) SetNillableCategoryType(v *string) *FileHistoryCreate {
-	if v != nil {
-		_c.SetCategoryType(*v)
-	}
-	return _c
-}
-
 // SetURI sets the "uri" field.
 func (_c *FileHistoryCreate) SetURI(v string) *FileHistoryCreate {
 	_c.mutation.SetURI(v)
@@ -790,10 +776,6 @@ func (_c *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.StoreKey(); ok {
 		_spec.SetField(filehistory.FieldStoreKey, field.TypeString, value)
 		_node.StoreKey = value
-	}
-	if value, ok := _c.mutation.CategoryType(); ok {
-		_spec.SetField(filehistory.FieldCategoryType, field.TypeString, value)
-		_node.CategoryType = value
 	}
 	if value, ok := _c.mutation.URI(); ok {
 		_spec.SetField(filehistory.FieldURI, field.TypeString, value)

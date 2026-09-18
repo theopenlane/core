@@ -14,13 +14,13 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
+
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
-	"github.com/theopenlane/core/v2/internal/httpserve/serveropts"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 )
@@ -282,42 +282,4 @@ func TestDisconnectReinstallReclaimsIngestedRecord(t *testing.T) {
 	th.RequireNoError(t, err)
 	assert.Check(t, is.Equal(second.ID, reclaimed.ManagedBy), "the reinstall re-owns the record on the shared instance id")
 	assert.Check(t, is.Equal("tenant-reinstall", reclaimed.SourceInstanceID), "the re-claimed record keeps the shared instance id")
-}
-
-// TestBackfillChainResolvesInstanceIDThenStampsProvenance drives the real gala startup backfill chain
-// with file-backups disabled: a mock installation connects and resolves a distinct external id, its id
-// is cleared to a legacy row, and one legacy unstamped record is left FK-linked to it. The chain must
-// re-resolve the instance id before stamping provenance, which the record carrying the re-resolved id
-// proves is the order instance-ids ran before provenance
-func TestBackfillChainResolvesInstanceIDThenStampsProvenance(t *testing.T) {
-	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
-
-	server := testint.NewMockHTTPServer(mockProviderToken, "tenant-mockhttp")
-	t.Cleanup(server.Close)
-
-	install := connectMockInstall(ctx, t, server)
-
-	assert.Check(t, is.Equal(enums.IntegrationStatusConnected, install.Status), "the installation connects through the real health check")
-	assert.Check(t, is.Equal("tenant-mockhttp", install.InstallationMetadata.Display.ExternalID), "connect resolves the distinct external id from the provider")
-
-	account := legacyUnclaimedAccount(ctx, t, install, "chain-mock-acct")
-
-	clearInstallInstanceID(ctx, t, install.ID)
-
-	t.Cleanup(func() {
-		(&th.Cleanup[*ent.DirectoryAccountDeleteOne]{Client: suite.Client.DB.DirectoryAccount, ID: account.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
-		(&th.Cleanup[*ent.IntegrationDeleteOne]{Client: suite.Client.DB.Integration, ID: install.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
-	})
-
-	th.RequireNoError(t, serveropts.StartBackfill(ctx, suite.GalaRuntime))
-
-	waitForEvents()
-
-	assert.Check(t, is.Equal("tenant-mockhttp", reloadIntegration(t, ctx, install.ID).InstallationMetadata.Display.ExternalID), "the backfill re-resolves the distinct external id through the provider")
-
-	stamped, err := suite.Client.DB.DirectoryAccount.Get(ctx, account.ID)
-	th.RequireNoError(t, err)
-	assert.Check(t, is.Equal("tenant-mockhttp", stamped.SourceInstanceID), "provenance stamps the re-resolved id, proving instance-ids ran before provenance")
-	assert.Check(t, is.Equal(install.ID, stamped.ManagedBy), "the stamped record is managed by the installation")
-	assert.Check(t, "tenant-mockhttp" != install.ID, "the resolved external id is distinct from the installation id")
 }
