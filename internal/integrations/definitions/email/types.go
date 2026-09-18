@@ -15,8 +15,6 @@ var (
 	emailCredentialSchema, emailCredentialRef = providerkit.CredentialSchema[Credential]()
 	// emailClientRef is the client ref for the email client used by this definition
 	emailClientRef = types.NewClientRef[*Client]()
-	// healthCheckSchema is the operation schema for the health check operation
-	healthCheckSchema, healthCheckOp = providerkit.OperationSchema[HealthCheck]()
 	// sendEmailSchema is the operation schema for the generic send-email operation
 	sendEmailSchema, SendEmailOp = providerkit.OperationSchema[SendEmailRequest]() //nolint:revive
 	// sendBrandedCampaignSchema is the operation schema for the branded campaign dispatch operation
@@ -144,7 +142,7 @@ type Credential struct {
 	// APIKey is the email provider API key
 	APIKey string `json:"apiKey" jsonschema:"required,description=Email provider API key"`
 	// Provider is the email service provider name
-	Provider string `json:"provider" jsonschema:"required,enum=resend,enum=sendgrid,enum=postmark,description=Email service provider"`
+	Provider string `json:"provider" jsonschema:"required,enum=resend,description=Email service provider"`
 }
 
 // UserInput is the installation-scoped configuration that customers provide

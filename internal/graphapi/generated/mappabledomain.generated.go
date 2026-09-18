@@ -583,10 +583,6 @@ func (ec *executionContext) _MappableDomainUpdatePayload(ctx context.Context, se
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNMappableDomainBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainBulkCreatePayload) graphql.Marshaler {
-	return ec._MappableDomainBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNMappableDomainBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNMappableDomainBulkCreatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._MappableDomainBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNMappableDomainBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainBulkDeletePayload) graphql.Marshaler {
-	return ec._MappableDomainBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNMappableDomainBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNMappableDomainBulkDeletePayload2ᚖgithubᚗ
 	return ec._MappableDomainBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNMappableDomainBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainBulkUpdatePayload) graphql.Marshaler {
-	return ec._MappableDomainBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNMappableDomainBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNMappableDomainBulkUpdatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._MappableDomainBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNMappableDomainCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainCreatePayload) graphql.Marshaler {
-	return ec._MappableDomainCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNMappableDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNMappableDomainCreatePayload2ᚖgithubᚗcom�
 	return ec._MappableDomainCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNMappableDomainDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainDeletePayload) graphql.Marshaler {
-	return ec._MappableDomainDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNMappableDomainDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNMappableDomainDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._MappableDomainDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNMappableDomainUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainUpdatePayload) graphql.Marshaler {
-	return ec._MappableDomainUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNMappableDomainUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainUpdatePayload) graphql.Marshaler {

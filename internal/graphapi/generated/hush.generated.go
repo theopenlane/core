@@ -583,10 +583,6 @@ func (ec *executionContext) _HushUpdatePayload(ctx context.Context, sel ast.Sele
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNHushBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.HushBulkCreatePayload) graphql.Marshaler {
-	return ec._HushBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNHushBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.HushBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNHushBulkCreatePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._HushBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNHushBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.HushBulkDeletePayload) graphql.Marshaler {
-	return ec._HushBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNHushBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.HushBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNHushBulkDeletePayload2ᚖgithubᚗcomᚋtheo
 	return ec._HushBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNHushBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.HushBulkUpdatePayload) graphql.Marshaler {
-	return ec._HushBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNHushBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.HushBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNHushBulkUpdatePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._HushBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNHushCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.HushCreatePayload) graphql.Marshaler {
-	return ec._HushCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNHushCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.HushCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNHushCreatePayload2ᚖgithubᚗcomᚋtheopenl
 	return ec._HushCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNHushDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.HushDeletePayload) graphql.Marshaler {
-	return ec._HushDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNHushDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.HushDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNHushDeletePayload2ᚖgithubᚗcomᚋtheopenl
 		return graphql.Null
 	}
 	return ec._HushDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNHushUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.HushUpdatePayload) graphql.Marshaler {
-	return ec._HushUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNHushUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐHushUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.HushUpdatePayload) graphql.Marshaler {

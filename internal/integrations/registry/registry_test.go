@@ -424,6 +424,52 @@ func TestIndexOperationsIngestHandlerWithContracts(t *testing.T) {
 	}
 }
 
+// TestIndexOperationsSnapshotRequiresIngestHandle verifies Policy.Snapshot without an IngestHandle is rejected
+func TestIndexOperationsSnapshotRequiresIngestHandle(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_badsnapshot"},
+		Operations: []integrationtypes.OperationRegistration{
+			{
+				Name:   "bad_snapshot",
+				Topic:  gala.TopicName("bad_snapshot"),
+				Handle: newTestHandler(),
+				Policy: integrationtypes.ExecutionPolicy{Snapshot: true},
+			},
+		},
+	}
+
+	err := reg.Register(def)
+	if !errors.Is(err, ErrIngestSnapshotRequiresIngestHandle) {
+		t.Fatalf("expected ErrIngestSnapshotRequiresIngestHandle, got %v", err)
+	}
+}
+
+// TestIndexOperationsSnapshotWithIngestHandle verifies Policy.Snapshot with an IngestHandle succeeds
+func TestIndexOperationsSnapshotWithIngestHandle(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_goodsnapshot"},
+		Operations: []integrationtypes.OperationRegistration{
+			{
+				Name:         "good_snapshot",
+				Topic:        gala.TopicName("good_snapshot"),
+				Ingest:       []integrationtypes.IngestContract{{Schema: "directory_account"}},
+				IngestHandle: newTestIngestHandler(),
+				Policy:       integrationtypes.ExecutionPolicy{Snapshot: true},
+			},
+		},
+	}
+
+	if err := reg.Register(def); err != nil {
+		t.Fatalf("Register() error = %v", err)
+	}
+}
+
 // TestIndexOperationsClientRefNotFound verifies operation referencing unknown client is rejected
 func TestIndexOperationsClientRefNotFound(t *testing.T) {
 	t.Parallel()
@@ -924,23 +970,23 @@ func TestConnectionClientRefNotDeclared(t *testing.T) {
 	}
 }
 
-// TestConnectionValidationOperationNotDeclared verifies connection with unknown validation operation is rejected
-func TestConnectionValidationOperationNotDeclared(t *testing.T) {
+// TestConnectionHealthCheckHandlerRequired verifies a connection health check without a handler is rejected
+func TestConnectionHealthCheckHandlerRequired(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
 	slot := integrationtypes.NewCredentialSlotID("tok")
 
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_badvalop"},
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_nohealthhandler"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
 			{Ref: slot, Schema: testCredentialSchema},
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
-				CredentialRef:       slot,
-				CredentialRefs:      []integrationtypes.CredentialSlotID{slot},
-				ValidationOperation: "nonexistent",
+				CredentialRef:  slot,
+				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
+				HealthCheck:    &integrationtypes.HealthCheckRegistration{},
 			},
 		},
 		Operations: []integrationtypes.OperationRegistration{
@@ -949,8 +995,42 @@ func TestConnectionValidationOperationNotDeclared(t *testing.T) {
 	}
 
 	err := reg.Register(def)
-	if !errors.Is(err, ErrConnectionValidationOperationNotDeclared) {
-		t.Fatalf("expected ErrConnectionValidationOperationNotDeclared, got %v", err)
+	if !errors.Is(err, ErrConnectionHealthCheckHandlerRequired) {
+		t.Fatalf("expected ErrConnectionHealthCheckHandlerRequired, got %v", err)
+	}
+}
+
+// TestConnectionHealthCheckClientNotDeclared verifies a connection health check with an unknown client ref is rejected
+func TestConnectionHealthCheckClientNotDeclared(t *testing.T) {
+	t.Parallel()
+
+	reg := New()
+	slot := integrationtypes.NewCredentialSlotID("tok")
+	unknownClient := integrationtypes.NewClientRef[string]()
+
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_badhealthclient"},
+		CredentialRegistrations: []integrationtypes.CredentialRegistration{
+			{Ref: slot, Schema: testCredentialSchema},
+		},
+		Connections: []integrationtypes.ConnectionRegistration{
+			{
+				CredentialRef:  slot,
+				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
+				HealthCheck: &integrationtypes.HealthCheckRegistration{
+					ClientRef: unknownClient.ID(),
+					Handle:    newTestHandler(),
+				},
+			},
+		},
+		Operations: []integrationtypes.OperationRegistration{
+			{Name: "h", Topic: gala.TopicName("h"), Handle: newTestHandler()},
+		},
+	}
+
+	err := reg.Register(def)
+	if !errors.Is(err, ErrConnectionClientRefNotDeclared) {
+		t.Fatalf("expected ErrConnectionClientRefNotDeclared, got %v", err)
 	}
 }
 
@@ -1103,12 +1183,15 @@ func TestConnectionFullyWiredSuccess(t *testing.T) {
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
-				CredentialRef:       slot,
-				CredentialRefs:      []integrationtypes.CredentialSlotID{slot, authSlot},
-				ClientRefs:          []integrationtypes.ClientID{clientRef.ID()},
-				ValidationOperation: "health",
-				Auth:                &integrationtypes.AuthRegistration{CredentialRef: authSlot},
-				Disconnect:          &integrationtypes.DisconnectRegistration{CredentialRef: slot},
+				CredentialRef:  slot,
+				CredentialRefs: []integrationtypes.CredentialSlotID{slot, authSlot},
+				ClientRefs:     []integrationtypes.ClientID{clientRef.ID()},
+				HealthCheck: &integrationtypes.HealthCheckRegistration{
+					ClientRef: clientRef.ID(),
+					Handle:    newTestHandler(),
+				},
+				Auth:       &integrationtypes.AuthRegistration{CredentialRef: authSlot},
+				Disconnect: &integrationtypes.DisconnectRegistration{CredentialRef: slot},
 			},
 		},
 	}

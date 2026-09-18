@@ -34,6 +34,16 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldSourceDefinitionID holds the string denoting the source_definition_id field in the database.
+	FieldSourceDefinitionID = "source_definition_id"
+	// FieldSourceDefinitionVersion holds the string denoting the source_definition_version field in the database.
+	FieldSourceDefinitionVersion = "source_definition_version"
+	// FieldSourceInstanceID holds the string denoting the source_instance_id field in the database.
+	FieldSourceInstanceID = "source_instance_id"
+	// FieldManagedBy holds the string denoting the managed_by field in the database.
+	FieldManagedBy = "managed_by"
+	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
+	FieldIntegrationRunID = "integration_run_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldInternalOwner holds the string denoting the internal_owner field in the database.
@@ -42,12 +52,16 @@ const (
 	FieldInternalOwnerUserID = "internal_owner_user_id"
 	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
 	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldInternalOwnerIdentityHolderID holds the string denoting the internal_owner_identity_holder_id field in the database.
+	FieldInternalOwnerIdentityHolderID = "internal_owner_identity_holder_id"
 	// FieldReviewedBy holds the string denoting the reviewed_by field in the database.
 	FieldReviewedBy = "reviewed_by"
 	// FieldReviewedByUserID holds the string denoting the reviewed_by_user_id field in the database.
 	FieldReviewedByUserID = "reviewed_by_user_id"
 	// FieldReviewedByGroupID holds the string denoting the reviewed_by_group_id field in the database.
 	FieldReviewedByGroupID = "reviewed_by_group_id"
+	// FieldReviewedByIdentityHolderID holds the string denoting the reviewed_by_identity_holder_id field in the database.
+	FieldReviewedByIdentityHolderID = "reviewed_by_identity_holder_id"
 	// FieldLastReviewedAt holds the string denoting the last_reviewed_at field in the database.
 	FieldLastReviewedAt = "last_reviewed_at"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
@@ -150,6 +164,8 @@ const (
 	FieldExternalID = "external_id"
 	// FieldObservedAt holds the string denoting the observed_at field in the database.
 	FieldObservedAt = "observed_at"
+	// EdgeIntegrationRuns holds the string denoting the integration_runs edge name in mutations.
+	EdgeIntegrationRuns = "integration_runs"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -160,10 +176,14 @@ const (
 	EdgeInternalOwnerUser = "internal_owner_user"
 	// EdgeInternalOwnerGroup holds the string denoting the internal_owner_group edge name in mutations.
 	EdgeInternalOwnerGroup = "internal_owner_group"
+	// EdgeInternalOwnerIdentityHolder holds the string denoting the internal_owner_identity_holder edge name in mutations.
+	EdgeInternalOwnerIdentityHolder = "internal_owner_identity_holder"
 	// EdgeReviewedByUser holds the string denoting the reviewed_by_user edge name in mutations.
 	EdgeReviewedByUser = "reviewed_by_user"
 	// EdgeReviewedByGroup holds the string denoting the reviewed_by_group edge name in mutations.
 	EdgeReviewedByGroup = "reviewed_by_group"
+	// EdgeReviewedByIdentityHolder holds the string denoting the reviewed_by_identity_holder edge name in mutations.
+	EdgeReviewedByIdentityHolder = "reviewed_by_identity_holder"
 	// EdgeEntityRelationshipState holds the string denoting the entity_relationship_state edge name in mutations.
 	EdgeEntityRelationshipState = "entity_relationship_state"
 	// EdgeEntitySecurityQuestionnaireStatus holds the string denoting the entity_security_questionnaire_status edge name in mutations.
@@ -230,6 +250,11 @@ const (
 	EdgeInternalPolicies = "internal_policies"
 	// Table holds the table name of the entity in the database.
 	Table = "entities"
+	// IntegrationRunsTable is the table that holds the integration_runs relation/edge. The primary key declared below.
+	IntegrationRunsTable = "entity_integration_runs"
+	// IntegrationRunsInverseTable is the table name for the IntegrationRun entity.
+	// It exists in this package in order to avoid circular dependency with the "integrationrun" package.
+	IntegrationRunsInverseTable = "integration_runs"
 	// OwnerTable is the table that holds the owner relation/edge.
 	OwnerTable = "entities"
 	// OwnerInverseTable is the table name for the Organization entity.
@@ -261,6 +286,13 @@ const (
 	InternalOwnerGroupInverseTable = "groups"
 	// InternalOwnerGroupColumn is the table column denoting the internal_owner_group relation/edge.
 	InternalOwnerGroupColumn = "internal_owner_group_id"
+	// InternalOwnerIdentityHolderTable is the table that holds the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderTable = "entities"
+	// InternalOwnerIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	InternalOwnerIdentityHolderInverseTable = "identity_holders"
+	// InternalOwnerIdentityHolderColumn is the table column denoting the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderColumn = "internal_owner_identity_holder_id"
 	// ReviewedByUserTable is the table that holds the reviewed_by_user relation/edge.
 	ReviewedByUserTable = "entities"
 	// ReviewedByUserInverseTable is the table name for the User entity.
@@ -275,6 +307,13 @@ const (
 	ReviewedByGroupInverseTable = "groups"
 	// ReviewedByGroupColumn is the table column denoting the reviewed_by_group relation/edge.
 	ReviewedByGroupColumn = "reviewed_by_group_id"
+	// ReviewedByIdentityHolderTable is the table that holds the reviewed_by_identity_holder relation/edge.
+	ReviewedByIdentityHolderTable = "entities"
+	// ReviewedByIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	ReviewedByIdentityHolderInverseTable = "identity_holders"
+	// ReviewedByIdentityHolderColumn is the table column denoting the reviewed_by_identity_holder relation/edge.
+	ReviewedByIdentityHolderColumn = "reviewed_by_identity_holder_id"
 	// EntityRelationshipStateTable is the table that holds the entity_relationship_state relation/edge.
 	EntityRelationshipStateTable = "entities"
 	// EntityRelationshipStateInverseTable is the table name for the CustomTypeEnum entity.
@@ -474,13 +513,20 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldSourceDefinitionID,
+	FieldSourceDefinitionVersion,
+	FieldSourceInstanceID,
+	FieldManagedBy,
+	FieldIntegrationRunID,
 	FieldOwnerID,
 	FieldInternalOwner,
 	FieldInternalOwnerUserID,
 	FieldInternalOwnerGroupID,
+	FieldInternalOwnerIdentityHolderID,
 	FieldReviewedBy,
 	FieldReviewedByUserID,
 	FieldReviewedByGroupID,
+	FieldReviewedByIdentityHolderID,
 	FieldLastReviewedAt,
 	FieldSystemOwned,
 	FieldInternalNotes,
@@ -542,6 +588,9 @@ var ForeignKeys = []string{
 }
 
 var (
+	// IntegrationRunsPrimaryKey and IntegrationRunsColumn2 are the table columns denoting the
+	// primary key for the integration_runs relation (M2M).
+	IntegrationRunsPrimaryKey = []string{"entity_id", "integration_run_id"}
 	// BlockedGroupsPrimaryKey and BlockedGroupsColumn2 are the table columns denoting the
 	// primary key for the blocked_groups relation (M2M).
 	BlockedGroupsPrimaryKey = []string{"entity_id", "group_id"}
@@ -758,6 +807,31 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// BySourceDefinitionID orders the results by the source_definition_id field.
+func BySourceDefinitionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionID, opts...).ToFunc()
+}
+
+// BySourceDefinitionVersion orders the results by the source_definition_version field.
+func BySourceDefinitionVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionVersion, opts...).ToFunc()
+}
+
+// BySourceInstanceID orders the results by the source_instance_id field.
+func BySourceInstanceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceInstanceID, opts...).ToFunc()
+}
+
+// ByManagedBy orders the results by the managed_by field.
+func ByManagedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldManagedBy, opts...).ToFunc()
+}
+
+// ByIntegrationRunID orders the results by the integration_run_id field.
+func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
+}
+
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
@@ -778,6 +852,11 @@ func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
 }
 
+// ByInternalOwnerIdentityHolderID orders the results by the internal_owner_identity_holder_id field.
+func ByInternalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerIdentityHolderID, opts...).ToFunc()
+}
+
 // ByReviewedBy orders the results by the reviewed_by field.
 func ByReviewedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewedBy, opts...).ToFunc()
@@ -791,6 +870,11 @@ func ByReviewedByUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByReviewedByGroupID orders the results by the reviewed_by_group_id field.
 func ByReviewedByGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewedByGroupID, opts...).ToFunc()
+}
+
+// ByReviewedByIdentityHolderID orders the results by the reviewed_by_identity_holder_id field.
+func ByReviewedByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByIdentityHolderID, opts...).ToFunc()
 }
 
 // ByLastReviewedAt orders the results by the last_reviewed_at field.
@@ -1018,6 +1102,20 @@ func ByObservedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldObservedAt, opts...).ToFunc()
 }
 
+// ByIntegrationRunsCount orders the results by integration_runs count.
+func ByIntegrationRunsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationRunsStep(), opts...)
+	}
+}
+
+// ByIntegrationRuns orders the results by integration_runs terms.
+func ByIntegrationRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1067,6 +1165,13 @@ func ByInternalOwnerGroupField(field string, opts ...sql.OrderTermOption) OrderO
 	}
 }
 
+// ByInternalOwnerIdentityHolderField orders the results by internal_owner_identity_holder field.
+func ByInternalOwnerIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerIdentityHolderStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByReviewedByUserField orders the results by reviewed_by_user field.
 func ByReviewedByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1078,6 +1183,13 @@ func ByReviewedByUserField(field string, opts ...sql.OrderTermOption) OrderOptio
 func ByReviewedByGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newReviewedByGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByReviewedByIdentityHolderField orders the results by reviewed_by_identity_holder field.
+func ByReviewedByIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewedByIdentityHolderStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -1479,6 +1591,13 @@ func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 		sqlgraph.OrderByNeighborTerms(s, newInternalPoliciesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+func newIntegrationRunsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationRunsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, IntegrationRunsTable, IntegrationRunsPrimaryKey...),
+	)
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1514,6 +1633,13 @@ func newInternalOwnerGroupStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerGroupTable, InternalOwnerGroupColumn),
 	)
 }
+func newInternalOwnerIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerIdentityHolderTable, InternalOwnerIdentityHolderColumn),
+	)
+}
 func newReviewedByUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1526,6 +1652,13 @@ func newReviewedByGroupStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ReviewedByGroupInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByGroupTable, ReviewedByGroupColumn),
+	)
+}
+func newReviewedByIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewedByIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByIdentityHolderTable, ReviewedByIdentityHolderColumn),
 	)
 }
 func newEntityRelationshipStateStep() *sqlgraph.Step {

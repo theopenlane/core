@@ -14,8 +14,6 @@ import (
 var DefinitionID = types.NewDefinitionRef("def_01K0TESTDEF0000000000000001")
 
 var (
-	// HealthOp is the inline health check used as every connection's validation operation
-	healthSchema, HealthOp = providerkit.OperationSchema[healthCheck]()
 	// RepoSyncOp is the async client-resolving operation
 	repoSyncSchema, RepoSyncOp = providerkit.OperationSchema[repoSync]()
 	// ValidatedOp is the inline operation with a required config field
@@ -62,8 +60,6 @@ const (
 	exhaustingInterval       = time.Millisecond
 	exhaustingMaxErrorStreak = 3
 )
-
-type healthCheck struct{}
 
 type repoSync struct{}
 

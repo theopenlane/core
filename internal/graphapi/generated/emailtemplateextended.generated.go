@@ -348,10 +348,6 @@ func (ec *executionContext) _EmailTemplateCatalogEntry(ctx context.Context, sel 
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNEmailTemplateCatalog2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalog(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateCatalog) graphql.Marshaler {
-	return ec._EmailTemplateCatalog(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEmailTemplateCatalog2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalog(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateCatalog) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {

@@ -36,6 +36,21 @@ type topicRegistration struct {
 	kind string
 }
 
+// deriveUniqueKey derives the dedup key from the typed payload, decoding raw emits so their keys match typed emits on the same topic
+func (t topicRegistration) deriveUniqueKey(payload any, raw []byte, rawPayload bool) (string, error) {
+	uniqueKey := t.uniqueKey(payload)
+	if uniqueKey != "" || !rawPayload {
+		return uniqueKey, nil
+	}
+
+	decodedPayload, err := t.decode(raw)
+	if err != nil {
+		return "", err
+	}
+
+	return t.uniqueKey(decodedPayload), nil
+}
+
 // registeredListener stores non-generic listener wrappers
 type registeredListener struct {
 	// id is the unique identifier for this listener

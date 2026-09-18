@@ -83,6 +83,14 @@ input CreateTrustCenterPreviewSettingInput {
   """
   accentColor: String
   """
+  secondary background color for the trust center
+  """
+  secondaryBackgroundColor: String
+  """
+  secondary foreground color for the trust center
+  """
+  secondaryForegroundColor: String
+  """
   hero image local file ID
   """
   heroImageFileID: ID

@@ -48,8 +48,6 @@ type Tx struct {
 	DirectoryGroup *DirectoryGroupClient
 	// DirectoryMembership is the client for interacting with the DirectoryMembership builders.
 	DirectoryMembership *DirectoryMembershipClient
-	// DirectorySyncRun is the client for interacting with the DirectorySyncRun builders.
-	DirectorySyncRun *DirectorySyncRunClient
 	// Discussion is the client for interacting with the Discussion builders.
 	Discussion *DiscussionClient
 	// DocumentData is the client for interacting with the DocumentData builders.
@@ -361,7 +359,6 @@ func (tx *Tx) init() {
 	tx.DirectoryAccount = NewDirectoryAccountClient(tx.config)
 	tx.DirectoryGroup = NewDirectoryGroupClient(tx.config)
 	tx.DirectoryMembership = NewDirectoryMembershipClient(tx.config)
-	tx.DirectorySyncRun = NewDirectorySyncRunClient(tx.config)
 	tx.Discussion = NewDiscussionClient(tx.config)
 	tx.DocumentData = NewDocumentDataClient(tx.config)
 	tx.EmailTemplate = NewEmailTemplateClient(tx.config)

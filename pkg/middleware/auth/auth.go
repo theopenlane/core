@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	api "github.com/theopenlane/core/common/openapi"
+
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
@@ -50,6 +51,17 @@ const (
 // due to the request being a PAT or API Token auth request
 var SessionSkipperFunc = func(c echo.Context) bool {
 	return auth.GetAuthTypeFromEchoContext(c) != auth.JWTAuthentication
+}
+
+// SessionFallbackUserID resolves the authenticated caller to mint a session for when the request carries none
+var SessionFallbackUserID = func(ctx context.Context) (string, bool) {
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.IsImpersonated() {
+		return "", false
+	}
+
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
+
+	return subjectID, err == nil
 }
 
 // AuthenticateSkipperFuncForImpersonation determines whether Authenticate middleware should be skipped
@@ -154,6 +166,11 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 						ctx := auth.WithCaller(c.Request().Context(), auth.NewQuestionnaireCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
 						ctx = auth.ActiveAssessmentIDKey.Set(ctx, claims.AssessmentID)
 						ctx = auth.ActiveAssessmentPreviewKey.Set(ctx, claims.AssessmentPreview)
+
+						if id := claims.CampaignID; id != "" {
+							ctx = auth.ActiveCampaignIDKey.Set(ctx, id)
+						}
+
 						c.SetRequest(c.Request().WithContext(ctx))
 					default:
 						// a token with neither or both scope claims is malformed and must not

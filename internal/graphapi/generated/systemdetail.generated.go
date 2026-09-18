@@ -583,10 +583,6 @@ func (ec *executionContext) _SystemDetailUpdatePayload(ctx context.Context, sel 
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNSystemDetailBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSystemDetailBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.SystemDetailBulkCreatePayload) graphql.Marshaler {
-	return ec._SystemDetailBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSystemDetailBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSystemDetailBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SystemDetailBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNSystemDetailBulkCreatePayload2ᚖgithubᚗco
 		return graphql.Null
 	}
 	return ec._SystemDetailBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSystemDetailBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSystemDetailBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.SystemDetailBulkDeletePayload) graphql.Marshaler {
-	return ec._SystemDetailBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSystemDetailBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSystemDetailBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.SystemDetailBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNSystemDetailBulkDeletePayload2ᚖgithubᚗco
 	return ec._SystemDetailBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNSystemDetailBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSystemDetailBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.SystemDetailBulkUpdatePayload) graphql.Marshaler {
-	return ec._SystemDetailBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSystemDetailBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSystemDetailBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SystemDetailBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNSystemDetailBulkUpdatePayload2ᚖgithubᚗco
 		return graphql.Null
 	}
 	return ec._SystemDetailBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSystemDetailCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSystemDetailCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.SystemDetailCreatePayload) graphql.Marshaler {
-	return ec._SystemDetailCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSystemDetailCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSystemDetailCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SystemDetailCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNSystemDetailCreatePayload2ᚖgithubᚗcomᚋ
 	return ec._SystemDetailCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNSystemDetailDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSystemDetailDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.SystemDetailDeletePayload) graphql.Marshaler {
-	return ec._SystemDetailDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSystemDetailDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSystemDetailDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.SystemDetailDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNSystemDetailDeletePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._SystemDetailDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSystemDetailUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSystemDetailUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.SystemDetailUpdatePayload) graphql.Marshaler {
-	return ec._SystemDetailUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSystemDetailUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSystemDetailUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SystemDetailUpdatePayload) graphql.Marshaler {

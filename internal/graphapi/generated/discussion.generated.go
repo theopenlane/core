@@ -312,10 +312,6 @@ func (ec *executionContext) _DiscussionUpdatePayload(ctx context.Context, sel as
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNDiscussionBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DiscussionBulkCreatePayload) graphql.Marshaler {
-	return ec._DiscussionBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDiscussionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DiscussionBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -324,10 +320,6 @@ func (ec *executionContext) marshalNDiscussionBulkCreatePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._DiscussionBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDiscussionCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DiscussionCreatePayload) graphql.Marshaler {
-	return ec._DiscussionCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDiscussionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DiscussionCreatePayload) graphql.Marshaler {
@@ -340,10 +332,6 @@ func (ec *executionContext) marshalNDiscussionCreatePayload2ᚖgithubᚗcomᚋth
 	return ec._DiscussionCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDiscussionDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DiscussionDeletePayload) graphql.Marshaler {
-	return ec._DiscussionDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDiscussionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DiscussionDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -352,10 +340,6 @@ func (ec *executionContext) marshalNDiscussionDeletePayload2ᚖgithubᚗcomᚋth
 		return graphql.Null
 	}
 	return ec._DiscussionDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDiscussionUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DiscussionUpdatePayload) graphql.Marshaler {
-	return ec._DiscussionUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDiscussionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DiscussionUpdatePayload) graphql.Marshaler {

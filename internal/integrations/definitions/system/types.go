@@ -27,6 +27,12 @@ const (
 	OrganizationDeleteMinInterval = 24 * time.Hour
 	// OrganizationDeleteMaxInterval is the maximum polling interval for organization deletion sweeps
 	OrganizationDeleteMaxInterval = 24 * time.Hour
+	// DefaultIntegrationLifecycleMaxPerRun is the default maximum number of integrations evaluated per sweep
+	DefaultIntegrationLifecycleMaxPerRun = 100
+	// IntegrationLifecycleMinInterval is the minimum polling interval for integration lifecycle sweeps
+	IntegrationLifecycleMinInterval = 6 * time.Hour
+	// IntegrationLifecycleMaxInterval is the maximum polling interval for integration lifecycle sweeps
+	IntegrationLifecycleMaxInterval = 24 * time.Hour
 )
 
 // PaymentReminderConfig contains the operator configuration for the payment reminder sweep
@@ -51,6 +57,16 @@ type OrganizationDeleteConfig struct {
 	Enabled bool `json:"enabled" koanf:"enabled" jsonschema:"description=Whether the organization deletion listener is enabled"`
 }
 
+// IntegrationLifecycleConfig contains the operator configuration for the integration lifecycle sweep
+type IntegrationLifecycleConfig struct {
+	// Enabled controls whether the integration lifecycle sweep is seeded at startup
+	Enabled bool `json:"enabled" koanf:"enabled" default:"true" jsonschema:"default=true,description=Whether the integration lifecycle sweep is enabled"`
+	// DryRun logs matching integration IDs and actions without dispatching them
+	DryRun bool `json:"dryrun" koanf:"dryrun" default:"true" jsonschema:"default=true,description=If true only log integration IDs and actions that would be dispatched"`
+	// MaxPerRun caps how many integrations are evaluated per sweep
+	MaxPerRun int `json:"maxperrun" koanf:"maxperrun" default:"100" jsonschema:"default=100,description=Maximum integrations to evaluate per run"`
+}
+
 // Sweep maps the operator configuration to its sweep defaults
 func (c PaymentReminderConfig) Sweep() PaymentReminderSweep {
 	return PaymentReminderSweep{
@@ -63,6 +79,14 @@ func (c PaymentReminderConfig) Sweep() PaymentReminderSweep {
 // Sweep maps the operator configuration to its sweep defaults
 func (c OrganizationDeleteConfig) Sweep() OrganizationDeleteSweep {
 	return OrganizationDeleteSweep{MaxDeletesPerRun: c.MaxDeletesPerRun}
+}
+
+// Sweep maps the operator configuration to its sweep defaults
+func (c IntegrationLifecycleConfig) Sweep() IntegrationLifecycleSweep {
+	return IntegrationLifecycleSweep{
+		DryRun:    c.DryRun,
+		MaxPerRun: c.MaxPerRun,
+	}
 }
 
 // PaymentReminderSweep configures one payment reminder sweep cycle
@@ -81,7 +105,16 @@ type OrganizationDeleteSweep struct {
 	MaxDeletesPerRun int `json:"maxDeletesPerRun,omitempty"`
 }
 
+// IntegrationLifecycleSweep configures one integration lifecycle sweep cycle
+type IntegrationLifecycleSweep struct {
+	// DryRun logs matching integration IDs and actions without dispatching them
+	DryRun bool `json:"dryRun,omitempty"`
+	// MaxPerRun caps how many integrations are evaluated during the cycle
+	MaxPerRun int `json:"maxPerRun,omitempty"`
+}
+
 var (
-	paymentReminderSweepSchema, PaymentReminderOp       = providerkit.OperationSchema[PaymentReminderSweep]()    //nolint:revive
-	organizationDeleteSweepSchema, OrganizationDeleteOp = providerkit.OperationSchema[OrganizationDeleteSweep]() //nolint:revive
+	paymentReminderSweepSchema, PaymentReminderOp           = providerkit.OperationSchema[PaymentReminderSweep]()      //nolint:revive
+	organizationDeleteSweepSchema, OrganizationDeleteOp     = providerkit.OperationSchema[OrganizationDeleteSweep]()   //nolint:revive
+	integrationLifecycleSweepSchema, IntegrationLifecycleOp = providerkit.OperationSchema[IntegrationLifecycleSweep]() //nolint:revive
 )

@@ -70,6 +70,8 @@ const (
 	FieldProviderState = "provider_state"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldHealth holds the string denoting the health field in the database.
+	FieldHealth = "health"
 	// FieldDefinitionID holds the string denoting the definition_id field in the database.
 	FieldDefinitionID = "definition_id"
 	// FieldDefinitionVersion holds the string denoting the definition_version field in the database.
@@ -80,6 +82,8 @@ const (
 	FieldFamily = "family"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldExpiresAt holds the string denoting the expires_at field in the database.
+	FieldExpiresAt = "expires_at"
 	// FieldProviderMetadataSnapshot holds the string denoting the provider_metadata_snapshot field in the database.
 	FieldProviderMetadataSnapshot = "provider_metadata_snapshot"
 	// FieldPrimaryDirectory holds the string denoting the primary_directory field in the database.
@@ -120,8 +124,6 @@ const (
 	EdgeDirectoryGroups = "directory_groups"
 	// EdgeDirectoryMemberships holds the string denoting the directory_memberships edge name in mutations.
 	EdgeDirectoryMemberships = "directory_memberships"
-	// EdgeDirectorySyncRuns holds the string denoting the directory_sync_runs edge name in mutations.
-	EdgeDirectorySyncRuns = "directory_sync_runs"
 	// EdgeCheckResults holds the string denoting the check_results edge name in mutations.
 	EdgeCheckResults = "check_results"
 	// EdgePlatform holds the string denoting the platform edge name in mutations.
@@ -243,13 +245,6 @@ const (
 	DirectoryMembershipsInverseTable = "directory_memberships"
 	// DirectoryMembershipsColumn is the table column denoting the directory_memberships relation/edge.
 	DirectoryMembershipsColumn = "integration_id"
-	// DirectorySyncRunsTable is the table that holds the directory_sync_runs relation/edge.
-	DirectorySyncRunsTable = "directory_sync_runs"
-	// DirectorySyncRunsInverseTable is the table name for the DirectorySyncRun entity.
-	// It exists in this package in order to avoid circular dependency with the "directorysyncrun" package.
-	DirectorySyncRunsInverseTable = "directory_sync_runs"
-	// DirectorySyncRunsColumn is the table column denoting the directory_sync_runs relation/edge.
-	DirectorySyncRunsColumn = "integration_id"
 	// CheckResultsTable is the table that holds the check_results relation/edge.
 	CheckResultsTable = "check_results"
 	// CheckResultsInverseTable is the table name for the CheckResult entity.
@@ -335,11 +330,13 @@ var Columns = []string{
 	FieldInstallationMetadata,
 	FieldProviderState,
 	FieldMetadata,
+	FieldHealth,
 	FieldDefinitionID,
 	FieldDefinitionVersion,
 	FieldDefinitionSlug,
 	FieldFamily,
 	FieldStatus,
+	FieldExpiresAt,
 	FieldProviderMetadataSnapshot,
 	FieldPrimaryDirectory,
 	FieldCampaignEmail,
@@ -433,7 +430,7 @@ const DefaultStatus enums.IntegrationStatus = "PENDING"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.IntegrationStatus) error {
 	switch s.String() {
-	case "PENDING", "CONNECTED", "ERRORED", "DISABLED", "DELETED":
+	case "PENDING", "CONNECTED", "DEGRADED", "ERRORED", "DISABLED":
 		return nil
 	default:
 		return fmt.Errorf("integration: invalid enum value for status field: %q", s)
@@ -571,6 +568,11 @@ func ByFamily(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByExpiresAt orders the results by the expires_at field.
+func ByExpiresAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExpiresAt, opts...).ToFunc()
 }
 
 // ByPrimaryDirectory orders the results by the primary_directory field.
@@ -800,20 +802,6 @@ func ByDirectoryMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpt
 	}
 }
 
-// ByDirectorySyncRunsCount orders the results by directory_sync_runs count.
-func ByDirectorySyncRunsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newDirectorySyncRunsStep(), opts...)
-	}
-}
-
-// ByDirectorySyncRuns orders the results by directory_sync_runs terms.
-func ByDirectorySyncRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDirectorySyncRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByCheckResultsCount orders the results by check_results count.
 func ByCheckResultsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1035,13 +1023,6 @@ func newDirectoryMembershipsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DirectoryMembershipsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryMembershipsTable, DirectoryMembershipsColumn),
-	)
-}
-func newDirectorySyncRunsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DirectorySyncRunsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
 	)
 }
 func newCheckResultsStep() *sqlgraph.Step {

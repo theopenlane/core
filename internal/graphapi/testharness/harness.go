@@ -62,7 +62,6 @@ import (
 	"github.com/theopenlane/core/v2/pkg/summarizer"
 
 	// import generated runtime which is required to prevent cyclical dependencies
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	_ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 	_ "github.com/theopenlane/core/v2/internal/ent/historygenerated/runtime"
 )
@@ -80,7 +79,6 @@ const (
 
 	MappableDomainZoneTestID = "mappable-domain-zone-id"
 	CnameTargetTest          = "cname-target.test.com"
-	PreviewCnameTargetTest   = "preview-cname-target.test.com"
 	DefaultDomainTest        = "test.default.domain"
 )
 
@@ -195,7 +193,8 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	otpMan := totp.NewOTP(otpOpts...)
 
 	entCfg := &entconfig.Config{
-		EntityTypes: []string{"vendor"},
+		EntityTypes:             []string{"vendor"},
+		QuestionnaireProductURL: "https://console.example.com",
 		Summarizer: summarizer.Config{
 			Type:             summarizer.TypeLexrank,
 			MaximumSentences: 60,
@@ -331,8 +330,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		DefinitionBuilders: []registry.Builder{
 			emaildef.Builder(emaildef.MockRuntimeConfig(), false),
 			slackdef.Builder(slackdef.Config{}, &slackdef.RuntimeSlackConfig{WebhookURL: "https://hooks.slack.com/services/test/mock/url"}, false),
-			systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}),
+			systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}, systemdef.IntegrationLifecycleConfig{}),
 			testint.Builder(),
+			testint.MockHTTPBuilder(),
 		},
 	})
 	RequireNoError(t, err)
@@ -353,15 +353,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	// Set trust center config for hooks
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
 		CnameTarget:              CnameTargetTest,
-		PreviewCnameTarget:       PreviewCnameTargetTest,
+		PreviewZoneID:            MappableDomainZoneTestID,
 		DefaultTrustCenterDomain: DefaultDomainTest,
 	})
-
-	_, err = c.DB.MappableDomain.Create().
-		SetName(PreviewCnameTargetTest).
-		SetZoneID(MappableDomainZoneTestID).
-		Save(privacy.DecisionContext(ctx, privacy.Allow))
-	RequireNoError(t, err)
 
 	suite.Client = c
 }

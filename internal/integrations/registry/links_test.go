@@ -96,8 +96,8 @@ func TestValidateLinkRules(t *testing.T) {
 			rule: integrationtypes.LinkRule{
 				TargetSchema: entityops.SchemaControl.Name,
 				TargetField:  control.FieldRefCode,
-				SourceField:  entityops.InputKeyFindingCategory,
-				SourceList:   entityops.InputKeyFindingCategories,
+				SourceField:  entityops.FindingFields.Category.InputKey,
+				SourceList:   entityops.FindingFields.Categories.InputKey,
 			},
 		},
 		{
@@ -105,7 +105,7 @@ func TestValidateLinkRules(t *testing.T) {
 			rule: integrationtypes.LinkRule{
 				TargetSchema: entityops.SchemaControl.Name,
 				TargetField:  control.FieldRefCode,
-				SourceList:   entityops.InputKeyFindingCategories,
+				SourceList:   entityops.FindingFields.Categories.InputKey,
 			},
 		},
 		{
@@ -120,7 +120,7 @@ func TestValidateLinkRules(t *testing.T) {
 			rule: integrationtypes.LinkRule{
 				TargetSchema: entityops.SchemaControl.Name,
 				TargetField:  control.FieldRefCode,
-				SourceField:  entityops.InputKeyFindingCategory,
+				SourceField:  entityops.FindingFields.Category.InputKey,
 				Expression:   `true`,
 			},
 			wantErr: ErrLinkRuleInvalid,
@@ -145,7 +145,7 @@ func TestValidateLinkRules(t *testing.T) {
 			rule: integrationtypes.LinkRule{
 				TargetSchema: entityops.SchemaControl.Name,
 				TargetField:  "not_a_field",
-				SourceField:  entityops.InputKeyFindingCategory,
+				SourceField:  entityops.FindingFields.Category.InputKey,
 			},
 			wantErr: ErrLinkTargetFieldInvalid,
 		},
@@ -163,7 +163,7 @@ func TestValidateLinkRules(t *testing.T) {
 			rule: integrationtypes.LinkRule{
 				TargetSchema: entityops.SchemaControl.Name,
 				TargetField:  control.FieldRefCode,
-				SourceField:  entityops.InputKeyFindingCategories,
+				SourceField:  entityops.FindingFields.Categories.InputKey,
 			},
 			wantErr: ErrLinkSourceFieldInvalid,
 		},
@@ -172,7 +172,7 @@ func TestValidateLinkRules(t *testing.T) {
 			rule: integrationtypes.LinkRule{
 				TargetSchema: entityops.SchemaControl.Name,
 				TargetField:  control.FieldRefCode,
-				SourceList:   entityops.InputKeyFindingCategory,
+				SourceList:   entityops.FindingFields.Category.InputKey,
 			},
 			wantErr: ErrLinkSourceFieldInvalid,
 		},
@@ -211,7 +211,7 @@ func TestRegisterValidatesMappingLinks(t *testing.T) {
 			Spec: integrationtypes.MappingOverride{
 				MapExpr: "payload",
 				Links: []integrationtypes.LinkRule{
-					{TargetSchema: entityops.SchemaControl.Name, TargetField: "not_a_field", SourceField: entityops.InputKeyFindingCategory},
+					{TargetSchema: entityops.SchemaControl.Name, TargetField: "not_a_field", SourceField: entityops.FindingFields.Category.InputKey},
 				},
 			},
 		},
@@ -266,7 +266,9 @@ func TestRegisterPopulatesLinkTargets(t *testing.T) {
 		t.Fatal("expected target fields to exclude non-match-key fields")
 	}
 
-	categories, found := lo.Find(controls.SourceFields, func(f integrationtypes.LinkFieldInfo) bool { return f.Name == entityops.InputKeyFindingCategories })
+	categories, found := lo.Find(controls.SourceFields, func(f integrationtypes.LinkFieldInfo) bool {
+		return f.Name == entityops.FindingFields.Categories.InputKey
+	})
 	if !found {
 		t.Fatal("expected source fields to include the categories input key")
 	}

@@ -583,10 +583,6 @@ func (ec *executionContext) _NarrativeUpdatePayload(ctx context.Context, sel ast
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNNarrativeBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.NarrativeBulkCreatePayload) graphql.Marshaler {
-	return ec._NarrativeBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNarrativeBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NarrativeBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNNarrativeBulkCreatePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._NarrativeBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNNarrativeBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.NarrativeBulkDeletePayload) graphql.Marshaler {
-	return ec._NarrativeBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNarrativeBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.NarrativeBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNNarrativeBulkDeletePayload2ᚖgithubᚗcom�
 	return ec._NarrativeBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNNarrativeBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.NarrativeBulkUpdatePayload) graphql.Marshaler {
-	return ec._NarrativeBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNarrativeBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNarrativeBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NarrativeBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNNarrativeBulkUpdatePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._NarrativeBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNNarrativeCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNarrativeCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.NarrativeCreatePayload) graphql.Marshaler {
-	return ec._NarrativeCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNarrativeCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNarrativeCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NarrativeCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNNarrativeCreatePayload2ᚖgithubᚗcomᚋthe
 	return ec._NarrativeCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNNarrativeDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNarrativeDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.NarrativeDeletePayload) graphql.Marshaler {
-	return ec._NarrativeDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNarrativeDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNarrativeDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.NarrativeDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNNarrativeDeletePayload2ᚖgithubᚗcomᚋthe
 		return graphql.Null
 	}
 	return ec._NarrativeDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNNarrativeUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNarrativeUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.NarrativeUpdatePayload) graphql.Marshaler {
-	return ec._NarrativeUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNarrativeUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNarrativeUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NarrativeUpdatePayload) graphql.Marshaler {

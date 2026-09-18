@@ -26,17 +26,19 @@ const companyProfilePrompt = `Extract company profile information from this webs
 
 Basic info: company name, description, industry, headquarters location, approximate employee count range, founding year, and estimated revenue range.
 
-Systems: the small number of distinct technical surfaces that make up the company's own product infrastructure — typically 2-5 of: a web console/dashboard application, a public API, a mobile app, a CLI tool, and the underlying data storage/database backend such as Redis, Postgres, RabbitMQ, etc. Use any subdomains found on the page (e.g. console.<domain>, app.<domain>, api.<domain>, docs.<domain>) to help identify which of these actually exist. Do NOT list the company's individual product modules, capabilities, or named marketing features as separate systems — for example, if the marketing page lists offerings like "Compliance Automation", "Policy Management", "Frameworks", "Trust Center", "Registry", or "Reporting", those are all features within the single web console, not separate systems, and must NOT each become their own entry. A company with one product typically has one system (the console), not one system per feature it markets. For each real system, give a brief 1-2 sentence summary and a fuller description of what it does and what data it handles, drawn from documentation or architecture pages when available.
+Systems: the small number of distinct technical surfaces that make up the company's own product infrastructure — typically 2-5 of: a web console/dashboard application, a public API, a mobile app, a CLI tool, and the underlying data storage/database backend such as Redis, Postgres, RabbitMQ, etc. Use any subdomains found on the page (e.g. console.<domain>, app.<domain>, api.<domain>, docs.<domain>) to help identify which of these actually exist. Do NOT list the company's individual product modules, capabilities, or named marketing features as separate systems — for example, if the marketing page lists offerings like "Compliance Automation", "Policy Management", "Frameworks", "Trust Center", "Registry", or "Reporting", those are all features within the single web console, not separate systems, and must NOT each become their own entry. A company with one product typically has one system (the console), not one system per feature it markets. For each real system, give a 1-2 sentence summary of what it does and what data it handles.
 
 Customers: named customers, clients, or case study companies referenced in logos, a "trusted by" section, testimonials, or case studies.
 
-Technologies: third-party SaaS technologies or vendors the company itself relies on (e.g. analytics, CRM, hosting, payments).
+Technologies: at most 15 distinct third-party SaaS vendors the company itself relies on to run its business (e.g. analytics, CRM, hosting, payments). Canonical names only, no aliases or "X API" variants. Do NOT list the integrations or connectors the company's product offers to its customers.
 
 Social links: LinkedIn, Twitter/X, GitHub, Discord, Instagram, YouTube, and Facebook profile links found in the header, footer, or about page.
 
 Status page: the URL of a public status/uptime page, if one is linked anywhere on the site.
 
-SSO/MFA support: whether the product advertises single sign-on (SSO) support or multi-factor authentication (MFA, 2FA) support, as true/false values based on explicit mentions in marketing, pricing, or documentation pages.`
+SSO/MFA support: whether the product advertises single sign-on (SSO) support or multi-factor authentication (MFA, 2FA) support, as true/false values based on explicit mentions in marketing, pricing, or documentation pages.
+
+Return only the object itself. Do not wrap it in a response_format envelope, and do not emit "type" or "json_schema" keys around it. Keep every text field short: a truncated response fails the whole extraction, so prefer omitting a marginal entry to running long.`
 
 // subprocessorsPromptText is the shared instruction for extracting subprocessor/vendor names,
 // used by both the compliance page and trust center prompts so they ask for it identically

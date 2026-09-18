@@ -41,9 +41,7 @@ func (sc *StripeClient) GetSubscriptionByID(ctx context.Context, id string) (*st
 	start := time.Now()
 
 	subscription, err := sc.Client.V1Subscriptions.Retrieve(ctx, id, &stripe.SubscriptionRetrieveParams{
-		Params: stripe.Params{
-			Expand: []*string{stripe.String("customer"), stripe.String("schedule")},
-		},
+		Expand: []*string{stripe.String("customer"), stripe.String("schedule")},
 	})
 
 	duration := time.Since(start).Seconds()

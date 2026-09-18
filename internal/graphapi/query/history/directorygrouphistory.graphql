@@ -13,7 +13,6 @@ query GetAllDirectoryGroupHistories {
 				createdAt
 				createdBy
 				description
-				directorySyncRunID
 				displayID
 				displayName
 				email
@@ -27,7 +26,6 @@ query GetAllDirectoryGroupHistories {
 				operation
 				ownerID
 				profile
-				profileHash
 				rawProfileFileID
 				ref
 				sourceVersion
@@ -54,7 +52,6 @@ query GetDirectoryGroupHistories ($first: Int, $last: Int, $where: DirectoryGrou
 				createdAt
 				createdBy
 				description
-				directorySyncRunID
 				displayID
 				displayName
 				email
@@ -68,7 +65,6 @@ query GetDirectoryGroupHistories ($first: Int, $last: Int, $where: DirectoryGrou
 				operation
 				ownerID
 				profile
-				profileHash
 				rawProfileFileID
 				ref
 				sourceVersion

@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
@@ -257,6 +258,26 @@ func (_u *ScanUpdate) ClearReviewedByGroupID() *ScanUpdate {
 	return _u
 }
 
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_u *ScanUpdate) SetReviewedByIdentityHolderID(v string) *ScanUpdate {
+	_u.mutation.SetReviewedByIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableReviewedByIdentityHolderID(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetReviewedByIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByIdentityHolderID clears the value of the "reviewed_by_identity_holder_id" field.
+func (_u *ScanUpdate) ClearReviewedByIdentityHolderID() *ScanUpdate {
+	_u.mutation.ClearReviewedByIdentityHolderID()
+	return _u
+}
+
 // SetAssignedTo sets the "assigned_to" field.
 func (_u *ScanUpdate) SetAssignedTo(v string) *ScanUpdate {
 	_u.mutation.SetAssignedTo(v)
@@ -314,6 +335,26 @@ func (_u *ScanUpdate) SetNillableAssignedToGroupID(v *string) *ScanUpdate {
 // ClearAssignedToGroupID clears the value of the "assigned_to_group_id" field.
 func (_u *ScanUpdate) ClearAssignedToGroupID() *ScanUpdate {
 	_u.mutation.ClearAssignedToGroupID()
+	return _u
+}
+
+// SetAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field.
+func (_u *ScanUpdate) SetAssignedToIdentityHolderID(v string) *ScanUpdate {
+	_u.mutation.SetAssignedToIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableAssignedToIdentityHolderID(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetAssignedToIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToIdentityHolderID clears the value of the "assigned_to_identity_holder_id" field.
+func (_u *ScanUpdate) ClearAssignedToIdentityHolderID() *ScanUpdate {
+	_u.mutation.ClearAssignedToIdentityHolderID()
 	return _u
 }
 
@@ -649,6 +690,11 @@ func (_u *ScanUpdate) SetReviewedByGroup(v *Group) *ScanUpdate {
 	return _u.SetReviewedByGroupID(v.ID)
 }
 
+// SetReviewedByIdentityHolder sets the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *ScanUpdate) SetReviewedByIdentityHolder(v *IdentityHolder) *ScanUpdate {
+	return _u.SetReviewedByIdentityHolderID(v.ID)
+}
+
 // SetAssignedToUser sets the "assigned_to_user" edge to the User entity.
 func (_u *ScanUpdate) SetAssignedToUser(v *User) *ScanUpdate {
 	return _u.SetAssignedToUserID(v.ID)
@@ -657,6 +703,11 @@ func (_u *ScanUpdate) SetAssignedToUser(v *User) *ScanUpdate {
 // SetAssignedToGroup sets the "assigned_to_group" edge to the Group entity.
 func (_u *ScanUpdate) SetAssignedToGroup(v *Group) *ScanUpdate {
 	return _u.SetAssignedToGroupID(v.ID)
+}
+
+// SetAssignedToIdentityHolder sets the "assigned_to_identity_holder" edge to the IdentityHolder entity.
+func (_u *ScanUpdate) SetAssignedToIdentityHolder(v *IdentityHolder) *ScanUpdate {
+	return _u.SetAssignedToIdentityHolderID(v.ID)
 }
 
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
@@ -923,6 +974,12 @@ func (_u *ScanUpdate) ClearReviewedByGroup() *ScanUpdate {
 	return _u
 }
 
+// ClearReviewedByIdentityHolder clears the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *ScanUpdate) ClearReviewedByIdentityHolder() *ScanUpdate {
+	_u.mutation.ClearReviewedByIdentityHolder()
+	return _u
+}
+
 // ClearAssignedToUser clears the "assigned_to_user" edge to the User entity.
 func (_u *ScanUpdate) ClearAssignedToUser() *ScanUpdate {
 	_u.mutation.ClearAssignedToUser()
@@ -932,6 +989,12 @@ func (_u *ScanUpdate) ClearAssignedToUser() *ScanUpdate {
 // ClearAssignedToGroup clears the "assigned_to_group" edge to the Group entity.
 func (_u *ScanUpdate) ClearAssignedToGroup() *ScanUpdate {
 	_u.mutation.ClearAssignedToGroup()
+	return _u
+}
+
+// ClearAssignedToIdentityHolder clears the "assigned_to_identity_holder" edge to the IdentityHolder entity.
+func (_u *ScanUpdate) ClearAssignedToIdentityHolder() *ScanUpdate {
+	_u.mutation.ClearAssignedToIdentityHolder()
 	return _u
 }
 
@@ -1586,6 +1649,35 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ReviewedByIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ReviewedByIdentityHolderTable,
+			Columns: []string{scan.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ReviewedByIdentityHolderTable,
+			Columns: []string{scan.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.AssignedToUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1637,6 +1729,35 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssignedToIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.AssignedToIdentityHolderTable,
+			Columns: []string{scan.AssignedToIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssignedToIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.AssignedToIdentityHolderTable,
+			Columns: []string{scan.AssignedToIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -2561,6 +2682,26 @@ func (_u *ScanUpdateOne) ClearReviewedByGroupID() *ScanUpdateOne {
 	return _u
 }
 
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_u *ScanUpdateOne) SetReviewedByIdentityHolderID(v string) *ScanUpdateOne {
+	_u.mutation.SetReviewedByIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableReviewedByIdentityHolderID(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetReviewedByIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByIdentityHolderID clears the value of the "reviewed_by_identity_holder_id" field.
+func (_u *ScanUpdateOne) ClearReviewedByIdentityHolderID() *ScanUpdateOne {
+	_u.mutation.ClearReviewedByIdentityHolderID()
+	return _u
+}
+
 // SetAssignedTo sets the "assigned_to" field.
 func (_u *ScanUpdateOne) SetAssignedTo(v string) *ScanUpdateOne {
 	_u.mutation.SetAssignedTo(v)
@@ -2618,6 +2759,26 @@ func (_u *ScanUpdateOne) SetNillableAssignedToGroupID(v *string) *ScanUpdateOne 
 // ClearAssignedToGroupID clears the value of the "assigned_to_group_id" field.
 func (_u *ScanUpdateOne) ClearAssignedToGroupID() *ScanUpdateOne {
 	_u.mutation.ClearAssignedToGroupID()
+	return _u
+}
+
+// SetAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field.
+func (_u *ScanUpdateOne) SetAssignedToIdentityHolderID(v string) *ScanUpdateOne {
+	_u.mutation.SetAssignedToIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableAssignedToIdentityHolderID(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetAssignedToIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToIdentityHolderID clears the value of the "assigned_to_identity_holder_id" field.
+func (_u *ScanUpdateOne) ClearAssignedToIdentityHolderID() *ScanUpdateOne {
+	_u.mutation.ClearAssignedToIdentityHolderID()
 	return _u
 }
 
@@ -2953,6 +3114,11 @@ func (_u *ScanUpdateOne) SetReviewedByGroup(v *Group) *ScanUpdateOne {
 	return _u.SetReviewedByGroupID(v.ID)
 }
 
+// SetReviewedByIdentityHolder sets the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *ScanUpdateOne) SetReviewedByIdentityHolder(v *IdentityHolder) *ScanUpdateOne {
+	return _u.SetReviewedByIdentityHolderID(v.ID)
+}
+
 // SetAssignedToUser sets the "assigned_to_user" edge to the User entity.
 func (_u *ScanUpdateOne) SetAssignedToUser(v *User) *ScanUpdateOne {
 	return _u.SetAssignedToUserID(v.ID)
@@ -2961,6 +3127,11 @@ func (_u *ScanUpdateOne) SetAssignedToUser(v *User) *ScanUpdateOne {
 // SetAssignedToGroup sets the "assigned_to_group" edge to the Group entity.
 func (_u *ScanUpdateOne) SetAssignedToGroup(v *Group) *ScanUpdateOne {
 	return _u.SetAssignedToGroupID(v.ID)
+}
+
+// SetAssignedToIdentityHolder sets the "assigned_to_identity_holder" edge to the IdentityHolder entity.
+func (_u *ScanUpdateOne) SetAssignedToIdentityHolder(v *IdentityHolder) *ScanUpdateOne {
+	return _u.SetAssignedToIdentityHolderID(v.ID)
 }
 
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
@@ -3227,6 +3398,12 @@ func (_u *ScanUpdateOne) ClearReviewedByGroup() *ScanUpdateOne {
 	return _u
 }
 
+// ClearReviewedByIdentityHolder clears the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *ScanUpdateOne) ClearReviewedByIdentityHolder() *ScanUpdateOne {
+	_u.mutation.ClearReviewedByIdentityHolder()
+	return _u
+}
+
 // ClearAssignedToUser clears the "assigned_to_user" edge to the User entity.
 func (_u *ScanUpdateOne) ClearAssignedToUser() *ScanUpdateOne {
 	_u.mutation.ClearAssignedToUser()
@@ -3236,6 +3413,12 @@ func (_u *ScanUpdateOne) ClearAssignedToUser() *ScanUpdateOne {
 // ClearAssignedToGroup clears the "assigned_to_group" edge to the Group entity.
 func (_u *ScanUpdateOne) ClearAssignedToGroup() *ScanUpdateOne {
 	_u.mutation.ClearAssignedToGroup()
+	return _u
+}
+
+// ClearAssignedToIdentityHolder clears the "assigned_to_identity_holder" edge to the IdentityHolder entity.
+func (_u *ScanUpdateOne) ClearAssignedToIdentityHolder() *ScanUpdateOne {
+	_u.mutation.ClearAssignedToIdentityHolder()
 	return _u
 }
 
@@ -3920,6 +4103,35 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ReviewedByIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ReviewedByIdentityHolderTable,
+			Columns: []string{scan.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ReviewedByIdentityHolderTable,
+			Columns: []string{scan.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.AssignedToUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3971,6 +4183,35 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssignedToIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.AssignedToIdentityHolderTable,
+			Columns: []string{scan.AssignedToIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssignedToIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.AssignedToIdentityHolderTable,
+			Columns: []string{scan.AssignedToIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

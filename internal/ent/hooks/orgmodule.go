@@ -85,6 +85,18 @@ func handleOrgModuleUpdate(ctx context.Context, omm *generated.OrgModuleMutation
 		return next.Mutate(ctx, omm)
 	}
 
+	// old values must be read before the mutation runs
+	oldActive := false
+
+	if newActiveExists {
+		var err error
+
+		oldActive, err = omm.OldActive(ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	v, err := next.Mutate(ctx, omm)
 	if err != nil {
 		return nil, err
@@ -95,11 +107,6 @@ func handleOrgModuleUpdate(ctx context.Context, omm *generated.OrgModuleMutation
 	}
 
 	if newActiveExists {
-		oldActive, err := omm.OldActive(ctx)
-		if err != nil {
-			return nil, err
-		}
-
 		switch {
 		case !oldActive && newActive:
 			return handleActivation(ctx, omm, v)

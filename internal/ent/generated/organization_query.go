@@ -29,7 +29,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
@@ -122,7 +121,6 @@ type OrganizationQuery struct {
 	withDirectoryAccountCreators                *GroupQuery
 	withDirectoryGroupCreators                  *GroupQuery
 	withDirectoryMembershipCreators             *GroupQuery
-	withDirectorySyncRunCreators                *GroupQuery
 	withDiscussionCreators                      *GroupQuery
 	withDocumentDataCreators                    *GroupQuery
 	withEmailTemplateCreators                   *GroupQuery
@@ -259,7 +257,6 @@ type OrganizationQuery struct {
 	withDirectoryAccounts                       *DirectoryAccountQuery
 	withDirectoryGroups                         *DirectoryGroupQuery
 	withDirectoryMemberships                    *DirectoryMembershipQuery
-	withDirectorySyncRuns                       *DirectorySyncRunQuery
 	withDiscussions                             *DiscussionQuery
 	withVendorScoringConfigs                    *VendorScoringConfigQuery
 	withVendorRiskScores                        *VendorRiskScoreQuery
@@ -282,7 +279,6 @@ type OrganizationQuery struct {
 	withNamedDirectoryAccountCreators           map[string]*GroupQuery
 	withNamedDirectoryGroupCreators             map[string]*GroupQuery
 	withNamedDirectoryMembershipCreators        map[string]*GroupQuery
-	withNamedDirectorySyncRunCreators           map[string]*GroupQuery
 	withNamedDiscussionCreators                 map[string]*GroupQuery
 	withNamedDocumentDataCreators               map[string]*GroupQuery
 	withNamedEmailTemplateCreators              map[string]*GroupQuery
@@ -416,7 +412,6 @@ type OrganizationQuery struct {
 	withNamedDirectoryAccounts                  map[string]*DirectoryAccountQuery
 	withNamedDirectoryGroups                    map[string]*DirectoryGroupQuery
 	withNamedDirectoryMemberships               map[string]*DirectoryMembershipQuery
-	withNamedDirectorySyncRuns                  map[string]*DirectorySyncRunQuery
 	withNamedDiscussions                        map[string]*DiscussionQuery
 	withNamedVendorScoringConfigs               map[string]*VendorScoringConfigQuery
 	withNamedVendorRiskScores                   map[string]*VendorRiskScoreQuery
@@ -802,28 +797,6 @@ func (_q *OrganizationQuery) QueryDirectoryMembershipCreators() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectoryMembershipCreatorsTable, organization.DirectoryMembershipCreatorsColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryDirectorySyncRunCreators chains the current query on the "directory_sync_run_creators" edge.
-func (_q *OrganizationQuery) QueryDirectorySyncRunCreators() *GroupQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectorySyncRunCreatorsTable, organization.DirectorySyncRunCreatorsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -3823,28 +3796,6 @@ func (_q *OrganizationQuery) QueryDirectoryMemberships() *DirectoryMembershipQue
 	return query
 }
 
-// QueryDirectorySyncRuns chains the current query on the "directory_sync_runs" edge.
-func (_q *OrganizationQuery) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
-	query := (&DirectorySyncRunClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectorySyncRunsTable, organization.DirectorySyncRunsColumn),
-		)
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryDiscussions chains the current query on the "discussions" edge.
 func (_q *OrganizationQuery) QueryDiscussions() *DiscussionQuery {
 	query := (&DiscussionClient{config: _q.config}).Query()
@@ -4141,7 +4092,6 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withDirectoryAccountCreators:           _q.withDirectoryAccountCreators.Clone(),
 		withDirectoryGroupCreators:             _q.withDirectoryGroupCreators.Clone(),
 		withDirectoryMembershipCreators:        _q.withDirectoryMembershipCreators.Clone(),
-		withDirectorySyncRunCreators:           _q.withDirectorySyncRunCreators.Clone(),
 		withDiscussionCreators:                 _q.withDiscussionCreators.Clone(),
 		withDocumentDataCreators:               _q.withDocumentDataCreators.Clone(),
 		withEmailTemplateCreators:              _q.withEmailTemplateCreators.Clone(),
@@ -4278,7 +4228,6 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withDirectoryAccounts:                  _q.withDirectoryAccounts.Clone(),
 		withDirectoryGroups:                    _q.withDirectoryGroups.Clone(),
 		withDirectoryMemberships:               _q.withDirectoryMemberships.Clone(),
-		withDirectorySyncRuns:                  _q.withDirectorySyncRuns.Clone(),
 		withDiscussions:                        _q.withDiscussions.Clone(),
 		withVendorScoringConfigs:               _q.withVendorScoringConfigs.Clone(),
 		withVendorRiskScores:                   _q.withVendorRiskScores.Clone(),
@@ -4463,17 +4412,6 @@ func (_q *OrganizationQuery) WithDirectoryMembershipCreators(opts ...func(*Group
 		opt(query)
 	}
 	_q.withDirectoryMembershipCreators = query
-	return _q
-}
-
-// WithDirectorySyncRunCreators tells the query-builder to eager-load the nodes that are connected to
-// the "directory_sync_run_creators" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithDirectorySyncRunCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withDirectorySyncRunCreators = query
 	return _q
 }
 
@@ -5973,17 +5911,6 @@ func (_q *OrganizationQuery) WithDirectoryMemberships(opts ...func(*DirectoryMem
 	return _q
 }
 
-// WithDirectorySyncRuns tells the query-builder to eager-load the nodes that are connected to
-// the "directory_sync_runs" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithDirectorySyncRuns(opts ...func(*DirectorySyncRunQuery)) *OrganizationQuery {
-	query := (&DirectorySyncRunClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withDirectorySyncRuns = query
-	return _q
-}
-
 // WithDiscussions tells the query-builder to eager-load the nodes that are connected to
 // the "discussions" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithDiscussions(opts ...func(*DiscussionQuery)) *OrganizationQuery {
@@ -6112,7 +6039,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [158]bool{
+		loadedTypes = [156]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
@@ -6129,7 +6056,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withDirectoryAccountCreators != nil,
 			_q.withDirectoryGroupCreators != nil,
 			_q.withDirectoryMembershipCreators != nil,
-			_q.withDirectorySyncRunCreators != nil,
 			_q.withDiscussionCreators != nil,
 			_q.withDocumentDataCreators != nil,
 			_q.withEmailTemplateCreators != nil,
@@ -6266,7 +6192,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withDirectoryAccounts != nil,
 			_q.withDirectoryGroups != nil,
 			_q.withDirectoryMemberships != nil,
-			_q.withDirectorySyncRuns != nil,
 			_q.withDiscussions != nil,
 			_q.withVendorScoringConfigs != nil,
 			_q.withVendorRiskScores != nil,
@@ -6418,15 +6343,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			func(n *Organization) { n.Edges.DirectoryMembershipCreators = []*Group{} },
 			func(n *Organization, e *Group) {
 				n.Edges.DirectoryMembershipCreators = append(n.Edges.DirectoryMembershipCreators, e)
-			}); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withDirectorySyncRunCreators; query != nil {
-		if err := _q.loadDirectorySyncRunCreators(ctx, query, nodes,
-			func(n *Organization) { n.Edges.DirectorySyncRunCreators = []*Group{} },
-			func(n *Organization, e *Group) {
-				n.Edges.DirectorySyncRunCreators = append(n.Edges.DirectorySyncRunCreators, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -7472,15 +7388,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
-	if query := _q.withDirectorySyncRuns; query != nil {
-		if err := _q.loadDirectorySyncRuns(ctx, query, nodes,
-			func(n *Organization) { n.Edges.DirectorySyncRuns = []*DirectorySyncRun{} },
-			func(n *Organization, e *DirectorySyncRun) {
-				n.Edges.DirectorySyncRuns = append(n.Edges.DirectorySyncRuns, e)
-			}); err != nil {
-			return nil, err
-		}
-	}
 	if query := _q.withDiscussions; query != nil {
 		if err := _q.loadDiscussions(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Discussions = []*Discussion{} },
@@ -7622,13 +7529,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadDirectoryMembershipCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedDirectoryMembershipCreators(name) },
 			func(n *Organization, e *Group) { n.appendNamedDirectoryMembershipCreators(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedDirectorySyncRunCreators {
-		if err := _q.loadDirectorySyncRunCreators(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedDirectorySyncRunCreators(name) },
-			func(n *Organization, e *Group) { n.appendNamedDirectorySyncRunCreators(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -8565,13 +8465,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
-	for name, query := range _q.withNamedDirectorySyncRuns {
-		if err := _q.loadDirectorySyncRuns(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedDirectorySyncRuns(name) },
-			func(n *Organization, e *DirectorySyncRun) { n.appendNamedDirectorySyncRuns(name, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for name, query := range _q.withNamedDiscussions {
 		if err := _q.loadDiscussions(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedDiscussions(name) },
@@ -9099,37 +8992,6 @@ func (_q *OrganizationQuery) loadDirectoryMembershipCreators(ctx context.Context
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_directory_membership_creators" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *OrganizationQuery) loadDirectorySyncRunCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.DirectorySyncRunCreatorsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.organization_directory_sync_run_creators
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "organization_directory_sync_run_creators" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "organization_directory_sync_run_creators" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -13422,36 +13284,6 @@ func (_q *OrganizationQuery) loadDirectoryMemberships(ctx context.Context, query
 	}
 	return nil
 }
-func (_q *OrganizationQuery) loadDirectorySyncRuns(ctx context.Context, query *DirectorySyncRunQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *DirectorySyncRun)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(directorysyncrun.FieldOwnerID)
-	}
-	query.Where(predicate.DirectorySyncRun(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.DirectorySyncRunsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
 func (_q *OrganizationQuery) loadDiscussions(ctx context.Context, query *DiscussionQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Discussion)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -13895,20 +13727,6 @@ func (_q *OrganizationQuery) WithNamedDirectoryMembershipCreators(name string, o
 		_q.withNamedDirectoryMembershipCreators = make(map[string]*GroupQuery)
 	}
 	_q.withNamedDirectoryMembershipCreators[name] = query
-	return _q
-}
-
-// WithNamedDirectorySyncRunCreators tells the query-builder to eager-load the nodes that are connected to the "directory_sync_run_creators"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedDirectorySyncRunCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedDirectorySyncRunCreators == nil {
-		_q.withNamedDirectorySyncRunCreators = make(map[string]*GroupQuery)
-	}
-	_q.withNamedDirectorySyncRunCreators[name] = query
 	return _q
 }
 
@@ -15771,20 +15589,6 @@ func (_q *OrganizationQuery) WithNamedDirectoryMemberships(name string, opts ...
 		_q.withNamedDirectoryMemberships = make(map[string]*DirectoryMembershipQuery)
 	}
 	_q.withNamedDirectoryMemberships[name] = query
-	return _q
-}
-
-// WithNamedDirectorySyncRuns tells the query-builder to eager-load the nodes that are connected to the "directory_sync_runs"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedDirectorySyncRuns(name string, opts ...func(*DirectorySyncRunQuery)) *OrganizationQuery {
-	query := (&DirectorySyncRunClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedDirectorySyncRuns == nil {
-		_q.withNamedDirectorySyncRuns = make(map[string]*DirectorySyncRunQuery)
-	}
-	_q.withNamedDirectorySyncRuns[name] = query
 	return _q
 }
 

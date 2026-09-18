@@ -44,6 +44,16 @@ const (
 	FieldDisplayID = "display_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldSourceDefinitionID holds the string denoting the source_definition_id field in the database.
+	FieldSourceDefinitionID = "source_definition_id"
+	// FieldSourceDefinitionVersion holds the string denoting the source_definition_version field in the database.
+	FieldSourceDefinitionVersion = "source_definition_version"
+	// FieldSourceInstanceID holds the string denoting the source_instance_id field in the database.
+	FieldSourceInstanceID = "source_instance_id"
+	// FieldManagedBy holds the string denoting the managed_by field in the database.
+	FieldManagedBy = "managed_by"
+	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
+	FieldIntegrationRunID = "integration_run_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldReviewedBy holds the string denoting the reviewed_by field in the database.
@@ -52,12 +62,16 @@ const (
 	FieldReviewedByUserID = "reviewed_by_user_id"
 	// FieldReviewedByGroupID holds the string denoting the reviewed_by_group_id field in the database.
 	FieldReviewedByGroupID = "reviewed_by_group_id"
+	// FieldReviewedByIdentityHolderID holds the string denoting the reviewed_by_identity_holder_id field in the database.
+	FieldReviewedByIdentityHolderID = "reviewed_by_identity_holder_id"
 	// FieldAssignedTo holds the string denoting the assigned_to field in the database.
 	FieldAssignedTo = "assigned_to"
 	// FieldAssignedToUserID holds the string denoting the assigned_to_user_id field in the database.
 	FieldAssignedToUserID = "assigned_to_user_id"
 	// FieldAssignedToGroupID holds the string denoting the assigned_to_group_id field in the database.
 	FieldAssignedToGroupID = "assigned_to_group_id"
+	// FieldAssignedToIdentityHolderID holds the string denoting the assigned_to_identity_holder_id field in the database.
+	FieldAssignedToIdentityHolderID = "assigned_to_identity_holder_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
 	FieldSystemOwned = "system_owned"
 	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
@@ -171,13 +185,20 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldDisplayID,
 	FieldTags,
+	FieldSourceDefinitionID,
+	FieldSourceDefinitionVersion,
+	FieldSourceInstanceID,
+	FieldManagedBy,
+	FieldIntegrationRunID,
 	FieldOwnerID,
 	FieldReviewedBy,
 	FieldReviewedByUserID,
 	FieldReviewedByGroupID,
+	FieldReviewedByIdentityHolderID,
 	FieldAssignedTo,
 	FieldAssignedToUserID,
 	FieldAssignedToGroupID,
+	FieldAssignedToIdentityHolderID,
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
@@ -357,6 +378,31 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
 }
 
+// BySourceDefinitionID orders the results by the source_definition_id field.
+func BySourceDefinitionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionID, opts...).ToFunc()
+}
+
+// BySourceDefinitionVersion orders the results by the source_definition_version field.
+func BySourceDefinitionVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionVersion, opts...).ToFunc()
+}
+
+// BySourceInstanceID orders the results by the source_instance_id field.
+func BySourceInstanceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceInstanceID, opts...).ToFunc()
+}
+
+// ByManagedBy orders the results by the managed_by field.
+func ByManagedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldManagedBy, opts...).ToFunc()
+}
+
+// ByIntegrationRunID orders the results by the integration_run_id field.
+func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
+}
+
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
@@ -377,6 +423,11 @@ func ByReviewedByGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewedByGroupID, opts...).ToFunc()
 }
 
+// ByReviewedByIdentityHolderID orders the results by the reviewed_by_identity_holder_id field.
+func ByReviewedByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByIdentityHolderID, opts...).ToFunc()
+}
+
 // ByAssignedTo orders the results by the assigned_to field.
 func ByAssignedTo(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssignedTo, opts...).ToFunc()
@@ -390,6 +441,11 @@ func ByAssignedToUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByAssignedToGroupID orders the results by the assigned_to_group_id field.
 func ByAssignedToGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssignedToGroupID, opts...).ToFunc()
+}
+
+// ByAssignedToIdentityHolderID orders the results by the assigned_to_identity_holder_id field.
+func ByAssignedToIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedToIdentityHolderID, opts...).ToFunc()
 }
 
 // BySystemOwned orders the results by the system_owned field.

@@ -163,6 +163,76 @@ func (_c *EntityHistoryCreate) SetTags(v []string) *EntityHistoryCreate {
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *EntityHistoryCreate) SetSourceDefinitionID(v string) *EntityHistoryCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableSourceDefinitionID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *EntityHistoryCreate) SetSourceDefinitionVersion(v string) *EntityHistoryCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableSourceDefinitionVersion(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *EntityHistoryCreate) SetSourceInstanceID(v string) *EntityHistoryCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableSourceInstanceID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *EntityHistoryCreate) SetManagedBy(v string) *EntityHistoryCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableManagedBy(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *EntityHistoryCreate) SetIntegrationRunID(v string) *EntityHistoryCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableIntegrationRunID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *EntityHistoryCreate) SetOwnerID(v string) *EntityHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -219,6 +289,20 @@ func (_c *EntityHistoryCreate) SetNillableInternalOwnerGroupID(v *string) *Entit
 	return _c
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *EntityHistoryCreate) SetInternalOwnerIdentityHolderID(v string) *EntityHistoryCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetReviewedBy sets the "reviewed_by" field.
 func (_c *EntityHistoryCreate) SetReviewedBy(v string) *EntityHistoryCreate {
 	_c.mutation.SetReviewedBy(v)
@@ -257,6 +341,20 @@ func (_c *EntityHistoryCreate) SetReviewedByGroupID(v string) *EntityHistoryCrea
 func (_c *EntityHistoryCreate) SetNillableReviewedByGroupID(v *string) *EntityHistoryCreate {
 	if v != nil {
 		_c.SetReviewedByGroupID(*v)
+	}
+	return _c
+}
+
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_c *EntityHistoryCreate) SetReviewedByIdentityHolderID(v string) *EntityHistoryCreate {
+	_c.mutation.SetReviewedByIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableReviewedByIdentityHolderID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetReviewedByIdentityHolderID(*v)
 	}
 	return _c
 }
@@ -1176,6 +1274,26 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 		_spec.SetField(entityhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(entityhistory.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(entityhistory.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(entityhistory.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(entityhistory.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(entityhistory.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(entityhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
@@ -1192,6 +1310,10 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 		_spec.SetField(entityhistory.FieldInternalOwnerGroupID, field.TypeString, value)
 		_node.InternalOwnerGroupID = value
 	}
+	if value, ok := _c.mutation.InternalOwnerIdentityHolderID(); ok {
+		_spec.SetField(entityhistory.FieldInternalOwnerIdentityHolderID, field.TypeString, value)
+		_node.InternalOwnerIdentityHolderID = value
+	}
 	if value, ok := _c.mutation.ReviewedBy(); ok {
 		_spec.SetField(entityhistory.FieldReviewedBy, field.TypeString, value)
 		_node.ReviewedBy = value
@@ -1203,6 +1325,10 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.ReviewedByGroupID(); ok {
 		_spec.SetField(entityhistory.FieldReviewedByGroupID, field.TypeString, value)
 		_node.ReviewedByGroupID = value
+	}
+	if value, ok := _c.mutation.ReviewedByIdentityHolderID(); ok {
+		_spec.SetField(entityhistory.FieldReviewedByIdentityHolderID, field.TypeString, value)
+		_node.ReviewedByIdentityHolderID = value
 	}
 	if value, ok := _c.mutation.LastReviewedAt(); ok {
 		_spec.SetField(entityhistory.FieldLastReviewedAt, field.TypeTime, value)

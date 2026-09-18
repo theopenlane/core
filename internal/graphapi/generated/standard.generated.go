@@ -312,10 +312,6 @@ func (ec *executionContext) _StandardUpdatePayload(ctx context.Context, sel ast.
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNStandardCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐStandardCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.StandardCreatePayload) graphql.Marshaler {
-	return ec._StandardCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNStandardCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐStandardCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.StandardCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -326,10 +322,6 @@ func (ec *executionContext) marshalNStandardCreatePayload2ᚖgithubᚗcomᚋtheo
 	return ec._StandardCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNStandardDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐStandardDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.StandardDeletePayload) graphql.Marshaler {
-	return ec._StandardDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNStandardDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐStandardDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.StandardDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -338,10 +330,6 @@ func (ec *executionContext) marshalNStandardDeletePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._StandardDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNStandardUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐStandardUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.StandardUpdatePayload) graphql.Marshaler {
-	return ec._StandardUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNStandardUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐStandardUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.StandardUpdatePayload) graphql.Marshaler {

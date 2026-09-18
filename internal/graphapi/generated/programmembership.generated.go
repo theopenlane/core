@@ -583,10 +583,6 @@ func (ec *executionContext) _ProgramMembershipUpdatePayload(ctx context.Context,
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNProgramMembershipBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ProgramMembershipBulkCreatePayload) graphql.Marshaler {
-	return ec._ProgramMembershipBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNProgramMembershipBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramMembershipBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNProgramMembershipBulkCreatePayload2ᚖgithub
 		return graphql.Null
 	}
 	return ec._ProgramMembershipBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNProgramMembershipBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ProgramMembershipBulkDeletePayload) graphql.Marshaler {
-	return ec._ProgramMembershipBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNProgramMembershipBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramMembershipBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNProgramMembershipBulkDeletePayload2ᚖgithub
 	return ec._ProgramMembershipBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProgramMembershipBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ProgramMembershipBulkUpdatePayload) graphql.Marshaler {
-	return ec._ProgramMembershipBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNProgramMembershipBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramMembershipBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNProgramMembershipBulkUpdatePayload2ᚖgithub
 		return graphql.Null
 	}
 	return ec._ProgramMembershipBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNProgramMembershipCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ProgramMembershipCreatePayload) graphql.Marshaler {
-	return ec._ProgramMembershipCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNProgramMembershipCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramMembershipCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNProgramMembershipCreatePayload2ᚖgithubᚗc
 	return ec._ProgramMembershipCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProgramMembershipDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ProgramMembershipDeletePayload) graphql.Marshaler {
-	return ec._ProgramMembershipDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNProgramMembershipDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramMembershipDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNProgramMembershipDeletePayload2ᚖgithubᚗc
 		return graphql.Null
 	}
 	return ec._ProgramMembershipDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNProgramMembershipUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ProgramMembershipUpdatePayload) graphql.Marshaler {
-	return ec._ProgramMembershipUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNProgramMembershipUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProgramMembershipUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProgramMembershipUpdatePayload) graphql.Marshaler {

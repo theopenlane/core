@@ -109,6 +109,9 @@ func (_u *PlatformHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.InternalOwnerGroupIDCleared() {
 		_spec.ClearField(platformhistory.FieldInternalOwnerGroupID, field.TypeString)
 	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(platformhistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
+	}
 	if _u.mutation.BusinessOwnerCleared() {
 		_spec.ClearField(platformhistory.FieldBusinessOwner, field.TypeString)
 	}
@@ -117,6 +120,9 @@ func (_u *PlatformHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.BusinessOwnerGroupIDCleared() {
 		_spec.ClearField(platformhistory.FieldBusinessOwnerGroupID, field.TypeString)
+	}
+	if _u.mutation.BusinessOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(platformhistory.FieldBusinessOwnerIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.TechnicalOwnerCleared() {
 		_spec.ClearField(platformhistory.FieldTechnicalOwner, field.TypeString)
@@ -127,6 +133,9 @@ func (_u *PlatformHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.TechnicalOwnerGroupIDCleared() {
 		_spec.ClearField(platformhistory.FieldTechnicalOwnerGroupID, field.TypeString)
 	}
+	if _u.mutation.TechnicalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(platformhistory.FieldTechnicalOwnerIdentityHolderID, field.TypeString)
+	}
 	if _u.mutation.SecurityOwnerCleared() {
 		_spec.ClearField(platformhistory.FieldSecurityOwner, field.TypeString)
 	}
@@ -135,6 +144,9 @@ func (_u *PlatformHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.SecurityOwnerGroupIDCleared() {
 		_spec.ClearField(platformhistory.FieldSecurityOwnerGroupID, field.TypeString)
+	}
+	if _u.mutation.SecurityOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(platformhistory.FieldSecurityOwnerIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.PlatformKindNameCleared() {
 		_spec.ClearField(platformhistory.FieldPlatformKindName, field.TypeString)
@@ -365,6 +377,9 @@ func (_u *PlatformHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Platfor
 	if _u.mutation.InternalOwnerGroupIDCleared() {
 		_spec.ClearField(platformhistory.FieldInternalOwnerGroupID, field.TypeString)
 	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(platformhistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
+	}
 	if _u.mutation.BusinessOwnerCleared() {
 		_spec.ClearField(platformhistory.FieldBusinessOwner, field.TypeString)
 	}
@@ -373,6 +388,9 @@ func (_u *PlatformHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Platfor
 	}
 	if _u.mutation.BusinessOwnerGroupIDCleared() {
 		_spec.ClearField(platformhistory.FieldBusinessOwnerGroupID, field.TypeString)
+	}
+	if _u.mutation.BusinessOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(platformhistory.FieldBusinessOwnerIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.TechnicalOwnerCleared() {
 		_spec.ClearField(platformhistory.FieldTechnicalOwner, field.TypeString)
@@ -383,6 +401,9 @@ func (_u *PlatformHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Platfor
 	if _u.mutation.TechnicalOwnerGroupIDCleared() {
 		_spec.ClearField(platformhistory.FieldTechnicalOwnerGroupID, field.TypeString)
 	}
+	if _u.mutation.TechnicalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(platformhistory.FieldTechnicalOwnerIdentityHolderID, field.TypeString)
+	}
 	if _u.mutation.SecurityOwnerCleared() {
 		_spec.ClearField(platformhistory.FieldSecurityOwner, field.TypeString)
 	}
@@ -391,6 +412,9 @@ func (_u *PlatformHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Platfor
 	}
 	if _u.mutation.SecurityOwnerGroupIDCleared() {
 		_spec.ClearField(platformhistory.FieldSecurityOwnerGroupID, field.TypeString)
+	}
+	if _u.mutation.SecurityOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(platformhistory.FieldSecurityOwnerIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.PlatformKindNameCleared() {
 		_spec.ClearField(platformhistory.FieldPlatformKindName, field.TypeString)

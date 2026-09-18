@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
@@ -39,62 +40,65 @@ import (
 // AssetQuery is the builder for querying Asset entities.
 type AssetQuery struct {
 	config
-	ctx                          *QueryContext
-	order                        []asset.OrderOption
-	inters                       []Interceptor
-	predicates                   []predicate.Asset
-	withOwner                    *OrganizationQuery
-	withBlockedGroups            *GroupQuery
-	withEditors                  *GroupQuery
-	withViewers                  *GroupQuery
-	withInternalOwnerUser        *UserQuery
-	withInternalOwnerGroup       *GroupQuery
-	withAssetSubtype             *CustomTypeEnumQuery
-	withAssetDataClassification  *CustomTypeEnumQuery
-	withEnvironment              *CustomTypeEnumQuery
-	withScope                    *CustomTypeEnumQuery
-	withAccessModel              *CustomTypeEnumQuery
-	withEncryptionStatus         *CustomTypeEnumQuery
-	withSecurityTier             *CustomTypeEnumQuery
-	withCriticality              *CustomTypeEnumQuery
-	withScans                    *ScanQuery
-	withEntities                 *EntityQuery
-	withPlatforms                *PlatformQuery
-	withSystemDetails            *SystemDetailQuery
-	withOutOfScopePlatforms      *PlatformQuery
-	withIdentityHolders          *IdentityHolderQuery
-	withControls                 *ControlQuery
-	withSubcontrols              *SubcontrolQuery
-	withInternalPolicies         *InternalPolicyQuery
-	withFindings                 *FindingQuery
-	withVulnerabilities          *VulnerabilityQuery
-	withReviews                  *ReviewQuery
-	withRemediations             *RemediationQuery
-	withSourcePlatform           *PlatformQuery
-	withIntegration              *IntegrationQuery
-	withConnectedAssets          *AssetQuery
-	withConnectedFrom            *AssetQuery
-	withFKs                      bool
-	loadTotal                    []func(context.Context, []*Asset) error
-	modifiers                    []func(*sql.Selector)
-	withNamedBlockedGroups       map[string]*GroupQuery
-	withNamedEditors             map[string]*GroupQuery
-	withNamedViewers             map[string]*GroupQuery
-	withNamedScans               map[string]*ScanQuery
-	withNamedEntities            map[string]*EntityQuery
-	withNamedPlatforms           map[string]*PlatformQuery
-	withNamedSystemDetails       map[string]*SystemDetailQuery
-	withNamedOutOfScopePlatforms map[string]*PlatformQuery
-	withNamedIdentityHolders     map[string]*IdentityHolderQuery
-	withNamedControls            map[string]*ControlQuery
-	withNamedSubcontrols         map[string]*SubcontrolQuery
-	withNamedInternalPolicies    map[string]*InternalPolicyQuery
-	withNamedFindings            map[string]*FindingQuery
-	withNamedVulnerabilities     map[string]*VulnerabilityQuery
-	withNamedReviews             map[string]*ReviewQuery
-	withNamedRemediations        map[string]*RemediationQuery
-	withNamedConnectedAssets     map[string]*AssetQuery
-	withNamedConnectedFrom       map[string]*AssetQuery
+	ctx                             *QueryContext
+	order                           []asset.OrderOption
+	inters                          []Interceptor
+	predicates                      []predicate.Asset
+	withIntegrationRuns             *IntegrationRunQuery
+	withOwner                       *OrganizationQuery
+	withBlockedGroups               *GroupQuery
+	withEditors                     *GroupQuery
+	withViewers                     *GroupQuery
+	withInternalOwnerUser           *UserQuery
+	withInternalOwnerGroup          *GroupQuery
+	withInternalOwnerIdentityHolder *IdentityHolderQuery
+	withAssetSubtype                *CustomTypeEnumQuery
+	withAssetDataClassification     *CustomTypeEnumQuery
+	withEnvironment                 *CustomTypeEnumQuery
+	withScope                       *CustomTypeEnumQuery
+	withAccessModel                 *CustomTypeEnumQuery
+	withEncryptionStatus            *CustomTypeEnumQuery
+	withSecurityTier                *CustomTypeEnumQuery
+	withCriticality                 *CustomTypeEnumQuery
+	withScans                       *ScanQuery
+	withEntities                    *EntityQuery
+	withPlatforms                   *PlatformQuery
+	withSystemDetails               *SystemDetailQuery
+	withOutOfScopePlatforms         *PlatformQuery
+	withIdentityHolders             *IdentityHolderQuery
+	withControls                    *ControlQuery
+	withSubcontrols                 *SubcontrolQuery
+	withInternalPolicies            *InternalPolicyQuery
+	withFindings                    *FindingQuery
+	withVulnerabilities             *VulnerabilityQuery
+	withReviews                     *ReviewQuery
+	withRemediations                *RemediationQuery
+	withSourcePlatform              *PlatformQuery
+	withIntegration                 *IntegrationQuery
+	withConnectedAssets             *AssetQuery
+	withConnectedFrom               *AssetQuery
+	withFKs                         bool
+	loadTotal                       []func(context.Context, []*Asset) error
+	modifiers                       []func(*sql.Selector)
+	withNamedIntegrationRuns        map[string]*IntegrationRunQuery
+	withNamedBlockedGroups          map[string]*GroupQuery
+	withNamedEditors                map[string]*GroupQuery
+	withNamedViewers                map[string]*GroupQuery
+	withNamedScans                  map[string]*ScanQuery
+	withNamedEntities               map[string]*EntityQuery
+	withNamedPlatforms              map[string]*PlatformQuery
+	withNamedSystemDetails          map[string]*SystemDetailQuery
+	withNamedOutOfScopePlatforms    map[string]*PlatformQuery
+	withNamedIdentityHolders        map[string]*IdentityHolderQuery
+	withNamedControls               map[string]*ControlQuery
+	withNamedSubcontrols            map[string]*SubcontrolQuery
+	withNamedInternalPolicies       map[string]*InternalPolicyQuery
+	withNamedFindings               map[string]*FindingQuery
+	withNamedVulnerabilities        map[string]*VulnerabilityQuery
+	withNamedReviews                map[string]*ReviewQuery
+	withNamedRemediations           map[string]*RemediationQuery
+	withNamedConnectedAssets        map[string]*AssetQuery
+	withNamedConnectedFrom          map[string]*AssetQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -129,6 +133,28 @@ func (_q *AssetQuery) Unique(unique bool) *AssetQuery {
 func (_q *AssetQuery) Order(o ...asset.OrderOption) *AssetQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *AssetQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, asset.IntegrationRunsTable, asset.IntegrationRunsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -256,6 +282,28 @@ func (_q *AssetQuery) QueryInternalOwnerGroup() *GroupQuery {
 			sqlgraph.From(asset.Table, asset.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, asset.InternalOwnerGroupTable, asset.InternalOwnerGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerIdentityHolder chains the current query on the "internal_owner_identity_holder" edge.
+func (_q *AssetQuery) QueryInternalOwnerIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.InternalOwnerIdentityHolderTable, asset.InternalOwnerIdentityHolderColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -1000,47 +1048,60 @@ func (_q *AssetQuery) Clone() *AssetQuery {
 		return nil
 	}
 	return &AssetQuery{
-		config:                      _q.config,
-		ctx:                         _q.ctx.Clone(),
-		order:                       append([]asset.OrderOption{}, _q.order...),
-		inters:                      append([]Interceptor{}, _q.inters...),
-		predicates:                  append([]predicate.Asset{}, _q.predicates...),
-		withOwner:                   _q.withOwner.Clone(),
-		withBlockedGroups:           _q.withBlockedGroups.Clone(),
-		withEditors:                 _q.withEditors.Clone(),
-		withViewers:                 _q.withViewers.Clone(),
-		withInternalOwnerUser:       _q.withInternalOwnerUser.Clone(),
-		withInternalOwnerGroup:      _q.withInternalOwnerGroup.Clone(),
-		withAssetSubtype:            _q.withAssetSubtype.Clone(),
-		withAssetDataClassification: _q.withAssetDataClassification.Clone(),
-		withEnvironment:             _q.withEnvironment.Clone(),
-		withScope:                   _q.withScope.Clone(),
-		withAccessModel:             _q.withAccessModel.Clone(),
-		withEncryptionStatus:        _q.withEncryptionStatus.Clone(),
-		withSecurityTier:            _q.withSecurityTier.Clone(),
-		withCriticality:             _q.withCriticality.Clone(),
-		withScans:                   _q.withScans.Clone(),
-		withEntities:                _q.withEntities.Clone(),
-		withPlatforms:               _q.withPlatforms.Clone(),
-		withSystemDetails:           _q.withSystemDetails.Clone(),
-		withOutOfScopePlatforms:     _q.withOutOfScopePlatforms.Clone(),
-		withIdentityHolders:         _q.withIdentityHolders.Clone(),
-		withControls:                _q.withControls.Clone(),
-		withSubcontrols:             _q.withSubcontrols.Clone(),
-		withInternalPolicies:        _q.withInternalPolicies.Clone(),
-		withFindings:                _q.withFindings.Clone(),
-		withVulnerabilities:         _q.withVulnerabilities.Clone(),
-		withReviews:                 _q.withReviews.Clone(),
-		withRemediations:            _q.withRemediations.Clone(),
-		withSourcePlatform:          _q.withSourcePlatform.Clone(),
-		withIntegration:             _q.withIntegration.Clone(),
-		withConnectedAssets:         _q.withConnectedAssets.Clone(),
-		withConnectedFrom:           _q.withConnectedFrom.Clone(),
+		config:                          _q.config,
+		ctx:                             _q.ctx.Clone(),
+		order:                           append([]asset.OrderOption{}, _q.order...),
+		inters:                          append([]Interceptor{}, _q.inters...),
+		predicates:                      append([]predicate.Asset{}, _q.predicates...),
+		withIntegrationRuns:             _q.withIntegrationRuns.Clone(),
+		withOwner:                       _q.withOwner.Clone(),
+		withBlockedGroups:               _q.withBlockedGroups.Clone(),
+		withEditors:                     _q.withEditors.Clone(),
+		withViewers:                     _q.withViewers.Clone(),
+		withInternalOwnerUser:           _q.withInternalOwnerUser.Clone(),
+		withInternalOwnerGroup:          _q.withInternalOwnerGroup.Clone(),
+		withInternalOwnerIdentityHolder: _q.withInternalOwnerIdentityHolder.Clone(),
+		withAssetSubtype:                _q.withAssetSubtype.Clone(),
+		withAssetDataClassification:     _q.withAssetDataClassification.Clone(),
+		withEnvironment:                 _q.withEnvironment.Clone(),
+		withScope:                       _q.withScope.Clone(),
+		withAccessModel:                 _q.withAccessModel.Clone(),
+		withEncryptionStatus:            _q.withEncryptionStatus.Clone(),
+		withSecurityTier:                _q.withSecurityTier.Clone(),
+		withCriticality:                 _q.withCriticality.Clone(),
+		withScans:                       _q.withScans.Clone(),
+		withEntities:                    _q.withEntities.Clone(),
+		withPlatforms:                   _q.withPlatforms.Clone(),
+		withSystemDetails:               _q.withSystemDetails.Clone(),
+		withOutOfScopePlatforms:         _q.withOutOfScopePlatforms.Clone(),
+		withIdentityHolders:             _q.withIdentityHolders.Clone(),
+		withControls:                    _q.withControls.Clone(),
+		withSubcontrols:                 _q.withSubcontrols.Clone(),
+		withInternalPolicies:            _q.withInternalPolicies.Clone(),
+		withFindings:                    _q.withFindings.Clone(),
+		withVulnerabilities:             _q.withVulnerabilities.Clone(),
+		withReviews:                     _q.withReviews.Clone(),
+		withRemediations:                _q.withRemediations.Clone(),
+		withSourcePlatform:              _q.withSourcePlatform.Clone(),
+		withIntegration:                 _q.withIntegration.Clone(),
+		withConnectedAssets:             _q.withConnectedAssets.Clone(),
+		withConnectedFrom:               _q.withConnectedFrom.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *AssetQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
+	return _q
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -1106,6 +1167,17 @@ func (_q *AssetQuery) WithInternalOwnerGroup(opts ...func(*GroupQuery)) *AssetQu
 		opt(query)
 	}
 	_q.withInternalOwnerGroup = query
+	return _q
+}
+
+// WithInternalOwnerIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithInternalOwnerIdentityHolder(opts ...func(*IdentityHolderQuery)) *AssetQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerIdentityHolder = query
 	return _q
 }
 
@@ -1469,13 +1541,15 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 		nodes       = []*Asset{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [31]bool{
+		loadedTypes = [33]bool{
+			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
 			_q.withInternalOwnerUser != nil,
 			_q.withInternalOwnerGroup != nil,
+			_q.withInternalOwnerIdentityHolder != nil,
 			_q.withAssetSubtype != nil,
 			_q.withAssetDataClassification != nil,
 			_q.withEnvironment != nil,
@@ -1527,6 +1601,13 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Asset) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *Asset, e *IntegrationRun) { n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Asset, e *Organization) { n.Edges.Owner = e }); err != nil {
@@ -1563,6 +1644,12 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 	if query := _q.withInternalOwnerGroup; query != nil {
 		if err := _q.loadInternalOwnerGroup(ctx, query, nodes, nil,
 			func(n *Asset, e *Group) { n.Edges.InternalOwnerGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalOwnerIdentityHolder; query != nil {
+		if err := _q.loadInternalOwnerIdentityHolder(ctx, query, nodes, nil,
+			func(n *Asset, e *IdentityHolder) { n.Edges.InternalOwnerIdentityHolder = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1731,6 +1818,13 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Asset) { n.appendNamedIntegrationRuns(name) },
+			func(n *Asset, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Asset) { n.appendNamedBlockedGroups(name) },
@@ -1865,6 +1959,67 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 	return nodes, nil
 }
 
+func (_q *AssetQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *IntegrationRun)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Asset)
+	nids := make(map[string]map[*Asset]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(asset.IntegrationRunsTable)
+		s.Join(joinT).On(s.C(integrationrun.FieldID), joinT.C(asset.IntegrationRunsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(asset.IntegrationRunsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(asset.IntegrationRunsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Asset]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*IntegrationRun](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "integration_runs" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *AssetQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Asset)
@@ -2038,6 +2193,35 @@ func (_q *AssetQuery) loadInternalOwnerGroup(ctx context.Context, query *GroupQu
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "internal_owner_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *AssetQuery) loadInternalOwnerIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Asset, init func(*Asset), assign func(*Asset, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Asset)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_identity_holder_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -3288,6 +3472,9 @@ func (_q *AssetQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withInternalOwnerGroup != nil {
 			_spec.Node.AddColumnOnce(asset.FieldInternalOwnerGroupID)
 		}
+		if _q.withInternalOwnerIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(asset.FieldInternalOwnerIdentityHolderID)
+		}
 		if _q.withAssetSubtype != nil {
 			_spec.Node.AddColumnOnce(asset.FieldAssetSubtypeID)
 		}
@@ -3381,6 +3568,20 @@ func (_q *AssetQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *AssetQuery) Modify(modifiers ...func(s *sql.Selector)) *AssetSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssetQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *AssetQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
+	return _q
 }
 
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"

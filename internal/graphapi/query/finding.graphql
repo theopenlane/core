@@ -4,6 +4,7 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			assessmentID
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			blocksProduction
 			categories
@@ -25,7 +26,9 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -42,6 +45,7 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			resourceName
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scopeID
 			scopeName
@@ -49,6 +53,9 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -72,6 +79,7 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			assessmentID
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			blocksProduction
 			categories
@@ -93,7 +101,9 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -110,6 +120,7 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			resourceName
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scopeID
 			scopeName
@@ -117,6 +128,9 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -140,6 +154,7 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			assessmentID
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			blocksProduction
 			categories
@@ -161,7 +176,9 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -178,6 +195,7 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			resourceName
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scopeID
 			scopeName
@@ -185,6 +203,9 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -297,6 +318,7 @@ query GetFindingByID ($findingId: ID!) {
 		assessmentID
 		assignedTo
 		assignedToGroupID
+		assignedToIdentityHolderID
 		assignedToUserID
 		blocksProduction
 		categories
@@ -318,7 +340,9 @@ query GetFindingByID ($findingId: ID!) {
 		findingStatusName
 		id
 		impact
+		integrationRunID
 		internalNotes
+		managedBy
 		metadata
 		numericSeverity
 		open
@@ -335,6 +359,7 @@ query GetFindingByID ($findingId: ID!) {
 		resourceName
 		reviewedBy
 		reviewedByGroupID
+		reviewedByIdentityHolderID
 		reviewedByUserID
 		scopeID
 		scopeName
@@ -342,6 +367,9 @@ query GetFindingByID ($findingId: ID!) {
 		securityLevel
 		severity
 		source
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		sourceUpdatedAt
 		state
 		stepsToReproduce
@@ -462,6 +490,7 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			assessmentID
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			blocksProduction
 			categories
@@ -483,7 +512,9 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -500,6 +531,7 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			resourceName
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scopeID
 			scopeName
@@ -507,6 +539,9 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -533,6 +568,7 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			assessmentID
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			blocksProduction
 			categories
@@ -554,7 +590,9 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -571,6 +609,7 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			resourceName
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scopeID
 			scopeName
@@ -578,6 +617,9 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -604,6 +646,7 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			assessmentID
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			blocksProduction
 			categories
@@ -625,7 +668,9 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -642,6 +687,7 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			resourceName
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scopeID
 			scopeName
@@ -649,6 +695,9 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce

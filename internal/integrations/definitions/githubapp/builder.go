@@ -7,6 +7,8 @@ import (
 	"strconv"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -46,13 +48,16 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       gitHubAppCredential.ID(),
-					Name:                "GitHub App installation",
-					Description:         "Install the Openlane GitHub App into your GitHub organization.",
-					CredentialRefs:      []types.CredentialSlotID{gitHubAppCredential.ID()},
-					ClientRefs:          []types.ClientID{gitHubClient.ID()},
-					ValidationOperation: healthDefaultOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  gitHubAppCredential.ID(),
+					Name:           "GitHub App installation",
+					Description:    "Install the Openlane GitHub App into your GitHub organization.",
+					CredentialRefs: []types.CredentialSlotID{gitHubAppCredential.ID()},
+					ClientRefs:     []types.ClientID{gitHubClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: gitHubClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Auth: &types.AuthRegistration{
 						CredentialRef: gitHubAppCredential.ID(),
 						Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
@@ -103,15 +108,6 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:         healthDefaultOperation.Name(),
-					Description:  "Validate the GitHub App installation is reachable",
-					Topic:        DefinitionID.OperationTopic(healthDefaultOperation.Name()),
-					ClientRef:    gitHubClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: healthCheckSchema,
-					Handle:       HealthCheck{}.Handle(),
-				},
-				{
 					Name:           repositorySyncOperation.Name(),
 					Description:    "Collect repository inventory from the installation as assets",
 					Topic:          DefinitionID.OperationTopic(repositorySyncOperation.Name()),
@@ -150,7 +146,7 @@ func Builder(cfg Config) registry.Builder {
 					Topic:          DefinitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:      gitHubClient.ID(),
 					ConfigSchema:   directorySyncSchema,
-					Policy:         types.ExecutionPolicy{Reconcile: true},
+					Policy:         types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 					Ingest: []types.IngestContract{
@@ -229,6 +225,18 @@ func Builder(cfg Config) registry.Builder {
 					Spec: types.MappingOverride{
 						FilterExpr: "true",
 						MapExpr:    mapExprDirectoryMembership,
+						Links: []types.LinkRule{
+							{
+								TargetSchema: entityops.SchemaDirectoryAccount.Name,
+								TargetField:  directoryaccount.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
+							},
+							{
+								TargetSchema: entityops.SchemaDirectoryGroup.Name,
+								TargetField:  directorygroup.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
+							},
+						},
 					},
 				},
 			},

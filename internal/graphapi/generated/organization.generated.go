@@ -312,10 +312,6 @@ func (ec *executionContext) _OrganizationUpdatePayload(ctx context.Context, sel 
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNOrganizationCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationCreatePayload) graphql.Marshaler {
-	return ec._OrganizationCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNOrganizationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -326,10 +322,6 @@ func (ec *executionContext) marshalNOrganizationCreatePayload2ᚖgithubᚗcomᚋ
 	return ec._OrganizationCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNOrganizationDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationDeletePayload) graphql.Marshaler {
-	return ec._OrganizationDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNOrganizationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -338,10 +330,6 @@ func (ec *executionContext) marshalNOrganizationDeletePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._OrganizationDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNOrganizationUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationUpdatePayload) graphql.Marshaler {
-	return ec._OrganizationUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNOrganizationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationUpdatePayload) graphql.Marshaler {

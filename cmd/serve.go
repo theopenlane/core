@@ -155,7 +155,7 @@ func serve(ctx context.Context) error {
 	// Set trust center config for hooks and email integration
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
 		CnameTarget:              so.Config.Settings.Server.TrustCenterCnameTarget,
-		PreviewCnameTarget:       so.Config.Settings.Server.TrustCenterPreviewCnameTarget,
+		PreviewZoneID:            so.Config.Settings.Server.TrustCenterPreviewZoneID,
 		DefaultTrustCenterDomain: so.Config.Settings.Server.DefaultTrustCenterDomain,
 	})
 
@@ -337,12 +337,6 @@ func serve(ctx context.Context) error {
 		serveropts.WithGraphRoute(srv, dbClient),
 		serveropts.WithHistoryGraphRoute(srv, historyClient),
 	)
-
-	if rt := so.Config.Handler.IntegrationsRuntime; rt != nil {
-		if err := rt.SeedScheduledOperations(ctx); err != nil {
-			log.Error().Err(err).Msg("failed to seed one or more scheduled operation listeners")
-		}
-	}
 
 	if err := srv.StartEchoServer(ctx); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Error().Err(err).Msg("failed to run server")

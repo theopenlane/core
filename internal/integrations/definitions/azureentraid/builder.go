@@ -2,6 +2,8 @@ package azureentraid
 
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -40,14 +42,17 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       entraTenantCredential.ID(),
-					Name:                "Azure Entra ID Admin Consent",
-					Description:         "Connect your Azure Entra ID tenant using admin consent.",
-					CredentialRefs:      []types.CredentialSlotID{entraTenantCredential.ID()},
-					ClientRefs:          []types.ClientID{entraCredential.ID(), entraClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
-					Auth:                adminConsentRegistration(cfg),
+					CredentialRef:  entraTenantCredential.ID(),
+					Name:           "Azure Entra ID Admin Consent",
+					Description:    "Connect your Azure Entra ID tenant using admin consent.",
+					CredentialRefs: []types.CredentialSlotID{entraTenantCredential.ID()},
+					ClientRefs:     []types.ClientID{entraCredential.ID(), entraClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: entraCredential.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
+					Auth:        adminConsentRegistration(cfg),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: entraTenantCredential.ID(),
 						Description:   "Removes the stored credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.",
@@ -70,22 +75,14 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Verify Azure client credentials can acquire a token against Microsoft Graph",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:    entraCredential.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					Handle:       HealthCheck{}.Handle(),
-					ConfigSchema: healthCheckSchema,
-				},
-				{
 					Name:         directorySyncOperation.Name(),
 					Description:  "Collect Azure Entra ID users, groups, and memberships as directory accounts",
 					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:    entraClient.ID(),
 					ConfigSchema: directorySyncSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true},
+					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Schedule:     gala.NewFullFetchSchedule(),
+					HealthCheck:  DirectoryProbe{}.Handle(),
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -122,6 +119,18 @@ func Builder(cfg Config) registry.Builder {
 					Spec: types.MappingOverride{
 						FilterExpr: "true",
 						MapExpr:    mapExprDirectoryMembership,
+						Links: []types.LinkRule{
+							{
+								TargetSchema: entityops.SchemaDirectoryAccount.Name,
+								TargetField:  directoryaccount.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
+							},
+							{
+								TargetSchema: entityops.SchemaDirectoryGroup.Name,
+								TargetField:  directorygroup.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
+							},
+						},
 					},
 				},
 			},

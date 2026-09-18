@@ -22,10 +22,9 @@ import (
 // functions in this package
 var listenerProviders []func() []gala.Registration
 
-// registerListeners adds a listener family constructor to the registry; call it from an
-// init function in the file that declares the constructor
-func registerListeners(provider func() []gala.Registration) {
-	listenerProviders = append(listenerProviders, provider)
+// registerListeners takes in a variadic amount of listeners and sets them up
+func registerListeners(providers ...func() []gala.Registration) {
+	listenerProviders = append(listenerProviders, providers...)
 }
 
 // AllListeners builds the registrations for every listener family in this package; the

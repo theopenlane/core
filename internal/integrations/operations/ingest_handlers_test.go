@@ -1,9 +1,6 @@
 package operations
 
 import (
-	"context"
-	"encoding/json"
-	"errors"
 	"testing"
 
 	"github.com/theopenlane/core/common/enums"
@@ -11,23 +8,6 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
-
-func TestWithDirectorySyncRunID(t *testing.T) {
-	t.Parallel()
-
-	ctx := context.Background()
-
-	// default is empty
-	if got := directorySyncRunIDFromContext(ctx); got != "" {
-		t.Fatalf("expected empty, got %q", got)
-	}
-
-	// set and retrieve
-	ctx = withDirectorySyncRunID(ctx, "run-123")
-	if got := directorySyncRunIDFromContext(ctx); got != "run-123" {
-		t.Fatalf("expected %q, got %q", "run-123", got)
-	}
-}
 
 func TestLookupIngestSchema(t *testing.T) {
 	t.Parallel()
@@ -125,92 +105,4 @@ func TestBuildIngestOperationContext(t *testing.T) {
 			t.Fatalf("Workflow.InstanceID=%v, want %q", src.Workflow, "wf-001")
 		}
 	})
-}
-
-func TestPersistMappedRecord_UnsupportedSchema(t *testing.T) {
-	t.Parallel()
-
-	_, err := persistMappedRecord(context.Background(), nil, nil, "nonexistent_schema", json.RawMessage(`{}`))
-	if !errors.Is(err, ErrIngestUnsupportedSchema) {
-		t.Fatalf("expected ErrIngestUnsupportedSchema, got %v", err)
-	}
-}
-
-func TestPrepareDirectoryAccountInput_SetsRunID(t *testing.T) {
-	t.Parallel()
-
-	ctx := withDirectorySyncRunID(context.Background(), "dsrun-001")
-
-	got := prepareDirectoryAccountInput(ctx, ent.CreateDirectoryAccountInput{})
-
-	if got.DirectorySyncRunID == nil || *got.DirectorySyncRunID != "dsrun-001" {
-		t.Fatalf("expected DirectorySyncRunID=%q, got %v", "dsrun-001", got.DirectorySyncRunID)
-	}
-}
-
-func TestPrepareDirectoryGroupInput_SetsRunID(t *testing.T) {
-	t.Parallel()
-
-	ctx := withDirectorySyncRunID(context.Background(), "dsrun-002")
-
-	got := prepareDirectoryGroupInput(ctx, ent.CreateDirectoryGroupInput{})
-
-	if got.DirectorySyncRunID != "dsrun-002" {
-		t.Fatalf("expected DirectorySyncRunID=%q, got %q", "dsrun-002", got.DirectorySyncRunID)
-	}
-}
-
-func TestPrepareDirectoryMembershipInput_SetsRunID(t *testing.T) {
-	t.Parallel()
-
-	ctx := withDirectorySyncRunID(context.Background(), "dsrun-003")
-
-	got := prepareDirectoryMembershipInput(ctx, ent.CreateDirectoryMembershipInput{})
-
-	if got.DirectorySyncRunID != "dsrun-003" {
-		t.Fatalf("expected DirectorySyncRunID=%q, got %q", "dsrun-003", got.DirectorySyncRunID)
-	}
-}
-
-func TestPrepareDirectoryAccountInput_NoOverrideWhenSet(t *testing.T) {
-	t.Parallel()
-
-	existingRunID := "existing-run"
-	ctx := withDirectorySyncRunID(context.Background(), "dsrun-new")
-
-	got := prepareDirectoryAccountInput(ctx, ent.CreateDirectoryAccountInput{
-		DirectorySyncRunID: &existingRunID,
-	})
-
-	if *got.DirectorySyncRunID != "existing-run" {
-		t.Fatalf("expected DirectorySyncRunID=%q, got %q", "existing-run", *got.DirectorySyncRunID)
-	}
-}
-
-func TestPrepareDirectoryGroupInput_NoOverrideWhenSet(t *testing.T) {
-	t.Parallel()
-
-	ctx := withDirectorySyncRunID(context.Background(), "dsrun-new")
-
-	got := prepareDirectoryGroupInput(ctx, ent.CreateDirectoryGroupInput{
-		DirectorySyncRunID: "existing-run",
-	})
-
-	if got.DirectorySyncRunID != "existing-run" {
-		t.Fatalf("expected DirectorySyncRunID=%q, got %q", "existing-run", got.DirectorySyncRunID)
-	}
-}
-
-func TestPrepareDirectoryMembershipInput_NoOverrideWhenSet(t *testing.T) {
-	t.Parallel()
-
-	ctx := withDirectorySyncRunID(context.Background(), "dsrun-new")
-
-	got := prepareDirectoryMembershipInput(ctx, ent.CreateDirectoryMembershipInput{
-		DirectorySyncRunID: "existing-run",
-	})
-
-	if got.DirectorySyncRunID != "existing-run" {
-		t.Fatalf("expected DirectorySyncRunID=%q, got %q", "existing-run", got.DirectorySyncRunID)
-	}
 }

@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email/themes"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // defaultHeader returns the standard header block used by all system emails
@@ -80,9 +81,20 @@ func calloutStyle() render.Style {
 	}
 }
 
-// tokenURL constructs a product URL with a query-encoded token parameter
+// tokenQueryParam is the query parameter carrying a signed action token on product links
+const tokenQueryParam = "token"
+
+// tokenURL constructs a product URL with a query-encoded token parameter, empty when base is not an absolute http(s) URL
 func tokenURL(base, path, token string) string {
-	return base + path + "?token=" + url.QueryEscape(token)
+	u, err := urlx.ParseAbsolute(base)
+	if err != nil {
+		return ""
+	}
+
+	u = u.JoinPath(path)
+	u.RawQuery = url.Values{tokenQueryParam: {token}}.Encode()
+
+	return u.String()
 }
 
 // supportEmailLink renders the support address as an explicitly styled mailto link; left as plain

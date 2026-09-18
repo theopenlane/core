@@ -312,10 +312,6 @@ func (ec *executionContext) _UserUpdatePayload(ctx context.Context, sel ast.Sele
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNUserCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐUserCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.UserCreatePayload) graphql.Marshaler {
-	return ec._UserCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNUserCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐUserCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.UserCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -326,10 +322,6 @@ func (ec *executionContext) marshalNUserCreatePayload2ᚖgithubᚗcomᚋtheopenl
 	return ec._UserCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNUserDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐUserDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.UserDeletePayload) graphql.Marshaler {
-	return ec._UserDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNUserDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐUserDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.UserDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -338,10 +330,6 @@ func (ec *executionContext) marshalNUserDeletePayload2ᚖgithubᚗcomᚋtheopenl
 		return graphql.Null
 	}
 	return ec._UserDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNUserUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐUserUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.UserUpdatePayload) graphql.Marshaler {
-	return ec._UserUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNUserUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐUserUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.UserUpdatePayload) graphql.Marshaler {

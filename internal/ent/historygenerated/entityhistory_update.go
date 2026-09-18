@@ -97,6 +97,21 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entityhistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(entityhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(entityhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(entityhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(entityhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(entityhistory.FieldIntegrationRunID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(entityhistory.FieldOwnerID, field.TypeString)
 	}
@@ -109,6 +124,9 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.InternalOwnerGroupIDCleared() {
 		_spec.ClearField(entityhistory.FieldInternalOwnerGroupID, field.TypeString)
 	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(entityhistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
+	}
 	if _u.mutation.ReviewedByCleared() {
 		_spec.ClearField(entityhistory.FieldReviewedBy, field.TypeString)
 	}
@@ -117,6 +135,9 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.ReviewedByGroupIDCleared() {
 		_spec.ClearField(entityhistory.FieldReviewedByGroupID, field.TypeString)
+	}
+	if _u.mutation.ReviewedByIdentityHolderIDCleared() {
+		_spec.ClearField(entityhistory.FieldReviewedByIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.LastReviewedAtCleared() {
 		_spec.ClearField(entityhistory.FieldLastReviewedAt, field.TypeTime)
@@ -389,6 +410,21 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entityhistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(entityhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(entityhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(entityhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(entityhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(entityhistory.FieldIntegrationRunID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(entityhistory.FieldOwnerID, field.TypeString)
 	}
@@ -401,6 +437,9 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	if _u.mutation.InternalOwnerGroupIDCleared() {
 		_spec.ClearField(entityhistory.FieldInternalOwnerGroupID, field.TypeString)
 	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(entityhistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
+	}
 	if _u.mutation.ReviewedByCleared() {
 		_spec.ClearField(entityhistory.FieldReviewedBy, field.TypeString)
 	}
@@ -409,6 +448,9 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	}
 	if _u.mutation.ReviewedByGroupIDCleared() {
 		_spec.ClearField(entityhistory.FieldReviewedByGroupID, field.TypeString)
+	}
+	if _u.mutation.ReviewedByIdentityHolderIDCleared() {
+		_spec.ClearField(entityhistory.FieldReviewedByIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.LastReviewedAtCleared() {
 		_spec.ClearField(entityhistory.FieldLastReviewedAt, field.TypeTime)

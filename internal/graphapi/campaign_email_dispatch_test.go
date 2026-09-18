@@ -3,11 +3,14 @@
 package graphapi_test
 
 import (
+	"context"
 	"encoding/json"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"gotest.tools/v3/assert"
@@ -649,4 +652,65 @@ func TestCustomCampaignCompletesWhenAllSent(t *testing.T) {
 			assert.Equal(t, updated.CompletedAt != nil, completed)
 		})
 	}
+}
+
+func TestCampaignEmailDispatchWithoutTrustCenterModule(t *testing.T) {
+	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	ctx := th.SetContext(user.UserCtx, suite.Client.DB)
+
+	emailTemplate, err := suite.Client.DB.EmailTemplate.Create().
+		SetName("No Trust Center Module Template").
+		SetKey(email.BrandedMessageOp.Name()).
+		SetTemplateContext(enums.TemplateContextCampaignRecipient).
+		SetDefaults(map[string]any{
+			"subject": "Hello {{ .firstName }}",
+			"title":   "Compliance Only",
+		}).
+		Save(ctx)
+	th.RequireNoError(t, err)
+
+	campaignObj, err := suite.Client.DB.Campaign.Create().
+		SetName("No Trust Center Module Campaign").
+		SetOwnerID(user.OrganizationID).
+		SetEmailTemplateID(emailTemplate.ID).
+		SetRecurrenceFrequency(enums.FrequencyNone).
+		Save(ctx)
+	th.RequireNoError(t, err)
+
+	target, err := suite.Client.DB.CampaignTarget.Create().
+		SetCampaignID(campaignObj.ID).
+		SetEmail("compliance-only@test.example").
+		SetFullName("Compliance Only").
+		SetOwnerID(user.OrganizationID).
+		Save(ctx)
+	th.RequireNoError(t, err)
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.CampaignTargetDeleteOne]{Client: suite.Client.DB.CampaignTarget, ID: target.ID}).MustDelete(user.UserCtx, t)
+		(&th.Cleanup[*generated.CampaignDeleteOne]{Client: suite.Client.DB.Campaign, ID: campaignObj.ID}).MustDelete(user.UserCtx, t)
+		(&th.Cleanup[*generated.EmailTemplateDeleteOne]{Client: suite.Client.DB.EmailTemplate, ID: emailTemplate.ID}).MustDelete(user.UserCtx, t)
+	})
+
+	mockSender, err := mock.New("")
+	assert.NilError(t, err)
+
+	emailClient := &email.Client{
+		Sender: mockSender,
+		Config: email.RuntimeEmailConfig{
+			FromEmail:   "test@mail.example.com",
+			CompanyName: "TestCorp",
+			ProductURL:  "https://app.example.com",
+		},
+	}
+
+	cfg := email.SendBrandedCampaignRequest{CampaignDispatchInput: email.CampaignDispatchInput{CampaignID: campaignObj.ID}}
+
+	userCtx := generated.NewContext(graphql.WithResponseContext(user.UserCtx, gqlerrors.ErrorPresenter, graphql.DefaultRecover), suite.Client.DB)
+
+	_, err = email.SendBrandedCampaign{}.Run(userCtx, types.OperationRequest{Client: emailClient, DB: suite.Client.DB}, emailClient, cfg)
+	assert.NilError(t, err)
+
+	messages := mockSender.Messages()
+	assert.Assert(t, is.Len(messages, 1))
+	assert.Check(t, is.Contains(messages[0].To, "compliance-only@test.example"))
 }

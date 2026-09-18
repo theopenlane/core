@@ -583,10 +583,6 @@ func (ec *executionContext) _DocumentDataUpdatePayload(ctx context.Context, sel 
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNDocumentDataBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataBulkCreatePayload) graphql.Marshaler {
-	return ec._DocumentDataBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDocumentDataBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNDocumentDataBulkCreatePayload2ᚖgithubᚗco
 		return graphql.Null
 	}
 	return ec._DocumentDataBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDocumentDataBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataBulkDeletePayload) graphql.Marshaler {
-	return ec._DocumentDataBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDocumentDataBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNDocumentDataBulkDeletePayload2ᚖgithubᚗco
 	return ec._DocumentDataBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDocumentDataBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataBulkUpdatePayload) graphql.Marshaler {
-	return ec._DocumentDataBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDocumentDataBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNDocumentDataBulkUpdatePayload2ᚖgithubᚗco
 		return graphql.Null
 	}
 	return ec._DocumentDataBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDocumentDataCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataCreatePayload) graphql.Marshaler {
-	return ec._DocumentDataCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDocumentDataCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNDocumentDataCreatePayload2ᚖgithubᚗcomᚋ
 	return ec._DocumentDataCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDocumentDataDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataDeletePayload) graphql.Marshaler {
-	return ec._DocumentDataDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDocumentDataDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNDocumentDataDeletePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._DocumentDataDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDocumentDataUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataUpdatePayload) graphql.Marshaler {
-	return ec._DocumentDataUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDocumentDataUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataUpdatePayload) graphql.Marshaler {

@@ -2,6 +2,8 @@ package googleworkspace
 
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/integrations/auth"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -20,6 +22,8 @@ var directorySyncScopes = []string{
 // Builder returns the Google Workspace definition builder with the supplied operator config applied
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
+		installation := installationRef(cfg)
+
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
@@ -47,13 +51,16 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       workspaceCredential.ID(),
-					Name:                "Google Workspace OAuth",
-					Description:         "Connect your Google Workspace domain using OAuth.",
-					CredentialRefs:      []types.CredentialSlotID{workspaceCredential.ID()},
-					ClientRefs:          []types.ClientID{workspaceClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  workspaceCredential.ID(),
+					Name:           "Google Workspace OAuth",
+					Description:    "Connect your Google Workspace domain using OAuth.",
+					CredentialRefs: []types.CredentialSlotID{workspaceCredential.ID()},
+					ClientRefs:     []types.ClientID{workspaceClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: workspaceClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[googleWorkspaceCred]{
 						CredentialRef: workspaceCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -93,21 +100,12 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Call Google Admin SDK users.list to verify the workspace token",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:    workspaceClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: healthCheckSchema,
-					Handle:       HealthCheck{}.Handle(),
-				},
-				{
 					Name:         directorySyncOperation.Name(),
 					Description:  "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",
 					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:    workspaceClient.ID(),
 					ConfigSchema: directorySyncSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true},
+					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -145,6 +143,18 @@ func Builder(cfg Config) registry.Builder {
 					Spec: types.MappingOverride{
 						FilterExpr: "true",
 						MapExpr:    mapExprDirectoryMembership,
+						Links: []types.LinkRule{
+							{
+								TargetSchema: entityops.SchemaDirectoryAccount.Name,
+								TargetField:  directoryaccount.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
+							},
+							{
+								TargetSchema: entityops.SchemaDirectoryGroup.Name,
+								TargetField:  directorygroup.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
+							},
+						},
 					},
 				},
 			},

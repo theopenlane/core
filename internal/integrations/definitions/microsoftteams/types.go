@@ -18,8 +18,6 @@ var (
 	teamsCredentialSchema, teamsCredential = providerkit.CredentialSchema[teamsCred]()
 	// teamsClient is the client ref for the Microsoft Graph service client used by this definition
 	teamsClient = types.NewClientRef[*msgraphsdk.GraphServiceClient]()
-	// healthDefaultOperation is the operation ref for the Microsoft Teams health check
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// messageSendSchema is the operation ref for the Microsoft Teams message send operation
 	messageSendSchema, MessageSendOp = providerkit.OperationSchema[MessageSendOperation]() //nolint:revive // co-initialized with schema
 )

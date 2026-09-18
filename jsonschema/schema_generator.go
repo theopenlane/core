@@ -1481,6 +1481,8 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 		// Generate comment
 		WriteFieldDescription(result, description, indentStr)
 
+		fieldValue = unwrapValue(fieldValue)
+
 		// Handle different field types
 		switch fieldValue.Kind() {
 		case reflect.Struct:
@@ -1552,6 +1554,8 @@ func generateYAMLWithCommentsAllFields(result *strings.Builder, prefix string, v
 		defaultTag := field.Tag.Get("default")
 
 		WriteFieldDescription(result, description, indentStr)
+
+		fieldValue = unwrapValue(fieldValue)
 
 		switch fieldValue.Kind() {
 		case reflect.Struct:

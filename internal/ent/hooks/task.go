@@ -6,11 +6,13 @@ import (
 
 	"entgo.io/ent"
 	openfga "github.com/openfga/go-sdk"
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -90,6 +92,77 @@ func HookTaskPermissions() ent.Hook {
 			),
 		),
 	)
+}
+
+// HookTaskTemplatePermissions manages the fga tuples for task templates
+func HookTaskTemplatePermissions() ent.Hook {
+	return hook.If(func(next ent.Mutator) ent.Mutator {
+		return hook.TaskFunc(func(ctx context.Context, m *generated.TaskMutation) (generated.Value, error) {
+			isTemplate, _ := m.IsTemplate()
+			if m.Op().Is(ent.OpCreate) && !isTemplate {
+				return next.Mutate(ctx, m)
+			}
+
+			var tasks []*generated.Task
+
+			if m.Op().Is(ent.OpUpdate) {
+				ids, err := getMutationIDs(ctx, m)
+				if err != nil {
+					return nil, err
+				}
+
+				tasks, err = m.Client().Task.Query().Where(task.IDIn(ids...)).
+					Select(task.FieldID, task.FieldOwnerID).
+					All(ctx)
+				if err != nil {
+					return nil, err
+				}
+			}
+
+			v, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			// if op.entcreate or ent.updateone, this will be true
+			if task, ok := v.(*generated.Task); ok {
+				tasks = []*generated.Task{task}
+			}
+
+			var writeKeys, deleteKeys []fgax.TupleKey
+
+			lo.ForEach(tasks, func(task *generated.Task, _ int) {
+				tuple := fgax.GetTupleKey(fgax.TupleRequest{
+					SubjectID:   task.OwnerID,
+					SubjectType: generated.TypeOrganization,
+					ObjectID:    task.ID,
+					ObjectType:  generated.TypeTask,
+					Relation:    "task_templates",
+				})
+
+				if isTemplate {
+					writeKeys = append(writeKeys, tuple)
+					return
+				}
+
+				// fga client ignores missing tuples so fine to do this
+				// else we'd really want to run through old values per task to make sure
+				// we are only deleting the tuples that exists already
+				deleteKeys = append(deleteKeys, tuple)
+			})
+
+			_, err = m.Client().Authz.WriteTupleKeys(ctx, writeKeys, deleteKeys)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to update task template relationship tuples")
+				return nil, ErrInternalServerError
+			}
+
+			return v, nil
+		})
+	}, hook.And(
+		hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne),
+		hook.HasFields("is_template"),
+	))
 }
 
 // updateTaskAssigneeTuples will add the new user tuple for the relation (assignee) and remove all the old assignee tuples

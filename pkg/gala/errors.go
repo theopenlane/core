@@ -36,6 +36,8 @@ var (
 	ErrEnvelopePayloadRequired = errors.New("gala: envelope payload is required")
 	// ErrJobKindRequired is returned when emit headers carry no job kind
 	ErrJobKindRequired = errors.New("gala: job kind is required")
+	// ErrJobKindNotRegistered is returned when an envelope's job kind has no registered queue
+	ErrJobKindNotRegistered = errors.New("gala: job kind is not registered")
 	// ErrDispatchFailed is returned when dispatch fails
 	ErrDispatchFailed = errors.New("gala: dispatch failed")
 	// ErrContextCodecKeyRequired is returned when a context codec key is empty

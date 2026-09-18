@@ -160,6 +160,11 @@ Config contains the configuration for the core server
         },
         "organizationdelete": {
             "maxdeletesperrun": 25
+        },
+        "integrationlifecycle": {
+            "enabled": true,
+            "dryrun": true,
+            "maxperrun": 100
         }
     },
     "workflows": {
@@ -205,7 +210,7 @@ Server settings for the echo server
 |**secretmanager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>|no|
 |**defaulttrustcenterdomain**|`string`|DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set<br/>|no|
 |**trustcentercnametarget**|`string`|TrustCenterCnameTarget is the cname target for the trust center<br/>Used for mapping the vanity domains to the trust centers<br/>|no|
-|**trustcenterpreviewcnametarget**|`string`|TrustCenterPreviewCnameTarget is the cname target for trust center preview domains<br/>|no|
+|**trustcenterpreviewzoneid**|`string`|TrustCenterPreviewZoneID is the cloudflare zone id that holds trust center preview domain records<br/>|no|
 |**notificationlookbackdays**|`integer`|NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription<br/>Unread notifications are always pulled regardless of this setting<br/>|no|
 
 **Additional Properties:** not allowed   
@@ -1617,6 +1622,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |[**email**](#defsemailruntimeemailconfig)|`object`||yes|
 |[**paymentreminder**](#defssystempaymentreminderconfig)|`object`|||
 |[**organizationdelete**](#defssystemorganizationdeleteconfig)|`object`|||
+|[**integrationlifecycle**](#defssystemintegrationlifecycleconfig)|`object`|||
 
 **Additional Properties:** not allowed   
 **Example**
@@ -1645,6 +1651,11 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
     },
     "organizationdelete": {
         "maxdeletesperrun": 25
+    },
+    "integrationlifecycle": {
+        "enabled": true,
+        "dryrun": true,
+        "maxperrun": 100
     }
 }
 ```
@@ -1691,6 +1702,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**bulkscan**|`boolean`|||
 |[**nonvendorcategories**](#defsstring)|`string[]`|||
 |[**deniedvendornames**](#defsstring)|`string[]`|||
 |**scanttl**|`integer`|||
@@ -1914,6 +1926,29 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 ```json
 {
     "maxdeletesperrun": 25
+}
+```
+
+   
+<a name="defssystemintegrationlifecycleconfig"></a>
+### $defs/system\.IntegrationLifecycleConfig: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Whether the integration lifecycle sweep is enabled<br/>Default: `true`<br/>||
+|**dryrun**|`boolean`|If true only log integration IDs and actions that would be dispatched<br/>Default: `true`<br/>||
+|**maxperrun**|`integer`|Maximum integrations to evaluate per run<br/>Default: `100`<br/>||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "enabled": true,
+    "dryrun": true,
+    "maxperrun": 100
 }
 ```
 

@@ -26,7 +26,7 @@ func (r *internalPolicyResolver) findPrimaryDriveIntegration(ctx context.Context
 		Where(
 			integration.OwnerID(ownerID),
 			integration.DefinitionIDIn(googledrive.DefinitionID(), onedrive.DefinitionID()),
-			integration.StatusEQ(enums.IntegrationStatusConnected),
+			integration.StatusIn(enums.IntegrationOperationalStatuses...),
 		).
 		All(ctx)
 	if err != nil {

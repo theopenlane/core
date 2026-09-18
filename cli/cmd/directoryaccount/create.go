@@ -31,9 +31,7 @@ func init() {
 	createCmd.Flags().String("job-title", "", "title captured at sync time")
 	createCmd.Flags().String("department", "", "department captured at sync time")
 	createCmd.Flags().String("directory-name", "", "directory source label (e.g. googleworkspace, github, slack)")
-	createCmd.Flags().String("directory-instance-id", "", "stable external workspace or tenant identifier")
 	createCmd.Flags().String("integration-id", "", "integration that owns this directory account")
-	createCmd.Flags().String("directory-sync-run-id", "", "sync run that produced this snapshot")
 	createCmd.Flags().String("platform-id", "", "platform associated with this directory account")
 	createCmd.Flags().StringSlice("tags", []string{}, "tags associated with the account")
 }
@@ -82,19 +80,9 @@ func createValidation() (input graphclient.CreateDirectoryAccountInput, err erro
 		input.DirectoryName = &directoryName
 	}
 
-	directoryInstanceID := cmd.Config.String("directory-instance-id")
-	if directoryInstanceID != "" {
-		input.DirectoryInstanceID = &directoryInstanceID
-	}
-
 	integrationID := cmd.Config.String("integration-id")
 	if integrationID != "" {
 		input.IntegrationID = &integrationID
-	}
-
-	directorySyncRunID := cmd.Config.String("directory-sync-run-id")
-	if directorySyncRunID != "" {
-		input.DirectorySyncRunID = &directorySyncRunID
 	}
 
 	platformID := cmd.Config.String("platform-id")

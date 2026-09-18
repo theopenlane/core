@@ -16,8 +16,6 @@ var (
 	authentikCredentialSchema, authentikCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// authentikClient is the client ref for the Authentik API client
 	authentikClient = types.NewClientRef[*authentikSDK.APIClient]()
-	// healthCheckSchema, healthCheckOperation is the operation ref for the health check
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema, directorySyncOperation is the operation ref for directory sync
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )
@@ -44,6 +42,8 @@ type UserInput struct {
 type InstallationMetadata struct {
 	// Brand is the Authentik instance brand name
 	Brand string `json:"brand,omitempty"`
+	// BrandID is the immutable uuid of the Authentik instance's default brand
+	BrandID string `json:"brandId,omitempty"`
 	// Host is the HTTP host of the Authentik instance
 	Host string `json:"host,omitempty"`
 	// BaseURL is the base URL of the Authentik instance
@@ -54,6 +54,6 @@ type InstallationMetadata struct {
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	return types.IntegrationInstallationIdentity{
 		ExternalName: m.Brand,
-		ExternalID:   m.Host,
+		ExternalID:   m.BrandID,
 	}
 }

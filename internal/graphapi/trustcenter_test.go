@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/theopenlane/core/v2/internal/controls"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -21,6 +22,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
@@ -234,7 +236,12 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 	customDomain := (&th.CustomDomainBuilder{Client: suite.Client}).MustNew(localTestUser.Owner.UserCtx, t)
 
 	// create trust center standard
-	trustCenterControlStd := (&th.StandardBuilder{Client: suite.Client, Name: "OTS", Framework: "openlane-trust-center", IsPublic: true}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	trustCenterControlStd := (&th.StandardBuilder{
+		Client:    suite.Client,
+		Name:      "OTS",
+		IsPublic:  true,
+		Framework: controls.TrustCenterFrameworkName,
+	}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	trustCenterControlIDs := []string{}
 	numTrustCenterControls := 5

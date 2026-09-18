@@ -328,10 +328,6 @@ func (ec *executionContext) unmarshalNReassignWorkflowAssignmentInput2githubᚗc
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNWorkflowAssignmentReassignPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentReassignPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowAssignmentReassignPayload) graphql.Marshaler {
-	return ec._WorkflowAssignmentReassignPayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowAssignmentReassignPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentReassignPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowAssignmentReassignPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -361,10 +357,6 @@ func (ec *executionContext) unmarshalNWorkflowAssignmentTargetInput2ᚖgithubᚗ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNWorkflowInstanceAdminPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceAdminPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowInstanceAdminPayload) graphql.Marshaler {
-	return ec._WorkflowInstanceAdminPayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowInstanceAdminPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceAdminPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowInstanceAdminPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -373,10 +365,6 @@ func (ec *executionContext) marshalNWorkflowInstanceAdminPayload2ᚖgithubᚗcom
 		return graphql.Null
 	}
 	return ec._WorkflowInstanceAdminPayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowInstanceBulkAdminPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceBulkAdminPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowInstanceBulkAdminPayload) graphql.Marshaler {
-	return ec._WorkflowInstanceBulkAdminPayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowInstanceBulkAdminPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceBulkAdminPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowInstanceBulkAdminPayload) graphql.Marshaler {

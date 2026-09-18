@@ -5,8 +5,11 @@ import (
 	"time"
 
 	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -48,13 +51,16 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       cloudflareCredential.ID(),
-					Name:                "Cloudflare API Token",
-					Description:         "Configure Cloudflare access using an API token scoped to your account and zones.",
-					CredentialRefs:      []types.CredentialSlotID{cloudflareCredential.ID()},
-					ClientRefs:          []types.ClientID{cloudflareClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  cloudflareCredential.ID(),
+					Name:           "Cloudflare API Token",
+					Description:    "Configure Cloudflare access using an API token scoped to your account and zones.",
+					CredentialRefs: []types.CredentialSlotID{cloudflareCredential.ID()},
+					ClientRefs:     []types.ClientID{cloudflareClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: cloudflareClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: cloudflareCredential.ID(),
 						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Cloudflare dashboard.",
@@ -71,21 +77,12 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Verify Cloudflare API token via /user/tokens/verify",
-					Topic:        DefinitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:    cloudflareClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					Handle:       HealthCheck{}.Handle(),
-					ConfigSchema: healthCheckSchema,
-				},
-				{
 					Name:           directorySyncOperation.Name(),
 					Description:    "Collect account members as directory accounts",
 					Topic:          DefinitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:      cloudflareClient.ID(),
 					ConfigSchema:   directorySyncSchema,
-					Policy:         types.ExecutionPolicy{Reconcile: true},
+					Policy:         types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 					Ingest: []types.IngestContract{
@@ -236,6 +233,18 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					Spec: types.MappingOverride{
 						FilterExpr: "true",
 						MapExpr:    mapExprDirectoryMembership,
+						Links: []types.LinkRule{
+							{
+								TargetSchema: entityops.SchemaDirectoryAccount.Name,
+								TargetField:  directoryaccount.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
+							},
+							{
+								TargetSchema: entityops.SchemaDirectoryGroup.Name,
+								TargetField:  directorygroup.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
+							},
+						},
 					},
 				},
 				{
@@ -247,8 +256,8 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 							{
 								TargetSchema: entityops.SchemaControl.Name,
 								TargetField:  control.FieldRefCode,
-								SourceField:  entityops.InputKeyFindingCategory,
-								SourceList:   entityops.InputKeyFindingCategories,
+								SourceField:  entityops.FindingFields.Category.InputKey,
+								SourceList:   entityops.FindingFields.Categories.InputKey,
 							},
 						},
 					},

@@ -119,51 +119,51 @@ func init() {
 	// actionplanhistory.DefaultRevision holds the default value on creation for the revision field.
 	actionplanhistory.DefaultRevision = actionplanhistoryDescRevision.Default.(string)
 	// actionplanhistoryDescApprovalRequired is the schema descriptor for approval_required field.
-	actionplanhistoryDescApprovalRequired := actionplanhistoryFields[18].Descriptor()
+	actionplanhistoryDescApprovalRequired := actionplanhistoryFields[23].Descriptor()
 	// actionplanhistory.DefaultApprovalRequired holds the default value on creation for the approval_required field.
 	actionplanhistory.DefaultApprovalRequired = actionplanhistoryDescApprovalRequired.Default.(bool)
 	// actionplanhistoryDescReviewDue is the schema descriptor for review_due field.
-	actionplanhistoryDescReviewDue := actionplanhistoryFields[19].Descriptor()
+	actionplanhistoryDescReviewDue := actionplanhistoryFields[24].Descriptor()
 	// actionplanhistory.DefaultReviewDue holds the default value on creation for the review_due field.
 	actionplanhistory.DefaultReviewDue = actionplanhistoryDescReviewDue.Default.(time.Time)
 	// actionplanhistoryDescTagSuggestions is the schema descriptor for tag_suggestions field.
-	actionplanhistoryDescTagSuggestions := actionplanhistoryFields[24].Descriptor()
+	actionplanhistoryDescTagSuggestions := actionplanhistoryFields[29].Descriptor()
 	// actionplanhistory.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
 	actionplanhistory.DefaultTagSuggestions = actionplanhistoryDescTagSuggestions.Default.([]string)
 	// actionplanhistoryDescDismissedTagSuggestions is the schema descriptor for dismissed_tag_suggestions field.
-	actionplanhistoryDescDismissedTagSuggestions := actionplanhistoryFields[25].Descriptor()
+	actionplanhistoryDescDismissedTagSuggestions := actionplanhistoryFields[30].Descriptor()
 	// actionplanhistory.DefaultDismissedTagSuggestions holds the default value on creation for the dismissed_tag_suggestions field.
 	actionplanhistory.DefaultDismissedTagSuggestions = actionplanhistoryDescDismissedTagSuggestions.Default.([]string)
 	// actionplanhistoryDescControlSuggestions is the schema descriptor for control_suggestions field.
-	actionplanhistoryDescControlSuggestions := actionplanhistoryFields[26].Descriptor()
+	actionplanhistoryDescControlSuggestions := actionplanhistoryFields[31].Descriptor()
 	// actionplanhistory.DefaultControlSuggestions holds the default value on creation for the control_suggestions field.
 	actionplanhistory.DefaultControlSuggestions = actionplanhistoryDescControlSuggestions.Default.([]string)
 	// actionplanhistoryDescDismissedControlSuggestions is the schema descriptor for dismissed_control_suggestions field.
-	actionplanhistoryDescDismissedControlSuggestions := actionplanhistoryFields[27].Descriptor()
+	actionplanhistoryDescDismissedControlSuggestions := actionplanhistoryFields[32].Descriptor()
 	// actionplanhistory.DefaultDismissedControlSuggestions holds the default value on creation for the dismissed_control_suggestions field.
 	actionplanhistory.DefaultDismissedControlSuggestions = actionplanhistoryDescDismissedControlSuggestions.Default.([]string)
 	// actionplanhistoryDescImprovementSuggestions is the schema descriptor for improvement_suggestions field.
-	actionplanhistoryDescImprovementSuggestions := actionplanhistoryFields[28].Descriptor()
+	actionplanhistoryDescImprovementSuggestions := actionplanhistoryFields[33].Descriptor()
 	// actionplanhistory.DefaultImprovementSuggestions holds the default value on creation for the improvement_suggestions field.
 	actionplanhistory.DefaultImprovementSuggestions = actionplanhistoryDescImprovementSuggestions.Default.([]string)
 	// actionplanhistoryDescDismissedImprovementSuggestions is the schema descriptor for dismissed_improvement_suggestions field.
-	actionplanhistoryDescDismissedImprovementSuggestions := actionplanhistoryFields[29].Descriptor()
+	actionplanhistoryDescDismissedImprovementSuggestions := actionplanhistoryFields[34].Descriptor()
 	// actionplanhistory.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	actionplanhistory.DefaultDismissedImprovementSuggestions = actionplanhistoryDescDismissedImprovementSuggestions.Default.([]string)
 	// actionplanhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	actionplanhistoryDescSystemOwned := actionplanhistoryFields[35].Descriptor()
+	actionplanhistoryDescSystemOwned := actionplanhistoryFields[40].Descriptor()
 	// actionplanhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	actionplanhistory.DefaultSystemOwned = actionplanhistoryDescSystemOwned.Default.(bool)
 	// actionplanhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	actionplanhistoryDescWorkflowEligibleMarker := actionplanhistoryFields[40].Descriptor()
+	actionplanhistoryDescWorkflowEligibleMarker := actionplanhistoryFields[45].Descriptor()
 	// actionplanhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	actionplanhistory.DefaultWorkflowEligibleMarker = actionplanhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// actionplanhistoryDescRequiresApproval is the schema descriptor for requires_approval field.
-	actionplanhistoryDescRequiresApproval := actionplanhistoryFields[46].Descriptor()
+	actionplanhistoryDescRequiresApproval := actionplanhistoryFields[51].Descriptor()
 	// actionplanhistory.DefaultRequiresApproval holds the default value on creation for the requires_approval field.
 	actionplanhistory.DefaultRequiresApproval = actionplanhistoryDescRequiresApproval.Default.(bool)
 	// actionplanhistoryDescBlocked is the schema descriptor for blocked field.
-	actionplanhistoryDescBlocked := actionplanhistoryFields[47].Descriptor()
+	actionplanhistoryDescBlocked := actionplanhistoryFields[52].Descriptor()
 	// actionplanhistory.DefaultBlocked holds the default value on creation for the blocked field.
 	actionplanhistory.DefaultBlocked = actionplanhistoryDescBlocked.Default.(bool)
 	// actionplanhistoryDescID is the schema descriptor for id field.
@@ -302,11 +302,11 @@ func init() {
 	// assethistory.DefaultTags holds the default value on creation for the tags field.
 	assethistory.DefaultTags = assethistoryDescTags.Default.([]string)
 	// assethistoryDescSystemOwned is the schema descriptor for system_owned field.
-	assethistoryDescSystemOwned := assethistoryFields[32].Descriptor()
+	assethistoryDescSystemOwned := assethistoryFields[38].Descriptor()
 	// assethistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	assethistory.DefaultSystemOwned = assethistoryDescSystemOwned.Default.(bool)
 	// assethistoryDescContainsPii is the schema descriptor for contains_pii field.
-	assethistoryDescContainsPii := assethistoryFields[43].Descriptor()
+	assethistoryDescContainsPii := assethistoryFields[49].Descriptor()
 	// assethistory.DefaultContainsPii holds the default value on creation for the contains_pii field.
 	assethistory.DefaultContainsPii = assethistoryDescContainsPii.Default.(bool)
 	// assethistoryDescID is the schema descriptor for id field.
@@ -343,27 +343,27 @@ func init() {
 	// campaignhistory.DefaultTags holds the default value on creation for the tags field.
 	campaignhistory.DefaultTags = campaignhistoryDescTags.Default.([]string)
 	// campaignhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	campaignhistoryDescWorkflowEligibleMarker := campaignhistoryFields[17].Descriptor()
+	campaignhistoryDescWorkflowEligibleMarker := campaignhistoryFields[18].Descriptor()
 	// campaignhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	campaignhistory.DefaultWorkflowEligibleMarker = campaignhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// campaignhistoryDescIsActive is the schema descriptor for is_active field.
-	campaignhistoryDescIsActive := campaignhistoryFields[22].Descriptor()
+	campaignhistoryDescIsActive := campaignhistoryFields[23].Descriptor()
 	// campaignhistory.DefaultIsActive holds the default value on creation for the is_active field.
 	campaignhistory.DefaultIsActive = campaignhistoryDescIsActive.Default.(bool)
 	// campaignhistoryDescIsRecurring is the schema descriptor for is_recurring field.
-	campaignhistoryDescIsRecurring := campaignhistoryFields[27].Descriptor()
+	campaignhistoryDescIsRecurring := campaignhistoryFields[28].Descriptor()
 	// campaignhistory.DefaultIsRecurring holds the default value on creation for the is_recurring field.
 	campaignhistory.DefaultIsRecurring = campaignhistoryDescIsRecurring.Default.(bool)
 	// campaignhistoryDescRecurrenceInterval is the schema descriptor for recurrence_interval field.
-	campaignhistoryDescRecurrenceInterval := campaignhistoryFields[29].Descriptor()
+	campaignhistoryDescRecurrenceInterval := campaignhistoryFields[30].Descriptor()
 	// campaignhistory.DefaultRecurrenceInterval holds the default value on creation for the recurrence_interval field.
 	campaignhistory.DefaultRecurrenceInterval = campaignhistoryDescRecurrenceInterval.Default.(int)
 	// campaignhistoryDescRecipientCount is the schema descriptor for recipient_count field.
-	campaignhistoryDescRecipientCount := campaignhistoryFields[35].Descriptor()
+	campaignhistoryDescRecipientCount := campaignhistoryFields[36].Descriptor()
 	// campaignhistory.DefaultRecipientCount holds the default value on creation for the recipient_count field.
 	campaignhistory.DefaultRecipientCount = campaignhistoryDescRecipientCount.Default.(int)
 	// campaignhistoryDescResendCount is the schema descriptor for resend_count field.
-	campaignhistoryDescResendCount := campaignhistoryFields[36].Descriptor()
+	campaignhistoryDescResendCount := campaignhistoryFields[37].Descriptor()
 	// campaignhistory.DefaultResendCount holds the default value on creation for the resend_count field.
 	campaignhistory.DefaultResendCount = campaignhistoryDescResendCount.Default.(int)
 	// campaignhistoryDescID is the schema descriptor for id field.
@@ -741,47 +741,47 @@ func init() {
 	// entityhistory.DefaultTags holds the default value on creation for the tags field.
 	entityhistory.DefaultTags = entityhistoryDescTags.Default.([]string)
 	// entityhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	entityhistoryDescSystemOwned := entityhistoryFields[20].Descriptor()
+	entityhistoryDescSystemOwned := entityhistoryFields[27].Descriptor()
 	// entityhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	entityhistory.DefaultSystemOwned = entityhistoryDescSystemOwned.Default.(bool)
 	// entityhistoryDescApprovedForUse is the schema descriptor for approved_for_use field.
-	entityhistoryDescApprovedForUse := entityhistoryFields[40].Descriptor()
+	entityhistoryDescApprovedForUse := entityhistoryFields[47].Descriptor()
 	// entityhistory.DefaultApprovedForUse holds the default value on creation for the approved_for_use field.
 	entityhistory.DefaultApprovedForUse = entityhistoryDescApprovedForUse.Default.(bool)
 	// entityhistoryDescLinkedAssetIds is the schema descriptor for linked_asset_ids field.
-	entityhistoryDescLinkedAssetIds := entityhistoryFields[41].Descriptor()
+	entityhistoryDescLinkedAssetIds := entityhistoryFields[48].Descriptor()
 	// entityhistory.DefaultLinkedAssetIds holds the default value on creation for the linked_asset_ids field.
 	entityhistory.DefaultLinkedAssetIds = entityhistoryDescLinkedAssetIds.Default.([]string)
 	// entityhistoryDescHasSoc2 is the schema descriptor for has_soc2 field.
-	entityhistoryDescHasSoc2 := entityhistoryFields[42].Descriptor()
+	entityhistoryDescHasSoc2 := entityhistoryFields[49].Descriptor()
 	// entityhistory.DefaultHasSoc2 holds the default value on creation for the has_soc2 field.
 	entityhistory.DefaultHasSoc2 = entityhistoryDescHasSoc2.Default.(bool)
 	// entityhistoryDescAutoRenews is the schema descriptor for auto_renews field.
-	entityhistoryDescAutoRenews := entityhistoryFields[46].Descriptor()
+	entityhistoryDescAutoRenews := entityhistoryFields[53].Descriptor()
 	// entityhistory.DefaultAutoRenews holds the default value on creation for the auto_renews field.
 	entityhistory.DefaultAutoRenews = entityhistoryDescAutoRenews.Default.(bool)
 	// entityhistoryDescSpendCurrency is the schema descriptor for spend_currency field.
-	entityhistoryDescSpendCurrency := entityhistoryFields[49].Descriptor()
+	entityhistoryDescSpendCurrency := entityhistoryFields[56].Descriptor()
 	// entityhistory.DefaultSpendCurrency holds the default value on creation for the spend_currency field.
 	entityhistory.DefaultSpendCurrency = entityhistoryDescSpendCurrency.Default.(string)
 	// entityhistoryDescSSOEnforced is the schema descriptor for sso_enforced field.
-	entityhistoryDescSSOEnforced := entityhistoryFields[52].Descriptor()
+	entityhistoryDescSSOEnforced := entityhistoryFields[59].Descriptor()
 	// entityhistory.DefaultSSOEnforced holds the default value on creation for the sso_enforced field.
 	entityhistory.DefaultSSOEnforced = entityhistoryDescSSOEnforced.Default.(bool)
 	// entityhistoryDescMfaSupported is the schema descriptor for mfa_supported field.
-	entityhistoryDescMfaSupported := entityhistoryFields[53].Descriptor()
+	entityhistoryDescMfaSupported := entityhistoryFields[60].Descriptor()
 	// entityhistory.DefaultMfaSupported holds the default value on creation for the mfa_supported field.
 	entityhistory.DefaultMfaSupported = entityhistoryDescMfaSupported.Default.(bool)
 	// entityhistoryDescMfaEnforced is the schema descriptor for mfa_enforced field.
-	entityhistoryDescMfaEnforced := entityhistoryFields[54].Descriptor()
+	entityhistoryDescMfaEnforced := entityhistoryFields[61].Descriptor()
 	// entityhistory.DefaultMfaEnforced holds the default value on creation for the mfa_enforced field.
 	entityhistory.DefaultMfaEnforced = entityhistoryDescMfaEnforced.Default.(bool)
 	// entityhistoryDescProvidedServices is the schema descriptor for provided_services field.
-	entityhistoryDescProvidedServices := entityhistoryFields[56].Descriptor()
+	entityhistoryDescProvidedServices := entityhistoryFields[63].Descriptor()
 	// entityhistory.DefaultProvidedServices holds the default value on creation for the provided_services field.
 	entityhistory.DefaultProvidedServices = entityhistoryDescProvidedServices.Default.([]string)
 	// entityhistoryDescLinks is the schema descriptor for links field.
-	entityhistoryDescLinks := entityhistoryFields[57].Descriptor()
+	entityhistoryDescLinks := entityhistoryFields[64].Descriptor()
 	// entityhistory.DefaultLinks holds the default value on creation for the links field.
 	entityhistory.DefaultLinks = entityhistoryDescLinks.Default.([]string)
 	// entityhistoryDescID is the schema descriptor for id field.
@@ -970,31 +970,31 @@ func init() {
 	// findinghistory.DefaultTags holds the default value on creation for the tags field.
 	findinghistory.DefaultTags = findinghistoryDescTags.Default.([]string)
 	// findinghistoryDescSystemOwned is the schema descriptor for system_owned field.
-	findinghistoryDescSystemOwned := findinghistoryFields[20].Descriptor()
+	findinghistoryDescSystemOwned := findinghistoryFields[27].Descriptor()
 	// findinghistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	findinghistory.DefaultSystemOwned = findinghistoryDescSystemOwned.Default.(bool)
 	// findinghistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	findinghistoryDescWorkflowEligibleMarker := findinghistoryFields[29].Descriptor()
+	findinghistoryDescWorkflowEligibleMarker := findinghistoryFields[36].Descriptor()
 	// findinghistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	findinghistory.DefaultWorkflowEligibleMarker = findinghistoryDescWorkflowEligibleMarker.Default.(bool)
 	// findinghistoryDescCategories is the schema descriptor for categories field.
-	findinghistoryDescCategories := findinghistoryFields[38].Descriptor()
+	findinghistoryDescCategories := findinghistoryFields[45].Descriptor()
 	// findinghistory.DefaultCategories holds the default value on creation for the categories field.
 	findinghistory.DefaultCategories = findinghistoryDescCategories.Default.([]string)
 	// findinghistoryDescOpen is the schema descriptor for open field.
-	findinghistoryDescOpen := findinghistoryFields[46].Descriptor()
+	findinghistoryDescOpen := findinghistoryFields[53].Descriptor()
 	// findinghistory.DefaultOpen holds the default value on creation for the open field.
 	findinghistory.DefaultOpen = findinghistoryDescOpen.Default.(bool)
 	// findinghistoryDescReferences is the schema descriptor for references field.
-	findinghistoryDescReferences := findinghistoryFields[55].Descriptor()
+	findinghistoryDescReferences := findinghistoryFields[62].Descriptor()
 	// findinghistory.DefaultReferences holds the default value on creation for the references field.
 	findinghistory.DefaultReferences = findinghistoryDescReferences.Default.([]string)
 	// findinghistoryDescStepsToReproduce is the schema descriptor for steps_to_reproduce field.
-	findinghistoryDescStepsToReproduce := findinghistoryFields[56].Descriptor()
+	findinghistoryDescStepsToReproduce := findinghistoryFields[63].Descriptor()
 	// findinghistory.DefaultStepsToReproduce holds the default value on creation for the steps_to_reproduce field.
 	findinghistory.DefaultStepsToReproduce = findinghistoryDescStepsToReproduce.Default.([]string)
 	// findinghistoryDescTargets is the schema descriptor for targets field.
-	findinghistoryDescTargets := findinghistoryFields[57].Descriptor()
+	findinghistoryDescTargets := findinghistoryFields[64].Descriptor()
 	// findinghistory.DefaultTargets holds the default value on creation for the targets field.
 	findinghistory.DefaultTargets = findinghistoryDescTargets.Default.([]string)
 	// findinghistoryDescID is the schema descriptor for id field.
@@ -1175,19 +1175,19 @@ func init() {
 	// identityholderhistory.DefaultTags holds the default value on creation for the tags field.
 	identityholderhistory.DefaultTags = identityholderhistoryDescTags.Default.([]string)
 	// identityholderhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	identityholderhistoryDescWorkflowEligibleMarker := identityholderhistoryFields[21].Descriptor()
+	identityholderhistoryDescWorkflowEligibleMarker := identityholderhistoryFields[22].Descriptor()
 	// identityholderhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	identityholderhistory.DefaultWorkflowEligibleMarker = identityholderhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// identityholderhistoryDescEmailAliases is the schema descriptor for email_aliases field.
-	identityholderhistoryDescEmailAliases := identityholderhistoryFields[25].Descriptor()
+	identityholderhistoryDescEmailAliases := identityholderhistoryFields[26].Descriptor()
 	// identityholderhistory.DefaultEmailAliases holds the default value on creation for the email_aliases field.
 	identityholderhistory.DefaultEmailAliases = identityholderhistoryDescEmailAliases.Default.([]string)
 	// identityholderhistoryDescIsOpenlaneUser is the schema descriptor for is_openlane_user field.
-	identityholderhistoryDescIsOpenlaneUser := identityholderhistoryFields[27].Descriptor()
+	identityholderhistoryDescIsOpenlaneUser := identityholderhistoryFields[28].Descriptor()
 	// identityholderhistory.DefaultIsOpenlaneUser holds the default value on creation for the is_openlane_user field.
 	identityholderhistory.DefaultIsOpenlaneUser = identityholderhistoryDescIsOpenlaneUser.Default.(bool)
 	// identityholderhistoryDescIsActive is the schema descriptor for is_active field.
-	identityholderhistoryDescIsActive := identityholderhistoryFields[31].Descriptor()
+	identityholderhistoryDescIsActive := identityholderhistoryFields[32].Descriptor()
 	// identityholderhistory.DefaultIsActive holds the default value on creation for the is_active field.
 	identityholderhistory.DefaultIsActive = identityholderhistoryDescIsActive.Default.(bool)
 	// identityholderhistoryDescID is the schema descriptor for id field.
@@ -1228,43 +1228,43 @@ func init() {
 	// internalpolicyhistory.DefaultRevision holds the default value on creation for the revision field.
 	internalpolicyhistory.DefaultRevision = internalpolicyhistoryDescRevision.Default.(string)
 	// internalpolicyhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	internalpolicyhistoryDescSystemOwned := internalpolicyhistoryFields[15].Descriptor()
+	internalpolicyhistoryDescSystemOwned := internalpolicyhistoryFields[20].Descriptor()
 	// internalpolicyhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	internalpolicyhistory.DefaultSystemOwned = internalpolicyhistoryDescSystemOwned.Default.(bool)
 	// internalpolicyhistoryDescApprovalRequired is the schema descriptor for approval_required field.
-	internalpolicyhistoryDescApprovalRequired := internalpolicyhistoryFields[23].Descriptor()
+	internalpolicyhistoryDescApprovalRequired := internalpolicyhistoryFields[28].Descriptor()
 	// internalpolicyhistory.DefaultApprovalRequired holds the default value on creation for the approval_required field.
 	internalpolicyhistory.DefaultApprovalRequired = internalpolicyhistoryDescApprovalRequired.Default.(bool)
 	// internalpolicyhistoryDescReviewDue is the schema descriptor for review_due field.
-	internalpolicyhistoryDescReviewDue := internalpolicyhistoryFields[24].Descriptor()
+	internalpolicyhistoryDescReviewDue := internalpolicyhistoryFields[29].Descriptor()
 	// internalpolicyhistory.DefaultReviewDue holds the default value on creation for the review_due field.
 	internalpolicyhistory.DefaultReviewDue = internalpolicyhistoryDescReviewDue.Default.(time.Time)
 	// internalpolicyhistoryDescTagSuggestions is the schema descriptor for tag_suggestions field.
-	internalpolicyhistoryDescTagSuggestions := internalpolicyhistoryFields[29].Descriptor()
+	internalpolicyhistoryDescTagSuggestions := internalpolicyhistoryFields[34].Descriptor()
 	// internalpolicyhistory.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
 	internalpolicyhistory.DefaultTagSuggestions = internalpolicyhistoryDescTagSuggestions.Default.([]string)
 	// internalpolicyhistoryDescDismissedTagSuggestions is the schema descriptor for dismissed_tag_suggestions field.
-	internalpolicyhistoryDescDismissedTagSuggestions := internalpolicyhistoryFields[30].Descriptor()
+	internalpolicyhistoryDescDismissedTagSuggestions := internalpolicyhistoryFields[35].Descriptor()
 	// internalpolicyhistory.DefaultDismissedTagSuggestions holds the default value on creation for the dismissed_tag_suggestions field.
 	internalpolicyhistory.DefaultDismissedTagSuggestions = internalpolicyhistoryDescDismissedTagSuggestions.Default.([]string)
 	// internalpolicyhistoryDescControlSuggestions is the schema descriptor for control_suggestions field.
-	internalpolicyhistoryDescControlSuggestions := internalpolicyhistoryFields[31].Descriptor()
+	internalpolicyhistoryDescControlSuggestions := internalpolicyhistoryFields[36].Descriptor()
 	// internalpolicyhistory.DefaultControlSuggestions holds the default value on creation for the control_suggestions field.
 	internalpolicyhistory.DefaultControlSuggestions = internalpolicyhistoryDescControlSuggestions.Default.([]string)
 	// internalpolicyhistoryDescDismissedControlSuggestions is the schema descriptor for dismissed_control_suggestions field.
-	internalpolicyhistoryDescDismissedControlSuggestions := internalpolicyhistoryFields[32].Descriptor()
+	internalpolicyhistoryDescDismissedControlSuggestions := internalpolicyhistoryFields[37].Descriptor()
 	// internalpolicyhistory.DefaultDismissedControlSuggestions holds the default value on creation for the dismissed_control_suggestions field.
 	internalpolicyhistory.DefaultDismissedControlSuggestions = internalpolicyhistoryDescDismissedControlSuggestions.Default.([]string)
 	// internalpolicyhistoryDescImprovementSuggestions is the schema descriptor for improvement_suggestions field.
-	internalpolicyhistoryDescImprovementSuggestions := internalpolicyhistoryFields[33].Descriptor()
+	internalpolicyhistoryDescImprovementSuggestions := internalpolicyhistoryFields[38].Descriptor()
 	// internalpolicyhistory.DefaultImprovementSuggestions holds the default value on creation for the improvement_suggestions field.
 	internalpolicyhistory.DefaultImprovementSuggestions = internalpolicyhistoryDescImprovementSuggestions.Default.([]string)
 	// internalpolicyhistoryDescDismissedImprovementSuggestions is the schema descriptor for dismissed_improvement_suggestions field.
-	internalpolicyhistoryDescDismissedImprovementSuggestions := internalpolicyhistoryFields[34].Descriptor()
+	internalpolicyhistoryDescDismissedImprovementSuggestions := internalpolicyhistoryFields[39].Descriptor()
 	// internalpolicyhistory.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	internalpolicyhistory.DefaultDismissedImprovementSuggestions = internalpolicyhistoryDescDismissedImprovementSuggestions.Default.([]string)
 	// internalpolicyhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	internalpolicyhistoryDescWorkflowEligibleMarker := internalpolicyhistoryFields[45].Descriptor()
+	internalpolicyhistoryDescWorkflowEligibleMarker := internalpolicyhistoryFields[50].Descriptor()
 	// internalpolicyhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	internalpolicyhistory.DefaultWorkflowEligibleMarker = internalpolicyhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// internalpolicyhistoryDescID is the schema descriptor for id field.
@@ -1682,11 +1682,11 @@ func init() {
 	// platformhistory.DefaultTags holds the default value on creation for the tags field.
 	platformhistory.DefaultTags = platformhistoryDescTags.Default.([]string)
 	// platformhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	platformhistoryDescWorkflowEligibleMarker := platformhistoryFields[42].Descriptor()
+	platformhistoryDescWorkflowEligibleMarker := platformhistoryFields[46].Descriptor()
 	// platformhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	platformhistory.DefaultWorkflowEligibleMarker = platformhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// platformhistoryDescContainsPii is the schema descriptor for contains_pii field.
-	platformhistoryDescContainsPii := platformhistoryFields[53].Descriptor()
+	platformhistoryDescContainsPii := platformhistoryFields[57].Descriptor()
 	// platformhistory.DefaultContainsPii holds the default value on creation for the contains_pii field.
 	platformhistory.DefaultContainsPii = platformhistoryDescContainsPii.Default.(bool)
 	// platformhistoryDescID is the schema descriptor for id field.
@@ -1727,43 +1727,43 @@ func init() {
 	// procedurehistory.DefaultRevision holds the default value on creation for the revision field.
 	procedurehistory.DefaultRevision = procedurehistoryDescRevision.Default.(string)
 	// procedurehistoryDescApprovalRequired is the schema descriptor for approval_required field.
-	procedurehistoryDescApprovalRequired := procedurehistoryFields[20].Descriptor()
+	procedurehistoryDescApprovalRequired := procedurehistoryFields[25].Descriptor()
 	// procedurehistory.DefaultApprovalRequired holds the default value on creation for the approval_required field.
 	procedurehistory.DefaultApprovalRequired = procedurehistoryDescApprovalRequired.Default.(bool)
 	// procedurehistoryDescReviewDue is the schema descriptor for review_due field.
-	procedurehistoryDescReviewDue := procedurehistoryFields[21].Descriptor()
+	procedurehistoryDescReviewDue := procedurehistoryFields[26].Descriptor()
 	// procedurehistory.DefaultReviewDue holds the default value on creation for the review_due field.
 	procedurehistory.DefaultReviewDue = procedurehistoryDescReviewDue.Default.(time.Time)
 	// procedurehistoryDescTagSuggestions is the schema descriptor for tag_suggestions field.
-	procedurehistoryDescTagSuggestions := procedurehistoryFields[26].Descriptor()
+	procedurehistoryDescTagSuggestions := procedurehistoryFields[31].Descriptor()
 	// procedurehistory.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
 	procedurehistory.DefaultTagSuggestions = procedurehistoryDescTagSuggestions.Default.([]string)
 	// procedurehistoryDescDismissedTagSuggestions is the schema descriptor for dismissed_tag_suggestions field.
-	procedurehistoryDescDismissedTagSuggestions := procedurehistoryFields[27].Descriptor()
+	procedurehistoryDescDismissedTagSuggestions := procedurehistoryFields[32].Descriptor()
 	// procedurehistory.DefaultDismissedTagSuggestions holds the default value on creation for the dismissed_tag_suggestions field.
 	procedurehistory.DefaultDismissedTagSuggestions = procedurehistoryDescDismissedTagSuggestions.Default.([]string)
 	// procedurehistoryDescControlSuggestions is the schema descriptor for control_suggestions field.
-	procedurehistoryDescControlSuggestions := procedurehistoryFields[28].Descriptor()
+	procedurehistoryDescControlSuggestions := procedurehistoryFields[33].Descriptor()
 	// procedurehistory.DefaultControlSuggestions holds the default value on creation for the control_suggestions field.
 	procedurehistory.DefaultControlSuggestions = procedurehistoryDescControlSuggestions.Default.([]string)
 	// procedurehistoryDescDismissedControlSuggestions is the schema descriptor for dismissed_control_suggestions field.
-	procedurehistoryDescDismissedControlSuggestions := procedurehistoryFields[29].Descriptor()
+	procedurehistoryDescDismissedControlSuggestions := procedurehistoryFields[34].Descriptor()
 	// procedurehistory.DefaultDismissedControlSuggestions holds the default value on creation for the dismissed_control_suggestions field.
 	procedurehistory.DefaultDismissedControlSuggestions = procedurehistoryDescDismissedControlSuggestions.Default.([]string)
 	// procedurehistoryDescImprovementSuggestions is the schema descriptor for improvement_suggestions field.
-	procedurehistoryDescImprovementSuggestions := procedurehistoryFields[30].Descriptor()
+	procedurehistoryDescImprovementSuggestions := procedurehistoryFields[35].Descriptor()
 	// procedurehistory.DefaultImprovementSuggestions holds the default value on creation for the improvement_suggestions field.
 	procedurehistory.DefaultImprovementSuggestions = procedurehistoryDescImprovementSuggestions.Default.([]string)
 	// procedurehistoryDescDismissedImprovementSuggestions is the schema descriptor for dismissed_improvement_suggestions field.
-	procedurehistoryDescDismissedImprovementSuggestions := procedurehistoryFields[31].Descriptor()
+	procedurehistoryDescDismissedImprovementSuggestions := procedurehistoryFields[36].Descriptor()
 	// procedurehistory.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	procedurehistory.DefaultDismissedImprovementSuggestions = procedurehistoryDescDismissedImprovementSuggestions.Default.([]string)
 	// procedurehistoryDescSystemOwned is the schema descriptor for system_owned field.
-	procedurehistoryDescSystemOwned := procedurehistoryFields[36].Descriptor()
+	procedurehistoryDescSystemOwned := procedurehistoryFields[41].Descriptor()
 	// procedurehistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	procedurehistory.DefaultSystemOwned = procedurehistoryDescSystemOwned.Default.(bool)
 	// procedurehistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	procedurehistoryDescWorkflowEligibleMarker := procedurehistoryFields[45].Descriptor()
+	procedurehistoryDescWorkflowEligibleMarker := procedurehistoryFields[50].Descriptor()
 	// procedurehistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	procedurehistory.DefaultWorkflowEligibleMarker = procedurehistoryDescWorkflowEligibleMarker.Default.(bool)
 	// procedurehistoryDescID is the schema descriptor for id field.
@@ -1956,11 +1956,11 @@ func init() {
 	// riskhistory.DefaultTags holds the default value on creation for the tags field.
 	riskhistory.DefaultTags = riskhistoryDescTags.Default.([]string)
 	// riskhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	riskhistoryDescWorkflowEligibleMarker := riskhistoryFields[22].Descriptor()
+	riskhistoryDescWorkflowEligibleMarker := riskhistoryFields[27].Descriptor()
 	// riskhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	riskhistory.DefaultWorkflowEligibleMarker = riskhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// riskhistoryDescReviewRequired is the schema descriptor for review_required field.
-	riskhistoryDescReviewRequired := riskhistoryFields[41].Descriptor()
+	riskhistoryDescReviewRequired := riskhistoryFields[46].Descriptor()
 	// riskhistory.DefaultReviewRequired holds the default value on creation for the review_required field.
 	riskhistory.DefaultReviewRequired = riskhistoryDescReviewRequired.Default.(bool)
 	// riskhistoryDescID is the schema descriptor for id field.
@@ -2765,31 +2765,31 @@ func init() {
 	// vulnerabilityhistory.DefaultTags holds the default value on creation for the tags field.
 	vulnerabilityhistory.DefaultTags = vulnerabilityhistoryDescTags.Default.([]string)
 	// vulnerabilityhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	vulnerabilityhistoryDescSystemOwned := vulnerabilityhistoryFields[20].Descriptor()
+	vulnerabilityhistoryDescSystemOwned := vulnerabilityhistoryFields[27].Descriptor()
 	// vulnerabilityhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	vulnerabilityhistory.DefaultSystemOwned = vulnerabilityhistoryDescSystemOwned.Default.(bool)
 	// vulnerabilityhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	vulnerabilityhistoryDescWorkflowEligibleMarker := vulnerabilityhistoryFields[29].Descriptor()
+	vulnerabilityhistoryDescWorkflowEligibleMarker := vulnerabilityhistoryFields[36].Descriptor()
 	// vulnerabilityhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	vulnerabilityhistory.DefaultWorkflowEligibleMarker = vulnerabilityhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// vulnerabilityhistoryDescOpen is the schema descriptor for open field.
-	vulnerabilityhistoryDescOpen := vulnerabilityhistoryFields[46].Descriptor()
+	vulnerabilityhistoryDescOpen := vulnerabilityhistoryFields[53].Descriptor()
 	// vulnerabilityhistory.DefaultOpen holds the default value on creation for the open field.
 	vulnerabilityhistory.DefaultOpen = vulnerabilityhistoryDescOpen.Default.(bool)
 	// vulnerabilityhistoryDescBlocking is the schema descriptor for blocking field.
-	vulnerabilityhistoryDescBlocking := vulnerabilityhistoryFields[47].Descriptor()
+	vulnerabilityhistoryDescBlocking := vulnerabilityhistoryFields[54].Descriptor()
 	// vulnerabilityhistory.DefaultBlocking holds the default value on creation for the blocking field.
 	vulnerabilityhistory.DefaultBlocking = vulnerabilityhistoryDescBlocking.Default.(bool)
 	// vulnerabilityhistoryDescReferences is the schema descriptor for references field.
-	vulnerabilityhistoryDescReferences := vulnerabilityhistoryFields[51].Descriptor()
+	vulnerabilityhistoryDescReferences := vulnerabilityhistoryFields[58].Descriptor()
 	// vulnerabilityhistory.DefaultReferences holds the default value on creation for the references field.
 	vulnerabilityhistory.DefaultReferences = vulnerabilityhistoryDescReferences.Default.([]string)
 	// vulnerabilityhistoryDescImpacts is the schema descriptor for impacts field.
-	vulnerabilityhistoryDescImpacts := vulnerabilityhistoryFields[52].Descriptor()
+	vulnerabilityhistoryDescImpacts := vulnerabilityhistoryFields[59].Descriptor()
 	// vulnerabilityhistory.DefaultImpacts holds the default value on creation for the impacts field.
 	vulnerabilityhistory.DefaultImpacts = vulnerabilityhistoryDescImpacts.Default.([]string)
 	// vulnerabilityhistoryDescCweIds is the schema descriptor for cwe_ids field.
-	vulnerabilityhistoryDescCweIds := vulnerabilityhistoryFields[53].Descriptor()
+	vulnerabilityhistoryDescCweIds := vulnerabilityhistoryFields[60].Descriptor()
 	// vulnerabilityhistory.DefaultCweIds holds the default value on creation for the cwe_ids field.
 	vulnerabilityhistory.DefaultCweIds = vulnerabilityhistoryDescCweIds.Default.([]string)
 	// vulnerabilityhistoryDescID is the schema descriptor for id field.

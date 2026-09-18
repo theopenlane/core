@@ -583,10 +583,6 @@ func (ec *executionContext) _VendorScoringConfigUpdatePayload(ctx context.Contex
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNVendorScoringConfigBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorScoringConfigBulkCreatePayload) graphql.Marshaler {
-	return ec._VendorScoringConfigBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNVendorScoringConfigBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorScoringConfigBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNVendorScoringConfigBulkCreatePayload2ᚖgith
 		return graphql.Null
 	}
 	return ec._VendorScoringConfigBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNVendorScoringConfigBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorScoringConfigBulkDeletePayload) graphql.Marshaler {
-	return ec._VendorScoringConfigBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNVendorScoringConfigBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorScoringConfigBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNVendorScoringConfigBulkDeletePayload2ᚖgith
 	return ec._VendorScoringConfigBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNVendorScoringConfigBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorScoringConfigBulkUpdatePayload) graphql.Marshaler {
-	return ec._VendorScoringConfigBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNVendorScoringConfigBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorScoringConfigBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNVendorScoringConfigBulkUpdatePayload2ᚖgith
 		return graphql.Null
 	}
 	return ec._VendorScoringConfigBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNVendorScoringConfigCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorScoringConfigCreatePayload) graphql.Marshaler {
-	return ec._VendorScoringConfigCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNVendorScoringConfigCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorScoringConfigCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNVendorScoringConfigCreatePayload2ᚖgithub�
 	return ec._VendorScoringConfigCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNVendorScoringConfigDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorScoringConfigDeletePayload) graphql.Marshaler {
-	return ec._VendorScoringConfigDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNVendorScoringConfigDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorScoringConfigDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNVendorScoringConfigDeletePayload2ᚖgithub�
 		return graphql.Null
 	}
 	return ec._VendorScoringConfigDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNVendorScoringConfigUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorScoringConfigUpdatePayload) graphql.Marshaler {
-	return ec._VendorScoringConfigUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNVendorScoringConfigUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorScoringConfigUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorScoringConfigUpdatePayload) graphql.Marshaler {

@@ -6,9 +6,7 @@ mutation CreateBulkCSVDirectoryGroup ($input: Upload!) {
 			createdAt
 			createdBy
 			description
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			email
@@ -16,21 +14,23 @@ mutation CreateBulkCSVDirectoryGroup ($input: Upload!) {
 			environmentName
 			externalID
 			externalSharingAllowed
-			firstSeenAt
 			id
 			integrationID
-			lastSeenAt
+			integrationRunID
+			managedBy
 			memberCount
 			metadata
 			observedAt
 			ownerID
 			platformID
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceVersion
 			status
 			tags
@@ -48,9 +48,7 @@ mutation CreateBulkDirectoryGroup ($input: [CreateDirectoryGroupInput!]) {
 			createdAt
 			createdBy
 			description
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			email
@@ -58,21 +56,23 @@ mutation CreateBulkDirectoryGroup ($input: [CreateDirectoryGroupInput!]) {
 			environmentName
 			externalID
 			externalSharingAllowed
-			firstSeenAt
 			id
 			integrationID
-			lastSeenAt
+			integrationRunID
+			managedBy
 			memberCount
 			metadata
 			observedAt
 			ownerID
 			platformID
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceVersion
 			status
 			tags
@@ -90,9 +90,7 @@ mutation CreateDirectoryGroup ($input: CreateDirectoryGroupInput!) {
 			createdAt
 			createdBy
 			description
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			email
@@ -100,21 +98,23 @@ mutation CreateDirectoryGroup ($input: CreateDirectoryGroupInput!) {
 			environmentName
 			externalID
 			externalSharingAllowed
-			firstSeenAt
 			id
 			integrationID
-			lastSeenAt
+			integrationRunID
+			managedBy
 			memberCount
 			metadata
 			observedAt
 			ownerID
 			platformID
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceVersion
 			status
 			tags
@@ -144,7 +144,6 @@ query GetAllDirectoryGroups {
 				createdAt
 				createdBy
 				description
-				directorySyncRunID
 				displayID
 				displayName
 				email
@@ -156,7 +155,6 @@ query GetAllDirectoryGroups {
 				observedAt
 				ownerID
 				profile
-				profileHash
 				rawProfileFileID
 				sourceVersion
 				status
@@ -174,9 +172,7 @@ query GetDirectoryGroupByID ($directoryGroupId: ID!) {
 		createdAt
 		createdBy
 		description
-		directoryInstanceID
 		directoryName
-		directorySyncRunID
 		displayID
 		displayName
 		email
@@ -184,21 +180,23 @@ query GetDirectoryGroupByID ($directoryGroupId: ID!) {
 		environmentName
 		externalID
 		externalSharingAllowed
-		firstSeenAt
 		id
 		integrationID
-		lastSeenAt
+		integrationRunID
+		managedBy
 		memberCount
 		metadata
 		observedAt
 		ownerID
 		platformID
 		profile
-		profileHash
 		rawProfileFileID
 		removedAt
 		scopeID
 		scopeName
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		sourceVersion
 		status
 		tags
@@ -222,7 +220,6 @@ query GetDirectoryGroups ($first: Int, $last: Int, $where: DirectoryGroupWhereIn
 				createdAt
 				createdBy
 				description
-				directorySyncRunID
 				displayID
 				displayName
 				email
@@ -234,7 +231,6 @@ query GetDirectoryGroups ($first: Int, $last: Int, $where: DirectoryGroupWhereIn
 				observedAt
 				ownerID
 				profile
-				profileHash
 				rawProfileFileID
 				sourceVersion
 				status
@@ -253,9 +249,7 @@ mutation UpdateDirectoryGroup ($updateDirectoryGroupId: ID!, $input: UpdateDirec
 			createdAt
 			createdBy
 			description
-			directoryInstanceID
 			directoryName
-			directorySyncRunID
 			displayID
 			displayName
 			email
@@ -263,21 +257,23 @@ mutation UpdateDirectoryGroup ($updateDirectoryGroupId: ID!, $input: UpdateDirec
 			environmentName
 			externalID
 			externalSharingAllowed
-			firstSeenAt
 			id
 			integrationID
-			lastSeenAt
+			integrationRunID
+			managedBy
 			memberCount
 			metadata
 			observedAt
 			ownerID
 			platformID
 			profile
-			profileHash
 			rawProfileFileID
 			removedAt
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceVersion
 			status
 			tags

@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -21,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 const (
@@ -301,20 +301,14 @@ func installationTokenClient(ctx context.Context, cfg Config, jwtToken string) *
 	}
 
 	if cfg.APIURL != "" {
-		apiURL, err := url.Parse(strings.TrimRight(cfg.APIURL, "/") + "/api/v3/")
+		apiURL, err := urlx.ParseAbsolute(cfg.APIURL)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("api url in config is not valid, unable to create client")
 			return nil
 		}
 
-		uploadURL, err := url.Parse(strings.TrimRight(cfg.APIURL, "/") + "/api/uploads/")
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("unable to get upload url, unable to create client")
-			return nil
-		}
-
-		baseURLStr := apiURL.String()
-		uploadURLStr := uploadURL.String()
+		baseURLStr := apiURL.JoinPath(enterpriseAPIPath).String()
+		uploadURLStr := apiURL.JoinPath(enterpriseUploadPath).String()
 
 		opts = append(opts, gh.WithURLs(&baseURLStr, &uploadURLStr))
 	}

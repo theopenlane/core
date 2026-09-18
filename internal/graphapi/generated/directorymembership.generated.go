@@ -312,10 +312,6 @@ func (ec *executionContext) _DirectoryMembershipUpdatePayload(ctx context.Contex
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNDirectoryMembershipBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectoryMembershipBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DirectoryMembershipBulkCreatePayload) graphql.Marshaler {
-	return ec._DirectoryMembershipBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDirectoryMembershipBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectoryMembershipBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectoryMembershipBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -324,10 +320,6 @@ func (ec *executionContext) marshalNDirectoryMembershipBulkCreatePayload2ᚖgith
 		return graphql.Null
 	}
 	return ec._DirectoryMembershipBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDirectoryMembershipCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectoryMembershipCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DirectoryMembershipCreatePayload) graphql.Marshaler {
-	return ec._DirectoryMembershipCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDirectoryMembershipCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectoryMembershipCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectoryMembershipCreatePayload) graphql.Marshaler {
@@ -340,10 +332,6 @@ func (ec *executionContext) marshalNDirectoryMembershipCreatePayload2ᚖgithub�
 	return ec._DirectoryMembershipCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDirectoryMembershipDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectoryMembershipDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DirectoryMembershipDeletePayload) graphql.Marshaler {
-	return ec._DirectoryMembershipDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDirectoryMembershipDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectoryMembershipDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectoryMembershipDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -352,10 +340,6 @@ func (ec *executionContext) marshalNDirectoryMembershipDeletePayload2ᚖgithub�
 		return graphql.Null
 	}
 	return ec._DirectoryMembershipDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDirectoryMembershipUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectoryMembershipUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DirectoryMembershipUpdatePayload) graphql.Marshaler {
-	return ec._DirectoryMembershipUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDirectoryMembershipUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectoryMembershipUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectoryMembershipUpdatePayload) graphql.Marshaler {

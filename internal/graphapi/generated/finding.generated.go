@@ -583,10 +583,6 @@ func (ec *executionContext) _FindingUpdatePayload(ctx context.Context, sel ast.S
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNFindingBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingBulkCreatePayload) graphql.Marshaler {
-	return ec._FindingBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNFindingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNFindingBulkCreatePayload2ᚖgithubᚗcomᚋt
 		return graphql.Null
 	}
 	return ec._FindingBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNFindingBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingBulkDeletePayload) graphql.Marshaler {
-	return ec._FindingBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNFindingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNFindingBulkDeletePayload2ᚖgithubᚗcomᚋt
 	return ec._FindingBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNFindingBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingBulkUpdatePayload) graphql.Marshaler {
-	return ec._FindingBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNFindingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNFindingBulkUpdatePayload2ᚖgithubᚗcomᚋt
 		return graphql.Null
 	}
 	return ec._FindingBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNFindingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingCreatePayload) graphql.Marshaler {
-	return ec._FindingCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNFindingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNFindingCreatePayload2ᚖgithubᚗcomᚋtheop
 	return ec._FindingCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNFindingDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingDeletePayload) graphql.Marshaler {
-	return ec._FindingDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNFindingDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNFindingDeletePayload2ᚖgithubᚗcomᚋtheop
 		return graphql.Null
 	}
 	return ec._FindingDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNFindingUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingUpdatePayload) graphql.Marshaler {
-	return ec._FindingUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNFindingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingUpdatePayload) graphql.Marshaler {

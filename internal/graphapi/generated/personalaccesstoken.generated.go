@@ -312,10 +312,6 @@ func (ec *executionContext) _PersonalAccessTokenUpdatePayload(ctx context.Contex
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNPersonalAccessTokenCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPersonalAccessTokenCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.PersonalAccessTokenCreatePayload) graphql.Marshaler {
-	return ec._PersonalAccessTokenCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNPersonalAccessTokenCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPersonalAccessTokenCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.PersonalAccessTokenCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -326,10 +322,6 @@ func (ec *executionContext) marshalNPersonalAccessTokenCreatePayload2ᚖgithub�
 	return ec._PersonalAccessTokenCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNPersonalAccessTokenDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPersonalAccessTokenDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.PersonalAccessTokenDeletePayload) graphql.Marshaler {
-	return ec._PersonalAccessTokenDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNPersonalAccessTokenDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPersonalAccessTokenDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.PersonalAccessTokenDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -338,10 +330,6 @@ func (ec *executionContext) marshalNPersonalAccessTokenDeletePayload2ᚖgithub�
 		return graphql.Null
 	}
 	return ec._PersonalAccessTokenDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNPersonalAccessTokenUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPersonalAccessTokenUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.PersonalAccessTokenUpdatePayload) graphql.Marshaler {
-	return ec._PersonalAccessTokenUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNPersonalAccessTokenUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPersonalAccessTokenUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.PersonalAccessTokenUpdatePayload) graphql.Marshaler {

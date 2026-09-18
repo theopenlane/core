@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/url"
 	"strings"
 
 	"github.com/theopenlane/newman"
@@ -89,7 +88,7 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 		return err
 	}
 
-	authURL, err := QuestionnaireAuthURL(ctx, db, camp.AssessmentID, camp.OwnerID, email, isTest)
+	authURL, err := QuestionnaireAuthURL(ctx, db, camp.AssessmentID, camp.OwnerID, email, camp.ID, isTest)
 	if err != nil {
 		return err
 	}
@@ -125,14 +124,19 @@ func sendQuestionnaireToRecipient(ctx context.Context, req types.OperationReques
 	return markCampaignTargetSent(ctx, db, campaignTargetID)
 }
 
+// questionnairePath is the product route serving questionnaire access links
+const questionnairePath = "questionnaire"
+
 // QuestionnaireAuthURL generates an anonymous access token URL for questionnaire access.
 // When isTest is true the token is marked as a sender preview so the questionnaire resolves
 // to the test response rather than a real recipient's response
-func QuestionnaireAuthURL(ctx context.Context, db *generated.Client, assessmentID, ownerID, recipientEmail string, isTest bool) (string, error) {
-	baseURL, err := url.Parse(db.EntConfig.QuestionnaireProductURL + "/questionnaire")
+func QuestionnaireAuthURL(ctx context.Context, db *generated.Client, assessmentID, ownerID, recipientEmail, campaignID string, isTest bool) (string, error) {
+	productURL, err := urlx.ParseAbsolute(db.EntConfig.QuestionnaireProductURL)
 	if err != nil {
 		return "", fmt.Errorf("parse questionnaire URL: %w", err)
 	}
+
+	baseURL := productURL.JoinPath(questionnairePath)
 
 	result, err := urlx.GenerateAnonTokenURL(ctx, db.TokenManager, db.Shortlinks, *baseURL, urlx.AnonTokenRequest{
 		Prefix:    authmanager.AnonQuestionnaireJWTPrefix,
@@ -143,6 +147,10 @@ func QuestionnaireAuthURL(ctx context.Context, db *generated.Client, assessmentI
 		ExtraClaims: func(c *tokens.Claims) {
 			c.AssessmentID = assessmentID
 			c.AssessmentPreview = isTest
+
+			if campaignID != "" {
+				c.CampaignID = campaignID
+			}
 		},
 	})
 	if err != nil {

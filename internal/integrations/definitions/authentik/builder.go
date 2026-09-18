@@ -2,6 +2,8 @@ package authentik
 
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -35,13 +37,16 @@ func Builder() registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       authentikCredential.ID(),
-					Name:                "Authentik API Token",
-					Description:         "Configure Authentik access using an API token from your instance.",
-					CredentialRefs:      []types.CredentialSlotID{authentikCredential.ID()},
-					ClientRefs:          []types.ClientID{authentikClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         integration.Registration(),
+					CredentialRef:  authentikCredential.ID(),
+					Name:           "Authentik API Token",
+					Description:    "Configure Authentik access using an API token from your instance.",
+					CredentialRefs: []types.CredentialSlotID{authentikCredential.ID()},
+					ClientRefs:     []types.ClientID{authentikClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: authentikClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: integration.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: authentikCredential.ID(),
 						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Authentik admin panel under Directory > Tokens.",
@@ -58,22 +63,12 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Call Authentik API to verify token and instance connectivity",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
+					Name:         directorySyncOperation.Name(),
+					Description:  "Collect Authentik directory users, groups, and memberships as directory accounts",
+					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:    authentikClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: healthCheckSchema,
-					Handle:       HealthCheck{}.Handle(),
-				},
-				{
-					Name:                directorySyncOperation.Name(),
-					Description:         "Collect Authentik directory users, groups, and memberships as directory accounts",
-					Topic:               definitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:           authentikClient.ID(),
-					ConfigSchema:        directorySyncSchema,
-					Policy:              types.ExecutionPolicy{Reconcile: true},
-					SkipDefaultLookback: true,
+					ConfigSchema: directorySyncSchema,
+					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -108,6 +103,18 @@ func Builder() registry.Builder {
 					Spec: types.MappingOverride{
 						FilterExpr: "true",
 						MapExpr:    mapExprDirectoryMembership,
+						Links: []types.LinkRule{
+							{
+								TargetSchema: entityops.SchemaDirectoryAccount.Name,
+								TargetField:  directoryaccount.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
+							},
+							{
+								TargetSchema: entityops.SchemaDirectoryGroup.Name,
+								TargetField:  directorygroup.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
+							},
+						},
 					},
 				},
 			},

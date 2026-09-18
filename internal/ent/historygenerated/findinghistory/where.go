@@ -119,6 +119,31 @@ func DisplayID(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldDisplayID, v))
 }
 
+// SourceDefinitionID applies equality check predicate on the "source_definition_id" field. It's identical to SourceDefinitionIDEQ.
+func SourceDefinitionID(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionVersion applies equality check predicate on the "source_definition_version" field. It's identical to SourceDefinitionVersionEQ.
+func SourceDefinitionVersion(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldSourceDefinitionVersion, v))
+}
+
+// SourceInstanceID applies equality check predicate on the "source_instance_id" field. It's identical to SourceInstanceIDEQ.
+func SourceInstanceID(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldSourceInstanceID, v))
+}
+
+// ManagedBy applies equality check predicate on the "managed_by" field. It's identical to ManagedByEQ.
+func ManagedBy(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldManagedBy, v))
+}
+
+// IntegrationRunID applies equality check predicate on the "integration_run_id" field. It's identical to IntegrationRunIDEQ.
+func IntegrationRunID(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldIntegrationRunID, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldOwnerID, v))
@@ -139,6 +164,11 @@ func ReviewedByGroupID(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldReviewedByGroupID, v))
 }
 
+// ReviewedByIdentityHolderID applies equality check predicate on the "reviewed_by_identity_holder_id" field. It's identical to ReviewedByIdentityHolderIDEQ.
+func ReviewedByIdentityHolderID(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldReviewedByIdentityHolderID, v))
+}
+
 // AssignedTo applies equality check predicate on the "assigned_to" field. It's identical to AssignedToEQ.
 func AssignedTo(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldAssignedTo, v))
@@ -152,6 +182,11 @@ func AssignedToUserID(v string) predicate.FindingHistory {
 // AssignedToGroupID applies equality check predicate on the "assigned_to_group_id" field. It's identical to AssignedToGroupIDEQ.
 func AssignedToGroupID(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldAssignedToGroupID, v))
+}
+
+// AssignedToIdentityHolderID applies equality check predicate on the "assigned_to_identity_holder_id" field. It's identical to AssignedToIdentityHolderIDEQ.
+func AssignedToIdentityHolderID(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldAssignedToIdentityHolderID, v))
 }
 
 // SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
@@ -1009,6 +1044,381 @@ func TagsNotNil() predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldNotNull(FieldTags))
 }
 
+// SourceDefinitionIDEQ applies the EQ predicate on the "source_definition_id" field.
+func SourceDefinitionIDEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDNEQ applies the NEQ predicate on the "source_definition_id" field.
+func SourceDefinitionIDNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDIn applies the In predicate on the "source_definition_id" field.
+func SourceDefinitionIDIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldSourceDefinitionID, vs...))
+}
+
+// SourceDefinitionIDNotIn applies the NotIn predicate on the "source_definition_id" field.
+func SourceDefinitionIDNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldSourceDefinitionID, vs...))
+}
+
+// SourceDefinitionIDGT applies the GT predicate on the "source_definition_id" field.
+func SourceDefinitionIDGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDGTE applies the GTE predicate on the "source_definition_id" field.
+func SourceDefinitionIDGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDLT applies the LT predicate on the "source_definition_id" field.
+func SourceDefinitionIDLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDLTE applies the LTE predicate on the "source_definition_id" field.
+func SourceDefinitionIDLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDContains applies the Contains predicate on the "source_definition_id" field.
+func SourceDefinitionIDContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDHasPrefix applies the HasPrefix predicate on the "source_definition_id" field.
+func SourceDefinitionIDHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDHasSuffix applies the HasSuffix predicate on the "source_definition_id" field.
+func SourceDefinitionIDHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDIsNil applies the IsNil predicate on the "source_definition_id" field.
+func SourceDefinitionIDIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldSourceDefinitionID))
+}
+
+// SourceDefinitionIDNotNil applies the NotNil predicate on the "source_definition_id" field.
+func SourceDefinitionIDNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldSourceDefinitionID))
+}
+
+// SourceDefinitionIDEqualFold applies the EqualFold predicate on the "source_definition_id" field.
+func SourceDefinitionIDEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDContainsFold applies the ContainsFold predicate on the "source_definition_id" field.
+func SourceDefinitionIDContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionVersionEQ applies the EQ predicate on the "source_definition_version" field.
+func SourceDefinitionVersionEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionNEQ applies the NEQ predicate on the "source_definition_version" field.
+func SourceDefinitionVersionNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionIn applies the In predicate on the "source_definition_version" field.
+func SourceDefinitionVersionIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldSourceDefinitionVersion, vs...))
+}
+
+// SourceDefinitionVersionNotIn applies the NotIn predicate on the "source_definition_version" field.
+func SourceDefinitionVersionNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldSourceDefinitionVersion, vs...))
+}
+
+// SourceDefinitionVersionGT applies the GT predicate on the "source_definition_version" field.
+func SourceDefinitionVersionGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionGTE applies the GTE predicate on the "source_definition_version" field.
+func SourceDefinitionVersionGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionLT applies the LT predicate on the "source_definition_version" field.
+func SourceDefinitionVersionLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionLTE applies the LTE predicate on the "source_definition_version" field.
+func SourceDefinitionVersionLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionContains applies the Contains predicate on the "source_definition_version" field.
+func SourceDefinitionVersionContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionHasPrefix applies the HasPrefix predicate on the "source_definition_version" field.
+func SourceDefinitionVersionHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionHasSuffix applies the HasSuffix predicate on the "source_definition_version" field.
+func SourceDefinitionVersionHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionIsNil applies the IsNil predicate on the "source_definition_version" field.
+func SourceDefinitionVersionIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldSourceDefinitionVersion))
+}
+
+// SourceDefinitionVersionNotNil applies the NotNil predicate on the "source_definition_version" field.
+func SourceDefinitionVersionNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldSourceDefinitionVersion))
+}
+
+// SourceDefinitionVersionEqualFold applies the EqualFold predicate on the "source_definition_version" field.
+func SourceDefinitionVersionEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionContainsFold applies the ContainsFold predicate on the "source_definition_version" field.
+func SourceDefinitionVersionContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldSourceDefinitionVersion, v))
+}
+
+// SourceInstanceIDEQ applies the EQ predicate on the "source_instance_id" field.
+func SourceInstanceIDEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDNEQ applies the NEQ predicate on the "source_instance_id" field.
+func SourceInstanceIDNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDIn applies the In predicate on the "source_instance_id" field.
+func SourceInstanceIDIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldSourceInstanceID, vs...))
+}
+
+// SourceInstanceIDNotIn applies the NotIn predicate on the "source_instance_id" field.
+func SourceInstanceIDNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldSourceInstanceID, vs...))
+}
+
+// SourceInstanceIDGT applies the GT predicate on the "source_instance_id" field.
+func SourceInstanceIDGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDGTE applies the GTE predicate on the "source_instance_id" field.
+func SourceInstanceIDGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDLT applies the LT predicate on the "source_instance_id" field.
+func SourceInstanceIDLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDLTE applies the LTE predicate on the "source_instance_id" field.
+func SourceInstanceIDLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDContains applies the Contains predicate on the "source_instance_id" field.
+func SourceInstanceIDContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDHasPrefix applies the HasPrefix predicate on the "source_instance_id" field.
+func SourceInstanceIDHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDHasSuffix applies the HasSuffix predicate on the "source_instance_id" field.
+func SourceInstanceIDHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDIsNil applies the IsNil predicate on the "source_instance_id" field.
+func SourceInstanceIDIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldSourceInstanceID))
+}
+
+// SourceInstanceIDNotNil applies the NotNil predicate on the "source_instance_id" field.
+func SourceInstanceIDNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldSourceInstanceID))
+}
+
+// SourceInstanceIDEqualFold applies the EqualFold predicate on the "source_instance_id" field.
+func SourceInstanceIDEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDContainsFold applies the ContainsFold predicate on the "source_instance_id" field.
+func SourceInstanceIDContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldSourceInstanceID, v))
+}
+
+// ManagedByEQ applies the EQ predicate on the "managed_by" field.
+func ManagedByEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldManagedBy, v))
+}
+
+// ManagedByNEQ applies the NEQ predicate on the "managed_by" field.
+func ManagedByNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldManagedBy, v))
+}
+
+// ManagedByIn applies the In predicate on the "managed_by" field.
+func ManagedByIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldManagedBy, vs...))
+}
+
+// ManagedByNotIn applies the NotIn predicate on the "managed_by" field.
+func ManagedByNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldManagedBy, vs...))
+}
+
+// ManagedByGT applies the GT predicate on the "managed_by" field.
+func ManagedByGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldManagedBy, v))
+}
+
+// ManagedByGTE applies the GTE predicate on the "managed_by" field.
+func ManagedByGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldManagedBy, v))
+}
+
+// ManagedByLT applies the LT predicate on the "managed_by" field.
+func ManagedByLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldManagedBy, v))
+}
+
+// ManagedByLTE applies the LTE predicate on the "managed_by" field.
+func ManagedByLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldManagedBy, v))
+}
+
+// ManagedByContains applies the Contains predicate on the "managed_by" field.
+func ManagedByContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldManagedBy, v))
+}
+
+// ManagedByHasPrefix applies the HasPrefix predicate on the "managed_by" field.
+func ManagedByHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldManagedBy, v))
+}
+
+// ManagedByHasSuffix applies the HasSuffix predicate on the "managed_by" field.
+func ManagedByHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldManagedBy, v))
+}
+
+// ManagedByIsNil applies the IsNil predicate on the "managed_by" field.
+func ManagedByIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldManagedBy))
+}
+
+// ManagedByNotNil applies the NotNil predicate on the "managed_by" field.
+func ManagedByNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldManagedBy))
+}
+
+// ManagedByEqualFold applies the EqualFold predicate on the "managed_by" field.
+func ManagedByEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldManagedBy, v))
+}
+
+// ManagedByContainsFold applies the ContainsFold predicate on the "managed_by" field.
+func ManagedByContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldManagedBy, v))
+}
+
+// IntegrationRunIDEQ applies the EQ predicate on the "integration_run_id" field.
+func IntegrationRunIDEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDNEQ applies the NEQ predicate on the "integration_run_id" field.
+func IntegrationRunIDNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDIn applies the In predicate on the "integration_run_id" field.
+func IntegrationRunIDIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldIntegrationRunID, vs...))
+}
+
+// IntegrationRunIDNotIn applies the NotIn predicate on the "integration_run_id" field.
+func IntegrationRunIDNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldIntegrationRunID, vs...))
+}
+
+// IntegrationRunIDGT applies the GT predicate on the "integration_run_id" field.
+func IntegrationRunIDGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDGTE applies the GTE predicate on the "integration_run_id" field.
+func IntegrationRunIDGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDLT applies the LT predicate on the "integration_run_id" field.
+func IntegrationRunIDLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDLTE applies the LTE predicate on the "integration_run_id" field.
+func IntegrationRunIDLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDContains applies the Contains predicate on the "integration_run_id" field.
+func IntegrationRunIDContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDHasPrefix applies the HasPrefix predicate on the "integration_run_id" field.
+func IntegrationRunIDHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDHasSuffix applies the HasSuffix predicate on the "integration_run_id" field.
+func IntegrationRunIDHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDIsNil applies the IsNil predicate on the "integration_run_id" field.
+func IntegrationRunIDIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldIntegrationRunID))
+}
+
+// IntegrationRunIDNotNil applies the NotNil predicate on the "integration_run_id" field.
+func IntegrationRunIDNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldIntegrationRunID))
+}
+
+// IntegrationRunIDEqualFold applies the EqualFold predicate on the "integration_run_id" field.
+func IntegrationRunIDEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDContainsFold applies the ContainsFold predicate on the "integration_run_id" field.
+func IntegrationRunIDContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldIntegrationRunID, v))
+}
+
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
 func OwnerIDEQ(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldOwnerID, v))
@@ -1309,6 +1719,81 @@ func ReviewedByGroupIDContainsFold(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldContainsFold(FieldReviewedByGroupID, v))
 }
 
+// ReviewedByIdentityHolderIDEQ applies the EQ predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDNEQ applies the NEQ predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDIn applies the In predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldReviewedByIdentityHolderID, vs...))
+}
+
+// ReviewedByIdentityHolderIDNotIn applies the NotIn predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldReviewedByIdentityHolderID, vs...))
+}
+
+// ReviewedByIdentityHolderIDGT applies the GT predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDGTE applies the GTE predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDLT applies the LT predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDLTE applies the LTE predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDContains applies the Contains predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDIsNil applies the IsNil predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldReviewedByIdentityHolderID))
+}
+
+// ReviewedByIdentityHolderIDNotNil applies the NotNil predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldReviewedByIdentityHolderID))
+}
+
+// ReviewedByIdentityHolderIDEqualFold applies the EqualFold predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDContainsFold applies the ContainsFold predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldReviewedByIdentityHolderID, v))
+}
+
 // AssignedToEQ applies the EQ predicate on the "assigned_to" field.
 func AssignedToEQ(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldAssignedTo, v))
@@ -1532,6 +2017,81 @@ func AssignedToGroupIDEqualFold(v string) predicate.FindingHistory {
 // AssignedToGroupIDContainsFold applies the ContainsFold predicate on the "assigned_to_group_id" field.
 func AssignedToGroupIDContainsFold(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldContainsFold(FieldAssignedToGroupID, v))
+}
+
+// AssignedToIdentityHolderIDEQ applies the EQ predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDNEQ applies the NEQ predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDIn applies the In predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldAssignedToIdentityHolderID, vs...))
+}
+
+// AssignedToIdentityHolderIDNotIn applies the NotIn predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldAssignedToIdentityHolderID, vs...))
+}
+
+// AssignedToIdentityHolderIDGT applies the GT predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDGTE applies the GTE predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDLT applies the LT predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDLTE applies the LTE predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDContains applies the Contains predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDIsNil applies the IsNil predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldAssignedToIdentityHolderID))
+}
+
+// AssignedToIdentityHolderIDNotNil applies the NotNil predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldAssignedToIdentityHolderID))
+}
+
+// AssignedToIdentityHolderIDEqualFold applies the EqualFold predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDContainsFold applies the ContainsFold predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldAssignedToIdentityHolderID, v))
 }
 
 // SystemOwnedEQ applies the EQ predicate on the "system_owned" field.

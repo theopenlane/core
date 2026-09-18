@@ -583,10 +583,6 @@ func (ec *executionContext) _ProcedureUpdatePayload(ctx context.Context, sel ast
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNProcedureBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProcedureBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ProcedureBulkCreatePayload) graphql.Marshaler {
-	return ec._ProcedureBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNProcedureBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProcedureBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProcedureBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNProcedureBulkCreatePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._ProcedureBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNProcedureBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProcedureBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ProcedureBulkDeletePayload) graphql.Marshaler {
-	return ec._ProcedureBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNProcedureBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProcedureBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProcedureBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNProcedureBulkDeletePayload2ᚖgithubᚗcom�
 	return ec._ProcedureBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProcedureBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProcedureBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ProcedureBulkUpdatePayload) graphql.Marshaler {
-	return ec._ProcedureBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNProcedureBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProcedureBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProcedureBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNProcedureBulkUpdatePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._ProcedureBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNProcedureCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProcedureCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ProcedureCreatePayload) graphql.Marshaler {
-	return ec._ProcedureCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNProcedureCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProcedureCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProcedureCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNProcedureCreatePayload2ᚖgithubᚗcomᚋthe
 	return ec._ProcedureCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProcedureDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProcedureDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ProcedureDeletePayload) graphql.Marshaler {
-	return ec._ProcedureDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNProcedureDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProcedureDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProcedureDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNProcedureDeletePayload2ᚖgithubᚗcomᚋthe
 		return graphql.Null
 	}
 	return ec._ProcedureDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNProcedureUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProcedureUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ProcedureUpdatePayload) graphql.Marshaler {
-	return ec._ProcedureUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNProcedureUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐProcedureUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ProcedureUpdatePayload) graphql.Marshaler {

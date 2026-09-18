@@ -45,12 +45,14 @@ type IdentityHolder struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// the internal owner for the identity holder when no user or group is linked
+	// the internal owner for the identity holder when no user, group, or identity holder is linked
 	InternalOwner string `json:"internal_owner,omitempty"`
 	// the internal owner user id for the identity holder
 	InternalOwnerUserID string `json:"internal_owner_user_id,omitempty"`
 	// the internal owner group id for the identity holder
 	InternalOwnerGroupID string `json:"internal_owner_group_id,omitempty"`
+	// the internal owner identity holder id for the identity holder
+	InternalOwnerIdentityHolderID string `json:"internal_owner_identity_holder_id,omitempty"`
 	// the environment of the identity_holder
 	EnvironmentName string `json:"environment_name,omitempty"`
 	// the environment of the identity_holder
@@ -123,6 +125,8 @@ type IdentityHolderEdges struct {
 	InternalOwnerUser *User `json:"internal_owner_user,omitempty"`
 	// InternalOwnerGroup holds the value of the internal_owner_group edge.
 	InternalOwnerGroup *Group `json:"internal_owner_group,omitempty"`
+	// InternalOwnerIdentityHolder holds the value of the internal_owner_identity_holder edge.
+	InternalOwnerIdentityHolder *IdentityHolder `json:"internal_owner_identity_holder,omitempty"`
 	// Environment holds the value of the environment edge.
 	Environment *CustomTypeEnum `json:"environment,omitempty"`
 	// Scope holds the value of the scope edge.
@@ -165,9 +169,9 @@ type IdentityHolderEdges struct {
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [26]bool
+	loadedTypes [27]bool
 	// totalCount holds the count of the edges above.
-	totalCount [26]map[string]int
+	totalCount [27]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -250,12 +254,23 @@ func (e IdentityHolderEdges) InternalOwnerGroupOrErr() (*Group, error) {
 	return nil, &NotLoadedError{edge: "internal_owner_group"}
 }
 
+// InternalOwnerIdentityHolderOrErr returns the InternalOwnerIdentityHolder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e IdentityHolderEdges) InternalOwnerIdentityHolderOrErr() (*IdentityHolder, error) {
+	if e.InternalOwnerIdentityHolder != nil {
+		return e.InternalOwnerIdentityHolder, nil
+	} else if e.loadedTypes[6] {
+		return nil, &NotFoundError{label: identityholder.Label}
+	}
+	return nil, &NotLoadedError{edge: "internal_owner_identity_holder"}
+}
+
 // EnvironmentOrErr returns the Environment value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e IdentityHolderEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 	if e.Environment != nil {
 		return e.Environment, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "environment"}
@@ -266,7 +281,7 @@ func (e IdentityHolderEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 func (e IdentityHolderEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	if e.Scope != nil {
 		return e.Scope, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "scope"}
@@ -277,7 +292,7 @@ func (e IdentityHolderEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 func (e IdentityHolderEdges) EmployerOrErr() (*Entity, error) {
 	if e.Employer != nil {
 		return e.Employer, nil
-	} else if e.loadedTypes[8] {
+	} else if e.loadedTypes[9] {
 		return nil, &NotFoundError{label: entity.Label}
 	}
 	return nil, &NotLoadedError{edge: "employer"}
@@ -286,7 +301,7 @@ func (e IdentityHolderEdges) EmployerOrErr() (*Entity, error) {
 // AssessmentResponsesOrErr returns the AssessmentResponses value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[10] {
 		return e.AssessmentResponses, nil
 	}
 	return nil, &NotLoadedError{edge: "assessment_responses"}
@@ -295,7 +310,7 @@ func (e IdentityHolderEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, 
 // AssessmentsOrErr returns the Assessments value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AssessmentsOrErr() ([]*Assessment, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[11] {
 		return e.Assessments, nil
 	}
 	return nil, &NotLoadedError{edge: "assessments"}
@@ -304,7 +319,7 @@ func (e IdentityHolderEdges) AssessmentsOrErr() ([]*Assessment, error) {
 // TemplatesOrErr returns the Templates value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) TemplatesOrErr() ([]*Template, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		return e.Templates, nil
 	}
 	return nil, &NotLoadedError{edge: "templates"}
@@ -313,7 +328,7 @@ func (e IdentityHolderEdges) TemplatesOrErr() ([]*Template, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -322,7 +337,7 @@ func (e IdentityHolderEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -331,7 +346,7 @@ func (e IdentityHolderEdges) EntitiesOrErr() ([]*Entity, error) {
 // DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.DirectoryAccounts, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_accounts"}
@@ -340,7 +355,7 @@ func (e IdentityHolderEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, erro
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -349,7 +364,7 @@ func (e IdentityHolderEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -358,7 +373,7 @@ func (e IdentityHolderEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -367,7 +382,7 @@ func (e IdentityHolderEdges) PlatformsOrErr() ([]*Platform, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -376,7 +391,7 @@ func (e IdentityHolderEdges) CampaignsOrErr() ([]*Campaign, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -385,7 +400,7 @@ func (e IdentityHolderEdges) TasksOrErr() ([]*Task, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -394,7 +409,7 @@ func (e IdentityHolderEdges) FilesOrErr() ([]*File, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -403,7 +418,7 @@ func (e IdentityHolderEdges) FindingsOrErr() ([]*Finding, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -412,7 +427,7 @@ func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, er
 // AccessPlatformsOrErr returns the AccessPlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[24] {
 		return e.AccessPlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "access_platforms"}
@@ -423,7 +438,7 @@ func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
 func (e IdentityHolderEdges) UserOrErr() (*User, error) {
 	if e.User != nil {
 		return e.User, nil
-	} else if e.loadedTypes[24] {
+	} else if e.loadedTypes[25] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -432,7 +447,7 @@ func (e IdentityHolderEdges) UserOrErr() (*User, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[26] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -449,7 +464,7 @@ func (*IdentityHolder) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case identityholder.FieldWorkflowEligibleMarker, identityholder.FieldIsOpenlaneUser, identityholder.FieldIsActive:
 			values[i] = new(sql.NullBool)
-		case identityholder.FieldID, identityholder.FieldCreatedBy, identityholder.FieldUpdatedBy, identityholder.FieldUpdatedByImpersonator, identityholder.FieldDeletedBy, identityholder.FieldDisplayID, identityholder.FieldOwnerID, identityholder.FieldInternalOwner, identityholder.FieldInternalOwnerUserID, identityholder.FieldInternalOwnerGroupID, identityholder.FieldEnvironmentName, identityholder.FieldEnvironmentID, identityholder.FieldScopeName, identityholder.FieldScopeID, identityholder.FieldFullName, identityholder.FieldEmail, identityholder.FieldAlternateEmail, identityholder.FieldPhoneNumber, identityholder.FieldUserID, identityholder.FieldIdentityHolderType, identityholder.FieldStatus, identityholder.FieldTitle, identityholder.FieldDepartment, identityholder.FieldTeam, identityholder.FieldLocation, identityholder.FieldEmployerEntityID, identityholder.FieldExternalUserID, identityholder.FieldExternalReferenceID, identityholder.FieldAvatarRemoteURL:
+		case identityholder.FieldID, identityholder.FieldCreatedBy, identityholder.FieldUpdatedBy, identityholder.FieldUpdatedByImpersonator, identityholder.FieldDeletedBy, identityholder.FieldDisplayID, identityholder.FieldOwnerID, identityholder.FieldInternalOwner, identityholder.FieldInternalOwnerUserID, identityholder.FieldInternalOwnerGroupID, identityholder.FieldInternalOwnerIdentityHolderID, identityholder.FieldEnvironmentName, identityholder.FieldEnvironmentID, identityholder.FieldScopeName, identityholder.FieldScopeID, identityholder.FieldFullName, identityholder.FieldEmail, identityholder.FieldAlternateEmail, identityholder.FieldPhoneNumber, identityholder.FieldUserID, identityholder.FieldIdentityHolderType, identityholder.FieldStatus, identityholder.FieldTitle, identityholder.FieldDepartment, identityholder.FieldTeam, identityholder.FieldLocation, identityholder.FieldEmployerEntityID, identityholder.FieldExternalUserID, identityholder.FieldExternalReferenceID, identityholder.FieldAvatarRemoteURL:
 			values[i] = new(sql.NullString)
 		case identityholder.FieldCreatedAt, identityholder.FieldUpdatedAt, identityholder.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -554,6 +569,12 @@ func (_m *IdentityHolder) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field internal_owner_group_id", values[i])
 			} else if value.Valid {
 				_m.InternalOwnerGroupID = value.String
+			}
+		case identityholder.FieldInternalOwnerIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerIdentityHolderID = value.String
 			}
 		case identityholder.FieldEnvironmentName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -761,6 +782,11 @@ func (_m *IdentityHolder) QueryInternalOwnerGroup() *GroupQuery {
 	return NewIdentityHolderClient(_m.config).QueryInternalOwnerGroup(_m)
 }
 
+// QueryInternalOwnerIdentityHolder queries the "internal_owner_identity_holder" edge of the IdentityHolder entity.
+func (_m *IdentityHolder) QueryInternalOwnerIdentityHolder() *IdentityHolderQuery {
+	return NewIdentityHolderClient(_m.config).QueryInternalOwnerIdentityHolder(_m)
+}
+
 // QueryEnvironment queries the "environment" edge of the IdentityHolder entity.
 func (_m *IdentityHolder) QueryEnvironment() *CustomTypeEnumQuery {
 	return NewIdentityHolderClient(_m.config).QueryEnvironment(_m)
@@ -924,6 +950,9 @@ func (_m *IdentityHolder) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("internal_owner_group_id=")
 	builder.WriteString(_m.InternalOwnerGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_identity_holder_id=")
+	builder.WriteString(_m.InternalOwnerIdentityHolderID)
 	builder.WriteString(", ")
 	builder.WriteString("environment_name=")
 	builder.WriteString(_m.EnvironmentName)

@@ -2,6 +2,8 @@ package tailscale
 
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -37,13 +39,16 @@ func Builder() registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       tailscaleCredential.ID(),
-					Name:                "Tailscale OAuth",
-					Description:         "Configure Tailscale access using an OAuth client scoped to your tailnet.",
-					CredentialRefs:      []types.CredentialSlotID{tailscaleCredential.ID()},
-					ClientRefs:          []types.ClientID{tailscaleClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  tailscaleCredential.ID(),
+					Name:           "Tailscale OAuth",
+					Description:    "Configure Tailscale access using an OAuth client scoped to your tailnet.",
+					CredentialRefs: []types.CredentialSlotID{tailscaleCredential.ID()},
+					ClientRefs:     []types.ClientID{tailscaleClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: tailscaleClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: tailscaleCredential.ID(),
 						Description:   "Removes the stored OAuth credentials from Openlane. If the client is no longer needed, revoke it in the Tailscale admin console.",
@@ -60,22 +65,12 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:                healthCheckOperation.Name(),
-					Description:         "Verify Tailscale OAuth credentials by listing tailnet users",
-					Topic:               definitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:           tailscaleClient.ID(),
-					Policy:              types.ExecutionPolicy{Inline: true},
-					Handle:              HealthCheck{}.Handle(),
-					ConfigSchema:        healthCheckSchema,
-					RequiredPermissions: []string{"users:read"},
-				},
-				{
 					Name:           directorySyncOperation.Name(),
 					Description:    "Sync Tailscale users and role-based groups as directory accounts",
 					Topic:          definitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:      tailscaleClient.ID(),
 					ConfigSchema:   directorySyncSchema,
-					Policy:         types.ExecutionPolicy{Reconcile: true},
+					Policy:         types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 					Ingest: []types.IngestContract{
@@ -134,6 +129,18 @@ func Builder() registry.Builder {
 					Spec: types.MappingOverride{
 						FilterExpr: "true",
 						MapExpr:    mapExprDirectoryMembership,
+						Links: []types.LinkRule{
+							{
+								TargetSchema: entityops.SchemaDirectoryAccount.Name,
+								TargetField:  directoryaccount.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
+							},
+							{
+								TargetSchema: entityops.SchemaDirectoryGroup.Name,
+								TargetField:  directorygroup.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
+							},
+						},
 					},
 				},
 				{

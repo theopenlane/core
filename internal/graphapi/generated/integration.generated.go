@@ -101,10 +101,6 @@ func (ec *executionContext) _IntegrationDeletePayload(ctx context.Context, sel a
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNIntegrationDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIntegrationDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.IntegrationDeletePayload) graphql.Marshaler {
-	return ec._IntegrationDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNIntegrationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIntegrationDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.IntegrationDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {

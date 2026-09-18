@@ -583,10 +583,6 @@ func (ec *executionContext) _TrustCenterFAQUpdatePayload(ctx context.Context, se
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNTrustCenterFAQBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterFAQBulkCreatePayload) graphql.Marshaler {
-	return ec._TrustCenterFAQBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterFAQBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterFAQBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNTrustCenterFAQBulkCreatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._TrustCenterFAQBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterFAQBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterFAQBulkDeletePayload) graphql.Marshaler {
-	return ec._TrustCenterFAQBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterFAQBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterFAQBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNTrustCenterFAQBulkDeletePayload2ᚖgithubᚗ
 	return ec._TrustCenterFAQBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustCenterFAQBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterFAQBulkUpdatePayload) graphql.Marshaler {
-	return ec._TrustCenterFAQBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterFAQBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterFAQBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNTrustCenterFAQBulkUpdatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._TrustCenterFAQBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterFAQCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterFAQCreatePayload) graphql.Marshaler {
-	return ec._TrustCenterFAQCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterFAQCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterFAQCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNTrustCenterFAQCreatePayload2ᚖgithubᚗcom�
 	return ec._TrustCenterFAQCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustCenterFAQDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterFAQDeletePayload) graphql.Marshaler {
-	return ec._TrustCenterFAQDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterFAQDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterFAQDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNTrustCenterFAQDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._TrustCenterFAQDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterFAQUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterFAQUpdatePayload) graphql.Marshaler {
-	return ec._TrustCenterFAQUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterFAQUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterFAQUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterFAQUpdatePayload) graphql.Marshaler {

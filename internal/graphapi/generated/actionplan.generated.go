@@ -136,11 +136,6 @@ type MutationResolver interface {
 	CreateBulkCSVDirectoryMembership(ctx context.Context, input graphql.Upload) (*model.DirectoryMembershipBulkCreatePayload, error)
 	UpdateDirectoryMembership(ctx context.Context, id string, input generated.UpdateDirectoryMembershipInput) (*model.DirectoryMembershipUpdatePayload, error)
 	DeleteDirectoryMembership(ctx context.Context, id string) (*model.DirectoryMembershipDeletePayload, error)
-	CreateDirectorySyncRun(ctx context.Context, input generated.CreateDirectorySyncRunInput) (*model.DirectorySyncRunCreatePayload, error)
-	CreateBulkDirectorySyncRun(ctx context.Context, input []*generated.CreateDirectorySyncRunInput) (*model.DirectorySyncRunBulkCreatePayload, error)
-	CreateBulkCSVDirectorySyncRun(ctx context.Context, input graphql.Upload) (*model.DirectorySyncRunBulkCreatePayload, error)
-	UpdateDirectorySyncRun(ctx context.Context, id string, input generated.UpdateDirectorySyncRunInput) (*model.DirectorySyncRunUpdatePayload, error)
-	DeleteDirectorySyncRun(ctx context.Context, id string) (*model.DirectorySyncRunDeletePayload, error)
 	CreateDiscussion(ctx context.Context, input generated.CreateDiscussionInput) (*model.DiscussionCreatePayload, error)
 	CreateBulkDiscussion(ctx context.Context, input []*generated.CreateDiscussionInput) (*model.DiscussionBulkCreatePayload, error)
 	CreateBulkCSVDiscussion(ctx context.Context, input graphql.Upload) (*model.DiscussionBulkCreatePayload, error)
@@ -1083,20 +1078,6 @@ func (ec *executionContext) field_Mutation_createBulkCSVDirectoryMembership_args
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVDirectorySyncRun_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
-		func(ctx context.Context, v any) (graphql.Upload, error) {
-			return ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_createBulkCSVDiscussion_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -1979,20 +1960,6 @@ func (ec *executionContext) field_Mutation_createBulkDirectoryMembership_args(ct
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
 		func(ctx context.Context, v any) ([]*generated.CreateDirectoryMembershipInput, error) {
 			return ec.unmarshalOCreateDirectoryMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateDirectoryMembershipInputᚄ(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_createBulkDirectorySyncRun_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
-		func(ctx context.Context, v any) ([]*generated.CreateDirectorySyncRunInput, error) {
-			return ec.unmarshalOCreateDirectorySyncRunInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateDirectorySyncRunInputᚄ(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -2947,20 +2914,6 @@ func (ec *executionContext) field_Mutation_createDirectoryMembership_args(ctx co
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
 		func(ctx context.Context, v any) (generated.CreateDirectoryMembershipInput, error) {
 			return ec.unmarshalNCreateDirectoryMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateDirectoryMembershipInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_createDirectorySyncRun_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
-		func(ctx context.Context, v any) (generated.CreateDirectorySyncRunInput, error) {
-			return ec.unmarshalNCreateDirectorySyncRunInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateDirectorySyncRunInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -5482,20 +5435,6 @@ func (ec *executionContext) field_Mutation_deleteDirectoryGroup_args(ctx context
 }
 
 func (ec *executionContext) field_Mutation_deleteDirectoryMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id",
-		func(ctx context.Context, v any) (string, error) {
-			return ec.unmarshalNID2string(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["id"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_deleteDirectorySyncRun_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id",
@@ -8919,28 +8858,6 @@ func (ec *executionContext) field_Mutation_updateDirectoryMembership_args(ctx co
 	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input",
 		func(ctx context.Context, v any) (generated.UpdateDirectoryMembershipInput, error) {
 			return ec.unmarshalNUpdateDirectoryMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUpdateDirectoryMembershipInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_updateDirectorySyncRun_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id",
-		func(ctx context.Context, v any) (string, error) {
-			return ec.unmarshalNID2string(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input",
-		func(ctx context.Context, v any) (generated.UpdateDirectorySyncRunInput, error) {
-			return ec.unmarshalNUpdateDirectorySyncRunInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUpdateDirectorySyncRunInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -16580,226 +16497,6 @@ func (ec *executionContext) fieldContext_Mutation_deleteDirectoryMembership(ctx 
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteDirectoryMembership_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_createDirectorySyncRun(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_createDirectorySyncRun(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateDirectorySyncRun(ctx, fc.Args["input"].(generated.CreateDirectorySyncRunInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.DirectorySyncRunCreatePayload) graphql.Marshaler {
-			return ec.marshalNDirectorySyncRunCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunCreatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_createDirectorySyncRun(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_DirectorySyncRunCreatePayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createDirectorySyncRun_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_createBulkDirectorySyncRun(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_createBulkDirectorySyncRun(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateBulkDirectorySyncRun(ctx, fc.Args["input"].([]*generated.CreateDirectorySyncRunInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.DirectorySyncRunBulkCreatePayload) graphql.Marshaler {
-			return ec.marshalNDirectorySyncRunBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunBulkCreatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_createBulkDirectorySyncRun(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_DirectorySyncRunBulkCreatePayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createBulkDirectorySyncRun_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_createBulkCSVDirectorySyncRun(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_createBulkCSVDirectorySyncRun(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateBulkCSVDirectorySyncRun(ctx, fc.Args["input"].(graphql.Upload))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.DirectorySyncRunBulkCreatePayload) graphql.Marshaler {
-			return ec.marshalNDirectorySyncRunBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunBulkCreatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_createBulkCSVDirectorySyncRun(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_DirectorySyncRunBulkCreatePayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createBulkCSVDirectorySyncRun_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_updateDirectorySyncRun(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_updateDirectorySyncRun(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateDirectorySyncRun(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateDirectorySyncRunInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.DirectorySyncRunUpdatePayload) graphql.Marshaler {
-			return ec.marshalNDirectorySyncRunUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunUpdatePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_updateDirectorySyncRun(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_DirectorySyncRunUpdatePayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateDirectorySyncRun_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_deleteDirectorySyncRun(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_deleteDirectorySyncRun(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().DeleteDirectorySyncRun(ctx, fc.Args["id"].(string))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.DirectorySyncRunDeletePayload) graphql.Marshaler {
-			return ec.marshalNDirectorySyncRunDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunDeletePayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_deleteDirectorySyncRun(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_DirectorySyncRunDeletePayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_deleteDirectorySyncRun_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -38314,41 +38011,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "createDirectorySyncRun":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createDirectorySyncRun(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "createBulkDirectorySyncRun":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createBulkDirectorySyncRun(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "createBulkCSVDirectorySyncRun":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createBulkCSVDirectorySyncRun(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "updateDirectorySyncRun":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateDirectorySyncRun(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "deleteDirectorySyncRun":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteDirectorySyncRun(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "createDiscussion":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createDiscussion(ctx, field)
@@ -41622,10 +41284,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNActionPlanBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ActionPlanBulkCreatePayload) graphql.Marshaler {
-	return ec._ActionPlanBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNActionPlanBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionPlanBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -41634,10 +41292,6 @@ func (ec *executionContext) marshalNActionPlanBulkCreatePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._ActionPlanBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNActionPlanBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ActionPlanBulkDeletePayload) graphql.Marshaler {
-	return ec._ActionPlanBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNActionPlanBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionPlanBulkDeletePayload) graphql.Marshaler {
@@ -41650,10 +41304,6 @@ func (ec *executionContext) marshalNActionPlanBulkDeletePayload2ᚖgithubᚗcom�
 	return ec._ActionPlanBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNActionPlanBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ActionPlanBulkUpdatePayload) graphql.Marshaler {
-	return ec._ActionPlanBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNActionPlanBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionPlanBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -41662,10 +41312,6 @@ func (ec *executionContext) marshalNActionPlanBulkUpdatePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._ActionPlanBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNActionPlanCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ActionPlanCreatePayload) graphql.Marshaler {
-	return ec._ActionPlanCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNActionPlanCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionPlanCreatePayload) graphql.Marshaler {
@@ -41678,10 +41324,6 @@ func (ec *executionContext) marshalNActionPlanCreatePayload2ᚖgithubᚗcomᚋth
 	return ec._ActionPlanCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNActionPlanDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ActionPlanDeletePayload) graphql.Marshaler {
-	return ec._ActionPlanDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNActionPlanDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionPlanDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -41690,10 +41332,6 @@ func (ec *executionContext) marshalNActionPlanDeletePayload2ᚖgithubᚗcomᚋth
 		return graphql.Null
 	}
 	return ec._ActionPlanDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNActionPlanUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ActionPlanUpdatePayload) graphql.Marshaler {
-	return ec._ActionPlanUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNActionPlanUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionPlanUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionPlanUpdatePayload) graphql.Marshaler {

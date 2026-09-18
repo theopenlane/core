@@ -312,10 +312,6 @@ func (ec *executionContext) _SubscriberUpdatePayload(ctx context.Context, sel as
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNSubscriberBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.SubscriberBulkCreatePayload) graphql.Marshaler {
-	return ec._SubscriberBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSubscriberBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -324,10 +320,6 @@ func (ec *executionContext) marshalNSubscriberBulkCreatePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._SubscriberBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSubscriberCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.SubscriberCreatePayload) graphql.Marshaler {
-	return ec._SubscriberCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSubscriberCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberCreatePayload) graphql.Marshaler {
@@ -340,10 +332,6 @@ func (ec *executionContext) marshalNSubscriberCreatePayload2ᚖgithubᚗcomᚋth
 	return ec._SubscriberCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNSubscriberDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.SubscriberDeletePayload) graphql.Marshaler {
-	return ec._SubscriberDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSubscriberDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -352,10 +340,6 @@ func (ec *executionContext) marshalNSubscriberDeletePayload2ᚖgithubᚗcomᚋth
 		return graphql.Null
 	}
 	return ec._SubscriberDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSubscriberUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.SubscriberUpdatePayload) graphql.Marshaler {
-	return ec._SubscriberUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSubscriberUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberUpdatePayload) graphql.Marshaler {

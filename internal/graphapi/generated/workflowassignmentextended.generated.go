@@ -180,10 +180,6 @@ func (ec *executionContext) _WorkflowAssignmentRejectPayload(ctx context.Context
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNWorkflowAssignmentApprovePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentApprovePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowAssignmentApprovePayload) graphql.Marshaler {
-	return ec._WorkflowAssignmentApprovePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowAssignmentApprovePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentApprovePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowAssignmentApprovePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -192,10 +188,6 @@ func (ec *executionContext) marshalNWorkflowAssignmentApprovePayload2ᚖgithub�
 		return graphql.Null
 	}
 	return ec._WorkflowAssignmentApprovePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowAssignmentRejectPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentRejectPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowAssignmentRejectPayload) graphql.Marshaler {
-	return ec._WorkflowAssignmentRejectPayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowAssignmentRejectPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentRejectPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowAssignmentRejectPayload) graphql.Marshaler {

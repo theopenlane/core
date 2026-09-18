@@ -11,9 +11,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/v2/internal/ent/generated/event"
-	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
@@ -50,8 +47,6 @@ type IntegrationRun struct {
 	RunType enums.IntegrationRunType `json:"run_type,omitempty"`
 	// resolved operation configuration used for this run
 	OperationConfig map[string]interface{} `json:"operation_config,omitempty"`
-	// mapping version used to produce outputs
-	MappingVersion string `json:"mapping_version,omitempty"`
 	// status of the run
 	Status enums.IntegrationRunStatus `json:"status,omitempty"`
 	// when the run started
@@ -60,14 +55,6 @@ type IntegrationRun struct {
 	FinishedAt *time.Time `json:"finished_at,omitempty"`
 	// run duration in milliseconds
 	DurationMs int `json:"duration_ms,omitempty"`
-	// file reference for the run request payload
-	RequestFileID string `json:"request_file_id,omitempty"`
-	// file reference for the run response payload
-	ResponseFileID string `json:"response_file_id,omitempty"`
-	// event reference for this run
-	EventID string `json:"event_id,omitempty"`
-	// assessment response that triggered this run
-	AssessmentResponseID string `json:"assessment_response_id,omitempty"`
 	// summary of the run outcome
 	Summary string `json:"summary,omitempty"`
 	// error details for failed runs
@@ -86,19 +73,51 @@ type IntegrationRunEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Integration holds the value of the integration edge.
 	Integration *Integration `json:"integration,omitempty"`
-	// RequestFile holds the value of the request_file edge.
-	RequestFile *File `json:"request_file,omitempty"`
-	// ResponseFile holds the value of the response_file edge.
-	ResponseFile *File `json:"response_file,omitempty"`
-	// Event holds the value of the event edge.
-	Event *Event `json:"event,omitempty"`
-	// AssessmentResponse holds the value of the assessment_response edge.
-	AssessmentResponse *AssessmentResponse `json:"assessment_response,omitempty"`
+	// ActionPlans holds the value of the action_plans edge.
+	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
+	// Assets holds the value of the assets edge.
+	Assets []*Asset `json:"assets,omitempty"`
+	// CheckResults holds the value of the check_results edge.
+	CheckResults []*CheckResult `json:"check_results,omitempty"`
+	// Contacts holds the value of the contacts edge.
+	Contacts []*Contact `json:"contacts,omitempty"`
+	// DirectoryAccounts holds the value of the directory_accounts edge.
+	DirectoryAccounts []*DirectoryAccount `json:"directory_accounts,omitempty"`
+	// DirectoryGroups holds the value of the directory_groups edge.
+	DirectoryGroups []*DirectoryGroup `json:"directory_groups,omitempty"`
+	// DirectoryMemberships holds the value of the directory_memberships edge.
+	DirectoryMemberships []*DirectoryMembership `json:"directory_memberships,omitempty"`
+	// Entities holds the value of the entities edge.
+	Entities []*Entity `json:"entities,omitempty"`
+	// Findings holds the value of the findings edge.
+	Findings []*Finding `json:"findings,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
+	// Procedures holds the value of the procedures edge.
+	Procedures []*Procedure `json:"procedures,omitempty"`
+	// Risks holds the value of the risks edge.
+	Risks []*Risk `json:"risks,omitempty"`
+	// Vulnerabilities holds the value of the vulnerabilities edge.
+	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [15]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [15]map[string]int
+
+	namedActionPlans          map[string][]*ActionPlan
+	namedAssets               map[string][]*Asset
+	namedCheckResults         map[string][]*CheckResult
+	namedContacts             map[string][]*Contact
+	namedDirectoryAccounts    map[string][]*DirectoryAccount
+	namedDirectoryGroups      map[string][]*DirectoryGroup
+	namedDirectoryMemberships map[string][]*DirectoryMembership
+	namedEntities             map[string][]*Entity
+	namedFindings             map[string][]*Finding
+	namedInternalPolicies     map[string][]*InternalPolicy
+	namedProcedures           map[string][]*Procedure
+	namedRisks                map[string][]*Risk
+	namedVulnerabilities      map[string][]*Vulnerability
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -123,48 +142,121 @@ func (e IntegrationRunEdges) IntegrationOrErr() (*Integration, error) {
 	return nil, &NotLoadedError{edge: "integration"}
 }
 
-// RequestFileOrErr returns the RequestFile value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e IntegrationRunEdges) RequestFileOrErr() (*File, error) {
-	if e.RequestFile != nil {
-		return e.RequestFile, nil
-	} else if e.loadedTypes[2] {
-		return nil, &NotFoundError{label: file.Label}
+// ActionPlansOrErr returns the ActionPlans value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationRunEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
+	if e.loadedTypes[2] {
+		return e.ActionPlans, nil
 	}
-	return nil, &NotLoadedError{edge: "request_file"}
+	return nil, &NotLoadedError{edge: "action_plans"}
 }
 
-// ResponseFileOrErr returns the ResponseFile value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e IntegrationRunEdges) ResponseFileOrErr() (*File, error) {
-	if e.ResponseFile != nil {
-		return e.ResponseFile, nil
-	} else if e.loadedTypes[3] {
-		return nil, &NotFoundError{label: file.Label}
+// AssetsOrErr returns the Assets value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationRunEdges) AssetsOrErr() ([]*Asset, error) {
+	if e.loadedTypes[3] {
+		return e.Assets, nil
 	}
-	return nil, &NotLoadedError{edge: "response_file"}
+	return nil, &NotLoadedError{edge: "assets"}
 }
 
-// EventOrErr returns the Event value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e IntegrationRunEdges) EventOrErr() (*Event, error) {
-	if e.Event != nil {
-		return e.Event, nil
-	} else if e.loadedTypes[4] {
-		return nil, &NotFoundError{label: event.Label}
+// CheckResultsOrErr returns the CheckResults value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationRunEdges) CheckResultsOrErr() ([]*CheckResult, error) {
+	if e.loadedTypes[4] {
+		return e.CheckResults, nil
 	}
-	return nil, &NotLoadedError{edge: "event"}
+	return nil, &NotLoadedError{edge: "check_results"}
 }
 
-// AssessmentResponseOrErr returns the AssessmentResponse value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e IntegrationRunEdges) AssessmentResponseOrErr() (*AssessmentResponse, error) {
-	if e.AssessmentResponse != nil {
-		return e.AssessmentResponse, nil
-	} else if e.loadedTypes[5] {
-		return nil, &NotFoundError{label: assessmentresponse.Label}
+// ContactsOrErr returns the Contacts value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationRunEdges) ContactsOrErr() ([]*Contact, error) {
+	if e.loadedTypes[5] {
+		return e.Contacts, nil
 	}
-	return nil, &NotLoadedError{edge: "assessment_response"}
+	return nil, &NotLoadedError{edge: "contacts"}
+}
+
+// DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationRunEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
+	if e.loadedTypes[6] {
+		return e.DirectoryAccounts, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_accounts"}
+}
+
+// DirectoryGroupsOrErr returns the DirectoryGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationRunEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
+	if e.loadedTypes[7] {
+		return e.DirectoryGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_groups"}
+}
+
+// DirectoryMembershipsOrErr returns the DirectoryMemberships value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationRunEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, error) {
+	if e.loadedTypes[8] {
+		return e.DirectoryMemberships, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_memberships"}
+}
+
+// EntitiesOrErr returns the Entities value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationRunEdges) EntitiesOrErr() ([]*Entity, error) {
+	if e.loadedTypes[9] {
+		return e.Entities, nil
+	}
+	return nil, &NotLoadedError{edge: "entities"}
+}
+
+// FindingsOrErr returns the Findings value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationRunEdges) FindingsOrErr() ([]*Finding, error) {
+	if e.loadedTypes[10] {
+		return e.Findings, nil
+	}
+	return nil, &NotLoadedError{edge: "findings"}
+}
+
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationRunEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
+	if e.loadedTypes[11] {
+		return e.InternalPolicies, nil
+	}
+	return nil, &NotLoadedError{edge: "internal_policies"}
+}
+
+// ProceduresOrErr returns the Procedures value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationRunEdges) ProceduresOrErr() ([]*Procedure, error) {
+	if e.loadedTypes[12] {
+		return e.Procedures, nil
+	}
+	return nil, &NotLoadedError{edge: "procedures"}
+}
+
+// RisksOrErr returns the Risks value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationRunEdges) RisksOrErr() ([]*Risk, error) {
+	if e.loadedTypes[13] {
+		return e.Risks, nil
+	}
+	return nil, &NotLoadedError{edge: "risks"}
+}
+
+// VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationRunEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
+	if e.loadedTypes[14] {
+		return e.Vulnerabilities, nil
+	}
+	return nil, &NotLoadedError{edge: "vulnerabilities"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -176,7 +268,7 @@ func (*IntegrationRun) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case integrationrun.FieldDurationMs:
 			values[i] = new(sql.NullInt64)
-		case integrationrun.FieldID, integrationrun.FieldCreatedBy, integrationrun.FieldUpdatedBy, integrationrun.FieldUpdatedByImpersonator, integrationrun.FieldDeletedBy, integrationrun.FieldOwnerID, integrationrun.FieldIntegrationID, integrationrun.FieldOperationName, integrationrun.FieldOperationKind, integrationrun.FieldRunType, integrationrun.FieldMappingVersion, integrationrun.FieldStatus, integrationrun.FieldRequestFileID, integrationrun.FieldResponseFileID, integrationrun.FieldEventID, integrationrun.FieldAssessmentResponseID, integrationrun.FieldSummary, integrationrun.FieldError:
+		case integrationrun.FieldID, integrationrun.FieldCreatedBy, integrationrun.FieldUpdatedBy, integrationrun.FieldUpdatedByImpersonator, integrationrun.FieldDeletedBy, integrationrun.FieldOwnerID, integrationrun.FieldIntegrationID, integrationrun.FieldOperationName, integrationrun.FieldOperationKind, integrationrun.FieldRunType, integrationrun.FieldStatus, integrationrun.FieldSummary, integrationrun.FieldError:
 			values[i] = new(sql.NullString)
 		case integrationrun.FieldCreatedAt, integrationrun.FieldUpdatedAt, integrationrun.FieldDeletedAt, integrationrun.FieldStartedAt, integrationrun.FieldFinishedAt:
 			values[i] = new(sql.NullTime)
@@ -282,12 +374,6 @@ func (_m *IntegrationRun) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field operation_config: %w", err)
 				}
 			}
-		case integrationrun.FieldMappingVersion:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field mapping_version", values[i])
-			} else if value.Valid {
-				_m.MappingVersion = value.String
-			}
 		case integrationrun.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
@@ -312,30 +398,6 @@ func (_m *IntegrationRun) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field duration_ms", values[i])
 			} else if value.Valid {
 				_m.DurationMs = int(value.Int64)
-			}
-		case integrationrun.FieldRequestFileID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field request_file_id", values[i])
-			} else if value.Valid {
-				_m.RequestFileID = value.String
-			}
-		case integrationrun.FieldResponseFileID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field response_file_id", values[i])
-			} else if value.Valid {
-				_m.ResponseFileID = value.String
-			}
-		case integrationrun.FieldEventID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field event_id", values[i])
-			} else if value.Valid {
-				_m.EventID = value.String
-			}
-		case integrationrun.FieldAssessmentResponseID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field assessment_response_id", values[i])
-			} else if value.Valid {
-				_m.AssessmentResponseID = value.String
 			}
 		case integrationrun.FieldSummary:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -380,24 +442,69 @@ func (_m *IntegrationRun) QueryIntegration() *IntegrationQuery {
 	return NewIntegrationRunClient(_m.config).QueryIntegration(_m)
 }
 
-// QueryRequestFile queries the "request_file" edge of the IntegrationRun entity.
-func (_m *IntegrationRun) QueryRequestFile() *FileQuery {
-	return NewIntegrationRunClient(_m.config).QueryRequestFile(_m)
+// QueryActionPlans queries the "action_plans" edge of the IntegrationRun entity.
+func (_m *IntegrationRun) QueryActionPlans() *ActionPlanQuery {
+	return NewIntegrationRunClient(_m.config).QueryActionPlans(_m)
 }
 
-// QueryResponseFile queries the "response_file" edge of the IntegrationRun entity.
-func (_m *IntegrationRun) QueryResponseFile() *FileQuery {
-	return NewIntegrationRunClient(_m.config).QueryResponseFile(_m)
+// QueryAssets queries the "assets" edge of the IntegrationRun entity.
+func (_m *IntegrationRun) QueryAssets() *AssetQuery {
+	return NewIntegrationRunClient(_m.config).QueryAssets(_m)
 }
 
-// QueryEvent queries the "event" edge of the IntegrationRun entity.
-func (_m *IntegrationRun) QueryEvent() *EventQuery {
-	return NewIntegrationRunClient(_m.config).QueryEvent(_m)
+// QueryCheckResults queries the "check_results" edge of the IntegrationRun entity.
+func (_m *IntegrationRun) QueryCheckResults() *CheckResultQuery {
+	return NewIntegrationRunClient(_m.config).QueryCheckResults(_m)
 }
 
-// QueryAssessmentResponse queries the "assessment_response" edge of the IntegrationRun entity.
-func (_m *IntegrationRun) QueryAssessmentResponse() *AssessmentResponseQuery {
-	return NewIntegrationRunClient(_m.config).QueryAssessmentResponse(_m)
+// QueryContacts queries the "contacts" edge of the IntegrationRun entity.
+func (_m *IntegrationRun) QueryContacts() *ContactQuery {
+	return NewIntegrationRunClient(_m.config).QueryContacts(_m)
+}
+
+// QueryDirectoryAccounts queries the "directory_accounts" edge of the IntegrationRun entity.
+func (_m *IntegrationRun) QueryDirectoryAccounts() *DirectoryAccountQuery {
+	return NewIntegrationRunClient(_m.config).QueryDirectoryAccounts(_m)
+}
+
+// QueryDirectoryGroups queries the "directory_groups" edge of the IntegrationRun entity.
+func (_m *IntegrationRun) QueryDirectoryGroups() *DirectoryGroupQuery {
+	return NewIntegrationRunClient(_m.config).QueryDirectoryGroups(_m)
+}
+
+// QueryDirectoryMemberships queries the "directory_memberships" edge of the IntegrationRun entity.
+func (_m *IntegrationRun) QueryDirectoryMemberships() *DirectoryMembershipQuery {
+	return NewIntegrationRunClient(_m.config).QueryDirectoryMemberships(_m)
+}
+
+// QueryEntities queries the "entities" edge of the IntegrationRun entity.
+func (_m *IntegrationRun) QueryEntities() *EntityQuery {
+	return NewIntegrationRunClient(_m.config).QueryEntities(_m)
+}
+
+// QueryFindings queries the "findings" edge of the IntegrationRun entity.
+func (_m *IntegrationRun) QueryFindings() *FindingQuery {
+	return NewIntegrationRunClient(_m.config).QueryFindings(_m)
+}
+
+// QueryInternalPolicies queries the "internal_policies" edge of the IntegrationRun entity.
+func (_m *IntegrationRun) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewIntegrationRunClient(_m.config).QueryInternalPolicies(_m)
+}
+
+// QueryProcedures queries the "procedures" edge of the IntegrationRun entity.
+func (_m *IntegrationRun) QueryProcedures() *ProcedureQuery {
+	return NewIntegrationRunClient(_m.config).QueryProcedures(_m)
+}
+
+// QueryRisks queries the "risks" edge of the IntegrationRun entity.
+func (_m *IntegrationRun) QueryRisks() *RiskQuery {
+	return NewIntegrationRunClient(_m.config).QueryRisks(_m)
+}
+
+// QueryVulnerabilities queries the "vulnerabilities" edge of the IntegrationRun entity.
+func (_m *IntegrationRun) QueryVulnerabilities() *VulnerabilityQuery {
+	return NewIntegrationRunClient(_m.config).QueryVulnerabilities(_m)
 }
 
 // Update returns a builder for updating this IntegrationRun.
@@ -464,9 +571,6 @@ func (_m *IntegrationRun) String() string {
 	builder.WriteString("operation_config=")
 	builder.WriteString(fmt.Sprintf("%v", _m.OperationConfig))
 	builder.WriteString(", ")
-	builder.WriteString("mapping_version=")
-	builder.WriteString(_m.MappingVersion)
-	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteString(", ")
@@ -481,18 +585,6 @@ func (_m *IntegrationRun) String() string {
 	builder.WriteString("duration_ms=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DurationMs))
 	builder.WriteString(", ")
-	builder.WriteString("request_file_id=")
-	builder.WriteString(_m.RequestFileID)
-	builder.WriteString(", ")
-	builder.WriteString("response_file_id=")
-	builder.WriteString(_m.ResponseFileID)
-	builder.WriteString(", ")
-	builder.WriteString("event_id=")
-	builder.WriteString(_m.EventID)
-	builder.WriteString(", ")
-	builder.WriteString("assessment_response_id=")
-	builder.WriteString(_m.AssessmentResponseID)
-	builder.WriteString(", ")
 	builder.WriteString("summary=")
 	builder.WriteString(_m.Summary)
 	builder.WriteString(", ")
@@ -503,6 +595,318 @@ func (_m *IntegrationRun) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.Metrics))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedActionPlans returns the ActionPlans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IntegrationRun) NamedActionPlans(name string) ([]*ActionPlan, error) {
+	if _m.Edges.namedActionPlans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedActionPlans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IntegrationRun) appendNamedActionPlans(name string, edges ...*ActionPlan) {
+	if _m.Edges.namedActionPlans == nil {
+		_m.Edges.namedActionPlans = make(map[string][]*ActionPlan)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedActionPlans[name] = []*ActionPlan{}
+	} else {
+		_m.Edges.namedActionPlans[name] = append(_m.Edges.namedActionPlans[name], edges...)
+	}
+}
+
+// NamedAssets returns the Assets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IntegrationRun) NamedAssets(name string) ([]*Asset, error) {
+	if _m.Edges.namedAssets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedAssets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IntegrationRun) appendNamedAssets(name string, edges ...*Asset) {
+	if _m.Edges.namedAssets == nil {
+		_m.Edges.namedAssets = make(map[string][]*Asset)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedAssets[name] = []*Asset{}
+	} else {
+		_m.Edges.namedAssets[name] = append(_m.Edges.namedAssets[name], edges...)
+	}
+}
+
+// NamedCheckResults returns the CheckResults named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IntegrationRun) NamedCheckResults(name string) ([]*CheckResult, error) {
+	if _m.Edges.namedCheckResults == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedCheckResults[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IntegrationRun) appendNamedCheckResults(name string, edges ...*CheckResult) {
+	if _m.Edges.namedCheckResults == nil {
+		_m.Edges.namedCheckResults = make(map[string][]*CheckResult)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedCheckResults[name] = []*CheckResult{}
+	} else {
+		_m.Edges.namedCheckResults[name] = append(_m.Edges.namedCheckResults[name], edges...)
+	}
+}
+
+// NamedContacts returns the Contacts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IntegrationRun) NamedContacts(name string) ([]*Contact, error) {
+	if _m.Edges.namedContacts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedContacts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IntegrationRun) appendNamedContacts(name string, edges ...*Contact) {
+	if _m.Edges.namedContacts == nil {
+		_m.Edges.namedContacts = make(map[string][]*Contact)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedContacts[name] = []*Contact{}
+	} else {
+		_m.Edges.namedContacts[name] = append(_m.Edges.namedContacts[name], edges...)
+	}
+}
+
+// NamedDirectoryAccounts returns the DirectoryAccounts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IntegrationRun) NamedDirectoryAccounts(name string) ([]*DirectoryAccount, error) {
+	if _m.Edges.namedDirectoryAccounts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectoryAccounts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IntegrationRun) appendNamedDirectoryAccounts(name string, edges ...*DirectoryAccount) {
+	if _m.Edges.namedDirectoryAccounts == nil {
+		_m.Edges.namedDirectoryAccounts = make(map[string][]*DirectoryAccount)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectoryAccounts[name] = []*DirectoryAccount{}
+	} else {
+		_m.Edges.namedDirectoryAccounts[name] = append(_m.Edges.namedDirectoryAccounts[name], edges...)
+	}
+}
+
+// NamedDirectoryGroups returns the DirectoryGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IntegrationRun) NamedDirectoryGroups(name string) ([]*DirectoryGroup, error) {
+	if _m.Edges.namedDirectoryGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectoryGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IntegrationRun) appendNamedDirectoryGroups(name string, edges ...*DirectoryGroup) {
+	if _m.Edges.namedDirectoryGroups == nil {
+		_m.Edges.namedDirectoryGroups = make(map[string][]*DirectoryGroup)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectoryGroups[name] = []*DirectoryGroup{}
+	} else {
+		_m.Edges.namedDirectoryGroups[name] = append(_m.Edges.namedDirectoryGroups[name], edges...)
+	}
+}
+
+// NamedDirectoryMemberships returns the DirectoryMemberships named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IntegrationRun) NamedDirectoryMemberships(name string) ([]*DirectoryMembership, error) {
+	if _m.Edges.namedDirectoryMemberships == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectoryMemberships[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IntegrationRun) appendNamedDirectoryMemberships(name string, edges ...*DirectoryMembership) {
+	if _m.Edges.namedDirectoryMemberships == nil {
+		_m.Edges.namedDirectoryMemberships = make(map[string][]*DirectoryMembership)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectoryMemberships[name] = []*DirectoryMembership{}
+	} else {
+		_m.Edges.namedDirectoryMemberships[name] = append(_m.Edges.namedDirectoryMemberships[name], edges...)
+	}
+}
+
+// NamedEntities returns the Entities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IntegrationRun) NamedEntities(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEntities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IntegrationRun) appendNamedEntities(name string, edges ...*Entity) {
+	if _m.Edges.namedEntities == nil {
+		_m.Edges.namedEntities = make(map[string][]*Entity)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEntities[name] = []*Entity{}
+	} else {
+		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
+	}
+}
+
+// NamedFindings returns the Findings named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IntegrationRun) NamedFindings(name string) ([]*Finding, error) {
+	if _m.Edges.namedFindings == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFindings[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IntegrationRun) appendNamedFindings(name string, edges ...*Finding) {
+	if _m.Edges.namedFindings == nil {
+		_m.Edges.namedFindings = make(map[string][]*Finding)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFindings[name] = []*Finding{}
+	} else {
+		_m.Edges.namedFindings[name] = append(_m.Edges.namedFindings[name], edges...)
+	}
+}
+
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IntegrationRun) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IntegrationRun) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+	} else {
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
+	}
+}
+
+// NamedProcedures returns the Procedures named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IntegrationRun) NamedProcedures(name string) ([]*Procedure, error) {
+	if _m.Edges.namedProcedures == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedProcedures[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IntegrationRun) appendNamedProcedures(name string, edges ...*Procedure) {
+	if _m.Edges.namedProcedures == nil {
+		_m.Edges.namedProcedures = make(map[string][]*Procedure)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedProcedures[name] = []*Procedure{}
+	} else {
+		_m.Edges.namedProcedures[name] = append(_m.Edges.namedProcedures[name], edges...)
+	}
+}
+
+// NamedRisks returns the Risks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IntegrationRun) NamedRisks(name string) ([]*Risk, error) {
+	if _m.Edges.namedRisks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedRisks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IntegrationRun) appendNamedRisks(name string, edges ...*Risk) {
+	if _m.Edges.namedRisks == nil {
+		_m.Edges.namedRisks = make(map[string][]*Risk)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedRisks[name] = []*Risk{}
+	} else {
+		_m.Edges.namedRisks[name] = append(_m.Edges.namedRisks[name], edges...)
+	}
+}
+
+// NamedVulnerabilities returns the Vulnerabilities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IntegrationRun) NamedVulnerabilities(name string) ([]*Vulnerability, error) {
+	if _m.Edges.namedVulnerabilities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedVulnerabilities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IntegrationRun) appendNamedVulnerabilities(name string, edges ...*Vulnerability) {
+	if _m.Edges.namedVulnerabilities == nil {
+		_m.Edges.namedVulnerabilities = make(map[string][]*Vulnerability)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedVulnerabilities[name] = []*Vulnerability{}
+	} else {
+		_m.Edges.namedVulnerabilities[name] = append(_m.Edges.namedVulnerabilities[name], edges...)
+	}
 }
 
 // IntegrationRuns is a parsable slice of IntegrationRun.

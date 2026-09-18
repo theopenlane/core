@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"slices"
 	"testing"
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
@@ -186,6 +187,53 @@ func TestQuerySubcontrols(t *testing.T) {
 	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: []string{sc1.ControlID, sc2.ControlID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	// cleanup the subcontrols
 	(&th.Cleanup[*generated.SubcontrolDeleteOne]{Client: suite.Client.DB.Subcontrol, IDs: []string{sc1.ID, sc2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+}
+
+func TestQuerySubcontrolsBlockedGroupOnControl(t *testing.T) {
+	users := suite.SeedFreshMinimalOrgUsers(t, true)
+	ownerCtx := users.Owner.UserCtx
+
+	groupMember := (&th.GroupMemberBuilder{Client: suite.Client, UserID: users.Member.ID}).MustNew(ownerCtx, t)
+
+	blocked := (&th.SubcontrolBuilder{Client: suite.Client}).MustNew(ownerCtx, t)
+	visible := (&th.SubcontrolBuilder{Client: suite.Client}).MustNew(ownerCtx, t)
+
+	_, err := suite.Client.API.UpdateControl(ownerCtx, blocked.ControlID, testclient.UpdateControlInput{
+		AddBlockedGroupIDs: []string{groupMember.GroupID},
+	})
+	assert.NilError(t, err)
+
+	where := &testclient.SubcontrolWhereInput{IDIn: []string{blocked.ID, visible.ID}}
+
+	testCases := []struct {
+		name        string
+		ctx         context.Context
+		expectedIDs []string
+	}{
+		{
+			name:        "org owner still sees both",
+			ctx:         ownerCtx,
+			expectedIDs: []string{blocked.ID, visible.ID},
+		},
+		{
+			name:        "member of blocked group cannot see subcontrol of blocked control",
+			ctx:         users.Member.UserCtx,
+			expectedIDs: []string{visible.ID},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("List "+tc.name, func(t *testing.T) {
+			resp, err := suite.Client.API.GetSubcontrols(tc.ctx, where)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			slices.Sort(tc.expectedIDs)
+			assert.Check(t, is.DeepEqual(subcontrolEdgeIDs(t, resp), tc.expectedIDs))
+		})
+	}
+
+	th.CleanupOrganizationDataWithContext(ownerCtx, t)
 }
 
 func TestMutationCreateSubcontrol(t *testing.T) {
@@ -659,4 +707,17 @@ func TestMutationDeleteSubcontrol(t *testing.T) {
 	// cleanup the controls
 	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: []string{subcontrol1.ControlID, subcontrol2.ControlID}}).
 		MustDelete(th.SharedTestUser1.UserCtx, t)
+}
+
+func subcontrolEdgeIDs(t *testing.T, resp *testclient.GetSubcontrols) []string {
+	t.Helper()
+
+	ids := make([]string, 0, len(resp.Subcontrols.Edges))
+	for _, edge := range resp.Subcontrols.Edges {
+		ids = append(ids, edge.Node.ID)
+	}
+
+	slices.Sort(ids)
+
+	return ids
 }

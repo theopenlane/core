@@ -24,7 +24,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
@@ -198,7 +197,7 @@ func init() {
 	// apitoken.DefaultID holds the default value on creation for the id field.
 	apitoken.DefaultID = apitokenDescID.Default.(func() string)
 	actionplanMixin := schema.ActionPlan{}.Mixin()
-	actionplan.Policy = privacy.NewPolicies(actionplanMixin[11], schema.ActionPlan{})
+	actionplan.Policy = privacy.NewPolicies(actionplanMixin[12], schema.ActionPlan{})
 	actionplan.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := actionplan.Policy.EvalMutation(ctx, m); err != nil {
@@ -212,12 +211,12 @@ func init() {
 	actionplanMixinHooks3 := actionplanMixin[3].Hooks()
 	actionplanMixinHooks5 := actionplanMixin[5].Hooks()
 	actionplanMixinHooks6 := actionplanMixin[6].Hooks()
-	actionplanMixinHooks8 := actionplanMixin[8].Hooks()
 	actionplanMixinHooks9 := actionplanMixin[9].Hooks()
 	actionplanMixinHooks10 := actionplanMixin[10].Hooks()
 	actionplanMixinHooks11 := actionplanMixin[11].Hooks()
 	actionplanMixinHooks12 := actionplanMixin[12].Hooks()
 	actionplanMixinHooks13 := actionplanMixin[13].Hooks()
+	actionplanMixinHooks14 := actionplanMixin[14].Hooks()
 
 	actionplan.Hooks[1] = actionplanMixinHooks0[0]
 
@@ -229,40 +228,40 @@ func init() {
 
 	actionplan.Hooks[5] = actionplanMixinHooks6[0]
 
-	actionplan.Hooks[6] = actionplanMixinHooks8[0]
+	actionplan.Hooks[6] = actionplanMixinHooks9[0]
 
-	actionplan.Hooks[7] = actionplanMixinHooks8[1]
+	actionplan.Hooks[7] = actionplanMixinHooks9[1]
 
-	actionplan.Hooks[8] = actionplanMixinHooks8[2]
+	actionplan.Hooks[8] = actionplanMixinHooks9[2]
 
-	actionplan.Hooks[9] = actionplanMixinHooks8[3]
+	actionplan.Hooks[9] = actionplanMixinHooks9[3]
 
-	actionplan.Hooks[10] = actionplanMixinHooks8[4]
+	actionplan.Hooks[10] = actionplanMixinHooks9[4]
 
-	actionplan.Hooks[11] = actionplanMixinHooks8[5]
+	actionplan.Hooks[11] = actionplanMixinHooks9[5]
 
-	actionplan.Hooks[12] = actionplanMixinHooks8[6]
+	actionplan.Hooks[12] = actionplanMixinHooks9[6]
 
-	actionplan.Hooks[13] = actionplanMixinHooks9[0]
+	actionplan.Hooks[13] = actionplanMixinHooks10[0]
 
-	actionplan.Hooks[14] = actionplanMixinHooks9[1]
+	actionplan.Hooks[14] = actionplanMixinHooks10[1]
 
-	actionplan.Hooks[15] = actionplanMixinHooks10[0]
+	actionplan.Hooks[15] = actionplanMixinHooks11[0]
 
-	actionplan.Hooks[16] = actionplanMixinHooks10[1]
+	actionplan.Hooks[16] = actionplanMixinHooks11[1]
 
-	actionplan.Hooks[17] = actionplanMixinHooks10[2]
+	actionplan.Hooks[17] = actionplanMixinHooks11[2]
 
-	actionplan.Hooks[18] = actionplanMixinHooks11[0]
+	actionplan.Hooks[18] = actionplanMixinHooks12[0]
 
-	actionplan.Hooks[19] = actionplanMixinHooks12[0]
+	actionplan.Hooks[19] = actionplanMixinHooks13[0]
 
-	actionplan.Hooks[20] = actionplanMixinHooks13[0]
+	actionplan.Hooks[20] = actionplanMixinHooks14[0]
 	actionplanMixinInters3 := actionplanMixin[3].Interceptors()
-	actionplanMixinInters9 := actionplanMixin[9].Interceptors()
+	actionplanMixinInters10 := actionplanMixin[10].Interceptors()
 	actionplan.Interceptors[0] = actionplanMixinInters3[0]
-	actionplan.Interceptors[1] = actionplanMixinInters9[0]
-	actionplan.Interceptors[2] = actionplanMixinInters9[1]
+	actionplan.Interceptors[1] = actionplanMixinInters10[0]
+	actionplan.Interceptors[2] = actionplanMixinInters10[1]
 	actionplanMixinFields0 := actionplanMixin[0].Fields()
 	_ = actionplanMixinFields0
 	actionplanMixinFields4 := actionplanMixin[4].Fields()
@@ -271,14 +270,14 @@ func init() {
 	_ = actionplanMixinFields5
 	actionplanMixinFields6 := actionplanMixin[6].Fields()
 	_ = actionplanMixinFields6
-	actionplanMixinFields8 := actionplanMixin[8].Fields()
-	_ = actionplanMixinFields8
 	actionplanMixinFields9 := actionplanMixin[9].Fields()
 	_ = actionplanMixinFields9
-	actionplanMixinFields11 := actionplanMixin[11].Fields()
-	_ = actionplanMixinFields11
-	actionplanMixinFields13 := actionplanMixin[13].Fields()
-	_ = actionplanMixinFields13
+	actionplanMixinFields10 := actionplanMixin[10].Fields()
+	_ = actionplanMixinFields10
+	actionplanMixinFields12 := actionplanMixin[12].Fields()
+	_ = actionplanMixinFields12
+	actionplanMixinFields14 := actionplanMixin[14].Fields()
+	_ = actionplanMixinFields14
 	actionplanFields := schema.ActionPlan{}.Fields()
 	_ = actionplanFields
 	// actionplanDescCreatedAt is the schema descriptor for created_at field.
@@ -302,55 +301,55 @@ func init() {
 	// actionplan.RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
 	actionplan.RevisionValidator = actionplanDescRevision.Validators[0].(func(string) error)
 	// actionplanDescName is the schema descriptor for name field.
-	actionplanDescName := actionplanMixinFields8[0].Descriptor()
+	actionplanDescName := actionplanMixinFields9[0].Descriptor()
 	// actionplan.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	actionplan.NameValidator = actionplanDescName.Validators[0].(func(string) error)
 	// actionplanDescApprovalRequired is the schema descriptor for approval_required field.
-	actionplanDescApprovalRequired := actionplanMixinFields8[5].Descriptor()
+	actionplanDescApprovalRequired := actionplanMixinFields9[5].Descriptor()
 	// actionplan.DefaultApprovalRequired holds the default value on creation for the approval_required field.
 	actionplan.DefaultApprovalRequired = actionplanDescApprovalRequired.Default.(bool)
 	// actionplanDescReviewDue is the schema descriptor for review_due field.
-	actionplanDescReviewDue := actionplanMixinFields8[6].Descriptor()
+	actionplanDescReviewDue := actionplanMixinFields9[6].Descriptor()
 	// actionplan.DefaultReviewDue holds the default value on creation for the review_due field.
 	actionplan.DefaultReviewDue = actionplanDescReviewDue.Default.(time.Time)
 	// actionplanDescTagSuggestions is the schema descriptor for tag_suggestions field.
-	actionplanDescTagSuggestions := actionplanMixinFields8[11].Descriptor()
+	actionplanDescTagSuggestions := actionplanMixinFields9[11].Descriptor()
 	// actionplan.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
 	actionplan.DefaultTagSuggestions = actionplanDescTagSuggestions.Default.([]string)
 	// actionplanDescDismissedTagSuggestions is the schema descriptor for dismissed_tag_suggestions field.
-	actionplanDescDismissedTagSuggestions := actionplanMixinFields8[12].Descriptor()
+	actionplanDescDismissedTagSuggestions := actionplanMixinFields9[12].Descriptor()
 	// actionplan.DefaultDismissedTagSuggestions holds the default value on creation for the dismissed_tag_suggestions field.
 	actionplan.DefaultDismissedTagSuggestions = actionplanDescDismissedTagSuggestions.Default.([]string)
 	// actionplanDescControlSuggestions is the schema descriptor for control_suggestions field.
-	actionplanDescControlSuggestions := actionplanMixinFields8[13].Descriptor()
+	actionplanDescControlSuggestions := actionplanMixinFields9[13].Descriptor()
 	// actionplan.DefaultControlSuggestions holds the default value on creation for the control_suggestions field.
 	actionplan.DefaultControlSuggestions = actionplanDescControlSuggestions.Default.([]string)
 	// actionplanDescDismissedControlSuggestions is the schema descriptor for dismissed_control_suggestions field.
-	actionplanDescDismissedControlSuggestions := actionplanMixinFields8[14].Descriptor()
+	actionplanDescDismissedControlSuggestions := actionplanMixinFields9[14].Descriptor()
 	// actionplan.DefaultDismissedControlSuggestions holds the default value on creation for the dismissed_control_suggestions field.
 	actionplan.DefaultDismissedControlSuggestions = actionplanDescDismissedControlSuggestions.Default.([]string)
 	// actionplanDescImprovementSuggestions is the schema descriptor for improvement_suggestions field.
-	actionplanDescImprovementSuggestions := actionplanMixinFields8[15].Descriptor()
+	actionplanDescImprovementSuggestions := actionplanMixinFields9[15].Descriptor()
 	// actionplan.DefaultImprovementSuggestions holds the default value on creation for the improvement_suggestions field.
 	actionplan.DefaultImprovementSuggestions = actionplanDescImprovementSuggestions.Default.([]string)
 	// actionplanDescDismissedImprovementSuggestions is the schema descriptor for dismissed_improvement_suggestions field.
-	actionplanDescDismissedImprovementSuggestions := actionplanMixinFields8[16].Descriptor()
+	actionplanDescDismissedImprovementSuggestions := actionplanMixinFields9[16].Descriptor()
 	// actionplan.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	actionplan.DefaultDismissedImprovementSuggestions = actionplanDescDismissedImprovementSuggestions.Default.([]string)
 	// actionplanDescURL is the schema descriptor for url field.
-	actionplanDescURL := actionplanMixinFields8[17].Descriptor()
+	actionplanDescURL := actionplanMixinFields9[17].Descriptor()
 	// actionplan.URLValidator is a validator for the "url" field. It is called by the builders before save.
 	actionplan.URLValidator = actionplanDescURL.Validators[0].(func(string) error)
 	// actionplanDescOwnerID is the schema descriptor for owner_id field.
-	actionplanDescOwnerID := actionplanMixinFields9[0].Descriptor()
+	actionplanDescOwnerID := actionplanMixinFields10[0].Descriptor()
 	// actionplan.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	actionplan.OwnerIDValidator = actionplanDescOwnerID.Validators[0].(func(string) error)
 	// actionplanDescSystemOwned is the schema descriptor for system_owned field.
-	actionplanDescSystemOwned := actionplanMixinFields11[0].Descriptor()
+	actionplanDescSystemOwned := actionplanMixinFields12[0].Descriptor()
 	// actionplan.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	actionplan.DefaultSystemOwned = actionplanDescSystemOwned.Default.(bool)
 	// actionplanDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	actionplanDescWorkflowEligibleMarker := actionplanMixinFields13[0].Descriptor()
+	actionplanDescWorkflowEligibleMarker := actionplanMixinFields14[0].Descriptor()
 	// actionplan.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	actionplan.DefaultWorkflowEligibleMarker = actionplanDescWorkflowEligibleMarker.Default.(bool)
 	// actionplanDescTitle is the schema descriptor for title field.
@@ -577,7 +576,7 @@ func init() {
 	// assessmentresponse.DefaultID holds the default value on creation for the id field.
 	assessmentresponse.DefaultID = assessmentresponseDescID.Default.(func() string)
 	assetMixin := schema.Asset{}.Mixin()
-	asset.Policy = privacy.NewPolicies(assetMixin[18], schema.Asset{})
+	asset.Policy = privacy.NewPolicies(assetMixin[19], schema.Asset{})
 	asset.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := asset.Policy.EvalMutation(ctx, m); err != nil {
@@ -590,9 +589,8 @@ func init() {
 	assetMixinHooks1 := assetMixin[1].Hooks()
 	assetMixinHooks3 := assetMixin[3].Hooks()
 	assetMixinHooks5 := assetMixin[5].Hooks()
-	assetMixinHooks7 := assetMixin[7].Hooks()
 	assetMixinHooks8 := assetMixin[8].Hooks()
-	assetMixinHooks10 := assetMixin[10].Hooks()
+	assetMixinHooks9 := assetMixin[9].Hooks()
 	assetMixinHooks11 := assetMixin[11].Hooks()
 	assetMixinHooks12 := assetMixin[12].Hooks()
 	assetMixinHooks13 := assetMixin[13].Hooks()
@@ -601,6 +599,7 @@ func init() {
 	assetMixinHooks16 := assetMixin[16].Hooks()
 	assetMixinHooks17 := assetMixin[17].Hooks()
 	assetMixinHooks18 := assetMixin[18].Hooks()
+	assetMixinHooks19 := assetMixin[19].Hooks()
 	assetHooks := schema.Asset{}.Hooks()
 
 	asset.Hooks[1] = assetMixinHooks0[0]
@@ -611,50 +610,52 @@ func init() {
 
 	asset.Hooks[4] = assetMixinHooks5[0]
 
-	asset.Hooks[5] = assetMixinHooks7[0]
+	asset.Hooks[5] = assetMixinHooks8[0]
 
-	asset.Hooks[6] = assetMixinHooks7[1]
+	asset.Hooks[6] = assetMixinHooks8[1]
 
-	asset.Hooks[7] = assetMixinHooks8[0]
+	asset.Hooks[7] = assetMixinHooks9[0]
 
-	asset.Hooks[8] = assetMixinHooks8[1]
+	asset.Hooks[8] = assetMixinHooks9[1]
 
-	asset.Hooks[9] = assetMixinHooks8[2]
+	asset.Hooks[9] = assetMixinHooks9[2]
 
-	asset.Hooks[10] = assetMixinHooks10[0]
+	asset.Hooks[10] = assetMixinHooks11[0]
 
-	asset.Hooks[11] = assetMixinHooks11[0]
+	asset.Hooks[11] = assetMixinHooks12[0]
 
-	asset.Hooks[12] = assetMixinHooks12[0]
+	asset.Hooks[12] = assetMixinHooks13[0]
 
-	asset.Hooks[13] = assetMixinHooks13[0]
+	asset.Hooks[13] = assetMixinHooks14[0]
 
-	asset.Hooks[14] = assetMixinHooks14[0]
+	asset.Hooks[14] = assetMixinHooks15[0]
 
-	asset.Hooks[15] = assetMixinHooks15[0]
+	asset.Hooks[15] = assetMixinHooks16[0]
 
-	asset.Hooks[16] = assetMixinHooks16[0]
+	asset.Hooks[16] = assetMixinHooks17[0]
 
-	asset.Hooks[17] = assetMixinHooks17[0]
+	asset.Hooks[17] = assetMixinHooks18[0]
 
-	asset.Hooks[18] = assetMixinHooks18[0]
+	asset.Hooks[18] = assetMixinHooks19[0]
 
 	asset.Hooks[19] = assetHooks[0]
+
+	asset.Hooks[20] = assetHooks[1]
 	assetMixinInters3 := assetMixin[3].Interceptors()
-	assetMixinInters7 := assetMixin[7].Interceptors()
+	assetMixinInters8 := assetMixin[8].Interceptors()
 	asset.Interceptors[0] = assetMixinInters3[0]
-	asset.Interceptors[1] = assetMixinInters7[0]
-	asset.Interceptors[2] = assetMixinInters7[1]
+	asset.Interceptors[1] = assetMixinInters8[0]
+	asset.Interceptors[2] = assetMixinInters8[1]
 	assetMixinFields0 := assetMixin[0].Fields()
 	_ = assetMixinFields0
 	assetMixinFields4 := assetMixin[4].Fields()
 	_ = assetMixinFields4
 	assetMixinFields5 := assetMixin[5].Fields()
 	_ = assetMixinFields5
-	assetMixinFields7 := assetMixin[7].Fields()
-	_ = assetMixinFields7
-	assetMixinFields18 := assetMixin[18].Fields()
-	_ = assetMixinFields18
+	assetMixinFields8 := assetMixin[8].Fields()
+	_ = assetMixinFields8
+	assetMixinFields19 := assetMixin[19].Fields()
+	_ = assetMixinFields19
 	assetFields := schema.Asset{}.Fields()
 	_ = assetFields
 	// assetDescCreatedAt is the schema descriptor for created_at field.
@@ -672,11 +673,11 @@ func init() {
 	// asset.DefaultTags holds the default value on creation for the tags field.
 	asset.DefaultTags = assetDescTags.Default.([]string)
 	// assetDescOwnerID is the schema descriptor for owner_id field.
-	assetDescOwnerID := assetMixinFields7[0].Descriptor()
+	assetDescOwnerID := assetMixinFields8[0].Descriptor()
 	// asset.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	asset.OwnerIDValidator = assetDescOwnerID.Validators[0].(func(string) error)
 	// assetDescSystemOwned is the schema descriptor for system_owned field.
-	assetDescSystemOwned := assetMixinFields18[0].Descriptor()
+	assetDescSystemOwned := assetMixinFields19[0].Descriptor()
 	// asset.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	asset.DefaultSystemOwned = assetDescSystemOwned.Default.(bool)
 	// assetDescName is the schema descriptor for name field.
@@ -931,8 +932,8 @@ func init() {
 	checkresultMixinHooks1 := checkresultMixin[1].Hooks()
 	checkresultMixinHooks3 := checkresultMixin[3].Hooks()
 	checkresultMixinHooks5 := checkresultMixin[5].Hooks()
-	checkresultMixinHooks7 := checkresultMixin[7].Hooks()
 	checkresultMixinHooks8 := checkresultMixin[8].Hooks()
+	checkresultMixinHooks9 := checkresultMixin[9].Hooks()
 
 	checkresult.Hooks[1] = checkresultMixinHooks0[0]
 
@@ -942,17 +943,17 @@ func init() {
 
 	checkresult.Hooks[4] = checkresultMixinHooks5[0]
 
-	checkresult.Hooks[5] = checkresultMixinHooks7[0]
+	checkresult.Hooks[5] = checkresultMixinHooks8[0]
 
-	checkresult.Hooks[6] = checkresultMixinHooks8[0]
+	checkresult.Hooks[6] = checkresultMixinHooks9[0]
 
-	checkresult.Hooks[7] = checkresultMixinHooks8[1]
+	checkresult.Hooks[7] = checkresultMixinHooks9[1]
 
-	checkresult.Hooks[8] = checkresultMixinHooks8[2]
+	checkresult.Hooks[8] = checkresultMixinHooks9[2]
 	checkresultMixinInters3 := checkresultMixin[3].Interceptors()
-	checkresultMixinInters7 := checkresultMixin[7].Interceptors()
+	checkresultMixinInters8 := checkresultMixin[8].Interceptors()
 	checkresult.Interceptors[0] = checkresultMixinInters3[0]
-	checkresult.Interceptors[1] = checkresultMixinInters7[0]
+	checkresult.Interceptors[1] = checkresultMixinInters8[0]
 	checkresultMixinFields0 := checkresultMixin[0].Fields()
 	_ = checkresultMixinFields0
 	checkresultMixinFields4 := checkresultMixin[4].Fields()
@@ -993,7 +994,7 @@ func init() {
 	contactMixinHooks1 := contactMixin[1].Hooks()
 	contactMixinHooks3 := contactMixin[3].Hooks()
 	contactMixinHooks5 := contactMixin[5].Hooks()
-	contactMixinHooks7 := contactMixin[7].Hooks()
+	contactMixinHooks8 := contactMixin[8].Hooks()
 	contactHooks := schema.Contact{}.Hooks()
 
 	contact.Hooks[1] = contactMixinHooks0[0]
@@ -1004,21 +1005,21 @@ func init() {
 
 	contact.Hooks[4] = contactMixinHooks5[0]
 
-	contact.Hooks[5] = contactMixinHooks7[0]
+	contact.Hooks[5] = contactMixinHooks8[0]
 
 	contact.Hooks[6] = contactHooks[0]
 	contactMixinInters3 := contactMixin[3].Interceptors()
-	contactMixinInters7 := contactMixin[7].Interceptors()
+	contactMixinInters8 := contactMixin[8].Interceptors()
 	contact.Interceptors[0] = contactMixinInters3[0]
-	contact.Interceptors[1] = contactMixinInters7[0]
+	contact.Interceptors[1] = contactMixinInters8[0]
 	contactMixinFields0 := contactMixin[0].Fields()
 	_ = contactMixinFields0
 	contactMixinFields4 := contactMixin[4].Fields()
 	_ = contactMixinFields4
 	contactMixinFields5 := contactMixin[5].Fields()
 	_ = contactMixinFields5
-	contactMixinFields7 := contactMixin[7].Fields()
-	_ = contactMixinFields7
+	contactMixinFields8 := contactMixin[8].Fields()
+	_ = contactMixinFields8
 	contactFields := schema.Contact{}.Fields()
 	_ = contactFields
 	// contactDescCreatedAt is the schema descriptor for created_at field.
@@ -1036,7 +1037,7 @@ func init() {
 	// contact.DefaultTags holds the default value on creation for the tags field.
 	contact.DefaultTags = contactDescTags.Default.([]string)
 	// contactDescOwnerID is the schema descriptor for owner_id field.
-	contactDescOwnerID := contactMixinFields7[0].Descriptor()
+	contactDescOwnerID := contactMixinFields8[0].Descriptor()
 	// contact.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	contact.OwnerIDValidator = contactDescOwnerID.Validators[0].(func(string) error)
 	// contactDescFullName is the schema descriptor for full_name field.
@@ -1685,9 +1686,9 @@ func init() {
 	directoryaccountMixinHooks1 := directoryaccountMixin[1].Hooks()
 	directoryaccountMixinHooks3 := directoryaccountMixin[3].Hooks()
 	directoryaccountMixinHooks4 := directoryaccountMixin[4].Hooks()
-	directoryaccountMixinHooks6 := directoryaccountMixin[6].Hooks()
 	directoryaccountMixinHooks7 := directoryaccountMixin[7].Hooks()
 	directoryaccountMixinHooks8 := directoryaccountMixin[8].Hooks()
+	directoryaccountMixinHooks9 := directoryaccountMixin[9].Hooks()
 	directoryaccountHooks := schema.DirectoryAccount{}.Hooks()
 
 	directoryaccount.Hooks[1] = directoryaccountMixinHooks0[0]
@@ -1698,26 +1699,26 @@ func init() {
 
 	directoryaccount.Hooks[4] = directoryaccountMixinHooks4[0]
 
-	directoryaccount.Hooks[5] = directoryaccountMixinHooks6[0]
+	directoryaccount.Hooks[5] = directoryaccountMixinHooks7[0]
 
-	directoryaccount.Hooks[6] = directoryaccountMixinHooks6[1]
+	directoryaccount.Hooks[6] = directoryaccountMixinHooks7[1]
 
-	directoryaccount.Hooks[7] = directoryaccountMixinHooks7[0]
+	directoryaccount.Hooks[7] = directoryaccountMixinHooks8[0]
 
-	directoryaccount.Hooks[8] = directoryaccountMixinHooks8[0]
+	directoryaccount.Hooks[8] = directoryaccountMixinHooks9[0]
 
 	directoryaccount.Hooks[9] = directoryaccountHooks[0]
-	directoryaccountMixinInters6 := directoryaccountMixin[6].Interceptors()
-	directoryaccount.Interceptors[0] = directoryaccountMixinInters6[0]
-	directoryaccount.Interceptors[1] = directoryaccountMixinInters6[1]
+	directoryaccountMixinInters7 := directoryaccountMixin[7].Interceptors()
+	directoryaccount.Interceptors[0] = directoryaccountMixinInters7[0]
+	directoryaccount.Interceptors[1] = directoryaccountMixinInters7[1]
 	directoryaccountMixinFields0 := directoryaccountMixin[0].Fields()
 	_ = directoryaccountMixinFields0
 	directoryaccountMixinFields3 := directoryaccountMixin[3].Fields()
 	_ = directoryaccountMixinFields3
 	directoryaccountMixinFields4 := directoryaccountMixin[4].Fields()
 	_ = directoryaccountMixinFields4
-	directoryaccountMixinFields6 := directoryaccountMixin[6].Fields()
-	_ = directoryaccountMixinFields6
+	directoryaccountMixinFields7 := directoryaccountMixin[7].Fields()
+	_ = directoryaccountMixinFields7
 	directoryaccountFields := schema.DirectoryAccount{}.Fields()
 	_ = directoryaccountFields
 	// directoryaccountDescCreatedAt is the schema descriptor for created_at field.
@@ -1739,37 +1740,33 @@ func init() {
 	// directoryaccount.DefaultTags holds the default value on creation for the tags field.
 	directoryaccount.DefaultTags = directoryaccountDescTags.Default.([]string)
 	// directoryaccountDescOwnerID is the schema descriptor for owner_id field.
-	directoryaccountDescOwnerID := directoryaccountMixinFields6[0].Descriptor()
+	directoryaccountDescOwnerID := directoryaccountMixinFields7[0].Descriptor()
 	// directoryaccount.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	directoryaccount.OwnerIDValidator = directoryaccountDescOwnerID.Validators[0].(func(string) error)
 	// directoryaccountDescIntegrationID is the schema descriptor for integration_id field.
 	directoryaccountDescIntegrationID := directoryaccountFields[0].Descriptor()
 	// directoryaccount.IntegrationIDValidator is a validator for the "integration_id" field. It is called by the builders before save.
 	directoryaccount.IntegrationIDValidator = directoryaccountDescIntegrationID.Validators[0].(func(string) error)
-	// directoryaccountDescDirectorySyncRunID is the schema descriptor for directory_sync_run_id field.
-	directoryaccountDescDirectorySyncRunID := directoryaccountFields[1].Descriptor()
-	// directoryaccount.DirectorySyncRunIDValidator is a validator for the "directory_sync_run_id" field. It is called by the builders before save.
-	directoryaccount.DirectorySyncRunIDValidator = directoryaccountDescDirectorySyncRunID.Validators[0].(func(string) error)
 	// directoryaccountDescPlatformID is the schema descriptor for platform_id field.
-	directoryaccountDescPlatformID := directoryaccountFields[2].Descriptor()
+	directoryaccountDescPlatformID := directoryaccountFields[1].Descriptor()
 	// directoryaccount.PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
 	directoryaccount.PlatformIDValidator = directoryaccountDescPlatformID.Validators[0].(func(string) error)
 	// directoryaccountDescExternalID is the schema descriptor for external_id field.
-	directoryaccountDescExternalID := directoryaccountFields[6].Descriptor()
+	directoryaccountDescExternalID := directoryaccountFields[4].Descriptor()
 	// directoryaccount.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	directoryaccount.ExternalIDValidator = directoryaccountDescExternalID.Validators[0].(func(string) error)
 	// directoryaccountDescEmailAliases is the schema descriptor for email_aliases field.
-	directoryaccountDescEmailAliases := directoryaccountFields[9].Descriptor()
+	directoryaccountDescEmailAliases := directoryaccountFields[7].Descriptor()
 	// directoryaccount.DefaultEmailAliases holds the default value on creation for the email_aliases field.
 	directoryaccount.DefaultEmailAliases = directoryaccountDescEmailAliases.Default.([]string)
 	// directoryaccount.EmailAliasesValidator is a validator for the "email_aliases" field. It is called by the builders before save.
 	directoryaccount.EmailAliasesValidator = directoryaccountDescEmailAliases.Validators[0].(func([]string) error)
 	// directoryaccountDescPhoneNumber is the schema descriptor for phone_number field.
-	directoryaccountDescPhoneNumber := directoryaccountFields[10].Descriptor()
+	directoryaccountDescPhoneNumber := directoryaccountFields[8].Descriptor()
 	// directoryaccount.PhoneNumberValidator is a validator for the "phone_number" field. It is called by the builders before save.
 	directoryaccount.PhoneNumberValidator = directoryaccountDescPhoneNumber.Validators[0].(func(string) error)
 	// directoryaccountDescAvatarRemoteURL is the schema descriptor for avatar_remote_url field.
-	directoryaccountDescAvatarRemoteURL := directoryaccountFields[12].Descriptor()
+	directoryaccountDescAvatarRemoteURL := directoryaccountFields[10].Descriptor()
 	// directoryaccount.AvatarRemoteURLValidator is a validator for the "avatar_remote_url" field. It is called by the builders before save.
 	directoryaccount.AvatarRemoteURLValidator = func() func(string) error {
 		validators := directoryaccountDescAvatarRemoteURL.Validators
@@ -1787,19 +1784,15 @@ func init() {
 		}
 	}()
 	// directoryaccountDescAvatarUpdatedAt is the schema descriptor for avatar_updated_at field.
-	directoryaccountDescAvatarUpdatedAt := directoryaccountFields[14].Descriptor()
+	directoryaccountDescAvatarUpdatedAt := directoryaccountFields[12].Descriptor()
 	// directoryaccount.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
 	directoryaccount.DefaultAvatarUpdatedAt = directoryaccountDescAvatarUpdatedAt.Default.(func() time.Time)
 	// directoryaccountDescObservedAt is the schema descriptor for observed_at field.
-	directoryaccountDescObservedAt := directoryaccountFields[29].Descriptor()
+	directoryaccountDescObservedAt := directoryaccountFields[24].Descriptor()
 	// directoryaccount.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directoryaccount.DefaultObservedAt = directoryaccountDescObservedAt.Default.(func() time.Time)
-	// directoryaccountDescProfileHash is the schema descriptor for profile_hash field.
-	directoryaccountDescProfileHash := directoryaccountFields[30].Descriptor()
-	// directoryaccount.DefaultProfileHash holds the default value on creation for the profile_hash field.
-	directoryaccount.DefaultProfileHash = directoryaccountDescProfileHash.Default.(string)
 	// directoryaccountDescPrimarySource is the schema descriptor for primary_source field.
-	directoryaccountDescPrimarySource := directoryaccountFields[35].Descriptor()
+	directoryaccountDescPrimarySource := directoryaccountFields[29].Descriptor()
 	// directoryaccount.DefaultPrimarySource holds the default value on creation for the primary_source field.
 	directoryaccount.DefaultPrimarySource = directoryaccountDescPrimarySource.Default.(bool)
 	// directoryaccountDescID is the schema descriptor for id field.
@@ -1820,9 +1813,9 @@ func init() {
 	directorygroupMixinHooks1 := directorygroupMixin[1].Hooks()
 	directorygroupMixinHooks3 := directorygroupMixin[3].Hooks()
 	directorygroupMixinHooks4 := directorygroupMixin[4].Hooks()
-	directorygroupMixinHooks6 := directorygroupMixin[6].Hooks()
 	directorygroupMixinHooks7 := directorygroupMixin[7].Hooks()
 	directorygroupMixinHooks8 := directorygroupMixin[8].Hooks()
+	directorygroupMixinHooks9 := directorygroupMixin[9].Hooks()
 
 	directorygroup.Hooks[1] = directorygroupMixinHooks0[0]
 
@@ -1832,21 +1825,21 @@ func init() {
 
 	directorygroup.Hooks[4] = directorygroupMixinHooks4[0]
 
-	directorygroup.Hooks[5] = directorygroupMixinHooks6[0]
+	directorygroup.Hooks[5] = directorygroupMixinHooks7[0]
 
-	directorygroup.Hooks[6] = directorygroupMixinHooks7[0]
+	directorygroup.Hooks[6] = directorygroupMixinHooks8[0]
 
-	directorygroup.Hooks[7] = directorygroupMixinHooks8[0]
-	directorygroupMixinInters6 := directorygroupMixin[6].Interceptors()
-	directorygroup.Interceptors[0] = directorygroupMixinInters6[0]
+	directorygroup.Hooks[7] = directorygroupMixinHooks9[0]
+	directorygroupMixinInters7 := directorygroupMixin[7].Interceptors()
+	directorygroup.Interceptors[0] = directorygroupMixinInters7[0]
 	directorygroupMixinFields0 := directorygroupMixin[0].Fields()
 	_ = directorygroupMixinFields0
 	directorygroupMixinFields3 := directorygroupMixin[3].Fields()
 	_ = directorygroupMixinFields3
 	directorygroupMixinFields4 := directorygroupMixin[4].Fields()
 	_ = directorygroupMixinFields4
-	directorygroupMixinFields6 := directorygroupMixin[6].Fields()
-	_ = directorygroupMixinFields6
+	directorygroupMixinFields7 := directorygroupMixin[7].Fields()
+	_ = directorygroupMixinFields7
 	directorygroupFields := schema.DirectoryGroup{}.Fields()
 	_ = directorygroupFields
 	// directorygroupDescCreatedAt is the schema descriptor for created_at field.
@@ -1868,7 +1861,7 @@ func init() {
 	// directorygroup.DefaultTags holds the default value on creation for the tags field.
 	directorygroup.DefaultTags = directorygroupDescTags.Default.([]string)
 	// directorygroupDescOwnerID is the schema descriptor for owner_id field.
-	directorygroupDescOwnerID := directorygroupMixinFields6[0].Descriptor()
+	directorygroupDescOwnerID := directorygroupMixinFields7[0].Descriptor()
 	// directorygroup.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	directorygroup.OwnerIDValidator = directorygroupDescOwnerID.Validators[0].(func(string) error)
 	// directorygroupDescIntegrationID is the schema descriptor for integration_id field.
@@ -1879,30 +1872,22 @@ func init() {
 	directorygroupDescPlatformID := directorygroupFields[1].Descriptor()
 	// directorygroup.PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
 	directorygroup.PlatformIDValidator = directorygroupDescPlatformID.Validators[0].(func(string) error)
-	// directorygroupDescDirectorySyncRunID is the schema descriptor for directory_sync_run_id field.
-	directorygroupDescDirectorySyncRunID := directorygroupFields[3].Descriptor()
-	// directorygroup.DirectorySyncRunIDValidator is a validator for the "directory_sync_run_id" field. It is called by the builders before save.
-	directorygroup.DirectorySyncRunIDValidator = directorygroupDescDirectorySyncRunID.Validators[0].(func(string) error)
 	// directorygroupDescExternalID is the schema descriptor for external_id field.
-	directorygroupDescExternalID := directorygroupFields[4].Descriptor()
+	directorygroupDescExternalID := directorygroupFields[2].Descriptor()
 	// directorygroup.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	directorygroup.ExternalIDValidator = directorygroupDescExternalID.Validators[0].(func(string) error)
 	// directorygroupDescEmail is the schema descriptor for email field.
-	directorygroupDescEmail := directorygroupFields[5].Descriptor()
+	directorygroupDescEmail := directorygroupFields[3].Descriptor()
 	// directorygroup.EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	directorygroup.EmailValidator = directorygroupDescEmail.Validators[0].(func(string) error)
 	// directorygroupDescExternalSharingAllowed is the schema descriptor for external_sharing_allowed field.
-	directorygroupDescExternalSharingAllowed := directorygroupFields[10].Descriptor()
+	directorygroupDescExternalSharingAllowed := directorygroupFields[8].Descriptor()
 	// directorygroup.DefaultExternalSharingAllowed holds the default value on creation for the external_sharing_allowed field.
 	directorygroup.DefaultExternalSharingAllowed = directorygroupDescExternalSharingAllowed.Default.(bool)
 	// directorygroupDescObservedAt is the schema descriptor for observed_at field.
-	directorygroupDescObservedAt := directorygroupFields[16].Descriptor()
+	directorygroupDescObservedAt := directorygroupFields[12].Descriptor()
 	// directorygroup.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directorygroup.DefaultObservedAt = directorygroupDescObservedAt.Default.(func() time.Time)
-	// directorygroupDescProfileHash is the schema descriptor for profile_hash field.
-	directorygroupDescProfileHash := directorygroupFields[17].Descriptor()
-	// directorygroup.DefaultProfileHash holds the default value on creation for the profile_hash field.
-	directorygroup.DefaultProfileHash = directorygroupDescProfileHash.Default.(string)
 	// directorygroupDescID is the schema descriptor for id field.
 	directorygroupDescID := directorygroupMixinFields3[0].Descriptor()
 	// directorygroup.DefaultID holds the default value on creation for the id field.
@@ -1920,9 +1905,9 @@ func init() {
 	directorymembershipMixinHooks0 := directorymembershipMixin[0].Hooks()
 	directorymembershipMixinHooks1 := directorymembershipMixin[1].Hooks()
 	directorymembershipMixinHooks3 := directorymembershipMixin[3].Hooks()
-	directorymembershipMixinHooks5 := directorymembershipMixin[5].Hooks()
 	directorymembershipMixinHooks6 := directorymembershipMixin[6].Hooks()
 	directorymembershipMixinHooks7 := directorymembershipMixin[7].Hooks()
+	directorymembershipMixinHooks8 := directorymembershipMixin[8].Hooks()
 
 	directorymembership.Hooks[1] = directorymembershipMixinHooks0[0]
 
@@ -1930,19 +1915,19 @@ func init() {
 
 	directorymembership.Hooks[3] = directorymembershipMixinHooks3[0]
 
-	directorymembership.Hooks[4] = directorymembershipMixinHooks5[0]
+	directorymembership.Hooks[4] = directorymembershipMixinHooks6[0]
 
-	directorymembership.Hooks[5] = directorymembershipMixinHooks6[0]
+	directorymembership.Hooks[5] = directorymembershipMixinHooks7[0]
 
-	directorymembership.Hooks[6] = directorymembershipMixinHooks7[0]
-	directorymembershipMixinInters5 := directorymembershipMixin[5].Interceptors()
-	directorymembership.Interceptors[0] = directorymembershipMixinInters5[0]
+	directorymembership.Hooks[6] = directorymembershipMixinHooks8[0]
+	directorymembershipMixinInters6 := directorymembershipMixin[6].Interceptors()
+	directorymembership.Interceptors[0] = directorymembershipMixinInters6[0]
 	directorymembershipMixinFields0 := directorymembershipMixin[0].Fields()
 	_ = directorymembershipMixinFields0
 	directorymembershipMixinFields3 := directorymembershipMixin[3].Fields()
 	_ = directorymembershipMixinFields3
-	directorymembershipMixinFields5 := directorymembershipMixin[5].Fields()
-	_ = directorymembershipMixinFields5
+	directorymembershipMixinFields6 := directorymembershipMixin[6].Fields()
+	_ = directorymembershipMixinFields6
 	directorymembershipFields := schema.DirectoryMembership{}.Fields()
 	_ = directorymembershipFields
 	// directorymembershipDescCreatedAt is the schema descriptor for created_at field.
@@ -1960,7 +1945,7 @@ func init() {
 	// directorymembership.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
 	directorymembership.DisplayIDValidator = directorymembershipDescDisplayID.Validators[0].(func(string) error)
 	// directorymembershipDescOwnerID is the schema descriptor for owner_id field.
-	directorymembershipDescOwnerID := directorymembershipMixinFields5[0].Descriptor()
+	directorymembershipDescOwnerID := directorymembershipMixinFields6[0].Descriptor()
 	// directorymembership.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	directorymembership.OwnerIDValidator = directorymembershipDescOwnerID.Validators[0].(func(string) error)
 	// directorymembershipDescIntegrationID is the schema descriptor for integration_id field.
@@ -1971,106 +1956,22 @@ func init() {
 	directorymembershipDescPlatformID := directorymembershipFields[1].Descriptor()
 	// directorymembership.PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
 	directorymembership.PlatformIDValidator = directorymembershipDescPlatformID.Validators[0].(func(string) error)
-	// directorymembershipDescDirectorySyncRunID is the schema descriptor for directory_sync_run_id field.
-	directorymembershipDescDirectorySyncRunID := directorymembershipFields[3].Descriptor()
-	// directorymembership.DirectorySyncRunIDValidator is a validator for the "directory_sync_run_id" field. It is called by the builders before save.
-	directorymembership.DirectorySyncRunIDValidator = directorymembershipDescDirectorySyncRunID.Validators[0].(func(string) error)
 	// directorymembershipDescDirectoryAccountID is the schema descriptor for directory_account_id field.
-	directorymembershipDescDirectoryAccountID := directorymembershipFields[4].Descriptor()
+	directorymembershipDescDirectoryAccountID := directorymembershipFields[2].Descriptor()
 	// directorymembership.DirectoryAccountIDValidator is a validator for the "directory_account_id" field. It is called by the builders before save.
 	directorymembership.DirectoryAccountIDValidator = directorymembershipDescDirectoryAccountID.Validators[0].(func(string) error)
 	// directorymembershipDescDirectoryGroupID is the schema descriptor for directory_group_id field.
-	directorymembershipDescDirectoryGroupID := directorymembershipFields[5].Descriptor()
+	directorymembershipDescDirectoryGroupID := directorymembershipFields[3].Descriptor()
 	// directorymembership.DirectoryGroupIDValidator is a validator for the "directory_group_id" field. It is called by the builders before save.
 	directorymembership.DirectoryGroupIDValidator = directorymembershipDescDirectoryGroupID.Validators[0].(func(string) error)
 	// directorymembershipDescObservedAt is the schema descriptor for observed_at field.
-	directorymembershipDescObservedAt := directorymembershipFields[13].Descriptor()
+	directorymembershipDescObservedAt := directorymembershipFields[9].Descriptor()
 	// directorymembership.DefaultObservedAt holds the default value on creation for the observed_at field.
 	directorymembership.DefaultObservedAt = directorymembershipDescObservedAt.Default.(func() time.Time)
 	// directorymembershipDescID is the schema descriptor for id field.
 	directorymembershipDescID := directorymembershipMixinFields3[0].Descriptor()
 	// directorymembership.DefaultID holds the default value on creation for the id field.
 	directorymembership.DefaultID = directorymembershipDescID.Default.(func() string)
-	directorysyncrunMixin := schema.DirectorySyncRun{}.Mixin()
-	directorysyncrun.Policy = privacy.NewPolicies(schema.DirectorySyncRun{})
-	directorysyncrun.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := directorysyncrun.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	directorysyncrunMixinHooks0 := directorysyncrunMixin[0].Hooks()
-	directorysyncrunMixinHooks1 := directorysyncrunMixin[1].Hooks()
-	directorysyncrunMixinHooks3 := directorysyncrunMixin[3].Hooks()
-	directorysyncrunMixinHooks5 := directorysyncrunMixin[5].Hooks()
-	directorysyncrunMixinHooks6 := directorysyncrunMixin[6].Hooks()
-	directorysyncrunMixinHooks7 := directorysyncrunMixin[7].Hooks()
-
-	directorysyncrun.Hooks[1] = directorysyncrunMixinHooks0[0]
-
-	directorysyncrun.Hooks[2] = directorysyncrunMixinHooks1[0]
-
-	directorysyncrun.Hooks[3] = directorysyncrunMixinHooks3[0]
-
-	directorysyncrun.Hooks[4] = directorysyncrunMixinHooks5[0]
-
-	directorysyncrun.Hooks[5] = directorysyncrunMixinHooks6[0]
-
-	directorysyncrun.Hooks[6] = directorysyncrunMixinHooks7[0]
-	directorysyncrunMixinInters5 := directorysyncrunMixin[5].Interceptors()
-	directorysyncrun.Interceptors[0] = directorysyncrunMixinInters5[0]
-	directorysyncrunMixinFields0 := directorysyncrunMixin[0].Fields()
-	_ = directorysyncrunMixinFields0
-	directorysyncrunMixinFields3 := directorysyncrunMixin[3].Fields()
-	_ = directorysyncrunMixinFields3
-	directorysyncrunMixinFields5 := directorysyncrunMixin[5].Fields()
-	_ = directorysyncrunMixinFields5
-	directorysyncrunFields := schema.DirectorySyncRun{}.Fields()
-	_ = directorysyncrunFields
-	// directorysyncrunDescCreatedAt is the schema descriptor for created_at field.
-	directorysyncrunDescCreatedAt := directorysyncrunMixinFields0[0].Descriptor()
-	// directorysyncrun.DefaultCreatedAt holds the default value on creation for the created_at field.
-	directorysyncrun.DefaultCreatedAt = directorysyncrunDescCreatedAt.Default.(func() time.Time)
-	// directorysyncrunDescUpdatedAt is the schema descriptor for updated_at field.
-	directorysyncrunDescUpdatedAt := directorysyncrunMixinFields0[1].Descriptor()
-	// directorysyncrun.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	directorysyncrun.DefaultUpdatedAt = directorysyncrunDescUpdatedAt.Default.(func() time.Time)
-	// directorysyncrun.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	directorysyncrun.UpdateDefaultUpdatedAt = directorysyncrunDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// directorysyncrunDescDisplayID is the schema descriptor for display_id field.
-	directorysyncrunDescDisplayID := directorysyncrunMixinFields3[1].Descriptor()
-	// directorysyncrun.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
-	directorysyncrun.DisplayIDValidator = directorysyncrunDescDisplayID.Validators[0].(func(string) error)
-	// directorysyncrunDescOwnerID is the schema descriptor for owner_id field.
-	directorysyncrunDescOwnerID := directorysyncrunMixinFields5[0].Descriptor()
-	// directorysyncrun.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	directorysyncrun.OwnerIDValidator = directorysyncrunDescOwnerID.Validators[0].(func(string) error)
-	// directorysyncrunDescIntegrationID is the schema descriptor for integration_id field.
-	directorysyncrunDescIntegrationID := directorysyncrunFields[0].Descriptor()
-	// directorysyncrun.IntegrationIDValidator is a validator for the "integration_id" field. It is called by the builders before save.
-	directorysyncrun.IntegrationIDValidator = directorysyncrunDescIntegrationID.Validators[0].(func(string) error)
-	// directorysyncrunDescPlatformID is the schema descriptor for platform_id field.
-	directorysyncrunDescPlatformID := directorysyncrunFields[1].Descriptor()
-	// directorysyncrun.PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
-	directorysyncrun.PlatformIDValidator = directorysyncrunDescPlatformID.Validators[0].(func(string) error)
-	// directorysyncrunDescStartedAt is the schema descriptor for started_at field.
-	directorysyncrunDescStartedAt := directorysyncrunFields[4].Descriptor()
-	// directorysyncrun.DefaultStartedAt holds the default value on creation for the started_at field.
-	directorysyncrun.DefaultStartedAt = directorysyncrunDescStartedAt.Default.(func() time.Time)
-	// directorysyncrunDescFullCount is the schema descriptor for full_count field.
-	directorysyncrunDescFullCount := directorysyncrunFields[7].Descriptor()
-	// directorysyncrun.DefaultFullCount holds the default value on creation for the full_count field.
-	directorysyncrun.DefaultFullCount = directorysyncrunDescFullCount.Default.(int)
-	// directorysyncrunDescDeltaCount is the schema descriptor for delta_count field.
-	directorysyncrunDescDeltaCount := directorysyncrunFields[8].Descriptor()
-	// directorysyncrun.DefaultDeltaCount holds the default value on creation for the delta_count field.
-	directorysyncrun.DefaultDeltaCount = directorysyncrunDescDeltaCount.Default.(int)
-	// directorysyncrunDescID is the schema descriptor for id field.
-	directorysyncrunDescID := directorysyncrunMixinFields3[0].Descriptor()
-	// directorysyncrun.DefaultID holds the default value on creation for the id field.
-	directorysyncrun.DefaultID = directorysyncrunDescID.Default.(func() string)
 	discussionMixin := schema.Discussion{}.Mixin()
 	discussion.Policy = privacy.NewPolicies(schema.Discussion{})
 	discussion.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -2385,7 +2286,7 @@ func init() {
 	// emailverificationtoken.DefaultID holds the default value on creation for the id field.
 	emailverificationtoken.DefaultID = emailverificationtokenDescID.Default.(func() string)
 	entityMixin := schema.Entity{}.Mixin()
-	entity.Policy = privacy.NewPolicies(entityMixin[10], schema.Entity{})
+	entity.Policy = privacy.NewPolicies(entityMixin[11], schema.Entity{})
 	entity.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := entity.Policy.EvalMutation(ctx, m); err != nil {
@@ -2398,14 +2299,14 @@ func init() {
 	entityMixinHooks1 := entityMixin[1].Hooks()
 	entityMixinHooks3 := entityMixin[3].Hooks()
 	entityMixinHooks5 := entityMixin[5].Hooks()
-	entityMixinHooks7 := entityMixin[7].Hooks()
 	entityMixinHooks8 := entityMixin[8].Hooks()
-	entityMixinHooks10 := entityMixin[10].Hooks()
+	entityMixinHooks9 := entityMixin[9].Hooks()
 	entityMixinHooks11 := entityMixin[11].Hooks()
 	entityMixinHooks12 := entityMixin[12].Hooks()
 	entityMixinHooks13 := entityMixin[13].Hooks()
 	entityMixinHooks14 := entityMixin[14].Hooks()
 	entityMixinHooks15 := entityMixin[15].Hooks()
+	entityMixinHooks16 := entityMixin[16].Hooks()
 	entityHooks := schema.Entity{}.Hooks()
 
 	entity.Hooks[1] = entityMixinHooks0[0]
@@ -2416,27 +2317,27 @@ func init() {
 
 	entity.Hooks[4] = entityMixinHooks5[0]
 
-	entity.Hooks[5] = entityMixinHooks7[0]
+	entity.Hooks[5] = entityMixinHooks8[0]
 
-	entity.Hooks[6] = entityMixinHooks7[1]
+	entity.Hooks[6] = entityMixinHooks8[1]
 
-	entity.Hooks[7] = entityMixinHooks8[0]
+	entity.Hooks[7] = entityMixinHooks9[0]
 
-	entity.Hooks[8] = entityMixinHooks8[1]
+	entity.Hooks[8] = entityMixinHooks9[1]
 
-	entity.Hooks[9] = entityMixinHooks10[0]
+	entity.Hooks[9] = entityMixinHooks11[0]
 
-	entity.Hooks[10] = entityMixinHooks10[1]
+	entity.Hooks[10] = entityMixinHooks11[1]
 
-	entity.Hooks[11] = entityMixinHooks11[0]
+	entity.Hooks[11] = entityMixinHooks12[0]
 
-	entity.Hooks[12] = entityMixinHooks12[0]
+	entity.Hooks[12] = entityMixinHooks13[0]
 
-	entity.Hooks[13] = entityMixinHooks13[0]
+	entity.Hooks[13] = entityMixinHooks14[0]
 
-	entity.Hooks[14] = entityMixinHooks14[0]
+	entity.Hooks[14] = entityMixinHooks15[0]
 
-	entity.Hooks[15] = entityMixinHooks15[0]
+	entity.Hooks[15] = entityMixinHooks16[0]
 
 	entity.Hooks[16] = entityHooks[0]
 
@@ -2446,22 +2347,22 @@ func init() {
 
 	entity.Hooks[19] = entityHooks[3]
 	entityMixinInters3 := entityMixin[3].Interceptors()
-	entityMixinInters7 := entityMixin[7].Interceptors()
 	entityMixinInters8 := entityMixin[8].Interceptors()
+	entityMixinInters9 := entityMixin[9].Interceptors()
 	entity.Interceptors[0] = entityMixinInters3[0]
-	entity.Interceptors[1] = entityMixinInters7[0]
-	entity.Interceptors[2] = entityMixinInters7[1]
-	entity.Interceptors[3] = entityMixinInters8[0]
+	entity.Interceptors[1] = entityMixinInters8[0]
+	entity.Interceptors[2] = entityMixinInters8[1]
+	entity.Interceptors[3] = entityMixinInters9[0]
 	entityMixinFields0 := entityMixin[0].Fields()
 	_ = entityMixinFields0
 	entityMixinFields4 := entityMixin[4].Fields()
 	_ = entityMixinFields4
 	entityMixinFields5 := entityMixin[5].Fields()
 	_ = entityMixinFields5
-	entityMixinFields7 := entityMixin[7].Fields()
-	_ = entityMixinFields7
-	entityMixinFields10 := entityMixin[10].Fields()
-	_ = entityMixinFields10
+	entityMixinFields8 := entityMixin[8].Fields()
+	_ = entityMixinFields8
+	entityMixinFields11 := entityMixin[11].Fields()
+	_ = entityMixinFields11
 	entityFields := schema.Entity{}.Fields()
 	_ = entityFields
 	// entityDescCreatedAt is the schema descriptor for created_at field.
@@ -2479,11 +2380,11 @@ func init() {
 	// entity.DefaultTags holds the default value on creation for the tags field.
 	entity.DefaultTags = entityDescTags.Default.([]string)
 	// entityDescOwnerID is the schema descriptor for owner_id field.
-	entityDescOwnerID := entityMixinFields7[0].Descriptor()
+	entityDescOwnerID := entityMixinFields8[0].Descriptor()
 	// entity.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	entity.OwnerIDValidator = entityDescOwnerID.Validators[0].(func(string) error)
 	// entityDescSystemOwned is the schema descriptor for system_owned field.
-	entityDescSystemOwned := entityMixinFields10[0].Descriptor()
+	entityDescSystemOwned := entityMixinFields11[0].Descriptor()
 	// entity.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	entity.DefaultSystemOwned = entityDescSystemOwned.Default.(bool)
 	// entityDescName is the schema descriptor for name field.
@@ -3027,7 +2928,7 @@ func init() {
 	// filedownloadtoken.DefaultID holds the default value on creation for the id field.
 	filedownloadtoken.DefaultID = filedownloadtokenDescID.Default.(func() string)
 	findingMixin := schema.Finding{}.Mixin()
-	finding.Policy = privacy.NewPolicies(findingMixin[10], schema.Finding{})
+	finding.Policy = privacy.NewPolicies(findingMixin[11], schema.Finding{})
 	finding.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := finding.Policy.EvalMutation(ctx, m); err != nil {
@@ -3041,13 +2942,13 @@ func init() {
 	findingMixinHooks3 := findingMixin[3].Hooks()
 	findingMixinHooks4 := findingMixin[4].Hooks()
 	findingMixinHooks5 := findingMixin[5].Hooks()
-	findingMixinHooks7 := findingMixin[7].Hooks()
 	findingMixinHooks8 := findingMixin[8].Hooks()
-	findingMixinHooks10 := findingMixin[10].Hooks()
+	findingMixinHooks9 := findingMixin[9].Hooks()
 	findingMixinHooks11 := findingMixin[11].Hooks()
 	findingMixinHooks12 := findingMixin[12].Hooks()
 	findingMixinHooks13 := findingMixin[13].Hooks()
 	findingMixinHooks14 := findingMixin[14].Hooks()
+	findingMixinHooks15 := findingMixin[15].Hooks()
 	findingHooks := schema.Finding{}.Hooks()
 
 	finding.Hooks[1] = findingMixinHooks0[0]
@@ -3060,44 +2961,44 @@ func init() {
 
 	finding.Hooks[5] = findingMixinHooks5[0]
 
-	finding.Hooks[6] = findingMixinHooks7[0]
+	finding.Hooks[6] = findingMixinHooks8[0]
 
-	finding.Hooks[7] = findingMixinHooks7[1]
+	finding.Hooks[7] = findingMixinHooks8[1]
 
-	finding.Hooks[8] = findingMixinHooks8[0]
+	finding.Hooks[8] = findingMixinHooks9[0]
 
-	finding.Hooks[9] = findingMixinHooks8[1]
+	finding.Hooks[9] = findingMixinHooks9[1]
 
-	finding.Hooks[10] = findingMixinHooks10[0]
+	finding.Hooks[10] = findingMixinHooks11[0]
 
-	finding.Hooks[11] = findingMixinHooks11[0]
+	finding.Hooks[11] = findingMixinHooks12[0]
 
-	finding.Hooks[12] = findingMixinHooks12[0]
+	finding.Hooks[12] = findingMixinHooks13[0]
 
-	finding.Hooks[13] = findingMixinHooks13[0]
+	finding.Hooks[13] = findingMixinHooks14[0]
 
-	finding.Hooks[14] = findingMixinHooks14[0]
+	finding.Hooks[14] = findingMixinHooks15[0]
 
 	finding.Hooks[15] = findingHooks[0]
 	findingMixinInters3 := findingMixin[3].Interceptors()
-	findingMixinInters7 := findingMixin[7].Interceptors()
 	findingMixinInters8 := findingMixin[8].Interceptors()
+	findingMixinInters9 := findingMixin[9].Interceptors()
 	finding.Interceptors[0] = findingMixinInters3[0]
-	finding.Interceptors[1] = findingMixinInters7[0]
-	finding.Interceptors[2] = findingMixinInters7[1]
-	finding.Interceptors[3] = findingMixinInters8[0]
+	finding.Interceptors[1] = findingMixinInters8[0]
+	finding.Interceptors[2] = findingMixinInters8[1]
+	finding.Interceptors[3] = findingMixinInters9[0]
 	findingMixinFields0 := findingMixin[0].Fields()
 	_ = findingMixinFields0
 	findingMixinFields4 := findingMixin[4].Fields()
 	_ = findingMixinFields4
 	findingMixinFields5 := findingMixin[5].Fields()
 	_ = findingMixinFields5
-	findingMixinFields7 := findingMixin[7].Fields()
-	_ = findingMixinFields7
-	findingMixinFields10 := findingMixin[10].Fields()
-	_ = findingMixinFields10
-	findingMixinFields14 := findingMixin[14].Fields()
-	_ = findingMixinFields14
+	findingMixinFields8 := findingMixin[8].Fields()
+	_ = findingMixinFields8
+	findingMixinFields11 := findingMixin[11].Fields()
+	_ = findingMixinFields11
+	findingMixinFields15 := findingMixin[15].Fields()
+	_ = findingMixinFields15
 	findingFields := schema.Finding{}.Fields()
 	_ = findingFields
 	// findingDescCreatedAt is the schema descriptor for created_at field.
@@ -3119,15 +3020,15 @@ func init() {
 	// finding.DefaultTags holds the default value on creation for the tags field.
 	finding.DefaultTags = findingDescTags.Default.([]string)
 	// findingDescOwnerID is the schema descriptor for owner_id field.
-	findingDescOwnerID := findingMixinFields7[0].Descriptor()
+	findingDescOwnerID := findingMixinFields8[0].Descriptor()
 	// finding.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	finding.OwnerIDValidator = findingDescOwnerID.Validators[0].(func(string) error)
 	// findingDescSystemOwned is the schema descriptor for system_owned field.
-	findingDescSystemOwned := findingMixinFields10[0].Descriptor()
+	findingDescSystemOwned := findingMixinFields11[0].Descriptor()
 	// finding.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	finding.DefaultSystemOwned = findingDescSystemOwned.Default.(bool)
 	// findingDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	findingDescWorkflowEligibleMarker := findingMixinFields14[0].Descriptor()
+	findingDescWorkflowEligibleMarker := findingMixinFields15[0].Descriptor()
 	// finding.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	finding.DefaultWorkflowEligibleMarker = findingDescWorkflowEligibleMarker.Default.(bool)
 	// findingDescCategories is the schema descriptor for categories field.
@@ -3745,11 +3646,11 @@ func init() {
 	// integration.PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
 	integration.PlatformIDValidator = integrationDescPlatformID.Validators[0].(func(string) error)
 	// integrationDescPrimaryDirectory is the schema descriptor for primary_directory field.
-	integrationDescPrimaryDirectory := integrationFields[16].Descriptor()
+	integrationDescPrimaryDirectory := integrationFields[18].Descriptor()
 	// integration.DefaultPrimaryDirectory holds the default value on creation for the primary_directory field.
 	integration.DefaultPrimaryDirectory = integrationDescPrimaryDirectory.Default.(bool)
 	// integrationDescCampaignEmail is the schema descriptor for campaign_email field.
-	integrationDescCampaignEmail := integrationFields[17].Descriptor()
+	integrationDescCampaignEmail := integrationFields[19].Descriptor()
 	// integration.DefaultCampaignEmail holds the default value on creation for the campaign_email field.
 	integration.DefaultCampaignEmail = integrationDescCampaignEmail.Default.(bool)
 	// integrationDescID is the schema descriptor for id field.
@@ -3808,7 +3709,7 @@ func init() {
 	// integrationrun.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	integrationrun.OwnerIDValidator = integrationrunDescOwnerID.Validators[0].(func(string) error)
 	// integrationrunDescStartedAt is the schema descriptor for started_at field.
-	integrationrunDescStartedAt := integrationrunFields[7].Descriptor()
+	integrationrunDescStartedAt := integrationrunFields[6].Descriptor()
 	// integrationrun.DefaultStartedAt holds the default value on creation for the started_at field.
 	integrationrun.DefaultStartedAt = integrationrunDescStartedAt.Default.(func() time.Time)
 	// integrationrunDescID is the schema descriptor for id field.
@@ -3879,7 +3780,7 @@ func init() {
 	// integrationwebhook.DefaultID holds the default value on creation for the id field.
 	integrationwebhook.DefaultID = integrationwebhookDescID.Default.(func() string)
 	internalpolicyMixin := schema.InternalPolicy{}.Mixin()
-	internalpolicy.Policy = privacy.NewPolicies(internalpolicyMixin[9], schema.InternalPolicy{})
+	internalpolicy.Policy = privacy.NewPolicies(internalpolicyMixin[10], schema.InternalPolicy{})
 	internalpolicy.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := internalpolicy.Policy.EvalMutation(ctx, m); err != nil {
@@ -3894,7 +3795,6 @@ func init() {
 	internalpolicyMixinHooks4 := internalpolicyMixin[4].Hooks()
 	internalpolicyMixinHooks5 := internalpolicyMixin[5].Hooks()
 	internalpolicyMixinHooks6 := internalpolicyMixin[6].Hooks()
-	internalpolicyMixinHooks8 := internalpolicyMixin[8].Hooks()
 	internalpolicyMixinHooks9 := internalpolicyMixin[9].Hooks()
 	internalpolicyMixinHooks10 := internalpolicyMixin[10].Hooks()
 	internalpolicyMixinHooks11 := internalpolicyMixin[11].Hooks()
@@ -3902,6 +3802,7 @@ func init() {
 	internalpolicyMixinHooks13 := internalpolicyMixin[13].Hooks()
 	internalpolicyMixinHooks14 := internalpolicyMixin[14].Hooks()
 	internalpolicyMixinHooks15 := internalpolicyMixin[15].Hooks()
+	internalpolicyMixinHooks16 := internalpolicyMixin[16].Hooks()
 	internalpolicyHooks := schema.InternalPolicy{}.Hooks()
 
 	internalpolicy.Hooks[1] = internalpolicyMixinHooks0[0]
@@ -3916,44 +3817,44 @@ func init() {
 
 	internalpolicy.Hooks[6] = internalpolicyMixinHooks6[0]
 
-	internalpolicy.Hooks[7] = internalpolicyMixinHooks8[0]
+	internalpolicy.Hooks[7] = internalpolicyMixinHooks9[0]
 
-	internalpolicy.Hooks[8] = internalpolicyMixinHooks9[0]
+	internalpolicy.Hooks[8] = internalpolicyMixinHooks10[0]
 
-	internalpolicy.Hooks[9] = internalpolicyMixinHooks10[0]
+	internalpolicy.Hooks[9] = internalpolicyMixinHooks11[0]
 
-	internalpolicy.Hooks[10] = internalpolicyMixinHooks10[1]
+	internalpolicy.Hooks[10] = internalpolicyMixinHooks11[1]
 
-	internalpolicy.Hooks[11] = internalpolicyMixinHooks11[0]
+	internalpolicy.Hooks[11] = internalpolicyMixinHooks12[0]
 
-	internalpolicy.Hooks[12] = internalpolicyMixinHooks11[1]
+	internalpolicy.Hooks[12] = internalpolicyMixinHooks12[1]
 
-	internalpolicy.Hooks[13] = internalpolicyMixinHooks11[2]
+	internalpolicy.Hooks[13] = internalpolicyMixinHooks12[2]
 
-	internalpolicy.Hooks[14] = internalpolicyMixinHooks11[3]
+	internalpolicy.Hooks[14] = internalpolicyMixinHooks12[3]
 
-	internalpolicy.Hooks[15] = internalpolicyMixinHooks11[4]
+	internalpolicy.Hooks[15] = internalpolicyMixinHooks12[4]
 
-	internalpolicy.Hooks[16] = internalpolicyMixinHooks11[5]
+	internalpolicy.Hooks[16] = internalpolicyMixinHooks12[5]
 
-	internalpolicy.Hooks[17] = internalpolicyMixinHooks11[6]
+	internalpolicy.Hooks[17] = internalpolicyMixinHooks12[6]
 
-	internalpolicy.Hooks[18] = internalpolicyMixinHooks12[0]
+	internalpolicy.Hooks[18] = internalpolicyMixinHooks13[0]
 
-	internalpolicy.Hooks[19] = internalpolicyMixinHooks13[0]
+	internalpolicy.Hooks[19] = internalpolicyMixinHooks14[0]
 
-	internalpolicy.Hooks[20] = internalpolicyMixinHooks14[0]
+	internalpolicy.Hooks[20] = internalpolicyMixinHooks15[0]
 
-	internalpolicy.Hooks[21] = internalpolicyMixinHooks15[0]
+	internalpolicy.Hooks[21] = internalpolicyMixinHooks16[0]
 
 	internalpolicy.Hooks[22] = internalpolicyHooks[0]
 	internalpolicyMixinInters3 := internalpolicyMixin[3].Interceptors()
-	internalpolicyMixinInters8 := internalpolicyMixin[8].Interceptors()
-	internalpolicyMixinInters10 := internalpolicyMixin[10].Interceptors()
+	internalpolicyMixinInters9 := internalpolicyMixin[9].Interceptors()
+	internalpolicyMixinInters11 := internalpolicyMixin[11].Interceptors()
 	internalpolicyInters := schema.InternalPolicy{}.Interceptors()
 	internalpolicy.Interceptors[0] = internalpolicyMixinInters3[0]
-	internalpolicy.Interceptors[1] = internalpolicyMixinInters8[0]
-	internalpolicy.Interceptors[2] = internalpolicyMixinInters10[0]
+	internalpolicy.Interceptors[1] = internalpolicyMixinInters9[0]
+	internalpolicy.Interceptors[2] = internalpolicyMixinInters11[0]
 	internalpolicy.Interceptors[3] = internalpolicyInters[0]
 	internalpolicyMixinFields0 := internalpolicyMixin[0].Fields()
 	_ = internalpolicyMixinFields0
@@ -3963,12 +3864,12 @@ func init() {
 	_ = internalpolicyMixinFields5
 	internalpolicyMixinFields6 := internalpolicyMixin[6].Fields()
 	_ = internalpolicyMixinFields6
-	internalpolicyMixinFields9 := internalpolicyMixin[9].Fields()
-	_ = internalpolicyMixinFields9
-	internalpolicyMixinFields11 := internalpolicyMixin[11].Fields()
-	_ = internalpolicyMixinFields11
-	internalpolicyMixinFields15 := internalpolicyMixin[15].Fields()
-	_ = internalpolicyMixinFields15
+	internalpolicyMixinFields10 := internalpolicyMixin[10].Fields()
+	_ = internalpolicyMixinFields10
+	internalpolicyMixinFields12 := internalpolicyMixin[12].Fields()
+	_ = internalpolicyMixinFields12
+	internalpolicyMixinFields16 := internalpolicyMixin[16].Fields()
+	_ = internalpolicyMixinFields16
 	internalpolicyFields := schema.InternalPolicy{}.Fields()
 	_ = internalpolicyFields
 	// internalpolicyDescCreatedAt is the schema descriptor for created_at field.
@@ -3996,51 +3897,51 @@ func init() {
 	// internalpolicy.RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
 	internalpolicy.RevisionValidator = internalpolicyDescRevision.Validators[0].(func(string) error)
 	// internalpolicyDescSystemOwned is the schema descriptor for system_owned field.
-	internalpolicyDescSystemOwned := internalpolicyMixinFields9[0].Descriptor()
+	internalpolicyDescSystemOwned := internalpolicyMixinFields10[0].Descriptor()
 	// internalpolicy.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	internalpolicy.DefaultSystemOwned = internalpolicyDescSystemOwned.Default.(bool)
 	// internalpolicyDescName is the schema descriptor for name field.
-	internalpolicyDescName := internalpolicyMixinFields11[0].Descriptor()
+	internalpolicyDescName := internalpolicyMixinFields12[0].Descriptor()
 	// internalpolicy.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	internalpolicy.NameValidator = internalpolicyDescName.Validators[0].(func(string) error)
 	// internalpolicyDescApprovalRequired is the schema descriptor for approval_required field.
-	internalpolicyDescApprovalRequired := internalpolicyMixinFields11[5].Descriptor()
+	internalpolicyDescApprovalRequired := internalpolicyMixinFields12[5].Descriptor()
 	// internalpolicy.DefaultApprovalRequired holds the default value on creation for the approval_required field.
 	internalpolicy.DefaultApprovalRequired = internalpolicyDescApprovalRequired.Default.(bool)
 	// internalpolicyDescReviewDue is the schema descriptor for review_due field.
-	internalpolicyDescReviewDue := internalpolicyMixinFields11[6].Descriptor()
+	internalpolicyDescReviewDue := internalpolicyMixinFields12[6].Descriptor()
 	// internalpolicy.DefaultReviewDue holds the default value on creation for the review_due field.
 	internalpolicy.DefaultReviewDue = internalpolicyDescReviewDue.Default.(time.Time)
 	// internalpolicyDescTagSuggestions is the schema descriptor for tag_suggestions field.
-	internalpolicyDescTagSuggestions := internalpolicyMixinFields11[11].Descriptor()
+	internalpolicyDescTagSuggestions := internalpolicyMixinFields12[11].Descriptor()
 	// internalpolicy.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
 	internalpolicy.DefaultTagSuggestions = internalpolicyDescTagSuggestions.Default.([]string)
 	// internalpolicyDescDismissedTagSuggestions is the schema descriptor for dismissed_tag_suggestions field.
-	internalpolicyDescDismissedTagSuggestions := internalpolicyMixinFields11[12].Descriptor()
+	internalpolicyDescDismissedTagSuggestions := internalpolicyMixinFields12[12].Descriptor()
 	// internalpolicy.DefaultDismissedTagSuggestions holds the default value on creation for the dismissed_tag_suggestions field.
 	internalpolicy.DefaultDismissedTagSuggestions = internalpolicyDescDismissedTagSuggestions.Default.([]string)
 	// internalpolicyDescControlSuggestions is the schema descriptor for control_suggestions field.
-	internalpolicyDescControlSuggestions := internalpolicyMixinFields11[13].Descriptor()
+	internalpolicyDescControlSuggestions := internalpolicyMixinFields12[13].Descriptor()
 	// internalpolicy.DefaultControlSuggestions holds the default value on creation for the control_suggestions field.
 	internalpolicy.DefaultControlSuggestions = internalpolicyDescControlSuggestions.Default.([]string)
 	// internalpolicyDescDismissedControlSuggestions is the schema descriptor for dismissed_control_suggestions field.
-	internalpolicyDescDismissedControlSuggestions := internalpolicyMixinFields11[14].Descriptor()
+	internalpolicyDescDismissedControlSuggestions := internalpolicyMixinFields12[14].Descriptor()
 	// internalpolicy.DefaultDismissedControlSuggestions holds the default value on creation for the dismissed_control_suggestions field.
 	internalpolicy.DefaultDismissedControlSuggestions = internalpolicyDescDismissedControlSuggestions.Default.([]string)
 	// internalpolicyDescImprovementSuggestions is the schema descriptor for improvement_suggestions field.
-	internalpolicyDescImprovementSuggestions := internalpolicyMixinFields11[15].Descriptor()
+	internalpolicyDescImprovementSuggestions := internalpolicyMixinFields12[15].Descriptor()
 	// internalpolicy.DefaultImprovementSuggestions holds the default value on creation for the improvement_suggestions field.
 	internalpolicy.DefaultImprovementSuggestions = internalpolicyDescImprovementSuggestions.Default.([]string)
 	// internalpolicyDescDismissedImprovementSuggestions is the schema descriptor for dismissed_improvement_suggestions field.
-	internalpolicyDescDismissedImprovementSuggestions := internalpolicyMixinFields11[16].Descriptor()
+	internalpolicyDescDismissedImprovementSuggestions := internalpolicyMixinFields12[16].Descriptor()
 	// internalpolicy.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	internalpolicy.DefaultDismissedImprovementSuggestions = internalpolicyDescDismissedImprovementSuggestions.Default.([]string)
 	// internalpolicyDescURL is the schema descriptor for url field.
-	internalpolicyDescURL := internalpolicyMixinFields11[17].Descriptor()
+	internalpolicyDescURL := internalpolicyMixinFields12[17].Descriptor()
 	// internalpolicy.URLValidator is a validator for the "url" field. It is called by the builders before save.
 	internalpolicy.URLValidator = internalpolicyDescURL.Validators[0].(func(string) error)
 	// internalpolicyDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	internalpolicyDescWorkflowEligibleMarker := internalpolicyMixinFields15[0].Descriptor()
+	internalpolicyDescWorkflowEligibleMarker := internalpolicyMixinFields16[0].Descriptor()
 	// internalpolicy.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	internalpolicy.DefaultWorkflowEligibleMarker = internalpolicyDescWorkflowEligibleMarker.Default.(bool)
 	// internalpolicyDescID is the schema descriptor for id field.
@@ -5221,13 +5122,11 @@ func init() {
 
 	organization.Hooks[78] = organizationMixinHooks7[73]
 
-	organization.Hooks[79] = organizationMixinHooks7[74]
+	organization.Hooks[79] = organizationHooks[0]
 
-	organization.Hooks[80] = organizationHooks[0]
+	organization.Hooks[80] = organizationHooks[1]
 
-	organization.Hooks[81] = organizationHooks[1]
-
-	organization.Hooks[82] = organizationHooks[2]
+	organization.Hooks[81] = organizationHooks[2]
 	organizationMixinInters3 := organizationMixin[3].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters3[0]
@@ -5707,7 +5606,7 @@ func init() {
 	// platform.DefaultID holds the default value on creation for the id field.
 	platform.DefaultID = platformDescID.Default.(func() string)
 	procedureMixin := schema.Procedure{}.Mixin()
-	procedure.Policy = privacy.NewPolicies(procedureMixin[11], schema.Procedure{})
+	procedure.Policy = privacy.NewPolicies(procedureMixin[12], schema.Procedure{})
 	procedure.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := procedure.Policy.EvalMutation(ctx, m); err != nil {
@@ -5722,7 +5621,6 @@ func init() {
 	procedureMixinHooks4 := procedureMixin[4].Hooks()
 	procedureMixinHooks5 := procedureMixin[5].Hooks()
 	procedureMixinHooks6 := procedureMixin[6].Hooks()
-	procedureMixinHooks8 := procedureMixin[8].Hooks()
 	procedureMixinHooks9 := procedureMixin[9].Hooks()
 	procedureMixinHooks10 := procedureMixin[10].Hooks()
 	procedureMixinHooks11 := procedureMixin[11].Hooks()
@@ -5730,6 +5628,7 @@ func init() {
 	procedureMixinHooks13 := procedureMixin[13].Hooks()
 	procedureMixinHooks14 := procedureMixin[14].Hooks()
 	procedureMixinHooks15 := procedureMixin[15].Hooks()
+	procedureMixinHooks16 := procedureMixin[16].Hooks()
 	procedureHooks := schema.Procedure{}.Hooks()
 
 	procedure.Hooks[1] = procedureMixinHooks0[0]
@@ -5744,44 +5643,44 @@ func init() {
 
 	procedure.Hooks[6] = procedureMixinHooks6[0]
 
-	procedure.Hooks[7] = procedureMixinHooks8[0]
+	procedure.Hooks[7] = procedureMixinHooks9[0]
 
-	procedure.Hooks[8] = procedureMixinHooks9[0]
+	procedure.Hooks[8] = procedureMixinHooks10[0]
 
-	procedure.Hooks[9] = procedureMixinHooks9[1]
+	procedure.Hooks[9] = procedureMixinHooks10[1]
 
-	procedure.Hooks[10] = procedureMixinHooks10[0]
+	procedure.Hooks[10] = procedureMixinHooks11[0]
 
-	procedure.Hooks[11] = procedureMixinHooks10[1]
+	procedure.Hooks[11] = procedureMixinHooks11[1]
 
-	procedure.Hooks[12] = procedureMixinHooks10[2]
+	procedure.Hooks[12] = procedureMixinHooks11[2]
 
-	procedure.Hooks[13] = procedureMixinHooks10[3]
+	procedure.Hooks[13] = procedureMixinHooks11[3]
 
-	procedure.Hooks[14] = procedureMixinHooks10[4]
+	procedure.Hooks[14] = procedureMixinHooks11[4]
 
-	procedure.Hooks[15] = procedureMixinHooks10[5]
+	procedure.Hooks[15] = procedureMixinHooks11[5]
 
-	procedure.Hooks[16] = procedureMixinHooks10[6]
+	procedure.Hooks[16] = procedureMixinHooks11[6]
 
-	procedure.Hooks[17] = procedureMixinHooks11[0]
+	procedure.Hooks[17] = procedureMixinHooks12[0]
 
-	procedure.Hooks[18] = procedureMixinHooks12[0]
+	procedure.Hooks[18] = procedureMixinHooks13[0]
 
-	procedure.Hooks[19] = procedureMixinHooks13[0]
+	procedure.Hooks[19] = procedureMixinHooks14[0]
 
-	procedure.Hooks[20] = procedureMixinHooks14[0]
+	procedure.Hooks[20] = procedureMixinHooks15[0]
 
-	procedure.Hooks[21] = procedureMixinHooks15[0]
+	procedure.Hooks[21] = procedureMixinHooks16[0]
 
 	procedure.Hooks[22] = procedureHooks[0]
 	procedureMixinInters3 := procedureMixin[3].Interceptors()
-	procedureMixinInters8 := procedureMixin[8].Interceptors()
 	procedureMixinInters9 := procedureMixin[9].Interceptors()
+	procedureMixinInters10 := procedureMixin[10].Interceptors()
 	procedureInters := schema.Procedure{}.Interceptors()
 	procedure.Interceptors[0] = procedureMixinInters3[0]
-	procedure.Interceptors[1] = procedureMixinInters8[0]
-	procedure.Interceptors[2] = procedureMixinInters9[0]
+	procedure.Interceptors[1] = procedureMixinInters9[0]
+	procedure.Interceptors[2] = procedureMixinInters10[0]
 	procedure.Interceptors[3] = procedureInters[0]
 	procedureMixinFields0 := procedureMixin[0].Fields()
 	_ = procedureMixinFields0
@@ -5791,12 +5690,12 @@ func init() {
 	_ = procedureMixinFields5
 	procedureMixinFields6 := procedureMixin[6].Fields()
 	_ = procedureMixinFields6
-	procedureMixinFields10 := procedureMixin[10].Fields()
-	_ = procedureMixinFields10
 	procedureMixinFields11 := procedureMixin[11].Fields()
 	_ = procedureMixinFields11
-	procedureMixinFields15 := procedureMixin[15].Fields()
-	_ = procedureMixinFields15
+	procedureMixinFields12 := procedureMixin[12].Fields()
+	_ = procedureMixinFields12
+	procedureMixinFields16 := procedureMixin[16].Fields()
+	_ = procedureMixinFields16
 	procedureFields := schema.Procedure{}.Fields()
 	_ = procedureFields
 	// procedureDescCreatedAt is the schema descriptor for created_at field.
@@ -5824,51 +5723,51 @@ func init() {
 	// procedure.RevisionValidator is a validator for the "revision" field. It is called by the builders before save.
 	procedure.RevisionValidator = procedureDescRevision.Validators[0].(func(string) error)
 	// procedureDescName is the schema descriptor for name field.
-	procedureDescName := procedureMixinFields10[0].Descriptor()
+	procedureDescName := procedureMixinFields11[0].Descriptor()
 	// procedure.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	procedure.NameValidator = procedureDescName.Validators[0].(func(string) error)
 	// procedureDescApprovalRequired is the schema descriptor for approval_required field.
-	procedureDescApprovalRequired := procedureMixinFields10[5].Descriptor()
+	procedureDescApprovalRequired := procedureMixinFields11[5].Descriptor()
 	// procedure.DefaultApprovalRequired holds the default value on creation for the approval_required field.
 	procedure.DefaultApprovalRequired = procedureDescApprovalRequired.Default.(bool)
 	// procedureDescReviewDue is the schema descriptor for review_due field.
-	procedureDescReviewDue := procedureMixinFields10[6].Descriptor()
+	procedureDescReviewDue := procedureMixinFields11[6].Descriptor()
 	// procedure.DefaultReviewDue holds the default value on creation for the review_due field.
 	procedure.DefaultReviewDue = procedureDescReviewDue.Default.(time.Time)
 	// procedureDescTagSuggestions is the schema descriptor for tag_suggestions field.
-	procedureDescTagSuggestions := procedureMixinFields10[11].Descriptor()
+	procedureDescTagSuggestions := procedureMixinFields11[11].Descriptor()
 	// procedure.DefaultTagSuggestions holds the default value on creation for the tag_suggestions field.
 	procedure.DefaultTagSuggestions = procedureDescTagSuggestions.Default.([]string)
 	// procedureDescDismissedTagSuggestions is the schema descriptor for dismissed_tag_suggestions field.
-	procedureDescDismissedTagSuggestions := procedureMixinFields10[12].Descriptor()
+	procedureDescDismissedTagSuggestions := procedureMixinFields11[12].Descriptor()
 	// procedure.DefaultDismissedTagSuggestions holds the default value on creation for the dismissed_tag_suggestions field.
 	procedure.DefaultDismissedTagSuggestions = procedureDescDismissedTagSuggestions.Default.([]string)
 	// procedureDescControlSuggestions is the schema descriptor for control_suggestions field.
-	procedureDescControlSuggestions := procedureMixinFields10[13].Descriptor()
+	procedureDescControlSuggestions := procedureMixinFields11[13].Descriptor()
 	// procedure.DefaultControlSuggestions holds the default value on creation for the control_suggestions field.
 	procedure.DefaultControlSuggestions = procedureDescControlSuggestions.Default.([]string)
 	// procedureDescDismissedControlSuggestions is the schema descriptor for dismissed_control_suggestions field.
-	procedureDescDismissedControlSuggestions := procedureMixinFields10[14].Descriptor()
+	procedureDescDismissedControlSuggestions := procedureMixinFields11[14].Descriptor()
 	// procedure.DefaultDismissedControlSuggestions holds the default value on creation for the dismissed_control_suggestions field.
 	procedure.DefaultDismissedControlSuggestions = procedureDescDismissedControlSuggestions.Default.([]string)
 	// procedureDescImprovementSuggestions is the schema descriptor for improvement_suggestions field.
-	procedureDescImprovementSuggestions := procedureMixinFields10[15].Descriptor()
+	procedureDescImprovementSuggestions := procedureMixinFields11[15].Descriptor()
 	// procedure.DefaultImprovementSuggestions holds the default value on creation for the improvement_suggestions field.
 	procedure.DefaultImprovementSuggestions = procedureDescImprovementSuggestions.Default.([]string)
 	// procedureDescDismissedImprovementSuggestions is the schema descriptor for dismissed_improvement_suggestions field.
-	procedureDescDismissedImprovementSuggestions := procedureMixinFields10[16].Descriptor()
+	procedureDescDismissedImprovementSuggestions := procedureMixinFields11[16].Descriptor()
 	// procedure.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	procedure.DefaultDismissedImprovementSuggestions = procedureDescDismissedImprovementSuggestions.Default.([]string)
 	// procedureDescURL is the schema descriptor for url field.
-	procedureDescURL := procedureMixinFields10[17].Descriptor()
+	procedureDescURL := procedureMixinFields11[17].Descriptor()
 	// procedure.URLValidator is a validator for the "url" field. It is called by the builders before save.
 	procedure.URLValidator = procedureDescURL.Validators[0].(func(string) error)
 	// procedureDescSystemOwned is the schema descriptor for system_owned field.
-	procedureDescSystemOwned := procedureMixinFields11[0].Descriptor()
+	procedureDescSystemOwned := procedureMixinFields12[0].Descriptor()
 	// procedure.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	procedure.DefaultSystemOwned = procedureDescSystemOwned.Default.(bool)
 	// procedureDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	procedureDescWorkflowEligibleMarker := procedureMixinFields15[0].Descriptor()
+	procedureDescWorkflowEligibleMarker := procedureMixinFields16[0].Descriptor()
 	// procedure.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	procedure.DefaultWorkflowEligibleMarker = procedureDescWorkflowEligibleMarker.Default.(bool)
 	// procedureDescID is the schema descriptor for id field.
@@ -6239,13 +6138,13 @@ func init() {
 	riskMixinHooks3 := riskMixin[3].Hooks()
 	riskMixinHooks4 := riskMixin[4].Hooks()
 	riskMixinHooks5 := riskMixin[5].Hooks()
-	riskMixinHooks7 := riskMixin[7].Hooks()
 	riskMixinHooks8 := riskMixin[8].Hooks()
 	riskMixinHooks9 := riskMixin[9].Hooks()
 	riskMixinHooks10 := riskMixin[10].Hooks()
 	riskMixinHooks11 := riskMixin[11].Hooks()
 	riskMixinHooks12 := riskMixin[12].Hooks()
 	riskMixinHooks13 := riskMixin[13].Hooks()
+	riskMixinHooks14 := riskMixin[14].Hooks()
 	riskHooks := schema.Risk{}.Hooks()
 
 	risk.Hooks[1] = riskMixinHooks0[0]
@@ -6258,25 +6157,25 @@ func init() {
 
 	risk.Hooks[5] = riskMixinHooks5[0]
 
-	risk.Hooks[6] = riskMixinHooks7[0]
+	risk.Hooks[6] = riskMixinHooks8[0]
 
-	risk.Hooks[7] = riskMixinHooks7[1]
+	risk.Hooks[7] = riskMixinHooks8[1]
 
-	risk.Hooks[8] = riskMixinHooks8[0]
+	risk.Hooks[8] = riskMixinHooks9[0]
 
-	risk.Hooks[9] = riskMixinHooks8[1]
+	risk.Hooks[9] = riskMixinHooks9[1]
 
-	risk.Hooks[10] = riskMixinHooks8[2]
+	risk.Hooks[10] = riskMixinHooks9[2]
 
-	risk.Hooks[11] = riskMixinHooks9[0]
+	risk.Hooks[11] = riskMixinHooks10[0]
 
-	risk.Hooks[12] = riskMixinHooks10[0]
+	risk.Hooks[12] = riskMixinHooks11[0]
 
-	risk.Hooks[13] = riskMixinHooks11[0]
+	risk.Hooks[13] = riskMixinHooks12[0]
 
-	risk.Hooks[14] = riskMixinHooks12[0]
+	risk.Hooks[14] = riskMixinHooks13[0]
 
-	risk.Hooks[15] = riskMixinHooks13[0]
+	risk.Hooks[15] = riskMixinHooks14[0]
 
 	risk.Hooks[16] = riskHooks[0]
 
@@ -6286,20 +6185,20 @@ func init() {
 
 	risk.Hooks[19] = riskHooks[3]
 	riskMixinInters3 := riskMixin[3].Interceptors()
-	riskMixinInters7 := riskMixin[7].Interceptors()
+	riskMixinInters8 := riskMixin[8].Interceptors()
 	risk.Interceptors[0] = riskMixinInters3[0]
-	risk.Interceptors[1] = riskMixinInters7[0]
-	risk.Interceptors[2] = riskMixinInters7[1]
+	risk.Interceptors[1] = riskMixinInters8[0]
+	risk.Interceptors[2] = riskMixinInters8[1]
 	riskMixinFields0 := riskMixin[0].Fields()
 	_ = riskMixinFields0
 	riskMixinFields4 := riskMixin[4].Fields()
 	_ = riskMixinFields4
 	riskMixinFields5 := riskMixin[5].Fields()
 	_ = riskMixinFields5
-	riskMixinFields7 := riskMixin[7].Fields()
-	_ = riskMixinFields7
-	riskMixinFields13 := riskMixin[13].Fields()
-	_ = riskMixinFields13
+	riskMixinFields8 := riskMixin[8].Fields()
+	_ = riskMixinFields8
+	riskMixinFields14 := riskMixin[14].Fields()
+	_ = riskMixinFields14
 	riskFields := schema.Risk{}.Fields()
 	_ = riskFields
 	// riskDescCreatedAt is the schema descriptor for created_at field.
@@ -6321,11 +6220,11 @@ func init() {
 	// risk.DefaultTags holds the default value on creation for the tags field.
 	risk.DefaultTags = riskDescTags.Default.([]string)
 	// riskDescOwnerID is the schema descriptor for owner_id field.
-	riskDescOwnerID := riskMixinFields7[0].Descriptor()
+	riskDescOwnerID := riskMixinFields8[0].Descriptor()
 	// risk.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	risk.OwnerIDValidator = riskDescOwnerID.Validators[0].(func(string) error)
 	// riskDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	riskDescWorkflowEligibleMarker := riskMixinFields13[0].Descriptor()
+	riskDescWorkflowEligibleMarker := riskMixinFields14[0].Descriptor()
 	// risk.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	risk.DefaultWorkflowEligibleMarker = riskDescWorkflowEligibleMarker.Default.(bool)
 	// riskDescName is the schema descriptor for name field.
@@ -7236,6 +7135,8 @@ func init() {
 	task.Hooks[13] = taskHooks[1]
 
 	task.Hooks[14] = taskHooks[2]
+
+	task.Hooks[15] = taskHooks[3]
 	taskMixinInters3 := taskMixin[3].Interceptors()
 	taskMixinInters7 := taskMixin[7].Interceptors()
 	task.Interceptors[0] = taskMixinInters3[0]
@@ -8627,7 +8528,7 @@ func init() {
 	// vendorscoringconfig.DefaultID holds the default value on creation for the id field.
 	vendorscoringconfig.DefaultID = vendorscoringconfigDescID.Default.(func() string)
 	vulnerabilityMixin := schema.Vulnerability{}.Mixin()
-	vulnerability.Policy = privacy.NewPolicies(vulnerabilityMixin[10], schema.Vulnerability{})
+	vulnerability.Policy = privacy.NewPolicies(vulnerabilityMixin[11], schema.Vulnerability{})
 	vulnerability.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := vulnerability.Policy.EvalMutation(ctx, m); err != nil {
@@ -8641,13 +8542,13 @@ func init() {
 	vulnerabilityMixinHooks3 := vulnerabilityMixin[3].Hooks()
 	vulnerabilityMixinHooks4 := vulnerabilityMixin[4].Hooks()
 	vulnerabilityMixinHooks5 := vulnerabilityMixin[5].Hooks()
-	vulnerabilityMixinHooks7 := vulnerabilityMixin[7].Hooks()
 	vulnerabilityMixinHooks8 := vulnerabilityMixin[8].Hooks()
-	vulnerabilityMixinHooks10 := vulnerabilityMixin[10].Hooks()
+	vulnerabilityMixinHooks9 := vulnerabilityMixin[9].Hooks()
 	vulnerabilityMixinHooks11 := vulnerabilityMixin[11].Hooks()
 	vulnerabilityMixinHooks12 := vulnerabilityMixin[12].Hooks()
 	vulnerabilityMixinHooks13 := vulnerabilityMixin[13].Hooks()
 	vulnerabilityMixinHooks14 := vulnerabilityMixin[14].Hooks()
+	vulnerabilityMixinHooks15 := vulnerabilityMixin[15].Hooks()
 	vulnerabilityHooks := schema.Vulnerability{}.Hooks()
 
 	vulnerability.Hooks[1] = vulnerabilityMixinHooks0[0]
@@ -8660,44 +8561,44 @@ func init() {
 
 	vulnerability.Hooks[5] = vulnerabilityMixinHooks5[0]
 
-	vulnerability.Hooks[6] = vulnerabilityMixinHooks7[0]
+	vulnerability.Hooks[6] = vulnerabilityMixinHooks8[0]
 
-	vulnerability.Hooks[7] = vulnerabilityMixinHooks7[1]
+	vulnerability.Hooks[7] = vulnerabilityMixinHooks8[1]
 
-	vulnerability.Hooks[8] = vulnerabilityMixinHooks8[0]
+	vulnerability.Hooks[8] = vulnerabilityMixinHooks9[0]
 
-	vulnerability.Hooks[9] = vulnerabilityMixinHooks8[1]
+	vulnerability.Hooks[9] = vulnerabilityMixinHooks9[1]
 
-	vulnerability.Hooks[10] = vulnerabilityMixinHooks8[2]
+	vulnerability.Hooks[10] = vulnerabilityMixinHooks9[2]
 
-	vulnerability.Hooks[11] = vulnerabilityMixinHooks10[0]
+	vulnerability.Hooks[11] = vulnerabilityMixinHooks11[0]
 
-	vulnerability.Hooks[12] = vulnerabilityMixinHooks11[0]
+	vulnerability.Hooks[12] = vulnerabilityMixinHooks12[0]
 
-	vulnerability.Hooks[13] = vulnerabilityMixinHooks12[0]
+	vulnerability.Hooks[13] = vulnerabilityMixinHooks13[0]
 
-	vulnerability.Hooks[14] = vulnerabilityMixinHooks13[0]
+	vulnerability.Hooks[14] = vulnerabilityMixinHooks14[0]
 
-	vulnerability.Hooks[15] = vulnerabilityMixinHooks14[0]
+	vulnerability.Hooks[15] = vulnerabilityMixinHooks15[0]
 
 	vulnerability.Hooks[16] = vulnerabilityHooks[0]
 	vulnerabilityMixinInters3 := vulnerabilityMixin[3].Interceptors()
-	vulnerabilityMixinInters7 := vulnerabilityMixin[7].Interceptors()
+	vulnerabilityMixinInters8 := vulnerabilityMixin[8].Interceptors()
 	vulnerability.Interceptors[0] = vulnerabilityMixinInters3[0]
-	vulnerability.Interceptors[1] = vulnerabilityMixinInters7[0]
-	vulnerability.Interceptors[2] = vulnerabilityMixinInters7[1]
+	vulnerability.Interceptors[1] = vulnerabilityMixinInters8[0]
+	vulnerability.Interceptors[2] = vulnerabilityMixinInters8[1]
 	vulnerabilityMixinFields0 := vulnerabilityMixin[0].Fields()
 	_ = vulnerabilityMixinFields0
 	vulnerabilityMixinFields4 := vulnerabilityMixin[4].Fields()
 	_ = vulnerabilityMixinFields4
 	vulnerabilityMixinFields5 := vulnerabilityMixin[5].Fields()
 	_ = vulnerabilityMixinFields5
-	vulnerabilityMixinFields7 := vulnerabilityMixin[7].Fields()
-	_ = vulnerabilityMixinFields7
-	vulnerabilityMixinFields10 := vulnerabilityMixin[10].Fields()
-	_ = vulnerabilityMixinFields10
-	vulnerabilityMixinFields14 := vulnerabilityMixin[14].Fields()
-	_ = vulnerabilityMixinFields14
+	vulnerabilityMixinFields8 := vulnerabilityMixin[8].Fields()
+	_ = vulnerabilityMixinFields8
+	vulnerabilityMixinFields11 := vulnerabilityMixin[11].Fields()
+	_ = vulnerabilityMixinFields11
+	vulnerabilityMixinFields15 := vulnerabilityMixin[15].Fields()
+	_ = vulnerabilityMixinFields15
 	vulnerabilityFields := schema.Vulnerability{}.Fields()
 	_ = vulnerabilityFields
 	// vulnerabilityDescCreatedAt is the schema descriptor for created_at field.
@@ -8719,15 +8620,15 @@ func init() {
 	// vulnerability.DefaultTags holds the default value on creation for the tags field.
 	vulnerability.DefaultTags = vulnerabilityDescTags.Default.([]string)
 	// vulnerabilityDescOwnerID is the schema descriptor for owner_id field.
-	vulnerabilityDescOwnerID := vulnerabilityMixinFields7[0].Descriptor()
+	vulnerabilityDescOwnerID := vulnerabilityMixinFields8[0].Descriptor()
 	// vulnerability.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	vulnerability.OwnerIDValidator = vulnerabilityDescOwnerID.Validators[0].(func(string) error)
 	// vulnerabilityDescSystemOwned is the schema descriptor for system_owned field.
-	vulnerabilityDescSystemOwned := vulnerabilityMixinFields10[0].Descriptor()
+	vulnerabilityDescSystemOwned := vulnerabilityMixinFields11[0].Descriptor()
 	// vulnerability.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	vulnerability.DefaultSystemOwned = vulnerabilityDescSystemOwned.Default.(bool)
 	// vulnerabilityDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	vulnerabilityDescWorkflowEligibleMarker := vulnerabilityMixinFields14[0].Descriptor()
+	vulnerabilityDescWorkflowEligibleMarker := vulnerabilityMixinFields15[0].Descriptor()
 	// vulnerability.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	vulnerability.DefaultWorkflowEligibleMarker = vulnerabilityDescWorkflowEligibleMarker.Default.(bool)
 	// vulnerabilityDescExternalID is the schema descriptor for external_id field.

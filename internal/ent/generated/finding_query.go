@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -46,64 +47,68 @@ import (
 // FindingQuery is the builder for querying Finding entities.
 type FindingQuery struct {
 	config
-	ctx                         *QueryContext
-	order                       []finding.OrderOption
-	inters                      []Interceptor
-	predicates                  []predicate.Finding
-	withOwner                   *OrganizationQuery
-	withBlockedGroups           *GroupQuery
-	withEditors                 *GroupQuery
-	withReviewedByUser          *UserQuery
-	withReviewedByGroup         *GroupQuery
-	withAssignedToUser          *UserQuery
-	withAssignedToGroup         *GroupQuery
-	withEnvironment             *CustomTypeEnumQuery
-	withScope                   *CustomTypeEnumQuery
-	withFindingStatus           *CustomTypeEnumQuery
-	withIntegrations            *IntegrationQuery
-	withVulnerabilities         *VulnerabilityQuery
-	withActionPlans             *ActionPlanQuery
-	withControls                *ControlQuery
-	withSubcontrols             *SubcontrolQuery
-	withRisks                   *RiskQuery
-	withPrograms                *ProgramQuery
-	withAssets                  *AssetQuery
-	withEntities                *EntityQuery
-	withScans                   *ScanQuery
-	withTasks                   *TaskQuery
-	withDirectoryAccounts       *DirectoryAccountQuery
-	withIdentityHolders         *IdentityHolderQuery
-	withRemediations            *RemediationQuery
-	withReviews                 *ReviewQuery
-	withComments                *NoteQuery
-	withFiles                   *FileQuery
-	withWorkflowObjectRefs      *WorkflowObjectRefQuery
-	withCheckResults            *CheckResultQuery
-	withControlMappings         *FindingControlQuery
-	loadTotal                   []func(context.Context, []*Finding) error
-	modifiers                   []func(*sql.Selector)
-	withNamedBlockedGroups      map[string]*GroupQuery
-	withNamedEditors            map[string]*GroupQuery
-	withNamedIntegrations       map[string]*IntegrationQuery
-	withNamedVulnerabilities    map[string]*VulnerabilityQuery
-	withNamedActionPlans        map[string]*ActionPlanQuery
-	withNamedControls           map[string]*ControlQuery
-	withNamedSubcontrols        map[string]*SubcontrolQuery
-	withNamedRisks              map[string]*RiskQuery
-	withNamedPrograms           map[string]*ProgramQuery
-	withNamedAssets             map[string]*AssetQuery
-	withNamedEntities           map[string]*EntityQuery
-	withNamedScans              map[string]*ScanQuery
-	withNamedTasks              map[string]*TaskQuery
-	withNamedDirectoryAccounts  map[string]*DirectoryAccountQuery
-	withNamedIdentityHolders    map[string]*IdentityHolderQuery
-	withNamedRemediations       map[string]*RemediationQuery
-	withNamedReviews            map[string]*ReviewQuery
-	withNamedComments           map[string]*NoteQuery
-	withNamedFiles              map[string]*FileQuery
-	withNamedWorkflowObjectRefs map[string]*WorkflowObjectRefQuery
-	withNamedCheckResults       map[string]*CheckResultQuery
-	withNamedControlMappings    map[string]*FindingControlQuery
+	ctx                          *QueryContext
+	order                        []finding.OrderOption
+	inters                       []Interceptor
+	predicates                   []predicate.Finding
+	withIntegrationRuns          *IntegrationRunQuery
+	withOwner                    *OrganizationQuery
+	withBlockedGroups            *GroupQuery
+	withEditors                  *GroupQuery
+	withReviewedByUser           *UserQuery
+	withReviewedByGroup          *GroupQuery
+	withReviewedByIdentityHolder *IdentityHolderQuery
+	withAssignedToUser           *UserQuery
+	withAssignedToGroup          *GroupQuery
+	withAssignedToIdentityHolder *IdentityHolderQuery
+	withEnvironment              *CustomTypeEnumQuery
+	withScope                    *CustomTypeEnumQuery
+	withFindingStatus            *CustomTypeEnumQuery
+	withIntegrations             *IntegrationQuery
+	withVulnerabilities          *VulnerabilityQuery
+	withActionPlans              *ActionPlanQuery
+	withControls                 *ControlQuery
+	withSubcontrols              *SubcontrolQuery
+	withRisks                    *RiskQuery
+	withPrograms                 *ProgramQuery
+	withAssets                   *AssetQuery
+	withEntities                 *EntityQuery
+	withScans                    *ScanQuery
+	withTasks                    *TaskQuery
+	withDirectoryAccounts        *DirectoryAccountQuery
+	withIdentityHolders          *IdentityHolderQuery
+	withRemediations             *RemediationQuery
+	withReviews                  *ReviewQuery
+	withComments                 *NoteQuery
+	withFiles                    *FileQuery
+	withWorkflowObjectRefs       *WorkflowObjectRefQuery
+	withCheckResults             *CheckResultQuery
+	withControlMappings          *FindingControlQuery
+	loadTotal                    []func(context.Context, []*Finding) error
+	modifiers                    []func(*sql.Selector)
+	withNamedIntegrationRuns     map[string]*IntegrationRunQuery
+	withNamedBlockedGroups       map[string]*GroupQuery
+	withNamedEditors             map[string]*GroupQuery
+	withNamedIntegrations        map[string]*IntegrationQuery
+	withNamedVulnerabilities     map[string]*VulnerabilityQuery
+	withNamedActionPlans         map[string]*ActionPlanQuery
+	withNamedControls            map[string]*ControlQuery
+	withNamedSubcontrols         map[string]*SubcontrolQuery
+	withNamedRisks               map[string]*RiskQuery
+	withNamedPrograms            map[string]*ProgramQuery
+	withNamedAssets              map[string]*AssetQuery
+	withNamedEntities            map[string]*EntityQuery
+	withNamedScans               map[string]*ScanQuery
+	withNamedTasks               map[string]*TaskQuery
+	withNamedDirectoryAccounts   map[string]*DirectoryAccountQuery
+	withNamedIdentityHolders     map[string]*IdentityHolderQuery
+	withNamedRemediations        map[string]*RemediationQuery
+	withNamedReviews             map[string]*ReviewQuery
+	withNamedComments            map[string]*NoteQuery
+	withNamedFiles               map[string]*FileQuery
+	withNamedWorkflowObjectRefs  map[string]*WorkflowObjectRefQuery
+	withNamedCheckResults        map[string]*CheckResultQuery
+	withNamedControlMappings     map[string]*FindingControlQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -138,6 +143,28 @@ func (_q *FindingQuery) Unique(unique bool) *FindingQuery {
 func (_q *FindingQuery) Order(o ...finding.OrderOption) *FindingQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *FindingQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.IntegrationRunsTable, finding.IntegrationRunsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -250,6 +277,28 @@ func (_q *FindingQuery) QueryReviewedByGroup() *GroupQuery {
 	return query
 }
 
+// QueryReviewedByIdentityHolder chains the current query on the "reviewed_by_identity_holder" edge.
+func (_q *FindingQuery) QueryReviewedByIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.ReviewedByIdentityHolderTable, finding.ReviewedByIdentityHolderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryAssignedToUser chains the current query on the "assigned_to_user" edge.
 func (_q *FindingQuery) QueryAssignedToUser() *UserQuery {
 	query := (&UserClient{config: _q.config}).Query()
@@ -287,6 +336,28 @@ func (_q *FindingQuery) QueryAssignedToGroup() *GroupQuery {
 			sqlgraph.From(finding.Table, finding.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, finding.AssignedToGroupTable, finding.AssignedToGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssignedToIdentityHolder chains the current query on the "assigned_to_identity_holder" edge.
+func (_q *FindingQuery) QueryAssignedToIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.AssignedToIdentityHolderTable, finding.AssignedToIdentityHolderColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -987,46 +1058,60 @@ func (_q *FindingQuery) Clone() *FindingQuery {
 		return nil
 	}
 	return &FindingQuery{
-		config:                 _q.config,
-		ctx:                    _q.ctx.Clone(),
-		order:                  append([]finding.OrderOption{}, _q.order...),
-		inters:                 append([]Interceptor{}, _q.inters...),
-		predicates:             append([]predicate.Finding{}, _q.predicates...),
-		withOwner:              _q.withOwner.Clone(),
-		withBlockedGroups:      _q.withBlockedGroups.Clone(),
-		withEditors:            _q.withEditors.Clone(),
-		withReviewedByUser:     _q.withReviewedByUser.Clone(),
-		withReviewedByGroup:    _q.withReviewedByGroup.Clone(),
-		withAssignedToUser:     _q.withAssignedToUser.Clone(),
-		withAssignedToGroup:    _q.withAssignedToGroup.Clone(),
-		withEnvironment:        _q.withEnvironment.Clone(),
-		withScope:              _q.withScope.Clone(),
-		withFindingStatus:      _q.withFindingStatus.Clone(),
-		withIntegrations:       _q.withIntegrations.Clone(),
-		withVulnerabilities:    _q.withVulnerabilities.Clone(),
-		withActionPlans:        _q.withActionPlans.Clone(),
-		withControls:           _q.withControls.Clone(),
-		withSubcontrols:        _q.withSubcontrols.Clone(),
-		withRisks:              _q.withRisks.Clone(),
-		withPrograms:           _q.withPrograms.Clone(),
-		withAssets:             _q.withAssets.Clone(),
-		withEntities:           _q.withEntities.Clone(),
-		withScans:              _q.withScans.Clone(),
-		withTasks:              _q.withTasks.Clone(),
-		withDirectoryAccounts:  _q.withDirectoryAccounts.Clone(),
-		withIdentityHolders:    _q.withIdentityHolders.Clone(),
-		withRemediations:       _q.withRemediations.Clone(),
-		withReviews:            _q.withReviews.Clone(),
-		withComments:           _q.withComments.Clone(),
-		withFiles:              _q.withFiles.Clone(),
-		withWorkflowObjectRefs: _q.withWorkflowObjectRefs.Clone(),
-		withCheckResults:       _q.withCheckResults.Clone(),
-		withControlMappings:    _q.withControlMappings.Clone(),
+		config:                       _q.config,
+		ctx:                          _q.ctx.Clone(),
+		order:                        append([]finding.OrderOption{}, _q.order...),
+		inters:                       append([]Interceptor{}, _q.inters...),
+		predicates:                   append([]predicate.Finding{}, _q.predicates...),
+		withIntegrationRuns:          _q.withIntegrationRuns.Clone(),
+		withOwner:                    _q.withOwner.Clone(),
+		withBlockedGroups:            _q.withBlockedGroups.Clone(),
+		withEditors:                  _q.withEditors.Clone(),
+		withReviewedByUser:           _q.withReviewedByUser.Clone(),
+		withReviewedByGroup:          _q.withReviewedByGroup.Clone(),
+		withReviewedByIdentityHolder: _q.withReviewedByIdentityHolder.Clone(),
+		withAssignedToUser:           _q.withAssignedToUser.Clone(),
+		withAssignedToGroup:          _q.withAssignedToGroup.Clone(),
+		withAssignedToIdentityHolder: _q.withAssignedToIdentityHolder.Clone(),
+		withEnvironment:              _q.withEnvironment.Clone(),
+		withScope:                    _q.withScope.Clone(),
+		withFindingStatus:            _q.withFindingStatus.Clone(),
+		withIntegrations:             _q.withIntegrations.Clone(),
+		withVulnerabilities:          _q.withVulnerabilities.Clone(),
+		withActionPlans:              _q.withActionPlans.Clone(),
+		withControls:                 _q.withControls.Clone(),
+		withSubcontrols:              _q.withSubcontrols.Clone(),
+		withRisks:                    _q.withRisks.Clone(),
+		withPrograms:                 _q.withPrograms.Clone(),
+		withAssets:                   _q.withAssets.Clone(),
+		withEntities:                 _q.withEntities.Clone(),
+		withScans:                    _q.withScans.Clone(),
+		withTasks:                    _q.withTasks.Clone(),
+		withDirectoryAccounts:        _q.withDirectoryAccounts.Clone(),
+		withIdentityHolders:          _q.withIdentityHolders.Clone(),
+		withRemediations:             _q.withRemediations.Clone(),
+		withReviews:                  _q.withReviews.Clone(),
+		withComments:                 _q.withComments.Clone(),
+		withFiles:                    _q.withFiles.Clone(),
+		withWorkflowObjectRefs:       _q.withWorkflowObjectRefs.Clone(),
+		withCheckResults:             _q.withCheckResults.Clone(),
+		withControlMappings:          _q.withControlMappings.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *FindingQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
+	return _q
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -1084,6 +1169,17 @@ func (_q *FindingQuery) WithReviewedByGroup(opts ...func(*GroupQuery)) *FindingQ
 	return _q
 }
 
+// WithReviewedByIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "reviewed_by_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithReviewedByIdentityHolder(opts ...func(*IdentityHolderQuery)) *FindingQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewedByIdentityHolder = query
+	return _q
+}
+
 // WithAssignedToUser tells the query-builder to eager-load the nodes that are connected to
 // the "assigned_to_user" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *FindingQuery) WithAssignedToUser(opts ...func(*UserQuery)) *FindingQuery {
@@ -1103,6 +1199,17 @@ func (_q *FindingQuery) WithAssignedToGroup(opts ...func(*GroupQuery)) *FindingQ
 		opt(query)
 	}
 	_q.withAssignedToGroup = query
+	return _q
+}
+
+// WithAssignedToIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "assigned_to_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithAssignedToIdentityHolder(opts ...func(*IdentityHolderQuery)) *FindingQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssignedToIdentityHolder = query
 	return _q
 }
 
@@ -1443,14 +1550,17 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 	var (
 		nodes       = []*Finding{}
 		_spec       = _q.querySpec()
-		loadedTypes = [30]bool{
+		loadedTypes = [33]bool{
+			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withReviewedByUser != nil,
 			_q.withReviewedByGroup != nil,
+			_q.withReviewedByIdentityHolder != nil,
 			_q.withAssignedToUser != nil,
 			_q.withAssignedToGroup != nil,
+			_q.withAssignedToIdentityHolder != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
 			_q.withFindingStatus != nil,
@@ -1497,6 +1607,13 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Finding) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *Finding, e *IntegrationRun) { n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Finding, e *Organization) { n.Edges.Owner = e }); err != nil {
@@ -1529,6 +1646,12 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 			return nil, err
 		}
 	}
+	if query := _q.withReviewedByIdentityHolder; query != nil {
+		if err := _q.loadReviewedByIdentityHolder(ctx, query, nodes, nil,
+			func(n *Finding, e *IdentityHolder) { n.Edges.ReviewedByIdentityHolder = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withAssignedToUser; query != nil {
 		if err := _q.loadAssignedToUser(ctx, query, nodes, nil,
 			func(n *Finding, e *User) { n.Edges.AssignedToUser = e }); err != nil {
@@ -1538,6 +1661,12 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 	if query := _q.withAssignedToGroup; query != nil {
 		if err := _q.loadAssignedToGroup(ctx, query, nodes, nil,
 			func(n *Finding, e *Group) { n.Edges.AssignedToGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssignedToIdentityHolder; query != nil {
+		if err := _q.loadAssignedToIdentityHolder(ctx, query, nodes, nil,
+			func(n *Finding, e *IdentityHolder) { n.Edges.AssignedToIdentityHolder = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1703,6 +1832,13 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Finding) { n.appendNamedIntegrationRuns(name) },
+			func(n *Finding, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Finding) { n.appendNamedBlockedGroups(name) },
@@ -1865,6 +2001,67 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 	return nodes, nil
 }
 
+func (_q *FindingQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *IntegrationRun)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Finding)
+	nids := make(map[string]map[*Finding]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(finding.IntegrationRunsTable)
+		s.Join(joinT).On(s.C(integrationrun.FieldID), joinT.C(finding.IntegrationRunsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(finding.IntegrationRunsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(finding.IntegrationRunsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Finding]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*IntegrationRun](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "integration_runs" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *FindingQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Finding)
@@ -2074,6 +2271,35 @@ func (_q *FindingQuery) loadReviewedByGroup(ctx context.Context, query *GroupQue
 	}
 	return nil
 }
+func (_q *FindingQuery) loadReviewedByIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Finding)
+	for i := range nodes {
+		fk := nodes[i].ReviewedByIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "reviewed_by_identity_holder_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *FindingQuery) loadAssignedToUser(ctx context.Context, query *UserQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Finding)
@@ -2125,6 +2351,35 @@ func (_q *FindingQuery) loadAssignedToGroup(ctx context.Context, query *GroupQue
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "assigned_to_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *FindingQuery) loadAssignedToIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Finding)
+	for i := range nodes {
+		fk := nodes[i].AssignedToIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "assigned_to_identity_holder_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -3356,11 +3611,17 @@ func (_q *FindingQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withReviewedByGroup != nil {
 			_spec.Node.AddColumnOnce(finding.FieldReviewedByGroupID)
 		}
+		if _q.withReviewedByIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(finding.FieldReviewedByIdentityHolderID)
+		}
 		if _q.withAssignedToUser != nil {
 			_spec.Node.AddColumnOnce(finding.FieldAssignedToUserID)
 		}
 		if _q.withAssignedToGroup != nil {
 			_spec.Node.AddColumnOnce(finding.FieldAssignedToGroupID)
+		}
+		if _q.withAssignedToIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(finding.FieldAssignedToIdentityHolderID)
 		}
 		if _q.withEnvironment != nil {
 			_spec.Node.AddColumnOnce(finding.FieldEnvironmentID)
@@ -3434,6 +3695,20 @@ func (_q *FindingQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *FindingQuery) Modify(modifiers ...func(s *sql.Selector)) *FindingSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *FindingQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
+	return _q
 }
 
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"

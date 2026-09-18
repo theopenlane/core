@@ -16,8 +16,6 @@ var (
 	oktaCredentialSchema, oktaCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// oktaClient is the client ref for the Okta API client used by this definition
 	oktaClient = types.NewClientRef[*oktagosdk.APIClient]()
-	// healthCheckSchema is the operation ref for the Okta health check operation
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema is the operation ref for the Okta directory sync operation
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )
@@ -46,11 +44,14 @@ type CredentialSchema struct {
 type InstallationMetadata struct {
 	// OrgURL is the Okta organization URL configured for this installation
 	OrgURL string `json:"orgUrl,omitempty" jsonschema:"title=Org URL"`
+	// OrgID is the immutable Okta organization identifier resolved from the org settings API
+	OrgID string `json:"orgId,omitempty" jsonschema:"title=Org ID"`
 }
 
 // InstallationIdentity implements types.InstallationIdentifiable
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	return types.IntegrationInstallationIdentity{
 		ExternalName: m.OrgURL,
+		ExternalID:   m.OrgID,
 	}
 }

@@ -172,10 +172,6 @@ func (ec *executionContext) _AssessmentResponseDeletePayload(ctx context.Context
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAssessmentResponseCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentResponseCreatePayload) graphql.Marshaler {
-	return ec._AssessmentResponseCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAssessmentResponseCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentResponseCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -184,10 +180,6 @@ func (ec *executionContext) marshalNAssessmentResponseCreatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._AssessmentResponseCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAssessmentResponseDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentResponseDeletePayload) graphql.Marshaler {
-	return ec._AssessmentResponseDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAssessmentResponseDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentResponseDeletePayload) graphql.Marshaler {

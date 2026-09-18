@@ -2186,25 +2186,6 @@ func (r *mutationResolver) bulkCreateDirectoryMembership(ctx context.Context, in
 	}, nil
 }
 
-// bulkCreateDirectorySyncRun uses the CreateBulk function to create multiple DirectorySyncRun entities
-func (r *mutationResolver) bulkCreateDirectorySyncRun(ctx context.Context, input []*generated.CreateDirectorySyncRunInput) (*model.DirectorySyncRunBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.DirectorySyncRunCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.DirectorySyncRun.Create().SetInput(*data)
-	}
-
-	res, err := c.DirectorySyncRun.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "directorysyncrun"})
-	}
-
-	// return response
-	return &model.DirectorySyncRunBulkCreatePayload{
-		DirectorySyncRuns: res,
-	}, nil
-}
-
 // bulkCreateDiscussion uses the CreateBulk function to create multiple Discussion entities
 func (r *mutationResolver) bulkCreateDiscussion(ctx context.Context, input []*generated.CreateDiscussionInput) (*model.DiscussionBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

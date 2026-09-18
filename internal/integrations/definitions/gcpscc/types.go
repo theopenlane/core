@@ -21,8 +21,6 @@ var (
 	sccSchema, sccCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// workloadIdentitySchema is the credential schema for GCP workload identity federation
 	workloadIdentitySchema, workloadIdentityCredential = providerkit.CredentialSchema[WorkloadIdentityCredentialSchema]()
-	// healthCheckSchema is the operation schema for the GCP Security Command Center health check operation
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// findingsCollectSchema is the operation schema for the GCP Security Command Center findings collection operation
 	findingsCollectSchema, findingsCollectOperation = providerkit.OperationSchema[FindingsSync]()
 )
@@ -30,7 +28,21 @@ var (
 const (
 	// projectScopeSpecific indicates collection should target only the explicitly listed project IDs
 	projectScopeSpecific = "specific"
+	// organizationParentPrefix is the SCC resource name prefix for an organization-scoped parent
+	organizationParentPrefix = "organizations/"
+	// projectParentPrefix is the SCC resource name prefix for a project-scoped parent
+	projectParentPrefix = "projects/"
 )
+
+// organizationParent returns the SCC parent resource name for a GCP organization id
+func organizationParent(organizationID string) string {
+	return organizationParentPrefix + organizationID
+}
+
+// projectParent returns the SCC parent resource name for a GCP project id
+func projectParent(projectID string) string {
+	return projectParentPrefix + projectID
+}
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
@@ -110,7 +122,12 @@ type InstallationMetadata struct {
 
 // InstallationIdentity implements types.InstallationIdentifiable
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
-	return types.IntegrationInstallationIdentity{
-		ExternalID: m.OrganizationID,
+	switch {
+	case m.OrganizationID != "":
+		return types.IntegrationInstallationIdentity{ExternalID: organizationParent(m.OrganizationID)}
+	case m.ProjectID != "":
+		return types.IntegrationInstallationIdentity{ExternalID: projectParent(m.ProjectID)}
+	default:
+		return types.IntegrationInstallationIdentity{}
 	}
 }

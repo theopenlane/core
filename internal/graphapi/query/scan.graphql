@@ -3,6 +3,7 @@ mutation CreateBulkCSVScan ($input: Upload!) {
 		scans {
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			createdAt
 			createdBy
@@ -20,6 +21,7 @@ mutation CreateBulkCSVScan ($input: Upload!) {
 			performedByUserID
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scanDate
 			scanSchedule
@@ -42,6 +44,7 @@ mutation CreateBulkScan ($input: [CreateScanInput!]) {
 		scans {
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			createdAt
 			createdBy
@@ -59,6 +62,7 @@ mutation CreateBulkScan ($input: [CreateScanInput!]) {
 			performedByUserID
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scanDate
 			scanSchedule
@@ -81,6 +85,7 @@ mutation CreateScan ($input: CreateScanInput!) {
 		scan {
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			createdAt
 			createdBy
@@ -98,6 +103,7 @@ mutation CreateScan ($input: CreateScanInput!) {
 			performedByUserID
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scanDate
 			scanSchedule
@@ -150,6 +156,7 @@ query GetScanByID ($scanId: ID!) {
 	scan(id: $scanId) {
 		assignedTo
 		assignedToGroupID
+		assignedToIdentityHolderID
 		assignedToUserID
 		createdAt
 		createdBy
@@ -167,6 +174,7 @@ query GetScanByID ($scanId: ID!) {
 		performedByUserID
 		reviewedBy
 		reviewedByGroupID
+		reviewedByIdentityHolderID
 		reviewedByUserID
 		scanDate
 		scanSchedule
@@ -214,6 +222,7 @@ mutation UpdateScan ($updateScanId: ID!, $input: UpdateScanInput!) {
 		scan {
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			createdAt
 			createdBy
@@ -231,6 +240,7 @@ mutation UpdateScan ($updateScanId: ID!, $input: UpdateScanInput!) {
 			performedByUserID
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scanDate
 			scanSchedule

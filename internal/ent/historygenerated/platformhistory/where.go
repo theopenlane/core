@@ -139,6 +139,11 @@ func InternalOwnerGroupID(v string) predicate.PlatformHistory {
 	return predicate.PlatformHistory(sql.FieldEQ(FieldInternalOwnerGroupID, v))
 }
 
+// InternalOwnerIdentityHolderID applies equality check predicate on the "internal_owner_identity_holder_id" field. It's identical to InternalOwnerIdentityHolderIDEQ.
+func InternalOwnerIdentityHolderID(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
 // BusinessOwner applies equality check predicate on the "business_owner" field. It's identical to BusinessOwnerEQ.
 func BusinessOwner(v string) predicate.PlatformHistory {
 	return predicate.PlatformHistory(sql.FieldEQ(FieldBusinessOwner, v))
@@ -152,6 +157,11 @@ func BusinessOwnerUserID(v string) predicate.PlatformHistory {
 // BusinessOwnerGroupID applies equality check predicate on the "business_owner_group_id" field. It's identical to BusinessOwnerGroupIDEQ.
 func BusinessOwnerGroupID(v string) predicate.PlatformHistory {
 	return predicate.PlatformHistory(sql.FieldEQ(FieldBusinessOwnerGroupID, v))
+}
+
+// BusinessOwnerIdentityHolderID applies equality check predicate on the "business_owner_identity_holder_id" field. It's identical to BusinessOwnerIdentityHolderIDEQ.
+func BusinessOwnerIdentityHolderID(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldEQ(FieldBusinessOwnerIdentityHolderID, v))
 }
 
 // TechnicalOwner applies equality check predicate on the "technical_owner" field. It's identical to TechnicalOwnerEQ.
@@ -169,6 +179,11 @@ func TechnicalOwnerGroupID(v string) predicate.PlatformHistory {
 	return predicate.PlatformHistory(sql.FieldEQ(FieldTechnicalOwnerGroupID, v))
 }
 
+// TechnicalOwnerIdentityHolderID applies equality check predicate on the "technical_owner_identity_holder_id" field. It's identical to TechnicalOwnerIdentityHolderIDEQ.
+func TechnicalOwnerIdentityHolderID(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldEQ(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
 // SecurityOwner applies equality check predicate on the "security_owner" field. It's identical to SecurityOwnerEQ.
 func SecurityOwner(v string) predicate.PlatformHistory {
 	return predicate.PlatformHistory(sql.FieldEQ(FieldSecurityOwner, v))
@@ -182,6 +197,11 @@ func SecurityOwnerUserID(v string) predicate.PlatformHistory {
 // SecurityOwnerGroupID applies equality check predicate on the "security_owner_group_id" field. It's identical to SecurityOwnerGroupIDEQ.
 func SecurityOwnerGroupID(v string) predicate.PlatformHistory {
 	return predicate.PlatformHistory(sql.FieldEQ(FieldSecurityOwnerGroupID, v))
+}
+
+// SecurityOwnerIdentityHolderID applies equality check predicate on the "security_owner_identity_holder_id" field. It's identical to SecurityOwnerIdentityHolderIDEQ.
+func SecurityOwnerIdentityHolderID(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldEQ(FieldSecurityOwnerIdentityHolderID, v))
 }
 
 // PlatformKindName applies equality check predicate on the "platform_kind_name" field. It's identical to PlatformKindNameEQ.
@@ -1309,6 +1329,81 @@ func InternalOwnerGroupIDContainsFold(v string) predicate.PlatformHistory {
 	return predicate.PlatformHistory(sql.FieldContainsFold(FieldInternalOwnerGroupID, v))
 }
 
+// InternalOwnerIdentityHolderIDEQ applies the EQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEQ(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDNEQ applies the NEQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNEQ(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldNEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIn applies the In predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIn(vs ...string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDNotIn applies the NotIn predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotIn(vs ...string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldNotIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDGT applies the GT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGT(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldGT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDGTE applies the GTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGTE(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldGTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLT applies the LT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLT(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldLT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLTE applies the LTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLTE(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldLTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContains applies the Contains predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContains(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldContains(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasPrefix(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldHasPrefix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasSuffix(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldHasSuffix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIsNil applies the IsNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIsNil() predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldIsNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDNotNil applies the NotNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotNil() predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldNotNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDEqualFold applies the EqualFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEqualFold(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldEqualFold(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContainsFold applies the ContainsFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContainsFold(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldContainsFold(FieldInternalOwnerIdentityHolderID, v))
+}
+
 // BusinessOwnerEQ applies the EQ predicate on the "business_owner" field.
 func BusinessOwnerEQ(v string) predicate.PlatformHistory {
 	return predicate.PlatformHistory(sql.FieldEQ(FieldBusinessOwner, v))
@@ -1532,6 +1627,81 @@ func BusinessOwnerGroupIDEqualFold(v string) predicate.PlatformHistory {
 // BusinessOwnerGroupIDContainsFold applies the ContainsFold predicate on the "business_owner_group_id" field.
 func BusinessOwnerGroupIDContainsFold(v string) predicate.PlatformHistory {
 	return predicate.PlatformHistory(sql.FieldContainsFold(FieldBusinessOwnerGroupID, v))
+}
+
+// BusinessOwnerIdentityHolderIDEQ applies the EQ predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDEQ(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldEQ(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDNEQ applies the NEQ predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDNEQ(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldNEQ(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDIn applies the In predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDIn(vs ...string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldIn(FieldBusinessOwnerIdentityHolderID, vs...))
+}
+
+// BusinessOwnerIdentityHolderIDNotIn applies the NotIn predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDNotIn(vs ...string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldNotIn(FieldBusinessOwnerIdentityHolderID, vs...))
+}
+
+// BusinessOwnerIdentityHolderIDGT applies the GT predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDGT(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldGT(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDGTE applies the GTE predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDGTE(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldGTE(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDLT applies the LT predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDLT(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldLT(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDLTE applies the LTE predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDLTE(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldLTE(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDContains applies the Contains predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDContains(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldContains(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDHasPrefix(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldHasPrefix(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDHasSuffix(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldHasSuffix(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDIsNil applies the IsNil predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDIsNil() predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldIsNull(FieldBusinessOwnerIdentityHolderID))
+}
+
+// BusinessOwnerIdentityHolderIDNotNil applies the NotNil predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDNotNil() predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldNotNull(FieldBusinessOwnerIdentityHolderID))
+}
+
+// BusinessOwnerIdentityHolderIDEqualFold applies the EqualFold predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDEqualFold(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldEqualFold(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDContainsFold applies the ContainsFold predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDContainsFold(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldContainsFold(FieldBusinessOwnerIdentityHolderID, v))
 }
 
 // TechnicalOwnerEQ applies the EQ predicate on the "technical_owner" field.
@@ -1759,6 +1929,81 @@ func TechnicalOwnerGroupIDContainsFold(v string) predicate.PlatformHistory {
 	return predicate.PlatformHistory(sql.FieldContainsFold(FieldTechnicalOwnerGroupID, v))
 }
 
+// TechnicalOwnerIdentityHolderIDEQ applies the EQ predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDEQ(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldEQ(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDNEQ applies the NEQ predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDNEQ(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldNEQ(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDIn applies the In predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDIn(vs ...string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldIn(FieldTechnicalOwnerIdentityHolderID, vs...))
+}
+
+// TechnicalOwnerIdentityHolderIDNotIn applies the NotIn predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDNotIn(vs ...string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldNotIn(FieldTechnicalOwnerIdentityHolderID, vs...))
+}
+
+// TechnicalOwnerIdentityHolderIDGT applies the GT predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDGT(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldGT(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDGTE applies the GTE predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDGTE(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldGTE(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDLT applies the LT predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDLT(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldLT(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDLTE applies the LTE predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDLTE(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldLTE(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDContains applies the Contains predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDContains(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldContains(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDHasPrefix(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldHasPrefix(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDHasSuffix(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldHasSuffix(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDIsNil applies the IsNil predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDIsNil() predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldIsNull(FieldTechnicalOwnerIdentityHolderID))
+}
+
+// TechnicalOwnerIdentityHolderIDNotNil applies the NotNil predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDNotNil() predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldNotNull(FieldTechnicalOwnerIdentityHolderID))
+}
+
+// TechnicalOwnerIdentityHolderIDEqualFold applies the EqualFold predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDEqualFold(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldEqualFold(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDContainsFold applies the ContainsFold predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDContainsFold(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldContainsFold(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
 // SecurityOwnerEQ applies the EQ predicate on the "security_owner" field.
 func SecurityOwnerEQ(v string) predicate.PlatformHistory {
 	return predicate.PlatformHistory(sql.FieldEQ(FieldSecurityOwner, v))
@@ -1982,6 +2227,81 @@ func SecurityOwnerGroupIDEqualFold(v string) predicate.PlatformHistory {
 // SecurityOwnerGroupIDContainsFold applies the ContainsFold predicate on the "security_owner_group_id" field.
 func SecurityOwnerGroupIDContainsFold(v string) predicate.PlatformHistory {
 	return predicate.PlatformHistory(sql.FieldContainsFold(FieldSecurityOwnerGroupID, v))
+}
+
+// SecurityOwnerIdentityHolderIDEQ applies the EQ predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDEQ(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldEQ(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDNEQ applies the NEQ predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDNEQ(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldNEQ(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDIn applies the In predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDIn(vs ...string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldIn(FieldSecurityOwnerIdentityHolderID, vs...))
+}
+
+// SecurityOwnerIdentityHolderIDNotIn applies the NotIn predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDNotIn(vs ...string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldNotIn(FieldSecurityOwnerIdentityHolderID, vs...))
+}
+
+// SecurityOwnerIdentityHolderIDGT applies the GT predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDGT(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldGT(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDGTE applies the GTE predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDGTE(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldGTE(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDLT applies the LT predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDLT(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldLT(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDLTE applies the LTE predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDLTE(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldLTE(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDContains applies the Contains predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDContains(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldContains(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDHasPrefix(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldHasPrefix(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDHasSuffix(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldHasSuffix(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDIsNil applies the IsNil predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDIsNil() predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldIsNull(FieldSecurityOwnerIdentityHolderID))
+}
+
+// SecurityOwnerIdentityHolderIDNotNil applies the NotNil predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDNotNil() predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldNotNull(FieldSecurityOwnerIdentityHolderID))
+}
+
+// SecurityOwnerIdentityHolderIDEqualFold applies the EqualFold predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDEqualFold(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldEqualFold(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDContainsFold applies the ContainsFold predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDContainsFold(v string) predicate.PlatformHistory {
+	return predicate.PlatformHistory(sql.FieldContainsFold(FieldSecurityOwnerIdentityHolderID, v))
 }
 
 // PlatformKindNameEQ applies the EQ predicate on the "platform_kind_name" field.

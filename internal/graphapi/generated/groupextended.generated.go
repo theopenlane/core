@@ -876,10 +876,6 @@ func (ec *executionContext) unmarshalNGroupMembersInput2ᚖgithubᚗcomᚋtheope
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNGroupPermissionConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionConnection(ctx context.Context, sel ast.SelectionSet, v model.GroupPermissionConnection) graphql.Marshaler {
-	return ec._GroupPermissionConnection(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNGroupPermissionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionConnection(ctx context.Context, sel ast.SelectionSet, v *model.GroupPermissionConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {

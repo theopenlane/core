@@ -15,8 +15,6 @@ var (
 	cloudflareSchema, cloudflareCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// cloudflareClient is the client ref for the Cloudflare API client used by this definition
 	cloudflareClient = types.NewClientRef[*CloudflareClient]()
-	// healthDefaultOperation is the operation ref for the Cloudflare health check
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema is the operation ref for the directory account sync operation
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 	// assetSyncSchema is the operation ref for the domain asset sync operation
@@ -44,6 +42,16 @@ var (
 const (
 	// DomainScanPerformedBy marks a Scan record as one the system should actually submit to the cloudflare domain scan job
 	DomainScanPerformedBy = "openlane_domain_scan"
+
+	// DomainScanBrandDesignOnlyMetadataKey selects the brand-design-only scan path
+	DomainScanBrandDesignOnlyMetadataKey = "brandDesignOnly"
+
+	// DomainScanApplyBrandDesignToPreviewMetadataKey makes sure we apply the extracted brand design to only the preview trustcenter environment
+	DomainScanApplyBrandDesignToPreviewMetadataKey = "applyBrandDesignToPreview"
+
+	// DomainScanApplyBrandDesignToLiveMetadataKey makes sure we apply the extracted brand design to only the live trustcenter environment
+	DomainScanApplyBrandDesignToLiveMetadataKey = "applyBrandDesignToLive"
+
 	// DomainScanGroupMetadataKey is the Scan.Metadata key carrying the shared group id for scans
 	// created together (e.g. every domain from one organization settings update), so scans
 	// submitted independently can still be recombined into a single notification once the whole

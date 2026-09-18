@@ -64,6 +64,7 @@ func (CheckResult) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entgql.OrderField("observed_at"),
+				entx.IntegrationMappingField().Volatile(),
 			),
 		field.String("external_uri").
 			Comment("link to the result in the source system").
@@ -79,11 +80,10 @@ func (CheckResult) Fields() []ent.Field {
 				entx.IntegrationMappingField().LookupKey(),
 			),
 		field.String("integration_id").
-			Comment("integration that owns this directory group").
+			Comment("integration that owns this check result").
 			Optional().
-			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
+				entx.IntegrationMappingField().SystemControlled(),
 			),
 	}
 }
@@ -92,6 +92,7 @@ func (CheckResult) Fields() []ent.Field {
 func (c CheckResult) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{SchemaType: c},
 			newObjectOwnedMixin[generated.CheckResult](c,
 				withParents(
 					Control{},
@@ -118,7 +119,6 @@ func (c CheckResult) Edges() []ent.Edge {
 			edgeSchema: Integration{},
 			field:      "integration_id",
 			required:   false,
-			immutable:  true,
 			comment:    "integration that owns this control health",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Organization{}.Name()),
@@ -137,7 +137,7 @@ func (CheckResult) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
-		entx.IntegrationMappingSchema().StockPersist(),
+		entx.IntegrationMappingSchema().StockPersist().InstanceScoped(),
 		history.Annotations{
 			Exclude: true,
 		},

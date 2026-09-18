@@ -21,6 +21,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -157,6 +159,106 @@ func (_u *AssetUpdate) ClearTags() *AssetUpdate {
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *AssetUpdate) SetSourceDefinitionID(v string) *AssetUpdate {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableSourceDefinitionID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *AssetUpdate) ClearSourceDefinitionID() *AssetUpdate {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *AssetUpdate) SetSourceDefinitionVersion(v string) *AssetUpdate {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableSourceDefinitionVersion(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *AssetUpdate) ClearSourceDefinitionVersion() *AssetUpdate {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *AssetUpdate) SetSourceInstanceID(v string) *AssetUpdate {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableSourceInstanceID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *AssetUpdate) ClearSourceInstanceID() *AssetUpdate {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *AssetUpdate) SetManagedBy(v string) *AssetUpdate {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableManagedBy(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *AssetUpdate) ClearManagedBy() *AssetUpdate {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *AssetUpdate) SetIntegrationRunID(v string) *AssetUpdate {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableIntegrationRunID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *AssetUpdate) ClearIntegrationRunID() *AssetUpdate {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
 // SetInternalOwner sets the "internal_owner" field.
 func (_u *AssetUpdate) SetInternalOwner(v string) *AssetUpdate {
 	_u.mutation.SetInternalOwner(v)
@@ -214,6 +316,26 @@ func (_u *AssetUpdate) SetNillableInternalOwnerGroupID(v *string) *AssetUpdate {
 // ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
 func (_u *AssetUpdate) ClearInternalOwnerGroupID() *AssetUpdate {
 	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *AssetUpdate) SetInternalOwnerIdentityHolderID(v string) *AssetUpdate {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableInternalOwnerIdentityHolderID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *AssetUpdate) ClearInternalOwnerIdentityHolderID() *AssetUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
 	return _u
 }
 
@@ -904,6 +1026,26 @@ func (_u *AssetUpdate) ClearCategories() *AssetUpdate {
 	return _u
 }
 
+// SetIntegrationID sets the "integration_id" field.
+func (_u *AssetUpdate) SetIntegrationID(v string) *AssetUpdate {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableIntegrationID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *AssetUpdate) ClearIntegrationID() *AssetUpdate {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
 // SetObservedAt sets the "observed_at" field.
 func (_u *AssetUpdate) SetObservedAt(v models.DateTime) *AssetUpdate {
 	_u.mutation.SetObservedAt(v)
@@ -922,6 +1064,21 @@ func (_u *AssetUpdate) SetNillableObservedAt(v *models.DateTime) *AssetUpdate {
 func (_u *AssetUpdate) ClearObservedAt() *AssetUpdate {
 	_u.mutation.ClearObservedAt()
 	return _u
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *AssetUpdate) AddIntegrationRunIDs(ids ...string) *AssetUpdate {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *AssetUpdate) AddIntegrationRuns(v ...*IntegrationRun) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
@@ -977,6 +1134,11 @@ func (_u *AssetUpdate) SetInternalOwnerUser(v *User) *AssetUpdate {
 // SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
 func (_u *AssetUpdate) SetInternalOwnerGroup(v *Group) *AssetUpdate {
 	return _u.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *AssetUpdate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *AssetUpdate {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
 }
 
 // SetAssetSubtype sets the "asset_subtype" edge to the CustomTypeEnum entity.
@@ -1219,6 +1381,11 @@ func (_u *AssetUpdate) SetSourcePlatform(v *Platform) *AssetUpdate {
 	return _u.SetSourcePlatformID(v.ID)
 }
 
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_u *AssetUpdate) SetIntegration(v *Integration) *AssetUpdate {
+	return _u.SetIntegrationID(v.ID)
+}
+
 // AddConnectedAssetIDs adds the "connected_assets" edge to the Asset entity by IDs.
 func (_u *AssetUpdate) AddConnectedAssetIDs(ids ...string) *AssetUpdate {
 	_u.mutation.AddConnectedAssetIDs(ids...)
@@ -1252,6 +1419,27 @@ func (_u *AssetUpdate) AddConnectedFrom(v ...*Asset) *AssetUpdate {
 // Mutation returns the AssetMutation object of the builder.
 func (_u *AssetUpdate) Mutation() *AssetMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *AssetUpdate) ClearIntegrationRuns() *AssetUpdate {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *AssetUpdate) RemoveIntegrationRunIDs(ids ...string) *AssetUpdate {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *AssetUpdate) RemoveIntegrationRuns(v ...*IntegrationRun) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -1326,6 +1514,12 @@ func (_u *AssetUpdate) ClearInternalOwnerUser() *AssetUpdate {
 // ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
 func (_u *AssetUpdate) ClearInternalOwnerGroup() *AssetUpdate {
 	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *AssetUpdate) ClearInternalOwnerIdentityHolder() *AssetUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
 	return _u
 }
 
@@ -1656,6 +1850,12 @@ func (_u *AssetUpdate) ClearSourcePlatform() *AssetUpdate {
 	return _u
 }
 
+// ClearIntegration clears the "integration" edge to the Integration entity.
+func (_u *AssetUpdate) ClearIntegration() *AssetUpdate {
+	_u.mutation.ClearIntegration()
+	return _u
+}
+
 // ClearConnectedAssets clears all "connected_assets" edges to the Asset entity.
 func (_u *AssetUpdate) ClearConnectedAssets() *AssetUpdate {
 	_u.mutation.ClearConnectedAssets()
@@ -1830,6 +2030,36 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(asset.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(asset.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(asset.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(asset.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(asset.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(asset.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(asset.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(asset.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(asset.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(asset.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(asset.FieldIntegrationRunID, field.TypeString)
+	}
 	if value, ok := _u.mutation.InternalOwner(); ok {
 		_spec.SetField(asset.FieldInternalOwner, field.TypeString, value)
 	}
@@ -1999,6 +2229,51 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ObservedAtCleared() {
 		_spec.ClearField(asset.FieldObservedAt, field.TypeTime)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   asset.IntegrationRunsTable,
+			Columns: asset.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   asset.IntegrationRunsTable,
+			Columns: asset.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   asset.IntegrationRunsTable,
+			Columns: asset.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2186,6 +2461,35 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerIdentityHolderTable,
+			Columns: []string{asset.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerIdentityHolderTable,
+			Columns: []string{asset.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -3039,6 +3343,35 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.IntegrationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   asset.IntegrationTable,
+			Columns: []string{asset.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   asset.IntegrationTable,
+			Columns: []string{asset.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ConnectedAssetsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3261,6 +3594,106 @@ func (_u *AssetUpdateOne) ClearTags() *AssetUpdateOne {
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *AssetUpdateOne) SetSourceDefinitionID(v string) *AssetUpdateOne {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableSourceDefinitionID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *AssetUpdateOne) ClearSourceDefinitionID() *AssetUpdateOne {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *AssetUpdateOne) SetSourceDefinitionVersion(v string) *AssetUpdateOne {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableSourceDefinitionVersion(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *AssetUpdateOne) ClearSourceDefinitionVersion() *AssetUpdateOne {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *AssetUpdateOne) SetSourceInstanceID(v string) *AssetUpdateOne {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableSourceInstanceID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *AssetUpdateOne) ClearSourceInstanceID() *AssetUpdateOne {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *AssetUpdateOne) SetManagedBy(v string) *AssetUpdateOne {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableManagedBy(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *AssetUpdateOne) ClearManagedBy() *AssetUpdateOne {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *AssetUpdateOne) SetIntegrationRunID(v string) *AssetUpdateOne {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableIntegrationRunID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *AssetUpdateOne) ClearIntegrationRunID() *AssetUpdateOne {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
 // SetInternalOwner sets the "internal_owner" field.
 func (_u *AssetUpdateOne) SetInternalOwner(v string) *AssetUpdateOne {
 	_u.mutation.SetInternalOwner(v)
@@ -3318,6 +3751,26 @@ func (_u *AssetUpdateOne) SetNillableInternalOwnerGroupID(v *string) *AssetUpdat
 // ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
 func (_u *AssetUpdateOne) ClearInternalOwnerGroupID() *AssetUpdateOne {
 	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *AssetUpdateOne) SetInternalOwnerIdentityHolderID(v string) *AssetUpdateOne {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableInternalOwnerIdentityHolderID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *AssetUpdateOne) ClearInternalOwnerIdentityHolderID() *AssetUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
 	return _u
 }
 
@@ -4008,6 +4461,26 @@ func (_u *AssetUpdateOne) ClearCategories() *AssetUpdateOne {
 	return _u
 }
 
+// SetIntegrationID sets the "integration_id" field.
+func (_u *AssetUpdateOne) SetIntegrationID(v string) *AssetUpdateOne {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableIntegrationID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *AssetUpdateOne) ClearIntegrationID() *AssetUpdateOne {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
 // SetObservedAt sets the "observed_at" field.
 func (_u *AssetUpdateOne) SetObservedAt(v models.DateTime) *AssetUpdateOne {
 	_u.mutation.SetObservedAt(v)
@@ -4026,6 +4499,21 @@ func (_u *AssetUpdateOne) SetNillableObservedAt(v *models.DateTime) *AssetUpdate
 func (_u *AssetUpdateOne) ClearObservedAt() *AssetUpdateOne {
 	_u.mutation.ClearObservedAt()
 	return _u
+}
+
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *AssetUpdateOne) AddIntegrationRunIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *AssetUpdateOne) AddIntegrationRuns(v ...*IntegrationRun) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
 }
 
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
@@ -4081,6 +4569,11 @@ func (_u *AssetUpdateOne) SetInternalOwnerUser(v *User) *AssetUpdateOne {
 // SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
 func (_u *AssetUpdateOne) SetInternalOwnerGroup(v *Group) *AssetUpdateOne {
 	return _u.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *AssetUpdateOne) SetInternalOwnerIdentityHolder(v *IdentityHolder) *AssetUpdateOne {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
 }
 
 // SetAssetSubtype sets the "asset_subtype" edge to the CustomTypeEnum entity.
@@ -4323,6 +4816,11 @@ func (_u *AssetUpdateOne) SetSourcePlatform(v *Platform) *AssetUpdateOne {
 	return _u.SetSourcePlatformID(v.ID)
 }
 
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_u *AssetUpdateOne) SetIntegration(v *Integration) *AssetUpdateOne {
+	return _u.SetIntegrationID(v.ID)
+}
+
 // AddConnectedAssetIDs adds the "connected_assets" edge to the Asset entity by IDs.
 func (_u *AssetUpdateOne) AddConnectedAssetIDs(ids ...string) *AssetUpdateOne {
 	_u.mutation.AddConnectedAssetIDs(ids...)
@@ -4356,6 +4854,27 @@ func (_u *AssetUpdateOne) AddConnectedFrom(v ...*Asset) *AssetUpdateOne {
 // Mutation returns the AssetMutation object of the builder.
 func (_u *AssetUpdateOne) Mutation() *AssetMutation {
 	return _u.mutation
+}
+
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *AssetUpdateOne) ClearIntegrationRuns() *AssetUpdateOne {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *AssetUpdateOne) RemoveIntegrationRunIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *AssetUpdateOne) RemoveIntegrationRuns(v ...*IntegrationRun) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -4430,6 +4949,12 @@ func (_u *AssetUpdateOne) ClearInternalOwnerUser() *AssetUpdateOne {
 // ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
 func (_u *AssetUpdateOne) ClearInternalOwnerGroup() *AssetUpdateOne {
 	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *AssetUpdateOne) ClearInternalOwnerIdentityHolder() *AssetUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
 	return _u
 }
 
@@ -4760,6 +5285,12 @@ func (_u *AssetUpdateOne) ClearSourcePlatform() *AssetUpdateOne {
 	return _u
 }
 
+// ClearIntegration clears the "integration" edge to the Integration entity.
+func (_u *AssetUpdateOne) ClearIntegration() *AssetUpdateOne {
+	_u.mutation.ClearIntegration()
+	return _u
+}
+
 // ClearConnectedAssets clears all "connected_assets" edges to the Asset entity.
 func (_u *AssetUpdateOne) ClearConnectedAssets() *AssetUpdateOne {
 	_u.mutation.ClearConnectedAssets()
@@ -4964,6 +5495,36 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(asset.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(asset.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(asset.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(asset.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(asset.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(asset.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(asset.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(asset.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(asset.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(asset.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(asset.FieldIntegrationRunID, field.TypeString)
+	}
 	if value, ok := _u.mutation.InternalOwner(); ok {
 		_spec.SetField(asset.FieldInternalOwner, field.TypeString, value)
 	}
@@ -5133,6 +5694,51 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 	}
 	if _u.mutation.ObservedAtCleared() {
 		_spec.ClearField(asset.FieldObservedAt, field.TypeTime)
+	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   asset.IntegrationRunsTable,
+			Columns: asset.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   asset.IntegrationRunsTable,
+			Columns: asset.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   asset.IntegrationRunsTable,
+			Columns: asset.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -5320,6 +5926,35 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerIdentityHolderTable,
+			Columns: []string{asset.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerIdentityHolderTable,
+			Columns: []string{asset.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -6166,6 +6801,35 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   asset.IntegrationTable,
+			Columns: []string{asset.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   asset.IntegrationTable,
+			Columns: []string{asset.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

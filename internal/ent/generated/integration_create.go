@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -20,7 +21,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/event"
@@ -387,6 +387,20 @@ func (_c *IntegrationCreate) SetMetadata(v map[string]interface{}) *IntegrationC
 	return _c
 }
 
+// SetHealth sets the "health" field.
+func (_c *IntegrationCreate) SetHealth(v models.IntegrationHealth) *IntegrationCreate {
+	_c.mutation.SetHealth(v)
+	return _c
+}
+
+// SetNillableHealth sets the "health" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableHealth(v *models.IntegrationHealth) *IntegrationCreate {
+	if v != nil {
+		_c.SetHealth(*v)
+	}
+	return _c
+}
+
 // SetDefinitionID sets the "definition_id" field.
 func (_c *IntegrationCreate) SetDefinitionID(v string) *IntegrationCreate {
 	_c.mutation.SetDefinitionID(v)
@@ -453,6 +467,20 @@ func (_c *IntegrationCreate) SetStatus(v enums.IntegrationStatus) *IntegrationCr
 func (_c *IntegrationCreate) SetNillableStatus(v *enums.IntegrationStatus) *IntegrationCreate {
 	if v != nil {
 		_c.SetStatus(*v)
+	}
+	return _c
+}
+
+// SetExpiresAt sets the "expires_at" field.
+func (_c *IntegrationCreate) SetExpiresAt(v time.Time) *IntegrationCreate {
+	_c.mutation.SetExpiresAt(v)
+	return _c
+}
+
+// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableExpiresAt(v *time.Time) *IntegrationCreate {
+	if v != nil {
+		_c.SetExpiresAt(*v)
 	}
 	return _c
 }
@@ -728,21 +756,6 @@ func (_c *IntegrationCreate) AddDirectoryMemberships(v ...*DirectoryMembership) 
 		ids[i] = v[i].ID
 	}
 	return _c.AddDirectoryMembershipIDs(ids...)
-}
-
-// AddDirectorySyncRunIDs adds the "directory_sync_runs" edge to the DirectorySyncRun entity by IDs.
-func (_c *IntegrationCreate) AddDirectorySyncRunIDs(ids ...string) *IntegrationCreate {
-	_c.mutation.AddDirectorySyncRunIDs(ids...)
-	return _c
-}
-
-// AddDirectorySyncRuns adds the "directory_sync_runs" edges to the DirectorySyncRun entity.
-func (_c *IntegrationCreate) AddDirectorySyncRuns(v ...*DirectorySyncRun) *IntegrationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddDirectorySyncRunIDs(ids...)
 }
 
 // AddCheckResultIDs adds the "check_results" edge to the CheckResult entity by IDs.
@@ -1088,6 +1101,10 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 		_spec.SetField(integration.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
 	}
+	if value, ok := _c.mutation.Health(); ok {
+		_spec.SetField(integration.FieldHealth, field.TypeJSON, value)
+		_node.Health = value
+	}
 	if value, ok := _c.mutation.DefinitionID(); ok {
 		_spec.SetField(integration.FieldDefinitionID, field.TypeString, value)
 		_node.DefinitionID = value
@@ -1107,6 +1124,10 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(integration.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ExpiresAt(); ok {
+		_spec.SetField(integration.FieldExpiresAt, field.TypeTime, value)
+		_node.ExpiresAt = &value
 	}
 	if value, ok := _c.mutation.ProviderMetadataSnapshot(); ok {
 		_spec.SetField(integration.FieldProviderMetadataSnapshot, field.TypeJSON, value)
@@ -1388,22 +1409,6 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.DirectorySyncRunsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   integration.DirectorySyncRunsTable,
-			Columns: []string{integration.DirectorySyncRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

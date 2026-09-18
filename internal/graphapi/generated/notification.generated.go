@@ -242,10 +242,6 @@ func (ec *executionContext) _NotificationUpdatePayload(ctx context.Context, sel 
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNActionNotificationsReadPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionNotificationsReadPayload(ctx context.Context, sel ast.SelectionSet, v model.ActionNotificationsReadPayload) graphql.Marshaler {
-	return ec._ActionNotificationsReadPayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNActionNotificationsReadPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionNotificationsReadPayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionNotificationsReadPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -256,10 +252,6 @@ func (ec *executionContext) marshalNActionNotificationsReadPayload2ᚖgithubᚗc
 	return ec._ActionNotificationsReadPayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNNotificationCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.NotificationCreatePayload) graphql.Marshaler {
-	return ec._NotificationCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNotificationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -268,10 +260,6 @@ func (ec *executionContext) marshalNNotificationCreatePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._NotificationCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNNotificationUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.NotificationUpdatePayload) graphql.Marshaler {
-	return ec._NotificationUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNotificationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationUpdatePayload) graphql.Marshaler {

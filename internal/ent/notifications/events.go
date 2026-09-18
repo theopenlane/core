@@ -15,8 +15,8 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
-// orgUserIDsByRole returns the user ids of org members holding any of the given roles
-func orgUserIDsByRole(ctx context.Context, client *generated.Client, orgID string, roles ...enums.Role) ([]string, error) {
+// OrgUserIDsByRole returns the user ids of org members holding any of the given roles
+func OrgUserIDsByRole(ctx context.Context, client *generated.Client, orgID string, roles ...enums.Role) ([]string, error) {
 	var ids []string
 
 	err := client.OrgMembership.Query().

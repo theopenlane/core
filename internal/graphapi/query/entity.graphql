@@ -207,15 +207,18 @@ query GetEntityByID ($entityId: ID!) {
 		externalID
 		hasSoc2
 		id
+		integrationRunID
 		internalNotes
 		internalOwner
 		internalOwnerGroupID
+		internalOwnerIdentityHolderID
 		internalOwnerUserID
 		lastReviewedAt
 		linkedAssetIds
 		links
 		logoFileID
 		logoRemoteURL
+		managedBy
 		mfaEnforced
 		mfaSupported
 		name
@@ -227,6 +230,7 @@ query GetEntityByID ($entityId: ID!) {
 		reviewFrequency
 		reviewedBy
 		reviewedByGroupID
+		reviewedByIdentityHolderID
 		reviewedByUserID
 		riskRating
 		riskScore
@@ -234,6 +238,9 @@ query GetEntityByID ($entityId: ID!) {
 		scopeID
 		scopeName
 		soc2PeriodEnd
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		spendCurrency
 		ssoEnforced
 		status

@@ -361,11 +361,12 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "8001"})
+	installMeta := githubapp.InstallationMetadata{InstallationID: "8001"}
+	installAttrs, _ := json.Marshal(installMeta)
 	_, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
-		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs, Display: installMeta.InstallationIdentity()}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
 	assert.NoError(t, err)
@@ -445,11 +446,12 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
-	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "8002"})
+	installMeta := githubapp.InstallationMetadata{InstallationID: "8002"}
+	installAttrs, _ := json.Marshal(installMeta)
 	_, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App").
-		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs, Display: installMeta.InstallationIdentity()}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
 	assert.NoError(t, err)
@@ -558,20 +560,22 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
 
 	// Two GitHub org installations under the same Openlane org
-	installAttrsOrgA, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "9001"})
+	installMetaOrgA := githubapp.InstallationMetadata{InstallationID: "9001"}
+	installAttrsOrgA, _ := json.Marshal(installMetaOrgA)
 	_, err := suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App - Org Alpha").
-		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrsOrgA}).
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrsOrgA, Display: installMetaOrgA.InstallationIdentity()}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
 	assert.NoError(t, err)
 
-	installAttrsOrgB, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "9002"})
+	installMetaOrgB := githubapp.InstallationMetadata{InstallationID: "9002"}
+	installAttrsOrgB, _ := json.Marshal(installMetaOrgB)
 	_, err = suite.db.Integration.Create().
 		SetOwnerID(user.OrganizationID).
 		SetName("GitHub App - Org Beta").
-		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrsOrgB}).
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrsOrgB, Display: installMetaOrgB.InstallationIdentity()}).
 		SetDefinitionID(githubAppDefinitionID).
 		Save(user.UserCtx)
 	assert.NoError(t, err)

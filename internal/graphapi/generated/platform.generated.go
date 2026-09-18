@@ -312,10 +312,6 @@ func (ec *executionContext) _PlatformUpdatePayload(ctx context.Context, sel ast.
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNPlatformBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPlatformBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.PlatformBulkCreatePayload) graphql.Marshaler {
-	return ec._PlatformBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNPlatformBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPlatformBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.PlatformBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -324,10 +320,6 @@ func (ec *executionContext) marshalNPlatformBulkCreatePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._PlatformBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNPlatformCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPlatformCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.PlatformCreatePayload) graphql.Marshaler {
-	return ec._PlatformCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNPlatformCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPlatformCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.PlatformCreatePayload) graphql.Marshaler {
@@ -340,10 +332,6 @@ func (ec *executionContext) marshalNPlatformCreatePayload2ᚖgithubᚗcomᚋtheo
 	return ec._PlatformCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNPlatformDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPlatformDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.PlatformDeletePayload) graphql.Marshaler {
-	return ec._PlatformDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNPlatformDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPlatformDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.PlatformDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -352,10 +340,6 @@ func (ec *executionContext) marshalNPlatformDeletePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._PlatformDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNPlatformUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPlatformUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.PlatformUpdatePayload) graphql.Marshaler {
-	return ec._PlatformUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNPlatformUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPlatformUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.PlatformUpdatePayload) graphql.Marshaler {

@@ -101,10 +101,6 @@ func (ec *executionContext) _WebauthnDeletePayload(ctx context.Context, sel ast.
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNWebauthnDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWebauthnDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.WebauthnDeletePayload) graphql.Marshaler {
-	return ec._WebauthnDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWebauthnDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWebauthnDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.WebauthnDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {

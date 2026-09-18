@@ -100,6 +100,21 @@ func (_u *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldRevision, field.TypeString)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldIntegrationRunID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldOwnerID, field.TypeString)
 	}
@@ -316,6 +331,21 @@ func (_u *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node *I
 	}
 	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldRevision, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldIntegrationRunID, field.TypeString)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldOwnerID, field.TypeString)

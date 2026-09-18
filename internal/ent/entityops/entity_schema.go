@@ -6,7 +6,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"strings"
+	"time"
 	"unicode"
 
 	"github.com/theopenlane/entx"
@@ -110,8 +112,85 @@ type FieldDescriptor struct {
 	Clearable bool `json:"clearable,omitempty"`
 	// WebhookPayload reports whether workflow webhook enrichment includes this field
 	WebhookPayload bool `json:"webhookPayload,omitempty"`
+	// SystemControlled excludes the field from provider mappings
+	SystemControlled bool `json:"systemControlled,omitempty"`
+	// Volatile excludes the field from triggering an ingest change
+	Volatile bool `json:"volatile,omitempty"`
+	// CaseInsensitive compares the field case-insensitively in ingest change detection
+	CaseInsensitive bool `json:"caseInsensitive,omitempty"`
 	// TaskRules are suggested-task rules declared on this field via entx.FieldTaskRule
 	TaskRules []TaskRuleDescriptor `json:"taskRules,omitempty"`
+}
+
+// MappingEntry is one field-to-expression binding declared by an integration mapping
+type MappingEntry struct {
+	// Key is the field's ingest input key
+	Key string
+	// Expr is the CEL expression producing the field's value
+	Expr string
+}
+
+// Expr binds a CEL expression to the field for integration mapping registration
+func (d FieldDescriptor) Expr(expr string) MappingEntry {
+	return MappingEntry{Key: d.InputKey, Expr: expr}
+}
+
+// Equal compares typed mutation values using the field's existing type information
+func (d FieldDescriptor) Equal(old, proposed any) bool {
+	unwrap := func(value any) any {
+		v := reflect.ValueOf(value)
+		for v.IsValid() && (v.Kind() == reflect.Pointer || v.Kind() == reflect.Interface) {
+			if v.IsNil() {
+				return nil
+			}
+			v = v.Elem()
+		}
+		if !v.IsValid() {
+			return nil
+		}
+		if (v.Kind() == reflect.Slice || v.Kind() == reflect.Map) && v.IsNil() {
+			return nil
+		}
+		return v.Interface()
+	}
+	old, proposed = unwrap(old), unwrap(proposed)
+	if old == nil || proposed == nil {
+		return old == nil && proposed == nil
+	}
+	if d.CaseInsensitive {
+		a, aOK := old.(string)
+		b, bOK := proposed.(string)
+		if aOK && bOK {
+			return strings.EqualFold(a, b)
+		}
+	}
+	if d.Type == "time.Time" || d.Type == "models.DateTime" {
+		a, b := reflect.ValueOf(old), reflect.ValueOf(proposed)
+		typ := reflect.TypeFor[time.Time]()
+		if a.CanConvert(typ) && b.CanConvert(typ) {
+			return a.Convert(typ).Interface().(time.Time).Truncate(time.Microsecond).
+				Equal(b.Convert(typ).Interface().(time.Time).Truncate(time.Microsecond))
+		}
+	}
+	if reflect.DeepEqual(old, proposed) {
+		return true
+	}
+	a, err := json.Marshal(old)
+	if err != nil {
+		return false
+	}
+	b, err := json.Marshal(proposed)
+	if err != nil {
+		return false
+	}
+	var av, bv any
+	ad, bd := json.NewDecoder(strings.NewReader(string(a))), json.NewDecoder(strings.NewReader(string(b)))
+	ad.UseNumber()
+	bd.UseNumber()
+	if ad.Decode(&av) != nil || bd.Decode(&bv) != nil {
+		return false
+	}
+	return reflect.DeepEqual(av, bv)
 }
 
 // TaskRuleDescriptor describes one suggested-task trigger: a CEL condition plus the RuleID a
@@ -185,6 +264,8 @@ type TargetSelector struct {
 	SourceSchema SchemaDescriptor `json:"source_schema,omitempty"`
 	// KeyMatch, when set, resolves candidates with an indexed key query before any Expression filtering
 	KeyMatch *KeyMatch `json:"key_match,omitempty"`
+	// Unique reports whether the edge this selector resolves for sets a single target
+	Unique bool `json:"unique,omitempty"`
 	// Expression is a CEL expression evaluated against each candidate entity
 	Expression string `json:"expression"`
 	// ExcludeIDs is a list of entity IDs to exclude from the result set
@@ -203,3 +284,12 @@ type LinkSpec struct {
 	// Target specifies which entities to link via schema, key match, or expression
 	Target TargetSelector `json:"target"`
 }
+
+// LookupAlternative is one ordered composite ingest lookup key of snake_case field names
+type LookupAlternative struct {
+	// Fields is the ordered snake_case field names forming this alternative's composite key
+	Fields []string
+}
+
+// LookupValues is one row's or payload's values for a lookup alternative keyed by snake_case field name
+type LookupValues map[string]string

@@ -16,8 +16,6 @@ var (
 	tailscaleSchema, tailscaleCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// tailscaleClient is the client ref for the Tailscale API client used by this definition
 	tailscaleClient = types.NewClientRef[*tsclient.Client]()
-	// healthCheckSchema is the operation schema for the health check
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema is the operation schema for the directory sync operation
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 	// assetSyncSchema is the operation schema for the asset sync operation
@@ -62,11 +60,14 @@ type CredentialSchema struct {
 type InstallationMetadata struct {
 	// ClientID is the OAuth client ID used to connect this installation
 	ClientID string `json:"clientId,omitempty" jsonschema:"title=Client ID"`
+	// Tailnet is the name of the tailnet the OAuth client is scoped to
+	Tailnet string `json:"tailnet,omitempty" jsonschema:"title=Tailnet"`
 }
 
 // InstallationIdentity implements types.InstallationIdentifiable
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	return types.IntegrationInstallationIdentity{
-		ExternalID: m.ClientID,
+		ExternalID:   m.Tailnet,
+		ExternalName: m.Tailnet,
 	}
 }

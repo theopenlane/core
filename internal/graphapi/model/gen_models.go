@@ -882,6 +882,10 @@ type CreateTrustCenterPreviewSettingInput struct {
 	BackgroundColor *string `json:"backgroundColor,omitempty"`
 	// accent color for the trust center
 	AccentColor *string `json:"accentColor,omitempty"`
+	// secondary background color for the trust center
+	SecondaryBackgroundColor *string `json:"secondaryBackgroundColor,omitempty"`
+	// secondary foreground color for the trust center
+	SecondaryForegroundColor *string `json:"secondaryForegroundColor,omitempty"`
 	// hero image local file ID
 	HeroImageFileID *string `json:"heroImageFileID,omitempty"`
 }
@@ -1078,30 +1082,6 @@ type DirectoryMembershipDeletePayload struct {
 type DirectoryMembershipUpdatePayload struct {
 	// Updated directoryMembership
 	DirectoryMembership *generated.DirectoryMembership `json:"directoryMembership"`
-}
-
-// Return response for createBulkDirectorySyncRun mutation
-type DirectorySyncRunBulkCreatePayload struct {
-	// Created directorySyncRuns
-	DirectorySyncRuns []*generated.DirectorySyncRun `json:"directorySyncRuns,omitempty"`
-}
-
-// Return response for createDirectorySyncRun mutation
-type DirectorySyncRunCreatePayload struct {
-	// Created directorySyncRun
-	DirectorySyncRun *generated.DirectorySyncRun `json:"directorySyncRun"`
-}
-
-// Return response for deleteDirectorySyncRun mutation
-type DirectorySyncRunDeletePayload struct {
-	// Deleted directorySyncRun ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateDirectorySyncRun mutation
-type DirectorySyncRunUpdatePayload struct {
-	// Updated directorySyncRun
-	DirectorySyncRun *generated.DirectorySyncRun `json:"directorySyncRun"`
 }
 
 // Return response for createBulkDiscussion mutation
@@ -1925,6 +1905,19 @@ type ImportDomainScanReviewAssetInput struct {
 	Categories []string `json:"categories,omitempty"`
 }
 
+// brand design data retrieved from the domain scan
+type ImportDomainScanReviewBrandDesignInput struct {
+	LogoURL                  *string `json:"logoURL,omitempty"`
+	FaviconURL               *string `json:"faviconURL,omitempty"`
+	PrimaryColor             *string `json:"primaryColor,omitempty"`
+	Font                     *string `json:"font,omitempty"`
+	ForegroundColor          *string `json:"foregroundColor,omitempty"`
+	BackgroundColor          *string `json:"backgroundColor,omitempty"`
+	AccentColor              *string `json:"accentColor,omitempty"`
+	SecondaryBackgroundColor *string `json:"secondaryBackgroundColor,omitempty"`
+	SecondaryForegroundColor *string `json:"secondaryForegroundColor,omitempty"`
+}
+
 // One accepted finding
 type ImportDomainScanReviewFindingInput struct {
 	// the finding's category
@@ -1949,6 +1942,8 @@ type ImportDomainScanReviewInput struct {
 	Assets []*ImportDomainScanReviewAssetInput `json:"assets"`
 	// the accepted findings
 	Findings []*ImportDomainScanReviewFindingInput `json:"findings,omitempty"`
+	// the accepted trust center branding, if any
+	Branding *ImportDomainScanReviewBrandDesignInput `json:"branding,omitempty"`
 }
 
 // Return response for importDomainScanReview mutation. Creation happens asynchronously, so this
@@ -4160,7 +4155,7 @@ func (e *ControlCategoryOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ControlCategoryOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ControlCategoryOrderField) UnmarshalJSON(b []byte) error {
@@ -4227,7 +4222,7 @@ func (e *ControlReportOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ControlReportOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ControlReportOrderField) UnmarshalJSON(b []byte) error {
@@ -4285,7 +4280,7 @@ func (e *GroupPermissionOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e GroupPermissionOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *GroupPermissionOrderField) UnmarshalJSON(b []byte) error {

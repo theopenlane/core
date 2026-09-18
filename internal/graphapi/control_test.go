@@ -6,6 +6,7 @@ import (
 	"slices"
 	"testing"
 
+	"github.com/theopenlane/core/v2/internal/controls"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"gotest.tools/v3/assert"
@@ -17,6 +18,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	controlgen "github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
@@ -1050,7 +1052,7 @@ func TestMutationCreateControlsByCloneOpenlaneControls(t *testing.T) {
 	standard := (&th.StandardBuilder{
 		Client:    suite.Client,
 		Name:      "Openlane Baseline",
-		Framework: "openlane-standard",
+		Framework: controls.StandardTrustCenterFrameworkName,
 		IsPublic:  true,
 	}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 

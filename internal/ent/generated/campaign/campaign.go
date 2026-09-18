@@ -44,6 +44,8 @@ const (
 	FieldInternalOwnerUserID = "internal_owner_user_id"
 	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
 	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldInternalOwnerIdentityHolderID holds the string denoting the internal_owner_identity_holder_id field in the database.
+	FieldInternalOwnerIdentityHolderID = "internal_owner_identity_holder_id"
 	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
 	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldName holds the string denoting the name field in the database.
@@ -114,6 +116,8 @@ const (
 	EdgeInternalOwnerUser = "internal_owner_user"
 	// EdgeInternalOwnerGroup holds the string denoting the internal_owner_group edge name in mutations.
 	EdgeInternalOwnerGroup = "internal_owner_group"
+	// EdgeInternalOwnerIdentityHolder holds the string denoting the internal_owner_identity_holder edge name in mutations.
+	EdgeInternalOwnerIdentityHolder = "internal_owner_identity_holder"
 	// EdgeAssessment holds the string denoting the assessment edge name in mutations.
 	EdgeAssessment = "assessment"
 	// EdgeTemplate holds the string denoting the template edge name in mutations.
@@ -180,6 +184,13 @@ const (
 	InternalOwnerGroupInverseTable = "groups"
 	// InternalOwnerGroupColumn is the table column denoting the internal_owner_group relation/edge.
 	InternalOwnerGroupColumn = "internal_owner_group_id"
+	// InternalOwnerIdentityHolderTable is the table that holds the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderTable = "campaigns"
+	// InternalOwnerIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	InternalOwnerIdentityHolderInverseTable = "identity_holders"
+	// InternalOwnerIdentityHolderColumn is the table column denoting the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderColumn = "internal_owner_identity_holder_id"
 	// AssessmentTable is the table that holds the assessment relation/edge.
 	AssessmentTable = "campaigns"
 	// AssessmentInverseTable is the table name for the Assessment entity.
@@ -286,6 +297,7 @@ var Columns = []string{
 	FieldInternalOwner,
 	FieldInternalOwnerUserID,
 	FieldInternalOwnerGroupID,
+	FieldInternalOwnerIdentityHolderID,
 	FieldWorkflowEligibleMarker,
 	FieldName,
 	FieldDescription,
@@ -501,6 +513,11 @@ func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
 }
 
+// ByInternalOwnerIdentityHolderID orders the results by the internal_owner_identity_holder_id field.
+func ByInternalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerIdentityHolderID, opts...).ToFunc()
+}
+
 // ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
 func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
@@ -704,6 +721,13 @@ func ByInternalOwnerGroupField(field string, opts ...sql.OrderTermOption) OrderO
 	}
 }
 
+// ByInternalOwnerIdentityHolderField orders the results by internal_owner_identity_holder field.
+func ByInternalOwnerIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerIdentityHolderStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByAssessmentField orders the results by assessment field.
 func ByAssessmentField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -897,6 +921,13 @@ func newInternalOwnerGroupStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(InternalOwnerGroupInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerGroupTable, InternalOwnerGroupColumn),
+	)
+}
+func newInternalOwnerIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerIdentityHolderTable, InternalOwnerIdentityHolderColumn),
 	)
 }
 func newAssessmentStep() *sqlgraph.Step {

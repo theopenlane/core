@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
@@ -42,20 +43,34 @@ type Entity struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// the internal owner for the entity when no user or group is linked
+	// the internal owner for the entity when no user, group, or identity holder is linked
 	InternalOwner string `json:"internal_owner,omitempty"`
 	// the internal owner user id for the entity
 	InternalOwnerUserID string `json:"internal_owner_user_id,omitempty"`
 	// the internal owner group id for the entity
 	InternalOwnerGroupID string `json:"internal_owner_group_id,omitempty"`
-	// who reviewed the entity when no user or group is linked
+	// the internal owner identity holder id for the entity
+	InternalOwnerIdentityHolderID string `json:"internal_owner_identity_holder_id,omitempty"`
+	// who reviewed the entity when no user, group, or identity holder is linked
 	ReviewedBy string `json:"reviewed_by,omitempty"`
 	// the user id that reviewed the entity
 	ReviewedByUserID string `json:"reviewed_by_user_id,omitempty"`
 	// the group id that reviewed the entity
 	ReviewedByGroupID string `json:"reviewed_by_group_id,omitempty"`
+	// the identity holder id that reviewed the entity
+	ReviewedByIdentityHolderID string `json:"reviewed_by_identity_holder_id,omitempty"`
 	// when the entity was last reviewed
 	LastReviewedAt *models.DateTime `json:"last_reviewed_at,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
@@ -168,6 +183,8 @@ type Entity struct {
 
 // EntityEdges holds the relations/edges for other nodes in the graph.
 type EntityEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -178,10 +195,14 @@ type EntityEdges struct {
 	InternalOwnerUser *User `json:"internal_owner_user,omitempty"`
 	// InternalOwnerGroup holds the value of the internal_owner_group edge.
 	InternalOwnerGroup *Group `json:"internal_owner_group,omitempty"`
+	// InternalOwnerIdentityHolder holds the value of the internal_owner_identity_holder edge.
+	InternalOwnerIdentityHolder *IdentityHolder `json:"internal_owner_identity_holder,omitempty"`
 	// ReviewedByUser holds the value of the reviewed_by_user edge.
 	ReviewedByUser *User `json:"reviewed_by_user,omitempty"`
 	// ReviewedByGroup holds the value of the reviewed_by_group edge.
 	ReviewedByGroup *Group `json:"reviewed_by_group,omitempty"`
+	// ReviewedByIdentityHolder holds the value of the reviewed_by_identity_holder edge.
+	ReviewedByIdentityHolder *IdentityHolder `json:"reviewed_by_identity_holder,omitempty"`
 	// EntityRelationshipState holds the value of the entity_relationship_state edge.
 	EntityRelationshipState *CustomTypeEnum `json:"entity_relationship_state,omitempty"`
 	// EntitySecurityQuestionnaireStatus holds the value of the entity_security_questionnaire_status edge.
@@ -248,10 +269,11 @@ type EntityEdges struct {
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [39]bool
+	loadedTypes [42]bool
 	// totalCount holds the count of the edges above.
-	totalCount [39]map[string]int
+	totalCount [42]map[string]int
 
+	namedIntegrationRuns         map[string][]*IntegrationRun
 	namedBlockedGroups           map[string][]*Group
 	namedEditors                 map[string][]*Group
 	namedContacts                map[string][]*Contact
@@ -281,12 +303,21 @@ type EntityEdges struct {
 	namedInternalPolicies        map[string][]*InternalPolicy
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e EntityEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e EntityEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -295,7 +326,7 @@ func (e EntityEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -304,7 +335,7 @@ func (e EntityEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -315,7 +346,7 @@ func (e EntityEdges) EditorsOrErr() ([]*Group, error) {
 func (e EntityEdges) InternalOwnerUserOrErr() (*User, error) {
 	if e.InternalOwnerUser != nil {
 		return e.InternalOwnerUser, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_user"}
@@ -326,10 +357,21 @@ func (e EntityEdges) InternalOwnerUserOrErr() (*User, error) {
 func (e EntityEdges) InternalOwnerGroupOrErr() (*Group, error) {
 	if e.InternalOwnerGroup != nil {
 		return e.InternalOwnerGroup, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_group"}
+}
+
+// InternalOwnerIdentityHolderOrErr returns the InternalOwnerIdentityHolder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EntityEdges) InternalOwnerIdentityHolderOrErr() (*IdentityHolder, error) {
+	if e.InternalOwnerIdentityHolder != nil {
+		return e.InternalOwnerIdentityHolder, nil
+	} else if e.loadedTypes[6] {
+		return nil, &NotFoundError{label: identityholder.Label}
+	}
+	return nil, &NotLoadedError{edge: "internal_owner_identity_holder"}
 }
 
 // ReviewedByUserOrErr returns the ReviewedByUser value or an error if the edge
@@ -337,7 +379,7 @@ func (e EntityEdges) InternalOwnerGroupOrErr() (*Group, error) {
 func (e EntityEdges) ReviewedByUserOrErr() (*User, error) {
 	if e.ReviewedByUser != nil {
 		return e.ReviewedByUser, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "reviewed_by_user"}
@@ -348,10 +390,21 @@ func (e EntityEdges) ReviewedByUserOrErr() (*User, error) {
 func (e EntityEdges) ReviewedByGroupOrErr() (*Group, error) {
 	if e.ReviewedByGroup != nil {
 		return e.ReviewedByGroup, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "reviewed_by_group"}
+}
+
+// ReviewedByIdentityHolderOrErr returns the ReviewedByIdentityHolder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EntityEdges) ReviewedByIdentityHolderOrErr() (*IdentityHolder, error) {
+	if e.ReviewedByIdentityHolder != nil {
+		return e.ReviewedByIdentityHolder, nil
+	} else if e.loadedTypes[9] {
+		return nil, &NotFoundError{label: identityholder.Label}
+	}
+	return nil, &NotLoadedError{edge: "reviewed_by_identity_holder"}
 }
 
 // EntityRelationshipStateOrErr returns the EntityRelationshipState value or an error if the edge
@@ -359,7 +412,7 @@ func (e EntityEdges) ReviewedByGroupOrErr() (*Group, error) {
 func (e EntityEdges) EntityRelationshipStateOrErr() (*CustomTypeEnum, error) {
 	if e.EntityRelationshipState != nil {
 		return e.EntityRelationshipState, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity_relationship_state"}
@@ -370,7 +423,7 @@ func (e EntityEdges) EntityRelationshipStateOrErr() (*CustomTypeEnum, error) {
 func (e EntityEdges) EntitySecurityQuestionnaireStatusOrErr() (*CustomTypeEnum, error) {
 	if e.EntitySecurityQuestionnaireStatus != nil {
 		return e.EntitySecurityQuestionnaireStatus, nil
-	} else if e.loadedTypes[8] {
+	} else if e.loadedTypes[11] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity_security_questionnaire_status"}
@@ -381,7 +434,7 @@ func (e EntityEdges) EntitySecurityQuestionnaireStatusOrErr() (*CustomTypeEnum, 
 func (e EntityEdges) EntitySourceTypeOrErr() (*CustomTypeEnum, error) {
 	if e.EntitySourceType != nil {
 		return e.EntitySourceType, nil
-	} else if e.loadedTypes[9] {
+	} else if e.loadedTypes[12] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity_source_type"}
@@ -392,7 +445,7 @@ func (e EntityEdges) EntitySourceTypeOrErr() (*CustomTypeEnum, error) {
 func (e EntityEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 	if e.Environment != nil {
 		return e.Environment, nil
-	} else if e.loadedTypes[10] {
+	} else if e.loadedTypes[13] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "environment"}
@@ -403,7 +456,7 @@ func (e EntityEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 func (e EntityEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	if e.Scope != nil {
 		return e.Scope, nil
-	} else if e.loadedTypes[11] {
+	} else if e.loadedTypes[14] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "scope"}
@@ -412,7 +465,7 @@ func (e EntityEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 // ContactsOrErr returns the Contacts value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) ContactsOrErr() ([]*Contact, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[15] {
 		return e.Contacts, nil
 	}
 	return nil, &NotLoadedError{edge: "contacts"}
@@ -421,7 +474,7 @@ func (e EntityEdges) ContactsOrErr() ([]*Contact, error) {
 // DocumentsOrErr returns the Documents value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) DocumentsOrErr() ([]*DocumentData, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[16] {
 		return e.Documents, nil
 	}
 	return nil, &NotLoadedError{edge: "documents"}
@@ -430,7 +483,7 @@ func (e EntityEdges) DocumentsOrErr() ([]*DocumentData, error) {
 // NotesOrErr returns the Notes value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) NotesOrErr() ([]*Note, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[17] {
 		return e.Notes, nil
 	}
 	return nil, &NotLoadedError{edge: "notes"}
@@ -439,7 +492,7 @@ func (e EntityEdges) NotesOrErr() ([]*Note, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[18] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -448,7 +501,7 @@ func (e EntityEdges) FilesOrErr() ([]*File, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[19] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -457,7 +510,7 @@ func (e EntityEdges) AssetsOrErr() ([]*Asset, error) {
 // SystemDetailsOrErr returns the SystemDetails value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) SystemDetailsOrErr() ([]*SystemDetail, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[20] {
 		return e.SystemDetails, nil
 	}
 	return nil, &NotLoadedError{edge: "system_details"}
@@ -466,7 +519,7 @@ func (e EntityEdges) SystemDetailsOrErr() ([]*SystemDetail, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[21] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -475,7 +528,7 @@ func (e EntityEdges) ScansOrErr() ([]*Scan, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[22] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -484,7 +537,7 @@ func (e EntityEdges) CampaignsOrErr() ([]*Campaign, error) {
 // AssessmentResponsesOrErr returns the AssessmentResponses value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[23] {
 		return e.AssessmentResponses, nil
 	}
 	return nil, &NotLoadedError{edge: "assessment_responses"}
@@ -493,7 +546,7 @@ func (e EntityEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
 // VendorRiskScoresOrErr returns the VendorRiskScores value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) VendorRiskScoresOrErr() ([]*VendorRiskScore, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[24] {
 		return e.VendorRiskScores, nil
 	}
 	return nil, &NotLoadedError{edge: "vendor_risk_scores"}
@@ -502,7 +555,7 @@ func (e EntityEdges) VendorRiskScoresOrErr() ([]*VendorRiskScore, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[25] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -511,7 +564,7 @@ func (e EntityEdges) IntegrationsOrErr() ([]*Integration, error) {
 // SubprocessorsOrErr returns the Subprocessors value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) SubprocessorsOrErr() ([]*Subprocessor, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[26] {
 		return e.Subprocessors, nil
 	}
 	return nil, &NotLoadedError{edge: "subprocessors"}
@@ -520,7 +573,7 @@ func (e EntityEdges) SubprocessorsOrErr() ([]*Subprocessor, error) {
 // AuthMethodsOrErr returns the AuthMethods value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) AuthMethodsOrErr() ([]*CustomTypeEnum, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[27] {
 		return e.AuthMethods, nil
 	}
 	return nil, &NotLoadedError{edge: "auth_methods"}
@@ -529,7 +582,7 @@ func (e EntityEdges) AuthMethodsOrErr() ([]*CustomTypeEnum, error) {
 // EmployerIdentityHoldersOrErr returns the EmployerIdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) EmployerIdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[28] {
 		return e.EmployerIdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "employer_identity_holders"}
@@ -538,7 +591,7 @@ func (e EntityEdges) EmployerIdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[29] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -547,7 +600,7 @@ func (e EntityEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[30] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -556,7 +609,7 @@ func (e EntityEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[28] {
+	if e.loadedTypes[31] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -565,7 +618,7 @@ func (e EntityEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[29] {
+	if e.loadedTypes[32] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -574,7 +627,7 @@ func (e EntityEdges) FindingsOrErr() ([]*Finding, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[30] {
+	if e.loadedTypes[33] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -583,7 +636,7 @@ func (e EntityEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ReviewsOrErr returns the Reviews value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[31] {
+	if e.loadedTypes[34] {
 		return e.Reviews, nil
 	}
 	return nil, &NotLoadedError{edge: "reviews"}
@@ -592,7 +645,7 @@ func (e EntityEdges) ReviewsOrErr() ([]*Review, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[32] {
+	if e.loadedTypes[35] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -601,7 +654,7 @@ func (e EntityEdges) RemediationsOrErr() ([]*Remediation, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[33] {
+	if e.loadedTypes[36] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -610,7 +663,7 @@ func (e EntityEdges) PlatformsOrErr() ([]*Platform, error) {
 // OutOfScopePlatformsOrErr returns the OutOfScopePlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) OutOfScopePlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[34] {
+	if e.loadedTypes[37] {
 		return e.OutOfScopePlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_platforms"}
@@ -619,7 +672,7 @@ func (e EntityEdges) OutOfScopePlatformsOrErr() ([]*Platform, error) {
 // SourcePlatformsOrErr returns the SourcePlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) SourcePlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[35] {
+	if e.loadedTypes[38] {
 		return e.SourcePlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "source_platforms"}
@@ -630,7 +683,7 @@ func (e EntityEdges) SourcePlatformsOrErr() ([]*Platform, error) {
 func (e EntityEdges) EntityTypeOrErr() (*EntityType, error) {
 	if e.EntityType != nil {
 		return e.EntityType, nil
-	} else if e.loadedTypes[36] {
+	} else if e.loadedTypes[39] {
 		return nil, &NotFoundError{label: entitytype.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity_type"}
@@ -641,7 +694,7 @@ func (e EntityEdges) EntityTypeOrErr() (*EntityType, error) {
 func (e EntityEdges) LogoFileOrErr() (*File, error) {
 	if e.LogoFile != nil {
 		return e.LogoFile, nil
-	} else if e.loadedTypes[37] {
+	} else if e.loadedTypes[40] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "logo_file"}
@@ -650,7 +703,7 @@ func (e EntityEdges) LogoFileOrErr() (*File, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[38] {
+	if e.loadedTypes[41] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -671,7 +724,7 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case entity.FieldTerminationNoticeDays, entity.FieldRiskScore, entity.FieldRiskScoreCoverage:
 			values[i] = new(sql.NullInt64)
-		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldUpdatedByImpersonator, entity.FieldDeletedBy, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldLogoRemoteURL, entity.FieldLogoFileID, entity.FieldExternalID:
+		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldUpdatedByImpersonator, entity.FieldDeletedBy, entity.FieldSourceDefinitionID, entity.FieldSourceDefinitionVersion, entity.FieldSourceInstanceID, entity.FieldManagedBy, entity.FieldIntegrationRunID, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldInternalOwnerIdentityHolderID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldReviewedByIdentityHolderID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldLogoRemoteURL, entity.FieldLogoFileID, entity.FieldExternalID:
 			values[i] = new(sql.NullString)
 		case entity.FieldCreatedAt, entity.FieldUpdatedAt, entity.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -751,6 +804,36 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case entity.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case entity.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case entity.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case entity.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case entity.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
 		case entity.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -775,6 +858,12 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.InternalOwnerGroupID = value.String
 			}
+		case entity.FieldInternalOwnerIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerIdentityHolderID = value.String
+			}
 		case entity.FieldReviewedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field reviewed_by", values[i])
@@ -792,6 +881,12 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field reviewed_by_group_id", values[i])
 			} else if value.Valid {
 				_m.ReviewedByGroupID = value.String
+			}
+		case entity.FieldReviewedByIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.ReviewedByIdentityHolderID = value.String
 			}
 		case entity.FieldLastReviewedAt:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
@@ -1149,6 +1244,11 @@ func (_m *Entity) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryIntegrationRuns queries the "integration_runs" edge of the Entity entity.
+func (_m *Entity) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewEntityClient(_m.config).QueryIntegrationRuns(_m)
+}
+
 // QueryOwner queries the "owner" edge of the Entity entity.
 func (_m *Entity) QueryOwner() *OrganizationQuery {
 	return NewEntityClient(_m.config).QueryOwner(_m)
@@ -1174,6 +1274,11 @@ func (_m *Entity) QueryInternalOwnerGroup() *GroupQuery {
 	return NewEntityClient(_m.config).QueryInternalOwnerGroup(_m)
 }
 
+// QueryInternalOwnerIdentityHolder queries the "internal_owner_identity_holder" edge of the Entity entity.
+func (_m *Entity) QueryInternalOwnerIdentityHolder() *IdentityHolderQuery {
+	return NewEntityClient(_m.config).QueryInternalOwnerIdentityHolder(_m)
+}
+
 // QueryReviewedByUser queries the "reviewed_by_user" edge of the Entity entity.
 func (_m *Entity) QueryReviewedByUser() *UserQuery {
 	return NewEntityClient(_m.config).QueryReviewedByUser(_m)
@@ -1182,6 +1287,11 @@ func (_m *Entity) QueryReviewedByUser() *UserQuery {
 // QueryReviewedByGroup queries the "reviewed_by_group" edge of the Entity entity.
 func (_m *Entity) QueryReviewedByGroup() *GroupQuery {
 	return NewEntityClient(_m.config).QueryReviewedByGroup(_m)
+}
+
+// QueryReviewedByIdentityHolder queries the "reviewed_by_identity_holder" edge of the Entity entity.
+func (_m *Entity) QueryReviewedByIdentityHolder() *IdentityHolderQuery {
+	return NewEntityClient(_m.config).QueryReviewedByIdentityHolder(_m)
 }
 
 // QueryEntityRelationshipState queries the "entity_relationship_state" edge of the Entity entity.
@@ -1393,6 +1503,21 @@ func (_m *Entity) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -1405,6 +1530,9 @@ func (_m *Entity) String() string {
 	builder.WriteString("internal_owner_group_id=")
 	builder.WriteString(_m.InternalOwnerGroupID)
 	builder.WriteString(", ")
+	builder.WriteString("internal_owner_identity_holder_id=")
+	builder.WriteString(_m.InternalOwnerIdentityHolderID)
+	builder.WriteString(", ")
 	builder.WriteString("reviewed_by=")
 	builder.WriteString(_m.ReviewedBy)
 	builder.WriteString(", ")
@@ -1413,6 +1541,9 @@ func (_m *Entity) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("reviewed_by_group_id=")
 	builder.WriteString(_m.ReviewedByGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("reviewed_by_identity_holder_id=")
+	builder.WriteString(_m.ReviewedByIdentityHolderID)
 	builder.WriteString(", ")
 	if v := _m.LastReviewedAt; v != nil {
 		builder.WriteString("last_reviewed_at=")
@@ -1590,6 +1721,30 @@ func (_m *Entity) String() string {
 	}
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Entity) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Entity) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not

@@ -169,6 +169,76 @@ func (_c *FindingHistoryCreate) SetTags(v []string) *FindingHistoryCreate {
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *FindingHistoryCreate) SetSourceDefinitionID(v string) *FindingHistoryCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableSourceDefinitionID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *FindingHistoryCreate) SetSourceDefinitionVersion(v string) *FindingHistoryCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableSourceDefinitionVersion(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *FindingHistoryCreate) SetSourceInstanceID(v string) *FindingHistoryCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableSourceInstanceID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *FindingHistoryCreate) SetManagedBy(v string) *FindingHistoryCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableManagedBy(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *FindingHistoryCreate) SetIntegrationRunID(v string) *FindingHistoryCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableIntegrationRunID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *FindingHistoryCreate) SetOwnerID(v string) *FindingHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -225,6 +295,20 @@ func (_c *FindingHistoryCreate) SetNillableReviewedByGroupID(v *string) *Finding
 	return _c
 }
 
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_c *FindingHistoryCreate) SetReviewedByIdentityHolderID(v string) *FindingHistoryCreate {
+	_c.mutation.SetReviewedByIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableReviewedByIdentityHolderID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetReviewedByIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetAssignedTo sets the "assigned_to" field.
 func (_c *FindingHistoryCreate) SetAssignedTo(v string) *FindingHistoryCreate {
 	_c.mutation.SetAssignedTo(v)
@@ -263,6 +347,20 @@ func (_c *FindingHistoryCreate) SetAssignedToGroupID(v string) *FindingHistoryCr
 func (_c *FindingHistoryCreate) SetNillableAssignedToGroupID(v *string) *FindingHistoryCreate {
 	if v != nil {
 		_c.SetAssignedToGroupID(*v)
+	}
+	return _c
+}
+
+// SetAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field.
+func (_c *FindingHistoryCreate) SetAssignedToIdentityHolderID(v string) *FindingHistoryCreate {
+	_c.mutation.SetAssignedToIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableAssignedToIdentityHolderID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetAssignedToIdentityHolderID(*v)
 	}
 	return _c
 }
@@ -1091,6 +1189,26 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 		_spec.SetField(findinghistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(findinghistory.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(findinghistory.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(findinghistory.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(findinghistory.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(findinghistory.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(findinghistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
@@ -1107,6 +1225,10 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 		_spec.SetField(findinghistory.FieldReviewedByGroupID, field.TypeString, value)
 		_node.ReviewedByGroupID = value
 	}
+	if value, ok := _c.mutation.ReviewedByIdentityHolderID(); ok {
+		_spec.SetField(findinghistory.FieldReviewedByIdentityHolderID, field.TypeString, value)
+		_node.ReviewedByIdentityHolderID = value
+	}
 	if value, ok := _c.mutation.AssignedTo(); ok {
 		_spec.SetField(findinghistory.FieldAssignedTo, field.TypeString, value)
 		_node.AssignedTo = value
@@ -1118,6 +1240,10 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.AssignedToGroupID(); ok {
 		_spec.SetField(findinghistory.FieldAssignedToGroupID, field.TypeString, value)
 		_node.AssignedToGroupID = value
+	}
+	if value, ok := _c.mutation.AssignedToIdentityHolderID(); ok {
+		_spec.SetField(findinghistory.FieldAssignedToIdentityHolderID, field.TypeString, value)
+		_node.AssignedToIdentityHolderID = value
 	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(findinghistory.FieldSystemOwned, field.TypeBool, value)

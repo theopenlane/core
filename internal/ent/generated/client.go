@@ -36,7 +36,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
@@ -178,8 +177,6 @@ type Client struct {
 	DirectoryGroup *DirectoryGroupClient
 	// DirectoryMembership is the client for interacting with the DirectoryMembership builders.
 	DirectoryMembership *DirectoryMembershipClient
-	// DirectorySyncRun is the client for interacting with the DirectorySyncRun builders.
-	DirectorySyncRun *DirectorySyncRunClient
 	// Discussion is the client for interacting with the Discussion builders.
 	Discussion *DiscussionClient
 	// DocumentData is the client for interacting with the DocumentData builders.
@@ -380,7 +377,6 @@ func (c *Client) init() {
 	c.DirectoryAccount = NewDirectoryAccountClient(c.config)
 	c.DirectoryGroup = NewDirectoryGroupClient(c.config)
 	c.DirectoryMembership = NewDirectoryMembershipClient(c.config)
-	c.DirectorySyncRun = NewDirectorySyncRunClient(c.config)
 	c.Discussion = NewDiscussionClient(c.config)
 	c.DocumentData = NewDocumentDataClient(c.config)
 	c.EmailTemplate = NewEmailTemplateClient(c.config)
@@ -678,7 +674,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		DirectoryAccount:           NewDirectoryAccountClient(cfg),
 		DirectoryGroup:             NewDirectoryGroupClient(cfg),
 		DirectoryMembership:        NewDirectoryMembershipClient(cfg),
-		DirectorySyncRun:           NewDirectorySyncRunClient(cfg),
 		Discussion:                 NewDiscussionClient(cfg),
 		DocumentData:               NewDocumentDataClient(cfg),
 		EmailTemplate:              NewEmailTemplateClient(cfg),
@@ -797,7 +792,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		DirectoryAccount:           NewDirectoryAccountClient(cfg),
 		DirectoryGroup:             NewDirectoryGroupClient(cfg),
 		DirectoryMembership:        NewDirectoryMembershipClient(cfg),
-		DirectorySyncRun:           NewDirectorySyncRunClient(cfg),
 		Discussion:                 NewDiscussionClient(cfg),
 		DocumentData:               NewDocumentDataClient(cfg),
 		EmailTemplate:              NewEmailTemplateClient(cfg),
@@ -912,15 +906,15 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Campaign, c.CampaignTarget, c.CheckResult, c.Contact, c.Control,
 		c.ControlImplementation, c.ControlObjective, c.CustomDomain, c.CustomTypeEnum,
 		c.DNSVerification, c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
-		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailTemplate,
-		c.EmailVerificationToken, c.Entity, c.EntityType, c.Event, c.Evidence,
-		c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl, c.Group,
-		c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
-		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
-		c.InternalPolicy, c.Invite, c.MappableDomain, c.MappedControl, c.Narrative,
-		c.Note, c.Notification, c.NotificationPreference, c.NotificationTemplate,
-		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
-		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
+		c.Discussion, c.DocumentData, c.EmailTemplate, c.EmailVerificationToken,
+		c.Entity, c.EntityType, c.Event, c.Evidence, c.Export, c.File,
+		c.FileDownloadToken, c.Finding, c.FindingControl, c.Group, c.GroupMembership,
+		c.GroupSetting, c.Hush, c.IdentityHolder, c.ImpersonationEvent, c.Integration,
+		c.IntegrationRun, c.IntegrationWebhook, c.InternalPolicy, c.Invite,
+		c.MappableDomain, c.MappedControl, c.Narrative, c.Note, c.Notification,
+		c.NotificationPreference, c.NotificationTemplate, c.Onboarding,
+		c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
+		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
 		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
 		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
@@ -944,15 +938,15 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Campaign, c.CampaignTarget, c.CheckResult, c.Contact, c.Control,
 		c.ControlImplementation, c.ControlObjective, c.CustomDomain, c.CustomTypeEnum,
 		c.DNSVerification, c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
-		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailTemplate,
-		c.EmailVerificationToken, c.Entity, c.EntityType, c.Event, c.Evidence,
-		c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl, c.Group,
-		c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
-		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
-		c.InternalPolicy, c.Invite, c.MappableDomain, c.MappedControl, c.Narrative,
-		c.Note, c.Notification, c.NotificationPreference, c.NotificationTemplate,
-		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
-		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
+		c.Discussion, c.DocumentData, c.EmailTemplate, c.EmailVerificationToken,
+		c.Entity, c.EntityType, c.Event, c.Evidence, c.Export, c.File,
+		c.FileDownloadToken, c.Finding, c.FindingControl, c.Group, c.GroupMembership,
+		c.GroupSetting, c.Hush, c.IdentityHolder, c.ImpersonationEvent, c.Integration,
+		c.IntegrationRun, c.IntegrationWebhook, c.InternalPolicy, c.Invite,
+		c.MappableDomain, c.MappedControl, c.Narrative, c.Note, c.Notification,
+		c.NotificationPreference, c.NotificationTemplate, c.Onboarding,
+		c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
+		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
 		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
 		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
@@ -1079,8 +1073,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.DirectoryGroup.mutate(ctx, m)
 	case *DirectoryMembershipMutation:
 		return c.DirectoryMembership.mutate(ctx, m)
-	case *DirectorySyncRunMutation:
-		return c.DirectorySyncRun.mutate(ctx, m)
 	case *DiscussionMutation:
 		return c.Discussion.mutate(ctx, m)
 	case *DocumentDataMutation:
@@ -1505,6 +1497,22 @@ func (c *ActionPlanClient) GetX(ctx context.Context, id string) *ActionPlan {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryIntegrationRuns queries the integration_runs edge of a ActionPlan.
+func (c *ActionPlanClient) QueryIntegrationRuns(_m *ActionPlan) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, actionplan.IntegrationRunsTable, actionplan.IntegrationRunsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // QueryApprover queries the approver edge of a ActionPlan.
@@ -2504,6 +2512,22 @@ func (c *AssetClient) GetX(ctx context.Context, id string) *Asset {
 	return obj
 }
 
+// QueryIntegrationRuns queries the integration_runs edge of a Asset.
+func (c *AssetClient) QueryIntegrationRuns(_m *Asset) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, asset.IntegrationRunsTable, asset.IntegrationRunsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryOwner queries the owner edge of a Asset.
 func (c *AssetClient) QueryOwner(_m *Asset) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
@@ -2593,6 +2617,22 @@ func (c *AssetClient) QueryInternalOwnerGroup(_m *Asset) *GroupQuery {
 			sqlgraph.From(asset.Table, asset.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, asset.InternalOwnerGroupTable, asset.InternalOwnerGroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerIdentityHolder queries the internal_owner_identity_holder edge of a Asset.
+func (c *AssetClient) QueryInternalOwnerIdentityHolder(_m *Asset) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(asset.Table, asset.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, asset.InternalOwnerIdentityHolderTable, asset.InternalOwnerIdentityHolderColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -3231,6 +3271,22 @@ func (c *CampaignClient) QueryInternalOwnerGroup(_m *Campaign) *GroupQuery {
 	return query
 }
 
+// QueryInternalOwnerIdentityHolder queries the internal_owner_identity_holder edge of a Campaign.
+func (c *CampaignClient) QueryInternalOwnerIdentityHolder(_m *Campaign) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, campaign.InternalOwnerIdentityHolderTable, campaign.InternalOwnerIdentityHolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryAssessment queries the assessment edge of a Campaign.
 func (c *CampaignClient) QueryAssessment(_m *Campaign) *AssessmentQuery {
 	query := (&AssessmentClient{config: c.config}).Query()
@@ -3837,6 +3893,22 @@ func (c *CheckResultClient) GetX(ctx context.Context, id string) *CheckResult {
 	return obj
 }
 
+// QueryIntegrationRuns queries the integration_runs edge of a CheckResult.
+func (c *CheckResultClient) QueryIntegrationRuns(_m *CheckResult) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(checkresult.Table, checkresult.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, checkresult.IntegrationRunsTable, checkresult.IntegrationRunsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryBlockedGroups queries the blocked_groups edge of a CheckResult.
 func (c *CheckResultClient) QueryBlockedGroups(_m *CheckResult) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -4066,6 +4138,22 @@ func (c *ContactClient) GetX(ctx context.Context, id string) *Contact {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryIntegrationRuns queries the integration_runs edge of a Contact.
+func (c *ContactClient) QueryIntegrationRuns(_m *Contact) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, contact.IntegrationRunsTable, contact.IntegrationRunsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // QueryOwner queries the owner edge of a Contact.
@@ -6293,6 +6381,22 @@ func (c *DirectoryAccountClient) GetX(ctx context.Context, id string) *Directory
 	return obj
 }
 
+// QueryIntegrationRuns queries the integration_runs edge of a DirectoryAccount.
+func (c *DirectoryAccountClient) QueryIntegrationRuns(_m *DirectoryAccount) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, directoryaccount.IntegrationRunsTable, directoryaccount.IntegrationRunsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryOwner queries the owner edge of a DirectoryAccount.
 func (c *DirectoryAccountClient) QueryOwner(_m *DirectoryAccount) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
@@ -6350,22 +6454,6 @@ func (c *DirectoryAccountClient) QueryIntegration(_m *DirectoryAccount) *Integra
 			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, id),
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, directoryaccount.IntegrationTable, directoryaccount.IntegrationColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryDirectorySyncRun queries the directory_sync_run edge of a DirectoryAccount.
-func (c *DirectoryAccountClient) QueryDirectorySyncRun(_m *DirectoryAccount) *DirectorySyncRunQuery {
-	query := (&DirectorySyncRunClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, id),
-			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, directoryaccount.DirectorySyncRunTable, directoryaccount.DirectorySyncRunColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -6620,6 +6708,22 @@ func (c *DirectoryGroupClient) GetX(ctx context.Context, id string) *DirectoryGr
 	return obj
 }
 
+// QueryIntegrationRuns queries the integration_runs edge of a DirectoryGroup.
+func (c *DirectoryGroupClient) QueryIntegrationRuns(_m *DirectoryGroup) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorygroup.Table, directorygroup.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, directorygroup.IntegrationRunsTable, directorygroup.IntegrationRunsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryOwner queries the owner edge of a DirectoryGroup.
 func (c *DirectoryGroupClient) QueryOwner(_m *DirectoryGroup) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
@@ -6677,22 +6781,6 @@ func (c *DirectoryGroupClient) QueryIntegration(_m *DirectoryGroup) *Integration
 			sqlgraph.From(directorygroup.Table, directorygroup.FieldID, id),
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, directorygroup.IntegrationTable, directorygroup.IntegrationColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryDirectorySyncRun queries the directory_sync_run edge of a DirectoryGroup.
-func (c *DirectoryGroupClient) QueryDirectorySyncRun(_m *DirectoryGroup) *DirectorySyncRunQuery {
-	query := (&DirectorySyncRunClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(directorygroup.Table, directorygroup.FieldID, id),
-			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, directorygroup.DirectorySyncRunTable, directorygroup.DirectorySyncRunColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -6899,6 +6987,22 @@ func (c *DirectoryMembershipClient) GetX(ctx context.Context, id string) *Direct
 	return obj
 }
 
+// QueryIntegrationRuns queries the integration_runs edge of a DirectoryMembership.
+func (c *DirectoryMembershipClient) QueryIntegrationRuns(_m *DirectoryMembership) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, directorymembership.IntegrationRunsTable, directorymembership.IntegrationRunsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryOwner queries the owner edge of a DirectoryMembership.
 func (c *DirectoryMembershipClient) QueryOwner(_m *DirectoryMembership) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
@@ -6956,22 +7060,6 @@ func (c *DirectoryMembershipClient) QueryIntegration(_m *DirectoryMembership) *I
 			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, id),
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, directorymembership.IntegrationTable, directorymembership.IntegrationColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryDirectorySyncRun queries the directory_sync_run edge of a DirectoryMembership.
-func (c *DirectoryMembershipClient) QueryDirectorySyncRun(_m *DirectoryMembership) *DirectorySyncRunQuery {
-	query := (&DirectorySyncRunClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, id),
-			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, directorymembership.DirectorySyncRunTable, directorymembership.DirectorySyncRunColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -7083,269 +7171,6 @@ func (c *DirectoryMembershipClient) mutate(ctx context.Context, m *DirectoryMemb
 		return (&DirectoryMembershipDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown DirectoryMembership mutation op: %q", m.Op())
-	}
-}
-
-// DirectorySyncRunClient is a client for the DirectorySyncRun schema.
-type DirectorySyncRunClient struct {
-	config
-}
-
-// NewDirectorySyncRunClient returns a client for the DirectorySyncRun from the given config.
-func NewDirectorySyncRunClient(c config) *DirectorySyncRunClient {
-	return &DirectorySyncRunClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `directorysyncrun.Hooks(f(g(h())))`.
-func (c *DirectorySyncRunClient) Use(hooks ...Hook) {
-	c.hooks.DirectorySyncRun = append(c.hooks.DirectorySyncRun, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `directorysyncrun.Intercept(f(g(h())))`.
-func (c *DirectorySyncRunClient) Intercept(interceptors ...Interceptor) {
-	c.inters.DirectorySyncRun = append(c.inters.DirectorySyncRun, interceptors...)
-}
-
-// Create returns a builder for creating a DirectorySyncRun entity.
-func (c *DirectorySyncRunClient) Create() *DirectorySyncRunCreate {
-	mutation := newDirectorySyncRunMutation(c.config, OpCreate)
-	return &DirectorySyncRunCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of DirectorySyncRun entities.
-func (c *DirectorySyncRunClient) CreateBulk(builders ...*DirectorySyncRunCreate) *DirectorySyncRunCreateBulk {
-	return &DirectorySyncRunCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *DirectorySyncRunClient) MapCreateBulk(slice any, setFunc func(*DirectorySyncRunCreate, int)) *DirectorySyncRunCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &DirectorySyncRunCreateBulk{err: fmt.Errorf("calling to DirectorySyncRunClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*DirectorySyncRunCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &DirectorySyncRunCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for DirectorySyncRun.
-func (c *DirectorySyncRunClient) Update() *DirectorySyncRunUpdate {
-	mutation := newDirectorySyncRunMutation(c.config, OpUpdate)
-	return &DirectorySyncRunUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *DirectorySyncRunClient) UpdateOne(_m *DirectorySyncRun) *DirectorySyncRunUpdateOne {
-	mutation := newDirectorySyncRunMutation(c.config, OpUpdateOne, withDirectorySyncRun(_m))
-	return &DirectorySyncRunUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *DirectorySyncRunClient) UpdateOneID(id string) *DirectorySyncRunUpdateOne {
-	mutation := newDirectorySyncRunMutation(c.config, OpUpdateOne, withDirectorySyncRunID(id))
-	return &DirectorySyncRunUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for DirectorySyncRun.
-func (c *DirectorySyncRunClient) Delete() *DirectorySyncRunDelete {
-	mutation := newDirectorySyncRunMutation(c.config, OpDelete)
-	return &DirectorySyncRunDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *DirectorySyncRunClient) DeleteOne(_m *DirectorySyncRun) *DirectorySyncRunDeleteOne {
-	return c.DeleteOneID(_m.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *DirectorySyncRunClient) DeleteOneID(id string) *DirectorySyncRunDeleteOne {
-	builder := c.Delete().Where(directorysyncrun.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &DirectorySyncRunDeleteOne{builder}
-}
-
-// Query returns a query builder for DirectorySyncRun.
-func (c *DirectorySyncRunClient) Query() *DirectorySyncRunQuery {
-	return &DirectorySyncRunQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeDirectorySyncRun},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a DirectorySyncRun entity by its id.
-func (c *DirectorySyncRunClient) Get(ctx context.Context, id string) (*DirectorySyncRun, error) {
-	return c.Query().Where(directorysyncrun.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *DirectorySyncRunClient) GetX(ctx context.Context, id string) *DirectorySyncRun {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryOwner queries the owner edge of a DirectorySyncRun.
-func (c *DirectorySyncRunClient) QueryOwner(_m *DirectorySyncRun) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, directorysyncrun.OwnerTable, directorysyncrun.OwnerColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryEnvironment queries the environment edge of a DirectorySyncRun.
-func (c *DirectorySyncRunClient) QueryEnvironment(_m *DirectorySyncRun) *CustomTypeEnumQuery {
-	query := (&CustomTypeEnumClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, id),
-			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, directorysyncrun.EnvironmentTable, directorysyncrun.EnvironmentColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryScope queries the scope edge of a DirectorySyncRun.
-func (c *DirectorySyncRunClient) QueryScope(_m *DirectorySyncRun) *CustomTypeEnumQuery {
-	query := (&CustomTypeEnumClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, id),
-			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, directorysyncrun.ScopeTable, directorysyncrun.ScopeColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryIntegration queries the integration edge of a DirectorySyncRun.
-func (c *DirectorySyncRunClient) QueryIntegration(_m *DirectorySyncRun) *IntegrationQuery {
-	query := (&IntegrationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, id),
-			sqlgraph.To(integration.Table, integration.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, directorysyncrun.IntegrationTable, directorysyncrun.IntegrationColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryPlatform queries the platform edge of a DirectorySyncRun.
-func (c *DirectorySyncRunClient) QueryPlatform(_m *DirectorySyncRun) *PlatformQuery {
-	query := (&PlatformClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, id),
-			sqlgraph.To(platform.Table, platform.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, directorysyncrun.PlatformTable, directorysyncrun.PlatformColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryDirectoryAccounts queries the directory_accounts edge of a DirectorySyncRun.
-func (c *DirectorySyncRunClient) QueryDirectoryAccounts(_m *DirectorySyncRun) *DirectoryAccountQuery {
-	query := (&DirectoryAccountClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, id),
-			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, directorysyncrun.DirectoryAccountsTable, directorysyncrun.DirectoryAccountsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryDirectoryGroups queries the directory_groups edge of a DirectorySyncRun.
-func (c *DirectorySyncRunClient) QueryDirectoryGroups(_m *DirectorySyncRun) *DirectoryGroupQuery {
-	query := (&DirectoryGroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, id),
-			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, directorysyncrun.DirectoryGroupsTable, directorysyncrun.DirectoryGroupsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryDirectoryMemberships queries the directory_memberships edge of a DirectorySyncRun.
-func (c *DirectorySyncRunClient) QueryDirectoryMemberships(_m *DirectorySyncRun) *DirectoryMembershipQuery {
-	query := (&DirectoryMembershipClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, id),
-			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, directorysyncrun.DirectoryMembershipsTable, directorysyncrun.DirectoryMembershipsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *DirectorySyncRunClient) Hooks() []Hook {
-	hooks := c.hooks.DirectorySyncRun
-	return append(hooks[:len(hooks):len(hooks)], directorysyncrun.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *DirectorySyncRunClient) Interceptors() []Interceptor {
-	inters := c.inters.DirectorySyncRun
-	return append(inters[:len(inters):len(inters)], directorysyncrun.Interceptors[:]...)
-}
-
-func (c *DirectorySyncRunClient) mutate(ctx context.Context, m *DirectorySyncRunMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&DirectorySyncRunCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&DirectorySyncRunUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&DirectorySyncRunUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&DirectorySyncRunDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("generated: unknown DirectorySyncRun mutation op: %q", m.Op())
 	}
 }
 
@@ -8397,6 +8222,22 @@ func (c *EntityClient) GetX(ctx context.Context, id string) *Entity {
 	return obj
 }
 
+// QueryIntegrationRuns queries the integration_runs edge of a Entity.
+func (c *EntityClient) QueryIntegrationRuns(_m *Entity) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, entity.IntegrationRunsTable, entity.IntegrationRunsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryOwner queries the owner edge of a Entity.
 func (c *EntityClient) QueryOwner(_m *Entity) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
@@ -8477,6 +8318,22 @@ func (c *EntityClient) QueryInternalOwnerGroup(_m *Entity) *GroupQuery {
 	return query
 }
 
+// QueryInternalOwnerIdentityHolder queries the internal_owner_identity_holder edge of a Entity.
+func (c *EntityClient) QueryInternalOwnerIdentityHolder(_m *Entity) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.InternalOwnerIdentityHolderTable, entity.InternalOwnerIdentityHolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryReviewedByUser queries the reviewed_by_user edge of a Entity.
 func (c *EntityClient) QueryReviewedByUser(_m *Entity) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
@@ -8502,6 +8359,22 @@ func (c *EntityClient) QueryReviewedByGroup(_m *Entity) *GroupQuery {
 			sqlgraph.From(entity.Table, entity.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entity.ReviewedByGroupTable, entity.ReviewedByGroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryReviewedByIdentityHolder queries the reviewed_by_identity_holder edge of a Entity.
+func (c *EntityClient) QueryReviewedByIdentityHolder(_m *Entity) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.ReviewedByIdentityHolderTable, entity.ReviewedByIdentityHolderColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -10845,6 +10718,22 @@ func (c *FindingClient) GetX(ctx context.Context, id string) *Finding {
 	return obj
 }
 
+// QueryIntegrationRuns queries the integration_runs edge of a Finding.
+func (c *FindingClient) QueryIntegrationRuns(_m *Finding) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.IntegrationRunsTable, finding.IntegrationRunsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryOwner queries the owner edge of a Finding.
 func (c *FindingClient) QueryOwner(_m *Finding) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
@@ -10925,6 +10814,22 @@ func (c *FindingClient) QueryReviewedByGroup(_m *Finding) *GroupQuery {
 	return query
 }
 
+// QueryReviewedByIdentityHolder queries the reviewed_by_identity_holder edge of a Finding.
+func (c *FindingClient) QueryReviewedByIdentityHolder(_m *Finding) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.ReviewedByIdentityHolderTable, finding.ReviewedByIdentityHolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryAssignedToUser queries the assigned_to_user edge of a Finding.
 func (c *FindingClient) QueryAssignedToUser(_m *Finding) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
@@ -10950,6 +10855,22 @@ func (c *FindingClient) QueryAssignedToGroup(_m *Finding) *GroupQuery {
 			sqlgraph.From(finding.Table, finding.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, finding.AssignedToGroupTable, finding.AssignedToGroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssignedToIdentityHolder queries the assigned_to_identity_holder edge of a Finding.
+func (c *FindingClient) QueryAssignedToIdentityHolder(_m *Finding) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.AssignedToIdentityHolderTable, finding.AssignedToIdentityHolderColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -13303,6 +13224,22 @@ func (c *IdentityHolderClient) QueryInternalOwnerGroup(_m *IdentityHolder) *Grou
 	return query
 }
 
+// QueryInternalOwnerIdentityHolder queries the internal_owner_identity_holder edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryInternalOwnerIdentityHolder(_m *IdentityHolder) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, identityholder.InternalOwnerIdentityHolderTable, identityholder.InternalOwnerIdentityHolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEnvironment queries the environment edge of a IdentityHolder.
 func (c *IdentityHolderClient) QueryEnvironment(_m *IdentityHolder) *CustomTypeEnumQuery {
 	query := (&CustomTypeEnumClient{config: c.config}).Query()
@@ -14213,22 +14150,6 @@ func (c *IntegrationClient) QueryDirectoryMemberships(_m *Integration) *Director
 	return query
 }
 
-// QueryDirectorySyncRuns queries the directory_sync_runs edge of a Integration.
-func (c *IntegrationClient) QueryDirectorySyncRuns(_m *Integration) *DirectorySyncRunQuery {
-	query := (&DirectorySyncRunClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(integration.Table, integration.FieldID, id),
-			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, integration.DirectorySyncRunsTable, integration.DirectorySyncRunsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryCheckResults queries the check_results edge of a Integration.
 func (c *IntegrationClient) QueryCheckResults(_m *Integration) *CheckResultQuery {
 	query := (&CheckResultClient{config: c.config}).Query()
@@ -14524,15 +14445,15 @@ func (c *IntegrationRunClient) QueryIntegration(_m *IntegrationRun) *Integration
 	return query
 }
 
-// QueryRequestFile queries the request_file edge of a IntegrationRun.
-func (c *IntegrationRunClient) QueryRequestFile(_m *IntegrationRun) *FileQuery {
-	query := (&FileClient{config: c.config}).Query()
+// QueryActionPlans queries the action_plans edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryActionPlans(_m *IntegrationRun) *ActionPlanQuery {
+	query := (&ActionPlanClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
-			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, integrationrun.RequestFileTable, integrationrun.RequestFileColumn),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.ActionPlansTable, integrationrun.ActionPlansPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -14540,15 +14461,15 @@ func (c *IntegrationRunClient) QueryRequestFile(_m *IntegrationRun) *FileQuery {
 	return query
 }
 
-// QueryResponseFile queries the response_file edge of a IntegrationRun.
-func (c *IntegrationRunClient) QueryResponseFile(_m *IntegrationRun) *FileQuery {
-	query := (&FileClient{config: c.config}).Query()
+// QueryAssets queries the assets edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryAssets(_m *IntegrationRun) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
-			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, integrationrun.ResponseFileTable, integrationrun.ResponseFileColumn),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.AssetsTable, integrationrun.AssetsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -14556,15 +14477,15 @@ func (c *IntegrationRunClient) QueryResponseFile(_m *IntegrationRun) *FileQuery 
 	return query
 }
 
-// QueryEvent queries the event edge of a IntegrationRun.
-func (c *IntegrationRunClient) QueryEvent(_m *IntegrationRun) *EventQuery {
-	query := (&EventClient{config: c.config}).Query()
+// QueryCheckResults queries the check_results edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryCheckResults(_m *IntegrationRun) *CheckResultQuery {
+	query := (&CheckResultClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
-			sqlgraph.To(event.Table, event.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, integrationrun.EventTable, integrationrun.EventColumn),
+			sqlgraph.To(checkresult.Table, checkresult.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.CheckResultsTable, integrationrun.CheckResultsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -14572,15 +14493,159 @@ func (c *IntegrationRunClient) QueryEvent(_m *IntegrationRun) *EventQuery {
 	return query
 }
 
-// QueryAssessmentResponse queries the assessment_response edge of a IntegrationRun.
-func (c *IntegrationRunClient) QueryAssessmentResponse(_m *IntegrationRun) *AssessmentResponseQuery {
-	query := (&AssessmentResponseClient{config: c.config}).Query()
+// QueryContacts queries the contacts edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryContacts(_m *IntegrationRun) *ContactQuery {
+	query := (&ContactClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
-			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, integrationrun.AssessmentResponseTable, integrationrun.AssessmentResponseColumn),
+			sqlgraph.To(contact.Table, contact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.ContactsTable, integrationrun.ContactsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryAccounts queries the directory_accounts edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryDirectoryAccounts(_m *IntegrationRun) *DirectoryAccountQuery {
+	query := (&DirectoryAccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.DirectoryAccountsTable, integrationrun.DirectoryAccountsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryGroups queries the directory_groups edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryDirectoryGroups(_m *IntegrationRun) *DirectoryGroupQuery {
+	query := (&DirectoryGroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.DirectoryGroupsTable, integrationrun.DirectoryGroupsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryMemberships queries the directory_memberships edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryDirectoryMemberships(_m *IntegrationRun) *DirectoryMembershipQuery {
+	query := (&DirectoryMembershipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.DirectoryMembershipsTable, integrationrun.DirectoryMembershipsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntities queries the entities edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryEntities(_m *IntegrationRun) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.EntitiesTable, integrationrun.EntitiesPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFindings queries the findings edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryFindings(_m *IntegrationRun) *FindingQuery {
+	query := (&FindingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.FindingsTable, integrationrun.FindingsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalPolicies queries the internal_policies edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryInternalPolicies(_m *IntegrationRun) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.InternalPoliciesTable, integrationrun.InternalPoliciesPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProcedures queries the procedures edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryProcedures(_m *IntegrationRun) *ProcedureQuery {
+	query := (&ProcedureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.ProceduresTable, integrationrun.ProceduresPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRisks queries the risks edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryRisks(_m *IntegrationRun) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.RisksTable, integrationrun.RisksPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVulnerabilities queries the vulnerabilities edge of a IntegrationRun.
+func (c *IntegrationRunClient) QueryVulnerabilities(_m *IntegrationRun) *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrun.Table, integrationrun.FieldID, id),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, integrationrun.VulnerabilitiesTable, integrationrun.VulnerabilitiesPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -14888,6 +14953,22 @@ func (c *InternalPolicyClient) GetX(ctx context.Context, id string) *InternalPol
 		panic(err)
 	}
 	return obj
+}
+
+// QueryIntegrationRuns queries the integration_runs edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryIntegrationRuns(_m *InternalPolicy) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.IntegrationRunsTable, internalpolicy.IntegrationRunsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // QueryOwner queries the owner edge of a InternalPolicy.
@@ -18595,22 +18676,6 @@ func (c *OrganizationClient) QueryDirectoryMembershipCreators(_m *Organization) 
 	return query
 }
 
-// QueryDirectorySyncRunCreators queries the directory_sync_run_creators edge of a Organization.
-func (c *OrganizationClient) QueryDirectorySyncRunCreators(_m *Organization) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectorySyncRunCreatorsTable, organization.DirectorySyncRunCreatorsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryDiscussionCreators queries the discussion_creators edge of a Organization.
 func (c *OrganizationClient) QueryDiscussionCreators(_m *Organization) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -20787,22 +20852,6 @@ func (c *OrganizationClient) QueryDirectoryMemberships(_m *Organization) *Direct
 	return query
 }
 
-// QueryDirectorySyncRuns queries the directory_sync_runs edge of a Organization.
-func (c *OrganizationClient) QueryDirectorySyncRuns(_m *Organization) *DirectorySyncRunQuery {
-	query := (&DirectorySyncRunClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectorySyncRunsTable, organization.DirectorySyncRunsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryDiscussions queries the discussions edge of a Organization.
 func (c *OrganizationClient) QueryDiscussions(_m *Organization) *DiscussionQuery {
 	query := (&DiscussionClient{config: c.config}).Query()
@@ -21599,6 +21648,22 @@ func (c *PlatformClient) QueryInternalOwnerGroup(_m *Platform) *GroupQuery {
 	return query
 }
 
+// QueryInternalOwnerIdentityHolder queries the internal_owner_identity_holder edge of a Platform.
+func (c *PlatformClient) QueryInternalOwnerIdentityHolder(_m *Platform) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.InternalOwnerIdentityHolderTable, platform.InternalOwnerIdentityHolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryBusinessOwnerUser queries the business_owner_user edge of a Platform.
 func (c *PlatformClient) QueryBusinessOwnerUser(_m *Platform) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
@@ -21624,6 +21689,22 @@ func (c *PlatformClient) QueryBusinessOwnerGroup(_m *Platform) *GroupQuery {
 			sqlgraph.From(platform.Table, platform.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.BusinessOwnerGroupTable, platform.BusinessOwnerGroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBusinessOwnerIdentityHolder queries the business_owner_identity_holder edge of a Platform.
+func (c *PlatformClient) QueryBusinessOwnerIdentityHolder(_m *Platform) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.BusinessOwnerIdentityHolderTable, platform.BusinessOwnerIdentityHolderColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -21663,6 +21744,22 @@ func (c *PlatformClient) QueryTechnicalOwnerGroup(_m *Platform) *GroupQuery {
 	return query
 }
 
+// QueryTechnicalOwnerIdentityHolder queries the technical_owner_identity_holder edge of a Platform.
+func (c *PlatformClient) QueryTechnicalOwnerIdentityHolder(_m *Platform) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.TechnicalOwnerIdentityHolderTable, platform.TechnicalOwnerIdentityHolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QuerySecurityOwnerUser queries the security_owner_user edge of a Platform.
 func (c *PlatformClient) QuerySecurityOwnerUser(_m *Platform) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
@@ -21688,6 +21785,22 @@ func (c *PlatformClient) QuerySecurityOwnerGroup(_m *Platform) *GroupQuery {
 			sqlgraph.From(platform.Table, platform.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.SecurityOwnerGroupTable, platform.SecurityOwnerGroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySecurityOwnerIdentityHolder queries the security_owner_identity_holder edge of a Platform.
+func (c *PlatformClient) QuerySecurityOwnerIdentityHolder(_m *Platform) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.SecurityOwnerIdentityHolderTable, platform.SecurityOwnerIdentityHolderColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -22047,22 +22160,6 @@ func (c *PlatformClient) QueryIntegrations(_m *Platform) *IntegrationQuery {
 	return query
 }
 
-// QueryDirectorySyncRuns queries the directory_sync_runs edge of a Platform.
-func (c *PlatformClient) QueryDirectorySyncRuns(_m *Platform) *DirectorySyncRunQuery {
-	query := (&DirectorySyncRunClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(platform.Table, platform.FieldID, id),
-			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, platform.DirectorySyncRunsTable, platform.DirectorySyncRunsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryDirectoryAccounts queries the directory_accounts edge of a Platform.
 func (c *PlatformClient) QueryDirectoryAccounts(_m *Platform) *DirectoryAccountQuery {
 	query := (&DirectoryAccountClient{config: c.config}).Query()
@@ -22388,6 +22485,22 @@ func (c *ProcedureClient) GetX(ctx context.Context, id string) *Procedure {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryIntegrationRuns queries the integration_runs edge of a Procedure.
+func (c *ProcedureClient) QueryIntegrationRuns(_m *Procedure) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, procedure.IntegrationRunsTable, procedure.IntegrationRunsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // QueryOwner queries the owner edge of a Procedure.
@@ -24489,6 +24602,22 @@ func (c *RiskClient) GetX(ctx context.Context, id string) *Risk {
 	return obj
 }
 
+// QueryIntegrationRuns queries the integration_runs edge of a Risk.
+func (c *RiskClient) QueryIntegrationRuns(_m *Risk) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, risk.IntegrationRunsTable, risk.IntegrationRunsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryOwner queries the owner edge of a Risk.
 func (c *RiskClient) QueryOwner(_m *Risk) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
@@ -25335,6 +25464,22 @@ func (c *ScanClient) QueryReviewedByGroup(_m *Scan) *GroupQuery {
 	return query
 }
 
+// QueryReviewedByIdentityHolder queries the reviewed_by_identity_holder edge of a Scan.
+func (c *ScanClient) QueryReviewedByIdentityHolder(_m *Scan) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.ReviewedByIdentityHolderTable, scan.ReviewedByIdentityHolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryAssignedToUser queries the assigned_to_user edge of a Scan.
 func (c *ScanClient) QueryAssignedToUser(_m *Scan) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
@@ -25360,6 +25505,22 @@ func (c *ScanClient) QueryAssignedToGroup(_m *Scan) *GroupQuery {
 			sqlgraph.From(scan.Table, scan.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scan.AssignedToGroupTable, scan.AssignedToGroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssignedToIdentityHolder queries the assigned_to_identity_holder edge of a Scan.
+func (c *ScanClient) QueryAssignedToIdentityHolder(_m *Scan) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.AssignedToIdentityHolderTable, scan.AssignedToIdentityHolderColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -31688,6 +31849,22 @@ func (c *VulnerabilityClient) GetX(ctx context.Context, id string) *Vulnerabilit
 	return obj
 }
 
+// QueryIntegrationRuns queries the integration_runs edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryIntegrationRuns(_m *Vulnerability) *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, vulnerability.IntegrationRunsTable, vulnerability.IntegrationRunsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryOwner queries the owner edge of a Vulnerability.
 func (c *VulnerabilityClient) QueryOwner(_m *Vulnerability) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()
@@ -31784,6 +31961,22 @@ func (c *VulnerabilityClient) QueryReviewedByGroup(_m *Vulnerability) *GroupQuer
 	return query
 }
 
+// QueryReviewedByIdentityHolder queries the reviewed_by_identity_holder edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryReviewedByIdentityHolder(_m *Vulnerability) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vulnerability.ReviewedByIdentityHolderTable, vulnerability.ReviewedByIdentityHolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryAssignedToUser queries the assigned_to_user edge of a Vulnerability.
 func (c *VulnerabilityClient) QueryAssignedToUser(_m *Vulnerability) *UserQuery {
 	query := (&UserClient{config: c.config}).Query()
@@ -31809,6 +32002,22 @@ func (c *VulnerabilityClient) QueryAssignedToGroup(_m *Vulnerability) *GroupQuer
 			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, vulnerability.AssignedToGroupTable, vulnerability.AssignedToGroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssignedToIdentityHolder queries the assigned_to_identity_holder edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryAssignedToIdentityHolder(_m *Vulnerability) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, vulnerability.AssignedToIdentityHolderTable, vulnerability.AssignedToIdentityHolderColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -34401,14 +34610,14 @@ type (
 		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
 		CampaignTarget, CheckResult, Contact, Control, ControlImplementation,
 		ControlObjective, CustomDomain, CustomTypeEnum, DNSVerification,
-		DirectoryAccount, DirectoryGroup, DirectoryMembership, DirectorySyncRun,
-		Discussion, DocumentData, EmailTemplate, EmailVerificationToken, Entity,
-		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
-		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
-		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
-		InternalPolicy, Invite, MappableDomain, MappedControl, Narrative, Note,
-		Notification, NotificationPreference, NotificationTemplate, Onboarding,
-		OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
+		DirectoryAccount, DirectoryGroup, DirectoryMembership, Discussion,
+		DocumentData, EmailTemplate, EmailVerificationToken, Entity, EntityType, Event,
+		Evidence, Export, File, FileDownloadToken, Finding, FindingControl, Group,
+		GroupMembership, GroupSetting, Hush, IdentityHolder, ImpersonationEvent,
+		Integration, IntegrationRun, IntegrationWebhook, InternalPolicy, Invite,
+		MappableDomain, MappedControl, Narrative, Note, Notification,
+		NotificationPreference, NotificationTemplate, Onboarding, OrgMembership,
+		OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
 		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
 		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
 		SLADefinition, Scan, Standard, Subcontrol, Subprocessor, Subscriber,
@@ -34424,14 +34633,14 @@ type (
 		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
 		CampaignTarget, CheckResult, Contact, Control, ControlImplementation,
 		ControlObjective, CustomDomain, CustomTypeEnum, DNSVerification,
-		DirectoryAccount, DirectoryGroup, DirectoryMembership, DirectorySyncRun,
-		Discussion, DocumentData, EmailTemplate, EmailVerificationToken, Entity,
-		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
-		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
-		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
-		InternalPolicy, Invite, MappableDomain, MappedControl, Narrative, Note,
-		Notification, NotificationPreference, NotificationTemplate, Onboarding,
-		OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
+		DirectoryAccount, DirectoryGroup, DirectoryMembership, Discussion,
+		DocumentData, EmailTemplate, EmailVerificationToken, Entity, EntityType, Event,
+		Evidence, Export, File, FileDownloadToken, Finding, FindingControl, Group,
+		GroupMembership, GroupSetting, Hush, IdentityHolder, ImpersonationEvent,
+		Integration, IntegrationRun, IntegrationWebhook, InternalPolicy, Invite,
+		MappableDomain, MappedControl, Narrative, Note, Notification,
+		NotificationPreference, NotificationTemplate, Onboarding, OrgMembership,
+		OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
 		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
 		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
 		SLADefinition, Scan, Standard, Subcontrol, Subprocessor, Subscriber,

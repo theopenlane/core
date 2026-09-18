@@ -583,10 +583,6 @@ func (ec *executionContext) _ContactUpdatePayload(ctx context.Context, sel ast.S
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNContactBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐContactBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ContactBulkCreatePayload) graphql.Marshaler {
-	return ec._ContactBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNContactBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐContactBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ContactBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNContactBulkCreatePayload2ᚖgithubᚗcomᚋt
 		return graphql.Null
 	}
 	return ec._ContactBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNContactBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐContactBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ContactBulkDeletePayload) graphql.Marshaler {
-	return ec._ContactBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNContactBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐContactBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ContactBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNContactBulkDeletePayload2ᚖgithubᚗcomᚋt
 	return ec._ContactBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNContactBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐContactBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ContactBulkUpdatePayload) graphql.Marshaler {
-	return ec._ContactBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNContactBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐContactBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ContactBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNContactBulkUpdatePayload2ᚖgithubᚗcomᚋt
 		return graphql.Null
 	}
 	return ec._ContactBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNContactCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐContactCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ContactCreatePayload) graphql.Marshaler {
-	return ec._ContactCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNContactCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐContactCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ContactCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNContactCreatePayload2ᚖgithubᚗcomᚋtheop
 	return ec._ContactCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNContactDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐContactDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ContactDeletePayload) graphql.Marshaler {
-	return ec._ContactDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNContactDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐContactDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ContactDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNContactDeletePayload2ᚖgithubᚗcomᚋtheop
 		return graphql.Null
 	}
 	return ec._ContactDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNContactUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐContactUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ContactUpdatePayload) graphql.Marshaler {
-	return ec._ContactUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNContactUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐContactUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ContactUpdatePayload) graphql.Marshaler {

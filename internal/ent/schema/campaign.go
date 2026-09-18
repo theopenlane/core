@@ -247,7 +247,8 @@ func (Campaign) Fields() []ent.Field {
 			Optional(),
 		field.String("trust_center_id").
 			Comment("the trust center this campaign sends updates for, if any").
-			Optional(),
+			Optional().
+			Nillable(),
 	}
 }
 

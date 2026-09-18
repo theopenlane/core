@@ -163,8 +163,8 @@ func (sc *StripeClient) GetCustomerByStripeID(ctx context.Context, customerID st
 	customer, err := sc.Client.V1Customers.Retrieve(ctx, customerID, &stripe.CustomerRetrieveParams{
 		Params: stripe.Params{
 			Context: ctx,
-			Expand:  []*string{stripe.String("tax"), stripe.String("subscriptions")},
 		},
+		Expand: []*string{stripe.String("tax"), stripe.String("subscriptions")},
 	})
 	duration := time.Since(start).Seconds()
 

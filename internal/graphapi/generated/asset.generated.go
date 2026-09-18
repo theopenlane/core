@@ -583,10 +583,6 @@ func (ec *executionContext) _AssetUpdatePayload(ctx context.Context, sel ast.Sel
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAssetBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssetBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssetBulkCreatePayload) graphql.Marshaler {
-	return ec._AssetBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAssetBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssetBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssetBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNAssetBulkCreatePayload2ᚖgithubᚗcomᚋthe
 		return graphql.Null
 	}
 	return ec._AssetBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAssetBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssetBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.AssetBulkDeletePayload) graphql.Marshaler {
-	return ec._AssetBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAssetBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssetBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssetBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNAssetBulkDeletePayload2ᚖgithubᚗcomᚋthe
 	return ec._AssetBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAssetBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssetBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssetBulkUpdatePayload) graphql.Marshaler {
-	return ec._AssetBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAssetBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssetBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssetBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNAssetBulkUpdatePayload2ᚖgithubᚗcomᚋthe
 		return graphql.Null
 	}
 	return ec._AssetBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAssetCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssetCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssetCreatePayload) graphql.Marshaler {
-	return ec._AssetCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAssetCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssetCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssetCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNAssetCreatePayload2ᚖgithubᚗcomᚋtheopen
 	return ec._AssetCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAssetDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssetDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.AssetDeletePayload) graphql.Marshaler {
-	return ec._AssetDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAssetDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssetDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssetDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNAssetDeletePayload2ᚖgithubᚗcomᚋtheopen
 		return graphql.Null
 	}
 	return ec._AssetDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAssetUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssetUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssetUpdatePayload) graphql.Marshaler {
-	return ec._AssetUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAssetUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssetUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssetUpdatePayload) graphql.Marshaler {

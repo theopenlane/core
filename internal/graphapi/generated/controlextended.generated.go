@@ -1709,10 +1709,6 @@ func (ec *executionContext) unmarshalNControlDiffInput2githubᚗcomᚋtheopenlan
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNControlDiffPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlDiffPayload(ctx context.Context, sel ast.SelectionSet, v model.ControlDiffPayload) graphql.Marshaler {
-	return ec._ControlDiffPayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNControlDiffPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlDiffPayload(ctx context.Context, sel ast.SelectionSet, v *model.ControlDiffPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -1757,10 +1753,6 @@ func (ec *executionContext) marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._ControlGroup(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNControlGroupConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlGroupConnection(ctx context.Context, sel ast.SelectionSet, v model.ControlGroupConnection) graphql.Marshaler {
-	return ec._ControlGroupConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNControlGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlGroupConnection(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroupConnection) graphql.Marshaler {

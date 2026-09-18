@@ -28,6 +28,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
@@ -167,6 +168,106 @@ func (_u *EntityUpdate) ClearTags() *EntityUpdate {
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *EntityUpdate) SetSourceDefinitionID(v string) *EntityUpdate {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableSourceDefinitionID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *EntityUpdate) ClearSourceDefinitionID() *EntityUpdate {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *EntityUpdate) SetSourceDefinitionVersion(v string) *EntityUpdate {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableSourceDefinitionVersion(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *EntityUpdate) ClearSourceDefinitionVersion() *EntityUpdate {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *EntityUpdate) SetSourceInstanceID(v string) *EntityUpdate {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableSourceInstanceID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *EntityUpdate) ClearSourceInstanceID() *EntityUpdate {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *EntityUpdate) SetManagedBy(v string) *EntityUpdate {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableManagedBy(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *EntityUpdate) ClearManagedBy() *EntityUpdate {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *EntityUpdate) SetIntegrationRunID(v string) *EntityUpdate {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableIntegrationRunID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *EntityUpdate) ClearIntegrationRunID() *EntityUpdate {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
 // SetInternalOwner sets the "internal_owner" field.
 func (_u *EntityUpdate) SetInternalOwner(v string) *EntityUpdate {
 	_u.mutation.SetInternalOwner(v)
@@ -227,6 +328,26 @@ func (_u *EntityUpdate) ClearInternalOwnerGroupID() *EntityUpdate {
 	return _u
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *EntityUpdate) SetInternalOwnerIdentityHolderID(v string) *EntityUpdate {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableInternalOwnerIdentityHolderID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *EntityUpdate) ClearInternalOwnerIdentityHolderID() *EntityUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetReviewedBy sets the "reviewed_by" field.
 func (_u *EntityUpdate) SetReviewedBy(v string) *EntityUpdate {
 	_u.mutation.SetReviewedBy(v)
@@ -284,6 +405,26 @@ func (_u *EntityUpdate) SetNillableReviewedByGroupID(v *string) *EntityUpdate {
 // ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
 func (_u *EntityUpdate) ClearReviewedByGroupID() *EntityUpdate {
 	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_u *EntityUpdate) SetReviewedByIdentityHolderID(v string) *EntityUpdate {
+	_u.mutation.SetReviewedByIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableReviewedByIdentityHolderID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetReviewedByIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByIdentityHolderID clears the value of the "reviewed_by_identity_holder_id" field.
+func (_u *EntityUpdate) ClearReviewedByIdentityHolderID() *EntityUpdate {
+	_u.mutation.ClearReviewedByIdentityHolderID()
 	return _u
 }
 
@@ -1297,6 +1438,21 @@ func (_u *EntityUpdate) ClearObservedAt() *EntityUpdate {
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *EntityUpdate) AddIntegrationRunIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *EntityUpdate) AddIntegrationRuns(v ...*IntegrationRun) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *EntityUpdate) AddBlockedGroupIDs(ids ...string) *EntityUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1337,6 +1493,11 @@ func (_u *EntityUpdate) SetInternalOwnerGroup(v *Group) *EntityUpdate {
 	return _u.SetInternalOwnerGroupID(v.ID)
 }
 
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *EntityUpdate {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
 func (_u *EntityUpdate) SetReviewedByUser(v *User) *EntityUpdate {
 	return _u.SetReviewedByUserID(v.ID)
@@ -1345,6 +1506,11 @@ func (_u *EntityUpdate) SetReviewedByUser(v *User) *EntityUpdate {
 // SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
 func (_u *EntityUpdate) SetReviewedByGroup(v *Group) *EntityUpdate {
 	return _u.SetReviewedByGroupID(v.ID)
+}
+
+// SetReviewedByIdentityHolder sets the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdate) SetReviewedByIdentityHolder(v *IdentityHolder) *EntityUpdate {
+	return _u.SetReviewedByIdentityHolderID(v.ID)
 }
 
 // SetEntityRelationshipState sets the "entity_relationship_state" edge to the CustomTypeEnum entity.
@@ -1762,6 +1928,27 @@ func (_u *EntityUpdate) Mutation() *EntityMutation {
 	return _u.mutation
 }
 
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *EntityUpdate) ClearIntegrationRuns() *EntityUpdate {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *EntityUpdate) RemoveIntegrationRunIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *EntityUpdate) RemoveIntegrationRuns(v ...*IntegrationRun) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
+}
+
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
 func (_u *EntityUpdate) ClearBlockedGroups() *EntityUpdate {
 	_u.mutation.ClearBlockedGroups()
@@ -1816,6 +2003,12 @@ func (_u *EntityUpdate) ClearInternalOwnerGroup() *EntityUpdate {
 	return _u
 }
 
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdate) ClearInternalOwnerIdentityHolder() *EntityUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
+	return _u
+}
+
 // ClearReviewedByUser clears the "reviewed_by_user" edge to the User entity.
 func (_u *EntityUpdate) ClearReviewedByUser() *EntityUpdate {
 	_u.mutation.ClearReviewedByUser()
@@ -1825,6 +2018,12 @@ func (_u *EntityUpdate) ClearReviewedByUser() *EntityUpdate {
 // ClearReviewedByGroup clears the "reviewed_by_group" edge to the Group entity.
 func (_u *EntityUpdate) ClearReviewedByGroup() *EntityUpdate {
 	_u.mutation.ClearReviewedByGroup()
+	return _u
+}
+
+// ClearReviewedByIdentityHolder clears the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdate) ClearReviewedByIdentityHolder() *EntityUpdate {
+	_u.mutation.ClearReviewedByIdentityHolder()
 	return _u
 }
 
@@ -2552,6 +2751,36 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entity.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(entity.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(entity.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(entity.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(entity.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(entity.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(entity.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(entity.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(entity.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(entity.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(entity.FieldIntegrationRunID, field.TypeString)
+	}
 	if value, ok := _u.mutation.InternalOwner(); ok {
 		_spec.SetField(entity.FieldInternalOwner, field.TypeString, value)
 	}
@@ -2862,6 +3091,51 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.ObservedAtCleared() {
 		_spec.ClearField(entity.FieldObservedAt, field.TypeTime)
 	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.IntegrationRunsTable,
+			Columns: entity.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.IntegrationRunsTable,
+			Columns: entity.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.IntegrationRunsTable,
+			Columns: entity.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3010,6 +3284,35 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerIdentityHolderTable,
+			Columns: []string{entity.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerIdentityHolderTable,
+			Columns: []string{entity.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ReviewedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3061,6 +3364,35 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByIdentityHolderTable,
+			Columns: []string{entity.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByIdentityHolderTable,
+			Columns: []string{entity.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -4528,6 +4860,106 @@ func (_u *EntityUpdateOne) ClearTags() *EntityUpdateOne {
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *EntityUpdateOne) SetSourceDefinitionID(v string) *EntityUpdateOne {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableSourceDefinitionID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *EntityUpdateOne) ClearSourceDefinitionID() *EntityUpdateOne {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *EntityUpdateOne) SetSourceDefinitionVersion(v string) *EntityUpdateOne {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableSourceDefinitionVersion(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *EntityUpdateOne) ClearSourceDefinitionVersion() *EntityUpdateOne {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *EntityUpdateOne) SetSourceInstanceID(v string) *EntityUpdateOne {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableSourceInstanceID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *EntityUpdateOne) ClearSourceInstanceID() *EntityUpdateOne {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *EntityUpdateOne) SetManagedBy(v string) *EntityUpdateOne {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableManagedBy(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *EntityUpdateOne) ClearManagedBy() *EntityUpdateOne {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_u *EntityUpdateOne) SetIntegrationRunID(v string) *EntityUpdateOne {
+	_u.mutation.SetIntegrationRunID(v)
+	return _u
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableIntegrationRunID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetIntegrationRunID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationRunID clears the value of the "integration_run_id" field.
+func (_u *EntityUpdateOne) ClearIntegrationRunID() *EntityUpdateOne {
+	_u.mutation.ClearIntegrationRunID()
+	return _u
+}
+
 // SetInternalOwner sets the "internal_owner" field.
 func (_u *EntityUpdateOne) SetInternalOwner(v string) *EntityUpdateOne {
 	_u.mutation.SetInternalOwner(v)
@@ -4588,6 +5020,26 @@ func (_u *EntityUpdateOne) ClearInternalOwnerGroupID() *EntityUpdateOne {
 	return _u
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *EntityUpdateOne) SetInternalOwnerIdentityHolderID(v string) *EntityUpdateOne {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableInternalOwnerIdentityHolderID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *EntityUpdateOne) ClearInternalOwnerIdentityHolderID() *EntityUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetReviewedBy sets the "reviewed_by" field.
 func (_u *EntityUpdateOne) SetReviewedBy(v string) *EntityUpdateOne {
 	_u.mutation.SetReviewedBy(v)
@@ -4645,6 +5097,26 @@ func (_u *EntityUpdateOne) SetNillableReviewedByGroupID(v *string) *EntityUpdate
 // ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
 func (_u *EntityUpdateOne) ClearReviewedByGroupID() *EntityUpdateOne {
 	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_u *EntityUpdateOne) SetReviewedByIdentityHolderID(v string) *EntityUpdateOne {
+	_u.mutation.SetReviewedByIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableReviewedByIdentityHolderID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetReviewedByIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByIdentityHolderID clears the value of the "reviewed_by_identity_holder_id" field.
+func (_u *EntityUpdateOne) ClearReviewedByIdentityHolderID() *EntityUpdateOne {
+	_u.mutation.ClearReviewedByIdentityHolderID()
 	return _u
 }
 
@@ -5658,6 +6130,21 @@ func (_u *EntityUpdateOne) ClearObservedAt() *EntityUpdateOne {
 	return _u
 }
 
+// AddIntegrationRunIDs adds the "integration_runs" edge to the IntegrationRun entity by IDs.
+func (_u *EntityUpdateOne) AddIntegrationRunIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddIntegrationRunIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRuns adds the "integration_runs" edges to the IntegrationRun entity.
+func (_u *EntityUpdateOne) AddIntegrationRuns(v ...*IntegrationRun) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRunIDs(ids...)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *EntityUpdateOne) AddBlockedGroupIDs(ids ...string) *EntityUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -5698,6 +6185,11 @@ func (_u *EntityUpdateOne) SetInternalOwnerGroup(v *Group) *EntityUpdateOne {
 	return _u.SetInternalOwnerGroupID(v.ID)
 }
 
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdateOne) SetInternalOwnerIdentityHolder(v *IdentityHolder) *EntityUpdateOne {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
 func (_u *EntityUpdateOne) SetReviewedByUser(v *User) *EntityUpdateOne {
 	return _u.SetReviewedByUserID(v.ID)
@@ -5706,6 +6198,11 @@ func (_u *EntityUpdateOne) SetReviewedByUser(v *User) *EntityUpdateOne {
 // SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
 func (_u *EntityUpdateOne) SetReviewedByGroup(v *Group) *EntityUpdateOne {
 	return _u.SetReviewedByGroupID(v.ID)
+}
+
+// SetReviewedByIdentityHolder sets the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdateOne) SetReviewedByIdentityHolder(v *IdentityHolder) *EntityUpdateOne {
+	return _u.SetReviewedByIdentityHolderID(v.ID)
 }
 
 // SetEntityRelationshipState sets the "entity_relationship_state" edge to the CustomTypeEnum entity.
@@ -6123,6 +6620,27 @@ func (_u *EntityUpdateOne) Mutation() *EntityMutation {
 	return _u.mutation
 }
 
+// ClearIntegrationRuns clears all "integration_runs" edges to the IntegrationRun entity.
+func (_u *EntityUpdateOne) ClearIntegrationRuns() *EntityUpdateOne {
+	_u.mutation.ClearIntegrationRuns()
+	return _u
+}
+
+// RemoveIntegrationRunIDs removes the "integration_runs" edge to IntegrationRun entities by IDs.
+func (_u *EntityUpdateOne) RemoveIntegrationRunIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveIntegrationRunIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRuns removes "integration_runs" edges to IntegrationRun entities.
+func (_u *EntityUpdateOne) RemoveIntegrationRuns(v ...*IntegrationRun) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRunIDs(ids...)
+}
+
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
 func (_u *EntityUpdateOne) ClearBlockedGroups() *EntityUpdateOne {
 	_u.mutation.ClearBlockedGroups()
@@ -6177,6 +6695,12 @@ func (_u *EntityUpdateOne) ClearInternalOwnerGroup() *EntityUpdateOne {
 	return _u
 }
 
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdateOne) ClearInternalOwnerIdentityHolder() *EntityUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
+	return _u
+}
+
 // ClearReviewedByUser clears the "reviewed_by_user" edge to the User entity.
 func (_u *EntityUpdateOne) ClearReviewedByUser() *EntityUpdateOne {
 	_u.mutation.ClearReviewedByUser()
@@ -6186,6 +6710,12 @@ func (_u *EntityUpdateOne) ClearReviewedByUser() *EntityUpdateOne {
 // ClearReviewedByGroup clears the "reviewed_by_group" edge to the Group entity.
 func (_u *EntityUpdateOne) ClearReviewedByGroup() *EntityUpdateOne {
 	_u.mutation.ClearReviewedByGroup()
+	return _u
+}
+
+// ClearReviewedByIdentityHolder clears the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdateOne) ClearReviewedByIdentityHolder() *EntityUpdateOne {
+	_u.mutation.ClearReviewedByIdentityHolder()
 	return _u
 }
 
@@ -6943,6 +7473,36 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entity.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(entity.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(entity.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(entity.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(entity.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(entity.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(entity.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(entity.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(entity.FieldManagedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.IntegrationRunID(); ok {
+		_spec.SetField(entity.FieldIntegrationRunID, field.TypeString, value)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(entity.FieldIntegrationRunID, field.TypeString)
+	}
 	if value, ok := _u.mutation.InternalOwner(); ok {
 		_spec.SetField(entity.FieldInternalOwner, field.TypeString, value)
 	}
@@ -7253,6 +7813,51 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 	if _u.mutation.ObservedAtCleared() {
 		_spec.ClearField(entity.FieldObservedAt, field.TypeTime)
 	}
+	if _u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.IntegrationRunsTable,
+			Columns: entity.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.IntegrationRunsTable,
+			Columns: entity.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   entity.IntegrationRunsTable,
+			Columns: entity.IntegrationRunsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -7401,6 +8006,35 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerIdentityHolderTable,
+			Columns: []string{entity.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerIdentityHolderTable,
+			Columns: []string{entity.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ReviewedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -7452,6 +8086,35 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByIdentityHolderTable,
+			Columns: []string{entity.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByIdentityHolderTable,
+			Columns: []string{entity.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

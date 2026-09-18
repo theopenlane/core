@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
@@ -75,6 +76,8 @@ type Integration struct {
 	ProviderState openapi.IntegrationProviderState `json:"provider_state,omitempty"`
 	// additional metadata about the integration
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// runtime health state recorded by health checks and reconcile failures
+	Health models.IntegrationHealth `json:"health,omitempty"`
 	// the canonical definition identifier for the installation
 	DefinitionID string `json:"definition_id,omitempty"`
 	// the definition version recorded for this installation
@@ -85,6 +88,8 @@ type Integration struct {
 	Family string `json:"family,omitempty"`
 	// the lifecycle status of the installation
 	Status enums.IntegrationStatus `json:"status,omitempty"`
+	// when a pending installation is considered abandoned and eligible for cleanup; cleared when the installation connects
+	ExpiresAt *time.Time `json:"expires_at,omitempty"`
 	// snapshot of definition metadata captured on the installation
 	ProviderMetadataSnapshot map[string]interface{} `json:"provider_metadata_snapshot,omitempty"`
 	// designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
@@ -135,8 +140,6 @@ type IntegrationEdges struct {
 	DirectoryGroups []*DirectoryGroup `json:"directory_groups,omitempty"`
 	// DirectoryMemberships holds the value of the directory_memberships edge.
 	DirectoryMemberships []*DirectoryMembership `json:"directory_memberships,omitempty"`
-	// DirectorySyncRuns holds the value of the directory_sync_runs edge.
-	DirectorySyncRuns []*DirectorySyncRun `json:"directory_sync_runs,omitempty"`
 	// CheckResults holds the value of the check_results edge.
 	CheckResults []*CheckResult `json:"check_results,omitempty"`
 	// platform associated with this integration
@@ -155,7 +158,7 @@ type IntegrationEdges struct {
 	Entities []*Entity `json:"entities,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [26]bool
+	loadedTypes [25]bool
 	// totalCount holds the count of the edges above.
 	totalCount [24]map[string]int
 
@@ -173,7 +176,6 @@ type IntegrationEdges struct {
 	namedDirectoryAccounts     map[string][]*DirectoryAccount
 	namedDirectoryGroups       map[string][]*DirectoryGroup
 	namedDirectoryMemberships  map[string][]*DirectoryMembership
-	namedDirectorySyncRuns     map[string][]*DirectorySyncRun
 	namedCheckResults          map[string][]*CheckResult
 	namedNotificationTemplates map[string][]*NotificationTemplate
 	namedEmailTemplates        map[string][]*EmailTemplate
@@ -342,19 +344,10 @@ func (e IntegrationEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, e
 	return nil, &NotLoadedError{edge: "directory_memberships"}
 }
 
-// DirectorySyncRunsOrErr returns the DirectorySyncRuns value or an error if the edge
-// was not loaded in eager-loading.
-func (e IntegrationEdges) DirectorySyncRunsOrErr() ([]*DirectorySyncRun, error) {
-	if e.loadedTypes[17] {
-		return e.DirectorySyncRuns, nil
-	}
-	return nil, &NotLoadedError{edge: "directory_sync_runs"}
-}
-
 // CheckResultsOrErr returns the CheckResults value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) CheckResultsOrErr() ([]*CheckResult, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[17] {
 		return e.CheckResults, nil
 	}
 	return nil, &NotLoadedError{edge: "check_results"}
@@ -365,7 +358,7 @@ func (e IntegrationEdges) CheckResultsOrErr() ([]*CheckResult, error) {
 func (e IntegrationEdges) PlatformOrErr() (*Platform, error) {
 	if e.Platform != nil {
 		return e.Platform, nil
-	} else if e.loadedTypes[19] {
+	} else if e.loadedTypes[18] {
 		return nil, &NotFoundError{label: platform.Label}
 	}
 	return nil, &NotLoadedError{edge: "platform"}
@@ -374,7 +367,7 @@ func (e IntegrationEdges) PlatformOrErr() (*Platform, error) {
 // NotificationTemplatesOrErr returns the NotificationTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) NotificationTemplatesOrErr() ([]*NotificationTemplate, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[19] {
 		return e.NotificationTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "notification_templates"}
@@ -383,7 +376,7 @@ func (e IntegrationEdges) NotificationTemplatesOrErr() ([]*NotificationTemplate,
 // EmailTemplatesOrErr returns the EmailTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[20] {
 		return e.EmailTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "email_templates"}
@@ -392,7 +385,7 @@ func (e IntegrationEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[21] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -401,7 +394,7 @@ func (e IntegrationEdges) CampaignsOrErr() ([]*Campaign, error) {
 // IntegrationWebhooksOrErr returns the IntegrationWebhooks value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) IntegrationWebhooksOrErr() ([]*IntegrationWebhook, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[22] {
 		return e.IntegrationWebhooks, nil
 	}
 	return nil, &NotLoadedError{edge: "integration_webhooks"}
@@ -410,7 +403,7 @@ func (e IntegrationEdges) IntegrationWebhooksOrErr() ([]*IntegrationWebhook, err
 // IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[23] {
 		return e.IntegrationRuns, nil
 	}
 	return nil, &NotLoadedError{edge: "integration_runs"}
@@ -419,7 +412,7 @@ func (e IntegrationEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[24] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -430,13 +423,13 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case integration.FieldTags, integration.FieldProviderMetadata, integration.FieldConfig, integration.FieldInstallationMetadata, integration.FieldProviderState, integration.FieldMetadata, integration.FieldProviderMetadataSnapshot:
+		case integration.FieldTags, integration.FieldProviderMetadata, integration.FieldConfig, integration.FieldInstallationMetadata, integration.FieldProviderState, integration.FieldMetadata, integration.FieldHealth, integration.FieldProviderMetadataSnapshot:
 			values[i] = new([]byte)
 		case integration.FieldSystemOwned, integration.FieldPrimaryDirectory, integration.FieldCampaignEmail:
 			values[i] = new(sql.NullBool)
 		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldUpdatedByImpersonator, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldInternalNotes, integration.FieldSystemInternalID, integration.FieldEnvironmentName, integration.FieldEnvironmentID, integration.FieldScopeName, integration.FieldScopeID, integration.FieldName, integration.FieldDescription, integration.FieldKind, integration.FieldIntegrationType, integration.FieldPlatformID, integration.FieldDefinitionID, integration.FieldDefinitionVersion, integration.FieldDefinitionSlug, integration.FieldFamily, integration.FieldStatus:
 			values[i] = new(sql.NullString)
-		case integration.FieldCreatedAt, integration.FieldUpdatedAt, integration.FieldDeletedAt:
+		case integration.FieldCreatedAt, integration.FieldUpdatedAt, integration.FieldDeletedAt, integration.FieldExpiresAt:
 			values[i] = new(sql.NullTime)
 		case integration.ForeignKeys[0]: // file_integrations
 			values[i] = new(sql.NullString)
@@ -634,6 +627,14 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
+		case integration.FieldHealth:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field health", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Health); err != nil {
+					return fmt.Errorf("unmarshal field health: %w", err)
+				}
+			}
 		case integration.FieldDefinitionID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field definition_id", values[i])
@@ -663,6 +664,13 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.IntegrationStatus(value.String)
+			}
+		case integration.FieldExpiresAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
+			} else if value.Valid {
+				_m.ExpiresAt = new(time.Time)
+				*_m.ExpiresAt = value.Time
 			}
 		case integration.FieldProviderMetadataSnapshot:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -794,11 +802,6 @@ func (_m *Integration) QueryDirectoryGroups() *DirectoryGroupQuery {
 // QueryDirectoryMemberships queries the "directory_memberships" edge of the Integration entity.
 func (_m *Integration) QueryDirectoryMemberships() *DirectoryMembershipQuery {
 	return NewIntegrationClient(_m.config).QueryDirectoryMemberships(_m)
-}
-
-// QueryDirectorySyncRuns queries the "directory_sync_runs" edge of the Integration entity.
-func (_m *Integration) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
-	return NewIntegrationClient(_m.config).QueryDirectorySyncRuns(_m)
 }
 
 // QueryCheckResults queries the "check_results" edge of the Integration entity.
@@ -948,6 +951,9 @@ func (_m *Integration) String() string {
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteString(", ")
+	builder.WriteString("health=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Health))
+	builder.WriteString(", ")
 	builder.WriteString("definition_id=")
 	builder.WriteString(_m.DefinitionID)
 	builder.WriteString(", ")
@@ -962,6 +968,11 @@ func (_m *Integration) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	if v := _m.ExpiresAt; v != nil {
+		builder.WriteString("expires_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("provider_metadata_snapshot=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ProviderMetadataSnapshot))
@@ -1308,30 +1319,6 @@ func (_m *Integration) appendNamedDirectoryMemberships(name string, edges ...*Di
 		_m.Edges.namedDirectoryMemberships[name] = []*DirectoryMembership{}
 	} else {
 		_m.Edges.namedDirectoryMemberships[name] = append(_m.Edges.namedDirectoryMemberships[name], edges...)
-	}
-}
-
-// NamedDirectorySyncRuns returns the DirectorySyncRuns named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Integration) NamedDirectorySyncRuns(name string) ([]*DirectorySyncRun, error) {
-	if _m.Edges.namedDirectorySyncRuns == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedDirectorySyncRuns[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Integration) appendNamedDirectorySyncRuns(name string, edges ...*DirectorySyncRun) {
-	if _m.Edges.namedDirectorySyncRuns == nil {
-		_m.Edges.namedDirectorySyncRuns = make(map[string][]*DirectorySyncRun)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedDirectorySyncRuns[name] = []*DirectorySyncRun{}
-	} else {
-		_m.Edges.namedDirectorySyncRuns[name] = append(_m.Edges.namedDirectorySyncRuns[name], edges...)
 	}
 }
 

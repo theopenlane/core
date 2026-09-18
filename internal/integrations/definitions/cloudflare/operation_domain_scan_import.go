@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/domainscan"
 )
 
 // DomainScanImportVendor is one vendor the reviewer accepted, keyed by a client-assigned
@@ -99,6 +100,8 @@ type DomainScanImport struct {
 	Assets []DomainScanImportAsset `json:"assets"`
 	// Findings are the accepted findings
 	Findings []DomainScanImportFinding `json:"findings,omitempty"`
+	// Branding is the brand design config for a trust center environment
+	Branding *domainscan.BrandDesignProfile `json:"branding,omitempty"`
 }
 
 // Handle adapts DomainScanImport to the generic operation registration boundary

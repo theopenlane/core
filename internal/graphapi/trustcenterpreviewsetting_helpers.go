@@ -42,25 +42,29 @@ func buildPreviewSettingCreateInput(trustCenterID string, input *model.CreateTru
 	createInput.ForegroundColor = input.ForegroundColor
 	createInput.BackgroundColor = input.BackgroundColor
 	createInput.AccentColor = input.AccentColor
+	createInput.SecondaryBackgroundColor = input.SecondaryBackgroundColor
+	createInput.SecondaryForegroundColor = input.SecondaryForegroundColor
 
 	return createInput
 }
 
 func buildPreviewSettingUpdateInput(input model.CreateTrustCenterPreviewSettingInput) generated.UpdateTrustCenterSettingInput {
 	return generated.UpdateTrustCenterSettingInput{
-		Title:            input.Title,
-		Overview:         input.Overview,
-		PrimaryColor:     input.PrimaryColor,
-		LogoRemoteURL:    input.LogoRemoteURL,
-		LogoFileID:       input.LogoFileID,
-		FaviconRemoteURL: input.FaviconRemoteURL,
-		FaviconFileID:    input.FaviconFileID,
-		HeroImageFileID:  input.HeroImageFileID,
-		ThemeMode:        input.ThemeMode,
-		Font:             input.Font,
-		ForegroundColor:  input.ForegroundColor,
-		BackgroundColor:  input.BackgroundColor,
-		AccentColor:      input.AccentColor,
+		Title:                    input.Title,
+		Overview:                 input.Overview,
+		PrimaryColor:             input.PrimaryColor,
+		LogoRemoteURL:            input.LogoRemoteURL,
+		LogoFileID:               input.LogoFileID,
+		FaviconRemoteURL:         input.FaviconRemoteURL,
+		FaviconFileID:            input.FaviconFileID,
+		HeroImageFileID:          input.HeroImageFileID,
+		ThemeMode:                input.ThemeMode,
+		Font:                     input.Font,
+		ForegroundColor:          input.ForegroundColor,
+		BackgroundColor:          input.BackgroundColor,
+		AccentColor:              input.AccentColor,
+		SecondaryBackgroundColor: input.SecondaryBackgroundColor,
+		SecondaryForegroundColor: input.SecondaryForegroundColor,
 	}
 }
 

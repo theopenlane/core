@@ -109,3 +109,20 @@ func registerIntegrationOperationHandler(router *Router) error {
 
 	return router.AddV1HandlerRoute(config)
 }
+
+func registerIntegrationHealthHandler(router *Router) error {
+	config := Config{
+		Path:         "/integrations/:integrationID/health",
+		Method:       http.MethodPost,
+		Name:         "CheckIntegrationHealth",
+		Description:  "Run the installation health assessment, recording connection and per-operation health",
+		Tags:         []string{"Integrations"},
+		OperationID:  "CheckIntegrationHealth",
+		IncludeInOAS: true,
+		Security:     handlers.AuthenticatedSecurity,
+		Middlewares:  *authenticatedEndpoint,
+		Handler:      router.Handler.CheckIntegrationHealth,
+	}
+
+	return router.AddV1HandlerRoute(config)
+}

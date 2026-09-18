@@ -2,6 +2,8 @@ package okta
 
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -35,13 +37,16 @@ func Builder() registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       oktaCredential.ID(),
-					Name:                "Okta API Token",
-					Description:         "Configure Okta access using an API token from your organization.",
-					CredentialRefs:      []types.CredentialSlotID{oktaCredential.ID()},
-					ClientRefs:          []types.ClientID{oktaClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         integration.Registration(),
+					CredentialRef:  oktaCredential.ID(),
+					Name:           "Okta API Token",
+					Description:    "Configure Okta access using an API token from your organization.",
+					CredentialRefs: []types.CredentialSlotID{oktaCredential.ID()},
+					ClientRefs:     []types.ClientID{oktaClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: oktaClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: integration.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: oktaCredential.ID(),
 						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Okta admin console under Security > API.",
@@ -58,21 +63,12 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Call Okta user API to verify API token",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:    oktaClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: healthCheckSchema,
-					Handle:       HealthCheck{}.Handle(),
-				},
-				{
 					Name:         directorySyncOperation.Name(),
 					Description:  "Collect Okta directory users, groups, and memberships as directory accounts",
 					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
 					ClientRef:    oktaClient.ID(),
 					ConfigSchema: directorySyncSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true},
+					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -108,6 +104,18 @@ func Builder() registry.Builder {
 					Spec: types.MappingOverride{
 						FilterExpr: "true",
 						MapExpr:    mapExprDirectoryMembership,
+						Links: []types.LinkRule{
+							{
+								TargetSchema: entityops.SchemaDirectoryAccount.Name,
+								TargetField:  directoryaccount.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
+							},
+							{
+								TargetSchema: entityops.SchemaDirectoryGroup.Name,
+								TargetField:  directorygroup.FieldExternalID,
+								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
+							},
+						},
 					},
 				},
 			},

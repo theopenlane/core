@@ -35,13 +35,16 @@ func Builder() registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       securityCenterCredential.ID(),
-					Name:                "Azure Service Principal",
-					Description:         "Configure Defender for Cloud access using an Azure service principal.",
-					CredentialRefs:      []types.CredentialSlotID{securityCenterCredential.ID()},
-					ClientRefs:          []types.ClientID{securityCenterClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  securityCenterCredential.ID(),
+					Name:           "Azure Service Principal",
+					Description:    "Configure Defender for Cloud access using an Azure service principal.",
+					CredentialRefs: []types.CredentialSlotID{securityCenterCredential.ID()},
+					ClientRefs:     []types.ClientID{securityCenterClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: securityCenterClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: securityCenterCredential.ID(),
 						Description:   "Removes the stored service principal credentials from Openlane. If the Azure app registration is no longer needed, delete it from your Azure tenant.",
@@ -57,15 +60,6 @@ func Builder() registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Call Azure Security Center assessments API to verify access",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:    securityCenterClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					Handle:       HealthCheck{}.Handle(),
-					ConfigSchema: healthCheckSchema,
-				},
 				{
 					Name:         assessmentsCollectOperation.Name(),
 					Description:  "Collect unhealthy security posture assessment findings for vulnerability ingestion",

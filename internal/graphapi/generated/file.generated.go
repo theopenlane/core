@@ -101,10 +101,6 @@ func (ec *executionContext) _FileDeletePayload(ctx context.Context, sel ast.Sele
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNFileDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFileDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.FileDeletePayload) graphql.Marshaler {
-	return ec._FileDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNFileDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFileDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.FileDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {

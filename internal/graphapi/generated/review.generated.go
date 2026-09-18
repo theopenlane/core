@@ -583,10 +583,6 @@ func (ec *executionContext) _ReviewUpdatePayload(ctx context.Context, sel ast.Se
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNReviewBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ReviewBulkCreatePayload) graphql.Marshaler {
-	return ec._ReviewBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNReviewBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNReviewBulkCreatePayload2ᚖgithubᚗcomᚋth
 		return graphql.Null
 	}
 	return ec._ReviewBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNReviewBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ReviewBulkDeletePayload) graphql.Marshaler {
-	return ec._ReviewBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNReviewBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNReviewBulkDeletePayload2ᚖgithubᚗcomᚋth
 	return ec._ReviewBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNReviewBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ReviewBulkUpdatePayload) graphql.Marshaler {
-	return ec._ReviewBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNReviewBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNReviewBulkUpdatePayload2ᚖgithubᚗcomᚋth
 		return graphql.Null
 	}
 	return ec._ReviewBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNReviewCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ReviewCreatePayload) graphql.Marshaler {
-	return ec._ReviewCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNReviewCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNReviewCreatePayload2ᚖgithubᚗcomᚋtheope
 	return ec._ReviewCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNReviewDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ReviewDeletePayload) graphql.Marshaler {
-	return ec._ReviewDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNReviewDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNReviewDeletePayload2ᚖgithubᚗcomᚋtheope
 		return graphql.Null
 	}
 	return ec._ReviewDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNReviewUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ReviewUpdatePayload) graphql.Marshaler {
-	return ec._ReviewUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNReviewUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReviewUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewUpdatePayload) graphql.Marshaler {

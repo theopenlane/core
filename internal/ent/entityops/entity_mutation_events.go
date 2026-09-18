@@ -84,19 +84,6 @@ func MutationTopicName(concern MutationConcern, schemaType string) gala.TopicNam
 	return concernNamespace(concern).Name(schemaType)
 }
 
-// LegacyTopicRenames maps the historical unprefixed direct mutation topic of every schema
-// to its designated topic
-func LegacyTopicRenames() map[gala.TopicName]gala.TopicName {
-	buildSchemaLookup()
-
-	renames := make(map[gala.TopicName]gala.TopicName, len(allSchemas))
-	for _, schema := range allSchemas {
-		renames[gala.TopicName(schema.Name)] = MutationTopicName(MutationConcernDirect, schema.Name)
-	}
-
-	return renames
-}
-
 // MutationPayload is the durable mutation event payload dispatched to gala listeners.
 // Identity field json tags and the embedded ChangeSet tags are wire format for queued jobs
 type MutationPayload struct {
@@ -131,13 +118,6 @@ func (payload MutationPayload) identity() mutationIdentity {
 // PayloadOperation returns the mutation operation for gala listener routing
 func (payload MutationPayload) PayloadOperation() string {
 	return payload.Operation
-}
-
-// WithPayloadOperation returns a copy of the payload with its operation replaced
-func (payload MutationPayload) WithPayloadOperation(operation string) any {
-	payload.Operation = operation
-
-	return payload
 }
 
 // MutationTopic returns the typed mutation topic for a concern + schema type pair

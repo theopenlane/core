@@ -583,10 +583,6 @@ func (ec *executionContext) _EventUpdatePayload(ctx context.Context, sel ast.Sel
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNEventBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEventBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EventBulkCreatePayload) graphql.Marshaler {
-	return ec._EventBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEventBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEventBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EventBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNEventBulkCreatePayload2ᚖgithubᚗcomᚋthe
 		return graphql.Null
 	}
 	return ec._EventBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEventBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEventBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.EventBulkDeletePayload) graphql.Marshaler {
-	return ec._EventBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEventBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEventBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.EventBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNEventBulkDeletePayload2ᚖgithubᚗcomᚋthe
 	return ec._EventBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEventBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEventBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EventBulkUpdatePayload) graphql.Marshaler {
-	return ec._EventBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEventBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEventBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EventBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNEventBulkUpdatePayload2ᚖgithubᚗcomᚋthe
 		return graphql.Null
 	}
 	return ec._EventBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEventCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEventCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EventCreatePayload) graphql.Marshaler {
-	return ec._EventCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEventCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEventCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EventCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNEventCreatePayload2ᚖgithubᚗcomᚋtheopen
 	return ec._EventCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEventDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEventDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.EventDeletePayload) graphql.Marshaler {
-	return ec._EventDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEventDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEventDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.EventDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNEventDeletePayload2ᚖgithubᚗcomᚋtheopen
 		return graphql.Null
 	}
 	return ec._EventDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEventUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEventUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EventUpdatePayload) graphql.Marshaler {
-	return ec._EventUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEventUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEventUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EventUpdatePayload) graphql.Marshaler {

@@ -169,6 +169,7 @@ integrations:
         accountid: ""
         apitoken: ""
         domainscan:
+            bulkscan: true
             deniedvendornames:
                 - rfc-editor
                 - ajax
@@ -218,6 +219,10 @@ integrations:
         clientid: ""
         clientsecret: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    integrationlifecycle:
+        dryrun: true
+        enabled: true
+        maxperrun: 100
     microsoftteams:
         applicationid: ""
         clientid: ""
@@ -473,8 +478,8 @@ server:
         certfile: server.crt
         certkey: server.key
         enabled: false
-    trustcentercnametarget: ""
-    trustcenterpreviewcnametarget: ""
+    trustcentercnametarget: cname.openlane-dns.com
+    trustcenterpreviewzoneid: ""
     writetimeout: 15000000000
 sessions:
     domain: ""

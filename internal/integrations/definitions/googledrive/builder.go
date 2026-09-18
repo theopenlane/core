@@ -12,6 +12,8 @@ import (
 // Builder returns the Google Drive definition builder with the supplied operator config applied
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
+		installation := installationRef(cfg)
+
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
@@ -39,13 +41,16 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       driveCredential.ID(),
-					Name:                "Google Drive OAuth",
-					Description:         "Connect your Google account using OAuth to access Drive documents.",
-					CredentialRefs:      []types.CredentialSlotID{driveCredential.ID()},
-					ClientRefs:          []types.ClientID{driveClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  driveCredential.ID(),
+					Name:           "Google Drive OAuth",
+					Description:    "Connect your Google account using OAuth to access Drive documents.",
+					CredentialRefs: []types.CredentialSlotID{driveCredential.ID()},
+					ClientRefs:     []types.ClientID{driveClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: driveClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[googleDriveCred]{
 						CredentialRef: driveCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -84,15 +89,6 @@ func Builder(cfg Config) registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Call Google Drive about.get to verify the drive token",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:    driveClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: healthCheckSchema,
-					Handle:       HealthCheck{}.Handle(),
-				},
 				{
 					Name:         documentExportOperation.Name(),
 					Description:  "Export a Google Doc as HTML via the Drive files.export endpoint",

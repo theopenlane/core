@@ -29,6 +29,7 @@ import (
 const (
 	integrationReconfigurationRequiredObjectType = "INTEGRATION_RECONFIGURATION_REQUIRED"
 	integrationReconnectedObjectType             = "INTEGRATION_RECONNECTED"
+	integrationOperationDegradedObjectType       = "INTEGRATION_OPERATION_DEGRADED"
 )
 
 func harnessReconcileOperation(t *testing.T, mode string) string {

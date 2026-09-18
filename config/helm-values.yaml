@@ -121,9 +121,7 @@ coreConfiguration:
     defaulttrustcenterdomain: "trust.theopenlane.net"  # @schema type:string; default:trust.theopenlane.net
     # -- TrustCenterCnameTarget is the cname target for the trust center
     # Used for mapping the vanity domains to the trust centers
-    trustcentercnametarget: ""  # @schema type:string
-    # -- TrustCenterPreviewCnameTarget is the cname target for trust center preview domains
-    trustcenterpreviewcnametarget: ""  # @schema type:string
+    trustcentercnametarget: "cname.openlane-dns.com"  # @schema type:string; default:cname.openlane-dns.com
     # -- NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
     # Unread notifications are always pulled regardless of this setting
     notificationlookbackdays: 30  # @schema type:integer; default:30
@@ -489,7 +487,18 @@ coreConfiguration:
         # -- Credentials contains the credentials for accessing the provider
         credentials:
         # -- Backup optionally replicates this provider's objects to another provider asynchronously
-        backup: &{false  false }
+        backup:
+          # -- Enabled indicates if this backup target is enabled
+          enabled: false  # @schema type:boolean; default:false
+          # -- Provider names the destination backend type, e.g. s3; empty replicates to the source
+          # provider itself, which writes the backup to the suffixed bucket alongside the live one
+          provider:   # @schema type:string
+          # -- ReadFromBackup serves reads from this backup target instead of the source provider, intended
+          # to be enabled during a disaster recovery event when the source provider storage is lost
+          readfrombackup: false  # @schema type:boolean; default:false
+          # -- Region optionally overrides the destination provider's region, so a backup can replicate
+          # into a region other than the one holding the live objects
+          region: ""  # @schema type:string
       # -- R2 provider configuration
       r2:
         # -- Enabled indicates if this provider is enabled
@@ -509,7 +518,18 @@ coreConfiguration:
         # -- Credentials contains the credentials for accessing the provider
         credentials:
         # -- Backup optionally replicates this provider's objects to another provider asynchronously
-        backup: &{false  false }
+        backup:
+          # -- Enabled indicates if this backup target is enabled
+          enabled: false  # @schema type:boolean; default:false
+          # -- Provider names the destination backend type, e.g. s3; empty replicates to the source
+          # provider itself, which writes the backup to the suffixed bucket alongside the live one
+          provider:   # @schema type:string
+          # -- ReadFromBackup serves reads from this backup target instead of the source provider, intended
+          # to be enabled during a disaster recovery event when the source provider storage is lost
+          readfrombackup: false  # @schema type:boolean; default:false
+          # -- Region optionally overrides the destination provider's region, so a backup can replicate
+          # into a region other than the one holding the live objects
+          region: ""  # @schema type:string
       # -- Disk provider configuration
       disk:
         # -- Enabled indicates if this provider is enabled
@@ -529,7 +549,18 @@ coreConfiguration:
         # -- Credentials contains the credentials for accessing the provider
         credentials:
         # -- Backup optionally replicates this provider's objects to another provider asynchronously
-        backup: &{false  false }
+        backup:
+          # -- Enabled indicates if this backup target is enabled
+          enabled: false  # @schema type:boolean; default:false
+          # -- Provider names the destination backend type, e.g. s3; empty replicates to the source
+          # provider itself, which writes the backup to the suffixed bucket alongside the live one
+          provider:   # @schema type:string
+          # -- ReadFromBackup serves reads from this backup target instead of the source provider, intended
+          # to be enabled during a disaster recovery event when the source provider storage is lost
+          readfrombackup: false  # @schema type:boolean; default:false
+          # -- Region optionally overrides the destination provider's region, so a backup can replicate
+          # into a region other than the one holding the live objects
+          region: ""  # @schema type:string
       # -- Database provider configuration
       database:
         # -- Enabled indicates if this provider is enabled
@@ -549,7 +580,18 @@ coreConfiguration:
         # -- Credentials contains the credentials for accessing the provider
         credentials:
         # -- Backup optionally replicates this provider's objects to another provider asynchronously
-        backup: &{false  false }
+        backup:
+          # -- Enabled indicates if this backup target is enabled
+          enabled: false  # @schema type:boolean; default:false
+          # -- Provider names the destination backend type, e.g. s3; empty replicates to the source
+          # provider itself, which writes the backup to the suffixed bucket alongside the live one
+          provider:   # @schema type:string
+          # -- ReadFromBackup serves reads from this backup target instead of the source provider, intended
+          # to be enabled during a disaster recovery event when the source provider storage is lost
+          readfrombackup: false  # @schema type:boolean; default:false
+          # -- Region optionally overrides the destination provider's region, so a backup can replicate
+          # into a region other than the one holding the live objects
+          region: ""  # @schema type:string
   # -- Entitlements contains the configuration for the entitlements service
   subscription:
     # -- Enabled determines if the entitlements service is enabled
@@ -582,6 +624,7 @@ coreConfiguration:
       accountid: ""  # @schema type:string
       # -- Vendor/technology classification and enrichment behavior for onboarding domain scan reports
       domainscan:
+        bulkscan: true  # @schema type:boolean; default:true
         nonvendorcategories:
             - Miscellaneous
             - JavaScript frameworks
@@ -676,6 +719,13 @@ coreConfiguration:
       maxdeletesperrun: 0  # @schema type:integer
       # -- Whether the organization deletion listener is enabled
       enabled: false  # @schema type:boolean
+    integrationlifecycle:
+      # -- Whether the integration lifecycle sweep is enabled
+      enabled: true  # @schema type:boolean; default:true
+      # -- If true only log integration IDs and actions that would be dispatched
+      dryrun: true  # @schema type:boolean; default:true
+      # -- Maximum integrations to evaluate per run
+      maxperrun: 100  # @schema type:integer; default:100
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false
@@ -727,6 +777,14 @@ externalSecrets:
       secretKey: "CORE_SERVER_SECRETMANAGER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-server-secretmanager"  # @schema type:string
+    # -- core-server-trustcenterpreviewzoneid secret configuration
+    core-server-trustcenterpreviewzoneid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for server.trustcenterpreviewzoneid
+      secretKey: "CORE_SERVER_TRUSTCENTERPREVIEWZONEID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-server-trustcenterpreviewzoneid"  # @schema type:string
     # -- core-auth-providers-github-clientsecret secret configuration
     core-auth-providers-github-clientsecret:
       # -- Enable this external secret

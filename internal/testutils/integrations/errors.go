@@ -15,4 +15,8 @@ var (
 	ErrOAuthCodeMissing = errors.New("integrations: missing oauth code")
 	// ErrOAuthStateMismatch indicates the OAuth callback state did not match
 	ErrOAuthStateMismatch = errors.New("integrations: oauth state mismatch")
+	// ErrMockHTTPUnhealthy indicates the mock HTTP provider rejected the health check
+	ErrMockHTTPUnhealthy = errors.New("integrations: mock http provider unhealthy")
+	// ErrMockHTTPDecode indicates the mock HTTP provider response could not be decoded
+	ErrMockHTTPDecode = errors.New("integrations: mock http provider decode")
 )

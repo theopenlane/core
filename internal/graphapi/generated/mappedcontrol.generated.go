@@ -583,10 +583,6 @@ func (ec *executionContext) _MappedControlUpdatePayload(ctx context.Context, sel
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNMappedControlBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappedControlBulkCreatePayload) graphql.Marshaler {
-	return ec._MappedControlBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNMappedControlBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappedControlBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNMappedControlBulkCreatePayload2ᚖgithubᚗc
 		return graphql.Null
 	}
 	return ec._MappedControlBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNMappedControlBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.MappedControlBulkDeletePayload) graphql.Marshaler {
-	return ec._MappedControlBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNMappedControlBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappedControlBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNMappedControlBulkDeletePayload2ᚖgithubᚗc
 	return ec._MappedControlBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNMappedControlBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappedControlBulkUpdatePayload) graphql.Marshaler {
-	return ec._MappedControlBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNMappedControlBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappedControlBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNMappedControlBulkUpdatePayload2ᚖgithubᚗc
 		return graphql.Null
 	}
 	return ec._MappedControlBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNMappedControlCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappedControlCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappedControlCreatePayload) graphql.Marshaler {
-	return ec._MappedControlCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNMappedControlCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappedControlCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappedControlCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNMappedControlCreatePayload2ᚖgithubᚗcom�
 	return ec._MappedControlCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNMappedControlDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappedControlDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.MappedControlDeletePayload) graphql.Marshaler {
-	return ec._MappedControlDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNMappedControlDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappedControlDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappedControlDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNMappedControlDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._MappedControlDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNMappedControlUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappedControlUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappedControlUpdatePayload) graphql.Marshaler {
-	return ec._MappedControlUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNMappedControlUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappedControlUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappedControlUpdatePayload) graphql.Marshaler {

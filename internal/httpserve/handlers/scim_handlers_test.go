@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/theopenlane/core/common/enums"
+	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/httpserve/route"
 	definitionscim "github.com/theopenlane/core/v2/internal/integrations/definitions/scim"
@@ -55,6 +56,7 @@ func (suite *HandlerTestSuite) createSCIMIntegration(ctx context.Context, orgID,
 		SetKind(scimProviderID).
 		SetDefinitionID(definitionscim.DefinitionID.ID()).
 		SetStatus(enums.IntegrationStatusConnected).
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-" + orgID}}).
 		Save(ctx)
 	suite.Require().NoError(err)
 

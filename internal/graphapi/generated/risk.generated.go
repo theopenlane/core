@@ -583,10 +583,6 @@ func (ec *executionContext) _RiskUpdatePayload(ctx context.Context, sel ast.Sele
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNRiskBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRiskBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.RiskBulkCreatePayload) graphql.Marshaler {
-	return ec._RiskBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNRiskBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRiskBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.RiskBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNRiskBulkCreatePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._RiskBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNRiskBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRiskBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.RiskBulkDeletePayload) graphql.Marshaler {
-	return ec._RiskBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNRiskBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRiskBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.RiskBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNRiskBulkDeletePayload2ᚖgithubᚗcomᚋtheo
 	return ec._RiskBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNRiskBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRiskBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.RiskBulkUpdatePayload) graphql.Marshaler {
-	return ec._RiskBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNRiskBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRiskBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.RiskBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNRiskBulkUpdatePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._RiskBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNRiskCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRiskCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.RiskCreatePayload) graphql.Marshaler {
-	return ec._RiskCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNRiskCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRiskCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.RiskCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNRiskCreatePayload2ᚖgithubᚗcomᚋtheopenl
 	return ec._RiskCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNRiskDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRiskDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.RiskDeletePayload) graphql.Marshaler {
-	return ec._RiskDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNRiskDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRiskDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.RiskDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNRiskDeletePayload2ᚖgithubᚗcomᚋtheopenl
 		return graphql.Null
 	}
 	return ec._RiskDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNRiskUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRiskUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.RiskUpdatePayload) graphql.Marshaler {
-	return ec._RiskUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNRiskUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRiskUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.RiskUpdatePayload) graphql.Marshaler {

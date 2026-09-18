@@ -49,12 +49,14 @@ type IdentityHolderHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// the internal owner for the identity holder when no user or group is linked
+	// the internal owner for the identity holder when no user, group, or identity holder is linked
 	InternalOwner string `json:"internal_owner,omitempty"`
 	// the internal owner user id for the identity holder
 	InternalOwnerUserID string `json:"internal_owner_user_id,omitempty"`
 	// the internal owner group id for the identity holder
 	InternalOwnerGroupID string `json:"internal_owner_group_id,omitempty"`
+	// the internal owner identity holder id for the identity holder
+	InternalOwnerIdentityHolderID string `json:"internal_owner_identity_holder_id,omitempty"`
 	// the environment of the identity_holder
 	EnvironmentName string `json:"environment_name,omitempty"`
 	// the environment of the identity_holder
@@ -123,7 +125,7 @@ func (*IdentityHolderHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case identityholderhistory.FieldWorkflowEligibleMarker, identityholderhistory.FieldIsOpenlaneUser, identityholderhistory.FieldIsActive:
 			values[i] = new(sql.NullBool)
-		case identityholderhistory.FieldID, identityholderhistory.FieldRef, identityholderhistory.FieldCreatedBy, identityholderhistory.FieldUpdatedBy, identityholderhistory.FieldUpdatedByImpersonator, identityholderhistory.FieldDeletedBy, identityholderhistory.FieldDisplayID, identityholderhistory.FieldOwnerID, identityholderhistory.FieldInternalOwner, identityholderhistory.FieldInternalOwnerUserID, identityholderhistory.FieldInternalOwnerGroupID, identityholderhistory.FieldEnvironmentName, identityholderhistory.FieldEnvironmentID, identityholderhistory.FieldScopeName, identityholderhistory.FieldScopeID, identityholderhistory.FieldFullName, identityholderhistory.FieldEmail, identityholderhistory.FieldAlternateEmail, identityholderhistory.FieldPhoneNumber, identityholderhistory.FieldUserID, identityholderhistory.FieldIdentityHolderType, identityholderhistory.FieldStatus, identityholderhistory.FieldTitle, identityholderhistory.FieldDepartment, identityholderhistory.FieldTeam, identityholderhistory.FieldLocation, identityholderhistory.FieldEmployerEntityID, identityholderhistory.FieldExternalUserID, identityholderhistory.FieldExternalReferenceID, identityholderhistory.FieldAvatarRemoteURL:
+		case identityholderhistory.FieldID, identityholderhistory.FieldRef, identityholderhistory.FieldCreatedBy, identityholderhistory.FieldUpdatedBy, identityholderhistory.FieldUpdatedByImpersonator, identityholderhistory.FieldDeletedBy, identityholderhistory.FieldDisplayID, identityholderhistory.FieldOwnerID, identityholderhistory.FieldInternalOwner, identityholderhistory.FieldInternalOwnerUserID, identityholderhistory.FieldInternalOwnerGroupID, identityholderhistory.FieldInternalOwnerIdentityHolderID, identityholderhistory.FieldEnvironmentName, identityholderhistory.FieldEnvironmentID, identityholderhistory.FieldScopeName, identityholderhistory.FieldScopeID, identityholderhistory.FieldFullName, identityholderhistory.FieldEmail, identityholderhistory.FieldAlternateEmail, identityholderhistory.FieldPhoneNumber, identityholderhistory.FieldUserID, identityholderhistory.FieldIdentityHolderType, identityholderhistory.FieldStatus, identityholderhistory.FieldTitle, identityholderhistory.FieldDepartment, identityholderhistory.FieldTeam, identityholderhistory.FieldLocation, identityholderhistory.FieldEmployerEntityID, identityholderhistory.FieldExternalUserID, identityholderhistory.FieldExternalReferenceID, identityholderhistory.FieldAvatarRemoteURL:
 			values[i] = new(sql.NullString)
 		case identityholderhistory.FieldHistoryTime, identityholderhistory.FieldCreatedAt, identityholderhistory.FieldUpdatedAt, identityholderhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -246,6 +248,12 @@ func (_m *IdentityHolderHistory) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field internal_owner_group_id", values[i])
 			} else if value.Valid {
 				_m.InternalOwnerGroupID = value.String
+			}
+		case identityholderhistory.FieldInternalOwnerIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerIdentityHolderID = value.String
 			}
 		case identityholderhistory.FieldEnvironmentName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -495,6 +503,9 @@ func (_m *IdentityHolderHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("internal_owner_group_id=")
 	builder.WriteString(_m.InternalOwnerGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_identity_holder_id=")
+	builder.WriteString(_m.InternalOwnerIdentityHolderID)
 	builder.WriteString(", ")
 	builder.WriteString("environment_name=")
 	builder.WriteString(_m.EnvironmentName)

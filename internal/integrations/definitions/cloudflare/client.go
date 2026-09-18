@@ -4,15 +4,19 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"time"
 
 	cf "github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/option"
+	"github.com/theopenlane/httpsling/httpclient"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
+
+// cloudflareRequestTimeout bounds every Cloudflare API request issued through the SDK client
+const cloudflareRequestTimeout = time.Minute
 
 // CloudflareClient wraps the Cloudflare SDK client with the account it's scoped to:
 // the customer's own account for installation-bound operations, or the operator-owned
@@ -52,10 +56,15 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 		return nil, ErrAPITokenMissing
 	}
 
+	httpClient, err := urlx.NewHTTPClient(httpclient.Timeout(cloudflareRequestTimeout))
+	if err != nil {
+		return nil, err
+	}
+
 	return &CloudflareClient{
 		Client: cf.NewClient(
 			option.WithAPIToken(cred.APIToken),
-			option.WithHTTPClient(&http.Client{Timeout: time.Minute}),
+			option.WithHTTPClient(httpClient),
 		),
 		Config: ClientConfig{
 			AccountID: cred.AccountID,
@@ -78,10 +87,15 @@ func runtimeCloudflareClientBuilder() func(context.Context, json.RawMessage) (an
 			return nil, ErrRuntimeConfigInvalid
 		}
 
+		httpClient, err := urlx.NewHTTPClient(httpclient.Timeout(cloudflareRequestTimeout))
+		if err != nil {
+			return nil, err
+		}
+
 		return &CloudflareClient{
 			Client: cf.NewClient(
 				option.WithAPIToken(cfg.APIToken),
-				option.WithHTTPClient(&http.Client{Timeout: time.Minute}),
+				option.WithHTTPClient(httpClient),
 			),
 			Config: ClientConfig{
 				AccountID:  cfg.AccountID,

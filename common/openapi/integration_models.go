@@ -60,8 +60,6 @@ type IntegrationInstallationIdentity struct {
 	ExternalID string `json:"externalId,omitempty"`
 	// CredentialRef is the credential method used to set up the integration
 	CredentialRef string `json:"credentialRef,omitempty"`
-	// LastSuccessfulHealthCheck is the RFC3339 timestamp of the last successful validation operation
-	LastSuccessfulHealthCheck string `json:"lastSuccessfulHealthCheck,omitempty"`
 }
 
 // IntegrationInstallationMetadata stores stable, non-secret installation identity metadata
@@ -126,6 +124,45 @@ type ConfigureIntegrationResponse struct {
 	// WebhookSecret is the shared secret for authenticating inbound webhook or SCIM deliveries.
 	// This value is only populated on initial creation and should be captured by the caller.
 	WebhookSecret string `json:"webhookSecret,omitempty"`
+}
+
+// IntegrationHealthRequest is the request type for running an installation health assessment.
+type IntegrationHealthRequest struct {
+	// IntegrationID is the installation record to assess.
+	IntegrationID string `param:"integrationID" description:"Integration installation ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+}
+
+// IntegrationConnectionHealth is the connection-level health check outcome.
+type IntegrationConnectionHealth struct {
+	// Healthy reports whether the connection's credentials passed the health check.
+	Healthy bool `json:"healthy"`
+	// Reason explains the failure when unhealthy.
+	Reason string `json:"reason,omitempty"`
+}
+
+// IntegrationOperationHealth is one operation's health outcome.
+type IntegrationOperationHealth struct {
+	// Name is the operation name.
+	Name string `json:"name"`
+	// Healthy reports whether the operation's prerequisites are satisfied.
+	Healthy bool `json:"healthy"`
+	// Reason explains the failure when unhealthy.
+	Reason string `json:"reason,omitempty"`
+}
+
+// IntegrationHealthResponse is the response after running an installation health assessment.
+type IntegrationHealthResponse struct {
+	rout.Reply
+	// Provider is the integration definition ID.
+	Provider string `json:"provider"`
+	// IntegrationID is the assessed installation record ID.
+	IntegrationID string `json:"integrationId"`
+	// Status is the installation status after the assessment (CONNECTED, DEGRADED, ERRORED).
+	Status string `json:"status"`
+	// Connection is the connection-level check outcome.
+	Connection IntegrationConnectionHealth `json:"connection"`
+	// Operations lists per-operation health outcomes.
+	Operations []IntegrationOperationHealth `json:"operations,omitempty"`
 }
 
 // RunIntegrationOperationResponse is the response after executing or queuing a provider operation.
@@ -201,8 +238,13 @@ var ExampleConfigureIntegrationRequest = ConfigureIntegrationRequest{
 var ExampleRunIntegrationOperationRequest = RunIntegrationOperationRequest{
 	IntegrationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
 	Body: RunIntegrationOperationBody{
-		Operation: "HealthCheck",
+		Operation: "DirectorySync",
 	},
+}
+
+// ExampleIntegrationHealthRequest is an example health assessment request for OpenAPI documentation.
+var ExampleIntegrationHealthRequest = IntegrationHealthRequest{
+	IntegrationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
 }
 
 // hasIntegrationCredentialBody reports whether the config request contains a meaningful

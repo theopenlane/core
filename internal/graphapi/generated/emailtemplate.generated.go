@@ -583,10 +583,6 @@ func (ec *executionContext) _EmailTemplateUpdatePayload(ctx context.Context, sel
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNEmailTemplateBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateBulkCreatePayload) graphql.Marshaler {
-	return ec._EmailTemplateBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEmailTemplateBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNEmailTemplateBulkCreatePayload2ᚖgithubᚗc
 		return graphql.Null
 	}
 	return ec._EmailTemplateBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEmailTemplateBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateBulkDeletePayload) graphql.Marshaler {
-	return ec._EmailTemplateBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEmailTemplateBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNEmailTemplateBulkDeletePayload2ᚖgithubᚗc
 	return ec._EmailTemplateBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEmailTemplateBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateBulkUpdatePayload) graphql.Marshaler {
-	return ec._EmailTemplateBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEmailTemplateBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNEmailTemplateBulkUpdatePayload2ᚖgithubᚗc
 		return graphql.Null
 	}
 	return ec._EmailTemplateBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEmailTemplateCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateCreatePayload) graphql.Marshaler {
-	return ec._EmailTemplateCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEmailTemplateCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNEmailTemplateCreatePayload2ᚖgithubᚗcom�
 	return ec._EmailTemplateCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEmailTemplateDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateDeletePayload) graphql.Marshaler {
-	return ec._EmailTemplateDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEmailTemplateDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNEmailTemplateDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._EmailTemplateDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEmailTemplateUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateUpdatePayload) graphql.Marshaler {
-	return ec._EmailTemplateUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEmailTemplateUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateUpdatePayload) graphql.Marshaler {
