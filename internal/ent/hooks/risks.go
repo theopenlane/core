@@ -58,10 +58,9 @@ func HookRisks() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			// default the due date based on sla config, allow to be updated manually
+			// default the due date based on sla config, continue anyways, this should be best effort
 			if err := setDueDateBasedOnSLAConfig(ctx, m); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed to set due date based on SLA config")
-				return nil, err
 			}
 
 			retVal, err := next.Mutate(ctx, m)
