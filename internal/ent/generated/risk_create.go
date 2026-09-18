@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
@@ -33,6 +34,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 )
@@ -234,6 +236,118 @@ func (_c *RiskCreate) SetOwnerID(v string) *RiskCreate {
 func (_c *RiskCreate) SetNillableOwnerID(v *string) *RiskCreate {
 	if v != nil {
 		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
+// SetStakeholderName sets the "stakeholder_name" field.
+func (_c *RiskCreate) SetStakeholderName(v string) *RiskCreate {
+	_c.mutation.SetStakeholderName(v)
+	return _c
+}
+
+// SetNillableStakeholderName sets the "stakeholder_name" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableStakeholderName(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetStakeholderName(*v)
+	}
+	return _c
+}
+
+// SetStakeholderUserID sets the "stakeholder_user_id" field.
+func (_c *RiskCreate) SetStakeholderUserID(v string) *RiskCreate {
+	_c.mutation.SetStakeholderUserID(v)
+	return _c
+}
+
+// SetNillableStakeholderUserID sets the "stakeholder_user_id" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableStakeholderUserID(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetStakeholderUserID(*v)
+	}
+	return _c
+}
+
+// SetStakeholderGroupID sets the "stakeholder_group_id" field.
+func (_c *RiskCreate) SetStakeholderGroupID(v string) *RiskCreate {
+	_c.mutation.SetStakeholderGroupID(v)
+	return _c
+}
+
+// SetNillableStakeholderGroupID sets the "stakeholder_group_id" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableStakeholderGroupID(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetStakeholderGroupID(*v)
+	}
+	return _c
+}
+
+// SetStakeholderIdentityHolderID sets the "stakeholder_identity_holder_id" field.
+func (_c *RiskCreate) SetStakeholderIdentityHolderID(v string) *RiskCreate {
+	_c.mutation.SetStakeholderIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableStakeholderIdentityHolderID sets the "stakeholder_identity_holder_id" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableStakeholderIdentityHolderID(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetStakeholderIdentityHolderID(*v)
+	}
+	return _c
+}
+
+// SetDelegateName sets the "delegate_name" field.
+func (_c *RiskCreate) SetDelegateName(v string) *RiskCreate {
+	_c.mutation.SetDelegateName(v)
+	return _c
+}
+
+// SetNillableDelegateName sets the "delegate_name" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableDelegateName(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetDelegateName(*v)
+	}
+	return _c
+}
+
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (_c *RiskCreate) SetDelegateUserID(v string) *RiskCreate {
+	_c.mutation.SetDelegateUserID(v)
+	return _c
+}
+
+// SetNillableDelegateUserID sets the "delegate_user_id" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableDelegateUserID(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetDelegateUserID(*v)
+	}
+	return _c
+}
+
+// SetDelegateGroupID sets the "delegate_group_id" field.
+func (_c *RiskCreate) SetDelegateGroupID(v string) *RiskCreate {
+	_c.mutation.SetDelegateGroupID(v)
+	return _c
+}
+
+// SetNillableDelegateGroupID sets the "delegate_group_id" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableDelegateGroupID(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetDelegateGroupID(*v)
+	}
+	return _c
+}
+
+// SetDelegateIdentityHolderID sets the "delegate_identity_holder_id" field.
+func (_c *RiskCreate) SetDelegateIdentityHolderID(v string) *RiskCreate {
+	_c.mutation.SetDelegateIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableDelegateIdentityHolderID sets the "delegate_identity_holder_id" field if the given value is not nil.
+func (_c *RiskCreate) SetNillableDelegateIdentityHolderID(v *string) *RiskCreate {
+	if v != nil {
+		_c.SetDelegateIdentityHolderID(*v)
 	}
 	return _c
 }
@@ -761,6 +875,36 @@ func (_c *RiskCreate) AddViewers(v ...*Group) *RiskCreate {
 	return _c.AddViewerIDs(ids...)
 }
 
+// SetStakeholderUser sets the "stakeholder_user" edge to the User entity.
+func (_c *RiskCreate) SetStakeholderUser(v *User) *RiskCreate {
+	return _c.SetStakeholderUserID(v.ID)
+}
+
+// SetStakeholderGroup sets the "stakeholder_group" edge to the Group entity.
+func (_c *RiskCreate) SetStakeholderGroup(v *Group) *RiskCreate {
+	return _c.SetStakeholderGroupID(v.ID)
+}
+
+// SetStakeholderIdentityHolder sets the "stakeholder_identity_holder" edge to the IdentityHolder entity.
+func (_c *RiskCreate) SetStakeholderIdentityHolder(v *IdentityHolder) *RiskCreate {
+	return _c.SetStakeholderIdentityHolderID(v.ID)
+}
+
+// SetDelegateUser sets the "delegate_user" edge to the User entity.
+func (_c *RiskCreate) SetDelegateUser(v *User) *RiskCreate {
+	return _c.SetDelegateUserID(v.ID)
+}
+
+// SetDelegateGroup sets the "delegate_group" edge to the Group entity.
+func (_c *RiskCreate) SetDelegateGroup(v *Group) *RiskCreate {
+	return _c.SetDelegateGroupID(v.ID)
+}
+
+// SetDelegateIdentityHolder sets the "delegate_identity_holder" edge to the IdentityHolder entity.
+func (_c *RiskCreate) SetDelegateIdentityHolder(v *IdentityHolder) *RiskCreate {
+	return _c.SetDelegateIdentityHolderID(v.ID)
+}
+
 // SetRiskKind sets the "risk_kind" edge to the CustomTypeEnum entity.
 func (_c *RiskCreate) SetRiskKind(v *CustomTypeEnum) *RiskCreate {
 	return _c.SetRiskKindID(v.ID)
@@ -1285,6 +1429,14 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		_spec.SetField(risk.FieldIntegrationRunID, field.TypeString, value)
 		_node.IntegrationRunID = value
 	}
+	if value, ok := _c.mutation.StakeholderName(); ok {
+		_spec.SetField(risk.FieldStakeholderName, field.TypeString, value)
+		_node.StakeholderName = value
+	}
+	if value, ok := _c.mutation.DelegateName(); ok {
+		_spec.SetField(risk.FieldDelegateName, field.TypeString, value)
+		_node.DelegateName = value
+	}
 	if value, ok := _c.mutation.RiskKindName(); ok {
 		_spec.SetField(risk.FieldRiskKindName, field.TypeString, value)
 		_node.RiskKindName = value
@@ -1476,6 +1628,108 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.StakeholderUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderUserTable,
+			Columns: []string{risk.StakeholderUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.StakeholderUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.StakeholderGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderGroupTable,
+			Columns: []string{risk.StakeholderGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.StakeholderGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.StakeholderIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.StakeholderIdentityHolderTable,
+			Columns: []string{risk.StakeholderIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.StakeholderIdentityHolderID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DelegateUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateUserTable,
+			Columns: []string{risk.DelegateUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.DelegateUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DelegateGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateGroupTable,
+			Columns: []string{risk.DelegateGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.DelegateGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DelegateIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   risk.DelegateIdentityHolderTable,
+			Columns: []string{risk.DelegateIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.DelegateIdentityHolderID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.RiskKindIDs(); len(nodes) > 0 {

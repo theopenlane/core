@@ -253,6 +253,62 @@ func (_c *FindingHistoryCreate) SetNillableOwnerID(v *string) *FindingHistoryCre
 	return _c
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_c *FindingHistoryCreate) SetInternalOwner(v string) *FindingHistoryCreate {
+	_c.mutation.SetInternalOwner(v)
+	return _c
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableInternalOwner(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwner(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_c *FindingHistoryCreate) SetInternalOwnerUserID(v string) *FindingHistoryCreate {
+	_c.mutation.SetInternalOwnerUserID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableInternalOwnerUserID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerUserID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_c *FindingHistoryCreate) SetInternalOwnerGroupID(v string) *FindingHistoryCreate {
+	_c.mutation.SetInternalOwnerGroupID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableInternalOwnerGroupID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *FindingHistoryCreate) SetInternalOwnerIdentityHolderID(v string) *FindingHistoryCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetReviewedBy sets the "reviewed_by" field.
 func (_c *FindingHistoryCreate) SetReviewedBy(v string) *FindingHistoryCreate {
 	_c.mutation.SetReviewedBy(v)
@@ -1212,6 +1268,22 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(findinghistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.InternalOwner(); ok {
+		_spec.SetField(findinghistory.FieldInternalOwner, field.TypeString, value)
+		_node.InternalOwner = value
+	}
+	if value, ok := _c.mutation.InternalOwnerUserID(); ok {
+		_spec.SetField(findinghistory.FieldInternalOwnerUserID, field.TypeString, value)
+		_node.InternalOwnerUserID = value
+	}
+	if value, ok := _c.mutation.InternalOwnerGroupID(); ok {
+		_spec.SetField(findinghistory.FieldInternalOwnerGroupID, field.TypeString, value)
+		_node.InternalOwnerGroupID = value
+	}
+	if value, ok := _c.mutation.InternalOwnerIdentityHolderID(); ok {
+		_spec.SetField(findinghistory.FieldInternalOwnerIdentityHolderID, field.TypeString, value)
+		_node.InternalOwnerIdentityHolderID = value
 	}
 	if value, ok := _c.mutation.ReviewedBy(); ok {
 		_spec.SetField(findinghistory.FieldReviewedBy, field.TypeString, value)

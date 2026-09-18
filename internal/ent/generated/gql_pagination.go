@@ -13603,6 +13603,20 @@ var (
 			}
 		},
 	}
+	// FindingOrderFieldInternalOwner orders Finding by internal_owner.
+	FindingOrderFieldInternalOwner = &FindingOrderField{
+		Value: func(_m *Finding) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: finding.FieldInternalOwner,
+		toTerm: finding.ByInternalOwner,
+		toCursor: func(_m *Finding) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
 	// FindingOrderFieldExternalID orders Finding by external_id.
 	FindingOrderFieldExternalID = &FindingOrderField{
 		Value: func(_m *Finding) (ent.Value, error) {
@@ -13737,6 +13751,8 @@ func (f FindingOrderField) String() string {
 		str = "created_at"
 	case FindingOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case FindingOrderFieldInternalOwner.column:
+		str = "internal_owner"
 	case FindingOrderFieldExternalID.column:
 		str = "external_id"
 	case FindingOrderFieldSecurityLevel.column:
@@ -13771,6 +13787,8 @@ func (f *FindingOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *FindingOrderFieldCreatedAt
 	case "updated_at":
 		*f = *FindingOrderFieldUpdatedAt
+	case "internal_owner":
+		*f = *FindingOrderFieldInternalOwner
 	case "external_id":
 		*f = *FindingOrderFieldExternalID
 	case "security_level":
@@ -26620,6 +26638,34 @@ var (
 			}
 		},
 	}
+	// RiskOrderFieldStakeholderName orders Risk by stakeholder_name.
+	RiskOrderFieldStakeholderName = &RiskOrderField{
+		Value: func(_m *Risk) (ent.Value, error) {
+			return _m.StakeholderName, nil
+		},
+		column: risk.FieldStakeholderName,
+		toTerm: risk.ByStakeholderName,
+		toCursor: func(_m *Risk) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.StakeholderName,
+			}
+		},
+	}
+	// RiskOrderFieldDelegateName orders Risk by delegate_name.
+	RiskOrderFieldDelegateName = &RiskOrderField{
+		Value: func(_m *Risk) (ent.Value, error) {
+			return _m.DelegateName, nil
+		},
+		column: risk.FieldDelegateName,
+		toTerm: risk.ByDelegateName,
+		toCursor: func(_m *Risk) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DelegateName,
+			}
+		},
+	}
 	// RiskOrderFieldExternalID orders Risk by external_id.
 	RiskOrderFieldExternalID = &RiskOrderField{
 		Value: func(_m *Risk) (ent.Value, error) {
@@ -26919,6 +26965,10 @@ func (f RiskOrderField) String() string {
 		str = "created_at"
 	case RiskOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case RiskOrderFieldStakeholderName.column:
+		str = "stakeholder_name"
+	case RiskOrderFieldDelegateName.column:
+		str = "delegate_name"
 	case RiskOrderFieldExternalID.column:
 		str = "external_id"
 	case RiskOrderFieldObservedAt.column:
@@ -26971,6 +27021,10 @@ func (f *RiskOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RiskOrderFieldCreatedAt
 	case "updated_at":
 		*f = *RiskOrderFieldUpdatedAt
+	case "stakeholder_name":
+		*f = *RiskOrderFieldStakeholderName
+	case "delegate_name":
+		*f = *RiskOrderFieldDelegateName
 	case "external_id":
 		*f = *RiskOrderFieldExternalID
 	case "observed_at":
@@ -37082,6 +37136,20 @@ var (
 			}
 		},
 	}
+	// VulnerabilityOrderFieldInternalOwner orders Vulnerability by internal_owner.
+	VulnerabilityOrderFieldInternalOwner = &VulnerabilityOrderField{
+		Value: func(_m *Vulnerability) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: vulnerability.FieldInternalOwner,
+		toTerm: vulnerability.ByInternalOwner,
+		toCursor: func(_m *Vulnerability) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
 	// VulnerabilityOrderFieldExternalOwnerID orders Vulnerability by external_owner_id.
 	VulnerabilityOrderFieldExternalOwnerID = &VulnerabilityOrderField{
 		Value: func(_m *Vulnerability) (ent.Value, error) {
@@ -37190,6 +37258,8 @@ func (f VulnerabilityOrderField) String() string {
 		str = "created_at"
 	case VulnerabilityOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case VulnerabilityOrderFieldInternalOwner.column:
+		str = "internal_owner"
 	case VulnerabilityOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
 	case VulnerabilityOrderFieldSecurityLevel.column:
@@ -37224,6 +37294,8 @@ func (f *VulnerabilityOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *VulnerabilityOrderFieldCreatedAt
 	case "updated_at":
 		*f = *VulnerabilityOrderFieldUpdatedAt
+	case "internal_owner":
+		*f = *VulnerabilityOrderFieldInternalOwner
 	case "external_owner_id":
 		*f = *VulnerabilityOrderFieldExternalOwnerID
 	case "security_level":

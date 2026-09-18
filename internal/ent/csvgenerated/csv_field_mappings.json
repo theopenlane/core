@@ -208,6 +208,21 @@
       "isSlice": false
     },
     {
+      "csvColumn": "InternalOwnerGroupName",
+      "targetField": "InternalOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerIdentityHolderEmail",
+      "targetField": "InternalOwnerIdentityHolderID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerUserEmail",
+      "targetField": "InternalOwnerUserID",
+      "isSlice": false
+    },
+    {
       "csvColumn": "ReviewedByGroupName",
       "targetField": "ReviewedByGroupID",
       "isSlice": false
@@ -419,6 +434,21 @@
       "isSlice": true
     },
     {
+      "csvColumn": "DelegateGroupName",
+      "targetField": "DelegateGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "DelegateIdentityHolderEmail",
+      "targetField": "DelegateIdentityHolderID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "DelegateUserEmail",
+      "targetField": "DelegateUserID",
+      "isSlice": false
+    },
+    {
       "csvColumn": "EntityNames",
       "targetField": "EntityIDs",
       "isSlice": true
@@ -435,7 +465,17 @@
     },
     {
       "csvColumn": "StakeholderGroupName",
-      "targetField": "StakeholderID",
+      "targetField": "StakeholderGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "StakeholderIdentityHolderEmail",
+      "targetField": "StakeholderIdentityHolderID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "StakeholderUserEmail",
+      "targetField": "StakeholderUserID",
       "isSlice": false
     },
     {
@@ -577,6 +617,21 @@
       "csvColumn": "ControlRefCodes",
       "targetField": "ControlIDs",
       "isSlice": true
+    },
+    {
+      "csvColumn": "InternalOwnerGroupName",
+      "targetField": "InternalOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerIdentityHolderEmail",
+      "targetField": "InternalOwnerIdentityHolderID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerUserEmail",
+      "targetField": "InternalOwnerUserID",
+      "isSlice": false
     },
     {
       "csvColumn": "ReviewedByGroupName",

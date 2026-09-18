@@ -303,10 +303,11 @@ func searchFindings(ctx context.Context, query string, after *entgql.Cursor[stri
 				finding.ExternalIDContainsFold(query),      // search by ExternalID
 				finding.ExternalOwnerIDContainsFold(query), // search by ExternalOwnerID
 				finding.ID(query),                          // search equal to ID
+				finding.InternalOwnerContainsFold(query),   // search by InternalOwner
 				finding.SeverityContainsFold(query),        // search by Severity
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $6", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $7", likeQuery)) // search by Tags
 				},
 			),
 		)
@@ -557,12 +558,14 @@ func searchRisks(ctx context.Context, query string, after *entgql.Cursor[string]
 	request := withTransactionalMutation(ctx).Risk.Query().
 		Where(
 			risk.Or(
-				risk.DisplayID(query),        // search equal to DisplayID
-				risk.ID(query),               // search equal to ID
-				risk.NameContainsFold(query), // search by Name
+				risk.DelegateNameContainsFold(query),    // search by DelegateName
+				risk.DisplayID(query),                   // search equal to DisplayID
+				risk.ID(query),                          // search equal to ID
+				risk.NameContainsFold(query),            // search by Name
+				risk.StakeholderNameContainsFold(query), // search by StakeholderName
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $6", likeQuery)) // search by Tags
 				},
 			),
 		)
@@ -777,11 +780,12 @@ func searchVulnerabilities(ctx context.Context, query string, after *entgql.Curs
 				vulnerability.ExternalIDContainsFold(query),      // search by ExternalID
 				vulnerability.ExternalOwnerIDContainsFold(query), // search by ExternalOwnerID
 				vulnerability.ID(query),                          // search equal to ID
+				vulnerability.InternalOwnerContainsFold(query),   // search by InternalOwner
 				vulnerability.PackageNameContainsFold(query),     // search by PackageName
 				vulnerability.SeverityContainsFold(query),        // search by Severity
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $9", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $10", likeQuery)) // search by Tags
 				},
 			),
 		)
