@@ -87,6 +87,8 @@ func HookTags() ent.Hook {
 					SetInput(input).
 					Exec(ctx); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Str("tag", tag).Msg("error creating tag definition")
+
+					return nil, err
 				}
 			}
 
