@@ -268,7 +268,7 @@ func (Finding) Fields() []ent.Field {
 			Comment("raw metadata payload for the finding from the source system").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField(),
+				entx.IntegrationMappingField().Volatile(),
 			),
 		field.JSON("raw_payload", map[string]any{}).
 			Comment("raw payload received from the integration for auditing and troubleshooting").

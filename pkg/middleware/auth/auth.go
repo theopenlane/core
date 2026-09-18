@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	api "github.com/theopenlane/core/common/openapi"
+
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
@@ -165,6 +166,11 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 						ctx := auth.WithCaller(c.Request().Context(), auth.NewQuestionnaireCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
 						ctx = auth.ActiveAssessmentIDKey.Set(ctx, claims.AssessmentID)
 						ctx = auth.ActiveAssessmentPreviewKey.Set(ctx, claims.AssessmentPreview)
+
+						if id := claims.CampaignID; id != "" {
+							ctx = auth.ActiveCampaignIDKey.Set(ctx, id)
+						}
+
 						c.SetRequest(c.Request().WithContext(ctx))
 					default:
 						// a token with neither or both scope claims is malformed and must not

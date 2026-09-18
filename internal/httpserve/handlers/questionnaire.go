@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
@@ -53,12 +54,20 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context) error {
 	isPreview, _ := auth.ActiveAssessmentPreviewKey.Get(reqCtx)
 
 	if email != "" {
-		assessmentResponse, err = h.DBClient.AssessmentResponse.Query().
+		query := h.DBClient.AssessmentResponse.Query().
 			Where(
 				assessmentresponse.AssessmentIDEQ(assessmentID),
 				assessmentresponse.EmailEQ(email),
 				assessmentresponse.IsTestEQ(isPreview),
-			).
+			)
+
+		var campaignPredicate = assessmentresponse.CampaignIDIsNil()
+
+		if id, ok := auth.ActiveCampaignIDKey.Get(reqCtx); ok && id != "" {
+			campaignPredicate = assessmentresponse.CampaignIDEQ(id)
+		}
+
+		assessmentResponse, err = query.Where(campaignPredicate).
 			WithDocument().
 			Only(allowCtx)
 		if err != nil && !generated.IsNotFound(err) {
@@ -213,12 +222,18 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 	isPreview, _ := auth.ActiveAssessmentPreviewKey.Get(reqCtx)
 
 	if email != "" {
-		assessmentResponse, err = h.DBClient.AssessmentResponse.Query().
+		query := h.DBClient.AssessmentResponse.Query().
 			Where(assessmentresponse.EmailEqualFold(email),
 				assessmentresponse.AssessmentIDEQ(assessmentID),
-				assessmentresponse.IsTestEQ(isPreview)).
-			Only(allowCtx)
+				assessmentresponse.IsTestEQ(isPreview))
 
+		var campaignPredicate = assessmentresponse.CampaignIDIsNil()
+
+		if id, ok := auth.ActiveCampaignIDKey.Get(reqCtx); ok && id != "" {
+			campaignPredicate = assessmentresponse.CampaignIDEQ(id)
+		}
+
+		assessmentResponse, err = query.Where(campaignPredicate).Only(allowCtx)
 		if generated.IsNotFound(err) {
 			return h.NotFound(ctx, ErrAssessmentResponseNotFound)
 		}

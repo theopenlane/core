@@ -7185,8 +7185,6 @@ type CreateFileInput struct {
 	DetectedContentType string `json:"detectedContentType"`
 	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	StoreKey *string `json:"storeKey,omitempty"`
-	// the category type of the file, if any (e.g. evidence, invoice, etc.)
-	CategoryType *string `json:"categoryType,omitempty"`
 	// the full URI of the file
 	URI *string `json:"uri,omitempty"`
 	// the storage scheme of the file, e.g. file://, s3://, etc.
@@ -15305,8 +15303,6 @@ type File struct {
 	DetectedContentType string `json:"detectedContentType"`
 	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	StoreKey *string `json:"storeKey,omitempty"`
-	// the category type of the file, if any (e.g. evidence, invoice, etc.)
-	CategoryType *string `json:"categoryType,omitempty"`
 	// the full URI of the file
 	URI *string `json:"uri,omitempty"`
 	// the storage scheme of the file, e.g. file://, s3://, etc.
@@ -15650,18 +15646,6 @@ type FileWhereInput struct {
 	StoreKeyNotNil       *bool    `json:"storeKeyNotNil,omitempty"`
 	StoreKeyEqualFold    *string  `json:"storeKeyEqualFold,omitempty"`
 	StoreKeyContainsFold *string  `json:"storeKeyContainsFold,omitempty"`
-	// category_type field predicates
-	CategoryType             *string  `json:"categoryType,omitempty"`
-	CategoryTypeNeq          *string  `json:"categoryTypeNEQ,omitempty"`
-	CategoryTypeIn           []string `json:"categoryTypeIn,omitempty"`
-	CategoryTypeNotIn        []string `json:"categoryTypeNotIn,omitempty"`
-	CategoryTypeContains     *string  `json:"categoryTypeContains,omitempty"`
-	CategoryTypeHasPrefix    *string  `json:"categoryTypeHasPrefix,omitempty"`
-	CategoryTypeHasSuffix    *string  `json:"categoryTypeHasSuffix,omitempty"`
-	CategoryTypeIsNil        *bool    `json:"categoryTypeIsNil,omitempty"`
-	CategoryTypeNotNil       *bool    `json:"categoryTypeNotNil,omitempty"`
-	CategoryTypeEqualFold    *string  `json:"categoryTypeEqualFold,omitempty"`
-	CategoryTypeContainsFold *string  `json:"categoryTypeContainsFold,omitempty"`
 	// uri field predicates
 	URI             *string  `json:"uri,omitempty"`
 	URINeq          *string  `json:"uriNEQ,omitempty"`
@@ -38030,9 +38014,6 @@ type UpdateFileInput struct {
 	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	StoreKey      *string `json:"storeKey,omitempty"`
 	ClearStoreKey *bool   `json:"clearStoreKey,omitempty"`
-	// the category type of the file, if any (e.g. evidence, invoice, etc.)
-	CategoryType      *string `json:"categoryType,omitempty"`
-	ClearCategoryType *bool   `json:"clearCategoryType,omitempty"`
 	// the full URI of the file
 	URI      *string `json:"uri,omitempty"`
 	ClearURI *bool   `json:"clearURI,omitempty"`

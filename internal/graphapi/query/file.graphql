@@ -8,7 +8,6 @@ query GetAllFiles {
 		edges {
 			node {
 				categoryName
-				categoryType
 				createdAt
 				createdBy
 				detectedContentType
@@ -40,7 +39,6 @@ query GetFileByID ($fileId: ID!) {
 	file(id: $fileId) {
 		categoryID
 		categoryName
-		categoryType
 		createdAt
 		createdBy
 		detectedContentType
@@ -79,7 +77,6 @@ query GetFiles ($where: FileWhereInput) {
 		edges {
 			node {
 				categoryName
-				categoryType
 				createdAt
 				createdBy
 				detectedContentType

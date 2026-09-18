@@ -8,6 +8,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
@@ -379,7 +380,7 @@ func sendResponseEmail(ctx context.Context, client *generated.Client, assessment
 		return err
 	}
 
-	authURL, err := emaildef.QuestionnaireAuthURL(ctx, client, assessmentID, ownerID, email, isTest)
+	authURL, err := emaildef.QuestionnaireAuthURL(ctx, client, assessmentID, ownerID, email, "", isTest)
 	if err != nil {
 		return err
 	}

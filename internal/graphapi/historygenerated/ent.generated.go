@@ -20089,29 +20089,6 @@ func (ec *executionContext) fieldContext_FileHistory_storeKey(_ context.Context,
 	return graphql.NewScalarFieldContext("FileHistory", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
-func (ec *executionContext) _FileHistory_categoryType(ctx context.Context, field graphql.CollectedField, obj *historygenerated.FileHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_FileHistory_categoryType(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.CategoryType, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
-			return ec.marshalOString2string(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_FileHistory_categoryType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("FileHistory", field, false, false, errors.New("field of type String does not have child fields"))
-}
-
 func (ec *executionContext) _FileHistory_uri(ctx context.Context, field graphql.CollectedField, obj *historygenerated.FileHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -95507,7 +95484,7 @@ func (ec *executionContext) unmarshalInputFileHistoryWhereInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "categoryName", "categoryNameNEQ", "categoryNameIn", "categoryNameNotIn", "categoryNameContains", "categoryNameHasPrefix", "categoryNameHasSuffix", "categoryNameIsNil", "categoryNameNotNil", "categoryNameEqualFold", "categoryNameContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameIsNil", "nameNotNil", "nameEqualFold", "nameContainsFold", "providedFileName", "providedFileNameNEQ", "providedFileNameIn", "providedFileNameNotIn", "providedFileNameContains", "providedFileNameHasPrefix", "providedFileNameHasSuffix", "providedFileNameEqualFold", "providedFileNameContainsFold", "providedFileExtension", "providedFileExtensionNEQ", "providedFileExtensionIn", "providedFileExtensionNotIn", "providedFileExtensionContains", "providedFileExtensionHasPrefix", "providedFileExtensionHasSuffix", "providedFileExtensionEqualFold", "providedFileExtensionContainsFold", "providedFileSize", "providedFileSizeNEQ", "providedFileSizeGT", "providedFileSizeGTE", "providedFileSizeLT", "providedFileSizeLTE", "providedFileSizeIsNil", "providedFileSizeNotNil", "persistedFileSize", "persistedFileSizeNEQ", "persistedFileSizeGT", "persistedFileSizeGTE", "persistedFileSizeLT", "persistedFileSizeLTE", "persistedFileSizeIsNil", "persistedFileSizeNotNil", "detectedMimeType", "detectedMimeTypeNEQ", "detectedMimeTypeIn", "detectedMimeTypeNotIn", "detectedMimeTypeContains", "detectedMimeTypeHasPrefix", "detectedMimeTypeHasSuffix", "detectedMimeTypeIsNil", "detectedMimeTypeNotNil", "detectedMimeTypeEqualFold", "detectedMimeTypeContainsFold", "md5Hash", "md5HashNEQ", "md5HashIn", "md5HashNotIn", "md5HashContains", "md5HashHasPrefix", "md5HashHasSuffix", "md5HashIsNil", "md5HashNotNil", "md5HashEqualFold", "md5HashContainsFold", "detectedContentType", "detectedContentTypeNEQ", "detectedContentTypeIn", "detectedContentTypeNotIn", "detectedContentTypeContains", "detectedContentTypeHasPrefix", "detectedContentTypeHasSuffix", "detectedContentTypeEqualFold", "detectedContentTypeContainsFold", "storeKey", "storeKeyNEQ", "storeKeyIn", "storeKeyNotIn", "storeKeyContains", "storeKeyHasPrefix", "storeKeyHasSuffix", "storeKeyIsNil", "storeKeyNotNil", "storeKeyEqualFold", "storeKeyContainsFold", "categoryType", "categoryTypeNEQ", "categoryTypeIn", "categoryTypeNotIn", "categoryTypeContains", "categoryTypeHasPrefix", "categoryTypeHasSuffix", "categoryTypeIsNil", "categoryTypeNotNil", "categoryTypeEqualFold", "categoryTypeContainsFold", "uri", "uriNEQ", "uriIn", "uriNotIn", "uriContains", "uriHasPrefix", "uriHasSuffix", "uriIsNil", "uriNotNil", "uriEqualFold", "uriContainsFold", "storageScheme", "storageSchemeNEQ", "storageSchemeIn", "storageSchemeNotIn", "storageSchemeContains", "storageSchemeHasPrefix", "storageSchemeHasSuffix", "storageSchemeIsNil", "storageSchemeNotNil", "storageSchemeEqualFold", "storageSchemeContainsFold", "storageVolume", "storageVolumeNEQ", "storageVolumeIn", "storageVolumeNotIn", "storageVolumeContains", "storageVolumeHasPrefix", "storageVolumeHasSuffix", "storageVolumeIsNil", "storageVolumeNotNil", "storageVolumeEqualFold", "storageVolumeContainsFold", "storagePath", "storagePathNEQ", "storagePathIn", "storagePathNotIn", "storagePathContains", "storagePathHasPrefix", "storagePathHasSuffix", "storagePathIsNil", "storagePathNotNil", "storagePathEqualFold", "storagePathContainsFold", "storageRegion", "storageRegionNEQ", "storageRegionIn", "storageRegionNotIn", "storageRegionContains", "storageRegionHasPrefix", "storageRegionHasSuffix", "storageRegionIsNil", "storageRegionNotNil", "storageRegionEqualFold", "storageRegionContainsFold", "storageProvider", "storageProviderNEQ", "storageProviderIn", "storageProviderNotIn", "storageProviderContains", "storageProviderHasPrefix", "storageProviderHasSuffix", "storageProviderIsNil", "storageProviderNotNil", "storageProviderEqualFold", "storageProviderContainsFold", "lastAccessedAt", "lastAccessedAtGT", "lastAccessedAtGTE", "lastAccessedAtLT", "lastAccessedAtLTE", "lastAccessedAtIsNil", "lastAccessedAtNotNil"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "categoryName", "categoryNameNEQ", "categoryNameIn", "categoryNameNotIn", "categoryNameContains", "categoryNameHasPrefix", "categoryNameHasSuffix", "categoryNameIsNil", "categoryNameNotNil", "categoryNameEqualFold", "categoryNameContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameIsNil", "nameNotNil", "nameEqualFold", "nameContainsFold", "providedFileName", "providedFileNameNEQ", "providedFileNameIn", "providedFileNameNotIn", "providedFileNameContains", "providedFileNameHasPrefix", "providedFileNameHasSuffix", "providedFileNameEqualFold", "providedFileNameContainsFold", "providedFileExtension", "providedFileExtensionNEQ", "providedFileExtensionIn", "providedFileExtensionNotIn", "providedFileExtensionContains", "providedFileExtensionHasPrefix", "providedFileExtensionHasSuffix", "providedFileExtensionEqualFold", "providedFileExtensionContainsFold", "providedFileSize", "providedFileSizeNEQ", "providedFileSizeGT", "providedFileSizeGTE", "providedFileSizeLT", "providedFileSizeLTE", "providedFileSizeIsNil", "providedFileSizeNotNil", "persistedFileSize", "persistedFileSizeNEQ", "persistedFileSizeGT", "persistedFileSizeGTE", "persistedFileSizeLT", "persistedFileSizeLTE", "persistedFileSizeIsNil", "persistedFileSizeNotNil", "detectedMimeType", "detectedMimeTypeNEQ", "detectedMimeTypeIn", "detectedMimeTypeNotIn", "detectedMimeTypeContains", "detectedMimeTypeHasPrefix", "detectedMimeTypeHasSuffix", "detectedMimeTypeIsNil", "detectedMimeTypeNotNil", "detectedMimeTypeEqualFold", "detectedMimeTypeContainsFold", "md5Hash", "md5HashNEQ", "md5HashIn", "md5HashNotIn", "md5HashContains", "md5HashHasPrefix", "md5HashHasSuffix", "md5HashIsNil", "md5HashNotNil", "md5HashEqualFold", "md5HashContainsFold", "detectedContentType", "detectedContentTypeNEQ", "detectedContentTypeIn", "detectedContentTypeNotIn", "detectedContentTypeContains", "detectedContentTypeHasPrefix", "detectedContentTypeHasSuffix", "detectedContentTypeEqualFold", "detectedContentTypeContainsFold", "storeKey", "storeKeyNEQ", "storeKeyIn", "storeKeyNotIn", "storeKeyContains", "storeKeyHasPrefix", "storeKeyHasSuffix", "storeKeyIsNil", "storeKeyNotNil", "storeKeyEqualFold", "storeKeyContainsFold", "uri", "uriNEQ", "uriIn", "uriNotIn", "uriContains", "uriHasPrefix", "uriHasSuffix", "uriIsNil", "uriNotNil", "uriEqualFold", "uriContainsFold", "storageScheme", "storageSchemeNEQ", "storageSchemeIn", "storageSchemeNotIn", "storageSchemeContains", "storageSchemeHasPrefix", "storageSchemeHasSuffix", "storageSchemeIsNil", "storageSchemeNotNil", "storageSchemeEqualFold", "storageSchemeContainsFold", "storageVolume", "storageVolumeNEQ", "storageVolumeIn", "storageVolumeNotIn", "storageVolumeContains", "storageVolumeHasPrefix", "storageVolumeHasSuffix", "storageVolumeIsNil", "storageVolumeNotNil", "storageVolumeEqualFold", "storageVolumeContainsFold", "storagePath", "storagePathNEQ", "storagePathIn", "storagePathNotIn", "storagePathContains", "storagePathHasPrefix", "storagePathHasSuffix", "storagePathIsNil", "storagePathNotNil", "storagePathEqualFold", "storagePathContainsFold", "storageRegion", "storageRegionNEQ", "storageRegionIn", "storageRegionNotIn", "storageRegionContains", "storageRegionHasPrefix", "storageRegionHasSuffix", "storageRegionIsNil", "storageRegionNotNil", "storageRegionEqualFold", "storageRegionContainsFold", "storageProvider", "storageProviderNEQ", "storageProviderIn", "storageProviderNotIn", "storageProviderContains", "storageProviderHasPrefix", "storageProviderHasSuffix", "storageProviderIsNil", "storageProviderNotNil", "storageProviderEqualFold", "storageProviderContainsFold", "lastAccessedAt", "lastAccessedAtGT", "lastAccessedAtGTE", "lastAccessedAtLT", "lastAccessedAtLTE", "lastAccessedAtIsNil", "lastAccessedAtNotNil"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -97299,83 +97276,6 @@ func (ec *executionContext) unmarshalInputFileHistoryWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.StoreKeyContainsFold = data
-		case "categoryType":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryType"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CategoryType = data
-		case "categoryTypeNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryTypeNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CategoryTypeNEQ = data
-		case "categoryTypeIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryTypeIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CategoryTypeIn = data
-		case "categoryTypeNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryTypeNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CategoryTypeNotIn = data
-		case "categoryTypeContains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryTypeContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CategoryTypeContains = data
-		case "categoryTypeHasPrefix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryTypeHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CategoryTypeHasPrefix = data
-		case "categoryTypeHasSuffix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryTypeHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CategoryTypeHasSuffix = data
-		case "categoryTypeIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryTypeIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CategoryTypeIsNil = data
-		case "categoryTypeNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryTypeNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CategoryTypeNotNil = data
-		case "categoryTypeEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryTypeEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CategoryTypeEqualFold = data
-		case "categoryTypeContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("categoryTypeContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.CategoryTypeContainsFold = data
 		case "uri":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("uri"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -184054,11 +183954,6 @@ func (ec *executionContext) _FileHistory(ctx context.Context, sel ast.SelectionS
 			}
 		case "storeKey":
 			out.Values[i] = ec._FileHistory_storeKey(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "categoryType":
-			out.Values[i] = ec._FileHistory_categoryType(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

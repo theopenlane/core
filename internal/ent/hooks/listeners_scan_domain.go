@@ -57,16 +57,19 @@ func handleScanDomainCreated(inv entityops.Invocation, _ entityops.MutationPaylo
 	}
 
 	forceRefresh, _ := scanRecord.Metadata["forceRefresh"].(bool)
+
 	isBrandDesignOnly, _ := scanRecord.Metadata[cloudflare.DomainScanBrandDesignOnlyMetadataKey].(bool)
-	applyBrandDesign, _ := scanRecord.Metadata[cloudflare.DomainScanApplyBrandDesignMetadataKey].(bool)
+	applyBrandDesignToPreviewEnv, _ := scanRecord.Metadata[cloudflare.DomainScanApplyBrandDesignToPreviewMetadataKey].(bool)
+	applyBrandDesignToLiveEnv, _ := scanRecord.Metadata[cloudflare.DomainScanApplyBrandDesignToLiveMetadataKey].(bool)
 
 	return dispatchDomainScan(inv.Context, rt, cloudflare.DefinitionID.OperationTopics().Key(cloudflare.DomainScanRequestOp.Name(), string(inv.Envelope.ID)), cloudflare.DomainScanRequest{
-		ScanID:           scanRecord.ID,
-		OrganizationID:   scanRecord.OwnerID,
-		Domain:           scanRecord.Target,
-		ForceRefresh:     forceRefresh,
-		BrandDesignOnly:  isBrandDesignOnly,
-		ApplyBrandDesign: applyBrandDesign,
+		ScanID:                    scanRecord.ID,
+		OrganizationID:            scanRecord.OwnerID,
+		Domain:                    scanRecord.Target,
+		ForceRefresh:              forceRefresh,
+		BrandDesignOnly:           isBrandDesignOnly,
+		ApplyBrandDesignToPreview: applyBrandDesignToPreviewEnv,
+		ApplyBrandDesignToLive:    applyBrandDesignToLiveEnv,
 	})
 }
 
@@ -83,15 +86,23 @@ func handleOrganizationSettingDomainsUpdated(inv entityops.Invocation, payload e
 
 	// only apply the branding to the trustcenter by default on the first run
 	// if org settings has existing domains then no need to
-	applyBrandDesign := domains == nil || (ok && len(domains) == 0)
+	isOnboardingRequest := domains == nil || (ok && len(domains) == 0)
 
 	for idx, domain := range setting.Domains {
-		if err := dispatchDomainScan(inv.Context, rt, cloudflare.DefinitionID.OperationTopics().Key(cloudflare.DomainScanRequestOp.Name(), string(inv.Envelope.ID), domain), cloudflare.DomainScanRequest{
-			OrganizationID:   setting.OrganizationID,
-			Domain:           domain,
-			GroupID:          string(inv.Envelope.ID),
-			ApplyBrandDesign: applyBrandDesign && idx == 0,
-		}); err != nil {
+		req := cloudflare.DomainScanRequest{
+			OrganizationID: setting.OrganizationID,
+			Domain:         domain,
+			GroupID:        string(inv.Envelope.ID),
+		}
+
+		// if first run, apply the brand design to both envs by default
+		// then also pick out the first domain
+		if isOnboardingRequest && idx == 0 {
+			req.ApplyBrandDesignToPreview = true
+			req.ApplyBrandDesignToLive = true
+		}
+
+		if err := dispatchDomainScan(inv.Context, rt, cloudflare.DefinitionID.OperationTopics().Key(cloudflare.DomainScanRequestOp.Name(), string(inv.Envelope.ID), domain), req); err != nil {
 			return err
 		}
 	}
