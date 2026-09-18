@@ -94,9 +94,9 @@ require (
 	github.com/prometheus/client_golang v1.24.1
 	github.com/redis/go-redis/v9 v9.22.0
 	github.com/resend/resend-go/v3 v3.17.0
-	github.com/riverqueue/river v0.45.0
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.45.0
-	github.com/riverqueue/river/rivertype v0.45.0
+	github.com/riverqueue/river v0.47.0
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.47.0
+	github.com/riverqueue/river/rivertype v0.47.0
 	github.com/rs/zerolog v1.35.1
 	github.com/samber/do/v2 v2.1.0
 	github.com/samber/lo v1.53.0
@@ -321,8 +321,8 @@ require (
 	github.com/prometheus/procfs v0.22.0 // indirect
 	github.com/q-uint/parser v0.3.1 // indirect
 	github.com/q-uint/xsd-datetime v1.0.0 // indirect
-	github.com/riverqueue/river/riverdriver v0.45.0 // indirect
-	github.com/riverqueue/river/rivershared v0.45.0 // indirect
+	github.com/riverqueue/river/riverdriver v0.47.0 // indirect
+	github.com/riverqueue/river/rivershared v0.47.0 // indirect
 	github.com/riverqueue/rivercontrib/otelriver v0.12.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/sagikazarmark/locafero v0.12.0 // indirect
