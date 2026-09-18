@@ -49857,7 +49857,6 @@ func (t *DeleteFile_DeleteFile) GetDeletedID() string {
 
 type GetAllFiles_Files_Edges_Node struct {
 	CategoryName          *string        "json:\"categoryName,omitempty\" graphql:\"categoryName\""
-	CategoryType          *string        "json:\"categoryType,omitempty\" graphql:\"categoryType\""
 	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DetectedContentType   string         "json:\"detectedContentType\" graphql:\"detectedContentType\""
@@ -49888,12 +49887,6 @@ func (t *GetAllFiles_Files_Edges_Node) GetCategoryName() *string {
 		t = &GetAllFiles_Files_Edges_Node{}
 	}
 	return t.CategoryName
-}
-func (t *GetAllFiles_Files_Edges_Node) GetCategoryType() *string {
-	if t == nil {
-		t = &GetAllFiles_Files_Edges_Node{}
-	}
-	return t.CategoryType
 }
 func (t *GetAllFiles_Files_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -50059,7 +50052,6 @@ func (t *GetAllFiles_Files) GetEdges() []*GetAllFiles_Files_Edges {
 type GetFileByID_File struct {
 	CategoryID            *string        "json:\"categoryID,omitempty\" graphql:\"categoryID\""
 	CategoryName          *string        "json:\"categoryName,omitempty\" graphql:\"categoryName\""
-	CategoryType          *string        "json:\"categoryType,omitempty\" graphql:\"categoryType\""
 	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DetectedContentType   string         "json:\"detectedContentType\" graphql:\"detectedContentType\""
@@ -50104,12 +50096,6 @@ func (t *GetFileByID_File) GetCategoryName() *string {
 		t = &GetFileByID_File{}
 	}
 	return t.CategoryName
-}
-func (t *GetFileByID_File) GetCategoryType() *string {
-	if t == nil {
-		t = &GetFileByID_File{}
-	}
-	return t.CategoryType
 }
 func (t *GetFileByID_File) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -50300,7 +50286,6 @@ func (t *GetFileByID_File) GetURI() *string {
 
 type GetFiles_Files_Edges_Node struct {
 	CategoryName          *string        "json:\"categoryName,omitempty\" graphql:\"categoryName\""
-	CategoryType          *string        "json:\"categoryType,omitempty\" graphql:\"categoryType\""
 	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DetectedContentType   string         "json:\"detectedContentType\" graphql:\"detectedContentType\""
@@ -50331,12 +50316,6 @@ func (t *GetFiles_Files_Edges_Node) GetCategoryName() *string {
 		t = &GetFiles_Files_Edges_Node{}
 	}
 	return t.CategoryName
-}
-func (t *GetFiles_Files_Edges_Node) GetCategoryType() *string {
-	if t == nil {
-		t = &GetFiles_Files_Edges_Node{}
-	}
-	return t.CategoryType
 }
 func (t *GetFiles_Files_Edges_Node) GetCreatedAt() *time.Time {
 	if t == nil {
@@ -85837,7 +85816,7 @@ func (t *CreateBulkCSVPlatform_CreateBulkCSVPlatform) GetPlatforms() []*CreateBu
 
 type CreateBulkPlatform_CreateBulkPlatform_Platforms_ArchitectureDiagrams_Edges_Node struct {
 	Base64           *string "json:\"base64,omitempty\" graphql:\"base64\""
-	CategoryType     *string "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CategoryName     *string "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	ID               string  "json:\"id\" graphql:\"id\""
 	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
@@ -85848,11 +85827,11 @@ func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms_ArchitectureDiagrams_Ed
 	}
 	return t.Base64
 }
-func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms_ArchitectureDiagrams_Edges_Node) GetCategoryType() *string {
+func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms_ArchitectureDiagrams_Edges_Node) GetCategoryName() *string {
 	if t == nil {
 		t = &CreateBulkPlatform_CreateBulkPlatform_Platforms_ArchitectureDiagrams_Edges_Node{}
 	}
-	return t.CategoryType
+	return t.CategoryName
 }
 func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms_ArchitectureDiagrams_Edges_Node) GetID() string {
 	if t == nil {
@@ -85891,7 +85870,7 @@ func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms_ArchitectureDiagrams) G
 
 type CreateBulkPlatform_CreateBulkPlatform_Platforms_DataFlowDiagrams_Edges_Node struct {
 	Base64           *string "json:\"base64,omitempty\" graphql:\"base64\""
-	CategoryType     *string "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CategoryName     *string "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	ID               string  "json:\"id\" graphql:\"id\""
 	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
@@ -85902,11 +85881,11 @@ func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms_DataFlowDiagrams_Edges_
 	}
 	return t.Base64
 }
-func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms_DataFlowDiagrams_Edges_Node) GetCategoryType() *string {
+func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms_DataFlowDiagrams_Edges_Node) GetCategoryName() *string {
 	if t == nil {
 		t = &CreateBulkPlatform_CreateBulkPlatform_Platforms_DataFlowDiagrams_Edges_Node{}
 	}
-	return t.CategoryType
+	return t.CategoryName
 }
 func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms_DataFlowDiagrams_Edges_Node) GetID() string {
 	if t == nil {
@@ -85945,7 +85924,7 @@ func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms_DataFlowDiagrams) GetEd
 
 type CreateBulkPlatform_CreateBulkPlatform_Platforms_TrustBoundaryDiagrams_Edges_Node struct {
 	Base64           *string "json:\"base64,omitempty\" graphql:\"base64\""
-	CategoryType     *string "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CategoryName     *string "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	ID               string  "json:\"id\" graphql:\"id\""
 	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
@@ -85956,11 +85935,11 @@ func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms_TrustBoundaryDiagrams_E
 	}
 	return t.Base64
 }
-func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms_TrustBoundaryDiagrams_Edges_Node) GetCategoryType() *string {
+func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms_TrustBoundaryDiagrams_Edges_Node) GetCategoryName() *string {
 	if t == nil {
 		t = &CreateBulkPlatform_CreateBulkPlatform_Platforms_TrustBoundaryDiagrams_Edges_Node{}
 	}
-	return t.CategoryType
+	return t.CategoryName
 }
 func (t *CreateBulkPlatform_CreateBulkPlatform_Platforms_TrustBoundaryDiagrams_Edges_Node) GetID() string {
 	if t == nil {
@@ -86622,7 +86601,7 @@ func (t *CreatePlatform_CreatePlatform_Platform_OutOfScopeVendors) GetEdges() []
 
 type CreatePlatform_CreatePlatform_Platform_ArchitectureDiagrams_Edges_Node struct {
 	Base64           *string "json:\"base64,omitempty\" graphql:\"base64\""
-	CategoryType     *string "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CategoryName     *string "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	ID               string  "json:\"id\" graphql:\"id\""
 	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
@@ -86633,11 +86612,11 @@ func (t *CreatePlatform_CreatePlatform_Platform_ArchitectureDiagrams_Edges_Node)
 	}
 	return t.Base64
 }
-func (t *CreatePlatform_CreatePlatform_Platform_ArchitectureDiagrams_Edges_Node) GetCategoryType() *string {
+func (t *CreatePlatform_CreatePlatform_Platform_ArchitectureDiagrams_Edges_Node) GetCategoryName() *string {
 	if t == nil {
 		t = &CreatePlatform_CreatePlatform_Platform_ArchitectureDiagrams_Edges_Node{}
 	}
-	return t.CategoryType
+	return t.CategoryName
 }
 func (t *CreatePlatform_CreatePlatform_Platform_ArchitectureDiagrams_Edges_Node) GetID() string {
 	if t == nil {
@@ -86676,7 +86655,7 @@ func (t *CreatePlatform_CreatePlatform_Platform_ArchitectureDiagrams) GetEdges()
 
 type CreatePlatform_CreatePlatform_Platform_DataFlowDiagrams_Edges_Node struct {
 	Base64           *string "json:\"base64,omitempty\" graphql:\"base64\""
-	CategoryType     *string "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CategoryName     *string "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	ID               string  "json:\"id\" graphql:\"id\""
 	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
@@ -86687,11 +86666,11 @@ func (t *CreatePlatform_CreatePlatform_Platform_DataFlowDiagrams_Edges_Node) Get
 	}
 	return t.Base64
 }
-func (t *CreatePlatform_CreatePlatform_Platform_DataFlowDiagrams_Edges_Node) GetCategoryType() *string {
+func (t *CreatePlatform_CreatePlatform_Platform_DataFlowDiagrams_Edges_Node) GetCategoryName() *string {
 	if t == nil {
 		t = &CreatePlatform_CreatePlatform_Platform_DataFlowDiagrams_Edges_Node{}
 	}
-	return t.CategoryType
+	return t.CategoryName
 }
 func (t *CreatePlatform_CreatePlatform_Platform_DataFlowDiagrams_Edges_Node) GetID() string {
 	if t == nil {
@@ -86730,7 +86709,7 @@ func (t *CreatePlatform_CreatePlatform_Platform_DataFlowDiagrams) GetEdges() []*
 
 type CreatePlatform_CreatePlatform_Platform_TrustBoundaryDiagrams_Edges_Node struct {
 	Base64           *string "json:\"base64,omitempty\" graphql:\"base64\""
-	CategoryType     *string "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CategoryName     *string "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	ID               string  "json:\"id\" graphql:\"id\""
 	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
@@ -86741,11 +86720,11 @@ func (t *CreatePlatform_CreatePlatform_Platform_TrustBoundaryDiagrams_Edges_Node
 	}
 	return t.Base64
 }
-func (t *CreatePlatform_CreatePlatform_Platform_TrustBoundaryDiagrams_Edges_Node) GetCategoryType() *string {
+func (t *CreatePlatform_CreatePlatform_Platform_TrustBoundaryDiagrams_Edges_Node) GetCategoryName() *string {
 	if t == nil {
 		t = &CreatePlatform_CreatePlatform_Platform_TrustBoundaryDiagrams_Edges_Node{}
 	}
-	return t.CategoryType
+	return t.CategoryName
 }
 func (t *CreatePlatform_CreatePlatform_Platform_TrustBoundaryDiagrams_Edges_Node) GetID() string {
 	if t == nil {
@@ -87337,7 +87316,7 @@ func (t *GetAllPlatforms_Platforms_Edges_Node_IdentityHolders) GetEdges() []*Get
 
 type GetAllPlatforms_Platforms_Edges_Node_ArchitectureDiagrams_Edges_Node struct {
 	Base64           *string "json:\"base64,omitempty\" graphql:\"base64\""
-	CategoryType     *string "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CategoryName     *string "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	ID               string  "json:\"id\" graphql:\"id\""
 	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
@@ -87348,11 +87327,11 @@ func (t *GetAllPlatforms_Platforms_Edges_Node_ArchitectureDiagrams_Edges_Node) G
 	}
 	return t.Base64
 }
-func (t *GetAllPlatforms_Platforms_Edges_Node_ArchitectureDiagrams_Edges_Node) GetCategoryType() *string {
+func (t *GetAllPlatforms_Platforms_Edges_Node_ArchitectureDiagrams_Edges_Node) GetCategoryName() *string {
 	if t == nil {
 		t = &GetAllPlatforms_Platforms_Edges_Node_ArchitectureDiagrams_Edges_Node{}
 	}
-	return t.CategoryType
+	return t.CategoryName
 }
 func (t *GetAllPlatforms_Platforms_Edges_Node_ArchitectureDiagrams_Edges_Node) GetID() string {
 	if t == nil {
@@ -87391,7 +87370,7 @@ func (t *GetAllPlatforms_Platforms_Edges_Node_ArchitectureDiagrams) GetEdges() [
 
 type GetAllPlatforms_Platforms_Edges_Node_DataFlowDiagrams_Edges_Node struct {
 	Base64           *string "json:\"base64,omitempty\" graphql:\"base64\""
-	CategoryType     *string "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CategoryName     *string "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	ID               string  "json:\"id\" graphql:\"id\""
 	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
@@ -87402,11 +87381,11 @@ func (t *GetAllPlatforms_Platforms_Edges_Node_DataFlowDiagrams_Edges_Node) GetBa
 	}
 	return t.Base64
 }
-func (t *GetAllPlatforms_Platforms_Edges_Node_DataFlowDiagrams_Edges_Node) GetCategoryType() *string {
+func (t *GetAllPlatforms_Platforms_Edges_Node_DataFlowDiagrams_Edges_Node) GetCategoryName() *string {
 	if t == nil {
 		t = &GetAllPlatforms_Platforms_Edges_Node_DataFlowDiagrams_Edges_Node{}
 	}
-	return t.CategoryType
+	return t.CategoryName
 }
 func (t *GetAllPlatforms_Platforms_Edges_Node_DataFlowDiagrams_Edges_Node) GetID() string {
 	if t == nil {
@@ -87445,7 +87424,7 @@ func (t *GetAllPlatforms_Platforms_Edges_Node_DataFlowDiagrams) GetEdges() []*Ge
 
 type GetAllPlatforms_Platforms_Edges_Node_TrustBoundaryDiagrams_Edges_Node struct {
 	Base64           *string "json:\"base64,omitempty\" graphql:\"base64\""
-	CategoryType     *string "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CategoryName     *string "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	ID               string  "json:\"id\" graphql:\"id\""
 	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
@@ -87456,11 +87435,11 @@ func (t *GetAllPlatforms_Platforms_Edges_Node_TrustBoundaryDiagrams_Edges_Node) 
 	}
 	return t.Base64
 }
-func (t *GetAllPlatforms_Platforms_Edges_Node_TrustBoundaryDiagrams_Edges_Node) GetCategoryType() *string {
+func (t *GetAllPlatforms_Platforms_Edges_Node_TrustBoundaryDiagrams_Edges_Node) GetCategoryName() *string {
 	if t == nil {
 		t = &GetAllPlatforms_Platforms_Edges_Node_TrustBoundaryDiagrams_Edges_Node{}
 	}
-	return t.CategoryType
+	return t.CategoryName
 }
 func (t *GetAllPlatforms_Platforms_Edges_Node_TrustBoundaryDiagrams_Edges_Node) GetID() string {
 	if t == nil {
@@ -87994,7 +87973,7 @@ func (t *GetAllPlatforms_Platforms) GetTotalCount() int64 {
 
 type GetPlatformByID_Platform_ArchitectureDiagrams_Edges_Node struct {
 	Base64           *string "json:\"base64,omitempty\" graphql:\"base64\""
-	CategoryType     *string "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CategoryName     *string "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	ID               string  "json:\"id\" graphql:\"id\""
 	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
@@ -88005,11 +87984,11 @@ func (t *GetPlatformByID_Platform_ArchitectureDiagrams_Edges_Node) GetBase64() *
 	}
 	return t.Base64
 }
-func (t *GetPlatformByID_Platform_ArchitectureDiagrams_Edges_Node) GetCategoryType() *string {
+func (t *GetPlatformByID_Platform_ArchitectureDiagrams_Edges_Node) GetCategoryName() *string {
 	if t == nil {
 		t = &GetPlatformByID_Platform_ArchitectureDiagrams_Edges_Node{}
 	}
-	return t.CategoryType
+	return t.CategoryName
 }
 func (t *GetPlatformByID_Platform_ArchitectureDiagrams_Edges_Node) GetID() string {
 	if t == nil {
@@ -88048,7 +88027,7 @@ func (t *GetPlatformByID_Platform_ArchitectureDiagrams) GetEdges() []*GetPlatfor
 
 type GetPlatformByID_Platform_DataFlowDiagrams_Edges_Node struct {
 	Base64           *string "json:\"base64,omitempty\" graphql:\"base64\""
-	CategoryType     *string "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CategoryName     *string "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	ID               string  "json:\"id\" graphql:\"id\""
 	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
@@ -88059,11 +88038,11 @@ func (t *GetPlatformByID_Platform_DataFlowDiagrams_Edges_Node) GetBase64() *stri
 	}
 	return t.Base64
 }
-func (t *GetPlatformByID_Platform_DataFlowDiagrams_Edges_Node) GetCategoryType() *string {
+func (t *GetPlatformByID_Platform_DataFlowDiagrams_Edges_Node) GetCategoryName() *string {
 	if t == nil {
 		t = &GetPlatformByID_Platform_DataFlowDiagrams_Edges_Node{}
 	}
-	return t.CategoryType
+	return t.CategoryName
 }
 func (t *GetPlatformByID_Platform_DataFlowDiagrams_Edges_Node) GetID() string {
 	if t == nil {
@@ -88102,7 +88081,7 @@ func (t *GetPlatformByID_Platform_DataFlowDiagrams) GetEdges() []*GetPlatformByI
 
 type GetPlatformByID_Platform_TrustBoundaryDiagrams_Edges_Node struct {
 	Base64           *string "json:\"base64,omitempty\" graphql:\"base64\""
-	CategoryType     *string "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CategoryName     *string "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	ID               string  "json:\"id\" graphql:\"id\""
 	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
@@ -88113,11 +88092,11 @@ func (t *GetPlatformByID_Platform_TrustBoundaryDiagrams_Edges_Node) GetBase64() 
 	}
 	return t.Base64
 }
-func (t *GetPlatformByID_Platform_TrustBoundaryDiagrams_Edges_Node) GetCategoryType() *string {
+func (t *GetPlatformByID_Platform_TrustBoundaryDiagrams_Edges_Node) GetCategoryName() *string {
 	if t == nil {
 		t = &GetPlatformByID_Platform_TrustBoundaryDiagrams_Edges_Node{}
 	}
-	return t.CategoryType
+	return t.CategoryName
 }
 func (t *GetPlatformByID_Platform_TrustBoundaryDiagrams_Edges_Node) GetID() string {
 	if t == nil {
@@ -89347,7 +89326,7 @@ func (t *UpdatePlatform_UpdatePlatform_Platform_OutOfScopeVendors) GetEdges() []
 
 type UpdatePlatform_UpdatePlatform_Platform_ArchitectureDiagrams_Edges_Node struct {
 	Base64           *string "json:\"base64,omitempty\" graphql:\"base64\""
-	CategoryType     *string "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CategoryName     *string "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	ID               string  "json:\"id\" graphql:\"id\""
 	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
@@ -89358,11 +89337,11 @@ func (t *UpdatePlatform_UpdatePlatform_Platform_ArchitectureDiagrams_Edges_Node)
 	}
 	return t.Base64
 }
-func (t *UpdatePlatform_UpdatePlatform_Platform_ArchitectureDiagrams_Edges_Node) GetCategoryType() *string {
+func (t *UpdatePlatform_UpdatePlatform_Platform_ArchitectureDiagrams_Edges_Node) GetCategoryName() *string {
 	if t == nil {
 		t = &UpdatePlatform_UpdatePlatform_Platform_ArchitectureDiagrams_Edges_Node{}
 	}
-	return t.CategoryType
+	return t.CategoryName
 }
 func (t *UpdatePlatform_UpdatePlatform_Platform_ArchitectureDiagrams_Edges_Node) GetID() string {
 	if t == nil {
@@ -89401,7 +89380,7 @@ func (t *UpdatePlatform_UpdatePlatform_Platform_ArchitectureDiagrams) GetEdges()
 
 type UpdatePlatform_UpdatePlatform_Platform_DataFlowDiagrams_Edges_Node struct {
 	Base64           *string "json:\"base64,omitempty\" graphql:\"base64\""
-	CategoryType     *string "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CategoryName     *string "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	ID               string  "json:\"id\" graphql:\"id\""
 	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
@@ -89412,11 +89391,11 @@ func (t *UpdatePlatform_UpdatePlatform_Platform_DataFlowDiagrams_Edges_Node) Get
 	}
 	return t.Base64
 }
-func (t *UpdatePlatform_UpdatePlatform_Platform_DataFlowDiagrams_Edges_Node) GetCategoryType() *string {
+func (t *UpdatePlatform_UpdatePlatform_Platform_DataFlowDiagrams_Edges_Node) GetCategoryName() *string {
 	if t == nil {
 		t = &UpdatePlatform_UpdatePlatform_Platform_DataFlowDiagrams_Edges_Node{}
 	}
-	return t.CategoryType
+	return t.CategoryName
 }
 func (t *UpdatePlatform_UpdatePlatform_Platform_DataFlowDiagrams_Edges_Node) GetID() string {
 	if t == nil {
@@ -89455,7 +89434,7 @@ func (t *UpdatePlatform_UpdatePlatform_Platform_DataFlowDiagrams) GetEdges() []*
 
 type UpdatePlatform_UpdatePlatform_Platform_TrustBoundaryDiagrams_Edges_Node struct {
 	Base64           *string "json:\"base64,omitempty\" graphql:\"base64\""
-	CategoryType     *string "json:\"categoryType,omitempty\" graphql:\"categoryType\""
+	CategoryName     *string "json:\"categoryName,omitempty\" graphql:\"categoryName\""
 	ID               string  "json:\"id\" graphql:\"id\""
 	ProvidedFileName string  "json:\"providedFileName\" graphql:\"providedFileName\""
 }
@@ -89466,11 +89445,11 @@ func (t *UpdatePlatform_UpdatePlatform_Platform_TrustBoundaryDiagrams_Edges_Node
 	}
 	return t.Base64
 }
-func (t *UpdatePlatform_UpdatePlatform_Platform_TrustBoundaryDiagrams_Edges_Node) GetCategoryType() *string {
+func (t *UpdatePlatform_UpdatePlatform_Platform_TrustBoundaryDiagrams_Edges_Node) GetCategoryName() *string {
 	if t == nil {
 		t = &UpdatePlatform_UpdatePlatform_Platform_TrustBoundaryDiagrams_Edges_Node{}
 	}
-	return t.CategoryType
+	return t.CategoryName
 }
 func (t *UpdatePlatform_UpdatePlatform_Platform_TrustBoundaryDiagrams_Edges_Node) GetID() string {
 	if t == nil {
@@ -185113,7 +185092,6 @@ const GetAllFilesDocument = `query GetAllFiles {
 		edges {
 			node {
 				categoryName
-				categoryType
 				createdAt
 				createdBy
 				detectedContentType
@@ -185162,7 +185140,6 @@ const GetFileByIDDocument = `query GetFileByID ($fileId: ID!) {
 	file(id: $fileId) {
 		categoryID
 		categoryName
-		categoryType
 		createdAt
 		createdBy
 		detectedContentType
@@ -185220,7 +185197,6 @@ const GetFilesDocument = `query GetFiles ($where: FileWhereInput) {
 		edges {
 			node {
 				categoryName
-				categoryType
 				createdAt
 				createdBy
 				detectedContentType
@@ -194376,7 +194352,7 @@ const CreateBulkPlatformDocument = `mutation CreateBulkPlatform ($input: [Create
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -194386,7 +194362,7 @@ const CreateBulkPlatformDocument = `mutation CreateBulkPlatform ($input: [Create
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -194396,7 +194372,7 @@ const CreateBulkPlatformDocument = `mutation CreateBulkPlatform ($input: [Create
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -194519,7 +194495,7 @@ const CreatePlatformDocument = `mutation CreatePlatform ($input: CreatePlatformI
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -194529,7 +194505,7 @@ const CreatePlatformDocument = `mutation CreatePlatform ($input: CreatePlatformI
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -194539,7 +194515,7 @@ const CreatePlatformDocument = `mutation CreatePlatform ($input: CreatePlatformI
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -194680,7 +194656,7 @@ const GetAllPlatformsDocument = `query GetAllPlatforms ($first: Int, $last: Int,
 					edges {
 						node {
 							id
-							categoryType
+							categoryName
 							base64
 							providedFileName
 						}
@@ -194690,7 +194666,7 @@ const GetAllPlatformsDocument = `query GetAllPlatforms ($first: Int, $last: Int,
 					edges {
 						node {
 							id
-							categoryType
+							categoryName
 							base64
 							providedFileName
 						}
@@ -194700,7 +194676,7 @@ const GetAllPlatformsDocument = `query GetAllPlatforms ($first: Int, $last: Int,
 					edges {
 						node {
 							id
-							categoryType
+							categoryName
 							base64
 							providedFileName
 						}
@@ -194800,7 +194776,7 @@ const GetPlatformByIDDocument = `query GetPlatformByID ($platformId: ID!) {
 			edges {
 				node {
 					id
-					categoryType
+					categoryName
 					base64
 					providedFileName
 				}
@@ -194810,7 +194786,7 @@ const GetPlatformByIDDocument = `query GetPlatformByID ($platformId: ID!) {
 			edges {
 				node {
 					id
-					categoryType
+					categoryName
 					base64
 					providedFileName
 				}
@@ -194820,7 +194796,7 @@ const GetPlatformByIDDocument = `query GetPlatformByID ($platformId: ID!) {
 			edges {
 				node {
 					id
-					categoryType
+					categoryName
 					base64
 					providedFileName
 				}
@@ -195058,7 +195034,7 @@ const UpdatePlatformDocument = `mutation UpdatePlatform ($updatePlatformId: ID!,
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -195068,7 +195044,7 @@ const UpdatePlatformDocument = `mutation UpdatePlatform ($updatePlatformId: ID!,
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -195078,7 +195054,7 @@ const UpdatePlatformDocument = `mutation UpdatePlatform ($updatePlatformId: ID!,
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
