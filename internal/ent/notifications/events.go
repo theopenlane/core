@@ -6,6 +6,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/export"
@@ -67,6 +68,13 @@ func Listeners() []gala.Registration {
 			Schema:  entityops.SchemaTask,
 			Fields:  []string{task.FieldAssigneeID},
 			Caller:  notificationCaller,
+			Match: []entityops.FieldMatch{
+				{
+					Field:  task.FieldStatus,
+					Negate: true,
+					In:     []string{string(enums.TaskStatusCompleted)},
+				},
+			},
 			Notify: &entityops.NotifySpec{
 				Recipients: entityops.RecipientsFromField(task.FieldAssigneeID),
 				Content: entityops.NotificationContent{
