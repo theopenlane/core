@@ -8331,6 +8331,22 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if internalOwner, exists := m.InternalOwner(); exists {
+		create = create.SetInternalOwner(internalOwner)
+	}
+
+	if internalOwnerUserID, exists := m.InternalOwnerUserID(); exists {
+		create = create.SetInternalOwnerUserID(internalOwnerUserID)
+	}
+
+	if internalOwnerGroupID, exists := m.InternalOwnerGroupID(); exists {
+		create = create.SetInternalOwnerGroupID(internalOwnerGroupID)
+	}
+
+	if internalOwnerIdentityHolderID, exists := m.InternalOwnerIdentityHolderID(); exists {
+		create = create.SetInternalOwnerIdentityHolderID(internalOwnerIdentityHolderID)
+	}
+
 	if reviewedBy, exists := m.ReviewedBy(); exists {
 		create = create.SetReviewedBy(reviewedBy)
 	}
@@ -8673,6 +8689,30 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(ownerID)
 		} else {
 			create = create.SetOwnerID(finding.OwnerID)
+		}
+
+		if internalOwner, exists := m.InternalOwner(); exists {
+			create = create.SetInternalOwner(internalOwner)
+		} else {
+			create = create.SetInternalOwner(finding.InternalOwner)
+		}
+
+		if internalOwnerUserID, exists := m.InternalOwnerUserID(); exists {
+			create = create.SetInternalOwnerUserID(internalOwnerUserID)
+		} else {
+			create = create.SetInternalOwnerUserID(finding.InternalOwnerUserID)
+		}
+
+		if internalOwnerGroupID, exists := m.InternalOwnerGroupID(); exists {
+			create = create.SetInternalOwnerGroupID(internalOwnerGroupID)
+		} else {
+			create = create.SetInternalOwnerGroupID(finding.InternalOwnerGroupID)
+		}
+
+		if internalOwnerIdentityHolderID, exists := m.InternalOwnerIdentityHolderID(); exists {
+			create = create.SetInternalOwnerIdentityHolderID(internalOwnerIdentityHolderID)
+		} else {
+			create = create.SetInternalOwnerIdentityHolderID(finding.InternalOwnerIdentityHolderID)
 		}
 
 		if reviewedBy, exists := m.ReviewedBy(); exists {
@@ -9058,6 +9098,10 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetManagedBy(finding.ManagedBy).
 			SetIntegrationRunID(finding.IntegrationRunID).
 			SetOwnerID(finding.OwnerID).
+			SetInternalOwner(finding.InternalOwner).
+			SetInternalOwnerUserID(finding.InternalOwnerUserID).
+			SetInternalOwnerGroupID(finding.InternalOwnerGroupID).
+			SetInternalOwnerIdentityHolderID(finding.InternalOwnerIdentityHolderID).
 			SetReviewedBy(finding.ReviewedBy).
 			SetReviewedByUserID(finding.ReviewedByUserID).
 			SetReviewedByGroupID(finding.ReviewedByGroupID).
@@ -18079,6 +18123,38 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if stakeholderName, exists := m.StakeholderName(); exists {
+		create = create.SetStakeholderName(stakeholderName)
+	}
+
+	if stakeholderUserID, exists := m.StakeholderUserID(); exists {
+		create = create.SetStakeholderUserID(stakeholderUserID)
+	}
+
+	if stakeholderGroupID, exists := m.StakeholderGroupID(); exists {
+		create = create.SetStakeholderGroupID(stakeholderGroupID)
+	}
+
+	if stakeholderIdentityHolderID, exists := m.StakeholderIdentityHolderID(); exists {
+		create = create.SetStakeholderIdentityHolderID(stakeholderIdentityHolderID)
+	}
+
+	if delegateName, exists := m.DelegateName(); exists {
+		create = create.SetDelegateName(delegateName)
+	}
+
+	if delegateUserID, exists := m.DelegateUserID(); exists {
+		create = create.SetDelegateUserID(delegateUserID)
+	}
+
+	if delegateGroupID, exists := m.DelegateGroupID(); exists {
+		create = create.SetDelegateGroupID(delegateGroupID)
+	}
+
+	if delegateIdentityHolderID, exists := m.DelegateIdentityHolderID(); exists {
+		create = create.SetDelegateIdentityHolderID(delegateIdentityHolderID)
+	}
+
 	if riskKindName, exists := m.RiskKindName(); exists {
 		create = create.SetRiskKindName(riskKindName)
 	}
@@ -18339,6 +18415,54 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(risk.OwnerID)
 		}
 
+		if stakeholderName, exists := m.StakeholderName(); exists {
+			create = create.SetStakeholderName(stakeholderName)
+		} else {
+			create = create.SetStakeholderName(risk.StakeholderName)
+		}
+
+		if stakeholderUserID, exists := m.StakeholderUserID(); exists {
+			create = create.SetStakeholderUserID(stakeholderUserID)
+		} else {
+			create = create.SetStakeholderUserID(risk.StakeholderUserID)
+		}
+
+		if stakeholderGroupID, exists := m.StakeholderGroupID(); exists {
+			create = create.SetStakeholderGroupID(stakeholderGroupID)
+		} else {
+			create = create.SetStakeholderGroupID(risk.StakeholderGroupID)
+		}
+
+		if stakeholderIdentityHolderID, exists := m.StakeholderIdentityHolderID(); exists {
+			create = create.SetStakeholderIdentityHolderID(stakeholderIdentityHolderID)
+		} else {
+			create = create.SetStakeholderIdentityHolderID(risk.StakeholderIdentityHolderID)
+		}
+
+		if delegateName, exists := m.DelegateName(); exists {
+			create = create.SetDelegateName(delegateName)
+		} else {
+			create = create.SetDelegateName(risk.DelegateName)
+		}
+
+		if delegateUserID, exists := m.DelegateUserID(); exists {
+			create = create.SetDelegateUserID(delegateUserID)
+		} else {
+			create = create.SetDelegateUserID(risk.DelegateUserID)
+		}
+
+		if delegateGroupID, exists := m.DelegateGroupID(); exists {
+			create = create.SetDelegateGroupID(delegateGroupID)
+		} else {
+			create = create.SetDelegateGroupID(risk.DelegateGroupID)
+		}
+
+		if delegateIdentityHolderID, exists := m.DelegateIdentityHolderID(); exists {
+			create = create.SetDelegateIdentityHolderID(delegateIdentityHolderID)
+		} else {
+			create = create.SetDelegateIdentityHolderID(risk.DelegateIdentityHolderID)
+		}
+
 		if riskKindName, exists := m.RiskKindName(); exists {
 			create = create.SetRiskKindName(riskKindName)
 		} else {
@@ -18596,6 +18720,14 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetManagedBy(risk.ManagedBy).
 			SetIntegrationRunID(risk.IntegrationRunID).
 			SetOwnerID(risk.OwnerID).
+			SetStakeholderName(risk.StakeholderName).
+			SetStakeholderUserID(risk.StakeholderUserID).
+			SetStakeholderGroupID(risk.StakeholderGroupID).
+			SetStakeholderIdentityHolderID(risk.StakeholderIdentityHolderID).
+			SetDelegateName(risk.DelegateName).
+			SetDelegateUserID(risk.DelegateUserID).
+			SetDelegateGroupID(risk.DelegateGroupID).
+			SetDelegateIdentityHolderID(risk.DelegateIdentityHolderID).
 			SetRiskKindName(risk.RiskKindName).
 			SetRiskKindID(risk.RiskKindID).
 			SetRiskCategoryName(risk.RiskCategoryName).
@@ -25546,6 +25678,22 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if internalOwner, exists := m.InternalOwner(); exists {
+		create = create.SetInternalOwner(internalOwner)
+	}
+
+	if internalOwnerUserID, exists := m.InternalOwnerUserID(); exists {
+		create = create.SetInternalOwnerUserID(internalOwnerUserID)
+	}
+
+	if internalOwnerGroupID, exists := m.InternalOwnerGroupID(); exists {
+		create = create.SetInternalOwnerGroupID(internalOwnerGroupID)
+	}
+
+	if internalOwnerIdentityHolderID, exists := m.InternalOwnerIdentityHolderID(); exists {
+		create = create.SetInternalOwnerIdentityHolderID(internalOwnerIdentityHolderID)
+	}
+
 	if reviewedBy, exists := m.ReviewedBy(); exists {
 		create = create.SetReviewedBy(reviewedBy)
 	}
@@ -25908,6 +26056,30 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetOwnerID(ownerID)
 		} else {
 			create = create.SetOwnerID(vulnerability.OwnerID)
+		}
+
+		if internalOwner, exists := m.InternalOwner(); exists {
+			create = create.SetInternalOwner(internalOwner)
+		} else {
+			create = create.SetInternalOwner(vulnerability.InternalOwner)
+		}
+
+		if internalOwnerUserID, exists := m.InternalOwnerUserID(); exists {
+			create = create.SetInternalOwnerUserID(internalOwnerUserID)
+		} else {
+			create = create.SetInternalOwnerUserID(vulnerability.InternalOwnerUserID)
+		}
+
+		if internalOwnerGroupID, exists := m.InternalOwnerGroupID(); exists {
+			create = create.SetInternalOwnerGroupID(internalOwnerGroupID)
+		} else {
+			create = create.SetInternalOwnerGroupID(vulnerability.InternalOwnerGroupID)
+		}
+
+		if internalOwnerIdentityHolderID, exists := m.InternalOwnerIdentityHolderID(); exists {
+			create = create.SetInternalOwnerIdentityHolderID(internalOwnerIdentityHolderID)
+		} else {
+			create = create.SetInternalOwnerIdentityHolderID(vulnerability.InternalOwnerIdentityHolderID)
 		}
 
 		if reviewedBy, exists := m.ReviewedBy(); exists {
@@ -26323,6 +26495,10 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetManagedBy(vulnerability.ManagedBy).
 			SetIntegrationRunID(vulnerability.IntegrationRunID).
 			SetOwnerID(vulnerability.OwnerID).
+			SetInternalOwner(vulnerability.InternalOwner).
+			SetInternalOwnerUserID(vulnerability.InternalOwnerUserID).
+			SetInternalOwnerGroupID(vulnerability.InternalOwnerGroupID).
+			SetInternalOwnerIdentityHolderID(vulnerability.InternalOwnerIdentityHolderID).
 			SetReviewedBy(vulnerability.ReviewedBy).
 			SetReviewedByUserID(vulnerability.ReviewedByUserID).
 			SetReviewedByGroupID(vulnerability.ReviewedByGroupID).

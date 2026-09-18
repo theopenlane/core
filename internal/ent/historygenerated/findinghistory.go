@@ -59,6 +59,14 @@ type FindingHistory struct {
 	IntegrationRunID string `json:"integration_run_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the internal owner for the finding when no user, group, or identity holder is linked
+	InternalOwner string `json:"internal_owner,omitempty"`
+	// the internal owner user id for the finding
+	InternalOwnerUserID string `json:"internal_owner_user_id,omitempty"`
+	// the internal owner group id for the finding
+	InternalOwnerGroupID string `json:"internal_owner_group_id,omitempty"`
+	// the internal owner identity holder id for the finding
+	InternalOwnerIdentityHolderID string `json:"internal_owner_identity_holder_id,omitempty"`
 	// who reviewed the finding when no user, group, or identity holder is linked
 	ReviewedBy string `json:"reviewed_by,omitempty"`
 	// the user id that reviewed the finding
@@ -189,7 +197,7 @@ func (*FindingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case findinghistory.FieldRemediationSLA:
 			values[i] = new(sql.NullInt64)
-		case findinghistory.FieldID, findinghistory.FieldRef, findinghistory.FieldCreatedBy, findinghistory.FieldUpdatedBy, findinghistory.FieldUpdatedByImpersonator, findinghistory.FieldDeletedBy, findinghistory.FieldDisplayID, findinghistory.FieldSourceDefinitionID, findinghistory.FieldSourceDefinitionVersion, findinghistory.FieldSourceInstanceID, findinghistory.FieldManagedBy, findinghistory.FieldIntegrationRunID, findinghistory.FieldOwnerID, findinghistory.FieldReviewedBy, findinghistory.FieldReviewedByUserID, findinghistory.FieldReviewedByGroupID, findinghistory.FieldReviewedByIdentityHolderID, findinghistory.FieldAssignedTo, findinghistory.FieldAssignedToUserID, findinghistory.FieldAssignedToGroupID, findinghistory.FieldAssignedToIdentityHolderID, findinghistory.FieldInternalNotes, findinghistory.FieldSystemInternalID, findinghistory.FieldEnvironmentName, findinghistory.FieldEnvironmentID, findinghistory.FieldScopeName, findinghistory.FieldScopeID, findinghistory.FieldFindingStatusName, findinghistory.FieldFindingStatusID, findinghistory.FieldExternalID, findinghistory.FieldSecurityLevel, findinghistory.FieldExternalOwnerID, findinghistory.FieldSource, findinghistory.FieldResourceName, findinghistory.FieldDisplayName, findinghistory.FieldState, findinghistory.FieldCategory, findinghistory.FieldFindingClass, findinghistory.FieldSeverity, findinghistory.FieldPriority, findinghistory.FieldAssessmentID, findinghistory.FieldDescription, findinghistory.FieldRecommendation, findinghistory.FieldRecommendedActions, findinghistory.FieldVector, findinghistory.FieldExternalURI:
+		case findinghistory.FieldID, findinghistory.FieldRef, findinghistory.FieldCreatedBy, findinghistory.FieldUpdatedBy, findinghistory.FieldUpdatedByImpersonator, findinghistory.FieldDeletedBy, findinghistory.FieldDisplayID, findinghistory.FieldSourceDefinitionID, findinghistory.FieldSourceDefinitionVersion, findinghistory.FieldSourceInstanceID, findinghistory.FieldManagedBy, findinghistory.FieldIntegrationRunID, findinghistory.FieldOwnerID, findinghistory.FieldInternalOwner, findinghistory.FieldInternalOwnerUserID, findinghistory.FieldInternalOwnerGroupID, findinghistory.FieldInternalOwnerIdentityHolderID, findinghistory.FieldReviewedBy, findinghistory.FieldReviewedByUserID, findinghistory.FieldReviewedByGroupID, findinghistory.FieldReviewedByIdentityHolderID, findinghistory.FieldAssignedTo, findinghistory.FieldAssignedToUserID, findinghistory.FieldAssignedToGroupID, findinghistory.FieldAssignedToIdentityHolderID, findinghistory.FieldInternalNotes, findinghistory.FieldSystemInternalID, findinghistory.FieldEnvironmentName, findinghistory.FieldEnvironmentID, findinghistory.FieldScopeName, findinghistory.FieldScopeID, findinghistory.FieldFindingStatusName, findinghistory.FieldFindingStatusID, findinghistory.FieldExternalID, findinghistory.FieldSecurityLevel, findinghistory.FieldExternalOwnerID, findinghistory.FieldSource, findinghistory.FieldResourceName, findinghistory.FieldDisplayName, findinghistory.FieldState, findinghistory.FieldCategory, findinghistory.FieldFindingClass, findinghistory.FieldSeverity, findinghistory.FieldPriority, findinghistory.FieldAssessmentID, findinghistory.FieldDescription, findinghistory.FieldRecommendation, findinghistory.FieldRecommendedActions, findinghistory.FieldVector, findinghistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case findinghistory.FieldHistoryTime, findinghistory.FieldCreatedAt, findinghistory.FieldUpdatedAt, findinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -324,6 +332,30 @@ func (_m *FindingHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case findinghistory.FieldInternalOwner:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner", values[i])
+			} else if value.Valid {
+				_m.InternalOwner = value.String
+			}
+		case findinghistory.FieldInternalOwnerUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_user_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerUserID = value.String
+			}
+		case findinghistory.FieldInternalOwnerGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_group_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerGroupID = value.String
+			}
+		case findinghistory.FieldInternalOwnerIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerIdentityHolderID = value.String
 			}
 		case findinghistory.FieldReviewedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -765,6 +797,18 @@ func (_m *FindingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner=")
+	builder.WriteString(_m.InternalOwner)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_user_id=")
+	builder.WriteString(_m.InternalOwnerUserID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_group_id=")
+	builder.WriteString(_m.InternalOwnerGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_identity_holder_id=")
+	builder.WriteString(_m.InternalOwnerIdentityHolderID)
 	builder.WriteString(", ")
 	builder.WriteString("reviewed_by=")
 	builder.WriteString(_m.ReviewedBy)

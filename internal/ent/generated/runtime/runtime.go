@@ -6140,11 +6140,11 @@ func init() {
 	riskMixinHooks5 := riskMixin[5].Hooks()
 	riskMixinHooks8 := riskMixin[8].Hooks()
 	riskMixinHooks9 := riskMixin[9].Hooks()
-	riskMixinHooks10 := riskMixin[10].Hooks()
 	riskMixinHooks11 := riskMixin[11].Hooks()
 	riskMixinHooks12 := riskMixin[12].Hooks()
 	riskMixinHooks13 := riskMixin[13].Hooks()
 	riskMixinHooks14 := riskMixin[14].Hooks()
+	riskMixinHooks15 := riskMixin[15].Hooks()
 	riskHooks := schema.Risk{}.Hooks()
 
 	risk.Hooks[1] = riskMixinHooks0[0]
@@ -6167,15 +6167,15 @@ func init() {
 
 	risk.Hooks[10] = riskMixinHooks9[2]
 
-	risk.Hooks[11] = riskMixinHooks10[0]
+	risk.Hooks[11] = riskMixinHooks11[0]
 
-	risk.Hooks[12] = riskMixinHooks11[0]
+	risk.Hooks[12] = riskMixinHooks12[0]
 
-	risk.Hooks[13] = riskMixinHooks12[0]
+	risk.Hooks[13] = riskMixinHooks13[0]
 
-	risk.Hooks[14] = riskMixinHooks13[0]
+	risk.Hooks[14] = riskMixinHooks14[0]
 
-	risk.Hooks[15] = riskMixinHooks14[0]
+	risk.Hooks[15] = riskMixinHooks15[0]
 
 	risk.Hooks[16] = riskHooks[0]
 
@@ -6197,8 +6197,8 @@ func init() {
 	_ = riskMixinFields5
 	riskMixinFields8 := riskMixin[8].Fields()
 	_ = riskMixinFields8
-	riskMixinFields14 := riskMixin[14].Fields()
-	_ = riskMixinFields14
+	riskMixinFields15 := riskMixin[15].Fields()
+	_ = riskMixinFields15
 	riskFields := schema.Risk{}.Fields()
 	_ = riskFields
 	// riskDescCreatedAt is the schema descriptor for created_at field.
@@ -6224,7 +6224,7 @@ func init() {
 	// risk.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	risk.OwnerIDValidator = riskDescOwnerID.Validators[0].(func(string) error)
 	// riskDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	riskDescWorkflowEligibleMarker := riskMixinFields14[0].Descriptor()
+	riskDescWorkflowEligibleMarker := riskMixinFields15[0].Descriptor()
 	// risk.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	risk.DefaultWorkflowEligibleMarker = riskDescWorkflowEligibleMarker.Default.(bool)
 	// riskDescName is the schema descriptor for name field.

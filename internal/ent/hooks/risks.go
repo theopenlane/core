@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
@@ -233,6 +234,12 @@ func setStatusBasedOnRemediation(ctx context.Context, m *generated.RiskMutation)
 
 // setDueDateBasedOnSLAConfig sets the next review due date based on the SLA config for the risk, if the due date is not already set or being updated
 func setDueDateBasedOnSLAConfig(ctx context.Context, m *generated.RiskMutation) error {
+	// return early and skip extra db queries if no new impact value in the mutation
+	impact, ok := m.Impact()
+	if !ok {
+		return nil
+	}
+
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
 		return err
@@ -245,11 +252,6 @@ func setDueDateBasedOnSLAConfig(ctx context.Context, m *generated.RiskMutation) 
 		All(rule.WithInternalContext(ctx))
 	if err != nil {
 		return err
-	}
-
-	impact, ok := m.Impact()
-	if !ok {
-		return nil
 	}
 
 	for _, sla := range slaConfig {

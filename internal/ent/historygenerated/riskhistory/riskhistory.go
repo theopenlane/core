@@ -56,6 +56,22 @@ const (
 	FieldIntegrationRunID = "integration_run_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldStakeholderName holds the string denoting the stakeholder_name field in the database.
+	FieldStakeholderName = "stakeholder_name"
+	// FieldStakeholderUserID holds the string denoting the stakeholder_user_id field in the database.
+	FieldStakeholderUserID = "stakeholder_user_id"
+	// FieldStakeholderGroupID holds the string denoting the stakeholder_group_id field in the database.
+	FieldStakeholderGroupID = "stakeholder_group_id"
+	// FieldStakeholderIdentityHolderID holds the string denoting the stakeholder_identity_holder_id field in the database.
+	FieldStakeholderIdentityHolderID = "stakeholder_identity_holder_id"
+	// FieldDelegateName holds the string denoting the delegate_name field in the database.
+	FieldDelegateName = "delegate_name"
+	// FieldDelegateUserID holds the string denoting the delegate_user_id field in the database.
+	FieldDelegateUserID = "delegate_user_id"
+	// FieldDelegateGroupID holds the string denoting the delegate_group_id field in the database.
+	FieldDelegateGroupID = "delegate_group_id"
+	// FieldDelegateIdentityHolderID holds the string denoting the delegate_identity_holder_id field in the database.
+	FieldDelegateIdentityHolderID = "delegate_identity_holder_id"
 	// FieldRiskKindName holds the string denoting the risk_kind_name field in the database.
 	FieldRiskKindName = "risk_kind_name"
 	// FieldRiskKindID holds the string denoting the risk_kind_id field in the database.
@@ -149,6 +165,14 @@ var Columns = []string{
 	FieldManagedBy,
 	FieldIntegrationRunID,
 	FieldOwnerID,
+	FieldStakeholderName,
+	FieldStakeholderUserID,
+	FieldStakeholderGroupID,
+	FieldStakeholderIdentityHolderID,
+	FieldDelegateName,
+	FieldDelegateUserID,
+	FieldDelegateGroupID,
+	FieldDelegateIdentityHolderID,
 	FieldRiskKindName,
 	FieldRiskKindID,
 	FieldRiskCategoryName,
@@ -377,6 +401,46 @@ func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// ByStakeholderName orders the results by the stakeholder_name field.
+func ByStakeholderName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStakeholderName, opts...).ToFunc()
+}
+
+// ByStakeholderUserID orders the results by the stakeholder_user_id field.
+func ByStakeholderUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStakeholderUserID, opts...).ToFunc()
+}
+
+// ByStakeholderGroupID orders the results by the stakeholder_group_id field.
+func ByStakeholderGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStakeholderGroupID, opts...).ToFunc()
+}
+
+// ByStakeholderIdentityHolderID orders the results by the stakeholder_identity_holder_id field.
+func ByStakeholderIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStakeholderIdentityHolderID, opts...).ToFunc()
+}
+
+// ByDelegateName orders the results by the delegate_name field.
+func ByDelegateName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateName, opts...).ToFunc()
+}
+
+// ByDelegateUserID orders the results by the delegate_user_id field.
+func ByDelegateUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateUserID, opts...).ToFunc()
+}
+
+// ByDelegateGroupID orders the results by the delegate_group_id field.
+func ByDelegateGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateGroupID, opts...).ToFunc()
+}
+
+// ByDelegateIdentityHolderID orders the results by the delegate_identity_holder_id field.
+func ByDelegateIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateIdentityHolderID, opts...).ToFunc()
 }
 
 // ByRiskKindName orders the results by the risk_kind_name field.

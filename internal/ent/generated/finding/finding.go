@@ -48,6 +48,14 @@ const (
 	FieldIntegrationRunID = "integration_run_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldInternalOwner holds the string denoting the internal_owner field in the database.
+	FieldInternalOwner = "internal_owner"
+	// FieldInternalOwnerUserID holds the string denoting the internal_owner_user_id field in the database.
+	FieldInternalOwnerUserID = "internal_owner_user_id"
+	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
+	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldInternalOwnerIdentityHolderID holds the string denoting the internal_owner_identity_holder_id field in the database.
+	FieldInternalOwnerIdentityHolderID = "internal_owner_identity_holder_id"
 	// FieldReviewedBy holds the string denoting the reviewed_by field in the database.
 	FieldReviewedBy = "reviewed_by"
 	// FieldReviewedByUserID holds the string denoting the reviewed_by_user_id field in the database.
@@ -166,6 +174,12 @@ const (
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
 	EdgeEditors = "editors"
+	// EdgeInternalOwnerUser holds the string denoting the internal_owner_user edge name in mutations.
+	EdgeInternalOwnerUser = "internal_owner_user"
+	// EdgeInternalOwnerGroup holds the string denoting the internal_owner_group edge name in mutations.
+	EdgeInternalOwnerGroup = "internal_owner_group"
+	// EdgeInternalOwnerIdentityHolder holds the string denoting the internal_owner_identity_holder edge name in mutations.
+	EdgeInternalOwnerIdentityHolder = "internal_owner_identity_holder"
 	// EdgeReviewedByUser holds the string denoting the reviewed_by_user edge name in mutations.
 	EdgeReviewedByUser = "reviewed_by_user"
 	// EdgeReviewedByGroup holds the string denoting the reviewed_by_group edge name in mutations.
@@ -248,6 +262,27 @@ const (
 	// EditorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	EditorsInverseTable = "groups"
+	// InternalOwnerUserTable is the table that holds the internal_owner_user relation/edge.
+	InternalOwnerUserTable = "findings"
+	// InternalOwnerUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	InternalOwnerUserInverseTable = "users"
+	// InternalOwnerUserColumn is the table column denoting the internal_owner_user relation/edge.
+	InternalOwnerUserColumn = "internal_owner_user_id"
+	// InternalOwnerGroupTable is the table that holds the internal_owner_group relation/edge.
+	InternalOwnerGroupTable = "findings"
+	// InternalOwnerGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	InternalOwnerGroupInverseTable = "groups"
+	// InternalOwnerGroupColumn is the table column denoting the internal_owner_group relation/edge.
+	InternalOwnerGroupColumn = "internal_owner_group_id"
+	// InternalOwnerIdentityHolderTable is the table that holds the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderTable = "findings"
+	// InternalOwnerIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	InternalOwnerIdentityHolderInverseTable = "identity_holders"
+	// InternalOwnerIdentityHolderColumn is the table column denoting the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderColumn = "internal_owner_identity_holder_id"
 	// ReviewedByUserTable is the table that holds the reviewed_by_user relation/edge.
 	ReviewedByUserTable = "findings"
 	// ReviewedByUserInverseTable is the table name for the User entity.
@@ -439,6 +474,10 @@ var Columns = []string{
 	FieldManagedBy,
 	FieldIntegrationRunID,
 	FieldOwnerID,
+	FieldInternalOwner,
+	FieldInternalOwnerUserID,
+	FieldInternalOwnerGroupID,
+	FieldInternalOwnerIdentityHolderID,
 	FieldReviewedBy,
 	FieldReviewedByUserID,
 	FieldReviewedByGroupID,
@@ -693,6 +732,26 @@ func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// ByInternalOwner orders the results by the internal_owner field.
+func ByInternalOwner(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwner, opts...).ToFunc()
+}
+
+// ByInternalOwnerUserID orders the results by the internal_owner_user_id field.
+func ByInternalOwnerUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerUserID, opts...).ToFunc()
+}
+
+// ByInternalOwnerGroupID orders the results by the internal_owner_group_id field.
+func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
+}
+
+// ByInternalOwnerIdentityHolderID orders the results by the internal_owner_identity_holder_id field.
+func ByInternalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerIdentityHolderID, opts...).ToFunc()
 }
 
 // ByReviewedBy orders the results by the reviewed_by field.
@@ -981,6 +1040,27 @@ func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByInternalOwnerUserField orders the results by internal_owner_user field.
+func ByInternalOwnerUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByInternalOwnerGroupField orders the results by internal_owner_group field.
+func ByInternalOwnerGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByInternalOwnerIdentityHolderField orders the results by internal_owner_identity_holder field.
+func ByInternalOwnerIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerIdentityHolderStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -1352,6 +1432,27 @@ func newEditorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EditorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
+	)
+}
+func newInternalOwnerUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerUserTable, InternalOwnerUserColumn),
+	)
+}
+func newInternalOwnerGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerGroupTable, InternalOwnerGroupColumn),
+	)
+}
+func newInternalOwnerIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerIdentityHolderTable, InternalOwnerIdentityHolderColumn),
 	)
 }
 func newReviewedByUserStep() *sqlgraph.Step {

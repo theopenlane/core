@@ -57,18 +57,14 @@ type backfillRoutine struct {
 
 // backfillRoutines are the registered backfill routines
 var backfillRoutines = []backfillRoutine{
-	// leaving for example structure
-	//
-	//	{
-	//		Name:    "ingest-batching",
-	//		Version: "v2",
-	//		Enabled: true,
-	//		Run: func(ctx context.Context, deps backfillDeps) error {
-	//			seedIntegrationLoops(ctx, deps.Runtime)
-	//
-	//			return nil
-	//		},
-	//	},
+	{
+		Name:    "backfill-schema-responsibilities",
+		Version: "v1",
+		Enabled: true,
+		Run: func(ctx context.Context, deps backfillDeps) error {
+			return backfillSchemaResponsibilities(ctx, deps.Client)
+		},
+	},
 }
 
 // WithBackfill submits the config-gated backfill scheduling run

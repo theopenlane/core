@@ -970,31 +970,31 @@ func init() {
 	// findinghistory.DefaultTags holds the default value on creation for the tags field.
 	findinghistory.DefaultTags = findinghistoryDescTags.Default.([]string)
 	// findinghistoryDescSystemOwned is the schema descriptor for system_owned field.
-	findinghistoryDescSystemOwned := findinghistoryFields[27].Descriptor()
+	findinghistoryDescSystemOwned := findinghistoryFields[31].Descriptor()
 	// findinghistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	findinghistory.DefaultSystemOwned = findinghistoryDescSystemOwned.Default.(bool)
 	// findinghistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	findinghistoryDescWorkflowEligibleMarker := findinghistoryFields[36].Descriptor()
+	findinghistoryDescWorkflowEligibleMarker := findinghistoryFields[40].Descriptor()
 	// findinghistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	findinghistory.DefaultWorkflowEligibleMarker = findinghistoryDescWorkflowEligibleMarker.Default.(bool)
 	// findinghistoryDescCategories is the schema descriptor for categories field.
-	findinghistoryDescCategories := findinghistoryFields[45].Descriptor()
+	findinghistoryDescCategories := findinghistoryFields[49].Descriptor()
 	// findinghistory.DefaultCategories holds the default value on creation for the categories field.
 	findinghistory.DefaultCategories = findinghistoryDescCategories.Default.([]string)
 	// findinghistoryDescOpen is the schema descriptor for open field.
-	findinghistoryDescOpen := findinghistoryFields[53].Descriptor()
+	findinghistoryDescOpen := findinghistoryFields[57].Descriptor()
 	// findinghistory.DefaultOpen holds the default value on creation for the open field.
 	findinghistory.DefaultOpen = findinghistoryDescOpen.Default.(bool)
 	// findinghistoryDescReferences is the schema descriptor for references field.
-	findinghistoryDescReferences := findinghistoryFields[62].Descriptor()
+	findinghistoryDescReferences := findinghistoryFields[66].Descriptor()
 	// findinghistory.DefaultReferences holds the default value on creation for the references field.
 	findinghistory.DefaultReferences = findinghistoryDescReferences.Default.([]string)
 	// findinghistoryDescStepsToReproduce is the schema descriptor for steps_to_reproduce field.
-	findinghistoryDescStepsToReproduce := findinghistoryFields[63].Descriptor()
+	findinghistoryDescStepsToReproduce := findinghistoryFields[67].Descriptor()
 	// findinghistory.DefaultStepsToReproduce holds the default value on creation for the steps_to_reproduce field.
 	findinghistory.DefaultStepsToReproduce = findinghistoryDescStepsToReproduce.Default.([]string)
 	// findinghistoryDescTargets is the schema descriptor for targets field.
-	findinghistoryDescTargets := findinghistoryFields[64].Descriptor()
+	findinghistoryDescTargets := findinghistoryFields[68].Descriptor()
 	// findinghistory.DefaultTargets holds the default value on creation for the targets field.
 	findinghistory.DefaultTargets = findinghistoryDescTargets.Default.([]string)
 	// findinghistoryDescID is the schema descriptor for id field.
@@ -1956,11 +1956,11 @@ func init() {
 	// riskhistory.DefaultTags holds the default value on creation for the tags field.
 	riskhistory.DefaultTags = riskhistoryDescTags.Default.([]string)
 	// riskhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	riskhistoryDescWorkflowEligibleMarker := riskhistoryFields[27].Descriptor()
+	riskhistoryDescWorkflowEligibleMarker := riskhistoryFields[35].Descriptor()
 	// riskhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	riskhistory.DefaultWorkflowEligibleMarker = riskhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// riskhistoryDescReviewRequired is the schema descriptor for review_required field.
-	riskhistoryDescReviewRequired := riskhistoryFields[46].Descriptor()
+	riskhistoryDescReviewRequired := riskhistoryFields[54].Descriptor()
 	// riskhistory.DefaultReviewRequired holds the default value on creation for the review_required field.
 	riskhistory.DefaultReviewRequired = riskhistoryDescReviewRequired.Default.(bool)
 	// riskhistoryDescID is the schema descriptor for id field.
@@ -2765,31 +2765,31 @@ func init() {
 	// vulnerabilityhistory.DefaultTags holds the default value on creation for the tags field.
 	vulnerabilityhistory.DefaultTags = vulnerabilityhistoryDescTags.Default.([]string)
 	// vulnerabilityhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	vulnerabilityhistoryDescSystemOwned := vulnerabilityhistoryFields[27].Descriptor()
+	vulnerabilityhistoryDescSystemOwned := vulnerabilityhistoryFields[31].Descriptor()
 	// vulnerabilityhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	vulnerabilityhistory.DefaultSystemOwned = vulnerabilityhistoryDescSystemOwned.Default.(bool)
 	// vulnerabilityhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	vulnerabilityhistoryDescWorkflowEligibleMarker := vulnerabilityhistoryFields[36].Descriptor()
+	vulnerabilityhistoryDescWorkflowEligibleMarker := vulnerabilityhistoryFields[40].Descriptor()
 	// vulnerabilityhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	vulnerabilityhistory.DefaultWorkflowEligibleMarker = vulnerabilityhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// vulnerabilityhistoryDescOpen is the schema descriptor for open field.
-	vulnerabilityhistoryDescOpen := vulnerabilityhistoryFields[53].Descriptor()
+	vulnerabilityhistoryDescOpen := vulnerabilityhistoryFields[57].Descriptor()
 	// vulnerabilityhistory.DefaultOpen holds the default value on creation for the open field.
 	vulnerabilityhistory.DefaultOpen = vulnerabilityhistoryDescOpen.Default.(bool)
 	// vulnerabilityhistoryDescBlocking is the schema descriptor for blocking field.
-	vulnerabilityhistoryDescBlocking := vulnerabilityhistoryFields[54].Descriptor()
+	vulnerabilityhistoryDescBlocking := vulnerabilityhistoryFields[58].Descriptor()
 	// vulnerabilityhistory.DefaultBlocking holds the default value on creation for the blocking field.
 	vulnerabilityhistory.DefaultBlocking = vulnerabilityhistoryDescBlocking.Default.(bool)
 	// vulnerabilityhistoryDescReferences is the schema descriptor for references field.
-	vulnerabilityhistoryDescReferences := vulnerabilityhistoryFields[58].Descriptor()
+	vulnerabilityhistoryDescReferences := vulnerabilityhistoryFields[62].Descriptor()
 	// vulnerabilityhistory.DefaultReferences holds the default value on creation for the references field.
 	vulnerabilityhistory.DefaultReferences = vulnerabilityhistoryDescReferences.Default.([]string)
 	// vulnerabilityhistoryDescImpacts is the schema descriptor for impacts field.
-	vulnerabilityhistoryDescImpacts := vulnerabilityhistoryFields[59].Descriptor()
+	vulnerabilityhistoryDescImpacts := vulnerabilityhistoryFields[63].Descriptor()
 	// vulnerabilityhistory.DefaultImpacts holds the default value on creation for the impacts field.
 	vulnerabilityhistory.DefaultImpacts = vulnerabilityhistoryDescImpacts.Default.([]string)
 	// vulnerabilityhistoryDescCweIds is the schema descriptor for cwe_ids field.
-	vulnerabilityhistoryDescCweIds := vulnerabilityhistoryFields[60].Descriptor()
+	vulnerabilityhistoryDescCweIds := vulnerabilityhistoryFields[64].Descriptor()
 	// vulnerabilityhistory.DefaultCweIds holds the default value on creation for the cwe_ids field.
 	vulnerabilityhistory.DefaultCweIds = vulnerabilityhistoryDescCweIds.Default.([]string)
 	// vulnerabilityhistoryDescID is the schema descriptor for id field.

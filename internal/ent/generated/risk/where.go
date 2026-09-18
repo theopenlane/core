@@ -137,6 +137,46 @@ func OwnerID(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// StakeholderName applies equality check predicate on the "stakeholder_name" field. It's identical to StakeholderNameEQ.
+func StakeholderName(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldStakeholderName, v))
+}
+
+// StakeholderUserID applies equality check predicate on the "stakeholder_user_id" field. It's identical to StakeholderUserIDEQ.
+func StakeholderUserID(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldStakeholderUserID, v))
+}
+
+// StakeholderGroupID applies equality check predicate on the "stakeholder_group_id" field. It's identical to StakeholderGroupIDEQ.
+func StakeholderGroupID(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldStakeholderGroupID, v))
+}
+
+// StakeholderIdentityHolderID applies equality check predicate on the "stakeholder_identity_holder_id" field. It's identical to StakeholderIdentityHolderIDEQ.
+func StakeholderIdentityHolderID(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldStakeholderIdentityHolderID, v))
+}
+
+// DelegateName applies equality check predicate on the "delegate_name" field. It's identical to DelegateNameEQ.
+func DelegateName(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldDelegateName, v))
+}
+
+// DelegateUserID applies equality check predicate on the "delegate_user_id" field. It's identical to DelegateUserIDEQ.
+func DelegateUserID(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldDelegateUserID, v))
+}
+
+// DelegateGroupID applies equality check predicate on the "delegate_group_id" field. It's identical to DelegateGroupIDEQ.
+func DelegateGroupID(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldDelegateGroupID, v))
+}
+
+// DelegateIdentityHolderID applies equality check predicate on the "delegate_identity_holder_id" field. It's identical to DelegateIdentityHolderIDEQ.
+func DelegateIdentityHolderID(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldDelegateIdentityHolderID, v))
+}
+
 // RiskKindName applies equality check predicate on the "risk_kind_name" field. It's identical to RiskKindNameEQ.
 func RiskKindName(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldRiskKindName, v))
@@ -1240,6 +1280,606 @@ func OwnerIDEqualFold(v string) predicate.Risk {
 // OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
 func OwnerIDContainsFold(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
+// StakeholderNameEQ applies the EQ predicate on the "stakeholder_name" field.
+func StakeholderNameEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldStakeholderName, v))
+}
+
+// StakeholderNameNEQ applies the NEQ predicate on the "stakeholder_name" field.
+func StakeholderNameNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldStakeholderName, v))
+}
+
+// StakeholderNameIn applies the In predicate on the "stakeholder_name" field.
+func StakeholderNameIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldStakeholderName, vs...))
+}
+
+// StakeholderNameNotIn applies the NotIn predicate on the "stakeholder_name" field.
+func StakeholderNameNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldStakeholderName, vs...))
+}
+
+// StakeholderNameGT applies the GT predicate on the "stakeholder_name" field.
+func StakeholderNameGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldStakeholderName, v))
+}
+
+// StakeholderNameGTE applies the GTE predicate on the "stakeholder_name" field.
+func StakeholderNameGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldStakeholderName, v))
+}
+
+// StakeholderNameLT applies the LT predicate on the "stakeholder_name" field.
+func StakeholderNameLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldStakeholderName, v))
+}
+
+// StakeholderNameLTE applies the LTE predicate on the "stakeholder_name" field.
+func StakeholderNameLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldStakeholderName, v))
+}
+
+// StakeholderNameContains applies the Contains predicate on the "stakeholder_name" field.
+func StakeholderNameContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldStakeholderName, v))
+}
+
+// StakeholderNameHasPrefix applies the HasPrefix predicate on the "stakeholder_name" field.
+func StakeholderNameHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldStakeholderName, v))
+}
+
+// StakeholderNameHasSuffix applies the HasSuffix predicate on the "stakeholder_name" field.
+func StakeholderNameHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldStakeholderName, v))
+}
+
+// StakeholderNameIsNil applies the IsNil predicate on the "stakeholder_name" field.
+func StakeholderNameIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldStakeholderName))
+}
+
+// StakeholderNameNotNil applies the NotNil predicate on the "stakeholder_name" field.
+func StakeholderNameNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldStakeholderName))
+}
+
+// StakeholderNameEqualFold applies the EqualFold predicate on the "stakeholder_name" field.
+func StakeholderNameEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldStakeholderName, v))
+}
+
+// StakeholderNameContainsFold applies the ContainsFold predicate on the "stakeholder_name" field.
+func StakeholderNameContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldStakeholderName, v))
+}
+
+// StakeholderUserIDEQ applies the EQ predicate on the "stakeholder_user_id" field.
+func StakeholderUserIDEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldStakeholderUserID, v))
+}
+
+// StakeholderUserIDNEQ applies the NEQ predicate on the "stakeholder_user_id" field.
+func StakeholderUserIDNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldStakeholderUserID, v))
+}
+
+// StakeholderUserIDIn applies the In predicate on the "stakeholder_user_id" field.
+func StakeholderUserIDIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldStakeholderUserID, vs...))
+}
+
+// StakeholderUserIDNotIn applies the NotIn predicate on the "stakeholder_user_id" field.
+func StakeholderUserIDNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldStakeholderUserID, vs...))
+}
+
+// StakeholderUserIDGT applies the GT predicate on the "stakeholder_user_id" field.
+func StakeholderUserIDGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldStakeholderUserID, v))
+}
+
+// StakeholderUserIDGTE applies the GTE predicate on the "stakeholder_user_id" field.
+func StakeholderUserIDGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldStakeholderUserID, v))
+}
+
+// StakeholderUserIDLT applies the LT predicate on the "stakeholder_user_id" field.
+func StakeholderUserIDLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldStakeholderUserID, v))
+}
+
+// StakeholderUserIDLTE applies the LTE predicate on the "stakeholder_user_id" field.
+func StakeholderUserIDLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldStakeholderUserID, v))
+}
+
+// StakeholderUserIDContains applies the Contains predicate on the "stakeholder_user_id" field.
+func StakeholderUserIDContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldStakeholderUserID, v))
+}
+
+// StakeholderUserIDHasPrefix applies the HasPrefix predicate on the "stakeholder_user_id" field.
+func StakeholderUserIDHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldStakeholderUserID, v))
+}
+
+// StakeholderUserIDHasSuffix applies the HasSuffix predicate on the "stakeholder_user_id" field.
+func StakeholderUserIDHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldStakeholderUserID, v))
+}
+
+// StakeholderUserIDIsNil applies the IsNil predicate on the "stakeholder_user_id" field.
+func StakeholderUserIDIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldStakeholderUserID))
+}
+
+// StakeholderUserIDNotNil applies the NotNil predicate on the "stakeholder_user_id" field.
+func StakeholderUserIDNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldStakeholderUserID))
+}
+
+// StakeholderUserIDEqualFold applies the EqualFold predicate on the "stakeholder_user_id" field.
+func StakeholderUserIDEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldStakeholderUserID, v))
+}
+
+// StakeholderUserIDContainsFold applies the ContainsFold predicate on the "stakeholder_user_id" field.
+func StakeholderUserIDContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldStakeholderUserID, v))
+}
+
+// StakeholderGroupIDEQ applies the EQ predicate on the "stakeholder_group_id" field.
+func StakeholderGroupIDEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldStakeholderGroupID, v))
+}
+
+// StakeholderGroupIDNEQ applies the NEQ predicate on the "stakeholder_group_id" field.
+func StakeholderGroupIDNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldStakeholderGroupID, v))
+}
+
+// StakeholderGroupIDIn applies the In predicate on the "stakeholder_group_id" field.
+func StakeholderGroupIDIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldStakeholderGroupID, vs...))
+}
+
+// StakeholderGroupIDNotIn applies the NotIn predicate on the "stakeholder_group_id" field.
+func StakeholderGroupIDNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldStakeholderGroupID, vs...))
+}
+
+// StakeholderGroupIDGT applies the GT predicate on the "stakeholder_group_id" field.
+func StakeholderGroupIDGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldStakeholderGroupID, v))
+}
+
+// StakeholderGroupIDGTE applies the GTE predicate on the "stakeholder_group_id" field.
+func StakeholderGroupIDGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldStakeholderGroupID, v))
+}
+
+// StakeholderGroupIDLT applies the LT predicate on the "stakeholder_group_id" field.
+func StakeholderGroupIDLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldStakeholderGroupID, v))
+}
+
+// StakeholderGroupIDLTE applies the LTE predicate on the "stakeholder_group_id" field.
+func StakeholderGroupIDLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldStakeholderGroupID, v))
+}
+
+// StakeholderGroupIDContains applies the Contains predicate on the "stakeholder_group_id" field.
+func StakeholderGroupIDContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldStakeholderGroupID, v))
+}
+
+// StakeholderGroupIDHasPrefix applies the HasPrefix predicate on the "stakeholder_group_id" field.
+func StakeholderGroupIDHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldStakeholderGroupID, v))
+}
+
+// StakeholderGroupIDHasSuffix applies the HasSuffix predicate on the "stakeholder_group_id" field.
+func StakeholderGroupIDHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldStakeholderGroupID, v))
+}
+
+// StakeholderGroupIDIsNil applies the IsNil predicate on the "stakeholder_group_id" field.
+func StakeholderGroupIDIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldStakeholderGroupID))
+}
+
+// StakeholderGroupIDNotNil applies the NotNil predicate on the "stakeholder_group_id" field.
+func StakeholderGroupIDNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldStakeholderGroupID))
+}
+
+// StakeholderGroupIDEqualFold applies the EqualFold predicate on the "stakeholder_group_id" field.
+func StakeholderGroupIDEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldStakeholderGroupID, v))
+}
+
+// StakeholderGroupIDContainsFold applies the ContainsFold predicate on the "stakeholder_group_id" field.
+func StakeholderGroupIDContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldStakeholderGroupID, v))
+}
+
+// StakeholderIdentityHolderIDEQ applies the EQ predicate on the "stakeholder_identity_holder_id" field.
+func StakeholderIdentityHolderIDEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldStakeholderIdentityHolderID, v))
+}
+
+// StakeholderIdentityHolderIDNEQ applies the NEQ predicate on the "stakeholder_identity_holder_id" field.
+func StakeholderIdentityHolderIDNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldStakeholderIdentityHolderID, v))
+}
+
+// StakeholderIdentityHolderIDIn applies the In predicate on the "stakeholder_identity_holder_id" field.
+func StakeholderIdentityHolderIDIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldStakeholderIdentityHolderID, vs...))
+}
+
+// StakeholderIdentityHolderIDNotIn applies the NotIn predicate on the "stakeholder_identity_holder_id" field.
+func StakeholderIdentityHolderIDNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldStakeholderIdentityHolderID, vs...))
+}
+
+// StakeholderIdentityHolderIDGT applies the GT predicate on the "stakeholder_identity_holder_id" field.
+func StakeholderIdentityHolderIDGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldStakeholderIdentityHolderID, v))
+}
+
+// StakeholderIdentityHolderIDGTE applies the GTE predicate on the "stakeholder_identity_holder_id" field.
+func StakeholderIdentityHolderIDGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldStakeholderIdentityHolderID, v))
+}
+
+// StakeholderIdentityHolderIDLT applies the LT predicate on the "stakeholder_identity_holder_id" field.
+func StakeholderIdentityHolderIDLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldStakeholderIdentityHolderID, v))
+}
+
+// StakeholderIdentityHolderIDLTE applies the LTE predicate on the "stakeholder_identity_holder_id" field.
+func StakeholderIdentityHolderIDLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldStakeholderIdentityHolderID, v))
+}
+
+// StakeholderIdentityHolderIDContains applies the Contains predicate on the "stakeholder_identity_holder_id" field.
+func StakeholderIdentityHolderIDContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldStakeholderIdentityHolderID, v))
+}
+
+// StakeholderIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "stakeholder_identity_holder_id" field.
+func StakeholderIdentityHolderIDHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldStakeholderIdentityHolderID, v))
+}
+
+// StakeholderIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "stakeholder_identity_holder_id" field.
+func StakeholderIdentityHolderIDHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldStakeholderIdentityHolderID, v))
+}
+
+// StakeholderIdentityHolderIDIsNil applies the IsNil predicate on the "stakeholder_identity_holder_id" field.
+func StakeholderIdentityHolderIDIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldStakeholderIdentityHolderID))
+}
+
+// StakeholderIdentityHolderIDNotNil applies the NotNil predicate on the "stakeholder_identity_holder_id" field.
+func StakeholderIdentityHolderIDNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldStakeholderIdentityHolderID))
+}
+
+// StakeholderIdentityHolderIDEqualFold applies the EqualFold predicate on the "stakeholder_identity_holder_id" field.
+func StakeholderIdentityHolderIDEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldStakeholderIdentityHolderID, v))
+}
+
+// StakeholderIdentityHolderIDContainsFold applies the ContainsFold predicate on the "stakeholder_identity_holder_id" field.
+func StakeholderIdentityHolderIDContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldStakeholderIdentityHolderID, v))
+}
+
+// DelegateNameEQ applies the EQ predicate on the "delegate_name" field.
+func DelegateNameEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldDelegateName, v))
+}
+
+// DelegateNameNEQ applies the NEQ predicate on the "delegate_name" field.
+func DelegateNameNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldDelegateName, v))
+}
+
+// DelegateNameIn applies the In predicate on the "delegate_name" field.
+func DelegateNameIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldDelegateName, vs...))
+}
+
+// DelegateNameNotIn applies the NotIn predicate on the "delegate_name" field.
+func DelegateNameNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldDelegateName, vs...))
+}
+
+// DelegateNameGT applies the GT predicate on the "delegate_name" field.
+func DelegateNameGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldDelegateName, v))
+}
+
+// DelegateNameGTE applies the GTE predicate on the "delegate_name" field.
+func DelegateNameGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldDelegateName, v))
+}
+
+// DelegateNameLT applies the LT predicate on the "delegate_name" field.
+func DelegateNameLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldDelegateName, v))
+}
+
+// DelegateNameLTE applies the LTE predicate on the "delegate_name" field.
+func DelegateNameLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldDelegateName, v))
+}
+
+// DelegateNameContains applies the Contains predicate on the "delegate_name" field.
+func DelegateNameContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldDelegateName, v))
+}
+
+// DelegateNameHasPrefix applies the HasPrefix predicate on the "delegate_name" field.
+func DelegateNameHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldDelegateName, v))
+}
+
+// DelegateNameHasSuffix applies the HasSuffix predicate on the "delegate_name" field.
+func DelegateNameHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldDelegateName, v))
+}
+
+// DelegateNameIsNil applies the IsNil predicate on the "delegate_name" field.
+func DelegateNameIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldDelegateName))
+}
+
+// DelegateNameNotNil applies the NotNil predicate on the "delegate_name" field.
+func DelegateNameNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldDelegateName))
+}
+
+// DelegateNameEqualFold applies the EqualFold predicate on the "delegate_name" field.
+func DelegateNameEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldDelegateName, v))
+}
+
+// DelegateNameContainsFold applies the ContainsFold predicate on the "delegate_name" field.
+func DelegateNameContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldDelegateName, v))
+}
+
+// DelegateUserIDEQ applies the EQ predicate on the "delegate_user_id" field.
+func DelegateUserIDEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDNEQ applies the NEQ predicate on the "delegate_user_id" field.
+func DelegateUserIDNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDIn applies the In predicate on the "delegate_user_id" field.
+func DelegateUserIDIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldDelegateUserID, vs...))
+}
+
+// DelegateUserIDNotIn applies the NotIn predicate on the "delegate_user_id" field.
+func DelegateUserIDNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldDelegateUserID, vs...))
+}
+
+// DelegateUserIDGT applies the GT predicate on the "delegate_user_id" field.
+func DelegateUserIDGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDGTE applies the GTE predicate on the "delegate_user_id" field.
+func DelegateUserIDGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDLT applies the LT predicate on the "delegate_user_id" field.
+func DelegateUserIDLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDLTE applies the LTE predicate on the "delegate_user_id" field.
+func DelegateUserIDLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDContains applies the Contains predicate on the "delegate_user_id" field.
+func DelegateUserIDContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDHasPrefix applies the HasPrefix predicate on the "delegate_user_id" field.
+func DelegateUserIDHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDHasSuffix applies the HasSuffix predicate on the "delegate_user_id" field.
+func DelegateUserIDHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDIsNil applies the IsNil predicate on the "delegate_user_id" field.
+func DelegateUserIDIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldDelegateUserID))
+}
+
+// DelegateUserIDNotNil applies the NotNil predicate on the "delegate_user_id" field.
+func DelegateUserIDNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldDelegateUserID))
+}
+
+// DelegateUserIDEqualFold applies the EqualFold predicate on the "delegate_user_id" field.
+func DelegateUserIDEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldDelegateUserID, v))
+}
+
+// DelegateUserIDContainsFold applies the ContainsFold predicate on the "delegate_user_id" field.
+func DelegateUserIDContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldDelegateUserID, v))
+}
+
+// DelegateGroupIDEQ applies the EQ predicate on the "delegate_group_id" field.
+func DelegateGroupIDEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDNEQ applies the NEQ predicate on the "delegate_group_id" field.
+func DelegateGroupIDNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDIn applies the In predicate on the "delegate_group_id" field.
+func DelegateGroupIDIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldDelegateGroupID, vs...))
+}
+
+// DelegateGroupIDNotIn applies the NotIn predicate on the "delegate_group_id" field.
+func DelegateGroupIDNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldDelegateGroupID, vs...))
+}
+
+// DelegateGroupIDGT applies the GT predicate on the "delegate_group_id" field.
+func DelegateGroupIDGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDGTE applies the GTE predicate on the "delegate_group_id" field.
+func DelegateGroupIDGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDLT applies the LT predicate on the "delegate_group_id" field.
+func DelegateGroupIDLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDLTE applies the LTE predicate on the "delegate_group_id" field.
+func DelegateGroupIDLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDContains applies the Contains predicate on the "delegate_group_id" field.
+func DelegateGroupIDContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDHasPrefix applies the HasPrefix predicate on the "delegate_group_id" field.
+func DelegateGroupIDHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDHasSuffix applies the HasSuffix predicate on the "delegate_group_id" field.
+func DelegateGroupIDHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDIsNil applies the IsNil predicate on the "delegate_group_id" field.
+func DelegateGroupIDIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldDelegateGroupID))
+}
+
+// DelegateGroupIDNotNil applies the NotNil predicate on the "delegate_group_id" field.
+func DelegateGroupIDNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldDelegateGroupID))
+}
+
+// DelegateGroupIDEqualFold applies the EqualFold predicate on the "delegate_group_id" field.
+func DelegateGroupIDEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldDelegateGroupID, v))
+}
+
+// DelegateGroupIDContainsFold applies the ContainsFold predicate on the "delegate_group_id" field.
+func DelegateGroupIDContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldDelegateGroupID, v))
+}
+
+// DelegateIdentityHolderIDEQ applies the EQ predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDNEQ applies the NEQ predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDNEQ(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDIn applies the In predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldIn(FieldDelegateIdentityHolderID, vs...))
+}
+
+// DelegateIdentityHolderIDNotIn applies the NotIn predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDNotIn(vs ...string) predicate.Risk {
+	return predicate.Risk(sql.FieldNotIn(FieldDelegateIdentityHolderID, vs...))
+}
+
+// DelegateIdentityHolderIDGT applies the GT predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDGT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGT(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDGTE applies the GTE predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDGTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldGTE(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDLT applies the LT predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDLT(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLT(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDLTE applies the LTE predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDLTE(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldLTE(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDContains applies the Contains predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDContains(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContains(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDHasPrefix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasPrefix(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDHasSuffix(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldHasSuffix(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDIsNil applies the IsNil predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldDelegateIdentityHolderID))
+}
+
+// DelegateIdentityHolderIDNotNil applies the NotNil predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldDelegateIdentityHolderID))
+}
+
+// DelegateIdentityHolderIDEqualFold applies the EqualFold predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDEqualFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldEqualFold(FieldDelegateIdentityHolderID, v))
+}
+
+// DelegateIdentityHolderIDContainsFold applies the ContainsFold predicate on the "delegate_identity_holder_id" field.
+func DelegateIdentityHolderIDContainsFold(v string) predicate.Risk {
+	return predicate.Risk(sql.FieldContainsFold(FieldDelegateIdentityHolderID, v))
 }
 
 // RiskKindNameEQ applies the EQ predicate on the "risk_kind_name" field.
@@ -3234,6 +3874,144 @@ func HasViewers() predicate.Risk {
 func HasViewersWith(preds ...predicate.Group) predicate.Risk {
 	return predicate.Risk(func(s *sql.Selector) {
 		step := newViewersStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasStakeholderUser applies the HasEdge predicate on the "stakeholder_user" edge.
+func HasStakeholderUser() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, StakeholderUserTable, StakeholderUserColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasStakeholderUserWith applies the HasEdge predicate on the "stakeholder_user" edge with a given conditions (other predicates).
+func HasStakeholderUserWith(preds ...predicate.User) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newStakeholderUserStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasStakeholderGroup applies the HasEdge predicate on the "stakeholder_group" edge.
+func HasStakeholderGroup() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, StakeholderGroupTable, StakeholderGroupColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasStakeholderGroupWith applies the HasEdge predicate on the "stakeholder_group" edge with a given conditions (other predicates).
+func HasStakeholderGroupWith(preds ...predicate.Group) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newStakeholderGroupStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasStakeholderIdentityHolder applies the HasEdge predicate on the "stakeholder_identity_holder" edge.
+func HasStakeholderIdentityHolder() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, StakeholderIdentityHolderTable, StakeholderIdentityHolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasStakeholderIdentityHolderWith applies the HasEdge predicate on the "stakeholder_identity_holder" edge with a given conditions (other predicates).
+func HasStakeholderIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newStakeholderIdentityHolderStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDelegateUser applies the HasEdge predicate on the "delegate_user" edge.
+func HasDelegateUser() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, DelegateUserTable, DelegateUserColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDelegateUserWith applies the HasEdge predicate on the "delegate_user" edge with a given conditions (other predicates).
+func HasDelegateUserWith(preds ...predicate.User) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newDelegateUserStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDelegateGroup applies the HasEdge predicate on the "delegate_group" edge.
+func HasDelegateGroup() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, DelegateGroupTable, DelegateGroupColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDelegateGroupWith applies the HasEdge predicate on the "delegate_group" edge with a given conditions (other predicates).
+func HasDelegateGroupWith(preds ...predicate.Group) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newDelegateGroupStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDelegateIdentityHolder applies the HasEdge predicate on the "delegate_identity_holder" edge.
+func HasDelegateIdentityHolder() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, DelegateIdentityHolderTable, DelegateIdentityHolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDelegateIdentityHolderWith applies the HasEdge predicate on the "delegate_identity_holder" edge with a given conditions (other predicates).
+func HasDelegateIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newDelegateIdentityHolderStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

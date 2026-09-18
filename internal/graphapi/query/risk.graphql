@@ -5,7 +5,11 @@ mutation CreateBulkCSVRisk ($input: Upload!) {
 			businessCostsJSON
 			createdAt
 			createdBy
+			delegateGroupID
 			delegateID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			detailsJSON
 			displayID
@@ -42,7 +46,11 @@ mutation CreateBulkCSVRisk ($input: Upload!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			stakeholderGroupID
 			stakeholderID
+			stakeholderIdentityHolderID
+			stakeholderName
+			stakeholderUserID
 			status
 			tags
 			updatedAt
@@ -67,7 +75,11 @@ mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
 			businessCostsJSON
 			createdAt
 			createdBy
+			delegateGroupID
 			delegateID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			detailsJSON
 			displayID
@@ -104,7 +116,11 @@ mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			stakeholderGroupID
 			stakeholderID
+			stakeholderIdentityHolderID
+			stakeholderName
+			stakeholderUserID
 			status
 			tags
 			updatedAt
@@ -129,7 +145,11 @@ mutation CreateRisk ($input: CreateRiskInput!) {
 			businessCostsJSON
 			createdAt
 			createdBy
+			delegateGroupID
 			delegateID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			detailsJSON
 			displayID
@@ -166,7 +186,11 @@ mutation CreateRisk ($input: CreateRiskInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			stakeholderGroupID
 			stakeholderID
+			stakeholderIdentityHolderID
+			stakeholderName
+			stakeholderUserID
 			status
 			tags
 			updatedAt
@@ -236,7 +260,11 @@ query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				businessCostsJSON
 				createdAt
 				createdBy
+				delegateGroupID
 				delegateID
+				delegateIdentityHolderID
+				delegateName
+				delegateUserID
 				details
 				detailsJSON
 				displayID
@@ -273,7 +301,11 @@ query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				stakeholderGroupID
 				stakeholderID
+				stakeholderIdentityHolderID
+				stakeholderName
+				stakeholderUserID
 				status
 				tags
 				updatedAt
@@ -330,7 +362,11 @@ query GetRiskByID ($riskId: ID!) {
 		businessCostsJSON
 		createdAt
 		createdBy
+		delegateGroupID
 		delegateID
+		delegateIdentityHolderID
+		delegateName
+		delegateUserID
 		details
 		detailsJSON
 		displayID
@@ -367,7 +403,11 @@ query GetRiskByID ($riskId: ID!) {
 		sourceDefinitionID
 		sourceDefinitionVersion
 		sourceInstanceID
+		stakeholderGroupID
 		stakeholderID
+		stakeholderIdentityHolderID
+		stakeholderName
+		stakeholderUserID
 		status
 		tags
 		updatedAt
@@ -431,7 +471,11 @@ query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				businessCostsJSON
 				createdAt
 				createdBy
+				delegateGroupID
 				delegateID
+				delegateIdentityHolderID
+				delegateName
+				delegateUserID
 				details
 				detailsJSON
 				displayID
@@ -468,7 +512,11 @@ query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				sourceDefinitionID
 				sourceDefinitionVersion
 				sourceInstanceID
+				stakeholderGroupID
 				stakeholderID
+				stakeholderIdentityHolderID
+				stakeholderName
+				stakeholderUserID
 				status
 				tags
 				updatedAt
@@ -526,7 +574,11 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			businessCostsJSON
 			createdAt
 			createdBy
+			delegateGroupID
 			delegateID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			detailsJSON
 			displayID
@@ -563,7 +615,11 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			stakeholderGroupID
 			stakeholderID
+			stakeholderIdentityHolderID
+			stakeholderName
+			stakeholderUserID
 			status
 			tags
 			updatedAt
@@ -591,7 +647,11 @@ mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
 			businessCostsJSON
 			createdAt
 			createdBy
+			delegateGroupID
 			delegateID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			detailsJSON
 			displayID
@@ -628,7 +688,11 @@ mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
 			sourceDefinitionID
 			sourceDefinitionVersion
 			sourceInstanceID
+			stakeholderGroupID
 			stakeholderID
+			stakeholderIdentityHolderID
+			stakeholderName
+			stakeholderUserID
 			status
 			tags
 			updatedAt
