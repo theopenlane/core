@@ -293,6 +293,11 @@ data:
           role: {{ .Values.openlane.coreConfiguration.entconfig.emailvalidation.allowedemailtypes.role }}
           {{- end }}
         {{- end }}
+        {{- $sliceValue := (.Values.openlane.coreConfiguration.entconfig.emailvalidation.blockeddomains | default (list)) }}
+        {{- if gt (len $sliceValue) 0 }}
+        blockeddomains:
+        {{- toYaml $sliceValue | nindent 10 }}
+        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.entconfig.billing }}
       billing:
