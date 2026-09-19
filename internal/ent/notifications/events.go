@@ -73,7 +73,7 @@ func Listeners() []gala.Registration {
 					In:    []string{string(enums.TaskStatusOpen)},
 				},
 			},
-			Caller:  notificationCaller,
+			Caller: notificationCaller,
 			Notify: &entityops.NotifySpec{
 				Recipients: entityops.RecipientsFromField(task.FieldAssigneeID),
 				Content: entityops.NotificationContent{
