@@ -5,6 +5,7 @@ import (
 
 	emailverifier "github.com/AfterShip/email-verifier"
 	"github.com/rs/zerolog/log"
+
 	"github.com/theopenlane/core/v2/pkg/metrics"
 )
 
@@ -20,6 +21,10 @@ type EmailVerificationConfig struct {
 	EnableSMTPCheck bool `json:"enablesmtpcheck" koanf:"enablesmtpcheck" default:"false" description:"check email by smtp"`
 	// AllowedEmailTypes defines the allowed email types for verification
 	AllowedEmailTypes AllowedEmailTypes `json:"allowedemailtypes" koanf:"allowedemailtypes"`
+	// BlockedDomains allows the extension of the default disposable emails provided by the verification list
+	// this may be a new known domain that is yet to be updated in the list or just an email we explicitly do
+	// not want ( e.g iCloud or duckduckgo's hide my email )
+	BlockedDomains []string `json:"blockeddomains" koanf:"blockeddomains" description:"custom emails to extend the known disposable emails from the validator"`
 }
 
 // EmailVerifier is a wrapper around the emailverifier.Verifier with additional configuration
@@ -77,6 +82,8 @@ func (c *EmailVerificationConfig) NewVerifier() *EmailVerifier {
 	if c.EnableAutoUpdateDisposable {
 		v.EnableAutoUpdateDisposable()
 	}
+
+	v.AddDisposableDomains(c.BlockedDomains)
 
 	return &EmailVerifier{
 		Client:            v,
