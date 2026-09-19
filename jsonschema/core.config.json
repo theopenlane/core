@@ -2120,6 +2120,10 @@
         "allowedemailtypes": {
           "$ref": "#/$defs/validator.AllowedEmailTypes",
           "description": "AllowedEmailTypes defines the allowed email types for verification"
+        },
+        "blockeddomains": {
+          "$ref": "#/$defs/[]string",
+          "description": "BlockedDomains allows the extension of the default disposable emails provided by the verification list\nthis may be a new known domain that is yet to be updated in the list or just an email we explicitly do\nnot want ( e.g iCloud or duckduckgo's hide my email )"
         }
       },
       "additionalProperties": false,
