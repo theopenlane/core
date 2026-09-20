@@ -74,7 +74,7 @@ func Builder() registry.Builder {
 					Topic:        definitionID.OperationTopic(vulnerabilitySyncOperation.Name()),
 					ClientRef:    fossaClient.ID(),
 					ConfigSchema: vulnerabilitySyncSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true},
+					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					// no Disabled resolver, security vulnerability collection is always on
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) VulnerabilitySync { return u.VulnerabilitySync }),
 					Ingest: []types.IngestContract{
