@@ -10,7 +10,10 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
+
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
@@ -145,9 +148,13 @@ func TestDirectoryGroupProfileChurnRidesAlongMaterialChange(t *testing.T) {
 	assert.Check(t, after.Profile["lastLoginTime"] == directoryProfileChurnedLastLogin, "the profile must ride along the material change")
 }
 
-// TestDirectoryMembershipMetadataChangePersisted verifies a change confined to membership metadata is a material update that is written and emitted
+// TestDirectoryMembershipMetadataChangePersisted verifies metadata persistence follows its volatility
+// descriptor and that a material role change persists the latest metadata in either configuration.
 func TestDirectoryMembershipMetadataChangePersisted(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+
+	field, ok := entityops.SchemaDirectoryMembership.FieldByName(directorymembership.FieldMetadata)
+	assert.Assert(t, ok, "membership metadata must have a field descriptor")
 
 	const prefix = "memchurn"
 
@@ -178,11 +185,34 @@ func TestDirectoryMembershipMetadataChangePersisted(t *testing.T) {
 	waitForGala(t, counters.Runtime)
 
 	assert.Check(t, is.Equal(0, result.Failed))
-	assert.Check(t, is.Equal(1, result.Changed), "a membership metadata change must count as changed")
-	assert.Check(t, is.Equal(int64(1), counters.MembershipUpdates.Load()), "a membership metadata change must emit exactly one update mutation event")
 
-	after := directoryMembershipByExternalIDs(ctx, t, membership.DirectoryAccountID, membership.DirectoryGroupID)
+	afterOperation := directoryMembershipByExternalIDs(ctx, t, membership.DirectoryAccountID, membership.DirectoryGroupID)
 
 	assert.Check(t, is.DeepEqual(before.Metadata, membership.Metadata), "the seeded metadata is the pre-change value")
-	assert.Check(t, is.DeepEqual(churned.Memberships[0].Metadata, after.Metadata), "the stored metadata must carry the new value")
+
+	expectedResults := []int64{1, 1}
+
+	if field.Volatile {
+		expectedResults = []int64{0, 0}
+		assert.Check(t, afterOperation.UpdatedAt.Equal(before.UpdatedAt), "a volatile metadata-only change must not rewrite the row")
+	}
+
+	receivedResults := []int64{int64(result.Changed), counters.MembershipUpdates.Load()}
+	assert.Check(t, is.DeepEqual(expectedResults, receivedResults), "changed records and update events must respect metadata volatility")
+
+	materialized := churned.clone()
+	materialized.Memberships[0].Role = enums.DirectoryMembershipRoleOwner.String()
+	updatesBefore := counters.MembershipUpdates.Load()
+
+	materialResult := ingestDirectorySnapshotFixture(ctx, t, integration, materialized, true)
+	waitForGala(t, counters.Runtime)
+
+	assert.Check(t, is.Equal(0, materialResult.Failed))
+	assert.Check(t, is.Equal(1, materialResult.Changed), "a role change must count as changed")
+	assert.Check(t, is.Equal(int64(1), counters.MembershipUpdates.Load()-updatesBefore), "a role change must emit exactly one update mutation event")
+
+	after := directoryMembershipByExternalIDs(ctx, t, membership.DirectoryAccountID, membership.DirectoryGroupID)
+	assert.Check(t, is.Equal(enums.DirectoryMembershipRoleOwner, after.Role))
+	assert.Check(t, !after.UpdatedAt.Equal(afterOperation.UpdatedAt), "a material membership change must rewrite the row")
+	assert.Check(t, is.DeepEqual(materialized.Memberships[0].Metadata, after.Metadata), "the metadata must be with the material change")
 }

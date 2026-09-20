@@ -28,6 +28,10 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			impact
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			metadata
 			numericSeverity
@@ -103,6 +107,10 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			impact
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			metadata
 			numericSeverity
@@ -178,6 +186,10 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			impact
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			metadata
 			numericSeverity
@@ -342,6 +354,10 @@ query GetFindingByID ($findingId: ID!) {
 		impact
 		integrationRunID
 		internalNotes
+		internalOwner
+		internalOwnerGroupID
+		internalOwnerIdentityHolderID
+		internalOwnerUserID
 		managedBy
 		metadata
 		numericSeverity
@@ -514,6 +530,10 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			impact
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			metadata
 			numericSeverity
@@ -592,6 +612,10 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			impact
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			metadata
 			numericSeverity
@@ -670,6 +694,10 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			impact
 			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
 			managedBy
 			metadata
 			numericSeverity

@@ -726,6 +726,14 @@ var FindingFields = struct {
 	Impact FieldDescriptor
 	// InternalNotes is the internal_notes field
 	InternalNotes FieldDescriptor
+	// InternalOwner is the internal_owner field
+	InternalOwner FieldDescriptor
+	// InternalOwnerGroupID is the internal_owner_group_id field
+	InternalOwnerGroupID FieldDescriptor
+	// InternalOwnerIdentityHolderID is the internal_owner_identity_holder_id field
+	InternalOwnerIdentityHolderID FieldDescriptor
+	// InternalOwnerUserID is the internal_owner_user_id field
+	InternalOwnerUserID FieldDescriptor
 	// Metadata is the metadata field
 	Metadata FieldDescriptor
 	// NumericSeverity is the numeric_severity field
@@ -789,59 +797,63 @@ var FindingFields = struct {
 	// Vector is the vector field
 	Vector FieldDescriptor
 }{
-	AssessmentID:               FieldDescriptor{Name: "assessment_id", InputKey: "assessment_id"},
-	AssignedTo:                 FieldDescriptor{Name: "assigned_to", InputKey: "assigned_to"},
-	AssignedToGroupID:          FieldDescriptor{Name: "assigned_to_group_id", InputKey: "assigned_to_group_id"},
-	AssignedToIdentityHolderID: FieldDescriptor{Name: "assigned_to_identity_holder_id", InputKey: "assigned_to_identity_holder_id"},
-	AssignedToUserID:           FieldDescriptor{Name: "assigned_to_user_id", InputKey: "assigned_to_user_id"},
-	BlocksProduction:           FieldDescriptor{Name: "blocks_production", InputKey: "blocks_production"},
-	Categories:                 FieldDescriptor{Name: "categories", InputKey: "categories"},
-	Category:                   FieldDescriptor{Name: "category", InputKey: "category"},
-	Description:                FieldDescriptor{Name: "description", InputKey: "description"},
-	DisplayName:                FieldDescriptor{Name: "display_name", InputKey: "display_name"},
-	EnvironmentID:              FieldDescriptor{Name: "environment_id", InputKey: "environment_id"},
-	EnvironmentName:            FieldDescriptor{Name: "environment_name", InputKey: "environment_name"},
-	EventTime:                  FieldDescriptor{Name: "event_time", InputKey: "event_time"},
-	Exploitability:             FieldDescriptor{Name: "exploitability", InputKey: "exploitability"},
-	ExternalID:                 FieldDescriptor{Name: "external_id", InputKey: "external_id"},
-	ExternalOwnerID:            FieldDescriptor{Name: "external_owner_id", InputKey: "external_owner_id"},
-	ExternalURI:                FieldDescriptor{Name: "external_uri", InputKey: "external_uri"},
-	FindingClass:               FieldDescriptor{Name: "finding_class", InputKey: "finding_class"},
-	FindingStatusID:            FieldDescriptor{Name: "finding_status_id", InputKey: "finding_status_id"},
-	FindingStatusName:          FieldDescriptor{Name: "finding_status_name", InputKey: "finding_status_name"},
-	Impact:                     FieldDescriptor{Name: "impact", InputKey: "impact"},
-	InternalNotes:              FieldDescriptor{Name: "internal_notes", InputKey: "internal_notes"},
-	Metadata:                   FieldDescriptor{Name: "metadata", InputKey: "metadata"},
-	NumericSeverity:            FieldDescriptor{Name: "numeric_severity", InputKey: "numeric_severity"},
-	Open:                       FieldDescriptor{Name: "open", InputKey: "open"},
-	Priority:                   FieldDescriptor{Name: "priority", InputKey: "priority"},
-	Production:                 FieldDescriptor{Name: "production", InputKey: "production"},
-	Public:                     FieldDescriptor{Name: "public", InputKey: "public"},
-	RawPayload:                 FieldDescriptor{Name: "raw_payload", InputKey: "raw_payload"},
-	Recommendation:             FieldDescriptor{Name: "recommendation", InputKey: "recommendation"},
-	RecommendedActions:         FieldDescriptor{Name: "recommended_actions", InputKey: "recommended_actions"},
-	References:                 FieldDescriptor{Name: "references", InputKey: "references"},
-	RemediationSLA:             FieldDescriptor{Name: "remediation_sla", InputKey: "remediation_sla"},
-	ReportedAt:                 FieldDescriptor{Name: "reported_at", InputKey: "reported_at"},
-	ResourceName:               FieldDescriptor{Name: "resource_name", InputKey: "resource_name"},
-	ReviewedBy:                 FieldDescriptor{Name: "reviewed_by", InputKey: "reviewed_by"},
-	ReviewedByGroupID:          FieldDescriptor{Name: "reviewed_by_group_id", InputKey: "reviewed_by_group_id"},
-	ReviewedByIdentityHolderID: FieldDescriptor{Name: "reviewed_by_identity_holder_id", InputKey: "reviewed_by_identity_holder_id"},
-	ReviewedByUserID:           FieldDescriptor{Name: "reviewed_by_user_id", InputKey: "reviewed_by_user_id"},
-	ScopeID:                    FieldDescriptor{Name: "scope_id", InputKey: "scope_id"},
-	ScopeName:                  FieldDescriptor{Name: "scope_name", InputKey: "scope_name"},
-	Score:                      FieldDescriptor{Name: "score", InputKey: "score"},
-	Severity:                   FieldDescriptor{Name: "severity", InputKey: "severity"},
-	Source:                     FieldDescriptor{Name: "source", InputKey: "source"},
-	SourceUpdatedAt:            FieldDescriptor{Name: "source_updated_at", InputKey: "source_updated_at"},
-	State:                      FieldDescriptor{Name: "state", InputKey: "state"},
-	StepsToReproduce:           FieldDescriptor{Name: "steps_to_reproduce", InputKey: "steps_to_reproduce"},
-	SystemInternalID:           FieldDescriptor{Name: "system_internal_id", InputKey: "system_internal_id"},
-	Tags:                       FieldDescriptor{Name: "tags", InputKey: "tags"},
-	TargetDetails:              FieldDescriptor{Name: "target_details", InputKey: "target_details"},
-	Targets:                    FieldDescriptor{Name: "targets", InputKey: "targets"},
-	Validated:                  FieldDescriptor{Name: "validated", InputKey: "validated"},
-	Vector:                     FieldDescriptor{Name: "vector", InputKey: "vector"},
+	AssessmentID:                  FieldDescriptor{Name: "assessment_id", InputKey: "assessment_id"},
+	AssignedTo:                    FieldDescriptor{Name: "assigned_to", InputKey: "assigned_to"},
+	AssignedToGroupID:             FieldDescriptor{Name: "assigned_to_group_id", InputKey: "assigned_to_group_id"},
+	AssignedToIdentityHolderID:    FieldDescriptor{Name: "assigned_to_identity_holder_id", InputKey: "assigned_to_identity_holder_id"},
+	AssignedToUserID:              FieldDescriptor{Name: "assigned_to_user_id", InputKey: "assigned_to_user_id"},
+	BlocksProduction:              FieldDescriptor{Name: "blocks_production", InputKey: "blocks_production"},
+	Categories:                    FieldDescriptor{Name: "categories", InputKey: "categories"},
+	Category:                      FieldDescriptor{Name: "category", InputKey: "category"},
+	Description:                   FieldDescriptor{Name: "description", InputKey: "description"},
+	DisplayName:                   FieldDescriptor{Name: "display_name", InputKey: "display_name"},
+	EnvironmentID:                 FieldDescriptor{Name: "environment_id", InputKey: "environment_id"},
+	EnvironmentName:               FieldDescriptor{Name: "environment_name", InputKey: "environment_name"},
+	EventTime:                     FieldDescriptor{Name: "event_time", InputKey: "event_time"},
+	Exploitability:                FieldDescriptor{Name: "exploitability", InputKey: "exploitability"},
+	ExternalID:                    FieldDescriptor{Name: "external_id", InputKey: "external_id"},
+	ExternalOwnerID:               FieldDescriptor{Name: "external_owner_id", InputKey: "external_owner_id"},
+	ExternalURI:                   FieldDescriptor{Name: "external_uri", InputKey: "external_uri"},
+	FindingClass:                  FieldDescriptor{Name: "finding_class", InputKey: "finding_class"},
+	FindingStatusID:               FieldDescriptor{Name: "finding_status_id", InputKey: "finding_status_id"},
+	FindingStatusName:             FieldDescriptor{Name: "finding_status_name", InputKey: "finding_status_name"},
+	Impact:                        FieldDescriptor{Name: "impact", InputKey: "impact"},
+	InternalNotes:                 FieldDescriptor{Name: "internal_notes", InputKey: "internal_notes"},
+	InternalOwner:                 FieldDescriptor{Name: "internal_owner", InputKey: "internal_owner"},
+	InternalOwnerGroupID:          FieldDescriptor{Name: "internal_owner_group_id", InputKey: "internal_owner_group_id"},
+	InternalOwnerIdentityHolderID: FieldDescriptor{Name: "internal_owner_identity_holder_id", InputKey: "internal_owner_identity_holder_id"},
+	InternalOwnerUserID:           FieldDescriptor{Name: "internal_owner_user_id", InputKey: "internal_owner_user_id"},
+	Metadata:                      FieldDescriptor{Name: "metadata", InputKey: "metadata"},
+	NumericSeverity:               FieldDescriptor{Name: "numeric_severity", InputKey: "numeric_severity"},
+	Open:                          FieldDescriptor{Name: "open", InputKey: "open"},
+	Priority:                      FieldDescriptor{Name: "priority", InputKey: "priority"},
+	Production:                    FieldDescriptor{Name: "production", InputKey: "production"},
+	Public:                        FieldDescriptor{Name: "public", InputKey: "public"},
+	RawPayload:                    FieldDescriptor{Name: "raw_payload", InputKey: "raw_payload"},
+	Recommendation:                FieldDescriptor{Name: "recommendation", InputKey: "recommendation"},
+	RecommendedActions:            FieldDescriptor{Name: "recommended_actions", InputKey: "recommended_actions"},
+	References:                    FieldDescriptor{Name: "references", InputKey: "references"},
+	RemediationSLA:                FieldDescriptor{Name: "remediation_sla", InputKey: "remediation_sla"},
+	ReportedAt:                    FieldDescriptor{Name: "reported_at", InputKey: "reported_at"},
+	ResourceName:                  FieldDescriptor{Name: "resource_name", InputKey: "resource_name"},
+	ReviewedBy:                    FieldDescriptor{Name: "reviewed_by", InputKey: "reviewed_by"},
+	ReviewedByGroupID:             FieldDescriptor{Name: "reviewed_by_group_id", InputKey: "reviewed_by_group_id"},
+	ReviewedByIdentityHolderID:    FieldDescriptor{Name: "reviewed_by_identity_holder_id", InputKey: "reviewed_by_identity_holder_id"},
+	ReviewedByUserID:              FieldDescriptor{Name: "reviewed_by_user_id", InputKey: "reviewed_by_user_id"},
+	ScopeID:                       FieldDescriptor{Name: "scope_id", InputKey: "scope_id"},
+	ScopeName:                     FieldDescriptor{Name: "scope_name", InputKey: "scope_name"},
+	Score:                         FieldDescriptor{Name: "score", InputKey: "score"},
+	Severity:                      FieldDescriptor{Name: "severity", InputKey: "severity"},
+	Source:                        FieldDescriptor{Name: "source", InputKey: "source"},
+	SourceUpdatedAt:               FieldDescriptor{Name: "source_updated_at", InputKey: "source_updated_at"},
+	State:                         FieldDescriptor{Name: "state", InputKey: "state"},
+	StepsToReproduce:              FieldDescriptor{Name: "steps_to_reproduce", InputKey: "steps_to_reproduce"},
+	SystemInternalID:              FieldDescriptor{Name: "system_internal_id", InputKey: "system_internal_id"},
+	Tags:                          FieldDescriptor{Name: "tags", InputKey: "tags"},
+	TargetDetails:                 FieldDescriptor{Name: "target_details", InputKey: "target_details"},
+	Targets:                       FieldDescriptor{Name: "targets", InputKey: "targets"},
+	Validated:                     FieldDescriptor{Name: "validated", InputKey: "validated"},
+	Vector:                        FieldDescriptor{Name: "vector", InputKey: "vector"},
 }
 
 // InternalPolicyFields indexes the provider-mappable fields of InternalPolicy
@@ -1037,6 +1049,14 @@ var RiskFields = struct {
 	BusinessCosts FieldDescriptor
 	// BusinessCostsJSON is the business_costs_json field
 	BusinessCostsJSON FieldDescriptor
+	// DelegateGroupID is the delegate_group_id field
+	DelegateGroupID FieldDescriptor
+	// DelegateIdentityHolderID is the delegate_identity_holder_id field
+	DelegateIdentityHolderID FieldDescriptor
+	// DelegateName is the delegate_name field
+	DelegateName FieldDescriptor
+	// DelegateUserID is the delegate_user_id field
+	DelegateUserID FieldDescriptor
 	// Details is the details field
 	Details FieldDescriptor
 	// DetailsJSON is the details_json field
@@ -1091,42 +1111,58 @@ var RiskFields = struct {
 	ScopeName FieldDescriptor
 	// Score is the score field
 	Score FieldDescriptor
+	// StakeholderGroupID is the stakeholder_group_id field
+	StakeholderGroupID FieldDescriptor
+	// StakeholderIdentityHolderID is the stakeholder_identity_holder_id field
+	StakeholderIdentityHolderID FieldDescriptor
+	// StakeholderName is the stakeholder_name field
+	StakeholderName FieldDescriptor
+	// StakeholderUserID is the stakeholder_user_id field
+	StakeholderUserID FieldDescriptor
 	// Status is the status field
 	Status FieldDescriptor
 	// Tags is the tags field
 	Tags FieldDescriptor
 }{
-	BusinessCosts:     FieldDescriptor{Name: "business_costs", InputKey: "business_costs"},
-	BusinessCostsJSON: FieldDescriptor{Name: "business_costs_json", InputKey: "business_costs_json"},
-	Details:           FieldDescriptor{Name: "details", InputKey: "details"},
-	DetailsJSON:       FieldDescriptor{Name: "details_json", InputKey: "details_json"},
-	DueDate:           FieldDescriptor{Name: "due_date", InputKey: "due_date"},
-	EnvironmentID:     FieldDescriptor{Name: "environment_id", InputKey: "environment_id"},
-	EnvironmentName:   FieldDescriptor{Name: "environment_name", InputKey: "environment_name"},
-	ExternalID:        FieldDescriptor{Name: "external_id", InputKey: "external_id"},
-	ExternalUUID:      FieldDescriptor{Name: "external_uuid", InputKey: "external_uuid"},
-	Impact:            FieldDescriptor{Name: "impact", InputKey: "impact"},
-	LastReviewedAt:    FieldDescriptor{Name: "last_reviewed_at", InputKey: "last_reviewed_at"},
-	Likelihood:        FieldDescriptor{Name: "likelihood", InputKey: "likelihood"},
-	MitigatedAt:       FieldDescriptor{Name: "mitigated_at", InputKey: "mitigated_at"},
-	Mitigation:        FieldDescriptor{Name: "mitigation", InputKey: "mitigation"},
-	MitigationJSON:    FieldDescriptor{Name: "mitigation_json", InputKey: "mitigation_json"},
-	Name:              FieldDescriptor{Name: "name", InputKey: "name"},
-	NextReviewDueAt:   FieldDescriptor{Name: "next_review_due_at", InputKey: "next_review_due_at"},
-	ObservedAt:        FieldDescriptor{Name: "observed_at", InputKey: "observed_at"},
-	ResidualScore:     FieldDescriptor{Name: "residual_score", InputKey: "residual_score"},
-	ReviewFrequency:   FieldDescriptor{Name: "review_frequency", InputKey: "review_frequency"},
-	ReviewRequired:    FieldDescriptor{Name: "review_required", InputKey: "review_required"},
-	RiskCategoryID:    FieldDescriptor{Name: "risk_category_id", InputKey: "risk_category_id"},
-	RiskCategoryName:  FieldDescriptor{Name: "risk_category_name", InputKey: "risk_category_name"},
-	RiskDecision:      FieldDescriptor{Name: "risk_decision", InputKey: "risk_decision"},
-	RiskKindID:        FieldDescriptor{Name: "risk_kind_id", InputKey: "risk_kind_id"},
-	RiskKindName:      FieldDescriptor{Name: "risk_kind_name", InputKey: "risk_kind_name"},
-	ScopeID:           FieldDescriptor{Name: "scope_id", InputKey: "scope_id"},
-	ScopeName:         FieldDescriptor{Name: "scope_name", InputKey: "scope_name"},
-	Score:             FieldDescriptor{Name: "score", InputKey: "score"},
-	Status:            FieldDescriptor{Name: "status", InputKey: "status"},
-	Tags:              FieldDescriptor{Name: "tags", InputKey: "tags"},
+	BusinessCosts:               FieldDescriptor{Name: "business_costs", InputKey: "business_costs"},
+	BusinessCostsJSON:           FieldDescriptor{Name: "business_costs_json", InputKey: "business_costs_json"},
+	DelegateGroupID:             FieldDescriptor{Name: "delegate_group_id", InputKey: "delegate_group_id"},
+	DelegateIdentityHolderID:    FieldDescriptor{Name: "delegate_identity_holder_id", InputKey: "delegate_identity_holder_id"},
+	DelegateName:                FieldDescriptor{Name: "delegate_name", InputKey: "delegate_name"},
+	DelegateUserID:              FieldDescriptor{Name: "delegate_user_id", InputKey: "delegate_user_id"},
+	Details:                     FieldDescriptor{Name: "details", InputKey: "details"},
+	DetailsJSON:                 FieldDescriptor{Name: "details_json", InputKey: "details_json"},
+	DueDate:                     FieldDescriptor{Name: "due_date", InputKey: "due_date"},
+	EnvironmentID:               FieldDescriptor{Name: "environment_id", InputKey: "environment_id"},
+	EnvironmentName:             FieldDescriptor{Name: "environment_name", InputKey: "environment_name"},
+	ExternalID:                  FieldDescriptor{Name: "external_id", InputKey: "external_id"},
+	ExternalUUID:                FieldDescriptor{Name: "external_uuid", InputKey: "external_uuid"},
+	Impact:                      FieldDescriptor{Name: "impact", InputKey: "impact"},
+	LastReviewedAt:              FieldDescriptor{Name: "last_reviewed_at", InputKey: "last_reviewed_at"},
+	Likelihood:                  FieldDescriptor{Name: "likelihood", InputKey: "likelihood"},
+	MitigatedAt:                 FieldDescriptor{Name: "mitigated_at", InputKey: "mitigated_at"},
+	Mitigation:                  FieldDescriptor{Name: "mitigation", InputKey: "mitigation"},
+	MitigationJSON:              FieldDescriptor{Name: "mitigation_json", InputKey: "mitigation_json"},
+	Name:                        FieldDescriptor{Name: "name", InputKey: "name"},
+	NextReviewDueAt:             FieldDescriptor{Name: "next_review_due_at", InputKey: "next_review_due_at"},
+	ObservedAt:                  FieldDescriptor{Name: "observed_at", InputKey: "observed_at"},
+	ResidualScore:               FieldDescriptor{Name: "residual_score", InputKey: "residual_score"},
+	ReviewFrequency:             FieldDescriptor{Name: "review_frequency", InputKey: "review_frequency"},
+	ReviewRequired:              FieldDescriptor{Name: "review_required", InputKey: "review_required"},
+	RiskCategoryID:              FieldDescriptor{Name: "risk_category_id", InputKey: "risk_category_id"},
+	RiskCategoryName:            FieldDescriptor{Name: "risk_category_name", InputKey: "risk_category_name"},
+	RiskDecision:                FieldDescriptor{Name: "risk_decision", InputKey: "risk_decision"},
+	RiskKindID:                  FieldDescriptor{Name: "risk_kind_id", InputKey: "risk_kind_id"},
+	RiskKindName:                FieldDescriptor{Name: "risk_kind_name", InputKey: "risk_kind_name"},
+	ScopeID:                     FieldDescriptor{Name: "scope_id", InputKey: "scope_id"},
+	ScopeName:                   FieldDescriptor{Name: "scope_name", InputKey: "scope_name"},
+	Score:                       FieldDescriptor{Name: "score", InputKey: "score"},
+	StakeholderGroupID:          FieldDescriptor{Name: "stakeholder_group_id", InputKey: "stakeholder_group_id"},
+	StakeholderIdentityHolderID: FieldDescriptor{Name: "stakeholder_identity_holder_id", InputKey: "stakeholder_identity_holder_id"},
+	StakeholderName:             FieldDescriptor{Name: "stakeholder_name", InputKey: "stakeholder_name"},
+	StakeholderUserID:           FieldDescriptor{Name: "stakeholder_user_id", InputKey: "stakeholder_user_id"},
+	Status:                      FieldDescriptor{Name: "status", InputKey: "status"},
+	Tags:                        FieldDescriptor{Name: "tags", InputKey: "tags"},
 }
 
 // VulnerabilityFields indexes the provider-mappable fields of Vulnerability
@@ -1187,6 +1223,14 @@ var VulnerabilityFields = struct {
 	Impacts FieldDescriptor
 	// InternalNotes is the internal_notes field
 	InternalNotes FieldDescriptor
+	// InternalOwner is the internal_owner field
+	InternalOwner FieldDescriptor
+	// InternalOwnerGroupID is the internal_owner_group_id field
+	InternalOwnerGroupID FieldDescriptor
+	// InternalOwnerIdentityHolderID is the internal_owner_identity_holder_id field
+	InternalOwnerIdentityHolderID FieldDescriptor
+	// InternalOwnerUserID is the internal_owner_user_id field
+	InternalOwnerUserID FieldDescriptor
 	// ManifestPath is the manifest_path field
 	ManifestPath FieldDescriptor
 	// Metadata is the metadata field
@@ -1248,62 +1292,66 @@ var VulnerabilityFields = struct {
 	// VulnerableVersionRange is the vulnerable_version_range field
 	VulnerableVersionRange FieldDescriptor
 }{
-	AssignedTo:                 FieldDescriptor{Name: "assigned_to", InputKey: "assigned_to"},
-	AssignedToGroupID:          FieldDescriptor{Name: "assigned_to_group_id", InputKey: "assigned_to_group_id"},
-	AssignedToIdentityHolderID: FieldDescriptor{Name: "assigned_to_identity_holder_id", InputKey: "assigned_to_identity_holder_id"},
-	AssignedToUserID:           FieldDescriptor{Name: "assigned_to_user_id", InputKey: "assigned_to_user_id"},
-	AutoDismissedAt:            FieldDescriptor{Name: "auto_dismissed_at", InputKey: "auto_dismissed_at"},
-	Blocking:                   FieldDescriptor{Name: "blocking", InputKey: "blocking"},
-	Category:                   FieldDescriptor{Name: "category", InputKey: "category"},
-	CveID:                      FieldDescriptor{Name: "cve_id", InputKey: "cve_id"},
-	CweIds:                     FieldDescriptor{Name: "cwe_ids", InputKey: "cwe_ids"},
-	DependencyScope:            FieldDescriptor{Name: "dependency_scope", InputKey: "dependency_scope"},
-	Description:                FieldDescriptor{Name: "description", InputKey: "description"},
-	DiscoveredAt:               FieldDescriptor{Name: "discovered_at", InputKey: "discovered_at"},
-	DismissedAt:                FieldDescriptor{Name: "dismissed_at", InputKey: "dismissed_at"},
-	DismissedComment:           FieldDescriptor{Name: "dismissed_comment", InputKey: "dismissed_comment"},
-	DismissedReason:            FieldDescriptor{Name: "dismissed_reason", InputKey: "dismissed_reason"},
-	DisplayName:                FieldDescriptor{Name: "display_name", InputKey: "display_name"},
-	EnvironmentID:              FieldDescriptor{Name: "environment_id", InputKey: "environment_id"},
-	EnvironmentName:            FieldDescriptor{Name: "environment_name", InputKey: "environment_name"},
-	Exploitability:             FieldDescriptor{Name: "exploitability", InputKey: "exploitability"},
-	ExternalID:                 FieldDescriptor{Name: "external_id", InputKey: "external_id"},
-	ExternalOwnerID:            FieldDescriptor{Name: "external_owner_id", InputKey: "external_owner_id"},
-	ExternalURI:                FieldDescriptor{Name: "external_uri", InputKey: "external_uri"},
-	FirstPatchedVersion:        FieldDescriptor{Name: "first_patched_version", InputKey: "first_patched_version"},
-	FixAvailable:               FieldDescriptor{Name: "fix_available", InputKey: "fix_available"},
-	FixedAt:                    FieldDescriptor{Name: "fixed_at", InputKey: "fixed_at"},
-	Impact:                     FieldDescriptor{Name: "impact", InputKey: "impact"},
-	Impacts:                    FieldDescriptor{Name: "impacts", InputKey: "impacts"},
-	InternalNotes:              FieldDescriptor{Name: "internal_notes", InputKey: "internal_notes"},
-	ManifestPath:               FieldDescriptor{Name: "manifest_path", InputKey: "manifest_path"},
-	Metadata:                   FieldDescriptor{Name: "metadata", InputKey: "metadata"},
-	Open:                       FieldDescriptor{Name: "open", InputKey: "open"},
-	PackageEcosystem:           FieldDescriptor{Name: "package_ecosystem", InputKey: "package_ecosystem"},
-	PackageName:                FieldDescriptor{Name: "package_name", InputKey: "package_name"},
-	Priority:                   FieldDescriptor{Name: "priority", InputKey: "priority"},
-	Production:                 FieldDescriptor{Name: "production", InputKey: "production"},
-	Public:                     FieldDescriptor{Name: "public", InputKey: "public"},
-	PublishedAt:                FieldDescriptor{Name: "published_at", InputKey: "published_at"},
-	RawPayload:                 FieldDescriptor{Name: "raw_payload", InputKey: "raw_payload"},
-	References:                 FieldDescriptor{Name: "references", InputKey: "references"},
-	RemediationSLA:             FieldDescriptor{Name: "remediation_sla", InputKey: "remediation_sla"},
-	ReviewedBy:                 FieldDescriptor{Name: "reviewed_by", InputKey: "reviewed_by"},
-	ReviewedByGroupID:          FieldDescriptor{Name: "reviewed_by_group_id", InputKey: "reviewed_by_group_id"},
-	ReviewedByIdentityHolderID: FieldDescriptor{Name: "reviewed_by_identity_holder_id", InputKey: "reviewed_by_identity_holder_id"},
-	ReviewedByUserID:           FieldDescriptor{Name: "reviewed_by_user_id", InputKey: "reviewed_by_user_id"},
-	ScopeID:                    FieldDescriptor{Name: "scope_id", InputKey: "scope_id"},
-	ScopeName:                  FieldDescriptor{Name: "scope_name", InputKey: "scope_name"},
-	Score:                      FieldDescriptor{Name: "score", InputKey: "score"},
-	Severity:                   FieldDescriptor{Name: "severity", InputKey: "severity"},
-	Source:                     FieldDescriptor{Name: "source", InputKey: "source"},
-	SourceUpdatedAt:            FieldDescriptor{Name: "source_updated_at", InputKey: "source_updated_at"},
-	Summary:                    FieldDescriptor{Name: "summary", InputKey: "summary"},
-	SystemInternalID:           FieldDescriptor{Name: "system_internal_id", InputKey: "system_internal_id"},
-	Tags:                       FieldDescriptor{Name: "tags", InputKey: "tags"},
-	Validated:                  FieldDescriptor{Name: "validated", InputKey: "validated"},
-	Vector:                     FieldDescriptor{Name: "vector", InputKey: "vector"},
-	VulnerabilityStatusID:      FieldDescriptor{Name: "vulnerability_status_id", InputKey: "vulnerability_status_id"},
-	VulnerabilityStatusName:    FieldDescriptor{Name: "vulnerability_status_name", InputKey: "vulnerability_status_name"},
-	VulnerableVersionRange:     FieldDescriptor{Name: "vulnerable_version_range", InputKey: "vulnerable_version_range"},
+	AssignedTo:                    FieldDescriptor{Name: "assigned_to", InputKey: "assigned_to"},
+	AssignedToGroupID:             FieldDescriptor{Name: "assigned_to_group_id", InputKey: "assigned_to_group_id"},
+	AssignedToIdentityHolderID:    FieldDescriptor{Name: "assigned_to_identity_holder_id", InputKey: "assigned_to_identity_holder_id"},
+	AssignedToUserID:              FieldDescriptor{Name: "assigned_to_user_id", InputKey: "assigned_to_user_id"},
+	AutoDismissedAt:               FieldDescriptor{Name: "auto_dismissed_at", InputKey: "auto_dismissed_at"},
+	Blocking:                      FieldDescriptor{Name: "blocking", InputKey: "blocking"},
+	Category:                      FieldDescriptor{Name: "category", InputKey: "category"},
+	CveID:                         FieldDescriptor{Name: "cve_id", InputKey: "cve_id"},
+	CweIds:                        FieldDescriptor{Name: "cwe_ids", InputKey: "cwe_ids"},
+	DependencyScope:               FieldDescriptor{Name: "dependency_scope", InputKey: "dependency_scope"},
+	Description:                   FieldDescriptor{Name: "description", InputKey: "description"},
+	DiscoveredAt:                  FieldDescriptor{Name: "discovered_at", InputKey: "discovered_at"},
+	DismissedAt:                   FieldDescriptor{Name: "dismissed_at", InputKey: "dismissed_at"},
+	DismissedComment:              FieldDescriptor{Name: "dismissed_comment", InputKey: "dismissed_comment"},
+	DismissedReason:               FieldDescriptor{Name: "dismissed_reason", InputKey: "dismissed_reason"},
+	DisplayName:                   FieldDescriptor{Name: "display_name", InputKey: "display_name"},
+	EnvironmentID:                 FieldDescriptor{Name: "environment_id", InputKey: "environment_id"},
+	EnvironmentName:               FieldDescriptor{Name: "environment_name", InputKey: "environment_name"},
+	Exploitability:                FieldDescriptor{Name: "exploitability", InputKey: "exploitability"},
+	ExternalID:                    FieldDescriptor{Name: "external_id", InputKey: "external_id"},
+	ExternalOwnerID:               FieldDescriptor{Name: "external_owner_id", InputKey: "external_owner_id"},
+	ExternalURI:                   FieldDescriptor{Name: "external_uri", InputKey: "external_uri"},
+	FirstPatchedVersion:           FieldDescriptor{Name: "first_patched_version", InputKey: "first_patched_version"},
+	FixAvailable:                  FieldDescriptor{Name: "fix_available", InputKey: "fix_available"},
+	FixedAt:                       FieldDescriptor{Name: "fixed_at", InputKey: "fixed_at"},
+	Impact:                        FieldDescriptor{Name: "impact", InputKey: "impact"},
+	Impacts:                       FieldDescriptor{Name: "impacts", InputKey: "impacts"},
+	InternalNotes:                 FieldDescriptor{Name: "internal_notes", InputKey: "internal_notes"},
+	InternalOwner:                 FieldDescriptor{Name: "internal_owner", InputKey: "internal_owner"},
+	InternalOwnerGroupID:          FieldDescriptor{Name: "internal_owner_group_id", InputKey: "internal_owner_group_id"},
+	InternalOwnerIdentityHolderID: FieldDescriptor{Name: "internal_owner_identity_holder_id", InputKey: "internal_owner_identity_holder_id"},
+	InternalOwnerUserID:           FieldDescriptor{Name: "internal_owner_user_id", InputKey: "internal_owner_user_id"},
+	ManifestPath:                  FieldDescriptor{Name: "manifest_path", InputKey: "manifest_path"},
+	Metadata:                      FieldDescriptor{Name: "metadata", InputKey: "metadata"},
+	Open:                          FieldDescriptor{Name: "open", InputKey: "open"},
+	PackageEcosystem:              FieldDescriptor{Name: "package_ecosystem", InputKey: "package_ecosystem"},
+	PackageName:                   FieldDescriptor{Name: "package_name", InputKey: "package_name"},
+	Priority:                      FieldDescriptor{Name: "priority", InputKey: "priority"},
+	Production:                    FieldDescriptor{Name: "production", InputKey: "production"},
+	Public:                        FieldDescriptor{Name: "public", InputKey: "public"},
+	PublishedAt:                   FieldDescriptor{Name: "published_at", InputKey: "published_at"},
+	RawPayload:                    FieldDescriptor{Name: "raw_payload", InputKey: "raw_payload"},
+	References:                    FieldDescriptor{Name: "references", InputKey: "references"},
+	RemediationSLA:                FieldDescriptor{Name: "remediation_sla", InputKey: "remediation_sla"},
+	ReviewedBy:                    FieldDescriptor{Name: "reviewed_by", InputKey: "reviewed_by"},
+	ReviewedByGroupID:             FieldDescriptor{Name: "reviewed_by_group_id", InputKey: "reviewed_by_group_id"},
+	ReviewedByIdentityHolderID:    FieldDescriptor{Name: "reviewed_by_identity_holder_id", InputKey: "reviewed_by_identity_holder_id"},
+	ReviewedByUserID:              FieldDescriptor{Name: "reviewed_by_user_id", InputKey: "reviewed_by_user_id"},
+	ScopeID:                       FieldDescriptor{Name: "scope_id", InputKey: "scope_id"},
+	ScopeName:                     FieldDescriptor{Name: "scope_name", InputKey: "scope_name"},
+	Score:                         FieldDescriptor{Name: "score", InputKey: "score"},
+	Severity:                      FieldDescriptor{Name: "severity", InputKey: "severity"},
+	Source:                        FieldDescriptor{Name: "source", InputKey: "source"},
+	SourceUpdatedAt:               FieldDescriptor{Name: "source_updated_at", InputKey: "source_updated_at"},
+	Summary:                       FieldDescriptor{Name: "summary", InputKey: "summary"},
+	SystemInternalID:              FieldDescriptor{Name: "system_internal_id", InputKey: "system_internal_id"},
+	Tags:                          FieldDescriptor{Name: "tags", InputKey: "tags"},
+	Validated:                     FieldDescriptor{Name: "validated", InputKey: "validated"},
+	Vector:                        FieldDescriptor{Name: "vector", InputKey: "vector"},
+	VulnerabilityStatusID:         FieldDescriptor{Name: "vulnerability_status_id", InputKey: "vulnerability_status_id"},
+	VulnerabilityStatusName:       FieldDescriptor{Name: "vulnerability_status_name", InputKey: "vulnerability_status_name"},
+	VulnerableVersionRange:        FieldDescriptor{Name: "vulnerable_version_range", InputKey: "vulnerable_version_range"},
 }

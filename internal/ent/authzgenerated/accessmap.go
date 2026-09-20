@@ -1766,6 +1766,21 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
+}, "internal_owner_user": {
+	ObjectType:          "internal_owner_user",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "internal_owner_group": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+}, "internal_owner_identity_holder": {
+	ObjectType:          "identity_holder",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "reviewed_by_user": {
 	ObjectType:          "reviewed_by_user",
 	SkipEditCheck:       true,
@@ -4627,6 +4642,36 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
+}, "stakeholder_user": {
+	ObjectType:          "stakeholder_user",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "stakeholder_group": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+}, "stakeholder_identity_holder": {
+	ObjectType:          "identity_holder",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+}, "delegate_user": {
+	ObjectType:          "delegate_user",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "delegate_group": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+}, "delegate_identity_holder": {
+	ObjectType:          "identity_holder",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "risk_kind": {
 	ObjectType:          "risk_kind",
 	SkipEditCheck:       true,
@@ -5859,6 +5904,21 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "viewers": {
 	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+}, "internal_owner_user": {
+	ObjectType:          "internal_owner_user",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "internal_owner_group": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+}, "internal_owner_identity_holder": {
+	ObjectType:          "identity_holder",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
