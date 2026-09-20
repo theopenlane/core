@@ -49,7 +49,7 @@ require (
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/getkin/kin-openapi v0.149.0
 	github.com/go-jose/go-jose/v4 v4.1.5
-	github.com/go-webauthn/webauthn v0.17.4
+	github.com/go-webauthn/webauthn v0.18.1
 	github.com/gocarina/gocsv v0.0.0-20260824135904-1713ebc4797a
 	github.com/goccy/go-yaml v1.19.2
 	github.com/golang-jwt/jwt/v5 v5.3.1
@@ -57,11 +57,12 @@ require (
 	github.com/google/go-github/v88 v88.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
-	github.com/gqlgo/gqlgenc v0.38.2
+	github.com/gqlgo/gqlgenc v0.40.1
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/invopop/jsonschema v0.14.0
 	github.com/invopop/yaml v0.3.1
 	github.com/jackc/pgx/v5 v5.10.0
+	github.com/jwx-go/jwkfetch/v4 v4.0.4
 	github.com/knadh/koanf/parsers/yaml v1.1.1
 	github.com/knadh/koanf/providers/env v1.1.0
 	github.com/knadh/koanf/providers/env/v2 v2.0.1
@@ -72,7 +73,7 @@ require (
 	github.com/labstack/echo/v4 v4.15.4
 	github.com/labstack/gommon v0.5.0
 	github.com/lestrrat-go/httprc/v3 v3.0.6
-	github.com/lestrrat-go/jwx/v3 v3.2.0
+	github.com/lestrrat-go/jwx/v4 v4.5.0
 	github.com/lib/pq v1.12.3
 	github.com/manifoldco/promptui v0.9.0
 	github.com/mcuadros/go-defaults v1.2.0
@@ -119,7 +120,7 @@ require (
 	github.com/theopenlane/go-client v0.14.0
 	github.com/theopenlane/gqlgen-plugins v0.18.0
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.39.2
+	github.com/theopenlane/iam v0.39.3
 	github.com/theopenlane/newman v0.4.3
 	github.com/theopenlane/riverboat v0.14.0
 	github.com/theopenlane/utils v0.7.1
@@ -229,12 +230,12 @@ require (
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
 	github.com/go-resty/resty/v2 v2.7.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
-	github.com/go-webauthn/x v0.3.0 // indirect
+	github.com/go-webauthn/x v0.3.1 // indirect
 	github.com/goccy/go-json v0.10.6 // indirect
 	github.com/gofrs/flock v0.10.0 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/go-github/v90 v90.0.0 // indirect
+	github.com/google/go-github/v91 v91.0.0 // indirect
 	github.com/google/go-querystring v1.2.0 // indirect
 	github.com/google/go-tpm v0.9.8 // indirect
 	github.com/google/s2a-go v0.1.9 // indirect
@@ -265,7 +266,9 @@ require (
 	github.com/labstack/echo/v5 v5.3.1 // indirect
 	github.com/lestrrat-go/blackmagic v1.0.4 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
+	github.com/lestrrat-go/jwx/v3 v3.2.0 // indirect
 	github.com/lestrrat-go/option/v2 v2.0.0 // indirect
+	github.com/lestrrat-go/option/v3 v3.0.0-alpha1 // indirect
 	github.com/lufia/plan9stats v0.0.0-20260330125221-c963978e514e // indirect
 	github.com/magiconair/properties v1.8.10 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
@@ -285,7 +288,7 @@ require (
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/moby/docker-image-spec v1.3.1 // indirect
 	github.com/moby/go-archive v0.3.0 // indirect
-	github.com/moby/moby/api v1.55.0 // indirect
+	github.com/moby/moby/api v1.56.0 // indirect
 	github.com/moby/moby/client v0.5.1 // indirect
 	github.com/moby/patternmatcher v0.6.1 // indirect
 	github.com/moby/sys/sequential v0.7.0 // indirect
@@ -306,7 +309,7 @@ require (
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/opencontainers/runc v1.3.6 // indirect
 	github.com/openfga/api/proto v0.0.0-20260723150800-6981fff8d33b // indirect
-	github.com/openfga/openfga v1.19.0 // indirect
+	github.com/openfga/openfga v1.20.0 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect

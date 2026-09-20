@@ -2,10 +2,12 @@ package auth
 
 import (
 	"context"
+	"errors"
+	"sync"
 	"time"
 
+	"github.com/jwx-go/jwkfetch/v4"
 	"github.com/lestrrat-go/httprc/v3"
-	"github.com/lestrrat-go/jwx/v3/jwk"
 	"github.com/redis/go-redis/v9"
 	"github.com/theopenlane/echox/middleware"
 
@@ -37,6 +39,8 @@ type Options struct {
 
 	//  validator constructed by the auth options (can be directly supplied by the user).
 	validator tokens.Validator
+	// validatorMu serializes the lazy construction of validator so concurrent first requests share one JWKS cache
+	validatorMu *sync.Mutex
 	// reauth constructed by the auth options (can be directly supplied by the user).
 	reauth Reauthenticator
 
@@ -79,6 +83,7 @@ var DefaultAuthOptions = Options{
 // supplied input from the AuthOption variadic arguments.
 func NewAuthOptions(opts ...Option) (conf Options) {
 	conf = DefaultAuthOptions
+	conf.validatorMu = &sync.Mutex{}
 
 	for _, opt := range opts {
 		opt(&conf)
@@ -96,19 +101,22 @@ func NewAuthOptions(opts ...Option) (conf Options) {
 // Validator from the supplied options. If the options are invalid or the validator
 // cannot be created an error is returned
 func (conf *Options) Validator() (tokens.Validator, error) {
+	conf.validatorMu.Lock()
+	defer conf.validatorMu.Unlock()
+
 	if conf.validator != nil {
 		return conf.validator, nil
 	}
 
 	httprcclient := httprc.NewClient()
 
-	cache, err := jwk.NewCache(conf.Context, httprcclient)
+	cache, err := jwkfetch.NewCache(conf.Context, httprcclient)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := cache.Register(context.Background(), conf.KeysURL, jwk.WithMinInterval(conf.MinRefreshInterval)); err != nil {
-		return nil, ErrUnableToConstructValidator
+	if err := cache.Register(context.Background(), conf.KeysURL, jwkfetch.WithMinInterval(conf.MinRefreshInterval)); err != nil {
+		return nil, errors.Join(ErrUnableToConstructValidator, cache.Shutdown(context.Background()))
 	}
 
 	validator, err := tokens.NewCachedJWKSValidator(cache, conf.KeysURL, conf.Audience, conf.Issuer)
@@ -132,17 +140,6 @@ func (conf *Options) WithLocalValidator() error {
 		return nil
 	}
 
-	httprcclient := httprc.NewClient()
-
-	cache, err := jwk.NewCache(conf.Context, httprcclient)
-	if err != nil {
-		return err
-	}
-
-	if err := cache.Register(conf.Context, conf.KeysURL, jwk.WithMinInterval(conf.MinRefreshInterval)); err != nil {
-		return ErrUnableToConstructValidator
-	}
-
 	keys, err := conf.DBClient.TokenManager.Keys()
 	if err != nil {
 		return err
@@ -151,6 +148,20 @@ func (conf *Options) WithLocalValidator() error {
 	conf.validator = tokens.NewJWKSValidator(keys, conf.Audience, conf.Issuer)
 
 	return nil
+}
+
+// Shutdown releases the background JWKS refresh workers behind the validator and waits for them
+// to exit; it is a no-op unless the validator is a cached JWKS validator
+func (conf *Options) Shutdown(ctx context.Context) error {
+	conf.validatorMu.Lock()
+	defer conf.validatorMu.Unlock()
+
+	cached, ok := conf.validator.(*tokens.CachedJWKSValidator)
+	if !ok {
+		return nil
+	}
+
+	return cached.Shutdown(ctx)
 }
 
 // WithAuthOptions allows the user to update the default auth options with an auth

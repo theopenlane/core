@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	authmw "github.com/theopenlane/core/v2/pkg/middleware/auth"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/summarizer"
@@ -56,6 +57,8 @@ type Handler struct {
 	ConsoleURL string
 	// AuthMiddleware contains the middleware to be used for authenticated endpoints
 	AuthMiddleware []echo.MiddlewareFunc
+	// AuthOptions backs AuthMiddleware and websocket authentication and owns the JWKS cache released on shutdown
+	AuthOptions *authmw.Options
 	// AdditionalMiddleware contains the additional middleware to be used for all endpoints
 	// it is separate so it can be applied after any auth middleware if needed
 	AdditionalMiddleware []echo.MiddlewareFunc

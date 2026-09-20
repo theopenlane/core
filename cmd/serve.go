@@ -34,6 +34,9 @@ import (
 // galaShutdownTimeout is the maximum time to wait for gala workers to stop gracefully.
 const galaShutdownTimeout = 10 * time.Second
 
+// authShutdownTimeout is the maximum time to wait for the JWKS refresh workers to stop
+const authShutdownTimeout = 5 * time.Second
+
 var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "start the core api server",
@@ -340,6 +343,15 @@ func serve(ctx context.Context) error {
 
 	if err := srv.StartEchoServer(ctx); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Error().Err(err).Msg("failed to run server")
+	}
+
+	// release the JWKS refresh workers only after the server has drained in-flight requests,
+	// since token verification during the drain still looks keys up through the cache
+	stopCtx, cancel := context.WithTimeout(context.Background(), authShutdownTimeout)
+	defer cancel()
+
+	if err := so.Config.Handler.AuthOptions.Shutdown(stopCtx); err != nil {
+		log.Error().Err(err).Msg("error shutting down jwks cache")
 	}
 
 	return nil
