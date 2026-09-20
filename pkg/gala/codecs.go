@@ -8,6 +8,7 @@ import (
 	"slices"
 
 	"github.com/samber/do/v2"
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/utils/contextx"
@@ -173,7 +174,7 @@ func newAccessorCodec[T any](id ContextKey, get func(context.Context) (T, bool),
 // logFieldsCodec builds the durable log fields codec; restoring via logx.WithFields rebuilds the zerolog logger, not just the field store
 func logFieldsCodec() ContextCodec {
 	return newAccessorCodec("log_fields", func(ctx context.Context) (map[string]any, bool) {
-		fields := logx.FieldsFromContext(ctx)
+		fields := lo.OmitByKeys(logx.FieldsFromContext(ctx), logx.PerHopFields)
 
 		return fields, len(fields) > 0
 	}, logx.WithFields)
