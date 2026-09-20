@@ -100,9 +100,9 @@ func (set ChangeSet) FieldChanged(field string) bool {
 		return false
 	}
 
-	if proposed, ok := set.ProposedChanges[field]; ok {
+	if val, ok := set.ProposedChanges[field]; ok {
 		if old, exists := set.OldValues[field]; exists {
-			return !(FieldDescriptor{}).Equal(old, proposed)
+			return !FieldDescriptor{}.Equal(old, val)
 		}
 
 		return true
