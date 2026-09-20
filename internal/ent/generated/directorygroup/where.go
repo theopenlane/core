@@ -96,6 +96,31 @@ func DisplayID(v string) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldEQ(FieldDisplayID, v))
 }
 
+// SourceDefinitionID applies equality check predicate on the "source_definition_id" field. It's identical to SourceDefinitionIDEQ.
+func SourceDefinitionID(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEQ(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionVersion applies equality check predicate on the "source_definition_version" field. It's identical to SourceDefinitionVersionEQ.
+func SourceDefinitionVersion(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEQ(FieldSourceDefinitionVersion, v))
+}
+
+// SourceInstanceID applies equality check predicate on the "source_instance_id" field. It's identical to SourceInstanceIDEQ.
+func SourceInstanceID(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEQ(FieldSourceInstanceID, v))
+}
+
+// ManagedBy applies equality check predicate on the "managed_by" field. It's identical to ManagedByEQ.
+func ManagedBy(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEQ(FieldManagedBy, v))
+}
+
+// IntegrationRunID applies equality check predicate on the "integration_run_id" field. It's identical to IntegrationRunIDEQ.
+func IntegrationRunID(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEQ(FieldIntegrationRunID, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldEQ(FieldOwnerID, v))
@@ -131,16 +156,6 @@ func PlatformID(v string) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldEQ(FieldPlatformID, v))
 }
 
-// DirectoryInstanceID applies equality check predicate on the "directory_instance_id" field. It's identical to DirectoryInstanceIDEQ.
-func DirectoryInstanceID(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldEQ(FieldDirectoryInstanceID, v))
-}
-
-// DirectorySyncRunID applies equality check predicate on the "directory_sync_run_id" field. It's identical to DirectorySyncRunIDEQ.
-func DirectorySyncRunID(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldEQ(FieldDirectorySyncRunID, v))
-}
-
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldEQ(FieldExternalID, v))
@@ -171,16 +186,6 @@ func MemberCount(v int) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldEQ(FieldMemberCount, v))
 }
 
-// FirstSeenAt applies equality check predicate on the "first_seen_at" field. It's identical to FirstSeenAtEQ.
-func FirstSeenAt(v time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldEQ(FieldFirstSeenAt, v))
-}
-
-// LastSeenAt applies equality check predicate on the "last_seen_at" field. It's identical to LastSeenAtEQ.
-func LastSeenAt(v time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldEQ(FieldLastSeenAt, v))
-}
-
 // AddedAt applies equality check predicate on the "added_at" field. It's identical to AddedAtEQ.
 func AddedAt(v time.Time) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldEQ(FieldAddedAt, v))
@@ -194,11 +199,6 @@ func RemovedAt(v time.Time) predicate.DirectoryGroup {
 // ObservedAt applies equality check predicate on the "observed_at" field. It's identical to ObservedAtEQ.
 func ObservedAt(v time.Time) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldEQ(FieldObservedAt, v))
-}
-
-// ProfileHash applies equality check predicate on the "profile_hash" field. It's identical to ProfileHashEQ.
-func ProfileHash(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldEQ(FieldProfileHash, v))
 }
 
 // RawProfileFileID applies equality check predicate on the "raw_profile_file_id" field. It's identical to RawProfileFileIDEQ.
@@ -614,6 +614,381 @@ func TagsIsNil() predicate.DirectoryGroup {
 // TagsNotNil applies the NotNil predicate on the "tags" field.
 func TagsNotNil() predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldNotNull(FieldTags))
+}
+
+// SourceDefinitionIDEQ applies the EQ predicate on the "source_definition_id" field.
+func SourceDefinitionIDEQ(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEQ(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDNEQ applies the NEQ predicate on the "source_definition_id" field.
+func SourceDefinitionIDNEQ(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNEQ(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDIn applies the In predicate on the "source_definition_id" field.
+func SourceDefinitionIDIn(vs ...string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldIn(FieldSourceDefinitionID, vs...))
+}
+
+// SourceDefinitionIDNotIn applies the NotIn predicate on the "source_definition_id" field.
+func SourceDefinitionIDNotIn(vs ...string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNotIn(FieldSourceDefinitionID, vs...))
+}
+
+// SourceDefinitionIDGT applies the GT predicate on the "source_definition_id" field.
+func SourceDefinitionIDGT(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldGT(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDGTE applies the GTE predicate on the "source_definition_id" field.
+func SourceDefinitionIDGTE(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldGTE(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDLT applies the LT predicate on the "source_definition_id" field.
+func SourceDefinitionIDLT(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldLT(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDLTE applies the LTE predicate on the "source_definition_id" field.
+func SourceDefinitionIDLTE(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldLTE(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDContains applies the Contains predicate on the "source_definition_id" field.
+func SourceDefinitionIDContains(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldContains(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDHasPrefix applies the HasPrefix predicate on the "source_definition_id" field.
+func SourceDefinitionIDHasPrefix(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldHasPrefix(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDHasSuffix applies the HasSuffix predicate on the "source_definition_id" field.
+func SourceDefinitionIDHasSuffix(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldHasSuffix(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDIsNil applies the IsNil predicate on the "source_definition_id" field.
+func SourceDefinitionIDIsNil() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldIsNull(FieldSourceDefinitionID))
+}
+
+// SourceDefinitionIDNotNil applies the NotNil predicate on the "source_definition_id" field.
+func SourceDefinitionIDNotNil() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNotNull(FieldSourceDefinitionID))
+}
+
+// SourceDefinitionIDEqualFold applies the EqualFold predicate on the "source_definition_id" field.
+func SourceDefinitionIDEqualFold(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEqualFold(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDContainsFold applies the ContainsFold predicate on the "source_definition_id" field.
+func SourceDefinitionIDContainsFold(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldContainsFold(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionVersionEQ applies the EQ predicate on the "source_definition_version" field.
+func SourceDefinitionVersionEQ(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEQ(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionNEQ applies the NEQ predicate on the "source_definition_version" field.
+func SourceDefinitionVersionNEQ(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNEQ(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionIn applies the In predicate on the "source_definition_version" field.
+func SourceDefinitionVersionIn(vs ...string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldIn(FieldSourceDefinitionVersion, vs...))
+}
+
+// SourceDefinitionVersionNotIn applies the NotIn predicate on the "source_definition_version" field.
+func SourceDefinitionVersionNotIn(vs ...string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNotIn(FieldSourceDefinitionVersion, vs...))
+}
+
+// SourceDefinitionVersionGT applies the GT predicate on the "source_definition_version" field.
+func SourceDefinitionVersionGT(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldGT(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionGTE applies the GTE predicate on the "source_definition_version" field.
+func SourceDefinitionVersionGTE(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldGTE(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionLT applies the LT predicate on the "source_definition_version" field.
+func SourceDefinitionVersionLT(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldLT(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionLTE applies the LTE predicate on the "source_definition_version" field.
+func SourceDefinitionVersionLTE(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldLTE(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionContains applies the Contains predicate on the "source_definition_version" field.
+func SourceDefinitionVersionContains(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldContains(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionHasPrefix applies the HasPrefix predicate on the "source_definition_version" field.
+func SourceDefinitionVersionHasPrefix(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldHasPrefix(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionHasSuffix applies the HasSuffix predicate on the "source_definition_version" field.
+func SourceDefinitionVersionHasSuffix(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldHasSuffix(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionIsNil applies the IsNil predicate on the "source_definition_version" field.
+func SourceDefinitionVersionIsNil() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldIsNull(FieldSourceDefinitionVersion))
+}
+
+// SourceDefinitionVersionNotNil applies the NotNil predicate on the "source_definition_version" field.
+func SourceDefinitionVersionNotNil() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNotNull(FieldSourceDefinitionVersion))
+}
+
+// SourceDefinitionVersionEqualFold applies the EqualFold predicate on the "source_definition_version" field.
+func SourceDefinitionVersionEqualFold(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEqualFold(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionContainsFold applies the ContainsFold predicate on the "source_definition_version" field.
+func SourceDefinitionVersionContainsFold(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldContainsFold(FieldSourceDefinitionVersion, v))
+}
+
+// SourceInstanceIDEQ applies the EQ predicate on the "source_instance_id" field.
+func SourceInstanceIDEQ(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEQ(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDNEQ applies the NEQ predicate on the "source_instance_id" field.
+func SourceInstanceIDNEQ(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNEQ(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDIn applies the In predicate on the "source_instance_id" field.
+func SourceInstanceIDIn(vs ...string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldIn(FieldSourceInstanceID, vs...))
+}
+
+// SourceInstanceIDNotIn applies the NotIn predicate on the "source_instance_id" field.
+func SourceInstanceIDNotIn(vs ...string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNotIn(FieldSourceInstanceID, vs...))
+}
+
+// SourceInstanceIDGT applies the GT predicate on the "source_instance_id" field.
+func SourceInstanceIDGT(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldGT(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDGTE applies the GTE predicate on the "source_instance_id" field.
+func SourceInstanceIDGTE(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldGTE(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDLT applies the LT predicate on the "source_instance_id" field.
+func SourceInstanceIDLT(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldLT(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDLTE applies the LTE predicate on the "source_instance_id" field.
+func SourceInstanceIDLTE(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldLTE(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDContains applies the Contains predicate on the "source_instance_id" field.
+func SourceInstanceIDContains(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldContains(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDHasPrefix applies the HasPrefix predicate on the "source_instance_id" field.
+func SourceInstanceIDHasPrefix(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldHasPrefix(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDHasSuffix applies the HasSuffix predicate on the "source_instance_id" field.
+func SourceInstanceIDHasSuffix(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldHasSuffix(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDIsNil applies the IsNil predicate on the "source_instance_id" field.
+func SourceInstanceIDIsNil() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldIsNull(FieldSourceInstanceID))
+}
+
+// SourceInstanceIDNotNil applies the NotNil predicate on the "source_instance_id" field.
+func SourceInstanceIDNotNil() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNotNull(FieldSourceInstanceID))
+}
+
+// SourceInstanceIDEqualFold applies the EqualFold predicate on the "source_instance_id" field.
+func SourceInstanceIDEqualFold(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEqualFold(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDContainsFold applies the ContainsFold predicate on the "source_instance_id" field.
+func SourceInstanceIDContainsFold(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldContainsFold(FieldSourceInstanceID, v))
+}
+
+// ManagedByEQ applies the EQ predicate on the "managed_by" field.
+func ManagedByEQ(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEQ(FieldManagedBy, v))
+}
+
+// ManagedByNEQ applies the NEQ predicate on the "managed_by" field.
+func ManagedByNEQ(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNEQ(FieldManagedBy, v))
+}
+
+// ManagedByIn applies the In predicate on the "managed_by" field.
+func ManagedByIn(vs ...string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldIn(FieldManagedBy, vs...))
+}
+
+// ManagedByNotIn applies the NotIn predicate on the "managed_by" field.
+func ManagedByNotIn(vs ...string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNotIn(FieldManagedBy, vs...))
+}
+
+// ManagedByGT applies the GT predicate on the "managed_by" field.
+func ManagedByGT(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldGT(FieldManagedBy, v))
+}
+
+// ManagedByGTE applies the GTE predicate on the "managed_by" field.
+func ManagedByGTE(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldGTE(FieldManagedBy, v))
+}
+
+// ManagedByLT applies the LT predicate on the "managed_by" field.
+func ManagedByLT(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldLT(FieldManagedBy, v))
+}
+
+// ManagedByLTE applies the LTE predicate on the "managed_by" field.
+func ManagedByLTE(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldLTE(FieldManagedBy, v))
+}
+
+// ManagedByContains applies the Contains predicate on the "managed_by" field.
+func ManagedByContains(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldContains(FieldManagedBy, v))
+}
+
+// ManagedByHasPrefix applies the HasPrefix predicate on the "managed_by" field.
+func ManagedByHasPrefix(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldHasPrefix(FieldManagedBy, v))
+}
+
+// ManagedByHasSuffix applies the HasSuffix predicate on the "managed_by" field.
+func ManagedByHasSuffix(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldHasSuffix(FieldManagedBy, v))
+}
+
+// ManagedByIsNil applies the IsNil predicate on the "managed_by" field.
+func ManagedByIsNil() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldIsNull(FieldManagedBy))
+}
+
+// ManagedByNotNil applies the NotNil predicate on the "managed_by" field.
+func ManagedByNotNil() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNotNull(FieldManagedBy))
+}
+
+// ManagedByEqualFold applies the EqualFold predicate on the "managed_by" field.
+func ManagedByEqualFold(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEqualFold(FieldManagedBy, v))
+}
+
+// ManagedByContainsFold applies the ContainsFold predicate on the "managed_by" field.
+func ManagedByContainsFold(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldContainsFold(FieldManagedBy, v))
+}
+
+// IntegrationRunIDEQ applies the EQ predicate on the "integration_run_id" field.
+func IntegrationRunIDEQ(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEQ(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDNEQ applies the NEQ predicate on the "integration_run_id" field.
+func IntegrationRunIDNEQ(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNEQ(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDIn applies the In predicate on the "integration_run_id" field.
+func IntegrationRunIDIn(vs ...string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldIn(FieldIntegrationRunID, vs...))
+}
+
+// IntegrationRunIDNotIn applies the NotIn predicate on the "integration_run_id" field.
+func IntegrationRunIDNotIn(vs ...string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNotIn(FieldIntegrationRunID, vs...))
+}
+
+// IntegrationRunIDGT applies the GT predicate on the "integration_run_id" field.
+func IntegrationRunIDGT(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldGT(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDGTE applies the GTE predicate on the "integration_run_id" field.
+func IntegrationRunIDGTE(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldGTE(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDLT applies the LT predicate on the "integration_run_id" field.
+func IntegrationRunIDLT(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldLT(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDLTE applies the LTE predicate on the "integration_run_id" field.
+func IntegrationRunIDLTE(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldLTE(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDContains applies the Contains predicate on the "integration_run_id" field.
+func IntegrationRunIDContains(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldContains(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDHasPrefix applies the HasPrefix predicate on the "integration_run_id" field.
+func IntegrationRunIDHasPrefix(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldHasPrefix(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDHasSuffix applies the HasSuffix predicate on the "integration_run_id" field.
+func IntegrationRunIDHasSuffix(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldHasSuffix(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDIsNil applies the IsNil predicate on the "integration_run_id" field.
+func IntegrationRunIDIsNil() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldIsNull(FieldIntegrationRunID))
+}
+
+// IntegrationRunIDNotNil applies the NotNil predicate on the "integration_run_id" field.
+func IntegrationRunIDNotNil() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldNotNull(FieldIntegrationRunID))
+}
+
+// IntegrationRunIDEqualFold applies the EqualFold predicate on the "integration_run_id" field.
+func IntegrationRunIDEqualFold(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldEqualFold(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDContainsFold applies the ContainsFold predicate on the "integration_run_id" field.
+func IntegrationRunIDContainsFold(v string) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(sql.FieldContainsFold(FieldIntegrationRunID, v))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
@@ -1131,146 +1506,6 @@ func PlatformIDContainsFold(v string) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldContainsFold(FieldPlatformID, v))
 }
 
-// DirectoryInstanceIDEQ applies the EQ predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDEQ(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldEQ(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDNEQ applies the NEQ predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDNEQ(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldNEQ(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDIn applies the In predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDIn(vs ...string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldIn(FieldDirectoryInstanceID, vs...))
-}
-
-// DirectoryInstanceIDNotIn applies the NotIn predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDNotIn(vs ...string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldNotIn(FieldDirectoryInstanceID, vs...))
-}
-
-// DirectoryInstanceIDGT applies the GT predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDGT(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldGT(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDGTE applies the GTE predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDGTE(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldGTE(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDLT applies the LT predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDLT(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldLT(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDLTE applies the LTE predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDLTE(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldLTE(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDContains applies the Contains predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDContains(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldContains(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDHasPrefix applies the HasPrefix predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDHasPrefix(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldHasPrefix(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDHasSuffix applies the HasSuffix predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDHasSuffix(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldHasSuffix(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDIsNil applies the IsNil predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDIsNil() predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldIsNull(FieldDirectoryInstanceID))
-}
-
-// DirectoryInstanceIDNotNil applies the NotNil predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDNotNil() predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldNotNull(FieldDirectoryInstanceID))
-}
-
-// DirectoryInstanceIDEqualFold applies the EqualFold predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDEqualFold(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldEqualFold(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDContainsFold applies the ContainsFold predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDContainsFold(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldContainsFold(FieldDirectoryInstanceID, v))
-}
-
-// DirectorySyncRunIDEQ applies the EQ predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDEQ(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldEQ(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDNEQ applies the NEQ predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDNEQ(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldNEQ(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDIn applies the In predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDIn(vs ...string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldIn(FieldDirectorySyncRunID, vs...))
-}
-
-// DirectorySyncRunIDNotIn applies the NotIn predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDNotIn(vs ...string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldNotIn(FieldDirectorySyncRunID, vs...))
-}
-
-// DirectorySyncRunIDGT applies the GT predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDGT(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldGT(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDGTE applies the GTE predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDGTE(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldGTE(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDLT applies the LT predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDLT(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldLT(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDLTE applies the LTE predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDLTE(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldLTE(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDContains applies the Contains predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDContains(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldContains(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDHasPrefix applies the HasPrefix predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDHasPrefix(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldHasPrefix(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDHasSuffix applies the HasSuffix predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDHasSuffix(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldHasSuffix(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDEqualFold applies the EqualFold predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDEqualFold(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldEqualFold(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDContainsFold applies the ContainsFold predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDContainsFold(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldContainsFold(FieldDirectorySyncRunID, v))
-}
-
 // ExternalIDEQ applies the EQ predicate on the "external_id" field.
 func ExternalIDEQ(v string) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldEQ(FieldExternalID, v))
@@ -1691,106 +1926,6 @@ func MemberCountNotNil() predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldNotNull(FieldMemberCount))
 }
 
-// FirstSeenAtEQ applies the EQ predicate on the "first_seen_at" field.
-func FirstSeenAtEQ(v time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldEQ(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtNEQ applies the NEQ predicate on the "first_seen_at" field.
-func FirstSeenAtNEQ(v time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldNEQ(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtIn applies the In predicate on the "first_seen_at" field.
-func FirstSeenAtIn(vs ...time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldIn(FieldFirstSeenAt, vs...))
-}
-
-// FirstSeenAtNotIn applies the NotIn predicate on the "first_seen_at" field.
-func FirstSeenAtNotIn(vs ...time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldNotIn(FieldFirstSeenAt, vs...))
-}
-
-// FirstSeenAtGT applies the GT predicate on the "first_seen_at" field.
-func FirstSeenAtGT(v time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldGT(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtGTE applies the GTE predicate on the "first_seen_at" field.
-func FirstSeenAtGTE(v time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldGTE(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtLT applies the LT predicate on the "first_seen_at" field.
-func FirstSeenAtLT(v time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldLT(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtLTE applies the LTE predicate on the "first_seen_at" field.
-func FirstSeenAtLTE(v time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldLTE(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtIsNil applies the IsNil predicate on the "first_seen_at" field.
-func FirstSeenAtIsNil() predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldIsNull(FieldFirstSeenAt))
-}
-
-// FirstSeenAtNotNil applies the NotNil predicate on the "first_seen_at" field.
-func FirstSeenAtNotNil() predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldNotNull(FieldFirstSeenAt))
-}
-
-// LastSeenAtEQ applies the EQ predicate on the "last_seen_at" field.
-func LastSeenAtEQ(v time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldEQ(FieldLastSeenAt, v))
-}
-
-// LastSeenAtNEQ applies the NEQ predicate on the "last_seen_at" field.
-func LastSeenAtNEQ(v time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldNEQ(FieldLastSeenAt, v))
-}
-
-// LastSeenAtIn applies the In predicate on the "last_seen_at" field.
-func LastSeenAtIn(vs ...time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldIn(FieldLastSeenAt, vs...))
-}
-
-// LastSeenAtNotIn applies the NotIn predicate on the "last_seen_at" field.
-func LastSeenAtNotIn(vs ...time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldNotIn(FieldLastSeenAt, vs...))
-}
-
-// LastSeenAtGT applies the GT predicate on the "last_seen_at" field.
-func LastSeenAtGT(v time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldGT(FieldLastSeenAt, v))
-}
-
-// LastSeenAtGTE applies the GTE predicate on the "last_seen_at" field.
-func LastSeenAtGTE(v time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldGTE(FieldLastSeenAt, v))
-}
-
-// LastSeenAtLT applies the LT predicate on the "last_seen_at" field.
-func LastSeenAtLT(v time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldLT(FieldLastSeenAt, v))
-}
-
-// LastSeenAtLTE applies the LTE predicate on the "last_seen_at" field.
-func LastSeenAtLTE(v time.Time) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldLTE(FieldLastSeenAt, v))
-}
-
-// LastSeenAtIsNil applies the IsNil predicate on the "last_seen_at" field.
-func LastSeenAtIsNil() predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldIsNull(FieldLastSeenAt))
-}
-
-// LastSeenAtNotNil applies the NotNil predicate on the "last_seen_at" field.
-func LastSeenAtNotNil() predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldNotNull(FieldLastSeenAt))
-}
-
 // AddedAtEQ applies the EQ predicate on the "added_at" field.
 func AddedAtEQ(v time.Time) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldEQ(FieldAddedAt, v))
@@ -1929,71 +2064,6 @@ func ObservedAtLT(v time.Time) predicate.DirectoryGroup {
 // ObservedAtLTE applies the LTE predicate on the "observed_at" field.
 func ObservedAtLTE(v time.Time) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldLTE(FieldObservedAt, v))
-}
-
-// ProfileHashEQ applies the EQ predicate on the "profile_hash" field.
-func ProfileHashEQ(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldEQ(FieldProfileHash, v))
-}
-
-// ProfileHashNEQ applies the NEQ predicate on the "profile_hash" field.
-func ProfileHashNEQ(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldNEQ(FieldProfileHash, v))
-}
-
-// ProfileHashIn applies the In predicate on the "profile_hash" field.
-func ProfileHashIn(vs ...string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldIn(FieldProfileHash, vs...))
-}
-
-// ProfileHashNotIn applies the NotIn predicate on the "profile_hash" field.
-func ProfileHashNotIn(vs ...string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldNotIn(FieldProfileHash, vs...))
-}
-
-// ProfileHashGT applies the GT predicate on the "profile_hash" field.
-func ProfileHashGT(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldGT(FieldProfileHash, v))
-}
-
-// ProfileHashGTE applies the GTE predicate on the "profile_hash" field.
-func ProfileHashGTE(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldGTE(FieldProfileHash, v))
-}
-
-// ProfileHashLT applies the LT predicate on the "profile_hash" field.
-func ProfileHashLT(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldLT(FieldProfileHash, v))
-}
-
-// ProfileHashLTE applies the LTE predicate on the "profile_hash" field.
-func ProfileHashLTE(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldLTE(FieldProfileHash, v))
-}
-
-// ProfileHashContains applies the Contains predicate on the "profile_hash" field.
-func ProfileHashContains(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldContains(FieldProfileHash, v))
-}
-
-// ProfileHashHasPrefix applies the HasPrefix predicate on the "profile_hash" field.
-func ProfileHashHasPrefix(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldHasPrefix(FieldProfileHash, v))
-}
-
-// ProfileHashHasSuffix applies the HasSuffix predicate on the "profile_hash" field.
-func ProfileHashHasSuffix(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldHasSuffix(FieldProfileHash, v))
-}
-
-// ProfileHashEqualFold applies the EqualFold predicate on the "profile_hash" field.
-func ProfileHashEqualFold(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldEqualFold(FieldProfileHash, v))
-}
-
-// ProfileHashContainsFold applies the ContainsFold predicate on the "profile_hash" field.
-func ProfileHashContainsFold(v string) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(sql.FieldContainsFold(FieldProfileHash, v))
 }
 
 // ProfileIsNil applies the IsNil predicate on the "profile" field.
@@ -2241,6 +2311,29 @@ func DirectoryNameContainsFold(v string) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(sql.FieldContainsFold(FieldDirectoryName, v))
 }
 
+// HasIntegrationRuns applies the HasEdge predicate on the "integration_runs" edge.
+func HasIntegrationRuns() predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, IntegrationRunsTable, IntegrationRunsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIntegrationRunsWith applies the HasEdge predicate on the "integration_runs" edge with a given conditions (other predicates).
+func HasIntegrationRunsWith(preds ...predicate.IntegrationRun) predicate.DirectoryGroup {
+	return predicate.DirectoryGroup(func(s *sql.Selector) {
+		step := newIntegrationRunsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(func(s *sql.Selector) {
@@ -2325,29 +2418,6 @@ func HasIntegration() predicate.DirectoryGroup {
 func HasIntegrationWith(preds ...predicate.Integration) predicate.DirectoryGroup {
 	return predicate.DirectoryGroup(func(s *sql.Selector) {
 		step := newIntegrationStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasDirectorySyncRun applies the HasEdge predicate on the "directory_sync_run" edge.
-func HasDirectorySyncRun() predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, DirectorySyncRunTable, DirectorySyncRunColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasDirectorySyncRunWith applies the HasEdge predicate on the "directory_sync_run" edge with a given conditions (other predicates).
-func HasDirectorySyncRunWith(preds ...predicate.DirectorySyncRun) predicate.DirectoryGroup {
-	return predicate.DirectoryGroup(func(s *sql.Selector) {
-		step := newDirectorySyncRunStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

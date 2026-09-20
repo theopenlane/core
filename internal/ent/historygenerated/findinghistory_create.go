@@ -169,6 +169,76 @@ func (_c *FindingHistoryCreate) SetTags(v []string) *FindingHistoryCreate {
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *FindingHistoryCreate) SetSourceDefinitionID(v string) *FindingHistoryCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableSourceDefinitionID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *FindingHistoryCreate) SetSourceDefinitionVersion(v string) *FindingHistoryCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableSourceDefinitionVersion(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *FindingHistoryCreate) SetSourceInstanceID(v string) *FindingHistoryCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableSourceInstanceID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *FindingHistoryCreate) SetManagedBy(v string) *FindingHistoryCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableManagedBy(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *FindingHistoryCreate) SetIntegrationRunID(v string) *FindingHistoryCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableIntegrationRunID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *FindingHistoryCreate) SetOwnerID(v string) *FindingHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -179,6 +249,62 @@ func (_c *FindingHistoryCreate) SetOwnerID(v string) *FindingHistoryCreate {
 func (_c *FindingHistoryCreate) SetNillableOwnerID(v *string) *FindingHistoryCreate {
 	if v != nil {
 		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwner sets the "internal_owner" field.
+func (_c *FindingHistoryCreate) SetInternalOwner(v string) *FindingHistoryCreate {
+	_c.mutation.SetInternalOwner(v)
+	return _c
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableInternalOwner(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwner(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_c *FindingHistoryCreate) SetInternalOwnerUserID(v string) *FindingHistoryCreate {
+	_c.mutation.SetInternalOwnerUserID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableInternalOwnerUserID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerUserID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_c *FindingHistoryCreate) SetInternalOwnerGroupID(v string) *FindingHistoryCreate {
+	_c.mutation.SetInternalOwnerGroupID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableInternalOwnerGroupID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *FindingHistoryCreate) SetInternalOwnerIdentityHolderID(v string) *FindingHistoryCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
 	}
 	return _c
 }
@@ -1119,9 +1245,45 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 		_spec.SetField(findinghistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(findinghistory.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(findinghistory.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(findinghistory.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(findinghistory.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(findinghistory.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(findinghistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.InternalOwner(); ok {
+		_spec.SetField(findinghistory.FieldInternalOwner, field.TypeString, value)
+		_node.InternalOwner = value
+	}
+	if value, ok := _c.mutation.InternalOwnerUserID(); ok {
+		_spec.SetField(findinghistory.FieldInternalOwnerUserID, field.TypeString, value)
+		_node.InternalOwnerUserID = value
+	}
+	if value, ok := _c.mutation.InternalOwnerGroupID(); ok {
+		_spec.SetField(findinghistory.FieldInternalOwnerGroupID, field.TypeString, value)
+		_node.InternalOwnerGroupID = value
+	}
+	if value, ok := _c.mutation.InternalOwnerIdentityHolderID(); ok {
+		_spec.SetField(findinghistory.FieldInternalOwnerIdentityHolderID, field.TypeString, value)
+		_node.InternalOwnerIdentityHolderID = value
 	}
 	if value, ok := _c.mutation.ReviewedBy(); ok {
 		_spec.SetField(findinghistory.FieldReviewedBy, field.TypeString, value)

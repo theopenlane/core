@@ -37,6 +37,7 @@ type DirectorySync struct{}
 func (d DirectorySync) IngestHandle() types.IngestHandler {
 	return providerkit.WithClientRequest(oktaClient, func(ctx context.Context, request types.OperationRequest, c *oktagosdk.APIClient) ([]types.IngestPayloadSet, error) {
 		var cfg UserInput
+
 		if request.Integration != nil {
 			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
 		}
@@ -70,8 +71,9 @@ func (DirectorySync) Run(ctx context.Context, c *oktagosdk.APIClient, cfg UserIn
 
 	payloadSets := []types.IngestPayloadSet{
 		{
-			Schema:    entityops.SchemaDirectoryAccount.Name,
-			Envelopes: accountEnvelopes,
+			Schema:           entityops.SchemaDirectoryAccount.Name,
+			Envelopes:        accountEnvelopes,
+			SnapshotComplete: true,
 		},
 	}
 
@@ -126,8 +128,9 @@ func (DirectorySync) Run(ctx context.Context, c *oktagosdk.APIClient, cfg UserIn
 
 	payloadSets = append(payloadSets,
 		types.IngestPayloadSet{
-			Schema:    entityops.SchemaDirectoryGroup.Name,
-			Envelopes: groupEnvelopes,
+			Schema:           entityops.SchemaDirectoryGroup.Name,
+			Envelopes:        groupEnvelopes,
+			SnapshotComplete: true,
 		},
 		types.IngestPayloadSet{
 			Schema:           entityops.SchemaDirectoryMembership.Name,

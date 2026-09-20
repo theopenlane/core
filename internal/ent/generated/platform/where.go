@@ -5406,29 +5406,6 @@ func HasIntegrationsWith(preds ...predicate.Integration) predicate.Platform {
 	})
 }
 
-// HasDirectorySyncRuns applies the HasEdge predicate on the "directory_sync_runs" edge.
-func HasDirectorySyncRuns() predicate.Platform {
-	return predicate.Platform(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasDirectorySyncRunsWith applies the HasEdge predicate on the "directory_sync_runs" edge with a given conditions (other predicates).
-func HasDirectorySyncRunsWith(preds ...predicate.DirectorySyncRun) predicate.Platform {
-	return predicate.Platform(func(s *sql.Selector) {
-		step := newDirectorySyncRunsStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasDirectoryAccounts applies the HasEdge predicate on the "directory_accounts" edge.
 func HasDirectoryAccounts() predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {

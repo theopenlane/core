@@ -717,40 +717,6 @@ func (r *queryResolver) DirectoryMemberships(ctx context.Context, after *entgql.
 	return res, err
 }
 
-// DirectorySyncRuns is the resolver for the directorySyncRuns field.
-func (r *queryResolver) DirectorySyncRuns(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) (*generated.DirectorySyncRunConnection, error) {
-	// set page limit if nothing was set
-	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
-
-	if orderBy == nil {
-		orderBy = []*generated.DirectorySyncRunOrder{
-			{
-				Field:     generated.DirectorySyncRunOrderFieldCreatedAt,
-				Direction: entgql.OrderDirectionDesc,
-			},
-		}
-	}
-
-	query, err := withTransactionalMutation(ctx).DirectorySyncRun.Query().CollectFields(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "directorysyncrun"})
-	}
-
-	res, err := query.Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithDirectorySyncRunOrder(orderBy),
-		generated.WithDirectorySyncRunFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "directorysyncrun"})
-	}
-
-	return res, err
-}
-
 // Discussions is the resolver for the discussions field.
 func (r *queryResolver) Discussions(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) (*generated.DiscussionConnection, error) {
 	// set page limit if nothing was set
@@ -1326,6 +1292,38 @@ func (r *queryResolver) Integrations(ctx context.Context, after *entgql.Cursor[s
 		generated.WithIntegrationFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "integration"})
+	}
+
+	return res, err
+}
+
+// IntegrationRuns is the resolver for the integrationRuns field.
+func (r *queryResolver) IntegrationRuns(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) (*generated.IntegrationRunConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.IntegrationRunOrder{
+			Field:     generated.IntegrationRunOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).IntegrationRun.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "integrationrun"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithIntegrationRunOrder(orderBy),
+		generated.WithIntegrationRunFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "integrationrun"})
 	}
 
 	return res, err

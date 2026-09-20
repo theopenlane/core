@@ -66,9 +66,6 @@ type DirectoryGroup func(*sql.Selector)
 // DirectoryMembership is the predicate function for directorymembership builders.
 type DirectoryMembership func(*sql.Selector)
 
-// DirectorySyncRun is the predicate function for directorysyncrun builders.
-type DirectorySyncRun func(*sql.Selector)
-
 // Discussion is the predicate function for discussion builders.
 type Discussion func(*sql.Selector)
 

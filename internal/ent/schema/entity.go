@@ -281,7 +281,10 @@ func (Entity) Fields() []ent.Field {
 			),
 		field.JSON("vendor_metadata", map[string]any{}).
 			Comment("vendor metadata such as additional enrichment info, company size, public, etc.").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField().Volatile(),
+			),
 		field.String("logo_remote_url").
 			Comment("URL of the logo for the entity").
 			MaxLen(urlMaxLen).
@@ -317,6 +320,7 @@ func (Entity) Fields() []ent.Field {
 func (e Entity) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{SchemaType: e},
 			newObjectOwnedMixin[generated.Entity](e,
 				withParents(TrustCenterEntity{}, Platform{}, SystemDetail{}),
 				withOrganizationOwner(),
@@ -421,6 +425,8 @@ func (Entity) Indexes() []ent.Index {
 		index.Fields("name", ownerFieldName).
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 		index.Fields("reviewed_by_user_id"),
+		index.Fields("external_id", ownerFieldName).
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 

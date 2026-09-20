@@ -1,26 +1,18 @@
 package operations
 
 import (
-	"context"
-	"encoding/json"
 	"fmt"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// injectLinks resolves the mapping's cross-object link rules and writes the matched target ids into
-// the mapped create-input payload under each edge's create-input key, so the record is created (or
-// emitted for async creation) with its edges already set rather than linked in a post-persist step
-func injectLinks(ctx context.Context, db *ent.Client, ownerID string, rules []types.LinkRule, sourceSchema *entityops.Schema, payload json.RawMessage) (json.RawMessage, error) {
-	if len(rules) == 0 {
-		return payload, nil
-	}
-
-	links := make([]entityops.LinkSpec, 0, len(rules))
+// linkSpecs resolves one mapping variant's cross-object link rules into entityops link specs, shared
+// by entityops.PrefetchLinkTargets and entityops.InjectCreateLinks across every record in the variant
+// group so edge resolution runs once per group instead of once per record
+func linkSpecs(sourceSchema *entityops.Schema, rules []types.LinkRule) ([]entityops.LinkSpec, error) {
+	specs := make([]entityops.LinkSpec, 0, len(rules))
 
 	for _, rule := range rules {
 		edge, err := registry.ResolveLinkEdge(sourceSchema, rule)
@@ -28,7 +20,7 @@ func injectLinks(ctx context.Context, db *ent.Client, ownerID string, rules []ty
 			return nil, fmt.Errorf("%w: %w", ErrLinkFailed, err)
 		}
 
-		selector := entityops.TargetSelector{SourceContext: payload}
+		selector := entityops.TargetSelector{}
 
 		if rule.TargetField != "" {
 			selector.KeyMatch = &entityops.KeyMatch{
@@ -40,15 +32,8 @@ func injectLinks(ctx context.Context, db *ent.Client, ownerID string, rules []ty
 			selector.Expression = rule.Expression
 		}
 
-		links = append(links, entityops.LinkSpec{Edge: edge.Name, Target: selector})
+		specs = append(specs, entityops.LinkSpec{Edge: edge.Name, Target: selector})
 	}
 
-	payload, err := entityops.InjectCreateLinks(ctx, db, ownerID, sourceSchema, payload, links)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("schema", sourceSchema.Name).Msg("ingest link target resolution failed")
-
-		return nil, fmt.Errorf("%w: %w", ErrLinkFailed, err)
-	}
-
-	return payload, nil
+	return specs, nil
 }

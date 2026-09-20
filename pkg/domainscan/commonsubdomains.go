@@ -67,6 +67,7 @@ var commonDKIMSelectors = []dkimSelector{
 	{"k3", ""},
 	{"default", ""},
 	{"dkim", ""},
+	{"mail", ""},
 }
 
 // dkimSelector pairs a DKIM selector label with its vendor, see commonDKIMSelectors

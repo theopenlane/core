@@ -189,6 +189,10 @@ coreConfiguration:
         free: false  # @schema type:boolean; default:false
         # -- Role indicates whether role-based email addresses are allowed
         role: false  # @schema type:boolean; default:false
+      # -- BlockedDomains allows the extension of the default disposable emails provided by the verification list
+      # this may be a new known domain that is yet to be updated in the list or just an email we explicitly do
+      # not want ( e.g iCloud or duckduckgo's hide my email )
+      blockeddomains: []
     # -- Billing contains configuration for billing related features
     billing:
       # -- RequirePaymentMethod indicates whether to check if a payment method

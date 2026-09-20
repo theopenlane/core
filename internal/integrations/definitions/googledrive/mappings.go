@@ -6,9 +6,8 @@ import (
 )
 
 // mapExprInternalPolicy is the CEL mapping expression for Google Drive file payloads mapped to InternalPolicy
-var mapExprInternalPolicy = providerkit.CelMapExpr([]providerkit.CelMapEntry{
-	{Key: entityops.InputKeyInternalPolicyName, Expr: `'name' in payload && payload.name != "" ? payload.name : "Untitled Policy"`},
-	{Key: entityops.InputKeyInternalPolicyExternalFileID, Expr: `'id' in payload ? payload.id : ""`},
-	{Key: entityops.InputKeyInternalPolicyManagementMode, Expr: `"INTEGRATION"`},
-	{Key: entityops.InputKeyInternalPolicyStatus, Expr: `"DRAFT"`},
-})
+var mapExprInternalPolicy = providerkit.CelMapExpr(
+	entityops.InternalPolicyFields.Name.Expr(`'name' in payload && payload.name != "" ? payload.name : "Untitled Policy"`),
+	entityops.InternalPolicyFields.ExternalFileID.Expr(`'id' in payload ? payload.id : ""`),
+	entityops.InternalPolicyFields.ManagementMode.Expr(`"INTEGRATION"`),
+)

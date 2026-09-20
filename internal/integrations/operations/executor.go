@@ -59,10 +59,6 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, servic
 		}
 	}
 
-	if err := bindIngestPersistence(); err != nil {
-		return err
-	}
-
 	if err := entityops.RegisterIngestListeners(runtime, func(ctx context.Context, client *ent.Client, _ gala.OperationContext) (*ent.Integration, error) {
 		return resolveIngestIntegration(ctx, client)
 	}); err != nil {

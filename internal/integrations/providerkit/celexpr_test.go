@@ -2,6 +2,8 @@ package providerkit
 
 import (
 	"testing"
+
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 )
 
 func TestCelMapExpr(t *testing.T) {
@@ -9,7 +11,7 @@ func TestCelMapExpr(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		entries []CelMapEntry
+		entries []entityops.MappingEntry
 		want    string
 	}{
 		{
@@ -19,14 +21,14 @@ func TestCelMapExpr(t *testing.T) {
 		},
 		{
 			name: "single entry",
-			entries: []CelMapEntry{
+			entries: []entityops.MappingEntry{
 				{Key: "severity", Expr: "payload.severity"},
 			},
 			want: "{\n  \"severity\": dyn(payload.severity)\n}",
 		},
 		{
 			name: "multiple entries separated by commas",
-			entries: []CelMapEntry{
+			entries: []entityops.MappingEntry{
 				{Key: "name", Expr: "resource"},
 				{Key: "level", Expr: "variant"},
 			},
@@ -34,7 +36,7 @@ func TestCelMapExpr(t *testing.T) {
 		},
 		{
 			name: "key with special characters is quoted",
-			entries: []CelMapEntry{
+			entries: []entityops.MappingEntry{
 				{Key: "field.name", Expr: "payload.x"},
 			},
 			want: "{\n  \"field.name\": dyn(payload.x)\n}",
@@ -45,7 +47,7 @@ func TestCelMapExpr(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := CelMapExpr(tc.entries)
+			got := CelMapExpr(tc.entries...)
 			if got != tc.want {
 				t.Fatalf("CelMapExpr() = %q, want %q", got, tc.want)
 			}

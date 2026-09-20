@@ -25,11 +25,9 @@ func init() {
 
 	createCmd.Flags().StringP("external-id", "e", "", "stable identifier from the directory system")
 	createCmd.Flags().String("integration-id", "", "integration that owns this directory group")
-	createCmd.Flags().String("directory-sync-run-id", "", "sync run that produced this snapshot")
 	createCmd.Flags().String("display-name", "", "display name of the group")
 	createCmd.Flags().String("email", "", "primary group email address")
 	createCmd.Flags().StringP("description", "d", "", "free-form description")
-	createCmd.Flags().String("directory-instance-id", "", "stable external workspace or tenant identifier")
 	createCmd.Flags().String("platform-id", "", "platform associated with this directory group")
 	createCmd.Flags().StringSlice("tags", []string{}, "tags associated with the group")
 }
@@ -50,13 +48,6 @@ func createValidation() (input graphclient.CreateDirectoryGroupInput, err error)
 
 	input.IntegrationID = integrationID
 
-	directorySyncRunID := cmd.Config.String("directory-sync-run-id")
-	if directorySyncRunID == "" {
-		return input, cmd.NewRequiredFieldMissingError("directory sync run id")
-	}
-
-	input.DirectorySyncRunID = directorySyncRunID
-
 	displayName := cmd.Config.String("display-name")
 	if displayName != "" {
 		input.DisplayName = &displayName
@@ -70,11 +61,6 @@ func createValidation() (input graphclient.CreateDirectoryGroupInput, err error)
 	description := cmd.Config.String("description")
 	if description != "" {
 		input.Description = &description
-	}
-
-	directoryInstanceID := cmd.Config.String("directory-instance-id")
-	if directoryInstanceID != "" {
-		input.DirectoryInstanceID = &directoryInstanceID
 	}
 
 	platformID := cmd.Config.String("platform-id")

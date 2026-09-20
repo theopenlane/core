@@ -571,11 +571,6 @@ func (o Organization) Edges() []ent.Edge {
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:         o,
-			edgeSchema:         DirectorySyncRun{},
-			cascadeDeleteOwner: true,
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         o,
 			edgeSchema:         Discussion{},
 			cascadeDeleteOwner: true,
 		}),

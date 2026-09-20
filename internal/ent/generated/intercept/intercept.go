@@ -27,7 +27,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
@@ -707,33 +706,6 @@ func (f TraverseDirectoryMembership) Traverse(ctx context.Context, q generated.Q
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.DirectoryMembershipQuery", q)
-}
-
-// The DirectorySyncRunFunc type is an adapter to allow the use of ordinary function as a Querier.
-type DirectorySyncRunFunc func(context.Context, *generated.DirectorySyncRunQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f DirectorySyncRunFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.DirectorySyncRunQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.DirectorySyncRunQuery", q)
-}
-
-// The TraverseDirectorySyncRun type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseDirectorySyncRun func(context.Context, *generated.DirectorySyncRunQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseDirectorySyncRun) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseDirectorySyncRun) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.DirectorySyncRunQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.DirectorySyncRunQuery", q)
 }
 
 // The DiscussionFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2966,8 +2938,6 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.DirectoryGroupQuery, predicate.DirectoryGroup, directorygroup.OrderOption]{typ: generated.TypeDirectoryGroup, tq: q}, nil
 	case *generated.DirectoryMembershipQuery:
 		return &query[*generated.DirectoryMembershipQuery, predicate.DirectoryMembership, directorymembership.OrderOption]{typ: generated.TypeDirectoryMembership, tq: q}, nil
-	case *generated.DirectorySyncRunQuery:
-		return &query[*generated.DirectorySyncRunQuery, predicate.DirectorySyncRun, directorysyncrun.OrderOption]{typ: generated.TypeDirectorySyncRun, tq: q}, nil
 	case *generated.DiscussionQuery:
 		return &query[*generated.DiscussionQuery, predicate.Discussion, discussion.OrderOption]{typ: generated.TypeDiscussion, tq: q}, nil
 	case *generated.DocumentDataQuery:

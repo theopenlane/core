@@ -39,18 +39,26 @@ type domainScanSaga struct {
 	services types.RuntimeServices
 }
 
-// runBrandDesignScan runs only the brand design portion of the scan
-func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, scanID, domain string, applyBrandDesign bool) error {
-	systemCtx := domainScanSystemContext(ctx, organizationID)
+type brandDesignScanOpts struct {
+	organizationID            string
+	scanID                    string
+	domain                    string
+	applyBrandDesignToPreview bool
+	applyBrandDesignToLive    bool
+}
 
-	if err := s.services.DB().Scan.UpdateOneID(scanID).
+// runBrandDesignScan runs only the brand design portion of the scan
+func (s domainScanSaga) runBrandDesignScan(ctx context.Context, opts brandDesignScanOpts) error {
+	systemCtx := domainScanSystemContext(ctx, opts.organizationID)
+
+	if err := s.services.DB().Scan.UpdateOneID(opts.scanID).
 		SetStatus(enums.ScanStatusProcessing).
 		Exec(systemCtx); err != nil {
 		return err
 	}
 
 	config, err := json.Marshal(DomainScanGatherEnrichment{
-		Domain:          domain,
+		Domain:          opts.domain,
 		ForceRefresh:    true,
 		BrandDesignOnly: true,
 	})
@@ -71,19 +79,22 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, 
 	if result.Enrichment.Branding == nil {
 		logx.FromContext(ctx).Info().Msg("domain scan: no brand design found")
 
-		return s.services.DB().Scan.UpdateOneID(scanID).
+		return s.services.DB().Scan.UpdateOneID(opts.scanID).
 			SetStatus(enums.ScanStatusCompleted).
 			Exec(systemCtx)
 	}
 
-	if applyBrandDesign && result.Enrichment.Branding.Error == "" {
-		if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), buildBrandDesignImport(result.Enrichment.Branding)); err != nil {
+	if result.Enrichment.Branding.Error == "" {
+		result.Enrichment.Branding.ApplyToPreviewTrustcenter = opts.applyBrandDesignToPreview
+		result.Enrichment.Branding.ApplyToLiveTrustcenter = opts.applyBrandDesignToLive
+
+		if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), *result.Enrichment.Branding); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed applying brand design to trust center")
 		}
 	}
 
 	metadata := map[string]any{
-		"url": domain,
+		"url": opts.domain,
 		"branding": domainscan.Branding{
 			Error: result.Enrichment.Branding.Error,
 			Favicon: domainscan.Favicon{
@@ -100,7 +111,10 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, 
 		},
 	}
 
-	if err := s.services.DB().Scan.UpdateOneID(scanID).
+	metadata[DomainScanApplyBrandDesignToPreviewMetadataKey] = opts.applyBrandDesignToPreview
+	metadata[DomainScanApplyBrandDesignToLiveMetadataKey] = opts.applyBrandDesignToLive
+
+	if err := s.services.DB().Scan.UpdateOneID(opts.scanID).
 		SetStatus(enums.ScanStatusCompleted).
 		SetMetadata(metadata).
 		Exec(systemCtx); err != nil {
@@ -108,20 +122,6 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, 
 	}
 
 	return nil
-}
-
-func buildBrandDesignImport(brandDesign *domainscan.BrandDesignProfile) DomainScanImportBranding {
-	return DomainScanImportBranding{
-		LogoURL:                  brandDesign.LogoURL,
-		FaviconURL:               brandDesign.FaviconURL,
-		PrimaryColor:             brandDesign.PrimaryColor,
-		Font:                     brandDesign.Font,
-		ForegroundColor:          brandDesign.ForegroundColor,
-		BackgroundColor:          brandDesign.BackgroundColor,
-		AccentColor:              brandDesign.AccentColor,
-		SecondaryBackgroundColor: brandDesign.SecondaryBackgroundColor,
-		SecondaryForegroundColor: brandDesign.SecondaryForegroundColor,
-	}
 }
 
 // domainScanListeners declares the standalone gala listeners implementing the domain scan saga
@@ -329,7 +329,8 @@ func (s domainScanSaga) persistDomainScanEnrichment(ctx context.Context, organiz
 		return err
 	}
 
-	applyBrandDesign, _ := scanRecord.Metadata[DomainScanApplyBrandDesignMetadataKey].(bool)
+	applyBrandDesignToPreview, _ := scanRecord.Metadata[DomainScanApplyBrandDesignToPreviewMetadataKey].(bool)
+	applyBrandDesignToLive, _ := scanRecord.Metadata[DomainScanApplyBrandDesignToLiveMetadataKey].(bool)
 
 	if err := s.services.DB().Scan.UpdateOneID(internalScanID).
 		SetMetadata(map[string]any{domainScanEnrichmentMetadataKey: enrichment}).
@@ -344,17 +345,16 @@ func (s domainScanSaga) persistDomainScanEnrichment(ctx context.Context, organiz
 		return err
 	}
 
-	if !applyBrandDesign {
-		return nil
-	}
-
 	if enrichment.Branding == nil || enrichment.Branding.Error != "" {
 		logx.FromContext(ctx).Info().Msg("domain scan: no brand design found, skipping trust center update")
 
 		return nil
 	}
 
-	if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), buildBrandDesignImport(enrichment.Branding)); err != nil {
+	enrichment.Branding.ApplyToPreviewTrustcenter = applyBrandDesignToPreview
+	enrichment.Branding.ApplyToLiveTrustcenter = applyBrandDesignToLive
+
+	if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), *enrichment.Branding); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed applying brand design to trust center")
 	}
 

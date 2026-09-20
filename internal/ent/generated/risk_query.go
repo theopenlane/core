@@ -21,6 +21,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
@@ -34,6 +36,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 
@@ -43,62 +46,70 @@ import (
 // RiskQuery is the builder for querying Risk entities.
 type RiskQuery struct {
 	config
-	ctx                         *QueryContext
-	order                       []risk.OrderOption
-	inters                      []Interceptor
-	predicates                  []predicate.Risk
-	withOwner                   *OrganizationQuery
-	withBlockedGroups           *GroupQuery
-	withEditors                 *GroupQuery
-	withViewers                 *GroupQuery
-	withRiskKind                *CustomTypeEnumQuery
-	withRiskCategory            *CustomTypeEnumQuery
-	withEnvironment             *CustomTypeEnumQuery
-	withScope                   *CustomTypeEnumQuery
-	withControls                *ControlQuery
-	withSubcontrols             *SubcontrolQuery
-	withProcedures              *ProcedureQuery
-	withInternalPolicies        *InternalPolicyQuery
-	withPrograms                *ProgramQuery
-	withPlatforms               *PlatformQuery
-	withActionPlans             *ActionPlanQuery
-	withTasks                   *TaskQuery
-	withAssets                  *AssetQuery
-	withEntities                *EntityQuery
-	withScans                   *ScanQuery
-	withStakeholder             *GroupQuery
-	withDelegate                *GroupQuery
-	withComments                *NoteQuery
-	withDiscussions             *DiscussionQuery
-	withReviews                 *ReviewQuery
-	withRemediations            *RemediationQuery
-	withVulnerabilities         *VulnerabilityQuery
-	withFindings                *FindingQuery
-	withWorkflowObjectRefs      *WorkflowObjectRefQuery
-	withFKs                     bool
-	loadTotal                   []func(context.Context, []*Risk) error
-	modifiers                   []func(*sql.Selector)
-	withNamedBlockedGroups      map[string]*GroupQuery
-	withNamedEditors            map[string]*GroupQuery
-	withNamedViewers            map[string]*GroupQuery
-	withNamedControls           map[string]*ControlQuery
-	withNamedSubcontrols        map[string]*SubcontrolQuery
-	withNamedProcedures         map[string]*ProcedureQuery
-	withNamedInternalPolicies   map[string]*InternalPolicyQuery
-	withNamedPrograms           map[string]*ProgramQuery
-	withNamedPlatforms          map[string]*PlatformQuery
-	withNamedActionPlans        map[string]*ActionPlanQuery
-	withNamedTasks              map[string]*TaskQuery
-	withNamedAssets             map[string]*AssetQuery
-	withNamedEntities           map[string]*EntityQuery
-	withNamedScans              map[string]*ScanQuery
-	withNamedComments           map[string]*NoteQuery
-	withNamedDiscussions        map[string]*DiscussionQuery
-	withNamedReviews            map[string]*ReviewQuery
-	withNamedRemediations       map[string]*RemediationQuery
-	withNamedVulnerabilities    map[string]*VulnerabilityQuery
-	withNamedFindings           map[string]*FindingQuery
-	withNamedWorkflowObjectRefs map[string]*WorkflowObjectRefQuery
+	ctx                           *QueryContext
+	order                         []risk.OrderOption
+	inters                        []Interceptor
+	predicates                    []predicate.Risk
+	withIntegrationRuns           *IntegrationRunQuery
+	withOwner                     *OrganizationQuery
+	withBlockedGroups             *GroupQuery
+	withEditors                   *GroupQuery
+	withViewers                   *GroupQuery
+	withStakeholderUser           *UserQuery
+	withStakeholderGroup          *GroupQuery
+	withStakeholderIdentityHolder *IdentityHolderQuery
+	withDelegateUser              *UserQuery
+	withDelegateGroup             *GroupQuery
+	withDelegateIdentityHolder    *IdentityHolderQuery
+	withRiskKind                  *CustomTypeEnumQuery
+	withRiskCategory              *CustomTypeEnumQuery
+	withEnvironment               *CustomTypeEnumQuery
+	withScope                     *CustomTypeEnumQuery
+	withControls                  *ControlQuery
+	withSubcontrols               *SubcontrolQuery
+	withProcedures                *ProcedureQuery
+	withInternalPolicies          *InternalPolicyQuery
+	withPrograms                  *ProgramQuery
+	withPlatforms                 *PlatformQuery
+	withActionPlans               *ActionPlanQuery
+	withTasks                     *TaskQuery
+	withAssets                    *AssetQuery
+	withEntities                  *EntityQuery
+	withScans                     *ScanQuery
+	withStakeholder               *GroupQuery
+	withDelegate                  *GroupQuery
+	withComments                  *NoteQuery
+	withDiscussions               *DiscussionQuery
+	withReviews                   *ReviewQuery
+	withRemediations              *RemediationQuery
+	withVulnerabilities           *VulnerabilityQuery
+	withFindings                  *FindingQuery
+	withWorkflowObjectRefs        *WorkflowObjectRefQuery
+	withFKs                       bool
+	loadTotal                     []func(context.Context, []*Risk) error
+	modifiers                     []func(*sql.Selector)
+	withNamedIntegrationRuns      map[string]*IntegrationRunQuery
+	withNamedBlockedGroups        map[string]*GroupQuery
+	withNamedEditors              map[string]*GroupQuery
+	withNamedViewers              map[string]*GroupQuery
+	withNamedControls             map[string]*ControlQuery
+	withNamedSubcontrols          map[string]*SubcontrolQuery
+	withNamedProcedures           map[string]*ProcedureQuery
+	withNamedInternalPolicies     map[string]*InternalPolicyQuery
+	withNamedPrograms             map[string]*ProgramQuery
+	withNamedPlatforms            map[string]*PlatformQuery
+	withNamedActionPlans          map[string]*ActionPlanQuery
+	withNamedTasks                map[string]*TaskQuery
+	withNamedAssets               map[string]*AssetQuery
+	withNamedEntities             map[string]*EntityQuery
+	withNamedScans                map[string]*ScanQuery
+	withNamedComments             map[string]*NoteQuery
+	withNamedDiscussions          map[string]*DiscussionQuery
+	withNamedReviews              map[string]*ReviewQuery
+	withNamedRemediations         map[string]*RemediationQuery
+	withNamedVulnerabilities      map[string]*VulnerabilityQuery
+	withNamedFindings             map[string]*FindingQuery
+	withNamedWorkflowObjectRefs   map[string]*WorkflowObjectRefQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -133,6 +144,28 @@ func (_q *RiskQuery) Unique(unique bool) *RiskQuery {
 func (_q *RiskQuery) Order(o ...risk.OrderOption) *RiskQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryIntegrationRuns chains the current query on the "integration_runs" edge.
+func (_q *RiskQuery) QueryIntegrationRuns() *IntegrationRunQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, risk.IntegrationRunsTable, risk.IntegrationRunsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryOwner chains the current query on the "owner" edge.
@@ -216,6 +249,138 @@ func (_q *RiskQuery) QueryViewers() *GroupQuery {
 			sqlgraph.From(risk.Table, risk.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, risk.ViewersTable, risk.ViewersPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryStakeholderUser chains the current query on the "stakeholder_user" edge.
+func (_q *RiskQuery) QueryStakeholderUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.StakeholderUserTable, risk.StakeholderUserColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryStakeholderGroup chains the current query on the "stakeholder_group" edge.
+func (_q *RiskQuery) QueryStakeholderGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.StakeholderGroupTable, risk.StakeholderGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryStakeholderIdentityHolder chains the current query on the "stakeholder_identity_holder" edge.
+func (_q *RiskQuery) QueryStakeholderIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.StakeholderIdentityHolderTable, risk.StakeholderIdentityHolderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDelegateUser chains the current query on the "delegate_user" edge.
+func (_q *RiskQuery) QueryDelegateUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.DelegateUserTable, risk.DelegateUserColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDelegateGroup chains the current query on the "delegate_group" edge.
+func (_q *RiskQuery) QueryDelegateGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.DelegateGroupTable, risk.DelegateGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDelegateIdentityHolder chains the current query on the "delegate_identity_holder" edge.
+func (_q *RiskQuery) QueryDelegateIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, risk.DelegateIdentityHolderTable, risk.DelegateIdentityHolderColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -938,44 +1103,62 @@ func (_q *RiskQuery) Clone() *RiskQuery {
 		return nil
 	}
 	return &RiskQuery{
-		config:                 _q.config,
-		ctx:                    _q.ctx.Clone(),
-		order:                  append([]risk.OrderOption{}, _q.order...),
-		inters:                 append([]Interceptor{}, _q.inters...),
-		predicates:             append([]predicate.Risk{}, _q.predicates...),
-		withOwner:              _q.withOwner.Clone(),
-		withBlockedGroups:      _q.withBlockedGroups.Clone(),
-		withEditors:            _q.withEditors.Clone(),
-		withViewers:            _q.withViewers.Clone(),
-		withRiskKind:           _q.withRiskKind.Clone(),
-		withRiskCategory:       _q.withRiskCategory.Clone(),
-		withEnvironment:        _q.withEnvironment.Clone(),
-		withScope:              _q.withScope.Clone(),
-		withControls:           _q.withControls.Clone(),
-		withSubcontrols:        _q.withSubcontrols.Clone(),
-		withProcedures:         _q.withProcedures.Clone(),
-		withInternalPolicies:   _q.withInternalPolicies.Clone(),
-		withPrograms:           _q.withPrograms.Clone(),
-		withPlatforms:          _q.withPlatforms.Clone(),
-		withActionPlans:        _q.withActionPlans.Clone(),
-		withTasks:              _q.withTasks.Clone(),
-		withAssets:             _q.withAssets.Clone(),
-		withEntities:           _q.withEntities.Clone(),
-		withScans:              _q.withScans.Clone(),
-		withStakeholder:        _q.withStakeholder.Clone(),
-		withDelegate:           _q.withDelegate.Clone(),
-		withComments:           _q.withComments.Clone(),
-		withDiscussions:        _q.withDiscussions.Clone(),
-		withReviews:            _q.withReviews.Clone(),
-		withRemediations:       _q.withRemediations.Clone(),
-		withVulnerabilities:    _q.withVulnerabilities.Clone(),
-		withFindings:           _q.withFindings.Clone(),
-		withWorkflowObjectRefs: _q.withWorkflowObjectRefs.Clone(),
+		config:                        _q.config,
+		ctx:                           _q.ctx.Clone(),
+		order:                         append([]risk.OrderOption{}, _q.order...),
+		inters:                        append([]Interceptor{}, _q.inters...),
+		predicates:                    append([]predicate.Risk{}, _q.predicates...),
+		withIntegrationRuns:           _q.withIntegrationRuns.Clone(),
+		withOwner:                     _q.withOwner.Clone(),
+		withBlockedGroups:             _q.withBlockedGroups.Clone(),
+		withEditors:                   _q.withEditors.Clone(),
+		withViewers:                   _q.withViewers.Clone(),
+		withStakeholderUser:           _q.withStakeholderUser.Clone(),
+		withStakeholderGroup:          _q.withStakeholderGroup.Clone(),
+		withStakeholderIdentityHolder: _q.withStakeholderIdentityHolder.Clone(),
+		withDelegateUser:              _q.withDelegateUser.Clone(),
+		withDelegateGroup:             _q.withDelegateGroup.Clone(),
+		withDelegateIdentityHolder:    _q.withDelegateIdentityHolder.Clone(),
+		withRiskKind:                  _q.withRiskKind.Clone(),
+		withRiskCategory:              _q.withRiskCategory.Clone(),
+		withEnvironment:               _q.withEnvironment.Clone(),
+		withScope:                     _q.withScope.Clone(),
+		withControls:                  _q.withControls.Clone(),
+		withSubcontrols:               _q.withSubcontrols.Clone(),
+		withProcedures:                _q.withProcedures.Clone(),
+		withInternalPolicies:          _q.withInternalPolicies.Clone(),
+		withPrograms:                  _q.withPrograms.Clone(),
+		withPlatforms:                 _q.withPlatforms.Clone(),
+		withActionPlans:               _q.withActionPlans.Clone(),
+		withTasks:                     _q.withTasks.Clone(),
+		withAssets:                    _q.withAssets.Clone(),
+		withEntities:                  _q.withEntities.Clone(),
+		withScans:                     _q.withScans.Clone(),
+		withStakeholder:               _q.withStakeholder.Clone(),
+		withDelegate:                  _q.withDelegate.Clone(),
+		withComments:                  _q.withComments.Clone(),
+		withDiscussions:               _q.withDiscussions.Clone(),
+		withReviews:                   _q.withReviews.Clone(),
+		withRemediations:              _q.withRemediations.Clone(),
+		withVulnerabilities:           _q.withVulnerabilities.Clone(),
+		withFindings:                  _q.withFindings.Clone(),
+		withWorkflowObjectRefs:        _q.withWorkflowObjectRefs.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithIntegrationRuns tells the query-builder to eager-load the nodes that are connected to
+// the "integration_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQuery)) *RiskQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRuns = query
+	return _q
 }
 
 // WithOwner tells the query-builder to eager-load the nodes that are connected to
@@ -1019,6 +1202,72 @@ func (_q *RiskQuery) WithViewers(opts ...func(*GroupQuery)) *RiskQuery {
 		opt(query)
 	}
 	_q.withViewers = query
+	return _q
+}
+
+// WithStakeholderUser tells the query-builder to eager-load the nodes that are connected to
+// the "stakeholder_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithStakeholderUser(opts ...func(*UserQuery)) *RiskQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withStakeholderUser = query
+	return _q
+}
+
+// WithStakeholderGroup tells the query-builder to eager-load the nodes that are connected to
+// the "stakeholder_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithStakeholderGroup(opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withStakeholderGroup = query
+	return _q
+}
+
+// WithStakeholderIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "stakeholder_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithStakeholderIdentityHolder(opts ...func(*IdentityHolderQuery)) *RiskQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withStakeholderIdentityHolder = query
+	return _q
+}
+
+// WithDelegateUser tells the query-builder to eager-load the nodes that are connected to
+// the "delegate_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithDelegateUser(opts ...func(*UserQuery)) *RiskQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDelegateUser = query
+	return _q
+}
+
+// WithDelegateGroup tells the query-builder to eager-load the nodes that are connected to
+// the "delegate_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithDelegateGroup(opts ...func(*GroupQuery)) *RiskQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDelegateGroup = query
+	return _q
+}
+
+// WithDelegateIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "delegate_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithDelegateIdentityHolder(opts ...func(*IdentityHolderQuery)) *RiskQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDelegateIdentityHolder = query
 	return _q
 }
 
@@ -1371,11 +1620,18 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		nodes       = []*Risk{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [28]bool{
+		loadedTypes = [35]bool{
+			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
+			_q.withStakeholderUser != nil,
+			_q.withStakeholderGroup != nil,
+			_q.withStakeholderIdentityHolder != nil,
+			_q.withDelegateUser != nil,
+			_q.withDelegateGroup != nil,
+			_q.withDelegateIdentityHolder != nil,
 			_q.withRiskKind != nil,
 			_q.withRiskCategory != nil,
 			_q.withEnvironment != nil,
@@ -1426,6 +1682,13 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withIntegrationRuns; query != nil {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Risk) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
+			func(n *Risk, e *IntegrationRun) { n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Risk, e *Organization) { n.Edges.Owner = e }); err != nil {
@@ -1450,6 +1713,42 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		if err := _q.loadViewers(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Viewers = []*Group{} },
 			func(n *Risk, e *Group) { n.Edges.Viewers = append(n.Edges.Viewers, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withStakeholderUser; query != nil {
+		if err := _q.loadStakeholderUser(ctx, query, nodes, nil,
+			func(n *Risk, e *User) { n.Edges.StakeholderUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withStakeholderGroup; query != nil {
+		if err := _q.loadStakeholderGroup(ctx, query, nodes, nil,
+			func(n *Risk, e *Group) { n.Edges.StakeholderGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withStakeholderIdentityHolder; query != nil {
+		if err := _q.loadStakeholderIdentityHolder(ctx, query, nodes, nil,
+			func(n *Risk, e *IdentityHolder) { n.Edges.StakeholderIdentityHolder = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDelegateUser; query != nil {
+		if err := _q.loadDelegateUser(ctx, query, nodes, nil,
+			func(n *Risk, e *User) { n.Edges.DelegateUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDelegateGroup; query != nil {
+		if err := _q.loadDelegateGroup(ctx, query, nodes, nil,
+			func(n *Risk, e *Group) { n.Edges.DelegateGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDelegateIdentityHolder; query != nil {
+		if err := _q.loadDelegateIdentityHolder(ctx, query, nodes, nil,
+			func(n *Risk, e *IdentityHolder) { n.Edges.DelegateIdentityHolder = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1617,6 +1916,13 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedIntegrationRuns {
+		if err := _q.loadIntegrationRuns(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedIntegrationRuns(name) },
+			func(n *Risk, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedBlockedGroups(name) },
@@ -1772,6 +2078,67 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 	return nodes, nil
 }
 
+func (_q *RiskQuery) loadIntegrationRuns(ctx context.Context, query *IntegrationRunQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *IntegrationRun)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Risk)
+	nids := make(map[string]map[*Risk]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(risk.IntegrationRunsTable)
+		s.Join(joinT).On(s.C(integrationrun.FieldID), joinT.C(risk.IntegrationRunsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(risk.IntegrationRunsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(risk.IntegrationRunsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Risk]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*IntegrationRun](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "integration_runs" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *RiskQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Organization)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Risk)
@@ -1980,6 +2347,180 @@ func (_q *RiskQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes [
 		}
 		for kn := range nodes {
 			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *RiskQuery) loadStakeholderUser(ctx context.Context, query *UserQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		fk := nodes[i].StakeholderUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "stakeholder_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *RiskQuery) loadStakeholderGroup(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		fk := nodes[i].StakeholderGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "stakeholder_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *RiskQuery) loadStakeholderIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		fk := nodes[i].StakeholderIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "stakeholder_identity_holder_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *RiskQuery) loadDelegateUser(ctx context.Context, query *UserQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		fk := nodes[i].DelegateUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "delegate_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *RiskQuery) loadDelegateGroup(ctx context.Context, query *GroupQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		fk := nodes[i].DelegateGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "delegate_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *RiskQuery) loadDelegateIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Risk)
+	for i := range nodes {
+		fk := nodes[i].DelegateIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "delegate_identity_holder_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
 		}
 	}
 	return nil
@@ -3108,6 +3649,24 @@ func (_q *RiskQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(risk.FieldOwnerID)
 		}
+		if _q.withStakeholderUser != nil {
+			_spec.Node.AddColumnOnce(risk.FieldStakeholderUserID)
+		}
+		if _q.withStakeholderGroup != nil {
+			_spec.Node.AddColumnOnce(risk.FieldStakeholderGroupID)
+		}
+		if _q.withStakeholderIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(risk.FieldStakeholderIdentityHolderID)
+		}
+		if _q.withDelegateUser != nil {
+			_spec.Node.AddColumnOnce(risk.FieldDelegateUserID)
+		}
+		if _q.withDelegateGroup != nil {
+			_spec.Node.AddColumnOnce(risk.FieldDelegateGroupID)
+		}
+		if _q.withDelegateIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(risk.FieldDelegateIdentityHolderID)
+		}
 		if _q.withRiskKind != nil {
 			_spec.Node.AddColumnOnce(risk.FieldRiskKindID)
 		}
@@ -3189,6 +3748,20 @@ func (_q *RiskQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *RiskQuery) Modify(modifiers ...func(s *sql.Selector)) *RiskSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedIntegrationRuns tells the query-builder to eager-load the nodes that are connected to the "integration_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithNamedIntegrationRuns(name string, opts ...func(*IntegrationRunQuery)) *RiskQuery {
+	query := (&IntegrationRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRuns == nil {
+		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
+	}
+	_q.withNamedIntegrationRuns[name] = query
+	return _q
 }
 
 // WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"

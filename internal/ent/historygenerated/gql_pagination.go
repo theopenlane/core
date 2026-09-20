@@ -10507,6 +10507,20 @@ var (
 			}
 		},
 	}
+	// FindingHistoryOrderFieldInternalOwner orders FindingHistory by internal_owner.
+	FindingHistoryOrderFieldInternalOwner = &FindingHistoryOrderField{
+		Value: func(_m *FindingHistory) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: findinghistory.FieldInternalOwner,
+		toTerm: findinghistory.ByInternalOwner,
+		toCursor: func(_m *FindingHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
 	// FindingHistoryOrderFieldExternalID orders FindingHistory by external_id.
 	FindingHistoryOrderFieldExternalID = &FindingHistoryOrderField{
 		Value: func(_m *FindingHistory) (ent.Value, error) {
@@ -10643,6 +10657,8 @@ func (f FindingHistoryOrderField) String() string {
 		str = "created_at"
 	case FindingHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case FindingHistoryOrderFieldInternalOwner.column:
+		str = "internal_owner"
 	case FindingHistoryOrderFieldExternalID.column:
 		str = "external_id"
 	case FindingHistoryOrderFieldSecurityLevel.column:
@@ -10679,6 +10695,8 @@ func (f *FindingHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *FindingHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *FindingHistoryOrderFieldUpdatedAt
+	case "internal_owner":
+		*f = *FindingHistoryOrderFieldInternalOwner
 	case "external_id":
 		*f = *FindingHistoryOrderFieldExternalID
 	case "security_level":
@@ -19912,6 +19930,34 @@ var (
 			}
 		},
 	}
+	// RiskHistoryOrderFieldStakeholderName orders RiskHistory by stakeholder_name.
+	RiskHistoryOrderFieldStakeholderName = &RiskHistoryOrderField{
+		Value: func(_m *RiskHistory) (ent.Value, error) {
+			return _m.StakeholderName, nil
+		},
+		column: riskhistory.FieldStakeholderName,
+		toTerm: riskhistory.ByStakeholderName,
+		toCursor: func(_m *RiskHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.StakeholderName,
+			}
+		},
+	}
+	// RiskHistoryOrderFieldDelegateName orders RiskHistory by delegate_name.
+	RiskHistoryOrderFieldDelegateName = &RiskHistoryOrderField{
+		Value: func(_m *RiskHistory) (ent.Value, error) {
+			return _m.DelegateName, nil
+		},
+		column: riskhistory.FieldDelegateName,
+		toTerm: riskhistory.ByDelegateName,
+		toCursor: func(_m *RiskHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DelegateName,
+			}
+		},
+	}
 	// RiskHistoryOrderFieldExternalID orders RiskHistory by external_id.
 	RiskHistoryOrderFieldExternalID = &RiskHistoryOrderField{
 		Value: func(_m *RiskHistory) (ent.Value, error) {
@@ -20213,6 +20259,10 @@ func (f RiskHistoryOrderField) String() string {
 		str = "created_at"
 	case RiskHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case RiskHistoryOrderFieldStakeholderName.column:
+		str = "stakeholder_name"
+	case RiskHistoryOrderFieldDelegateName.column:
+		str = "delegate_name"
 	case RiskHistoryOrderFieldExternalID.column:
 		str = "external_id"
 	case RiskHistoryOrderFieldObservedAt.column:
@@ -20267,6 +20317,10 @@ func (f *RiskHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RiskHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *RiskHistoryOrderFieldUpdatedAt
+	case "stakeholder_name":
+		*f = *RiskHistoryOrderFieldStakeholderName
+	case "delegate_name":
+		*f = *RiskHistoryOrderFieldDelegateName
 	case "external_id":
 		*f = *RiskHistoryOrderFieldExternalID
 	case "observed_at":
@@ -28230,6 +28284,20 @@ var (
 			}
 		},
 	}
+	// VulnerabilityHistoryOrderFieldInternalOwner orders VulnerabilityHistory by internal_owner.
+	VulnerabilityHistoryOrderFieldInternalOwner = &VulnerabilityHistoryOrderField{
+		Value: func(_m *VulnerabilityHistory) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: vulnerabilityhistory.FieldInternalOwner,
+		toTerm: vulnerabilityhistory.ByInternalOwner,
+		toCursor: func(_m *VulnerabilityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
 	// VulnerabilityHistoryOrderFieldExternalOwnerID orders VulnerabilityHistory by external_owner_id.
 	VulnerabilityHistoryOrderFieldExternalOwnerID = &VulnerabilityHistoryOrderField{
 		Value: func(_m *VulnerabilityHistory) (ent.Value, error) {
@@ -28340,6 +28408,8 @@ func (f VulnerabilityHistoryOrderField) String() string {
 		str = "created_at"
 	case VulnerabilityHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case VulnerabilityHistoryOrderFieldInternalOwner.column:
+		str = "internal_owner"
 	case VulnerabilityHistoryOrderFieldExternalOwnerID.column:
 		str = "external_owner_id"
 	case VulnerabilityHistoryOrderFieldSecurityLevel.column:
@@ -28376,6 +28446,8 @@ func (f *VulnerabilityHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *VulnerabilityHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *VulnerabilityHistoryOrderFieldUpdatedAt
+	case "internal_owner":
+		*f = *VulnerabilityHistoryOrderFieldInternalOwner
 	case "external_owner_id":
 		*f = *VulnerabilityHistoryOrderFieldExternalOwnerID
 	case "security_level":

@@ -19,6 +19,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
@@ -360,6 +361,160 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 	suite.db.DocumentData.DeleteOneID(documentData.ID).Exec(ctx)
 	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(ctx)
 	suite.db.Template.DeleteOneID(template.ID).Exec(ctx)
+}
+
+func (suite *HandlerTestSuite) TestQuestionnaireWithCampaign() {
+	t := suite.T()
+
+	suite.registerAuthenticatedTestHandler("GET", "/questionnaire", suite.h.GetQuestionnaire)
+	suite.registerAuthenticatedTestHandler("POST", "/questionnaire", suite.h.SubmitQuestionnaire)
+
+	ec := echocontext.NewTestEchoContext().Request().Context()
+	ctx := privacy.DecisionContext(ec, privacy.Allow)
+
+	jsonConfig := map[string]any{
+		"title": "Campaign Questionnaire",
+		"questions": []map[string]any{
+			{"id": "q1", "question": "What is your name?", "type": "text"},
+		},
+	}
+
+	template, err := suite.db.Template.Create().
+		SetName("Campaign Questionnaire Template").
+		SetTemplateType(enums.Document).
+		SetJsonconfig(jsonConfig).
+		SetOwnerID(testUser1.OrganizationID).
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
+
+	assessment, err := suite.db.Assessment.Create().
+		SetName("Campaign Questionnaire Assessment").
+		SetTemplateID(template.ID).
+		SetAssessmentType(enums.AssessmentTypeExternal).
+		SetOwnerID(testUser1.OrganizationID).
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
+
+	campaign, err := suite.db.Campaign.Create().
+		SetName("Campaign Questionnaire Campaign").
+		SetAssessmentID(assessment.ID).
+		SetOwnerID(testUser1.OrganizationID).
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
+
+	testEmail := "campaign@theopenlane.io"
+
+	anonUser := auth.NewQuestionnaireCaller(testUser1.OrganizationID, fmt.Sprintf("anon_questionnaire_%s", assessment.ID), "", testEmail)
+
+	questionnaireCtx := auth.WithCaller(ctx, anonUser)
+	questionnaireCtx = auth.ActiveAssessmentIDKey.Set(questionnaireCtx, assessment.ID)
+
+	assessmentResponseFn := func(campaignID, marker string) (string, string) {
+		create := suite.db.AssessmentResponse.Create().
+			SetAssessmentID(assessment.ID).
+			SetEmail(testEmail).
+			SetOwnerID(testUser1.OrganizationID)
+
+		if campaignID != "" {
+			create = create.SetCampaignID(campaignID)
+		}
+
+		response, err := create.Save(questionnaireCtx)
+		require.NoError(t, err)
+
+		documentData, err := suite.db.DocumentData.Create().
+			SetTemplateID(template.ID).
+			SetOwnerID(testUser1.OrganizationID).
+			SetData(map[string]any{"q1": marker}).
+			Save(questionnaireCtx)
+		require.NoError(t, err)
+
+		_, err = suite.db.AssessmentResponse.UpdateOneID(response.ID).
+			SetDocumentDataID(documentData.ID).
+			Save(questionnaireCtx)
+		require.NoError(t, err)
+
+		return response.ID, documentData.ID
+	}
+
+	responseWithoutCampaignID, responseWithoutCampaignDocID := assessmentResponseFn("", "orphan answer")
+	campaignResposeWithID, campaignDocDataResponseID := assessmentResponseFn(campaign.ID, "here is my answer")
+
+	anonUserID := fmt.Sprintf("anon_questionnaire_%s", assessment.ID)
+	accessToken, _, err := suite.h.DBClient.TokenManager.CreateTokenPair(&tokens.Claims{
+		RegisteredClaims: jwt.RegisteredClaims{Subject: anonUserID},
+		UserID:           anonUserID,
+		OrgID:            assessment.OwnerID,
+		AssessmentID:     assessment.ID,
+		CampaignID:       campaign.ID,
+		Email:            testEmail,
+	})
+	require.NoError(t, err)
+
+	t.Run("resolves the campaign linked assessment response", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/questionnaire", nil)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+accessToken)
+
+		recorder := httptest.NewRecorder()
+		suite.e.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusOK, recorder.Code)
+
+		var out models.GetQuestionnaireResponse
+		err := json.NewDecoder(recorder.Result().Body).Decode(&out)
+		require.NoError(t, err)
+
+		assert.Equal(t, "Campaign Questionnaire", out.Jsonconfig["title"])
+		assert.Equal(t, "here is my answer", out.SavedData["q1"])
+	})
+
+	t.Run("campaign linked response can be submitted", func(t *testing.T) {
+		submitReq := models.SubmitQuestionnaireRequest{
+			Data: map[string]any{"q1": "here is my answer"},
+		}
+
+		bodyBytes, err := json.Marshal(submitReq)
+		require.NoError(t, err)
+
+		req := httptest.NewRequest(http.MethodPost, "/questionnaire", bytes.NewReader(bodyBytes))
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+accessToken)
+
+		recorder := httptest.NewRecorder()
+		suite.e.ServeHTTP(recorder, req)
+
+		assert.Equal(t, http.StatusOK, recorder.Code)
+
+		var out models.SubmitQuestionnaireResponse
+		err = json.NewDecoder(recorder.Result().Body).Decode(&out)
+		require.NoError(t, err)
+
+		assert.Equal(t, campaignDocDataResponseID, out.DocumentDataID)
+		assert.Equal(t, "COMPLETED", out.Status)
+		assert.NotEmpty(t, out.CompletedAt)
+
+		updated, err := suite.db.AssessmentResponse.Get(questionnaireCtx, campaignResposeWithID)
+		require.NoError(t, err)
+		assert.Equal(t, enums.AssessmentResponseStatusCompleted, updated.Status)
+
+		doc, err := suite.db.DocumentData.Get(questionnaireCtx, campaignDocDataResponseID)
+		require.NoError(t, err)
+		assert.Equal(t, "here is my answer", doc.Data["q1"])
+
+		// verify this is still in sent and only the response with a campaign was updated
+		resp, err := suite.db.AssessmentResponse.Get(questionnaireCtx, responseWithoutCampaignID)
+		require.NoError(t, err)
+		assert.Equal(t, enums.AssessmentResponseStatusSent, resp.Status)
+	})
+
+	suite.db.DocumentData.DeleteOneID(campaignDocDataResponseID).Exec(questionnaireCtx)
+	suite.db.DocumentData.DeleteOneID(responseWithoutCampaignDocID).Exec(questionnaireCtx)
+	suite.db.AssessmentResponse.DeleteOneID(campaignResposeWithID).Exec(questionnaireCtx)
+	suite.db.AssessmentResponse.DeleteOneID(responseWithoutCampaignID).Exec(questionnaireCtx)
+	suite.db.Campaign.DeleteOneID(campaign.ID).Exec(questionnaireCtx)
+	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(questionnaireCtx)
+	suite.db.Template.DeleteOneID(template.ID).Exec(questionnaireCtx)
 }
 
 func (suite *HandlerTestSuite) TestAnonymousQuestionnaireRejectsDraft() {

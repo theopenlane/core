@@ -249,18 +249,6 @@ func (f DirectoryMembershipFunc) Mutate(ctx context.Context, m generated.Mutatio
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DirectoryMembershipMutation", m)
 }
 
-// The DirectorySyncRunFunc type is an adapter to allow the use of ordinary
-// function as DirectorySyncRun mutator.
-type DirectorySyncRunFunc func(context.Context, *generated.DirectorySyncRunMutation) (generated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f DirectorySyncRunFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
-	if mv, ok := m.(*generated.DirectorySyncRunMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DirectorySyncRunMutation", m)
-}
-
 // The DiscussionFunc type is an adapter to allow the use of ordinary
 // function as Discussion mutator.
 type DiscussionFunc func(context.Context, *generated.DiscussionMutation) (generated.Value, error)

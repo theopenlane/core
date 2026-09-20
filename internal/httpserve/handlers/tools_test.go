@@ -301,6 +301,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 		ent.TokenManager(suite.sharedTokenManager),
 		ent.SessionConfig(&sessionConfig),
 		ent.EntConfig(&entconfig.Config{
+			QuestionnaireProductURL: "https://console.example.com",
 			Modules: entconfig.Modules{
 				Enabled:    true,
 				UseSandbox: true,

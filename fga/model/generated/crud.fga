@@ -102,11 +102,6 @@ extend type organization
     define can_delete_directory_membership: [service, user] or full_access
     define can_create_directory_membership: can_edit or can_edit_directory_membership
 
-    define can_view_directory_sync_run: [service, user] or can_edit_directory_sync_run or full_access
-    define can_edit_directory_sync_run: [service, user] or can_delete_directory_sync_run or full_access
-    define can_delete_directory_sync_run: [service, user] or full_access
-    define can_create_directory_sync_run: can_edit or can_edit_directory_sync_run
-
     define can_view_discussion: [service, user] or can_edit_discussion or full_access
     define can_edit_discussion: [service, user] or can_delete_discussion or full_access
     define can_delete_discussion: [service, user] or full_access

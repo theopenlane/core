@@ -73,11 +73,14 @@ var (
 	ErrEvaluatorBuildFailed = errors.New("entityops: evaluator build failed")
 	// ErrIngestUnsupported indicates the schema has no generated ingest capability
 	ErrIngestUnsupported = errors.New("entityops: ingest unsupported")
-	// ErrIngestMisconfigured indicates a schema ingest capability was wired incorrectly at startup:
-	// bound without persistence, bound twice, or registered without its resolver or binding
+	// ErrIngestMisconfigured indicates a schema ingest capability was registered incorrectly at startup
 	ErrIngestMisconfigured = errors.New("entityops: ingest misconfigured")
 	// ErrIngestIntegrationResolveFailed indicates the durable command's integration could not be resolved
 	ErrIngestIntegrationResolveFailed = errors.New("entityops: ingest integration resolve failed")
+	// ErrUpsertStaleRun indicates an ingest update was superseded by a newer or equal integration run
+	ErrUpsertStaleRun = errors.New("entityops: upsert stale run")
+	// ErrLookupAlternativeInvalid indicates a lookup names an alternative index the schema does not declare
+	ErrLookupAlternativeInvalid = errors.New("entityops: lookup alternative invalid")
 )
 
 // --- Operation constants ---
@@ -195,7 +198,17 @@ func logPersistError(ctx context.Context, ref SchemaRef, sentinel error, err err
 // attached via logx.WithField travel on the context logger already, including across durable gala
 // hops, so only the operation context needs explicit embedding
 func errorEvent(ctx context.Context, ref SchemaRef, err error) *zerolog.Event {
-	event := logx.FromContext(ctx).Error().Err(err).EmbedObject(ref)
+	var event *zerolog.Event
+
+	switch {
+	case generated.IsNotFound(err):
+		// a missing row logs at warn since callers uniformly treat not-found as a benign skip
+		event = logx.FromContext(ctx).Warn().Err(err)
+	default:
+		event = logx.FromContext(ctx).Error().Err(err)
+	}
+
+	event = event.EmbedObject(ref)
 
 	oc, ok := gala.OperationContextFromContext(ctx)
 	if !ok {

@@ -236,7 +236,7 @@ func resolveTrustCenterSubscriberRecipients(ctx context.Context, db *generated.C
 		"schema": entityops.SchemaSubscriber.Snake,
 		"expression": fmt.Sprintf(
 			"target.trust_center_id == %q && target.active && target.verified_email && !target.unsubscribed",
-			camp.TrustCenterID,
+			*camp.TrustCenterID,
 		),
 	}
 

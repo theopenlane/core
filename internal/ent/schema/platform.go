@@ -259,7 +259,6 @@ func (s Platform) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Organization{}.Name()),
 			},
 		}),
-		defaultEdgeToWithPagination(s, DirectorySyncRun{}),
 		defaultEdgeToWithPagination(s, DirectoryAccount{}),
 		defaultEdgeToWithPagination(s, DirectoryGroup{}),
 		defaultEdgeToWithPagination(s, DirectoryMembership{}),

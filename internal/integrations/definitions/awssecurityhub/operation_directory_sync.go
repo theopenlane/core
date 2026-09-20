@@ -3,6 +3,7 @@ package awssecurityhub
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	awssdk "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
@@ -94,8 +95,9 @@ func (DirectorySync) Run(ctx context.Context, client *iam.Client, cfg DirectoryS
 
 	payloadSets := []types.IngestPayloadSet{
 		{
-			Schema:    entityops.SchemaDirectoryAccount.Name,
-			Envelopes: accountEnvelopes,
+			Schema:           entityops.SchemaDirectoryAccount.Name,
+			Envelopes:        accountEnvelopes,
+			SnapshotComplete: true,
 		},
 	}
 
@@ -157,8 +159,9 @@ func (DirectorySync) Run(ctx context.Context, client *iam.Client, cfg DirectoryS
 
 	payloadSets = append(payloadSets,
 		types.IngestPayloadSet{
-			Schema:    entityops.SchemaDirectoryGroup.Name,
-			Envelopes: groupEnvelopes,
+			Schema:           entityops.SchemaDirectoryGroup.Name,
+			Envelopes:        groupEnvelopes,
+			SnapshotComplete: true,
 		},
 		types.IngestPayloadSet{
 			Schema:           entityops.SchemaDirectoryMembership.Name,
@@ -200,6 +203,22 @@ func iamGroupToPayload(group iamtypes.Group) iamGroupPayload {
 		Name: awssdk.ToString(group.GroupName),
 		Path: awssdk.ToString(group.Path),
 	}
+}
+
+// arnSegmentCount is the number of colon-separated segments in a full Amazon Resource Name
+const arnSegmentCount = 6
+
+// arnAccountIndex is the position of the account id segment in a colon-split Amazon Resource Name
+const arnAccountIndex = 4
+
+// arnAccountID extracts the account id segment from one Amazon Resource Name
+func arnAccountID(arn string) string {
+	parts := strings.Split(arn, ":")
+	if len(parts) < arnSegmentCount {
+		return ""
+	}
+
+	return parts[arnAccountIndex]
 }
 
 // listIAMUsers pages through all IAM users using Marker-based pagination and

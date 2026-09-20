@@ -18,6 +18,7 @@ func NewEnv(cfg EnvConfig, vars ...cel.EnvOption) (*cel.Env, error) {
 		ext.Strings(),
 		cel.StdLib(),
 		indexByFunc,
+		paragraphsFunc,
 	)
 
 	if cfg.ComprehensionNestingLimit > 0 {

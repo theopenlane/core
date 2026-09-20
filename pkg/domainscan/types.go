@@ -7,7 +7,9 @@ type JSONSchemaProperty struct {
 	Items       *JSONSchemaProperty           `json:"items,omitempty"`
 	Properties  map[string]JSONSchemaProperty `json:"properties,omitempty"`
 	MaxItems    int                           `json:"maxItems,omitempty"`
+	MaxLength   int                           `json:"maxLength,omitempty"`
 	UniqueItems bool                          `json:"uniqueItems,omitempty"`
+	Enum        []string                      `json:"enum,omitempty"`
 }
 
 // JSONSchema is the JSON schema for structured extraction
@@ -35,6 +37,9 @@ type BrandDesignProfile struct {
 	AccentColor              string `json:"accent_color,omitempty"`
 	SecondaryBackgroundColor string `json:"secondary_background_color,omitempty"`
 	SecondaryForegroundColor string `json:"secondary_foreground_color,omitempty"`
+
+	ApplyToPreviewTrustcenter bool `json:"-"`
+	ApplyToLiveTrustcenter    bool `json:"-"`
 }
 
 // IsEmpty checks if branding data was found after the browser rendering job completes

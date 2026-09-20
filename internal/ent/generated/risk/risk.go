@@ -36,8 +36,34 @@ const (
 	FieldDisplayID = "display_id"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldSourceDefinitionID holds the string denoting the source_definition_id field in the database.
+	FieldSourceDefinitionID = "source_definition_id"
+	// FieldSourceDefinitionVersion holds the string denoting the source_definition_version field in the database.
+	FieldSourceDefinitionVersion = "source_definition_version"
+	// FieldSourceInstanceID holds the string denoting the source_instance_id field in the database.
+	FieldSourceInstanceID = "source_instance_id"
+	// FieldManagedBy holds the string denoting the managed_by field in the database.
+	FieldManagedBy = "managed_by"
+	// FieldIntegrationRunID holds the string denoting the integration_run_id field in the database.
+	FieldIntegrationRunID = "integration_run_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldStakeholderName holds the string denoting the stakeholder_name field in the database.
+	FieldStakeholderName = "stakeholder_name"
+	// FieldStakeholderUserID holds the string denoting the stakeholder_user_id field in the database.
+	FieldStakeholderUserID = "stakeholder_user_id"
+	// FieldStakeholderGroupID holds the string denoting the stakeholder_group_id field in the database.
+	FieldStakeholderGroupID = "stakeholder_group_id"
+	// FieldStakeholderIdentityHolderID holds the string denoting the stakeholder_identity_holder_id field in the database.
+	FieldStakeholderIdentityHolderID = "stakeholder_identity_holder_id"
+	// FieldDelegateName holds the string denoting the delegate_name field in the database.
+	FieldDelegateName = "delegate_name"
+	// FieldDelegateUserID holds the string denoting the delegate_user_id field in the database.
+	FieldDelegateUserID = "delegate_user_id"
+	// FieldDelegateGroupID holds the string denoting the delegate_group_id field in the database.
+	FieldDelegateGroupID = "delegate_group_id"
+	// FieldDelegateIdentityHolderID holds the string denoting the delegate_identity_holder_id field in the database.
+	FieldDelegateIdentityHolderID = "delegate_identity_holder_id"
 	// FieldRiskKindName holds the string denoting the risk_kind_name field in the database.
 	FieldRiskKindName = "risk_kind_name"
 	// FieldRiskKindID holds the string denoting the risk_kind_id field in the database.
@@ -106,6 +132,8 @@ const (
 	FieldResidualScore = "residual_score"
 	// FieldRiskDecision holds the string denoting the risk_decision field in the database.
 	FieldRiskDecision = "risk_decision"
+	// EdgeIntegrationRuns holds the string denoting the integration_runs edge name in mutations.
+	EdgeIntegrationRuns = "integration_runs"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -114,6 +142,18 @@ const (
 	EdgeEditors = "editors"
 	// EdgeViewers holds the string denoting the viewers edge name in mutations.
 	EdgeViewers = "viewers"
+	// EdgeStakeholderUser holds the string denoting the stakeholder_user edge name in mutations.
+	EdgeStakeholderUser = "stakeholder_user"
+	// EdgeStakeholderGroup holds the string denoting the stakeholder_group edge name in mutations.
+	EdgeStakeholderGroup = "stakeholder_group"
+	// EdgeStakeholderIdentityHolder holds the string denoting the stakeholder_identity_holder edge name in mutations.
+	EdgeStakeholderIdentityHolder = "stakeholder_identity_holder"
+	// EdgeDelegateUser holds the string denoting the delegate_user edge name in mutations.
+	EdgeDelegateUser = "delegate_user"
+	// EdgeDelegateGroup holds the string denoting the delegate_group edge name in mutations.
+	EdgeDelegateGroup = "delegate_group"
+	// EdgeDelegateIdentityHolder holds the string denoting the delegate_identity_holder edge name in mutations.
+	EdgeDelegateIdentityHolder = "delegate_identity_holder"
 	// EdgeRiskKind holds the string denoting the risk_kind edge name in mutations.
 	EdgeRiskKind = "risk_kind"
 	// EdgeRiskCategory holds the string denoting the risk_category edge name in mutations.
@@ -164,6 +204,11 @@ const (
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// Table holds the table name of the risk in the database.
 	Table = "risks"
+	// IntegrationRunsTable is the table that holds the integration_runs relation/edge. The primary key declared below.
+	IntegrationRunsTable = "risk_integration_runs"
+	// IntegrationRunsInverseTable is the table name for the IntegrationRun entity.
+	// It exists in this package in order to avoid circular dependency with the "integrationrun" package.
+	IntegrationRunsInverseTable = "integration_runs"
 	// OwnerTable is the table that holds the owner relation/edge.
 	OwnerTable = "risks"
 	// OwnerInverseTable is the table name for the Organization entity.
@@ -186,6 +231,48 @@ const (
 	// ViewersInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ViewersInverseTable = "groups"
+	// StakeholderUserTable is the table that holds the stakeholder_user relation/edge.
+	StakeholderUserTable = "risks"
+	// StakeholderUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	StakeholderUserInverseTable = "users"
+	// StakeholderUserColumn is the table column denoting the stakeholder_user relation/edge.
+	StakeholderUserColumn = "stakeholder_user_id"
+	// StakeholderGroupTable is the table that holds the stakeholder_group relation/edge.
+	StakeholderGroupTable = "risks"
+	// StakeholderGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	StakeholderGroupInverseTable = "groups"
+	// StakeholderGroupColumn is the table column denoting the stakeholder_group relation/edge.
+	StakeholderGroupColumn = "stakeholder_group_id"
+	// StakeholderIdentityHolderTable is the table that holds the stakeholder_identity_holder relation/edge.
+	StakeholderIdentityHolderTable = "risks"
+	// StakeholderIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	StakeholderIdentityHolderInverseTable = "identity_holders"
+	// StakeholderIdentityHolderColumn is the table column denoting the stakeholder_identity_holder relation/edge.
+	StakeholderIdentityHolderColumn = "stakeholder_identity_holder_id"
+	// DelegateUserTable is the table that holds the delegate_user relation/edge.
+	DelegateUserTable = "risks"
+	// DelegateUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	DelegateUserInverseTable = "users"
+	// DelegateUserColumn is the table column denoting the delegate_user relation/edge.
+	DelegateUserColumn = "delegate_user_id"
+	// DelegateGroupTable is the table that holds the delegate_group relation/edge.
+	DelegateGroupTable = "risks"
+	// DelegateGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	DelegateGroupInverseTable = "groups"
+	// DelegateGroupColumn is the table column denoting the delegate_group relation/edge.
+	DelegateGroupColumn = "delegate_group_id"
+	// DelegateIdentityHolderTable is the table that holds the delegate_identity_holder relation/edge.
+	DelegateIdentityHolderTable = "risks"
+	// DelegateIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	DelegateIdentityHolderInverseTable = "identity_holders"
+	// DelegateIdentityHolderColumn is the table column denoting the delegate_identity_holder relation/edge.
+	DelegateIdentityHolderColumn = "delegate_identity_holder_id"
 	// RiskKindTable is the table that holds the risk_kind relation/edge.
 	RiskKindTable = "risks"
 	// RiskKindInverseTable is the table name for the CustomTypeEnum entity.
@@ -344,7 +431,20 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldDisplayID,
 	FieldTags,
+	FieldSourceDefinitionID,
+	FieldSourceDefinitionVersion,
+	FieldSourceInstanceID,
+	FieldManagedBy,
+	FieldIntegrationRunID,
 	FieldOwnerID,
+	FieldStakeholderName,
+	FieldStakeholderUserID,
+	FieldStakeholderGroupID,
+	FieldStakeholderIdentityHolderID,
+	FieldDelegateName,
+	FieldDelegateUserID,
+	FieldDelegateGroupID,
+	FieldDelegateIdentityHolderID,
 	FieldRiskKindName,
 	FieldRiskKindID,
 	FieldRiskCategoryName,
@@ -390,6 +490,9 @@ var ForeignKeys = []string{
 }
 
 var (
+	// IntegrationRunsPrimaryKey and IntegrationRunsColumn2 are the table columns denoting the
+	// primary key for the integration_runs relation (M2M).
+	IntegrationRunsPrimaryKey = []string{"risk_id", "integration_run_id"}
 	// BlockedGroupsPrimaryKey and BlockedGroupsColumn2 are the table columns denoting the
 	// primary key for the blocked_groups relation (M2M).
 	BlockedGroupsPrimaryKey = []string{"risk_id", "group_id"}
@@ -587,9 +690,74 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDisplayID, opts...).ToFunc()
 }
 
+// BySourceDefinitionID orders the results by the source_definition_id field.
+func BySourceDefinitionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionID, opts...).ToFunc()
+}
+
+// BySourceDefinitionVersion orders the results by the source_definition_version field.
+func BySourceDefinitionVersion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceDefinitionVersion, opts...).ToFunc()
+}
+
+// BySourceInstanceID orders the results by the source_instance_id field.
+func BySourceInstanceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceInstanceID, opts...).ToFunc()
+}
+
+// ByManagedBy orders the results by the managed_by field.
+func ByManagedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldManagedBy, opts...).ToFunc()
+}
+
+// ByIntegrationRunID orders the results by the integration_run_id field.
+func ByIntegrationRunID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIntegrationRunID, opts...).ToFunc()
+}
+
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// ByStakeholderName orders the results by the stakeholder_name field.
+func ByStakeholderName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStakeholderName, opts...).ToFunc()
+}
+
+// ByStakeholderUserID orders the results by the stakeholder_user_id field.
+func ByStakeholderUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStakeholderUserID, opts...).ToFunc()
+}
+
+// ByStakeholderGroupID orders the results by the stakeholder_group_id field.
+func ByStakeholderGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStakeholderGroupID, opts...).ToFunc()
+}
+
+// ByStakeholderIdentityHolderID orders the results by the stakeholder_identity_holder_id field.
+func ByStakeholderIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStakeholderIdentityHolderID, opts...).ToFunc()
+}
+
+// ByDelegateName orders the results by the delegate_name field.
+func ByDelegateName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateName, opts...).ToFunc()
+}
+
+// ByDelegateUserID orders the results by the delegate_user_id field.
+func ByDelegateUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateUserID, opts...).ToFunc()
+}
+
+// ByDelegateGroupID orders the results by the delegate_group_id field.
+func ByDelegateGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateGroupID, opts...).ToFunc()
+}
+
+// ByDelegateIdentityHolderID orders the results by the delegate_identity_holder_id field.
+func ByDelegateIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDelegateIdentityHolderID, opts...).ToFunc()
 }
 
 // ByRiskKindName orders the results by the risk_kind_name field.
@@ -747,6 +915,20 @@ func ByRiskDecision(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRiskDecision, opts...).ToFunc()
 }
 
+// ByIntegrationRunsCount orders the results by integration_runs count.
+func ByIntegrationRunsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationRunsStep(), opts...)
+	}
+}
+
+// ByIntegrationRuns orders the results by integration_runs terms.
+func ByIntegrationRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -793,6 +975,48 @@ func ByViewersCount(opts ...sql.OrderTermOption) OrderOption {
 func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByStakeholderUserField orders the results by stakeholder_user field.
+func ByStakeholderUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newStakeholderUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByStakeholderGroupField orders the results by stakeholder_group field.
+func ByStakeholderGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newStakeholderGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByStakeholderIdentityHolderField orders the results by stakeholder_identity_holder field.
+func ByStakeholderIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newStakeholderIdentityHolderStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDelegateUserField orders the results by delegate_user field.
+func ByDelegateUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDelegateUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDelegateGroupField orders the results by delegate_group field.
+func ByDelegateGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDelegateGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDelegateIdentityHolderField orders the results by delegate_identity_holder field.
+func ByDelegateIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDelegateIdentityHolderStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -1089,6 +1313,13 @@ func ByWorkflowObjectRefs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOptio
 		sqlgraph.OrderByNeighborTerms(s, newWorkflowObjectRefsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+func newIntegrationRunsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationRunsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, IntegrationRunsTable, IntegrationRunsPrimaryKey...),
+	)
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1115,6 +1346,48 @@ func newViewersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ViewersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
+	)
+}
+func newStakeholderUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(StakeholderUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, StakeholderUserTable, StakeholderUserColumn),
+	)
+}
+func newStakeholderGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(StakeholderGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, StakeholderGroupTable, StakeholderGroupColumn),
+	)
+}
+func newStakeholderIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(StakeholderIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, StakeholderIdentityHolderTable, StakeholderIdentityHolderColumn),
+	)
+}
+func newDelegateUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DelegateUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DelegateUserTable, DelegateUserColumn),
+	)
+}
+func newDelegateGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DelegateGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DelegateGroupTable, DelegateGroupColumn),
+	)
+}
+func newDelegateIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DelegateIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DelegateIdentityHolderTable, DelegateIdentityHolderColumn),
 	)
 }
 func newRiskKindStep() *sqlgraph.Step {

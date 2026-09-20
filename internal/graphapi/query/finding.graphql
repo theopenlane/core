@@ -26,7 +26,13 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -51,6 +57,9 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -96,7 +105,13 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -121,6 +136,9 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -166,7 +184,13 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -191,6 +215,9 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -325,7 +352,13 @@ query GetFindingByID ($findingId: ID!) {
 		findingStatusName
 		id
 		impact
+		integrationRunID
 		internalNotes
+		internalOwner
+		internalOwnerGroupID
+		internalOwnerIdentityHolderID
+		internalOwnerUserID
+		managedBy
 		metadata
 		numericSeverity
 		open
@@ -350,6 +383,9 @@ query GetFindingByID ($findingId: ID!) {
 		securityLevel
 		severity
 		source
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		sourceUpdatedAt
 		state
 		stepsToReproduce
@@ -492,7 +528,13 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -517,6 +559,9 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -565,7 +610,13 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -590,6 +641,9 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -638,7 +692,13 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			findingStatusName
 			id
 			impact
+			integrationRunID
 			internalNotes
+			internalOwner
+			internalOwnerGroupID
+			internalOwnerIdentityHolderID
+			internalOwnerUserID
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -663,6 +723,9 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce

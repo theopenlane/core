@@ -19,7 +19,7 @@ import (
 // the campaign are skipped. Running it inside the dispatch keeps a single source of truth so both the
 // manual campaign launch and automated (post-publish, subprocessor change) triggers behave identically
 func snapshotTrustCenterSubscribers(ctx context.Context, db *generated.Client, camp *generated.Campaign) error {
-	if camp.CampaignType != enums.CampaignTypeTrustCenterUpdate || camp.TrustCenterID == "" {
+	if camp.CampaignType != enums.CampaignTypeTrustCenterUpdate || camp.TrustCenterID == nil {
 		return nil
 	}
 

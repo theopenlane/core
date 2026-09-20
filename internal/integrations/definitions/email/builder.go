@@ -23,7 +23,7 @@ func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 				ID:          DefinitionID.ID(),
 				Family:      "email",
 				DisplayName: "Email",
-				Description: "Send templated transactional and campaign emails via resend, sendgrid, or postmark.",
+				Description: "Send templated transactional and campaign emails via resend.",
 				Category:    "messaging",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/email/overview",
 				Tags:        []string{"email", "messaging", "notifications"},

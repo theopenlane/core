@@ -133,7 +133,7 @@ mutation CreateBulkPlatform ($input: [CreatePlatformInput!]) {
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -143,7 +143,7 @@ mutation CreateBulkPlatform ($input: [CreatePlatformInput!]) {
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -153,7 +153,7 @@ mutation CreateBulkPlatform ($input: [CreatePlatformInput!]) {
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -257,7 +257,7 @@ mutation CreatePlatform ($input: CreatePlatformInput!, $architectureDiagrams: [U
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -267,7 +267,7 @@ mutation CreatePlatform ($input: CreatePlatformInput!, $architectureDiagrams: [U
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -277,7 +277,7 @@ mutation CreatePlatform ($input: CreatePlatformInput!, $architectureDiagrams: [U
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -377,7 +377,7 @@ query GetAllPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 					edges {
 						node {
 							id
-							categoryType
+							categoryName
 							base64
 							providedFileName
 						}
@@ -387,7 +387,7 @@ query GetAllPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 					edges {
 						node {
 							id
-							categoryType
+							categoryName
 							base64
 							providedFileName
 						}
@@ -397,7 +397,7 @@ query GetAllPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 					edges {
 						node {
 							id
-							categoryType
+							categoryName
 							base64
 							providedFileName
 						}
@@ -474,7 +474,7 @@ query GetPlatformByID ($platformId: ID!) {
 			edges {
 				node {
 					id
-					categoryType
+					categoryName
 					base64
 					providedFileName
 				}
@@ -484,7 +484,7 @@ query GetPlatformByID ($platformId: ID!) {
 			edges {
 				node {
 					id
-					categoryType
+					categoryName
 					base64
 					providedFileName
 				}
@@ -494,7 +494,7 @@ query GetPlatformByID ($platformId: ID!) {
 			edges {
 				node {
 					id
-					categoryType
+					categoryName
 					base64
 					providedFileName
 				}
@@ -689,7 +689,7 @@ mutation UpdatePlatform ($updatePlatformId: ID!, $input: UpdatePlatformInput!, $
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -699,7 +699,7 @@ mutation UpdatePlatform ($updatePlatformId: ID!, $input: UpdatePlatformInput!, $
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}
@@ -709,7 +709,7 @@ mutation UpdatePlatform ($updatePlatformId: ID!, $input: UpdatePlatformInput!, $
 				edges {
 					node {
 						id
-						categoryType
+						categoryName
 						base64
 						providedFileName
 					}

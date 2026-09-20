@@ -600,6 +600,7 @@ EmailVerificationConfig is the configuration for email verification
 |**enablegravatarcheck**|`boolean`|EnableGravatarCheck indicates whether to check for Gravatar existence<br/>||
 |**enablesmtpcheck**|`boolean`|EnableSMTPCheck indicates whether to check email by smtp<br/>||
 |[**allowedemailtypes**](#defsvalidatorallowedemailtypes)|`object`|AllowedEmailTypes defines the allowed email types for verification<br/>||
+|[**blockeddomains**](#defsstring)|`string[]`|||
 
 **Additional Properties:** not allowed   
 **Example**
@@ -626,6 +627,13 @@ AllowedEmailTypes defines the allowed email types for verification
 |**role**|`boolean`|Role indicates whether role-based email addresses are allowed<br/>||
 
 **Additional Properties:** not allowed   
+   
+<a name="defsstring"></a>
+#### $defs/\[\]string: array
+
+**Items**
+
+**Item Type:** `string`   
    
 <a name="defsentconfigbilling"></a>
 ### $defs/entconfig\.Billing: object

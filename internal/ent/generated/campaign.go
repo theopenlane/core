@@ -115,7 +115,7 @@ type Campaign struct {
 	// the email branding associated with the campaign
 	EmailBrandingID string `json:"email_branding_id,omitempty"`
 	// the trust center this campaign sends updates for, if any
-	TrustCenterID string `json:"trust_center_id,omitempty"`
+	TrustCenterID *string `json:"trust_center_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CampaignQuery when eager-loading is set.
 	Edges        CampaignEdges `json:"edges"`
@@ -716,7 +716,8 @@ func (_m *Campaign) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
 			} else if value.Valid {
-				_m.TrustCenterID = value.String
+				_m.TrustCenterID = new(string)
+				*_m.TrustCenterID = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -1010,8 +1011,10 @@ func (_m *Campaign) String() string {
 	builder.WriteString("email_branding_id=")
 	builder.WriteString(_m.EmailBrandingID)
 	builder.WriteString(", ")
-	builder.WriteString("trust_center_id=")
-	builder.WriteString(_m.TrustCenterID)
+	if v := _m.TrustCenterID; v != nil {
+		builder.WriteString("trust_center_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

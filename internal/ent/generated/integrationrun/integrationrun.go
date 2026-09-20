@@ -44,8 +44,6 @@ const (
 	FieldRunType = "run_type"
 	// FieldOperationConfig holds the string denoting the operation_config field in the database.
 	FieldOperationConfig = "operation_config"
-	// FieldMappingVersion holds the string denoting the mapping_version field in the database.
-	FieldMappingVersion = "mapping_version"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldStartedAt holds the string denoting the started_at field in the database.
@@ -54,14 +52,6 @@ const (
 	FieldFinishedAt = "finished_at"
 	// FieldDurationMs holds the string denoting the duration_ms field in the database.
 	FieldDurationMs = "duration_ms"
-	// FieldRequestFileID holds the string denoting the request_file_id field in the database.
-	FieldRequestFileID = "request_file_id"
-	// FieldResponseFileID holds the string denoting the response_file_id field in the database.
-	FieldResponseFileID = "response_file_id"
-	// FieldEventID holds the string denoting the event_id field in the database.
-	FieldEventID = "event_id"
-	// FieldAssessmentResponseID holds the string denoting the assessment_response_id field in the database.
-	FieldAssessmentResponseID = "assessment_response_id"
 	// FieldSummary holds the string denoting the summary field in the database.
 	FieldSummary = "summary"
 	// FieldError holds the string denoting the error field in the database.
@@ -72,14 +62,32 @@ const (
 	EdgeOwner = "owner"
 	// EdgeIntegration holds the string denoting the integration edge name in mutations.
 	EdgeIntegration = "integration"
-	// EdgeRequestFile holds the string denoting the request_file edge name in mutations.
-	EdgeRequestFile = "request_file"
-	// EdgeResponseFile holds the string denoting the response_file edge name in mutations.
-	EdgeResponseFile = "response_file"
-	// EdgeEvent holds the string denoting the event edge name in mutations.
-	EdgeEvent = "event"
-	// EdgeAssessmentResponse holds the string denoting the assessment_response edge name in mutations.
-	EdgeAssessmentResponse = "assessment_response"
+	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
+	EdgeActionPlans = "action_plans"
+	// EdgeAssets holds the string denoting the assets edge name in mutations.
+	EdgeAssets = "assets"
+	// EdgeCheckResults holds the string denoting the check_results edge name in mutations.
+	EdgeCheckResults = "check_results"
+	// EdgeContacts holds the string denoting the contacts edge name in mutations.
+	EdgeContacts = "contacts"
+	// EdgeDirectoryAccounts holds the string denoting the directory_accounts edge name in mutations.
+	EdgeDirectoryAccounts = "directory_accounts"
+	// EdgeDirectoryGroups holds the string denoting the directory_groups edge name in mutations.
+	EdgeDirectoryGroups = "directory_groups"
+	// EdgeDirectoryMemberships holds the string denoting the directory_memberships edge name in mutations.
+	EdgeDirectoryMemberships = "directory_memberships"
+	// EdgeEntities holds the string denoting the entities edge name in mutations.
+	EdgeEntities = "entities"
+	// EdgeFindings holds the string denoting the findings edge name in mutations.
+	EdgeFindings = "findings"
+	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
+	EdgeInternalPolicies = "internal_policies"
+	// EdgeProcedures holds the string denoting the procedures edge name in mutations.
+	EdgeProcedures = "procedures"
+	// EdgeRisks holds the string denoting the risks edge name in mutations.
+	EdgeRisks = "risks"
+	// EdgeVulnerabilities holds the string denoting the vulnerabilities edge name in mutations.
+	EdgeVulnerabilities = "vulnerabilities"
 	// Table holds the table name of the integrationrun in the database.
 	Table = "integration_runs"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -96,34 +104,71 @@ const (
 	IntegrationInverseTable = "integrations"
 	// IntegrationColumn is the table column denoting the integration relation/edge.
 	IntegrationColumn = "integration_id"
-	// RequestFileTable is the table that holds the request_file relation/edge.
-	RequestFileTable = "integration_runs"
-	// RequestFileInverseTable is the table name for the File entity.
-	// It exists in this package in order to avoid circular dependency with the "file" package.
-	RequestFileInverseTable = "files"
-	// RequestFileColumn is the table column denoting the request_file relation/edge.
-	RequestFileColumn = "request_file_id"
-	// ResponseFileTable is the table that holds the response_file relation/edge.
-	ResponseFileTable = "integration_runs"
-	// ResponseFileInverseTable is the table name for the File entity.
-	// It exists in this package in order to avoid circular dependency with the "file" package.
-	ResponseFileInverseTable = "files"
-	// ResponseFileColumn is the table column denoting the response_file relation/edge.
-	ResponseFileColumn = "response_file_id"
-	// EventTable is the table that holds the event relation/edge.
-	EventTable = "integration_runs"
-	// EventInverseTable is the table name for the Event entity.
-	// It exists in this package in order to avoid circular dependency with the "event" package.
-	EventInverseTable = "events"
-	// EventColumn is the table column denoting the event relation/edge.
-	EventColumn = "event_id"
-	// AssessmentResponseTable is the table that holds the assessment_response relation/edge.
-	AssessmentResponseTable = "integration_runs"
-	// AssessmentResponseInverseTable is the table name for the AssessmentResponse entity.
-	// It exists in this package in order to avoid circular dependency with the "assessmentresponse" package.
-	AssessmentResponseInverseTable = "assessment_responses"
-	// AssessmentResponseColumn is the table column denoting the assessment_response relation/edge.
-	AssessmentResponseColumn = "assessment_response_id"
+	// ActionPlansTable is the table that holds the action_plans relation/edge. The primary key declared below.
+	ActionPlansTable = "action_plan_integration_runs"
+	// ActionPlansInverseTable is the table name for the ActionPlan entity.
+	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
+	ActionPlansInverseTable = "action_plans"
+	// AssetsTable is the table that holds the assets relation/edge. The primary key declared below.
+	AssetsTable = "asset_integration_runs"
+	// AssetsInverseTable is the table name for the Asset entity.
+	// It exists in this package in order to avoid circular dependency with the "asset" package.
+	AssetsInverseTable = "assets"
+	// CheckResultsTable is the table that holds the check_results relation/edge. The primary key declared below.
+	CheckResultsTable = "check_result_integration_runs"
+	// CheckResultsInverseTable is the table name for the CheckResult entity.
+	// It exists in this package in order to avoid circular dependency with the "checkresult" package.
+	CheckResultsInverseTable = "check_results"
+	// ContactsTable is the table that holds the contacts relation/edge. The primary key declared below.
+	ContactsTable = "contact_integration_runs"
+	// ContactsInverseTable is the table name for the Contact entity.
+	// It exists in this package in order to avoid circular dependency with the "contact" package.
+	ContactsInverseTable = "contacts"
+	// DirectoryAccountsTable is the table that holds the directory_accounts relation/edge. The primary key declared below.
+	DirectoryAccountsTable = "directory_account_integration_runs"
+	// DirectoryAccountsInverseTable is the table name for the DirectoryAccount entity.
+	// It exists in this package in order to avoid circular dependency with the "directoryaccount" package.
+	DirectoryAccountsInverseTable = "directory_accounts"
+	// DirectoryGroupsTable is the table that holds the directory_groups relation/edge. The primary key declared below.
+	DirectoryGroupsTable = "directory_group_integration_runs"
+	// DirectoryGroupsInverseTable is the table name for the DirectoryGroup entity.
+	// It exists in this package in order to avoid circular dependency with the "directorygroup" package.
+	DirectoryGroupsInverseTable = "directory_groups"
+	// DirectoryMembershipsTable is the table that holds the directory_memberships relation/edge. The primary key declared below.
+	DirectoryMembershipsTable = "directory_membership_integration_runs"
+	// DirectoryMembershipsInverseTable is the table name for the DirectoryMembership entity.
+	// It exists in this package in order to avoid circular dependency with the "directorymembership" package.
+	DirectoryMembershipsInverseTable = "directory_memberships"
+	// EntitiesTable is the table that holds the entities relation/edge. The primary key declared below.
+	EntitiesTable = "entity_integration_runs"
+	// EntitiesInverseTable is the table name for the Entity entity.
+	// It exists in this package in order to avoid circular dependency with the "entity" package.
+	EntitiesInverseTable = "entities"
+	// FindingsTable is the table that holds the findings relation/edge. The primary key declared below.
+	FindingsTable = "finding_integration_runs"
+	// FindingsInverseTable is the table name for the Finding entity.
+	// It exists in this package in order to avoid circular dependency with the "finding" package.
+	FindingsInverseTable = "findings"
+	// InternalPoliciesTable is the table that holds the internal_policies relation/edge. The primary key declared below.
+	InternalPoliciesTable = "internal_policy_integration_runs"
+	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
+	InternalPoliciesInverseTable = "internal_policies"
+	// ProceduresTable is the table that holds the procedures relation/edge. The primary key declared below.
+	ProceduresTable = "procedure_integration_runs"
+	// ProceduresInverseTable is the table name for the Procedure entity.
+	// It exists in this package in order to avoid circular dependency with the "procedure" package.
+	ProceduresInverseTable = "procedures"
+	// RisksTable is the table that holds the risks relation/edge. The primary key declared below.
+	RisksTable = "risk_integration_runs"
+	// RisksInverseTable is the table name for the Risk entity.
+	// It exists in this package in order to avoid circular dependency with the "risk" package.
+	RisksInverseTable = "risks"
+	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge. The primary key declared below.
+	VulnerabilitiesTable = "vulnerability_integration_runs"
+	// VulnerabilitiesInverseTable is the table name for the Vulnerability entity.
+	// It exists in this package in order to avoid circular dependency with the "vulnerability" package.
+	VulnerabilitiesInverseTable = "vulnerabilities"
 )
 
 // Columns holds all SQL columns for integrationrun fields.
@@ -142,19 +187,56 @@ var Columns = []string{
 	FieldOperationKind,
 	FieldRunType,
 	FieldOperationConfig,
-	FieldMappingVersion,
 	FieldStatus,
 	FieldStartedAt,
 	FieldFinishedAt,
 	FieldDurationMs,
-	FieldRequestFileID,
-	FieldResponseFileID,
-	FieldEventID,
-	FieldAssessmentResponseID,
 	FieldSummary,
 	FieldError,
 	FieldMetrics,
 }
+
+var (
+	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
+	// primary key for the action_plans relation (M2M).
+	ActionPlansPrimaryKey = []string{"action_plan_id", "integration_run_id"}
+	// AssetsPrimaryKey and AssetsColumn2 are the table columns denoting the
+	// primary key for the assets relation (M2M).
+	AssetsPrimaryKey = []string{"asset_id", "integration_run_id"}
+	// CheckResultsPrimaryKey and CheckResultsColumn2 are the table columns denoting the
+	// primary key for the check_results relation (M2M).
+	CheckResultsPrimaryKey = []string{"check_result_id", "integration_run_id"}
+	// ContactsPrimaryKey and ContactsColumn2 are the table columns denoting the
+	// primary key for the contacts relation (M2M).
+	ContactsPrimaryKey = []string{"contact_id", "integration_run_id"}
+	// DirectoryAccountsPrimaryKey and DirectoryAccountsColumn2 are the table columns denoting the
+	// primary key for the directory_accounts relation (M2M).
+	DirectoryAccountsPrimaryKey = []string{"directory_account_id", "integration_run_id"}
+	// DirectoryGroupsPrimaryKey and DirectoryGroupsColumn2 are the table columns denoting the
+	// primary key for the directory_groups relation (M2M).
+	DirectoryGroupsPrimaryKey = []string{"directory_group_id", "integration_run_id"}
+	// DirectoryMembershipsPrimaryKey and DirectoryMembershipsColumn2 are the table columns denoting the
+	// primary key for the directory_memberships relation (M2M).
+	DirectoryMembershipsPrimaryKey = []string{"directory_membership_id", "integration_run_id"}
+	// EntitiesPrimaryKey and EntitiesColumn2 are the table columns denoting the
+	// primary key for the entities relation (M2M).
+	EntitiesPrimaryKey = []string{"entity_id", "integration_run_id"}
+	// FindingsPrimaryKey and FindingsColumn2 are the table columns denoting the
+	// primary key for the findings relation (M2M).
+	FindingsPrimaryKey = []string{"finding_id", "integration_run_id"}
+	// InternalPoliciesPrimaryKey and InternalPoliciesColumn2 are the table columns denoting the
+	// primary key for the internal_policies relation (M2M).
+	InternalPoliciesPrimaryKey = []string{"internal_policy_id", "integration_run_id"}
+	// ProceduresPrimaryKey and ProceduresColumn2 are the table columns denoting the
+	// primary key for the procedures relation (M2M).
+	ProceduresPrimaryKey = []string{"procedure_id", "integration_run_id"}
+	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
+	// primary key for the risks relation (M2M).
+	RisksPrimaryKey = []string{"risk_id", "integration_run_id"}
+	// VulnerabilitiesPrimaryKey and VulnerabilitiesColumn2 are the table columns denoting the
+	// primary key for the vulnerabilities relation (M2M).
+	VulnerabilitiesPrimaryKey = []string{"vulnerability_id", "integration_run_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -289,11 +371,6 @@ func ByRunType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRunType, opts...).ToFunc()
 }
 
-// ByMappingVersion orders the results by the mapping_version field.
-func ByMappingVersion(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMappingVersion, opts...).ToFunc()
-}
-
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
@@ -312,26 +389,6 @@ func ByFinishedAt(opts ...sql.OrderTermOption) OrderOption {
 // ByDurationMs orders the results by the duration_ms field.
 func ByDurationMs(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDurationMs, opts...).ToFunc()
-}
-
-// ByRequestFileID orders the results by the request_file_id field.
-func ByRequestFileID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRequestFileID, opts...).ToFunc()
-}
-
-// ByResponseFileID orders the results by the response_file_id field.
-func ByResponseFileID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldResponseFileID, opts...).ToFunc()
-}
-
-// ByEventID orders the results by the event_id field.
-func ByEventID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEventID, opts...).ToFunc()
-}
-
-// ByAssessmentResponseID orders the results by the assessment_response_id field.
-func ByAssessmentResponseID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAssessmentResponseID, opts...).ToFunc()
 }
 
 // BySummary orders the results by the summary field.
@@ -358,31 +415,185 @@ func ByIntegrationField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByRequestFileField orders the results by request_file field.
-func ByRequestFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByActionPlansCount orders the results by action_plans count.
+func ByActionPlansCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newRequestFileStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newActionPlansStep(), opts...)
 	}
 }
 
-// ByResponseFileField orders the results by response_file field.
-func ByResponseFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByActionPlans orders the results by action_plans terms.
+func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newResponseFileStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newActionPlansStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
-// ByEventField orders the results by event field.
-func ByEventField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByAssetsCount orders the results by assets count.
+func ByAssetsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newEventStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newAssetsStep(), opts...)
 	}
 }
 
-// ByAssessmentResponseField orders the results by assessment_response field.
-func ByAssessmentResponseField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByAssets orders the results by assets terms.
+func ByAssets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newAssessmentResponseStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newAssetsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCheckResultsCount orders the results by check_results count.
+func ByCheckResultsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCheckResultsStep(), opts...)
+	}
+}
+
+// ByCheckResults orders the results by check_results terms.
+func ByCheckResults(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCheckResultsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByContactsCount orders the results by contacts count.
+func ByContactsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newContactsStep(), opts...)
+	}
+}
+
+// ByContacts orders the results by contacts terms.
+func ByContacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newContactsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectoryAccountsCount orders the results by directory_accounts count.
+func ByDirectoryAccountsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryAccountsStep(), opts...)
+	}
+}
+
+// ByDirectoryAccounts orders the results by directory_accounts terms.
+func ByDirectoryAccounts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryAccountsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectoryGroupsCount orders the results by directory_groups count.
+func ByDirectoryGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryGroupsStep(), opts...)
+	}
+}
+
+// ByDirectoryGroups orders the results by directory_groups terms.
+func ByDirectoryGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectoryMembershipsCount orders the results by directory_memberships count.
+func ByDirectoryMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryMembershipsStep(), opts...)
+	}
+}
+
+// ByDirectoryMemberships orders the results by directory_memberships terms.
+func ByDirectoryMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryMembershipsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEntitiesCount orders the results by entities count.
+func ByEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEntitiesStep(), opts...)
+	}
+}
+
+// ByEntities orders the results by entities terms.
+func ByEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByFindingsCount orders the results by findings count.
+func ByFindingsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFindingsStep(), opts...)
+	}
+}
+
+// ByFindings orders the results by findings terms.
+func ByFindings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByInternalPoliciesCount orders the results by internal_policies count.
+func ByInternalPoliciesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newInternalPoliciesStep(), opts...)
+	}
+}
+
+// ByInternalPolicies orders the results by internal_policies terms.
+func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalPoliciesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProceduresCount orders the results by procedures count.
+func ByProceduresCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProceduresStep(), opts...)
+	}
+}
+
+// ByProcedures orders the results by procedures terms.
+func ByProcedures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProceduresStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRisksCount orders the results by risks count.
+func ByRisksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRisksStep(), opts...)
+	}
+}
+
+// ByRisks orders the results by risks terms.
+func ByRisks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRisksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByVulnerabilitiesCount orders the results by vulnerabilities count.
+func ByVulnerabilitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVulnerabilitiesStep(), opts...)
+	}
+}
+
+// ByVulnerabilities orders the results by vulnerabilities terms.
+func ByVulnerabilities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVulnerabilitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -399,32 +610,95 @@ func newIntegrationStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, IntegrationTable, IntegrationColumn),
 	)
 }
-func newRequestFileStep() *sqlgraph.Step {
+func newActionPlansStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(RequestFileInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, RequestFileTable, RequestFileColumn),
+		sqlgraph.To(ActionPlansInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ActionPlansTable, ActionPlansPrimaryKey...),
 	)
 }
-func newResponseFileStep() *sqlgraph.Step {
+func newAssetsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ResponseFileInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, ResponseFileTable, ResponseFileColumn),
+		sqlgraph.To(AssetsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, AssetsTable, AssetsPrimaryKey...),
 	)
 }
-func newEventStep() *sqlgraph.Step {
+func newCheckResultsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(EventInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, EventTable, EventColumn),
+		sqlgraph.To(CheckResultsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, CheckResultsTable, CheckResultsPrimaryKey...),
 	)
 }
-func newAssessmentResponseStep() *sqlgraph.Step {
+func newContactsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(AssessmentResponseInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, AssessmentResponseTable, AssessmentResponseColumn),
+		sqlgraph.To(ContactsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ContactsTable, ContactsPrimaryKey...),
+	)
+}
+func newDirectoryAccountsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryAccountsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, DirectoryAccountsTable, DirectoryAccountsPrimaryKey...),
+	)
+}
+func newDirectoryGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, DirectoryGroupsTable, DirectoryGroupsPrimaryKey...),
+	)
+}
+func newDirectoryMembershipsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryMembershipsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, DirectoryMembershipsTable, DirectoryMembershipsPrimaryKey...),
+	)
+}
+func newEntitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EntitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, EntitiesTable, EntitiesPrimaryKey...),
+	)
+}
+func newFindingsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
+	)
+}
+func newInternalPoliciesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalPoliciesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
+	)
+}
+func newProceduresStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProceduresInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ProceduresTable, ProceduresPrimaryKey...),
+	)
+}
+func newRisksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RisksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, RisksTable, RisksPrimaryKey...),
+	)
+}
+func newVulnerabilitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VulnerabilitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
 	)
 }
 

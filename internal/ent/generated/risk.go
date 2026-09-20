@@ -14,8 +14,10 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // Risk is the model entity for the Risk schema.
@@ -41,8 +43,34 @@ type Risk struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// id of the integration installation managing the record, empty when the record is unclaimed
+	ManagedBy string `json:"managed_by,omitempty"`
+	// id of the integration run that last wrote this record
+	IntegrationRunID string `json:"integration_run_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the stakeholder for the risk when no user, group, or identity holder is linked
+	StakeholderName string `json:"stakeholder_name,omitempty"`
+	// the stakeholder user id for the risk
+	StakeholderUserID string `json:"stakeholder_user_id,omitempty"`
+	// the stakeholder group id for the risk
+	StakeholderGroupID string `json:"stakeholder_group_id,omitempty"`
+	// the stakeholder identity holder id for the risk
+	StakeholderIdentityHolderID string `json:"stakeholder_identity_holder_id,omitempty"`
+	// the delegate for the risk when no user, group, or identity holder is linked
+	DelegateName string `json:"delegate_name,omitempty"`
+	// the delegate user id for the risk
+	DelegateUserID string `json:"delegate_user_id,omitempty"`
+	// the delegate group id for the risk
+	DelegateGroupID string `json:"delegate_group_id,omitempty"`
+	// the delegate identity holder id for the risk
+	DelegateIdentityHolderID string `json:"delegate_identity_holder_id,omitempty"`
 	// the kind of the risk
 	RiskKindName string `json:"risk_kind_name,omitempty"`
 	// the kind of the risk
@@ -122,6 +150,8 @@ type Risk struct {
 
 // RiskEdges holds the relations/edges for other nodes in the graph.
 type RiskEdges struct {
+	// integration runs that have written to this record
+	IntegrationRuns []*IntegrationRun `json:"integration_runs,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
 	// groups that are blocked from viewing or editing the risk
@@ -130,6 +160,18 @@ type RiskEdges struct {
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
 	Viewers []*Group `json:"viewers,omitempty"`
+	// StakeholderUser holds the value of the stakeholder_user edge.
+	StakeholderUser *User `json:"stakeholder_user,omitempty"`
+	// StakeholderGroup holds the value of the stakeholder_group edge.
+	StakeholderGroup *Group `json:"stakeholder_group,omitempty"`
+	// StakeholderIdentityHolder holds the value of the stakeholder_identity_holder edge.
+	StakeholderIdentityHolder *IdentityHolder `json:"stakeholder_identity_holder,omitempty"`
+	// DelegateUser holds the value of the delegate_user edge.
+	DelegateUser *User `json:"delegate_user,omitempty"`
+	// DelegateGroup holds the value of the delegate_group edge.
+	DelegateGroup *Group `json:"delegate_group,omitempty"`
+	// DelegateIdentityHolder holds the value of the delegate_identity_holder edge.
+	DelegateIdentityHolder *IdentityHolder `json:"delegate_identity_holder,omitempty"`
 	// RiskKind holds the value of the risk_kind edge.
 	RiskKind *CustomTypeEnum `json:"risk_kind,omitempty"`
 	// RiskCategory holds the value of the risk_category edge.
@@ -180,10 +222,11 @@ type RiskEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [28]bool
+	loadedTypes [35]bool
 	// totalCount holds the count of the edges above.
-	totalCount [28]map[string]int
+	totalCount [35]map[string]int
 
+	namedIntegrationRuns    map[string][]*IntegrationRun
 	namedBlockedGroups      map[string][]*Group
 	namedEditors            map[string][]*Group
 	namedViewers            map[string][]*Group
@@ -207,12 +250,21 @@ type RiskEdges struct {
 	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
 }
 
+// IntegrationRunsOrErr returns the IntegrationRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) IntegrationRunsOrErr() ([]*IntegrationRun, error) {
+	if e.loadedTypes[0] {
+		return e.IntegrationRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "integration_runs"}
+}
+
 // OwnerOrErr returns the Owner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e RiskEdges) OwnerOrErr() (*Organization, error) {
 	if e.Owner != nil {
 		return e.Owner, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: organization.Label}
 	}
 	return nil, &NotLoadedError{edge: "owner"}
@@ -221,7 +273,7 @@ func (e RiskEdges) OwnerOrErr() (*Organization, error) {
 // BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[2] {
 		return e.BlockedGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "blocked_groups"}
@@ -230,7 +282,7 @@ func (e RiskEdges) BlockedGroupsOrErr() ([]*Group, error) {
 // EditorsOrErr returns the Editors value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[3] {
 		return e.Editors, nil
 	}
 	return nil, &NotLoadedError{edge: "editors"}
@@ -239,10 +291,76 @@ func (e RiskEdges) EditorsOrErr() ([]*Group, error) {
 // ViewersOrErr returns the Viewers value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[4] {
 		return e.Viewers, nil
 	}
 	return nil, &NotLoadedError{edge: "viewers"}
+}
+
+// StakeholderUserOrErr returns the StakeholderUser value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RiskEdges) StakeholderUserOrErr() (*User, error) {
+	if e.StakeholderUser != nil {
+		return e.StakeholderUser, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "stakeholder_user"}
+}
+
+// StakeholderGroupOrErr returns the StakeholderGroup value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RiskEdges) StakeholderGroupOrErr() (*Group, error) {
+	if e.StakeholderGroup != nil {
+		return e.StakeholderGroup, nil
+	} else if e.loadedTypes[6] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "stakeholder_group"}
+}
+
+// StakeholderIdentityHolderOrErr returns the StakeholderIdentityHolder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RiskEdges) StakeholderIdentityHolderOrErr() (*IdentityHolder, error) {
+	if e.StakeholderIdentityHolder != nil {
+		return e.StakeholderIdentityHolder, nil
+	} else if e.loadedTypes[7] {
+		return nil, &NotFoundError{label: identityholder.Label}
+	}
+	return nil, &NotLoadedError{edge: "stakeholder_identity_holder"}
+}
+
+// DelegateUserOrErr returns the DelegateUser value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RiskEdges) DelegateUserOrErr() (*User, error) {
+	if e.DelegateUser != nil {
+		return e.DelegateUser, nil
+	} else if e.loadedTypes[8] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "delegate_user"}
+}
+
+// DelegateGroupOrErr returns the DelegateGroup value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RiskEdges) DelegateGroupOrErr() (*Group, error) {
+	if e.DelegateGroup != nil {
+		return e.DelegateGroup, nil
+	} else if e.loadedTypes[9] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "delegate_group"}
+}
+
+// DelegateIdentityHolderOrErr returns the DelegateIdentityHolder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e RiskEdges) DelegateIdentityHolderOrErr() (*IdentityHolder, error) {
+	if e.DelegateIdentityHolder != nil {
+		return e.DelegateIdentityHolder, nil
+	} else if e.loadedTypes[10] {
+		return nil, &NotFoundError{label: identityholder.Label}
+	}
+	return nil, &NotLoadedError{edge: "delegate_identity_holder"}
 }
 
 // RiskKindOrErr returns the RiskKind value or an error if the edge
@@ -250,7 +368,7 @@ func (e RiskEdges) ViewersOrErr() ([]*Group, error) {
 func (e RiskEdges) RiskKindOrErr() (*CustomTypeEnum, error) {
 	if e.RiskKind != nil {
 		return e.RiskKind, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[11] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "risk_kind"}
@@ -261,7 +379,7 @@ func (e RiskEdges) RiskKindOrErr() (*CustomTypeEnum, error) {
 func (e RiskEdges) RiskCategoryOrErr() (*CustomTypeEnum, error) {
 	if e.RiskCategory != nil {
 		return e.RiskCategory, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[12] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "risk_category"}
@@ -272,7 +390,7 @@ func (e RiskEdges) RiskCategoryOrErr() (*CustomTypeEnum, error) {
 func (e RiskEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 	if e.Environment != nil {
 		return e.Environment, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[13] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "environment"}
@@ -283,7 +401,7 @@ func (e RiskEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 func (e RiskEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	if e.Scope != nil {
 		return e.Scope, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[14] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "scope"}
@@ -292,7 +410,7 @@ func (e RiskEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[15] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -301,7 +419,7 @@ func (e RiskEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[16] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -310,7 +428,7 @@ func (e RiskEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // ProceduresOrErr returns the Procedures value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ProceduresOrErr() ([]*Procedure, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[17] {
 		return e.Procedures, nil
 	}
 	return nil, &NotLoadedError{edge: "procedures"}
@@ -319,7 +437,7 @@ func (e RiskEdges) ProceduresOrErr() ([]*Procedure, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[18] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -328,7 +446,7 @@ func (e RiskEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[19] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -337,7 +455,7 @@ func (e RiskEdges) ProgramsOrErr() ([]*Program, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[20] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -346,7 +464,7 @@ func (e RiskEdges) PlatformsOrErr() ([]*Platform, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[21] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -355,7 +473,7 @@ func (e RiskEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[22] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -364,7 +482,7 @@ func (e RiskEdges) TasksOrErr() ([]*Task, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[23] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -373,7 +491,7 @@ func (e RiskEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[24] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -382,7 +500,7 @@ func (e RiskEdges) EntitiesOrErr() ([]*Entity, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[25] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -393,7 +511,7 @@ func (e RiskEdges) ScansOrErr() ([]*Scan, error) {
 func (e RiskEdges) StakeholderOrErr() (*Group, error) {
 	if e.Stakeholder != nil {
 		return e.Stakeholder, nil
-	} else if e.loadedTypes[19] {
+	} else if e.loadedTypes[26] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "stakeholder"}
@@ -404,7 +522,7 @@ func (e RiskEdges) StakeholderOrErr() (*Group, error) {
 func (e RiskEdges) DelegateOrErr() (*Group, error) {
 	if e.Delegate != nil {
 		return e.Delegate, nil
-	} else if e.loadedTypes[20] {
+	} else if e.loadedTypes[27] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "delegate"}
@@ -413,7 +531,7 @@ func (e RiskEdges) DelegateOrErr() (*Group, error) {
 // CommentsOrErr returns the Comments value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) CommentsOrErr() ([]*Note, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[28] {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
@@ -422,7 +540,7 @@ func (e RiskEdges) CommentsOrErr() ([]*Note, error) {
 // DiscussionsOrErr returns the Discussions value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) DiscussionsOrErr() ([]*Discussion, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[29] {
 		return e.Discussions, nil
 	}
 	return nil, &NotLoadedError{edge: "discussions"}
@@ -431,7 +549,7 @@ func (e RiskEdges) DiscussionsOrErr() ([]*Discussion, error) {
 // ReviewsOrErr returns the Reviews value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[30] {
 		return e.Reviews, nil
 	}
 	return nil, &NotLoadedError{edge: "reviews"}
@@ -440,7 +558,7 @@ func (e RiskEdges) ReviewsOrErr() ([]*Review, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[31] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -449,7 +567,7 @@ func (e RiskEdges) RemediationsOrErr() ([]*Remediation, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[32] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -458,7 +576,7 @@ func (e RiskEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[33] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -467,7 +585,7 @@ func (e RiskEdges) FindingsOrErr() ([]*Finding, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[34] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -486,7 +604,7 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case risk.FieldScore, risk.FieldResidualScore:
 			values[i] = new(sql.NullInt64)
-		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldUpdatedByImpersonator, risk.FieldDeletedBy, risk.FieldDisplayID, risk.FieldOwnerID, risk.FieldRiskKindName, risk.FieldRiskKindID, risk.FieldRiskCategoryName, risk.FieldRiskCategoryID, risk.FieldEnvironmentName, risk.FieldEnvironmentID, risk.FieldScopeName, risk.FieldScopeID, risk.FieldExternalID, risk.FieldIntegrationID, risk.FieldExternalUUID, risk.FieldName, risk.FieldStatus, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldDetails, risk.FieldBusinessCosts, risk.FieldStakeholderID, risk.FieldDelegateID, risk.FieldReviewFrequency, risk.FieldRiskDecision:
+		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldUpdatedByImpersonator, risk.FieldDeletedBy, risk.FieldDisplayID, risk.FieldSourceDefinitionID, risk.FieldSourceDefinitionVersion, risk.FieldSourceInstanceID, risk.FieldManagedBy, risk.FieldIntegrationRunID, risk.FieldOwnerID, risk.FieldStakeholderName, risk.FieldStakeholderUserID, risk.FieldStakeholderGroupID, risk.FieldStakeholderIdentityHolderID, risk.FieldDelegateName, risk.FieldDelegateUserID, risk.FieldDelegateGroupID, risk.FieldDelegateIdentityHolderID, risk.FieldRiskKindName, risk.FieldRiskKindID, risk.FieldRiskCategoryName, risk.FieldRiskCategoryID, risk.FieldEnvironmentName, risk.FieldEnvironmentID, risk.FieldScopeName, risk.FieldScopeID, risk.FieldExternalID, risk.FieldIntegrationID, risk.FieldExternalUUID, risk.FieldName, risk.FieldStatus, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldDetails, risk.FieldBusinessCosts, risk.FieldStakeholderID, risk.FieldDelegateID, risk.FieldReviewFrequency, risk.FieldRiskDecision:
 			values[i] = new(sql.NullString)
 		case risk.FieldCreatedAt, risk.FieldUpdatedAt, risk.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -574,11 +692,89 @@ func (_m *Risk) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case risk.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case risk.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case risk.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case risk.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
+			}
+		case risk.FieldIntegrationRunID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_run_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationRunID = value.String
+			}
 		case risk.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case risk.FieldStakeholderName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stakeholder_name", values[i])
+			} else if value.Valid {
+				_m.StakeholderName = value.String
+			}
+		case risk.FieldStakeholderUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stakeholder_user_id", values[i])
+			} else if value.Valid {
+				_m.StakeholderUserID = value.String
+			}
+		case risk.FieldStakeholderGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stakeholder_group_id", values[i])
+			} else if value.Valid {
+				_m.StakeholderGroupID = value.String
+			}
+		case risk.FieldStakeholderIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field stakeholder_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.StakeholderIdentityHolderID = value.String
+			}
+		case risk.FieldDelegateName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_name", values[i])
+			} else if value.Valid {
+				_m.DelegateName = value.String
+			}
+		case risk.FieldDelegateUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_user_id", values[i])
+			} else if value.Valid {
+				_m.DelegateUserID = value.String
+			}
+		case risk.FieldDelegateGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_group_id", values[i])
+			} else if value.Valid {
+				_m.DelegateGroupID = value.String
+			}
+		case risk.FieldDelegateIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field delegate_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.DelegateIdentityHolderID = value.String
 			}
 		case risk.FieldRiskKindName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -830,6 +1026,11 @@ func (_m *Risk) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryIntegrationRuns queries the "integration_runs" edge of the Risk entity.
+func (_m *Risk) QueryIntegrationRuns() *IntegrationRunQuery {
+	return NewRiskClient(_m.config).QueryIntegrationRuns(_m)
+}
+
 // QueryOwner queries the "owner" edge of the Risk entity.
 func (_m *Risk) QueryOwner() *OrganizationQuery {
 	return NewRiskClient(_m.config).QueryOwner(_m)
@@ -848,6 +1049,36 @@ func (_m *Risk) QueryEditors() *GroupQuery {
 // QueryViewers queries the "viewers" edge of the Risk entity.
 func (_m *Risk) QueryViewers() *GroupQuery {
 	return NewRiskClient(_m.config).QueryViewers(_m)
+}
+
+// QueryStakeholderUser queries the "stakeholder_user" edge of the Risk entity.
+func (_m *Risk) QueryStakeholderUser() *UserQuery {
+	return NewRiskClient(_m.config).QueryStakeholderUser(_m)
+}
+
+// QueryStakeholderGroup queries the "stakeholder_group" edge of the Risk entity.
+func (_m *Risk) QueryStakeholderGroup() *GroupQuery {
+	return NewRiskClient(_m.config).QueryStakeholderGroup(_m)
+}
+
+// QueryStakeholderIdentityHolder queries the "stakeholder_identity_holder" edge of the Risk entity.
+func (_m *Risk) QueryStakeholderIdentityHolder() *IdentityHolderQuery {
+	return NewRiskClient(_m.config).QueryStakeholderIdentityHolder(_m)
+}
+
+// QueryDelegateUser queries the "delegate_user" edge of the Risk entity.
+func (_m *Risk) QueryDelegateUser() *UserQuery {
+	return NewRiskClient(_m.config).QueryDelegateUser(_m)
+}
+
+// QueryDelegateGroup queries the "delegate_group" edge of the Risk entity.
+func (_m *Risk) QueryDelegateGroup() *GroupQuery {
+	return NewRiskClient(_m.config).QueryDelegateGroup(_m)
+}
+
+// QueryDelegateIdentityHolder queries the "delegate_identity_holder" edge of the Risk entity.
+func (_m *Risk) QueryDelegateIdentityHolder() *IdentityHolderQuery {
+	return NewRiskClient(_m.config).QueryDelegateIdentityHolder(_m)
 }
 
 // QueryRiskKind queries the "risk_kind" edge of the Risk entity.
@@ -1022,8 +1253,47 @@ func (_m *Risk) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
+	builder.WriteString(", ")
+	builder.WriteString("integration_run_id=")
+	builder.WriteString(_m.IntegrationRunID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("stakeholder_name=")
+	builder.WriteString(_m.StakeholderName)
+	builder.WriteString(", ")
+	builder.WriteString("stakeholder_user_id=")
+	builder.WriteString(_m.StakeholderUserID)
+	builder.WriteString(", ")
+	builder.WriteString("stakeholder_group_id=")
+	builder.WriteString(_m.StakeholderGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("stakeholder_identity_holder_id=")
+	builder.WriteString(_m.StakeholderIdentityHolderID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_name=")
+	builder.WriteString(_m.DelegateName)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_user_id=")
+	builder.WriteString(_m.DelegateUserID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_group_id=")
+	builder.WriteString(_m.DelegateGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("delegate_identity_holder_id=")
+	builder.WriteString(_m.DelegateIdentityHolderID)
 	builder.WriteString(", ")
 	builder.WriteString("risk_kind_name=")
 	builder.WriteString(_m.RiskKindName)
@@ -1140,6 +1410,30 @@ func (_m *Risk) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.RiskDecision))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedIntegrationRuns returns the IntegrationRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Risk) NamedIntegrationRuns(name string) ([]*IntegrationRun, error) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIntegrationRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Risk) appendNamedIntegrationRuns(name string, edges ...*IntegrationRun) {
+	if _m.Edges.namedIntegrationRuns == nil {
+		_m.Edges.namedIntegrationRuns = make(map[string][]*IntegrationRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIntegrationRuns[name] = []*IntegrationRun{}
+	} else {
+		_m.Edges.namedIntegrationRuns[name] = append(_m.Edges.namedIntegrationRuns[name], edges...)
+	}
 }
 
 // NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not

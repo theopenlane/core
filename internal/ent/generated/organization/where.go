@@ -1674,29 +1674,6 @@ func HasDirectoryMembershipCreatorsWith(preds ...predicate.Group) predicate.Orga
 	})
 }
 
-// HasDirectorySyncRunCreators applies the HasEdge predicate on the "directory_sync_run_creators" edge.
-func HasDirectorySyncRunCreators() predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunCreatorsTable, DirectorySyncRunCreatorsColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasDirectorySyncRunCreatorsWith applies the HasEdge predicate on the "directory_sync_run_creators" edge with a given conditions (other predicates).
-func HasDirectorySyncRunCreatorsWith(preds ...predicate.Group) predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := newDirectorySyncRunCreatorsStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasDiscussionCreators applies the HasEdge predicate on the "discussion_creators" edge.
 func HasDiscussionCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
@@ -4863,29 +4840,6 @@ func HasDirectoryMemberships() predicate.Organization {
 func HasDirectoryMembershipsWith(preds ...predicate.DirectoryMembership) predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
 		step := newDirectoryMembershipsStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasDirectorySyncRuns applies the HasEdge predicate on the "directory_sync_runs" edge.
-func HasDirectorySyncRuns() predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasDirectorySyncRunsWith applies the HasEdge predicate on the "directory_sync_runs" edge with a given conditions (other predicates).
-func HasDirectorySyncRunsWith(preds ...predicate.DirectorySyncRun) predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := newDirectorySyncRunsStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

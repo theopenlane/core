@@ -237,7 +237,7 @@ func (Finding) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entgql.OrderField("event_time"),
-				entx.IntegrationMappingField(),
+				entx.IntegrationMappingField().Volatile(),
 				entx.FieldWorkflowEligible(),
 			),
 		field.Time("reported_at").
@@ -256,7 +256,7 @@ func (Finding) Fields() []ent.Field {
 			Optional().
 			Nillable().
 			Annotations(
-				entx.IntegrationMappingField(),
+				entx.IntegrationMappingField().Volatile(),
 			),
 		field.String("external_uri").
 			Comment("link to the finding in the source system").
@@ -268,13 +268,13 @@ func (Finding) Fields() []ent.Field {
 			Comment("raw metadata payload for the finding from the source system").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField(),
+				entx.IntegrationMappingField().Volatile(),
 			),
 		field.JSON("raw_payload", map[string]any{}).
 			Comment("raw payload received from the integration for auditing and troubleshooting").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField(),
+				entx.IntegrationMappingField().Volatile(),
 			),
 	}
 }
@@ -386,6 +386,7 @@ func (f Finding) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "FIND",
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{SchemaType: f},
 			newObjectOwnedMixin[generated.Finding](f,
 				withParents(
 					Program{},
@@ -403,7 +404,7 @@ func (f Finding) Mixin() []ent.Mixin {
 				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
 			),
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
-			newResponsibilityMixin(f, withReviewedBy(), withAssignedTo()),
+			newResponsibilityMixin(f, withInternalOwner(), withReviewedBy(), withAssignedTo()),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(f, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(f, withEnumFieldName("scope"), withGlobalEnum()),

@@ -97,8 +97,47 @@ func (_u *RiskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(riskhistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(riskhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(riskhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(riskhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(riskhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(riskhistory.FieldIntegrationRunID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(riskhistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.StakeholderNameCleared() {
+		_spec.ClearField(riskhistory.FieldStakeholderName, field.TypeString)
+	}
+	if _u.mutation.StakeholderUserIDCleared() {
+		_spec.ClearField(riskhistory.FieldStakeholderUserID, field.TypeString)
+	}
+	if _u.mutation.StakeholderGroupIDCleared() {
+		_spec.ClearField(riskhistory.FieldStakeholderGroupID, field.TypeString)
+	}
+	if _u.mutation.StakeholderIdentityHolderIDCleared() {
+		_spec.ClearField(riskhistory.FieldStakeholderIdentityHolderID, field.TypeString)
+	}
+	if _u.mutation.DelegateNameCleared() {
+		_spec.ClearField(riskhistory.FieldDelegateName, field.TypeString)
+	}
+	if _u.mutation.DelegateUserIDCleared() {
+		_spec.ClearField(riskhistory.FieldDelegateUserID, field.TypeString)
+	}
+	if _u.mutation.DelegateGroupIDCleared() {
+		_spec.ClearField(riskhistory.FieldDelegateGroupID, field.TypeString)
+	}
+	if _u.mutation.DelegateIdentityHolderIDCleared() {
+		_spec.ClearField(riskhistory.FieldDelegateIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.RiskKindNameCleared() {
 		_spec.ClearField(riskhistory.FieldRiskKindName, field.TypeString)
@@ -317,8 +356,47 @@ func (_u *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHistory
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(riskhistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(riskhistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(riskhistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(riskhistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(riskhistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(riskhistory.FieldIntegrationRunID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(riskhistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.StakeholderNameCleared() {
+		_spec.ClearField(riskhistory.FieldStakeholderName, field.TypeString)
+	}
+	if _u.mutation.StakeholderUserIDCleared() {
+		_spec.ClearField(riskhistory.FieldStakeholderUserID, field.TypeString)
+	}
+	if _u.mutation.StakeholderGroupIDCleared() {
+		_spec.ClearField(riskhistory.FieldStakeholderGroupID, field.TypeString)
+	}
+	if _u.mutation.StakeholderIdentityHolderIDCleared() {
+		_spec.ClearField(riskhistory.FieldStakeholderIdentityHolderID, field.TypeString)
+	}
+	if _u.mutation.DelegateNameCleared() {
+		_spec.ClearField(riskhistory.FieldDelegateName, field.TypeString)
+	}
+	if _u.mutation.DelegateUserIDCleared() {
+		_spec.ClearField(riskhistory.FieldDelegateUserID, field.TypeString)
+	}
+	if _u.mutation.DelegateGroupIDCleared() {
+		_spec.ClearField(riskhistory.FieldDelegateGroupID, field.TypeString)
+	}
+	if _u.mutation.DelegateIdentityHolderIDCleared() {
+		_spec.ClearField(riskhistory.FieldDelegateIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.RiskKindNameCleared() {
 		_spec.ClearField(riskhistory.FieldRiskKindName, field.TypeString)

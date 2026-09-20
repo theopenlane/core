@@ -552,7 +552,6 @@ var ForeignKeys = []string{
 	"organization_directory_account_creators",
 	"organization_directory_group_creators",
 	"organization_directory_membership_creators",
-	"organization_directory_sync_run_creators",
 	"organization_discussion_creators",
 	"organization_document_data_creators",
 	"organization_email_template_creators",

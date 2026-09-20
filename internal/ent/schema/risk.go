@@ -63,7 +63,7 @@ func (Risk) Fields() []ent.Field {
 			Comment("integration that surfaced this risk, when sourced via integration ingest").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
+				entx.IntegrationMappingField().SystemControlled(),
 			),
 		field.Time("observed_at").
 			Comment("time when this risk was last observed by the source integration").
@@ -72,6 +72,7 @@ func (Risk) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entgql.OrderField("observed_at"),
+				entx.IntegrationMappingField().Volatile(),
 			),
 		field.String("external_uuid").
 			Comment("stable external UUID for deterministic OSCAL export and round-tripping").
@@ -172,7 +173,7 @@ func (Risk) Fields() []ent.Field {
 			Optional().
 			Unique().
 			Annotations(
-				entx.CSVRef().FromColumn("StakeholderGroupName").MatchOn("name"),
+				entgql.Directives(entgql.Deprecated("use stakeholder_group_id instead")),
 			).
 			Comment("the id of the group responsible for risk oversight"),
 		field.String("delegate_id").
@@ -180,6 +181,7 @@ func (Risk) Fields() []ent.Field {
 			Unique().
 			Annotations(
 				entx.CSVRef().FromColumn("RiskDelegateGroupName").MatchOn("name"),
+				entgql.Directives(entgql.Deprecated("use delegate_group_id instead")),
 			).
 			Comment("the id of the group responsible for risk oversight on behalf of the stakeholder"),
 		field.Time("mitigated_at").
@@ -319,6 +321,7 @@ func (r Risk) Edges() []ent.Edge {
 			comment:    "the group of users who are responsible for risk oversight",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Group{}.Name()),
+				entgql.Directives(entgql.Deprecated("use stakeholder_group instead")),
 			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
@@ -329,6 +332,7 @@ func (r Risk) Edges() []ent.Edge {
 			comment:    "temporary delegates for the risk, used for temporary ownership",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Group{}.Name()),
+				entgql.Directives(entgql.Deprecated("use delegate_group instead")),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -390,6 +394,8 @@ func (Risk) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("external_uuid", ownerFieldName).
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("external_id", ownerFieldName).
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 
@@ -418,6 +424,7 @@ func (r Risk) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "RSK",
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{SchemaType: r},
 			// risks inherit permissions from the associated programs, but must have an organization as well
 			// this mixin will add the owner_id field using the OrgHook but not organization tuples are created
 			// it will also create program parent tuples for the risk when a program is associated to the risk
@@ -429,6 +436,7 @@ func (r Risk) Mixin() []ent.Mixin {
 			),
 			// add groups permissions with viewer, editor, and blocked groups
 			newGroupPermissionsMixin(),
+			newResponsibilityMixin(r, withStakeholder(), withDelegate()),
 			newCustomEnumMixin(r),
 			newCustomEnumMixin(r, withEnumFieldName("category")),
 			newCustomEnumMixin(r, withEnumFieldName("environment"), withGlobalEnum()),

@@ -5,7 +5,11 @@ mutation CreateBulkCSVRisk ($input: Upload!) {
 			businessCostsJSON
 			createdAt
 			createdBy
+			delegateGroupID
 			delegateID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			detailsJSON
 			displayID
@@ -17,8 +21,10 @@ mutation CreateBulkCSVRisk ($input: Upload!) {
 			id
 			impact
 			integrationID
+			integrationRunID
 			lastReviewedAt
 			likelihood
+			managedBy
 			mitigatedAt
 			mitigation
 			mitigationJSON
@@ -37,7 +43,14 @@ mutation CreateBulkCSVRisk ($input: Upload!) {
 			scopeID
 			scopeName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			stakeholderGroupID
 			stakeholderID
+			stakeholderIdentityHolderID
+			stakeholderName
+			stakeholderUserID
 			status
 			tags
 			updatedAt
@@ -62,7 +75,11 @@ mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
 			businessCostsJSON
 			createdAt
 			createdBy
+			delegateGroupID
 			delegateID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			detailsJSON
 			displayID
@@ -74,8 +91,10 @@ mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
 			id
 			impact
 			integrationID
+			integrationRunID
 			lastReviewedAt
 			likelihood
+			managedBy
 			mitigatedAt
 			mitigation
 			mitigationJSON
@@ -94,7 +113,14 @@ mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
 			scopeID
 			scopeName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			stakeholderGroupID
 			stakeholderID
+			stakeholderIdentityHolderID
+			stakeholderName
+			stakeholderUserID
 			status
 			tags
 			updatedAt
@@ -119,7 +145,11 @@ mutation CreateRisk ($input: CreateRiskInput!) {
 			businessCostsJSON
 			createdAt
 			createdBy
+			delegateGroupID
 			delegateID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			detailsJSON
 			displayID
@@ -131,8 +161,10 @@ mutation CreateRisk ($input: CreateRiskInput!) {
 			id
 			impact
 			integrationID
+			integrationRunID
 			lastReviewedAt
 			likelihood
+			managedBy
 			mitigatedAt
 			mitigation
 			mitigationJSON
@@ -151,7 +183,14 @@ mutation CreateRisk ($input: CreateRiskInput!) {
 			scopeID
 			scopeName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			stakeholderGroupID
 			stakeholderID
+			stakeholderIdentityHolderID
+			stakeholderName
+			stakeholderUserID
 			status
 			tags
 			updatedAt
@@ -221,7 +260,11 @@ query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				businessCostsJSON
 				createdAt
 				createdBy
+				delegateGroupID
 				delegateID
+				delegateIdentityHolderID
+				delegateName
+				delegateUserID
 				details
 				detailsJSON
 				displayID
@@ -233,8 +276,10 @@ query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				id
 				impact
 				integrationID
+				integrationRunID
 				lastReviewedAt
 				likelihood
+				managedBy
 				mitigatedAt
 				mitigation
 				mitigationJSON
@@ -253,7 +298,14 @@ query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				scopeID
 				scopeName
 				score
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
+				stakeholderGroupID
 				stakeholderID
+				stakeholderIdentityHolderID
+				stakeholderName
+				stakeholderUserID
 				status
 				tags
 				updatedAt
@@ -310,7 +362,11 @@ query GetRiskByID ($riskId: ID!) {
 		businessCostsJSON
 		createdAt
 		createdBy
+		delegateGroupID
 		delegateID
+		delegateIdentityHolderID
+		delegateName
+		delegateUserID
 		details
 		detailsJSON
 		displayID
@@ -322,8 +378,10 @@ query GetRiskByID ($riskId: ID!) {
 		id
 		impact
 		integrationID
+		integrationRunID
 		lastReviewedAt
 		likelihood
+		managedBy
 		mitigatedAt
 		mitigation
 		mitigationJSON
@@ -342,7 +400,14 @@ query GetRiskByID ($riskId: ID!) {
 		scopeID
 		scopeName
 		score
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
+		stakeholderGroupID
 		stakeholderID
+		stakeholderIdentityHolderID
+		stakeholderName
+		stakeholderUserID
 		status
 		tags
 		updatedAt
@@ -406,7 +471,11 @@ query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				businessCostsJSON
 				createdAt
 				createdBy
+				delegateGroupID
 				delegateID
+				delegateIdentityHolderID
+				delegateName
+				delegateUserID
 				details
 				detailsJSON
 				displayID
@@ -418,8 +487,10 @@ query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				id
 				impact
 				integrationID
+				integrationRunID
 				lastReviewedAt
 				likelihood
+				managedBy
 				mitigatedAt
 				mitigation
 				mitigationJSON
@@ -438,7 +509,14 @@ query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				scopeID
 				scopeName
 				score
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
+				stakeholderGroupID
 				stakeholderID
+				stakeholderIdentityHolderID
+				stakeholderName
+				stakeholderUserID
 				status
 				tags
 				updatedAt
@@ -496,7 +574,11 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			businessCostsJSON
 			createdAt
 			createdBy
+			delegateGroupID
 			delegateID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			detailsJSON
 			displayID
@@ -508,8 +590,10 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			id
 			impact
 			integrationID
+			integrationRunID
 			lastReviewedAt
 			likelihood
+			managedBy
 			mitigatedAt
 			mitigation
 			mitigationJSON
@@ -528,7 +612,14 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			scopeID
 			scopeName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			stakeholderGroupID
 			stakeholderID
+			stakeholderIdentityHolderID
+			stakeholderName
+			stakeholderUserID
 			status
 			tags
 			updatedAt
@@ -556,7 +647,11 @@ mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
 			businessCostsJSON
 			createdAt
 			createdBy
+			delegateGroupID
 			delegateID
+			delegateIdentityHolderID
+			delegateName
+			delegateUserID
 			details
 			detailsJSON
 			displayID
@@ -568,8 +663,10 @@ mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
 			id
 			impact
 			integrationID
+			integrationRunID
 			lastReviewedAt
 			likelihood
+			managedBy
 			mitigatedAt
 			mitigation
 			mitigationJSON
@@ -588,7 +685,14 @@ mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
 			scopeID
 			scopeName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
+			stakeholderGroupID
 			stakeholderID
+			stakeholderIdentityHolderID
+			stakeholderName
+			stakeholderUserID
 			status
 			tags
 			updatedAt

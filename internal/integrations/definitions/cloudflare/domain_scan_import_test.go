@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/pkg/domainscan"
 )
 
 func TestChooseTrustCenterBrandColor(t *testing.T) {
@@ -69,7 +70,7 @@ func TestUpdateTrustcenterBrandDesignSetting(t *testing.T) {
 		Font:                     "Outfit",
 	}
 
-	changed, err := updateTrustcenterBrandDesignSetting(context.Background(), setting, DomainScanImportBranding{
+	changed, err := updateTrustcenterBrandDesignSetting(context.Background(), setting, domainscan.BrandDesignProfile{
 		PrimaryColor: "invalid",
 		Font:         "   ",
 		LogoURL:      "not-a-url",

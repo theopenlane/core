@@ -127,79 +127,6 @@ func TestContractIncludesSchema_EmptyContracts(t *testing.T) {
 	assert.Equal(t, contractIncludesSchema(nil, "asset"), false)
 }
 
-func TestNeedsDirectorySyncRun(t *testing.T) {
-	t.Parallel()
-
-	tests := []struct {
-		name      string
-		contracts []types.IngestContract
-		want      bool
-	}{
-		{
-			name:      "directory account triggers sync run",
-			contracts: []types.IngestContract{{Schema: entityops.SchemaDirectoryAccount.Name}},
-			want:      true,
-		},
-		{
-			name:      "directory group triggers sync run",
-			contracts: []types.IngestContract{{Schema: entityops.SchemaDirectoryGroup.Name}},
-			want:      true,
-		},
-		{
-			name:      "directory membership triggers sync run",
-			contracts: []types.IngestContract{{Schema: entityops.SchemaDirectoryMembership.Name}},
-			want:      true,
-		},
-		{
-			name:      "asset does not trigger sync run",
-			contracts: []types.IngestContract{{Schema: entityops.SchemaAsset.Name}},
-			want:      false,
-		},
-		{
-			name:      "mixed with directory schema triggers",
-			contracts: []types.IngestContract{{Schema: "asset"}, {Schema: entityops.SchemaDirectoryGroup.Name}},
-			want:      true,
-		},
-		{
-			name:      "nil contracts",
-			contracts: nil,
-			want:      false,
-		},
-		{
-			name:      "empty contracts",
-			contracts: []types.IngestContract{},
-			want:      false,
-		},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			got := needsDirectorySyncRun(tc.contracts)
-			assert.Equal(t, got, tc.want)
-		})
-	}
-}
-
-func TestSameDirectorySyncRun(t *testing.T) {
-	t.Parallel()
-
-	assert.Equal(t, sameDirectorySyncRun("run-1", "run-1"), true)
-	assert.Equal(t, sameDirectorySyncRun("run-1", "run-2"), false)
-	assert.Equal(t, sameDirectorySyncRun("", "run-1"), false)
-}
-
-func TestDirectoryMembershipRunCanAdvance(t *testing.T) {
-	t.Parallel()
-
-	current := "01J00000000000000000000001"
-	assert.Equal(t, directoryMembershipRunCanAdvance(nil, current), true)
-	assert.Equal(t, directoryMembershipRunCanAdvance(&current, current), true)
-	assert.Equal(t, directoryMembershipRunCanAdvance(&current, "01J00000000000000000000000"), false)
-	assert.Equal(t, directoryMembershipRunCanAdvance(&current, ""), false)
-}
-
 func TestResolveInstallationFilterExpr(t *testing.T) {
 	t.Parallel()
 
@@ -406,7 +333,7 @@ func TestEnvelopeIncludedByFilters(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			matched, err := envelopeIncludedByFilters(context.Background(), tc.installationFilterExpr, tc.mappingFilterExpr, envelope)
+			matched, err := envelopeIncludedByFilters(context.Background(), tc.installationFilterExpr, tc.mappingFilterExpr, envelope, types.MappingInstallation{})
 			if tc.wantErr {
 				assert.Assert(t, err != nil, "expected error")
 				return
@@ -475,7 +402,7 @@ func TestMapIngestRecord(t *testing.T) {
 			mapping, found := findMapping(definition.Mappings, tc.schema, tc.envelope.Variant)
 			assert.Assert(t, found)
 
-			record, include, err := mapIngestRecord(context.Background(), mapping, tc.schema, tc.envelope, "")
+			record, include, err := mapIngestRecord(context.Background(), mapping, tc.schema, tc.envelope, "", types.MappingInstallation{})
 			if tc.wantErr != nil {
 				assert.ErrorIs(t, err, tc.wantErr)
 				return
@@ -569,6 +496,31 @@ func testDefinition(t *testing.T, mappings []types.MappingRegistration) (*regist
 	return reg, def
 }
 
+// testInstallationMetadata carries the instance id every ingest installation must have
+var testInstallationMetadata = openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-test"}}
+
+// applySingleEnvelopes runs each envelope through applyPayloadSets as its own one-record batch,
+// staying below ingestPreloadMinRecords so the DB-less IngestContext these tests build never issues
+// the batch preload queries, and returns how many records reached the handle
+func applySingleEnvelopes(t *testing.T, ic IngestContext, operationName, schema string, envelopes ...types.MappingEnvelope) int {
+	t.Helper()
+
+	contracts := []types.IngestContract{{Schema: schema}}
+	handled := 0
+
+	for _, envelope := range envelopes {
+		payloadSets := []types.IngestPayloadSet{{Schema: schema, Envelopes: []types.MappingEnvelope{envelope}}}
+
+		_, err := applyPayloadSets(context.Background(), ic, ingestBatch{OperationName: operationName, Contracts: contracts, PayloadSets: payloadSets}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+			handled++
+			return ingestOutcome{}, nil
+		})
+		assert.NilError(t, err)
+	}
+
+	return handled
+}
+
 func TestProcessPayloadSets_DefinitionNotFound(t *testing.T) {
 	t.Parallel()
 
@@ -578,11 +530,28 @@ func TestProcessPayloadSets_DefinitionNotFound(t *testing.T) {
 		Integration: &ent.Integration{DefinitionID: "nonexistent"},
 	}
 
-	_, err := applyPayloadSets(context.Background(), ic, "", nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		return nil
+	_, err := applyPayloadSets(context.Background(), ic, ingestBatch{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+		return ingestOutcome{}, nil
 	})
 
 	assert.ErrorIs(t, err, ErrIngestDefinitionNotFound)
+}
+
+func TestProcessPayloadSets_InstanceIDRequired(t *testing.T) {
+	t.Parallel()
+
+	reg, _ := testDefinition(t, nil)
+
+	ic := IngestContext{
+		Registry:    reg,
+		Integration: &ent.Integration{DefinitionID: "test-def"},
+	}
+
+	_, err := applyPayloadSets(context.Background(), ic, ingestBatch{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+		return ingestOutcome{}, nil
+	})
+
+	assert.ErrorIs(t, err, ErrIngestInstanceIDRequired)
 }
 
 func TestProcessPayloadSets_SchemaNotDeclared(t *testing.T) {
@@ -594,7 +563,7 @@ func TestProcessPayloadSets_SchemaNotDeclared(t *testing.T) {
 
 	ic := IngestContext{
 		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
+		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
 	}
 
 	// contracts say "contact", but payload set says "asset"
@@ -603,8 +572,8 @@ func TestProcessPayloadSets_SchemaNotDeclared(t *testing.T) {
 		{Schema: entityops.SchemaAsset.Name, Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}}},
 	}
 
-	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		return nil
+	_, err := applyPayloadSets(context.Background(), ic, ingestBatch{Contracts: contracts, PayloadSets: payloadSets}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+		return ingestOutcome{}, nil
 	})
 
 	assert.ErrorIs(t, err, ErrIngestSchemaNotDeclared)
@@ -617,7 +586,7 @@ func TestProcessPayloadSets_SchemaNotFound(t *testing.T) {
 
 	ic := IngestContext{
 		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
+		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
 	}
 
 	contracts := []types.IngestContract{{Schema: "totally_bogus_schema"}}
@@ -625,8 +594,8 @@ func TestProcessPayloadSets_SchemaNotFound(t *testing.T) {
 		{Schema: "totally_bogus_schema", Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}}},
 	}
 
-	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		return nil
+	_, err := applyPayloadSets(context.Background(), ic, ingestBatch{Contracts: contracts, PayloadSets: payloadSets}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+		return ingestOutcome{}, nil
 	})
 
 	assert.ErrorIs(t, err, ErrIngestSchemaNotFound)
@@ -640,7 +609,7 @@ func TestProcessPayloadSets_MappingNotFound(t *testing.T) {
 
 	ic := IngestContext{
 		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
+		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
 	}
 
 	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
@@ -653,8 +622,8 @@ func TestProcessPayloadSets_MappingNotFound(t *testing.T) {
 		},
 	}
 
-	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		return nil
+	_, err := applyPayloadSets(context.Background(), ic, ingestBatch{Contracts: contracts, PayloadSets: payloadSets}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+		return ingestOutcome{}, nil
 	})
 
 	assert.NilError(t, err, "unmappable records are skipped, not fatal")
@@ -668,13 +637,14 @@ func TestProcessPayloadSets_InvalidInstallationFilterConfig(t *testing.T) {
 	ic := IngestContext{
 		Registry: reg,
 		Integration: &ent.Integration{
-			DefinitionID: "test-def",
-			Config:       openapi.IntegrationConfig{ClientConfig: json.RawMessage(`{invalid`)},
+			DefinitionID:         "test-def",
+			InstallationMetadata: testInstallationMetadata,
+			Config:               openapi.IntegrationConfig{ClientConfig: json.RawMessage(`{invalid`)},
 		},
 	}
 
-	_, err := applyPayloadSets(context.Background(), ic, "", nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		return nil
+	_, err := applyPayloadSets(context.Background(), ic, ingestBatch{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+		return ingestOutcome{}, nil
 	})
 
 	assert.ErrorIs(t, err, ErrIngestInstallationFilterConfigInvalid)
@@ -693,7 +663,7 @@ func TestProcessPayloadSets_SuccessfulMapping(t *testing.T) {
 
 	ic := IngestContext{
 		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
+		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
 	}
 
 	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
@@ -708,9 +678,9 @@ func TestProcessPayloadSets_SuccessfulMapping(t *testing.T) {
 
 	var handled []mappedIngestRecord
 
-	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(_ context.Context, record mappedIngestRecord) error {
+	_, err := applyPayloadSets(context.Background(), ic, ingestBatch{Contracts: contracts, PayloadSets: payloadSets}, func(_ context.Context, record mappedIngestRecord) (ingestOutcome, error) {
 		handled = append(handled, record)
-		return nil
+		return ingestOutcome{}, nil
 	})
 
 	assert.NilError(t, err)
@@ -725,12 +695,12 @@ func TestProcessPayloadSets_EmptyPayloadSets(t *testing.T) {
 
 	ic := IngestContext{
 		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
+		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
 	}
 
-	_, err := applyPayloadSets(context.Background(), ic, "", nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	_, err := applyPayloadSets(context.Background(), ic, ingestBatch{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
 		t.Fatal("handler should not be called for empty payload sets")
-		return nil
+		return ingestOutcome{}, nil
 	})
 
 	assert.NilError(t, err)
@@ -752,72 +722,15 @@ func TestProcessPayloadSets_FilteredEnvelopes(t *testing.T) {
 
 	ic := IngestContext{
 		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
+		Integration: &ent.Integration{DefinitionID: "test-def", InstallationMetadata: testInstallationMetadata},
 	}
 
-	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema: entityops.SchemaAsset.Name,
-			Envelopes: []types.MappingEnvelope{
-				{Resource: "unwanted", Payload: json.RawMessage(`{"name":"skip"}`)},
-				{Resource: "wanted", Payload: json.RawMessage(`{"name":"keep"}`)},
-			},
-		},
-	}
+	handled := applySingleEnvelopes(t, ic, "", entityops.SchemaAsset.Name,
+		types.MappingEnvelope{Resource: "unwanted", Payload: json.RawMessage(`{"name":"skip"}`)},
+		types.MappingEnvelope{Resource: "wanted", Payload: json.RawMessage(`{"name":"keep"}`)},
+	)
 
-	var handled int
-
-	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		handled++
-		return nil
-	})
-
-	assert.NilError(t, err)
 	assert.Equal(t, handled, 1)
-}
-
-func TestProcessPayloadSets_HandleError(t *testing.T) {
-	t.Parallel()
-
-	reg, _ := testDefinition(t, []types.MappingRegistration{
-		{
-			Schema:  entityops.SchemaAsset.Name,
-			Variant: "",
-			Spec:    types.MappingOverride{MapExpr: `payload`},
-		},
-	})
-
-	ic := IngestContext{
-		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
-	}
-
-	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema: entityops.SchemaAsset.Name,
-			Envelopes: []types.MappingEnvelope{
-				{Payload: json.RawMessage(`{"name":"first"}`)},
-				{Payload: json.RawMessage(`{"name":"second"}`)},
-			},
-		},
-	}
-
-	handleErr := errors.New("persist failed")
-	handled := 0
-
-	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		handled++
-		if handled == 1 {
-			return handleErr
-		}
-
-		return nil
-	})
-
-	assert.NilError(t, err, "record failures are skipped, not fatal")
-	assert.Equal(t, 2, handled, "a failing record must not abort the remaining records")
 }
 
 // TestProcessPayloadSets_NestedInstallationFilter verifies that a filterExpr stored inside a
@@ -869,32 +782,20 @@ func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
 	ic := IngestContext{
 		Registry: reg,
 		Integration: &ent.Integration{
-			DefinitionID: "test-def",
+			DefinitionID:         "test-def",
+			InstallationMetadata: testInstallationMetadata,
 			Config: openapi.IntegrationConfig{
 				ClientConfig: json.RawMessage(`{"repoSync":{"filterExpr":"payload.is_private == true"}}`),
 			},
 		},
 	}
 
-	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema: entityops.SchemaAsset.Name,
-			Envelopes: []types.MappingEnvelope{
-				{Payload: json.RawMessage(`{"name":"private-repo","is_private":true}`)},
-				{Payload: json.RawMessage(`{"name":"public-repo","is_private":false}`)},
-				{Payload: json.RawMessage(`{"name":"another-private","is_private":true}`)},
-			},
-		},
-	}
+	handled := applySingleEnvelopes(t, ic, "repo-sync", entityops.SchemaAsset.Name,
+		types.MappingEnvelope{Payload: json.RawMessage(`{"name":"private-repo","is_private":true}`)},
+		types.MappingEnvelope{Payload: json.RawMessage(`{"name":"public-repo","is_private":false}`)},
+		types.MappingEnvelope{Payload: json.RawMessage(`{"name":"another-private","is_private":true}`)},
+	)
 
-	var handled int
-	_, err := applyPayloadSets(context.Background(), ic, "repo-sync", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		handled++
-		return nil
-	})
-
-	assert.NilError(t, err)
 	assert.Equal(t, handled, 2) // private repos pass; public-repo is filtered
 }
 
@@ -965,31 +866,41 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 	ic := IngestContext{
 		Registry: reg,
 		Integration: &ent.Integration{
-			DefinitionID: "test-def",
+			DefinitionID:         "test-def",
+			InstallationMetadata: testInstallationMetadata,
 			Config: openapi.IntegrationConfig{
 				ClientConfig: json.RawMessage(`{"findingSync":{"filterExpr":"payload.severity == \"CRITICAL\""},"directorySync":{}}`),
 			},
 		},
 	}
 
-	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema: entityops.SchemaAsset.Name,
-			Envelopes: []types.MappingEnvelope{
-				{Payload: json.RawMessage(`{"name":"asset-001"}`)},
-				{Payload: json.RawMessage(`{"name":"asset-002"}`)},
-			},
-		},
+	// running as asset-sync: the findingSync filterExpr must NOT apply
+	handled := applySingleEnvelopes(t, ic, "asset-sync", entityops.SchemaAsset.Name,
+		types.MappingEnvelope{Payload: json.RawMessage(`{"name":"asset-001"}`)},
+		types.MappingEnvelope{Payload: json.RawMessage(`{"name":"asset-002"}`)},
+	)
+
+	assert.Equal(t, handled, 2) // both pass — asset-sync has no filter
+}
+
+func TestStampProvenanceOverridesMappedValues(t *testing.T) {
+	t.Parallel()
+
+	installation := &ent.Integration{
+		ID:                   "int_owner",
+		OwnerID:              "org_1",
+		DefinitionID:         "def_dir",
+		InstallationMetadata: testInstallationMetadata,
 	}
 
-	var handled int
-	// running as asset-sync: the findingSync filterExpr must NOT apply
-	_, err := applyPayloadSets(context.Background(), ic, "asset-sync", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		handled++
-		return nil
-	})
+	payload := json.RawMessage(`{"external_id":"acct-1","managed_by":"int_other","source_instance_id":"tenant-other","owner_id":"org_other","source_definition_id":"def_other"}`)
 
-	assert.NilError(t, err)
-	assert.Equal(t, handled, 2) // both pass — asset-sync has no filter
+	stamped := entityops.StampProvenance(payload, entityops.SchemaDirectoryAccount, installation, "run_1")
+
+	assert.Equal(t, "int_owner", entityops.FieldValue(stamped, entityops.FieldManagedBy), "a mapping must not pick the managing installation")
+	assert.Equal(t, "tenant-test", entityops.FieldValue(stamped, entityops.FieldSourceInstanceID), "a mapping must not pick the source instance")
+	assert.Equal(t, "org_1", entityops.FieldValue(stamped, entityops.FieldOwnerID), "a mapping must not pick the owner")
+	assert.Equal(t, "def_dir", entityops.FieldValue(stamped, entityops.FieldSourceDefinitionID), "a mapping must not pick the source definition")
+	assert.Equal(t, "run_1", entityops.FieldValue(stamped, entityops.FieldIntegrationRunID))
+	assert.Equal(t, "acct-1", entityops.FieldValue(stamped, "external_id"), "mapped non-provenance fields pass through")
 }

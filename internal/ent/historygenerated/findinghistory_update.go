@@ -97,8 +97,35 @@ func (_u *FindingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(findinghistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(findinghistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(findinghistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(findinghistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(findinghistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(findinghistory.FieldIntegrationRunID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(findinghistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(findinghistory.FieldInternalOwner, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerUserIDCleared() {
+		_spec.ClearField(findinghistory.FieldInternalOwnerUserID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerGroupIDCleared() {
+		_spec.ClearField(findinghistory.FieldInternalOwnerGroupID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(findinghistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.ReviewedByCleared() {
 		_spec.ClearField(findinghistory.FieldReviewedBy, field.TypeString)
@@ -383,8 +410,35 @@ func (_u *FindingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FindingH
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(findinghistory.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(findinghistory.FieldSourceDefinitionID, field.TypeString)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(findinghistory.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(findinghistory.FieldSourceInstanceID, field.TypeString)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(findinghistory.FieldManagedBy, field.TypeString)
+	}
+	if _u.mutation.IntegrationRunIDCleared() {
+		_spec.ClearField(findinghistory.FieldIntegrationRunID, field.TypeString)
+	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(findinghistory.FieldOwnerID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(findinghistory.FieldInternalOwner, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerUserIDCleared() {
+		_spec.ClearField(findinghistory.FieldInternalOwnerUserID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerGroupIDCleared() {
+		_spec.ClearField(findinghistory.FieldInternalOwnerGroupID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(findinghistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.ReviewedByCleared() {
 		_spec.ClearField(findinghistory.FieldReviewedBy, field.TypeString)

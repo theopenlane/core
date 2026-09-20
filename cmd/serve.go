@@ -338,12 +338,6 @@ func serve(ctx context.Context) error {
 		serveropts.WithHistoryGraphRoute(srv, historyClient),
 	)
 
-	if rt := so.Config.Handler.IntegrationsRuntime; rt != nil {
-		if err := rt.SeedScheduledOperations(ctx); err != nil {
-			log.Error().Err(err).Msg("failed to seed one or more scheduled operation listeners")
-		}
-	}
-
 	if err := srv.StartEchoServer(ctx); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Error().Err(err).Msg("failed to run server")
 	}

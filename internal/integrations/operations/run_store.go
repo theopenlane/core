@@ -3,13 +3,16 @@ package operations
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/mapx"
 )
@@ -26,8 +29,60 @@ type RunResult struct {
 	Metrics map[string]any
 }
 
+// IngestRunSummary renders a compact one-line record-count summary for an ingest run
+func IngestRunSummary(result IngestResult) string {
+	return fmt.Sprintf("attempted %d, persisted %d, changed %d, failed %d, removed %d, excluded %d", result.Attempted, result.Persisted, result.Changed, result.Failed, result.Removed, result.Excluded)
+}
+
+// metricAttempted is the attempted-count key in an ingest run's metrics payload
+const metricAttempted = "attempted"
+
+// metricPersisted is the persisted-count key in an ingest run's metrics payload
+const metricPersisted = "persisted"
+
+// metricChanged is the changed-count key in an ingest run's metrics payload
+const metricChanged = "changed"
+
+// metricSkipped is the skipped-count key in an ingest run's metrics payload
+const metricSkipped = "skipped"
+
+// metricFailed is the failed-count key in an ingest run's metrics payload
+const metricFailed = "failed"
+
+// metricFiltered is the filtered-count key in an ingest run's metrics payload
+const metricFiltered = "filtered"
+
+// metricRemoved is the removed-count key in an ingest run's metrics payload
+const metricRemoved = "removed"
+
+// metricExcluded is the excluded-count key in an ingest run's metrics payload
+const metricExcluded = "excluded"
+
+// IngestMetrics renders one ingest run's record counters as a structured metrics payload
+func IngestMetrics(result IngestResult) map[string]any {
+	return map[string]any{
+		metricAttempted: result.Attempted,
+		metricPersisted: result.Persisted,
+		metricChanged:   result.Changed,
+		metricSkipped:   result.Skipped,
+		metricFailed:    result.Failed,
+		metricFiltered:  result.Filtered,
+		metricRemoved:   result.Removed,
+		metricExcluded:  result.Excluded,
+	}
+}
+
+// operationKind classifies an operation's execution shape as an IntegrationOperationKind
+func operationKind(operation types.OperationRegistration) enums.IntegrationOperationKind {
+	if operation.IngestHandle != nil {
+		return enums.IntegrationOperationKindSync
+	}
+
+	return enums.IntegrationOperationKindPush
+}
+
 // CreatePendingRun inserts one pending run record for a dispatched operation
-func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Integration, operation string, runType enums.IntegrationRunType, config json.RawMessage) (*ent.IntegrationRun, error) {
+func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Integration, operation types.OperationRegistration, runType enums.IntegrationRunType, config json.RawMessage) (*ent.IntegrationRun, error) {
 	if installation == nil {
 		return nil, ErrInstallationIDRequired
 	}
@@ -40,10 +95,29 @@ func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Int
 	return db.IntegrationRun.Create().
 		SetOwnerID(installation.OwnerID).
 		SetIntegrationID(installation.ID).
-		SetOperationName(operation).
+		SetOperationName(operation.Name).
+		SetOperationKind(operationKind(operation)).
 		SetRunType(runType).
 		SetStatus(enums.IntegrationRunStatusPending).
 		SetOperationConfig(configMap).
+		Save(ctx)
+}
+
+// metricRetryOf is the metrics key recording the run a re-executed attempt continues from
+const metricRetryOf = "retry_of"
+
+// RetryRun inserts a fresh pending run for a re-executed attempt of the given run, carrying its
+// operation, run type, and config, so every attempt writes records under its own run id
+func RetryRun(ctx context.Context, db *ent.Client, run *ent.IntegrationRun) (*ent.IntegrationRun, error) {
+	return db.IntegrationRun.Create().
+		SetOwnerID(run.OwnerID).
+		SetIntegrationID(run.IntegrationID).
+		SetOperationName(run.OperationName).
+		SetNillableOperationKind(lo.EmptyableToPtr(run.OperationKind)).
+		SetRunType(run.RunType).
+		SetStatus(enums.IntegrationRunStatusPending).
+		SetOperationConfig(run.OperationConfig).
+		SetMetrics(map[string]any{metricRetryOf: run.ID}).
 		Save(ctx)
 }
 

@@ -125,6 +125,7 @@ entconfig:
             disposable: false
             free: false
             role: false
+        blockeddomains: []
         enableautoupdatedisposable: true
         enabled: false
         enablegravatarcheck: true

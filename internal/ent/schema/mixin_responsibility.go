@@ -30,6 +30,7 @@ type ResponsibilityMixin struct {
 	includeReviewedBy     bool
 	includeLastReviewedAt bool
 	includeDelegate       bool
+	includeStakeholder    bool
 	reviewedByOrderField  bool
 	assignedToOrderField  bool
 	accessCheckAnnotation func(string) schema.Annotation
@@ -107,6 +108,18 @@ func withLastReviewedAt() responsibilityOption {
 func withReviewedByOrderField() responsibilityOption {
 	return func(r *ResponsibilityMixin) {
 		r.reviewedByOrderField = true
+	}
+}
+
+func withStakeholder() responsibilityOption {
+	return func(r *ResponsibilityMixin) {
+		r.includeStakeholder = true
+	}
+}
+
+func withDelegate() responsibilityOption {
+	return func(r *ResponsibilityMixin) {
+		r.includeDelegate = true
 	}
 }
 
@@ -307,12 +320,63 @@ func (r ResponsibilityMixin) Fields() []ent.Field {
 		)
 	}
 
+	if r.includeStakeholder {
+		fields = append(fields,
+			field.String("stakeholder_name").
+				Comment(fmt.Sprintf("the stakeholder for the %s when no user, group, or identity holder is linked", label)).
+				Optional().
+				Annotations(
+					entgql.OrderField("stakeholder_name"),
+					entx.FieldSearchable(),
+				),
+			field.String("stakeholder_user_id").
+				Comment(fmt.Sprintf("the stakeholder user id for the %s", label)).
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("StakeholderUserEmail").MatchOn("email"),
+				),
+			field.String("stakeholder_group_id").
+				Comment(fmt.Sprintf("the stakeholder group id for the %s", label)).
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("StakeholderGroupName").MatchOn("name"),
+				),
+			field.String("stakeholder_identity_holder_id").
+				Comment(fmt.Sprintf("the stakeholder identity holder id for the %s", label)).
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("StakeholderIdentityHolderEmail").MatchOn("email"),
+				),
+		)
+	}
+
 	if r.includeDelegate {
 		fields = append(fields,
-			field.String("delegate_id").
-				Comment(fmt.Sprintf("the group id delegated for the %s", label)).
+			field.String("delegate_name").
+				Comment(fmt.Sprintf("the delegate for the %s when no user, group, or identity holder is linked", label)).
 				Optional().
-				Unique(),
+				Annotations(
+					entgql.OrderField("delegate_name"),
+					entx.FieldSearchable(),
+				),
+			field.String("delegate_user_id").
+				Comment(fmt.Sprintf("the delegate user id for the %s", label)).
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("DelegateUserEmail").MatchOn("email"),
+				),
+			field.String("delegate_group_id").
+				Comment(fmt.Sprintf("the delegate group id for the %s", label)).
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("DelegateGroupName").MatchOn("name"),
+				),
+			field.String("delegate_identity_holder_id").
+				Comment(fmt.Sprintf("the delegate identity holder id for the %s", label)).
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("DelegateIdentityHolderEmail").MatchOn("email"),
+				),
 		)
 	}
 
@@ -522,16 +586,65 @@ func (r ResponsibilityMixin) Edges() []ent.Edge {
 		)
 	}
 
+	if r.includeStakeholder {
+		edges = append(edges,
+			uniqueEdgeTo(&edgeDefinition{
+				fromSchema: r.schemaType,
+				name:       "stakeholder_user",
+				t:          User.Type,
+				field:      "stakeholder_user_id",
+				annotations: []schema.Annotation{
+					check(User{}.Name()),
+				},
+			}),
+			uniqueEdgeTo(&edgeDefinition{
+				fromSchema: r.schemaType,
+				name:       "stakeholder_group",
+				t:          Group.Type,
+				field:      "stakeholder_group_id",
+				annotations: []schema.Annotation{
+					check(Group{}.Name()),
+				},
+			}),
+			uniqueEdgeTo(&edgeDefinition{
+				fromSchema: r.schemaType,
+				name:       "stakeholder_identity_holder",
+				t:          IdentityHolder.Type,
+				field:      "stakeholder_identity_holder_id",
+				annotations: []schema.Annotation{
+					check(IdentityHolder{}.Name()),
+				},
+			}),
+		)
+	}
+
 	if r.includeDelegate {
 		edges = append(edges,
 			uniqueEdgeTo(&edgeDefinition{
 				fromSchema: r.schemaType,
-				name:       "delegate",
+				name:       "delegate_user",
+				t:          User.Type,
+				field:      "delegate_user_id",
+				annotations: []schema.Annotation{
+					check(User{}.Name()),
+				},
+			}),
+			uniqueEdgeTo(&edgeDefinition{
+				fromSchema: r.schemaType,
+				name:       "delegate_group",
 				t:          Group.Type,
-				field:      "delegate_id",
-				comment:    fmt.Sprintf("temporary delegate for the %s, used for temporary ownership", schemaLabel(r.schemaType)),
+				field:      "delegate_group_id",
 				annotations: []schema.Annotation{
 					check(Group{}.Name()),
+				},
+			}),
+			uniqueEdgeTo(&edgeDefinition{
+				fromSchema: r.schemaType,
+				name:       "delegate_identity_holder",
+				t:          IdentityHolder.Type,
+				field:      "delegate_identity_holder_id",
+				annotations: []schema.Annotation{
+					check(IdentityHolder{}.Name()),
 				},
 			}),
 		)

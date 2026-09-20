@@ -169,6 +169,76 @@ func (_c *RiskHistoryCreate) SetTags(v []string) *RiskHistoryCreate {
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *RiskHistoryCreate) SetSourceDefinitionID(v string) *RiskHistoryCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableSourceDefinitionID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *RiskHistoryCreate) SetSourceDefinitionVersion(v string) *RiskHistoryCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableSourceDefinitionVersion(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *RiskHistoryCreate) SetSourceInstanceID(v string) *RiskHistoryCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableSourceInstanceID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *RiskHistoryCreate) SetManagedBy(v string) *RiskHistoryCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableManagedBy(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
+// SetIntegrationRunID sets the "integration_run_id" field.
+func (_c *RiskHistoryCreate) SetIntegrationRunID(v string) *RiskHistoryCreate {
+	_c.mutation.SetIntegrationRunID(v)
+	return _c
+}
+
+// SetNillableIntegrationRunID sets the "integration_run_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableIntegrationRunID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetIntegrationRunID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *RiskHistoryCreate) SetOwnerID(v string) *RiskHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -179,6 +249,118 @@ func (_c *RiskHistoryCreate) SetOwnerID(v string) *RiskHistoryCreate {
 func (_c *RiskHistoryCreate) SetNillableOwnerID(v *string) *RiskHistoryCreate {
 	if v != nil {
 		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
+// SetStakeholderName sets the "stakeholder_name" field.
+func (_c *RiskHistoryCreate) SetStakeholderName(v string) *RiskHistoryCreate {
+	_c.mutation.SetStakeholderName(v)
+	return _c
+}
+
+// SetNillableStakeholderName sets the "stakeholder_name" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableStakeholderName(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetStakeholderName(*v)
+	}
+	return _c
+}
+
+// SetStakeholderUserID sets the "stakeholder_user_id" field.
+func (_c *RiskHistoryCreate) SetStakeholderUserID(v string) *RiskHistoryCreate {
+	_c.mutation.SetStakeholderUserID(v)
+	return _c
+}
+
+// SetNillableStakeholderUserID sets the "stakeholder_user_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableStakeholderUserID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetStakeholderUserID(*v)
+	}
+	return _c
+}
+
+// SetStakeholderGroupID sets the "stakeholder_group_id" field.
+func (_c *RiskHistoryCreate) SetStakeholderGroupID(v string) *RiskHistoryCreate {
+	_c.mutation.SetStakeholderGroupID(v)
+	return _c
+}
+
+// SetNillableStakeholderGroupID sets the "stakeholder_group_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableStakeholderGroupID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetStakeholderGroupID(*v)
+	}
+	return _c
+}
+
+// SetStakeholderIdentityHolderID sets the "stakeholder_identity_holder_id" field.
+func (_c *RiskHistoryCreate) SetStakeholderIdentityHolderID(v string) *RiskHistoryCreate {
+	_c.mutation.SetStakeholderIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableStakeholderIdentityHolderID sets the "stakeholder_identity_holder_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableStakeholderIdentityHolderID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetStakeholderIdentityHolderID(*v)
+	}
+	return _c
+}
+
+// SetDelegateName sets the "delegate_name" field.
+func (_c *RiskHistoryCreate) SetDelegateName(v string) *RiskHistoryCreate {
+	_c.mutation.SetDelegateName(v)
+	return _c
+}
+
+// SetNillableDelegateName sets the "delegate_name" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableDelegateName(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetDelegateName(*v)
+	}
+	return _c
+}
+
+// SetDelegateUserID sets the "delegate_user_id" field.
+func (_c *RiskHistoryCreate) SetDelegateUserID(v string) *RiskHistoryCreate {
+	_c.mutation.SetDelegateUserID(v)
+	return _c
+}
+
+// SetNillableDelegateUserID sets the "delegate_user_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableDelegateUserID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetDelegateUserID(*v)
+	}
+	return _c
+}
+
+// SetDelegateGroupID sets the "delegate_group_id" field.
+func (_c *RiskHistoryCreate) SetDelegateGroupID(v string) *RiskHistoryCreate {
+	_c.mutation.SetDelegateGroupID(v)
+	return _c
+}
+
+// SetNillableDelegateGroupID sets the "delegate_group_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableDelegateGroupID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetDelegateGroupID(*v)
+	}
+	return _c
+}
+
+// SetDelegateIdentityHolderID sets the "delegate_identity_holder_id" field.
+func (_c *RiskHistoryCreate) SetDelegateIdentityHolderID(v string) *RiskHistoryCreate {
+	_c.mutation.SetDelegateIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableDelegateIdentityHolderID sets the "delegate_identity_holder_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableDelegateIdentityHolderID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetDelegateIdentityHolderID(*v)
 	}
 	return _c
 }
@@ -860,9 +1042,61 @@ func (_c *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) {
 		_spec.SetField(riskhistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(riskhistory.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(riskhistory.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(riskhistory.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(riskhistory.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
+	}
+	if value, ok := _c.mutation.IntegrationRunID(); ok {
+		_spec.SetField(riskhistory.FieldIntegrationRunID, field.TypeString, value)
+		_node.IntegrationRunID = value
+	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(riskhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.StakeholderName(); ok {
+		_spec.SetField(riskhistory.FieldStakeholderName, field.TypeString, value)
+		_node.StakeholderName = value
+	}
+	if value, ok := _c.mutation.StakeholderUserID(); ok {
+		_spec.SetField(riskhistory.FieldStakeholderUserID, field.TypeString, value)
+		_node.StakeholderUserID = value
+	}
+	if value, ok := _c.mutation.StakeholderGroupID(); ok {
+		_spec.SetField(riskhistory.FieldStakeholderGroupID, field.TypeString, value)
+		_node.StakeholderGroupID = value
+	}
+	if value, ok := _c.mutation.StakeholderIdentityHolderID(); ok {
+		_spec.SetField(riskhistory.FieldStakeholderIdentityHolderID, field.TypeString, value)
+		_node.StakeholderIdentityHolderID = value
+	}
+	if value, ok := _c.mutation.DelegateName(); ok {
+		_spec.SetField(riskhistory.FieldDelegateName, field.TypeString, value)
+		_node.DelegateName = value
+	}
+	if value, ok := _c.mutation.DelegateUserID(); ok {
+		_spec.SetField(riskhistory.FieldDelegateUserID, field.TypeString, value)
+		_node.DelegateUserID = value
+	}
+	if value, ok := _c.mutation.DelegateGroupID(); ok {
+		_spec.SetField(riskhistory.FieldDelegateGroupID, field.TypeString, value)
+		_node.DelegateGroupID = value
+	}
+	if value, ok := _c.mutation.DelegateIdentityHolderID(); ok {
+		_spec.SetField(riskhistory.FieldDelegateIdentityHolderID, field.TypeString, value)
+		_node.DelegateIdentityHolderID = value
 	}
 	if value, ok := _c.mutation.RiskKindName(); ok {
 		_spec.SetField(riskhistory.FieldRiskKindName, field.TypeString, value)

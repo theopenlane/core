@@ -150,6 +150,31 @@ func (_q *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, actionplanhistory.FieldRevision)
 				fieldSeen[actionplanhistory.FieldRevision] = struct{}{}
 			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[actionplanhistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldSourceDefinitionID)
+				fieldSeen[actionplanhistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[actionplanhistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldSourceDefinitionVersion)
+				fieldSeen[actionplanhistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[actionplanhistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldSourceInstanceID)
+				fieldSeen[actionplanhistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[actionplanhistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldManagedBy)
+				fieldSeen[actionplanhistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[actionplanhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, actionplanhistory.FieldIntegrationRunID)
+				fieldSeen[actionplanhistory.FieldIntegrationRunID] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[actionplanhistory.FieldName]; !ok {
 				selectedFields = append(selectedFields, actionplanhistory.FieldName)
@@ -901,6 +926,31 @@ func (_q *AssetHistoryQuery) collectField(ctx context.Context, oneNode bool, opC
 			if _, ok := fieldSeen[assethistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, assethistory.FieldTags)
 				fieldSeen[assethistory.FieldTags] = struct{}{}
+			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[assethistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, assethistory.FieldSourceDefinitionID)
+				fieldSeen[assethistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[assethistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, assethistory.FieldSourceDefinitionVersion)
+				fieldSeen[assethistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[assethistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, assethistory.FieldSourceInstanceID)
+				fieldSeen[assethistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[assethistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, assethistory.FieldManagedBy)
+				fieldSeen[assethistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[assethistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, assethistory.FieldIntegrationRunID)
+				fieldSeen[assethistory.FieldIntegrationRunID] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[assethistory.FieldOwnerID]; !ok {
@@ -2086,6 +2136,31 @@ func (_q *ContactHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[contacthistory.FieldTags]; !ok {
 				selectedFields = append(selectedFields, contacthistory.FieldTags)
 				fieldSeen[contacthistory.FieldTags] = struct{}{}
+			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[contacthistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, contacthistory.FieldSourceDefinitionID)
+				fieldSeen[contacthistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[contacthistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, contacthistory.FieldSourceDefinitionVersion)
+				fieldSeen[contacthistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[contacthistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, contacthistory.FieldSourceInstanceID)
+				fieldSeen[contacthistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[contacthistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, contacthistory.FieldManagedBy)
+				fieldSeen[contacthistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[contacthistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, contacthistory.FieldIntegrationRunID)
+				fieldSeen[contacthistory.FieldIntegrationRunID] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[contacthistory.FieldOwnerID]; !ok {
@@ -3704,6 +3779,31 @@ func (_q *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, entityhistory.FieldTags)
 				fieldSeen[entityhistory.FieldTags] = struct{}{}
 			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[entityhistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldSourceDefinitionID)
+				fieldSeen[entityhistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[entityhistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldSourceDefinitionVersion)
+				fieldSeen[entityhistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[entityhistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldSourceInstanceID)
+				fieldSeen[entityhistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[entityhistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldManagedBy)
+				fieldSeen[entityhistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[entityhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldIntegrationRunID)
+				fieldSeen[entityhistory.FieldIntegrationRunID] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[entityhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, entityhistory.FieldOwnerID)
@@ -4601,11 +4701,6 @@ func (_q *FileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, filehistory.FieldStoreKey)
 				fieldSeen[filehistory.FieldStoreKey] = struct{}{}
 			}
-		case "categoryType":
-			if _, ok := fieldSeen[filehistory.FieldCategoryType]; !ok {
-				selectedFields = append(selectedFields, filehistory.FieldCategoryType)
-				fieldSeen[filehistory.FieldCategoryType] = struct{}{}
-			}
 		case "uri":
 			if _, ok := fieldSeen[filehistory.FieldURI]; !ok {
 				selectedFields = append(selectedFields, filehistory.FieldURI)
@@ -4954,10 +5049,55 @@ func (_q *FindingHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, findinghistory.FieldTags)
 				fieldSeen[findinghistory.FieldTags] = struct{}{}
 			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[findinghistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldSourceDefinitionID)
+				fieldSeen[findinghistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[findinghistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldSourceDefinitionVersion)
+				fieldSeen[findinghistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[findinghistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldSourceInstanceID)
+				fieldSeen[findinghistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[findinghistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldManagedBy)
+				fieldSeen[findinghistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[findinghistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldIntegrationRunID)
+				fieldSeen[findinghistory.FieldIntegrationRunID] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[findinghistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, findinghistory.FieldOwnerID)
 				fieldSeen[findinghistory.FieldOwnerID] = struct{}{}
+			}
+		case "internalOwner":
+			if _, ok := fieldSeen[findinghistory.FieldInternalOwner]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldInternalOwner)
+				fieldSeen[findinghistory.FieldInternalOwner] = struct{}{}
+			}
+		case "internalOwnerUserID":
+			if _, ok := fieldSeen[findinghistory.FieldInternalOwnerUserID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldInternalOwnerUserID)
+				fieldSeen[findinghistory.FieldInternalOwnerUserID] = struct{}{}
+			}
+		case "internalOwnerGroupID":
+			if _, ok := fieldSeen[findinghistory.FieldInternalOwnerGroupID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldInternalOwnerGroupID)
+				fieldSeen[findinghistory.FieldInternalOwnerGroupID] = struct{}{}
+			}
+		case "internalOwnerIdentityHolderID":
+			if _, ok := fieldSeen[findinghistory.FieldInternalOwnerIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, findinghistory.FieldInternalOwnerIdentityHolderID)
+				fieldSeen[findinghistory.FieldInternalOwnerIdentityHolderID] = struct{}{}
 			}
 		case "reviewedBy":
 			if _, ok := fieldSeen[findinghistory.FieldReviewedBy]; !ok {
@@ -6342,6 +6482,31 @@ func (_q *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[internalpolicyhistory.FieldRevision]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldRevision)
 				fieldSeen[internalpolicyhistory.FieldRevision] = struct{}{}
+			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldSourceDefinitionID)
+				fieldSeen[internalpolicyhistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldSourceDefinitionVersion)
+				fieldSeen[internalpolicyhistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldSourceInstanceID)
+				fieldSeen[internalpolicyhistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldManagedBy)
+				fieldSeen[internalpolicyhistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldIntegrationRunID)
+				fieldSeen[internalpolicyhistory.FieldIntegrationRunID] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[internalpolicyhistory.FieldOwnerID]; !ok {
@@ -8827,6 +8992,31 @@ func (_q *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, procedurehistory.FieldRevision)
 				fieldSeen[procedurehistory.FieldRevision] = struct{}{}
 			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[procedurehistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldSourceDefinitionID)
+				fieldSeen[procedurehistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[procedurehistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldSourceDefinitionVersion)
+				fieldSeen[procedurehistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[procedurehistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldSourceInstanceID)
+				fieldSeen[procedurehistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[procedurehistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldManagedBy)
+				fieldSeen[procedurehistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[procedurehistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, procedurehistory.FieldIntegrationRunID)
+				fieldSeen[procedurehistory.FieldIntegrationRunID] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[procedurehistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldOwnerID)
@@ -10042,10 +10232,75 @@ func (_q *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, riskhistory.FieldTags)
 				fieldSeen[riskhistory.FieldTags] = struct{}{}
 			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[riskhistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldSourceDefinitionID)
+				fieldSeen[riskhistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[riskhistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldSourceDefinitionVersion)
+				fieldSeen[riskhistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[riskhistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldSourceInstanceID)
+				fieldSeen[riskhistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[riskhistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldManagedBy)
+				fieldSeen[riskhistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[riskhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldIntegrationRunID)
+				fieldSeen[riskhistory.FieldIntegrationRunID] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[riskhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldOwnerID)
 				fieldSeen[riskhistory.FieldOwnerID] = struct{}{}
+			}
+		case "stakeholderName":
+			if _, ok := fieldSeen[riskhistory.FieldStakeholderName]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldStakeholderName)
+				fieldSeen[riskhistory.FieldStakeholderName] = struct{}{}
+			}
+		case "stakeholderUserID":
+			if _, ok := fieldSeen[riskhistory.FieldStakeholderUserID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldStakeholderUserID)
+				fieldSeen[riskhistory.FieldStakeholderUserID] = struct{}{}
+			}
+		case "stakeholderGroupID":
+			if _, ok := fieldSeen[riskhistory.FieldStakeholderGroupID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldStakeholderGroupID)
+				fieldSeen[riskhistory.FieldStakeholderGroupID] = struct{}{}
+			}
+		case "stakeholderIdentityHolderID":
+			if _, ok := fieldSeen[riskhistory.FieldStakeholderIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldStakeholderIdentityHolderID)
+				fieldSeen[riskhistory.FieldStakeholderIdentityHolderID] = struct{}{}
+			}
+		case "delegateName":
+			if _, ok := fieldSeen[riskhistory.FieldDelegateName]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldDelegateName)
+				fieldSeen[riskhistory.FieldDelegateName] = struct{}{}
+			}
+		case "delegateUserID":
+			if _, ok := fieldSeen[riskhistory.FieldDelegateUserID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldDelegateUserID)
+				fieldSeen[riskhistory.FieldDelegateUserID] = struct{}{}
+			}
+		case "delegateGroupID":
+			if _, ok := fieldSeen[riskhistory.FieldDelegateGroupID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldDelegateGroupID)
+				fieldSeen[riskhistory.FieldDelegateGroupID] = struct{}{}
+			}
+		case "delegateIdentityHolderID":
+			if _, ok := fieldSeen[riskhistory.FieldDelegateIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldDelegateIdentityHolderID)
+				fieldSeen[riskhistory.FieldDelegateIdentityHolderID] = struct{}{}
 			}
 		case "riskKindName":
 			if _, ok := fieldSeen[riskhistory.FieldRiskKindName]; !ok {
@@ -14201,10 +14456,55 @@ func (_q *VulnerabilityHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldTags)
 				fieldSeen[vulnerabilityhistory.FieldTags] = struct{}{}
 			}
+		case "sourceDefinitionID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldSourceDefinitionID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldSourceDefinitionID)
+				fieldSeen[vulnerabilityhistory.FieldSourceDefinitionID] = struct{}{}
+			}
+		case "sourceDefinitionVersion":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldSourceDefinitionVersion]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldSourceDefinitionVersion)
+				fieldSeen[vulnerabilityhistory.FieldSourceDefinitionVersion] = struct{}{}
+			}
+		case "sourceInstanceID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldSourceInstanceID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldSourceInstanceID)
+				fieldSeen[vulnerabilityhistory.FieldSourceInstanceID] = struct{}{}
+			}
+		case "managedBy":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldManagedBy]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldManagedBy)
+				fieldSeen[vulnerabilityhistory.FieldManagedBy] = struct{}{}
+			}
+		case "integrationRunID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldIntegrationRunID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldIntegrationRunID)
+				fieldSeen[vulnerabilityhistory.FieldIntegrationRunID] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, vulnerabilityhistory.FieldOwnerID)
 				fieldSeen[vulnerabilityhistory.FieldOwnerID] = struct{}{}
+			}
+		case "internalOwner":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldInternalOwner]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldInternalOwner)
+				fieldSeen[vulnerabilityhistory.FieldInternalOwner] = struct{}{}
+			}
+		case "internalOwnerUserID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldInternalOwnerUserID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldInternalOwnerUserID)
+				fieldSeen[vulnerabilityhistory.FieldInternalOwnerUserID] = struct{}{}
+			}
+		case "internalOwnerGroupID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldInternalOwnerGroupID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldInternalOwnerGroupID)
+				fieldSeen[vulnerabilityhistory.FieldInternalOwnerGroupID] = struct{}{}
+			}
+		case "internalOwnerIdentityHolderID":
+			if _, ok := fieldSeen[vulnerabilityhistory.FieldInternalOwnerIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, vulnerabilityhistory.FieldInternalOwnerIdentityHolderID)
+				fieldSeen[vulnerabilityhistory.FieldInternalOwnerIdentityHolderID] = struct{}{}
 			}
 		case "reviewedBy":
 			if _, ok := fieldSeen[vulnerabilityhistory.FieldReviewedBy]; !ok {

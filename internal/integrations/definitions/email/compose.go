@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -234,6 +235,27 @@ func loadCampaign(ctx context.Context, db *generated.Client, campaignID string, 
 	}
 
 	return camp, nil
+}
+
+// loadCampaignTrustCenter loads the trust center and its setting onto the campaign edges when one is linked
+func loadCampaignTrustCenter(ctx context.Context, db *generated.Client, camp *generated.Campaign) error {
+	if camp.TrustCenterID == nil {
+		return nil
+	}
+
+	tc, err := db.TrustCenter.Query().
+		Where(trustcenter.IDEQ(*camp.TrustCenterID)).
+		WithSetting().
+		Only(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Str("trust_center_id", *camp.TrustCenterID).Msg("failed loading campaign trust center")
+
+		return err
+	}
+
+	camp.Edges.TrustCenter = tc
+
+	return nil
 }
 
 // loadCampaignWithTargets loads a campaign by ID, queries its targets, and filters them

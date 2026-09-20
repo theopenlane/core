@@ -96,6 +96,31 @@ func DisplayID(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldDisplayID, v))
 }
 
+// SourceDefinitionID applies equality check predicate on the "source_definition_id" field. It's identical to SourceDefinitionIDEQ.
+func SourceDefinitionID(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEQ(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionVersion applies equality check predicate on the "source_definition_version" field. It's identical to SourceDefinitionVersionEQ.
+func SourceDefinitionVersion(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEQ(FieldSourceDefinitionVersion, v))
+}
+
+// SourceInstanceID applies equality check predicate on the "source_instance_id" field. It's identical to SourceInstanceIDEQ.
+func SourceInstanceID(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEQ(FieldSourceInstanceID, v))
+}
+
+// ManagedBy applies equality check predicate on the "managed_by" field. It's identical to ManagedByEQ.
+func ManagedBy(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEQ(FieldManagedBy, v))
+}
+
+// IntegrationRunID applies equality check predicate on the "integration_run_id" field. It's identical to IntegrationRunIDEQ.
+func IntegrationRunID(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEQ(FieldIntegrationRunID, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldOwnerID, v))
@@ -131,16 +156,6 @@ func PlatformID(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldPlatformID, v))
 }
 
-// DirectoryInstanceID applies equality check predicate on the "directory_instance_id" field. It's identical to DirectoryInstanceIDEQ.
-func DirectoryInstanceID(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEQ(FieldDirectoryInstanceID, v))
-}
-
-// DirectorySyncRunID applies equality check predicate on the "directory_sync_run_id" field. It's identical to DirectorySyncRunIDEQ.
-func DirectorySyncRunID(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEQ(FieldDirectorySyncRunID, v))
-}
-
 // DirectoryAccountID applies equality check predicate on the "directory_account_id" field. It's identical to DirectoryAccountIDEQ.
 func DirectoryAccountID(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldDirectoryAccountID, v))
@@ -161,16 +176,6 @@ func DirectoryName(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldDirectoryName, v))
 }
 
-// FirstSeenAt applies equality check predicate on the "first_seen_at" field. It's identical to FirstSeenAtEQ.
-func FirstSeenAt(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEQ(FieldFirstSeenAt, v))
-}
-
-// LastSeenAt applies equality check predicate on the "last_seen_at" field. It's identical to LastSeenAtEQ.
-func LastSeenAt(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEQ(FieldLastSeenAt, v))
-}
-
 // AddedAt applies equality check predicate on the "added_at" field. It's identical to AddedAtEQ.
 func AddedAt(v time.Time) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldAddedAt, v))
@@ -184,11 +189,6 @@ func RemovedAt(v time.Time) predicate.DirectoryMembership {
 // ObservedAt applies equality check predicate on the "observed_at" field. It's identical to ObservedAtEQ.
 func ObservedAt(v time.Time) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldObservedAt, v))
-}
-
-// LastConfirmedRunID applies equality check predicate on the "last_confirmed_run_id" field. It's identical to LastConfirmedRunIDEQ.
-func LastConfirmedRunID(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEQ(FieldLastConfirmedRunID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -579,6 +579,381 @@ func DisplayIDEqualFold(v string) predicate.DirectoryMembership {
 // DisplayIDContainsFold applies the ContainsFold predicate on the "display_id" field.
 func DisplayIDContainsFold(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldDisplayID, v))
+}
+
+// SourceDefinitionIDEQ applies the EQ predicate on the "source_definition_id" field.
+func SourceDefinitionIDEQ(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEQ(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDNEQ applies the NEQ predicate on the "source_definition_id" field.
+func SourceDefinitionIDNEQ(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNEQ(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDIn applies the In predicate on the "source_definition_id" field.
+func SourceDefinitionIDIn(vs ...string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldIn(FieldSourceDefinitionID, vs...))
+}
+
+// SourceDefinitionIDNotIn applies the NotIn predicate on the "source_definition_id" field.
+func SourceDefinitionIDNotIn(vs ...string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNotIn(FieldSourceDefinitionID, vs...))
+}
+
+// SourceDefinitionIDGT applies the GT predicate on the "source_definition_id" field.
+func SourceDefinitionIDGT(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldGT(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDGTE applies the GTE predicate on the "source_definition_id" field.
+func SourceDefinitionIDGTE(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldGTE(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDLT applies the LT predicate on the "source_definition_id" field.
+func SourceDefinitionIDLT(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldLT(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDLTE applies the LTE predicate on the "source_definition_id" field.
+func SourceDefinitionIDLTE(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldLTE(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDContains applies the Contains predicate on the "source_definition_id" field.
+func SourceDefinitionIDContains(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldContains(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDHasPrefix applies the HasPrefix predicate on the "source_definition_id" field.
+func SourceDefinitionIDHasPrefix(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldHasPrefix(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDHasSuffix applies the HasSuffix predicate on the "source_definition_id" field.
+func SourceDefinitionIDHasSuffix(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldHasSuffix(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDIsNil applies the IsNil predicate on the "source_definition_id" field.
+func SourceDefinitionIDIsNil() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldIsNull(FieldSourceDefinitionID))
+}
+
+// SourceDefinitionIDNotNil applies the NotNil predicate on the "source_definition_id" field.
+func SourceDefinitionIDNotNil() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNotNull(FieldSourceDefinitionID))
+}
+
+// SourceDefinitionIDEqualFold applies the EqualFold predicate on the "source_definition_id" field.
+func SourceDefinitionIDEqualFold(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEqualFold(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionIDContainsFold applies the ContainsFold predicate on the "source_definition_id" field.
+func SourceDefinitionIDContainsFold(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldSourceDefinitionID, v))
+}
+
+// SourceDefinitionVersionEQ applies the EQ predicate on the "source_definition_version" field.
+func SourceDefinitionVersionEQ(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEQ(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionNEQ applies the NEQ predicate on the "source_definition_version" field.
+func SourceDefinitionVersionNEQ(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNEQ(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionIn applies the In predicate on the "source_definition_version" field.
+func SourceDefinitionVersionIn(vs ...string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldIn(FieldSourceDefinitionVersion, vs...))
+}
+
+// SourceDefinitionVersionNotIn applies the NotIn predicate on the "source_definition_version" field.
+func SourceDefinitionVersionNotIn(vs ...string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNotIn(FieldSourceDefinitionVersion, vs...))
+}
+
+// SourceDefinitionVersionGT applies the GT predicate on the "source_definition_version" field.
+func SourceDefinitionVersionGT(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldGT(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionGTE applies the GTE predicate on the "source_definition_version" field.
+func SourceDefinitionVersionGTE(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldGTE(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionLT applies the LT predicate on the "source_definition_version" field.
+func SourceDefinitionVersionLT(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldLT(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionLTE applies the LTE predicate on the "source_definition_version" field.
+func SourceDefinitionVersionLTE(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldLTE(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionContains applies the Contains predicate on the "source_definition_version" field.
+func SourceDefinitionVersionContains(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldContains(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionHasPrefix applies the HasPrefix predicate on the "source_definition_version" field.
+func SourceDefinitionVersionHasPrefix(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldHasPrefix(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionHasSuffix applies the HasSuffix predicate on the "source_definition_version" field.
+func SourceDefinitionVersionHasSuffix(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldHasSuffix(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionIsNil applies the IsNil predicate on the "source_definition_version" field.
+func SourceDefinitionVersionIsNil() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldIsNull(FieldSourceDefinitionVersion))
+}
+
+// SourceDefinitionVersionNotNil applies the NotNil predicate on the "source_definition_version" field.
+func SourceDefinitionVersionNotNil() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNotNull(FieldSourceDefinitionVersion))
+}
+
+// SourceDefinitionVersionEqualFold applies the EqualFold predicate on the "source_definition_version" field.
+func SourceDefinitionVersionEqualFold(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEqualFold(FieldSourceDefinitionVersion, v))
+}
+
+// SourceDefinitionVersionContainsFold applies the ContainsFold predicate on the "source_definition_version" field.
+func SourceDefinitionVersionContainsFold(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldSourceDefinitionVersion, v))
+}
+
+// SourceInstanceIDEQ applies the EQ predicate on the "source_instance_id" field.
+func SourceInstanceIDEQ(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEQ(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDNEQ applies the NEQ predicate on the "source_instance_id" field.
+func SourceInstanceIDNEQ(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNEQ(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDIn applies the In predicate on the "source_instance_id" field.
+func SourceInstanceIDIn(vs ...string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldIn(FieldSourceInstanceID, vs...))
+}
+
+// SourceInstanceIDNotIn applies the NotIn predicate on the "source_instance_id" field.
+func SourceInstanceIDNotIn(vs ...string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNotIn(FieldSourceInstanceID, vs...))
+}
+
+// SourceInstanceIDGT applies the GT predicate on the "source_instance_id" field.
+func SourceInstanceIDGT(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldGT(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDGTE applies the GTE predicate on the "source_instance_id" field.
+func SourceInstanceIDGTE(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldGTE(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDLT applies the LT predicate on the "source_instance_id" field.
+func SourceInstanceIDLT(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldLT(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDLTE applies the LTE predicate on the "source_instance_id" field.
+func SourceInstanceIDLTE(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldLTE(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDContains applies the Contains predicate on the "source_instance_id" field.
+func SourceInstanceIDContains(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldContains(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDHasPrefix applies the HasPrefix predicate on the "source_instance_id" field.
+func SourceInstanceIDHasPrefix(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldHasPrefix(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDHasSuffix applies the HasSuffix predicate on the "source_instance_id" field.
+func SourceInstanceIDHasSuffix(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldHasSuffix(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDIsNil applies the IsNil predicate on the "source_instance_id" field.
+func SourceInstanceIDIsNil() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldIsNull(FieldSourceInstanceID))
+}
+
+// SourceInstanceIDNotNil applies the NotNil predicate on the "source_instance_id" field.
+func SourceInstanceIDNotNil() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNotNull(FieldSourceInstanceID))
+}
+
+// SourceInstanceIDEqualFold applies the EqualFold predicate on the "source_instance_id" field.
+func SourceInstanceIDEqualFold(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEqualFold(FieldSourceInstanceID, v))
+}
+
+// SourceInstanceIDContainsFold applies the ContainsFold predicate on the "source_instance_id" field.
+func SourceInstanceIDContainsFold(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldSourceInstanceID, v))
+}
+
+// ManagedByEQ applies the EQ predicate on the "managed_by" field.
+func ManagedByEQ(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEQ(FieldManagedBy, v))
+}
+
+// ManagedByNEQ applies the NEQ predicate on the "managed_by" field.
+func ManagedByNEQ(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNEQ(FieldManagedBy, v))
+}
+
+// ManagedByIn applies the In predicate on the "managed_by" field.
+func ManagedByIn(vs ...string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldIn(FieldManagedBy, vs...))
+}
+
+// ManagedByNotIn applies the NotIn predicate on the "managed_by" field.
+func ManagedByNotIn(vs ...string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNotIn(FieldManagedBy, vs...))
+}
+
+// ManagedByGT applies the GT predicate on the "managed_by" field.
+func ManagedByGT(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldGT(FieldManagedBy, v))
+}
+
+// ManagedByGTE applies the GTE predicate on the "managed_by" field.
+func ManagedByGTE(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldGTE(FieldManagedBy, v))
+}
+
+// ManagedByLT applies the LT predicate on the "managed_by" field.
+func ManagedByLT(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldLT(FieldManagedBy, v))
+}
+
+// ManagedByLTE applies the LTE predicate on the "managed_by" field.
+func ManagedByLTE(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldLTE(FieldManagedBy, v))
+}
+
+// ManagedByContains applies the Contains predicate on the "managed_by" field.
+func ManagedByContains(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldContains(FieldManagedBy, v))
+}
+
+// ManagedByHasPrefix applies the HasPrefix predicate on the "managed_by" field.
+func ManagedByHasPrefix(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldHasPrefix(FieldManagedBy, v))
+}
+
+// ManagedByHasSuffix applies the HasSuffix predicate on the "managed_by" field.
+func ManagedByHasSuffix(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldHasSuffix(FieldManagedBy, v))
+}
+
+// ManagedByIsNil applies the IsNil predicate on the "managed_by" field.
+func ManagedByIsNil() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldIsNull(FieldManagedBy))
+}
+
+// ManagedByNotNil applies the NotNil predicate on the "managed_by" field.
+func ManagedByNotNil() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNotNull(FieldManagedBy))
+}
+
+// ManagedByEqualFold applies the EqualFold predicate on the "managed_by" field.
+func ManagedByEqualFold(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEqualFold(FieldManagedBy, v))
+}
+
+// ManagedByContainsFold applies the ContainsFold predicate on the "managed_by" field.
+func ManagedByContainsFold(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldManagedBy, v))
+}
+
+// IntegrationRunIDEQ applies the EQ predicate on the "integration_run_id" field.
+func IntegrationRunIDEQ(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEQ(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDNEQ applies the NEQ predicate on the "integration_run_id" field.
+func IntegrationRunIDNEQ(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNEQ(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDIn applies the In predicate on the "integration_run_id" field.
+func IntegrationRunIDIn(vs ...string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldIn(FieldIntegrationRunID, vs...))
+}
+
+// IntegrationRunIDNotIn applies the NotIn predicate on the "integration_run_id" field.
+func IntegrationRunIDNotIn(vs ...string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNotIn(FieldIntegrationRunID, vs...))
+}
+
+// IntegrationRunIDGT applies the GT predicate on the "integration_run_id" field.
+func IntegrationRunIDGT(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldGT(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDGTE applies the GTE predicate on the "integration_run_id" field.
+func IntegrationRunIDGTE(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldGTE(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDLT applies the LT predicate on the "integration_run_id" field.
+func IntegrationRunIDLT(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldLT(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDLTE applies the LTE predicate on the "integration_run_id" field.
+func IntegrationRunIDLTE(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldLTE(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDContains applies the Contains predicate on the "integration_run_id" field.
+func IntegrationRunIDContains(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldContains(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDHasPrefix applies the HasPrefix predicate on the "integration_run_id" field.
+func IntegrationRunIDHasPrefix(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldHasPrefix(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDHasSuffix applies the HasSuffix predicate on the "integration_run_id" field.
+func IntegrationRunIDHasSuffix(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldHasSuffix(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDIsNil applies the IsNil predicate on the "integration_run_id" field.
+func IntegrationRunIDIsNil() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldIsNull(FieldIntegrationRunID))
+}
+
+// IntegrationRunIDNotNil applies the NotNil predicate on the "integration_run_id" field.
+func IntegrationRunIDNotNil() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldNotNull(FieldIntegrationRunID))
+}
+
+// IntegrationRunIDEqualFold applies the EqualFold predicate on the "integration_run_id" field.
+func IntegrationRunIDEqualFold(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldEqualFold(FieldIntegrationRunID, v))
+}
+
+// IntegrationRunIDContainsFold applies the ContainsFold predicate on the "integration_run_id" field.
+func IntegrationRunIDContainsFold(v string) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldIntegrationRunID, v))
 }
 
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
@@ -1096,146 +1471,6 @@ func PlatformIDContainsFold(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldPlatformID, v))
 }
 
-// DirectoryInstanceIDEQ applies the EQ predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDEQ(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEQ(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDNEQ applies the NEQ predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDNEQ(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNEQ(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDIn applies the In predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDIn(vs ...string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldIn(FieldDirectoryInstanceID, vs...))
-}
-
-// DirectoryInstanceIDNotIn applies the NotIn predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDNotIn(vs ...string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNotIn(FieldDirectoryInstanceID, vs...))
-}
-
-// DirectoryInstanceIDGT applies the GT predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDGT(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldGT(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDGTE applies the GTE predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDGTE(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldGTE(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDLT applies the LT predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDLT(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldLT(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDLTE applies the LTE predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDLTE(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldLTE(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDContains applies the Contains predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDContains(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldContains(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDHasPrefix applies the HasPrefix predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDHasPrefix(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldHasPrefix(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDHasSuffix applies the HasSuffix predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDHasSuffix(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldHasSuffix(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDIsNil applies the IsNil predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDIsNil() predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldIsNull(FieldDirectoryInstanceID))
-}
-
-// DirectoryInstanceIDNotNil applies the NotNil predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDNotNil() predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNotNull(FieldDirectoryInstanceID))
-}
-
-// DirectoryInstanceIDEqualFold applies the EqualFold predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDEqualFold(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEqualFold(FieldDirectoryInstanceID, v))
-}
-
-// DirectoryInstanceIDContainsFold applies the ContainsFold predicate on the "directory_instance_id" field.
-func DirectoryInstanceIDContainsFold(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldDirectoryInstanceID, v))
-}
-
-// DirectorySyncRunIDEQ applies the EQ predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDEQ(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEQ(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDNEQ applies the NEQ predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDNEQ(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNEQ(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDIn applies the In predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDIn(vs ...string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldIn(FieldDirectorySyncRunID, vs...))
-}
-
-// DirectorySyncRunIDNotIn applies the NotIn predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDNotIn(vs ...string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNotIn(FieldDirectorySyncRunID, vs...))
-}
-
-// DirectorySyncRunIDGT applies the GT predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDGT(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldGT(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDGTE applies the GTE predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDGTE(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldGTE(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDLT applies the LT predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDLT(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldLT(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDLTE applies the LTE predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDLTE(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldLTE(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDContains applies the Contains predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDContains(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldContains(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDHasPrefix applies the HasPrefix predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDHasPrefix(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldHasPrefix(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDHasSuffix applies the HasSuffix predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDHasSuffix(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldHasSuffix(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDEqualFold applies the EqualFold predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDEqualFold(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEqualFold(FieldDirectorySyncRunID, v))
-}
-
-// DirectorySyncRunIDContainsFold applies the ContainsFold predicate on the "directory_sync_run_id" field.
-func DirectorySyncRunIDContainsFold(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldDirectorySyncRunID, v))
-}
-
 // DirectoryAccountIDEQ applies the EQ predicate on the "directory_account_id" field.
 func DirectoryAccountIDEQ(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldDirectoryAccountID, v))
@@ -1556,106 +1791,6 @@ func DirectoryNameContainsFold(v string) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldDirectoryName, v))
 }
 
-// FirstSeenAtEQ applies the EQ predicate on the "first_seen_at" field.
-func FirstSeenAtEQ(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEQ(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtNEQ applies the NEQ predicate on the "first_seen_at" field.
-func FirstSeenAtNEQ(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNEQ(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtIn applies the In predicate on the "first_seen_at" field.
-func FirstSeenAtIn(vs ...time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldIn(FieldFirstSeenAt, vs...))
-}
-
-// FirstSeenAtNotIn applies the NotIn predicate on the "first_seen_at" field.
-func FirstSeenAtNotIn(vs ...time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNotIn(FieldFirstSeenAt, vs...))
-}
-
-// FirstSeenAtGT applies the GT predicate on the "first_seen_at" field.
-func FirstSeenAtGT(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldGT(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtGTE applies the GTE predicate on the "first_seen_at" field.
-func FirstSeenAtGTE(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldGTE(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtLT applies the LT predicate on the "first_seen_at" field.
-func FirstSeenAtLT(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldLT(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtLTE applies the LTE predicate on the "first_seen_at" field.
-func FirstSeenAtLTE(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldLTE(FieldFirstSeenAt, v))
-}
-
-// FirstSeenAtIsNil applies the IsNil predicate on the "first_seen_at" field.
-func FirstSeenAtIsNil() predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldIsNull(FieldFirstSeenAt))
-}
-
-// FirstSeenAtNotNil applies the NotNil predicate on the "first_seen_at" field.
-func FirstSeenAtNotNil() predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNotNull(FieldFirstSeenAt))
-}
-
-// LastSeenAtEQ applies the EQ predicate on the "last_seen_at" field.
-func LastSeenAtEQ(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEQ(FieldLastSeenAt, v))
-}
-
-// LastSeenAtNEQ applies the NEQ predicate on the "last_seen_at" field.
-func LastSeenAtNEQ(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNEQ(FieldLastSeenAt, v))
-}
-
-// LastSeenAtIn applies the In predicate on the "last_seen_at" field.
-func LastSeenAtIn(vs ...time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldIn(FieldLastSeenAt, vs...))
-}
-
-// LastSeenAtNotIn applies the NotIn predicate on the "last_seen_at" field.
-func LastSeenAtNotIn(vs ...time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNotIn(FieldLastSeenAt, vs...))
-}
-
-// LastSeenAtGT applies the GT predicate on the "last_seen_at" field.
-func LastSeenAtGT(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldGT(FieldLastSeenAt, v))
-}
-
-// LastSeenAtGTE applies the GTE predicate on the "last_seen_at" field.
-func LastSeenAtGTE(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldGTE(FieldLastSeenAt, v))
-}
-
-// LastSeenAtLT applies the LT predicate on the "last_seen_at" field.
-func LastSeenAtLT(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldLT(FieldLastSeenAt, v))
-}
-
-// LastSeenAtLTE applies the LTE predicate on the "last_seen_at" field.
-func LastSeenAtLTE(v time.Time) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldLTE(FieldLastSeenAt, v))
-}
-
-// LastSeenAtIsNil applies the IsNil predicate on the "last_seen_at" field.
-func LastSeenAtIsNil() predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldIsNull(FieldLastSeenAt))
-}
-
-// LastSeenAtNotNil applies the NotNil predicate on the "last_seen_at" field.
-func LastSeenAtNotNil() predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNotNull(FieldLastSeenAt))
-}
-
 // AddedAtEQ applies the EQ predicate on the "added_at" field.
 func AddedAtEQ(v time.Time) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldEQ(FieldAddedAt, v))
@@ -1796,81 +1931,6 @@ func ObservedAtLTE(v time.Time) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldLTE(FieldObservedAt, v))
 }
 
-// LastConfirmedRunIDEQ applies the EQ predicate on the "last_confirmed_run_id" field.
-func LastConfirmedRunIDEQ(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEQ(FieldLastConfirmedRunID, v))
-}
-
-// LastConfirmedRunIDNEQ applies the NEQ predicate on the "last_confirmed_run_id" field.
-func LastConfirmedRunIDNEQ(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNEQ(FieldLastConfirmedRunID, v))
-}
-
-// LastConfirmedRunIDIn applies the In predicate on the "last_confirmed_run_id" field.
-func LastConfirmedRunIDIn(vs ...string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldIn(FieldLastConfirmedRunID, vs...))
-}
-
-// LastConfirmedRunIDNotIn applies the NotIn predicate on the "last_confirmed_run_id" field.
-func LastConfirmedRunIDNotIn(vs ...string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNotIn(FieldLastConfirmedRunID, vs...))
-}
-
-// LastConfirmedRunIDGT applies the GT predicate on the "last_confirmed_run_id" field.
-func LastConfirmedRunIDGT(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldGT(FieldLastConfirmedRunID, v))
-}
-
-// LastConfirmedRunIDGTE applies the GTE predicate on the "last_confirmed_run_id" field.
-func LastConfirmedRunIDGTE(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldGTE(FieldLastConfirmedRunID, v))
-}
-
-// LastConfirmedRunIDLT applies the LT predicate on the "last_confirmed_run_id" field.
-func LastConfirmedRunIDLT(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldLT(FieldLastConfirmedRunID, v))
-}
-
-// LastConfirmedRunIDLTE applies the LTE predicate on the "last_confirmed_run_id" field.
-func LastConfirmedRunIDLTE(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldLTE(FieldLastConfirmedRunID, v))
-}
-
-// LastConfirmedRunIDContains applies the Contains predicate on the "last_confirmed_run_id" field.
-func LastConfirmedRunIDContains(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldContains(FieldLastConfirmedRunID, v))
-}
-
-// LastConfirmedRunIDHasPrefix applies the HasPrefix predicate on the "last_confirmed_run_id" field.
-func LastConfirmedRunIDHasPrefix(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldHasPrefix(FieldLastConfirmedRunID, v))
-}
-
-// LastConfirmedRunIDHasSuffix applies the HasSuffix predicate on the "last_confirmed_run_id" field.
-func LastConfirmedRunIDHasSuffix(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldHasSuffix(FieldLastConfirmedRunID, v))
-}
-
-// LastConfirmedRunIDIsNil applies the IsNil predicate on the "last_confirmed_run_id" field.
-func LastConfirmedRunIDIsNil() predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldIsNull(FieldLastConfirmedRunID))
-}
-
-// LastConfirmedRunIDNotNil applies the NotNil predicate on the "last_confirmed_run_id" field.
-func LastConfirmedRunIDNotNil() predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldNotNull(FieldLastConfirmedRunID))
-}
-
-// LastConfirmedRunIDEqualFold applies the EqualFold predicate on the "last_confirmed_run_id" field.
-func LastConfirmedRunIDEqualFold(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldEqualFold(FieldLastConfirmedRunID, v))
-}
-
-// LastConfirmedRunIDContainsFold applies the ContainsFold predicate on the "last_confirmed_run_id" field.
-func LastConfirmedRunIDContainsFold(v string) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(sql.FieldContainsFold(FieldLastConfirmedRunID, v))
-}
-
 // MetadataIsNil applies the IsNil predicate on the "metadata" field.
 func MetadataIsNil() predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldIsNull(FieldMetadata))
@@ -1879,6 +1939,29 @@ func MetadataIsNil() predicate.DirectoryMembership {
 // MetadataNotNil applies the NotNil predicate on the "metadata" field.
 func MetadataNotNil() predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(sql.FieldNotNull(FieldMetadata))
+}
+
+// HasIntegrationRuns applies the HasEdge predicate on the "integration_runs" edge.
+func HasIntegrationRuns() predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, IntegrationRunsTable, IntegrationRunsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIntegrationRunsWith applies the HasEdge predicate on the "integration_runs" edge with a given conditions (other predicates).
+func HasIntegrationRunsWith(preds ...predicate.IntegrationRun) predicate.DirectoryMembership {
+	return predicate.DirectoryMembership(func(s *sql.Selector) {
+		step := newIntegrationRunsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.
@@ -1965,29 +2048,6 @@ func HasIntegration() predicate.DirectoryMembership {
 func HasIntegrationWith(preds ...predicate.Integration) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(func(s *sql.Selector) {
 		step := newIntegrationStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasDirectorySyncRun applies the HasEdge predicate on the "directory_sync_run" edge.
-func HasDirectorySyncRun() predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, DirectorySyncRunTable, DirectorySyncRunColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasDirectorySyncRunWith applies the HasEdge predicate on the "directory_sync_run" edge with a given conditions (other predicates).
-func HasDirectorySyncRunWith(preds ...predicate.DirectorySyncRun) predicate.DirectoryMembership {
-	return predicate.DirectoryMembership(func(s *sql.Selector) {
-		step := newDirectorySyncRunStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

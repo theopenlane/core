@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
@@ -58,10 +59,9 @@ func HookRisks() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			// default the due date based on sla config, allow to be updated manually
+			// default the due date based on sla config, continue anyways, this should be best effort
 			if err := setDueDateBasedOnSLAConfig(ctx, m); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed to set due date based on SLA config")
-				return nil, err
 			}
 
 			retVal, err := next.Mutate(ctx, m)
@@ -233,6 +233,12 @@ func setStatusBasedOnRemediation(ctx context.Context, m *generated.RiskMutation)
 
 // setDueDateBasedOnSLAConfig sets the next review due date based on the SLA config for the risk, if the due date is not already set or being updated
 func setDueDateBasedOnSLAConfig(ctx context.Context, m *generated.RiskMutation) error {
+	// return early and skip extra db queries if no new impact value in the mutation
+	impact, ok := m.Impact()
+	if !ok {
+		return nil
+	}
+
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
 		return err
@@ -245,11 +251,6 @@ func setDueDateBasedOnSLAConfig(ctx context.Context, m *generated.RiskMutation) 
 		All(rule.WithInternalContext(ctx))
 	if err != nil {
 		return err
-	}
-
-	impact, ok := m.Impact()
-	if !ok {
-		return nil
 	}
 
 	for _, sla := range slaConfig {

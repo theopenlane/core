@@ -13,6 +13,24 @@ type IntegrationHealth struct {
 	UnhealthyOperations map[string]string `json:"unhealthyOperations,omitempty"`
 	// LastSuccessfulHealthCheck is when the connection health check last passed
 	LastSuccessfulHealthCheck *time.Time `json:"lastSuccessfulHealthCheck,omitempty"`
+	// FailedRecords tracks ingest records a batched run could not persist, so later batched runs
+	// stop requeuing them while they keep failing
+	FailedRecords []FailedRecord `json:"failedRecords,omitempty"`
+}
+
+// FailedRecord is one ingest record a batched run could not persist, tracked so later batched runs
+// stop requeuing it while it keeps failing
+type FailedRecord struct {
+	// Schema is the entityops schema name of the record
+	Schema string `json:"schema"`
+	// Key is the record's lookup key values in declared field order, joined by keyJoin (unexported const "\x1f")
+	Key string `json:"key"`
+	// RunID is the integration run that first recorded the failure
+	RunID string `json:"runId"`
+	// Attempts counts batched runs that failed the record since it was recorded
+	Attempts int `json:"attempts"`
+	// LastError is the most recent failure text
+	LastError string `json:"lastError"`
 }
 
 // MarshalGQL implement the Marshaler interface for gqlgen

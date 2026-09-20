@@ -28,7 +28,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
@@ -47,6 +46,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
@@ -209,11 +209,6 @@ var directorymembershipImplementors = []string{"DirectoryMembership", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*DirectoryMembership) IsNode() {}
 
-var directorysyncrunImplementors = []string{"DirectorySyncRun", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*DirectorySyncRun) IsNode() {}
-
 var discussionImplementors = []string{"Discussion", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -298,6 +293,11 @@ var integrationImplementors = []string{"Integration", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Integration) IsNode() {}
+
+var integrationrunImplementors = []string{"IntegrationRun", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*IntegrationRun) IsNode() {}
 
 var internalpolicyImplementors = []string{"InternalPolicy", "Node"}
 
@@ -812,15 +812,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
-	case directorysyncrun.Table:
-		query := c.DirectorySyncRun.Query().
-			Where(directorysyncrun.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, directorysyncrunImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
 	case discussion.Table:
 		query := c.Discussion.Query().
 			Where(discussion.ID(id))
@@ -970,6 +961,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(integration.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, integrationImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case integrationrun.Table:
+		query := c.IntegrationRun.Query().
+			Where(integrationrun.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, integrationrunImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1862,22 +1862,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
-	case directorysyncrun.Table:
-		query := c.DirectorySyncRun.Query().
-			Where(directorysyncrun.IDIn(ids...))
-		query, err := query.CollectFields(ctx, directorysyncrunImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
 	case discussion.Table:
 		query := c.Discussion.Query().
 			Where(discussion.IDIn(ids...))
@@ -2138,6 +2122,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.Integration.Query().
 			Where(integration.IDIn(ids...))
 		query, err := query.CollectFields(ctx, integrationImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case integrationrun.Table:
+		query := c.IntegrationRun.Query().
+			Where(integrationrun.IDIn(ids...))
+		query, err := query.CollectFields(ctx, integrationrunImplementors...)
 		if err != nil {
 			return nil, err
 		}

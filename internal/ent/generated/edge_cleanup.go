@@ -26,7 +26,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
@@ -276,12 +275,6 @@ func DirectoryGroupEdgeCleanup(ctx context.Context, id string) error {
 
 func DirectoryMembershipEdgeCleanup(ctx context.Context, id string) error {
 	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorymembership edge")))
-
-	return nil
-}
-
-func DirectorySyncRunEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorysyncrun edge")))
 
 	return nil
 }
@@ -2215,26 +2208,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).DirectoryMembership.Query().Where((directorymembership.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if directorymembershipCount, err := FromContext(ctx).DirectoryMembership.Delete().Where(directorymembership.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", directorymembershipCount).Msg("error deleting directorymembership")
-			return err
-		}
-	}
-
-	{
-		ids, err := FromContext(ctx).DirectorySyncRun.Query().Where(directorysyncrun.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying directorysyncrun ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := DirectorySyncRunEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up directorysyncrun edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).DirectorySyncRun.Query().Where((directorysyncrun.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if directorysyncrunCount, err := FromContext(ctx).DirectorySyncRun.Delete().Where(directorysyncrun.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", directorysyncrunCount).Msg("error deleting directorysyncrun")
 			return err
 		}
 	}
