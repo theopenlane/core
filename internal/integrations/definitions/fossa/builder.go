@@ -37,13 +37,16 @@ func Builder() registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       fossaCredential.ID(),
-					Name:                "FOSSA API Token",
-					Description:         "Configure FOSSA access using a full API token from a service account (Account Settings, Integrations, API Service Accounts) whose role can view issues.",
-					CredentialRefs:      []types.CredentialSlotID{fossaCredential.ID()},
-					ClientRefs:          []types.ClientID{fossaClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  fossaCredential.ID(),
+					Name:           "FOSSA API Token",
+					Description:    "Configure FOSSA access using a full API token from a service account (Account Settings, Integrations, API Service Accounts) whose role can view issues.",
+					CredentialRefs: []types.CredentialSlotID{fossaCredential.ID()},
+					ClientRefs:     []types.ClientID{fossaClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: fossaClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: fossaCredential.ID(),
 						Description:   "Removes the stored FOSSA API token from Openlane. If the token is no longer needed, revoke it from your FOSSA account settings.",
@@ -59,15 +62,6 @@ func Builder() registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Validate FOSSA access",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:    fossaClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					Handle:       HealthCheck{}.Handle(),
-					ConfigSchema: healthCheckSchema,
-				},
 				{
 					Name:         vulnerabilitySyncOperation.Name(),
 					Description:  "Collect FOSSA security vulnerabilities, and optionally OSS license compliance findings",

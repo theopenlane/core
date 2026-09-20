@@ -14,8 +14,6 @@ var (
 	fossaSchema, fossaCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// fossaClient is the client ref for the FOSSA REST API client used by this definition
 	fossaClient = types.NewClientRef[*APIClient]()
-	// healthCheckSchema is the operation schema for the FOSSA health check operation
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// vulnerabilitySyncSchema is the operation schema for the FOSSA vulnerability sync operation
 	vulnerabilitySyncSchema, vulnerabilitySyncOperation = providerkit.OperationSchema[VulnerabilitySync]()
 )
