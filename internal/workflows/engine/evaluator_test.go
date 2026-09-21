@@ -197,12 +197,24 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitions() {
 
 	wfEngine := s.Engine()
 
-	obj := &workflows.Object{ID: "test123", Type: enums.WorkflowObjectTypeControl}
-	unknownObj := &workflows.Object{ID: "test123", Type: enums.WorkflowObjectType("NonexistentType")}
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-MATCH-" + ulid.Make().String()).
+		SetOwnerID(orgID).
+		Save(userCtx)
+	s.Require().NoError(err)
+
+	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
+	unknownObj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectType("NonexistentType")}
 
 	s.Run("no matching definitions", func() {
-		defs, err := wfEngine.FindMatchingDefinitions(userCtx, "NonexistentType", "UPDATE", []string{"status"}, nil, nil, nil, nil, unknownObj)
+		defs, err := wfEngine.FindMatchingDefinitions(userCtx, "NonexistentType", "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
 		s.NoError(err)
+		s.Empty(defs)
+	})
+
+	s.Run("unsupported object type", func() {
+		defs, err := wfEngine.FindMatchingDefinitions(userCtx, "NonexistentType", "UPDATE", []string{"status"}, nil, nil, nil, nil, unknownObj)
+		s.ErrorIs(err, workflows.ErrUnsupportedObjectType)
 		s.Empty(defs)
 	})
 
@@ -253,14 +265,19 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 	)
 	defer s.ClearWorkflowDefinitionsForOrg(orgID)
 
-	obj := &workflows.Object{ID: "auth-context-test", Type: enums.WorkflowObjectTypeControl}
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-AUTH-" + ulid.Make().String()).
+		SetOwnerID(orgID).
+		Save(userCtx)
+	s.Require().NoError(err)
+
+	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 	otherOrgID := ulid.Make().String()
 	apiTokenSubjectID := ulid.Make().String()
 
 	testCases := []struct {
-		name      string
-		caller    *auth.Caller
-		expectErr bool
+		name   string
+		caller *auth.Caller
 	}{
 		{
 			name: "jwt with selected organization",
@@ -295,7 +312,6 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 				OrganizationIDs:    []string{orgID, otherOrgID},
 				AuthenticationType: auth.PATAuthentication,
 			},
-			expectErr: true,
 		},
 		{
 			name: "pat with empty authorized organizations and no selected organization",
@@ -304,7 +320,6 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 				OrganizationIDs:    []string{},
 				AuthenticationType: auth.PATAuthentication,
 			},
-			expectErr: true,
 		},
 		{
 			name: "api token with selected organization",
@@ -324,9 +339,8 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 			},
 		},
 		{
-			name:      "missing authenticated user",
-			caller:    nil,
-			expectErr: true,
+			name:   "missing authenticated user",
+			caller: nil,
 		},
 	}
 
@@ -339,11 +353,6 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsAuthContextPermutat
 			ctx = generated.NewContext(ctx, s.client)
 
 			defs, err := wfEngine.FindMatchingDefinitions(ctx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, obj)
-			if tc.expectErr {
-				s.Error(err)
-				return
-			}
-
 			s.NoError(err)
 			s.Len(defs, 1)
 			s.Equal(def.ID, defs[0].ID)
@@ -417,7 +426,13 @@ func (s *WorkflowEngineTestSuite) TestFindMatchingDefinitionsSelectors() {
 	s.NoError(err)
 	s.Len(defs, 1)
 
-	otherObj := &workflows.Object{ID: "missing", Type: enums.WorkflowObjectTypeProcedure}
+	procedure, err := s.client.Procedure.Create().
+		SetName("Procedure " + ulid.Make().String()).
+		SetOwnerID(orgID).
+		Save(seedCtx)
+	s.Require().NoError(err)
+
+	otherObj := &workflows.Object{ID: procedure.ID, Type: enums.WorkflowObjectTypeProcedure}
 	defs, err = wfEngine.FindMatchingDefinitions(userCtx, def.SchemaType, "UPDATE", []string{"status"}, nil, nil, nil, nil, otherObj)
 	s.NoError(err)
 	s.Empty(defs)
@@ -520,7 +535,13 @@ func (s *WorkflowEngineTestSuite) TestPrefilterBehavior() {
 	_, orgID, userCtx := s.SetupTestUser()
 	wfEngine := s.Engine()
 
-	obj := &workflows.Object{ID: "test123", Type: enums.WorkflowObjectTypeControl}
+	control, err := s.client.Control.Create().
+		SetRefCode("CTL-PREFILTER-" + ulid.Make().String()).
+		SetOwnerID(orgID).
+		Save(userCtx)
+	s.Require().NoError(err)
+
+	obj := &workflows.Object{ID: control.ID, Type: enums.WorkflowObjectTypeControl}
 
 	s.Run("prefilter by operation - UPDATE only", func() {
 		def := s.CreateTestWorkflowDefinitionWithPrefilter(userCtx, orgID,
