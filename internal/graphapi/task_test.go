@@ -443,12 +443,39 @@ func TestTaskNotifications(t *testing.T) {
 	waitForNotification(originalAssignee.UserCtx, originalAssignee.ID, 1)
 	assert.Equal(t, calculateNotificationCount(nextAssignee.UserCtx, nextAssignee.ID), 0)
 
+	var taskInReviewID string
+
+	for _, status := range []enums.TaskStatus{enums.TaskStatusInProgress, enums.TaskStatusInReview} {
+		newTask, err := suite.Client.API.CreateTask(owner.UserCtx, testclient.CreateTaskInput{
+			Title:      "Test with status apart from open",
+			Details:    lo.ToPtr("Verify active task assignment notifications"),
+			Status:     &status,
+			AssigneeID: &originalAssignee.ID,
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, newTask != nil)
+
+		if status == enums.TaskStatusInReview {
+			taskInReviewID = newTask.CreateTask.Task.ID
+		}
+
+	}
+	waitForNotification(originalAssignee.UserCtx, originalAssignee.ID, 3)
+
+	// if a task that is in review gets reassigned without passing in the status, the new assignee must get a new notification too
+	_, err = suite.Client.API.UpdateTask(owner.UserCtx, taskInReviewID, testclient.UpdateTaskInput{
+		AssigneeID: &nextAssignee.ID,
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, calculateNotificationCount(originalAssignee.UserCtx, originalAssignee.ID), 3)
+	waitForNotification(nextAssignee.UserCtx, nextAssignee.ID, 1)
+
 	// updating fields should not create another notification for the assignee.
 	_, err = suite.Client.API.UpdateTask(owner.UserCtx, taskID, testclient.UpdateTaskInput{
 		Details: lo.ToPtr("Updated task details to check notifications"),
 	})
 	assert.NilError(t, err)
-	assert.Equal(t, calculateNotificationCount(originalAssignee.UserCtx, originalAssignee.ID), 1)
+	assert.Equal(t, calculateNotificationCount(originalAssignee.UserCtx, originalAssignee.ID), 3)
 
 	// even status changes should not create another notification.
 	for _, status := range []enums.TaskStatus{enums.TaskStatusInProgress, enums.TaskStatusOpen} {
@@ -456,7 +483,7 @@ func TestTaskNotifications(t *testing.T) {
 			Status: &status,
 		})
 		assert.NilError(t, err)
-		assert.Equal(t, calculateNotificationCount(originalAssignee.UserCtx, originalAssignee.ID), 1)
+		assert.Equal(t, calculateNotificationCount(originalAssignee.UserCtx, originalAssignee.ID), 3)
 	}
 
 	// but reassigning to a new user should make notify the new assignee.
@@ -466,8 +493,8 @@ func TestTaskNotifications(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
-	assert.Equal(t, calculateNotificationCount(originalAssignee.UserCtx, originalAssignee.ID), 1)
-	waitForNotification(nextAssignee.UserCtx, nextAssignee.ID, 1)
+	assert.Equal(t, calculateNotificationCount(originalAssignee.UserCtx, originalAssignee.ID), 3)
+	waitForNotification(nextAssignee.UserCtx, nextAssignee.ID, 2)
 }
 
 func TestQueryTasksPaginationDueDate(t *testing.T) {

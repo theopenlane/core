@@ -67,22 +67,8 @@ func Listeners() []gala.Registration {
 			Concern: entityops.MutationConcernNotification,
 			Schema:  entityops.SchemaTask,
 			Fields:  []string{task.FieldAssigneeID},
-			Match: []entityops.FieldMatch{
-				{
-					Field: task.FieldStatus,
-					In:    []string{string(enums.TaskStatusOpen)},
-				},
-			},
 			Caller: notificationCaller,
-			Notify: &entityops.NotifySpec{
-				Recipients: entityops.RecipientsFromField(task.FieldAssigneeID),
-				Content: entityops.NotificationContent{
-					Type:          enums.NotificationTypeUser,
-					Topic:         enums.NotificationTopicTaskAssignment,
-					TitleTemplate: "New task assigned",
-					BodyTemplate:  "Task {{ .Name }} has been assigned to you",
-				},
-			},
+			Handle:  handleTaskMutation,
 		},
 		entityops.MutationListener{
 			Concern: entityops.MutationConcernNotification,
