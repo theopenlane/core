@@ -67,7 +67,7 @@ func Listeners() []gala.Registration {
 			Concern: entityops.MutationConcernNotification,
 			Schema:  entityops.SchemaTask,
 			Fields:  []string{task.FieldAssigneeID},
-			Caller: notificationCaller,
+			Caller:  notificationCaller,
 			Handle:  handleTaskMutation,
 		},
 		entityops.MutationListener{
