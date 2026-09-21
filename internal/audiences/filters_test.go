@@ -88,15 +88,25 @@ func TestValidateFilters(t *testing.T) {
 			filters:      map[string]any{"schema": "subscriber"},
 		},
 		{
-			name:         " audience does not compile expression at save time",
+			name:         "audience rejects invalid expression",
 			audienceType: enums.AudienceTypeDynamic,
 			filters: map[string]any{
 				"schema":     "identity_holder",
 				"expression": "target.missing_field == true",
 			},
+			hasError: true,
 		},
 		{
-			name:         " audience with key match",
+			name:         "audience rejects invalid operator",
+			audienceType: enums.AudienceTypeDynamic,
+			filters: map[string]any{
+				"schema":     "user",
+				"expression": "target.email !== ''",
+			},
+			hasError: true,
+		},
+		{
+			name:         "audience with key match",
 			audienceType: enums.AudienceTypeDynamic,
 			filters: map[string]any{
 				"schema": "contact",

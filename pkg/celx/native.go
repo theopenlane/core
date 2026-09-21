@@ -79,6 +79,17 @@ func (n *NativeEntityEvaluator) EvaluateBool(ctx context.Context, expression str
 	return n.eval.EvaluateBool(ctx, expression, map[string]any{EntityVarTarget: target})
 }
 
+// Validate compiles then type-checks the provided expression to make sure it is
+// valid and useable
+func (n *NativeEntityEvaluator) Validate(expression string) error {
+	_, issues := n.eval.Compile(expression)
+	if issues != nil && issues.Err() != nil {
+		return fmt.Errorf("%w: %w", ErrCompileFailed, issues.Err())
+	}
+
+	return nil
+}
+
 // EvaluateBoolWithSource evaluates the expression against the target entity JSON with the source
 // entity exposed as "source", so selectors like target.identity_holder_id == source.id work
 func (n *NativeEntityEvaluator) EvaluateBoolWithSource(ctx context.Context, expression string, targetData, sourceData json.RawMessage) (bool, error) {

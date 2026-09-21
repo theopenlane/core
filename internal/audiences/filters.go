@@ -164,6 +164,23 @@ func validateSelector(selector entityops.TargetSelector) error {
 		return errSourceSelectorsUnsupported
 	}
 
+	if selector.Expression == "" {
+		return nil
+	}
+
+	if schema.ProjectionType == nil {
+		return fmt.Errorf("%w: %s has no projection for expression evaluation", entityops.ErrEvaluatorBuildFailed, schema.Name)
+	}
+
+	evaluator, err := entityops.NewEvaluator(schema.ProjectionType, nil)
+	if err != nil {
+		return err
+	}
+
+	if err := evaluator.Validate(selector.Expression); err != nil {
+		return fmt.Errorf("%w: %w", entityops.ErrEvaluationFailed, err)
+	}
+
 	return nil
 }
 
