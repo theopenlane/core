@@ -31,7 +31,6 @@ const (
 
 var (
 	errAudienceFiltersRequired    = errors.New("audience filters must include at least one selector")
-	errManualAudienceFilters      = errors.New("manual audiences cannot define filters")
 	errAudienceFiltersMissing     = errors.New("dynamic audiences require filters")
 	errUnsupportedAudienceType    = errors.New("unsupported audience type")
 	errSelectorSchemaRequired     = errors.New("selector schema is required")

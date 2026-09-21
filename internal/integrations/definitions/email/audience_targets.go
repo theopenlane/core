@@ -2,7 +2,6 @@ package email
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"strings"
 
@@ -22,10 +21,6 @@ const (
 	audienceTargetSourceObjectKey = "source_object_id"
 	audienceTargetBatchSize       = 100
 	audienceTargetMetadataFields  = 3
-)
-
-var (
-	errUnsupportedAudienceType = errors.New("unsupported audience type")
 )
 
 type recipientResolveOptions struct {
@@ -193,8 +188,8 @@ func resolveTrustCenterSubscriberRecipients(ctx context.Context, db *generated.C
 	filters := map[string]any{
 		"schema": entityops.SchemaSubscriber.Snake,
 		"expression": fmt.Sprintf(
-			"target.trust_center_id == %q && target.active && target.verified_email && !target.unsubscribed",
-			camp.TrustCenterID,
+			"target.trust_center_id == %s && target.active && target.verified_email && !target.unsubscribed",
+			*camp.TrustCenterID,
 		),
 	}
 

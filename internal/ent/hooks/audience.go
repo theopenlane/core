@@ -17,8 +17,6 @@ import (
 
 var (
 	errAudienceFilterMissingBulkType = errors.New("bulk audience filter updates must include audience_type")
-	errAudienceFilterUnsupportedOp   = errors.New("bulk dynamic audience updates must include filters")
-	errAudienceFilterManualBulk      = errors.New("bulk manual audience updates must clear filters")
 )
 
 // HookAudienceValidateFilters validates audience filters before writes.
