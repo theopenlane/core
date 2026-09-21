@@ -208,7 +208,7 @@ func (r *mutationResolver) processDispatchTargets(ctx context.Context, state *ca
 
 	// audiences will not have their targets already snapshotted so we cannot rely on the totalCount
 	// alone else campaigns tied to audiences will never be processed as the totalCount for targets will always be 0
-	// the campagin targets are created during the resolution process
+	// the campaign targets are created during the resolution process
 	hasAudiences, err := state.campaignObj.QueryAudiences().Exist(ctx)
 	if err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "audience"})
