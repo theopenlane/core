@@ -22,8 +22,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/core/v2/pkg/logx"
-	authmw "github.com/theopenlane/core/v2/pkg/middleware/auth"
 	"github.com/theopenlane/core/v2/pkg/metrics"
+	authmw "github.com/theopenlane/core/v2/pkg/middleware/auth"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/summarizer"
 )
