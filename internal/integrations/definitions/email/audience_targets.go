@@ -188,7 +188,7 @@ func resolveTrustCenterSubscriberRecipients(ctx context.Context, db *generated.C
 	filters := map[string]any{
 		"schema": entityops.SchemaSubscriber.Snake,
 		"expression": fmt.Sprintf(
-			"target.trust_center_id == %s && target.active && target.verified_email && !target.unsubscribed",
+			"target.trust_center_id == %q && target.active && target.verified_email && !target.unsubscribed",
 			*camp.TrustCenterID,
 		),
 	}
