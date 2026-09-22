@@ -171,6 +171,11 @@ func (p *Provider) GetPresignedURL(ctx context.Context, fileRef *storagetypes.Fi
 	return proxy.GenerateDownloadURL(ctx, fileRef, dur, cfg)
 }
 
+// ListObjects is not supported by the database provider
+func (p *Provider) ListObjects(context.Context, string, int) ([]string, error) {
+	return nil, ErrListObjectsUnsupported
+}
+
 // ListBuckets returns the configured logical bucket for the provider.
 func (p *Provider) ListBuckets() ([]string, error) {
 	return []string{p.bucket()}, nil

@@ -128,6 +128,47 @@ func TestDiskProviderGetPresignedURL(t *testing.T) {
 	assert.Contains(t, url, "http://localhost:8080/files/test-file.txt")
 }
 
+func TestDiskProviderListObjects(t *testing.T) {
+	tempDir, err := os.MkdirTemp("", "disk-provider-test-*")
+	require.NoError(t, err)
+	defer os.RemoveAll(tempDir)
+
+	provider, err := diskprovider.NewDiskProvider(diskOptions(tempDir, ""))
+	require.NoError(t, err)
+	defer provider.Close()
+
+	ctx := context.Background()
+	uploads := []struct {
+		folder string
+		name   string
+	}{
+		{folder: "imports", name: "a.json"},
+		{folder: "imports", name: "b.json"},
+		{folder: "exports", name: "c.json"},
+	}
+
+	for _, upload := range uploads {
+		_, err := provider.Upload(ctx, strings.NewReader("{}"), &storagetypes.UploadFileOptions{
+			FileName:          upload.name,
+			FolderDestination: upload.folder,
+			ContentType:       "application/json",
+		})
+		require.NoError(t, err)
+	}
+
+	keys, err := provider.ListObjects(ctx, "imports/", 0)
+	require.NoError(t, err)
+	assert.ElementsMatch(t, []string{"imports/a.json", "imports/b.json"}, keys)
+
+	keys, err = provider.ListObjects(ctx, "", 2)
+	require.NoError(t, err)
+	assert.Len(t, keys, 2)
+
+	keys, err = provider.ListObjects(ctx, "missing/", 0)
+	require.NoError(t, err)
+	assert.Empty(t, keys)
+}
+
 func TestDiskProviderExistsMissingFile(t *testing.T) {
 	tempDir, err := os.MkdirTemp("", "disk-provider-test-*")
 	require.NoError(t, err)

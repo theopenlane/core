@@ -1622,6 +1622,21 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "storage.AccessKeyCredentials": {
+      "properties": {
+        "accesskeyid": {
+          "type": "string",
+          "description": "AccessKeyID for the bucket"
+        },
+        "secretaccesskey": {
+          "type": "string",
+          "description": "SecretAccessKey for the bucket"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "AccessKeyCredentials is the access key pair used by S3 compatible providers"
+    },
     "storage.BackupConfig": {
       "properties": {
         "enabled": {
@@ -1644,6 +1659,68 @@
       "additionalProperties": false,
       "type": "object",
       "description": "BackupConfig defines an asynchronous replication target for a provider's objects. It only\nnames whether backups run and where they go; the destination provider's own configuration\nsupplies the region, endpoint, and credentials"
+    },
+    "storage.DatabaseConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates if this provider is enabled"
+        },
+        "ensureavailable": {
+          "type": "boolean",
+          "description": "EnsureAvailable enforces provider availability before completing server startup"
+        },
+        "bucket": {
+          "type": "string",
+          "description": "Bucket is the bucket name, or the directory path for the disk provider"
+        },
+        "backup": {
+          "$ref": "#/$defs/storage.BackupConfig",
+          "description": "Backup optionally replicates this provider's objects to another provider asynchronously"
+        },
+        "baseurl": {
+          "type": "string",
+          "description": "BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "DatabaseConfig configures the provider that stores file bytes in the database"
+    },
+    "storage.DiskConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates if this provider is enabled"
+        },
+        "ensureavailable": {
+          "type": "boolean",
+          "description": "EnsureAvailable enforces provider availability before completing server startup"
+        },
+        "bucket": {
+          "type": "string",
+          "description": "Bucket is the bucket name, or the directory path for the disk provider"
+        },
+        "backup": {
+          "$ref": "#/$defs/storage.BackupConfig",
+          "description": "Backup optionally replicates this provider's objects to another provider asynchronously"
+        },
+        "proxypresignenabled": {
+          "type": "boolean",
+          "description": "ProxyPresignEnabled toggles proxy-signed download URL generation"
+        },
+        "baseurl": {
+          "type": "string",
+          "description": "BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)"
+        },
+        "endpoint": {
+          "type": "string",
+          "description": "Endpoint is the URL files are served from when proxy presigning is disabled"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "DiskConfig configures the local filesystem provider"
     },
     "storage.ProviderConfig": {
       "properties": {
@@ -1676,7 +1753,30 @@
       "type": "object",
       "description": "ProviderConfig contains configuration for object storage providers"
     },
-    "storage.ProviderConfigs": {
+    "storage.Providers": {
+      "properties": {
+        "s3": {
+          "$ref": "#/$defs/storage.S3Config",
+          "description": "S3 provider configuration"
+        },
+        "r2": {
+          "$ref": "#/$defs/storage.R2Config",
+          "description": "R2 provider configuration"
+        },
+        "disk": {
+          "$ref": "#/$defs/storage.DiskConfig",
+          "description": "Disk provider configuration"
+        },
+        "database": {
+          "$ref": "#/$defs/storage.DatabaseConfig",
+          "description": "Database provider configuration"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Providers contains the configuration for each storage provider"
+    },
+    "storage.R2Config": {
       "properties": {
         "enabled": {
           "type": "boolean",
@@ -1686,17 +1786,13 @@
           "type": "boolean",
           "description": "EnsureAvailable enforces provider availability before completing server startup"
         },
-        "region": {
-          "type": "string",
-          "description": "Region for cloud providers"
-        },
         "bucket": {
           "type": "string",
-          "description": "Bucket name for cloud providers"
+          "description": "Bucket is the bucket name, or the directory path for the disk provider"
         },
-        "endpoint": {
-          "type": "string",
-          "description": "Endpoint for custom endpoints"
+        "backup": {
+          "$ref": "#/$defs/storage.BackupConfig",
+          "description": "Backup optionally replicates this provider's objects to another provider asynchronously"
         },
         "proxypresignenabled": {
           "type": "boolean",
@@ -1704,69 +1800,82 @@
         },
         "baseurl": {
           "type": "string",
-          "description": "BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)."
+          "description": "BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)"
+        },
+        "endpoint": {
+          "type": "string",
+          "description": "Endpoint overrides the account endpoint derived from the account ID"
         },
         "credentials": {
-          "$ref": "#/$defs/storage.ProviderCredentials",
-          "description": "Credentials contains the credentials for accessing the provider"
-        },
-        "backup": {
-          "$ref": "#/$defs/storage.BackupConfig",
-          "description": "Backup optionally replicates this provider's objects to another provider asynchronously"
+          "$ref": "#/$defs/storage.R2Credentials",
+          "description": "Credentials contains the access key pair and account for the bucket"
         }
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "ProviderConfigs contains configuration for all storage providers\nThis is structured to allow easy extension for additional providers in the future"
+      "description": "R2Config configures the Cloudflare R2 provider"
     },
-    "storage.ProviderCredentials": {
+    "storage.R2Credentials": {
       "properties": {
         "accesskeyid": {
           "type": "string",
-          "description": "AccessKeyID for cloud providers"
+          "description": "AccessKeyID for the bucket"
         },
         "secretaccesskey": {
           "type": "string",
-          "description": "SecretAccessKey for cloud providers"
-        },
-        "projectid": {
-          "type": "string",
-          "description": "ProjectID for GCS"
+          "description": "SecretAccessKey for the bucket"
         },
         "accountid": {
           "type": "string",
           "description": "AccountID for Cloudflare R2"
-        },
-        "apitoken": {
-          "type": "string",
-          "description": "APIToken for Cloudflare R2"
         }
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "ProviderCredentials contains credentials for a storage provider"
+      "description": "R2Credentials is the access key pair plus the Cloudflare account that owns the bucket"
     },
-    "storage.Providers": {
+    "storage.S3Config": {
       "properties": {
-        "s3": {
-          "$ref": "#/$defs/storage.ProviderConfigs",
-          "description": "S3 provider configuration"
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates if this provider is enabled"
         },
-        "r2": {
-          "$ref": "#/$defs/storage.ProviderConfigs",
-          "description": "R2 provider configuration"
+        "ensureavailable": {
+          "type": "boolean",
+          "description": "EnsureAvailable enforces provider availability before completing server startup"
         },
-        "disk": {
-          "$ref": "#/$defs/storage.ProviderConfigs",
-          "description": "Disk provider configuration"
+        "bucket": {
+          "type": "string",
+          "description": "Bucket is the bucket name, or the directory path for the disk provider"
         },
-        "database": {
-          "$ref": "#/$defs/storage.ProviderConfigs",
-          "description": "Database provider configuration"
+        "backup": {
+          "$ref": "#/$defs/storage.BackupConfig",
+          "description": "Backup optionally replicates this provider's objects to another provider asynchronously"
+        },
+        "proxypresignenabled": {
+          "type": "boolean",
+          "description": "ProxyPresignEnabled toggles proxy-signed download URL generation"
+        },
+        "baseurl": {
+          "type": "string",
+          "description": "BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)"
+        },
+        "region": {
+          "type": "string",
+          "description": "Region the bucket lives in"
+        },
+        "endpoint": {
+          "type": "string",
+          "description": "Endpoint overrides the AWS endpoint for S3 compatible services"
+        },
+        "credentials": {
+          "$ref": "#/$defs/storage.AccessKeyCredentials",
+          "description": "Credentials contains the access key pair for the bucket"
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "S3Config configures the Amazon S3 provider"
     },
     "summarizer.AnthropicConfig": {
       "properties": {

@@ -478,18 +478,8 @@ coreConfiguration:
         enabled: false  # @schema type:boolean; default:false
         # -- EnsureAvailable enforces provider availability before completing server startup
         ensureavailable: false  # @schema type:boolean; default:false
-        # -- Region for cloud providers
-        region: ""  # @schema type:string
-        # -- Bucket name for cloud providers
+        # -- Bucket is the bucket name, or the directory path for the disk provider
         bucket: ""  # @schema type:string
-        # -- Endpoint for custom endpoints
-        endpoint: ""  # @schema type:string
-        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
-        proxypresignenabled: false  # @schema type:boolean; default:false
-        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
-        baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
-        # -- Credentials contains the credentials for accessing the provider
-        credentials:
         # -- Backup optionally replicates this provider's objects to another provider asynchronously
         backup:
           # -- Enabled indicates if this backup target is enabled
@@ -503,24 +493,24 @@ coreConfiguration:
           # -- Region optionally overrides the destination provider's region, so a backup can replicate
           # into a region other than the one holding the live objects
           region: ""  # @schema type:string
+        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
+        proxypresignenabled: false  # @schema type:boolean; default:false
+        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)
+        baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
+        # -- Region the bucket lives in
+        region: ""  # @schema type:string
+        # -- Endpoint overrides the AWS endpoint for S3 compatible services
+        endpoint: ""  # @schema type:string
+        # -- Credentials contains the access key pair for the bucket
+        credentials:
       # -- R2 provider configuration
       r2:
         # -- Enabled indicates if this provider is enabled
         enabled: false  # @schema type:boolean; default:false
         # -- EnsureAvailable enforces provider availability before completing server startup
         ensureavailable: false  # @schema type:boolean; default:false
-        # -- Region for cloud providers
-        region: ""  # @schema type:string
-        # -- Bucket name for cloud providers
+        # -- Bucket is the bucket name, or the directory path for the disk provider
         bucket: ""  # @schema type:string
-        # -- Endpoint for custom endpoints
-        endpoint: ""  # @schema type:string
-        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
-        proxypresignenabled: false  # @schema type:boolean; default:false
-        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
-        baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
-        # -- Credentials contains the credentials for accessing the provider
-        credentials:
         # -- Backup optionally replicates this provider's objects to another provider asynchronously
         backup:
           # -- Enabled indicates if this backup target is enabled
@@ -534,24 +524,22 @@ coreConfiguration:
           # -- Region optionally overrides the destination provider's region, so a backup can replicate
           # into a region other than the one holding the live objects
           region: ""  # @schema type:string
+        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
+        proxypresignenabled: false  # @schema type:boolean; default:false
+        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)
+        baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
+        # -- Endpoint overrides the account endpoint derived from the account ID
+        endpoint: ""  # @schema type:string
+        # -- Credentials contains the access key pair and account for the bucket
+        credentials:
       # -- Disk provider configuration
       disk:
         # -- Enabled indicates if this provider is enabled
         enabled: false  # @schema type:boolean; default:false
         # -- EnsureAvailable enforces provider availability before completing server startup
         ensureavailable: false  # @schema type:boolean; default:false
-        # -- Region for cloud providers
-        region: ""  # @schema type:string
-        # -- Bucket name for cloud providers
+        # -- Bucket is the bucket name, or the directory path for the disk provider
         bucket: ""  # @schema type:string
-        # -- Endpoint for custom endpoints
-        endpoint: ""  # @schema type:string
-        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
-        proxypresignenabled: false  # @schema type:boolean; default:false
-        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
-        baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
-        # -- Credentials contains the credentials for accessing the provider
-        credentials:
         # -- Backup optionally replicates this provider's objects to another provider asynchronously
         backup:
           # -- Enabled indicates if this backup target is enabled
@@ -565,24 +553,20 @@ coreConfiguration:
           # -- Region optionally overrides the destination provider's region, so a backup can replicate
           # into a region other than the one holding the live objects
           region: ""  # @schema type:string
+        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
+        proxypresignenabled: false  # @schema type:boolean; default:false
+        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)
+        baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
+        # -- Endpoint is the URL files are served from when proxy presigning is disabled
+        endpoint: ""  # @schema type:string
       # -- Database provider configuration
       database:
         # -- Enabled indicates if this provider is enabled
         enabled: false  # @schema type:boolean; default:false
         # -- EnsureAvailable enforces provider availability before completing server startup
         ensureavailable: false  # @schema type:boolean; default:false
-        # -- Region for cloud providers
-        region: ""  # @schema type:string
-        # -- Bucket name for cloud providers
+        # -- Bucket is the bucket name, or the directory path for the disk provider
         bucket: ""  # @schema type:string
-        # -- Endpoint for custom endpoints
-        endpoint: ""  # @schema type:string
-        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
-        proxypresignenabled: false  # @schema type:boolean; default:false
-        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
-        baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
-        # -- Credentials contains the credentials for accessing the provider
-        credentials:
         # -- Backup optionally replicates this provider's objects to another provider asynchronously
         backup:
           # -- Enabled indicates if this backup target is enabled
@@ -596,6 +580,8 @@ coreConfiguration:
           # -- Region optionally overrides the destination provider's region, so a backup can replicate
           # into a region other than the one holding the live objects
           region: ""  # @schema type:string
+        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)
+        baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
   # -- Entitlements contains the configuration for the entitlements service
   subscription:
     # -- Enabled determines if the entitlements service is enabled
@@ -909,30 +895,6 @@ externalSecrets:
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-s3-credentials-secretaccesskey"  # @schema type:string
-    # -- core-objectstorage-providers-s3-credentials-projectid secret configuration
-    core-objectstorage-providers-s3-credentials-projectid:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectstorage.providers.s3.credentials.projectid
-      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_PROJECTID"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-providers-s3-credentials-projectid"  # @schema type:string
-    # -- core-objectstorage-providers-s3-credentials-accountid secret configuration
-    core-objectstorage-providers-s3-credentials-accountid:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectstorage.providers.s3.credentials.accountid
-      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_ACCOUNTID"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-providers-s3-credentials-accountid"  # @schema type:string
-    # -- core-objectstorage-providers-s3-credentials-apitoken secret configuration
-    core-objectstorage-providers-s3-credentials-apitoken:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectstorage.providers.s3.credentials.apitoken
-      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_APITOKEN"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-providers-s3-credentials-apitoken"  # @schema type:string
     # -- core-objectstorage-providers-r2-credentials-accesskeyid secret configuration
     core-objectstorage-providers-r2-credentials-accesskeyid:
       # -- Enable this external secret
@@ -949,14 +911,6 @@ externalSecrets:
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_R2_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-r2-credentials-secretaccesskey"  # @schema type:string
-    # -- core-objectstorage-providers-r2-credentials-projectid secret configuration
-    core-objectstorage-providers-r2-credentials-projectid:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectstorage.providers.r2.credentials.projectid
-      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_R2_CREDENTIALS_PROJECTID"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-providers-r2-credentials-projectid"  # @schema type:string
     # -- core-objectstorage-providers-r2-credentials-accountid secret configuration
     core-objectstorage-providers-r2-credentials-accountid:
       # -- Enable this external secret
@@ -965,94 +919,6 @@ externalSecrets:
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_R2_CREDENTIALS_ACCOUNTID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-r2-credentials-accountid"  # @schema type:string
-    # -- core-objectstorage-providers-r2-credentials-apitoken secret configuration
-    core-objectstorage-providers-r2-credentials-apitoken:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectstorage.providers.r2.credentials.apitoken
-      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_R2_CREDENTIALS_APITOKEN"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-providers-r2-credentials-apitoken"  # @schema type:string
-    # -- core-objectstorage-providers-disk-credentials-accesskeyid secret configuration
-    core-objectstorage-providers-disk-credentials-accesskeyid:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectstorage.providers.disk.credentials.accesskeyid
-      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_ACCESSKEYID"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-providers-disk-credentials-accesskeyid"  # @schema type:string
-    # -- core-objectstorage-providers-disk-credentials-secretaccesskey secret configuration
-    core-objectstorage-providers-disk-credentials-secretaccesskey:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectstorage.providers.disk.credentials.secretaccesskey
-      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-providers-disk-credentials-secretaccesskey"  # @schema type:string
-    # -- core-objectstorage-providers-disk-credentials-projectid secret configuration
-    core-objectstorage-providers-disk-credentials-projectid:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectstorage.providers.disk.credentials.projectid
-      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_PROJECTID"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-providers-disk-credentials-projectid"  # @schema type:string
-    # -- core-objectstorage-providers-disk-credentials-accountid secret configuration
-    core-objectstorage-providers-disk-credentials-accountid:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectstorage.providers.disk.credentials.accountid
-      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_ACCOUNTID"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-providers-disk-credentials-accountid"  # @schema type:string
-    # -- core-objectstorage-providers-disk-credentials-apitoken secret configuration
-    core-objectstorage-providers-disk-credentials-apitoken:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectstorage.providers.disk.credentials.apitoken
-      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_APITOKEN"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-providers-disk-credentials-apitoken"  # @schema type:string
-    # -- core-objectstorage-providers-database-credentials-accesskeyid secret configuration
-    core-objectstorage-providers-database-credentials-accesskeyid:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectstorage.providers.database.credentials.accesskeyid
-      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_ACCESSKEYID"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-providers-database-credentials-accesskeyid"  # @schema type:string
-    # -- core-objectstorage-providers-database-credentials-secretaccesskey secret configuration
-    core-objectstorage-providers-database-credentials-secretaccesskey:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectstorage.providers.database.credentials.secretaccesskey
-      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-providers-database-credentials-secretaccesskey"  # @schema type:string
-    # -- core-objectstorage-providers-database-credentials-projectid secret configuration
-    core-objectstorage-providers-database-credentials-projectid:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectstorage.providers.database.credentials.projectid
-      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_PROJECTID"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-providers-database-credentials-projectid"  # @schema type:string
-    # -- core-objectstorage-providers-database-credentials-accountid secret configuration
-    core-objectstorage-providers-database-credentials-accountid:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectstorage.providers.database.credentials.accountid
-      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_ACCOUNTID"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-providers-database-credentials-accountid"  # @schema type:string
-    # -- core-objectstorage-providers-database-credentials-apitoken secret configuration
-    core-objectstorage-providers-database-credentials-apitoken:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectstorage.providers.database.credentials.apitoken
-      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_APITOKEN"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-objectstorage-providers-database-credentials-apitoken"  # @schema type:string
     # -- core-subscription-privatestripekey secret configuration
     core-subscription-privatestripekey:
       # -- Enable this external secret
