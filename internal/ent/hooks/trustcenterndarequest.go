@@ -99,13 +99,8 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			}
 
 			if recordSigned {
-				if _, ok := m.SignedAt(); !ok {
-					now, err := models.ToDateTime(time.Now().UTC().Format(time.RFC3339))
-					if err != nil {
-						return nil, err
-					}
-
-					m.SetSignedAt(*now)
+				if err := defaultSignedAt(m); err != nil {
+					return nil, err
 				}
 			}
 
@@ -262,16 +257,9 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			// if approved or signed, set the timestamp in the ISO8601 format
-			now, err := models.ToDateTime(time.Now().UTC().Format(time.RFC3339))
-			if err != nil {
-				return nil, err
-			}
-
 			if status == enums.TrustCenterNDARequestStatusSigned {
-				// only default the timestamp when the caller did not record one
-				if _, ok := m.SignedAt(); !ok {
-					m.SetSignedAt(*now)
+				if err := defaultSignedAt(m); err != nil {
+					return nil, err
 				}
 
 				// resolve the targets first, the status predicate no longer matches after the update
@@ -292,7 +280,14 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 				return retVal, nil
 			}
 
+			// if approved, set the timestamp in the ISO8601 format
+			now, err := models.ToDateTime(time.Now().UTC().Format(time.RFC3339))
+			if err != nil {
+				return nil, err
+			}
+
 			m.SetApprovedAt(*now)
+
 			if _, ok := m.ApprovedByUserID(); !ok {
 				userID, err := auth.GetSubjectIDFromContext(ctx)
 				if err != nil || userID == "" {
@@ -345,6 +340,23 @@ func handleNDARequestDelete(ctx context.Context, m *generated.TrustCenterNDARequ
 
 		return ErrInternalServerError
 	}
+
+	return nil
+}
+
+// defaultSignedAt stamps the signed timestamp only when the caller did not record one, so a
+// backfilled signature keeps its historical date
+func defaultSignedAt(m *generated.TrustCenterNDARequestMutation) error {
+	if _, ok := m.SignedAt(); ok {
+		return nil
+	}
+
+	now, err := models.ToDateTime(time.Now().UTC().Format(time.RFC3339))
+	if err != nil {
+		return err
+	}
+
+	m.SetSignedAt(*now)
 
 	return nil
 }

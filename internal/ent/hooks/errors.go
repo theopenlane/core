@@ -252,6 +252,8 @@ var (
 	ErrFailedToCreateAttestationCert = errors.New("failed to create attestation certificate")
 	// ErrFailedToMergeAttestationPage is returned when merging the attestation page into the original PDF fails
 	ErrFailedToMergeAttestationPage = errors.New("failed to merge attestation page")
+	// ErrFailedToDecryptNDAPDF is returned when an encrypted NDA PDF cannot be opened without a password
+	ErrFailedToDecryptNDAPDF = errors.New("failed to decrypt nda pdf, the file requires a password")
 	// ErrFailedToGenerateAttestationPDF is returned when the attestation PDF output fails
 	ErrFailedToGenerateAttestationPDF = errors.New("failed to generate attestation PDF")
 	// ErrInvalidScope is returned when a scope is not assignable to service subjects
