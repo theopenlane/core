@@ -127,6 +127,9 @@ var (
 	// ErrNDATemplateRequired is returned when nda requests mutation runs but there is no file for the
 	// user to sign
 	ErrNDATemplateRequired = errors.New("you need a nda template before a request can be made")
+	// ErrNDARequestStatusNotAllowed is returned when an anonymous trust center requester tries to set
+	// the status on an nda request
+	ErrNDARequestStatusNotAllowed = errors.New("status not allowed to be set")
 	// ErrMutationMissingID is returned when a mutation does not have an ID
 	ErrMutationMissingID = errors.New("mutation missing ID")
 	// ErrProposedChangesNotSupported is returned when proposed changes are not supported for a schema type

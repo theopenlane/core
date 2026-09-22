@@ -164,16 +164,28 @@ func NewAnonTrustCenterCtxFromCaller(caller *auth.Caller, trustCenterID string) 
 	return ctx
 }
 
+// anonTrustCenterContext builds the anonymous trust center caller for id, prefixing it the way the
+// anonymous access tokens do, and wraps it in a context
+func anonTrustCenterContext(trustCenterID, organizationID, id, email string) (context.Context, *auth.Caller) {
+	caller := auth.NewTrustCenterCaller(organizationID, fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, id), "Anonymous User", email)
+
+	return NewAnonTrustCenterCtxFromCaller(caller, trustCenterID), caller
+}
+
 // CreateAnonymousTrustCenterContext creates a context for an anonymous trust center user
 func CreateAnonymousTrustCenterContext(trustCenterID, organizationID string) context.Context {
-	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
-	caller := auth.NewTrustCenterCaller(organizationID, anonUserID, "Anonymous User", "")
-	return NewAnonTrustCenterCtxFromCaller(caller, trustCenterID)
+	ctx, _ := anonTrustCenterContext(trustCenterID, organizationID, ulids.New().String(), "")
+
+	return ctx
+}
+
+// CreateAnonymousTrustCenterContextForSubject creates a context for an anonymous trust center user with
+// a known subject id, such as the nda request id the access email mints its token for
+func CreateAnonymousTrustCenterContextForSubject(trustCenterID, organizationID, subjectID, email string) (context.Context, *auth.Caller) {
+	return anonTrustCenterContext(trustCenterID, organizationID, subjectID, email)
 }
 
 // CreateAnonymousTrustCenterContextWithEmail creates a context for an anonymous trust center user with subject email
 func CreateAnonymousTrustCenterContextWithEmail(trustCenterID, organizationID, email string) (context.Context, *auth.Caller) {
-	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
-	caller := auth.NewTrustCenterCaller(organizationID, anonUserID, "Anonymous User", email)
-	return NewAnonTrustCenterCtxFromCaller(caller, trustCenterID), caller
+	return anonTrustCenterContext(trustCenterID, organizationID, ulids.New().String(), email)
 }
