@@ -521,7 +521,7 @@ func TestMutationCreateTrustCenterNDARequestRecordSigned(t *testing.T) {
 			TrustCenterID: &trustCenter.ID,
 			Status:        lo.ToPtr(enums.TrustCenterNDARequestStatusSigned),
 		})
-		assert.ErrorContains(t, err, "status cannot be set")
+		assert.ErrorContains(t, err, "status not allowed to be set")
 	})
 
 	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
