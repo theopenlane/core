@@ -95,6 +95,55 @@ func TestIdentityHolder_IsOpenlaneUser(t *testing.T) {
 	assert.Check(t, is.Len(holders.IdentityHolders.Edges, 1))
 }
 
+func TestIdentityHolder_AutoSetOpenlaneUserFromOrgMembership(t *testing.T) {
+	org := suite.SeedOrgOwner(t)
+
+	client := suite.Client.API
+
+	orgID := org.Owner.OrganizationID
+
+	ctx := org.Owner.UserCtx
+
+	t.Cleanup(func() {
+		_, err := client.DeleteOrganization(ctx, orgID)
+		assert.NilError(t, err)
+	})
+
+	_, err := client.AddUserToOrgWithRole(ctx, testclient.CreateOrgMembershipInput{
+		OrganizationID: orgID,
+		UserID:         th.SharedTestUser2.ID,
+		Role:           lo.ToPtr(enums.RoleMember),
+	})
+
+	assert.NilError(t, err)
+
+	// create a new identity holder with an email that is not a member of the org yet
+	// then add the org member using SharedTestUser1
+
+	holder, err := client.CreateIdentityHolder(ctx, testclient.CreateIdentityHolderInput{
+		Email:    th.SharedTestUser1.UserInfo.Email,
+		FullName: gofakeit.Name(),
+		OwnerID:  &orgID,
+	})
+	assert.NilError(t, err)
+
+	assert.Check(t, is.Equal(false, *holder.CreateIdentityHolder.IdentityHolder.IsOpenlaneUser))
+
+	// now add the user to the org
+	_, err = client.AddUserToOrgWithRole(ctx, testclient.CreateOrgMembershipInput{
+		OrganizationID: orgID,
+		Role:           lo.ToPtr(enums.RoleMember),
+		UserID:         th.SharedTestUser1.ID,
+	})
+	assert.NilError(t, err)
+
+	// verify the identity holder got toggled
+	newHolder, err := client.GetIdentityHolderByID(ctx, holder.CreateIdentityHolder.IdentityHolder.ID)
+	assert.NilError(t, err)
+
+	assert.Check(t, is.Equal(true, *newHolder.IdentityHolder.IsOpenlaneUser))
+}
+
 func TestQueryIdentityHolder(t *testing.T) {
 	ih := (&th.IdentityHolderBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 

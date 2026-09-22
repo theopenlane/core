@@ -25,6 +25,8 @@ type skipOpenlaneUserAssignmentKey struct{}
 
 // HookAssignOpenlaneUser automatically (un)sets the is_openlane_user based off
 // the existence of the user in the org.
+// this hook only really exists as a form of support for existing org members so that when new identity holders
+// are created/updated for existing org members, we add them in correctly
 func HookAssignOpenlaneUser() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.IdentityHolderFunc(func(ctx context.Context, m *generated.IdentityHolderMutation) (generated.Value, error) {

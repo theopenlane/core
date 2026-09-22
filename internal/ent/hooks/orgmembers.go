@@ -86,6 +86,10 @@ func HookOrgMembers() ent.Hook {
 				return nil, err
 			}
 
+			if err := updateIdentityHolder(privacy.DecisionContext(ctx, privacy.Allow), m.Client(), orgMember.UserID, true); err != nil {
+				return nil, err
+			}
+
 			// update the managed group members when members are added
 			// after the mutation has been executed
 			if err := updateManagedGroupMembers(ctx, m); err != nil {
@@ -242,7 +246,7 @@ func HookOrgMembersDelete() ent.Hook {
 			// check to see if the default org needs to be updated for the user
 			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-			if err := updateIdentityHolder(allowCtx, m.Client(), orgMembership.UserID); err != nil {
+			if err := updateIdentityHolder(allowCtx, m.Client(), orgMembership.UserID, false); err != nil {
 				return nil, err
 			}
 
@@ -284,7 +288,7 @@ func HookOrgMembersDelete() ent.Hook {
 
 // updateIdentityHolder checks if the org memeber being removed also exists on the identity holder.
 // If they do, unset is_openlane_user
-func updateIdentityHolder(ctx context.Context, client *generated.Client, userID string) error {
+func updateIdentityHolder(ctx context.Context, client *generated.Client, userID string, expectedOpenlaneUserValue bool) error {
 
 	orgUser, err := client.User.Query().
 		Where(user.IDEQ(userID)).
@@ -319,7 +323,7 @@ func updateIdentityHolder(ctx context.Context, client *generated.Client, userID 
 	newCtx := context.WithValue(ctx, skipOpenlaneUserAssignmentKey{}, true)
 
 	err = client.IdentityHolder.UpdateOneID(id).
-		SetIsOpenlaneUser(false).
+		SetIsOpenlaneUser(expectedOpenlaneUserValue).
 		Exec(newCtx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("identity_holder_id", id).
