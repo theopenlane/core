@@ -1722,6 +1722,45 @@
       "type": "object",
       "description": "DiskConfig configures the local filesystem provider"
     },
+    "storage.GCSConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates if this provider is enabled"
+        },
+        "ensureavailable": {
+          "type": "boolean",
+          "description": "EnsureAvailable enforces provider availability before completing server startup"
+        },
+        "bucket": {
+          "type": "string",
+          "description": "Bucket is the bucket name, or the directory path for the disk provider"
+        },
+        "backup": {
+          "$ref": "#/$defs/storage.BackupConfig",
+          "description": "Backup optionally replicates this provider's objects to another provider asynchronously"
+        },
+        "proxypresignenabled": {
+          "type": "boolean",
+          "description": "ProxyPresignEnabled toggles proxy-signed download URL generation"
+        },
+        "baseurl": {
+          "type": "string",
+          "description": "BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)"
+        },
+        "endpoint": {
+          "type": "string",
+          "description": "Endpoint overrides the Google API endpoint, for an emulator"
+        },
+        "projectid": {
+          "type": "string",
+          "description": "ProjectID is the Google Cloud project that owns the bucket"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "GCSConfig configures the Google Cloud Storage provider"
+    },
     "storage.ProviderConfig": {
       "properties": {
         "enabled": {
@@ -1762,6 +1801,10 @@
         "r2": {
           "$ref": "#/$defs/storage.R2Config",
           "description": "R2 provider configuration"
+        },
+        "gcs": {
+          "$ref": "#/$defs/storage.GCSConfig",
+          "description": "GCS provider configuration"
         },
         "disk": {
           "$ref": "#/$defs/storage.DiskConfig",

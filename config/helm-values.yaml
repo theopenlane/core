@@ -532,6 +532,35 @@ coreConfiguration:
         endpoint: ""  # @schema type:string
         # -- Credentials contains the access key pair and account for the bucket
         credentials:
+      # -- GCS provider configuration
+      gcs:
+        # -- Enabled indicates if this provider is enabled
+        enabled: false  # @schema type:boolean; default:false
+        # -- EnsureAvailable enforces provider availability before completing server startup
+        ensureavailable: false  # @schema type:boolean; default:false
+        # -- Bucket is the bucket name, or the directory path for the disk provider
+        bucket: ""  # @schema type:string
+        # -- Backup optionally replicates this provider's objects to another provider asynchronously
+        backup:
+          # -- Enabled indicates if this backup target is enabled
+          enabled: false  # @schema type:boolean; default:false
+          # -- Provider names the destination backend type, e.g. s3; empty replicates to the source
+          # provider itself, which writes the backup to the suffixed bucket alongside the live one
+          provider:   # @schema type:string
+          # -- ReadFromBackup serves reads from this backup target instead of the source provider, intended
+          # to be enabled during a disaster recovery event when the source provider storage is lost
+          readfrombackup: false  # @schema type:boolean; default:false
+          # -- Region optionally overrides the destination provider's region, so a backup can replicate
+          # into a region other than the one holding the live objects
+          region: ""  # @schema type:string
+        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
+        proxypresignenabled: false  # @schema type:boolean; default:false
+        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)
+        baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
+        # -- Endpoint overrides the Google API endpoint, for an emulator
+        endpoint: ""  # @schema type:string
+        # -- ProjectID is the Google Cloud project that owns the bucket
+        projectid: ""  # @schema type:string
       # -- Disk provider configuration
       disk:
         # -- Enabled indicates if this provider is enabled

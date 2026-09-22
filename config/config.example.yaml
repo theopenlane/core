@@ -326,6 +326,15 @@ objectstorage:
             endpoint: ""
             ensureavailable: false
             proxypresignenabled: false
+        gcs:
+            backup: null
+            baseurl: http://localhost:17608/v1/files
+            bucket: ""
+            enabled: false
+            endpoint: ""
+            ensureavailable: false
+            projectid: ""
+            proxypresignenabled: false
         r2:
             backup: null
             baseurl: http://localhost:17608/v1/files

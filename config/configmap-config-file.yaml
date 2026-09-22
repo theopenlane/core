@@ -956,6 +956,45 @@ data:
           endpoint: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.endpoint | quote }}
           {{- end }}
         {{- end }}
+        {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs }}
+        gcs:
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.enabled }}
+          enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.enabled }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.ensureavailable }}
+          ensureavailable: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.ensureavailable }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.bucket }}
+          bucket: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.bucket | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup }}
+          backup:
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.enabled }}
+            enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.enabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.provider }}
+            provider: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.provider | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.readfrombackup }}
+            readfrombackup: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.readfrombackup }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.region }}
+            region: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.backup.region | quote }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.proxypresignenabled }}
+          proxypresignenabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.proxypresignenabled }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.baseurl }}
+          baseurl: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.baseurl | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.endpoint }}
+          endpoint: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.endpoint | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.projectid }}
+          projectid: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.projectid | quote }}
+          {{- end }}
+        {{- end }}
         {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk }}
         disk:
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.enabled }}

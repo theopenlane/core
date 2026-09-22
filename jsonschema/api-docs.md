@@ -123,6 +123,9 @@ Config contains the configuration for the core server
                 "backup": {},
                 "credentials": {}
             },
+            "gcs": {
+                "backup": {}
+            },
             "disk": {
                 "backup": {}
             },
@@ -1420,6 +1423,9 @@ ProviderConfig contains configuration for object storage providers
             "backup": {},
             "credentials": {}
         },
+        "gcs": {
+            "backup": {}
+        },
         "disk": {
             "backup": {}
         },
@@ -1450,6 +1456,7 @@ Providers contains the configuration for each storage provider
 |----|----|-----------|--------|
 |[**s3**](#defsstorages3config)|`object`|S3Config configures the Amazon S3 provider<br/>||
 |[**r2**](#defsstorager2config)|`object`|R2Config configures the Cloudflare R2 provider<br/>||
+|[**gcs**](#defsstoragegcsconfig)|`object`|GCSConfig configures the Google Cloud Storage provider<br/>||
 |[**disk**](#defsstoragediskconfig)|`object`|DiskConfig configures the local filesystem provider<br/>||
 |[**database**](#defsstoragedatabaseconfig)|`object`|DatabaseConfig configures the provider that stores file bytes in the database<br/>||
 
@@ -1465,6 +1472,9 @@ Providers contains the configuration for each storage provider
     "r2": {
         "backup": {},
         "credentials": {}
+    },
+    "gcs": {
+        "backup": {}
     },
     "disk": {
         "backup": {}
@@ -1603,6 +1613,54 @@ R2Credentials is the access key pair plus the Cloudflare account that owns the b
 |**accesskeyid**|`string`|AccessKeyID for the bucket<br/>||
 |**secretaccesskey**|`string`|SecretAccessKey for the bucket<br/>||
 |**accountid**|`string`|AccountID for Cloudflare R2<br/>||
+
+**Additional Properties:** not allowed   
+   
+<a name="defsstoragegcsconfig"></a>
+#### $defs/storage\.GCSConfig: object
+
+GCSConfig configures the Google Cloud Storage provider
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates if this provider is enabled<br/>||
+|**ensureavailable**|`boolean`|EnsureAvailable enforces provider availability before completing server startup<br/>||
+|**bucket**|`string`|Bucket is the bucket name, or the directory path for the disk provider<br/>||
+|[**backup**](#defsstoragebackupconfig)|`object`|BackupConfig defines an asynchronous replication target for a provider's objects. It only<br/>||
+|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
+|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)<br/>||
+|**endpoint**|`string`|Endpoint overrides the Google API endpoint, for an emulator<br/>||
+|**projectid**|`string`|ProjectID is the Google Cloud project that owns the bucket<br/>||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "backup": {}
+}
+```
+
+   
+<a name="defsstoragebackupconfig"></a>
+##### $defs/storage\.BackupConfig: object
+
+BackupConfig defines an asynchronous replication target for a provider's objects. It only
+names whether backups run and where they go; the destination provider's own configuration
+supplies the region, endpoint, and credentials
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates if this backup target is enabled<br/>||
+|**provider**|`string`|Provider names the destination backend type, e.g. s3; empty replicates to the source<br/>provider itself, which writes the backup to the suffixed bucket alongside the live one<br/>||
+|**readfrombackup**|`boolean`|ReadFromBackup serves reads from this backup target instead of the source provider, intended<br/>to be enabled during a disaster recovery event when the source provider storage is lost<br/>||
+|**region**|`string`|Region optionally overrides the destination provider's region, so a backup can replicate<br/>into a region other than the one holding the live objects<br/>||
 
 **Additional Properties:** not allowed   
    
