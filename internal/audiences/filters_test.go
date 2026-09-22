@@ -17,6 +17,7 @@ func TestValidateFilters(t *testing.T) {
 		{
 			name:         "manual audience without filters",
 			audienceType: enums.AudienceTypeManual,
+			hasError:     true,
 		},
 		{
 			name:         "manual audience with filters",
