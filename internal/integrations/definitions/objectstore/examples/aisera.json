@@ -1,0 +1,15 @@
+{
+  "tags": [
+    "technology",
+    "automated customer support"
+  ],
+  "systemInternalID": "entity::d7KvzW8ghTXYzIpzAwQT0A",
+  "name": "aisera",
+  "displayName": "Aisera",
+  "description": "Aisera is a cutting-edge technology company that empowers businesses to revolutionize their work experiences and operations through its innovative AI agent platform, driving productivity, efficiency, and cost savings.",
+  "domains": [
+    "aisera.com"
+  ],
+  "entityTypeName": "vendor",
+  "logoRemoteURL": "https://www.google.com/s2/favicons?domain=aisera.com&sz=128"
+}

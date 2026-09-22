@@ -23,6 +23,7 @@ linters:
       - std-error-handling
     paths:
       - internal/graphapi/testclient
+      - internal/graphapi/testharness/testdata
       - internal/graphapi/model/
       - internal/graphapi/historymodel
       - internal/ent/generated
@@ -57,6 +58,7 @@ formatters:
       - internal/graphapi/generated/gen_models.go
       - internal/graphapi/historygenerated/gen_models.go
       - internal/testutils/*
+      - internal/graphapi/testharness/testdata/*
       - pkg/entitlements/test/*
       - cli/cmd/*
       - internal/ent/hush/examples/*

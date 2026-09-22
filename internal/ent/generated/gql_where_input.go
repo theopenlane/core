@@ -28493,6 +28493,19 @@ type EntityWhereInput struct {
 	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
 	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
 
+	// "catalog_entity_id" field predicates.
+	CatalogEntityID             *string  `json:"catalogEntityID,omitempty"`
+	CatalogEntityIDNEQ          *string  `json:"catalogEntityIDNEQ,omitempty"`
+	CatalogEntityIDIn           []string `json:"catalogEntityIDIn,omitempty"`
+	CatalogEntityIDNotIn        []string `json:"catalogEntityIDNotIn,omitempty"`
+	CatalogEntityIDContains     *string  `json:"catalogEntityIDContains,omitempty"`
+	CatalogEntityIDHasPrefix    *string  `json:"catalogEntityIDHasPrefix,omitempty"`
+	CatalogEntityIDHasSuffix    *string  `json:"catalogEntityIDHasSuffix,omitempty"`
+	CatalogEntityIDIsNil        bool     `json:"catalogEntityIDIsNil,omitempty"`
+	CatalogEntityIDNotNil       bool     `json:"catalogEntityIDNotNil,omitempty"`
+	CatalogEntityIDEqualFold    *string  `json:"catalogEntityIDEqualFold,omitempty"`
+	CatalogEntityIDContainsFold *string  `json:"catalogEntityIDContainsFold,omitempty"`
+
 	// "observed_at" field predicates.
 	ObservedAt       *models.DateTime `json:"observedAt,omitempty"`
 	ObservedAtGT     *models.DateTime `json:"observedAtGT,omitempty"`
@@ -28683,6 +28696,14 @@ type EntityWhereInput struct {
 	// "logo_file" edge predicates.
 	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
 	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
+
+	// "catalog_entity" edge predicates.
+	HasCatalogEntity     *bool               `json:"hasCatalogEntity,omitempty"`
+	HasCatalogEntityWith []*EntityWhereInput `json:"hasCatalogEntityWith,omitempty"`
+
+	// "adopted_entities" edge predicates.
+	HasAdoptedEntities     *bool               `json:"hasAdoptedEntities,omitempty"`
+	HasAdoptedEntitiesWith []*EntityWhereInput `json:"hasAdoptedEntitiesWith,omitempty"`
 
 	// "internal_policies" edge predicates.
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
@@ -30539,6 +30560,39 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 	if i.ExternalIDContainsFold != nil {
 		predicates = append(predicates, entity.ExternalIDContainsFold(*i.ExternalIDContainsFold))
 	}
+	if i.CatalogEntityID != nil {
+		predicates = append(predicates, entity.CatalogEntityIDEQ(*i.CatalogEntityID))
+	}
+	if i.CatalogEntityIDNEQ != nil {
+		predicates = append(predicates, entity.CatalogEntityIDNEQ(*i.CatalogEntityIDNEQ))
+	}
+	if len(i.CatalogEntityIDIn) > 0 {
+		predicates = append(predicates, entity.CatalogEntityIDIn(i.CatalogEntityIDIn...))
+	}
+	if len(i.CatalogEntityIDNotIn) > 0 {
+		predicates = append(predicates, entity.CatalogEntityIDNotIn(i.CatalogEntityIDNotIn...))
+	}
+	if i.CatalogEntityIDContains != nil {
+		predicates = append(predicates, entity.CatalogEntityIDContains(*i.CatalogEntityIDContains))
+	}
+	if i.CatalogEntityIDHasPrefix != nil {
+		predicates = append(predicates, entity.CatalogEntityIDHasPrefix(*i.CatalogEntityIDHasPrefix))
+	}
+	if i.CatalogEntityIDHasSuffix != nil {
+		predicates = append(predicates, entity.CatalogEntityIDHasSuffix(*i.CatalogEntityIDHasSuffix))
+	}
+	if i.CatalogEntityIDIsNil {
+		predicates = append(predicates, entity.CatalogEntityIDIsNil())
+	}
+	if i.CatalogEntityIDNotNil {
+		predicates = append(predicates, entity.CatalogEntityIDNotNil())
+	}
+	if i.CatalogEntityIDEqualFold != nil {
+		predicates = append(predicates, entity.CatalogEntityIDEqualFold(*i.CatalogEntityIDEqualFold))
+	}
+	if i.CatalogEntityIDContainsFold != nil {
+		predicates = append(predicates, entity.CatalogEntityIDContainsFold(*i.CatalogEntityIDContainsFold))
+	}
 	if i.ObservedAt != nil {
 		predicates = append(predicates, entity.ObservedAtEQ(*i.ObservedAt))
 	}
@@ -31381,6 +31435,44 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, entity.HasLogoFileWith(with...))
+	}
+	if i.HasCatalogEntity != nil {
+		p := entity.HasCatalogEntity()
+		if !*i.HasCatalogEntity {
+			p = entity.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasCatalogEntityWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasCatalogEntityWith))
+		with = append(with, entity.DeletedAtIsNil())
+		for _, w := range i.HasCatalogEntityWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasCatalogEntityWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, entity.HasCatalogEntityWith(with...))
+	}
+	if i.HasAdoptedEntities != nil {
+		p := entity.HasAdoptedEntities()
+		if !*i.HasAdoptedEntities {
+			p = entity.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasAdoptedEntitiesWith) > 0 {
+		with := make([]predicate.Entity, 0, len(i.HasAdoptedEntitiesWith))
+		with = append(with, entity.DeletedAtIsNil())
+		for _, w := range i.HasAdoptedEntitiesWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasAdoptedEntitiesWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, entity.HasAdoptedEntitiesWith(with...))
 	}
 	if i.HasInternalPolicies != nil {
 		p := entity.HasInternalPolicies()
@@ -77048,6 +77140,38 @@ type RiskWhereInput struct {
 	DelegateIdentityHolderIDEqualFold    *string  `json:"delegateIdentityHolderIDEqualFold,omitempty"`
 	DelegateIdentityHolderIDContainsFold *string  `json:"delegateIdentityHolderIDContainsFold,omitempty"`
 
+	// "system_owned" field predicates.
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
+
+	// "internal_notes" field predicates.
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNEQ          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        bool     `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       bool     `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+
+	// "system_internal_id" field predicates.
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIDNEQ          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        bool     `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       bool     `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+
 	// "risk_kind_name" field predicates.
 	RiskKindName             *string  `json:"riskKindName,omitempty"`
 	RiskKindNameNEQ          *string  `json:"riskKindNameNEQ,omitempty"`
@@ -78246,6 +78370,84 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if i.DelegateIdentityHolderIDContainsFold != nil {
 		predicates = append(predicates, risk.DelegateIdentityHolderIDContainsFold(*i.DelegateIdentityHolderIDContainsFold))
+	}
+	if i.SystemOwned != nil {
+		predicates = append(predicates, risk.SystemOwnedEQ(*i.SystemOwned))
+	}
+	if i.SystemOwnedNEQ != nil {
+		predicates = append(predicates, risk.SystemOwnedNEQ(*i.SystemOwnedNEQ))
+	}
+	if i.SystemOwnedIsNil {
+		predicates = append(predicates, risk.SystemOwnedIsNil())
+	}
+	if i.SystemOwnedNotNil {
+		predicates = append(predicates, risk.SystemOwnedNotNil())
+	}
+	if i.InternalNotes != nil {
+		predicates = append(predicates, risk.InternalNotesEQ(*i.InternalNotes))
+	}
+	if i.InternalNotesNEQ != nil {
+		predicates = append(predicates, risk.InternalNotesNEQ(*i.InternalNotesNEQ))
+	}
+	if len(i.InternalNotesIn) > 0 {
+		predicates = append(predicates, risk.InternalNotesIn(i.InternalNotesIn...))
+	}
+	if len(i.InternalNotesNotIn) > 0 {
+		predicates = append(predicates, risk.InternalNotesNotIn(i.InternalNotesNotIn...))
+	}
+	if i.InternalNotesContains != nil {
+		predicates = append(predicates, risk.InternalNotesContains(*i.InternalNotesContains))
+	}
+	if i.InternalNotesHasPrefix != nil {
+		predicates = append(predicates, risk.InternalNotesHasPrefix(*i.InternalNotesHasPrefix))
+	}
+	if i.InternalNotesHasSuffix != nil {
+		predicates = append(predicates, risk.InternalNotesHasSuffix(*i.InternalNotesHasSuffix))
+	}
+	if i.InternalNotesIsNil {
+		predicates = append(predicates, risk.InternalNotesIsNil())
+	}
+	if i.InternalNotesNotNil {
+		predicates = append(predicates, risk.InternalNotesNotNil())
+	}
+	if i.InternalNotesEqualFold != nil {
+		predicates = append(predicates, risk.InternalNotesEqualFold(*i.InternalNotesEqualFold))
+	}
+	if i.InternalNotesContainsFold != nil {
+		predicates = append(predicates, risk.InternalNotesContainsFold(*i.InternalNotesContainsFold))
+	}
+	if i.SystemInternalID != nil {
+		predicates = append(predicates, risk.SystemInternalIDEQ(*i.SystemInternalID))
+	}
+	if i.SystemInternalIDNEQ != nil {
+		predicates = append(predicates, risk.SystemInternalIDNEQ(*i.SystemInternalIDNEQ))
+	}
+	if len(i.SystemInternalIDIn) > 0 {
+		predicates = append(predicates, risk.SystemInternalIDIn(i.SystemInternalIDIn...))
+	}
+	if len(i.SystemInternalIDNotIn) > 0 {
+		predicates = append(predicates, risk.SystemInternalIDNotIn(i.SystemInternalIDNotIn...))
+	}
+	if i.SystemInternalIDContains != nil {
+		predicates = append(predicates, risk.SystemInternalIDContains(*i.SystemInternalIDContains))
+	}
+	if i.SystemInternalIDHasPrefix != nil {
+		predicates = append(predicates, risk.SystemInternalIDHasPrefix(*i.SystemInternalIDHasPrefix))
+	}
+	if i.SystemInternalIDHasSuffix != nil {
+		predicates = append(predicates, risk.SystemInternalIDHasSuffix(*i.SystemInternalIDHasSuffix))
+	}
+	if i.SystemInternalIDIsNil {
+		predicates = append(predicates, risk.SystemInternalIDIsNil())
+	}
+	if i.SystemInternalIDNotNil {
+		predicates = append(predicates, risk.SystemInternalIDNotNil())
+	}
+	if i.SystemInternalIDEqualFold != nil {
+		predicates = append(predicates, risk.SystemInternalIDEqualFold(*i.SystemInternalIDEqualFold))
+	}
+	if i.SystemInternalIDContainsFold != nil {
+		predicates = append(predicates, risk.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
 	}
 	if i.RiskKindName != nil {
 		predicates = append(predicates, risk.RiskKindNameEQ(*i.RiskKindName))

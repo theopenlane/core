@@ -1,0 +1,32 @@
+[
+  {
+    "systemInternalID": "entity::fixture-alpha",
+    "entityTypeName": "vendor",
+    "name": "fixture-alpha-vendor",
+    "displayName": "Fixture Alpha",
+    "description": "Fixture Alpha provides identity services for the objectstore import tests.",
+    "domains": ["fixture-alpha.example.com"],
+    "tags": ["technology", "fixture"],
+    "logoRemoteURL": "https://www.google.com/s2/favicons?domain=fixture-alpha.example.com&sz=128"
+  },
+  {
+    "systemInternalID": "entity::fixture-beta",
+    "entityTypeName": "vendor",
+    "name": "fixture-beta-vendor",
+    "displayName": "Fixture Beta",
+    "description": "Fixture Beta provides billing services for the objectstore import tests.",
+    "domains": ["fixture-beta.example.com"],
+    "tags": ["technology", "fixture"],
+    "logoRemoteURL": "https://www.google.com/s2/favicons?domain=fixture-beta.example.com&sz=128"
+  },
+  {
+    "systemInternalID": "entity::fixture-gamma-customer",
+    "entityTypeName": "customer",
+    "name": "fixture-gamma-customer",
+    "displayName": "Fixture Gamma",
+    "description": "Fixture Gamma is a customer record the vendor variant must filter out.",
+    "domains": ["fixture-gamma.example.com"],
+    "tags": ["fixture"],
+    "logoRemoteURL": "https://www.google.com/s2/favicons?domain=fixture-gamma.example.com&sz=128"
+  }
+]

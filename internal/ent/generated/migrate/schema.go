@@ -2271,6 +2271,7 @@ var (
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_type_id", Type: field.TypeString, Nullable: true},
 		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "catalog_entity_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_type_entities", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "risk_entities", Type: field.TypeString, Nullable: true},
@@ -2360,20 +2361,26 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_entity_types_entities",
+				Symbol:     "entities_entities_adopted_entities",
 				Columns:    []*schema.Column{EntitiesColumns[73]},
+				RefColumns: []*schema.Column{EntitiesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_entity_types_entities",
+				Columns:    []*schema.Column{EntitiesColumns[74]},
 				RefColumns: []*schema.Column{EntityTypesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_organizations_entities",
-				Columns:    []*schema.Column{EntitiesColumns[74]},
+				Columns:    []*schema.Column{EntitiesColumns[75]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_risks_entities",
-				Columns:    []*schema.Column{EntitiesColumns[75]},
+				Columns:    []*schema.Column{EntitiesColumns[76]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2402,12 +2409,12 @@ var (
 			{
 				Name:    "entity_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{EntitiesColumns[74]},
+				Columns: []*schema.Column{EntitiesColumns[75]},
 			},
 			{
 				Name:    "entity_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntitiesColumns[25], EntitiesColumns[74]},
+				Columns: []*schema.Column{EntitiesColumns[25], EntitiesColumns[75]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2420,7 +2427,15 @@ var (
 			{
 				Name:    "entity_external_id_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{EntitiesColumns[58], EntitiesColumns[74]},
+				Columns: []*schema.Column{EntitiesColumns[58], EntitiesColumns[75]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "entity_catalog_entity_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{EntitiesColumns[73], EntitiesColumns[75]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6563,6 +6578,9 @@ var (
 		{Name: "integration_run_id", Type: field.TypeString, Nullable: true},
 		{Name: "stakeholder_name", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_name", Type: field.TypeString, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "risk_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "risk_category_name", Type: field.TypeString, Nullable: true},
 		{Name: "environment_name", Type: field.TypeString, Nullable: true},
@@ -6616,97 +6634,97 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "risks_control_objectives_risks",
-				Columns:    []*schema.Column{RisksColumns[45]},
+				Columns:    []*schema.Column{RisksColumns[48]},
 				RefColumns: []*schema.Column{ControlObjectivesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_custom_type_enums_risks",
-				Columns:    []*schema.Column{RisksColumns[46]},
+				Columns:    []*schema.Column{RisksColumns[49]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_custom_type_enums_risk_categories",
-				Columns:    []*schema.Column{RisksColumns[47]},
+				Columns:    []*schema.Column{RisksColumns[50]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_organizations_risks",
-				Columns:    []*schema.Column{RisksColumns[48]},
+				Columns:    []*schema.Column{RisksColumns[51]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_users_stakeholder_user",
-				Columns:    []*schema.Column{RisksColumns[49]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "risks_groups_stakeholder_group",
-				Columns:    []*schema.Column{RisksColumns[50]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "risks_identity_holders_stakeholder_identity_holder",
-				Columns:    []*schema.Column{RisksColumns[51]},
-				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "risks_users_delegate_user",
 				Columns:    []*schema.Column{RisksColumns[52]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_groups_delegate_group",
+				Symbol:     "risks_groups_stakeholder_group",
 				Columns:    []*schema.Column{RisksColumns[53]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_identity_holders_delegate_identity_holder",
+				Symbol:     "risks_identity_holders_stakeholder_identity_holder",
 				Columns:    []*schema.Column{RisksColumns[54]},
 				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_custom_type_enums_risk_kind",
+				Symbol:     "risks_users_delegate_user",
 				Columns:    []*schema.Column{RisksColumns[55]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_custom_type_enums_risk_category",
+				Symbol:     "risks_groups_delegate_group",
 				Columns:    []*schema.Column{RisksColumns[56]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_custom_type_enums_environment",
+				Symbol:     "risks_identity_holders_delegate_identity_holder",
 				Columns:    []*schema.Column{RisksColumns[57]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_custom_type_enums_scope",
+				Symbol:     "risks_custom_type_enums_risk_kind",
 				Columns:    []*schema.Column{RisksColumns[58]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_groups_stakeholder",
+				Symbol:     "risks_custom_type_enums_risk_category",
 				Columns:    []*schema.Column{RisksColumns[59]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_custom_type_enums_environment",
+				Columns:    []*schema.Column{RisksColumns[60]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_custom_type_enums_scope",
+				Columns:    []*schema.Column{RisksColumns[61]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_groups_stakeholder",
+				Columns:    []*schema.Column{RisksColumns[62]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_groups_delegate",
-				Columns:    []*schema.Column{RisksColumns[60]},
+				Columns:    []*schema.Column{RisksColumns[63]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6715,17 +6733,17 @@ var (
 			{
 				Name:    "risk_stakeholder_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{RisksColumns[59]},
+				Columns: []*schema.Column{RisksColumns[62]},
 			},
 			{
 				Name:    "risk_delegate_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{RisksColumns[60]},
+				Columns: []*schema.Column{RisksColumns[63]},
 			},
 			{
 				Name:    "risk_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{RisksColumns[8], RisksColumns[48]},
+				Columns: []*schema.Column{RisksColumns[8], RisksColumns[51]},
 			},
 			{
 				Name:    "risk_source_instance_id",
@@ -6740,12 +6758,12 @@ var (
 			{
 				Name:    "risk_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{RisksColumns[48]},
+				Columns: []*schema.Column{RisksColumns[51]},
 			},
 			{
 				Name:    "risk_external_uuid_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{RisksColumns[25], RisksColumns[48]},
+				Columns: []*schema.Column{RisksColumns[28], RisksColumns[51]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6753,7 +6771,7 @@ var (
 			{
 				Name:    "risk_external_id_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{RisksColumns[22], RisksColumns[48]},
+				Columns: []*schema.Column{RisksColumns[25], RisksColumns[51]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -16109,9 +16127,10 @@ func init() {
 	EntitiesTable.ForeignKeys[10].RefTable = CustomTypeEnumsTable
 	EntitiesTable.ForeignKeys[11].RefTable = EntityTypesTable
 	EntitiesTable.ForeignKeys[12].RefTable = FilesTable
-	EntitiesTable.ForeignKeys[13].RefTable = EntityTypesTable
-	EntitiesTable.ForeignKeys[14].RefTable = OrganizationsTable
-	EntitiesTable.ForeignKeys[15].RefTable = RisksTable
+	EntitiesTable.ForeignKeys[13].RefTable = EntitiesTable
+	EntitiesTable.ForeignKeys[14].RefTable = EntityTypesTable
+	EntitiesTable.ForeignKeys[15].RefTable = OrganizationsTable
+	EntitiesTable.ForeignKeys[16].RefTable = RisksTable
 	EntityTypesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	EventsTable.ForeignKeys[0].RefTable = DirectoryMembershipsTable
 	EventsTable.ForeignKeys[1].RefTable = ExportsTable

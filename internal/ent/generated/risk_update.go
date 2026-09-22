@@ -425,6 +425,46 @@ func (_u *RiskUpdate) ClearDelegateIdentityHolderID() *RiskUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *RiskUpdate) SetInternalNotes(v string) *RiskUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableInternalNotes(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *RiskUpdate) ClearInternalNotes() *RiskUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *RiskUpdate) SetSystemInternalID(v string) *RiskUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *RiskUpdate) SetNillableSystemInternalID(v *string) *RiskUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *RiskUpdate) ClearSystemInternalID() *RiskUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetRiskKindName sets the "risk_kind_name" field.
 func (_u *RiskUpdate) SetRiskKindName(v string) *RiskUpdate {
 	_u.mutation.SetRiskKindName(v)
@@ -2219,6 +2259,21 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.DelegateNameCleared() {
 		_spec.ClearField(risk.FieldDelegateName, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(risk.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(risk.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(risk.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(risk.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(risk.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.RiskKindName(); ok {
 		_spec.SetField(risk.FieldRiskKindName, field.TypeString, value)
@@ -4136,6 +4191,46 @@ func (_u *RiskUpdateOne) ClearDelegateIdentityHolderID() *RiskUpdateOne {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *RiskUpdateOne) SetInternalNotes(v string) *RiskUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableInternalNotes(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *RiskUpdateOne) ClearInternalNotes() *RiskUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *RiskUpdateOne) SetSystemInternalID(v string) *RiskUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *RiskUpdateOne) SetNillableSystemInternalID(v *string) *RiskUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *RiskUpdateOne) ClearSystemInternalID() *RiskUpdateOne {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetRiskKindName sets the "risk_kind_name" field.
 func (_u *RiskUpdateOne) SetRiskKindName(v string) *RiskUpdateOne {
 	_u.mutation.SetRiskKindName(v)
@@ -5960,6 +6055,21 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 	}
 	if _u.mutation.DelegateNameCleared() {
 		_spec.ClearField(risk.FieldDelegateName, field.TypeString)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(risk.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(risk.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(risk.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(risk.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(risk.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.RiskKindName(); ok {
 		_spec.SetField(risk.FieldRiskKindName, field.TypeString, value)

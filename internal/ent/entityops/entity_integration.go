@@ -1073,6 +1073,8 @@ var RiskFields = struct {
 	ExternalUUID FieldDescriptor
 	// Impact is the impact field
 	Impact FieldDescriptor
+	// InternalNotes is the internal_notes field
+	InternalNotes FieldDescriptor
 	// LastReviewedAt is the last_reviewed_at field
 	LastReviewedAt FieldDescriptor
 	// Likelihood is the likelihood field
@@ -1121,6 +1123,8 @@ var RiskFields = struct {
 	StakeholderUserID FieldDescriptor
 	// Status is the status field
 	Status FieldDescriptor
+	// SystemInternalID is the system_internal_id field
+	SystemInternalID FieldDescriptor
 	// Tags is the tags field
 	Tags FieldDescriptor
 }{

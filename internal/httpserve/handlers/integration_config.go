@@ -42,7 +42,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	ctx.SetRequest(ctx.Request().WithContext(systemCtx))
 
 	def, ok := h.IntegrationsRuntime.Registry().Definition(payload.DefinitionID)
-	if !ok || !def.Active {
+	if !ok || !def.Active || def.RuntimeOnly {
 		return h.BadRequest(ctx, ErrInvalidProvider)
 	}
 

@@ -289,6 +289,9 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(entityhistory.FieldExternalID, field.TypeString)
 	}
+	if _u.mutation.CatalogEntityIDCleared() {
+		_spec.ClearField(entityhistory.FieldCatalogEntityID, field.TypeString)
+	}
 	if _u.mutation.ObservedAtCleared() {
 		_spec.ClearField(entityhistory.FieldObservedAt, field.TypeTime)
 	}
@@ -601,6 +604,9 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(entityhistory.FieldExternalID, field.TypeString)
+	}
+	if _u.mutation.CatalogEntityIDCleared() {
+		_spec.ClearField(entityhistory.FieldCatalogEntityID, field.TypeString)
 	}
 	if _u.mutation.ObservedAtCleared() {
 		_spec.ClearField(entityhistory.FieldObservedAt, field.TypeTime)

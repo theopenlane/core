@@ -22408,6 +22408,8 @@ type CreateRiskInput struct {
 	Tags                        []string              `json:"tags,omitempty"`
 	StakeholderName             *string               `json:"stakeholder_name,omitempty"`
 	DelegateName                *string               `json:"delegate_name,omitempty"`
+	InternalNotes               *string               `json:"internal_notes,omitempty"`
+	SystemInternalID            *string               `json:"system_internal_id,omitempty"`
 	RiskKindName                *string               `json:"risk_kind_name,omitempty"`
 	RiskCategoryName            *string               `json:"risk_category_name,omitempty"`
 	EnvironmentName             *string               `json:"environment_name,omitempty"`
@@ -22483,6 +22485,12 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.DelegateName; v != nil {
 		m.SetDelegateName(*v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.RiskKindName; v != nil {
 		m.SetRiskKindName(*v)
@@ -22688,6 +22696,10 @@ type UpdateRiskInput struct {
 	StakeholderName                *string `json:"stakeholder_name,omitempty"`
 	ClearDelegateName              bool
 	DelegateName                   *string `json:"delegate_name,omitempty"`
+	ClearInternalNotes             bool
+	InternalNotes                  *string `json:"internal_notes,omitempty"`
+	ClearSystemInternalID          bool
+	SystemInternalID               *string `json:"system_internal_id,omitempty"`
 	ClearRiskKindName              bool
 	RiskKindName                   *string `json:"risk_kind_name,omitempty"`
 	ClearRiskCategoryName          bool
@@ -22860,6 +22872,18 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.DelegateName; v != nil {
 		m.SetDelegateName(*v)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if i.ClearRiskKindName {
 		m.ClearRiskKindName()

@@ -1091,6 +1091,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entity.FieldLogoRemoteURL:                         {Type: field.TypeString, Column: entity.FieldLogoRemoteURL},
 			entity.FieldLogoFileID:                            {Type: field.TypeString, Column: entity.FieldLogoFileID},
 			entity.FieldExternalID:                            {Type: field.TypeString, Column: entity.FieldExternalID},
+			entity.FieldCatalogEntityID:                       {Type: field.TypeString, Column: entity.FieldCatalogEntityID},
 			entity.FieldObservedAt:                            {Type: field.TypeTime, Column: entity.FieldObservedAt},
 		},
 	}
@@ -2678,6 +2679,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			risk.FieldDelegateUserID:              {Type: field.TypeString, Column: risk.FieldDelegateUserID},
 			risk.FieldDelegateGroupID:             {Type: field.TypeString, Column: risk.FieldDelegateGroupID},
 			risk.FieldDelegateIdentityHolderID:    {Type: field.TypeString, Column: risk.FieldDelegateIdentityHolderID},
+			risk.FieldSystemOwned:                 {Type: field.TypeBool, Column: risk.FieldSystemOwned},
+			risk.FieldInternalNotes:               {Type: field.TypeString, Column: risk.FieldInternalNotes},
+			risk.FieldSystemInternalID:            {Type: field.TypeString, Column: risk.FieldSystemInternalID},
 			risk.FieldRiskKindName:                {Type: field.TypeString, Column: risk.FieldRiskKindName},
 			risk.FieldRiskKindID:                  {Type: field.TypeString, Column: risk.FieldRiskKindID},
 			risk.FieldRiskCategoryName:            {Type: field.TypeString, Column: risk.FieldRiskCategoryName},
@@ -7326,6 +7330,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Entity",
 		"File",
+	)
+	graph.MustAddE(
+		"catalog_entity",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entity.CatalogEntityTable,
+			Columns: []string{entity.CatalogEntityColumn},
+			Bidi:    false,
+		},
+		"Entity",
+		"Entity",
+	)
+	graph.MustAddE(
+		"adopted_entities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedEntitiesTable,
+			Columns: []string{entity.AdoptedEntitiesColumn},
+			Bidi:    false,
+		},
+		"Entity",
+		"Entity",
 	)
 	graph.MustAddE(
 		"internal_policies",
@@ -26801,6 +26829,11 @@ func (f *EntityFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(entity.FieldExternalID))
 }
 
+// WhereCatalogEntityID applies the entql string predicate on the catalog_entity_id field.
+func (f *EntityFilter) WhereCatalogEntityID(p entql.StringP) {
+	f.Where(p.Field(entity.FieldCatalogEntityID))
+}
+
 // WhereObservedAt applies the entql time.Time predicate on the observed_at field.
 func (f *EntityFilter) WhereObservedAt(p entql.TimeP) {
 	f.Where(p.Field(entity.FieldObservedAt))
@@ -27374,6 +27407,34 @@ func (f *EntityFilter) WhereHasLogoFile() {
 // WhereHasLogoFileWith applies a predicate to check if query has an edge logo_file with a given conditions (other predicates).
 func (f *EntityFilter) WhereHasLogoFileWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("logo_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasCatalogEntity applies a predicate to check if query has an edge catalog_entity.
+func (f *EntityFilter) WhereHasCatalogEntity() {
+	f.Where(entql.HasEdge("catalog_entity"))
+}
+
+// WhereHasCatalogEntityWith applies a predicate to check if query has an edge catalog_entity with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasCatalogEntityWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("catalog_entity", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAdoptedEntities applies a predicate to check if query has an edge adopted_entities.
+func (f *EntityFilter) WhereHasAdoptedEntities() {
+	f.Where(entql.HasEdge("adopted_entities"))
+}
+
+// WhereHasAdoptedEntitiesWith applies a predicate to check if query has an edge adopted_entities with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasAdoptedEntitiesWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("adopted_entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -42955,6 +43016,21 @@ func (f *RiskFilter) WhereDelegateGroupID(p entql.StringP) {
 // WhereDelegateIdentityHolderID applies the entql string predicate on the delegate_identity_holder_id field.
 func (f *RiskFilter) WhereDelegateIdentityHolderID(p entql.StringP) {
 	f.Where(p.Field(risk.FieldDelegateIdentityHolderID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *RiskFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(risk.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *RiskFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(risk.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *RiskFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(risk.FieldSystemInternalID))
 }
 
 // WhereRiskKindName applies the entql string predicate on the risk_kind_name field.

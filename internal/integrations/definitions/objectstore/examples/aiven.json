@@ -1,0 +1,15 @@
+{
+  "tags": [
+    "technology",
+    "cloud data infrastructure"
+  ],
+  "systemInternalID": "entity::_eFj0TdfPrEQDHhclvyXmg",
+  "name": "aiven",
+  "displayName": "Aiven",
+  "description": "Aiven is an AI-ready open source data platform company that helps organizations gain more value from their data by providing a cloud platform to stream, store, and serve data simply, securely, and rapidly across major cloud providers, empowering innovation and next-generation applications.",
+  "domains": [
+    "aiven.io"
+  ],
+  "entityTypeName": "vendor",
+  "logoRemoteURL": "https://www.google.com/s2/favicons?domain=aiven.io&sz=128"
+}

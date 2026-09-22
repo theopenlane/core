@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
+	"github.com/theopenlane/core/v2/internal/vendorenrich"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -375,7 +376,7 @@ func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client
 		return ids, nil, nil
 	}
 
-	vendorEntityTypeID, err := client.EntityType.Query().Where(entitytype.NameEqualFold(domainScanImportVendorEntityType)).OnlyID(ctx)
+	vendorEntityTypeID, err := client.EntityType.Query().Where(entitytype.NameEqualFold(domainScanImportVendorEntityType), entitytype.OwnerID(ownerID)).OnlyID(ctx)
 	if err != nil {
 		return nil, nil, fmt.Errorf("looking up vendor entity type: %w", err)
 	}
@@ -397,6 +398,7 @@ func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client
 
 		existing, err := client.Entity.Query().
 			Where(
+				entity.OwnerID(ownerID),
 				entity.Or(
 					entity.NameEqualFold(entityName),
 					entity.NameEqualFold(vendor.Name),
@@ -425,6 +427,37 @@ func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client
 			return nil, nil, fmt.Errorf("looking up existing vendor %q: %w", vendor.Name, err)
 		}
 
+		catalogID, matched, err := vendorenrich.MatchCatalog(ctx, client, vendor.Name, vendor.Domain)
+		if err != nil {
+			return nil, nil, fmt.Errorf("matching vendor %q against catalog: %w", vendor.Name, err)
+		}
+
+		if !matched && vendor.LegalName != "" {
+			catalogID, matched, err = vendorenrich.MatchCatalog(ctx, client, vendor.LegalName, "")
+			if err != nil {
+				return nil, nil, fmt.Errorf("matching vendor %q against catalog: %w", vendor.LegalName, err)
+			}
+		}
+
+		if matched {
+			adoptedID, created, err := vendorenrich.AdoptVendor(ctx, client, ownerID, catalogID)
+			if err != nil {
+				return nil, nil, fmt.Errorf("adopting catalog vendor %q: %w", vendor.Name, err)
+			}
+
+			if err := linkDomainScanAdoptedVendor(ctx, client, adoptedID, vendor.Categories, matchedAssetIDs, scanIDs); err != nil {
+				return nil, nil, fmt.Errorf("linking adopted vendor %q: %w", vendor.Name, err)
+			}
+
+			ids[vendor.Ref] = adoptedID
+
+			if created {
+				createdIDs = append(createdIDs, adoptedID)
+			}
+
+			continue
+		}
+
 		input := generated.CreateEntityInput{
 			Name:           &entityName,
 			DisplayName:    &vendor.Name,
@@ -450,6 +483,42 @@ func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client
 	}
 
 	return ids, createdIDs, nil
+}
+
+// linkDomainScanAdoptedVendor links the scans, assets, and tags an adopted vendor is missing
+func linkDomainScanAdoptedVendor(ctx context.Context, client *generated.Client, entityID string, categories, assetIDs, scanIDs []string) error {
+	adopted, err := client.Entity.Get(ctx, entityID)
+	if err != nil {
+		return err
+	}
+
+	linkedAssetIDs, err := adopted.QueryAssets().IDs(ctx)
+	if err != nil {
+		return err
+	}
+
+	linkedScanIDs, err := adopted.QueryScans().IDs(ctx)
+	if err != nil {
+		return err
+	}
+
+	missingAssetIDs := unlinkedDomainScanIDs(assetIDs, linkedAssetIDs)
+	missingScanIDs := unlinkedDomainScanIDs(scanIDs, linkedScanIDs)
+	missingTags := unlinkedDomainScanIDs(categories, adopted.Tags)
+
+	if len(missingAssetIDs) == 0 && len(missingScanIDs) == 0 && len(missingTags) == 0 {
+		return nil
+	}
+
+	update := client.Entity.UpdateOneID(entityID).
+		AddAssetIDs(missingAssetIDs...).
+		AddScanIDs(missingScanIDs...)
+
+	if len(missingTags) > 0 {
+		update.AppendTags(missingTags)
+	}
+
+	return update.Exec(ctx)
 }
 
 // domainScanAssetVendorNames maps each domain (lowercased) to the vendor name the scan itself

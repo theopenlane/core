@@ -170,6 +170,8 @@ const (
 	FieldLogoFileID = "logo_file_id"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
+	// FieldCatalogEntityID holds the string denoting the catalog_entity_id field in the database.
+	FieldCatalogEntityID = "catalog_entity_id"
 	// FieldObservedAt holds the string denoting the observed_at field in the database.
 	FieldObservedAt = "observed_at"
 	// Table holds the table name of the entityhistory in the database.
@@ -254,6 +256,7 @@ var Columns = []string{
 	FieldLogoRemoteURL,
 	FieldLogoFileID,
 	FieldExternalID,
+	FieldCatalogEntityID,
 	FieldObservedAt,
 }
 
@@ -702,6 +705,11 @@ func ByLogoFileID(opts ...sql.OrderTermOption) OrderOption {
 // ByExternalID orders the results by the external_id field.
 func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
+}
+
+// ByCatalogEntityID orders the results by the catalog_entity_id field.
+func ByCatalogEntityID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCatalogEntityID, opts...).ToFunc()
 }
 
 // ByObservedAt orders the results by the observed_at field.

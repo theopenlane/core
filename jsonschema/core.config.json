@@ -165,6 +165,12 @@
         "slackruntime": {
           "$ref": "#/$defs/slack.RuntimeSlackConfig"
         },
+        "objectstore": {
+          "$ref": "#/$defs/objectstore.Config"
+        },
+        "objectstoreruntime": {
+          "$ref": "#/$defs/objectstore.RuntimeConfig"
+        },
         "googledrive": {
           "$ref": "#/$defs/googledrive.Config"
         },
@@ -1209,6 +1215,67 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Config defines the config for Mime middleware"
+    },
+    "objectstore.Config": {
+      "properties": {
+        "accesskeyid": {
+          "type": "string"
+        },
+        "secretaccesskey": {
+          "type": "string"
+        },
+        "arn": {
+          "type": "string"
+        },
+        "runtimeonly": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "objectstore.ImportRecords": {
+      "properties": {
+        "prefix": {
+          "type": "string",
+          "title": "Prefix",
+          "description": "Object key prefix (directory) whose JSON files hold arrays of records"
+        },
+        "schema": {
+          "type": "string",
+          "title": "Schema",
+          "description": "Internal model the records are mapped and upserted into (e.g. Entity)"
+        },
+        "variant": {
+          "type": "string",
+          "title": "Variant",
+          "description": "Mapping variant to apply such as vendor to link imported entities to the vendor entity type"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "prefix",
+        "schema"
+      ]
+    },
+    "objectstore.RuntimeConfig": {
+      "properties": {
+        "providers": {
+          "$ref": "#/$defs/storage.Providers",
+          "description": "Storage providers"
+        },
+        "import": {
+          "$ref": "#/$defs/objectstore.ImportRecords",
+          "description": "Bucket prefix with the schema and mapping variant the system import reads unless a trigger overrides them"
+        },
+        "runonstartup": {
+          "type": "boolean",
+          "description": "Run the system import once when the server starts"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "oidclocal.Config": {
       "properties": {

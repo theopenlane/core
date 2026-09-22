@@ -6,6 +6,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore"
 	runtime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/keystore"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
@@ -57,6 +58,8 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 
 		runtime.SetDefault(rt)
 
+		runStartupSystemImport(ctx, rt, s.Config.Settings.Integrations.ObjectStoreRuntime)
+
 		if err := galaInstance.Attach(gala.WithValue(rt)); err != nil {
 			log.Panic().Err(err).Msg("failed to attach integration runtime to gala injector")
 		}
@@ -89,6 +92,22 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 			log.Panic().Err(err).Msg("failed to wire integration deps into workflow engine")
 		}
 	})
+}
+
+// runStartupSystemImport runs the object storage system import once when the runtime config asks for it
+func runStartupSystemImport(ctx context.Context, rt *runtime.Runtime, cfg objectstore.RuntimeConfig) {
+	if !cfg.Provisioned() || !cfg.RunOnStartup {
+		return
+	}
+
+	result, err := rt.ExecuteRuntimeOperation(ctx, objectstore.DefinitionID.ID(), objectstore.SystemImportOp.Name(), nil)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("startup object storage system import failed")
+
+		return
+	}
+
+	logx.FromContext(ctx).Info().RawJSON("result", result).Msg("startup object storage system import completed")
 }
 
 // seedIntegrationLoops ensures every reconcilable and scheduled operation has a live loop

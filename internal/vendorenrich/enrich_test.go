@@ -78,6 +78,30 @@ func TestBuildCandidates(t *testing.T) {
 	}
 }
 
+func TestCatalogCandidate(t *testing.T) {
+	tests := []struct {
+		name   string
+		inName string
+		domain string
+		want   candidate
+	}{
+		{name: "bare domain is kept", inName: "Stripe", domain: "stripe.com", want: candidate{name: "Stripe", domain: "stripe.com"}},
+		{name: "url is reduced to its hostname", inName: "Stripe", domain: "https://Stripe.com/pricing", want: candidate{name: "Stripe", domain: "stripe.com"}},
+		{name: "name whitespace is trimmed", inName: "  Stripe  ", domain: "", want: candidate{name: "Stripe", domain: ""}},
+		{name: "unparsable domain is dropped", inName: "Stripe", domain: "://", want: candidate{name: "Stripe", domain: ""}},
+		{name: "neither name nor domain", inName: "", domain: "", want: candidate{}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := catalogCandidate(tt.inName, tt.domain)
+
+			assert.Check(t, is.Equal(tt.want.name, got.name))
+			assert.Check(t, is.Equal(tt.want.domain, got.domain))
+		})
+	}
+}
+
 func TestMatchReference(t *testing.T) {
 	byDomain := reference{entityID: "by-domain", name: "domain-match", domains: []string{"stripe.com"}}
 	byName := reference{entityID: "by-name", name: "Stripe"}

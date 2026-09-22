@@ -1011,6 +1011,20 @@ func (_c *EntityHistoryCreate) SetNillableExternalID(v *string) *EntityHistoryCr
 	return _c
 }
 
+// SetCatalogEntityID sets the "catalog_entity_id" field.
+func (_c *EntityHistoryCreate) SetCatalogEntityID(v string) *EntityHistoryCreate {
+	_c.mutation.SetCatalogEntityID(v)
+	return _c
+}
+
+// SetNillableCatalogEntityID sets the "catalog_entity_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableCatalogEntityID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetCatalogEntityID(*v)
+	}
+	return _c
+}
+
 // SetObservedAt sets the "observed_at" field.
 func (_c *EntityHistoryCreate) SetObservedAt(v models.DateTime) *EntityHistoryCreate {
 	_c.mutation.SetObservedAt(v)
@@ -1529,6 +1543,10 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(entityhistory.FieldExternalID, field.TypeString, value)
 		_node.ExternalID = value
+	}
+	if value, ok := _c.mutation.CatalogEntityID(); ok {
+		_spec.SetField(entityhistory.FieldCatalogEntityID, field.TypeString, value)
+		_node.CatalogEntityID = value
 	}
 	if value, ok := _c.mutation.ObservedAt(); ok {
 		_spec.SetField(entityhistory.FieldObservedAt, field.TypeTime, value)

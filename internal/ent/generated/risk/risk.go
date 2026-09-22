@@ -64,6 +64,12 @@ const (
 	FieldDelegateGroupID = "delegate_group_id"
 	// FieldDelegateIdentityHolderID holds the string denoting the delegate_identity_holder_id field in the database.
 	FieldDelegateIdentityHolderID = "delegate_identity_holder_id"
+	// FieldSystemOwned holds the string denoting the system_owned field in the database.
+	FieldSystemOwned = "system_owned"
+	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
+	FieldInternalNotes = "internal_notes"
+	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
+	FieldSystemInternalID = "system_internal_id"
 	// FieldRiskKindName holds the string denoting the risk_kind_name field in the database.
 	FieldRiskKindName = "risk_kind_name"
 	// FieldRiskKindID holds the string denoting the risk_kind_id field in the database.
@@ -445,6 +451,9 @@ var Columns = []string{
 	FieldDelegateUserID,
 	FieldDelegateGroupID,
 	FieldDelegateIdentityHolderID,
+	FieldSystemOwned,
+	FieldInternalNotes,
+	FieldSystemInternalID,
 	FieldRiskKindName,
 	FieldRiskKindID,
 	FieldRiskCategoryName,
@@ -561,7 +570,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [20]ent.Hook
+	Hooks        [22]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -576,6 +585,8 @@ var (
 	DefaultTags []string
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
+	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
+	DefaultSystemOwned bool
 	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
 	DefaultWorkflowEligibleMarker bool
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
@@ -758,6 +769,21 @@ func ByDelegateGroupID(opts ...sql.OrderTermOption) OrderOption {
 // ByDelegateIdentityHolderID orders the results by the delegate_identity_holder_id field.
 func ByDelegateIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDelegateIdentityHolderID, opts...).ToFunc()
+}
+
+// BySystemOwned orders the results by the system_owned field.
+func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
+}
+
+// ByInternalNotes orders the results by the internal_notes field.
+func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalNotes, opts...).ToFunc()
+}
+
+// BySystemInternalID orders the results by the system_internal_id field.
+func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
 }
 
 // ByRiskKindName orders the results by the risk_kind_name field.

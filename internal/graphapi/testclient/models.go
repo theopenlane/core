@@ -8652,6 +8652,10 @@ type CreateRiskInput struct {
 	StakeholderName *string `json:"stakeholderName,omitempty"`
 	// the delegate for the risk when no user, group, or identity holder is linked
 	DelegateName *string `json:"delegateName,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the kind of the risk
 	RiskKindName *string `json:"riskKindName,omitempty"`
 	// the category of the risk
@@ -13180,6 +13184,8 @@ type Entity struct {
 	LogoFileID *string `json:"logoFileID,omitempty"`
 	// stable identifier assigned by the source system, used for integration ingest deduplication
 	ExternalID *string `json:"externalID,omitempty"`
+	// the system-owned catalogue entity this entity was adopted from
+	CatalogEntityID *string `json:"catalogEntityID,omitempty"`
 	// time when this entity was last observed by the source integration
 	ObservedAt                        *models.DateTime              `json:"observedAt,omitempty"`
 	IntegrationRuns                   *IntegrationRunConnection     `json:"integrationRuns"`
@@ -13223,7 +13229,10 @@ type Entity struct {
 	SourcePlatforms                   *PlatformConnection           `json:"sourcePlatforms"`
 	EntityType                        *EntityType                   `json:"entityType,omitempty"`
 	LogoFile                          *File                         `json:"logoFile,omitempty"`
-	InternalPolicies                  *InternalPolicyConnection     `json:"internalPolicies"`
+	// the system-owned catalogue entity this entity was adopted from
+	CatalogEntity    *Entity                   `json:"catalogEntity,omitempty"`
+	AdoptedEntities  *EntityConnection         `json:"adoptedEntities"`
+	InternalPolicies *InternalPolicyConnection `json:"internalPolicies"`
 }
 
 func (Entity) IsNode() {}
@@ -14187,6 +14196,18 @@ type EntityWhereInput struct {
 	ExternalIDNotNil       *bool    `json:"externalIDNotNil,omitempty"`
 	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
 	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
+	// catalog_entity_id field predicates
+	CatalogEntityID             *string  `json:"catalogEntityID,omitempty"`
+	CatalogEntityIdneq          *string  `json:"catalogEntityIDNEQ,omitempty"`
+	CatalogEntityIDIn           []string `json:"catalogEntityIDIn,omitempty"`
+	CatalogEntityIDNotIn        []string `json:"catalogEntityIDNotIn,omitempty"`
+	CatalogEntityIDContains     *string  `json:"catalogEntityIDContains,omitempty"`
+	CatalogEntityIDHasPrefix    *string  `json:"catalogEntityIDHasPrefix,omitempty"`
+	CatalogEntityIDHasSuffix    *string  `json:"catalogEntityIDHasSuffix,omitempty"`
+	CatalogEntityIDIsNil        *bool    `json:"catalogEntityIDIsNil,omitempty"`
+	CatalogEntityIDNotNil       *bool    `json:"catalogEntityIDNotNil,omitempty"`
+	CatalogEntityIDEqualFold    *string  `json:"catalogEntityIDEqualFold,omitempty"`
+	CatalogEntityIDContainsFold *string  `json:"catalogEntityIDContainsFold,omitempty"`
 	// observed_at field predicates
 	ObservedAt       *models.DateTime `json:"observedAt,omitempty"`
 	ObservedAtGt     *models.DateTime `json:"observedAtGT,omitempty"`
@@ -14318,6 +14339,12 @@ type EntityWhereInput struct {
 	// logo_file edge predicates
 	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
 	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
+	// catalog_entity edge predicates
+	HasCatalogEntity     *bool               `json:"hasCatalogEntity,omitempty"`
+	HasCatalogEntityWith []*EntityWhereInput `json:"hasCatalogEntityWith,omitempty"`
+	// adopted_entities edge predicates
+	HasAdoptedEntities     *bool               `json:"hasAdoptedEntities,omitempty"`
+	HasAdoptedEntitiesWith []*EntityWhereInput `json:"hasAdoptedEntitiesWith,omitempty"`
 	// internal_policies edge predicates
 	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
 	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
@@ -28443,6 +28470,12 @@ type Risk struct {
 	DelegateGroupID *string `json:"delegateGroupID,omitempty"`
 	// the delegate identity holder id for the risk
 	DelegateIdentityHolderID *string `json:"delegateIdentityHolderID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the kind of the risk
 	RiskKindName *string `json:"riskKindName,omitempty"`
 	// the kind of the risk
@@ -28874,6 +28907,35 @@ type RiskWhereInput struct {
 	DelegateIdentityHolderIDNotNil       *bool    `json:"delegateIdentityHolderIDNotNil,omitempty"`
 	DelegateIdentityHolderIDEqualFold    *string  `json:"delegateIdentityHolderIDEqualFold,omitempty"`
 	DelegateIdentityHolderIDContainsFold *string  `json:"delegateIdentityHolderIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// risk_kind_name field predicates
 	RiskKindName             *string  `json:"riskKindName,omitempty"`
 	RiskKindNameNeq          *string  `json:"riskKindNameNEQ,omitempty"`
@@ -40663,6 +40725,12 @@ type UpdateRiskInput struct {
 	// the delegate for the risk when no user, group, or identity holder is linked
 	DelegateName      *string `json:"delegateName,omitempty"`
 	ClearDelegateName *bool   `json:"clearDelegateName,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the kind of the risk
 	RiskKindName      *string `json:"riskKindName,omitempty"`
 	ClearRiskKindName *bool   `json:"clearRiskKindName,omitempty"`

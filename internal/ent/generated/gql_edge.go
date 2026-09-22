@@ -4513,6 +4513,35 @@ func (_m *Entity) LogoFile(ctx context.Context) (*File, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *Entity) CatalogEntity(ctx context.Context) (*Entity, error) {
+	result, err := _m.Edges.CatalogEntityOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryCatalogEntity().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *Entity) AdoptedEntities(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EntityOrder, where *EntityWhereInput,
+) (*EntityConnection, error) {
+	opts := []EntityPaginateOption{
+		WithEntityOrder(orderBy),
+		WithEntityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[42][alias]
+	if nodes, err := _m.NamedAdoptedEntities(alias); err == nil || hasTotalCount {
+		pager, err := newEntityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &EntityConnection{Edges: []*EntityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryAdoptedEntities().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Entity) InternalPolicies(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*InternalPolicyOrder, where *InternalPolicyWhereInput,
 ) (*InternalPolicyConnection, error) {
@@ -4521,7 +4550,7 @@ func (_m *Entity) InternalPolicies(
 		WithInternalPolicyFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[41][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[43][alias]
 	if nodes, err := _m.NamedInternalPolicies(alias); err == nil || hasTotalCount {
 		pager, err := newInternalPolicyPager(opts, last != nil)
 		if err != nil {

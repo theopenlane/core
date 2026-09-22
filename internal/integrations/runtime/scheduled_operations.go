@@ -35,14 +35,28 @@ func (r *Runtime) handleScheduledCycle(ctx context.Context, envelope operations.
 		return 0, err
 	}
 
-	var result types.ScheduledCycleResult
-	if err := jsonx.UnmarshalIfPresent(response, &result); err != nil {
-		return 0, err
+	var processed int
+
+	switch {
+	case operation.IngestHandle != nil:
+		var result operations.IngestResult
+		if err := jsonx.UnmarshalIfPresent(response, &result); err != nil {
+			return 0, err
+		}
+
+		processed = result.Changed
+	default:
+		var result types.ScheduledCycleResult
+		if err := jsonx.UnmarshalIfPresent(response, &result); err != nil {
+			return 0, err
+		}
+
+		processed = result.Processed
 	}
 
-	logx.FromContext(ctx).Info().Int("processed", result.Processed).Msg("scheduled operation cycle completed")
+	logx.FromContext(ctx).Info().Int("processed", processed).Msg("scheduled operation cycle completed")
 
-	return result.Processed, nil
+	return processed, nil
 }
 
 // SeedScheduledOperations ensures every operation with the Scheduled policy has an active

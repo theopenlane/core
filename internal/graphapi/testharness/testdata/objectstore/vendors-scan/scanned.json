@@ -1,0 +1,10 @@
+{
+  "systemInternalID": "entity::fixture-scan",
+  "entityTypeName": "vendor",
+  "name": "fixture-scan-vendor",
+  "displayName": "Fixture Scan",
+  "description": "Fixture Scan is the catalogue vendor the domain scan import attributes an asset to.",
+  "domains": ["fixture-scan.example.com"],
+  "tags": ["technology", "fixture"],
+  "logoRemoteURL": "https://www.google.com/s2/favicons?domain=fixture-scan.example.com&sz=128"
+}

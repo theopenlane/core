@@ -657,6 +657,7 @@ type EntityProjection struct {
 	ApprovedForUse                        bool                   `json:"approved_for_use,omitempty"`
 	AutoRenews                            bool                   `json:"auto_renews,omitempty"`
 	BillingModel                          string                 `json:"billing_model,omitempty"`
+	CatalogEntityID                       string                 `json:"catalog_entity_id,omitempty"`
 	ContractEndDate                       models.DateTime        `json:"contract_end_date,omitempty"`
 	ContractRenewalAt                     models.DateTime        `json:"contract_renewal_at,omitempty"`
 	ContractStartDate                     models.DateTime        `json:"contract_start_date,omitempty"`
@@ -1488,6 +1489,7 @@ type RiskProjection struct {
 	Impact                      enums.RiskImpact     `json:"impact,omitempty"`
 	IntegrationID               string               `json:"integration_id,omitempty"`
 	IntegrationRunID            string               `json:"integration_run_id,omitempty"`
+	InternalNotes               string               `json:"internal_notes,omitempty"`
 	LastReviewedAt              models.DateTime      `json:"last_reviewed_at,omitempty"`
 	Likelihood                  enums.RiskLikelihood `json:"likelihood,omitempty"`
 	ManagedBy                   string               `json:"managed_by,omitempty"`
@@ -1518,6 +1520,8 @@ type RiskProjection struct {
 	StakeholderName             string               `json:"stakeholder_name,omitempty"`
 	StakeholderUserID           string               `json:"stakeholder_user_id,omitempty"`
 	Status                      enums.RiskStatus     `json:"status,omitempty"`
+	SystemInternalID            string               `json:"system_internal_id,omitempty"`
+	SystemOwned                 bool                 `json:"system_owned,omitempty"`
 	Tags                        []string             `json:"tags,omitempty"`
 	UpdatedAt                   time.Time            `json:"updated_at,omitempty"`
 	UpdatedBy                   string               `json:"updated_by,omitempty"`

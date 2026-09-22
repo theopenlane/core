@@ -16526,6 +16526,14 @@ input CreateRiskInput {
 	"""
 	delegateName: String
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	"""
 	the kind of the risk
 	"""
 	riskKindName: String
@@ -24256,6 +24264,10 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	"""
 	externalID: String
 	"""
+	the system-owned catalogue entity this entity was adopted from
+	"""
+	catalogEntityID: ID
+	"""
 	time when this entity was last observed by the source integration
 	"""
 	observedAt: DateTime
@@ -25110,6 +25122,41 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	): PlatformConnection!
 	entityType: EntityType
 	logoFile: File
+	"""
+	the system-owned catalogue entity this entity was adopted from
+	"""
+	catalogEntity: Entity
+	adoptedEntities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
 	internalPolicies(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -26472,6 +26519,20 @@ input EntityWhereInput {
 	externalIDEqualFold: String
 	externalIDContainsFold: String
 	"""
+	catalog_entity_id field predicates
+	"""
+	catalogEntityID: ID
+	catalogEntityIDNEQ: ID
+	catalogEntityIDIn: [ID!]
+	catalogEntityIDNotIn: [ID!]
+	catalogEntityIDContains: ID
+	catalogEntityIDHasPrefix: ID
+	catalogEntityIDHasSuffix: ID
+	catalogEntityIDIsNil: Boolean
+	catalogEntityIDNotNil: Boolean
+	catalogEntityIDEqualFold: ID
+	catalogEntityIDContainsFold: ID
+	"""
 	observed_at field predicates
 	"""
 	observedAt: DateTime
@@ -26686,6 +26747,16 @@ input EntityWhereInput {
 	"""
 	hasLogoFile: Boolean
 	hasLogoFileWith: [FileWhereInput!]
+	"""
+	catalog_entity edge predicates
+	"""
+	hasCatalogEntity: Boolean
+	hasCatalogEntityWith: [EntityWhereInput!]
+	"""
+	adopted_entities edge predicates
+	"""
+	hasAdoptedEntities: Boolean
+	hasAdoptedEntitiesWith: [EntityWhereInput!]
 	"""
 	internal_policies edge predicates
 	"""
@@ -44173,6 +44244,15 @@ type Mutation {
 		"""
 		input: Upload!
 	): EntityBulkUpdatePayload!
+	"""
+	Adopt a system-owned catalogue entity into the organization, returning the organization's copy; idempotent per organization
+	"""
+	adoptEntity(
+		"""
+		catalogEntityID is the system-owned entity to adopt
+		"""
+		catalogEntityID: ID!
+	): EntityCreatePayload!
 	"""
 	Create a new entityType
 	"""
@@ -71727,6 +71807,18 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
 	"""
 	delegateIdentityHolderID: ID
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	the kind of the risk
 	"""
 	riskKindName: String
@@ -73063,6 +73155,41 @@ input RiskWhereInput {
 	delegateIdentityHolderIDNotNil: Boolean
 	delegateIdentityHolderIDEqualFold: ID
 	delegateIdentityHolderIDContainsFold: ID
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	risk_kind_name field predicates
 	"""
@@ -92414,6 +92541,16 @@ input UpdateRiskInput {
 	"""
 	delegateName: String
 	clearDelegateName: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
 	"""
 	the kind of the risk
 	"""

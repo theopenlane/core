@@ -67670,6 +67670,11 @@ type EntityMutation struct {
 	clearedentity_type                          bool
 	logo_file                                   *string
 	clearedlogo_file                            bool
+	catalog_entity                              *string
+	clearedcatalog_entity                       bool
+	adopted_entities                            map[string]struct{}
+	removedadopted_entities                     map[string]struct{}
+	clearedadopted_entities                     bool
 	internal_policies                           map[string]struct{}
 	removedinternal_policies                    map[string]struct{}
 	clearedinternal_policies                    bool
@@ -71490,6 +71495,55 @@ func (m *EntityMutation) ResetExternalID() {
 	delete(m.clearedFields, entity.FieldExternalID)
 }
 
+// SetCatalogEntityID sets the "catalog_entity_id" field.
+func (m *EntityMutation) SetCatalogEntityID(s string) {
+	m.catalog_entity = &s
+}
+
+// CatalogEntityID returns the value of the "catalog_entity_id" field in the mutation.
+func (m *EntityMutation) CatalogEntityID() (r string, exists bool) {
+	v := m.catalog_entity
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCatalogEntityID returns the old "catalog_entity_id" field's value of the Entity entity.
+// If the Entity object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EntityMutation) OldCatalogEntityID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCatalogEntityID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCatalogEntityID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCatalogEntityID: %w", err)
+	}
+	return oldValue.CatalogEntityID, nil
+}
+
+// ClearCatalogEntityID clears the value of the "catalog_entity_id" field.
+func (m *EntityMutation) ClearCatalogEntityID() {
+	m.catalog_entity = nil
+	m.clearedFields[entity.FieldCatalogEntityID] = struct{}{}
+}
+
+// CatalogEntityIDCleared returns if the "catalog_entity_id" field was cleared in this mutation.
+func (m *EntityMutation) CatalogEntityIDCleared() bool {
+	_, ok := m.clearedFields[entity.FieldCatalogEntityID]
+	return ok
+}
+
+// ResetCatalogEntityID resets all changes to the "catalog_entity_id" field.
+func (m *EntityMutation) ResetCatalogEntityID() {
+	m.catalog_entity = nil
+	delete(m.clearedFields, entity.FieldCatalogEntityID)
+}
+
 // SetObservedAt sets the "observed_at" field.
 func (m *EntityMutation) SetObservedAt(mt models.DateTime) {
 	m.observed_at = &mt
@@ -73375,6 +73429,87 @@ func (m *EntityMutation) ResetLogoFile() {
 	m.clearedlogo_file = false
 }
 
+// ClearCatalogEntity clears the "catalog_entity" edge to the Entity entity.
+func (m *EntityMutation) ClearCatalogEntity() {
+	m.clearedcatalog_entity = true
+	m.clearedFields[entity.FieldCatalogEntityID] = struct{}{}
+}
+
+// CatalogEntityCleared reports if the "catalog_entity" edge to the Entity entity was cleared.
+func (m *EntityMutation) CatalogEntityCleared() bool {
+	return m.CatalogEntityIDCleared() || m.clearedcatalog_entity
+}
+
+// CatalogEntityIDs returns the "catalog_entity" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// CatalogEntityID instead. It exists only for internal usage by the builders.
+func (m *EntityMutation) CatalogEntityIDs() (ids []string) {
+	if id := m.catalog_entity; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetCatalogEntity resets all changes to the "catalog_entity" edge.
+func (m *EntityMutation) ResetCatalogEntity() {
+	m.catalog_entity = nil
+	m.clearedcatalog_entity = false
+}
+
+// AddAdoptedEntityIDs adds the "adopted_entities" edge to the Entity entity by ids.
+func (m *EntityMutation) AddAdoptedEntityIDs(ids ...string) {
+	if m.adopted_entities == nil {
+		m.adopted_entities = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.adopted_entities[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAdoptedEntities clears the "adopted_entities" edge to the Entity entity.
+func (m *EntityMutation) ClearAdoptedEntities() {
+	m.clearedadopted_entities = true
+}
+
+// AdoptedEntitiesCleared reports if the "adopted_entities" edge to the Entity entity was cleared.
+func (m *EntityMutation) AdoptedEntitiesCleared() bool {
+	return m.clearedadopted_entities
+}
+
+// RemoveAdoptedEntityIDs removes the "adopted_entities" edge to the Entity entity by IDs.
+func (m *EntityMutation) RemoveAdoptedEntityIDs(ids ...string) {
+	if m.removedadopted_entities == nil {
+		m.removedadopted_entities = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.adopted_entities, ids[i])
+		m.removedadopted_entities[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAdoptedEntities returns the removed IDs of the "adopted_entities" edge to the Entity entity.
+func (m *EntityMutation) RemovedAdoptedEntitiesIDs() (ids []string) {
+	for id := range m.removedadopted_entities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AdoptedEntitiesIDs returns the "adopted_entities" edge IDs in the mutation.
+func (m *EntityMutation) AdoptedEntitiesIDs() (ids []string) {
+	for id := range m.adopted_entities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAdoptedEntities resets all changes to the "adopted_entities" edge.
+func (m *EntityMutation) ResetAdoptedEntities() {
+	m.adopted_entities = nil
+	m.clearedadopted_entities = false
+	m.removedadopted_entities = nil
+}
+
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by ids.
 func (m *EntityMutation) AddInternalPolicyIDs(ids ...string) {
 	if m.internal_policies == nil {
@@ -73463,7 +73598,7 @@ func (m *EntityMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EntityMutation) Fields() []string {
-	fields := make([]string, 0, 73)
+	fields := make([]string, 0, 74)
 	if m.created_at != nil {
 		fields = append(fields, entity.FieldCreatedAt)
 	}
@@ -73680,6 +73815,9 @@ func (m *EntityMutation) Fields() []string {
 	if m.external_id != nil {
 		fields = append(fields, entity.FieldExternalID)
 	}
+	if m.catalog_entity != nil {
+		fields = append(fields, entity.FieldCatalogEntityID)
+	}
 	if m.observed_at != nil {
 		fields = append(fields, entity.FieldObservedAt)
 	}
@@ -73835,6 +73973,8 @@ func (m *EntityMutation) Field(name string) (ent.Value, bool) {
 		return m.LogoFileID()
 	case entity.FieldExternalID:
 		return m.ExternalID()
+	case entity.FieldCatalogEntityID:
+		return m.CatalogEntityID()
 	case entity.FieldObservedAt:
 		return m.ObservedAt()
 	}
@@ -73990,6 +74130,8 @@ func (m *EntityMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldLogoFileID(ctx)
 	case entity.FieldExternalID:
 		return m.OldExternalID(ctx)
+	case entity.FieldCatalogEntityID:
+		return m.OldCatalogEntityID(ctx)
 	case entity.FieldObservedAt:
 		return m.OldObservedAt(ctx)
 	}
@@ -74505,6 +74647,13 @@ func (m *EntityMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetExternalID(v)
 		return nil
+	case entity.FieldCatalogEntityID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCatalogEntityID(v)
+		return nil
 	case entity.FieldObservedAt:
 		v, ok := value.(models.DateTime)
 		if !ok {
@@ -74809,6 +74958,9 @@ func (m *EntityMutation) ClearedFields() []string {
 	if m.FieldCleared(entity.FieldExternalID) {
 		fields = append(fields, entity.FieldExternalID)
 	}
+	if m.FieldCleared(entity.FieldCatalogEntityID) {
+		fields = append(fields, entity.FieldCatalogEntityID)
+	}
 	if m.FieldCleared(entity.FieldObservedAt) {
 		fields = append(fields, entity.FieldObservedAt)
 	}
@@ -75042,6 +75194,9 @@ func (m *EntityMutation) ClearField(name string) error {
 	case entity.FieldExternalID:
 		m.ClearExternalID()
 		return nil
+	case entity.FieldCatalogEntityID:
+		m.ClearCatalogEntityID()
+		return nil
 	case entity.FieldObservedAt:
 		m.ClearObservedAt()
 		return nil
@@ -75269,6 +75424,9 @@ func (m *EntityMutation) ResetField(name string) error {
 	case entity.FieldExternalID:
 		m.ResetExternalID()
 		return nil
+	case entity.FieldCatalogEntityID:
+		m.ResetCatalogEntityID()
+		return nil
 	case entity.FieldObservedAt:
 		m.ResetObservedAt()
 		return nil
@@ -75278,7 +75436,7 @@ func (m *EntityMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *EntityMutation) AddedEdges() []string {
-	edges := make([]string, 0, 42)
+	edges := make([]string, 0, 44)
 	if m.integration_runs != nil {
 		edges = append(edges, entity.EdgeIntegrationRuns)
 	}
@@ -75401,6 +75559,12 @@ func (m *EntityMutation) AddedEdges() []string {
 	}
 	if m.logo_file != nil {
 		edges = append(edges, entity.EdgeLogoFile)
+	}
+	if m.catalog_entity != nil {
+		edges = append(edges, entity.EdgeCatalogEntity)
+	}
+	if m.adopted_entities != nil {
+		edges = append(edges, entity.EdgeAdoptedEntities)
 	}
 	if m.internal_policies != nil {
 		edges = append(edges, entity.EdgeInternalPolicies)
@@ -75630,6 +75794,16 @@ func (m *EntityMutation) AddedIDs(name string) []ent.Value {
 		if id := m.logo_file; id != nil {
 			return []ent.Value{*id}
 		}
+	case entity.EdgeCatalogEntity:
+		if id := m.catalog_entity; id != nil {
+			return []ent.Value{*id}
+		}
+	case entity.EdgeAdoptedEntities:
+		ids := make([]ent.Value, 0, len(m.adopted_entities))
+		for id := range m.adopted_entities {
+			ids = append(ids, id)
+		}
+		return ids
 	case entity.EdgeInternalPolicies:
 		ids := make([]ent.Value, 0, len(m.internal_policies))
 		for id := range m.internal_policies {
@@ -75642,7 +75816,7 @@ func (m *EntityMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *EntityMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 42)
+	edges := make([]string, 0, 44)
 	if m.removedintegration_runs != nil {
 		edges = append(edges, entity.EdgeIntegrationRuns)
 	}
@@ -75723,6 +75897,9 @@ func (m *EntityMutation) RemovedEdges() []string {
 	}
 	if m.removedsource_platforms != nil {
 		edges = append(edges, entity.EdgeSourcePlatforms)
+	}
+	if m.removedadopted_entities != nil {
+		edges = append(edges, entity.EdgeAdoptedEntities)
 	}
 	if m.removedinternal_policies != nil {
 		edges = append(edges, entity.EdgeInternalPolicies)
@@ -75896,6 +76073,12 @@ func (m *EntityMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case entity.EdgeAdoptedEntities:
+		ids := make([]ent.Value, 0, len(m.removedadopted_entities))
+		for id := range m.removedadopted_entities {
+			ids = append(ids, id)
+		}
+		return ids
 	case entity.EdgeInternalPolicies:
 		ids := make([]ent.Value, 0, len(m.removedinternal_policies))
 		for id := range m.removedinternal_policies {
@@ -75908,7 +76091,7 @@ func (m *EntityMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *EntityMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 42)
+	edges := make([]string, 0, 44)
 	if m.clearedintegration_runs {
 		edges = append(edges, entity.EdgeIntegrationRuns)
 	}
@@ -76032,6 +76215,12 @@ func (m *EntityMutation) ClearedEdges() []string {
 	if m.clearedlogo_file {
 		edges = append(edges, entity.EdgeLogoFile)
 	}
+	if m.clearedcatalog_entity {
+		edges = append(edges, entity.EdgeCatalogEntity)
+	}
+	if m.clearedadopted_entities {
+		edges = append(edges, entity.EdgeAdoptedEntities)
+	}
 	if m.clearedinternal_policies {
 		edges = append(edges, entity.EdgeInternalPolicies)
 	}
@@ -76124,6 +76313,10 @@ func (m *EntityMutation) EdgeCleared(name string) bool {
 		return m.clearedentity_type
 	case entity.EdgeLogoFile:
 		return m.clearedlogo_file
+	case entity.EdgeCatalogEntity:
+		return m.clearedcatalog_entity
+	case entity.EdgeAdoptedEntities:
+		return m.clearedadopted_entities
 	case entity.EdgeInternalPolicies:
 		return m.clearedinternal_policies
 	}
@@ -76175,6 +76368,9 @@ func (m *EntityMutation) ClearEdge(name string) error {
 		return nil
 	case entity.EdgeLogoFile:
 		m.ClearLogoFile()
+		return nil
+	case entity.EdgeCatalogEntity:
+		m.ClearCatalogEntity()
 		return nil
 	}
 	return fmt.Errorf("unknown Entity unique edge %s", name)
@@ -76306,6 +76502,12 @@ func (m *EntityMutation) ResetEdge(name string) error {
 		return nil
 	case entity.EdgeLogoFile:
 		m.ResetLogoFile()
+		return nil
+	case entity.EdgeCatalogEntity:
+		m.ResetCatalogEntity()
+		return nil
+	case entity.EdgeAdoptedEntities:
+		m.ResetAdoptedEntities()
 		return nil
 	case entity.EdgeInternalPolicies:
 		m.ResetInternalPolicies()
@@ -207701,6 +207903,9 @@ type RiskMutation struct {
 	integration_run_id                 *string
 	stakeholder_name                   *string
 	delegate_name                      *string
+	system_owned                       *bool
+	internal_notes                     *string
+	system_internal_id                 *string
 	risk_kind_name                     *string
 	risk_category_name                 *string
 	environment_name                   *string
@@ -209064,6 +209269,153 @@ func (m *RiskMutation) DelegateIdentityHolderIDCleared() bool {
 func (m *RiskMutation) ResetDelegateIdentityHolderID() {
 	m.delegate_identity_holder = nil
 	delete(m.clearedFields, risk.FieldDelegateIdentityHolderID)
+}
+
+// SetSystemOwned sets the "system_owned" field.
+func (m *RiskMutation) SetSystemOwned(b bool) {
+	m.system_owned = &b
+}
+
+// SystemOwned returns the value of the "system_owned" field in the mutation.
+func (m *RiskMutation) SystemOwned() (r bool, exists bool) {
+	v := m.system_owned
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSystemOwned returns the old "system_owned" field's value of the Risk entity.
+// If the Risk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RiskMutation) OldSystemOwned(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSystemOwned is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSystemOwned requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSystemOwned: %w", err)
+	}
+	return oldValue.SystemOwned, nil
+}
+
+// ClearSystemOwned clears the value of the "system_owned" field.
+func (m *RiskMutation) ClearSystemOwned() {
+	m.system_owned = nil
+	m.clearedFields[risk.FieldSystemOwned] = struct{}{}
+}
+
+// SystemOwnedCleared returns if the "system_owned" field was cleared in this mutation.
+func (m *RiskMutation) SystemOwnedCleared() bool {
+	_, ok := m.clearedFields[risk.FieldSystemOwned]
+	return ok
+}
+
+// ResetSystemOwned resets all changes to the "system_owned" field.
+func (m *RiskMutation) ResetSystemOwned() {
+	m.system_owned = nil
+	delete(m.clearedFields, risk.FieldSystemOwned)
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (m *RiskMutation) SetInternalNotes(s string) {
+	m.internal_notes = &s
+}
+
+// InternalNotes returns the value of the "internal_notes" field in the mutation.
+func (m *RiskMutation) InternalNotes() (r string, exists bool) {
+	v := m.internal_notes
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalNotes returns the old "internal_notes" field's value of the Risk entity.
+// If the Risk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RiskMutation) OldInternalNotes(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalNotes is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalNotes requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalNotes: %w", err)
+	}
+	return oldValue.InternalNotes, nil
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (m *RiskMutation) ClearInternalNotes() {
+	m.internal_notes = nil
+	m.clearedFields[risk.FieldInternalNotes] = struct{}{}
+}
+
+// InternalNotesCleared returns if the "internal_notes" field was cleared in this mutation.
+func (m *RiskMutation) InternalNotesCleared() bool {
+	_, ok := m.clearedFields[risk.FieldInternalNotes]
+	return ok
+}
+
+// ResetInternalNotes resets all changes to the "internal_notes" field.
+func (m *RiskMutation) ResetInternalNotes() {
+	m.internal_notes = nil
+	delete(m.clearedFields, risk.FieldInternalNotes)
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (m *RiskMutation) SetSystemInternalID(s string) {
+	m.system_internal_id = &s
+}
+
+// SystemInternalID returns the value of the "system_internal_id" field in the mutation.
+func (m *RiskMutation) SystemInternalID() (r string, exists bool) {
+	v := m.system_internal_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSystemInternalID returns the old "system_internal_id" field's value of the Risk entity.
+// If the Risk object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *RiskMutation) OldSystemInternalID(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSystemInternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSystemInternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSystemInternalID: %w", err)
+	}
+	return oldValue.SystemInternalID, nil
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (m *RiskMutation) ClearSystemInternalID() {
+	m.system_internal_id = nil
+	m.clearedFields[risk.FieldSystemInternalID] = struct{}{}
+}
+
+// SystemInternalIDCleared returns if the "system_internal_id" field was cleared in this mutation.
+func (m *RiskMutation) SystemInternalIDCleared() bool {
+	_, ok := m.clearedFields[risk.FieldSystemInternalID]
+	return ok
+}
+
+// ResetSystemInternalID resets all changes to the "system_internal_id" field.
+func (m *RiskMutation) ResetSystemInternalID() {
+	m.system_internal_id = nil
+	delete(m.clearedFields, risk.FieldSystemInternalID)
 }
 
 // SetRiskKindName sets the "risk_kind_name" field.
@@ -212382,7 +212734,7 @@ func (m *RiskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *RiskMutation) Fields() []string {
-	fields := make([]string, 0, 57)
+	fields := make([]string, 0, 60)
 	if m.created_at != nil {
 		fields = append(fields, risk.FieldCreatedAt)
 	}
@@ -212451,6 +212803,15 @@ func (m *RiskMutation) Fields() []string {
 	}
 	if m.delegate_identity_holder != nil {
 		fields = append(fields, risk.FieldDelegateIdentityHolderID)
+	}
+	if m.system_owned != nil {
+		fields = append(fields, risk.FieldSystemOwned)
+	}
+	if m.internal_notes != nil {
+		fields = append(fields, risk.FieldInternalNotes)
+	}
+	if m.system_internal_id != nil {
+		fields = append(fields, risk.FieldSystemInternalID)
 	}
 	if m.risk_kind_name != nil {
 		fields = append(fields, risk.FieldRiskKindName)
@@ -212608,6 +212969,12 @@ func (m *RiskMutation) Field(name string) (ent.Value, bool) {
 		return m.DelegateGroupID()
 	case risk.FieldDelegateIdentityHolderID:
 		return m.DelegateIdentityHolderID()
+	case risk.FieldSystemOwned:
+		return m.SystemOwned()
+	case risk.FieldInternalNotes:
+		return m.InternalNotes()
+	case risk.FieldSystemInternalID:
+		return m.SystemInternalID()
 	case risk.FieldRiskKindName:
 		return m.RiskKindName()
 	case risk.FieldRiskKindID:
@@ -212731,6 +213098,12 @@ func (m *RiskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldDelegateGroupID(ctx)
 	case risk.FieldDelegateIdentityHolderID:
 		return m.OldDelegateIdentityHolderID(ctx)
+	case risk.FieldSystemOwned:
+		return m.OldSystemOwned(ctx)
+	case risk.FieldInternalNotes:
+		return m.OldInternalNotes(ctx)
+	case risk.FieldSystemInternalID:
+		return m.OldSystemInternalID(ctx)
 	case risk.FieldRiskKindName:
 		return m.OldRiskKindName(ctx)
 	case risk.FieldRiskKindID:
@@ -212968,6 +213341,27 @@ func (m *RiskMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDelegateIdentityHolderID(v)
+		return nil
+	case risk.FieldSystemOwned:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSystemOwned(v)
+		return nil
+	case risk.FieldInternalNotes:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalNotes(v)
+		return nil
+	case risk.FieldSystemInternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSystemInternalID(v)
 		return nil
 	case risk.FieldRiskKindName:
 		v, ok := value.(string)
@@ -213330,6 +213724,15 @@ func (m *RiskMutation) ClearedFields() []string {
 	if m.FieldCleared(risk.FieldDelegateIdentityHolderID) {
 		fields = append(fields, risk.FieldDelegateIdentityHolderID)
 	}
+	if m.FieldCleared(risk.FieldSystemOwned) {
+		fields = append(fields, risk.FieldSystemOwned)
+	}
+	if m.FieldCleared(risk.FieldInternalNotes) {
+		fields = append(fields, risk.FieldInternalNotes)
+	}
+	if m.FieldCleared(risk.FieldSystemInternalID) {
+		fields = append(fields, risk.FieldSystemInternalID)
+	}
 	if m.FieldCleared(risk.FieldRiskKindName) {
 		fields = append(fields, risk.FieldRiskKindName)
 	}
@@ -213509,6 +213912,15 @@ func (m *RiskMutation) ClearField(name string) error {
 	case risk.FieldDelegateIdentityHolderID:
 		m.ClearDelegateIdentityHolderID()
 		return nil
+	case risk.FieldSystemOwned:
+		m.ClearSystemOwned()
+		return nil
+	case risk.FieldInternalNotes:
+		m.ClearInternalNotes()
+		return nil
+	case risk.FieldSystemInternalID:
+		m.ClearSystemInternalID()
+		return nil
 	case risk.FieldRiskKindName:
 		m.ClearRiskKindName()
 		return nil
@@ -213684,6 +214096,15 @@ func (m *RiskMutation) ResetField(name string) error {
 		return nil
 	case risk.FieldDelegateIdentityHolderID:
 		m.ResetDelegateIdentityHolderID()
+		return nil
+	case risk.FieldSystemOwned:
+		m.ResetSystemOwned()
+		return nil
+	case risk.FieldInternalNotes:
+		m.ResetInternalNotes()
+		return nil
+	case risk.FieldSystemInternalID:
+		m.ResetSystemInternalID()
 		return nil
 	case risk.FieldRiskKindName:
 		m.ResetRiskKindName()

@@ -171,6 +171,8 @@ type Entity struct {
 	LogoFileID *string `json:"logo_file_id,omitempty"`
 	// stable identifier assigned by the source system, used for integration ingest deduplication
 	ExternalID string `json:"external_id,omitempty"`
+	// the system-owned catalogue entity this entity was adopted from
+	CatalogEntityID string `json:"catalog_entity_id,omitempty"`
 	// time when this entity was last observed by the source integration
 	ObservedAt *models.DateTime `json:"observed_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -265,13 +267,17 @@ type EntityEdges struct {
 	EntityType *EntityType `json:"entity_type,omitempty"`
 	// LogoFile holds the value of the logo_file edge.
 	LogoFile *File `json:"logo_file,omitempty"`
+	// the system-owned catalogue entity this entity was adopted from
+	CatalogEntity *Entity `json:"catalog_entity,omitempty"`
+	// organization entities adopted from this catalogue entity
+	AdoptedEntities []*Entity `json:"adopted_entities,omitempty"`
 	// InternalPolicies holds the value of the internal_policies edge.
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [42]bool
+	loadedTypes [44]bool
 	// totalCount holds the count of the edges above.
-	totalCount [42]map[string]int
+	totalCount [44]map[string]int
 
 	namedIntegrationRuns         map[string][]*IntegrationRun
 	namedBlockedGroups           map[string][]*Group
@@ -300,6 +306,7 @@ type EntityEdges struct {
 	namedPlatforms               map[string][]*Platform
 	namedOutOfScopePlatforms     map[string][]*Platform
 	namedSourcePlatforms         map[string][]*Platform
+	namedAdoptedEntities         map[string][]*Entity
 	namedInternalPolicies        map[string][]*InternalPolicy
 }
 
@@ -700,10 +707,30 @@ func (e EntityEdges) LogoFileOrErr() (*File, error) {
 	return nil, &NotLoadedError{edge: "logo_file"}
 }
 
+// CatalogEntityOrErr returns the CatalogEntity value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EntityEdges) CatalogEntityOrErr() (*Entity, error) {
+	if e.CatalogEntity != nil {
+		return e.CatalogEntity, nil
+	} else if e.loadedTypes[41] {
+		return nil, &NotFoundError{label: entity.Label}
+	}
+	return nil, &NotLoadedError{edge: "catalog_entity"}
+}
+
+// AdoptedEntitiesOrErr returns the AdoptedEntities value or an error if the edge
+// was not loaded in eager-loading.
+func (e EntityEdges) AdoptedEntitiesOrErr() ([]*Entity, error) {
+	if e.loadedTypes[42] {
+		return e.AdoptedEntities, nil
+	}
+	return nil, &NotLoadedError{edge: "adopted_entities"}
+}
+
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e EntityEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[41] {
+	if e.loadedTypes[43] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -724,7 +751,7 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullFloat64)
 		case entity.FieldTerminationNoticeDays, entity.FieldRiskScore, entity.FieldRiskScoreCoverage:
 			values[i] = new(sql.NullInt64)
-		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldUpdatedByImpersonator, entity.FieldDeletedBy, entity.FieldSourceDefinitionID, entity.FieldSourceDefinitionVersion, entity.FieldSourceInstanceID, entity.FieldManagedBy, entity.FieldIntegrationRunID, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldInternalOwnerIdentityHolderID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldReviewedByIdentityHolderID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldLogoRemoteURL, entity.FieldLogoFileID, entity.FieldExternalID:
+		case entity.FieldID, entity.FieldCreatedBy, entity.FieldUpdatedBy, entity.FieldUpdatedByImpersonator, entity.FieldDeletedBy, entity.FieldSourceDefinitionID, entity.FieldSourceDefinitionVersion, entity.FieldSourceInstanceID, entity.FieldManagedBy, entity.FieldIntegrationRunID, entity.FieldOwnerID, entity.FieldInternalOwner, entity.FieldInternalOwnerUserID, entity.FieldInternalOwnerGroupID, entity.FieldInternalOwnerIdentityHolderID, entity.FieldReviewedBy, entity.FieldReviewedByUserID, entity.FieldReviewedByGroupID, entity.FieldReviewedByIdentityHolderID, entity.FieldInternalNotes, entity.FieldSystemInternalID, entity.FieldEntityRelationshipStateName, entity.FieldEntityRelationshipStateID, entity.FieldEntitySecurityQuestionnaireStatusName, entity.FieldEntitySecurityQuestionnaireStatusID, entity.FieldEntitySourceTypeName, entity.FieldEntitySourceTypeID, entity.FieldEnvironmentName, entity.FieldEnvironmentID, entity.FieldScopeName, entity.FieldScopeID, entity.FieldName, entity.FieldDisplayName, entity.FieldDescription, entity.FieldEntityTypeID, entity.FieldStatus, entity.FieldSpendCurrency, entity.FieldBillingModel, entity.FieldRenewalRisk, entity.FieldStatusPageURL, entity.FieldRiskRating, entity.FieldTier, entity.FieldReviewFrequency, entity.FieldLogoRemoteURL, entity.FieldLogoFileID, entity.FieldExternalID, entity.FieldCatalogEntityID:
 			values[i] = new(sql.NullString)
 		case entity.FieldCreatedAt, entity.FieldUpdatedAt, entity.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -1210,6 +1237,12 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ExternalID = value.String
 			}
+		case entity.FieldCatalogEntityID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field catalog_entity_id", values[i])
+			} else if value.Valid {
+				_m.CatalogEntityID = value.String
+			}
 		case entity.FieldObservedAt:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
 				return fmt.Errorf("unexpected type %T for field observed_at", values[i])
@@ -1447,6 +1480,16 @@ func (_m *Entity) QueryEntityType() *EntityTypeQuery {
 // QueryLogoFile queries the "logo_file" edge of the Entity entity.
 func (_m *Entity) QueryLogoFile() *FileQuery {
 	return NewEntityClient(_m.config).QueryLogoFile(_m)
+}
+
+// QueryCatalogEntity queries the "catalog_entity" edge of the Entity entity.
+func (_m *Entity) QueryCatalogEntity() *EntityQuery {
+	return NewEntityClient(_m.config).QueryCatalogEntity(_m)
+}
+
+// QueryAdoptedEntities queries the "adopted_entities" edge of the Entity entity.
+func (_m *Entity) QueryAdoptedEntities() *EntityQuery {
+	return NewEntityClient(_m.config).QueryAdoptedEntities(_m)
 }
 
 // QueryInternalPolicies queries the "internal_policies" edge of the Entity entity.
@@ -1714,6 +1757,9 @@ func (_m *Entity) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)
+	builder.WriteString(", ")
+	builder.WriteString("catalog_entity_id=")
+	builder.WriteString(_m.CatalogEntityID)
 	builder.WriteString(", ")
 	if v := _m.ObservedAt; v != nil {
 		builder.WriteString("observed_at=")
@@ -2368,6 +2414,30 @@ func (_m *Entity) appendNamedSourcePlatforms(name string, edges ...*Platform) {
 		_m.Edges.namedSourcePlatforms[name] = []*Platform{}
 	} else {
 		_m.Edges.namedSourcePlatforms[name] = append(_m.Edges.namedSourcePlatforms[name], edges...)
+	}
+}
+
+// NamedAdoptedEntities returns the AdoptedEntities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Entity) NamedAdoptedEntities(name string) ([]*Entity, error) {
+	if _m.Edges.namedAdoptedEntities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedAdoptedEntities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Entity) appendNamedAdoptedEntities(name string, edges ...*Entity) {
+	if _m.Edges.namedAdoptedEntities == nil {
+		_m.Edges.namedAdoptedEntities = make(map[string][]*Entity)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedAdoptedEntities[name] = []*Entity{}
+	} else {
+		_m.Edges.namedAdoptedEntities[name] = append(_m.Edges.namedAdoptedEntities[name], edges...)
 	}
 }
 

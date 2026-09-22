@@ -1,0 +1,10 @@
+{
+  "systemInternalID": "entity::fixture-openlane",
+  "entityTypeName": "vendor",
+  "name": "Openlane",
+  "displayName": "Openlane Fixture",
+  "description": "Openlane catalogue fixture matching the harness integration definitions' family.",
+  "domains": ["fixture-openlane.example.com"],
+  "tags": ["technology", "fixture"],
+  "logoRemoteURL": "https://www.google.com/s2/favicons?domain=fixture-openlane.example.com&sz=128"
+}

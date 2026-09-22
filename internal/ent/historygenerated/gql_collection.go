@@ -3749,6 +3749,11 @@ func (_q *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, entityhistory.FieldExternalID)
 				fieldSeen[entityhistory.FieldExternalID] = struct{}{}
 			}
+		case "catalogEntityID":
+			if _, ok := fieldSeen[entityhistory.FieldCatalogEntityID]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldCatalogEntityID)
+				fieldSeen[entityhistory.FieldCatalogEntityID] = struct{}{}
+			}
 		case "observedAt":
 			if _, ok := fieldSeen[entityhistory.FieldObservedAt]; !ok {
 				selectedFields = append(selectedFields, entityhistory.FieldObservedAt)
@@ -9951,6 +9956,21 @@ func (_q *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[riskhistory.FieldDelegateIdentityHolderID]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldDelegateIdentityHolderID)
 				fieldSeen[riskhistory.FieldDelegateIdentityHolderID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[riskhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldSystemOwned)
+				fieldSeen[riskhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[riskhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldInternalNotes)
+				fieldSeen[riskhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[riskhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, riskhistory.FieldSystemInternalID)
+				fieldSeen[riskhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "riskKindName":
 			if _, ok := fieldSeen[riskhistory.FieldRiskKindName]; !ok {

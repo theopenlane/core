@@ -2849,6 +2849,7 @@ var (
 		Lookup: []LookupAlternative{
 			{Fields: []string{"external_id"}},
 		},
+		Catalog: &CatalogCapability{PointerField: "catalog_entity_id", Fields: []string{"name", "display_name", "description", "domains", "aliases", "status_page_url", "provided_services", "links", "logo_remote_url"}},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "entity", Operation: refOpCreate}
 
@@ -2859,7 +2860,7 @@ var (
 
 			builder := client.Entity.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, "catalog_entity_id", FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -4604,7 +4605,7 @@ var (
 			ref := SchemaRef{Schema: "risk", Operation: refOpQuery}
 
 			entities, err := client.Risk.Query().
-				Where(risk.OwnerID(orgID)).
+				Where(ownerScopeRisk(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -6392,6 +6393,7 @@ func init() {
 		{Name: "approved_for_use", Label: "ApprovedForUse", Type: "bool", InputKey: "approved_for_use", Clearable: true},
 		{Name: "auto_renews", Label: "AutoRenews", Type: "bool", InputKey: "auto_renews", Clearable: true},
 		{Name: "billing_model", Label: "BillingModel", Type: "string", MatchKey: true, InputKey: "billing_model", Clearable: true},
+		{Name: "catalog_entity_id", Label: "CatalogEntityID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "contract_end_date", Label: "ContractEndDate", Type: "models.DateTime", InputKey: "contract_end_date", Clearable: true},
 		{Name: "contract_renewal_at", Label: "ContractRenewalAt", Type: "models.DateTime", InputKey: "contract_renewal_at", Clearable: true},
 		{Name: "contract_start_date", Label: "ContractStartDate", Type: "models.DateTime", InputKey: "contract_start_date", Clearable: true},
@@ -7572,6 +7574,7 @@ func init() {
 		{Name: "impact", Label: "Impact", Type: "enums.RiskImpact", WorkflowEligible: true, InputKey: "impact", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
+		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "last_reviewed_at", Label: "LastReviewedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "last_reviewed_at", Clearable: true},
 		{Name: "likelihood", Label: "Likelihood", Type: "enums.RiskLikelihood", WorkflowEligible: true, InputKey: "likelihood", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -7602,6 +7605,8 @@ func init() {
 		{Name: "stakeholder_name", Label: "StakeholderName", Type: "string", MatchKey: true, InputKey: "stakeholder_name", Clearable: true},
 		{Name: "stakeholder_user_id", Label: "StakeholderUserID", Type: "string", MatchKey: true, InputKey: "stakeholder_user_id", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.RiskStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
+		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -10633,6 +10638,14 @@ func init() {
 	}
 	SchemaEntity.Edges = []EdgeDescriptor{
 		{
+			Name:        "adopted_entities",
+			Label:       "AdoptedEntities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "adopted_entity_ids",
+			AddField:    "add_adopted_entity_ids",
+		},
+		{
 			Name:        "assessment_responses",
 			Label:       "AssessmentResponses",
 			Target:      SchemaAssessmentResponse,
@@ -10671,6 +10684,15 @@ func init() {
 			TargetType:  "Campaign",
 			CreateField: "campaign_ids",
 			AddField:    "add_campaign_ids",
+		},
+		{
+			Name:        "catalog_entity",
+			Label:       "CatalogEntity",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			Unique:      true,
+			CreateField: "catalog_entity_id",
+			Field:       "catalog_entity_id",
 		},
 		{
 			Name:        "contacts",
@@ -22757,6 +22779,91 @@ func init() {
 		}
 
 		return affected, nil
+	}
+	SchemaEntity.Catalog.adopt = func(ctx context.Context, client *generated.Client, catalogID, ownerID string, overlay json.RawMessage) (string, bool, error) {
+		ref := SchemaRef{Schema: "entity", Operation: refOpCreate, EntityID: catalogID}
+
+		row, err := client.Entity.Query().Where(entity.ID(catalogID), entity.SystemOwned(true)).Only(ctx)
+		if err != nil {
+			if generated.IsNotFound(err) {
+				return "", false, logError(ctx, ref, ErrCatalogRowNotSystemOwned, err)
+			}
+
+			return "", false, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		id, err := client.Entity.Query().Where(entity.OwnerID(ownerID), entity.CatalogEntityID(catalogID)).OnlyID(ctx)
+		switch {
+		case err == nil:
+			return id, false, nil
+		case !generated.IsNotFound(err):
+			return "", false, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		payload, err := catalogPayload(row, SchemaEntity.Catalog.Fields)
+		if err != nil {
+			return "", false, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		if payload, _, err = jsonx.SetObjectKey(payload, FieldOwnerID, ownerID); err != nil {
+			return "", false, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		if payload, _, err = jsonx.SetObjectKey(payload, SchemaEntity.Catalog.PointerField, catalogID); err != nil {
+			return "", false, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		if len(overlay) > 0 {
+			if payload, _, err = jsonx.DeepMerge(payload, overlay); err != nil {
+				return "", false, logError(ctx, ref, ErrDecodeFailed, err)
+			}
+		}
+
+		id, err = SchemaEntity.Create(ctx, client, payload)
+		if err != nil {
+			return "", false, err
+		}
+
+		return id, true, nil
+	}
+	SchemaEntity.Catalog.refresh = func(ctx context.Context, client *generated.Client, catalogID string) (int, error) {
+		ref := SchemaRef{Schema: "entity", Operation: refOpUpdate, EntityID: catalogID}
+
+		row, err := client.Entity.Query().Where(entity.ID(catalogID), entity.SystemOwned(true)).Only(ctx)
+		if err != nil {
+			if generated.IsNotFound(err) {
+				return 0, logError(ctx, ref, ErrCatalogRowNotSystemOwned, err)
+			}
+
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		payload, err := catalogPayload(row, SchemaEntity.Catalog.Fields)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateEntityInput](payload)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		ids, err := client.Entity.Query().Where(entity.CatalogEntityID(catalogID)).IDs(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		updated := 0
+
+		for _, id := range ids {
+			if err := client.Entity.UpdateOneID(id).SetInput(input).Exec(ctx); err != nil {
+				return updated, logPersistError(ctx, SchemaRef{Schema: "entity", Operation: refOpUpdate, EntityID: id}, ErrUpdateFailed, err)
+			}
+
+			updated++
+		}
+
+		return updated, nil
 	}
 	SchemaActionPlan.Ingest.persist = defaultIngestPersist(SchemaActionPlan)
 	SchemaAsset.Ingest.persist = defaultIngestPersist(SchemaAsset)

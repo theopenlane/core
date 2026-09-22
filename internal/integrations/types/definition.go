@@ -32,6 +32,8 @@ type DefinitionSpec struct {
 	Active bool `json:"active"`
 	// Visible indicates whether the definition is visible in catalog surfaces
 	Visible bool `json:"visible"`
+	// RuntimeOnly indicates the definition runs only through its runtime integration and organizations cannot install it
+	RuntimeOnly bool `json:"runtimeOnly,omitempty"`
 }
 
 // Definition is the installable and executable integration unit

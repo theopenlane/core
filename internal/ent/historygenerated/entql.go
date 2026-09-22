@@ -805,6 +805,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entityhistory.FieldLogoRemoteURL:                         {Type: field.TypeString, Column: entityhistory.FieldLogoRemoteURL},
 			entityhistory.FieldLogoFileID:                            {Type: field.TypeString, Column: entityhistory.FieldLogoFileID},
 			entityhistory.FieldExternalID:                            {Type: field.TypeString, Column: entityhistory.FieldExternalID},
+			entityhistory.FieldCatalogEntityID:                       {Type: field.TypeString, Column: entityhistory.FieldCatalogEntityID},
 			entityhistory.FieldObservedAt:                            {Type: field.TypeTime, Column: entityhistory.FieldObservedAt},
 		},
 	}
@@ -1993,6 +1994,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			riskhistory.FieldDelegateUserID:              {Type: field.TypeString, Column: riskhistory.FieldDelegateUserID},
 			riskhistory.FieldDelegateGroupID:             {Type: field.TypeString, Column: riskhistory.FieldDelegateGroupID},
 			riskhistory.FieldDelegateIdentityHolderID:    {Type: field.TypeString, Column: riskhistory.FieldDelegateIdentityHolderID},
+			riskhistory.FieldSystemOwned:                 {Type: field.TypeBool, Column: riskhistory.FieldSystemOwned},
+			riskhistory.FieldInternalNotes:               {Type: field.TypeString, Column: riskhistory.FieldInternalNotes},
+			riskhistory.FieldSystemInternalID:            {Type: field.TypeString, Column: riskhistory.FieldSystemInternalID},
 			riskhistory.FieldRiskKindName:                {Type: field.TypeString, Column: riskhistory.FieldRiskKindName},
 			riskhistory.FieldRiskKindID:                  {Type: field.TypeString, Column: riskhistory.FieldRiskKindID},
 			riskhistory.FieldRiskCategoryName:            {Type: field.TypeString, Column: riskhistory.FieldRiskCategoryName},
@@ -6242,6 +6246,11 @@ func (f *EntityHistoryFilter) WhereLogoFileID(p entql.StringP) {
 // WhereExternalID applies the entql string predicate on the external_id field.
 func (f *EntityHistoryFilter) WhereExternalID(p entql.StringP) {
 	f.Where(p.Field(entityhistory.FieldExternalID))
+}
+
+// WhereCatalogEntityID applies the entql string predicate on the catalog_entity_id field.
+func (f *EntityHistoryFilter) WhereCatalogEntityID(p entql.StringP) {
+	f.Where(p.Field(entityhistory.FieldCatalogEntityID))
 }
 
 // WhereObservedAt applies the entql time.Time predicate on the observed_at field.
@@ -11507,6 +11516,21 @@ func (f *RiskHistoryFilter) WhereDelegateGroupID(p entql.StringP) {
 // WhereDelegateIdentityHolderID applies the entql string predicate on the delegate_identity_holder_id field.
 func (f *RiskHistoryFilter) WhereDelegateIdentityHolderID(p entql.StringP) {
 	f.Where(p.Field(riskhistory.FieldDelegateIdentityHolderID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *RiskHistoryFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(riskhistory.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *RiskHistoryFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *RiskHistoryFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(riskhistory.FieldSystemInternalID))
 }
 
 // WhereRiskKindName applies the entql string predicate on the risk_kind_name field.

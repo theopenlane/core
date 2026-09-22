@@ -538,6 +538,104 @@ func TestProcessPayloadSets_DefinitionNotFound(t *testing.T) {
 	assert.ErrorIs(t, err, ErrIngestDefinitionNotFound)
 }
 
+func TestProcessPayloadSets_RuntimeDefinitionNotFound(t *testing.T) {
+	t.Parallel()
+
+	reg := registry.New()
+	ic := IngestContext{
+		Registry:     reg,
+		DefinitionID: "nonexistent",
+	}
+
+	_, err := applyPayloadSets(context.Background(), ic, ingestBatch{}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+		return ingestOutcome{}, nil
+	})
+
+	assert.ErrorIs(t, err, ErrIngestDefinitionNotFound)
+}
+
+func TestProcessPayloadSets_RuntimeMapsWithoutInstallation(t *testing.T) {
+	t.Parallel()
+
+	reg, _ := testDefinition(t, []types.MappingRegistration{
+		{
+			Schema:  entityops.SchemaAsset.Name,
+			Variant: "",
+			Spec:    types.MappingOverride{MapExpr: `{"sourceIdentifier": payload.id}`},
+		},
+	})
+
+	ic := IngestContext{
+		Registry:     reg,
+		DefinitionID: "test-def",
+	}
+
+	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
+	payloadSets := []types.IngestPayloadSet{
+		{
+			Schema: entityops.SchemaAsset.Name,
+			Envelopes: []types.MappingEnvelope{
+				{Variant: "", Payload: json.RawMessage(`{"id":"asset-001"}`)},
+			},
+		},
+	}
+
+	var handled []mappedIngestRecord
+
+	_, err := applyPayloadSets(context.Background(), ic, ingestBatch{Contracts: contracts, PayloadSets: payloadSets}, func(_ context.Context, record mappedIngestRecord) (ingestOutcome, error) {
+		handled = append(handled, record)
+		return ingestOutcome{}, nil
+	})
+
+	assert.NilError(t, err)
+	assert.Equal(t, len(handled), 1)
+	assert.Equal(t, handled[0].Schema, entityops.SchemaAsset.Name)
+	assert.Equal(t, entityops.FieldValue(handled[0].Payload, entityops.FieldOwnerID), "", "runtime ingest must not stamp an owner")
+	assert.Equal(t, entityops.FieldValue(handled[0].Payload, entityops.FieldSourceDefinitionID), "test-def", "runtime ingest must stamp the definition")
+}
+
+func TestProcessPayloadSets_RuntimeRejectsSchemaWithoutSystemOwned(t *testing.T) {
+	t.Parallel()
+
+	reg, _ := testDefinition(t, []types.MappingRegistration{
+		{
+			Schema: entityops.SchemaContact.Name,
+			Spec:   types.MappingOverride{MapExpr: `{"email": payload.email}`},
+		},
+	})
+
+	ic := IngestContext{
+		Registry:     reg,
+		DefinitionID: "test-def",
+	}
+
+	contracts := []types.IngestContract{{Schema: entityops.SchemaContact.Name}}
+	payloadSets := []types.IngestPayloadSet{
+		{
+			Schema:    entityops.SchemaContact.Name,
+			Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{"email":"a@example.com"}`)}},
+		},
+	}
+
+	_, err := applyPayloadSets(context.Background(), ic, ingestBatch{Contracts: contracts, PayloadSets: payloadSets}, func(context.Context, mappedIngestRecord) (ingestOutcome, error) {
+		return ingestOutcome{}, nil
+	})
+
+	assert.ErrorIs(t, err, ErrIngestSchemaNotSystemOwned)
+}
+
+func TestIngestContextOwnerID(t *testing.T) {
+	t.Parallel()
+
+	installed := IngestContext{Integration: &ent.Integration{OwnerID: "org_1", DefinitionID: "def_installed"}, DefinitionID: "def_runtime"}
+	assert.Equal(t, installed.ownerID(), "org_1")
+	assert.Equal(t, installed.definitionID(), "def_installed")
+
+	runtime := IngestContext{DefinitionID: "def_runtime"}
+	assert.Equal(t, runtime.ownerID(), "")
+	assert.Equal(t, runtime.definitionID(), "def_runtime")
+}
+
 func TestProcessPayloadSets_InstanceIDRequired(t *testing.T) {
 	t.Parallel()
 

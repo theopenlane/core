@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
@@ -88,17 +89,75 @@ func buildCandidates(vendors []map[string]any) []candidate {
 
 // vendorDomain returns the lowercased hostname parsed from vendor's url
 func vendorDomain(vendor map[string]any) string {
-	rawURL, ok := vendor["url"].(string)
-	if !ok || rawURL == "" {
+	rawURL, _ := vendor["url"].(string)
+
+	return normalizeDomain(rawURL)
+}
+
+// normalizeDomain returns the lowercased hostname of a raw domain or url
+func normalizeDomain(raw string) string {
+	if raw == "" {
 		return ""
 	}
 
-	hostname, err := urlx.NormalizeHostname(rawURL)
+	hostname, err := urlx.NormalizeHostname(raw)
 	if err != nil {
 		return ""
 	}
 
 	return hostname
+}
+
+// catalogCandidate builds the matching signals for one vendor name and raw domain
+func catalogCandidate(name, domain string) candidate {
+	return candidate{name: strings.TrimSpace(name), domain: normalizeDomain(domain)}
+}
+
+// MatchCatalog returns the system-owned vendor entity id best matching the name and domain
+func MatchCatalog(ctx context.Context, db *generated.Client, name, domain string) (string, bool, error) {
+	c := catalogCandidate(name, domain)
+	if c.name == "" && c.domain == "" {
+		return "", false, nil
+	}
+
+	references, err := lookupReferences(ctx, db, []candidate{c})
+	if err != nil {
+		return "", false, err
+	}
+
+	ref := matchReference(c, references)
+	if ref == nil {
+		return "", false, nil
+	}
+
+	return ref.entityID, true, nil
+}
+
+// AdoptVendor returns the organization's adopted copy of the catalogue vendor, creating it when absent
+func AdoptVendor(ctx context.Context, db *generated.Client, ownerID, catalogID string) (id string, created bool, err error) {
+	entityTypeID, err := db.EntityType.Query().
+		Where(
+			entitytype.NameEqualFold(systemVendorEntityType),
+			entitytype.OwnerID(ownerID),
+		).
+		OnlyID(ctx)
+
+	switch {
+	case generated.IsNotFound(err):
+		return "", false, ErrVendorEntityTypeMissing
+	case err != nil:
+		return "", false, err
+	}
+
+	overlay, err := jsonx.ToRawMessage(map[string]any{
+		"entity_type_id":   entityTypeID,
+		"approved_for_use": true,
+	})
+	if err != nil {
+		return "", false, err
+	}
+
+	return entityops.SchemaEntity.Adopt(ctx, db, catalogID, ownerID, overlay)
 }
 
 // lookupReferences queries system-owned vendor Entities matching any candidate's name, display

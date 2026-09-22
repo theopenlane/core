@@ -467,7 +467,7 @@ func (r *Runtime) BuildClientForIntegration(ctx context.Context, integration *en
 // When integration is nil the client is resolved from the registry's runtime client.
 // Returns the response payload, the ingest result (zero-valued for non-ingest operations), and any error
 func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, operations.IngestResult, error) {
-	client, credentials, _, err := r.resolveOperationClient(ctx, integration, operation, credentials, config, clientForce)
+	client, credentials, definitionID, err := r.resolveOperationClient(ctx, integration, operation, credentials, config, clientForce)
 	if err != nil {
 		return nil, operations.IngestResult{}, err
 	}
@@ -497,6 +497,10 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		return nil, operations.IngestResult{}, ErrOperationRateLimited
 	}
 
+	if integration == nil && operation.IngestHandle != nil {
+		ctx = systemIngestContext(ctx)
+	}
+
 	req := types.OperationRequest{
 		Integration: integration,
 		Credentials: credentials,
@@ -524,10 +528,11 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		logx.FromContext(ctx).Info().Int("payload_sets", len(payloadSets)).Int("envelopes", totalEnvelopes).Msg("ingest handle completed")
 
 		result, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
-			Registry:    r.Registry(),
-			DB:          r.DB(),
-			Runtime:     r.Gala(),
-			Integration: integration,
+			Registry:     r.Registry(),
+			DB:           r.DB(),
+			Runtime:      r.Gala(),
+			Integration:  integration,
+			DefinitionID: definitionID,
 		}, operation.Name, operation.Ingest, operation.Policy, payloadSets, ingestOptions)
 		if err != nil {
 			return nil, result, err
@@ -747,6 +752,15 @@ func installationJobFragments(integrationID string) ([]string, error) {
 // ingest jobs bound to one installation
 func installationIngestJobFragment(integrationID string) (string, error) {
 	return types.PropertiesFragment(map[string]string{"integration_id": integrationID})
+}
+
+// systemIngestContext installs the caller runtime ingest writes system-owned rows as: system admin so the
+// system-owned hook marks rows and no owner is stamped, with audit-log bypass matching integration callers
+func systemIngestContext(ctx context.Context) context.Context {
+	caller := auth.NewSystemAdminCaller(auth.IntegrationSubjectID, auth.IntegrationDisplayName, auth.IntegrationEmail)
+	caller.Capabilities |= auth.CapBypassAuditLog
+
+	return auth.WithCaller(ctx, caller)
 }
 
 // resolveOperationClient resolves the client for an operation. When integration

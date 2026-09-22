@@ -38,7 +38,7 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 	}
 
 	def, ok := h.IntegrationsRuntime.Registry().Definition(in.DefinitionID)
-	if !ok || !def.Active {
+	if !ok || !def.Active || def.RuntimeOnly {
 		return h.BadRequest(ctx, ErrInvalidProvider)
 	}
 

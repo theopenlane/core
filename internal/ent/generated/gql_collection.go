@@ -22263,6 +22263,110 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				fieldSeen[entity.FieldLogoFileID] = struct{}{}
 			}
 
+		case "catalogEntity":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EntityClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, entityImplementors)...); err != nil {
+				return err
+			}
+			_q.withCatalogEntity = query
+			if _, ok := fieldSeen[entity.FieldCatalogEntityID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldCatalogEntityID)
+				fieldSeen[entity.FieldCatalogEntityID] = struct{}{}
+			}
+
+		case "adoptedEntities":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EntityClient{config: _q.config}).Query()
+			)
+			args := newEntityPaginateArgs(fieldArgs(ctx, new(EntityWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newEntityPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Entity) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"catalog_entity_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(entity.AdoptedEntitiesColumn), ids...))
+						})
+						if err := query.GroupBy(entity.AdoptedEntitiesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[42] == nil {
+								nodes[i].Edges.totalCount[42] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[42][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Entity) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.AdoptedEntities)
+							if nodes[i].Edges.totalCount[42] == nil {
+								nodes[i].Edges.totalCount[42] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[42][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, entityImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(entity.AdoptedEntitiesColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedAdoptedEntities(alias, func(wq *EntityQuery) {
+				*wq = *query
+			})
+
 		case "internalPolicies":
 			var (
 				alias = field.Alias
@@ -22310,10 +22414,10 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[41] == nil {
-								nodes[i].Edges.totalCount[41] = make(map[string]int)
+							if nodes[i].Edges.totalCount[43] == nil {
+								nodes[i].Edges.totalCount[43] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[41][alias] = n
+							nodes[i].Edges.totalCount[43][alias] = n
 						}
 						return nil
 					})
@@ -22321,10 +22425,10 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Entity) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.InternalPolicies)
-							if nodes[i].Edges.totalCount[41] == nil {
-								nodes[i].Edges.totalCount[41] = make(map[string]int)
+							if nodes[i].Edges.totalCount[43] == nil {
+								nodes[i].Edges.totalCount[43] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[41][alias] = n
+							nodes[i].Edges.totalCount[43][alias] = n
 						}
 						return nil
 					})
@@ -22704,6 +22808,11 @@ func (_q *EntityQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			if _, ok := fieldSeen[entity.FieldExternalID]; !ok {
 				selectedFields = append(selectedFields, entity.FieldExternalID)
 				fieldSeen[entity.FieldExternalID] = struct{}{}
+			}
+		case "catalogEntityID":
+			if _, ok := fieldSeen[entity.FieldCatalogEntityID]; !ok {
+				selectedFields = append(selectedFields, entity.FieldCatalogEntityID)
+				fieldSeen[entity.FieldCatalogEntityID] = struct{}{}
 			}
 		case "observedAt":
 			if _, ok := fieldSeen[entity.FieldObservedAt]; !ok {
@@ -75214,6 +75323,21 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[risk.FieldDelegateIdentityHolderID]; !ok {
 				selectedFields = append(selectedFields, risk.FieldDelegateIdentityHolderID)
 				fieldSeen[risk.FieldDelegateIdentityHolderID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[risk.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, risk.FieldSystemOwned)
+				fieldSeen[risk.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[risk.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, risk.FieldInternalNotes)
+				fieldSeen[risk.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[risk.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, risk.FieldSystemInternalID)
+				fieldSeen[risk.FieldSystemInternalID] = struct{}{}
 			}
 		case "riskKindName":
 			if _, ok := fieldSeen[risk.FieldRiskKindName]; !ok {

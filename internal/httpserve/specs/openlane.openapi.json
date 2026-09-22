@@ -1061,6 +1061,9 @@
                     "logoUrl": {
                       "type": "string"
                     },
+                    "runtimeOnly": {
+                      "type": "boolean"
+                    },
                     "tags": {
                       "items": {
                         "type": "string"

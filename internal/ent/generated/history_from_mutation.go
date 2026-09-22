@@ -6472,6 +6472,10 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetExternalID(externalID)
 	}
 
+	if catalogEntityID, exists := m.CatalogEntityID(); exists {
+		create = create.SetCatalogEntityID(catalogEntityID)
+	}
+
 	if observedAt, exists := m.ObservedAt(); exists {
 		create = create.SetNillableObservedAt(&observedAt)
 	}
@@ -6942,6 +6946,12 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetExternalID(entity.ExternalID)
 		}
 
+		if catalogEntityID, exists := m.CatalogEntityID(); exists {
+			create = create.SetCatalogEntityID(catalogEntityID)
+		} else {
+			create = create.SetCatalogEntityID(entity.CatalogEntityID)
+		}
+
 		if observedAt, exists := m.ObservedAt(); exists {
 			create = create.SetNillableObservedAt(&observedAt)
 		} else {
@@ -7058,6 +7068,7 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillableLogoRemoteURL(entity.LogoRemoteURL).
 			SetNillableLogoFileID(entity.LogoFileID).
 			SetExternalID(entity.ExternalID).
+			SetCatalogEntityID(entity.CatalogEntityID).
 			SetNillableObservedAt(entity.ObservedAt).
 			Save(ctx)
 		if err != nil {
@@ -18155,6 +18166,18 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDelegateIdentityHolderID(delegateIdentityHolderID)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
 	if riskKindName, exists := m.RiskKindName(); exists {
 		create = create.SetRiskKindName(riskKindName)
 	}
@@ -18463,6 +18486,24 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDelegateIdentityHolderID(risk.DelegateIdentityHolderID)
 		}
 
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(risk.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(risk.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(risk.SystemInternalID)
+		}
+
 		if riskKindName, exists := m.RiskKindName(); exists {
 			create = create.SetRiskKindName(riskKindName)
 		} else {
@@ -18728,6 +18769,9 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDelegateUserID(risk.DelegateUserID).
 			SetDelegateGroupID(risk.DelegateGroupID).
 			SetDelegateIdentityHolderID(risk.DelegateIdentityHolderID).
+			SetSystemOwned(risk.SystemOwned).
+			SetNillableInternalNotes(risk.InternalNotes).
+			SetNillableSystemInternalID(risk.SystemInternalID).
 			SetRiskKindName(risk.RiskKindName).
 			SetRiskKindID(risk.RiskKindID).
 			SetRiskCategoryName(risk.RiskCategoryName).

@@ -18,6 +18,8 @@ type IngestContext struct {
 	Runtime *gala.Gala
 	// Integration is the integration record being ingested into
 	Integration *ent.Integration
+	// DefinitionID identifies the definition when ingesting on the runtime path, where no installation exists
+	DefinitionID string
 }
 
 // WebhookEnvelope is the durable payload emitted for one inbound integration webhook event

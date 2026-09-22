@@ -189,6 +189,21 @@ func DelegateIdentityHolderID(v string) predicate.RiskHistory {
 	return predicate.RiskHistory(sql.FieldEQ(FieldDelegateIdentityHolderID, v))
 }
 
+// SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
+func SystemOwned(v bool) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// InternalNotes applies equality check predicate on the "internal_notes" field. It's identical to InternalNotesEQ.
+func InternalNotes(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldInternalNotes, v))
+}
+
+// SystemInternalID applies equality check predicate on the "system_internal_id" field. It's identical to SystemInternalIDEQ.
+func SystemInternalID(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldSystemInternalID, v))
+}
+
 // RiskKindName applies equality check predicate on the "risk_kind_name" field. It's identical to RiskKindNameEQ.
 func RiskKindName(v string) predicate.RiskHistory {
 	return predicate.RiskHistory(sql.FieldEQ(FieldRiskKindName, v))
@@ -2027,6 +2042,176 @@ func DelegateIdentityHolderIDEqualFold(v string) predicate.RiskHistory {
 // DelegateIdentityHolderIDContainsFold applies the ContainsFold predicate on the "delegate_identity_holder_id" field.
 func DelegateIdentityHolderIDContainsFold(v string) predicate.RiskHistory {
 	return predicate.RiskHistory(sql.FieldContainsFold(FieldDelegateIdentityHolderID, v))
+}
+
+// SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
+func SystemOwnedEQ(v bool) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedNEQ applies the NEQ predicate on the "system_owned" field.
+func SystemOwnedNEQ(v bool) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedIsNil applies the IsNil predicate on the "system_owned" field.
+func SystemOwnedIsNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIsNull(FieldSystemOwned))
+}
+
+// SystemOwnedNotNil applies the NotNil predicate on the "system_owned" field.
+func SystemOwnedNotNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotNull(FieldSystemOwned))
+}
+
+// InternalNotesEQ applies the EQ predicate on the "internal_notes" field.
+func InternalNotesEQ(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldInternalNotes, v))
+}
+
+// InternalNotesNEQ applies the NEQ predicate on the "internal_notes" field.
+func InternalNotesNEQ(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNEQ(FieldInternalNotes, v))
+}
+
+// InternalNotesIn applies the In predicate on the "internal_notes" field.
+func InternalNotesIn(vs ...string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIn(FieldInternalNotes, vs...))
+}
+
+// InternalNotesNotIn applies the NotIn predicate on the "internal_notes" field.
+func InternalNotesNotIn(vs ...string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotIn(FieldInternalNotes, vs...))
+}
+
+// InternalNotesGT applies the GT predicate on the "internal_notes" field.
+func InternalNotesGT(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGT(FieldInternalNotes, v))
+}
+
+// InternalNotesGTE applies the GTE predicate on the "internal_notes" field.
+func InternalNotesGTE(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGTE(FieldInternalNotes, v))
+}
+
+// InternalNotesLT applies the LT predicate on the "internal_notes" field.
+func InternalNotesLT(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLT(FieldInternalNotes, v))
+}
+
+// InternalNotesLTE applies the LTE predicate on the "internal_notes" field.
+func InternalNotesLTE(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLTE(FieldInternalNotes, v))
+}
+
+// InternalNotesContains applies the Contains predicate on the "internal_notes" field.
+func InternalNotesContains(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldContains(FieldInternalNotes, v))
+}
+
+// InternalNotesHasPrefix applies the HasPrefix predicate on the "internal_notes" field.
+func InternalNotesHasPrefix(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldHasPrefix(FieldInternalNotes, v))
+}
+
+// InternalNotesHasSuffix applies the HasSuffix predicate on the "internal_notes" field.
+func InternalNotesHasSuffix(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldHasSuffix(FieldInternalNotes, v))
+}
+
+// InternalNotesIsNil applies the IsNil predicate on the "internal_notes" field.
+func InternalNotesIsNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIsNull(FieldInternalNotes))
+}
+
+// InternalNotesNotNil applies the NotNil predicate on the "internal_notes" field.
+func InternalNotesNotNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotNull(FieldInternalNotes))
+}
+
+// InternalNotesEqualFold applies the EqualFold predicate on the "internal_notes" field.
+func InternalNotesEqualFold(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEqualFold(FieldInternalNotes, v))
+}
+
+// InternalNotesContainsFold applies the ContainsFold predicate on the "internal_notes" field.
+func InternalNotesContainsFold(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldContainsFold(FieldInternalNotes, v))
+}
+
+// SystemInternalIDEQ applies the EQ predicate on the "system_internal_id" field.
+func SystemInternalIDEQ(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEQ(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDNEQ applies the NEQ predicate on the "system_internal_id" field.
+func SystemInternalIDNEQ(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNEQ(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDIn applies the In predicate on the "system_internal_id" field.
+func SystemInternalIDIn(vs ...string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIn(FieldSystemInternalID, vs...))
+}
+
+// SystemInternalIDNotIn applies the NotIn predicate on the "system_internal_id" field.
+func SystemInternalIDNotIn(vs ...string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotIn(FieldSystemInternalID, vs...))
+}
+
+// SystemInternalIDGT applies the GT predicate on the "system_internal_id" field.
+func SystemInternalIDGT(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGT(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDGTE applies the GTE predicate on the "system_internal_id" field.
+func SystemInternalIDGTE(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldGTE(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDLT applies the LT predicate on the "system_internal_id" field.
+func SystemInternalIDLT(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLT(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDLTE applies the LTE predicate on the "system_internal_id" field.
+func SystemInternalIDLTE(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldLTE(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDContains applies the Contains predicate on the "system_internal_id" field.
+func SystemInternalIDContains(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldContains(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDHasPrefix applies the HasPrefix predicate on the "system_internal_id" field.
+func SystemInternalIDHasPrefix(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldHasPrefix(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDHasSuffix applies the HasSuffix predicate on the "system_internal_id" field.
+func SystemInternalIDHasSuffix(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldHasSuffix(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDIsNil applies the IsNil predicate on the "system_internal_id" field.
+func SystemInternalIDIsNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldIsNull(FieldSystemInternalID))
+}
+
+// SystemInternalIDNotNil applies the NotNil predicate on the "system_internal_id" field.
+func SystemInternalIDNotNil() predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldNotNull(FieldSystemInternalID))
+}
+
+// SystemInternalIDEqualFold applies the EqualFold predicate on the "system_internal_id" field.
+func SystemInternalIDEqualFold(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldEqualFold(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDContainsFold applies the ContainsFold predicate on the "system_internal_id" field.
+func SystemInternalIDContainsFold(v string) predicate.RiskHistory {
+	return predicate.RiskHistory(sql.FieldContainsFold(FieldSystemInternalID, v))
 }
 
 // RiskKindNameEQ applies the EQ predicate on the "risk_kind_name" field.

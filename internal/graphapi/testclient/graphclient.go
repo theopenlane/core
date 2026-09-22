@@ -206,6 +206,7 @@ type TestGraphClient interface {
 	UpdateBulkCSVEmailTemplate(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVEmailTemplate, error)
 	UpdateBulkEmailTemplate(ctx context.Context, ids []string, input UpdateEmailTemplateInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkEmailTemplate, error)
 	UpdateEmailTemplate(ctx context.Context, updateEmailTemplateID string, input UpdateEmailTemplateInput, interceptors ...clientv2.RequestInterceptor) (*UpdateEmailTemplate, error)
+	AdoptEntity(ctx context.Context, catalogEntityID string, interceptors ...clientv2.RequestInterceptor) (*AdoptEntity, error)
 	CreateBulkCSVEntity(ctx context.Context, input graphql.Upload, entityTypeName *string, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVEntity, error)
 	CreateBulkEntity(ctx context.Context, input []*CreateEntityInput, entityTypeName *string, interceptors ...clientv2.RequestInterceptor) (*CreateBulkEntity, error)
 	CreateEntity(ctx context.Context, input CreateEntityInput, entityTypeName *string, entityFiles []*graphql.Upload, entityFilesMetadata []*FileMetadataInput, logoFile *graphql.Upload, logoFileMetadata *FileMetadataInput, interceptors ...clientv2.RequestInterceptor) (*CreateEntity, error)
@@ -41564,6 +41565,120 @@ func (t *UpdateEmailTemplate_UpdateEmailTemplate) GetEmailTemplate() *UpdateEmai
 	return &t.EmailTemplate
 }
 
+type AdoptEntity_AdoptEntity_Entity_CatalogEntity struct {
+	ID string "json:\"id\" graphql:\"id\""
+}
+
+func (t *AdoptEntity_AdoptEntity_Entity_CatalogEntity) GetID() string {
+	if t == nil {
+		t = &AdoptEntity_AdoptEntity_Entity_CatalogEntity{}
+	}
+	return t.ID
+}
+
+type AdoptEntity_AdoptEntity_Entity_EntityType struct {
+	ID   string "json:\"id\" graphql:\"id\""
+	Name string "json:\"name\" graphql:\"name\""
+}
+
+func (t *AdoptEntity_AdoptEntity_Entity_EntityType) GetID() string {
+	if t == nil {
+		t = &AdoptEntity_AdoptEntity_Entity_EntityType{}
+	}
+	return t.ID
+}
+func (t *AdoptEntity_AdoptEntity_Entity_EntityType) GetName() string {
+	if t == nil {
+		t = &AdoptEntity_AdoptEntity_Entity_EntityType{}
+	}
+	return t.Name
+}
+
+type AdoptEntity_AdoptEntity_Entity struct {
+	CatalogEntity   *AdoptEntity_AdoptEntity_Entity_CatalogEntity "json:\"catalogEntity,omitempty\" graphql:\"catalogEntity\""
+	CatalogEntityID *string                                       "json:\"catalogEntityID,omitempty\" graphql:\"catalogEntityID\""
+	Description     *string                                       "json:\"description,omitempty\" graphql:\"description\""
+	DisplayName     *string                                       "json:\"displayName,omitempty\" graphql:\"displayName\""
+	Domains         []string                                      "json:\"domains,omitempty\" graphql:\"domains\""
+	EntityType      *AdoptEntity_AdoptEntity_Entity_EntityType    "json:\"entityType,omitempty\" graphql:\"entityType\""
+	ID              string                                        "json:\"id\" graphql:\"id\""
+	LogoRemoteURL   *string                                       "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
+	Name            *string                                       "json:\"name,omitempty\" graphql:\"name\""
+	OwnerID         *string                                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+}
+
+func (t *AdoptEntity_AdoptEntity_Entity) GetCatalogEntity() *AdoptEntity_AdoptEntity_Entity_CatalogEntity {
+	if t == nil {
+		t = &AdoptEntity_AdoptEntity_Entity{}
+	}
+	return t.CatalogEntity
+}
+func (t *AdoptEntity_AdoptEntity_Entity) GetCatalogEntityID() *string {
+	if t == nil {
+		t = &AdoptEntity_AdoptEntity_Entity{}
+	}
+	return t.CatalogEntityID
+}
+func (t *AdoptEntity_AdoptEntity_Entity) GetDescription() *string {
+	if t == nil {
+		t = &AdoptEntity_AdoptEntity_Entity{}
+	}
+	return t.Description
+}
+func (t *AdoptEntity_AdoptEntity_Entity) GetDisplayName() *string {
+	if t == nil {
+		t = &AdoptEntity_AdoptEntity_Entity{}
+	}
+	return t.DisplayName
+}
+func (t *AdoptEntity_AdoptEntity_Entity) GetDomains() []string {
+	if t == nil {
+		t = &AdoptEntity_AdoptEntity_Entity{}
+	}
+	return t.Domains
+}
+func (t *AdoptEntity_AdoptEntity_Entity) GetEntityType() *AdoptEntity_AdoptEntity_Entity_EntityType {
+	if t == nil {
+		t = &AdoptEntity_AdoptEntity_Entity{}
+	}
+	return t.EntityType
+}
+func (t *AdoptEntity_AdoptEntity_Entity) GetID() string {
+	if t == nil {
+		t = &AdoptEntity_AdoptEntity_Entity{}
+	}
+	return t.ID
+}
+func (t *AdoptEntity_AdoptEntity_Entity) GetLogoRemoteURL() *string {
+	if t == nil {
+		t = &AdoptEntity_AdoptEntity_Entity{}
+	}
+	return t.LogoRemoteURL
+}
+func (t *AdoptEntity_AdoptEntity_Entity) GetName() *string {
+	if t == nil {
+		t = &AdoptEntity_AdoptEntity_Entity{}
+	}
+	return t.Name
+}
+func (t *AdoptEntity_AdoptEntity_Entity) GetOwnerID() *string {
+	if t == nil {
+		t = &AdoptEntity_AdoptEntity_Entity{}
+	}
+	return t.OwnerID
+}
+
+type AdoptEntity_AdoptEntity struct {
+	Entity AdoptEntity_AdoptEntity_Entity "json:\"entity\" graphql:\"entity\""
+}
+
+func (t *AdoptEntity_AdoptEntity) GetEntity() *AdoptEntity_AdoptEntity_Entity {
+	if t == nil {
+		t = &AdoptEntity_AdoptEntity{}
+	}
+	return &t.Entity
+}
+
 type CreateBulkCSVEntity_CreateBulkCSVEntity_Entities_Notes_Edges_Node struct {
 	Text      string     "json:\"text\" graphql:\"text\""
 	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
@@ -42833,6 +42948,7 @@ type GetEntityByID_Entity struct {
 	ApprovedForUse                        *bool                            "json:\"approvedForUse,omitempty\" graphql:\"approvedForUse\""
 	AutoRenews                            *bool                            "json:\"autoRenews,omitempty\" graphql:\"autoRenews\""
 	BillingModel                          *string                          "json:\"billingModel,omitempty\" graphql:\"billingModel\""
+	CatalogEntityID                       *string                          "json:\"catalogEntityID,omitempty\" graphql:\"catalogEntityID\""
 	Contacts                              GetEntityByID_Entity_Contacts    "json:\"contacts\" graphql:\"contacts\""
 	ContractEndDate                       *models.DateTime                 "json:\"contractEndDate,omitempty\" graphql:\"contractEndDate\""
 	ContractRenewalAt                     *models.DateTime                 "json:\"contractRenewalAt,omitempty\" graphql:\"contractRenewalAt\""
@@ -42936,6 +43052,12 @@ func (t *GetEntityByID_Entity) GetBillingModel() *string {
 		t = &GetEntityByID_Entity{}
 	}
 	return t.BillingModel
+}
+func (t *GetEntityByID_Entity) GetCatalogEntityID() *string {
+	if t == nil {
+		t = &GetEntityByID_Entity{}
+	}
+	return t.CatalogEntityID
 }
 func (t *GetEntityByID_Entity) GetContacts() *GetEntityByID_Entity_Contacts {
 	if t == nil {
@@ -104037,6 +104159,7 @@ type CreateBulkCSVRisk_CreateBulkCSVRisk_Risks struct {
 	Impact                      *enums.RiskImpact                                      "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID               *string                                                "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	IntegrationRunID            *string                                                "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes               *string                                                "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	LastReviewedAt              *models.DateTime                                       "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood                  *enums.RiskLikelihood                                  "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy                   *string                                                "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -104068,6 +104191,8 @@ type CreateBulkCSVRisk_CreateBulkCSVRisk_Risks struct {
 	StakeholderName             *string                                                "json:\"stakeholderName,omitempty\" graphql:\"stakeholderName\""
 	StakeholderUserID           *string                                                "json:\"stakeholderUserID,omitempty\" graphql:\"stakeholderUserID\""
 	Status                      *enums.RiskStatus                                      "json:\"status,omitempty\" graphql:\"status\""
+	SystemInternalID            *string                                                "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned                 *bool                                                  "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                        []string                                               "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                   *time.Time                                             "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy                   *string                                                "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -104206,6 +104331,12 @@ func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetIntegrationRunID() *strin
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
 	}
 	return t.IntegrationRunID
+}
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetInternalNotes() *string {
+	if t == nil {
+		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
+	}
+	return t.InternalNotes
 }
 func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -104393,6 +104524,18 @@ func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetStatus() *enums.RiskStatu
 	}
 	return t.Status
 }
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetSystemInternalID() *string {
+	if t == nil {
+		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
+	}
+	return t.SystemInternalID
+}
+func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetSystemOwned() *bool {
+	if t == nil {
+		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
+	}
+	return t.SystemOwned
+}
 func (t *CreateBulkCSVRisk_CreateBulkCSVRisk_Risks) GetTags() []string {
 	if t == nil {
 		t = &CreateBulkCSVRisk_CreateBulkCSVRisk_Risks{}
@@ -104494,6 +104637,7 @@ type CreateBulkRisk_CreateBulkRisk_Risks struct {
 	Impact                      *enums.RiskImpact                                "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID               *string                                          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	IntegrationRunID            *string                                          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes               *string                                          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	LastReviewedAt              *models.DateTime                                 "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood                  *enums.RiskLikelihood                            "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy                   *string                                          "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -104525,6 +104669,8 @@ type CreateBulkRisk_CreateBulkRisk_Risks struct {
 	StakeholderName             *string                                          "json:\"stakeholderName,omitempty\" graphql:\"stakeholderName\""
 	StakeholderUserID           *string                                          "json:\"stakeholderUserID,omitempty\" graphql:\"stakeholderUserID\""
 	Status                      *enums.RiskStatus                                "json:\"status,omitempty\" graphql:\"status\""
+	SystemInternalID            *string                                          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned                 *bool                                            "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                        []string                                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                   *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy                   *string                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -104663,6 +104809,12 @@ func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetIntegrationRunID() *string {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
 	}
 	return t.IntegrationRunID
+}
+func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetInternalNotes() *string {
+	if t == nil {
+		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
+	}
+	return t.InternalNotes
 }
 func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -104849,6 +105001,18 @@ func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetStatus() *enums.RiskStatus {
 		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
 	}
 	return t.Status
+}
+func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetSystemInternalID() *string {
+	if t == nil {
+		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
+	}
+	return t.SystemInternalID
+}
+func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetSystemOwned() *bool {
+	if t == nil {
+		t = &CreateBulkRisk_CreateBulkRisk_Risks{}
+	}
+	return t.SystemOwned
 }
 func (t *CreateBulkRisk_CreateBulkRisk_Risks) GetTags() []string {
 	if t == nil {
@@ -105113,6 +105277,7 @@ type CreateRisk_CreateRisk_Risk struct {
 	Impact                      *enums.RiskImpact                        "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID               *string                                  "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	IntegrationRunID            *string                                  "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes               *string                                  "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	LastReviewedAt              *models.DateTime                         "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood                  *enums.RiskLikelihood                    "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy                   *string                                  "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -105145,6 +105310,8 @@ type CreateRisk_CreateRisk_Risk struct {
 	StakeholderName             *string                                  "json:\"stakeholderName,omitempty\" graphql:\"stakeholderName\""
 	StakeholderUserID           *string                                  "json:\"stakeholderUserID,omitempty\" graphql:\"stakeholderUserID\""
 	Status                      *enums.RiskStatus                        "json:\"status,omitempty\" graphql:\"status\""
+	SystemInternalID            *string                                  "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned                 *bool                                    "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                        []string                                 "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                   *time.Time                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy                   *string                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -105296,6 +105463,12 @@ func (t *CreateRisk_CreateRisk_Risk) GetIntegrationRunID() *string {
 		t = &CreateRisk_CreateRisk_Risk{}
 	}
 	return t.IntegrationRunID
+}
+func (t *CreateRisk_CreateRisk_Risk) GetInternalNotes() *string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk{}
+	}
+	return t.InternalNotes
 }
 func (t *CreateRisk_CreateRisk_Risk) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -105488,6 +105661,18 @@ func (t *CreateRisk_CreateRisk_Risk) GetStatus() *enums.RiskStatus {
 		t = &CreateRisk_CreateRisk_Risk{}
 	}
 	return t.Status
+}
+func (t *CreateRisk_CreateRisk_Risk) GetSystemInternalID() *string {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk{}
+	}
+	return t.SystemInternalID
+}
+func (t *CreateRisk_CreateRisk_Risk) GetSystemOwned() *bool {
+	if t == nil {
+		t = &CreateRisk_CreateRisk_Risk{}
+	}
+	return t.SystemOwned
 }
 func (t *CreateRisk_CreateRisk_Risk) GetTags() []string {
 	if t == nil {
@@ -105801,6 +105986,7 @@ type GetAllRisks_Risks_Edges_Node struct {
 	Impact                      *enums.RiskImpact                          "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID               *string                                    "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	IntegrationRunID            *string                                    "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes               *string                                    "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	LastReviewedAt              *models.DateTime                           "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood                  *enums.RiskLikelihood                      "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy                   *string                                    "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -105833,6 +106019,8 @@ type GetAllRisks_Risks_Edges_Node struct {
 	StakeholderName             *string                                    "json:\"stakeholderName,omitempty\" graphql:\"stakeholderName\""
 	StakeholderUserID           *string                                    "json:\"stakeholderUserID,omitempty\" graphql:\"stakeholderUserID\""
 	Status                      *enums.RiskStatus                          "json:\"status,omitempty\" graphql:\"status\""
+	SystemInternalID            *string                                    "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned                 *bool                                      "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                        []string                                   "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                   *time.Time                                 "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy                   *string                                    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -105984,6 +106172,12 @@ func (t *GetAllRisks_Risks_Edges_Node) GetIntegrationRunID() *string {
 		t = &GetAllRisks_Risks_Edges_Node{}
 	}
 	return t.IntegrationRunID
+}
+func (t *GetAllRisks_Risks_Edges_Node) GetInternalNotes() *string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node{}
+	}
+	return t.InternalNotes
 }
 func (t *GetAllRisks_Risks_Edges_Node) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -106176,6 +106370,18 @@ func (t *GetAllRisks_Risks_Edges_Node) GetStatus() *enums.RiskStatus {
 		t = &GetAllRisks_Risks_Edges_Node{}
 	}
 	return t.Status
+}
+func (t *GetAllRisks_Risks_Edges_Node) GetSystemInternalID() *string {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node{}
+	}
+	return t.SystemInternalID
+}
+func (t *GetAllRisks_Risks_Edges_Node) GetSystemOwned() *bool {
+	if t == nil {
+		t = &GetAllRisks_Risks_Edges_Node{}
+	}
+	return t.SystemOwned
 }
 func (t *GetAllRisks_Risks_Edges_Node) GetTags() []string {
 	if t == nil {
@@ -106471,6 +106677,7 @@ type GetRiskByID_Risk struct {
 	Impact                      *enums.RiskImpact              "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID               *string                        "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	IntegrationRunID            *string                        "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes               *string                        "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	LastReviewedAt              *models.DateTime               "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood                  *enums.RiskLikelihood          "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy                   *string                        "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -106503,6 +106710,8 @@ type GetRiskByID_Risk struct {
 	StakeholderName             *string                        "json:\"stakeholderName,omitempty\" graphql:\"stakeholderName\""
 	StakeholderUserID           *string                        "json:\"stakeholderUserID,omitempty\" graphql:\"stakeholderUserID\""
 	Status                      *enums.RiskStatus              "json:\"status,omitempty\" graphql:\"status\""
+	SystemInternalID            *string                        "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned                 *bool                          "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                        []string                       "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                   *time.Time                     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy                   *string                        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -106654,6 +106863,12 @@ func (t *GetRiskByID_Risk) GetIntegrationRunID() *string {
 		t = &GetRiskByID_Risk{}
 	}
 	return t.IntegrationRunID
+}
+func (t *GetRiskByID_Risk) GetInternalNotes() *string {
+	if t == nil {
+		t = &GetRiskByID_Risk{}
+	}
+	return t.InternalNotes
 }
 func (t *GetRiskByID_Risk) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -106846,6 +107061,18 @@ func (t *GetRiskByID_Risk) GetStatus() *enums.RiskStatus {
 		t = &GetRiskByID_Risk{}
 	}
 	return t.Status
+}
+func (t *GetRiskByID_Risk) GetSystemInternalID() *string {
+	if t == nil {
+		t = &GetRiskByID_Risk{}
+	}
+	return t.SystemInternalID
+}
+func (t *GetRiskByID_Risk) GetSystemOwned() *bool {
+	if t == nil {
+		t = &GetRiskByID_Risk{}
+	}
+	return t.SystemOwned
 }
 func (t *GetRiskByID_Risk) GetTags() []string {
 	if t == nil {
@@ -107137,6 +107364,7 @@ type GetRisks_Risks_Edges_Node struct {
 	Impact                      *enums.RiskImpact                       "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID               *string                                 "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	IntegrationRunID            *string                                 "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes               *string                                 "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	LastReviewedAt              *models.DateTime                        "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood                  *enums.RiskLikelihood                   "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy                   *string                                 "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -107169,6 +107397,8 @@ type GetRisks_Risks_Edges_Node struct {
 	StakeholderName             *string                                 "json:\"stakeholderName,omitempty\" graphql:\"stakeholderName\""
 	StakeholderUserID           *string                                 "json:\"stakeholderUserID,omitempty\" graphql:\"stakeholderUserID\""
 	Status                      *enums.RiskStatus                       "json:\"status,omitempty\" graphql:\"status\""
+	SystemInternalID            *string                                 "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned                 *bool                                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                        []string                                "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                   *time.Time                              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy                   *string                                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -107320,6 +107550,12 @@ func (t *GetRisks_Risks_Edges_Node) GetIntegrationRunID() *string {
 		t = &GetRisks_Risks_Edges_Node{}
 	}
 	return t.IntegrationRunID
+}
+func (t *GetRisks_Risks_Edges_Node) GetInternalNotes() *string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node{}
+	}
+	return t.InternalNotes
 }
 func (t *GetRisks_Risks_Edges_Node) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -107513,6 +107749,18 @@ func (t *GetRisks_Risks_Edges_Node) GetStatus() *enums.RiskStatus {
 	}
 	return t.Status
 }
+func (t *GetRisks_Risks_Edges_Node) GetSystemInternalID() *string {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node{}
+	}
+	return t.SystemInternalID
+}
+func (t *GetRisks_Risks_Edges_Node) GetSystemOwned() *bool {
+	if t == nil {
+		t = &GetRisks_Risks_Edges_Node{}
+	}
+	return t.SystemOwned
+}
 func (t *GetRisks_Risks_Edges_Node) GetTags() []string {
 	if t == nil {
 		t = &GetRisks_Risks_Edges_Node{}
@@ -107645,6 +107893,7 @@ type UpdateBulkRisk_UpdateBulkRisk_Risks struct {
 	Impact                      *enums.RiskImpact                                "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID               *string                                          "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	IntegrationRunID            *string                                          "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes               *string                                          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	LastReviewedAt              *models.DateTime                                 "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood                  *enums.RiskLikelihood                            "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy                   *string                                          "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -107676,6 +107925,8 @@ type UpdateBulkRisk_UpdateBulkRisk_Risks struct {
 	StakeholderName             *string                                          "json:\"stakeholderName,omitempty\" graphql:\"stakeholderName\""
 	StakeholderUserID           *string                                          "json:\"stakeholderUserID,omitempty\" graphql:\"stakeholderUserID\""
 	Status                      *enums.RiskStatus                                "json:\"status,omitempty\" graphql:\"status\""
+	SystemInternalID            *string                                          "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned                 *bool                                            "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                        []string                                         "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                   *time.Time                                       "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy                   *string                                          "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -107814,6 +108065,12 @@ func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetIntegrationRunID() *string {
 		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
 	}
 	return t.IntegrationRunID
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetInternalNotes() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.InternalNotes
 }
 func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -108000,6 +108257,18 @@ func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetStatus() *enums.RiskStatus {
 		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
 	}
 	return t.Status
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetSystemInternalID() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.SystemInternalID
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetSystemOwned() *bool {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk_Risks{}
+	}
+	return t.SystemOwned
 }
 func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetTags() []string {
 	if t == nil {
@@ -108285,6 +108554,7 @@ type UpdateRisk_UpdateRisk_Risk struct {
 	Impact                      *enums.RiskImpact                        "json:\"impact,omitempty\" graphql:\"impact\""
 	IntegrationID               *string                                  "json:\"integrationID,omitempty\" graphql:\"integrationID\""
 	IntegrationRunID            *string                                  "json:\"integrationRunID,omitempty\" graphql:\"integrationRunID\""
+	InternalNotes               *string                                  "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	LastReviewedAt              *models.DateTime                         "json:\"lastReviewedAt,omitempty\" graphql:\"lastReviewedAt\""
 	Likelihood                  *enums.RiskLikelihood                    "json:\"likelihood,omitempty\" graphql:\"likelihood\""
 	ManagedBy                   *string                                  "json:\"managedBy,omitempty\" graphql:\"managedBy\""
@@ -108317,6 +108587,8 @@ type UpdateRisk_UpdateRisk_Risk struct {
 	StakeholderName             *string                                  "json:\"stakeholderName,omitempty\" graphql:\"stakeholderName\""
 	StakeholderUserID           *string                                  "json:\"stakeholderUserID,omitempty\" graphql:\"stakeholderUserID\""
 	Status                      *enums.RiskStatus                        "json:\"status,omitempty\" graphql:\"status\""
+	SystemInternalID            *string                                  "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned                 *bool                                    "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
 	Tags                        []string                                 "json:\"tags,omitempty\" graphql:\"tags\""
 	UpdatedAt                   *time.Time                               "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
 	UpdatedBy                   *string                                  "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
@@ -108468,6 +108740,12 @@ func (t *UpdateRisk_UpdateRisk_Risk) GetIntegrationRunID() *string {
 		t = &UpdateRisk_UpdateRisk_Risk{}
 	}
 	return t.IntegrationRunID
+}
+func (t *UpdateRisk_UpdateRisk_Risk) GetInternalNotes() *string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk{}
+	}
+	return t.InternalNotes
 }
 func (t *UpdateRisk_UpdateRisk_Risk) GetLastReviewedAt() *models.DateTime {
 	if t == nil {
@@ -108660,6 +108938,18 @@ func (t *UpdateRisk_UpdateRisk_Risk) GetStatus() *enums.RiskStatus {
 		t = &UpdateRisk_UpdateRisk_Risk{}
 	}
 	return t.Status
+}
+func (t *UpdateRisk_UpdateRisk_Risk) GetSystemInternalID() *string {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk{}
+	}
+	return t.SystemInternalID
+}
+func (t *UpdateRisk_UpdateRisk_Risk) GetSystemOwned() *bool {
+	if t == nil {
+		t = &UpdateRisk_UpdateRisk_Risk{}
+	}
+	return t.SystemOwned
 }
 func (t *UpdateRisk_UpdateRisk_Risk) GetTags() []string {
 	if t == nil {
@@ -167205,6 +167495,17 @@ func (t *UpdateEmailTemplate) GetUpdateEmailTemplate() *UpdateEmailTemplate_Upda
 	return &t.UpdateEmailTemplate
 }
 
+type AdoptEntity struct {
+	AdoptEntity AdoptEntity_AdoptEntity "json:\"adoptEntity\" graphql:\"adoptEntity\""
+}
+
+func (t *AdoptEntity) GetAdoptEntity() *AdoptEntity_AdoptEntity {
+	if t == nil {
+		t = &AdoptEntity{}
+	}
+	return &t.AdoptEntity
+}
+
 type CreateBulkCSVEntity struct {
 	CreateBulkCSVEntity CreateBulkCSVEntity_CreateBulkCSVEntity "json:\"createBulkCSVEntity\" graphql:\"createBulkCSVEntity\""
 }
@@ -183774,6 +184075,46 @@ func (c *Client) UpdateEmailTemplate(ctx context.Context, updateEmailTemplateID 
 	return &res, nil
 }
 
+const AdoptEntityDocument = `mutation AdoptEntity ($catalogEntityID: ID!) {
+	adoptEntity(catalogEntityID: $catalogEntityID) {
+		entity {
+			id
+			name
+			displayName
+			description
+			domains
+			logoRemoteURL
+			ownerID
+			catalogEntityID
+			catalogEntity {
+				id
+			}
+			entityType {
+				id
+				name
+			}
+		}
+	}
+}
+`
+
+func (c *Client) AdoptEntity(ctx context.Context, catalogEntityID string, interceptors ...clientv2.RequestInterceptor) (*AdoptEntity, error) {
+	vars := map[string]any{
+		"catalogEntityID": catalogEntityID,
+	}
+
+	var res AdoptEntity
+	if err := c.Client.Post(ctx, "AdoptEntity", AdoptEntityDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateBulkCSVEntityDocument = `mutation CreateBulkCSVEntity ($input: Upload!, $entityTypeName: String) {
 	createBulkCSVEntity(input: $input, entityTypeName: $entityTypeName) {
 		entities {
@@ -184082,6 +184423,7 @@ const GetEntityByIDDocument = `query GetEntityByID ($entityId: ID!) {
 		approvedForUse
 		autoRenews
 		billingModel
+		catalogEntityID
 		contractEndDate
 		contractRenewalAt
 		contractStartDate
@@ -199477,6 +199819,7 @@ const CreateBulkCSVRiskDocument = `mutation CreateBulkCSVRisk ($input: Upload!) 
 			impact
 			integrationID
 			integrationRunID
+			internalNotes
 			lastReviewedAt
 			likelihood
 			managedBy
@@ -199507,6 +199850,8 @@ const CreateBulkCSVRiskDocument = `mutation CreateBulkCSVRisk ($input: Upload!) 
 			stakeholderName
 			stakeholderUserID
 			status
+			systemInternalID
+			systemOwned
 			tags
 			updatedAt
 			updatedBy
@@ -199566,6 +199911,7 @@ const CreateBulkRiskDocument = `mutation CreateBulkRisk ($input: [CreateRiskInpu
 			impact
 			integrationID
 			integrationRunID
+			internalNotes
 			lastReviewedAt
 			likelihood
 			managedBy
@@ -199596,6 +199942,8 @@ const CreateBulkRiskDocument = `mutation CreateBulkRisk ($input: [CreateRiskInpu
 			stakeholderName
 			stakeholderUserID
 			status
+			systemInternalID
+			systemOwned
 			tags
 			updatedAt
 			updatedBy
@@ -199655,6 +200003,7 @@ const CreateRiskDocument = `mutation CreateRisk ($input: CreateRiskInput!) {
 			impact
 			integrationID
 			integrationRunID
+			internalNotes
 			lastReviewedAt
 			likelihood
 			managedBy
@@ -199685,6 +200034,8 @@ const CreateRiskDocument = `mutation CreateRisk ($input: CreateRiskInput!) {
 			stakeholderName
 			stakeholderUserID
 			status
+			systemInternalID
+			systemOwned
 			tags
 			updatedAt
 			updatedBy
@@ -199808,6 +200159,7 @@ const GetAllRisksDocument = `query GetAllRisks ($first: Int, $last: Int, $after:
 				impact
 				integrationID
 				integrationRunID
+				internalNotes
 				lastReviewedAt
 				likelihood
 				managedBy
@@ -199838,6 +200190,8 @@ const GetAllRisksDocument = `query GetAllRisks ($first: Int, $last: Int, $after:
 				stakeholderName
 				stakeholderUserID
 				status
+				systemInternalID
+				systemOwned
 				tags
 				updatedAt
 				updatedBy
@@ -199933,6 +200287,7 @@ const GetRiskByIDDocument = `query GetRiskByID ($riskId: ID!) {
 		impact
 		integrationID
 		integrationRunID
+		internalNotes
 		lastReviewedAt
 		likelihood
 		managedBy
@@ -199963,6 +200318,8 @@ const GetRiskByIDDocument = `query GetRiskByID ($riskId: ID!) {
 		stakeholderName
 		stakeholderUserID
 		status
+		systemInternalID
+		systemOwned
 		tags
 		updatedAt
 		updatedBy
@@ -200061,6 +200418,7 @@ const GetRisksDocument = `query GetRisks ($first: Int, $last: Int, $after: Curso
 				impact
 				integrationID
 				integrationRunID
+				internalNotes
 				lastReviewedAt
 				likelihood
 				managedBy
@@ -200091,6 +200449,8 @@ const GetRisksDocument = `query GetRisks ($first: Int, $last: Int, $after: Curso
 				stakeholderName
 				stakeholderUserID
 				status
+				systemInternalID
+				systemOwned
 				tags
 				updatedAt
 				updatedBy
@@ -200188,6 +200548,7 @@ const UpdateBulkRiskDocument = `mutation UpdateBulkRisk ($ids: [ID!]!, $input: U
 			impact
 			integrationID
 			integrationRunID
+			internalNotes
 			lastReviewedAt
 			likelihood
 			managedBy
@@ -200218,6 +200579,8 @@ const UpdateBulkRiskDocument = `mutation UpdateBulkRisk ($ids: [ID!]!, $input: U
 			stakeholderName
 			stakeholderUserID
 			status
+			systemInternalID
+			systemOwned
 			tags
 			updatedAt
 			updatedBy
@@ -200281,6 +200644,7 @@ const UpdateRiskDocument = `mutation UpdateRisk ($updateRiskId: ID!, $input: Upd
 			impact
 			integrationID
 			integrationRunID
+			internalNotes
 			lastReviewedAt
 			likelihood
 			managedBy
@@ -200311,6 +200675,8 @@ const UpdateRiskDocument = `mutation UpdateRisk ($updateRiskId: ID!, $input: Upd
 			stakeholderName
 			stakeholderUserID
 			status
+			systemInternalID
+			systemOwned
 			tags
 			updatedAt
 			updatedBy
@@ -215363,6 +215729,7 @@ var DocumentOperationNames = map[string]string{
 	UpdateBulkCSVEmailTemplateDocument:            "UpdateBulkCSVEmailTemplate",
 	UpdateBulkEmailTemplateDocument:               "UpdateBulkEmailTemplate",
 	UpdateEmailTemplateDocument:                   "UpdateEmailTemplate",
+	AdoptEntityDocument:                           "AdoptEntity",
 	CreateBulkCSVEntityDocument:                   "CreateBulkCSVEntity",
 	CreateBulkEntityDocument:                      "CreateBulkEntity",
 	CreateEntityDocument:                          "CreateEntity",

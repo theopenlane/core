@@ -42,7 +42,9 @@ import (
 	gqlgenerated "github.com/theopenlane/core/v2/internal/graphapi/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/httpserve/config"
+	cloudflaredef "github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	systemdef "github.com/theopenlane/core/v2/internal/integrations/definitions/system"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
@@ -121,6 +123,9 @@ func repoRoot() string {
 
 // fgaModuleFile is the fga model the test containers are seeded with
 var fgaModuleFile = filepath.Join(repoRoot(), "fga", "model", "fga.mod")
+
+// objectStoreFixtureDir is the committed record bucket the objectstore runtime reads in tests
+var objectStoreFixtureDir = filepath.Join(repoRoot(), "internal", "graphapi", "testharness", "testdata", "objectstore")
 
 // Suite is the shared harness instance used by each graphapi test suite
 var Suite = &GraphTestSuite{}
@@ -334,6 +339,8 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 			emaildef.Builder(emaildef.MockRuntimeConfig(), false),
 			suite.SlackMock.Builder(),
 			systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}, systemdef.IntegrationLifecycleConfig{}),
+			objectstore.Builder(&suite.ObjectStoreRuntime, "", objectstore.Config{}),
+			cloudflaredef.Builder(&cloudflaredef.RuntimeConfig{}),
 			testint.Builder(),
 			testint.MockHTTPBuilder(),
 		},

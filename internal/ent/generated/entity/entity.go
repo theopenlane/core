@@ -162,6 +162,8 @@ const (
 	FieldLogoFileID = "logo_file_id"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
+	// FieldCatalogEntityID holds the string denoting the catalog_entity_id field in the database.
+	FieldCatalogEntityID = "catalog_entity_id"
 	// FieldObservedAt holds the string denoting the observed_at field in the database.
 	FieldObservedAt = "observed_at"
 	// EdgeIntegrationRuns holds the string denoting the integration_runs edge name in mutations.
@@ -246,6 +248,10 @@ const (
 	EdgeEntityType = "entity_type"
 	// EdgeLogoFile holds the string denoting the logo_file edge name in mutations.
 	EdgeLogoFile = "logo_file"
+	// EdgeCatalogEntity holds the string denoting the catalog_entity edge name in mutations.
+	EdgeCatalogEntity = "catalog_entity"
+	// EdgeAdoptedEntities holds the string denoting the adopted_entities edge name in mutations.
+	EdgeAdoptedEntities = "adopted_entities"
 	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
 	EdgeInternalPolicies = "internal_policies"
 	// Table holds the table name of the entity in the database.
@@ -495,6 +501,14 @@ const (
 	LogoFileInverseTable = "files"
 	// LogoFileColumn is the table column denoting the logo_file relation/edge.
 	LogoFileColumn = "logo_file_id"
+	// CatalogEntityTable is the table that holds the catalog_entity relation/edge.
+	CatalogEntityTable = "entities"
+	// CatalogEntityColumn is the table column denoting the catalog_entity relation/edge.
+	CatalogEntityColumn = "catalog_entity_id"
+	// AdoptedEntitiesTable is the table that holds the adopted_entities relation/edge.
+	AdoptedEntitiesTable = "entities"
+	// AdoptedEntitiesColumn is the table column denoting the adopted_entities relation/edge.
+	AdoptedEntitiesColumn = "catalog_entity_id"
 	// InternalPoliciesTable is the table that holds the internal_policies relation/edge. The primary key declared below.
 	InternalPoliciesTable = "internal_policy_entities"
 	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
@@ -577,6 +591,7 @@ var Columns = []string{
 	FieldLogoRemoteURL,
 	FieldLogoFileID,
 	FieldExternalID,
+	FieldCatalogEntityID,
 	FieldObservedAt,
 }
 
@@ -1097,6 +1112,11 @@ func ByExternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldExternalID, opts...).ToFunc()
 }
 
+// ByCatalogEntityID orders the results by the catalog_entity_id field.
+func ByCatalogEntityID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCatalogEntityID, opts...).ToFunc()
+}
+
 // ByObservedAt orders the results by the observed_at field.
 func ByObservedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldObservedAt, opts...).ToFunc()
@@ -1578,6 +1598,27 @@ func ByLogoFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByCatalogEntityField orders the results by catalog_entity field.
+func ByCatalogEntityField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCatalogEntityStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByAdoptedEntitiesCount orders the results by adopted_entities count.
+func ByAdoptedEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAdoptedEntitiesStep(), opts...)
+	}
+}
+
+// ByAdoptedEntities orders the results by adopted_entities terms.
+func ByAdoptedEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAdoptedEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByInternalPoliciesCount orders the results by internal_policies count.
 func ByInternalPoliciesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1876,6 +1917,20 @@ func newLogoFileStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(LogoFileInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
+	)
+}
+func newCatalogEntityStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, CatalogEntityTable, CatalogEntityColumn),
+	)
+}
+func newAdoptedEntitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AdoptedEntitiesTable, AdoptedEntitiesColumn),
 	)
 }
 func newInternalPoliciesStep() *sqlgraph.Step {

@@ -16,6 +16,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
@@ -360,6 +361,68 @@ func TestMutationCreateEntityEnrichment(t *testing.T) {
 
 	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: []string{resp.CreateEntity.Entity.ID, entityResp.CreateEntity.Entity.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor.ID}).MustDelete(systemCtx, t)
+}
+
+func TestMutationAdoptEntity(t *testing.T) {
+	systemCtx := th.SetContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
+
+	name := "Catalog Vendor " + ulids.New().String()
+	displayName := "Catalog Vendor"
+	description := "Vetted catalogue description"
+	domains := []string{"https://catalog-vendor.example.com"}
+	logoRemoteURL := "https://example.com/catalog-logo.png"
+
+	catalogEntity, err := suite.Client.DB.Entity.Create().
+		SetName(name).
+		SetDisplayName(displayName).
+		SetDescription(description).
+		SetDomains(domains).
+		SetLogoRemoteURL(logoRemoteURL).
+		Save(systemCtx)
+	assert.NilError(t, err)
+	assert.Check(t, catalogEntity.SystemOwned)
+
+	resp, err := suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, catalogEntity.ID)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	adopted := resp.AdoptEntity.Entity
+	assert.Check(t, is.Equal(name, *adopted.Name))
+	assert.Check(t, is.Equal(displayName, *adopted.DisplayName))
+	assert.Check(t, is.Equal(description, *adopted.Description))
+	assert.Check(t, is.DeepEqual(domains, adopted.Domains))
+	assert.Check(t, is.Equal(logoRemoteURL, *adopted.LogoRemoteURL))
+	assert.Check(t, is.Equal(th.SharedTestUser1.OrganizationID, *adopted.OwnerID))
+	assert.Assert(t, adopted.CatalogEntity != nil)
+	assert.Check(t, is.Equal(catalogEntity.ID, adopted.CatalogEntity.ID))
+	assert.Assert(t, adopted.EntityType != nil)
+	assert.Check(t, is.Equal("vendor", adopted.EntityType.Name))
+
+	vendorTypeID, err := suite.Client.DB.EntityType.Query().
+		Where(entitytype.NameEqualFold("vendor"), entitytype.OwnerID(th.SharedTestUser1.OrganizationID)).
+		OnlyID(th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB))
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(vendorTypeID, adopted.EntityType.ID))
+
+	// adopting again is idempotent per organization
+	again, err := suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, catalogEntity.ID)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(adopted.ID, again.AdoptEntity.Entity.ID))
+
+	// a second organization gets its own copy
+	other, err := suite.Client.API.AdoptEntity(th.SharedTestUser2.UserCtx, catalogEntity.ID)
+	assert.NilError(t, err)
+	assert.Check(t, adopted.ID != other.AdoptEntity.Entity.ID)
+	assert.Check(t, is.Equal(th.SharedTestUser2.OrganizationID, *other.AdoptEntity.Entity.OwnerID))
+	assert.Check(t, is.Equal(catalogEntity.ID, other.AdoptEntity.Entity.CatalogEntity.ID))
+
+	// an organization row is not a catalogue row
+	_, err = suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, adopted.ID)
+	assert.ErrorContains(t, err, "entity not found")
+
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, ID: adopted.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, ID: other.AdoptEntity.Entity.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, ID: catalogEntity.ID}).MustDelete(systemCtx, t)
 }
 
 func TestMutationUpdateEntity(t *testing.T) {

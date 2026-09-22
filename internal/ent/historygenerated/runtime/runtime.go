@@ -1955,12 +1955,16 @@ func init() {
 	riskhistoryDescTags := riskhistoryFields[12].Descriptor()
 	// riskhistory.DefaultTags holds the default value on creation for the tags field.
 	riskhistory.DefaultTags = riskhistoryDescTags.Default.([]string)
+	// riskhistoryDescSystemOwned is the schema descriptor for system_owned field.
+	riskhistoryDescSystemOwned := riskhistoryFields[27].Descriptor()
+	// riskhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	riskhistory.DefaultSystemOwned = riskhistoryDescSystemOwned.Default.(bool)
 	// riskhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	riskhistoryDescWorkflowEligibleMarker := riskhistoryFields[35].Descriptor()
+	riskhistoryDescWorkflowEligibleMarker := riskhistoryFields[38].Descriptor()
 	// riskhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	riskhistory.DefaultWorkflowEligibleMarker = riskhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// riskhistoryDescReviewRequired is the schema descriptor for review_required field.
-	riskhistoryDescReviewRequired := riskhistoryFields[54].Descriptor()
+	riskhistoryDescReviewRequired := riskhistoryFields[57].Descriptor()
 	// riskhistory.DefaultReviewRequired holds the default value on creation for the review_required field.
 	riskhistory.DefaultReviewRequired = riskhistoryDescReviewRequired.Default.(bool)
 	// riskhistoryDescID is the schema descriptor for id field.

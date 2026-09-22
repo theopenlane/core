@@ -59,7 +59,7 @@ var ExportableSchemas = map[string]info{"ASSESSMENT": info{
 	hasSystemOwnedField: true,
 }, "RISK": info{
 	hasOwnerField:       true,
-	hasSystemOwnedField: false,
+	hasSystemOwnedField: true,
 }, "SUBPROCESSOR": info{
 	hasOwnerField:       true,
 	hasSystemOwnedField: true,

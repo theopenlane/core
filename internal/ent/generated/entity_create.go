@@ -1000,6 +1000,20 @@ func (_c *EntityCreate) SetNillableExternalID(v *string) *EntityCreate {
 	return _c
 }
 
+// SetCatalogEntityID sets the "catalog_entity_id" field.
+func (_c *EntityCreate) SetCatalogEntityID(v string) *EntityCreate {
+	_c.mutation.SetCatalogEntityID(v)
+	return _c
+}
+
+// SetNillableCatalogEntityID sets the "catalog_entity_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableCatalogEntityID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetCatalogEntityID(*v)
+	}
+	return _c
+}
+
 // SetObservedAt sets the "observed_at" field.
 func (_c *EntityCreate) SetObservedAt(v models.DateTime) *EntityCreate {
 	_c.mutation.SetObservedAt(v)
@@ -1501,6 +1515,26 @@ func (_c *EntityCreate) SetEntityType(v *EntityType) *EntityCreate {
 // SetLogoFile sets the "logo_file" edge to the File entity.
 func (_c *EntityCreate) SetLogoFile(v *File) *EntityCreate {
 	return _c.SetLogoFileID(v.ID)
+}
+
+// SetCatalogEntity sets the "catalog_entity" edge to the Entity entity.
+func (_c *EntityCreate) SetCatalogEntity(v *Entity) *EntityCreate {
+	return _c.SetCatalogEntityID(v.ID)
+}
+
+// AddAdoptedEntityIDs adds the "adopted_entities" edge to the Entity entity by IDs.
+func (_c *EntityCreate) AddAdoptedEntityIDs(ids ...string) *EntityCreate {
+	_c.mutation.AddAdoptedEntityIDs(ids...)
+	return _c
+}
+
+// AddAdoptedEntities adds the "adopted_entities" edges to the Entity entity.
+func (_c *EntityCreate) AddAdoptedEntities(v ...*Entity) *EntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAdoptedEntityIDs(ids...)
 }
 
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
@@ -2630,6 +2664,39 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.LogoFileID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CatalogEntityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entity.CatalogEntityTable,
+			Columns: []string{entity.CatalogEntityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CatalogEntityID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AdoptedEntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedEntitiesTable,
+			Columns: []string{entity.AdoptedEntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.InternalPoliciesIDs(); len(nodes) > 0 {

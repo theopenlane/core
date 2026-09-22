@@ -1,0 +1,22 @@
+[
+  {
+    "systemInternalID": "entity::fixture-alpha",
+    "entityTypeName": "vendor",
+    "name": "fixture-alpha-vendor",
+    "displayName": "Fixture Alpha Updated",
+    "description": "Fixture Alpha now provides identity and access services.",
+    "domains": ["fixture-alpha.example.com"],
+    "tags": ["technology", "fixture"],
+    "logoRemoteURL": "https://www.google.com/s2/favicons?domain=fixture-alpha.example.com&sz=128"
+  },
+  {
+    "systemInternalID": "entity::fixture-beta",
+    "entityTypeName": "vendor",
+    "name": "fixture-beta-vendor",
+    "displayName": "Fixture Beta Updated",
+    "description": "Fixture Beta now provides billing and invoicing services.",
+    "domains": ["fixture-beta.example.com"],
+    "tags": ["technology", "fixture"],
+    "logoRemoteURL": "https://www.google.com/s2/favicons?domain=fixture-beta.example.com&sz=128"
+  }
+]

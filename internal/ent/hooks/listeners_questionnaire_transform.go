@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/vendorenrich"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -361,16 +362,28 @@ func applyEnvironment(ctx context.Context, client *entgen.Client, organizationID
 // upsertEntity creates the mapped entity, updating the existing row when the owner already
 // has an entity with the same external id
 func upsertEntity(ctx context.Context, client *entgen.Client, input entgen.CreateEntityInput) (*entgen.Entity, error) {
-	existing, err := client.Entity.Query().
+	targetID, err := client.Entity.Query().
 		Where(
 			entity.OwnerID(lo.FromPtr(input.OwnerID)),
 			entity.ExternalID(lo.FromPtr(input.ExternalID)),
 		).
-		First(ctx)
+		FirstID(ctx)
 
 	switch {
 	case entgen.IsNotFound(err):
-		return client.Entity.Create().SetInput(input).Save(ctx)
+		catalogID, matched, err := vendorenrich.MatchCatalog(ctx, client, lo.FromPtr(input.Name), lo.FirstOrEmpty(input.Domains))
+		if err != nil {
+			return nil, err
+		}
+
+		if !matched {
+			return client.Entity.Create().SetInput(input).Save(ctx)
+		}
+
+		targetID, _, err = vendorenrich.AdoptVendor(ctx, client, lo.FromPtr(input.OwnerID), catalogID)
+		if err != nil {
+			return nil, err
+		}
 	case err != nil:
 		return nil, err
 	}
@@ -380,7 +393,7 @@ func upsertEntity(ctx context.Context, client *entgen.Client, input entgen.Creat
 		return nil, err
 	}
 
-	return client.Entity.UpdateOne(existing).SetInput(update).Save(ctx)
+	return client.Entity.UpdateOneID(targetID).SetInput(update).Save(ctx)
 }
 
 // claimAssessmentResponse atomically claims the assessment response by flipping its empty

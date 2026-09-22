@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/googledrive"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/googleworkspace"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/oidclocal"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
@@ -31,6 +32,10 @@ type Config struct {
 	Slack slack.Config `json:"slack" koanf:"slack"`
 	// SlackRuntime holds runtime-provisioned configuration for system Slack notifications
 	SlackRuntime slack.RuntimeSlackConfig `json:"slackruntime" koanf:"slackruntime"`
+	// ObjectStore holds operator credentials for the object storage definition's AWS source identity
+	ObjectStore objectstore.Config `json:"objectstore" koanf:"objectstore"`
+	// ObjectStoreRuntime holds runtime-provisioned configuration for the platform-owned bucket used for system record imports
+	ObjectStoreRuntime objectstore.RuntimeConfig `json:"objectstoreruntime" koanf:"objectstoreruntime"`
 	// GoogleDrive holds OAuth credentials for the Google Drive definition
 	GoogleDrive googledrive.Config `json:"googledrive" koanf:"googledrive"`
 	// GoogleWorkspace holds OAuth credentials for the Google Workspace definition

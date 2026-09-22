@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/vendorenrich"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 )
@@ -106,6 +107,28 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 		}
 
 		logx.FromContext(ctx).Debug().Msg("successfully updated vendor from integration setup")
+
+		return
+	}
+
+	catalogID, matched, err := vendorenrich.MatchCatalog(ctx, r.DB(), def.Family, "")
+	if err != nil {
+		logx.FromContext(ctx).Info().Err(err).Msg("error matching vendor against catalog, skipping adoption")
+	}
+
+	if matched {
+		vendorID, _, err := vendorenrich.AdoptVendor(ctx, r.DB(), ownerID, catalogID)
+		if err != nil {
+			logx.FromContext(ctx).Info().Err(err).Msg("error adopting catalog vendor, skipping creation")
+			return
+		}
+
+		ctxAllow := privacy.DecisionContext(ctx, privacy.Allow)
+		if err := r.DB().Entity.UpdateOneID(vendorID).AddIntegrationIDs(integrationID).Exec(ctxAllow); err != nil {
+			logx.FromContext(ctx).Info().Err(err).Msg("error update adopted vendor edges to integration")
+		}
+
+		logx.FromContext(ctx).Debug().Msg("successfully adopted vendor from catalog during integration setup")
 
 		return
 	}

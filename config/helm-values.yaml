@@ -680,6 +680,177 @@ coreConfiguration:
       botToken: ""  # @schema type:string
       # -- Default channel id for system messages when no explicit channel is provided
       defaultChannel: ""  # @schema type:string
+    objectstore:
+      arn: ""  # @schema type:string
+      runtimeOnly: false  # @schema type:boolean
+    objectstoreruntime:
+      # -- Storage providers
+      providers:
+        # -- S3 provider configuration
+        s3:
+          # -- Enabled indicates if this provider is enabled
+          enabled: false  # @schema type:boolean; default:false
+          # -- EnsureAvailable enforces provider availability before completing server startup
+          ensureavailable: false  # @schema type:boolean; default:false
+          # -- Region for cloud providers
+          region: ""  # @schema type:string
+          # -- Bucket name for cloud providers
+          bucket: ""  # @schema type:string
+          # -- Endpoint for custom endpoints
+          endpoint: ""  # @schema type:string
+          # -- ProxyPresignEnabled toggles proxy-signed download URL generation
+          proxypresignenabled: false  # @schema type:boolean; default:false
+          # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
+          baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
+          # -- Credentials contains the credentials for accessing the provider
+          credentials:
+          # -- Backup optionally replicates this provider's objects to another provider asynchronously
+          backup:
+            # -- Enabled indicates if this backup target is enabled
+            enabled: false  # @schema type:boolean; default:false
+            # -- Provider names the destination backend type, e.g. s3; empty replicates to the source
+            # provider itself, which writes the backup to the suffixed bucket alongside the live one
+            provider:   # @schema type:string
+            # -- ReadFromBackup serves reads from this backup target instead of the source provider, intended
+            # to be enabled during a disaster recovery event when the source provider storage is lost
+            readfrombackup: false  # @schema type:boolean; default:false
+            # -- Region optionally overrides the destination provider's region, so a backup can replicate
+            # into a region other than the one holding the live objects
+            region: ""  # @schema type:string
+        # -- R2 provider configuration
+        r2:
+          # -- Enabled indicates if this provider is enabled
+          enabled: false  # @schema type:boolean; default:false
+          # -- EnsureAvailable enforces provider availability before completing server startup
+          ensureavailable: false  # @schema type:boolean; default:false
+          # -- Region for cloud providers
+          region: ""  # @schema type:string
+          # -- Bucket name for cloud providers
+          bucket: ""  # @schema type:string
+          # -- Endpoint for custom endpoints
+          endpoint: ""  # @schema type:string
+          # -- ProxyPresignEnabled toggles proxy-signed download URL generation
+          proxypresignenabled: false  # @schema type:boolean; default:false
+          # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
+          baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
+          # -- Credentials contains the credentials for accessing the provider
+          credentials:
+          # -- Backup optionally replicates this provider's objects to another provider asynchronously
+          backup:
+            # -- Enabled indicates if this backup target is enabled
+            enabled: false  # @schema type:boolean; default:false
+            # -- Provider names the destination backend type, e.g. s3; empty replicates to the source
+            # provider itself, which writes the backup to the suffixed bucket alongside the live one
+            provider:   # @schema type:string
+            # -- ReadFromBackup serves reads from this backup target instead of the source provider, intended
+            # to be enabled during a disaster recovery event when the source provider storage is lost
+            readfrombackup: false  # @schema type:boolean; default:false
+            # -- Region optionally overrides the destination provider's region, so a backup can replicate
+            # into a region other than the one holding the live objects
+            region: ""  # @schema type:string
+        # -- GCS provider configuration
+        gcs:
+          # -- Enabled indicates if this provider is enabled
+          enabled: false  # @schema type:boolean; default:false
+          # -- EnsureAvailable enforces provider availability before completing server startup
+          ensureavailable: false  # @schema type:boolean; default:false
+          # -- Region for cloud providers
+          region: ""  # @schema type:string
+          # -- Bucket name for cloud providers
+          bucket: ""  # @schema type:string
+          # -- Endpoint for custom endpoints
+          endpoint: ""  # @schema type:string
+          # -- ProxyPresignEnabled toggles proxy-signed download URL generation
+          proxypresignenabled: false  # @schema type:boolean; default:false
+          # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
+          baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
+          # -- Credentials contains the credentials for accessing the provider
+          credentials:
+          # -- Backup optionally replicates this provider's objects to another provider asynchronously
+          backup:
+            # -- Enabled indicates if this backup target is enabled
+            enabled: false  # @schema type:boolean; default:false
+            # -- Provider names the destination backend type, e.g. s3; empty replicates to the source
+            # provider itself, which writes the backup to the suffixed bucket alongside the live one
+            provider:   # @schema type:string
+            # -- ReadFromBackup serves reads from this backup target instead of the source provider, intended
+            # to be enabled during a disaster recovery event when the source provider storage is lost
+            readfrombackup: false  # @schema type:boolean; default:false
+            # -- Region optionally overrides the destination provider's region, so a backup can replicate
+            # into a region other than the one holding the live objects
+            region: ""  # @schema type:string
+        # -- Disk provider configuration
+        disk:
+          # -- Enabled indicates if this provider is enabled
+          enabled: false  # @schema type:boolean; default:false
+          # -- EnsureAvailable enforces provider availability before completing server startup
+          ensureavailable: false  # @schema type:boolean; default:false
+          # -- Region for cloud providers
+          region: ""  # @schema type:string
+          # -- Bucket name for cloud providers
+          bucket: ""  # @schema type:string
+          # -- Endpoint for custom endpoints
+          endpoint: ""  # @schema type:string
+          # -- ProxyPresignEnabled toggles proxy-signed download URL generation
+          proxypresignenabled: false  # @schema type:boolean; default:false
+          # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
+          baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
+          # -- Credentials contains the credentials for accessing the provider
+          credentials:
+          # -- Backup optionally replicates this provider's objects to another provider asynchronously
+          backup:
+            # -- Enabled indicates if this backup target is enabled
+            enabled: false  # @schema type:boolean; default:false
+            # -- Provider names the destination backend type, e.g. s3; empty replicates to the source
+            # provider itself, which writes the backup to the suffixed bucket alongside the live one
+            provider:   # @schema type:string
+            # -- ReadFromBackup serves reads from this backup target instead of the source provider, intended
+            # to be enabled during a disaster recovery event when the source provider storage is lost
+            readfrombackup: false  # @schema type:boolean; default:false
+            # -- Region optionally overrides the destination provider's region, so a backup can replicate
+            # into a region other than the one holding the live objects
+            region: ""  # @schema type:string
+        # -- Database provider configuration
+        database:
+          # -- Enabled indicates if this provider is enabled
+          enabled: false  # @schema type:boolean; default:false
+          # -- EnsureAvailable enforces provider availability before completing server startup
+          ensureavailable: false  # @schema type:boolean; default:false
+          # -- Region for cloud providers
+          region: ""  # @schema type:string
+          # -- Bucket name for cloud providers
+          bucket: ""  # @schema type:string
+          # -- Endpoint for custom endpoints
+          endpoint: ""  # @schema type:string
+          # -- ProxyPresignEnabled toggles proxy-signed download URL generation
+          proxypresignenabled: false  # @schema type:boolean; default:false
+          # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
+          baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
+          # -- Credentials contains the credentials for accessing the provider
+          credentials:
+          # -- Backup optionally replicates this provider's objects to another provider asynchronously
+          backup:
+            # -- Enabled indicates if this backup target is enabled
+            enabled: false  # @schema type:boolean; default:false
+            # -- Provider names the destination backend type, e.g. s3; empty replicates to the source
+            # provider itself, which writes the backup to the suffixed bucket alongside the live one
+            provider:   # @schema type:string
+            # -- ReadFromBackup serves reads from this backup target instead of the source provider, intended
+            # to be enabled during a disaster recovery event when the source provider storage is lost
+            readfrombackup: false  # @schema type:boolean; default:false
+            # -- Region optionally overrides the destination provider's region, so a backup can replicate
+            # into a region other than the one holding the live objects
+            region: ""  # @schema type:string
+      # -- Bucket prefix with the schema and mapping variant the system import reads unless a trigger overrides them
+      import:
+        # -- Object key prefix (directory) whose JSON files hold arrays of records
+        prefix: ""  # @schema type:string
+        # -- Internal model the records are mapped and upserted into (e.g. Entity)
+        schema: ""  # @schema type:string
+        # -- Mapping variant to apply such as vendor to link imported entities to the vendor entity type
+        variant: ""  # @schema type:string
+      # -- Run the system import once when the server starts
+      runonstartup: false  # @schema type:boolean
     googledrive:
       clientid: ""  # @schema type:string
       redirecturl: "https://api.theopenlane.io/v1/integrations/auth/callback"  # @schema type:string; default:https://api.theopenlane.io/v1/integrations/auth/callback
@@ -1045,6 +1216,222 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_SLACK_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-slack-clientsecret"  # @schema type:string
+    # -- core-integrations-objectstore-accesskeyid secret configuration
+    core-integrations-objectstore-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstore.accessKeyId
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORE_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstore-accesskeyid"  # @schema type:string
+    # -- core-integrations-objectstore-secretaccesskey secret configuration
+    core-integrations-objectstore-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstore.secretAccessKey
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORE_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstore-secretaccesskey"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-s3-credentials-accesskeyid secret configuration
+    core-integrations-objectstoreruntime-providers-s3-credentials-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.s3.credentials.accesskeyid
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_S3_CREDENTIALS_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-s3-credentials-accesskeyid"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-s3-credentials-secretaccesskey secret configuration
+    core-integrations-objectstoreruntime-providers-s3-credentials-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.s3.credentials.secretaccesskey
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_S3_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-s3-credentials-secretaccesskey"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-s3-credentials-projectid secret configuration
+    core-integrations-objectstoreruntime-providers-s3-credentials-projectid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.s3.credentials.projectid
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_S3_CREDENTIALS_PROJECTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-s3-credentials-projectid"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-s3-credentials-accountid secret configuration
+    core-integrations-objectstoreruntime-providers-s3-credentials-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.s3.credentials.accountid
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_S3_CREDENTIALS_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-s3-credentials-accountid"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-s3-credentials-apitoken secret configuration
+    core-integrations-objectstoreruntime-providers-s3-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.s3.credentials.apitoken
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_S3_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-s3-credentials-apitoken"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-r2-credentials-accesskeyid secret configuration
+    core-integrations-objectstoreruntime-providers-r2-credentials-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.r2.credentials.accesskeyid
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_R2_CREDENTIALS_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-r2-credentials-accesskeyid"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-r2-credentials-secretaccesskey secret configuration
+    core-integrations-objectstoreruntime-providers-r2-credentials-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.r2.credentials.secretaccesskey
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_R2_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-r2-credentials-secretaccesskey"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-r2-credentials-projectid secret configuration
+    core-integrations-objectstoreruntime-providers-r2-credentials-projectid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.r2.credentials.projectid
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_R2_CREDENTIALS_PROJECTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-r2-credentials-projectid"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-r2-credentials-accountid secret configuration
+    core-integrations-objectstoreruntime-providers-r2-credentials-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.r2.credentials.accountid
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_R2_CREDENTIALS_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-r2-credentials-accountid"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-r2-credentials-apitoken secret configuration
+    core-integrations-objectstoreruntime-providers-r2-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.r2.credentials.apitoken
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_R2_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-r2-credentials-apitoken"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-gcs-credentials-accesskeyid secret configuration
+    core-integrations-objectstoreruntime-providers-gcs-credentials-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.gcs.credentials.accesskeyid
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_GCS_CREDENTIALS_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-gcs-credentials-accesskeyid"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-gcs-credentials-secretaccesskey secret configuration
+    core-integrations-objectstoreruntime-providers-gcs-credentials-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.gcs.credentials.secretaccesskey
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_GCS_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-gcs-credentials-secretaccesskey"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-gcs-credentials-projectid secret configuration
+    core-integrations-objectstoreruntime-providers-gcs-credentials-projectid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.gcs.credentials.projectid
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_GCS_CREDENTIALS_PROJECTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-gcs-credentials-projectid"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-gcs-credentials-accountid secret configuration
+    core-integrations-objectstoreruntime-providers-gcs-credentials-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.gcs.credentials.accountid
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_GCS_CREDENTIALS_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-gcs-credentials-accountid"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-gcs-credentials-apitoken secret configuration
+    core-integrations-objectstoreruntime-providers-gcs-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.gcs.credentials.apitoken
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_GCS_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-gcs-credentials-apitoken"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-disk-credentials-accesskeyid secret configuration
+    core-integrations-objectstoreruntime-providers-disk-credentials-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.disk.credentials.accesskeyid
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_DISK_CREDENTIALS_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-disk-credentials-accesskeyid"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-disk-credentials-secretaccesskey secret configuration
+    core-integrations-objectstoreruntime-providers-disk-credentials-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.disk.credentials.secretaccesskey
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_DISK_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-disk-credentials-secretaccesskey"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-disk-credentials-projectid secret configuration
+    core-integrations-objectstoreruntime-providers-disk-credentials-projectid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.disk.credentials.projectid
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_DISK_CREDENTIALS_PROJECTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-disk-credentials-projectid"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-disk-credentials-accountid secret configuration
+    core-integrations-objectstoreruntime-providers-disk-credentials-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.disk.credentials.accountid
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_DISK_CREDENTIALS_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-disk-credentials-accountid"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-disk-credentials-apitoken secret configuration
+    core-integrations-objectstoreruntime-providers-disk-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.disk.credentials.apitoken
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_DISK_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-disk-credentials-apitoken"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-database-credentials-accesskeyid secret configuration
+    core-integrations-objectstoreruntime-providers-database-credentials-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.database.credentials.accesskeyid
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_DATABASE_CREDENTIALS_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-database-credentials-accesskeyid"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-database-credentials-secretaccesskey secret configuration
+    core-integrations-objectstoreruntime-providers-database-credentials-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.database.credentials.secretaccesskey
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_DATABASE_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-database-credentials-secretaccesskey"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-database-credentials-projectid secret configuration
+    core-integrations-objectstoreruntime-providers-database-credentials-projectid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.database.credentials.projectid
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_DATABASE_CREDENTIALS_PROJECTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-database-credentials-projectid"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-database-credentials-accountid secret configuration
+    core-integrations-objectstoreruntime-providers-database-credentials-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.database.credentials.accountid
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_DATABASE_CREDENTIALS_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-database-credentials-accountid"  # @schema type:string
+    # -- core-integrations-objectstoreruntime-providers-database-credentials-apitoken secret configuration
+    core-integrations-objectstoreruntime-providers-database-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.objectstoreruntime.providers.database.credentials.apitoken
+      secretKey: "CORE_INTEGRATIONS_OBJECTSTORERUNTIME_PROVIDERS_DATABASE_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-objectstoreruntime-providers-database-credentials-apitoken"  # @schema type:string
     # -- core-integrations-googledrive-clientsecret secret configuration
     core-integrations-googledrive-clientsecret:
       # -- Enable this external secret

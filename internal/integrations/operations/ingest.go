@@ -43,6 +43,9 @@ const ingestQueryChunk = 500
 // fieldID is the primary key field name on every marshaled entity row
 const fieldID = "id"
 
+// fieldSystemOwned is the marker column a schema needs before runtime ingest may persist it without an owner
+const fieldSystemOwned = "system_owned"
+
 // IngestOptions carries the minimal ingest-time metadata needed by persistence
 type IngestOptions struct {
 	// RunID is a caller-supplied correlation identifier for the overall operation run
@@ -202,6 +205,26 @@ type payloadRun struct {
 	result       IngestResult
 }
 
+// definitionID returns the definition the batch ingests for, from the installation or the runtime source
+func (ic IngestContext) definitionID() string {
+	switch {
+	case ic.Integration != nil:
+		return ic.Integration.DefinitionID
+	default:
+		return ic.DefinitionID
+	}
+}
+
+// ownerID returns the owning organization, empty on the runtime path so rows persist system-owned
+func (ic IngestContext) ownerID() string {
+	switch {
+	case ic.Integration != nil:
+		return ic.Integration.OwnerID
+	default:
+		return ""
+	}
+}
+
 // ProcessPayloadSets persists one batch of mapped payload sets synchronously inside the run job;
 // record failures are skipped, requeued as durable per-record jobs when ic.Runtime is set, and
 // reported in the result, never the error
@@ -238,9 +261,23 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, batch ingestBatch, 
 
 // newPayloadRun validates the batch against the installation and stages the shared run state
 func newPayloadRun(ctx context.Context, ic IngestContext, batch ingestBatch, handle ingestHandle) (*payloadRun, context.Context, error) {
-	definition, ok := ic.Registry.Definition(ic.Integration.DefinitionID)
+	definition, ok := ic.Registry.Definition(ic.definitionID())
 	if !ok {
 		return nil, ctx, ErrIngestDefinitionNotFound
+	}
+
+	preload := lo.SumBy(batch.PayloadSets, func(payloadSet types.IngestPayloadSet) int { return len(payloadSet.Envelopes) }) >= ingestPreloadMinRecords
+
+	if ic.Integration == nil {
+		return &payloadRun{
+			ic:           ic,
+			batch:        batch,
+			handle:       handle,
+			definition:   definition,
+			installation: types.MappingInstallation{DefinitionID: definition.ID, DefinitionName: definition.DisplayName},
+			preload:      preload,
+			tracked:      map[string]*models.FailedRecord{},
+		}, ctx, nil
 	}
 
 	if ic.Integration.InstallationMetadata.Display.ExternalID == "" {
@@ -266,7 +303,7 @@ func newPayloadRun(ctx context.Context, ic IngestContext, batch ingestBatch, han
 			InstanceID:       ic.Integration.InstallationMetadata.Display.ExternalID,
 			PrimaryDirectory: ic.Integration.PrimaryDirectory,
 		},
-		preload: lo.SumBy(batch.PayloadSets, func(payloadSet types.IngestPayloadSet) int { return len(payloadSet.Envelopes) }) >= ingestPreloadMinRecords,
+		preload: preload,
 		tracked: make(map[string]*models.FailedRecord, len(ic.Integration.Health.FailedRecords)),
 	}
 
@@ -310,7 +347,7 @@ func (run *payloadRun) applySet(ctx context.Context, payloadSet types.IngestPayl
 	setCtx := ctx
 
 	if run.preload && sourceSchema.QueryByLookup != nil && len(sourceSchema.Lookup) > 0 {
-		prefetched, err := prefetchLookupMatches(ctx, run.ic.DB, run.ic.Integration.OwnerID, sourceSchema, ready)
+		prefetched, err := prefetchLookupMatches(ctx, run.ic.DB, run.ic.ownerID(), sourceSchema, ready)
 		if err != nil {
 			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 		}
@@ -340,6 +377,10 @@ func (run *payloadRun) resolveSetSchema(name string) (*entityops.Schema, error) 
 
 	sourceSchema, ok := lookupIngestSchema(name)
 	if ok {
+		if _, systemOwnable := sourceSchema.FieldByName(fieldSystemOwned); run.ic.Integration == nil && !systemOwnable {
+			return nil, ErrIngestSchemaNotSystemOwned
+		}
+
 		return sourceSchema, nil
 	}
 
@@ -409,7 +450,7 @@ func (run *payloadRun) link(ctx context.Context, sourceSchema *entityops.Schema,
 		}
 
 		for _, p := range group.records {
-			payload, err := entityops.InjectCreateLinks(linkCtx, run.ic.DB, run.ic.Integration.OwnerID, sourceSchema, p.record.Payload, specs)
+			payload, err := entityops.InjectCreateLinks(linkCtx, run.ic.DB, run.ic.ownerID(), sourceSchema, p.record.Payload, specs)
 			if err != nil {
 				logx.FromContext(p.logCtx(ctx)).Error().Err(err).Str("schema", sourceSchema.Name).Msg("ingest link target resolution failed")
 				run.fail(p.record.Schema, p.resource, fmt.Errorf("%w: %w", ErrLinkFailed, err))
@@ -433,7 +474,7 @@ func (run *payloadRun) prefetchLinkTargets(ctx context.Context, sourceSchema *en
 
 	payloads := lo.Map(records, func(p preparedIngestRecord, _ int) json.RawMessage { return p.record.Payload })
 
-	prefetched, err := entityops.PrefetchLinkTargets(ctx, run.ic.DB, run.ic.Integration.OwnerID, sourceSchema, payloads, specs)
+	prefetched, err := entityops.PrefetchLinkTargets(ctx, run.ic.DB, run.ic.ownerID(), sourceSchema, payloads, specs)
 	if err != nil {
 		return ctx, fmt.Errorf("%w: %w", ErrLinkFailed, err)
 	}
@@ -443,6 +484,11 @@ func (run *payloadRun) prefetchLinkTargets(ctx context.Context, sourceSchema *en
 
 // snapshot loads the payload set's snapshot scope when the run may infer removals for it
 func (run *payloadRun) snapshot(ctx context.Context, payloadSet types.IngestPayloadSet, sourceSchema *entityops.Schema) (*snapshotSet, error) {
+	// removal inference needs a managing installation, so runtime ingest never snapshots
+	if run.ic.Integration == nil {
+		return nil, nil
+	}
+
 	if !run.batch.Policy.Snapshot || !payloadSet.SnapshotComplete || sourceSchema.SnapshotScope == nil {
 		return nil, nil
 	}
@@ -516,7 +562,7 @@ func (run *payloadRun) skipExcluded(ctx, recordCtx context.Context, p preparedIn
 	var rows []json.RawMessage
 
 	if set != nil || resolvable {
-		fetched, err := excludedRecordRows(ctx, run.ic.DB, run.ic.Integration.OwnerID, schema, p.record.Payload)
+		fetched, err := excludedRecordRows(ctx, run.ic.DB, run.ic.ownerID(), schema, p.record.Payload)
 		if err != nil {
 			return false, fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 		}
@@ -589,7 +635,7 @@ func (run *payloadRun) recordFailure(recordCtx context.Context, p preparedIngest
 
 	requeued := false
 
-	if run.ic.Runtime != nil {
+	if run.ic.Runtime != nil && run.ic.Integration != nil {
 		if requeueErr := emitMappedRecord(recordCtx, run.ic.Runtime, run.ic.Integration, run.batch.OperationName, p.record, run.batch.Options); requeueErr != nil {
 			logx.FromContext(recordCtx).Warn().Err(requeueErr).Msg("ingest failure requeue failed")
 		} else {
@@ -617,7 +663,7 @@ func (run *payloadRun) finalize(ctx context.Context) error {
 		logx.FromContext(ctx).Info().Int("skipped", run.result.Skipped).Msg("ingest left records unmanaged by this installation")
 	}
 
-	if !run.dirty {
+	if !run.dirty || run.ic.Integration == nil {
 		return nil
 	}
 

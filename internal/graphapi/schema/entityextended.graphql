@@ -5,3 +5,15 @@ extend input CreateEntityInput {
 extend input UpdateEntityInput {
   note:  CreateNoteInput
 }
+
+extend type Mutation {
+    """
+    Adopt a system-owned catalogue entity into the organization, returning the organization's copy; idempotent per organization
+    """
+    adoptEntity(
+        """
+        catalogEntityID is the system-owned entity to adopt
+        """
+        catalogEntityID: ID!
+    ): EntityCreatePayload!
+}
