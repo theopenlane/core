@@ -59,12 +59,24 @@ func (s *ObjectService) Upload(ctx context.Context, provider Provider, reader io
 		FieldName:    opts.Key,
 		OriginalName: fileName,
 		FileMetadata: FileMetadata{
-			ContentType: contentType,
+			ContentType:   contentType,
+			ProviderHints: opts.ProviderHints,
 		},
+	}
+
+	seeker, seekable := reader.(io.ReadSeeker)
+	if seekable {
+		tempFile.RawFile = seeker
 	}
 
 	if err := s.validationFunc(tempFile); err != nil {
 		return nil, err
+	}
+
+	if seekable {
+		if _, err := seeker.Seek(0, io.SeekStart); err != nil {
+			return nil, err
+		}
 	}
 
 	storageOpts := &UploadOptions{

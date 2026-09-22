@@ -55,6 +55,10 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	// make sure the nda request is in requested status, the approval is off by default
 	assert.Check(t, *ndaCreateResp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status == enums.TrustCenterNDARequestStatusRequested)
 
+	// the access email mints the signing identity from the request id, not the browsing session
+	ndaRequestID := ndaCreateResp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID
+	anonCtx, signer := th.CreateAnonymousTrustCenterContextForSubject(trustCenter.ID, trustCenter.OwnerID, ndaRequestID, email)
+
 	input := testclient.SubmitTrustCenterNDAResponseInput{
 		TemplateID: trustCenterNDA.CreateTrustCenterNda.Template.ID,
 		Response: map[string]any{
@@ -66,14 +70,12 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 				"ip_address": "192.168.1.100",
 				"timestamp":  "2025-09-22T19:37:59.988Z",
 				"pdf_hash":   pdfHash,
-				"user_id":    anonUserID,
+				"user_id":    signer.SubjectID,
 			},
 			"pdf_file_id":     trustCenterNDA.CreateTrustCenterNda.Template.Files.Edges[0].Node.ID,
 			"trust_center_id": trustCenter.ID,
 		},
 	}
-
-	anonCtx := th.NewAnonTrustCenterCtxFromCaller(anonUser, trustCenter.ID)
 
 	// check that the anonymous user can't query the protected doc's files
 	getTrustCenterDocResp, err := suite.Client.API.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)

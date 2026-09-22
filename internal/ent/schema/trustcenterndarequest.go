@@ -3,7 +3,6 @@ package schema
 import (
 	"net/mail"
 
-	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
@@ -85,9 +84,6 @@ func (TrustCenterNDARequest) Fields() []ent.Field {
 			GoType(enums.TrustCenterNDARequestStatus("")).
 			Default(enums.TrustCenterNDARequestStatusRequested.String()).
 			Optional().
-			Annotations(
-				entgql.Skip(entgql.SkipMutationCreateInput),
-			).
 			Comment("status of the NDA request"),
 		field.Time("approved_at").
 			Comment("timestamp when the request was approved").
