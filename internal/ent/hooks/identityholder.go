@@ -9,9 +9,33 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 )
+
+func HookAssignOpenlaneUser() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.IdentityHolderFunc(func(ctx context.Context, m *generated.IdentityHolderMutation) (generated.Value, error) {
+
+			email, ok := m.Email()
+			if !ok {
+				return next.Mutate(ctx, m)
+			}
+
+			exists, err := m.Client().User.Query().
+				Where(user.EmailEqualFold(email)).
+				Exist(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			m.SetIsOpenlaneUser(exists)
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
+}
 
 // HookIdentityHolderFiles runs on identity holder mutations to check for uploaded files
 func HookIdentityHolderFiles() ent.Hook {
