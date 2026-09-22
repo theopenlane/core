@@ -29,6 +29,12 @@ func TestNDAAttestationListener(t *testing.T) {
 		signerEmail := "nda-signer@listenerpin.io"
 		bystanderEmail := "nda-bystander@listenerpin.io"
 
+		protectedDoc := (&th.TrustCenterDocBuilder{
+			Client:        suite.Client,
+			TrustCenterID: trustCenter.ID,
+			Visibility:    enums.TrustCenterDocumentVisibilityProtected,
+		}).MustNew(tcOrg.Owner.UserCtx, t)
+
 		signerCtx, signerCaller := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, signerEmail)
 		bystanderCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, bystanderEmail)
 
@@ -85,6 +91,12 @@ func TestNDAAttestationListener(t *testing.T) {
 		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusSigned, signed.Status))
 		assert.Assert(t, signed.FileID != nil)
 		assert.Check(t, is.Equal(*tcOrg.NDAFileID, *signed.FileID))
+
+		signedDocCtx, _ := th.CreateAnonymousTrustCenterContextForSubject(trustCenter.ID, trustCenter.OwnerID, signed.ID, "")
+
+		signerDocResp, err := suite.Client.API.GetTrustCenterDocByID(signedDocCtx, protectedDoc.ID)
+		assert.NilError(t, err)
+		assert.Check(t, signerDocResp.TrustCenterDoc.OriginalFile != nil)
 
 		bystander, err := suite.Client.DB.TrustCenterNDARequest.Query().Where(
 			trustcenterndarequest.EmailEqualFold(bystanderEmail),

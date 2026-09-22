@@ -38,15 +38,25 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 				return nil, ErrTrustCenterIDRequired
 			}
 
-			n, err := m.Client().Template.Query().
-				Select(template.FieldID).
+			// do not allow any status other than the default requested from anon users
+			// intentionally using wide-ranging IsAnonymousFromContext and not trust center specific
+			// to ensure other anon user types also cannot set this with an anon token
+			requestedStatus, _ := m.Status()
+			if requestedStatus != enums.TrustCenterNDARequestStatusRequested && auth.IsAnonymousFromContext(ctx) {
+				logx.FromContext(ctx).Warn().Str("status", requestedStatus.String()).Msg("nda status attempted to be set from anon context")
+				return nil, ErrNDARequestStatusNotAllowed
+			}
+
+			recordSigned := requestedStatus == enums.TrustCenterNDARequestStatusSigned
+
+			ndaExists, err := m.Client().Template.Query().
 				Where(template.KindEQ(enums.TemplateKindTrustCenterNda)).
-				Count(ctx)
+				Exist(ctx)
 			if err != nil {
 				return nil, err
 			}
 
-			if n == 0 {
+			if !ndaExists {
 				return nil, ErrNDATemplateRequired
 			}
 
@@ -68,6 +78,10 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			}
 
 			if existingRequest != nil {
+				if recordSigned {
+					return recordSignedNDARequest(ctx, queryCtx, m, existingRequest)
+				}
+
 				return handleExistingNDARequest(ctx, queryCtx, m.Client(), existingRequest)
 			}
 
@@ -80,8 +94,14 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			}
 
 			requiresApproval := tc.Edges.Setting != nil && tc.Edges.Setting.NdaApprovalRequired
-			if requiresApproval {
+			if requiresApproval && !recordSigned {
 				m.SetStatus(enums.TrustCenterNDARequestStatusNeedsApproval)
+			}
+
+			if recordSigned {
+				if err := defaultSignedAt(m); err != nil {
+					return nil, err
+				}
 			}
 
 			v, err := next.Mutate(ctx, m)
@@ -91,6 +111,17 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 
 			request, ok := v.(*generated.TrustCenterNDARequest)
 			if !ok {
+				return v, nil
+			}
+
+			// a request created as already signed grants access directly, there is nothing to
+			// request a signature for and nothing to approve
+			if recordSigned {
+				if err := grantNDASignedAccess(ctx, m, []*generated.TrustCenterNDARequest{request}); err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to grant nda access for created signed request")
+					return nil, err
+				}
+
 				return v, nil
 			}
 
@@ -226,24 +257,37 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			// if approved or signed, set the timestamp in the ISO8601 format
-			now, err := models.ToDateTime(time.Now().UTC().Format(time.RFC3339))
-			if err != nil {
-				return nil, err
-			}
-
 			if status == enums.TrustCenterNDARequestStatusSigned {
-				m.SetSignedAt(*now)
+				if err := defaultSignedAt(m); err != nil {
+					return nil, err
+				}
+
+				// resolve the targets first, the status predicate no longer matches after the update
+				requests, err := ndaRequestsFromMutation(ctx, m)
+				if err != nil {
+					return nil, err
+				}
 
 				retVal, err := next.Mutate(ctx, m)
 				if err != nil {
 					return nil, err
 				}
 
+				if err := grantNDASignedAccess(ctx, m, requests); err != nil {
+					return nil, err
+				}
+
 				return retVal, nil
 			}
 
+			// if approved, set the timestamp in the ISO8601 format
+			now, err := models.ToDateTime(time.Now().UTC().Format(time.RFC3339))
+			if err != nil {
+				return nil, err
+			}
+
 			m.SetApprovedAt(*now)
+
 			if _, ok := m.ApprovedByUserID(); !ok {
 				userID, err := auth.GetSubjectIDFromContext(ctx)
 				if err != nil || userID == "" {
@@ -277,44 +321,18 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 }
 
 func handleNDARequestDelete(ctx context.Context, m *generated.TrustCenterNDARequestMutation) error {
-	var ids []string
-
-	switch m.Op() {
-	case ent.OpDelete, ent.OpUpdate:
-		var err error
-		ids, err = m.IDs(ctx)
-		if err != nil {
-			return err
-		}
-	case ent.OpDeleteOne, ent.OpUpdateOne:
-		id, ok := m.ID()
-		if !ok {
-			return fmt.Errorf("%w: %s", ErrInvalidInput, "id is required")
-		}
-
-		ids = []string{id}
-	}
-
-	requests, err := m.Client().TrustCenterNDARequest.Query().
-		Where(trustcenterndarequest.IDIn(ids...)).
-		Select(trustcenterndarequest.FieldID, trustcenterndarequest.FieldTrustCenterID).
-		All(ctx)
+	requests, err := ndaRequestsFromMutation(ctx, m)
 	if err != nil {
 		return err
 	}
+
 	if len(requests) == 0 {
 		return nil
 	}
 
 	deleteTuples := make([]fgax.TupleKey, 0, len(requests))
 	for _, request := range requests {
-		deleteTuples = append(deleteTuples, fgax.GetTupleKey(fgax.TupleRequest{
-			SubjectID:   fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, request.ID),
-			SubjectType: "user",
-			ObjectID:    request.TrustCenterID,
-			ObjectType:  "trust_center",
-			Relation:    "nda_signed",
-		}))
+		deleteTuples = append(deleteTuples, ndaSignedTuple(request.ID, request.TrustCenterID))
 	}
 
 	if _, err := m.Authz.WriteTupleKeys(ctx, nil, deleteTuples); err != nil {
@@ -324,6 +342,111 @@ func handleNDARequestDelete(ctx context.Context, m *generated.TrustCenterNDARequ
 	}
 
 	return nil
+}
+
+// defaultSignedAt stamps the signed timestamp only when the caller did not record one, so a
+// backfilled signature keeps its historical date
+func defaultSignedAt(m *generated.TrustCenterNDARequestMutation) error {
+	if _, ok := m.SignedAt(); ok {
+		return nil
+	}
+
+	now, err := models.ToDateTime(time.Now().UTC().Format(time.RFC3339))
+	if err != nil {
+		return err
+	}
+
+	m.SetSignedAt(*now)
+
+	return nil
+}
+
+// ndaSignedTuple builds the tuple granting trust center document access to the signer of an NDA
+// request; the subject is the anonymous identity minted for that request in the access email
+func ndaSignedTuple(requestID, trustCenterID string) fgax.TupleKey {
+	return fgax.GetTupleKey(fgax.TupleRequest{
+		SubjectID:   fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, requestID),
+		SubjectType: "user",
+		ObjectID:    trustCenterID,
+		ObjectType:  "trust_center",
+		Relation:    "nda_signed",
+	})
+}
+
+// grantNDASignedAccess writes the nda_signed tuples for requests that have been signed
+func grantNDASignedAccess(ctx context.Context, m *generated.TrustCenterNDARequestMutation, requests []*generated.TrustCenterNDARequest) error {
+	if len(requests) == 0 {
+		return nil
+	}
+
+	tuples := make([]fgax.TupleKey, 0, len(requests))
+	for _, request := range requests {
+		tuples = append(tuples, ndaSignedTuple(request.ID, request.TrustCenterID))
+	}
+
+	if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create nda_signed relationship tuple")
+
+		return ErrInternalServerError
+	}
+
+	return nil
+}
+
+// ndaRequestsFromMutation loads the id and trust center id of every request the mutation targets
+func ndaRequestsFromMutation(ctx context.Context, m *generated.TrustCenterNDARequestMutation) ([]*generated.TrustCenterNDARequest, error) {
+	var ids []string
+
+	switch m.Op() {
+	case ent.OpDelete, ent.OpUpdate:
+		var err error
+
+		ids, err = m.IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+	case ent.OpDeleteOne, ent.OpUpdateOne:
+		id, ok := m.ID()
+		if !ok {
+			return nil, fmt.Errorf("%w: %s", ErrInvalidInput, "id is required")
+		}
+
+		ids = []string{id}
+	}
+
+	if len(ids) == 0 {
+		return nil, nil
+	}
+
+	return m.Client().TrustCenterNDARequest.Query().
+		Where(trustcenterndarequest.IDIn(ids...)).
+		Select(trustcenterndarequest.FieldID, trustcenterndarequest.FieldTrustCenterID).
+		All(privacy.DecisionContext(ctx, privacy.Allow))
+}
+
+// recordSignedNDARequest marks an existing request signed when an already signed NDA is recorded
+// for an email that has requested access before
+func recordSignedNDARequest(ctx, queryCtx context.Context, m *generated.TrustCenterNDARequestMutation, existing *generated.TrustCenterNDARequest) (*generated.TrustCenterNDARequest, error) {
+	if existing.Status == enums.TrustCenterNDARequestStatusSigned {
+		return existing, nil
+	}
+
+	update := transactionFromContext(ctx).TrustCenterNDARequest.UpdateOne(existing).
+		SetStatus(enums.TrustCenterNDARequestStatusSigned)
+
+	if signedAt, ok := m.SignedAt(); ok {
+		update.SetSignedAt(signedAt)
+	}
+
+	if fileID, ok := m.FileID(); ok {
+		update.SetFileID(fileID)
+	}
+
+	if documentDataID, ok := m.DocumentDataID(); ok {
+		update.SetDocumentDataID(documentDataID)
+	}
+
+	return update.Save(queryCtx)
 }
 
 func createNDARequestNotification(ctx context.Context, ndaRequest *generated.TrustCenterNDARequest, ownerID string) error {
