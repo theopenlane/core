@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
@@ -270,6 +271,12 @@ func loadCampaignWithTargets(ctx context.Context, db *generated.Client, input Ca
 	// snapshot them at dispatch time so manual launches and automated triggers behave identically
 	if err := snapshotTrustCenterSubscribers(ctx, db, camp); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", input.CampaignID).Msg("failed snapshotting trust center subscribers")
+
+		return nil, nil, 0, err
+	}
+
+	if err := snapshotCampaignAudiences(ctx, db, camp); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", input.CampaignID).Msg("failed snapshotting campaign audiences")
 
 		return nil, nil, 0, err
 	}

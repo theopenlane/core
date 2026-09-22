@@ -267,6 +267,7 @@ func (p IdentityHolder) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(p, Subcontrol{}),
 		defaultEdgeFromWithPagination(p, Platform{}),
 		defaultEdgeFromWithPagination(p, Campaign{}),
+		defaultEdgeToWithPagination(p, AudienceMember{}),
 		defaultEdgeToWithPagination(p, Task{}),
 		defaultEdgeToWithPagination(p, File{}),
 		defaultEdgeFromWithPagination(p, Finding{}),

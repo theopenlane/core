@@ -325,6 +325,7 @@ func (c Campaign) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(c, User{}),
 		defaultEdgeToWithPagination(c, Group{}),
 		defaultEdgeToWithPagination(c, IdentityHolder{}),
+		defaultEdgeToWithPagination(c, Audience{}),
 		defaultEdgeFromWithPagination(c, Control{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: c,

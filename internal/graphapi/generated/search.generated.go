@@ -210,6 +210,70 @@ func (ec *executionContext) fieldContext_SearchResults_assets(_ context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _SearchResults_audiences(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_audiences(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Audiences, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.AudienceConnection) graphql.Marshaler {
+			return ec.marshalOAudienceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAudienceConnection(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SearchResults_audiences(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AudienceConnection(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SearchResults_audienceMembers(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResults_audienceMembers(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AudienceMembers, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.AudienceMemberConnection) graphql.Marshaler {
+			return ec.marshalOAudienceMemberConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAudienceMemberConnection(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SearchResults_audienceMembers(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResults",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AudienceMemberConnection(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SearchResults_campaigns(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1413,6 +1477,16 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			}
 		case "assets":
 			out.Values[i] = ec._SearchResults_assets(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "audiences":
+			out.Values[i] = ec._SearchResults_audiences(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "audienceMembers":
+			out.Values[i] = ec._SearchResults_audienceMembers(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

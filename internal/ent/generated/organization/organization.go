@@ -59,6 +59,10 @@ const (
 	EdgeAssessmentCreators = "assessment_creators"
 	// EdgeAssetCreators holds the string denoting the asset_creators edge name in mutations.
 	EdgeAssetCreators = "asset_creators"
+	// EdgeAudienceCreators holds the string denoting the audience_creators edge name in mutations.
+	EdgeAudienceCreators = "audience_creators"
+	// EdgeAudienceMemberCreators holds the string denoting the audience_member_creators edge name in mutations.
+	EdgeAudienceMemberCreators = "audience_member_creators"
 	// EdgeCampaignCreators holds the string denoting the campaign_creators edge name in mutations.
 	EdgeCampaignCreators = "campaign_creators"
 	// EdgeCampaignTargetCreators holds the string denoting the campaign_target_creators edge name in mutations.
@@ -311,6 +315,10 @@ const (
 	EdgeSubprocessors = "subprocessors"
 	// EdgeExports holds the string denoting the exports edge name in mutations.
 	EdgeExports = "exports"
+	// EdgeAudiences holds the string denoting the audiences edge name in mutations.
+	EdgeAudiences = "audiences"
+	// EdgeAudienceMembers holds the string denoting the audience_members edge name in mutations.
+	EdgeAudienceMembers = "audience_members"
 	// EdgeTrustCenterWatermarkConfigs holds the string denoting the trust_center_watermark_configs edge name in mutations.
 	EdgeTrustCenterWatermarkConfigs = "trust_center_watermark_configs"
 	// EdgeImpersonationEvents holds the string denoting the impersonation_events edge name in mutations.
@@ -393,6 +401,20 @@ const (
 	AssetCreatorsInverseTable = "groups"
 	// AssetCreatorsColumn is the table column denoting the asset_creators relation/edge.
 	AssetCreatorsColumn = "organization_asset_creators"
+	// AudienceCreatorsTable is the table that holds the audience_creators relation/edge.
+	AudienceCreatorsTable = "groups"
+	// AudienceCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	AudienceCreatorsInverseTable = "groups"
+	// AudienceCreatorsColumn is the table column denoting the audience_creators relation/edge.
+	AudienceCreatorsColumn = "organization_audience_creators"
+	// AudienceMemberCreatorsTable is the table that holds the audience_member_creators relation/edge.
+	AudienceMemberCreatorsTable = "groups"
+	// AudienceMemberCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	AudienceMemberCreatorsInverseTable = "groups"
+	// AudienceMemberCreatorsColumn is the table column denoting the audience_member_creators relation/edge.
+	AudienceMemberCreatorsColumn = "organization_audience_member_creators"
 	// CampaignCreatorsTable is the table that holds the campaign_creators relation/edge.
 	CampaignCreatorsTable = "groups"
 	// CampaignCreatorsInverseTable is the table name for the Group entity.
@@ -1261,6 +1283,20 @@ const (
 	ExportsInverseTable = "exports"
 	// ExportsColumn is the table column denoting the exports relation/edge.
 	ExportsColumn = "owner_id"
+	// AudiencesTable is the table that holds the audiences relation/edge.
+	AudiencesTable = "audiences"
+	// AudiencesInverseTable is the table name for the Audience entity.
+	// It exists in this package in order to avoid circular dependency with the "audience" package.
+	AudiencesInverseTable = "audiences"
+	// AudiencesColumn is the table column denoting the audiences relation/edge.
+	AudiencesColumn = "owner_id"
+	// AudienceMembersTable is the table that holds the audience_members relation/edge.
+	AudienceMembersTable = "audience_members"
+	// AudienceMembersInverseTable is the table name for the AudienceMember entity.
+	// It exists in this package in order to avoid circular dependency with the "audiencemember" package.
+	AudienceMembersInverseTable = "audience_members"
+	// AudienceMembersColumn is the table column denoting the audience_members relation/edge.
+	AudienceMembersColumn = "owner_id"
 	// TrustCenterWatermarkConfigsTable is the table that holds the trust_center_watermark_configs relation/edge.
 	TrustCenterWatermarkConfigsTable = "trust_center_watermark_configs"
 	// TrustCenterWatermarkConfigsInverseTable is the table name for the TrustCenterWatermarkConfig entity.
@@ -1499,7 +1535,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [82]ent.Hook
+	Hooks        [84]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -1674,6 +1710,34 @@ func ByAssetCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByAssetCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newAssetCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAudienceCreatorsCount orders the results by audience_creators count.
+func ByAudienceCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAudienceCreatorsStep(), opts...)
+	}
+}
+
+// ByAudienceCreators orders the results by audience_creators terms.
+func ByAudienceCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAudienceCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAudienceMemberCreatorsCount orders the results by audience_member_creators count.
+func ByAudienceMemberCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAudienceMemberCreatorsStep(), opts...)
+	}
+}
+
+// ByAudienceMemberCreators orders the results by audience_member_creators terms.
+func ByAudienceMemberCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAudienceMemberCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -3420,6 +3484,34 @@ func ByExports(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByAudiencesCount orders the results by audiences count.
+func ByAudiencesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAudiencesStep(), opts...)
+	}
+}
+
+// ByAudiences orders the results by audiences terms.
+func ByAudiences(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAudiencesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAudienceMembersCount orders the results by audience_members count.
+func ByAudienceMembersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAudienceMembersStep(), opts...)
+	}
+}
+
+// ByAudienceMembers orders the results by audience_members terms.
+func ByAudienceMembers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAudienceMembersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByTrustCenterWatermarkConfigsCount orders the results by trust_center_watermark_configs count.
 func ByTrustCenterWatermarkConfigsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -3809,6 +3901,20 @@ func newAssetCreatorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AssetCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, AssetCreatorsTable, AssetCreatorsColumn),
+	)
+}
+func newAudienceCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AudienceCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AudienceCreatorsTable, AudienceCreatorsColumn),
+	)
+}
+func newAudienceMemberCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AudienceMemberCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AudienceMemberCreatorsTable, AudienceMemberCreatorsColumn),
 	)
 }
 func newCampaignCreatorsStep() *sqlgraph.Step {
@@ -4691,6 +4797,20 @@ func newExportsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ExportsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ExportsTable, ExportsColumn),
+	)
+}
+func newAudiencesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AudiencesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AudiencesTable, AudiencesColumn),
+	)
+}
+func newAudienceMembersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AudienceMembersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AudienceMembersTable, AudienceMembersColumn),
 	)
 }
 func newTrustCenterWatermarkConfigsStep() *sqlgraph.Step {

@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
@@ -1656,6 +1657,74 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "asset.ingest.requested"),
+		},
+	}
+	SchemaAudience = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:  "Audience",
+			Snake: "audience",
+			Lower: "audience",
+		},
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "audience", Operation: refOpLoad, EntityID: entityID}
+
+			entity, err := client.Audience.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
+		},
+	}
+	SchemaAudienceMember = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:  "AudienceMember",
+			Snake: "audience_member",
+			Lower: "audiencemember",
+		},
+		ProjectionType: reflect.TypeFor[AudienceMemberProjection](),
+		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
+			ref := SchemaRef{Schema: "audience_member", Operation: refOpQuery}
+
+			entities, err := client.AudienceMember.Query().
+				Where(audiencemember.OwnerID(orgID)).
+				All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			results := make([]json.RawMessage, 0, len(entities))
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+
+			return results, nil
+		},
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "audience_member", Operation: refOpLoad, EntityID: entityID}
+
+			entity, err := client.AudienceMember.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
 		},
 	}
 	SchemaCampaign = &Schema{
@@ -5685,6 +5754,44 @@ func init() {
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "website", Label: "Website", Type: "string", MatchKey: true, InputKey: "website", Clearable: true},
 	}
+	SchemaAudience.Fields = []FieldDescriptor{
+		{Name: "audience_type", Label: "AudienceType", Type: "enums.AudienceType"},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
+		{Name: "filters", Label: "Filters", Type: "map[string]interface {}", Clearable: true},
+		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+	}
+	SchemaAudienceMember.Fields = []FieldDescriptor{
+		{Name: "audience_id", Label: "AudienceID", Type: "string", MatchKey: true},
+		{Name: "contact_id", Label: "ContactID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
+		{Name: "email", Label: "Email", Type: "string", MatchKey: true},
+		{Name: "full_name", Label: "FullName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "group_id", Label: "GroupID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "identity_holder_id", Label: "IdentityHolderID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "subscriber_id", Label: "SubscriberID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true, Clearable: true},
+	}
 	SchemaCampaign.Fields = []FieldDescriptor{
 		{Name: "assessment_id", Label: "AssessmentID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "campaign_type", Label: "CampaignType", Type: "enums.CampaignType"},
@@ -8826,6 +8933,122 @@ func init() {
 			AddField:    "add_vulnerability_ids",
 		},
 	}
+	SchemaAudience.Edges = []EdgeDescriptor{
+		{
+			Name:        "audience_members",
+			Label:       "AudienceMembers",
+			Target:      SchemaAudienceMember,
+			TargetType:  "AudienceMember",
+			CreateField: "audience_member_ids",
+			AddField:    "add_audience_member_ids",
+		},
+		{
+			Name:        "blocked_groups",
+			Label:       "BlockedGroups",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "blocked_group_ids",
+			AddField:    "add_blocked_group_ids",
+		},
+		{
+			Name:        "campaigns",
+			Label:       "Campaigns",
+			Target:      SchemaCampaign,
+			TargetType:  "Campaign",
+			CreateField: "campaign_ids",
+			AddField:    "add_campaign_ids",
+		},
+		{
+			Name:        "editors",
+			Label:       "Editors",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "editor_ids",
+			AddField:    "add_editor_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
+		},
+		{
+			Name:        "viewers",
+			Label:       "Viewers",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "viewer_ids",
+			AddField:    "add_viewer_ids",
+		},
+	}
+	SchemaAudienceMember.Edges = []EdgeDescriptor{
+		{
+			Name:        "audience",
+			Label:       "Audience",
+			Target:      SchemaAudience,
+			TargetType:  "Audience",
+			Unique:      true,
+			CreateField: "audience_id",
+			Field:       "audience_id",
+		},
+		{
+			Name:        "contact",
+			Label:       "Contact",
+			Target:      SchemaContact,
+			TargetType:  "Contact",
+			Unique:      true,
+			CreateField: "contact_id",
+			Field:       "contact_id",
+		},
+		{
+			Name:        "group",
+			Label:       "Group",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			Unique:      true,
+			CreateField: "group_id",
+			Field:       "group_id",
+		},
+		{
+			Name:        "identity_holder",
+			Label:       "IdentityHolder",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			Unique:      true,
+			CreateField: "identity_holder_id",
+			Field:       "identity_holder_id",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
+		},
+		{
+			Name:        "subscriber",
+			Label:       "Subscriber",
+			Target:      SchemaSubscriber,
+			TargetType:  "Subscriber",
+			Unique:      true,
+			CreateField: "subscriber_id",
+			Field:       "subscriber_id",
+		},
+		{
+			Name:        "user",
+			Label:       "User",
+			Target:      SchemaUser,
+			TargetType:  "User",
+			Unique:      true,
+			CreateField: "user_id",
+			Field:       "user_id",
+		},
+	}
 	SchemaCampaign.Edges = []EdgeDescriptor{
 		{
 			Name:        "assessment",
@@ -8843,6 +9066,14 @@ func init() {
 			TargetType:  "AssessmentResponse",
 			CreateField: "assessment_response_ids",
 			AddField:    "add_assessment_response_ids",
+		},
+		{
+			Name:        "audiences",
+			Label:       "Audiences",
+			Target:      SchemaAudience,
+			TargetType:  "Audience",
+			CreateField: "audience_ids",
+			AddField:    "add_audience_ids",
 		},
 		{
 			Name:        "blocked_groups",
@@ -9130,6 +9361,14 @@ func init() {
 		},
 	}
 	SchemaContact.Edges = []EdgeDescriptor{
+		{
+			Name:        "audience_members",
+			Label:       "AudienceMembers",
+			Target:      SchemaAudienceMember,
+			TargetType:  "AudienceMember",
+			CreateField: "audience_member_ids",
+			AddField:    "add_audience_member_ids",
+		},
 		{
 			Name:        "campaign_targets",
 			Label:       "CampaignTargets",
@@ -11599,6 +11838,38 @@ func init() {
 			AddField:    "add_action_plan_viewer_ids",
 		},
 		{
+			Name:        "audience_blocked_groups",
+			Label:       "AudienceBlockedGroups",
+			Target:      SchemaAudience,
+			TargetType:  "Audience",
+			CreateField: "audience_blocked_group_ids",
+			AddField:    "add_audience_blocked_group_ids",
+		},
+		{
+			Name:        "audience_editors",
+			Label:       "AudienceEditors",
+			Target:      SchemaAudience,
+			TargetType:  "Audience",
+			CreateField: "audience_editor_ids",
+			AddField:    "add_audience_editor_ids",
+		},
+		{
+			Name:        "audience_members",
+			Label:       "AudienceMembers",
+			Target:      SchemaAudienceMember,
+			TargetType:  "AudienceMember",
+			CreateField: "audience_member_ids",
+			AddField:    "add_audience_member_ids",
+		},
+		{
+			Name:        "audience_viewers",
+			Label:       "AudienceViewers",
+			Target:      SchemaAudience,
+			TargetType:  "Audience",
+			CreateField: "audience_viewer_ids",
+			AddField:    "add_audience_viewer_ids",
+		},
+		{
 			Name:        "avatar_file",
 			Label:       "AvatarFile",
 			Target:      SchemaFile,
@@ -12149,6 +12420,14 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+		},
+		{
+			Name:        "audience_members",
+			Label:       "AudienceMembers",
+			Target:      SchemaAudienceMember,
+			TargetType:  "AudienceMember",
+			CreateField: "audience_member_ids",
+			AddField:    "add_audience_member_ids",
 		},
 		{
 			Name:        "blocked_groups",
@@ -13590,6 +13869,38 @@ func init() {
 			TargetType:  "Asset",
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
+		},
+		{
+			Name:        "audience_creators",
+			Label:       "AudienceCreators",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "audience_creator_ids",
+			AddField:    "add_audience_creator_ids",
+		},
+		{
+			Name:        "audience_member_creators",
+			Label:       "AudienceMemberCreators",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "audience_member_creator_ids",
+			AddField:    "add_audience_member_creator_ids",
+		},
+		{
+			Name:        "audience_members",
+			Label:       "AudienceMembers",
+			Target:      SchemaAudienceMember,
+			TargetType:  "AudienceMember",
+			CreateField: "audience_member_ids",
+			AddField:    "add_audience_member_ids",
+		},
+		{
+			Name:        "audiences",
+			Label:       "Audiences",
+			Target:      SchemaAudience,
+			TargetType:  "Audience",
+			CreateField: "audience_ids",
+			AddField:    "add_audience_ids",
 		},
 		{
 			Name:        "avatar_file",
@@ -16948,6 +17259,14 @@ func init() {
 	}
 	SchemaSubscriber.Edges = []EdgeDescriptor{
 		{
+			Name:        "audience_members",
+			Label:       "AudienceMembers",
+			Target:      SchemaAudienceMember,
+			TargetType:  "AudienceMember",
+			CreateField: "audience_member_ids",
+			AddField:    "add_audience_member_ids",
+		},
+		{
 			Name:        "campaign_targets",
 			Label:       "CampaignTargets",
 			Target:      SchemaCampaignTarget,
@@ -17938,6 +18257,14 @@ func init() {
 			TargetType:  "Task",
 			CreateField: "assigner_task_ids",
 			AddField:    "add_assigner_task_ids",
+		},
+		{
+			Name:        "audience_members",
+			Label:       "AudienceMembers",
+			Target:      SchemaAudienceMember,
+			TargetType:  "AudienceMember",
+			CreateField: "audience_member_ids",
+			AddField:    "add_audience_member_ids",
 		},
 		{
 			Name:        "avatar_file",
@@ -19288,6 +19615,34 @@ func init() {
 		entities, err := client.Asset.Query().
 			Where(asset.OwnerID(orgID)).
 			Where(predicate.Asset(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaAudienceMember.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "audience_member", Operation: refOpQuery}
+
+		if !SchemaAudienceMember.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "audience_member"))
+		}
+
+		entities, err := client.AudienceMember.Query().
+			Where(audiencemember.OwnerID(orgID)).
+			Where(predicate.AudienceMember(matchKeyIn(field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -22643,6 +22998,8 @@ var allSchemas = []*Schema{
 	SchemaAssessment,
 	SchemaAssessmentResponse,
 	SchemaAsset,
+	SchemaAudience,
+	SchemaAudienceMember,
 	SchemaCampaign,
 	SchemaCampaignTarget,
 	SchemaCheckResult,

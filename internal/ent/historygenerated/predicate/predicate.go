@@ -20,6 +20,12 @@ type AssessmentResponseHistory func(*sql.Selector)
 // AssetHistory is the predicate function for assethistory builders.
 type AssetHistory func(*sql.Selector)
 
+// AudienceHistory is the predicate function for audiencehistory builders.
+type AudienceHistory func(*sql.Selector)
+
+// AudienceMemberHistory is the predicate function for audiencememberhistory builders.
+type AudienceMemberHistory func(*sql.Selector)
+
 // CampaignHistory is the predicate function for campaignhistory builders.
 type CampaignHistory func(*sql.Selector)
 
