@@ -11,12 +11,15 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -238,6 +241,11 @@ func HookOrgMembersDelete() ent.Hook {
 
 			// check to see if the default org needs to be updated for the user
 			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+			if err := updateIdentityHolder(allowCtx, m.Client(), orgMembership.UserID); err != nil {
+				return nil, err
+			}
+
 			if _, err = checkAndUpdateDefaultOrg(allowCtx, orgMembership.UserID, orgMembership.OrganizationID, m.Client()); err != nil {
 				return nil, err
 			}
@@ -272,6 +280,54 @@ func HookOrgMembersDelete() ent.Hook {
 			return retValue, err
 		})
 	}, ent.OpDeleteOne|ent.OpDelete|ent.OpUpdate|ent.OpUpdateOne) // handle soft deletes as well as hard deletes
+}
+
+// updateIdentityHolder checks if the org memeber being removed also exists on the identity holder.
+// If they do, unset is_openlane_user
+func updateIdentityHolder(ctx context.Context, client *generated.Client, userID string) error {
+
+	orgUser, err := client.User.Query().
+		Where(user.IDEQ(userID)).
+		Select(user.FieldEmail).
+		Only(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("org_membership_id", userID).
+			Msg("could not find user from org membership")
+		return err
+	}
+
+	id, err := client.IdentityHolder.Query().
+		Where(identityholder.EmailEqualFold(orgUser.Email)).
+		OnlyID(ctx)
+
+	if generated.IsNotFound(err) {
+		return nil
+	}
+
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("org_membership_id", userID).
+			Msg("could not find identity holder from org membership")
+		return err
+	}
+
+	if id == "" {
+		return nil
+	}
+
+	// no need to go through the entire checks again since we have verified
+	// the identity holder needs to be unset
+	newCtx := context.WithValue(ctx, skipOpenlaneUserAssignmentKey{}, true)
+
+	err = client.IdentityHolder.UpdateOneID(id).
+		SetIsOpenlaneUser(false).
+		Exec(newCtx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("identity_holder_id", id).
+			Msg("could not toggle is_openlane_user status")
+		return err
+	}
+
+	return nil
 }
 
 // updateOrgMemberDefaultOrgOnCreate updates the user's default org if the user has no default org or

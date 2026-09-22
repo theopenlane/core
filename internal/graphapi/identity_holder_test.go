@@ -14,9 +14,86 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
+
+func TestIdentityHolder_IsOpenlaneUser(t *testing.T) {
+	org := suite.SeedOrgOwner(t)
+
+	client := suite.Client.API
+
+	orgID := org.Owner.OrganizationID
+
+	ctx := org.Owner.UserCtx
+
+	t.Cleanup(func() {
+		_, err := client.DeleteOrganization(ctx, orgID)
+		assert.NilError(t, err)
+	})
+
+	users := []th.TestUserDetails{th.SharedTestUser2, th.SharedViewOnlyUser}
+
+	orgMemberIDs := make([]string, 0, len(users))
+
+	// add 2 users to the new org
+	for _, user := range users {
+		member, err := client.AddUserToOrgWithRole(ctx, testclient.CreateOrgMembershipInput{
+			OrganizationID: orgID,
+			UserID:         user.ID,
+			Role:           &enums.RoleMember,
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, member != nil)
+
+		orgMemberIDs = append(orgMemberIDs, member.CreateOrgMembership.OrgMembership.ID)
+	}
+
+	// create identity holders, make 2 use the emails of the previously added org users and a completely new email
+	// then verify isOpenlaneUser is set correctly
+	idsToCreate := []struct {
+		email          string
+		isOpenlaneUser bool
+	}{
+		{
+			isOpenlaneUser: true,
+			email:          users[0].UserInfo.Email,
+		},
+		{
+			isOpenlaneUser: true,
+			email:          users[1].UserInfo.Email,
+		},
+		{
+			isOpenlaneUser: false,
+			email:          gofakeit.Email(),
+		},
+	}
+
+	for _, val := range idsToCreate {
+		holder, err := client.CreateIdentityHolder(ctx, testclient.CreateIdentityHolderInput{
+			FullName: gofakeit.Name(),
+			Email:    val.email,
+			OwnerID:  &orgID,
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, holder != nil)
+
+		assert.Check(t, is.Equal(val.isOpenlaneUser, *holder.CreateIdentityHolder.IdentityHolder.IsOpenlaneUser))
+	}
+
+	_, err := client.RemoveUserFromOrg(ctx, orgMemberIDs[0])
+	assert.NilError(t, err)
+
+	holders, err := client.GetIdentityHolders(ctx, nil, nil, nil, nil, nil, &testclient.IdentityHolderWhereInput{
+		IsOpenlaneUser: lo.ToPtr(true),
+	})
+	assert.NilError(t, err)
+
+	// we created 2 holders with isOpenlaneUser set to true and removed a member from the org
+	// so we should be left with just 1
+	assert.Check(t, is.Len(holders.IdentityHolders.Edges, 1))
+}
 
 func TestQueryIdentityHolder(t *testing.T) {
 	ih := (&th.IdentityHolderBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
