@@ -286,7 +286,7 @@ func HookOrgMembersDelete() ent.Hook {
 	}, ent.OpDeleteOne|ent.OpDelete|ent.OpUpdate|ent.OpUpdateOne) // handle soft deletes as well as hard deletes
 }
 
-// updateIdentityHolder checks if the org memeber being removed also exists on the identity holder.
+// updateIdentityHolder checks if the org member being removed also exists on the identity holder.
 // If they do, unset is_openlane_user
 func updateIdentityHolder(ctx context.Context, client *generated.Client, userID string, expectedOpenlaneUserValue bool) error {
 
