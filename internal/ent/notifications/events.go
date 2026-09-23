@@ -6,6 +6,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/export"
@@ -67,15 +68,7 @@ func Listeners() []gala.Registration {
 			Schema:  entityops.SchemaTask,
 			Fields:  []string{task.FieldAssigneeID},
 			Caller:  notificationCaller,
-			Notify: &entityops.NotifySpec{
-				Recipients: entityops.RecipientsFromField(task.FieldAssigneeID),
-				Content: entityops.NotificationContent{
-					Type:          enums.NotificationTypeUser,
-					Topic:         enums.NotificationTopicTaskAssignment,
-					TitleTemplate: "New task assigned",
-					BodyTemplate:  "Task {{ .Name }} has been assigned to you",
-				},
-			},
+			Handle:  handleTaskMutation,
 		},
 		entityops.MutationListener{
 			Concern: entityops.MutationConcernNotification,
