@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
+
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
@@ -50,6 +51,10 @@ func HookTrustCenter() ent.Hook {
 			}
 
 			m.SetSlug(strcase.KebabCase(org.Name))
+
+			if id, ok := m.CustomDomainID(); ok && id != "" {
+				m.SetNoindexDefaultDomain(true)
+			}
 
 			retVal, err := next.Mutate(ctx, m)
 			if err != nil {
@@ -349,6 +354,10 @@ func HookTrustCenterUpdate() ent.Hook {
 
 			customDomainCleared := m.CustomDomainIDCleared()
 			mutationCustomDomainID, mutationCustomDomainIDExists := m.CustomDomainID()
+
+			if mutationCustomDomainIDExists && mutationCustomDomainID != "" {
+				m.SetNoindexDefaultDomain(true)
+			}
 
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
