@@ -89105,7 +89105,7 @@ type IdentityHolder implements Node @modules(names: ["compliance_module","regist
   """
   whether the identity holder record is linked to an Openlane user account
   """
-  isOpenlaneUser: Boolean
+  isOpenlaneUser: Boolean @deprecated(reason: "is_openlane_user will be automatically set if it matches an existing user in the org")
   """
   the user id associated with the identity holder record
   """
