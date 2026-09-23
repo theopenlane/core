@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/taskrules"
@@ -131,6 +132,12 @@ func (suite *HookTestSuite) TestHookOnboarding() {
 				Exist(newOrgCtx)
 			require.NoError(t, err)
 			assert.True(t, managedTagExists)
+
+			slaCount, err := suite.client.SLADefinition.Query().
+				Where(sladefinition.OwnerID(onboarding.OrganizationID)).
+				Count(newOrgCtx)
+			require.NoError(t, err)
+			assert.Equal(t, 4, slaCount)
 		})
 	}
 }
