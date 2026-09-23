@@ -8,7 +8,6 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -108,19 +107,6 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 				}
 
 				logx.FromContext(ctx).Error().Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("no existing nda request to mark signed status")
-			}
-
-			tuple := fgax.GetTupleKey(fgax.TupleRequest{
-				SubjectID:   caller.SubjectID,
-				SubjectType: "user",
-				ObjectID:    tcID,
-				ObjectType:  "trust_center",
-				Relation:    "nda_signed",
-			})
-
-			if _, err := m.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("failed to create nda_signed relationship tuple")
-				return nil, ErrInternalServerError
 			}
 
 			return v, nil

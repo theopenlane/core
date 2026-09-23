@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"strings"
@@ -13,6 +14,8 @@ import (
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/pdfcpu/pdfcpu/pkg/font"
+	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
+	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/model"
 
 	"github.com/rs/zerolog/log"
 
@@ -96,7 +99,7 @@ func attestNDADocument(ctx context.Context, client *generated.Client, docData *g
 		return nil, ErrFailedToDownloadNDAPDF
 	}
 
-	combined, err := appendAttestationPage(bytes.NewReader(downloaded.File), &ndaMetadata)
+	combined, err := appendAttestationPage(ctx, bytes.NewReader(downloaded.File), &ndaMetadata)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create attested PDF")
 
@@ -108,7 +111,7 @@ func attestNDADocument(ctx context.Context, client *generated.Client, docData *g
 
 	ndaMetadata.SignatureMetadata.PDFHash = attestedPDFHash
 
-	attestedPDF, err := appendAttestationPage(bytes.NewReader(downloaded.File), &ndaMetadata)
+	attestedPDF, err := appendAttestationPage(ctx, bytes.NewReader(downloaded.File), &ndaMetadata)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create attested PDF with hash")
 
@@ -241,22 +244,57 @@ func fetchNDATemplateFile(ctx context.Context, client *generated.Client, templat
 }
 
 // appendAttestationPage merges the original PDF with a generated attestation certificate page
-func appendAttestationPage(originalPDF io.ReadSeeker, data *signedNDADocumentData) ([]byte, error) {
+func appendAttestationPage(ctx context.Context, originalPDF io.ReadSeeker, data *signedNDADocumentData) ([]byte, error) {
 	certPage, err := createAttestationCertificate(data)
 	if err != nil {
-		logx.FromContext(context.Background()).Error().Err(err).Msg("failed to create attestation certificate page")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create attestation certificate page")
 
 		return nil, ErrFailedToCreateAttestationCert
 	}
 
+	merged, err := mergePDFs(ctx, originalPDF, bytes.NewReader(certPage))
+	if !errors.Is(err, pdfcpu.ErrEncrypted) {
+		return merged, err
+	}
+
+	// pdfcpu refuses encrypted sources in merge mode even when no user password is set, so decrypt first
+	decrypted, err := decryptPDF(ctx, originalPDF)
+	if err != nil {
+		return nil, err
+	}
+
+	return mergePDFs(ctx, bytes.NewReader(decrypted), bytes.NewReader(certPage))
+}
+
+// mergePDFs concatenates the given PDFs into one, returning pdfcpu.ErrEncrypted unwrapped when a source is encrypted
+func mergePDFs(ctx context.Context, readers ...io.ReadSeeker) ([]byte, error) {
 	var buf bytes.Buffer
 
-	readers := []io.ReadSeeker{originalPDF, bytes.NewReader(certPage)}
+	if err := api.MergeRaw(readers, &buf, false, nil); err != nil {
+		if errors.Is(err, pdfcpu.ErrEncrypted) {
+			return nil, err
+		}
 
-	if err = api.MergeRaw(readers, &buf, false, nil); err != nil {
-		logx.FromContext(context.Background()).Error().Err(err).Msg("pdfcpu merge failed")
+		logx.FromContext(ctx).Error().Err(err).Msg("pdfcpu merge failed")
 
 		return nil, ErrFailedToMergeAttestationPage
+	}
+
+	return buf.Bytes(), nil
+}
+
+// decryptPDF removes owner-password encryption from a PDF that opens without a user password
+func decryptPDF(ctx context.Context, encrypted io.ReadSeeker) ([]byte, error) {
+	if _, err := encrypted.Seek(0, io.SeekStart); err != nil {
+		return nil, err
+	}
+
+	var buf bytes.Buffer
+
+	if err := api.Decrypt(encrypted, &buf, model.NewDefaultConfiguration()); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("pdfcpu decrypt failed")
+
+		return nil, ErrFailedToDecryptNDAPDF
 	}
 
 	return buf.Bytes(), nil

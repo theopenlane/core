@@ -6,10 +6,12 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 
-	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // filterAuthorizedIDs checks which IDs the caller has access to for the given relation
@@ -27,6 +29,10 @@ func (r *mutationResolver) filterAuthorizedIDs(ctx context.Context, ids []string
 	if !ok || caller == nil {
 		logx.FromContext(ctx).Error().Msg("unable to get caller from context for bulk access check")
 		return nil
+	}
+
+	if caller.Has(auth.CapOrgSupport) && !strings.HasPrefix(relation, rule.CanDeletePrefix) {
+		return ids
 	}
 
 	email := caller.SubjectEmail
