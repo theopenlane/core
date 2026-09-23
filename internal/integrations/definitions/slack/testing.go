@@ -106,23 +106,38 @@ func (m *MockSlackRuntime) Close() {
 	m.Server.Close()
 }
 
+// MockDefaultChannel is the channel the mock runtime client targets for system messages
+const MockDefaultChannel = "system-notifications"
+
+// mockSlackClient builds a SlackClient whose API is pointed at the mock server
+func mockSlackClient(apiURL string) *SlackClient {
+	return &SlackClient{
+		API:            slackgo.New("mock-token", slackgo.OptionAPIURL(apiURL)),
+		DefaultChannel: MockDefaultChannel,
+	}
+}
+
 // Builder returns a Slack definition builder backed by the mock server.
-// All client builds return a SlackClient with the API pointed at the mock,
-// bypassing credential resolution entirely
+// Every client build, including the system runtime client, returns a SlackClient
+// with the API pointed at the mock, bypassing credential resolution entirely
 func (m *MockSlackRuntime) Builder() registry.Builder {
 	mockAPIURL := m.Server.URL + "/"
 
 	return registry.Builder(func() (types.Definition, error) {
-		def, err := Builder(Config{}, nil, false)()
+		def, err := Builder(Config{}, &RuntimeSlackConfig{BotToken: "mock-token", DefaultChannel: MockDefaultChannel}, false)()
 		if err != nil {
 			return types.Definition{}, err
 		}
 
 		for i := range def.Clients {
 			def.Clients[i].Build = func(_ context.Context, _ types.ClientBuildRequest) (any, error) {
-				return &SlackClient{
-					API: slackgo.New("mock-token", slackgo.OptionAPIURL(mockAPIURL)),
-				}, nil
+				return mockSlackClient(mockAPIURL), nil
+			}
+		}
+
+		if def.RuntimeIntegration != nil {
+			def.RuntimeIntegration.Build = func(_ context.Context, _ json.RawMessage) (any, error) {
+				return mockSlackClient(mockAPIURL), nil
 			}
 		}
 

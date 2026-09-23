@@ -92,6 +92,7 @@ type GraphTestSuite struct {
 	GalaRuntime        *gala.Gala
 	IntegrationsRT     *intruntime.Runtime
 	WorkflowEngine     *engine.WorkflowEngine
+	SlackMock          *slackdef.MockSlackRuntime
 }
 
 // Client contains all the clients the test need to interact with
@@ -318,9 +319,11 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	_, err = gala.Register(galaInstance, hooks.IntegrationCleanupListeners()...)
 	RequireNoError(t, err)
 
-	// wire integration runtime with mock email provider
+	// wire integration runtime with mock email and slack providers
 	credStore, err := keystore.NewStore(c.DB)
 	RequireNoError(t, err)
+
+	suite.SlackMock = slackdef.NewMockSlackRuntime()
 
 	rt, err := intruntime.New(intruntime.Config{
 		DB:          c.DB,
@@ -329,7 +332,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		RedisClient: coreutils.NewRedisClient(),
 		DefinitionBuilders: []registry.Builder{
 			emaildef.Builder(emaildef.MockRuntimeConfig(), false),
-			slackdef.Builder(slackdef.Config{}, &slackdef.RuntimeSlackConfig{WebhookURL: "https://hooks.slack.com/services/test/mock/url"}, false),
+			suite.SlackMock.Builder(),
 			systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}, systemdef.IntegrationLifecycleConfig{}),
 			testint.Builder(),
 			testint.MockHTTPBuilder(),
@@ -361,6 +364,10 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 }
 
 func (suite *GraphTestSuite) TearDownSuite(t *testing.T) {
+	if suite.SlackMock != nil {
+		suite.SlackMock.Close()
+	}
+
 	if suite.GalaRuntime != nil {
 		err := suite.GalaRuntime.StopWorkers(context.Background())
 		RequireNoError(t, err)
