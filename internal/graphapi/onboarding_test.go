@@ -13,7 +13,6 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
@@ -41,16 +40,27 @@ func TestMutationCreateOnboarding(t *testing.T) {
 
 	t.Cleanup(setup.Teardown)
 
-	sysCtx := th.SetContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
-	soc2Standard := mustSystemStandard(t, sysCtx, "soc2")
-	isoStandard := mustSystemStandard(t, sysCtx, "iso27001:2022")
+	sysCtx := th.SharedSystemAdminUser.UserCtx
 
-	// only the Security category is cloned for soc2, so the third control is never copied
-	mustSystemControl(t, sysCtx, soc2Standard.ID, "CC1.1", "Security")
-	mustSystemControl(t, sysCtx, soc2Standard.ID, "CC1.2", "Security")
-	mustSystemControl(t, sysCtx, soc2Standard.ID, "A1.1", "Availability")
-	mustSystemControl(t, sysCtx, isoStandard.ID, "A.5.1", "Organizational")
-	mustSystemControl(t, sysCtx, isoStandard.ID, "A.6.1", "People")
+	soc2Standard := (&th.StandardBuilder{Client: suite.Client, Name: "soc2", Framework: "soc2", IsPublic: true}).MustNew(sysCtx, t)
+	isoStandard := (&th.StandardBuilder{Client: suite.Client, Name: "iso27001:2022", Framework: "iso27001:2022", IsPublic: true}).MustNew(sysCtx, t)
+
+	// only the Security category is cloned for soc2, so the availability control is never copied
+	controlIDs := []string{}
+	for _, builder := range []*th.ControlBuilder{
+		{Client: suite.Client, StandardID: soc2Standard.ID, RefCode: "CC1.1", Category: "Security"},
+		{Client: suite.Client, StandardID: soc2Standard.ID, RefCode: "CC1.2", Category: "Security"},
+		{Client: suite.Client, StandardID: soc2Standard.ID, RefCode: "A1.1", Category: "Availability"},
+		{Client: suite.Client, StandardID: isoStandard.ID, RefCode: "A.5.1", Category: "Organizational"},
+		{Client: suite.Client, StandardID: isoStandard.ID, RefCode: "A.6.1", Category: "People"},
+	} {
+		controlIDs = append(controlIDs, builder.MustNew(sysCtx, t).ID)
+	}
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: controlIDs}).MustDelete(sysCtx, t)
+		(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, IDs: []string{soc2Standard.ID, isoStandard.ID}}).MustDelete(sysCtx, t)
+	})
 
 	companyName := "Test Acme Corp, Inc."
 
@@ -169,40 +179,4 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			(&th.Cleanup[*generated.OnboardingDeleteOne]{Client: suite.Client.DB.Onboarding, IDs: []string{resp.CreateOnboarding.Onboarding.ID}}).MustDelete(tc.ctx, t)
 		})
 	}
-}
-
-func mustSystemStandard(t *testing.T, ctx context.Context, framework string) *generated.Standard {
-	t.Helper()
-
-	std, err := suite.Client.DB.Standard.Create().
-		SetName(framework).
-		SetShortName(framework).
-		SetFramework(framework).
-		SetIsPublic(true).
-		SetSystemOwned(true).
-		SetStatus(enums.StandardActive).
-		Save(ctx)
-	assert.NilError(t, err)
-
-	t.Cleanup(func() {
-		(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, IDs: []string{std.ID}}).MustDelete(ctx, t)
-	})
-
-	return std
-}
-
-func mustSystemControl(t *testing.T, ctx context.Context, standardID, refCode, category string) {
-	t.Helper()
-
-	control, err := suite.Client.DB.Control.Create().
-		SetStandardID(standardID).
-		SetSystemOwned(true).
-		SetRefCode(refCode).
-		SetCategory(category).
-		Save(ctx)
-	assert.NilError(t, err)
-
-	t.Cleanup(func() {
-		(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: []string{control.ID}}).MustDelete(ctx, t)
-	})
 }
