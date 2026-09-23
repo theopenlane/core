@@ -2407,10 +2407,6 @@ func init() {
 	trustcenterhistoryDescTags := trustcenterhistoryFields[11].Descriptor()
 	// trustcenterhistory.DefaultTags holds the default value on creation for the tags field.
 	trustcenterhistory.DefaultTags = trustcenterhistoryDescTags.Default.([]string)
-	// trustcenterhistoryDescNoindexDefaultDomain is the schema descriptor for noindex_default_domain field.
-	trustcenterhistoryDescNoindexDefaultDomain := trustcenterhistoryFields[21].Descriptor()
-	// trustcenterhistory.DefaultNoindexDefaultDomain holds the default value on creation for the noindex_default_domain field.
-	trustcenterhistory.DefaultNoindexDefaultDomain = trustcenterhistoryDescNoindexDefaultDomain.Default.(bool)
 	// trustcenterhistoryDescID is the schema descriptor for id field.
 	trustcenterhistoryDescID := trustcenterhistoryFields[10].Descriptor()
 	// trustcenterhistory.DefaultID holds the default value on creation for the id field.
@@ -2489,6 +2485,10 @@ func init() {
 	trustcentersettinghistoryDescNotifySubscribersOnSubprocessorChange := trustcentersettinghistoryFields[35].Descriptor()
 	// trustcentersettinghistory.DefaultNotifySubscribersOnSubprocessorChange holds the default value on creation for the notify_subscribers_on_subprocessor_change field.
 	trustcentersettinghistory.DefaultNotifySubscribersOnSubprocessorChange = trustcentersettinghistoryDescNotifySubscribersOnSubprocessorChange.Default.(bool)
+	// trustcentersettinghistoryDescNoindexDefaultDomain is the schema descriptor for noindex_default_domain field.
+	trustcentersettinghistoryDescNoindexDefaultDomain := trustcentersettinghistoryFields[39].Descriptor()
+	// trustcentersettinghistory.DefaultNoindexDefaultDomain holds the default value on creation for the noindex_default_domain field.
+	trustcentersettinghistory.DefaultNoindexDefaultDomain = trustcentersettinghistoryDescNoindexDefaultDomain.Default.(bool)
 	// trustcentersettinghistoryDescID is the schema descriptor for id field.
 	trustcentersettinghistoryDescID := trustcentersettinghistoryFields[10].Descriptor()
 	// trustcentersettinghistory.DefaultID holds the default value on creation for the id field.

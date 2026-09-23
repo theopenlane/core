@@ -664,6 +664,26 @@ func (_u *TrustCenterSettingUpdate) ClearStatusPageURL() *TrustCenterSettingUpda
 	return _u
 }
 
+// SetNoindexDefaultDomain sets the "noindex_default_domain" field.
+func (_u *TrustCenterSettingUpdate) SetNoindexDefaultDomain(v bool) *TrustCenterSettingUpdate {
+	_u.mutation.SetNoindexDefaultDomain(v)
+	return _u
+}
+
+// SetNillableNoindexDefaultDomain sets the "noindex_default_domain" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableNoindexDefaultDomain(v *bool) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetNoindexDefaultDomain(*v)
+	}
+	return _u
+}
+
+// ClearNoindexDefaultDomain clears the value of the "noindex_default_domain" field.
+func (_u *TrustCenterSettingUpdate) ClearNoindexDefaultDomain() *TrustCenterSettingUpdate {
+	_u.mutation.ClearNoindexDefaultDomain()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterSettingUpdate) AddBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1148,6 +1168,12 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.StatusPageURLCleared() {
 		_spec.ClearField(trustcentersetting.FieldStatusPageURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.NoindexDefaultDomain(); ok {
+		_spec.SetField(trustcentersetting.FieldNoindexDefaultDomain, field.TypeBool, value)
+	}
+	if _u.mutation.NoindexDefaultDomainCleared() {
+		_spec.ClearField(trustcentersetting.FieldNoindexDefaultDomain, field.TypeBool)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2009,6 +2035,26 @@ func (_u *TrustCenterSettingUpdateOne) ClearStatusPageURL() *TrustCenterSettingU
 	return _u
 }
 
+// SetNoindexDefaultDomain sets the "noindex_default_domain" field.
+func (_u *TrustCenterSettingUpdateOne) SetNoindexDefaultDomain(v bool) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetNoindexDefaultDomain(v)
+	return _u
+}
+
+// SetNillableNoindexDefaultDomain sets the "noindex_default_domain" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableNoindexDefaultDomain(v *bool) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetNoindexDefaultDomain(*v)
+	}
+	return _u
+}
+
+// ClearNoindexDefaultDomain clears the value of the "noindex_default_domain" field.
+func (_u *TrustCenterSettingUpdateOne) ClearNoindexDefaultDomain() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearNoindexDefaultDomain()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterSettingUpdateOne) AddBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -2523,6 +2569,12 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.StatusPageURLCleared() {
 		_spec.ClearField(trustcentersetting.FieldStatusPageURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.NoindexDefaultDomain(); ok {
+		_spec.SetField(trustcentersetting.FieldNoindexDefaultDomain, field.TypeBool, value)
+	}
+	if _u.mutation.NoindexDefaultDomainCleared() {
+		_spec.ClearField(trustcentersetting.FieldNoindexDefaultDomain, field.TypeBool)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -118,6 +118,7 @@ query GetTrustCenterSettingByID ($trustCenterSettingId: ID!) {
 		logoRemoteURL
 		ndaApprovalRequired
 		ndaApproverGroupID
+		noindexDefaultDomain
 		notifySubscribersOnSubprocessorChange
 		overview
 		primaryColor

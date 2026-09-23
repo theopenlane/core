@@ -2470,7 +2470,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterhistory.FieldPirschAccessLink:         {Type: field.TypeString, Column: trustcenterhistory.FieldPirschAccessLink},
 			trustcenterhistory.FieldPreviewStatus:            {Type: field.TypeEnum, Column: trustcenterhistory.FieldPreviewStatus},
 			trustcenterhistory.FieldSubprocessorURL:          {Type: field.TypeString, Column: trustcenterhistory.FieldSubprocessorURL},
-			trustcenterhistory.FieldNoindexDefaultDomain:     {Type: field.TypeBool, Column: trustcenterhistory.FieldNoindexDefaultDomain},
 		},
 	}
 	graph.Nodes[54] = &sqlgraph.Node{
@@ -2559,6 +2558,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldSubprocessorsNotifiedAt:               {Type: field.TypeTime, Column: trustcentersettinghistory.FieldSubprocessorsNotifiedAt},
 			trustcentersettinghistory.FieldNdaApproverGroupID:                    {Type: field.TypeString, Column: trustcentersettinghistory.FieldNdaApproverGroupID},
 			trustcentersettinghistory.FieldStatusPageURL:                         {Type: field.TypeString, Column: trustcentersettinghistory.FieldStatusPageURL},
+			trustcentersettinghistory.FieldNoindexDefaultDomain:                  {Type: field.TypeBool, Column: trustcentersettinghistory.FieldNoindexDefaultDomain},
 		},
 	}
 	graph.Nodes[56] = &sqlgraph.Node{
@@ -13594,11 +13594,6 @@ func (f *TrustCenterHistoryFilter) WhereSubprocessorURL(p entql.StringP) {
 	f.Where(p.Field(trustcenterhistory.FieldSubprocessorURL))
 }
 
-// WhereNoindexDefaultDomain applies the entql bool predicate on the noindex_default_domain field.
-func (f *TrustCenterHistoryFilter) WhereNoindexDefaultDomain(p entql.BoolP) {
-	f.Where(p.Field(trustcenterhistory.FieldNoindexDefaultDomain))
-}
-
 // addPredicate implements the predicateAdder interface.
 func (_q *TrustCenterNDARequestHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -13987,6 +13982,11 @@ func (f *TrustCenterSettingHistoryFilter) WhereNdaApproverGroupID(p entql.String
 // WhereStatusPageURL applies the entql string predicate on the status_page_url field.
 func (f *TrustCenterSettingHistoryFilter) WhereStatusPageURL(p entql.StringP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldStatusPageURL))
+}
+
+// WhereNoindexDefaultDomain applies the entql bool predicate on the noindex_default_domain field.
+func (f *TrustCenterSettingHistoryFilter) WhereNoindexDefaultDomain(p entql.BoolP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldNoindexDefaultDomain))
 }
 
 // addPredicate implements the predicateAdder interface.

@@ -7769,7 +7769,6 @@ var (
 		{Name: "pirsch_access_link", Type: field.TypeString, Nullable: true},
 		{Name: "preview_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PROVISIONING", "READY", "FAILED", "DEPROVISIONING", "NONE"}, Default: "NONE"},
 		{Name: "subprocessor_url", Type: field.TypeString, Nullable: true},
-		{Name: "noindex_default_domain", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "custom_domain_id", Type: field.TypeString, Nullable: true},
 		{Name: "preview_domain_id", Type: field.TypeString, Nullable: true},
@@ -7785,37 +7784,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_centers_organizations_trust_centers",
-				Columns:    []*schema.Column{TrustCentersColumns[16]},
+				Columns:    []*schema.Column{TrustCentersColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_centers_custom_domains_custom_domain",
-				Columns:    []*schema.Column{TrustCentersColumns[17]},
+				Columns:    []*schema.Column{TrustCentersColumns[16]},
 				RefColumns: []*schema.Column{CustomDomainsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_centers_custom_domains_preview_domain",
-				Columns:    []*schema.Column{TrustCentersColumns[18]},
+				Columns:    []*schema.Column{TrustCentersColumns[17]},
 				RefColumns: []*schema.Column{CustomDomainsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_centers_trust_center_settings_setting",
-				Columns:    []*schema.Column{TrustCentersColumns[19]},
+				Columns:    []*schema.Column{TrustCentersColumns[18]},
 				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_centers_trust_center_settings_preview_setting",
-				Columns:    []*schema.Column{TrustCentersColumns[20]},
+				Columns:    []*schema.Column{TrustCentersColumns[19]},
 				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_centers_trust_center_watermark_configs_watermark_config",
-				Columns:    []*schema.Column{TrustCentersColumns[21]},
+				Columns:    []*schema.Column{TrustCentersColumns[20]},
 				RefColumns: []*schema.Column{TrustCenterWatermarkConfigsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -7824,17 +7823,17 @@ var (
 			{
 				Name:    "trust_center_custom_domain_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCentersColumns[17]},
+				Columns: []*schema.Column{TrustCentersColumns[16]},
 			},
 			{
 				Name:    "trust_center_preview_domain_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCentersColumns[18]},
+				Columns: []*schema.Column{TrustCentersColumns[17]},
 			},
 			{
 				Name:    "trust_center_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCentersColumns[16]},
+				Columns: []*schema.Column{TrustCentersColumns[15]},
 			},
 			{
 				Name:    "trustcenter_slug",
@@ -8221,6 +8220,7 @@ var (
 		{Name: "notify_subscribers_on_subprocessor_change", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "subprocessors_notified_at", Type: field.TypeTime, Nullable: true},
 		{Name: "status_page_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "noindex_default_domain", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "favicon_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "hero_image_local_file_id", Type: field.TypeString, Nullable: true},
@@ -8234,25 +8234,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_settings_files_logo_file",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[32]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "trust_center_settings_files_favicon_file",
 				Columns:    []*schema.Column{TrustCenterSettingsColumns[33]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_center_settings_files_hero_image_file",
+				Symbol:     "trust_center_settings_files_favicon_file",
 				Columns:    []*schema.Column{TrustCenterSettingsColumns[34]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_center_settings_groups_nda_approver_group",
+				Symbol:     "trust_center_settings_files_hero_image_file",
 				Columns:    []*schema.Column{TrustCenterSettingsColumns[35]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_settings_groups_nda_approver_group",
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[36]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -8261,22 +8261,22 @@ var (
 			{
 				Name:    "trust_center_setting_logo_local_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[32]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[33]},
 			},
 			{
 				Name:    "trust_center_setting_favicon_local_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[33]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[34]},
 			},
 			{
 				Name:    "trust_center_setting_hero_image_local_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[34]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[35]},
 			},
 			{
 				Name:    "trust_center_setting_nda_approver_group_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[35]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[36]},
 			},
 			{
 				Name:    "trustcentersetting_trust_center_id_environment",

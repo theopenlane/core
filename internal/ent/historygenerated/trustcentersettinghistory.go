@@ -97,7 +97,9 @@ type TrustCenterSettingHistory struct {
 	NdaApproverGroupID *string `json:"nda_approver_group_id,omitempty"`
 	// URL to the company's status page
 	StatusPageURL *string `json:"status_page_url,omitempty"`
-	selectValues  sql.SelectValues
+	// allow trustcenter to be indexed on google
+	NoindexDefaultDomain bool `json:"noindex_default_domain,omitempty"`
+	selectValues         sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -107,7 +109,7 @@ func (*TrustCenterSettingHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcentersettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcentersettinghistory.FieldRemoveBranding, trustcentersettinghistory.FieldNdaApprovalRequired, trustcentersettinghistory.FieldAllowSubscribers, trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange:
+		case trustcentersettinghistory.FieldRemoveBranding, trustcentersettinghistory.FieldNdaApprovalRequired, trustcentersettinghistory.FieldAllowSubscribers, trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange, trustcentersettinghistory.FieldNoindexDefaultDomain:
 			values[i] = new(sql.NullBool)
 		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldUpdatedByImpersonator, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldCompanyName, trustcentersettinghistory.FieldCompanyDescription, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldHeroImageLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor, trustcentersettinghistory.FieldEnvironment, trustcentersettinghistory.FieldCompanyDomain, trustcentersettinghistory.FieldSecurityContact, trustcentersettinghistory.FieldNdaApproverGroupID, trustcentersettinghistory.FieldStatusPageURL:
 			values[i] = new(sql.NullString)
@@ -373,6 +375,12 @@ func (_m *TrustCenterSettingHistory) assignValues(columns []string, values []any
 				_m.StatusPageURL = new(string)
 				*_m.StatusPageURL = value.String
 			}
+		case trustcentersettinghistory.FieldNoindexDefaultDomain:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field noindex_default_domain", values[i])
+			} else if value.Valid {
+				_m.NoindexDefaultDomain = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -544,6 +552,9 @@ func (_m *TrustCenterSettingHistory) String() string {
 		builder.WriteString("status_page_url=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("noindex_default_domain=")
+	builder.WriteString(fmt.Sprintf("%v", _m.NoindexDefaultDomain))
 	builder.WriteByte(')')
 	return builder.String()
 }

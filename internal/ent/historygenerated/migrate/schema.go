@@ -2604,7 +2604,6 @@ var (
 		{Name: "pirsch_access_link", Type: field.TypeString, Nullable: true},
 		{Name: "preview_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PROVISIONING", "READY", "FAILED", "DEPROVISIONING", "NONE"}, Default: "NONE"},
 		{Name: "subprocessor_url", Type: field.TypeString, Nullable: true},
-		{Name: "noindex_default_domain", Type: field.TypeBool, Nullable: true, Default: true},
 	}
 	// TrustCenterHistoryTable holds the schema information for the "trust_center_history" table.
 	TrustCenterHistoryTable = &schema.Table{
@@ -2701,6 +2700,7 @@ var (
 		{Name: "subprocessors_notified_at", Type: field.TypeTime, Nullable: true},
 		{Name: "nda_approver_group_id", Type: field.TypeString, Nullable: true},
 		{Name: "status_page_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "noindex_default_domain", Type: field.TypeBool, Nullable: true, Default: true},
 	}
 	// TrustCenterSettingHistoryTable holds the schema information for the "trust_center_setting_history" table.
 	TrustCenterSettingHistoryTable = &schema.Table{

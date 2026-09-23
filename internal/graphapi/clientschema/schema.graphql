@@ -17488,10 +17488,6 @@ input CreateTrustCenterInput {
 	External URL for the trust center subprocessors
 	"""
 	subprocessorURL: String
-	"""
-	allow trustcenter to be indexed on google
-	"""
-	noindexDefaultDomain: Boolean
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -17734,6 +17730,10 @@ input CreateTrustCenterSettingInput {
 	URL to the company's status page
 	"""
 	statusPageURL: String
+	"""
+	allow trustcenter to be indexed on google
+	"""
+	noindexDefaultDomain: Boolean
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	logoFileID: ID
@@ -81668,10 +81668,6 @@ type TrustCenter implements Node @modules(names: ["trust_center_module"]) {
 	External URL for the trust center subprocessors
 	"""
 	subprocessorURL: String
-	"""
-	allow trustcenter to be indexed on google
-	"""
-	noindexDefaultDomain: Boolean
 	owner: Organization
 	blockedGroups(
 		"""
@@ -84468,6 +84464,10 @@ type TrustCenterSetting implements Node @modules(names: ["trust_center_module"])
 	URL to the company's status page
 	"""
 	statusPageURL: String
+	"""
+	allow trustcenter to be indexed on google
+	"""
+	noindexDefaultDomain: Boolean
 	blockedGroups(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -85064,6 +85064,13 @@ input TrustCenterSettingWhereInput {
 	statusPageURLNotNil: Boolean
 	statusPageURLEqualFold: String
 	statusPageURLContainsFold: String
+	"""
+	noindex_default_domain field predicates
+	"""
+	noindexDefaultDomain: Boolean
+	noindexDefaultDomainNEQ: Boolean
+	noindexDefaultDomainIsNil: Boolean
+	noindexDefaultDomainNotNil: Boolean
 	"""
 	blocked_groups edge predicates
 	"""
@@ -86150,13 +86157,6 @@ input TrustCenterWhereInput {
 	subprocessorURLNotNil: Boolean
 	subprocessorURLEqualFold: String
 	subprocessorURLContainsFold: String
-	"""
-	noindex_default_domain field predicates
-	"""
-	noindexDefaultDomain: Boolean
-	noindexDefaultDomainNEQ: Boolean
-	noindexDefaultDomainIsNil: Boolean
-	noindexDefaultDomainNotNil: Boolean
 	"""
 	owner edge predicates
 	"""
@@ -93785,11 +93785,6 @@ input UpdateTrustCenterInput {
 	"""
 	subprocessorURL: String
 	clearSubprocessorURL: Boolean
-	"""
-	allow trustcenter to be indexed on google
-	"""
-	noindexDefaultDomain: Boolean
-	clearNoindexDefaultDomain: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]
@@ -94030,6 +94025,11 @@ input UpdateTrustCenterSettingInput {
 	"""
 	statusPageURL: String
 	clearStatusPageURL: Boolean
+	"""
+	allow trustcenter to be indexed on google
+	"""
+	noindexDefaultDomain: Boolean
+	clearNoindexDefaultDomain: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean

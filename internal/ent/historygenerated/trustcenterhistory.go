@@ -62,9 +62,7 @@ type TrustCenterHistory struct {
 	PreviewStatus enums.TrustCenterPreviewStatus `json:"preview_status,omitempty"`
 	// External URL for the trust center subprocessors
 	SubprocessorURL string `json:"subprocessor_url,omitempty"`
-	// allow trustcenter to be indexed on google
-	NoindexDefaultDomain bool `json:"noindex_default_domain,omitempty"`
-	selectValues         sql.SelectValues
+	selectValues    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -76,8 +74,6 @@ func (*TrustCenterHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case trustcenterhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcenterhistory.FieldNoindexDefaultDomain:
-			values[i] = new(sql.NullBool)
 		case trustcenterhistory.FieldID, trustcenterhistory.FieldRef, trustcenterhistory.FieldCreatedBy, trustcenterhistory.FieldUpdatedBy, trustcenterhistory.FieldUpdatedByImpersonator, trustcenterhistory.FieldDeletedBy, trustcenterhistory.FieldOwnerID, trustcenterhistory.FieldSlug, trustcenterhistory.FieldCustomDomainID, trustcenterhistory.FieldPreviewDomainID, trustcenterhistory.FieldPirschDomainID, trustcenterhistory.FieldPirschIdentificationCode, trustcenterhistory.FieldPirschAccessLink, trustcenterhistory.FieldPreviewStatus, trustcenterhistory.FieldSubprocessorURL:
 			values[i] = new(sql.NullString)
 		case trustcenterhistory.FieldHistoryTime, trustcenterhistory.FieldCreatedAt, trustcenterhistory.FieldUpdatedAt, trustcenterhistory.FieldDeletedAt:
@@ -227,12 +223,6 @@ func (_m *TrustCenterHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.SubprocessorURL = value.String
 			}
-		case trustcenterhistory.FieldNoindexDefaultDomain:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field noindex_default_domain", values[i])
-			} else if value.Valid {
-				_m.NoindexDefaultDomain = value.Bool
-			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -332,9 +322,6 @@ func (_m *TrustCenterHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("subprocessor_url=")
 	builder.WriteString(_m.SubprocessorURL)
-	builder.WriteString(", ")
-	builder.WriteString("noindex_default_domain=")
-	builder.WriteString(fmt.Sprintf("%v", _m.NoindexDefaultDomain))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -7381,10 +7381,6 @@ func init() {
 	trustcenterDescSubprocessorURL := trustcenterFields[7].Descriptor()
 	// trustcenter.SubprocessorURLValidator is a validator for the "subprocessor_url" field. It is called by the builders before save.
 	trustcenter.SubprocessorURLValidator = trustcenterDescSubprocessorURL.Validators[0].(func(string) error)
-	// trustcenterDescNoindexDefaultDomain is the schema descriptor for noindex_default_domain field.
-	trustcenterDescNoindexDefaultDomain := trustcenterFields[8].Descriptor()
-	// trustcenter.DefaultNoindexDefaultDomain holds the default value on creation for the noindex_default_domain field.
-	trustcenter.DefaultNoindexDefaultDomain = trustcenterDescNoindexDefaultDomain.Default.(bool)
 	// trustcenterDescID is the schema descriptor for id field.
 	trustcenterDescID := trustcenterMixinFields4[0].Descriptor()
 	// trustcenter.DefaultID holds the default value on creation for the id field.
@@ -7978,6 +7974,10 @@ func init() {
 			return nil
 		}
 	}()
+	// trustcentersettingDescNoindexDefaultDomain is the schema descriptor for noindex_default_domain field.
+	trustcentersettingDescNoindexDefaultDomain := trustcentersettingFields[28].Descriptor()
+	// trustcentersetting.DefaultNoindexDefaultDomain holds the default value on creation for the noindex_default_domain field.
+	trustcentersetting.DefaultNoindexDefaultDomain = trustcentersettingDescNoindexDefaultDomain.Default.(bool)
 	// trustcentersettingDescID is the schema descriptor for id field.
 	trustcentersettingDescID := trustcentersettingMixinFields4[0].Descriptor()
 	// trustcentersetting.DefaultID holds the default value on creation for the id field.

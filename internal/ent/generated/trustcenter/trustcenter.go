@@ -52,8 +52,6 @@ const (
 	FieldPreviewStatus = "preview_status"
 	// FieldSubprocessorURL holds the string denoting the subprocessor_url field in the database.
 	FieldSubprocessorURL = "subprocessor_url"
-	// FieldNoindexDefaultDomain holds the string denoting the noindex_default_domain field in the database.
-	FieldNoindexDefaultDomain = "noindex_default_domain"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -249,7 +247,6 @@ var Columns = []string{
 	FieldPirschAccessLink,
 	FieldPreviewStatus,
 	FieldSubprocessorURL,
-	FieldNoindexDefaultDomain,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "trust_centers"
@@ -298,8 +295,6 @@ var (
 	PirschAccessLinkValidator func(string) error
 	// SubprocessorURLValidator is a validator for the "subprocessor_url" field. It is called by the builders before save.
 	SubprocessorURLValidator func(string) error
-	// DefaultNoindexDefaultDomain holds the default value on creation for the "noindex_default_domain" field.
-	DefaultNoindexDefaultDomain bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -402,11 +397,6 @@ func ByPreviewStatus(opts ...sql.OrderTermOption) OrderOption {
 // BySubprocessorURL orders the results by the subprocessor_url field.
 func BySubprocessorURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSubprocessorURL, opts...).ToFunc()
-}
-
-// ByNoindexDefaultDomain orders the results by the noindex_default_domain field.
-func ByNoindexDefaultDomain(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNoindexDefaultDomain, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

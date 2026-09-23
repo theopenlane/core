@@ -178,6 +178,9 @@ func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.StatusPageURLCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString)
 	}
+	if _u.mutation.NoindexDefaultDomainCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldNoindexDefaultDomain, field.TypeBool)
+	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcentersettinghistory.Label}
@@ -376,6 +379,9 @@ func (_u *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.StatusPageURLCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString)
+	}
+	if _u.mutation.NoindexDefaultDomainCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldNoindexDefaultDomain, field.TypeBool)
 	}
 	_node = &TrustCenterSettingHistory{config: _u.config}
 	_spec.Assign = _node.assignValues

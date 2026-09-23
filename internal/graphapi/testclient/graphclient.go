@@ -129973,7 +129973,6 @@ type CreateTrustCenter_CreateTrustCenter_TrustCenter struct {
 	CustomDomain             *CreateTrustCenter_CreateTrustCenter_TrustCenter_CustomDomain    "json:\"customDomain,omitempty\" graphql:\"customDomain\""
 	CustomDomainID           *string                                                          "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
 	ID                       string                                                           "json:\"id\" graphql:\"id\""
-	NoindexDefaultDomain     *bool                                                            "json:\"noindexDefaultDomain,omitempty\" graphql:\"noindexDefaultDomain\""
 	OwnerID                  *string                                                          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PirschAccessLink         *string                                                          "json:\"pirschAccessLink,omitempty\" graphql:\"pirschAccessLink\""
 	PirschDomainID           *string                                                          "json:\"pirschDomainID,omitempty\" graphql:\"pirschDomainID\""
@@ -130021,12 +130020,6 @@ func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetID() string {
 		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter{}
 	}
 	return t.ID
-}
-func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetNoindexDefaultDomain() *bool {
-	if t == nil {
-		t = &CreateTrustCenter_CreateTrustCenter_TrustCenter{}
-	}
-	return t.NoindexDefaultDomain
 }
 func (t *CreateTrustCenter_CreateTrustCenter_TrustCenter) GetOwnerID() *string {
 	if t == nil {
@@ -131022,7 +131015,6 @@ type GetTrustCenterByID_TrustCenter struct {
 	CustomDomain             *GetTrustCenterByID_TrustCenter_CustomDomain            "json:\"customDomain,omitempty\" graphql:\"customDomain\""
 	CustomDomainID           *string                                                 "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
 	ID                       string                                                  "json:\"id\" graphql:\"id\""
-	NoindexDefaultDomain     *bool                                                   "json:\"noindexDefaultDomain,omitempty\" graphql:\"noindexDefaultDomain\""
 	OwnerID                  *string                                                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PirschAccessLink         *string                                                 "json:\"pirschAccessLink,omitempty\" graphql:\"pirschAccessLink\""
 	PirschDomainID           *string                                                 "json:\"pirschDomainID,omitempty\" graphql:\"pirschDomainID\""
@@ -131070,12 +131062,6 @@ func (t *GetTrustCenterByID_TrustCenter) GetID() string {
 		t = &GetTrustCenterByID_TrustCenter{}
 	}
 	return t.ID
-}
-func (t *GetTrustCenterByID_TrustCenter) GetNoindexDefaultDomain() *bool {
-	if t == nil {
-		t = &GetTrustCenterByID_TrustCenter{}
-	}
-	return t.NoindexDefaultDomain
 }
 func (t *GetTrustCenterByID_TrustCenter) GetOwnerID() *string {
 	if t == nil {
@@ -132689,7 +132675,6 @@ type UpdateTrustCenter_UpdateTrustCenter_TrustCenter struct {
 	CustomDomain             *UpdateTrustCenter_UpdateTrustCenter_TrustCenter_CustomDomain "json:\"customDomain,omitempty\" graphql:\"customDomain\""
 	CustomDomainID           *string                                                       "json:\"customDomainID,omitempty\" graphql:\"customDomainID\""
 	ID                       string                                                        "json:\"id\" graphql:\"id\""
-	NoindexDefaultDomain     *bool                                                         "json:\"noindexDefaultDomain,omitempty\" graphql:\"noindexDefaultDomain\""
 	OwnerID                  *string                                                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PirschAccessLink         *string                                                       "json:\"pirschAccessLink,omitempty\" graphql:\"pirschAccessLink\""
 	PirschDomainID           *string                                                       "json:\"pirschDomainID,omitempty\" graphql:\"pirschDomainID\""
@@ -132735,12 +132720,6 @@ func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetID() string {
 		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter{}
 	}
 	return t.ID
-}
-func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetNoindexDefaultDomain() *bool {
-	if t == nil {
-		t = &UpdateTrustCenter_UpdateTrustCenter_TrustCenter{}
-	}
-	return t.NoindexDefaultDomain
 }
 func (t *UpdateTrustCenter_UpdateTrustCenter_TrustCenter) GetOwnerID() *string {
 	if t == nil {
@@ -139440,6 +139419,7 @@ type GetTrustCenterSettingByID_TrustCenterSetting struct {
 	LogoRemoteURL                         *string                                                     "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
 	NdaApprovalRequired                   *bool                                                       "json:\"ndaApprovalRequired,omitempty\" graphql:\"ndaApprovalRequired\""
 	NdaApproverGroupID                    *string                                                     "json:\"ndaApproverGroupID,omitempty\" graphql:\"ndaApproverGroupID\""
+	NoindexDefaultDomain                  *bool                                                       "json:\"noindexDefaultDomain,omitempty\" graphql:\"noindexDefaultDomain\""
 	NotifySubscribersOnSubprocessorChange *bool                                                       "json:\"notifySubscribersOnSubprocessorChange,omitempty\" graphql:\"notifySubscribersOnSubprocessorChange\""
 	Overview                              *string                                                     "json:\"overview,omitempty\" graphql:\"overview\""
 	PrimaryColor                          *string                                                     "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
@@ -139588,6 +139568,12 @@ func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetNdaApproverGroupID() *
 		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
 	}
 	return t.NdaApproverGroupID
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetNoindexDefaultDomain() *bool {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.NoindexDefaultDomain
 }
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetNotifySubscribersOnSubprocessorChange() *bool {
 	if t == nil {
@@ -205632,7 +205618,6 @@ const CreateTrustCenterDocument = `mutation CreateTrustCenter ($input: CreateTru
 			createdBy
 			customDomainID
 			id
-			noindexDefaultDomain
 			ownerID
 			pirschAccessLink
 			pirschDomainID
@@ -205856,7 +205841,6 @@ const GetTrustCenterByIDDocument = `query GetTrustCenterByID ($trustCenterId: ID
 		createdBy
 		customDomainID
 		id
-		noindexDefaultDomain
 		ownerID
 		pirschAccessLink
 		pirschDomainID
@@ -206214,7 +206198,6 @@ const UpdateTrustCenterDocument = `mutation UpdateTrustCenter ($updateTrustCente
 			createdBy
 			customDomainID
 			id
-			noindexDefaultDomain
 			ownerID
 			pirschAccessLink
 			pirschDomainID
@@ -208459,6 +208442,7 @@ const GetTrustCenterSettingByIDDocument = `query GetTrustCenterSettingByID ($tru
 		logoRemoteURL
 		ndaApprovalRequired
 		ndaApproverGroupID
+		noindexDefaultDomain
 		notifySubscribersOnSubprocessorChange
 		overview
 		primaryColor

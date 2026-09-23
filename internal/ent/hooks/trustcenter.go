@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -51,10 +52,6 @@ func HookTrustCenter() ent.Hook {
 			}
 
 			m.SetSlug(strcase.KebabCase(org.Name))
-
-			if id, ok := m.CustomDomainID(); ok && id != "" {
-				m.SetNoindexDefaultDomain(true)
-			}
 
 			retVal, err := next.Mutate(ctx, m)
 			if err != nil {
@@ -355,10 +352,6 @@ func HookTrustCenterUpdate() ent.Hook {
 			customDomainCleared := m.CustomDomainIDCleared()
 			mutationCustomDomainID, mutationCustomDomainIDExists := m.CustomDomainID()
 
-			if mutationCustomDomainIDExists && mutationCustomDomainID != "" {
-				m.SetNoindexDefaultDomain(true)
-			}
-
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
 				return v, err
@@ -379,6 +372,18 @@ func HookTrustCenterUpdate() ent.Hook {
 				}
 
 				return v, nil
+			}
+
+			if mutationCustomDomainIDExists && mutationCustomDomainID != "" {
+				err := m.Client().TrustCenterSetting.Update().
+					Where(
+						trustcentersetting.TrustCenterID(tcID),
+					).
+					SetNoindexDefaultDomain(true).
+					Exec(ctx)
+				if err != nil {
+					return nil, err
+				}
 			}
 
 			if mutationCustomDomainIDExists && previousCustomDomainID == nil && mutationCustomDomainID != "" {

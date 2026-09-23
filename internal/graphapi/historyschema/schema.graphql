@@ -29447,10 +29447,6 @@ type TrustCenterHistory implements Node {
 	External URL for the trust center subprocessors
 	"""
 	subprocessorURL: String
-	"""
-	allow trustcenter to be indexed on google
-	"""
-	noindexDefaultDomain: Boolean
 }
 """
 A connection to a list of items.
@@ -29750,13 +29746,6 @@ input TrustCenterHistoryWhereInput {
 	subprocessorURLNotNil: Boolean
 	subprocessorURLEqualFold: String
 	subprocessorURLContainsFold: String
-	"""
-	noindex_default_domain field predicates
-	"""
-	noindexDefaultDomain: Boolean
-	noindexDefaultDomainNEQ: Boolean
-	noindexDefaultDomainIsNil: Boolean
-	noindexDefaultDomainNotNil: Boolean
 }
 type TrustCenterNDARequestHistory implements Node {
 	id: ID!
@@ -30296,6 +30285,10 @@ type TrustCenterSettingHistory implements Node {
 	URL to the company's status page
 	"""
 	statusPageURL: String
+	"""
+	allow trustcenter to be indexed on google
+	"""
+	noindexDefaultDomain: Boolean
 }
 """
 A connection to a list of items.
@@ -30828,6 +30821,13 @@ input TrustCenterSettingHistoryWhereInput {
 	statusPageURLNotNil: Boolean
 	statusPageURLEqualFold: String
 	statusPageURLContainsFold: String
+	"""
+	noindex_default_domain field predicates
+	"""
+	noindexDefaultDomain: Boolean
+	noindexDefaultDomainNEQ: Boolean
+	noindexDefaultDomainIsNil: Boolean
+	noindexDefaultDomainNotNil: Boolean
 }
 type TrustCenterSubprocessorHistory implements Node {
 	id: ID!

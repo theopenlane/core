@@ -12445,11 +12445,6 @@ func (_q *TrustCenterHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, trustcenterhistory.FieldSubprocessorURL)
 				fieldSeen[trustcenterhistory.FieldSubprocessorURL] = struct{}{}
 			}
-		case "noindexDefaultDomain":
-			if _, ok := fieldSeen[trustcenterhistory.FieldNoindexDefaultDomain]; !ok {
-				selectedFields = append(selectedFields, trustcenterhistory.FieldNoindexDefaultDomain)
-				fieldSeen[trustcenterhistory.FieldNoindexDefaultDomain] = struct{}{}
-			}
 		case "id":
 		case "__typename":
 		default:
@@ -12907,6 +12902,11 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldStatusPageURL]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldStatusPageURL)
 				fieldSeen[trustcentersettinghistory.FieldStatusPageURL] = struct{}{}
+			}
+		case "noindexDefaultDomain":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldNoindexDefaultDomain]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldNoindexDefaultDomain)
+				fieldSeen[trustcentersettinghistory.FieldNoindexDefaultDomain] = struct{}{}
 			}
 		case "id":
 		case "__typename":
