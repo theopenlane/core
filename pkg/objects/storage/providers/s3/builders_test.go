@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/common/storagetypes"
@@ -62,6 +64,20 @@ func TestS3BuilderBuild(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestNewS3ProviderWithAWSConfigCredentials(t *testing.T) {
+	cfg := aws.Config{
+		Region:      "us-east-1",
+		Credentials: credentials.NewStaticCredentialsProvider("k", "s", ""),
+	}
+
+	provider, err := s3provider.NewS3Provider(
+		storage.NewProviderOptions(storage.WithBucket("bucket"), storage.WithRegion("us-east-1")),
+		s3provider.WithAWSConfig(cfg),
+	)
+	assert.NoError(t, err)
+	assert.NotNil(t, provider)
 }
 
 func TestS3BuilderProviderType(t *testing.T) {

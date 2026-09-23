@@ -21,6 +21,8 @@ type Provider interface {
 	GetPresignedURL(ctx context.Context, file *File, opts *PresignedURLOptions) (string, error)
 	// Exists checks if a file exists in the storage provider
 	Exists(ctx context.Context, file *File) (bool, error)
+	// ListObjects returns the object keys under prefix, at most limit when limit is positive
+	ListObjects(ctx context.Context, prefix string, limit int) ([]string, error)
 	// GetScheme returns the URL scheme for this provider
 	GetScheme() *string
 	// ListBuckets is used to list the buckets in the storage backend
@@ -42,6 +44,8 @@ const (
 	DiskProvider ProviderType = "disk"
 	// DatabaseProvider is the type for database storage
 	DatabaseProvider ProviderType = "database"
+	// GCSProvider is the type for Google Cloud Storage
+	GCSProvider ProviderType = "gcs"
 )
 
 // String returns the string version of the provider type

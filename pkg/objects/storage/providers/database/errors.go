@@ -13,4 +13,6 @@ var (
 	ErrFileNotFound = errors.New("file not found in database storage")
 	// ErrDatabaseProviderRequiresProxyPresign indicates that the database storage provider requires proxy presigning to be enabled.
 	ErrDatabaseProviderRequiresProxyPresign = errors.New("database storage provider requires proxy presign to be enabled")
+	// ErrListObjectsUnsupported indicates the database provider cannot enumerate stored objects
+	ErrListObjectsUnsupported = errors.New("database storage provider does not support listing objects")
 )
