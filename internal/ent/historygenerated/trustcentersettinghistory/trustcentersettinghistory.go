@@ -96,6 +96,8 @@ const (
 	FieldNdaApproverGroupID = "nda_approver_group_id"
 	// FieldStatusPageURL holds the string denoting the status_page_url field in the database.
 	FieldStatusPageURL = "status_page_url"
+	// FieldNoindexDefaultDomain holds the string denoting the noindex_default_domain field in the database.
+	FieldNoindexDefaultDomain = "noindex_default_domain"
 	// Table holds the table name of the trustcentersettinghistory in the database.
 	Table = "trust_center_setting_history"
 )
@@ -141,6 +143,7 @@ var Columns = []string{
 	FieldSubprocessorsNotifiedAt,
 	FieldNdaApproverGroupID,
 	FieldStatusPageURL,
+	FieldNoindexDefaultDomain,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -176,6 +179,8 @@ var (
 	DefaultAllowSubscribers bool
 	// DefaultNotifySubscribersOnSubprocessorChange holds the default value on creation for the "notify_subscribers_on_subprocessor_change" field.
 	DefaultNotifySubscribersOnSubprocessorChange bool
+	// DefaultNoindexDefaultDomain holds the default value on creation for the "noindex_default_domain" field.
+	DefaultNoindexDefaultDomain bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -410,6 +415,11 @@ func ByNdaApproverGroupID(opts ...sql.OrderTermOption) OrderOption {
 // ByStatusPageURL orders the results by the status_page_url field.
 func ByStatusPageURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatusPageURL, opts...).ToFunc()
+}
+
+// ByNoindexDefaultDomain orders the results by the noindex_default_domain field.
+func ByNoindexDefaultDomain(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNoindexDefaultDomain, opts...).ToFunc()
 }
 
 var (

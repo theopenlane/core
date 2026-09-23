@@ -3341,6 +3341,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldSubprocessorsNotifiedAt:               {Type: field.TypeTime, Column: trustcentersetting.FieldSubprocessorsNotifiedAt},
 			trustcentersetting.FieldNdaApproverGroupID:                    {Type: field.TypeString, Column: trustcentersetting.FieldNdaApproverGroupID},
 			trustcentersetting.FieldStatusPageURL:                         {Type: field.TypeString, Column: trustcentersetting.FieldStatusPageURL},
+			trustcentersetting.FieldNoindexDefaultDomain:                  {Type: field.TypeBool, Column: trustcentersetting.FieldNoindexDefaultDomain},
 		},
 	}
 	graph.Nodes[84] = &sqlgraph.Node{
@@ -48577,6 +48578,11 @@ func (f *TrustCenterSettingFilter) WhereNdaApproverGroupID(p entql.StringP) {
 // WhereStatusPageURL applies the entql string predicate on the status_page_url field.
 func (f *TrustCenterSettingFilter) WhereStatusPageURL(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldStatusPageURL))
+}
+
+// WhereNoindexDefaultDomain applies the entql bool predicate on the noindex_default_domain field.
+func (f *TrustCenterSettingFilter) WhereNoindexDefaultDomain(p entql.BoolP) {
+	f.Where(p.Field(trustcentersetting.FieldNoindexDefaultDomain))
 }
 
 // WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.

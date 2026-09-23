@@ -7063,6 +7063,7 @@ type ComplexityRoot struct {
 		NdaApprovalRequired                   func(childComplexity int) int
 		NdaApproverGroup                      func(childComplexity int) int
 		NdaApproverGroupID                    func(childComplexity int) int
+		NoindexDefaultDomain                  func(childComplexity int) int
 		NotifySubscribersOnSubprocessorChange func(childComplexity int) int
 		Overview                              func(childComplexity int) int
 		PrimaryColor                          func(childComplexity int) int
@@ -46841,6 +46842,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSetting.NdaApproverGroupID(childComplexity), true
+	case "TrustCenterSetting.noindexDefaultDomain":
+		if e.ComplexityRoot.TrustCenterSetting.NoindexDefaultDomain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSetting.NoindexDefaultDomain(childComplexity), true
 	case "TrustCenterSetting.notifySubscribersOnSubprocessorChange":
 		if e.ComplexityRoot.TrustCenterSetting.NotifySubscribersOnSubprocessorChange == nil {
 			break
@@ -72541,6 +72548,10 @@ input CreateTrustCenterSettingInput {
   URL to the company's status page
   """
   statusPageURL: String
+  """
+  allow trustcenter to be indexed on google
+  """
+  noindexDefaultDomain: Boolean
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   logoFileID: ID
@@ -126298,6 +126309,10 @@ type TrustCenterSetting implements Node @modules(names: ["trust_center_module"])
   URL to the company's status page
   """
   statusPageURL: String
+  """
+  allow trustcenter to be indexed on google
+  """
+  noindexDefaultDomain: Boolean
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -126858,6 +126873,13 @@ input TrustCenterSettingWhereInput {
   statusPageURLNotNil: Boolean
   statusPageURLEqualFold: String
   statusPageURLContainsFold: String
+  """
+  noindex_default_domain field predicates
+  """
+  noindexDefaultDomain: Boolean
+  noindexDefaultDomainNEQ: Boolean
+  noindexDefaultDomainIsNil: Boolean
+  noindexDefaultDomainNotNil: Boolean
   """
   blocked_groups edge predicates
   """
@@ -135616,6 +135638,11 @@ input UpdateTrustCenterSettingInput {
   """
   statusPageURL: String
   clearStatusPageURL: Boolean
+  """
+  allow trustcenter to be indexed on google
+  """
+  noindexDefaultDomain: Boolean
+  clearNoindexDefaultDomain: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -168627,6 +168654,8 @@ func (ec *executionContext) childFields_TrustCenterSetting(ctx context.Context, 
 		return ec.fieldContext_TrustCenterSetting_ndaApproverGroupID(ctx, field)
 	case "statusPageURL":
 		return ec.fieldContext_TrustCenterSetting_statusPageURL(ctx, field)
+	case "noindexDefaultDomain":
+		return ec.fieldContext_TrustCenterSetting_noindexDefaultDomain(ctx, field)
 	case "blockedGroups":
 		return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 	case "editors":

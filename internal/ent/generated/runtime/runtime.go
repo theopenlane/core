@@ -7974,6 +7974,10 @@ func init() {
 			return nil
 		}
 	}()
+	// trustcentersettingDescNoindexDefaultDomain is the schema descriptor for noindex_default_domain field.
+	trustcentersettingDescNoindexDefaultDomain := trustcentersettingFields[28].Descriptor()
+	// trustcentersetting.DefaultNoindexDefaultDomain holds the default value on creation for the noindex_default_domain field.
+	trustcentersetting.DefaultNoindexDefaultDomain = trustcentersettingDescNoindexDefaultDomain.Default.(bool)
 	// trustcentersettingDescID is the schema descriptor for id field.
 	trustcentersettingDescID := trustcentersettingMixinFields4[0].Descriptor()
 	// trustcentersetting.DefaultID holds the default value on creation for the id field.

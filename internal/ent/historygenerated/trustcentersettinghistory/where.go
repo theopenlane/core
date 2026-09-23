@@ -243,6 +243,11 @@ func StatusPageURL(v string) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldStatusPageURL, v))
 }
 
+// NoindexDefaultDomain applies equality check predicate on the "noindex_default_domain" field. It's identical to NoindexDefaultDomainEQ.
+func NoindexDefaultDomain(v bool) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldNoindexDefaultDomain, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -2611,6 +2616,26 @@ func StatusPageURLEqualFold(v string) predicate.TrustCenterSettingHistory {
 // StatusPageURLContainsFold applies the ContainsFold predicate on the "status_page_url" field.
 func StatusPageURLContainsFold(v string) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldContainsFold(FieldStatusPageURL, v))
+}
+
+// NoindexDefaultDomainEQ applies the EQ predicate on the "noindex_default_domain" field.
+func NoindexDefaultDomainEQ(v bool) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldNoindexDefaultDomain, v))
+}
+
+// NoindexDefaultDomainNEQ applies the NEQ predicate on the "noindex_default_domain" field.
+func NoindexDefaultDomainNEQ(v bool) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNEQ(FieldNoindexDefaultDomain, v))
+}
+
+// NoindexDefaultDomainIsNil applies the IsNil predicate on the "noindex_default_domain" field.
+func NoindexDefaultDomainIsNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIsNull(FieldNoindexDefaultDomain))
+}
+
+// NoindexDefaultDomainNotNil applies the NotNil predicate on the "noindex_default_domain" field.
+func NoindexDefaultDomainNotNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotNull(FieldNoindexDefaultDomain))
 }
 
 // And groups predicates with the AND operator between them.

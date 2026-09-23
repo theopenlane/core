@@ -2700,6 +2700,7 @@ var (
 		{Name: "subprocessors_notified_at", Type: field.TypeTime, Nullable: true},
 		{Name: "nda_approver_group_id", Type: field.TypeString, Nullable: true},
 		{Name: "status_page_url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "noindex_default_domain", Type: field.TypeBool, Nullable: true, Default: true},
 	}
 	// TrustCenterSettingHistoryTable holds the schema information for the "trust_center_setting_history" table.
 	TrustCenterSettingHistoryTable = &schema.Table{

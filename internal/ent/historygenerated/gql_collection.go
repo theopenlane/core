@@ -12903,6 +12903,11 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldStatusPageURL)
 				fieldSeen[trustcentersettinghistory.FieldStatusPageURL] = struct{}{}
 			}
+		case "noindexDefaultDomain":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldNoindexDefaultDomain]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldNoindexDefaultDomain)
+				fieldSeen[trustcentersettinghistory.FieldNoindexDefaultDomain] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

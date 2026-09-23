@@ -88,6 +88,8 @@ const (
 	FieldNdaApproverGroupID = "nda_approver_group_id"
 	// FieldStatusPageURL holds the string denoting the status_page_url field in the database.
 	FieldStatusPageURL = "status_page_url"
+	// FieldNoindexDefaultDomain holds the string denoting the noindex_default_domain field in the database.
+	FieldNoindexDefaultDomain = "noindex_default_domain"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
@@ -184,6 +186,7 @@ var Columns = []string{
 	FieldSubprocessorsNotifiedAt,
 	FieldNdaApproverGroupID,
 	FieldStatusPageURL,
+	FieldNoindexDefaultDomain,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -249,6 +252,8 @@ var (
 	DefaultNotifySubscribersOnSubprocessorChange bool
 	// StatusPageURLValidator is a validator for the "status_page_url" field. It is called by the builders before save.
 	StatusPageURLValidator func(string) error
+	// DefaultNoindexDefaultDomain holds the default value on creation for the "noindex_default_domain" field.
+	DefaultNoindexDefaultDomain bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -458,6 +463,11 @@ func ByNdaApproverGroupID(opts ...sql.OrderTermOption) OrderOption {
 // ByStatusPageURL orders the results by the status_page_url field.
 func ByStatusPageURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatusPageURL, opts...).ToFunc()
+}
+
+// ByNoindexDefaultDomain orders the results by the noindex_default_domain field.
+func ByNoindexDefaultDomain(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNoindexDefaultDomain, opts...).ToFunc()
 }
 
 // ByBlockedGroupsCount orders the results by blocked_groups count.

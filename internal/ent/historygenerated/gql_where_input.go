@@ -62406,6 +62406,12 @@ type TrustCenterSettingHistoryWhereInput struct {
 	StatusPageURLNotNil       bool     `json:"statusPageURLNotNil,omitempty"`
 	StatusPageURLEqualFold    *string  `json:"statusPageURLEqualFold,omitempty"`
 	StatusPageURLContainsFold *string  `json:"statusPageURLContainsFold,omitempty"`
+
+	// "noindex_default_domain" field predicates.
+	NoindexDefaultDomain       *bool `json:"noindexDefaultDomain,omitempty"`
+	NoindexDefaultDomainNEQ    *bool `json:"noindexDefaultDomainNEQ,omitempty"`
+	NoindexDefaultDomainIsNil  bool  `json:"noindexDefaultDomainIsNil,omitempty"`
+	NoindexDefaultDomainNotNil bool  `json:"noindexDefaultDomainNotNil,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -63495,6 +63501,18 @@ func (i *TrustCenterSettingHistoryWhereInput) P() (predicate.TrustCenterSettingH
 	}
 	if i.StatusPageURLContainsFold != nil {
 		predicates = append(predicates, trustcentersettinghistory.StatusPageURLContainsFold(*i.StatusPageURLContainsFold))
+	}
+	if i.NoindexDefaultDomain != nil {
+		predicates = append(predicates, trustcentersettinghistory.NoindexDefaultDomainEQ(*i.NoindexDefaultDomain))
+	}
+	if i.NoindexDefaultDomainNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.NoindexDefaultDomainNEQ(*i.NoindexDefaultDomainNEQ))
+	}
+	if i.NoindexDefaultDomainIsNil {
+		predicates = append(predicates, trustcentersettinghistory.NoindexDefaultDomainIsNil())
+	}
+	if i.NoindexDefaultDomainNotNil {
+		predicates = append(predicates, trustcentersettinghistory.NoindexDefaultDomainNotNil())
 	}
 
 	switch len(predicates) {

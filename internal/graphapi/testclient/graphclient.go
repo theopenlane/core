@@ -139419,6 +139419,7 @@ type GetTrustCenterSettingByID_TrustCenterSetting struct {
 	LogoRemoteURL                         *string                                                     "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
 	NdaApprovalRequired                   *bool                                                       "json:\"ndaApprovalRequired,omitempty\" graphql:\"ndaApprovalRequired\""
 	NdaApproverGroupID                    *string                                                     "json:\"ndaApproverGroupID,omitempty\" graphql:\"ndaApproverGroupID\""
+	NoindexDefaultDomain                  *bool                                                       "json:\"noindexDefaultDomain,omitempty\" graphql:\"noindexDefaultDomain\""
 	NotifySubscribersOnSubprocessorChange *bool                                                       "json:\"notifySubscribersOnSubprocessorChange,omitempty\" graphql:\"notifySubscribersOnSubprocessorChange\""
 	Overview                              *string                                                     "json:\"overview,omitempty\" graphql:\"overview\""
 	PrimaryColor                          *string                                                     "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
@@ -139567,6 +139568,12 @@ func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetNdaApproverGroupID() *
 		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
 	}
 	return t.NdaApproverGroupID
+}
+func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetNoindexDefaultDomain() *bool {
+	if t == nil {
+		t = &GetTrustCenterSettingByID_TrustCenterSetting{}
+	}
+	return t.NoindexDefaultDomain
 }
 func (t *GetTrustCenterSettingByID_TrustCenterSetting) GetNotifySubscribersOnSubprocessorChange() *bool {
 	if t == nil {
@@ -208435,6 +208442,7 @@ const GetTrustCenterSettingByIDDocument = `query GetTrustCenterSettingByID ($tru
 		logoRemoteURL
 		ndaApprovalRequired
 		ndaApproverGroupID
+		noindexDefaultDomain
 		notifySubscribersOnSubprocessorChange
 		overview
 		primaryColor

@@ -7786,6 +7786,7 @@ func init() {
 		{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "nda_approval_required", Label: "NdaApprovalRequired", Type: "bool", Clearable: true},
 		{Name: "nda_approver_group_id", Label: "NdaApproverGroupID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "noindex_default_domain", Label: "NoindexDefaultDomain", Type: "bool", Clearable: true},
 		{Name: "notify_subscribers_on_subprocessor_change", Label: "NotifySubscribersOnSubprocessorChange", Type: "bool", Clearable: true},
 		{Name: "overview", Label: "Overview", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "primary_color", Label: "PrimaryColor", Type: "string", MatchKey: true, Clearable: true},

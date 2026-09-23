@@ -548,6 +548,20 @@ func (_c *TrustCenterSettingHistoryCreate) SetNillableStatusPageURL(v *string) *
 	return _c
 }
 
+// SetNoindexDefaultDomain sets the "noindex_default_domain" field.
+func (_c *TrustCenterSettingHistoryCreate) SetNoindexDefaultDomain(v bool) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetNoindexDefaultDomain(v)
+	return _c
+}
+
+// SetNillableNoindexDefaultDomain sets the "noindex_default_domain" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableNoindexDefaultDomain(v *bool) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetNoindexDefaultDomain(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterSettingHistoryCreate) SetID(v string) *TrustCenterSettingHistoryCreate {
 	_c.mutation.SetID(v)
@@ -643,6 +657,10 @@ func (_c *TrustCenterSettingHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.NotifySubscribersOnSubprocessorChange(); !ok {
 		v := trustcentersettinghistory.DefaultNotifySubscribersOnSubprocessorChange
 		_c.mutation.SetNotifySubscribersOnSubprocessorChange(v)
+	}
+	if _, ok := _c.mutation.NoindexDefaultDomain(); !ok {
+		v := trustcentersettinghistory.DefaultNoindexDefaultDomain
+		_c.mutation.SetNoindexDefaultDomain(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcentersettinghistory.DefaultID == nil {
@@ -863,6 +881,10 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 	if value, ok := _c.mutation.StatusPageURL(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString, value)
 		_node.StatusPageURL = &value
+	}
+	if value, ok := _c.mutation.NoindexDefaultDomain(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldNoindexDefaultDomain, field.TypeBool, value)
+		_node.NoindexDefaultDomain = value
 	}
 	return _node, _spec
 }

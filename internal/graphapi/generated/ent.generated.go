@@ -164916,6 +164916,29 @@ func (ec *executionContext) fieldContext_TrustCenterSetting_statusPageURL(_ cont
 	return graphql.NewScalarFieldContext("TrustCenterSetting", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
+func (ec *executionContext) _TrustCenterSetting_noindexDefaultDomain(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSetting_noindexDefaultDomain(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.NoindexDefaultDomain, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterSetting_noindexDefaultDomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterSetting", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
 func (ec *executionContext) _TrustCenterSetting_blockedGroups(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterSetting) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -221506,7 +221529,7 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterSettingInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"trustCenterID", "title", "companyName", "companyDescription", "overview", "logoRemoteURL", "faviconRemoteURL", "themeMode", "primaryColor", "font", "foregroundColor", "backgroundColor", "accentColor", "secondaryBackgroundColor", "secondaryForegroundColor", "environment", "companyDomain", "securityContact", "ndaApprovalRequired", "allowSubscribers", "notifySubscribersOnSubprocessorChange", "statusPageURL", "blockedGroupIDs", "editorIDs", "logoFileID", "faviconFileID", "heroImageFileID", "ndaApproverGroupID"}
+	fieldsInOrder := [...]string{"trustCenterID", "title", "companyName", "companyDescription", "overview", "logoRemoteURL", "faviconRemoteURL", "themeMode", "primaryColor", "font", "foregroundColor", "backgroundColor", "accentColor", "secondaryBackgroundColor", "secondaryForegroundColor", "environment", "companyDomain", "securityContact", "ndaApprovalRequired", "allowSubscribers", "notifySubscribersOnSubprocessorChange", "statusPageURL", "noindexDefaultDomain", "blockedGroupIDs", "editorIDs", "logoFileID", "faviconFileID", "heroImageFileID", "ndaApproverGroupID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -221667,6 +221690,13 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterSettingInput(ctx cont
 				return it, err
 			}
 			it.StatusPageURL = data
+		case "noindexDefaultDomain":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noindexDefaultDomain"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NoindexDefaultDomain = data
 		case "blockedGroupIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("blockedGroupIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -325447,7 +325477,7 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingWhereInput(ctx conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameIsNil", "companyNameNotNil", "companyNameEqualFold", "companyNameContainsFold", "companyDescription", "companyDescriptionNEQ", "companyDescriptionIn", "companyDescriptionNotIn", "companyDescriptionContains", "companyDescriptionHasPrefix", "companyDescriptionHasSuffix", "companyDescriptionIsNil", "companyDescriptionNotNil", "companyDescriptionEqualFold", "companyDescriptionContainsFold", "overview", "overviewNEQ", "overviewIn", "overviewNotIn", "overviewContains", "overviewHasPrefix", "overviewHasSuffix", "overviewIsNil", "overviewNotNil", "overviewEqualFold", "overviewContainsFold", "logoRemoteURL", "logoRemoteURLNEQ", "logoRemoteURLIn", "logoRemoteURLNotIn", "logoRemoteURLContains", "logoRemoteURLHasPrefix", "logoRemoteURLHasSuffix", "logoRemoteURLIsNil", "logoRemoteURLNotNil", "logoRemoteURLEqualFold", "logoRemoteURLContainsFold", "logoLocalFileID", "logoLocalFileIDNEQ", "logoLocalFileIDIn", "logoLocalFileIDNotIn", "logoLocalFileIDContains", "logoLocalFileIDHasPrefix", "logoLocalFileIDHasSuffix", "logoLocalFileIDIsNil", "logoLocalFileIDNotNil", "logoLocalFileIDEqualFold", "logoLocalFileIDContainsFold", "faviconRemoteURL", "faviconRemoteURLNEQ", "faviconRemoteURLIn", "faviconRemoteURLNotIn", "faviconRemoteURLContains", "faviconRemoteURLHasPrefix", "faviconRemoteURLHasSuffix", "faviconRemoteURLIsNil", "faviconRemoteURLNotNil", "faviconRemoteURLEqualFold", "faviconRemoteURLContainsFold", "faviconLocalFileID", "faviconLocalFileIDNEQ", "faviconLocalFileIDIn", "faviconLocalFileIDNotIn", "faviconLocalFileIDContains", "faviconLocalFileIDHasPrefix", "faviconLocalFileIDHasSuffix", "faviconLocalFileIDIsNil", "faviconLocalFileIDNotNil", "faviconLocalFileIDEqualFold", "faviconLocalFileIDContainsFold", "heroImageLocalFileID", "heroImageLocalFileIDNEQ", "heroImageLocalFileIDIn", "heroImageLocalFileIDNotIn", "heroImageLocalFileIDContains", "heroImageLocalFileIDHasPrefix", "heroImageLocalFileIDHasSuffix", "heroImageLocalFileIDIsNil", "heroImageLocalFileIDNotNil", "heroImageLocalFileIDEqualFold", "heroImageLocalFileIDContainsFold", "themeMode", "themeModeNEQ", "themeModeIn", "themeModeNotIn", "themeModeIsNil", "themeModeNotNil", "primaryColor", "primaryColorNEQ", "primaryColorIn", "primaryColorNotIn", "primaryColorContains", "primaryColorHasPrefix", "primaryColorHasSuffix", "primaryColorIsNil", "primaryColorNotNil", "primaryColorEqualFold", "primaryColorContainsFold", "font", "fontNEQ", "fontIn", "fontNotIn", "fontContains", "fontHasPrefix", "fontHasSuffix", "fontIsNil", "fontNotNil", "fontEqualFold", "fontContainsFold", "foregroundColor", "foregroundColorNEQ", "foregroundColorIn", "foregroundColorNotIn", "foregroundColorContains", "foregroundColorHasPrefix", "foregroundColorHasSuffix", "foregroundColorIsNil", "foregroundColorNotNil", "foregroundColorEqualFold", "foregroundColorContainsFold", "backgroundColor", "backgroundColorNEQ", "backgroundColorIn", "backgroundColorNotIn", "backgroundColorContains", "backgroundColorHasPrefix", "backgroundColorHasSuffix", "backgroundColorIsNil", "backgroundColorNotNil", "backgroundColorEqualFold", "backgroundColorContainsFold", "accentColor", "accentColorNEQ", "accentColorIn", "accentColorNotIn", "accentColorContains", "accentColorHasPrefix", "accentColorHasSuffix", "accentColorIsNil", "accentColorNotNil", "accentColorEqualFold", "accentColorContainsFold", "secondaryBackgroundColor", "secondaryBackgroundColorNEQ", "secondaryBackgroundColorIn", "secondaryBackgroundColorNotIn", "secondaryBackgroundColorContains", "secondaryBackgroundColorHasPrefix", "secondaryBackgroundColorHasSuffix", "secondaryBackgroundColorIsNil", "secondaryBackgroundColorNotNil", "secondaryBackgroundColorEqualFold", "secondaryBackgroundColorContainsFold", "secondaryForegroundColor", "secondaryForegroundColorNEQ", "secondaryForegroundColorIn", "secondaryForegroundColorNotIn", "secondaryForegroundColorContains", "secondaryForegroundColorHasPrefix", "secondaryForegroundColorHasSuffix", "secondaryForegroundColorIsNil", "secondaryForegroundColorNotNil", "secondaryForegroundColorEqualFold", "secondaryForegroundColorContainsFold", "environment", "environmentNEQ", "environmentIn", "environmentNotIn", "environmentIsNil", "environmentNotNil", "removeBranding", "removeBrandingNEQ", "removeBrandingIsNil", "removeBrandingNotNil", "companyDomain", "companyDomainNEQ", "companyDomainIn", "companyDomainNotIn", "companyDomainContains", "companyDomainHasPrefix", "companyDomainHasSuffix", "companyDomainIsNil", "companyDomainNotNil", "companyDomainEqualFold", "companyDomainContainsFold", "securityContact", "securityContactNEQ", "securityContactIn", "securityContactNotIn", "securityContactContains", "securityContactHasPrefix", "securityContactHasSuffix", "securityContactIsNil", "securityContactNotNil", "securityContactEqualFold", "securityContactContainsFold", "ndaApprovalRequired", "ndaApprovalRequiredNEQ", "ndaApprovalRequiredIsNil", "ndaApprovalRequiredNotNil", "allowSubscribers", "allowSubscribersNEQ", "allowSubscribersIsNil", "allowSubscribersNotNil", "notifySubscribersOnSubprocessorChange", "notifySubscribersOnSubprocessorChangeNEQ", "notifySubscribersOnSubprocessorChangeIsNil", "notifySubscribersOnSubprocessorChangeNotNil", "subprocessorsNotifiedAt", "subprocessorsNotifiedAtGT", "subprocessorsNotifiedAtGTE", "subprocessorsNotifiedAtLT", "subprocessorsNotifiedAtLTE", "subprocessorsNotifiedAtIsNil", "subprocessorsNotifiedAtNotNil", "ndaApproverGroupID", "ndaApproverGroupIDNEQ", "ndaApproverGroupIDIn", "ndaApproverGroupIDNotIn", "ndaApproverGroupIDContains", "ndaApproverGroupIDHasPrefix", "ndaApproverGroupIDHasSuffix", "ndaApproverGroupIDIsNil", "ndaApproverGroupIDNotNil", "ndaApproverGroupIDEqualFold", "ndaApproverGroupIDContainsFold", "statusPageURL", "statusPageURLNEQ", "statusPageURLIn", "statusPageURLNotIn", "statusPageURLContains", "statusPageURLHasPrefix", "statusPageURLHasSuffix", "statusPageURLIsNil", "statusPageURLNotNil", "statusPageURLEqualFold", "statusPageURLContainsFold", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasLogoFile", "hasLogoFileWith", "hasFaviconFile", "hasFaviconFileWith", "hasHeroImageFile", "hasHeroImageFileWith", "hasNdaApproverGroup", "hasNdaApproverGroupWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameIsNil", "companyNameNotNil", "companyNameEqualFold", "companyNameContainsFold", "companyDescription", "companyDescriptionNEQ", "companyDescriptionIn", "companyDescriptionNotIn", "companyDescriptionContains", "companyDescriptionHasPrefix", "companyDescriptionHasSuffix", "companyDescriptionIsNil", "companyDescriptionNotNil", "companyDescriptionEqualFold", "companyDescriptionContainsFold", "overview", "overviewNEQ", "overviewIn", "overviewNotIn", "overviewContains", "overviewHasPrefix", "overviewHasSuffix", "overviewIsNil", "overviewNotNil", "overviewEqualFold", "overviewContainsFold", "logoRemoteURL", "logoRemoteURLNEQ", "logoRemoteURLIn", "logoRemoteURLNotIn", "logoRemoteURLContains", "logoRemoteURLHasPrefix", "logoRemoteURLHasSuffix", "logoRemoteURLIsNil", "logoRemoteURLNotNil", "logoRemoteURLEqualFold", "logoRemoteURLContainsFold", "logoLocalFileID", "logoLocalFileIDNEQ", "logoLocalFileIDIn", "logoLocalFileIDNotIn", "logoLocalFileIDContains", "logoLocalFileIDHasPrefix", "logoLocalFileIDHasSuffix", "logoLocalFileIDIsNil", "logoLocalFileIDNotNil", "logoLocalFileIDEqualFold", "logoLocalFileIDContainsFold", "faviconRemoteURL", "faviconRemoteURLNEQ", "faviconRemoteURLIn", "faviconRemoteURLNotIn", "faviconRemoteURLContains", "faviconRemoteURLHasPrefix", "faviconRemoteURLHasSuffix", "faviconRemoteURLIsNil", "faviconRemoteURLNotNil", "faviconRemoteURLEqualFold", "faviconRemoteURLContainsFold", "faviconLocalFileID", "faviconLocalFileIDNEQ", "faviconLocalFileIDIn", "faviconLocalFileIDNotIn", "faviconLocalFileIDContains", "faviconLocalFileIDHasPrefix", "faviconLocalFileIDHasSuffix", "faviconLocalFileIDIsNil", "faviconLocalFileIDNotNil", "faviconLocalFileIDEqualFold", "faviconLocalFileIDContainsFold", "heroImageLocalFileID", "heroImageLocalFileIDNEQ", "heroImageLocalFileIDIn", "heroImageLocalFileIDNotIn", "heroImageLocalFileIDContains", "heroImageLocalFileIDHasPrefix", "heroImageLocalFileIDHasSuffix", "heroImageLocalFileIDIsNil", "heroImageLocalFileIDNotNil", "heroImageLocalFileIDEqualFold", "heroImageLocalFileIDContainsFold", "themeMode", "themeModeNEQ", "themeModeIn", "themeModeNotIn", "themeModeIsNil", "themeModeNotNil", "primaryColor", "primaryColorNEQ", "primaryColorIn", "primaryColorNotIn", "primaryColorContains", "primaryColorHasPrefix", "primaryColorHasSuffix", "primaryColorIsNil", "primaryColorNotNil", "primaryColorEqualFold", "primaryColorContainsFold", "font", "fontNEQ", "fontIn", "fontNotIn", "fontContains", "fontHasPrefix", "fontHasSuffix", "fontIsNil", "fontNotNil", "fontEqualFold", "fontContainsFold", "foregroundColor", "foregroundColorNEQ", "foregroundColorIn", "foregroundColorNotIn", "foregroundColorContains", "foregroundColorHasPrefix", "foregroundColorHasSuffix", "foregroundColorIsNil", "foregroundColorNotNil", "foregroundColorEqualFold", "foregroundColorContainsFold", "backgroundColor", "backgroundColorNEQ", "backgroundColorIn", "backgroundColorNotIn", "backgroundColorContains", "backgroundColorHasPrefix", "backgroundColorHasSuffix", "backgroundColorIsNil", "backgroundColorNotNil", "backgroundColorEqualFold", "backgroundColorContainsFold", "accentColor", "accentColorNEQ", "accentColorIn", "accentColorNotIn", "accentColorContains", "accentColorHasPrefix", "accentColorHasSuffix", "accentColorIsNil", "accentColorNotNil", "accentColorEqualFold", "accentColorContainsFold", "secondaryBackgroundColor", "secondaryBackgroundColorNEQ", "secondaryBackgroundColorIn", "secondaryBackgroundColorNotIn", "secondaryBackgroundColorContains", "secondaryBackgroundColorHasPrefix", "secondaryBackgroundColorHasSuffix", "secondaryBackgroundColorIsNil", "secondaryBackgroundColorNotNil", "secondaryBackgroundColorEqualFold", "secondaryBackgroundColorContainsFold", "secondaryForegroundColor", "secondaryForegroundColorNEQ", "secondaryForegroundColorIn", "secondaryForegroundColorNotIn", "secondaryForegroundColorContains", "secondaryForegroundColorHasPrefix", "secondaryForegroundColorHasSuffix", "secondaryForegroundColorIsNil", "secondaryForegroundColorNotNil", "secondaryForegroundColorEqualFold", "secondaryForegroundColorContainsFold", "environment", "environmentNEQ", "environmentIn", "environmentNotIn", "environmentIsNil", "environmentNotNil", "removeBranding", "removeBrandingNEQ", "removeBrandingIsNil", "removeBrandingNotNil", "companyDomain", "companyDomainNEQ", "companyDomainIn", "companyDomainNotIn", "companyDomainContains", "companyDomainHasPrefix", "companyDomainHasSuffix", "companyDomainIsNil", "companyDomainNotNil", "companyDomainEqualFold", "companyDomainContainsFold", "securityContact", "securityContactNEQ", "securityContactIn", "securityContactNotIn", "securityContactContains", "securityContactHasPrefix", "securityContactHasSuffix", "securityContactIsNil", "securityContactNotNil", "securityContactEqualFold", "securityContactContainsFold", "ndaApprovalRequired", "ndaApprovalRequiredNEQ", "ndaApprovalRequiredIsNil", "ndaApprovalRequiredNotNil", "allowSubscribers", "allowSubscribersNEQ", "allowSubscribersIsNil", "allowSubscribersNotNil", "notifySubscribersOnSubprocessorChange", "notifySubscribersOnSubprocessorChangeNEQ", "notifySubscribersOnSubprocessorChangeIsNil", "notifySubscribersOnSubprocessorChangeNotNil", "subprocessorsNotifiedAt", "subprocessorsNotifiedAtGT", "subprocessorsNotifiedAtGTE", "subprocessorsNotifiedAtLT", "subprocessorsNotifiedAtLTE", "subprocessorsNotifiedAtIsNil", "subprocessorsNotifiedAtNotNil", "ndaApproverGroupID", "ndaApproverGroupIDNEQ", "ndaApproverGroupIDIn", "ndaApproverGroupIDNotIn", "ndaApproverGroupIDContains", "ndaApproverGroupIDHasPrefix", "ndaApproverGroupIDHasSuffix", "ndaApproverGroupIDIsNil", "ndaApproverGroupIDNotNil", "ndaApproverGroupIDEqualFold", "ndaApproverGroupIDContainsFold", "statusPageURL", "statusPageURLNEQ", "statusPageURLIn", "statusPageURLNotIn", "statusPageURLContains", "statusPageURLHasPrefix", "statusPageURLHasSuffix", "statusPageURLIsNil", "statusPageURLNotNil", "statusPageURLEqualFold", "statusPageURLContainsFold", "noindexDefaultDomain", "noindexDefaultDomainNEQ", "noindexDefaultDomainIsNil", "noindexDefaultDomainNotNil", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasLogoFile", "hasLogoFileWith", "hasFaviconFile", "hasFaviconFileWith", "hasHeroImageFile", "hasHeroImageFileWith", "hasNdaApproverGroup", "hasNdaApproverGroupWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -327708,6 +327738,34 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingWhereInput(ctx conte
 				return it, err
 			}
 			it.StatusPageURLContainsFold = data
+		case "noindexDefaultDomain":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noindexDefaultDomain"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NoindexDefaultDomain = data
+		case "noindexDefaultDomainNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noindexDefaultDomainNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NoindexDefaultDomainNEQ = data
+		case "noindexDefaultDomainIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noindexDefaultDomainIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NoindexDefaultDomainIsNil = data
+		case "noindexDefaultDomainNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noindexDefaultDomainNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NoindexDefaultDomainNotNil = data
 		case "hasBlockedGroups":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBlockedGroups"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -366311,7 +366369,7 @@ func (ec *executionContext) unmarshalInputUpdateTrustCenterSettingInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"trustCenterID", "clearTrustCenterID", "title", "clearTitle", "companyName", "clearCompanyName", "companyDescription", "clearCompanyDescription", "overview", "clearOverview", "logoRemoteURL", "clearLogoRemoteURL", "faviconRemoteURL", "clearFaviconRemoteURL", "themeMode", "clearThemeMode", "primaryColor", "clearPrimaryColor", "font", "clearFont", "foregroundColor", "clearForegroundColor", "backgroundColor", "clearBackgroundColor", "accentColor", "clearAccentColor", "secondaryBackgroundColor", "clearSecondaryBackgroundColor", "secondaryForegroundColor", "clearSecondaryForegroundColor", "companyDomain", "clearCompanyDomain", "securityContact", "clearSecurityContact", "ndaApprovalRequired", "clearNdaApprovalRequired", "allowSubscribers", "clearAllowSubscribers", "notifySubscribersOnSubprocessorChange", "clearNotifySubscribersOnSubprocessorChange", "statusPageURL", "clearStatusPageURL", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "logoFileID", "clearLogoFile", "faviconFileID", "clearFaviconFile", "heroImageFileID", "clearHeroImageFile", "ndaApproverGroupID", "clearNdaApproverGroup"}
+	fieldsInOrder := [...]string{"trustCenterID", "clearTrustCenterID", "title", "clearTitle", "companyName", "clearCompanyName", "companyDescription", "clearCompanyDescription", "overview", "clearOverview", "logoRemoteURL", "clearLogoRemoteURL", "faviconRemoteURL", "clearFaviconRemoteURL", "themeMode", "clearThemeMode", "primaryColor", "clearPrimaryColor", "font", "clearFont", "foregroundColor", "clearForegroundColor", "backgroundColor", "clearBackgroundColor", "accentColor", "clearAccentColor", "secondaryBackgroundColor", "clearSecondaryBackgroundColor", "secondaryForegroundColor", "clearSecondaryForegroundColor", "companyDomain", "clearCompanyDomain", "securityContact", "clearSecurityContact", "ndaApprovalRequired", "clearNdaApprovalRequired", "allowSubscribers", "clearAllowSubscribers", "notifySubscribersOnSubprocessorChange", "clearNotifySubscribersOnSubprocessorChange", "statusPageURL", "clearStatusPageURL", "noindexDefaultDomain", "clearNoindexDefaultDomain", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "logoFileID", "clearLogoFile", "faviconFileID", "clearFaviconFile", "heroImageFileID", "clearHeroImageFile", "ndaApproverGroupID", "clearNdaApproverGroup"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -366612,6 +366670,20 @@ func (ec *executionContext) unmarshalInputUpdateTrustCenterSettingInput(ctx cont
 				return it, err
 			}
 			it.ClearStatusPageURL = data
+		case "noindexDefaultDomain":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noindexDefaultDomain"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NoindexDefaultDomain = data
+		case "clearNoindexDefaultDomain":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearNoindexDefaultDomain"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearNoindexDefaultDomain = data
 		case "addBlockedGroupIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addBlockedGroupIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -457711,6 +457783,11 @@ func (ec *executionContext) _TrustCenterSetting(ctx context.Context, sel ast.Sel
 			}
 		case "statusPageURL":
 			out.Values[i] = ec._TrustCenterSetting_statusPageURL(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "noindexDefaultDomain":
+			out.Values[i] = ec._TrustCenterSetting_noindexDefaultDomain(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
