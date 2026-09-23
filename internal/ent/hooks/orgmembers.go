@@ -300,34 +300,14 @@ func updateIdentityHolder(ctx context.Context, client *generated.Client, userID 
 		return err
 	}
 
-	id, err := client.IdentityHolder.Query().
+	_, err = client.IdentityHolder.Update().
 		Where(identityholder.EmailEqualFold(orgUser.Email)).
-		OnlyID(ctx)
-
-	if generated.IsNotFound(err) {
-		return nil
-	}
+		SetIsOpenlaneUser(expectedOpenlaneUserValue).
+		Save(ctx)
 
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("org_membership_id", userID).
 			Msg("could not find identity holder from org membership")
-		return err
-	}
-
-	if id == "" {
-		return nil
-	}
-
-	// no need to go through the entire checks again since we have verified
-	// the identity holder needs to be unset
-	newCtx := context.WithValue(ctx, skipOpenlaneUserAssignmentKey{}, true)
-
-	err = client.IdentityHolder.UpdateOneID(id).
-		SetIsOpenlaneUser(expectedOpenlaneUserValue).
-		Exec(newCtx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("identity_holder_id", id).
-			Msg("could not toggle is_openlane_user status")
 		return err
 	}
 
