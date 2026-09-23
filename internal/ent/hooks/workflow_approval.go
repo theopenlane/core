@@ -346,7 +346,7 @@ func ensureInstanceForExistingProposal(ctx context.Context, client *generated.Cl
 	}
 
 	var created *generated.WorkflowInstance
-	_, err = workflows.WithTx(allowCtx, client, nil, func(tx *generated.Tx) (string, error) {
+	_, err = workflows.WithTx(allowCtx, client, nil, func(allowCtx context.Context, tx *generated.Tx) (string, error) {
 		createdInstance, _, createErr := workflows.CreateWorkflowInstanceWithObjectRef(allowCtx, tx, workflows.WorkflowInstanceBuilderParams{
 			WorkflowDefinitionID: def.ID,
 			DefinitionSnapshot:   def.DefinitionJSON,
@@ -448,7 +448,7 @@ func createProposalWithInstance(ctx context.Context, client *generated.Client, d
 
 	var result proposalCreationResult
 
-	_, err := workflows.WithTx(allowCtx, client, nil, func(tx *generated.Tx) (string, error) {
+	_, err := workflows.WithTx(allowCtx, client, nil, func(allowCtx context.Context, tx *generated.Tx) (string, error) {
 		instance, objRef, createErr := workflows.CreateWorkflowInstanceWithObjectRef(allowCtx, tx, workflows.WorkflowInstanceBuilderParams{
 			WorkflowDefinitionID: def.ID,
 			DefinitionSnapshot:   def.DefinitionJSON,

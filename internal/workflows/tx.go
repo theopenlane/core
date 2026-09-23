@@ -38,12 +38,13 @@ func (e *TxError) Is(target error) bool {
 	return target == e.Stage
 }
 
-// WithTx runs fn inside a transaction and ensures rollback on error.
-func WithTx[T any](ctx context.Context, client *generated.Client, scope *observability.Scope, fn func(tx *generated.Tx) (T, error)) (T, error) {
+// WithTx runs fn inside a transaction and ensures rollback on error
+// fn receives a context carrying the transaction so mutation events are emitted after commit
+func WithTx[T any](ctx context.Context, client *generated.Client, scope *observability.Scope, fn func(ctx context.Context, tx *generated.Tx) (T, error)) (T, error) {
 	var zero T
 
 	if existingTx := generated.TxFromContext(ctx); existingTx != nil {
-		return fn(existingTx)
+		return fn(ctx, existingTx)
 	}
 
 	if client == nil {
@@ -69,7 +70,7 @@ func WithTx[T any](ctx context.Context, client *generated.Client, scope *observa
 		}
 	}()
 
-	result, err := fn(tx)
+	result, err := fn(generated.NewTxContext(ctx, tx), tx)
 	if err != nil {
 		return zero, err
 	}
