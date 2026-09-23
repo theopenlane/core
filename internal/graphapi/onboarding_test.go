@@ -13,9 +13,13 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/graphapi"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -31,14 +35,33 @@ func TestMutationCreateOnboarding(t *testing.T) {
 	personalOrgCtx := auth.NewTestContextWithOrgID(onboardingUser.ID, onboardingUser.PersonalOrgID)
 	personalOrgCtx2 := auth.NewTestContextWithOrgID(onboardingUser2.ID, onboardingUser2.PersonalOrgID)
 
+	// the shared harness does not wire the onboarding program listener
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.OnboardingProgramListeners())
+	assert.NilError(t, err)
+
+	t.Cleanup(setup.Teardown)
+
+	sysCtx := th.SetContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
+	soc2Standard := mustSystemStandard(t, sysCtx, "soc2")
+	isoStandard := mustSystemStandard(t, sysCtx, "iso27001:2022")
+
+	// only the Security category is cloned for soc2, so the third control is never copied
+	mustSystemControl(t, sysCtx, soc2Standard.ID, "CC1.1", "Security")
+	mustSystemControl(t, sysCtx, soc2Standard.ID, "CC1.2", "Security")
+	mustSystemControl(t, sysCtx, soc2Standard.ID, "A1.1", "Availability")
+	mustSystemControl(t, sysCtx, isoStandard.ID, "A.5.1", "Organizational")
+	mustSystemControl(t, sysCtx, isoStandard.ID, "A.6.1", "People")
+
 	companyName := "Test Acme Corp, Inc."
 
 	testCases := []struct {
-		name        string
-		request     testclient.CreateOnboardingInput
-		client      *testclient.TestClient
-		ctx         context.Context
-		expectedErr string
+		name             string
+		request          testclient.CreateOnboardingInput
+		client           *testclient.TestClient
+		ctx              context.Context
+		expectedPrograms int
+		expectedControls int
+		expectedErr      string
 	}{
 		{
 			name: "happy path, minimal input",
@@ -71,8 +94,10 @@ func TestMutationCreateOnboarding(t *testing.T) {
 					"existing_policies_procedures": false},
 				DemoRequested: lo.ToPtr(true),
 			},
-			client: suite.Client.API,
-			ctx:    personalOrgCtx2,
+			client:           suite.Client.API,
+			ctx:              personalOrgCtx2,
+			expectedPrograms: 1,
+			expectedControls: 4,
 		},
 		{
 			name:        "missing required field",
@@ -125,8 +150,59 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Check(t, is.Equal(4, slaCount))
 
+			orgID := *resp.CreateOnboarding.Onboarding.OrganizationID
+
+			assert.NilError(t, suite.GalaRuntime.WaitIdle(t.Context()))
+
+			programs, err := suite.Client.DB.Program.Query().
+				Where(program.OwnerID(orgID)).
+				WithControls().
+				All(th.SetContext(tc.ctx, suite.Client.DB))
+			assert.NilError(t, err)
+			assert.Assert(t, is.Len(programs, tc.expectedPrograms))
+
+			if tc.expectedPrograms > 0 {
+				assert.Check(t, is.Len(programs[0].Edges.Controls, tc.expectedControls))
+			}
+
 			// th.Cleanup onboarding data
 			(&th.Cleanup[*generated.OnboardingDeleteOne]{Client: suite.Client.DB.Onboarding, IDs: []string{resp.CreateOnboarding.Onboarding.ID}}).MustDelete(tc.ctx, t)
 		})
 	}
+}
+
+func mustSystemStandard(t *testing.T, ctx context.Context, framework string) *generated.Standard {
+	t.Helper()
+
+	std, err := suite.Client.DB.Standard.Create().
+		SetName(framework).
+		SetShortName(framework).
+		SetFramework(framework).
+		SetIsPublic(true).
+		SetSystemOwned(true).
+		SetStatus(enums.StandardActive).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, IDs: []string{std.ID}}).MustDelete(ctx, t)
+	})
+
+	return std
+}
+
+func mustSystemControl(t *testing.T, ctx context.Context, standardID, refCode, category string) {
+	t.Helper()
+
+	control, err := suite.Client.DB.Control.Create().
+		SetStandardID(standardID).
+		SetSystemOwned(true).
+		SetRefCode(refCode).
+		SetCategory(category).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	t.Cleanup(func() {
+		(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: []string{control.ID}}).MustDelete(ctx, t)
+	})
 }

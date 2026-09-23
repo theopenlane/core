@@ -62,7 +62,7 @@ func (s domainScanSaga) HandleImportDomainScanReview(ctx context.Context, envelo
 
 	systemCtx := domainScanSystemContext(ctx, envelope.OrganizationID)
 
-	summary, err := workflows.WithTx(systemCtx, s.services.DB(), nil, func(tx *generated.Tx) (importSummary, error) {
+	summary, err := workflows.WithTx(systemCtx, s.services.DB(), nil, func(systemCtx context.Context, tx *generated.Tx) (importSummary, error) {
 		return importDomainScanReview(systemCtx, tx.Client(), envelope)
 	})
 	if err != nil {
@@ -207,7 +207,7 @@ func applyBrandingToTrustCenter(ctx context.Context, client *generated.Client, b
 		return false, nil
 	}
 
-	return workflows.WithTx(ctx, client, nil, func(tx *generated.Tx) (bool, error) {
+	return workflows.WithTx(ctx, client, nil, func(ctx context.Context, tx *generated.Tx) (bool, error) {
 		tc, err := tx.TrustCenter.Query().First(ctx)
 		if generated.IsNotFound(err) {
 			return false, nil
