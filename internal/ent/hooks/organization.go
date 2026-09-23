@@ -374,6 +374,9 @@ var defaultSLADefinitions = map[enums.SecurityLevel]int{
 
 // createDefaultSLADefinitions creates the default SLA definitions for a new org
 func createDefaultSLADefinitions(ctx context.Context, orgID string, client *generated.Client) error {
+	// seeding defaults is an internal step and must not depend on the org's enabled modules
+	ctx = rule.WithInternalContext(ctx)
+
 	existing, err := client.SLADefinition.Query().
 		Where(sladefinition.OwnerID(orgID)).
 		Exist(ctx)

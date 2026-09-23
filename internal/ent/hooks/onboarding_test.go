@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/taskrules"
@@ -133,6 +134,26 @@ func (suite *HookTestSuite) TestHookOnboarding() {
 			assert.True(t, managedTagExists)
 		})
 	}
+}
+
+func (suite *HookTestSuite) TestHookOnboardingSeedsSLADefinitionsWithoutModules() {
+	t := suite.T()
+
+	user := suite.seedUser()
+	userCtx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), suite.client)
+
+	onboarding, err := suite.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
+		CompanyName: "SLA Seed " + gofakeit.LetterN(8),
+	}).Save(userCtx)
+	require.NoError(t, err)
+
+	newOrgCtx := privacy.DecisionContext(generated.NewContext(auth.NewTestContextWithOrgID(user.ID, onboarding.OrganizationID), suite.client), privacy.Allow)
+
+	count, err := suite.client.SLADefinition.Query().
+		Where(sladefinition.OwnerID(onboarding.OrganizationID)).
+		Count(newOrgCtx)
+	require.NoError(t, err)
+	assert.Equal(t, 4, count)
 }
 
 func (suite *HookTestSuite) TestOnboardingProgramFrameworkSelections() {
