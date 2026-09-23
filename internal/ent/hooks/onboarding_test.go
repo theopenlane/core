@@ -15,6 +15,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/taskrules"
 )
@@ -24,7 +26,7 @@ func (suite *HookTestSuite) TestHookOnboarding() {
 
 	user := suite.seedUser()
 
-	userCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].ID)
+	userCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID)
 
 	// add the client to the context for hooks
 	userCtx = generated.NewContext(userCtx, suite.client)
@@ -118,6 +120,24 @@ func (suite *HookTestSuite) TestHookOnboarding() {
 			}
 
 			assert.ElementsMatch(t, tc.input.Domains, org.Edges.Setting.Domains)
+
+			newOrgCtx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, onboarding.OrganizationID), suite.client)
+			newOrgCtx = privacy.DecisionContext(newOrgCtx, privacy.Allow)
+
+			managedTagExists, err := suite.client.TagDefinition.Query().
+				Where(
+					tagdefinition.OwnerID(onboarding.OrganizationID),
+					tagdefinition.NameEqualFold("managed"),
+				).
+				Exist(newOrgCtx)
+			require.NoError(t, err)
+			assert.True(t, managedTagExists)
+
+			slaCount, err := suite.client.SLADefinition.Query().
+				Where(sladefinition.OwnerID(onboarding.OrganizationID)).
+				Count(newOrgCtx)
+			require.NoError(t, err)
+			assert.Equal(t, 4, slaCount)
 		})
 	}
 }
