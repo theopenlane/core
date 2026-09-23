@@ -2,20 +2,16 @@ package hooks
 
 import (
 	"context"
-	"errors"
 	"slices"
-	"strings"
 
 	"entgo.io/ent"
 
 	"github.com/samber/lo"
-	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -60,44 +56,28 @@ func HookTags() ent.Hook {
 					continue
 				}
 
-				// match on slug as well as name, the unique index is on both and kebab casing collapses
-				// names that differ only in spacing or punctuation
 				exists, err := mut.Client().TagDefinition.Query().
-					Where(
-						tagdefinition.Or(
-							tagdefinition.NameEqualFold(tag),
-							tagdefinition.SlugEqualFold(strcase.KebabCase(strings.TrimSpace(tag))),
-						),
-					).
+					Where(tagdefinition.NameEqualFold(tag)).
 					Exist(ctx)
-				if err != nil {
-					logx.FromContext(ctx).Error().Err(err).Str("tag", tag).Msg("error querying tag definitions, skipping org tag creation")
+				if !exists {
 
-					continue
-				}
-
-				if exists {
-					continue
-				}
-
-				input := generated.CreateTagDefinitionInput{
-					Name:    tag,
-					OwnerID: &orgID,
-				}
-
-				if err := mut.Client().TagDefinition.Create().
-					SetInput(input).
-					Exec(ctx); err != nil {
-					// a user may be allowed to edit the object without being able to create org tag definitions
-					if errors.Is(err, generated.ErrPermissionDenied) || errors.Is(err, privacy.Deny) {
-						logx.FromContext(ctx).Debug().Str("tag", tag).Msg("user cannot create org tag definitions, skipping")
-
-						continue
+					input := generated.CreateTagDefinitionInput{
+						Name:    tag,
+						OwnerID: &orgID,
 					}
 
-					logx.FromContext(ctx).Error().Err(err).Str("tag", tag).Msg("error creating tag definition")
+					if err := mut.Client().TagDefinition.Create().
+						SetInput(input).
+						Exec(ctx); err != nil {
+						if !generated.IsConstraintError(err) {
+							logx.FromContext(ctx).Warn().Err(err).Str("tag", tag).Msg("error creating tag definition")
+						}
 
-					return nil, err
+						// else, another process created it, so we can ignore the error
+						logx.FromContext(ctx).Debug().Str("tag", tag).Msg("tag definition already exists, skipping creation")
+					}
+				} else if err != nil {
+					logx.FromContext(ctx).Warn().Err(err).Msg("error querying tag definitions, skipping org tag creation")
 				}
 			}
 

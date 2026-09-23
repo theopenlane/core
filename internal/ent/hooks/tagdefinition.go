@@ -96,7 +96,7 @@ func HookTagDefinition() ent.Hook {
 
 			if err != nil {
 				logx.FromContext(ctx).Warn().Err(err).Msg("error fetching matching tag definitions")
-				return nil, fmt.Errorf("%w: %w", ErrTagsNotFetched, err)
+				return nil, ErrTagsNotFetched
 			}
 
 			return tag, nil
