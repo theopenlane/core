@@ -10,7 +10,10 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -20,8 +23,8 @@ func TestMutationCreateOnboarding(t *testing.T) {
 
 	// create another user for this test
 	// so it doesn't interfere with the other tests
-	onboardingUser := suite.UserBuilder(context.Background(), t)
-	onboardingUser2 := suite.UserBuilder(context.Background(), t)
+	onboardingUser := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule)
+	onboardingUser2 := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule)
 
 	companyName := "Test Acme Corp, Inc."
 
@@ -107,6 +110,12 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			assert.Check(t, resp.CreateOnboarding.Onboarding.ID != "")
 			assert.Check(t, resp.CreateOnboarding.Onboarding.OrganizationID != nil)
 			assert.Check(t, is.Equal(tc.request.CompanyName, resp.CreateOnboarding.Onboarding.CompanyName))
+
+			slaCount, err := suite.Client.DB.SLADefinition.Query().
+				Where(sladefinition.OwnerID(*resp.CreateOnboarding.Onboarding.OrganizationID)).
+				Count(privacy.DecisionContext(tc.ctx, privacy.Allow))
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(4, slaCount))
 
 			// th.Cleanup onboarding data
 			(&th.Cleanup[*generated.OnboardingDeleteOne]{Client: suite.Client.DB.Onboarding, IDs: []string{resp.CreateOnboarding.Onboarding.ID}}).MustDelete(tc.ctx, t)
