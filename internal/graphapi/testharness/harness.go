@@ -399,19 +399,21 @@ func NewTestGraphServer(t *testing.T) http.Handler {
 	// local validator to avoid JWK cache issues
 	validator := tokens.NewJWKSValidator(keys, "http://localhost:17608", "http://localhost:17608")
 
+	authOptions := authmw.NewAuthOptions(
+		authmw.WithSkipperFunc(
+			func(c echo.Context) bool {
+				return authmw.AuthenticateSkipperFuncForWebsockets(c)
+			},
+		),
+		authmw.WithDBClient(Suite.Client.DB),
+		authmw.WithValidator(validator),
+	)
+
 	r := graphapi.NewResolver(Suite.Client.DB, nil).
 		WithExtensions(true).
 		WithDevelopment(true).
 		WithSubscriptions(true, nil).
-		WithAuthOptions(
-			authmw.WithSkipperFunc(
-				func(c echo.Context) bool {
-					return authmw.AuthenticateSkipperFuncForWebsockets(c)
-				},
-			),
-			authmw.WithDBClient(Suite.Client.DB),
-			authmw.WithValidator(validator),
-		)
+		WithAuthOptions(&authOptions)
 
 	r.WithPool(10)
 
