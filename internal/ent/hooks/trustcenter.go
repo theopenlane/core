@@ -380,7 +380,7 @@ func HookTrustCenterUpdate() ent.Hook {
 						trustcentersetting.TrustCenterID(tcID),
 					).
 					SetNoindexDefaultDomain(true).
-					Exec(ctx)
+					Exec(privacy.DecisionContext(ctx, privacy.Allow))
 				if err != nil {
 					return nil, err
 				}
