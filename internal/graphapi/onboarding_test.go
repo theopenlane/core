@@ -4,13 +4,15 @@ import (
 	"context"
 	"testing"
 
+	"github.com/samber/lo"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
@@ -23,8 +25,11 @@ func TestMutationCreateOnboarding(t *testing.T) {
 
 	// create another user for this test
 	// so it doesn't interfere with the other tests
-	onboardingUser := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule)
-	onboardingUser2 := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule)
+	onboardingUser := suite.UserBuilder(context.Background(), t)
+	onboardingUser2 := suite.UserBuilder(context.Background(), t)
+
+	personalOrgCtx := auth.NewTestContextWithOrgID(onboardingUser.ID, onboardingUser.PersonalOrgID)
+	personalOrgCtx2 := auth.NewTestContextWithOrgID(onboardingUser2.ID, onboardingUser2.PersonalOrgID)
 
 	companyName := "Test Acme Corp, Inc."
 
@@ -41,7 +46,7 @@ func TestMutationCreateOnboarding(t *testing.T) {
 				CompanyName: companyName,
 			},
 			client: suite.Client.API,
-			ctx:    onboardingUser.UserCtx,
+			ctx:    personalOrgCtx,
 		},
 		{
 			name: "happy path, all input, same name should not error due to retries",
@@ -58,19 +63,22 @@ func TestMutationCreateOnboarding(t *testing.T) {
 					"department": gofakeit.JobDescriptor(),
 				},
 				Compliance: map[string]interface{}{
-					"existing_policies": true,
-					"existing_controls": false,
-					"risk_assessment":   true,
-				},
+					"frameworks":                   []string{"soc2", "iso27001:2022"},
+					"has_auditor":                  false,
+					"existing_controls":            false,
+					"recommend_auditors":           true,
+					"recommend_vciso_partner":      true,
+					"existing_policies_procedures": false},
+				DemoRequested: lo.ToPtr(true),
 			},
 			client: suite.Client.API,
-			ctx:    onboardingUser2.UserCtx,
+			ctx:    personalOrgCtx2,
 		},
 		{
 			name:        "missing required field",
 			request:     testclient.CreateOnboardingInput{},
 			client:      suite.Client.API,
-			ctx:         onboardingUser.UserCtx,
+			ctx:         personalOrgCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
