@@ -15984,6 +15984,10 @@ input CreateTrustCenterNDARequestInput {
   """
   accessLevel: TrustCenterNDARequestTrustCenterNDARequestAccessLevel
   """
+  status of the NDA request
+  """
+  status: TrustCenterNDARequestTrustCenterNDARequestStatus
+  """
   timestamp when the request was approved
   """
   approvedAt: DateTime

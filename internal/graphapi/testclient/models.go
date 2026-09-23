@@ -9296,6 +9296,8 @@ type CreateTrustCenterNDARequestInput struct {
 	Reason *string `json:"reason,omitempty"`
 	// access level requested
 	AccessLevel *enums.TrustCenterNDARequestAccessLevel `json:"accessLevel,omitempty"`
+	// status of the NDA request
+	Status *enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
 	// timestamp when the request was approved
 	ApprovedAt *models.DateTime `json:"approvedAt,omitempty"`
 	// timestamp when the NDA was signed

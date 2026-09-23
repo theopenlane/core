@@ -60,7 +60,7 @@ func NewServiceFromConfig(config storage.ProviderConfig, opts ...Option) (*objec
 	service := objects.NewService(objects.Config{
 		Resolver:       resolver,
 		ClientService:  clientService,
-		ValidationFunc: validators.MimeTypeValidator,
+		ValidationFunc: validators.UploadValidator,
 		Backups:        backups,
 	})
 
