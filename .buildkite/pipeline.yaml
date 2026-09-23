@@ -8,6 +8,8 @@ env:
   SMALL_RUNNER_QUEUE: self-hosted-garage-vms
   RUNNER_LARGE: "large"
   RUNNER_SMALL: "small"
+  RUNNER_LOCATION_US_CENTRAL1: "us-central1"
+  RUNNER_LOCATION_NYC: "NYC"
   GRAPHQL_SCHEMA_LOCATION: "internal/graphapi/clientschema/schema.graphql"
   GRAPHQL_HISTORY_SCHEMA_LOCATION: "internal/graphapi/historyschema/schema.graphql"
   GRAPHQL_SCHEMA_NAME: "Openlane-0dedz@current"
@@ -196,7 +198,7 @@ steps:
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
-          location: NYC # gcp runners having issues pushing, setting location for now
+          location: $RUNNER_LOCATION_NYC # gcp runners having issues pushing, setting location for now
         plugins:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -299,6 +301,7 @@ steps:
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
+          location: $RUNNER_LOCATION_US_CENTRAL1
         key: "go_test_graph"
         cancel_on_build_failing: true
         if_changed:
