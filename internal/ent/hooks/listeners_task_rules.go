@@ -35,6 +35,7 @@ func init() { registerListeners(TaskRuleListeners) }
 func TaskRuleListeners() []gala.Registration {
 	return lo.Map(entityops.TaskRuleEligibleSchemas(), func(schema *entityops.Schema, _ int) gala.Registration {
 		listener := entityops.MutationListener{
+			Concern:    entityops.MutationConcernTaskRule,
 			Schema:     schema,
 			Operations: taskRuleOperations(schema),
 			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {

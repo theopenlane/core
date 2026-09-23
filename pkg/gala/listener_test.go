@@ -113,3 +113,36 @@ func TestRegisterRegistersTopicAndListener(t *testing.T) {
 		t.Fatalf("expected one listener attached, got %d", got)
 	}
 }
+
+func TestAttachListenerOrdersByPriority(t *testing.T) {
+	runtime := newTestGala(t, nil)
+	topic := Topic[runtimeTestPayload]{Name: TopicName("listener.priority.topic")}
+
+	if err := registerTopic(runtime.registry, topic); err != nil {
+		t.Fatalf("unexpected registration error: %v", err)
+	}
+
+	for _, definition := range []Definition[runtimeTestPayload]{
+		{Topic: topic, Name: "slow", Priority: 10, Handle: func(HandlerContext, runtimeTestPayload) error { return nil }},
+		{Topic: topic, Name: "fast", Priority: -10, Handle: func(HandlerContext, runtimeTestPayload) error { return nil }},
+		{Topic: topic, Name: "default.first", Handle: func(HandlerContext, runtimeTestPayload) error { return nil }},
+		{Topic: topic, Name: "default.second", Handle: func(HandlerContext, runtimeTestPayload) error { return nil }},
+	} {
+		if _, err := attachListener(runtime, definition); err != nil {
+			t.Fatalf("unexpected listener registration error: %v", err)
+		}
+	}
+
+	want := []string{"fast", "default.first", "default.second", "slow"}
+
+	listeners := runtime.registry.registeredListeners(topic.Name)
+	if len(listeners) != len(want) {
+		t.Fatalf("expected %d listeners, got %d", len(want), len(listeners))
+	}
+
+	for i, name := range want {
+		if listeners[i].definitionName != name {
+			t.Fatalf("listener %d: expected %q, got %q", i, name, listeners[i].definitionName)
+		}
+	}
+}

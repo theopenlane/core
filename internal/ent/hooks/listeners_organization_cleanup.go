@@ -20,6 +20,8 @@ func init() { registerListeners(OrganizationCleanupListeners) }
 func OrganizationCleanupListeners() []gala.Registration {
 	return []gala.Registration{
 		entityops.MutationListener{
+			// the cascade removes the organization row other delete listeners read, so it runs last
+			Priority:   listenerPriorityLast,
 			Schema:     entityops.SchemaOrganization,
 			Operations: []string{entityops.OpSoftDelete},
 			Caller: func(_ *auth.Caller, payload entityops.MutationPayload) *auth.Caller {

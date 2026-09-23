@@ -818,8 +818,8 @@ github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rM
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
 github.com/theopenlane/eddy v0.1.0 h1:mtsBL9COYCJWMkjxPOb7LefPaysyPVmYb4idy7kL4lY=
 github.com/theopenlane/eddy v0.1.0/go.mod h1:UvovGX5x0N9RdKk2Kb5CMbGziRUasARDy8xSEAT8aDs=
-github.com/theopenlane/entx v0.34.2 h1:Xktw2sMNKaFP4ZA0bPxAYj9Hoc2uEW4o1sFnbgVkjbg=
-github.com/theopenlane/entx v0.34.2/go.mod h1:c1H4hqMJeuTNNMTf3tnVZkVMRZ/FgHwQZbXydshBeAs=
+github.com/theopenlane/entx v0.34.4 h1:xCyhN3QPsMlG9rovRpqB/ZkT0z+IcmLpCHPpfKzikto=
+github.com/theopenlane/entx v0.34.4/go.mod h1:c1H4hqMJeuTNNMTf3tnVZkVMRZ/FgHwQZbXydshBeAs=
 github.com/theopenlane/go-client v0.14.0 h1:NFU8fUZlS9VUGSTP64G2DbM3K4z9P1Ki4fJDwvwXXFI=
 github.com/theopenlane/go-client v0.14.0/go.mod h1:xTWOTJwloCtwSnk6pQhntOcwswI3sulYV2q4x8gbIik=
 github.com/theopenlane/gqlgen-plugins v0.18.0 h1:UWA2QMzWdfwY/WqdeWuj5UvDhtld5GNrTcTeYgR/BL0=
@@ -871,8 +871,6 @@ github.com/vanng822/go-premailer v1.35.0 h1:MKjrmNV501RC7sIojfOSMT8o3f0eajzuwT7P
 github.com/vanng822/go-premailer v1.35.0/go.mod h1:Tprut5ol8TYvztOrIk92fo8cklEKXglZ6VFU32hoZy4=
 github.com/vektah/gqlparser/v2 v2.5.37 h1:jbb1Ilv+xBklV6653tKb4oVUupPNTLb5LmrnBKVI12Y=
 github.com/vektah/gqlparser/v2 v2.5.37/go.mod h1:9O4Ox6Ngd3Y12bMD3w6i3CRQXh8W1oC1q0m6olCymDM=
-github.com/vektra/mockery/v3 v3.7.4 h1:t2qElHpzlKKJA63nrEmnkdwy+OaBV1t6uAf/YpHu4EU=
-github.com/vektra/mockery/v3 v3.7.4/go.mod h1:K+L72OoFVizA9eWtO4L+kU65oylgreiJEJ57Gu8g9Ew=
 github.com/vektra/mockery/v3 v3.8.0 h1:Tklqcx844iV8GtYziqJXam1a8RdcKip4UErMa66Nxps=
 github.com/vektra/mockery/v3 v3.8.0/go.mod h1:K+L72OoFVizA9eWtO4L+kU65oylgreiJEJ57Gu8g9Ew=
 github.com/vmihailenco/msgpack/v5 v5.4.1 h1:cQriyiUvjTwOHg8QZaPihLWeRAAVoCpE00IUPn0Bjt8=

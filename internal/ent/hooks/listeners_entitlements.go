@@ -35,6 +35,8 @@ func EntitlementListeners() []gala.Registration {
 			Handle: entityops.RequireDep(handleOrganizationCreatedGala),
 		},
 		entityops.MutationListener{
+			// the stripe cancellation reads the organization row, so it runs before the cascade delete
+			Priority:   listenerPriorityFirst,
 			Schema:     entityops.SchemaOrganization,
 			Operations: []string{entityops.OpSoftDelete, entityops.OpDelete, entityops.OpDeleteOne},
 			Caller: func(_ *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
