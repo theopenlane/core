@@ -337,6 +337,26 @@ func (_u *TrustCenterUpdate) ClearSubprocessorURL() *TrustCenterUpdate {
 	return _u
 }
 
+// SetNoindexDefaultDomain sets the "noindex_default_domain" field.
+func (_u *TrustCenterUpdate) SetNoindexDefaultDomain(v bool) *TrustCenterUpdate {
+	_u.mutation.SetNoindexDefaultDomain(v)
+	return _u
+}
+
+// SetNillableNoindexDefaultDomain sets the "noindex_default_domain" field if the given value is not nil.
+func (_u *TrustCenterUpdate) SetNillableNoindexDefaultDomain(v *bool) *TrustCenterUpdate {
+	if v != nil {
+		_u.SetNoindexDefaultDomain(*v)
+	}
+	return _u
+}
+
+// ClearNoindexDefaultDomain clears the value of the "noindex_default_domain" field.
+func (_u *TrustCenterUpdate) ClearNoindexDefaultDomain() *TrustCenterUpdate {
+	_u.mutation.ClearNoindexDefaultDomain()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *TrustCenterUpdate) SetOwner(v *Organization) *TrustCenterUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -1085,6 +1105,12 @@ func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.SubprocessorURLCleared() {
 		_spec.ClearField(trustcenter.FieldSubprocessorURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.NoindexDefaultDomain(); ok {
+		_spec.SetField(trustcenter.FieldNoindexDefaultDomain, field.TypeBool, value)
+	}
+	if _u.mutation.NoindexDefaultDomainCleared() {
+		_spec.ClearField(trustcenter.FieldNoindexDefaultDomain, field.TypeBool)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2157,6 +2183,26 @@ func (_u *TrustCenterUpdateOne) ClearSubprocessorURL() *TrustCenterUpdateOne {
 	return _u
 }
 
+// SetNoindexDefaultDomain sets the "noindex_default_domain" field.
+func (_u *TrustCenterUpdateOne) SetNoindexDefaultDomain(v bool) *TrustCenterUpdateOne {
+	_u.mutation.SetNoindexDefaultDomain(v)
+	return _u
+}
+
+// SetNillableNoindexDefaultDomain sets the "noindex_default_domain" field if the given value is not nil.
+func (_u *TrustCenterUpdateOne) SetNillableNoindexDefaultDomain(v *bool) *TrustCenterUpdateOne {
+	if v != nil {
+		_u.SetNoindexDefaultDomain(*v)
+	}
+	return _u
+}
+
+// ClearNoindexDefaultDomain clears the value of the "noindex_default_domain" field.
+func (_u *TrustCenterUpdateOne) ClearNoindexDefaultDomain() *TrustCenterUpdateOne {
+	_u.mutation.ClearNoindexDefaultDomain()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *TrustCenterUpdateOne) SetOwner(v *Organization) *TrustCenterUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -2935,6 +2981,12 @@ func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter
 	}
 	if _u.mutation.SubprocessorURLCleared() {
 		_spec.ClearField(trustcenter.FieldSubprocessorURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.NoindexDefaultDomain(); ok {
+		_spec.SetField(trustcenter.FieldNoindexDefaultDomain, field.TypeBool, value)
+	}
+	if _u.mutation.NoindexDefaultDomainCleared() {
+		_spec.ClearField(trustcenter.FieldNoindexDefaultDomain, field.TypeBool)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

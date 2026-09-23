@@ -124,6 +124,9 @@ func (_u *TrustCenterHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.SubprocessorURLCleared() {
 		_spec.ClearField(trustcenterhistory.FieldSubprocessorURL, field.TypeString)
 	}
+	if _u.mutation.NoindexDefaultDomainCleared() {
+		_spec.ClearField(trustcenterhistory.FieldNoindexDefaultDomain, field.TypeBool)
+	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcenterhistory.Label}
@@ -268,6 +271,9 @@ func (_u *TrustCenterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.SubprocessorURLCleared() {
 		_spec.ClearField(trustcenterhistory.FieldSubprocessorURL, field.TypeString)
+	}
+	if _u.mutation.NoindexDefaultDomainCleared() {
+		_spec.ClearField(trustcenterhistory.FieldNoindexDefaultDomain, field.TypeBool)
 	}
 	_node = &TrustCenterHistory{config: _u.config}
 	_spec.Assign = _node.assignValues

@@ -2470,6 +2470,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterhistory.FieldPirschAccessLink:         {Type: field.TypeString, Column: trustcenterhistory.FieldPirschAccessLink},
 			trustcenterhistory.FieldPreviewStatus:            {Type: field.TypeEnum, Column: trustcenterhistory.FieldPreviewStatus},
 			trustcenterhistory.FieldSubprocessorURL:          {Type: field.TypeString, Column: trustcenterhistory.FieldSubprocessorURL},
+			trustcenterhistory.FieldNoindexDefaultDomain:     {Type: field.TypeBool, Column: trustcenterhistory.FieldNoindexDefaultDomain},
 		},
 	}
 	graph.Nodes[54] = &sqlgraph.Node{
@@ -13591,6 +13592,11 @@ func (f *TrustCenterHistoryFilter) WherePreviewStatus(p entql.StringP) {
 // WhereSubprocessorURL applies the entql string predicate on the subprocessor_url field.
 func (f *TrustCenterHistoryFilter) WhereSubprocessorURL(p entql.StringP) {
 	f.Where(p.Field(trustcenterhistory.FieldSubprocessorURL))
+}
+
+// WhereNoindexDefaultDomain applies the entql bool predicate on the noindex_default_domain field.
+func (f *TrustCenterHistoryFilter) WhereNoindexDefaultDomain(p entql.BoolP) {
+	f.Where(p.Field(trustcenterhistory.FieldNoindexDefaultDomain))
 }
 
 // addPredicate implements the predicateAdder interface.

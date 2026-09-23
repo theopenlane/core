@@ -91992,6 +91992,12 @@ type TrustCenterWhereInput struct {
 	SubprocessorURLEqualFold    *string  `json:"subprocessorURLEqualFold,omitempty"`
 	SubprocessorURLContainsFold *string  `json:"subprocessorURLContainsFold,omitempty"`
 
+	// "noindex_default_domain" field predicates.
+	NoindexDefaultDomain       *bool `json:"noindexDefaultDomain,omitempty"`
+	NoindexDefaultDomainNEQ    *bool `json:"noindexDefaultDomainNEQ,omitempty"`
+	NoindexDefaultDomainIsNil  bool  `json:"noindexDefaultDomainIsNil,omitempty"`
+	NoindexDefaultDomainNotNil bool  `json:"noindexDefaultDomainNotNil,omitempty"`
+
 	// "tags" JSON-string-array predicates.
 	TagsHas *string `json:"tagsHas,omitempty"`
 
@@ -92583,6 +92589,18 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 	}
 	if i.SubprocessorURLContainsFold != nil {
 		predicates = append(predicates, trustcenter.SubprocessorURLContainsFold(*i.SubprocessorURLContainsFold))
+	}
+	if i.NoindexDefaultDomain != nil {
+		predicates = append(predicates, trustcenter.NoindexDefaultDomainEQ(*i.NoindexDefaultDomain))
+	}
+	if i.NoindexDefaultDomainNEQ != nil {
+		predicates = append(predicates, trustcenter.NoindexDefaultDomainNEQ(*i.NoindexDefaultDomainNEQ))
+	}
+	if i.NoindexDefaultDomainIsNil {
+		predicates = append(predicates, trustcenter.NoindexDefaultDomainIsNil())
+	}
+	if i.NoindexDefaultDomainNotNil {
+		predicates = append(predicates, trustcenter.NoindexDefaultDomainNotNil())
 	}
 
 	if i.TagsHas != nil {

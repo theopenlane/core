@@ -26775,6 +26775,7 @@ type CreateTrustCenterInput struct {
 	PirschAccessLink           *string                         `json:"pirsch_access_link,omitempty"`
 	PreviewStatus              *enums.TrustCenterPreviewStatus `json:"preview_status,omitempty"`
 	SubprocessorURL            *string                         `json:"subprocessor_url,omitempty"`
+	NoindexDefaultDomain       *bool                           `json:"noindex_default_domain,omitempty"`
 	OwnerID                    *string                         `json:"owner_id,omitempty"`
 	BlockedGroupIDs            []string                        `json:"blocked_group_ids,omitempty"`
 	EditorIDs                  []string                        `json:"editor_ids,omitempty"`
@@ -26815,6 +26816,9 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.SubprocessorURL; v != nil {
 		m.SetSubprocessorURL(*v)
+	}
+	if v := i.NoindexDefaultDomain; v != nil {
+		m.SetNoindexDefaultDomain(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -26896,6 +26900,8 @@ type UpdateTrustCenterInput struct {
 	PreviewStatus                    *enums.TrustCenterPreviewStatus `json:"preview_status,omitempty"`
 	ClearSubprocessorURL             bool
 	SubprocessorURL                  *string `json:"subprocessor_url,omitempty"`
+	ClearNoindexDefaultDomain        bool
+	NoindexDefaultDomain             *bool `json:"noindex_default_domain,omitempty"`
 	ClearOwner                       bool
 	OwnerID                          *string `json:"owner_id,omitempty"`
 	ClearBlockedGroups               bool
@@ -26989,6 +26995,12 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.SubprocessorURL; v != nil {
 		m.SetSubprocessorURL(*v)
+	}
+	if i.ClearNoindexDefaultDomain {
+		m.ClearNoindexDefaultDomain()
+	}
+	if v := i.NoindexDefaultDomain; v != nil {
+		m.SetNoindexDefaultDomain(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

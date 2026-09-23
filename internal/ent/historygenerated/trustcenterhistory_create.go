@@ -288,6 +288,20 @@ func (_c *TrustCenterHistoryCreate) SetNillableSubprocessorURL(v *string) *Trust
 	return _c
 }
 
+// SetNoindexDefaultDomain sets the "noindex_default_domain" field.
+func (_c *TrustCenterHistoryCreate) SetNoindexDefaultDomain(v bool) *TrustCenterHistoryCreate {
+	_c.mutation.SetNoindexDefaultDomain(v)
+	return _c
+}
+
+// SetNillableNoindexDefaultDomain sets the "noindex_default_domain" field if the given value is not nil.
+func (_c *TrustCenterHistoryCreate) SetNillableNoindexDefaultDomain(v *bool) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetNoindexDefaultDomain(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterHistoryCreate) SetID(v string) *TrustCenterHistoryCreate {
 	_c.mutation.SetID(v)
@@ -367,6 +381,10 @@ func (_c *TrustCenterHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.PreviewStatus(); !ok {
 		v := trustcenterhistory.DefaultPreviewStatus
 		_c.mutation.SetPreviewStatus(v)
+	}
+	if _, ok := _c.mutation.NoindexDefaultDomain(); !ok {
+		v := trustcenterhistory.DefaultNoindexDefaultDomain
+		_c.mutation.SetNoindexDefaultDomain(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcenterhistory.DefaultID == nil {
@@ -510,6 +528,10 @@ func (_c *TrustCenterHistoryCreate) createSpec() (*TrustCenterHistory, *sqlgraph
 	if value, ok := _c.mutation.SubprocessorURL(); ok {
 		_spec.SetField(trustcenterhistory.FieldSubprocessorURL, field.TypeString, value)
 		_node.SubprocessorURL = value
+	}
+	if value, ok := _c.mutation.NoindexDefaultDomain(); ok {
+		_spec.SetField(trustcenterhistory.FieldNoindexDefaultDomain, field.TypeBool, value)
+		_node.NoindexDefaultDomain = value
 	}
 	return _node, _spec
 }

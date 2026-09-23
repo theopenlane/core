@@ -2475,6 +2475,7 @@ type ComplexityRoot struct {
 		CustomDomainID           func(childComplexity int) int
 		HistoryTime              func(childComplexity int) int
 		ID                       func(childComplexity int) int
+		NoindexDefaultDomain     func(childComplexity int) int
 		Operation                func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
 		PirschAccessLink         func(childComplexity int) int
@@ -15255,6 +15256,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterHistory.ID(childComplexity), true
+	case "TrustCenterHistory.noindexDefaultDomain":
+		if e.ComplexityRoot.TrustCenterHistory.NoindexDefaultDomain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterHistory.NoindexDefaultDomain(childComplexity), true
 	case "TrustCenterHistory.operation":
 		if e.ComplexityRoot.TrustCenterHistory.Operation == nil {
 			break
@@ -47450,6 +47457,10 @@ type TrustCenterHistory implements Node {
   External URL for the trust center subprocessors
   """
   subprocessorURL: String
+  """
+  allow trustcenter to be indexed on google
+  """
+  noindexDefaultDomain: Boolean
 }
 """
 A connection to a list of items.
@@ -47749,6 +47760,13 @@ input TrustCenterHistoryWhereInput {
   subprocessorURLNotNil: Boolean
   subprocessorURLEqualFold: String
   subprocessorURLContainsFold: String
+  """
+  noindex_default_domain field predicates
+  """
+  noindexDefaultDomain: Boolean
+  noindexDefaultDomainNEQ: Boolean
+  noindexDefaultDomainIsNil: Boolean
+  noindexDefaultDomainNotNil: Boolean
 }
 type TrustCenterNDARequestHistory implements Node {
   id: ID!
@@ -58158,6 +58176,8 @@ func (ec *executionContext) childFields_TrustCenterHistory(ctx context.Context, 
 		return ec.fieldContext_TrustCenterHistory_previewStatus(ctx, field)
 	case "subprocessorURL":
 		return ec.fieldContext_TrustCenterHistory_subprocessorURL(ctx, field)
+	case "noindexDefaultDomain":
+		return ec.fieldContext_TrustCenterHistory_noindexDefaultDomain(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterHistory", field.Name)
 }

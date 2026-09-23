@@ -3154,6 +3154,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenter.FieldPirschAccessLink:         {Type: field.TypeString, Column: trustcenter.FieldPirschAccessLink},
 			trustcenter.FieldPreviewStatus:            {Type: field.TypeEnum, Column: trustcenter.FieldPreviewStatus},
 			trustcenter.FieldSubprocessorURL:          {Type: field.TypeString, Column: trustcenter.FieldSubprocessorURL},
+			trustcenter.FieldNoindexDefaultDomain:     {Type: field.TypeBool, Column: trustcenter.FieldNoindexDefaultDomain},
 		},
 	}
 	graph.Nodes[78] = &sqlgraph.Node{
@@ -47134,6 +47135,11 @@ func (f *TrustCenterFilter) WherePreviewStatus(p entql.StringP) {
 // WhereSubprocessorURL applies the entql string predicate on the subprocessor_url field.
 func (f *TrustCenterFilter) WhereSubprocessorURL(p entql.StringP) {
 	f.Where(p.Field(trustcenter.FieldSubprocessorURL))
+}
+
+// WhereNoindexDefaultDomain applies the entql bool predicate on the noindex_default_domain field.
+func (f *TrustCenterFilter) WhereNoindexDefaultDomain(p entql.BoolP) {
+	f.Where(p.Field(trustcenter.FieldNoindexDefaultDomain))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

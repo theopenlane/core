@@ -266,6 +266,20 @@ func (_c *TrustCenterCreate) SetNillableSubprocessorURL(v *string) *TrustCenterC
 	return _c
 }
 
+// SetNoindexDefaultDomain sets the "noindex_default_domain" field.
+func (_c *TrustCenterCreate) SetNoindexDefaultDomain(v bool) *TrustCenterCreate {
+	_c.mutation.SetNoindexDefaultDomain(v)
+	return _c
+}
+
+// SetNillableNoindexDefaultDomain sets the "noindex_default_domain" field if the given value is not nil.
+func (_c *TrustCenterCreate) SetNillableNoindexDefaultDomain(v *bool) *TrustCenterCreate {
+	if v != nil {
+		_c.SetNoindexDefaultDomain(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterCreate) SetID(v string) *TrustCenterCreate {
 	_c.mutation.SetID(v)
@@ -606,6 +620,10 @@ func (_c *TrustCenterCreate) defaults() error {
 		v := trustcenter.DefaultPreviewStatus
 		_c.mutation.SetPreviewStatus(v)
 	}
+	if _, ok := _c.mutation.NoindexDefaultDomain(); !ok {
+		v := trustcenter.DefaultNoindexDefaultDomain
+		_c.mutation.SetNoindexDefaultDomain(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcenter.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcenter.DefaultID (forgotten import generated/runtime?)")
@@ -728,6 +746,10 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.SubprocessorURL(); ok {
 		_spec.SetField(trustcenter.FieldSubprocessorURL, field.TypeString, value)
 		_node.SubprocessorURL = value
+	}
+	if value, ok := _c.mutation.NoindexDefaultDomain(); ok {
+		_spec.SetField(trustcenter.FieldNoindexDefaultDomain, field.TypeBool, value)
+		_node.NoindexDefaultDomain = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

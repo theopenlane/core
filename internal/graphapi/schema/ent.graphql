@@ -15930,6 +15930,10 @@ input CreateTrustCenterInput {
   External URL for the trust center subprocessors
   """
   subprocessorURL: String
+  """
+  allow trustcenter to be indexed on google
+  """
+  noindexDefaultDomain: Boolean
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -67413,6 +67417,10 @@ type TrustCenter implements Node @modules(names: ["trust_center_module"]) {
   External URL for the trust center subprocessors
   """
   subprocessorURL: String
+  """
+  allow trustcenter to be indexed on google
+  """
+  noindexDefaultDomain: Boolean
   owner: Organization
   blockedGroups(
     """
@@ -71380,6 +71388,13 @@ input TrustCenterWhereInput {
   subprocessorURLNotNil: Boolean
   subprocessorURLEqualFold: String
   subprocessorURLContainsFold: String
+  """
+  noindex_default_domain field predicates
+  """
+  noindexDefaultDomain: Boolean
+  noindexDefaultDomainNEQ: Boolean
+  noindexDefaultDomainIsNil: Boolean
+  noindexDefaultDomainNotNil: Boolean
   """
   owner edge predicates
   """
@@ -78940,6 +78955,11 @@ input UpdateTrustCenterInput {
   """
   subprocessorURL: String
   clearSubprocessorURL: Boolean
+  """
+  allow trustcenter to be indexed on google
+  """
+  noindexDefaultDomain: Boolean
+  clearNoindexDefaultDomain: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]

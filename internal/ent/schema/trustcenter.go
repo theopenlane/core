@@ -89,6 +89,10 @@ func (TrustCenter) Fields() []ent.Field {
 			Comment("External URL for the trust center subprocessors").
 			Validate(validator.ValidateURL()).
 			Optional(),
+		field.Bool("noindex_default_domain").
+			Comment("allow trustcenter to be indexed on google").
+			Default(true).
+			Optional(),
 	}
 }
 

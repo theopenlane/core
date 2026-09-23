@@ -141,6 +141,11 @@ func SubprocessorURL(v string) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldEQ(FieldSubprocessorURL, v))
 }
 
+// NoindexDefaultDomain applies equality check predicate on the "noindex_default_domain" field. It's identical to NoindexDefaultDomainEQ.
+func NoindexDefaultDomain(v bool) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldEQ(FieldNoindexDefaultDomain, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldEQ(FieldCreatedAt, v))
@@ -1239,6 +1244,26 @@ func SubprocessorURLEqualFold(v string) predicate.TrustCenter {
 // SubprocessorURLContainsFold applies the ContainsFold predicate on the "subprocessor_url" field.
 func SubprocessorURLContainsFold(v string) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldContainsFold(FieldSubprocessorURL, v))
+}
+
+// NoindexDefaultDomainEQ applies the EQ predicate on the "noindex_default_domain" field.
+func NoindexDefaultDomainEQ(v bool) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldEQ(FieldNoindexDefaultDomain, v))
+}
+
+// NoindexDefaultDomainNEQ applies the NEQ predicate on the "noindex_default_domain" field.
+func NoindexDefaultDomainNEQ(v bool) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNEQ(FieldNoindexDefaultDomain, v))
+}
+
+// NoindexDefaultDomainIsNil applies the IsNil predicate on the "noindex_default_domain" field.
+func NoindexDefaultDomainIsNil() predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldIsNull(FieldNoindexDefaultDomain))
+}
+
+// NoindexDefaultDomainNotNil applies the NotNil predicate on the "noindex_default_domain" field.
+func NoindexDefaultDomainNotNil() predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNotNull(FieldNoindexDefaultDomain))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

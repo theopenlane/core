@@ -6678,6 +6678,7 @@ type ComplexityRoot struct {
 		Editors                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		EmailTemplates           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
 		ID                       func(childComplexity int) int
+		NoindexDefaultDomain     func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
 		PirschAccessLink         func(childComplexity int) int
@@ -45305,6 +45306,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenter.ID(childComplexity), true
+	case "TrustCenter.noindexDefaultDomain":
+		if e.ComplexityRoot.TrustCenter.NoindexDefaultDomain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenter.NoindexDefaultDomain(childComplexity), true
 	case "TrustCenter.owner":
 		if e.ComplexityRoot.TrustCenter.Owner == nil {
 			break
@@ -72375,6 +72382,10 @@ input CreateTrustCenterInput {
   External URL for the trust center subprocessors
   """
   subprocessorURL: String
+  """
+  allow trustcenter to be indexed on google
+  """
+  noindexDefaultDomain: Boolean
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -123858,6 +123869,10 @@ type TrustCenter implements Node @modules(names: ["trust_center_module"]) {
   External URL for the trust center subprocessors
   """
   subprocessorURL: String
+  """
+  allow trustcenter to be indexed on google
+  """
+  noindexDefaultDomain: Boolean
   owner: Organization
   blockedGroups(
     """
@@ -127825,6 +127840,13 @@ input TrustCenterWhereInput {
   subprocessorURLNotNil: Boolean
   subprocessorURLEqualFold: String
   subprocessorURLContainsFold: String
+  """
+  noindex_default_domain field predicates
+  """
+  noindexDefaultDomain: Boolean
+  noindexDefaultDomainNEQ: Boolean
+  noindexDefaultDomainIsNil: Boolean
+  noindexDefaultDomainNotNil: Boolean
   """
   owner edge predicates
   """
@@ -135385,6 +135407,11 @@ input UpdateTrustCenterInput {
   """
   subprocessorURL: String
   clearSubprocessorURL: Boolean
+  """
+  allow trustcenter to be indexed on google
+  """
+  noindexDefaultDomain: Boolean
+  clearNoindexDefaultDomain: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -167853,6 +167880,8 @@ func (ec *executionContext) childFields_TrustCenter(ctx context.Context, field g
 		return ec.fieldContext_TrustCenter_previewStatus(ctx, field)
 	case "subprocessorURL":
 		return ec.fieldContext_TrustCenter_subprocessorURL(ctx, field)
+	case "noindexDefaultDomain":
+		return ec.fieldContext_TrustCenter_noindexDefaultDomain(ctx, field)
 	case "owner":
 		return ec.fieldContext_TrustCenter_owner(ctx, field)
 	case "blockedGroups":

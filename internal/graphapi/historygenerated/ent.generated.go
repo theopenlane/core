@@ -53195,6 +53195,29 @@ func (ec *executionContext) fieldContext_TrustCenterHistory_subprocessorURL(_ co
 	return graphql.NewScalarFieldContext("TrustCenterHistory", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
+func (ec *executionContext) _TrustCenterHistory_noindexDefaultDomain(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterHistory_noindexDefaultDomain(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.NoindexDefaultDomain, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterHistory_noindexDefaultDomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
 func (ec *executionContext) _TrustCenterHistoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterHistoryConnection) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -157778,7 +157801,7 @@ func (ec *executionContext) unmarshalInputTrustCenterHistoryWhereInput(ctx conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "slug", "slugNEQ", "slugIn", "slugNotIn", "slugContains", "slugHasPrefix", "slugHasSuffix", "slugIsNil", "slugNotNil", "slugEqualFold", "slugContainsFold", "customDomainID", "customDomainIDNEQ", "customDomainIDIn", "customDomainIDNotIn", "customDomainIDContains", "customDomainIDHasPrefix", "customDomainIDHasSuffix", "customDomainIDIsNil", "customDomainIDNotNil", "customDomainIDEqualFold", "customDomainIDContainsFold", "previewDomainID", "previewDomainIDNEQ", "previewDomainIDIn", "previewDomainIDNotIn", "previewDomainIDContains", "previewDomainIDHasPrefix", "previewDomainIDHasSuffix", "previewDomainIDIsNil", "previewDomainIDNotNil", "previewDomainIDEqualFold", "previewDomainIDContainsFold", "pirschDomainID", "pirschDomainIDNEQ", "pirschDomainIDIn", "pirschDomainIDNotIn", "pirschDomainIDContains", "pirschDomainIDHasPrefix", "pirschDomainIDHasSuffix", "pirschDomainIDIsNil", "pirschDomainIDNotNil", "pirschDomainIDEqualFold", "pirschDomainIDContainsFold", "pirschIdentificationCode", "pirschIdentificationCodeNEQ", "pirschIdentificationCodeIn", "pirschIdentificationCodeNotIn", "pirschIdentificationCodeContains", "pirschIdentificationCodeHasPrefix", "pirschIdentificationCodeHasSuffix", "pirschIdentificationCodeIsNil", "pirschIdentificationCodeNotNil", "pirschIdentificationCodeEqualFold", "pirschIdentificationCodeContainsFold", "pirschAccessLink", "pirschAccessLinkNEQ", "pirschAccessLinkIn", "pirschAccessLinkNotIn", "pirschAccessLinkContains", "pirschAccessLinkHasPrefix", "pirschAccessLinkHasSuffix", "pirschAccessLinkIsNil", "pirschAccessLinkNotNil", "pirschAccessLinkEqualFold", "pirschAccessLinkContainsFold", "previewStatus", "previewStatusNEQ", "previewStatusIn", "previewStatusNotIn", "previewStatusIsNil", "previewStatusNotNil", "subprocessorURL", "subprocessorURLNEQ", "subprocessorURLIn", "subprocessorURLNotIn", "subprocessorURLContains", "subprocessorURLHasPrefix", "subprocessorURLHasSuffix", "subprocessorURLIsNil", "subprocessorURLNotNil", "subprocessorURLEqualFold", "subprocessorURLContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "slug", "slugNEQ", "slugIn", "slugNotIn", "slugContains", "slugHasPrefix", "slugHasSuffix", "slugIsNil", "slugNotNil", "slugEqualFold", "slugContainsFold", "customDomainID", "customDomainIDNEQ", "customDomainIDIn", "customDomainIDNotIn", "customDomainIDContains", "customDomainIDHasPrefix", "customDomainIDHasSuffix", "customDomainIDIsNil", "customDomainIDNotNil", "customDomainIDEqualFold", "customDomainIDContainsFold", "previewDomainID", "previewDomainIDNEQ", "previewDomainIDIn", "previewDomainIDNotIn", "previewDomainIDContains", "previewDomainIDHasPrefix", "previewDomainIDHasSuffix", "previewDomainIDIsNil", "previewDomainIDNotNil", "previewDomainIDEqualFold", "previewDomainIDContainsFold", "pirschDomainID", "pirschDomainIDNEQ", "pirschDomainIDIn", "pirschDomainIDNotIn", "pirschDomainIDContains", "pirschDomainIDHasPrefix", "pirschDomainIDHasSuffix", "pirschDomainIDIsNil", "pirschDomainIDNotNil", "pirschDomainIDEqualFold", "pirschDomainIDContainsFold", "pirschIdentificationCode", "pirschIdentificationCodeNEQ", "pirschIdentificationCodeIn", "pirschIdentificationCodeNotIn", "pirschIdentificationCodeContains", "pirschIdentificationCodeHasPrefix", "pirschIdentificationCodeHasSuffix", "pirschIdentificationCodeIsNil", "pirschIdentificationCodeNotNil", "pirschIdentificationCodeEqualFold", "pirschIdentificationCodeContainsFold", "pirschAccessLink", "pirschAccessLinkNEQ", "pirschAccessLinkIn", "pirschAccessLinkNotIn", "pirschAccessLinkContains", "pirschAccessLinkHasPrefix", "pirschAccessLinkHasSuffix", "pirschAccessLinkIsNil", "pirschAccessLinkNotNil", "pirschAccessLinkEqualFold", "pirschAccessLinkContainsFold", "previewStatus", "previewStatusNEQ", "previewStatusIn", "previewStatusNotIn", "previewStatusIsNil", "previewStatusNotNil", "subprocessorURL", "subprocessorURLNEQ", "subprocessorURLIn", "subprocessorURLNotIn", "subprocessorURLContains", "subprocessorURLHasPrefix", "subprocessorURLHasSuffix", "subprocessorURLIsNil", "subprocessorURLNotNil", "subprocessorURLEqualFold", "subprocessorURLContainsFold", "noindexDefaultDomain", "noindexDefaultDomainNEQ", "noindexDefaultDomainIsNil", "noindexDefaultDomainNotNil"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -158975,6 +158998,34 @@ func (ec *executionContext) unmarshalInputTrustCenterHistoryWhereInput(ctx conte
 				return it, err
 			}
 			it.SubprocessorURLContainsFold = data
+		case "noindexDefaultDomain":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noindexDefaultDomain"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NoindexDefaultDomain = data
+		case "noindexDefaultDomainNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noindexDefaultDomainNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NoindexDefaultDomainNEQ = data
+		case "noindexDefaultDomainIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noindexDefaultDomainIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NoindexDefaultDomainIsNil = data
+		case "noindexDefaultDomainNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("noindexDefaultDomainNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NoindexDefaultDomainNotNil = data
 		}
 	}
 	return it, nil
@@ -195272,6 +195323,11 @@ func (ec *executionContext) _TrustCenterHistory(ctx context.Context, sel ast.Sel
 			}
 		case "subprocessorURL":
 			out.Values[i] = ec._TrustCenterHistory_subprocessorURL(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "noindexDefaultDomain":
+			out.Values[i] = ec._TrustCenterHistory_noindexDefaultDomain(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

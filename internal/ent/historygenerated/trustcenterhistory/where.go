@@ -153,6 +153,11 @@ func SubprocessorURL(v string) predicate.TrustCenterHistory {
 	return predicate.TrustCenterHistory(sql.FieldEQ(FieldSubprocessorURL, v))
 }
 
+// NoindexDefaultDomain applies equality check predicate on the "noindex_default_domain" field. It's identical to NoindexDefaultDomainEQ.
+func NoindexDefaultDomain(v bool) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldEQ(FieldNoindexDefaultDomain, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.TrustCenterHistory {
 	return predicate.TrustCenterHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1386,6 +1391,26 @@ func SubprocessorURLEqualFold(v string) predicate.TrustCenterHistory {
 // SubprocessorURLContainsFold applies the ContainsFold predicate on the "subprocessor_url" field.
 func SubprocessorURLContainsFold(v string) predicate.TrustCenterHistory {
 	return predicate.TrustCenterHistory(sql.FieldContainsFold(FieldSubprocessorURL, v))
+}
+
+// NoindexDefaultDomainEQ applies the EQ predicate on the "noindex_default_domain" field.
+func NoindexDefaultDomainEQ(v bool) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldEQ(FieldNoindexDefaultDomain, v))
+}
+
+// NoindexDefaultDomainNEQ applies the NEQ predicate on the "noindex_default_domain" field.
+func NoindexDefaultDomainNEQ(v bool) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldNEQ(FieldNoindexDefaultDomain, v))
+}
+
+// NoindexDefaultDomainIsNil applies the IsNil predicate on the "noindex_default_domain" field.
+func NoindexDefaultDomainIsNil() predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldIsNull(FieldNoindexDefaultDomain))
+}
+
+// NoindexDefaultDomainNotNil applies the NotNil predicate on the "noindex_default_domain" field.
+func NoindexDefaultDomainNotNil() predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldNotNull(FieldNoindexDefaultDomain))
 }
 
 // And groups predicates with the AND operator between them.

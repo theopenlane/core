@@ -9251,7 +9251,9 @@ type CreateTrustCenterInput struct {
 	// preview status of the trust center
 	PreviewStatus *enums.TrustCenterPreviewStatus `json:"previewStatus,omitempty"`
 	// External URL for the trust center subprocessors
-	SubprocessorURL            *string                        `json:"subprocessorURL,omitempty"`
+	SubprocessorURL *string `json:"subprocessorURL,omitempty"`
+	// allow trustcenter to be indexed on google
+	NoindexDefaultDomain       *bool                          `json:"noindexDefaultDomain,omitempty"`
 	OwnerID                    *string                        `json:"ownerID,omitempty"`
 	BlockedGroupIDs            []string                       `json:"blockedGroupIDs,omitempty"`
 	EditorIDs                  []string                       `json:"editorIDs,omitempty"`
@@ -33404,7 +33406,9 @@ type TrustCenter struct {
 	// preview status of the trust center
 	PreviewStatus *enums.TrustCenterPreviewStatus `json:"previewStatus,omitempty"`
 	// External URL for the trust center subprocessors
-	SubprocessorURL          *string                            `json:"subprocessorURL,omitempty"`
+	SubprocessorURL *string `json:"subprocessorURL,omitempty"`
+	// allow trustcenter to be indexed on google
+	NoindexDefaultDomain     *bool                              `json:"noindexDefaultDomain,omitempty"`
 	Owner                    *Organization                      `json:"owner,omitempty"`
 	BlockedGroups            *GroupConnection                   `json:"blockedGroups"`
 	Editors                  *GroupConnection                   `json:"editors"`
@@ -35960,6 +35964,11 @@ type TrustCenterWhereInput struct {
 	SubprocessorURLNotNil       *bool    `json:"subprocessorURLNotNil,omitempty"`
 	SubprocessorURLEqualFold    *string  `json:"subprocessorURLEqualFold,omitempty"`
 	SubprocessorURLContainsFold *string  `json:"subprocessorURLContainsFold,omitempty"`
+	// noindex_default_domain field predicates
+	NoindexDefaultDomain       *bool `json:"noindexDefaultDomain,omitempty"`
+	NoindexDefaultDomainNeq    *bool `json:"noindexDefaultDomainNEQ,omitempty"`
+	NoindexDefaultDomainIsNil  *bool `json:"noindexDefaultDomainIsNil,omitempty"`
+	NoindexDefaultDomainNotNil *bool `json:"noindexDefaultDomainNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -41672,8 +41681,11 @@ type UpdateTrustCenterInput struct {
 	PreviewStatus      *enums.TrustCenterPreviewStatus `json:"previewStatus,omitempty"`
 	ClearPreviewStatus *bool                           `json:"clearPreviewStatus,omitempty"`
 	// External URL for the trust center subprocessors
-	SubprocessorURL                  *string  `json:"subprocessorURL,omitempty"`
-	ClearSubprocessorURL             *bool    `json:"clearSubprocessorURL,omitempty"`
+	SubprocessorURL      *string `json:"subprocessorURL,omitempty"`
+	ClearSubprocessorURL *bool   `json:"clearSubprocessorURL,omitempty"`
+	// allow trustcenter to be indexed on google
+	NoindexDefaultDomain             *bool    `json:"noindexDefaultDomain,omitempty"`
+	ClearNoindexDefaultDomain        *bool    `json:"clearNoindexDefaultDomain,omitempty"`
 	OwnerID                          *string  `json:"ownerID,omitempty"`
 	ClearOwner                       *bool    `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs               []string `json:"addBlockedGroupIDs,omitempty"`

@@ -7769,6 +7769,7 @@ var (
 		{Name: "pirsch_access_link", Type: field.TypeString, Nullable: true},
 		{Name: "preview_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PROVISIONING", "READY", "FAILED", "DEPROVISIONING", "NONE"}, Default: "NONE"},
 		{Name: "subprocessor_url", Type: field.TypeString, Nullable: true},
+		{Name: "noindex_default_domain", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "custom_domain_id", Type: field.TypeString, Nullable: true},
 		{Name: "preview_domain_id", Type: field.TypeString, Nullable: true},
@@ -7784,37 +7785,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_centers_organizations_trust_centers",
-				Columns:    []*schema.Column{TrustCentersColumns[15]},
+				Columns:    []*schema.Column{TrustCentersColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_centers_custom_domains_custom_domain",
-				Columns:    []*schema.Column{TrustCentersColumns[16]},
-				RefColumns: []*schema.Column{CustomDomainsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "trust_centers_custom_domains_preview_domain",
 				Columns:    []*schema.Column{TrustCentersColumns[17]},
 				RefColumns: []*schema.Column{CustomDomainsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_centers_trust_center_settings_setting",
+				Symbol:     "trust_centers_custom_domains_preview_domain",
 				Columns:    []*schema.Column{TrustCentersColumns[18]},
-				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
+				RefColumns: []*schema.Column{CustomDomainsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_centers_trust_center_settings_preview_setting",
+				Symbol:     "trust_centers_trust_center_settings_setting",
 				Columns:    []*schema.Column{TrustCentersColumns[19]},
 				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_centers_trust_center_watermark_configs_watermark_config",
+				Symbol:     "trust_centers_trust_center_settings_preview_setting",
 				Columns:    []*schema.Column{TrustCentersColumns[20]},
+				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_centers_trust_center_watermark_configs_watermark_config",
+				Columns:    []*schema.Column{TrustCentersColumns[21]},
 				RefColumns: []*schema.Column{TrustCenterWatermarkConfigsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -7823,17 +7824,17 @@ var (
 			{
 				Name:    "trust_center_custom_domain_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCentersColumns[16]},
+				Columns: []*schema.Column{TrustCentersColumns[17]},
 			},
 			{
 				Name:    "trust_center_preview_domain_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCentersColumns[17]},
+				Columns: []*schema.Column{TrustCentersColumns[18]},
 			},
 			{
 				Name:    "trust_center_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCentersColumns[15]},
+				Columns: []*schema.Column{TrustCentersColumns[16]},
 			},
 			{
 				Name:    "trustcenter_slug",

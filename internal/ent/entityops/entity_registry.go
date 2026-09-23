@@ -7668,6 +7668,7 @@ func init() {
 		{Name: "custom_domain_id", Label: "CustomDomainID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "noindex_default_domain", Label: "NoindexDefaultDomain", Type: "bool", Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "pirsch_access_link", Label: "PirschAccessLink", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "pirsch_domain_id", Label: "PirschDomainID", Type: "string", MatchKey: true, Clearable: true},

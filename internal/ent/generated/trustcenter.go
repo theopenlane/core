@@ -57,6 +57,8 @@ type TrustCenter struct {
 	PreviewStatus enums.TrustCenterPreviewStatus `json:"preview_status,omitempty"`
 	// External URL for the trust center subprocessors
 	SubprocessorURL string `json:"subprocessor_url,omitempty"`
+	// allow trustcenter to be indexed on google
+	NoindexDefaultDomain bool `json:"noindex_default_domain,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterQuery when eager-loading is set.
 	Edges                         TrustCenterEdges `json:"edges"`
@@ -317,6 +319,8 @@ func (*TrustCenter) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcenter.FieldTags:
 			values[i] = new([]byte)
+		case trustcenter.FieldNoindexDefaultDomain:
+			values[i] = new(sql.NullBool)
 		case trustcenter.FieldID, trustcenter.FieldCreatedBy, trustcenter.FieldUpdatedBy, trustcenter.FieldUpdatedByImpersonator, trustcenter.FieldDeletedBy, trustcenter.FieldOwnerID, trustcenter.FieldSlug, trustcenter.FieldCustomDomainID, trustcenter.FieldPreviewDomainID, trustcenter.FieldPirschDomainID, trustcenter.FieldPirschIdentificationCode, trustcenter.FieldPirschAccessLink, trustcenter.FieldPreviewStatus, trustcenter.FieldSubprocessorURL:
 			values[i] = new(sql.NullString)
 		case trustcenter.FieldCreatedAt, trustcenter.FieldUpdatedAt, trustcenter.FieldDeletedAt:
@@ -453,6 +457,12 @@ func (_m *TrustCenter) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field subprocessor_url", values[i])
 			} else if value.Valid {
 				_m.SubprocessorURL = value.String
+			}
+		case trustcenter.FieldNoindexDefaultDomain:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field noindex_default_domain", values[i])
+			} else if value.Valid {
+				_m.NoindexDefaultDomain = value.Bool
 			}
 		case trustcenter.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -660,6 +670,9 @@ func (_m *TrustCenter) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("subprocessor_url=")
 	builder.WriteString(_m.SubprocessorURL)
+	builder.WriteString(", ")
+	builder.WriteString("noindex_default_domain=")
+	builder.WriteString(fmt.Sprintf("%v", _m.NoindexDefaultDomain))
 	builder.WriteByte(')')
 	return builder.String()
 }

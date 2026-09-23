@@ -5,6 +5,7 @@ mutation CreateTrustCenter ($input: CreateTrustCenterInput!) {
 			createdBy
 			customDomainID
 			id
+			noindexDefaultDomain
 			ownerID
 			pirschAccessLink
 			pirschDomainID
@@ -173,6 +174,7 @@ query GetTrustCenterByID ($trustCenterId: ID!) {
 		createdBy
 		customDomainID
 		id
+		noindexDefaultDomain
 		ownerID
 		pirschAccessLink
 		pirschDomainID
@@ -473,6 +475,7 @@ mutation UpdateTrustCenter ($updateTrustCenterId: ID!, $input: UpdateTrustCenter
 			createdBy
 			customDomainID
 			id
+			noindexDefaultDomain
 			ownerID
 			pirschAccessLink
 			pirschDomainID

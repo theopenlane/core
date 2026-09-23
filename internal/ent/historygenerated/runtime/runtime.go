@@ -2407,6 +2407,10 @@ func init() {
 	trustcenterhistoryDescTags := trustcenterhistoryFields[11].Descriptor()
 	// trustcenterhistory.DefaultTags holds the default value on creation for the tags field.
 	trustcenterhistory.DefaultTags = trustcenterhistoryDescTags.Default.([]string)
+	// trustcenterhistoryDescNoindexDefaultDomain is the schema descriptor for noindex_default_domain field.
+	trustcenterhistoryDescNoindexDefaultDomain := trustcenterhistoryFields[21].Descriptor()
+	// trustcenterhistory.DefaultNoindexDefaultDomain holds the default value on creation for the noindex_default_domain field.
+	trustcenterhistory.DefaultNoindexDefaultDomain = trustcenterhistoryDescNoindexDefaultDomain.Default.(bool)
 	// trustcenterhistoryDescID is the schema descriptor for id field.
 	trustcenterhistoryDescID := trustcenterhistoryFields[10].Descriptor()
 	// trustcenterhistory.DefaultID holds the default value on creation for the id field.

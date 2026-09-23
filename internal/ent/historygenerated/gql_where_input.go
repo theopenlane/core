@@ -60481,6 +60481,12 @@ type TrustCenterHistoryWhereInput struct {
 	SubprocessorURLEqualFold    *string  `json:"subprocessorURLEqualFold,omitempty"`
 	SubprocessorURLContainsFold *string  `json:"subprocessorURLContainsFold,omitempty"`
 
+	// "noindex_default_domain" field predicates.
+	NoindexDefaultDomain       *bool `json:"noindexDefaultDomain,omitempty"`
+	NoindexDefaultDomainNEQ    *bool `json:"noindexDefaultDomainNEQ,omitempty"`
+	NoindexDefaultDomainIsNil  bool  `json:"noindexDefaultDomainIsNil,omitempty"`
+	NoindexDefaultDomainNotNil bool  `json:"noindexDefaultDomainNotNil,omitempty"`
+
 	// "tags" JSON-string-array predicates.
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -61056,6 +61062,18 @@ func (i *TrustCenterHistoryWhereInput) P() (predicate.TrustCenterHistory, error)
 	}
 	if i.SubprocessorURLContainsFold != nil {
 		predicates = append(predicates, trustcenterhistory.SubprocessorURLContainsFold(*i.SubprocessorURLContainsFold))
+	}
+	if i.NoindexDefaultDomain != nil {
+		predicates = append(predicates, trustcenterhistory.NoindexDefaultDomainEQ(*i.NoindexDefaultDomain))
+	}
+	if i.NoindexDefaultDomainNEQ != nil {
+		predicates = append(predicates, trustcenterhistory.NoindexDefaultDomainNEQ(*i.NoindexDefaultDomainNEQ))
+	}
+	if i.NoindexDefaultDomainIsNil {
+		predicates = append(predicates, trustcenterhistory.NoindexDefaultDomainIsNil())
+	}
+	if i.NoindexDefaultDomainNotNil {
+		predicates = append(predicates, trustcenterhistory.NoindexDefaultDomainNotNil())
 	}
 
 	if i.TagsHas != nil {
