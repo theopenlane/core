@@ -58,12 +58,13 @@ type backfillRoutine struct {
 // backfillRoutines are the registered backfill routines
 var backfillRoutines = []backfillRoutine{
 	{
-		Name:    "backfill-schema-responsibilities",
-		Version: "v1",
-		Enabled: true,
-		Run: func(ctx context.Context, deps backfillDeps) error {
-			return backfillSchemaResponsibilities(ctx, deps.Client)
-		},
+		// example registration
+		// Name:    "backfill-x",
+		// Version: "v1",
+		// Enabled: true,
+		// Run: func(ctx context.Context, deps backfillDeps) error {
+		// 	return backfillX(ctx, deps.Client)
+		// },
 	},
 }
 
