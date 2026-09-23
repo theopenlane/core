@@ -2,6 +2,7 @@ package resolver_test
 
 import (
 	"context"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -14,11 +15,13 @@ import (
 func TestResolveProviderUsesConfigWhenCredentialSyncDisabled(t *testing.T) {
 	config := storage.ProviderConfig{
 		Providers: storage.Providers{
-			S3: storage.ProviderConfigs{
-				Enabled: true,
-				Region:  "us-west-2",
-				Bucket:  "test-bucket",
-				Credentials: storage.ProviderCredentials{
+			S3: storage.S3Config{
+				ProviderCommon: storage.ProviderCommon{
+					Enabled: true,
+					Bucket:  "test-bucket",
+				},
+				Region: "us-west-2",
+				Credentials: storage.AccessKeyCredentials{
 					AccessKeyID:     "test-access",
 					SecretAccessKey: "test-secret",
 				},
@@ -40,4 +43,30 @@ func TestResolveProviderUsesConfigWhenCredentialSyncDisabled(t *testing.T) {
 	assert.NotNil(t, resolved.Config)
 	assert.Equal(t, "test-bucket", resolved.Config.Bucket)
 	assert.Equal(t, "us-west-2", resolved.Config.Region)
+}
+
+func TestNewProviderDisk(t *testing.T) {
+	bucket := filepath.Join(t.TempDir(), "bucket")
+
+	provider, err := resolver.NewProvider(context.Background(), storage.DiskProvider, storage.Providers{
+		Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: bucket}},
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, storage.DiskProvider, provider.ProviderType())
+}
+
+func TestNewProviderDisabled(t *testing.T) {
+	provider, err := resolver.NewProvider(context.Background(), storage.DiskProvider, storage.Providers{
+		Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Bucket: t.TempDir()}},
+	})
+	assert.Error(t, err)
+	assert.Nil(t, provider)
+}
+
+func TestNewProviderUnknownType(t *testing.T) {
+	provider, err := resolver.NewProvider(context.Background(), storage.ProviderType("ftp"), storage.Providers{
+		Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: "records"}},
+	})
+	assert.Error(t, err)
+	assert.Nil(t, provider)
 }

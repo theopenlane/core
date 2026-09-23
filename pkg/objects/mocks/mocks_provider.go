@@ -18,10 +18,19 @@ func NewMockProvider(t interface {
 	mock.TestingT
 	Cleanup(func())
 }) *MockProvider {
+	if helper, ok := t.(interface{ Helper() }); ok {
+		helper.Helper()
+	}
+
 	mock := &MockProvider{}
 	mock.Mock.Test(t)
 
-	t.Cleanup(func() { mock.AssertExpectations(t) })
+	t.Cleanup(func() {
+		if helper, ok := t.(interface{ Helper() }); ok {
+			helper.Helper()
+		}
+		mock.AssertExpectations(t)
+	})
 
 	return mock
 }
@@ -109,7 +118,7 @@ type MockProvider_Delete_Call struct {
 //   - ctx context.Context
 //   - file *storagetypes.File
 //   - opts *storagetypes.DeleteFileOptions
-func (_e *MockProvider_Expecter) Delete(ctx interface{}, file interface{}, opts interface{}) *MockProvider_Delete_Call {
+func (_e *MockProvider_Expecter) Delete(ctx any, file any, opts any) *MockProvider_Delete_Call {
 	return &MockProvider_Delete_Call{Call: _e.mock.On("Delete", ctx, file, opts)}
 }
 
@@ -183,7 +192,7 @@ type MockProvider_Download_Call struct {
 //   - ctx context.Context
 //   - file *storagetypes.File
 //   - opts *storagetypes.DownloadFileOptions
-func (_e *MockProvider_Expecter) Download(ctx interface{}, file interface{}, opts interface{}) *MockProvider_Download_Call {
+func (_e *MockProvider_Expecter) Download(ctx any, file any, opts any) *MockProvider_Download_Call {
 	return &MockProvider_Download_Call{Call: _e.mock.On("Download", ctx, file, opts)}
 }
 
@@ -254,7 +263,7 @@ type MockProvider_Exists_Call struct {
 // Exists is a helper method to define mock.On call
 //   - ctx context.Context
 //   - file *storagetypes.File
-func (_e *MockProvider_Expecter) Exists(ctx interface{}, file interface{}) *MockProvider_Exists_Call {
+func (_e *MockProvider_Expecter) Exists(ctx any, file any) *MockProvider_Exists_Call {
 	return &MockProvider_Exists_Call{Call: _e.mock.On("Exists", ctx, file)}
 }
 
@@ -321,7 +330,7 @@ type MockProvider_GetPresignedURL_Call struct {
 //   - ctx context.Context
 //   - file *storagetypes.File
 //   - opts *storagetypes.PresignedURLOptions
-func (_e *MockProvider_Expecter) GetPresignedURL(ctx interface{}, file interface{}, opts interface{}) *MockProvider_GetPresignedURL_Call {
+func (_e *MockProvider_Expecter) GetPresignedURL(ctx any, file any, opts any) *MockProvider_GetPresignedURL_Call {
 	return &MockProvider_GetPresignedURL_Call{Call: _e.mock.On("GetPresignedURL", ctx, file, opts)}
 }
 
@@ -459,6 +468,80 @@ func (_c *MockProvider_ListBuckets_Call) RunAndReturn(run func() ([]string, erro
 	return _c
 }
 
+// ListObjects provides a mock function for the type MockProvider
+func (_mock *MockProvider) ListObjects(ctx context.Context, prefix string, limit int) ([]string, error) {
+	ret := _mock.Called(ctx, prefix, limit)
+
+	if len(ret) == 0 {
+		panic("no return value specified for ListObjects")
+	}
+
+	var r0 []string
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, int) ([]string, error)); ok {
+		return returnFunc(ctx, prefix, limit)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, int) []string); ok {
+		r0 = returnFunc(ctx, prefix, limit)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]string)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, int) error); ok {
+		r1 = returnFunc(ctx, prefix, limit)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockProvider_ListObjects_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ListObjects'
+type MockProvider_ListObjects_Call struct {
+	*mock.Call
+}
+
+// ListObjects is a helper method to define mock.On call
+//   - ctx context.Context
+//   - prefix string
+//   - limit int
+func (_e *MockProvider_Expecter) ListObjects(ctx any, prefix any, limit any) *MockProvider_ListObjects_Call {
+	return &MockProvider_ListObjects_Call{Call: _e.mock.On("ListObjects", ctx, prefix, limit)}
+}
+
+func (_c *MockProvider_ListObjects_Call) Run(run func(ctx context.Context, prefix string, limit int)) *MockProvider_ListObjects_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 int
+		if args[2] != nil {
+			arg2 = args[2].(int)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockProvider_ListObjects_Call) Return(strings []string, err error) *MockProvider_ListObjects_Call {
+	_c.Call.Return(strings, err)
+	return _c
+}
+
+func (_c *MockProvider_ListObjects_Call) RunAndReturn(run func(ctx context.Context, prefix string, limit int) ([]string, error)) *MockProvider_ListObjects_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // ProviderType provides a mock function for the type MockProvider
 func (_mock *MockProvider) ProviderType() storagetypes.ProviderType {
 	ret := _mock.Called()
@@ -540,7 +623,7 @@ type MockProvider_Upload_Call struct {
 //   - ctx context.Context
 //   - reader io.Reader
 //   - opts *storagetypes.UploadFileOptions
-func (_e *MockProvider_Expecter) Upload(ctx interface{}, reader interface{}, opts interface{}) *MockProvider_Upload_Call {
+func (_e *MockProvider_Expecter) Upload(ctx any, reader any, opts any) *MockProvider_Upload_Call {
 	return &MockProvider_Upload_Call{Call: _e.mock.On("Upload", ctx, reader, opts)}
 }
 

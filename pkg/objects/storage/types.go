@@ -32,6 +32,7 @@ const (
 	R2Provider       = storagetypes.R2Provider
 	DiskProvider     = storagetypes.DiskProvider
 	DatabaseProvider = storagetypes.DatabaseProvider
+	GCSProvider      = storagetypes.GCSProvider
 	// Presign mode constants
 	PresignModeProvider = storagetypes.PresignModeProvider
 	PresignModeProxy    = storagetypes.PresignModeProxy
@@ -99,38 +100,85 @@ type ProviderConfig struct {
 	Providers Providers `json:"providers" koanf:"providers"`
 }
 
+// Providers contains the configuration for each storage provider
 type Providers struct {
 	// S3 provider configuration
-	S3 ProviderConfigs `json:"s3" koanf:"s3"`
+	S3 S3Config `json:"s3" koanf:"s3"`
 	// R2 provider configuration
-	R2 ProviderConfigs `json:"r2" koanf:"r2"`
+	R2 R2Config `json:"r2" koanf:"r2"`
+	// GCS provider configuration
+	GCS GCSConfig `json:"gcs" koanf:"gcs"`
 	// Disk provider configuration
-	Disk ProviderConfigs `json:"disk" koanf:"disk"`
+	Disk DiskConfig `json:"disk" koanf:"disk"`
 	// Database provider configuration
-	Database ProviderConfigs `json:"database" koanf:"database"`
+	Database DatabaseConfig `json:"database" koanf:"database"`
 }
 
-// ProviderConfigs contains configuration for all storage providers
-// This is structured to allow easy extension for additional providers in the future
-type ProviderConfigs struct {
+// ProviderCommon holds the settings every storage provider shares
+type ProviderCommon struct {
 	// Enabled indicates if this provider is enabled
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// EnsureAvailable enforces provider availability before completing server startup
 	EnsureAvailable bool `json:"ensureavailable" koanf:"ensureavailable" default:"false"`
-	// Region for cloud providers
-	Region string `json:"region" koanf:"region"`
-	// Bucket name for cloud providers
+	// Bucket is the bucket name, or the directory path for the disk provider
 	Bucket string `json:"bucket" koanf:"bucket"`
-	// Endpoint for custom endpoints
-	Endpoint string `json:"endpoint" koanf:"endpoint"`
-	// ProxyPresignEnabled toggles proxy-signed download URL generation
-	ProxyPresignEnabled bool `json:"proxypresignenabled" koanf:"proxypresignenabled" default:"false"`
-	// BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
-	BaseURL string `json:"baseurl" koanf:"baseurl" default:"http://localhost:17608/v1/files"`
-	// Credentials contains the credentials for accessing the provider
-	Credentials ProviderCredentials `json:"credentials" koanf:"credentials"`
 	// Backup optionally replicates this provider's objects to another provider asynchronously
 	Backup *BackupConfig `json:"backup" koanf:"backup"`
+}
+
+// ProxyPresign holds the proxy-signed download URL settings
+type ProxyPresign struct {
+	// ProxyPresignEnabled toggles proxy-signed download URL generation
+	ProxyPresignEnabled bool `json:"proxypresignenabled" koanf:"proxypresignenabled" default:"false"`
+	// BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)
+	BaseURL string `json:"baseurl" koanf:"baseurl" default:"http://localhost:17608/v1/files"`
+}
+
+// S3Config configures the Amazon S3 provider
+type S3Config struct {
+	ProviderCommon `koanf:",squash"`
+	ProxyPresign   `koanf:",squash"`
+	// Region the bucket lives in
+	Region string `json:"region" koanf:"region"`
+	// Endpoint overrides the AWS endpoint for S3 compatible services
+	Endpoint string `json:"endpoint" koanf:"endpoint"`
+	// Credentials contains the access key pair for the bucket
+	Credentials AccessKeyCredentials `json:"credentials" koanf:"credentials"`
+}
+
+// R2Config configures the Cloudflare R2 provider
+type R2Config struct {
+	ProviderCommon `koanf:",squash"`
+	ProxyPresign   `koanf:",squash"`
+	// Endpoint overrides the account endpoint derived from the account ID
+	Endpoint string `json:"endpoint" koanf:"endpoint"`
+	// Credentials contains the access key pair and account for the bucket
+	Credentials R2Credentials `json:"credentials" koanf:"credentials"`
+}
+
+// GCSConfig configures the Google Cloud Storage provider
+type GCSConfig struct {
+	ProviderCommon `koanf:",squash"`
+	ProxyPresign   `koanf:",squash"`
+	// Endpoint overrides the Google API endpoint, for an emulator
+	Endpoint string `json:"endpoint" koanf:"endpoint"`
+	// ProjectID is the Google Cloud project that owns the bucket
+	ProjectID string `json:"projectid" koanf:"projectid"`
+}
+
+// DiskConfig configures the local filesystem provider
+type DiskConfig struct {
+	ProviderCommon `koanf:",squash"`
+	ProxyPresign   `koanf:",squash"`
+	// Endpoint is the URL files are served from when proxy presigning is disabled
+	Endpoint string `json:"endpoint" koanf:"endpoint"`
+}
+
+// DatabaseConfig configures the provider that stores file bytes in the database
+type DatabaseConfig struct {
+	ProviderCommon `koanf:",squash"`
+	// BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)
+	BaseURL string `json:"baseurl" koanf:"baseurl" default:"http://localhost:17608/v1/files"`
 }
 
 // BackupBucketSuffix is appended to the destination provider's bucket when writing backups, so
@@ -154,20 +202,21 @@ type BackupConfig struct {
 	Region string `json:"region" koanf:"region"`
 }
 
-// ByType returns each provider configuration keyed by its provider type
-func (p Providers) ByType() map[ProviderType]ProviderConfigs {
-	return map[ProviderType]ProviderConfigs{
-		S3Provider:       p.S3,
-		R2Provider:       p.R2,
-		DiskProvider:     p.Disk,
-		DatabaseProvider: p.Database,
+// ByType returns the shared settings of each provider keyed by its provider type
+func (p Providers) ByType() map[ProviderType]ProviderCommon {
+	return map[ProviderType]ProviderCommon{
+		S3Provider:       p.S3.ProviderCommon,
+		R2Provider:       p.R2.ProviderCommon,
+		GCSProvider:      p.GCS.ProviderCommon,
+		DiskProvider:     p.Disk.ProviderCommon,
+		DatabaseProvider: p.Database.ProviderCommon,
 	}
 }
 
 // BackupDestination returns the provider type this provider's backups are written to and whether
 // an enabled backup is configured for it. A backup with no provider named replicates to the
 // source itself, which writes to the suffixed bucket alongside the live one
-func (c ProviderConfigs) BackupDestination(source ProviderType) (ProviderType, bool) {
+func (c ProviderCommon) BackupDestination(source ProviderType) (ProviderType, bool) {
 	if !c.Enabled || c.Backup == nil || !c.Backup.Enabled {
 		return "", false
 	}
@@ -188,18 +237,39 @@ func BackupBucket(bucket string) string {
 	return bucket + BackupBucketSuffix
 }
 
-// ProviderCredentials contains credentials for a storage provider
+// AccessKeyCredentials is the access key pair used by S3 compatible providers
+type AccessKeyCredentials struct {
+	// AccessKeyID for the bucket
+	AccessKeyID string `json:"accesskeyid" koanf:"accesskeyid" sensitive:"true"`
+	// SecretAccessKey for the bucket
+	SecretAccessKey string `json:"secretaccesskey" koanf:"secretaccesskey" sensitive:"true"`
+}
+
+// R2Credentials is the access key pair plus the Cloudflare account that owns the bucket
+type R2Credentials struct {
+	AccessKeyCredentials `koanf:",squash"`
+	// AccountID for Cloudflare R2
+	AccountID string `json:"accountid" koanf:"accountid" sensitive:"true"`
+}
+
+// ProviderCredentials is the runtime credential set handed to provider builders
 type ProviderCredentials struct {
 	// AccessKeyID for cloud providers
 	AccessKeyID string `json:"accesskeyid" koanf:"accesskeyid" sensitive:"true"`
 	// SecretAccessKey for cloud providers
 	SecretAccessKey string `json:"secretaccesskey" koanf:"secretaccesskey" sensitive:"true"`
-	// ProjectID for GCS
-	ProjectID string `json:"projectid" koanf:"projectid" sensitive:"true"`
 	// AccountID for Cloudflare R2
 	AccountID string `json:"accountid" koanf:"accountid" sensitive:"true"`
-	// APIToken for Cloudflare R2
-	APIToken string `json:"apitoken" koanf:"apitoken" sensitive:"true"`
+}
+
+// ProviderCredentials returns the runtime credentials for the access key pair
+func (c AccessKeyCredentials) ProviderCredentials() ProviderCredentials {
+	return ProviderCredentials{AccessKeyID: c.AccessKeyID, SecretAccessKey: c.SecretAccessKey}
+}
+
+// ProviderCredentials returns the runtime credentials for the access key pair and account
+func (c R2Credentials) ProviderCredentials() ProviderCredentials {
+	return ProviderCredentials{AccessKeyID: c.AccessKeyID, SecretAccessKey: c.SecretAccessKey, AccountID: c.AccountID}
 }
 
 // ProviderOption configures runtime provider options
@@ -211,7 +281,6 @@ type ProviderOptions struct {
 	Bucket              string
 	Region              string
 	Endpoint            string
-	BasePath            string
 	LocalURL            string
 	ProxyPresignEnabled bool
 	ProxyPresignConfig  *ProxyPresignConfig
@@ -373,13 +442,6 @@ func WithEndpoint(endpoint string) ProviderOption {
 	}
 }
 
-// WithBasePath sets the local base path for disk providers
-func WithBasePath(path string) ProviderOption {
-	return func(p *ProviderOptions) {
-		p.BasePath = path
-	}
-}
-
 // WithLocalURL sets the local URL used for presigned links
 func WithLocalURL(url string) ProviderOption {
 	return func(p *ProviderOptions) {
@@ -390,6 +452,9 @@ func WithLocalURL(url string) ProviderOption {
 // BackupTargetExtraKey marks provider options that were built from a backup destination
 // configuration, so a caller can tell a resolved backup apart from a live provider
 const BackupTargetExtraKey = "backup_target"
+
+// GCSProjectIDExtraKey carries the Google Cloud project that owns the GCS bucket, read by the gcs provider when listing buckets
+const GCSProjectIDExtraKey = "gcs_project_id"
 
 // WithExtra attaches provider specific metadata
 func WithExtra(key string, value any) ProviderOption {

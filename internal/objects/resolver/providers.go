@@ -14,6 +14,8 @@ func builderFor(builders providerBuilders, provider storage.ProviderType) provid
 		return builders.s3
 	case storage.R2Provider:
 		return builders.r2
+	case storage.GCSProvider:
+		return builders.gcs
 	case storage.DiskProvider:
 		return builders.disk
 	case storage.DatabaseProvider:
@@ -25,18 +27,7 @@ func builderFor(builders providerBuilders, provider storage.ProviderType) provid
 
 // providerEnabled returns whether a provider can be used based on configuration.
 func (rc *ruleCoordinator) providerEnabled(provider storage.ProviderType) bool {
-	switch provider {
-	case storage.R2Provider:
-		return rc.config.Providers.R2.Enabled
-	case storage.S3Provider:
-		return rc.config.Providers.S3.Enabled
-	case storage.DiskProvider:
-		return rc.config.Providers.Disk.Enabled
-	case storage.DatabaseProvider:
-		return rc.config.Providers.Database.Enabled
-	default:
-		return false
-	}
+	return rc.config.Providers.ByType()[provider].Enabled
 }
 
 // providerResolution is an internal type for credential resolution before adding builder
@@ -63,91 +54,156 @@ func resolveProviderFromConfig(provider storage.ProviderType, config storage.Pro
 }
 
 func providerOptionsFromConfig(provider storage.ProviderType, config storage.ProviderConfig, runtime serviceOptions) (*storage.ProviderOptions, storage.ProviderCredentials, error) {
-	var providerCfg storage.ProviderConfigs
-
 	switch provider {
 	case storage.S3Provider:
-		providerCfg = config.Providers.S3
+		return s3Options(config.Providers.S3, runtime)
 	case storage.R2Provider:
-		providerCfg = config.Providers.R2
+		return r2Options(config.Providers.R2, runtime)
+	case storage.GCSProvider:
+		return gcsOptions(config.Providers.GCS, runtime)
 	case storage.DiskProvider:
-		providerCfg = config.Providers.Disk
+		return diskOptions(config.Providers.Disk, runtime)
 	case storage.DatabaseProvider:
-		providerCfg = config.Providers.Database
+		return databaseOptions(config.Providers.Database, runtime)
 	default:
 		return nil, storage.ProviderCredentials{}, fmt.Errorf("%w: %s", errUnsupportedProvider, provider)
 	}
-
-	return providerOptionsFromProviderConfig(provider, providerCfg, runtime)
 }
 
-// providerOptionsFromProviderConfig builds provider options and credentials from a standalone
-// ProviderConfigs, used both for top-level providers and for nested backup targets
-func providerOptionsFromProviderConfig(provider storage.ProviderType, providerCfg storage.ProviderConfigs, runtime serviceOptions) (*storage.ProviderOptions, storage.ProviderCredentials, error) {
-	if !providerCfg.Enabled {
-		return nil, storage.ProviderCredentials{}, fmt.Errorf("%w: %s", errProviderDisabled, provider)
+// proxyPresignOptions builds the proxy presign options every provider applies
+func proxyPresignOptions(runtime serviceOptions, enabled bool, baseURL string) []storage.ProviderOption {
+	options := []storage.ProviderOption{storage.WithProxyPresignEnabled(enabled)}
+
+	if runtime.tokenManagerFunc == nil {
+		return options
 	}
 
-	options := storage.NewProviderOptions(storage.WithCredentials(providerCfg.Credentials))
-	options.Apply(storage.WithProxyPresignEnabled(providerCfg.ProxyPresignEnabled))
-
-	if runtime.tokenManagerFunc != nil {
-		if tm := runtime.tokenManagerFunc(); tm != nil {
-			presignOptions := []storage.ProxyPresignOption{
-				storage.WithProxyPresignTokenManager(tm),
-				storage.WithProxyPresignTokenIssuer(runtime.tokenIssuer),
-				storage.WithProxyPresignTokenAudience(runtime.tokenAudience),
-			}
-
-			if providerCfg.BaseURL != "" {
-				presignOptions = append(presignOptions, storage.WithProxyPresignBaseURL(providerCfg.BaseURL))
-			}
-
-			if runtime.baseURL != "" {
-				presignOptions = append(presignOptions, storage.WithProxyPresignBaseURL(runtime.baseURL))
-			}
-
-			options.Apply(storage.WithProxyPresignConfig(storage.NewProxyPresignConfig(presignOptions...)))
-		}
+	tm := runtime.tokenManagerFunc()
+	if tm == nil {
+		return options
 	}
 
-	switch provider {
-	case storage.S3Provider:
-		if providerCfg.Bucket != "" {
-			options.Apply(storage.WithBucket(providerCfg.Bucket))
-		}
-		region := providerCfg.Region
-		if region == "" {
-			region = objects.DefaultS3Region
-		}
-		options.Apply(storage.WithRegion(region))
-		if providerCfg.Endpoint != "" {
-			options.Apply(storage.WithEndpoint(providerCfg.Endpoint))
-		}
-	case storage.R2Provider:
-		if providerCfg.Bucket != "" {
-			options.Apply(storage.WithBucket(providerCfg.Bucket))
-		}
-		if providerCfg.Endpoint != "" {
-			options.Apply(storage.WithEndpoint(providerCfg.Endpoint))
-		}
-	case storage.DiskProvider:
-		bucket := providerCfg.Bucket
-		if bucket == "" {
-			bucket = objects.DefaultDevStorageBucket
-		}
-		options.Apply(storage.WithBucket(bucket), storage.WithBasePath(bucket))
-		if providerCfg.Endpoint != "" {
-			options.Apply(storage.WithLocalURL(providerCfg.Endpoint))
-		}
-	case storage.DatabaseProvider:
-		if providerCfg.Bucket != "" {
-			options.Apply(storage.WithBucket(providerCfg.Bucket))
-		}
-		if providerCfg.Endpoint != "" {
-			options.Apply(storage.WithEndpoint(providerCfg.Endpoint))
-		}
+	presignOptions := []storage.ProxyPresignOption{
+		storage.WithProxyPresignTokenManager(tm),
+		storage.WithProxyPresignTokenIssuer(runtime.tokenIssuer),
+		storage.WithProxyPresignTokenAudience(runtime.tokenAudience),
 	}
 
-	return options, providerCfg.Credentials, nil
+	if baseURL != "" {
+		presignOptions = append(presignOptions, storage.WithProxyPresignBaseURL(baseURL))
+	}
+
+	if runtime.baseURL != "" {
+		presignOptions = append(presignOptions, storage.WithProxyPresignBaseURL(runtime.baseURL))
+	}
+
+	return append(options, storage.WithProxyPresignConfig(storage.NewProxyPresignConfig(presignOptions...)))
+}
+
+// s3Options builds provider options and credentials from the S3 configuration
+func s3Options(cfg storage.S3Config, runtime serviceOptions) (*storage.ProviderOptions, storage.ProviderCredentials, error) {
+	if !cfg.Enabled {
+		return nil, storage.ProviderCredentials{}, fmt.Errorf("%w: %s", errProviderDisabled, storage.S3Provider)
+	}
+
+	creds := cfg.Credentials.ProviderCredentials()
+
+	options := storage.NewProviderOptions(storage.WithCredentials(creds))
+	options.Apply(proxyPresignOptions(runtime, cfg.ProxyPresignEnabled, cfg.BaseURL)...)
+
+	if cfg.Bucket != "" {
+		options.Apply(storage.WithBucket(cfg.Bucket))
+	}
+
+	region := cfg.Region
+	if region == "" {
+		region = objects.DefaultS3Region
+	}
+
+	options.Apply(storage.WithRegion(region))
+
+	if cfg.Endpoint != "" {
+		options.Apply(storage.WithEndpoint(cfg.Endpoint))
+	}
+
+	return options, creds, nil
+}
+
+// r2Options builds provider options and credentials from the R2 configuration
+func r2Options(cfg storage.R2Config, runtime serviceOptions) (*storage.ProviderOptions, storage.ProviderCredentials, error) {
+	if !cfg.Enabled {
+		return nil, storage.ProviderCredentials{}, fmt.Errorf("%w: %s", errProviderDisabled, storage.R2Provider)
+	}
+
+	creds := cfg.Credentials.ProviderCredentials()
+
+	options := storage.NewProviderOptions(storage.WithCredentials(creds))
+	options.Apply(proxyPresignOptions(runtime, cfg.ProxyPresignEnabled, cfg.BaseURL)...)
+
+	if cfg.Bucket != "" {
+		options.Apply(storage.WithBucket(cfg.Bucket))
+	}
+
+	if cfg.Endpoint != "" {
+		options.Apply(storage.WithEndpoint(cfg.Endpoint))
+	}
+
+	return options, creds, nil
+}
+
+// gcsOptions builds provider options from the GCS configuration
+func gcsOptions(cfg storage.GCSConfig, runtime serviceOptions) (*storage.ProviderOptions, storage.ProviderCredentials, error) {
+	if !cfg.Enabled {
+		return nil, storage.ProviderCredentials{}, fmt.Errorf("%w: %s", errProviderDisabled, storage.GCSProvider)
+	}
+
+	options := storage.NewProviderOptions(proxyPresignOptions(runtime, cfg.ProxyPresignEnabled, cfg.BaseURL)...)
+	options.Apply(storage.WithExtra(storage.GCSProjectIDExtraKey, cfg.ProjectID))
+
+	if cfg.Bucket != "" {
+		options.Apply(storage.WithBucket(cfg.Bucket))
+	}
+
+	if cfg.Endpoint != "" {
+		options.Apply(storage.WithEndpoint(cfg.Endpoint))
+	}
+
+	return options, storage.ProviderCredentials{}, nil
+}
+
+// diskOptions builds provider options from the disk configuration
+func diskOptions(cfg storage.DiskConfig, runtime serviceOptions) (*storage.ProviderOptions, storage.ProviderCredentials, error) {
+	if !cfg.Enabled {
+		return nil, storage.ProviderCredentials{}, fmt.Errorf("%w: %s", errProviderDisabled, storage.DiskProvider)
+	}
+
+	options := storage.NewProviderOptions(proxyPresignOptions(runtime, cfg.ProxyPresignEnabled, cfg.BaseURL)...)
+
+	bucket := cfg.Bucket
+	if bucket == "" {
+		bucket = objects.DefaultDevStorageBucket
+	}
+
+	options.Apply(storage.WithBucket(bucket))
+
+	if cfg.Endpoint != "" {
+		options.Apply(storage.WithLocalURL(cfg.Endpoint))
+	}
+
+	return options, storage.ProviderCredentials{}, nil
+}
+
+// databaseOptions builds provider options from the database configuration
+func databaseOptions(cfg storage.DatabaseConfig, runtime serviceOptions) (*storage.ProviderOptions, storage.ProviderCredentials, error) {
+	if !cfg.Enabled {
+		return nil, storage.ProviderCredentials{}, fmt.Errorf("%w: %s", errProviderDisabled, storage.DatabaseProvider)
+	}
+
+	options := storage.NewProviderOptions(proxyPresignOptions(runtime, true, cfg.BaseURL)...)
+
+	if cfg.Bucket != "" {
+		options.Apply(storage.WithBucket(cfg.Bucket))
+	}
+
+	return options, storage.ProviderCredentials{}, nil
 }

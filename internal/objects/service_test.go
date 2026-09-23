@@ -85,6 +85,10 @@ func (f *fakeProvider) GetScheme() *string {
 	return nil
 }
 
+func (f *fakeProvider) ListObjects(context.Context, string, int) ([]string, error) {
+	return nil, nil
+}
+
 func (f *fakeProvider) ListBuckets() ([]string, error) {
 	return nil, nil
 }

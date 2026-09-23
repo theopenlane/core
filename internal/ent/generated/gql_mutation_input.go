@@ -27666,6 +27666,7 @@ type CreateTrustCenterNDARequestInput struct {
 	CompanyName       *string                                 `json:"company_name,omitempty"`
 	Reason            *string                                 `json:"reason,omitempty"`
 	AccessLevel       *enums.TrustCenterNDARequestAccessLevel `json:"access_level,omitempty"`
+	Status            *enums.TrustCenterNDARequestStatus      `json:"status,omitempty"`
 	ApprovedAt        *models.DateTime                        `json:"approved_at,omitempty"`
 	SignedAt          *models.DateTime                        `json:"signed_at,omitempty"`
 	BlockedGroupIDs   []string                                `json:"blocked_group_ids,omitempty"`
@@ -27693,6 +27694,9 @@ func (i *CreateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	}
 	if v := i.AccessLevel; v != nil {
 		m.SetAccessLevel(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if v := i.ApprovedAt; v != nil {
 		m.SetApprovedAt(*v)

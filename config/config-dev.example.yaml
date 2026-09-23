@@ -128,24 +128,13 @@ objectstorage:
   providers:
       disk:
           bucket: ""
-          credentials:
-            accesskeyid: ""
-            accountid: ""
-            apitoken: ""
-            projectid: ""
-            secretaccesskey: ""
           enabled: false
           endpoint: ""
           ensureavailable: false
-          region: ""
       s3:
           bucket: ""
           credentials:
               accesskeyid: ""
-              accountid: ""
-              apitoken: ""
-              endpoint: ""
-              projectid: ""
               secretaccesskey: ""
           enabled: false
           endpoint: ""

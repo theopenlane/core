@@ -53,7 +53,6 @@ func TestProviderOptions_Clone(t *testing.T) {
 			Bucket:   "test-bucket",
 			Region:   "us-east-1",
 			Endpoint: "https://endpoint.com",
-			BasePath: "/uploads",
 			LocalURL: "http://localhost:8080",
 			Credentials: ProviderCredentials{
 				AccessKeyID:     "key",
@@ -66,7 +65,6 @@ func TestProviderOptions_Clone(t *testing.T) {
 		assert.Equal(t, original.Bucket, cloned.Bucket)
 		assert.Equal(t, original.Region, cloned.Region)
 		assert.Equal(t, original.Endpoint, cloned.Endpoint)
-		assert.Equal(t, original.BasePath, cloned.BasePath)
 		assert.Equal(t, original.LocalURL, cloned.LocalURL)
 		assert.Equal(t, original.Credentials, cloned.Credentials)
 
@@ -103,9 +101,7 @@ func TestWithCredentials(t *testing.T) {
 	creds := ProviderCredentials{
 		AccessKeyID:     "access-key",
 		SecretAccessKey: "secret-key",
-		ProjectID:       "project-123",
 		AccountID:       "account-456",
-		APIToken:        "token-789",
 	}
 
 	opts := NewProviderOptions(WithCredentials(creds))
@@ -127,11 +123,6 @@ func TestWithRegion(t *testing.T) {
 func TestWithEndpoint(t *testing.T) {
 	opts := NewProviderOptions(WithEndpoint("https://custom.endpoint.com"))
 	assert.Equal(t, "https://custom.endpoint.com", opts.Endpoint)
-}
-
-func TestWithBasePath(t *testing.T) {
-	opts := NewProviderOptions(WithBasePath("/var/uploads"))
-	assert.Equal(t, "/var/uploads", opts.BasePath)
 }
 
 func TestWithLocalURL(t *testing.T) {
@@ -221,7 +212,6 @@ func TestProviderOptions_CombinedOptions(t *testing.T) {
 			WithBucket("bucket"),
 			WithRegion("region"),
 			WithEndpoint("endpoint"),
-			WithBasePath("/path"),
 			WithLocalURL("http://local"),
 			WithExtra("custom", "value"),
 		)
@@ -230,11 +220,78 @@ func TestProviderOptions_CombinedOptions(t *testing.T) {
 		assert.Equal(t, "bucket", opts.Bucket)
 		assert.Equal(t, "region", opts.Region)
 		assert.Equal(t, "endpoint", opts.Endpoint)
-		assert.Equal(t, "/path", opts.BasePath)
 		assert.Equal(t, "http://local", opts.LocalURL)
 
 		val, ok := opts.Extra("custom")
 		assert.True(t, ok)
 		assert.Equal(t, "value", val)
 	})
+}
+
+func TestProvidersByType(t *testing.T) {
+	providers := Providers{
+		S3:       S3Config{ProviderCommon: ProviderCommon{Enabled: true, Bucket: "s3-bucket"}, Region: "us-east-1"},
+		R2:       R2Config{ProviderCommon: ProviderCommon{Bucket: "r2-bucket"}},
+		GCS:      GCSConfig{ProviderCommon: ProviderCommon{Enabled: true, Bucket: "gcs-bucket"}, ProjectID: "project"},
+		Disk:     DiskConfig{ProviderCommon: ProviderCommon{EnsureAvailable: true, Bucket: "/data"}},
+		Database: DatabaseConfig{ProviderCommon: ProviderCommon{Backup: &BackupConfig{Enabled: true}}},
+	}
+
+	byType := providers.ByType()
+
+	assert.Len(t, byType, 5)
+	assert.Equal(t, providers.S3.ProviderCommon, byType[S3Provider])
+	assert.Equal(t, providers.R2.ProviderCommon, byType[R2Provider])
+	assert.Equal(t, providers.GCS.ProviderCommon, byType[GCSProvider])
+	assert.Equal(t, providers.Disk.ProviderCommon, byType[DiskProvider])
+	assert.Equal(t, providers.Database.ProviderCommon, byType[DatabaseProvider])
+}
+
+func TestBackupDestination(t *testing.T) {
+	t.Run("disabled provider", func(t *testing.T) {
+		cfg := ProviderCommon{Backup: &BackupConfig{Enabled: true, Provider: R2Provider}}
+		_, ok := cfg.BackupDestination(S3Provider)
+		assert.False(t, ok)
+	})
+
+	t.Run("no backup", func(t *testing.T) {
+		cfg := ProviderCommon{Enabled: true}
+		_, ok := cfg.BackupDestination(S3Provider)
+		assert.False(t, ok)
+	})
+
+	t.Run("backup disabled", func(t *testing.T) {
+		cfg := ProviderCommon{Enabled: true, Backup: &BackupConfig{Provider: R2Provider}}
+		_, ok := cfg.BackupDestination(S3Provider)
+		assert.False(t, ok)
+	})
+
+	t.Run("backup to source", func(t *testing.T) {
+		cfg := ProviderCommon{Enabled: true, Backup: &BackupConfig{Enabled: true}}
+		destination, ok := cfg.BackupDestination(S3Provider)
+		assert.True(t, ok)
+		assert.Equal(t, S3Provider, destination)
+	})
+
+	t.Run("backup to named provider", func(t *testing.T) {
+		cfg := ProviderCommon{Enabled: true, Backup: &BackupConfig{Enabled: true, Provider: R2Provider}}
+		destination, ok := cfg.BackupDestination(S3Provider)
+		assert.True(t, ok)
+		assert.Equal(t, R2Provider, destination)
+	})
+}
+
+func TestAccessKeyCredentialsProviderCredentials(t *testing.T) {
+	creds := AccessKeyCredentials{AccessKeyID: "key", SecretAccessKey: "secret"}
+
+	assert.Equal(t, ProviderCredentials{AccessKeyID: "key", SecretAccessKey: "secret"}, creds.ProviderCredentials())
+}
+
+func TestR2CredentialsProviderCredentials(t *testing.T) {
+	creds := R2Credentials{
+		AccessKeyCredentials: AccessKeyCredentials{AccessKeyID: "key", SecretAccessKey: "secret"},
+		AccountID:            "account",
+	}
+
+	assert.Equal(t, ProviderCredentials{AccessKeyID: "key", SecretAccessKey: "secret", AccountID: "account"}, creds.ProviderCredentials())
 }

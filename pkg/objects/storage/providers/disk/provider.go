@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -187,6 +188,47 @@ func (p *Provider) Exists(_ context.Context, file *storagetypes.File) (bool, err
 	}
 
 	return true, nil
+}
+
+// ListObjects returns the object keys under prefix, at most limit when limit is positive
+func (p *Provider) ListObjects(_ context.Context, prefix string, limit int) ([]string, error) {
+	var keys []string
+
+	err := filepath.WalkDir(p.options.Bucket, func(entryPath string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+
+		if entry.IsDir() {
+			return nil
+		}
+
+		rel, err := filepath.Rel(p.options.Bucket, entryPath)
+		if err != nil {
+			return err
+		}
+
+		key := filepath.ToSlash(rel)
+		if !strings.HasPrefix(key, prefix) {
+			return nil
+		}
+
+		keys = append(keys, key)
+		if limit > 0 && len(keys) >= limit {
+			return fs.SkipAll
+		}
+
+		return nil
+	})
+
+	switch {
+	case errors.Is(err, fs.ErrNotExist):
+		return nil, nil
+	case err != nil:
+		return nil, err
+	default:
+		return keys, nil
+	}
 }
 
 // GetScheme returns the URI scheme for disk

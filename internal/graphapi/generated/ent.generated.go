@@ -221364,7 +221364,7 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterNDARequestInput(ctx c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "firstName", "lastName", "email", "companyName", "reason", "accessLevel", "approvedAt", "signedAt", "blockedGroupIDs", "editorIDs", "trustCenterID", "trustCenterDocIDs", "documentID", "fileID", "approvedByUserID"}
+	fieldsInOrder := [...]string{"tags", "firstName", "lastName", "email", "companyName", "reason", "accessLevel", "status", "approvedAt", "signedAt", "blockedGroupIDs", "editorIDs", "trustCenterID", "trustCenterDocIDs", "documentID", "fileID", "approvedByUserID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -221420,6 +221420,13 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterNDARequestInput(ctx c
 				return it, err
 			}
 			it.AccessLevel = data
+		case "status":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
+			data, err := ec.unmarshalOTrustCenterNDARequestTrustCenterNDARequestStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐTrustCenterNDARequestStatus(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Status = data
 		case "approvedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedAt"))
 			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
