@@ -41,6 +41,9 @@ type MutationListener struct {
 	// Operations optionally scopes listener interest to specific mutation operations;
 	// empty expands to RegularMutationOps, so OpSoftDelete is explicit opt-in
 	Operations []string
+	// Priority orders listeners sharing a concern topic, lowest first; listeners on one
+	// topic run sequentially in a single dispatch
+	Priority int
 	// Fields optionally gates update operations on at least one of these fields having
 	// changed; create and delete operations pass the gate
 	Fields []string
@@ -154,6 +157,7 @@ func (listener MutationListener) Definition() gala.Definition[MutationPayload] {
 		Topic:      MutationTopic(listener.concern(), listener.Schema.Name),
 		Name:       listener.Name(),
 		Operations: operations,
+		Priority:   listener.Priority,
 		// the declarative field and match gates compile to the definition gate: field
 		// gates apply to update operations only, creates and deletes pass, and match
 		// predicates are AND-combined over proposed values
