@@ -107,7 +107,7 @@ func (Notification) Fields() []ent.Field {
 func (Notification) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookNotification(),
-		hooks.HookNotificationPublish(),
+		hooks.HookNotificationDefaultChannels(),
 	}
 }
 

@@ -57,6 +57,9 @@ type GalaConfig struct {
 	WorkerCount int `json:"workercount" koanf:"workercount" default:"10"`
 	// MaxRetries sets River job max attempts for gala dispatch jobs.
 	MaxRetries int `json:"maxretries" koanf:"maxretries" default:"5"`
+	// JobTimeout is the maximum run time for one gala dispatch job; long-running listeners such as
+	// report parsing need more than the default
+	JobTimeout time.Duration `json:"jobtimeout" koanf:"jobtimeout" default:"15m"`
 	// FailOnEnqueueError is kept for backward config compatibility and currently has no runtime effect.
 	FailOnEnqueueError bool `json:"failonenqueueerror" koanf:"failonenqueueerror" default:"false"`
 	// QueueName optionally overrides queue selection for durable gala dispatch jobs.

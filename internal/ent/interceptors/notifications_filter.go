@@ -3,10 +3,14 @@ package interceptors
 import (
 	"context"
 
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -27,6 +31,11 @@ func NotificationQueryFilter() generated.Interceptor {
 			return auth.ErrNoAuthUser
 		}
 
+		// internal operations such as delivery listeners read notifications on behalf of any user
+		if caller.Has(auth.CapInternalOperation) || caller.Has(auth.CapBypassOrgFilter) {
+			return nil
+		}
+
 		// Apply the filter by modifying the query in place
 		nq.Where(
 			notification.Or(
@@ -36,8 +45,23 @@ func NotificationQueryFilter() generated.Interceptor {
 					notification.OwnerIDIn(caller.OrgIDs()...),
 				),
 			),
+			inAppChannelPredicate(),
 		)
 
 		return nil
 	})
+}
+
+// inAppChannelPredicate limits reads to notifications delivered in-app: rows with no channels set
+// predate channel routing and count as in-app, otherwise the channels must include IN_APP
+func inAppChannelPredicate() predicate.Notification {
+	return notification.Or(
+		notification.ChannelsIsNil(),
+		func(s *sql.Selector) {
+			s.Where(sqljson.LenEQ(notification.FieldChannels, 0))
+		},
+		func(s *sql.Selector) {
+			s.Where(sqljson.ValueContains(notification.FieldChannels, enums.ChannelInApp.String()))
+		},
+	)
 }

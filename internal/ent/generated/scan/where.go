@@ -2112,6 +2112,36 @@ func NextScanRunAtNotNil() predicate.Scan {
 	return predicate.Scan(sql.FieldNotNull(FieldNextScanRunAt))
 }
 
+// OriginEQ applies the EQ predicate on the "origin" field.
+func OriginEQ(v enums.ScanOrigin) predicate.Scan {
+	vc := v
+	return predicate.Scan(sql.FieldEQ(FieldOrigin, vc))
+}
+
+// OriginNEQ applies the NEQ predicate on the "origin" field.
+func OriginNEQ(v enums.ScanOrigin) predicate.Scan {
+	vc := v
+	return predicate.Scan(sql.FieldNEQ(FieldOrigin, vc))
+}
+
+// OriginIn applies the In predicate on the "origin" field.
+func OriginIn(vs ...enums.ScanOrigin) predicate.Scan {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Scan(sql.FieldIn(FieldOrigin, v...))
+}
+
+// OriginNotIn applies the NotIn predicate on the "origin" field.
+func OriginNotIn(vs ...enums.ScanOrigin) predicate.Scan {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Scan(sql.FieldNotIn(FieldOrigin, v...))
+}
+
 // PerformedByEQ applies the EQ predicate on the "performed_by" field.
 func PerformedByEQ(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldEQ(FieldPerformedBy, v))

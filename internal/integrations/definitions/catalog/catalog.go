@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/gcpscc"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/gemini"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/googledrive"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/googleworkspace"
@@ -38,6 +39,7 @@ func Builders(cfg Config, federationIssuer string, devMode bool) []registry.Buil
 		cloudflare.Builder(&cfg.CloudflareRuntime),
 		email.Builder(&cfg.Email, devMode),
 		gcpscc.Builder(federationIssuer),
+		gemini.Builder(&cfg.Gemini),
 		githubapp.Builder(cfg.GitHubApp),
 		googledrive.Builder(cfg.GoogleDrive),
 		googleworkspace.Builder(cfg.GoogleWorkspace),

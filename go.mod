@@ -13,6 +13,8 @@ tool (
 require (
 	ariga.io/atlas v1.3.0
 	ariga.io/entcache v0.1.0
+	cloud.google.com/go/auth v0.23.2
+	cloud.google.com/go/modelarmor v1.2.0
 	cloud.google.com/go/securitycenter v1.46.0
 	cloud.google.com/go/storage v1.62.3
 	entgo.io/contrib v0.7.0
@@ -118,7 +120,7 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
-	github.com/theopenlane/entx v0.34.4
+	github.com/theopenlane/entx v0.34.5
 	github.com/theopenlane/go-client v0.14.0
 	github.com/theopenlane/gqlgen-plugins v0.18.0
 	github.com/theopenlane/httpsling v0.3.0
@@ -145,6 +147,7 @@ require (
 	golang.org/x/text v0.42.0
 	golang.org/x/tools v0.50.0
 	google.golang.org/api v0.297.0
+	google.golang.org/genai v1.71.0
 	google.golang.org/protobuf v1.36.12
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
@@ -153,7 +156,6 @@ require (
 require (
 	cel.dev/expr v0.25.2 // indirect
 	cloud.google.com/go v0.123.0 // indirect
-	cloud.google.com/go/auth v0.23.2 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
 	cloud.google.com/go/compute/metadata v0.9.0 // indirect
 	cloud.google.com/go/iam v1.12.0 // indirect

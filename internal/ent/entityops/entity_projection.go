@@ -1545,6 +1545,7 @@ type ScanProjection struct {
 	InternalNotes              string                 `json:"internal_notes,omitempty"`
 	Metadata                   map[string]interface{} `json:"metadata,omitempty"`
 	NextScanRunAt              models.DateTime        `json:"next_scan_run_at,omitempty"`
+	Origin                     enums.ScanOrigin       `json:"origin,omitempty"`
 	OwnerID                    string                 `json:"owner_id,omitempty"`
 	PerformedBy                string                 `json:"performed_by,omitempty"`
 	PerformedByGroupID         string                 `json:"performed_by_group_id,omitempty"`

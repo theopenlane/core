@@ -18,6 +18,8 @@ var (
 	NotificationTopicStandardUpdate NotificationTopic = "STANDARD_UPDATE"
 	// NotificationTopicDomainScan indicates the domain scan.
 	NotificationTopicDomainScan NotificationTopic = "DOMAIN_SCAN"
+	// NotificationTopicReportScan indicates an uploaded report finished parsing
+	NotificationTopicReportScan NotificationTopic = "REPORT_SCAN"
 	// NotificationTopicImportComplete indicates an accepted import finished creating its records.
 	NotificationTopicImportComplete NotificationTopic = "IMPORT_COMPLETE"
 	// NotificationTopicOrganizationReady indicates an organization is ready to be viewed
@@ -35,6 +37,7 @@ var notificationTopicValues = []NotificationTopic{
 	NotificationTopicExport,
 	NotificationTopicStandardUpdate,
 	NotificationTopicDomainScan,
+	NotificationTopicReportScan,
 	NotificationTopicImportComplete,
 	NotificationTopicOrganizationReady,
 	NotificationTopicIntegration,

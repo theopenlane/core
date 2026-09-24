@@ -5,6 +5,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/gemini"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/googledrive"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/googleworkspace"
@@ -25,6 +26,9 @@ type Config struct {
 	// CloudflareRuntime holds runtime-provisioned configuration for the operator-owned
 	// account, used for system-initiated calls
 	CloudflareRuntime cloudflare.RuntimeConfig `json:"cloudflareruntime" koanf:"cloudflareruntime"`
+	// Gemini holds runtime-provisioned configuration for the operator-owned Gemini
+	// account, used for system-initiated calls such as report scans
+	Gemini gemini.RuntimeConfig `json:"gemini" koanf:"gemini"`
 	// GitHubApp holds operator credentials for the GitHub App definition
 	GitHubApp githubapp.Config `json:"githubapp" koanf:"githubapp"`
 	// Slack holds OAuth credentials for the Slack definition

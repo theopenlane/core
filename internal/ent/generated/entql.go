@@ -2780,6 +2780,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scan.FieldScanDate:                   {Type: field.TypeTime, Column: scan.FieldScanDate},
 			scan.FieldScanSchedule:               {Type: field.TypeString, Column: scan.FieldScanSchedule},
 			scan.FieldNextScanRunAt:              {Type: field.TypeTime, Column: scan.FieldNextScanRunAt},
+			scan.FieldOrigin:                     {Type: field.TypeEnum, Column: scan.FieldOrigin},
 			scan.FieldPerformedBy:                {Type: field.TypeString, Column: scan.FieldPerformedBy},
 			scan.FieldPerformedByUserID:          {Type: field.TypeString, Column: scan.FieldPerformedByUserID},
 			scan.FieldPerformedByGroupID:         {Type: field.TypeString, Column: scan.FieldPerformedByGroupID},
@@ -43947,6 +43948,11 @@ func (f *ScanFilter) WhereScanSchedule(p entql.StringP) {
 // WhereNextScanRunAt applies the entql time.Time predicate on the next_scan_run_at field.
 func (f *ScanFilter) WhereNextScanRunAt(p entql.TimeP) {
 	f.Where(p.Field(scan.FieldNextScanRunAt))
+}
+
+// WhereOrigin applies the entql string predicate on the origin field.
+func (f *ScanFilter) WhereOrigin(p entql.StringP) {
+	f.Where(p.Field(scan.FieldOrigin))
 }
 
 // WherePerformedBy applies the entql string predicate on the performed_by field.

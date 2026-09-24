@@ -337,6 +337,63 @@
                                               </tbody>
                                             </table>
                                             {{ end }}
+                                            {{ range $table := .Body.Tables }}
+                                            {{ if $table.Data }}
+                                            <table
+                                              align="center"
+                                              width="100%"
+                                              border="0"
+                                              cellpadding="0"
+                                              cellspacing="0"
+                                              role="presentation"
+                                              style="margin-bottom:1.5rem;max-width:380px;margin-right:auto;margin-left:auto">
+                                              <tbody>
+                                                <tr>
+                                                  <td style="background-color:{{ or $.Config.CardBackgroundColor "#ffffff" }};border-radius:8px;padding:16px 20px;text-align:left">
+                                                    {{ if $table.Title }}
+                                                    <p style="font-size:14px;font-weight:600;letter-spacing:-0.042px;color:#14171e;margin:0 0 8px 0;font-family:Inter,system-ui,Arial,sans-serif">
+                                                      {{ $table.Title }}
+                                                    </p>
+                                                    {{ end }}
+                                                    <table
+                                                      align="center"
+                                                      width="100%"
+                                                      border="0"
+                                                      cellpadding="0"
+                                                      cellspacing="0"
+                                                      role="presentation">
+                                                      <tbody>
+                                                        <tr>
+                                                          {{ range $cell := index $table.Data 0 }}
+                                                          <th
+                                                            style="font-size:13px;font-weight:600;letter-spacing:-0.039px;color:#14171e;padding:6px 8px 6px 0;text-align:left;border-bottom:1px solid #e5e7eb;font-family:Inter,system-ui,Arial,sans-serif">
+                                                            {{ $cell.Key }}
+                                                          </th>
+                                                          {{ end }}
+                                                        </tr>
+                                                        {{ range $row := $table.Data }}
+                                                        <tr>
+                                                          {{ range $cell := $row }}
+                                                          <td
+                                                            style="font-size:13px;font-weight:420;letter-spacing:-0.039px;color:#43454b;padding:6px 8px 6px 0;vertical-align:top;font-family:Inter,system-ui,Arial,sans-serif">
+                                                            {{ if $cell.Value }}{{ $cell.Value }}{{ else }}{{ $cell.UnsafeValue }}{{ end }}
+                                                          </td>
+                                                          {{ end }}
+                                                        </tr>
+                                                        {{ end }}
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                            {{ if $table.Footer }}
+                                            <p style="font-size:16px;line-height:1.5;font-weight:420;letter-spacing:-0.048px;color:#43454b;margin-right:auto;margin-left:auto;margin-top:0rem;margin-bottom:2rem;max-width:380px;text-align:center;font-family:Inter,system-ui,Arial,sans-serif">
+                                              {{ $table.Footer }}
+                                            </p>
+                                            {{ end }}
+                                            {{ end }}
+                                            {{ end }}
                                             {{ range $action := .Body.Actions }}
                                             {{ if and $action.Button.Text $action.Button.Link }}
                                             <table

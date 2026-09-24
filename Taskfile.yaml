@@ -25,6 +25,8 @@ includes:
     dir: ./internal/onboarding
   bats:
     taskfile: ./.buildkite/tests/Taskfile.yaml
+  testui:
+    taskfile: ./internal/testutils/Taskfile.yaml
 
 
 env:
@@ -111,6 +113,7 @@ tasks:
       - internal/ent/mixin/**/*.go
       - internal/ent/templates/**/*
       - internal/ent/taskrules/**/*.go
+      - common/enums/**/*.go
     generates:
       - internal/ent/generated/**/*.go
       - internal/ent/entityops/**/*.go

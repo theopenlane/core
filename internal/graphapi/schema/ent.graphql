@@ -39820,6 +39820,7 @@ enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/
   EXPORT
   STANDARD_UPDATE
   DOMAIN_SCAN
+  REPORT_SCAN
   IMPORT_COMPLETE
   ORGANIZATION_READY
   INTEGRATION
@@ -60615,6 +60616,10 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
   """
   nextScanRunAt: DateTime
   """
+  how the scan was created, derived from the caller on create and never supplied as input
+  """
+  origin: ScanScanOrigin!
+  """
   who performed the scan when no user or group is linked
   """
   performedBy: String
@@ -61137,7 +61142,17 @@ enum ScanOrderField {
   SCAN_TYPE
   scan_date
   next_scan_run_at
+  ORIGIN
   STATUS
+}
+"""
+ScanScanOrigin is enum for the field origin
+"""
+enum ScanScanOrigin @goModel(model: "github.com/theopenlane/core/common/enums.ScanOrigin") {
+  USER
+  SYSTEM
+  INTEGRATION
+  API
 }
 """
 ScanScanStatus is enum for the field status
@@ -61156,6 +61171,7 @@ enum ScanScanType @goModel(model: "github.com/theopenlane/core/common/enums.Scan
   VULNERABILITY
   VENDOR
   PROVIDER
+  REPORT
 }
 """
 ScanWhereInput is used for filtering Scan objects.
@@ -61492,6 +61508,13 @@ input ScanWhereInput {
   nextScanRunAtLTE: DateTime
   nextScanRunAtIsNil: Boolean
   nextScanRunAtNotNil: Boolean
+  """
+  origin field predicates
+  """
+  origin: ScanScanOrigin
+  originNEQ: ScanScanOrigin
+  originIn: [ScanScanOrigin!]
+  originNotIn: [ScanScanOrigin!]
   """
   performed_by field predicates
   """

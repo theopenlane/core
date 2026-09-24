@@ -667,6 +667,31 @@ coreConfiguration:
             - hs-banner
             - hs-analytics
         scanttl: 86400  # @schema type:integer; default:86400
+    gemini:
+      # -- Gemini backend to use: gemini for the Gemini Developer API or vertex for Vertex AI
+      backend: ""  # @schema type:string
+      # -- Google Cloud project for the Vertex AI backend
+      project: ""  # @schema type:string
+      # -- Google Cloud region for the Vertex AI backend
+      location: ""  # @schema type:string
+      # -- Model Armor template resource name used to screen uploaded reports for prompt injection
+      modelarmortemplate: ""  # @schema type:string
+      # -- Gemini model used for extraction
+      model: ""  # @schema type:string
+      # -- Prompt text used for extraction
+      prompts:
+        # -- System instruction applied to every extraction request
+        systemInstruction: ""  # @schema type:string
+        # -- Prompts used to extract from a SOC 2 report
+        soc2:
+          # -- Base prompt describing the SOC 2 report layout
+          report: ""  # @schema type:string
+          # -- Per-section extraction prompts keyed by section name
+          sections: {}
+          # -- Template appended to scope an extraction to the control ref codes in .RefCodes
+          scope: ""  # @schema type:string
+          # -- Template sent to resume a trimmed reviews stream after .LastControl mapped to .LastCriterion
+          continuation: ""  # @schema type:string
     githubapp:
       appslug: ""  # @schema type:string
     slack:
@@ -766,6 +791,7 @@ coreConfiguration:
       enabled: false  # @schema type:boolean; default:false
       workercount: 10  # @schema type:integer; default:10
       maxretries: 5  # @schema type:integer; default:5
+      jobtimeout: "15m0s"  # @schema type:integer; default:15m
       failonenqueueerror: false  # @schema type:boolean; default:false
       queuename: "events"  # @schema type:string; default:events
   # -- Cloudflare contains configuration for Cloudflare integration
@@ -1012,6 +1038,22 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_CLOUDFLARERUNTIME_APITOKEN"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-cloudflareruntime-apitoken"  # @schema type:string
+    # -- core-integrations-gemini-apikey secret configuration
+    core-integrations-gemini-apikey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.gemini.apikey
+      secretKey: "CORE_INTEGRATIONS_GEMINI_APIKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-gemini-apikey"  # @schema type:string
+    # -- core-integrations-gemini-credentialsjson secret configuration
+    core-integrations-gemini-credentialsjson:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.gemini.credentialsjson
+      secretKey: "CORE_INTEGRATIONS_GEMINI_CREDENTIALSJSON"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-gemini-credentialsjson"  # @schema type:string
     # -- core-integrations-githubapp-appid secret configuration
     core-integrations-githubapp-appid:
       # -- Enable this external secret
