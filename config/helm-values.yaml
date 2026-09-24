@@ -669,7 +669,7 @@ coreConfiguration:
         scanttl: 86400  # @schema type:integer; default:86400
     gemini:
       # -- Gemini backend to use: gemini for the Gemini Developer API or vertex for Vertex AI
-      backend: ""  # @schema type:string
+      backend:   # @schema type:string
       # -- Google Cloud project for the Vertex AI backend
       project: ""  # @schema type:string
       # -- Google Cloud region for the Vertex AI backend
