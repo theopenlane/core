@@ -205,9 +205,10 @@ func handleScanReportCompleted(inv entityops.Invocation, _ entityops.MutationPay
 
 	ctx := logx.WithFields(inv.Context, map[string]any{"scan_id": scanRecord.ID})
 
-	ok, err := rule.HasFeature(inv.Context, models.CatalogTrustCenterModule.String())
+	ok, err := rule.HasFeature(ctx, models.CatalogTrustCenterModule.String())
 	if err != nil {
-		logx.FromContext(inv.Context).Debug().Msg("report scan: no trust center, skipping document")
+		logx.FromContext(ctx).Debug().Err(err).Msg("report scan: trust center module lookup failed")
+
 		return err
 	}
 
@@ -215,7 +216,7 @@ func handleScanReportCompleted(inv entityops.Invocation, _ entityops.MutationPay
 		return nil
 	}
 
-	ctx = privacy.DecisionContext(inv.Context, privacy.Allow)
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	trustCenterID, err := inv.Client.TrustCenter.Query().Where(trustcenter.OwnerID(scanRecord.OwnerID)).OnlyID(ctx)
 	if generated.IsNotFound(err) {
