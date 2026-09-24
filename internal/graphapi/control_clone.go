@@ -290,6 +290,15 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	// add existingControlIDs to createdControlIDs
 	createdControlIDs = append(createdControlIDs, existingControlIDs...)
 
+	sourceControlIDs := make([]string, 0, len(controlsToClone))
+	for _, c := range controlsToClone {
+		sourceControlIDs = append(sourceControlIDs, c.ID)
+	}
+
+	if err := r.cloneMappings(ctx, sourceControlIDs, orgID); err != nil {
+		return nil, err
+	}
+
 	// get the cloned controls to return in the response
 	query, err := withTransactionalMutation(ctx).Control.Query().Where(control.IDIn(createdControlIDs...)).
 		WithSubcontrols().
