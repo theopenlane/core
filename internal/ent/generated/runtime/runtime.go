@@ -6392,6 +6392,7 @@ func init() {
 	scanMixinHooks9 := scanMixin[9].Hooks()
 	scanMixinHooks11 := scanMixin[11].Hooks()
 	scanMixinHooks12 := scanMixin[12].Hooks()
+	scanHooks := schema.Scan{}.Hooks()
 
 	scan.Hooks[1] = scanMixinHooks0[0]
 
@@ -6414,6 +6415,12 @@ func init() {
 	scan.Hooks[10] = scanMixinHooks11[0]
 
 	scan.Hooks[11] = scanMixinHooks12[0]
+
+	scan.Hooks[12] = scanHooks[0]
+
+	scan.Hooks[13] = scanHooks[1]
+
+	scan.Hooks[14] = scanHooks[2]
 	scanMixinInters3 := scanMixin[3].Interceptors()
 	scanMixinInters7 := scanMixin[7].Interceptors()
 	scanMixinInters9 := scanMixin[9].Interceptors()
@@ -6464,7 +6471,7 @@ func init() {
 	// scan.ScanScheduleValidator is a validator for the "scan_schedule" field. It is called by the builders before save.
 	scan.ScanScheduleValidator = scanDescScanSchedule.Validators[0].(func(string) error)
 	// scanDescDiscoveredVulnerabilityIds is the schema descriptor for discovered_vulnerability_ids field.
-	scanDescDiscoveredVulnerabilityIds := scanFields[10].Descriptor()
+	scanDescDiscoveredVulnerabilityIds := scanFields[11].Descriptor()
 	// scan.DefaultDiscoveredVulnerabilityIds holds the default value on creation for the discovered_vulnerability_ids field.
 	scan.DefaultDiscoveredVulnerabilityIds = scanDescDiscoveredVulnerabilityIds.Default.([]string)
 	// scanDescID is the schema descriptor for id field.

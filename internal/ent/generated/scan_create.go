@@ -435,6 +435,20 @@ func (_c *ScanCreate) SetNillableNextScanRunAt(v *models.DateTime) *ScanCreate {
 	return _c
 }
 
+// SetOrigin sets the "origin" field.
+func (_c *ScanCreate) SetOrigin(v enums.ScanOrigin) *ScanCreate {
+	_c.mutation.SetOrigin(v)
+	return _c
+}
+
+// SetNillableOrigin sets the "origin" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableOrigin(v *enums.ScanOrigin) *ScanCreate {
+	if v != nil {
+		_c.SetOrigin(*v)
+	}
+	return _c
+}
+
 // SetPerformedBy sets the "performed_by" field.
 func (_c *ScanCreate) SetPerformedBy(v string) *ScanCreate {
 	_c.mutation.SetPerformedBy(v)
@@ -858,6 +872,10 @@ func (_c *ScanCreate) defaults() error {
 		v := scan.DefaultScanType
 		_c.mutation.SetScanType(v)
 	}
+	if _, ok := _c.mutation.Origin(); !ok {
+		v := scan.DefaultOrigin
+		_c.mutation.SetOrigin(v)
+	}
 	if _, ok := _c.mutation.DiscoveredVulnerabilityIds(); !ok {
 		v := scan.DefaultDiscoveredVulnerabilityIds
 		_c.mutation.SetDiscoveredVulnerabilityIds(v)
@@ -902,6 +920,14 @@ func (_c *ScanCreate) check() error {
 	if v, ok := _c.mutation.ScanSchedule(); ok {
 		if err := scan.ScanScheduleValidator(string(v)); err != nil {
 			return &ValidationError{Name: "scan_schedule", err: fmt.Errorf(`generated: validator failed for field "Scan.scan_schedule": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.Origin(); !ok {
+		return &ValidationError{Name: "origin", err: errors.New(`generated: missing required field "Scan.origin"`)}
+	}
+	if v, ok := _c.mutation.Origin(); ok {
+		if err := scan.OriginValidator(v); err != nil {
+			return &ValidationError{Name: "origin", err: fmt.Errorf(`generated: validator failed for field "Scan.origin": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.Status(); !ok {
@@ -1030,6 +1056,10 @@ func (_c *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.NextScanRunAt(); ok {
 		_spec.SetField(scan.FieldNextScanRunAt, field.TypeTime, value)
 		_node.NextScanRunAt = &value
+	}
+	if value, ok := _c.mutation.Origin(); ok {
+		_spec.SetField(scan.FieldOrigin, field.TypeEnum, value)
+		_node.Origin = value
 	}
 	if value, ok := _c.mutation.PerformedBy(); ok {
 		_spec.SetField(scan.FieldPerformedBy, field.TypeString, value)

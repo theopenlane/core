@@ -248,7 +248,7 @@ func (e Operation[T]) Registration() types.OperationRegistration {
 		Description:        e.Description,
 		Topic:              DefinitionID.OperationTopic(e.Op.Name()),
 		ClientRef:          emailClientRef.ID(),
-		ConfigSchema:       e.Schema,
+		ConfigSchema:       jsonx.AllowAdditionalProperties(e.Schema),
 		CustomerSelectable: lo.ToPtr(e.CustomerSelectable != nil && *e.CustomerSelectable),
 		Handle:             e.handler(),
 	}

@@ -1146,6 +1146,47 @@ data:
           {{- end }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.gemini }}
+      gemini:
+        {{- if .Values.openlane.coreConfiguration.integrations.gemini.backend }}
+        backend: {{ .Values.openlane.coreConfiguration.integrations.gemini.backend | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.gemini.project }}
+        project: {{ .Values.openlane.coreConfiguration.integrations.gemini.project | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.gemini.location }}
+        location: {{ .Values.openlane.coreConfiguration.integrations.gemini.location | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.gemini.modelarmortemplate }}
+        modelarmortemplate: {{ .Values.openlane.coreConfiguration.integrations.gemini.modelarmortemplate | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.gemini.model }}
+        model: {{ .Values.openlane.coreConfiguration.integrations.gemini.model | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.gemini.prompts }}
+        prompts:
+          {{- if .Values.openlane.coreConfiguration.integrations.gemini.prompts.systeminstruction }}
+          systeminstruction: {{ .Values.openlane.coreConfiguration.integrations.gemini.prompts.systeminstruction | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.gemini.prompts.soc2 }}
+          soc2:
+            {{- if .Values.openlane.coreConfiguration.integrations.gemini.prompts.soc2.report }}
+            report: {{ .Values.openlane.coreConfiguration.integrations.gemini.prompts.soc2.report | quote }}
+            {{- end }}
+            {{- $mapValue := (.Values.openlane.coreConfiguration.integrations.gemini.prompts.soc2.sections | default (dict)) }}
+            {{- if gt (len $mapValue) 0 }}
+            sections:
+            {{- toYaml $mapValue | nindent 14 }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.gemini.prompts.soc2.scope }}
+            scope: {{ .Values.openlane.coreConfiguration.integrations.gemini.prompts.soc2.scope | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.integrations.gemini.prompts.soc2.continuation }}
+            continuation: {{ .Values.openlane.coreConfiguration.integrations.gemini.prompts.soc2.continuation | quote }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.githubapp }}
       githubapp:
         {{- if .Values.openlane.coreConfiguration.integrations.githubapp.appslug }}
@@ -1375,6 +1416,9 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.workflows.gala.maxretries }}
         maxretries: {{ .Values.openlane.coreConfiguration.workflows.gala.maxretries }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.workflows.gala.jobtimeout }}
+        jobtimeout: {{ .Values.openlane.coreConfiguration.workflows.gala.jobtimeout | quote }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.workflows.gala.failonenqueueerror }}
         failonenqueueerror: {{ .Values.openlane.coreConfiguration.workflows.gala.failonenqueueerror }}

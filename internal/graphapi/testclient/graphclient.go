@@ -109817,6 +109817,7 @@ type CreateBulkCSVScan_CreateBulkCSVScan_Scans struct {
 	InternalNotes              *string          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	Metadata                   map[string]any   "json:\"metadata,omitempty\" graphql:\"metadata\""
 	NextScanRunAt              *models.DateTime "json:\"nextScanRunAt,omitempty\" graphql:\"nextScanRunAt\""
+	Origin                     enums.ScanOrigin "json:\"origin\" graphql:\"origin\""
 	OwnerID                    *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PerformedBy                *string          "json:\"performedBy,omitempty\" graphql:\"performedBy\""
 	PerformedByGroupID         *string          "json:\"performedByGroupID,omitempty\" graphql:\"performedByGroupID\""
@@ -109923,6 +109924,12 @@ func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetNextScanRunAt() *models.D
 		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
 	}
 	return t.NextScanRunAt
+}
+func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetOrigin() *enums.ScanOrigin {
+	if t == nil {
+		t = &CreateBulkCSVScan_CreateBulkCSVScan_Scans{}
+	}
+	return &t.Origin
 }
 func (t *CreateBulkCSVScan_CreateBulkCSVScan_Scans) GetOwnerID() *string {
 	if t == nil {
@@ -110077,6 +110084,7 @@ type CreateBulkScan_CreateBulkScan_Scans struct {
 	InternalNotes              *string          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	Metadata                   map[string]any   "json:\"metadata,omitempty\" graphql:\"metadata\""
 	NextScanRunAt              *models.DateTime "json:\"nextScanRunAt,omitempty\" graphql:\"nextScanRunAt\""
+	Origin                     enums.ScanOrigin "json:\"origin\" graphql:\"origin\""
 	OwnerID                    *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PerformedBy                *string          "json:\"performedBy,omitempty\" graphql:\"performedBy\""
 	PerformedByGroupID         *string          "json:\"performedByGroupID,omitempty\" graphql:\"performedByGroupID\""
@@ -110183,6 +110191,12 @@ func (t *CreateBulkScan_CreateBulkScan_Scans) GetNextScanRunAt() *models.DateTim
 		t = &CreateBulkScan_CreateBulkScan_Scans{}
 	}
 	return t.NextScanRunAt
+}
+func (t *CreateBulkScan_CreateBulkScan_Scans) GetOrigin() *enums.ScanOrigin {
+	if t == nil {
+		t = &CreateBulkScan_CreateBulkScan_Scans{}
+	}
+	return &t.Origin
 }
 func (t *CreateBulkScan_CreateBulkScan_Scans) GetOwnerID() *string {
 	if t == nil {
@@ -110337,6 +110351,7 @@ type CreateScan_CreateScan_Scan struct {
 	InternalNotes              *string          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	Metadata                   map[string]any   "json:\"metadata,omitempty\" graphql:\"metadata\""
 	NextScanRunAt              *models.DateTime "json:\"nextScanRunAt,omitempty\" graphql:\"nextScanRunAt\""
+	Origin                     enums.ScanOrigin "json:\"origin\" graphql:\"origin\""
 	OwnerID                    *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PerformedBy                *string          "json:\"performedBy,omitempty\" graphql:\"performedBy\""
 	PerformedByGroupID         *string          "json:\"performedByGroupID,omitempty\" graphql:\"performedByGroupID\""
@@ -110443,6 +110458,12 @@ func (t *CreateScan_CreateScan_Scan) GetNextScanRunAt() *models.DateTime {
 		t = &CreateScan_CreateScan_Scan{}
 	}
 	return t.NextScanRunAt
+}
+func (t *CreateScan_CreateScan_Scan) GetOrigin() *enums.ScanOrigin {
+	if t == nil {
+		t = &CreateScan_CreateScan_Scan{}
+	}
+	return &t.Origin
 }
 func (t *CreateScan_CreateScan_Scan) GetOwnerID() *string {
 	if t == nil {
@@ -110757,6 +110778,7 @@ type GetScanByID_Scan struct {
 	InternalNotes              *string          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	Metadata                   map[string]any   "json:\"metadata,omitempty\" graphql:\"metadata\""
 	NextScanRunAt              *models.DateTime "json:\"nextScanRunAt,omitempty\" graphql:\"nextScanRunAt\""
+	Origin                     enums.ScanOrigin "json:\"origin\" graphql:\"origin\""
 	OwnerID                    *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PerformedBy                *string          "json:\"performedBy,omitempty\" graphql:\"performedBy\""
 	PerformedByGroupID         *string          "json:\"performedByGroupID,omitempty\" graphql:\"performedByGroupID\""
@@ -110863,6 +110885,12 @@ func (t *GetScanByID_Scan) GetNextScanRunAt() *models.DateTime {
 		t = &GetScanByID_Scan{}
 	}
 	return t.NextScanRunAt
+}
+func (t *GetScanByID_Scan) GetOrigin() *enums.ScanOrigin {
+	if t == nil {
+		t = &GetScanByID_Scan{}
+	}
+	return &t.Origin
 }
 func (t *GetScanByID_Scan) GetOwnerID() *string {
 	if t == nil {
@@ -111155,6 +111183,7 @@ type UpdateScan_UpdateScan_Scan struct {
 	InternalNotes              *string          "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
 	Metadata                   map[string]any   "json:\"metadata,omitempty\" graphql:\"metadata\""
 	NextScanRunAt              *models.DateTime "json:\"nextScanRunAt,omitempty\" graphql:\"nextScanRunAt\""
+	Origin                     enums.ScanOrigin "json:\"origin\" graphql:\"origin\""
 	OwnerID                    *string          "json:\"ownerID,omitempty\" graphql:\"ownerID\""
 	PerformedBy                *string          "json:\"performedBy,omitempty\" graphql:\"performedBy\""
 	PerformedByGroupID         *string          "json:\"performedByGroupID,omitempty\" graphql:\"performedByGroupID\""
@@ -111261,6 +111290,12 @@ func (t *UpdateScan_UpdateScan_Scan) GetNextScanRunAt() *models.DateTime {
 		t = &UpdateScan_UpdateScan_Scan{}
 	}
 	return t.NextScanRunAt
+}
+func (t *UpdateScan_UpdateScan_Scan) GetOrigin() *enums.ScanOrigin {
+	if t == nil {
+		t = &UpdateScan_UpdateScan_Scan{}
+	}
+	return &t.Origin
 }
 func (t *UpdateScan_UpdateScan_Scan) GetOwnerID() *string {
 	if t == nil {
@@ -202098,6 +202133,7 @@ const CreateBulkCSVScanDocument = `mutation CreateBulkCSVScan ($input: Upload!) 
 			internalNotes
 			metadata
 			nextScanRunAt
+			origin
 			ownerID
 			performedBy
 			performedByGroupID
@@ -202158,6 +202194,7 @@ const CreateBulkScanDocument = `mutation CreateBulkScan ($input: [CreateScanInpu
 			internalNotes
 			metadata
 			nextScanRunAt
+			origin
 			ownerID
 			performedBy
 			performedByGroupID
@@ -202218,6 +202255,7 @@ const CreateScanDocument = `mutation CreateScan ($input: CreateScanInput!) {
 			internalNotes
 			metadata
 			nextScanRunAt
+			origin
 			ownerID
 			performedBy
 			performedByGroupID
@@ -202344,6 +202382,7 @@ const GetScanByIDDocument = `query GetScanByID ($scanId: ID!) {
 		internalNotes
 		metadata
 		nextScanRunAt
+		origin
 		ownerID
 		performedBy
 		performedByGroupID
@@ -202450,6 +202489,7 @@ const UpdateScanDocument = `mutation UpdateScan ($updateScanId: ID!, $input: Upd
 			internalNotes
 			metadata
 			nextScanRunAt
+			origin
 			ownerID
 			performedBy
 			performedByGroupID
