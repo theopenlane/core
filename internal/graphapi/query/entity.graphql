@@ -1,5 +1,5 @@
-mutation AdoptEntity($catalogEntityID: ID!) {
-  adoptEntity(catalogEntityID: $catalogEntityID) {
+mutation AdoptEntity($catalogID: ID!, $input: CreateEntityInput) {
+  adoptEntity(catalogID: $catalogID, input: $input) {
     entity {
       id
       name
@@ -147,6 +147,45 @@ mutation DeleteEntity($deleteEntityId: ID!) {
   }
 }
 
+query EntitiesCatalog($after: Cursor, $first: Int, $before: Cursor, $last: Int, $orderBy: [EntityOrder!], $where: EntityWhereInput) {
+  entitiesCatalog(
+    after: $after
+    first: $first
+    before: $before
+    last: $last
+    orderBy: $orderBy
+    where: $where
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayName
+        status
+        domains
+        entityType {
+          id
+          name
+        }
+        id
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
 query GetAllEntities {
   entities {
     edges {
@@ -223,6 +262,7 @@ query GetEntityByID($entityId: ID!) {
     autoRenews
     billingModel
     catalogEntityID
+    catalogEntityKey
     contractEndDate
     contractRenewalAt
     contractStartDate
@@ -241,6 +281,7 @@ query GetEntityByID($entityId: ID!) {
     environmentID
     environmentName
     externalID
+    externallyVisible
     hasSoc2
     id
     integrationRunID

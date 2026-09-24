@@ -6,6 +6,7 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
@@ -13,7 +14,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/internal/vendorenrich"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 )
@@ -111,13 +111,13 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 		return
 	}
 
-	catalogID, matched, err := vendorenrich.MatchCatalog(ctx, r.DB(), def.Family, "")
+	catalogID, matched, err := entityops.SchemaEntity.Match(ctx, r.DB(), operations.VendorMatchCandidates(def.Family, "")...)
 	if err != nil {
 		logx.FromContext(ctx).Info().Err(err).Msg("error matching vendor against catalog, skipping adoption")
 	}
 
 	if matched {
-		vendorID, _, err := vendorenrich.AdoptVendor(ctx, r.DB(), ownerID, catalogID)
+		vendorID, _, err := operations.AdoptVendor(ctx, r.DB(), ownerID, catalogID)
 		if err != nil {
 			logx.FromContext(ctx).Info().Err(err).Msg("error adopting catalog vendor, skipping creation")
 			return

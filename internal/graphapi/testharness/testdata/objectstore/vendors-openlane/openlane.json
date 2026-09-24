@@ -1,6 +1,7 @@
 {
   "systemInternalID": "entity::fixture-openlane",
   "entityTypeName": "vendor",
+  "externallyVisible": true,
   "name": "Openlane",
   "displayName": "Openlane Fixture",
   "description": "Openlane catalogue fixture matching the harness integration definitions' family.",

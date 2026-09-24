@@ -192,6 +192,21 @@ func SystemInternalID(v string) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldSystemInternalID, v))
 }
 
+// CatalogEntityID applies equality check predicate on the "catalog_entity_id" field. It's identical to CatalogEntityIDEQ.
+func CatalogEntityID(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldCatalogEntityID, v))
+}
+
+// ExternallyVisible applies equality check predicate on the "externally_visible" field. It's identical to ExternallyVisibleEQ.
+func ExternallyVisible(v bool) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldExternallyVisible, v))
+}
+
+// CatalogEntityKey applies equality check predicate on the "catalog_entity_key" field. It's identical to CatalogEntityKeyEQ.
+func CatalogEntityKey(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldCatalogEntityKey, v))
+}
+
 // EntityRelationshipStateName applies equality check predicate on the "entity_relationship_state_name" field. It's identical to EntityRelationshipStateNameEQ.
 func EntityRelationshipStateName(v string) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldEntityRelationshipStateName, v))
@@ -375,11 +390,6 @@ func LogoFileID(v string) predicate.Entity {
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldExternalID, v))
-}
-
-// CatalogEntityID applies equality check predicate on the "catalog_entity_id" field. It's identical to CatalogEntityIDEQ.
-func CatalogEntityID(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldEQ(FieldCatalogEntityID, v))
 }
 
 // ObservedAt applies equality check predicate on the "observed_at" field. It's identical to ObservedAtEQ.
@@ -2115,6 +2125,176 @@ func SystemInternalIDEqualFold(v string) predicate.Entity {
 // SystemInternalIDContainsFold applies the ContainsFold predicate on the "system_internal_id" field.
 func SystemInternalIDContainsFold(v string) predicate.Entity {
 	return predicate.Entity(sql.FieldContainsFold(FieldSystemInternalID, v))
+}
+
+// CatalogEntityIDEQ applies the EQ predicate on the "catalog_entity_id" field.
+func CatalogEntityIDEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDNEQ applies the NEQ predicate on the "catalog_entity_id" field.
+func CatalogEntityIDNEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDIn applies the In predicate on the "catalog_entity_id" field.
+func CatalogEntityIDIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldIn(FieldCatalogEntityID, vs...))
+}
+
+// CatalogEntityIDNotIn applies the NotIn predicate on the "catalog_entity_id" field.
+func CatalogEntityIDNotIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldNotIn(FieldCatalogEntityID, vs...))
+}
+
+// CatalogEntityIDGT applies the GT predicate on the "catalog_entity_id" field.
+func CatalogEntityIDGT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGT(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDGTE applies the GTE predicate on the "catalog_entity_id" field.
+func CatalogEntityIDGTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGTE(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDLT applies the LT predicate on the "catalog_entity_id" field.
+func CatalogEntityIDLT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLT(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDLTE applies the LTE predicate on the "catalog_entity_id" field.
+func CatalogEntityIDLTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLTE(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDContains applies the Contains predicate on the "catalog_entity_id" field.
+func CatalogEntityIDContains(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContains(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDHasPrefix applies the HasPrefix predicate on the "catalog_entity_id" field.
+func CatalogEntityIDHasPrefix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasPrefix(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDHasSuffix applies the HasSuffix predicate on the "catalog_entity_id" field.
+func CatalogEntityIDHasSuffix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasSuffix(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDIsNil applies the IsNil predicate on the "catalog_entity_id" field.
+func CatalogEntityIDIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldCatalogEntityID))
+}
+
+// CatalogEntityIDNotNil applies the NotNil predicate on the "catalog_entity_id" field.
+func CatalogEntityIDNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldCatalogEntityID))
+}
+
+// CatalogEntityIDEqualFold applies the EqualFold predicate on the "catalog_entity_id" field.
+func CatalogEntityIDEqualFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEqualFold(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDContainsFold applies the ContainsFold predicate on the "catalog_entity_id" field.
+func CatalogEntityIDContainsFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContainsFold(FieldCatalogEntityID, v))
+}
+
+// ExternallyVisibleEQ applies the EQ predicate on the "externally_visible" field.
+func ExternallyVisibleEQ(v bool) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldExternallyVisible, v))
+}
+
+// ExternallyVisibleNEQ applies the NEQ predicate on the "externally_visible" field.
+func ExternallyVisibleNEQ(v bool) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldExternallyVisible, v))
+}
+
+// ExternallyVisibleIsNil applies the IsNil predicate on the "externally_visible" field.
+func ExternallyVisibleIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldExternallyVisible))
+}
+
+// ExternallyVisibleNotNil applies the NotNil predicate on the "externally_visible" field.
+func ExternallyVisibleNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldExternallyVisible))
+}
+
+// CatalogEntityKeyEQ applies the EQ predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyNEQ applies the NEQ predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyNEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyIn applies the In predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldIn(FieldCatalogEntityKey, vs...))
+}
+
+// CatalogEntityKeyNotIn applies the NotIn predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyNotIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldNotIn(FieldCatalogEntityKey, vs...))
+}
+
+// CatalogEntityKeyGT applies the GT predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyGT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGT(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyGTE applies the GTE predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyGTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGTE(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyLT applies the LT predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyLT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLT(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyLTE applies the LTE predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyLTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLTE(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyContains applies the Contains predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyContains(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContains(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyHasPrefix applies the HasPrefix predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyHasPrefix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasPrefix(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyHasSuffix applies the HasSuffix predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyHasSuffix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasSuffix(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyIsNil applies the IsNil predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldCatalogEntityKey))
+}
+
+// CatalogEntityKeyNotNil applies the NotNil predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldCatalogEntityKey))
+}
+
+// CatalogEntityKeyEqualFold applies the EqualFold predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyEqualFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEqualFold(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyContainsFold applies the ContainsFold predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyContainsFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContainsFold(FieldCatalogEntityKey, v))
 }
 
 // EntityRelationshipStateNameEQ applies the EQ predicate on the "entity_relationship_state_name" field.
@@ -4517,81 +4697,6 @@ func ExternalIDContainsFold(v string) predicate.Entity {
 	return predicate.Entity(sql.FieldContainsFold(FieldExternalID, v))
 }
 
-// CatalogEntityIDEQ applies the EQ predicate on the "catalog_entity_id" field.
-func CatalogEntityIDEQ(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldEQ(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDNEQ applies the NEQ predicate on the "catalog_entity_id" field.
-func CatalogEntityIDNEQ(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldNEQ(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDIn applies the In predicate on the "catalog_entity_id" field.
-func CatalogEntityIDIn(vs ...string) predicate.Entity {
-	return predicate.Entity(sql.FieldIn(FieldCatalogEntityID, vs...))
-}
-
-// CatalogEntityIDNotIn applies the NotIn predicate on the "catalog_entity_id" field.
-func CatalogEntityIDNotIn(vs ...string) predicate.Entity {
-	return predicate.Entity(sql.FieldNotIn(FieldCatalogEntityID, vs...))
-}
-
-// CatalogEntityIDGT applies the GT predicate on the "catalog_entity_id" field.
-func CatalogEntityIDGT(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldGT(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDGTE applies the GTE predicate on the "catalog_entity_id" field.
-func CatalogEntityIDGTE(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldGTE(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDLT applies the LT predicate on the "catalog_entity_id" field.
-func CatalogEntityIDLT(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldLT(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDLTE applies the LTE predicate on the "catalog_entity_id" field.
-func CatalogEntityIDLTE(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldLTE(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDContains applies the Contains predicate on the "catalog_entity_id" field.
-func CatalogEntityIDContains(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldContains(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDHasPrefix applies the HasPrefix predicate on the "catalog_entity_id" field.
-func CatalogEntityIDHasPrefix(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldHasPrefix(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDHasSuffix applies the HasSuffix predicate on the "catalog_entity_id" field.
-func CatalogEntityIDHasSuffix(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldHasSuffix(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDIsNil applies the IsNil predicate on the "catalog_entity_id" field.
-func CatalogEntityIDIsNil() predicate.Entity {
-	return predicate.Entity(sql.FieldIsNull(FieldCatalogEntityID))
-}
-
-// CatalogEntityIDNotNil applies the NotNil predicate on the "catalog_entity_id" field.
-func CatalogEntityIDNotNil() predicate.Entity {
-	return predicate.Entity(sql.FieldNotNull(FieldCatalogEntityID))
-}
-
-// CatalogEntityIDEqualFold applies the EqualFold predicate on the "catalog_entity_id" field.
-func CatalogEntityIDEqualFold(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldEqualFold(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDContainsFold applies the ContainsFold predicate on the "catalog_entity_id" field.
-func CatalogEntityIDContainsFold(v string) predicate.Entity {
-	return predicate.Entity(sql.FieldContainsFold(FieldCatalogEntityID, v))
-}
-
 // ObservedAtEQ applies the EQ predicate on the "observed_at" field.
 func ObservedAtEQ(v models.DateTime) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldObservedAt, v))
@@ -4864,6 +4969,52 @@ func HasReviewedByIdentityHolder() predicate.Entity {
 func HasReviewedByIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.Entity {
 	return predicate.Entity(func(s *sql.Selector) {
 		step := newReviewedByIdentityHolderStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasCatalogEntity applies the HasEdge predicate on the "catalog_entity" edge.
+func HasCatalogEntity() predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, CatalogEntityTable, CatalogEntityColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCatalogEntityWith applies the HasEdge predicate on the "catalog_entity" edge with a given conditions (other predicates).
+func HasCatalogEntityWith(preds ...predicate.Entity) predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := newCatalogEntityStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAdoptedEntities applies the HasEdge predicate on the "adopted_entities" edge.
+func HasAdoptedEntities() predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AdoptedEntitiesTable, AdoptedEntitiesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAdoptedEntitiesWith applies the HasEdge predicate on the "adopted_entities" edge with a given conditions (other predicates).
+func HasAdoptedEntitiesWith(preds ...predicate.Entity) predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := newAdoptedEntitiesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5577,52 +5728,6 @@ func HasLogoFile() predicate.Entity {
 func HasLogoFileWith(preds ...predicate.File) predicate.Entity {
 	return predicate.Entity(func(s *sql.Selector) {
 		step := newLogoFileStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasCatalogEntity applies the HasEdge predicate on the "catalog_entity" edge.
-func HasCatalogEntity() predicate.Entity {
-	return predicate.Entity(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, CatalogEntityTable, CatalogEntityColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasCatalogEntityWith applies the HasEdge predicate on the "catalog_entity" edge with a given conditions (other predicates).
-func HasCatalogEntityWith(preds ...predicate.Entity) predicate.Entity {
-	return predicate.Entity(func(s *sql.Selector) {
-		step := newCatalogEntityStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasAdoptedEntities applies the HasEdge predicate on the "adopted_entities" edge.
-func HasAdoptedEntities() predicate.Entity {
-	return predicate.Entity(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, AdoptedEntitiesTable, AdoptedEntitiesColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasAdoptedEntitiesWith applies the HasEdge predicate on the "adopted_entities" edge with a given conditions (other predicates).
-func HasAdoptedEntitiesWith(preds ...predicate.Entity) predicate.Entity {
-	return predicate.Entity(func(s *sql.Selector) {
-		step := newAdoptedEntitiesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

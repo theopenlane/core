@@ -737,6 +737,9 @@ var (
 		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
+		{Name: "catalog_entity_id", Type: field.TypeString, Nullable: true},
+		{Name: "externally_visible", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "catalog_entity_key", Type: field.TypeString, Nullable: true},
 		{Name: "entity_relationship_state_name", Type: field.TypeString, Nullable: true},
 		{Name: "entity_relationship_state_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_security_questionnaire_status_name", Type: field.TypeString, Nullable: true},
@@ -783,7 +786,6 @@ var (
 		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "external_id", Type: field.TypeString, Nullable: true},
-		{Name: "catalog_entity_id", Type: field.TypeString, Nullable: true},
 		{Name: "observed_at", Type: field.TypeTime, Nullable: true},
 	}
 	// EntityHistoryTable holds the schema information for the "entity_history" table.
@@ -2080,9 +2082,6 @@ var (
 		{Name: "delegate_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_group_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_identity_holder_id", Type: field.TypeString, Nullable: true},
-		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
-		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "risk_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "risk_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "risk_category_name", Type: field.TypeString, Nullable: true},

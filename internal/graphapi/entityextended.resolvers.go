@@ -7,55 +7,14 @@ package graphapi
 
 import (
 	"context"
-	"errors"
-	"fmt"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
-	"github.com/theopenlane/core/v2/internal/graphapi/model"
-	"github.com/theopenlane/core/v2/internal/vendorenrich"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
-
-// AdoptEntity is the resolver for the adoptEntity field.
-func (r *mutationResolver) AdoptEntity(ctx context.Context, catalogEntityID string) (*model.EntityCreatePayload, error) {
-	// set the organization in the auth context if its not done for us
-	ctx, err := common.SetOrganizationInAuthContext(ctx, nil)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return nil, rout.ErrPermissionDenied
-	}
-
-	id, _, err := vendorenrich.AdoptVendor(ctx, withTransactionalMutation(ctx), orgID, catalogEntityID)
-
-	switch {
-	case errors.Is(err, entityops.ErrCatalogRowNotSystemOwned):
-		return nil, common.NewNotFoundError("entity")
-	case errors.Is(err, vendorenrich.ErrVendorEntityTypeMissing):
-		return nil, fmt.Errorf("%w: %w", rout.ErrBadRequest, err)
-	case err != nil:
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "entity"})
-	}
-
-	res, err := withTransactionalMutation(ctx).Entity.Get(ctx, id)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "entity"})
-	}
-
-	return &model.EntityCreatePayload{
-		Entity: res,
-	}, nil
-}
 
 // Note is the resolver for the Note field.
 func (r *createEntityInputResolver) Note(ctx context.Context, obj *generated.CreateEntityInput, data *generated.CreateNoteInput) error {

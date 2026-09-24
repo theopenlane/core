@@ -24,4 +24,5 @@ var mapExprEntity = providerkit.CelMapExpr(
 	entityops.EntityFields.Domains.Expr(`'domains' in payload ? payload.domains : null`),
 	entityops.EntityFields.Tags.Expr(`'tags' in payload ? payload.tags : null`),
 	entityops.EntityFields.LogoRemoteURL.Expr(`'logoRemoteURL' in payload ? payload.logoRemoteURL : null`),
+	entityops.EntityFields.ExternallyVisible.Expr(`'externallyVisible' in payload ? payload.externallyVisible : false`),
 )

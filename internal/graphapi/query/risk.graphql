@@ -22,7 +22,6 @@ mutation CreateBulkCSVRisk ($input: Upload!) {
 			impact
 			integrationID
 			integrationRunID
-			internalNotes
 			lastReviewedAt
 			likelihood
 			managedBy
@@ -53,8 +52,6 @@ mutation CreateBulkCSVRisk ($input: Upload!) {
 			stakeholderName
 			stakeholderUserID
 			status
-			systemInternalID
-			systemOwned
 			tags
 			updatedAt
 			updatedBy
@@ -95,7 +92,6 @@ mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
 			impact
 			integrationID
 			integrationRunID
-			internalNotes
 			lastReviewedAt
 			likelihood
 			managedBy
@@ -126,8 +122,6 @@ mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
 			stakeholderName
 			stakeholderUserID
 			status
-			systemInternalID
-			systemOwned
 			tags
 			updatedAt
 			updatedBy
@@ -168,7 +162,6 @@ mutation CreateRisk ($input: CreateRiskInput!) {
 			impact
 			integrationID
 			integrationRunID
-			internalNotes
 			lastReviewedAt
 			likelihood
 			managedBy
@@ -199,8 +192,6 @@ mutation CreateRisk ($input: CreateRiskInput!) {
 			stakeholderName
 			stakeholderUserID
 			status
-			systemInternalID
-			systemOwned
 			tags
 			updatedAt
 			updatedBy
@@ -286,7 +277,6 @@ query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				impact
 				integrationID
 				integrationRunID
-				internalNotes
 				lastReviewedAt
 				likelihood
 				managedBy
@@ -317,8 +307,6 @@ query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				stakeholderName
 				stakeholderUserID
 				status
-				systemInternalID
-				systemOwned
 				tags
 				updatedAt
 				updatedBy
@@ -391,7 +379,6 @@ query GetRiskByID ($riskId: ID!) {
 		impact
 		integrationID
 		integrationRunID
-		internalNotes
 		lastReviewedAt
 		likelihood
 		managedBy
@@ -422,8 +409,6 @@ query GetRiskByID ($riskId: ID!) {
 		stakeholderName
 		stakeholderUserID
 		status
-		systemInternalID
-		systemOwned
 		tags
 		updatedAt
 		updatedBy
@@ -503,7 +488,6 @@ query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				impact
 				integrationID
 				integrationRunID
-				internalNotes
 				lastReviewedAt
 				likelihood
 				managedBy
@@ -534,8 +518,6 @@ query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				stakeholderName
 				stakeholderUserID
 				status
-				systemInternalID
-				systemOwned
 				tags
 				updatedAt
 				updatedBy
@@ -609,7 +591,6 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			impact
 			integrationID
 			integrationRunID
-			internalNotes
 			lastReviewedAt
 			likelihood
 			managedBy
@@ -640,8 +621,6 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			stakeholderName
 			stakeholderUserID
 			status
-			systemInternalID
-			systemOwned
 			tags
 			updatedAt
 			updatedBy
@@ -685,7 +664,6 @@ mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
 			impact
 			integrationID
 			integrationRunID
-			internalNotes
 			lastReviewedAt
 			likelihood
 			managedBy
@@ -716,8 +694,6 @@ mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
 			stakeholderName
 			stakeholderUserID
 			status
-			systemInternalID
-			systemOwned
 			tags
 			updatedAt
 			updatedBy

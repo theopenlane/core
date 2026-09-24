@@ -2,6 +2,7 @@
   {
     "systemInternalID": "entity::fixture-alpha",
     "entityTypeName": "vendor",
+    "externallyVisible": true,
     "name": "fixture-alpha-vendor",
     "displayName": "Fixture Alpha Updated",
     "description": "Fixture Alpha now provides identity and access services.",
@@ -12,6 +13,7 @@
   {
     "systemInternalID": "entity::fixture-beta",
     "entityTypeName": "vendor",
+    "externallyVisible": true,
     "name": "fixture-beta-vendor",
     "displayName": "Fixture Beta Updated",
     "description": "Fixture Beta now provides billing and invoicing services.",

@@ -1885,6 +1885,7 @@ type ComplexityRoot struct {
 		Campaigns                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		CatalogEntity                         func(childComplexity int) int
 		CatalogEntityID                       func(childComplexity int) int
+		CatalogEntityKey                      func(childComplexity int) int
 		Contacts                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
 		ContractEndDate                       func(childComplexity int) int
 		ContractRenewalAt                     func(childComplexity int) int
@@ -1913,6 +1914,7 @@ type ComplexityRoot struct {
 		EnvironmentID                         func(childComplexity int) int
 		EnvironmentName                       func(childComplexity int) int
 		ExternalID                            func(childComplexity int) int
+		ExternallyVisible                     func(childComplexity int) int
 		Files                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		Findings                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		HasSoc2                               func(childComplexity int) int
@@ -3447,7 +3449,7 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		AdminReassignWorkflowAssignment      func(childComplexity int, input model.ReassignWorkflowAssignmentInput) int
-		AdoptEntity                          func(childComplexity int, catalogEntityID string) int
+		AdoptEntity                          func(childComplexity int, catalogID string, input *generated.CreateEntityInput) int
 		ApproveNDARequests                   func(childComplexity int, ids []string) int
 		ApproveWorkflowAssignment            func(childComplexity int, id string) int
 		BulkCancelWorkflowInstances          func(childComplexity int, ids []string, reason *string) int
@@ -5271,6 +5273,7 @@ type ComplexityRoot struct {
 		EmailTemplateSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		EmailTemplates                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EmailTemplateOrder, where *generated.EmailTemplateWhereInput) int
 		Entities                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		EntitiesCatalog                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Entity                          func(childComplexity int, id string) int
 		EntitySearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		EntityType                      func(childComplexity int, id string) int
@@ -5705,7 +5708,6 @@ type ComplexityRoot struct {
 		IntegrationID               func(childComplexity int) int
 		IntegrationRunID            func(childComplexity int) int
 		IntegrationRuns             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationRunOrder, where *generated.IntegrationRunWhereInput) int
-		InternalNotes               func(childComplexity int) int
 		InternalPolicies            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		LastReviewedAt              func(childComplexity int) int
 		Likelihood                  func(childComplexity int) int
@@ -5752,8 +5754,6 @@ type ComplexityRoot struct {
 		StakeholderUserID           func(childComplexity int) int
 		Status                      func(childComplexity int) int
 		Subcontrols                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		SystemInternalID            func(childComplexity int) int
-		SystemOwned                 func(childComplexity int) int
 		Tags                        func(childComplexity int) int
 		Tasks                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt                   func(childComplexity int) int
@@ -16373,6 +16373,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Entity.CatalogEntityID(childComplexity), true
+	case "Entity.catalogEntityKey":
+		if e.ComplexityRoot.Entity.CatalogEntityKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.CatalogEntityKey(childComplexity), true
 	case "Entity.contacts":
 		if e.ComplexityRoot.Entity.Contacts == nil {
 			break
@@ -16566,6 +16572,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Entity.ExternalID(childComplexity), true
+	case "Entity.externallyVisible":
+		if e.ComplexityRoot.Entity.ExternallyVisible == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Entity.ExternallyVisible(childComplexity), true
 	case "Entity.files":
 		if e.ComplexityRoot.Entity.Files == nil {
 			break
@@ -24169,7 +24181,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.AdoptEntity(childComplexity, args["catalogEntityID"].(string)), true
+		return e.ComplexityRoot.Mutation.AdoptEntity(childComplexity, args["catalogID"].(string), args["input"].(*generated.CreateEntityInput)), true
 	case "Mutation.approveNDARequests":
 		if e.ComplexityRoot.Mutation.ApproveNDARequests == nil {
 			break
@@ -37536,6 +37548,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+	case "Query.entitiesCatalog":
+		if e.ComplexityRoot.Query.EntitiesCatalog == nil {
+			break
+		}
+
+		args, err := ec.field_Query_entitiesCatalog_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.EntitiesCatalog(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
 	case "Query.entity":
 		if e.ComplexityRoot.Query.Entity == nil {
 			break
@@ -40820,12 +40843,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Risk.IntegrationRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationRunOrder), args["where"].(*generated.IntegrationRunWhereInput)), true
-	case "Risk.internalNotes":
-		if e.ComplexityRoot.Risk.InternalNotes == nil {
-			break
-		}
-
-		return e.ComplexityRoot.Risk.InternalNotes(childComplexity), true
 	case "Risk.internalPolicies":
 		if e.ComplexityRoot.Risk.InternalPolicies == nil {
 			break
@@ -41142,18 +41159,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Risk.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
-	case "Risk.systemInternalID":
-		if e.ComplexityRoot.Risk.SystemInternalID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.Risk.SystemInternalID(childComplexity), true
-	case "Risk.systemOwned":
-		if e.ComplexityRoot.Risk.SystemOwned == nil {
-			break
-		}
-
-		return e.ComplexityRoot.Risk.SystemOwned(childComplexity), true
 	case "Risk.tags":
 		if e.ComplexityRoot.Risk.Tags == nil {
 			break
@@ -68838,6 +68843,10 @@ input CreateEntityInput {
   """
   systemInternalID: String @readOnly
   """
+  whether this system-owned row is published for organizations to adopt
+  """
+  externallyVisible: Boolean
+  """
   the relationship_state of the entity
   """
   entityRelationshipStateName: String
@@ -71496,14 +71505,6 @@ input CreateRiskInput {
   the delegate for the risk when no user, group, or identity holder is linked
   """
   delegateName: String
-  """
-  internal notes about the object creation, this field is only available to system admins
-  """
-  internalNotes: String @readOnly
-  """
-  an internal identifier for the mapping, this field is only available to system admins
-  """
-  systemInternalID: String @readOnly
   """
   the kind of the risk
   """
@@ -78410,6 +78411,18 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   """
   systemInternalID: String @hidden(if: true)
   """
+  the system-owned catalogue entity this entity was adopted from
+  """
+  catalogEntityID: ID
+  """
+  whether this system-owned row is published for organizations to adopt
+  """
+  externallyVisible: Boolean
+  """
+  the lookup key of the catalogue entity this entity was adopted from
+  """
+  catalogEntityKey: String
+  """
   the relationship_state of the entity
   """
   entityRelationshipStateName: String
@@ -78594,10 +78607,6 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   """
   externalID: String
   """
-  the system-owned catalogue entity this entity was adopted from
-  """
-  catalogEntityID: ID
-  """
   time when this entity was last observed by the source integration
   """
   observedAt: DateTime
@@ -78701,6 +78710,41 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   reviewedByUser: User
   reviewedByGroup: Group
   reviewedByIdentityHolder: IdentityHolder
+  """
+  the system-owned catalogue entity this entity was adopted from
+  """
+  catalogEntity: Entity
+  adoptedEntities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
   entityRelationshipState: CustomTypeEnum
   entitySecurityQuestionnaireStatus: CustomTypeEnum
   entitySourceType: CustomTypeEnum
@@ -79452,41 +79496,6 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
   ): PlatformConnection!
   entityType: EntityType
   logoFile: File
-  """
-  the system-owned catalogue entity this entity was adopted from
-  """
-  catalogEntity: Entity
-  adoptedEntities(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Entities returned from the connection.
-    """
-    orderBy: [EntityOrder!]
-
-    """
-    Filtering options for Entities returned from the connection.
-    """
-    where: EntityWhereInput
-  ): EntityConnection!
   internalPolicies(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -80228,6 +80237,41 @@ input EntityWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  catalog_entity_id field predicates
+  """
+  catalogEntityID: ID
+  catalogEntityIDNEQ: ID
+  catalogEntityIDIn: [ID!]
+  catalogEntityIDNotIn: [ID!]
+  catalogEntityIDContains: ID
+  catalogEntityIDHasPrefix: ID
+  catalogEntityIDHasSuffix: ID
+  catalogEntityIDIsNil: Boolean
+  catalogEntityIDNotNil: Boolean
+  catalogEntityIDEqualFold: ID
+  catalogEntityIDContainsFold: ID
+  """
+  externally_visible field predicates
+  """
+  externallyVisible: Boolean
+  externallyVisibleNEQ: Boolean
+  externallyVisibleIsNil: Boolean
+  externallyVisibleNotNil: Boolean
+  """
+  catalog_entity_key field predicates
+  """
+  catalogEntityKey: String
+  catalogEntityKeyNEQ: String
+  catalogEntityKeyIn: [String!]
+  catalogEntityKeyNotIn: [String!]
+  catalogEntityKeyContains: String
+  catalogEntityKeyHasPrefix: String
+  catalogEntityKeyHasSuffix: String
+  catalogEntityKeyIsNil: Boolean
+  catalogEntityKeyNotNil: Boolean
+  catalogEntityKeyEqualFold: String
+  catalogEntityKeyContainsFold: String
+  """
   entity_relationship_state_name field predicates
   """
   entityRelationshipStateName: String
@@ -80701,20 +80745,6 @@ input EntityWhereInput {
   externalIDEqualFold: String
   externalIDContainsFold: String
   """
-  catalog_entity_id field predicates
-  """
-  catalogEntityID: ID
-  catalogEntityIDNEQ: ID
-  catalogEntityIDIn: [ID!]
-  catalogEntityIDNotIn: [ID!]
-  catalogEntityIDContains: ID
-  catalogEntityIDHasPrefix: ID
-  catalogEntityIDHasSuffix: ID
-  catalogEntityIDIsNil: Boolean
-  catalogEntityIDNotNil: Boolean
-  catalogEntityIDEqualFold: ID
-  catalogEntityIDContainsFold: ID
-  """
   observed_at field predicates
   """
   observedAt: DateTime
@@ -80774,6 +80804,16 @@ input EntityWhereInput {
   """
   hasReviewedByIdentityHolder: Boolean
   hasReviewedByIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  catalog_entity edge predicates
+  """
+  hasCatalogEntity: Boolean
+  hasCatalogEntityWith: [EntityWhereInput!]
+  """
+  adopted_entities edge predicates
+  """
+  hasAdoptedEntities: Boolean
+  hasAdoptedEntitiesWith: [EntityWhereInput!]
   """
   entity_relationship_state edge predicates
   """
@@ -80929,16 +80969,6 @@ input EntityWhereInput {
   """
   hasLogoFile: Boolean
   hasLogoFileWith: [FileWhereInput!]
-  """
-  catalog_entity edge predicates
-  """
-  hasCatalogEntity: Boolean
-  hasCatalogEntityWith: [EntityWhereInput!]
-  """
-  adopted_entities edge predicates
-  """
-  hasAdoptedEntities: Boolean
-  hasAdoptedEntitiesWith: [EntityWhereInput!]
   """
   internal_policies edge predicates
   """
@@ -115016,18 +115046,6 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
   """
   delegateIdentityHolderID: ID
   """
-  indicates if the record is owned by the the openlane system and not by an organization
-  """
-  systemOwned: Boolean
-  """
-  internal notes about the object creation, this field is only available to system admins
-  """
-  internalNotes: String @hidden(if: true)
-  """
-  an internal identifier for the mapping, this field is only available to system admins
-  """
-  systemInternalID: String @hidden(if: true)
-  """
   the kind of the risk
   """
   riskKindName: String
@@ -116270,41 +116288,6 @@ input RiskWhereInput {
   delegateIdentityHolderIDNotNil: Boolean
   delegateIdentityHolderIDEqualFold: ID
   delegateIdentityHolderIDContainsFold: ID
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
   """
   risk_kind_name field predicates
   """
@@ -130235,6 +130218,11 @@ input UpdateEntityInput {
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
+  whether this system-owned row is published for organizations to adopt
+  """
+  externallyVisible: Boolean
+  clearExternallyVisible: Boolean
+  """
   the relationship_state of the entity
   """
   entityRelationshipStateName: String
@@ -134232,16 +134220,6 @@ input UpdateRiskInput {
   """
   delegateName: String
   clearDelegateName: Boolean
-  """
-  internal notes about the object creation, this field is only available to system admins
-  """
-  internalNotes: String @readOnly
-  clearInternalNotes: Boolean @readOnly
-  """
-  an internal identifier for the mapping, this field is only available to system admins
-  """
-  systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
   """
   the kind of the risk
   """
@@ -144616,24 +144594,25 @@ type EntityBulkUpdatePayload {
     error: String
 }
 `, BuiltIn: false},
+	{Name: "../schema/entitycatalog.graphql", Input: `extend type Query {
+    """
+    entitiesCatalog lists the externally visible system-owned entities available for adoption
+    """
+    entitiesCatalog(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [EntityOrder!], where: EntityWhereInput): EntityConnection!
+}
+extend type Mutation {
+    """
+    adoptEntity copies the externally visible system-owned entity into the organization, returning the organization's copy; idempotent per organization
+    """
+    adoptEntity(catalogID: ID!, input: CreateEntityInput): EntityCreatePayload!
+}
+`, BuiltIn: false},
 	{Name: "../schema/entityextended.graphql", Input: `extend input CreateEntityInput {
   note: CreateNoteInput
 }
 
 extend input UpdateEntityInput {
   note:  CreateNoteInput
-}
-
-extend type Mutation {
-    """
-    Adopt a system-owned catalogue entity into the organization, returning the organization's copy; idempotent per organization
-    """
-    adoptEntity(
-        """
-        catalogEntityID is the system-owned entity to adopt
-        """
-        catalogEntityID: ID!
-    ): EntityCreatePayload!
 }
 `, BuiltIn: false},
 	{Name: "../schema/entitytype.graphql", Input: `extend type Query {
@@ -160214,6 +160193,12 @@ func (ec *executionContext) childFields_Entity(ctx context.Context, field graphq
 		return ec.fieldContext_Entity_internalNotes(ctx, field)
 	case "systemInternalID":
 		return ec.fieldContext_Entity_systemInternalID(ctx, field)
+	case "catalogEntityID":
+		return ec.fieldContext_Entity_catalogEntityID(ctx, field)
+	case "externallyVisible":
+		return ec.fieldContext_Entity_externallyVisible(ctx, field)
+	case "catalogEntityKey":
+		return ec.fieldContext_Entity_catalogEntityKey(ctx, field)
 	case "entityRelationshipStateName":
 		return ec.fieldContext_Entity_entityRelationshipStateName(ctx, field)
 	case "entityRelationshipStateID":
@@ -160306,8 +160291,6 @@ func (ec *executionContext) childFields_Entity(ctx context.Context, field graphq
 		return ec.fieldContext_Entity_logoFileID(ctx, field)
 	case "externalID":
 		return ec.fieldContext_Entity_externalID(ctx, field)
-	case "catalogEntityID":
-		return ec.fieldContext_Entity_catalogEntityID(ctx, field)
 	case "observedAt":
 		return ec.fieldContext_Entity_observedAt(ctx, field)
 	case "integrationRuns":
@@ -160330,6 +160313,10 @@ func (ec *executionContext) childFields_Entity(ctx context.Context, field graphq
 		return ec.fieldContext_Entity_reviewedByGroup(ctx, field)
 	case "reviewedByIdentityHolder":
 		return ec.fieldContext_Entity_reviewedByIdentityHolder(ctx, field)
+	case "catalogEntity":
+		return ec.fieldContext_Entity_catalogEntity(ctx, field)
+	case "adoptedEntities":
+		return ec.fieldContext_Entity_adoptedEntities(ctx, field)
 	case "entityRelationshipState":
 		return ec.fieldContext_Entity_entityRelationshipState(ctx, field)
 	case "entitySecurityQuestionnaireStatus":
@@ -160392,10 +160379,6 @@ func (ec *executionContext) childFields_Entity(ctx context.Context, field graphq
 		return ec.fieldContext_Entity_entityType(ctx, field)
 	case "logoFile":
 		return ec.fieldContext_Entity_logoFile(ctx, field)
-	case "catalogEntity":
-		return ec.fieldContext_Entity_catalogEntity(ctx, field)
-	case "adoptedEntities":
-		return ec.fieldContext_Entity_adoptedEntities(ctx, field)
 	case "internalPolicies":
 		return ec.fieldContext_Entity_internalPolicies(ctx, field)
 	}
@@ -166108,12 +166091,6 @@ func (ec *executionContext) childFields_Risk(ctx context.Context, field graphql.
 		return ec.fieldContext_Risk_delegateGroupID(ctx, field)
 	case "delegateIdentityHolderID":
 		return ec.fieldContext_Risk_delegateIdentityHolderID(ctx, field)
-	case "systemOwned":
-		return ec.fieldContext_Risk_systemOwned(ctx, field)
-	case "internalNotes":
-		return ec.fieldContext_Risk_internalNotes(ctx, field)
-	case "systemInternalID":
-		return ec.fieldContext_Risk_systemInternalID(ctx, field)
 	case "riskKindName":
 		return ec.fieldContext_Risk_riskKindName(ctx, field)
 	case "riskKindID":

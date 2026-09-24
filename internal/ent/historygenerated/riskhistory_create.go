@@ -365,48 +365,6 @@ func (_c *RiskHistoryCreate) SetNillableDelegateIdentityHolderID(v *string) *Ris
 	return _c
 }
 
-// SetSystemOwned sets the "system_owned" field.
-func (_c *RiskHistoryCreate) SetSystemOwned(v bool) *RiskHistoryCreate {
-	_c.mutation.SetSystemOwned(v)
-	return _c
-}
-
-// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (_c *RiskHistoryCreate) SetNillableSystemOwned(v *bool) *RiskHistoryCreate {
-	if v != nil {
-		_c.SetSystemOwned(*v)
-	}
-	return _c
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_c *RiskHistoryCreate) SetInternalNotes(v string) *RiskHistoryCreate {
-	_c.mutation.SetInternalNotes(v)
-	return _c
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_c *RiskHistoryCreate) SetNillableInternalNotes(v *string) *RiskHistoryCreate {
-	if v != nil {
-		_c.SetInternalNotes(*v)
-	}
-	return _c
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_c *RiskHistoryCreate) SetSystemInternalID(v string) *RiskHistoryCreate {
-	_c.mutation.SetSystemInternalID(v)
-	return _c
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_c *RiskHistoryCreate) SetNillableSystemInternalID(v *string) *RiskHistoryCreate {
-	if v != nil {
-		_c.SetSystemInternalID(*v)
-	}
-	return _c
-}
-
 // SetRiskKindName sets the "risk_kind_name" field.
 func (_c *RiskHistoryCreate) SetRiskKindName(v string) *RiskHistoryCreate {
 	_c.mutation.SetRiskKindName(v)
@@ -927,10 +885,6 @@ func (_c *RiskHistoryCreate) defaults() error {
 		v := riskhistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
-	if _, ok := _c.mutation.SystemOwned(); !ok {
-		v := riskhistory.DefaultSystemOwned
-		_c.mutation.SetSystemOwned(v)
-	}
 	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
 		v := riskhistory.DefaultWorkflowEligibleMarker
 		_c.mutation.SetWorkflowEligibleMarker(v)
@@ -1143,18 +1097,6 @@ func (_c *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.DelegateIdentityHolderID(); ok {
 		_spec.SetField(riskhistory.FieldDelegateIdentityHolderID, field.TypeString, value)
 		_node.DelegateIdentityHolderID = value
-	}
-	if value, ok := _c.mutation.SystemOwned(); ok {
-		_spec.SetField(riskhistory.FieldSystemOwned, field.TypeBool, value)
-		_node.SystemOwned = value
-	}
-	if value, ok := _c.mutation.InternalNotes(); ok {
-		_spec.SetField(riskhistory.FieldInternalNotes, field.TypeString, value)
-		_node.InternalNotes = &value
-	}
-	if value, ok := _c.mutation.SystemInternalID(); ok {
-		_spec.SetField(riskhistory.FieldSystemInternalID, field.TypeString, value)
-		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.RiskKindName(); ok {
 		_spec.SetField(riskhistory.FieldRiskKindName, field.TypeString, value)

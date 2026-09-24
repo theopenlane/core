@@ -488,6 +488,46 @@ func (_u *EntityUpdate) ClearSystemInternalID() *EntityUpdate {
 	return _u
 }
 
+// SetCatalogEntityID sets the "catalog_entity_id" field.
+func (_u *EntityUpdate) SetCatalogEntityID(v string) *EntityUpdate {
+	_u.mutation.SetCatalogEntityID(v)
+	return _u
+}
+
+// SetNillableCatalogEntityID sets the "catalog_entity_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableCatalogEntityID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetCatalogEntityID(*v)
+	}
+	return _u
+}
+
+// ClearCatalogEntityID clears the value of the "catalog_entity_id" field.
+func (_u *EntityUpdate) ClearCatalogEntityID() *EntityUpdate {
+	_u.mutation.ClearCatalogEntityID()
+	return _u
+}
+
+// SetExternallyVisible sets the "externally_visible" field.
+func (_u *EntityUpdate) SetExternallyVisible(v bool) *EntityUpdate {
+	_u.mutation.SetExternallyVisible(v)
+	return _u
+}
+
+// SetNillableExternallyVisible sets the "externally_visible" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableExternallyVisible(v *bool) *EntityUpdate {
+	if v != nil {
+		_u.SetExternallyVisible(*v)
+	}
+	return _u
+}
+
+// ClearExternallyVisible clears the value of the "externally_visible" field.
+func (_u *EntityUpdate) ClearExternallyVisible() *EntityUpdate {
+	_u.mutation.ClearExternallyVisible()
+	return _u
+}
+
 // SetEntityRelationshipStateName sets the "entity_relationship_state_name" field.
 func (_u *EntityUpdate) SetEntityRelationshipStateName(v string) *EntityUpdate {
 	_u.mutation.SetEntityRelationshipStateName(v)
@@ -1513,6 +1553,26 @@ func (_u *EntityUpdate) SetReviewedByIdentityHolder(v *IdentityHolder) *EntityUp
 	return _u.SetReviewedByIdentityHolderID(v.ID)
 }
 
+// SetCatalogEntity sets the "catalog_entity" edge to the Entity entity.
+func (_u *EntityUpdate) SetCatalogEntity(v *Entity) *EntityUpdate {
+	return _u.SetCatalogEntityID(v.ID)
+}
+
+// AddAdoptedEntityIDs adds the "adopted_entities" edge to the Entity entity by IDs.
+func (_u *EntityUpdate) AddAdoptedEntityIDs(ids ...string) *EntityUpdate {
+	_u.mutation.AddAdoptedEntityIDs(ids...)
+	return _u
+}
+
+// AddAdoptedEntities adds the "adopted_entities" edges to the Entity entity.
+func (_u *EntityUpdate) AddAdoptedEntities(v ...*Entity) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAdoptedEntityIDs(ids...)
+}
+
 // SetEntityRelationshipState sets the "entity_relationship_state" edge to the CustomTypeEnum entity.
 func (_u *EntityUpdate) SetEntityRelationshipState(v *CustomTypeEnum) *EntityUpdate {
 	return _u.SetEntityRelationshipStateID(v.ID)
@@ -1908,21 +1968,6 @@ func (_u *EntityUpdate) SetLogoFile(v *File) *EntityUpdate {
 	return _u.SetLogoFileID(v.ID)
 }
 
-// AddAdoptedEntityIDs adds the "adopted_entities" edge to the Entity entity by IDs.
-func (_u *EntityUpdate) AddAdoptedEntityIDs(ids ...string) *EntityUpdate {
-	_u.mutation.AddAdoptedEntityIDs(ids...)
-	return _u
-}
-
-// AddAdoptedEntities adds the "adopted_entities" edges to the Entity entity.
-func (_u *EntityUpdate) AddAdoptedEntities(v ...*Entity) *EntityUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddAdoptedEntityIDs(ids...)
-}
-
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
 func (_u *EntityUpdate) AddInternalPolicyIDs(ids ...string) *EntityUpdate {
 	_u.mutation.AddInternalPolicyIDs(ids...)
@@ -2040,6 +2085,33 @@ func (_u *EntityUpdate) ClearReviewedByGroup() *EntityUpdate {
 func (_u *EntityUpdate) ClearReviewedByIdentityHolder() *EntityUpdate {
 	_u.mutation.ClearReviewedByIdentityHolder()
 	return _u
+}
+
+// ClearCatalogEntity clears the "catalog_entity" edge to the Entity entity.
+func (_u *EntityUpdate) ClearCatalogEntity() *EntityUpdate {
+	_u.mutation.ClearCatalogEntity()
+	return _u
+}
+
+// ClearAdoptedEntities clears all "adopted_entities" edges to the Entity entity.
+func (_u *EntityUpdate) ClearAdoptedEntities() *EntityUpdate {
+	_u.mutation.ClearAdoptedEntities()
+	return _u
+}
+
+// RemoveAdoptedEntityIDs removes the "adopted_entities" edge to Entity entities by IDs.
+func (_u *EntityUpdate) RemoveAdoptedEntityIDs(ids ...string) *EntityUpdate {
+	_u.mutation.RemoveAdoptedEntityIDs(ids...)
+	return _u
+}
+
+// RemoveAdoptedEntities removes "adopted_entities" edges to Entity entities.
+func (_u *EntityUpdate) RemoveAdoptedEntities(v ...*Entity) *EntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAdoptedEntityIDs(ids...)
 }
 
 // ClearEntityRelationshipState clears the "entity_relationship_state" edge to the CustomTypeEnum entity.
@@ -2588,27 +2660,6 @@ func (_u *EntityUpdate) ClearLogoFile() *EntityUpdate {
 	return _u
 }
 
-// ClearAdoptedEntities clears all "adopted_entities" edges to the Entity entity.
-func (_u *EntityUpdate) ClearAdoptedEntities() *EntityUpdate {
-	_u.mutation.ClearAdoptedEntities()
-	return _u
-}
-
-// RemoveAdoptedEntityIDs removes the "adopted_entities" edge to Entity entities by IDs.
-func (_u *EntityUpdate) RemoveAdoptedEntityIDs(ids ...string) *EntityUpdate {
-	_u.mutation.RemoveAdoptedEntityIDs(ids...)
-	return _u
-}
-
-// RemoveAdoptedEntities removes "adopted_entities" edges to Entity entities.
-func (_u *EntityUpdate) RemoveAdoptedEntities(v ...*Entity) *EntityUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveAdoptedEntityIDs(ids...)
-}
-
 // ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
 func (_u *EntityUpdate) ClearInternalPolicies() *EntityUpdate {
 	_u.mutation.ClearInternalPolicies()
@@ -2849,6 +2900,15 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(entity.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternallyVisible(); ok {
+		_spec.SetField(entity.FieldExternallyVisible, field.TypeBool, value)
+	}
+	if _u.mutation.ExternallyVisibleCleared() {
+		_spec.ClearField(entity.FieldExternallyVisible, field.TypeBool)
+	}
+	if _u.mutation.CatalogEntityKeyCleared() {
+		_spec.ClearField(entity.FieldCatalogEntityKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.EntityRelationshipStateName(); ok {
 		_spec.SetField(entity.FieldEntityRelationshipStateName, field.TypeString, value)
@@ -3429,6 +3489,80 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CatalogEntityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entity.CatalogEntityTable,
+			Columns: []string{entity.CatalogEntityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CatalogEntityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entity.CatalogEntityTable,
+			Columns: []string{entity.CatalogEntityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AdoptedEntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedEntitiesTable,
+			Columns: []string{entity.AdoptedEntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAdoptedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.AdoptedEntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedEntitiesTable,
+			Columns: []string{entity.AdoptedEntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AdoptedEntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedEntitiesTable,
+			Columns: []string{entity.AdoptedEntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -4719,51 +4853,6 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.AdoptedEntitiesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   entity.AdoptedEntitiesTable,
-			Columns: []string{entity.AdoptedEntitiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedAdoptedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.AdoptedEntitiesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   entity.AdoptedEntitiesTable,
-			Columns: []string{entity.AdoptedEntitiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.AdoptedEntitiesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   entity.AdoptedEntitiesTable,
-			Columns: []string{entity.AdoptedEntitiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if _u.mutation.InternalPoliciesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -5258,6 +5347,46 @@ func (_u *EntityUpdateOne) SetNillableSystemInternalID(v *string) *EntityUpdateO
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *EntityUpdateOne) ClearSystemInternalID() *EntityUpdateOne {
 	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
+// SetCatalogEntityID sets the "catalog_entity_id" field.
+func (_u *EntityUpdateOne) SetCatalogEntityID(v string) *EntityUpdateOne {
+	_u.mutation.SetCatalogEntityID(v)
+	return _u
+}
+
+// SetNillableCatalogEntityID sets the "catalog_entity_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableCatalogEntityID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetCatalogEntityID(*v)
+	}
+	return _u
+}
+
+// ClearCatalogEntityID clears the value of the "catalog_entity_id" field.
+func (_u *EntityUpdateOne) ClearCatalogEntityID() *EntityUpdateOne {
+	_u.mutation.ClearCatalogEntityID()
+	return _u
+}
+
+// SetExternallyVisible sets the "externally_visible" field.
+func (_u *EntityUpdateOne) SetExternallyVisible(v bool) *EntityUpdateOne {
+	_u.mutation.SetExternallyVisible(v)
+	return _u
+}
+
+// SetNillableExternallyVisible sets the "externally_visible" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableExternallyVisible(v *bool) *EntityUpdateOne {
+	if v != nil {
+		_u.SetExternallyVisible(*v)
+	}
+	return _u
+}
+
+// ClearExternallyVisible clears the value of the "externally_visible" field.
+func (_u *EntityUpdateOne) ClearExternallyVisible() *EntityUpdateOne {
+	_u.mutation.ClearExternallyVisible()
 	return _u
 }
 
@@ -6286,6 +6415,26 @@ func (_u *EntityUpdateOne) SetReviewedByIdentityHolder(v *IdentityHolder) *Entit
 	return _u.SetReviewedByIdentityHolderID(v.ID)
 }
 
+// SetCatalogEntity sets the "catalog_entity" edge to the Entity entity.
+func (_u *EntityUpdateOne) SetCatalogEntity(v *Entity) *EntityUpdateOne {
+	return _u.SetCatalogEntityID(v.ID)
+}
+
+// AddAdoptedEntityIDs adds the "adopted_entities" edge to the Entity entity by IDs.
+func (_u *EntityUpdateOne) AddAdoptedEntityIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.AddAdoptedEntityIDs(ids...)
+	return _u
+}
+
+// AddAdoptedEntities adds the "adopted_entities" edges to the Entity entity.
+func (_u *EntityUpdateOne) AddAdoptedEntities(v ...*Entity) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAdoptedEntityIDs(ids...)
+}
+
 // SetEntityRelationshipState sets the "entity_relationship_state" edge to the CustomTypeEnum entity.
 func (_u *EntityUpdateOne) SetEntityRelationshipState(v *CustomTypeEnum) *EntityUpdateOne {
 	return _u.SetEntityRelationshipStateID(v.ID)
@@ -6681,21 +6830,6 @@ func (_u *EntityUpdateOne) SetLogoFile(v *File) *EntityUpdateOne {
 	return _u.SetLogoFileID(v.ID)
 }
 
-// AddAdoptedEntityIDs adds the "adopted_entities" edge to the Entity entity by IDs.
-func (_u *EntityUpdateOne) AddAdoptedEntityIDs(ids ...string) *EntityUpdateOne {
-	_u.mutation.AddAdoptedEntityIDs(ids...)
-	return _u
-}
-
-// AddAdoptedEntities adds the "adopted_entities" edges to the Entity entity.
-func (_u *EntityUpdateOne) AddAdoptedEntities(v ...*Entity) *EntityUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddAdoptedEntityIDs(ids...)
-}
-
 // AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
 func (_u *EntityUpdateOne) AddInternalPolicyIDs(ids ...string) *EntityUpdateOne {
 	_u.mutation.AddInternalPolicyIDs(ids...)
@@ -6813,6 +6947,33 @@ func (_u *EntityUpdateOne) ClearReviewedByGroup() *EntityUpdateOne {
 func (_u *EntityUpdateOne) ClearReviewedByIdentityHolder() *EntityUpdateOne {
 	_u.mutation.ClearReviewedByIdentityHolder()
 	return _u
+}
+
+// ClearCatalogEntity clears the "catalog_entity" edge to the Entity entity.
+func (_u *EntityUpdateOne) ClearCatalogEntity() *EntityUpdateOne {
+	_u.mutation.ClearCatalogEntity()
+	return _u
+}
+
+// ClearAdoptedEntities clears all "adopted_entities" edges to the Entity entity.
+func (_u *EntityUpdateOne) ClearAdoptedEntities() *EntityUpdateOne {
+	_u.mutation.ClearAdoptedEntities()
+	return _u
+}
+
+// RemoveAdoptedEntityIDs removes the "adopted_entities" edge to Entity entities by IDs.
+func (_u *EntityUpdateOne) RemoveAdoptedEntityIDs(ids ...string) *EntityUpdateOne {
+	_u.mutation.RemoveAdoptedEntityIDs(ids...)
+	return _u
+}
+
+// RemoveAdoptedEntities removes "adopted_entities" edges to Entity entities.
+func (_u *EntityUpdateOne) RemoveAdoptedEntities(v ...*Entity) *EntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAdoptedEntityIDs(ids...)
 }
 
 // ClearEntityRelationshipState clears the "entity_relationship_state" edge to the CustomTypeEnum entity.
@@ -7361,27 +7522,6 @@ func (_u *EntityUpdateOne) ClearLogoFile() *EntityUpdateOne {
 	return _u
 }
 
-// ClearAdoptedEntities clears all "adopted_entities" edges to the Entity entity.
-func (_u *EntityUpdateOne) ClearAdoptedEntities() *EntityUpdateOne {
-	_u.mutation.ClearAdoptedEntities()
-	return _u
-}
-
-// RemoveAdoptedEntityIDs removes the "adopted_entities" edge to Entity entities by IDs.
-func (_u *EntityUpdateOne) RemoveAdoptedEntityIDs(ids ...string) *EntityUpdateOne {
-	_u.mutation.RemoveAdoptedEntityIDs(ids...)
-	return _u
-}
-
-// RemoveAdoptedEntities removes "adopted_entities" edges to Entity entities.
-func (_u *EntityUpdateOne) RemoveAdoptedEntities(v ...*Entity) *EntityUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveAdoptedEntityIDs(ids...)
-}
-
 // ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
 func (_u *EntityUpdateOne) ClearInternalPolicies() *EntityUpdateOne {
 	_u.mutation.ClearInternalPolicies()
@@ -7652,6 +7792,15 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(entity.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ExternallyVisible(); ok {
+		_spec.SetField(entity.FieldExternallyVisible, field.TypeBool, value)
+	}
+	if _u.mutation.ExternallyVisibleCleared() {
+		_spec.ClearField(entity.FieldExternallyVisible, field.TypeBool)
+	}
+	if _u.mutation.CatalogEntityKeyCleared() {
+		_spec.ClearField(entity.FieldCatalogEntityKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.EntityRelationshipStateName(); ok {
 		_spec.SetField(entity.FieldEntityRelationshipStateName, field.TypeString, value)
@@ -8232,6 +8381,80 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CatalogEntityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entity.CatalogEntityTable,
+			Columns: []string{entity.CatalogEntityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CatalogEntityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   entity.CatalogEntityTable,
+			Columns: []string{entity.CatalogEntityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AdoptedEntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedEntitiesTable,
+			Columns: []string{entity.AdoptedEntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAdoptedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.AdoptedEntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedEntitiesTable,
+			Columns: []string{entity.AdoptedEntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AdoptedEntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   entity.AdoptedEntitiesTable,
+			Columns: []string{entity.AdoptedEntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -9515,51 +9738,6 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.AdoptedEntitiesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   entity.AdoptedEntitiesTable,
-			Columns: []string{entity.AdoptedEntitiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedAdoptedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.AdoptedEntitiesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   entity.AdoptedEntitiesTable,
-			Columns: []string{entity.AdoptedEntitiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.AdoptedEntitiesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   entity.AdoptedEntitiesTable,
-			Columns: []string{entity.AdoptedEntitiesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

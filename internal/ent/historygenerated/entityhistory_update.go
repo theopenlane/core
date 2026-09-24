@@ -151,6 +151,15 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(entityhistory.FieldSystemInternalID, field.TypeString)
 	}
+	if _u.mutation.CatalogEntityIDCleared() {
+		_spec.ClearField(entityhistory.FieldCatalogEntityID, field.TypeString)
+	}
+	if _u.mutation.ExternallyVisibleCleared() {
+		_spec.ClearField(entityhistory.FieldExternallyVisible, field.TypeBool)
+	}
+	if _u.mutation.CatalogEntityKeyCleared() {
+		_spec.ClearField(entityhistory.FieldCatalogEntityKey, field.TypeString)
+	}
 	if _u.mutation.EntityRelationshipStateNameCleared() {
 		_spec.ClearField(entityhistory.FieldEntityRelationshipStateName, field.TypeString)
 	}
@@ -288,9 +297,6 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(entityhistory.FieldExternalID, field.TypeString)
-	}
-	if _u.mutation.CatalogEntityIDCleared() {
-		_spec.ClearField(entityhistory.FieldCatalogEntityID, field.TypeString)
 	}
 	if _u.mutation.ObservedAtCleared() {
 		_spec.ClearField(entityhistory.FieldObservedAt, field.TypeTime)
@@ -467,6 +473,15 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(entityhistory.FieldSystemInternalID, field.TypeString)
 	}
+	if _u.mutation.CatalogEntityIDCleared() {
+		_spec.ClearField(entityhistory.FieldCatalogEntityID, field.TypeString)
+	}
+	if _u.mutation.ExternallyVisibleCleared() {
+		_spec.ClearField(entityhistory.FieldExternallyVisible, field.TypeBool)
+	}
+	if _u.mutation.CatalogEntityKeyCleared() {
+		_spec.ClearField(entityhistory.FieldCatalogEntityKey, field.TypeString)
+	}
 	if _u.mutation.EntityRelationshipStateNameCleared() {
 		_spec.ClearField(entityhistory.FieldEntityRelationshipStateName, field.TypeString)
 	}
@@ -604,9 +619,6 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(entityhistory.FieldExternalID, field.TypeString)
-	}
-	if _u.mutation.CatalogEntityIDCleared() {
-		_spec.ClearField(entityhistory.FieldCatalogEntityID, field.TypeString)
 	}
 	if _u.mutation.ObservedAtCleared() {
 		_spec.ClearField(entityhistory.FieldObservedAt, field.TypeTime)

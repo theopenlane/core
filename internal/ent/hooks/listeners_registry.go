@@ -3,8 +3,12 @@ package hooks
 import (
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
+
+// init registers the generated catalog listeners so gala setup picks them up automatically
+func init() { registerListeners(entityops.CatalogListeners) }
 
 // To add a listener family, create a listeners_<name>.go file in this package with:
 //

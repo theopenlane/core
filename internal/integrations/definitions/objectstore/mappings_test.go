@@ -58,6 +58,7 @@ func TestEntityMapping(t *testing.T) {
 	assert.DeepEqual(t, []any{"1password.com"}, mapped["domains"])
 	assert.DeepEqual(t, []any{"technology", "password management"}, mapped["tags"])
 	assert.Equal(t, "https://www.google.com/s2/favicons?domain=1password.com&sz=128", mapped["logo_remote_url"])
+	assert.Equal(t, false, mapped["externally_visible"])
 	assert.Assert(t, mapped["description"] != nil)
 
 	mapped = mappingtest.EvalMap(t, spec, types.MappingEnvelope{
@@ -72,6 +73,14 @@ func TestEntityMapping(t *testing.T) {
 	assert.Assert(t, mapped["domains"] == nil)
 	assert.Assert(t, mapped["tags"] == nil)
 	assert.Assert(t, mapped["logo_remote_url"] == nil)
+	assert.Equal(t, false, mapped["externally_visible"])
+
+	mapped = mappingtest.EvalMap(t, spec, types.MappingEnvelope{
+		Resource: "vendors/visible.json#0",
+		Payload:  json.RawMessage(`{"systemInternalID":"entity::visible","name":"visible","externallyVisible":true}`),
+	})
+
+	assert.Equal(t, true, mapped["externally_visible"])
 }
 
 func TestVendorVariantFilter(t *testing.T) {

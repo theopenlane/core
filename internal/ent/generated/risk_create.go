@@ -352,48 +352,6 @@ func (_c *RiskCreate) SetNillableDelegateIdentityHolderID(v *string) *RiskCreate
 	return _c
 }
 
-// SetSystemOwned sets the "system_owned" field.
-func (_c *RiskCreate) SetSystemOwned(v bool) *RiskCreate {
-	_c.mutation.SetSystemOwned(v)
-	return _c
-}
-
-// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
-func (_c *RiskCreate) SetNillableSystemOwned(v *bool) *RiskCreate {
-	if v != nil {
-		_c.SetSystemOwned(*v)
-	}
-	return _c
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_c *RiskCreate) SetInternalNotes(v string) *RiskCreate {
-	_c.mutation.SetInternalNotes(v)
-	return _c
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_c *RiskCreate) SetNillableInternalNotes(v *string) *RiskCreate {
-	if v != nil {
-		_c.SetInternalNotes(*v)
-	}
-	return _c
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_c *RiskCreate) SetSystemInternalID(v string) *RiskCreate {
-	_c.mutation.SetSystemInternalID(v)
-	return _c
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_c *RiskCreate) SetNillableSystemInternalID(v *string) *RiskCreate {
-	if v != nil {
-		_c.SetSystemInternalID(*v)
-	}
-	return _c
-}
-
 // SetRiskKindName sets the "risk_kind_name" field.
 func (_c *RiskCreate) SetRiskKindName(v string) *RiskCreate {
 	_c.mutation.SetRiskKindName(v)
@@ -1302,10 +1260,6 @@ func (_c *RiskCreate) defaults() error {
 		v := risk.DefaultTags
 		_c.mutation.SetTags(v)
 	}
-	if _, ok := _c.mutation.SystemOwned(); !ok {
-		v := risk.DefaultSystemOwned
-		_c.mutation.SetSystemOwned(v)
-	}
 	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
 		v := risk.DefaultWorkflowEligibleMarker
 		_c.mutation.SetWorkflowEligibleMarker(v)
@@ -1482,18 +1436,6 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.DelegateName(); ok {
 		_spec.SetField(risk.FieldDelegateName, field.TypeString, value)
 		_node.DelegateName = value
-	}
-	if value, ok := _c.mutation.SystemOwned(); ok {
-		_spec.SetField(risk.FieldSystemOwned, field.TypeBool, value)
-		_node.SystemOwned = value
-	}
-	if value, ok := _c.mutation.InternalNotes(); ok {
-		_spec.SetField(risk.FieldInternalNotes, field.TypeString, value)
-		_node.InternalNotes = &value
-	}
-	if value, ok := _c.mutation.SystemInternalID(); ok {
-		_spec.SetField(risk.FieldSystemInternalID, field.TypeString, value)
-		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.RiskKindName(); ok {
 		_spec.SetField(risk.FieldRiskKindName, field.TypeString, value)

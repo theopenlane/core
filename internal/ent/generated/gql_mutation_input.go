@@ -7267,6 +7267,7 @@ type CreateEntityInput struct {
 	LastReviewedAt                        *models.DateTime       `json:"last_reviewed_at,omitempty"`
 	InternalNotes                         *string                `json:"internal_notes,omitempty"`
 	SystemInternalID                      *string                `json:"system_internal_id,omitempty"`
+	ExternallyVisible                     *bool                  `json:"externally_visible,omitempty"`
 	EntityRelationshipStateName           *string                `json:"entity_relationship_state_name,omitempty"`
 	EntitySecurityQuestionnaireStatusName *string                `json:"entity_security_questionnaire_status_name,omitempty"`
 	EntitySourceTypeName                  *string                `json:"entity_source_type_name,omitempty"`
@@ -7369,6 +7370,9 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if v := i.ExternallyVisible; v != nil {
+		m.SetExternallyVisible(*v)
 	}
 	if v := i.EntityRelationshipStateName; v != nil {
 		m.SetEntityRelationshipStateName(*v)
@@ -7636,6 +7640,8 @@ type UpdateEntityInput struct {
 	InternalNotes                              *string `json:"internal_notes,omitempty"`
 	ClearSystemInternalID                      bool
 	SystemInternalID                           *string `json:"system_internal_id,omitempty"`
+	ClearExternallyVisible                     bool
+	ExternallyVisible                          *bool `json:"externally_visible,omitempty"`
 	ClearEntityRelationshipStateName           bool
 	EntityRelationshipStateName                *string `json:"entity_relationship_state_name,omitempty"`
 	ClearEntitySecurityQuestionnaireStatusName bool
@@ -7871,6 +7877,12 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
+	}
+	if i.ClearExternallyVisible {
+		m.ClearExternallyVisible()
+	}
+	if v := i.ExternallyVisible; v != nil {
+		m.SetExternallyVisible(*v)
 	}
 	if i.ClearEntityRelationshipStateName {
 		m.ClearEntityRelationshipStateName()
@@ -22408,8 +22420,6 @@ type CreateRiskInput struct {
 	Tags                        []string              `json:"tags,omitempty"`
 	StakeholderName             *string               `json:"stakeholder_name,omitempty"`
 	DelegateName                *string               `json:"delegate_name,omitempty"`
-	InternalNotes               *string               `json:"internal_notes,omitempty"`
-	SystemInternalID            *string               `json:"system_internal_id,omitempty"`
 	RiskKindName                *string               `json:"risk_kind_name,omitempty"`
 	RiskCategoryName            *string               `json:"risk_category_name,omitempty"`
 	EnvironmentName             *string               `json:"environment_name,omitempty"`
@@ -22485,12 +22495,6 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.DelegateName; v != nil {
 		m.SetDelegateName(*v)
-	}
-	if v := i.InternalNotes; v != nil {
-		m.SetInternalNotes(*v)
-	}
-	if v := i.SystemInternalID; v != nil {
-		m.SetSystemInternalID(*v)
 	}
 	if v := i.RiskKindName; v != nil {
 		m.SetRiskKindName(*v)
@@ -22696,10 +22700,6 @@ type UpdateRiskInput struct {
 	StakeholderName                *string `json:"stakeholder_name,omitempty"`
 	ClearDelegateName              bool
 	DelegateName                   *string `json:"delegate_name,omitempty"`
-	ClearInternalNotes             bool
-	InternalNotes                  *string `json:"internal_notes,omitempty"`
-	ClearSystemInternalID          bool
-	SystemInternalID               *string `json:"system_internal_id,omitempty"`
 	ClearRiskKindName              bool
 	RiskKindName                   *string `json:"risk_kind_name,omitempty"`
 	ClearRiskCategoryName          bool
@@ -22872,18 +22872,6 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.DelegateName; v != nil {
 		m.SetDelegateName(*v)
-	}
-	if i.ClearInternalNotes {
-		m.ClearInternalNotes()
-	}
-	if v := i.InternalNotes; v != nil {
-		m.SetInternalNotes(*v)
-	}
-	if i.ClearSystemInternalID {
-		m.ClearSystemInternalID()
-	}
-	if v := i.SystemInternalID; v != nil {
-		m.SetSystemInternalID(*v)
 	}
 	if i.ClearRiskKindName {
 		m.ClearRiskKindName()

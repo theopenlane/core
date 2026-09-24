@@ -20,13 +20,14 @@ func TestObjectStoreSystemImportCreatesVendors(t *testing.T) {
 	systemCtx := th.SetContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
 	vendorType := systemVendorEntityType(t)
 
-	rows, result := importFixtureVendors(t, systemCtx, fixturePrefixDefault, fixtureAlpha, fixtureBeta)
+	rows, result := importFixtureVendors(t, systemCtx, fixturePrefixDefault, fixtureAlpha, fixtureBeta, fixtureHidden)
 	assert.Check(t, is.Equal(1, result.Filtered), "the customer record must be filtered out by the vendor variant")
 
 	for _, vendor := range []fixtureVendor{fixtureAlpha, fixtureBeta} {
 		row := rows[vendor.ExternalID]
 
 		assert.Check(t, row.SystemOwned, "the runtime import must create system-owned rows")
+		assert.Check(t, row.ExternallyVisible, "a published catalogue record must be externally visible")
 		assert.Check(t, is.Equal("", row.OwnerID), "a system-owned row carries no owner")
 		assert.Check(t, is.Equal(vendor.ExternalID, row.ExternalID))
 		assert.Check(t, is.Equal(vendor.ExternalID, lo.FromPtr(row.SystemInternalID)))
@@ -40,6 +41,10 @@ func TestObjectStoreSystemImportCreatesVendors(t *testing.T) {
 		assert.Check(t, is.Equal(vendor.LogoRemoteURL(), lo.FromPtr(row.LogoRemoteURL)))
 	}
 
+	hidden := rows[fixtureHidden.ExternalID]
+	assert.Check(t, hidden.SystemOwned)
+	assert.Check(t, !hidden.ExternallyVisible, "an unpublished catalogue record must not be externally visible")
+
 	filtered, err := suite.Client.DB.Entity.Query().
 		Where(entity.ExternalID(fixtureCustomer.ExternalID)).
 		Count(systemCtx)
@@ -52,10 +57,10 @@ func TestObjectStoreSystemImportUpsertsExisting(t *testing.T) {
 	systemCtx := th.SetContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
 	systemVendorEntityType(t)
 
-	deleteSystemVendors(t, fixtureAlpha, fixtureBeta)
+	deleteSystemVendors(t, fixtureAlpha, fixtureBeta, fixtureHidden)
 
 	t.Cleanup(func() {
-		deleteSystemVendors(t, fixtureAlpha, fixtureBeta)
+		deleteSystemVendors(t, fixtureAlpha, fixtureBeta, fixtureHidden)
 	})
 
 	seeded, err := suite.Client.DB.Entity.Create().
@@ -78,7 +83,7 @@ func TestObjectStoreSystemImportUpsertsExisting(t *testing.T) {
 	t.Run("import updates the seeded system row", func(t *testing.T) {
 		result := runSystemImport(t, systemCtx, fixturePrefixDefault)
 		assert.Check(t, is.Equal(0, result.Failed))
-		assert.Check(t, is.Equal(2, result.Changed), "the seeded row's takeover and the other vendor's create both count as changed")
+		assert.Check(t, is.Equal(3, result.Changed), "the seeded row's takeover and the other vendors' creates all count as changed")
 
 		rows := rowsByExternalID(t)
 		assert.Assert(t, is.Len(rows, 1), "the import must converge on the seeded row instead of creating a second")

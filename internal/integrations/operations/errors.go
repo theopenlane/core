@@ -60,4 +60,6 @@ var (
 	ErrResultEncode = errors.New("integrations/operations: result encode failed")
 	// ErrLinkFailed indicates a link operation failed
 	ErrLinkFailed = errors.New("integrations/operations: link operation failed")
+	// ErrVendorEntityTypeMissing indicates the organization has no vendor entity type
+	ErrVendorEntityTypeMissing = errors.New("integrations/operations: vendor entity type missing")
 )

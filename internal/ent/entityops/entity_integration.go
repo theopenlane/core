@@ -552,6 +552,8 @@ var EntityFields = struct {
 	EnvironmentName FieldDescriptor
 	// ExternalID is the external_id field
 	ExternalID FieldDescriptor
+	// ExternallyVisible is the externally_visible field
+	ExternallyVisible FieldDescriptor
 	// HasSoc2 is the has_soc2 field
 	HasSoc2 FieldDescriptor
 	// InternalNotes is the internal_notes field
@@ -623,7 +625,7 @@ var EntityFields = struct {
 	// VendorMetadata is the vendor_metadata field
 	VendorMetadata FieldDescriptor
 }{
-	Aliases:                               FieldDescriptor{Name: "aliases", Label: "Aliases", Type: "[]string", InputKey: "aliases", Clearable: true},
+	Aliases:                               FieldDescriptor{Name: "aliases", Label: "Aliases", Type: "[]string", InputKey: "aliases", Clearable: true, SourceManaged: true},
 	AnnualSpend:                           FieldDescriptor{Name: "annual_spend", Label: "AnnualSpend", Type: "float64", InputKey: "annual_spend", Clearable: true},
 	ApprovedForUse:                        FieldDescriptor{Name: "approved_for_use", Label: "ApprovedForUse", Type: "bool", InputKey: "approved_for_use", Clearable: true},
 	AutoRenews:                            FieldDescriptor{Name: "auto_renews", Label: "AutoRenews", Type: "bool", InputKey: "auto_renews", Clearable: true},
@@ -631,9 +633,9 @@ var EntityFields = struct {
 	ContractEndDate:                       FieldDescriptor{Name: "contract_end_date", Label: "ContractEndDate", Type: "models.DateTime", InputKey: "contract_end_date", Clearable: true},
 	ContractRenewalAt:                     FieldDescriptor{Name: "contract_renewal_at", Label: "ContractRenewalAt", Type: "models.DateTime", InputKey: "contract_renewal_at", Clearable: true},
 	ContractStartDate:                     FieldDescriptor{Name: "contract_start_date", Label: "ContractStartDate", Type: "models.DateTime", InputKey: "contract_start_date", Clearable: true},
-	Description:                           FieldDescriptor{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
-	DisplayName:                           FieldDescriptor{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Clearable: true},
-	Domains:                               FieldDescriptor{Name: "domains", Label: "Domains", Type: "[]string", InputKey: "domains", Clearable: true},
+	Description:                           FieldDescriptor{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true, SourceManaged: true},
+	DisplayName:                           FieldDescriptor{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Clearable: true, SourceManaged: true},
+	Domains:                               FieldDescriptor{Name: "domains", Label: "Domains", Type: "[]string", InputKey: "domains", Clearable: true, SourceManaged: true},
 	EntityRelationshipStateID:             FieldDescriptor{Name: "entity_relationship_state_id", Label: "EntityRelationshipStateID", Type: "string", MatchKey: true, InputKey: "entity_relationship_state_id", Clearable: true},
 	EntityRelationshipStateName:           FieldDescriptor{Name: "entity_relationship_state_name", Label: "EntityRelationshipStateName", Type: "string", MatchKey: true, InputKey: "entity_relationship_state_name", Clearable: true, CaseInsensitive: true},
 	EntitySecurityQuestionnaireStatusID:   FieldDescriptor{Name: "entity_security_questionnaire_status_id", Label: "EntitySecurityQuestionnaireStatusID", Type: "string", MatchKey: true, InputKey: "entity_security_questionnaire_status_id", Clearable: true},
@@ -643,6 +645,7 @@ var EntityFields = struct {
 	EnvironmentID:                         FieldDescriptor{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 	EnvironmentName:                       FieldDescriptor{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 	ExternalID:                            FieldDescriptor{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+	ExternallyVisible:                     FieldDescriptor{Name: "externally_visible", Label: "ExternallyVisible", Type: "bool", InputKey: "externally_visible", Clearable: true},
 	HasSoc2:                               FieldDescriptor{Name: "has_soc2", Label: "HasSoc2", Type: "bool", InputKey: "has_soc2", Clearable: true},
 	InternalNotes:                         FieldDescriptor{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 	InternalOwner:                         FieldDescriptor{Name: "internal_owner", Label: "InternalOwner", Type: "string", MatchKey: true, InputKey: "internal_owner", Clearable: true},
@@ -650,14 +653,14 @@ var EntityFields = struct {
 	InternalOwnerIdentityHolderID:         FieldDescriptor{Name: "internal_owner_identity_holder_id", Label: "InternalOwnerIdentityHolderID", Type: "string", MatchKey: true, InputKey: "internal_owner_identity_holder_id", Clearable: true},
 	InternalOwnerUserID:                   FieldDescriptor{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true, InputKey: "internal_owner_user_id", Clearable: true},
 	LastReviewedAt:                        FieldDescriptor{Name: "last_reviewed_at", Label: "LastReviewedAt", Type: "models.DateTime", InputKey: "last_reviewed_at", Clearable: true},
-	Links:                                 FieldDescriptor{Name: "links", Label: "Links", Type: "[]string", InputKey: "links", Clearable: true},
-	LogoRemoteURL:                         FieldDescriptor{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true, InputKey: "logo_remote_url", Clearable: true},
+	Links:                                 FieldDescriptor{Name: "links", Label: "Links", Type: "[]string", InputKey: "links", Clearable: true, SourceManaged: true},
+	LogoRemoteURL:                         FieldDescriptor{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true, InputKey: "logo_remote_url", Clearable: true, SourceManaged: true},
 	MfaEnforced:                           FieldDescriptor{Name: "mfa_enforced", Label: "MfaEnforced", Type: "bool", InputKey: "mfa_enforced", Clearable: true},
 	MfaSupported:                          FieldDescriptor{Name: "mfa_supported", Label: "MfaSupported", Type: "bool", InputKey: "mfa_supported", Clearable: true},
-	Name:                                  FieldDescriptor{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Clearable: true},
+	Name:                                  FieldDescriptor{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Clearable: true, SourceManaged: true},
 	NextReviewAt:                          FieldDescriptor{Name: "next_review_at", Label: "NextReviewAt", Type: "models.DateTime", InputKey: "next_review_at", Clearable: true},
 	ObservedAt:                            FieldDescriptor{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Clearable: true},
-	ProvidedServices:                      FieldDescriptor{Name: "provided_services", Label: "ProvidedServices", Type: "[]string", InputKey: "provided_services", Clearable: true},
+	ProvidedServices:                      FieldDescriptor{Name: "provided_services", Label: "ProvidedServices", Type: "[]string", InputKey: "provided_services", Clearable: true, SourceManaged: true},
 	RenewalRisk:                           FieldDescriptor{Name: "renewal_risk", Label: "RenewalRisk", Type: "string", MatchKey: true, InputKey: "renewal_risk", Clearable: true},
 	ReviewFrequency:                       FieldDescriptor{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", InputKey: "review_frequency", Clearable: true},
 	ReviewedBy:                            FieldDescriptor{Name: "reviewed_by", Label: "ReviewedBy", Type: "string", MatchKey: true, InputKey: "reviewed_by", Clearable: true},
@@ -672,7 +675,7 @@ var EntityFields = struct {
 	SpendCurrency:                         FieldDescriptor{Name: "spend_currency", Label: "SpendCurrency", Type: "string", MatchKey: true, InputKey: "spend_currency", Clearable: true},
 	SSOEnforced:                           FieldDescriptor{Name: "sso_enforced", Label: "SSOEnforced", Type: "bool", InputKey: "sso_enforced", Clearable: true},
 	Status:                                FieldDescriptor{Name: "status", Label: "Status", Type: "enums.EntityStatus", InputKey: "status", Clearable: true},
-	StatusPageURL:                         FieldDescriptor{Name: "status_page_url", Label: "StatusPageURL", Type: "string", MatchKey: true, InputKey: "status_page_url", Clearable: true},
+	StatusPageURL:                         FieldDescriptor{Name: "status_page_url", Label: "StatusPageURL", Type: "string", MatchKey: true, InputKey: "status_page_url", Clearable: true, SourceManaged: true},
 	SystemInternalID:                      FieldDescriptor{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 	Tags:                                  FieldDescriptor{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 	TerminationNoticeDays:                 FieldDescriptor{Name: "termination_notice_days", Label: "TerminationNoticeDays", Type: "int", InputKey: "termination_notice_days", Clearable: true},
@@ -1073,8 +1076,6 @@ var RiskFields = struct {
 	ExternalUUID FieldDescriptor
 	// Impact is the impact field
 	Impact FieldDescriptor
-	// InternalNotes is the internal_notes field
-	InternalNotes FieldDescriptor
 	// LastReviewedAt is the last_reviewed_at field
 	LastReviewedAt FieldDescriptor
 	// Likelihood is the likelihood field
@@ -1123,8 +1124,6 @@ var RiskFields = struct {
 	StakeholderUserID FieldDescriptor
 	// Status is the status field
 	Status FieldDescriptor
-	// SystemInternalID is the system_internal_id field
-	SystemInternalID FieldDescriptor
 	// Tags is the tags field
 	Tags FieldDescriptor
 }{

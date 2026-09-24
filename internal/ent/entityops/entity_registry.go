@@ -2849,7 +2849,7 @@ var (
 		Lookup: []LookupAlternative{
 			{Fields: []string{"external_id"}},
 		},
-		Catalog: &CatalogCapability{PointerField: "catalog_entity_id", Fields: []string{"name", "display_name", "description", "domains", "aliases", "status_page_url", "provided_services", "links", "logo_remote_url"}},
+		Catalog: &CatalogCapability{PointerField: "catalog_entity_id", VisibilityField: "externally_visible", KeyField: "catalog_entity_key", Fields: []string{"name", "display_name", "description", "domains", "aliases", "status_page_url", "provided_services", "links", "logo_remote_url"}},
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "entity", Operation: refOpCreate}
 
@@ -2860,7 +2860,7 @@ var (
 
 			builder := client.Entity.Create().SetInput(decoded)
 
-			if err := applyStampedFields(builder.Mutation(), input, "catalog_entity_id", FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
+			if err := applyStampedFields(builder.Mutation(), input, "catalog_entity_id", "catalog_entity_key", FieldIntegrationRunID, FieldManagedBy, FieldSourceDefinitionID, FieldSourceDefinitionVersion, FieldSourceInstanceID); err != nil {
 				return "", logError(ctx, ref, ErrCreateFailed, err)
 			}
 
@@ -4605,7 +4605,7 @@ var (
 			ref := SchemaRef{Schema: "risk", Operation: refOpQuery}
 
 			entities, err := client.Risk.Query().
-				Where(ownerScopeRisk(orgID)).
+				Where(risk.OwnerID(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -6388,12 +6388,13 @@ func init() {
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaEntity.Fields = []FieldDescriptor{
-		{Name: "aliases", Label: "Aliases", Type: "[]string", InputKey: "aliases", Clearable: true},
+		{Name: "aliases", Label: "Aliases", Type: "[]string", InputKey: "aliases", Clearable: true, SourceManaged: true},
 		{Name: "annual_spend", Label: "AnnualSpend", Type: "float64", InputKey: "annual_spend", Clearable: true},
 		{Name: "approved_for_use", Label: "ApprovedForUse", Type: "bool", InputKey: "approved_for_use", Clearable: true},
 		{Name: "auto_renews", Label: "AutoRenews", Type: "bool", InputKey: "auto_renews", Clearable: true},
 		{Name: "billing_model", Label: "BillingModel", Type: "string", MatchKey: true, InputKey: "billing_model", Clearable: true},
 		{Name: "catalog_entity_id", Label: "CatalogEntityID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "catalog_entity_key", Label: "CatalogEntityKey", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "contract_end_date", Label: "ContractEndDate", Type: "models.DateTime", InputKey: "contract_end_date", Clearable: true},
 		{Name: "contract_renewal_at", Label: "ContractRenewalAt", Type: "models.DateTime", InputKey: "contract_renewal_at", Clearable: true},
 		{Name: "contract_start_date", Label: "ContractStartDate", Type: "models.DateTime", InputKey: "contract_start_date", Clearable: true},
@@ -6401,9 +6402,9 @@ func init() {
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
-		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Clearable: true},
-		{Name: "domains", Label: "Domains", Type: "[]string", InputKey: "domains", Clearable: true},
+		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true, SourceManaged: true},
+		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Clearable: true, SourceManaged: true},
+		{Name: "domains", Label: "Domains", Type: "[]string", InputKey: "domains", Clearable: true, SourceManaged: true},
 		{Name: "entity_relationship_state_id", Label: "EntityRelationshipStateID", Type: "string", MatchKey: true, InputKey: "entity_relationship_state_id", Clearable: true},
 		{Name: "entity_relationship_state_name", Label: "EntityRelationshipStateName", Type: "string", MatchKey: true, InputKey: "entity_relationship_state_name", Clearable: true, CaseInsensitive: true},
 		{Name: "entity_security_questionnaire_status_id", Label: "EntitySecurityQuestionnaireStatusID", Type: "string", MatchKey: true, InputKey: "entity_security_questionnaire_status_id", Clearable: true},
@@ -6414,6 +6415,7 @@ func init() {
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true, CaseInsensitive: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
+		{Name: "externally_visible", Label: "ExternallyVisible", Type: "bool", InputKey: "externally_visible", Clearable: true},
 		{Name: "has_soc2", Label: "HasSoc2", Type: "bool", InputKey: "has_soc2", Clearable: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
@@ -6423,17 +6425,17 @@ func init() {
 		{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true, InputKey: "internal_owner_user_id", Clearable: true},
 		{Name: "last_reviewed_at", Label: "LastReviewedAt", Type: "models.DateTime", InputKey: "last_reviewed_at", Clearable: true},
 		{Name: "linked_asset_ids", Label: "LinkedAssetIds", Type: "[]string", Clearable: true},
-		{Name: "links", Label: "Links", Type: "[]string", InputKey: "links", Clearable: true},
+		{Name: "links", Label: "Links", Type: "[]string", InputKey: "links", Clearable: true, SourceManaged: true},
 		{Name: "logo_file_id", Label: "LogoFileID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true, InputKey: "logo_remote_url", Clearable: true},
+		{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true, InputKey: "logo_remote_url", Clearable: true, SourceManaged: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "mfa_enforced", Label: "MfaEnforced", Type: "bool", InputKey: "mfa_enforced", Clearable: true},
 		{Name: "mfa_supported", Label: "MfaSupported", Type: "bool", InputKey: "mfa_supported", Clearable: true},
-		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Clearable: true},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Clearable: true, SourceManaged: true},
 		{Name: "next_review_at", Label: "NextReviewAt", Type: "models.DateTime", InputKey: "next_review_at", Clearable: true},
 		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
-		{Name: "provided_services", Label: "ProvidedServices", Type: "[]string", InputKey: "provided_services", Clearable: true},
+		{Name: "provided_services", Label: "ProvidedServices", Type: "[]string", InputKey: "provided_services", Clearable: true, SourceManaged: true},
 		{Name: "renewal_risk", Label: "RenewalRisk", Type: "string", MatchKey: true, InputKey: "renewal_risk", Clearable: true},
 		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", InputKey: "review_frequency", Clearable: true},
 		{Name: "reviewed_by", Label: "ReviewedBy", Type: "string", MatchKey: true, InputKey: "reviewed_by", Clearable: true},
@@ -6452,7 +6454,7 @@ func init() {
 		{Name: "spend_currency", Label: "SpendCurrency", Type: "string", MatchKey: true, InputKey: "spend_currency", Clearable: true},
 		{Name: "sso_enforced", Label: "SSOEnforced", Type: "bool", InputKey: "sso_enforced", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.EntityStatus", InputKey: "status", Clearable: true},
-		{Name: "status_page_url", Label: "StatusPageURL", Type: "string", MatchKey: true, InputKey: "status_page_url", Clearable: true},
+		{Name: "status_page_url", Label: "StatusPageURL", Type: "string", MatchKey: true, InputKey: "status_page_url", Clearable: true, SourceManaged: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
@@ -7574,7 +7576,6 @@ func init() {
 		{Name: "impact", Label: "Impact", Type: "enums.RiskImpact", WorkflowEligible: true, InputKey: "impact", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "integration_run_id", Label: "IntegrationRunID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true, Volatile: true},
-		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "last_reviewed_at", Label: "LastReviewedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "last_reviewed_at", Clearable: true},
 		{Name: "likelihood", Label: "Likelihood", Type: "enums.RiskLikelihood", WorkflowEligible: true, InputKey: "likelihood", Clearable: true},
 		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -7605,8 +7606,6 @@ func init() {
 		{Name: "stakeholder_name", Label: "StakeholderName", Type: "string", MatchKey: true, InputKey: "stakeholder_name", Clearable: true},
 		{Name: "stakeholder_user_id", Label: "StakeholderUserID", Type: "string", MatchKey: true, InputKey: "stakeholder_user_id", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.RiskStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
-		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
@@ -22783,13 +22782,9 @@ func init() {
 	SchemaEntity.Catalog.adopt = func(ctx context.Context, client *generated.Client, catalogID, ownerID string, overlay json.RawMessage) (string, bool, error) {
 		ref := SchemaRef{Schema: "entity", Operation: refOpCreate, EntityID: catalogID}
 
-		row, err := client.Entity.Query().Where(entity.ID(catalogID), entity.SystemOwned(true)).Only(ctx)
+		row, key, err := catalogRowEntity(ctx, client, ref, catalogID)
 		if err != nil {
-			if generated.IsNotFound(err) {
-				return "", false, logError(ctx, ref, ErrCatalogRowNotSystemOwned, err)
-			}
-
-			return "", false, logError(ctx, ref, ErrQueryFailed, err)
+			return "", false, err
 		}
 
 		id, err := client.Entity.Query().Where(entity.OwnerID(ownerID), entity.CatalogEntityID(catalogID)).OnlyID(ctx)
@@ -22800,16 +22795,34 @@ func init() {
 			return "", false, logError(ctx, ref, ErrQueryFailed, err)
 		}
 
+		if key != "" {
+			id, err = client.Entity.Query().Where(entity.OwnerID(ownerID), entity.CatalogEntityKey(key)).OnlyID(ctx)
+			switch {
+			case err == nil:
+				if err := client.Entity.UpdateOneID(id).SetCatalogEntityID(catalogID).Exec(ctx); err != nil {
+					return "", false, logPersistError(ctx, SchemaRef{Schema: "entity", Operation: refOpUpdate, EntityID: id}, ErrUpdateFailed, err)
+				}
+
+				return id, false, nil
+			case !generated.IsNotFound(err):
+				return "", false, logError(ctx, ref, ErrQueryFailed, err)
+			}
+		}
+
 		payload, err := catalogPayload(row, SchemaEntity.Catalog.Fields)
 		if err != nil {
 			return "", false, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
-		if payload, _, err = jsonx.SetObjectKey(payload, FieldOwnerID, ownerID); err != nil {
+		if payload, _, err = jsonx.SetObjectKey(payload, entity.FieldOwnerID, ownerID); err != nil {
 			return "", false, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
 		if payload, _, err = jsonx.SetObjectKey(payload, SchemaEntity.Catalog.PointerField, catalogID); err != nil {
+			return "", false, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		if payload, _, err = jsonx.SetObjectKey(payload, SchemaEntity.Catalog.KeyField, key); err != nil {
 			return "", false, logError(ctx, ref, ErrMarshalFailed, err)
 		}
 
@@ -22829,13 +22842,9 @@ func init() {
 	SchemaEntity.Catalog.refresh = func(ctx context.Context, client *generated.Client, catalogID string) (int, error) {
 		ref := SchemaRef{Schema: "entity", Operation: refOpUpdate, EntityID: catalogID}
 
-		row, err := client.Entity.Query().Where(entity.ID(catalogID), entity.SystemOwned(true)).Only(ctx)
+		row, _, err := catalogRowEntity(ctx, client, ref, catalogID)
 		if err != nil {
-			if generated.IsNotFound(err) {
-				return 0, logError(ctx, ref, ErrCatalogRowNotSystemOwned, err)
-			}
-
-			return 0, logError(ctx, ref, ErrQueryFailed, err)
+			return 0, err
 		}
 
 		payload, err := catalogPayload(row, SchemaEntity.Catalog.Fields)
@@ -22864,6 +22873,184 @@ func init() {
 		}
 
 		return updated, nil
+	}
+	SchemaEntity.Catalog.relink = func(ctx context.Context, client *generated.Client, catalogID string) (int, error) {
+		ref := SchemaRef{Schema: "entity", Operation: refOpUpdate, EntityID: catalogID}
+
+		_, key, err := catalogRowEntity(ctx, client, ref, catalogID)
+		if err != nil {
+			return 0, err
+		}
+
+		if key == "" {
+			return 0, nil
+		}
+
+		pointers, err := client.Entity.Query().Where(entity.CatalogEntityKey(key), entity.CatalogEntityIDNotNil()).Select(entity.FieldCatalogEntityID).Strings(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		live, err := client.Entity.Query().Where(entity.IDIn(lo.Uniq(pointers)...)).IDs(ctx)
+		if err != nil {
+			return 0, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		relinked, err := client.Entity.Update().
+			Where(entity.IDNEQ(catalogID), entity.CatalogEntityKey(key), entity.Or(entity.CatalogEntityIDIsNil(), entity.CatalogEntityIDNotIn(live...))).
+			SetCatalogEntityID(catalogID).
+			Save(ctx)
+		if err != nil {
+			return 0, logPersistError(ctx, ref, ErrUpdateFailed, err)
+		}
+
+		return relinked, nil
+	}
+	SchemaEntity.Catalog.match = func(ctx context.Context, client *generated.Client, candidates []MatchCandidate) (string, bool, error) {
+		ref := SchemaRef{Schema: "entity", Operation: refOpQuery}
+
+		for _, candidate := range candidates {
+			if candidate.Value == "" {
+				continue
+			}
+
+			field, ok := SchemaEntity.FieldByName(candidate.Field)
+			if !ok {
+				return "", false, logError(ctx, ref, ErrFieldNotFound, fmt.Errorf("%s.%s", "entity", candidate.Field))
+			}
+
+			var where predicate.Entity
+
+			switch field.Name {
+			case "aliases":
+				where = predicate.Entity(func(s *sql.Selector) {
+					s.Where(sqljson.ValueContains(entity.FieldAliases, candidate.Value))
+				})
+			case "billing_model":
+				where = entity.BillingModelEqualFold(candidate.Value)
+			case "catalog_entity_id":
+				where = entity.CatalogEntityIDEqualFold(candidate.Value)
+			case "catalog_entity_key":
+				where = entity.CatalogEntityKeyEqualFold(candidate.Value)
+			case "created_by":
+				where = entity.CreatedByEqualFold(candidate.Value)
+			case "deleted_by":
+				where = entity.DeletedByEqualFold(candidate.Value)
+			case "description":
+				where = entity.DescriptionEqualFold(candidate.Value)
+			case "display_name":
+				where = entity.DisplayNameEqualFold(candidate.Value)
+			case "domains":
+				where = predicate.Entity(func(s *sql.Selector) {
+					s.Where(sqljson.ValueContains(entity.FieldDomains, candidate.Value))
+				})
+			case "entity_relationship_state_id":
+				where = entity.EntityRelationshipStateIDEqualFold(candidate.Value)
+			case "entity_relationship_state_name":
+				where = entity.EntityRelationshipStateNameEqualFold(candidate.Value)
+			case "entity_security_questionnaire_status_id":
+				where = entity.EntitySecurityQuestionnaireStatusIDEqualFold(candidate.Value)
+			case "entity_security_questionnaire_status_name":
+				where = entity.EntitySecurityQuestionnaireStatusNameEqualFold(candidate.Value)
+			case "entity_source_type_id":
+				where = entity.EntitySourceTypeIDEqualFold(candidate.Value)
+			case "entity_source_type_name":
+				where = entity.EntitySourceTypeNameEqualFold(candidate.Value)
+			case "entity_type_id":
+				where = entity.EntityTypeIDEqualFold(candidate.Value)
+			case "environment_id":
+				where = entity.EnvironmentIDEqualFold(candidate.Value)
+			case "environment_name":
+				where = entity.EnvironmentNameEqualFold(candidate.Value)
+			case "external_id":
+				where = entity.ExternalIDEqualFold(candidate.Value)
+			case "integration_run_id":
+				where = entity.IntegrationRunIDEqualFold(candidate.Value)
+			case "internal_notes":
+				where = entity.InternalNotesEqualFold(candidate.Value)
+			case "internal_owner":
+				where = entity.InternalOwnerEqualFold(candidate.Value)
+			case "internal_owner_group_id":
+				where = entity.InternalOwnerGroupIDEqualFold(candidate.Value)
+			case "internal_owner_identity_holder_id":
+				where = entity.InternalOwnerIdentityHolderIDEqualFold(candidate.Value)
+			case "internal_owner_user_id":
+				where = entity.InternalOwnerUserIDEqualFold(candidate.Value)
+			case "linked_asset_ids":
+				where = predicate.Entity(func(s *sql.Selector) {
+					s.Where(sqljson.ValueContains(entity.FieldLinkedAssetIds, candidate.Value))
+				})
+			case "links":
+				where = predicate.Entity(func(s *sql.Selector) {
+					s.Where(sqljson.ValueContains(entity.FieldLinks, candidate.Value))
+				})
+			case "logo_file_id":
+				where = entity.LogoFileIDEqualFold(candidate.Value)
+			case "logo_remote_url":
+				where = entity.LogoRemoteURLEqualFold(candidate.Value)
+			case "managed_by":
+				where = entity.ManagedByEqualFold(candidate.Value)
+			case "name":
+				where = entity.NameEqualFold(candidate.Value)
+			case "owner_id":
+				where = entity.OwnerIDEqualFold(candidate.Value)
+			case "provided_services":
+				where = predicate.Entity(func(s *sql.Selector) {
+					s.Where(sqljson.ValueContains(entity.FieldProvidedServices, candidate.Value))
+				})
+			case "renewal_risk":
+				where = entity.RenewalRiskEqualFold(candidate.Value)
+			case "reviewed_by":
+				where = entity.ReviewedByEqualFold(candidate.Value)
+			case "reviewed_by_group_id":
+				where = entity.ReviewedByGroupIDEqualFold(candidate.Value)
+			case "reviewed_by_identity_holder_id":
+				where = entity.ReviewedByIdentityHolderIDEqualFold(candidate.Value)
+			case "reviewed_by_user_id":
+				where = entity.ReviewedByUserIDEqualFold(candidate.Value)
+			case "risk_rating":
+				where = entity.RiskRatingEqualFold(candidate.Value)
+			case "scope_id":
+				where = entity.ScopeIDEqualFold(candidate.Value)
+			case "scope_name":
+				where = entity.ScopeNameEqualFold(candidate.Value)
+			case "source_definition_id":
+				where = entity.SourceDefinitionIDEqualFold(candidate.Value)
+			case "source_definition_version":
+				where = entity.SourceDefinitionVersionEqualFold(candidate.Value)
+			case "source_instance_id":
+				where = entity.SourceInstanceIDEqualFold(candidate.Value)
+			case "spend_currency":
+				where = entity.SpendCurrencyEqualFold(candidate.Value)
+			case "status_page_url":
+				where = entity.StatusPageURLEqualFold(candidate.Value)
+			case "system_internal_id":
+				where = entity.SystemInternalIDEqualFold(candidate.Value)
+			case "tags":
+				where = predicate.Entity(func(s *sql.Selector) {
+					s.Where(sqljson.ValueContains(entity.FieldTags, candidate.Value))
+				})
+			case "updated_by":
+				where = entity.UpdatedByEqualFold(candidate.Value)
+			case "updated_by_impersonator":
+				where = entity.UpdatedByImpersonatorEqualFold(candidate.Value)
+			default:
+				return "", false, logError(ctx, ref, ErrCatalogMatchFieldUnsupported, fmt.Errorf("%s.%s", "entity", field.Name))
+			}
+
+			id, err := client.Entity.Query().Where(entity.SystemOwned(true), entity.ExternallyVisible(true), where).FirstID(ctx)
+			switch {
+			case err == nil:
+				return id, true, nil
+			case !generated.IsNotFound(err):
+				return "", false, logError(ctx, ref, ErrQueryFailed, err)
+			}
+		}
+
+		return "", false, nil
+	}
+	SchemaEntity.Catalog.visible = func(ctx context.Context, client *generated.Client, catalogID string) (bool, error) {
+		return client.Entity.Query().Where(entity.ID(catalogID), entity.SystemOwned(true), entity.ExternallyVisible(true)).Exist(ctx)
 	}
 	SchemaActionPlan.Ingest.persist = defaultIngestPersist(SchemaActionPlan)
 	SchemaAsset.Ingest.persist = defaultIngestPersist(SchemaAsset)
@@ -23085,6 +23272,27 @@ func ownerScopeVulnerability(ownerID string) predicate.Vulnerability {
 	}
 
 	return vulnerability.OwnerID(ownerID)
+}
+
+// catalogRowEntity loads a visible system-owned catalogue entity as JSON with its lookup key, distinguishing hidden rows from missing ones
+func catalogRowEntity(ctx context.Context, client *generated.Client, ref SchemaRef, catalogID string) (json.RawMessage, string, error) {
+	row, err := client.Entity.Query().Where(entity.ID(catalogID), entity.SystemOwned(true)).Only(ctx)
+
+	switch {
+	case generated.IsNotFound(err):
+		return nil, "", logError(ctx, ref, ErrCatalogRowNotSystemOwned, err)
+	case err != nil:
+		return nil, "", logError(ctx, ref, ErrQueryFailed, err)
+	case !row.ExternallyVisible:
+		return nil, "", logError(ctx, ref, ErrCatalogRowNotVisible, fmt.Errorf("%s %s is not visible", "entity", catalogID))
+	}
+
+	raw, err := json.Marshal(row)
+	if err != nil {
+		return nil, "", logError(ctx, ref, ErrMarshalFailed, err)
+	}
+
+	return raw, lookupValue(raw, "external_id"), nil
 }
 
 // splitThroughEdgeIDs removes through-edge id lists from a create or update payload, returning the

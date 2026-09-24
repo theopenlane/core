@@ -756,6 +756,15 @@ func (r *queryResolver) Entities(ctx context.Context, after *entgql.Cursor[strin
 	// set page limit if nothing was set
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
+	// exclude system-owned catalog rows unless they are explicitly requested; the catalog query lists them
+	if where == nil {
+		where = &generated.EntityWhereInput{}
+	}
+	if where.SystemOwned == nil && where.SystemOwnedNEQ == nil {
+		systemOwned := false
+		where.SystemOwned = &systemOwned
+	}
+
 	if orderBy == nil {
 		orderBy = []*generated.EntityOrder{
 			{

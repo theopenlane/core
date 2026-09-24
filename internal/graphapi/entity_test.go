@@ -372,17 +372,41 @@ func TestMutationAdoptEntity(t *testing.T) {
 	domains := []string{"https://catalog-vendor.example.com"}
 	logoRemoteURL := "https://example.com/catalog-logo.png"
 
+	systemVendorType, err := suite.Client.DB.EntityType.Query().
+		Where(entitytype.NameEqualFold("vendor"), entitytype.SystemOwned(true)).
+		First(systemCtx)
+	if generated.IsNotFound(err) {
+		systemVendorType, err = suite.Client.DB.EntityType.Create().SetName("vendor").Save(systemCtx)
+	}
+	assert.NilError(t, err)
+
 	catalogEntity, err := suite.Client.DB.Entity.Create().
 		SetName(name).
 		SetDisplayName(displayName).
 		SetDescription(description).
 		SetDomains(domains).
 		SetLogoRemoteURL(logoRemoteURL).
+		SetExternallyVisible(true).
+		SetEntityTypeID(systemVendorType.ID).
 		Save(systemCtx)
 	assert.NilError(t, err)
 	assert.Check(t, catalogEntity.SystemOwned)
 
-	resp, err := suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, catalogEntity.ID)
+	hiddenEntity, err := suite.Client.DB.Entity.Create().
+		SetName("Hidden Catalog Vendor " + ulids.New().String()).
+		Save(systemCtx)
+	assert.NilError(t, err)
+	assert.Check(t, hiddenEntity.SystemOwned)
+	assert.Check(t, !hiddenEntity.ExternallyVisible)
+
+	overlayEntity, err := suite.Client.DB.Entity.Create().
+		SetName("Overlay Catalog Vendor " + ulids.New().String()).
+		SetExternallyVisible(true).
+		SetEntityTypeID(systemVendorType.ID).
+		Save(systemCtx)
+	assert.NilError(t, err)
+
+	resp, err := suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, catalogEntity.ID, nil)
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
 
@@ -405,24 +429,104 @@ func TestMutationAdoptEntity(t *testing.T) {
 	assert.Check(t, is.Equal(vendorTypeID, adopted.EntityType.ID))
 
 	// adopting again is idempotent per organization
-	again, err := suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, catalogEntity.ID)
+	again, err := suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, catalogEntity.ID, nil)
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(adopted.ID, again.AdoptEntity.Entity.ID))
 
 	// a second organization gets its own copy
-	other, err := suite.Client.API.AdoptEntity(th.SharedTestUser2.UserCtx, catalogEntity.ID)
+	other, err := suite.Client.API.AdoptEntity(th.SharedTestUser2.UserCtx, catalogEntity.ID, nil)
 	assert.NilError(t, err)
 	assert.Check(t, adopted.ID != other.AdoptEntity.Entity.ID)
 	assert.Check(t, is.Equal(th.SharedTestUser2.OrganizationID, *other.AdoptEntity.Entity.OwnerID))
 	assert.Check(t, is.Equal(catalogEntity.ID, other.AdoptEntity.Entity.CatalogEntity.ID))
 
 	// an organization row is not a catalogue row
-	_, err = suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, adopted.ID)
+	_, err = suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, adopted.ID, nil)
 	assert.ErrorContains(t, err, "entity not found")
 
-	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, ID: adopted.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	t.Run("system-owned row that is not externally visible is not adoptable", func(t *testing.T) {
+		_, err := suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, hiddenEntity.ID, nil)
+		assert.ErrorContains(t, err, "entity not found")
+	})
+
+	var overlayAdoptedID string
+
+	t.Run("input overlay is applied to the copy", func(t *testing.T) {
+		resp, err := suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, overlayEntity.ID, &testclient.CreateEntityInput{
+			Tier: lo.ToPtr(enums.VendorTierCritical),
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		overlayAdoptedID = resp.AdoptEntity.Entity.ID
+		assert.Check(t, is.Equal(overlayEntity.ID, resp.AdoptEntity.Entity.CatalogEntity.ID))
+
+		copyRow, err := suite.Client.DB.Entity.Get(th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB), overlayAdoptedID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(enums.VendorTierCritical, copyRow.Tier))
+		assert.Check(t, is.Equal(th.SharedTestUser1.OrganizationID, copyRow.OwnerID))
+	})
+
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: []string{adopted.ID, overlayAdoptedID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, ID: other.AdoptEntity.Entity.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
-	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, ID: catalogEntity.ID}).MustDelete(systemCtx, t)
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: []string{catalogEntity.ID, hiddenEntity.ID, overlayEntity.ID}}).MustDelete(systemCtx, t)
+}
+
+func TestQueryEntitiesCatalog(t *testing.T) {
+	systemCtx := th.SetContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
+
+	visibleEntity, err := suite.Client.DB.Entity.Create().
+		SetName("Visible Catalog Vendor " + ulids.New().String()).
+		SetExternallyVisible(true).
+		Save(systemCtx)
+	assert.NilError(t, err)
+	assert.Check(t, visibleEntity.SystemOwned)
+
+	hiddenEntity, err := suite.Client.DB.Entity.Create().
+		SetName("Hidden Catalog Vendor " + ulids.New().String()).
+		Save(systemCtx)
+	assert.NilError(t, err)
+	assert.Check(t, hiddenEntity.SystemOwned)
+
+	orgEntity := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+
+	catalogIDs := func(t *testing.T, resp *testclient.EntitiesCatalog) []string {
+		t.Helper()
+
+		return lo.Map(resp.EntitiesCatalog.Edges, func(edge *testclient.EntitiesCatalog_EntitiesCatalog_Edges, _ int) string {
+			return edge.Node.ID
+		})
+	}
+
+	t.Run("catalogue lists only externally visible system rows", func(t *testing.T) {
+		resp, err := suite.Client.API.EntitiesCatalog(th.SharedTestUser1.UserCtx, nil, nil, nil, nil, nil, &testclient.EntityWhereInput{
+			IDIn: []string{visibleEntity.ID, hiddenEntity.ID, orgEntity.ID},
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		ids := catalogIDs(t, resp)
+		assert.Check(t, is.Contains(ids, visibleEntity.ID))
+		assert.Check(t, !slices.Contains(ids, hiddenEntity.ID))
+		assert.Check(t, !slices.Contains(ids, orgEntity.ID))
+	})
+
+	t.Run("organization list excludes system rows", func(t *testing.T) {
+		resp, err := suite.Client.API.GetAllEntities(th.SharedTestUser1.UserCtx)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		ids := lo.Map(resp.Entities.Edges, func(edge *testclient.GetAllEntities_Entities_Edges, _ int) string {
+			return edge.Node.ID
+		})
+		assert.Check(t, is.Contains(ids, orgEntity.ID))
+		assert.Check(t, !slices.Contains(ids, visibleEntity.ID))
+		assert.Check(t, !slices.Contains(ids, hiddenEntity.ID))
+	})
+
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, ID: orgEntity.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EntityTypeDeleteOne]{Client: suite.Client.DB.EntityType, ID: orgEntity.EntityTypeID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: []string{visibleEntity.ID, hiddenEntity.ID}}).MustDelete(systemCtx, t)
 }
 
 func TestMutationUpdateEntity(t *testing.T) {

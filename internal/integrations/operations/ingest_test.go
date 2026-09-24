@@ -590,7 +590,7 @@ func TestProcessPayloadSets_RuntimeMapsWithoutInstallation(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, len(handled), 1)
 	assert.Equal(t, handled[0].Schema, entityops.SchemaAsset.Name)
-	assert.Equal(t, entityops.FieldValue(handled[0].Payload, entityops.FieldOwnerID), "", "runtime ingest must not stamp an owner")
+	assert.Equal(t, entityops.FieldValue(handled[0].Payload, entityops.SchemaAsset.OwnerField), "", "runtime ingest must not stamp an owner")
 	assert.Equal(t, entityops.FieldValue(handled[0].Payload, entityops.FieldSourceDefinitionID), "test-def", "runtime ingest must stamp the definition")
 }
 
@@ -998,6 +998,7 @@ func TestStampProvenanceOverridesMappedValues(t *testing.T) {
 
 	assert.Equal(t, "int_owner", entityops.FieldValue(stamped, entityops.FieldManagedBy), "a mapping must not pick the managing installation")
 	assert.Equal(t, "tenant-test", entityops.FieldValue(stamped, entityops.FieldSourceInstanceID), "a mapping must not pick the source instance")
+	assert.Equal(t, "org_1", entityops.FieldValue(stamped, entityops.SchemaDirectoryAccount.OwnerField), "a mapping must not pick the owner")
 	assert.Equal(t, "def_dir", entityops.FieldValue(stamped, entityops.FieldSourceDefinitionID), "a mapping must not pick the source definition")
 	assert.Equal(t, "run_1", entityops.FieldValue(stamped, entityops.FieldIntegrationRunID))
 	assert.Equal(t, "acct-1", entityops.FieldValue(stamped, "external_id"), "mapped non-provenance fields pass through")

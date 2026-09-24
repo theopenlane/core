@@ -74,6 +74,13 @@ var (
 		Description: "Fixture Beta now provides billing and invoicing services.",
 		Domain:      fixtureBeta.Domain,
 	}
+	fixtureHidden = fixtureVendor{
+		ExternalID:  "entity::fixture-hidden",
+		Name:        "fixture-hidden-vendor",
+		DisplayName: "Fixture Hidden",
+		Description: "Fixture Hidden is a vendor record organizations must not see or adopt.",
+		Domain:      "fixture-hidden.example.com",
+	}
 	fixtureCustomer = fixtureVendor{
 		ExternalID:  "entity::fixture-gamma-customer",
 		Name:        "fixture-gamma-customer",

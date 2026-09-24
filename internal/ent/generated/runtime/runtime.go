@@ -2387,6 +2387,10 @@ func init() {
 	entityDescSystemOwned := entityMixinFields11[0].Descriptor()
 	// entity.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	entity.DefaultSystemOwned = entityDescSystemOwned.Default.(bool)
+	// entityDescExternallyVisible is the schema descriptor for externally_visible field.
+	entityDescExternallyVisible := entityMixinFields11[4].Descriptor()
+	// entity.DefaultExternallyVisible holds the default value on creation for the externally_visible field.
+	entity.DefaultExternallyVisible = entityDescExternallyVisible.Default.(bool)
 	// entityDescName is the schema descriptor for name field.
 	entityDescName := entityFields[0].Descriptor()
 	// entity.NameValidator is a validator for the "name" field. It is called by the builders before save.
@@ -6124,7 +6128,7 @@ func init() {
 	// review.DefaultID holds the default value on creation for the id field.
 	review.DefaultID = reviewDescID.Default.(func() string)
 	riskMixin := schema.Risk{}.Mixin()
-	risk.Policy = privacy.NewPolicies(riskMixin[11], schema.Risk{})
+	risk.Policy = privacy.NewPolicies(schema.Risk{})
 	risk.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := risk.Policy.EvalMutation(ctx, m); err != nil {
@@ -6145,7 +6149,6 @@ func init() {
 	riskMixinHooks13 := riskMixin[13].Hooks()
 	riskMixinHooks14 := riskMixin[14].Hooks()
 	riskMixinHooks15 := riskMixin[15].Hooks()
-	riskMixinHooks16 := riskMixin[16].Hooks()
 	riskHooks := schema.Risk{}.Hooks()
 
 	risk.Hooks[1] = riskMixinHooks0[0]
@@ -6170,25 +6173,21 @@ func init() {
 
 	risk.Hooks[11] = riskMixinHooks11[0]
 
-	risk.Hooks[12] = riskMixinHooks11[1]
+	risk.Hooks[12] = riskMixinHooks12[0]
 
-	risk.Hooks[13] = riskMixinHooks12[0]
+	risk.Hooks[13] = riskMixinHooks13[0]
 
-	risk.Hooks[14] = riskMixinHooks13[0]
+	risk.Hooks[14] = riskMixinHooks14[0]
 
-	risk.Hooks[15] = riskMixinHooks14[0]
+	risk.Hooks[15] = riskMixinHooks15[0]
 
-	risk.Hooks[16] = riskMixinHooks15[0]
+	risk.Hooks[16] = riskHooks[0]
 
-	risk.Hooks[17] = riskMixinHooks16[0]
+	risk.Hooks[17] = riskHooks[1]
 
-	risk.Hooks[18] = riskHooks[0]
+	risk.Hooks[18] = riskHooks[2]
 
-	risk.Hooks[19] = riskHooks[1]
-
-	risk.Hooks[20] = riskHooks[2]
-
-	risk.Hooks[21] = riskHooks[3]
+	risk.Hooks[19] = riskHooks[3]
 	riskMixinInters3 := riskMixin[3].Interceptors()
 	riskMixinInters8 := riskMixin[8].Interceptors()
 	risk.Interceptors[0] = riskMixinInters3[0]
@@ -6202,10 +6201,8 @@ func init() {
 	_ = riskMixinFields5
 	riskMixinFields8 := riskMixin[8].Fields()
 	_ = riskMixinFields8
-	riskMixinFields11 := riskMixin[11].Fields()
-	_ = riskMixinFields11
-	riskMixinFields16 := riskMixin[16].Fields()
-	_ = riskMixinFields16
+	riskMixinFields15 := riskMixin[15].Fields()
+	_ = riskMixinFields15
 	riskFields := schema.Risk{}.Fields()
 	_ = riskFields
 	// riskDescCreatedAt is the schema descriptor for created_at field.
@@ -6230,12 +6227,8 @@ func init() {
 	riskDescOwnerID := riskMixinFields8[0].Descriptor()
 	// risk.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	risk.OwnerIDValidator = riskDescOwnerID.Validators[0].(func(string) error)
-	// riskDescSystemOwned is the schema descriptor for system_owned field.
-	riskDescSystemOwned := riskMixinFields11[0].Descriptor()
-	// risk.DefaultSystemOwned holds the default value on creation for the system_owned field.
-	risk.DefaultSystemOwned = riskDescSystemOwned.Default.(bool)
 	// riskDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	riskDescWorkflowEligibleMarker := riskMixinFields16[0].Descriptor()
+	riskDescWorkflowEligibleMarker := riskMixinFields15[0].Descriptor()
 	// risk.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	risk.DefaultWorkflowEligibleMarker = riskDescWorkflowEligibleMarker.Default.(bool)
 	// riskDescName is the schema descriptor for name field.

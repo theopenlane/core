@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
@@ -19,11 +20,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
-	"github.com/theopenlane/core/v2/internal/vendorenrich"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // domainScanImportVendorEntityType is the entityTypeName to use when creating the entities from
@@ -427,20 +429,22 @@ func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client
 			return nil, nil, fmt.Errorf("looking up existing vendor %q: %w", vendor.Name, err)
 		}
 
-		catalogID, matched, err := vendorenrich.MatchCatalog(ctx, client, vendor.Name, vendor.Domain)
+		domain, _ := urlx.NormalizeHostname(vendor.Domain)
+
+		catalogID, matched, err := entityops.SchemaEntity.Match(ctx, client, operations.VendorMatchCandidates(strings.TrimSpace(vendor.Name), domain)...)
 		if err != nil {
 			return nil, nil, fmt.Errorf("matching vendor %q against catalog: %w", vendor.Name, err)
 		}
 
 		if !matched && vendor.LegalName != "" {
-			catalogID, matched, err = vendorenrich.MatchCatalog(ctx, client, vendor.LegalName, "")
+			catalogID, matched, err = entityops.SchemaEntity.Match(ctx, client, operations.VendorMatchCandidates(strings.TrimSpace(vendor.LegalName), "")...)
 			if err != nil {
 				return nil, nil, fmt.Errorf("matching vendor %q against catalog: %w", vendor.LegalName, err)
 			}
 		}
 
 		if matched {
-			adoptedID, created, err := vendorenrich.AdoptVendor(ctx, client, ownerID, catalogID)
+			adoptedID, created, err := operations.AdoptVendor(ctx, client, ownerID, catalogID)
 			if err != nil {
 				return nil, nil, fmt.Errorf("adopting catalog vendor %q: %w", vendor.Name, err)
 			}

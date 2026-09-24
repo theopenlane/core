@@ -20,11 +20,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/v2/internal/vendorenrich"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/mapx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // init registers the questionnaire transform listeners so gala setup picks them up automatically
@@ -371,7 +372,9 @@ func upsertEntity(ctx context.Context, client *entgen.Client, input entgen.Creat
 
 	switch {
 	case entgen.IsNotFound(err):
-		catalogID, matched, err := vendorenrich.MatchCatalog(ctx, client, lo.FromPtr(input.Name), lo.FirstOrEmpty(input.Domains))
+		domain, _ := urlx.NormalizeHostname(lo.FirstOrEmpty(input.Domains))
+
+		catalogID, matched, err := entityops.SchemaEntity.Match(ctx, client, operations.VendorMatchCandidates(strings.TrimSpace(lo.FromPtr(input.Name)), domain)...)
 		if err != nil {
 			return nil, err
 		}
@@ -380,7 +383,7 @@ func upsertEntity(ctx context.Context, client *entgen.Client, input entgen.Creat
 			return client.Entity.Create().SetInput(input).Save(ctx)
 		}
 
-		targetID, _, err = vendorenrich.AdoptVendor(ctx, client, lo.FromPtr(input.OwnerID), catalogID)
+		targetID, _, err = operations.AdoptVendor(ctx, client, lo.FromPtr(input.OwnerID), catalogID)
 		if err != nil {
 			return nil, err
 		}

@@ -12,6 +12,8 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
@@ -134,9 +136,50 @@ func HookEntityCreate() ent.Hook {
 				return nil, err
 			}
 
+			if err := inheritCatalogEntityType(ctx, m); err != nil {
+				return nil, err
+			}
+
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate)
+}
+
+// inheritCatalogEntityType types an adopted entity like its catalogue row when the adoption did not set a type
+func inheritCatalogEntityType(ctx context.Context, m *generated.EntityMutation) error {
+	catalogID, ok := m.CatalogEntityID()
+	if !ok || catalogID == "" {
+		return nil
+	}
+
+	if _, ok := m.EntityTypeID(); ok {
+		return nil
+	}
+
+	ownerID, ok := m.OwnerID()
+	if !ok || ownerID == "" {
+		return nil
+	}
+
+	typeName, err := m.Client().Entity.Query().Where(entity.ID(catalogID)).QueryEntityType().Select(entitytype.FieldName).String(ctx)
+	switch {
+	case generated.IsNotFound(err):
+		return nil
+	case err != nil:
+		return err
+	}
+
+	typeID, err := m.Client().EntityType.Query().Where(entitytype.NameEqualFold(typeName), entitytype.OwnerID(ownerID)).OnlyID(ctx)
+	switch {
+	case generated.IsNotFound(err):
+		return nil
+	case err != nil:
+		return err
+	}
+
+	m.SetEntityTypeID(typeID)
+
+	return nil
 }
 
 func enrichLogoFromSubprocessor(ctx context.Context, m *generated.EntityMutation) error {

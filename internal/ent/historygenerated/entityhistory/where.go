@@ -204,6 +204,21 @@ func SystemInternalID(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldSystemInternalID, v))
 }
 
+// CatalogEntityID applies equality check predicate on the "catalog_entity_id" field. It's identical to CatalogEntityIDEQ.
+func CatalogEntityID(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldCatalogEntityID, v))
+}
+
+// ExternallyVisible applies equality check predicate on the "externally_visible" field. It's identical to ExternallyVisibleEQ.
+func ExternallyVisible(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldExternallyVisible, v))
+}
+
+// CatalogEntityKey applies equality check predicate on the "catalog_entity_key" field. It's identical to CatalogEntityKeyEQ.
+func CatalogEntityKey(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldCatalogEntityKey, v))
+}
+
 // EntityRelationshipStateName applies equality check predicate on the "entity_relationship_state_name" field. It's identical to EntityRelationshipStateNameEQ.
 func EntityRelationshipStateName(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldEntityRelationshipStateName, v))
@@ -387,11 +402,6 @@ func LogoFileID(v string) predicate.EntityHistory {
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldExternalID, v))
-}
-
-// CatalogEntityID applies equality check predicate on the "catalog_entity_id" field. It's identical to CatalogEntityIDEQ.
-func CatalogEntityID(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldEQ(FieldCatalogEntityID, v))
 }
 
 // ObservedAt applies equality check predicate on the "observed_at" field. It's identical to ObservedAtEQ.
@@ -2262,6 +2272,176 @@ func SystemInternalIDEqualFold(v string) predicate.EntityHistory {
 // SystemInternalIDContainsFold applies the ContainsFold predicate on the "system_internal_id" field.
 func SystemInternalIDContainsFold(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldContainsFold(FieldSystemInternalID, v))
+}
+
+// CatalogEntityIDEQ applies the EQ predicate on the "catalog_entity_id" field.
+func CatalogEntityIDEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDNEQ applies the NEQ predicate on the "catalog_entity_id" field.
+func CatalogEntityIDNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDIn applies the In predicate on the "catalog_entity_id" field.
+func CatalogEntityIDIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldCatalogEntityID, vs...))
+}
+
+// CatalogEntityIDNotIn applies the NotIn predicate on the "catalog_entity_id" field.
+func CatalogEntityIDNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldCatalogEntityID, vs...))
+}
+
+// CatalogEntityIDGT applies the GT predicate on the "catalog_entity_id" field.
+func CatalogEntityIDGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDGTE applies the GTE predicate on the "catalog_entity_id" field.
+func CatalogEntityIDGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDLT applies the LT predicate on the "catalog_entity_id" field.
+func CatalogEntityIDLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDLTE applies the LTE predicate on the "catalog_entity_id" field.
+func CatalogEntityIDLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDContains applies the Contains predicate on the "catalog_entity_id" field.
+func CatalogEntityIDContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDHasPrefix applies the HasPrefix predicate on the "catalog_entity_id" field.
+func CatalogEntityIDHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDHasSuffix applies the HasSuffix predicate on the "catalog_entity_id" field.
+func CatalogEntityIDHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDIsNil applies the IsNil predicate on the "catalog_entity_id" field.
+func CatalogEntityIDIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldCatalogEntityID))
+}
+
+// CatalogEntityIDNotNil applies the NotNil predicate on the "catalog_entity_id" field.
+func CatalogEntityIDNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldCatalogEntityID))
+}
+
+// CatalogEntityIDEqualFold applies the EqualFold predicate on the "catalog_entity_id" field.
+func CatalogEntityIDEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldCatalogEntityID, v))
+}
+
+// CatalogEntityIDContainsFold applies the ContainsFold predicate on the "catalog_entity_id" field.
+func CatalogEntityIDContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldCatalogEntityID, v))
+}
+
+// ExternallyVisibleEQ applies the EQ predicate on the "externally_visible" field.
+func ExternallyVisibleEQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldExternallyVisible, v))
+}
+
+// ExternallyVisibleNEQ applies the NEQ predicate on the "externally_visible" field.
+func ExternallyVisibleNEQ(v bool) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldExternallyVisible, v))
+}
+
+// ExternallyVisibleIsNil applies the IsNil predicate on the "externally_visible" field.
+func ExternallyVisibleIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldExternallyVisible))
+}
+
+// ExternallyVisibleNotNil applies the NotNil predicate on the "externally_visible" field.
+func ExternallyVisibleNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldExternallyVisible))
+}
+
+// CatalogEntityKeyEQ applies the EQ predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEQ(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyNEQ applies the NEQ predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyNEQ(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNEQ(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyIn applies the In predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIn(FieldCatalogEntityKey, vs...))
+}
+
+// CatalogEntityKeyNotIn applies the NotIn predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyNotIn(vs ...string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotIn(FieldCatalogEntityKey, vs...))
+}
+
+// CatalogEntityKeyGT applies the GT predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyGT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGT(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyGTE applies the GTE predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyGTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldGTE(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyLT applies the LT predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyLT(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLT(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyLTE applies the LTE predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyLTE(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldLTE(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyContains applies the Contains predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyContains(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContains(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyHasPrefix applies the HasPrefix predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyHasPrefix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasPrefix(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyHasSuffix applies the HasSuffix predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyHasSuffix(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldHasSuffix(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyIsNil applies the IsNil predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldCatalogEntityKey))
+}
+
+// CatalogEntityKeyNotNil applies the NotNil predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldCatalogEntityKey))
+}
+
+// CatalogEntityKeyEqualFold applies the EqualFold predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyEqualFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldEqualFold(FieldCatalogEntityKey, v))
+}
+
+// CatalogEntityKeyContainsFold applies the ContainsFold predicate on the "catalog_entity_key" field.
+func CatalogEntityKeyContainsFold(v string) predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldContainsFold(FieldCatalogEntityKey, v))
 }
 
 // EntityRelationshipStateNameEQ applies the EQ predicate on the "entity_relationship_state_name" field.
@@ -4662,81 +4842,6 @@ func ExternalIDEqualFold(v string) predicate.EntityHistory {
 // ExternalIDContainsFold applies the ContainsFold predicate on the "external_id" field.
 func ExternalIDContainsFold(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldContainsFold(FieldExternalID, v))
-}
-
-// CatalogEntityIDEQ applies the EQ predicate on the "catalog_entity_id" field.
-func CatalogEntityIDEQ(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldEQ(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDNEQ applies the NEQ predicate on the "catalog_entity_id" field.
-func CatalogEntityIDNEQ(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldNEQ(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDIn applies the In predicate on the "catalog_entity_id" field.
-func CatalogEntityIDIn(vs ...string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldIn(FieldCatalogEntityID, vs...))
-}
-
-// CatalogEntityIDNotIn applies the NotIn predicate on the "catalog_entity_id" field.
-func CatalogEntityIDNotIn(vs ...string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldNotIn(FieldCatalogEntityID, vs...))
-}
-
-// CatalogEntityIDGT applies the GT predicate on the "catalog_entity_id" field.
-func CatalogEntityIDGT(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldGT(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDGTE applies the GTE predicate on the "catalog_entity_id" field.
-func CatalogEntityIDGTE(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldGTE(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDLT applies the LT predicate on the "catalog_entity_id" field.
-func CatalogEntityIDLT(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldLT(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDLTE applies the LTE predicate on the "catalog_entity_id" field.
-func CatalogEntityIDLTE(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldLTE(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDContains applies the Contains predicate on the "catalog_entity_id" field.
-func CatalogEntityIDContains(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldContains(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDHasPrefix applies the HasPrefix predicate on the "catalog_entity_id" field.
-func CatalogEntityIDHasPrefix(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldHasPrefix(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDHasSuffix applies the HasSuffix predicate on the "catalog_entity_id" field.
-func CatalogEntityIDHasSuffix(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldHasSuffix(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDIsNil applies the IsNil predicate on the "catalog_entity_id" field.
-func CatalogEntityIDIsNil() predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldIsNull(FieldCatalogEntityID))
-}
-
-// CatalogEntityIDNotNil applies the NotNil predicate on the "catalog_entity_id" field.
-func CatalogEntityIDNotNil() predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldNotNull(FieldCatalogEntityID))
-}
-
-// CatalogEntityIDEqualFold applies the EqualFold predicate on the "catalog_entity_id" field.
-func CatalogEntityIDEqualFold(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldEqualFold(FieldCatalogEntityID, v))
-}
-
-// CatalogEntityIDContainsFold applies the ContainsFold predicate on the "catalog_entity_id" field.
-func CatalogEntityIDContainsFold(v string) predicate.EntityHistory {
-	return predicate.EntityHistory(sql.FieldContainsFold(FieldCatalogEntityID, v))
 }
 
 // ObservedAtEQ applies the EQ predicate on the "observed_at" field.

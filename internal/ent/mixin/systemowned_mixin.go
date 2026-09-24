@@ -17,6 +17,7 @@ import (
 	"entgo.io/ent/schema/mixin"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 
@@ -47,6 +48,8 @@ type SystemOwnedMixin struct {
 	autoCreateWildcardTuples bool
 	// catalogSchemaType is the schema type whose system-owned rows organizations can adopt, nil disables the catalogue plumbing
 	catalogSchemaType any
+	// ownerFieldName is the organization owner field the catalogue index pairs with the catalogue pointer
+	ownerFieldName string
 }
 
 // NewSystemOwnedMixin creates a new SystemOwnedMixin with the given options.
@@ -78,6 +81,13 @@ func SkipTupleCreation() SystemOwnedMixinOption {
 func WithCatalog(schemaType any) SystemOwnedMixinOption {
 	return func(m *SystemOwnedMixin) {
 		m.catalogSchemaType = schemaType
+	}
+}
+
+// WithOwnerField sets the organization owner field name used by the catalogue index
+func WithOwnerField(name string) SystemOwnedMixinOption {
+	return func(m *SystemOwnedMixin) {
+		m.ownerFieldName = name
 	}
 }
 
@@ -130,9 +140,23 @@ func (d SystemOwnedMixin) Fields() []ent.Field {
 		field.String("catalog_"+name+"_id").
 			Comment("the system-owned catalogue "+name+" this "+name+" was adopted from").
 			Optional().
-			Immutable().
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			),
+		field.Bool("externally_visible").
+			Default(false).
+			Optional().
+			Comment("whether this system-owned row is published for organizations to adopt").
+			Annotations(
+				entx.CatalogVisibilityField(),
+			),
+		field.String("catalog_"+name+"_key").
+			Optional().
+			Immutable().
+			Comment("the lookup key of the catalogue "+name+" this "+name+" was adopted from").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				entx.CatalogKeyField(),
 			),
 	)
 }
@@ -157,7 +181,6 @@ func (d SystemOwnedMixin) Edges() []ent.Edge {
 			From("catalog_"+name).
 			Comment("the system-owned catalogue "+name+" this "+name+" was adopted from").
 			Field("catalog_"+name+"_id").
-			Immutable().
 			Unique().
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
@@ -173,9 +196,12 @@ func (d SystemOwnedMixin) Indexes() []ent.Index {
 		return nil
 	}
 
-	// owner_id is spelled out because the schema package constant would import cycle
+	if d.ownerFieldName == "" {
+		log.Fatal().Msg("SystemOwnedMixin: WithCatalog requires the owner field name from the ObjectOwnedMixin")
+	}
+
 	return []ent.Index{
-		index.Fields("catalog_"+d.catalogName()+"_id", "owner_id").
+		index.Fields("catalog_"+d.catalogName()+"_id", d.ownerFieldName).
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }

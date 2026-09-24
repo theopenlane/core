@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -18,10 +19,12 @@ import (
 	"github.com/theopenlane/core/common/enums"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/internal/vendorenrich"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -421,6 +424,66 @@ func hostFromURL(rawURL string) string {
 	return rawURL
 }
 
+// enrichDomainScanVendors overlays the vetted catalogue fields onto every scanned vendor that matches a visible catalogue row
+func enrichDomainScanVendors(ctx context.Context, client *generated.Client, data map[string]any) map[string]any {
+	var vendors []map[string]any
+	if err := jsonx.RoundTrip(data["vendors"], &vendors); err != nil || len(vendors) == 0 {
+		return data
+	}
+
+	catalogCtx := rule.WithInternalContext(ctx)
+
+	for _, vendor := range vendors {
+		name, _ := vendor["name"].(string)
+		rawURL, _ := vendor["url"].(string)
+		domain, _ := urlx.NormalizeHostname(rawURL)
+
+		catalogID, matched, err := entityops.SchemaEntity.Match(ctx, client, operations.VendorMatchCandidates(strings.TrimSpace(name), domain)...)
+		if err != nil || !matched {
+			continue
+		}
+
+		row, err := client.Entity.Get(catalogCtx, catalogID)
+		if err != nil {
+			continue
+		}
+
+		applyCatalogVendor(vendor, row)
+	}
+
+	data["vendors"] = vendors
+
+	return data
+}
+
+// applyCatalogVendor overwrites the scanned vendor's name, description, domains and logo with the catalogue row's values when set
+func applyCatalogVendor(vendor map[string]any, row *generated.Entity) {
+	vendor["entity_id"] = row.ID
+
+	switch {
+	case row.DisplayName != "":
+		vendor["name"] = row.DisplayName
+	case row.Name != "":
+		vendor["name"] = row.Name
+	}
+
+	if row.Description != "" {
+		vendor["description"] = row.Description
+	}
+
+	if len(row.Domains) > 0 {
+		vendor["domains"] = row.Domains
+	}
+
+	if logoURL := lo.FromPtr(row.LogoRemoteURL); logoURL != "" {
+		vendor["logo_remote_url"] = logoURL
+	}
+
+	if logoFileID := lo.FromPtr(row.LogoFileID); logoFileID != "" {
+		vendor["logo_file_id"] = logoFileID
+	}
+}
+
 // gatherDomainScanEnrichments gathers company profile, compliance, and DNS vendor data for
 // every domain concurrently, so enrichment overlaps with URL Scanner processing
 // instead of waiting for it to complete. Each lookup is best-effort: a failure is logged and
@@ -624,7 +687,7 @@ func (s domainScanSaga) finalizeDomainScan(ctx context.Context, organizationID, 
 		return status, err
 	}
 
-	enriched.Data = vendorenrich.EnrichVendors(systemCtx, s.services.DB(), enriched.Data)
+	enriched.Data = enrichDomainScanVendors(systemCtx, s.services.DB(), enriched.Data)
 
 	if err := s.services.DB().Scan.UpdateOneID(internalScanID).
 		SetStatus(status).

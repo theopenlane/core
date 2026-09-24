@@ -424,3 +424,5 @@ require (
 )
 
 replace github.com/theopenlane/entx => /Users/manderson/entx
+
+replace github.com/theopenlane/gqlgen-plugins => /Users/manderson/gqlgen-plugins

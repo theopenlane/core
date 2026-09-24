@@ -1,6 +1,7 @@
 {
   "systemInternalID": "entity::fixture-scan",
   "entityTypeName": "vendor",
+  "externallyVisible": true,
   "name": "fixture-scan-vendor",
   "displayName": "Fixture Scan",
   "description": "Fixture Scan is the catalogue vendor the domain scan import attributes an asset to.",

@@ -2,6 +2,7 @@
   {
     "systemInternalID": "entity::fixture-alpha",
     "entityTypeName": "vendor",
+    "externallyVisible": true,
     "name": "fixture-alpha-vendor",
     "displayName": "Fixture Alpha",
     "description": "Fixture Alpha provides identity services for the objectstore import tests.",
@@ -12,12 +13,24 @@
   {
     "systemInternalID": "entity::fixture-beta",
     "entityTypeName": "vendor",
+    "externallyVisible": true,
     "name": "fixture-beta-vendor",
     "displayName": "Fixture Beta",
     "description": "Fixture Beta provides billing services for the objectstore import tests.",
     "domains": ["fixture-beta.example.com"],
     "tags": ["technology", "fixture"],
     "logoRemoteURL": "https://www.google.com/s2/favicons?domain=fixture-beta.example.com&sz=128"
+  },
+  {
+    "systemInternalID": "entity::fixture-hidden",
+    "entityTypeName": "vendor",
+    "externallyVisible": false,
+    "name": "fixture-hidden-vendor",
+    "displayName": "Fixture Hidden",
+    "description": "Fixture Hidden is a vendor record organizations must not see or adopt.",
+    "domains": ["fixture-hidden.example.com"],
+    "tags": ["technology", "fixture"],
+    "logoRemoteURL": "https://www.google.com/s2/favicons?domain=fixture-hidden.example.com&sz=128"
   },
   {
     "systemInternalID": "entity::fixture-gamma-customer",

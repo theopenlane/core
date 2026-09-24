@@ -7459,6 +7459,18 @@ type EntityHistory implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  the system-owned catalogue entity this entity was adopted from
+  """
+  catalogEntityID: String
+  """
+  whether this system-owned row is published for organizations to adopt
+  """
+  externallyVisible: Boolean
+  """
+  the lookup key of the catalogue entity this entity was adopted from
+  """
+  catalogEntityKey: String
+  """
   the relationship_state of the entity
   """
   entityRelationshipStateName: String
@@ -7642,10 +7654,6 @@ type EntityHistory implements Node {
   stable identifier assigned by the source system, used for integration ingest deduplication
   """
   externalID: String
-  """
-  the system-owned catalogue entity this entity was adopted from
-  """
-  catalogEntityID: String
   """
   time when this entity was last observed by the source integration
   """
@@ -8125,6 +8133,41 @@ input EntityHistoryWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  catalog_entity_id field predicates
+  """
+  catalogEntityID: String
+  catalogEntityIDNEQ: String
+  catalogEntityIDIn: [String!]
+  catalogEntityIDNotIn: [String!]
+  catalogEntityIDContains: String
+  catalogEntityIDHasPrefix: String
+  catalogEntityIDHasSuffix: String
+  catalogEntityIDIsNil: Boolean
+  catalogEntityIDNotNil: Boolean
+  catalogEntityIDEqualFold: String
+  catalogEntityIDContainsFold: String
+  """
+  externally_visible field predicates
+  """
+  externallyVisible: Boolean
+  externallyVisibleNEQ: Boolean
+  externallyVisibleIsNil: Boolean
+  externallyVisibleNotNil: Boolean
+  """
+  catalog_entity_key field predicates
+  """
+  catalogEntityKey: String
+  catalogEntityKeyNEQ: String
+  catalogEntityKeyIn: [String!]
+  catalogEntityKeyNotIn: [String!]
+  catalogEntityKeyContains: String
+  catalogEntityKeyHasPrefix: String
+  catalogEntityKeyHasSuffix: String
+  catalogEntityKeyIsNil: Boolean
+  catalogEntityKeyNotNil: Boolean
+  catalogEntityKeyEqualFold: String
+  catalogEntityKeyContainsFold: String
+  """
   entity_relationship_state_name field predicates
   """
   entityRelationshipStateName: String
@@ -8597,20 +8640,6 @@ input EntityHistoryWhereInput {
   externalIDNotNil: Boolean
   externalIDEqualFold: String
   externalIDContainsFold: String
-  """
-  catalog_entity_id field predicates
-  """
-  catalogEntityID: String
-  catalogEntityIDNEQ: String
-  catalogEntityIDIn: [String!]
-  catalogEntityIDNotIn: [String!]
-  catalogEntityIDContains: String
-  catalogEntityIDHasPrefix: String
-  catalogEntityIDHasSuffix: String
-  catalogEntityIDIsNil: Boolean
-  catalogEntityIDNotNil: Boolean
-  catalogEntityIDEqualFold: String
-  catalogEntityIDContainsFold: String
   """
   observed_at field predicates
   """
@@ -23995,18 +24024,6 @@ type RiskHistory implements Node {
   """
   delegateIdentityHolderID: String
   """
-  indicates if the record is owned by the the openlane system and not by an organization
-  """
-  systemOwned: Boolean
-  """
-  internal notes about the object creation, this field is only available to system admins
-  """
-  internalNotes: String @hidden(if: true)
-  """
-  an internal identifier for the mapping, this field is only available to system admins
-  """
-  systemInternalID: String @hidden(if: true)
-  """
   the kind of the risk
   """
   riskKindName: String
@@ -24586,41 +24603,6 @@ input RiskHistoryWhereInput {
   delegateIdentityHolderIDNotNil: Boolean
   delegateIdentityHolderIDEqualFold: String
   delegateIdentityHolderIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
   """
   risk_kind_name field predicates
   """

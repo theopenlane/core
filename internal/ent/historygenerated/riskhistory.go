@@ -75,12 +75,6 @@ type RiskHistory struct {
 	DelegateGroupID string `json:"delegate_group_id,omitempty"`
 	// the delegate identity holder id for the risk
 	DelegateIdentityHolderID string `json:"delegate_identity_holder_id,omitempty"`
-	// indicates if the record is owned by the the openlane system and not by an organization
-	SystemOwned bool `json:"system_owned,omitempty"`
-	// internal notes about the object creation, this field is only available to system admins
-	InternalNotes *string `json:"internal_notes,omitempty"`
-	// an internal identifier for the mapping, this field is only available to system admins
-	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// the kind of the risk
 	RiskKindName string `json:"risk_kind_name,omitempty"`
 	// the kind of the risk
@@ -163,11 +157,11 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case riskhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case riskhistory.FieldSystemOwned, riskhistory.FieldWorkflowEligibleMarker, riskhistory.FieldReviewRequired:
+		case riskhistory.FieldWorkflowEligibleMarker, riskhistory.FieldReviewRequired:
 			values[i] = new(sql.NullBool)
 		case riskhistory.FieldScore, riskhistory.FieldResidualScore:
 			values[i] = new(sql.NullInt64)
-		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldUpdatedByImpersonator, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldSourceDefinitionID, riskhistory.FieldSourceDefinitionVersion, riskhistory.FieldSourceInstanceID, riskhistory.FieldManagedBy, riskhistory.FieldIntegrationRunID, riskhistory.FieldOwnerID, riskhistory.FieldStakeholderName, riskhistory.FieldStakeholderUserID, riskhistory.FieldStakeholderGroupID, riskhistory.FieldStakeholderIdentityHolderID, riskhistory.FieldDelegateName, riskhistory.FieldDelegateUserID, riskhistory.FieldDelegateGroupID, riskhistory.FieldDelegateIdentityHolderID, riskhistory.FieldInternalNotes, riskhistory.FieldSystemInternalID, riskhistory.FieldRiskKindName, riskhistory.FieldRiskKindID, riskhistory.FieldRiskCategoryName, riskhistory.FieldRiskCategoryID, riskhistory.FieldEnvironmentName, riskhistory.FieldEnvironmentID, riskhistory.FieldScopeName, riskhistory.FieldScopeID, riskhistory.FieldExternalID, riskhistory.FieldIntegrationID, riskhistory.FieldExternalUUID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID, riskhistory.FieldReviewFrequency, riskhistory.FieldRiskDecision:
+		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldUpdatedByImpersonator, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldSourceDefinitionID, riskhistory.FieldSourceDefinitionVersion, riskhistory.FieldSourceInstanceID, riskhistory.FieldManagedBy, riskhistory.FieldIntegrationRunID, riskhistory.FieldOwnerID, riskhistory.FieldStakeholderName, riskhistory.FieldStakeholderUserID, riskhistory.FieldStakeholderGroupID, riskhistory.FieldStakeholderIdentityHolderID, riskhistory.FieldDelegateName, riskhistory.FieldDelegateUserID, riskhistory.FieldDelegateGroupID, riskhistory.FieldDelegateIdentityHolderID, riskhistory.FieldRiskKindName, riskhistory.FieldRiskKindID, riskhistory.FieldRiskCategoryName, riskhistory.FieldRiskCategoryID, riskhistory.FieldEnvironmentName, riskhistory.FieldEnvironmentID, riskhistory.FieldScopeName, riskhistory.FieldScopeID, riskhistory.FieldExternalID, riskhistory.FieldIntegrationID, riskhistory.FieldExternalUUID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID, riskhistory.FieldReviewFrequency, riskhistory.FieldRiskDecision:
 			values[i] = new(sql.NullString)
 		case riskhistory.FieldHistoryTime, riskhistory.FieldCreatedAt, riskhistory.FieldUpdatedAt, riskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -350,26 +344,6 @@ func (_m *RiskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field delegate_identity_holder_id", values[i])
 			} else if value.Valid {
 				_m.DelegateIdentityHolderID = value.String
-			}
-		case riskhistory.FieldSystemOwned:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
-			} else if value.Valid {
-				_m.SystemOwned = value.Bool
-			}
-		case riskhistory.FieldInternalNotes:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
-			} else if value.Valid {
-				_m.InternalNotes = new(string)
-				*_m.InternalNotes = value.String
-			}
-		case riskhistory.FieldSystemInternalID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
-			} else if value.Valid {
-				_m.SystemInternalID = new(string)
-				*_m.SystemInternalID = value.String
 			}
 		case riskhistory.FieldRiskKindName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -702,19 +676,6 @@ func (_m *RiskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("delegate_identity_holder_id=")
 	builder.WriteString(_m.DelegateIdentityHolderID)
-	builder.WriteString(", ")
-	builder.WriteString("system_owned=")
-	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
-	builder.WriteString(", ")
-	if v := _m.InternalNotes; v != nil {
-		builder.WriteString("internal_notes=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := _m.SystemInternalID; v != nil {
-		builder.WriteString("system_internal_id=")
-		builder.WriteString(*v)
-	}
 	builder.WriteString(", ")
 	builder.WriteString("risk_kind_name=")
 	builder.WriteString(_m.RiskKindName)

@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
@@ -22,6 +23,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/graphapi"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
@@ -81,7 +83,7 @@ func ensureInstallation(t *testing.T, ctx context.Context, user th.TestUserDetai
 
 // TestCatalogAdoptionFromImportedVendors verifies adoption, refresh, and isolation of org copies
 func TestCatalogAdoptionFromImportedVendors(t *testing.T) {
-	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.CatalogListeners())
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, entityops.CatalogListeners())
 	assert.NilError(t, err)
 
 	t.Cleanup(setup.Teardown)
@@ -91,8 +93,9 @@ func TestCatalogAdoptionFromImportedVendors(t *testing.T) {
 
 	suffix := ulids.New().String()
 
-	rows, _ := importFixtureVendors(t, systemCtx, fixturePrefixDefault, fixtureAlpha, fixtureBeta)
+	rows, _ := importFixtureVendors(t, systemCtx, fixturePrefixDefault, fixtureAlpha, fixtureBeta, fixtureHidden)
 	catalog := rows[fixtureAlpha.ExternalID]
+	hidden := rows[fixtureHidden.ExternalID]
 
 	org1Ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 	org2Ctx := th.SetContext(th.SharedTestUser2.UserCtx, suite.Client.DB)
@@ -100,7 +103,10 @@ func TestCatalogAdoptionFromImportedVendors(t *testing.T) {
 
 	org1VendorTypeID := orgVendorEntityTypeID(t, org1Ctx, th.SharedTestUser1.OrganizationID)
 
-	resp, err := suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, catalog.ID)
+	_, err = suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, hidden.ID, nil)
+	assert.ErrorContains(t, err, "entity not found", "an unpublished catalogue row must not be adoptable")
+
+	resp, err := suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, catalog.ID, &testclient.CreateEntityInput{ApprovedForUse: lo.ToPtr(true)})
 	th.RequireNoError(t, err)
 
 	adopted := resp.AdoptEntity.Entity
@@ -129,11 +135,11 @@ func TestCatalogAdoptionFromImportedVendors(t *testing.T) {
 	assert.Check(t, copy1.ApprovedForUse, "an adopted vendor is approved for use")
 	assert.Check(t, is.Equal(catalog.ID, copy1.CatalogEntityID))
 
-	again, err := suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, catalog.ID)
+	again, err := suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, catalog.ID, nil)
 	th.RequireNoError(t, err)
 	assert.Check(t, is.Equal(adopted.ID, again.AdoptEntity.Entity.ID), "adopting again must return the same copy")
 
-	other, err := suite.Client.API.AdoptEntity(th.SharedTestUser2.UserCtx, catalog.ID)
+	other, err := suite.Client.API.AdoptEntity(th.SharedTestUser2.UserCtx, catalog.ID, nil)
 	th.RequireNoError(t, err)
 
 	otherID := other.AdoptEntity.Entity.ID
@@ -146,7 +152,7 @@ func TestCatalogAdoptionFromImportedVendors(t *testing.T) {
 	assert.Check(t, is.Equal(th.SharedTestUser2.OrganizationID, lo.FromPtr(other.AdoptEntity.Entity.OwnerID)))
 	assert.Check(t, is.Equal(catalog.ID, other.AdoptEntity.Entity.CatalogEntity.ID))
 
-	adminResp, err := suite.Client.API.AdoptEntity(th.SharedSystemAdminUser.UserCtx, catalog.ID)
+	adminResp, err := suite.Client.API.AdoptEntity(th.SharedSystemAdminUser.UserCtx, catalog.ID, nil)
 	th.RequireNoError(t, err)
 
 	adminCopyID := adminResp.AdoptEntity.Entity.ID
@@ -295,7 +301,7 @@ func TestCatalogQuestionnaireTransformAdopts(t *testing.T) {
 
 	suffix := ulids.New().String()
 
-	rows, _ := importFixtureVendors(t, systemCtx, fixturePrefixDefault, fixtureAlpha, fixtureBeta)
+	rows, _ := importFixtureVendors(t, systemCtx, fixturePrefixDefault, fixtureAlpha, fixtureBeta, fixtureHidden)
 	catalog := rows[fixtureAlpha.ExternalID]
 
 	user := suite.UserBuilder(context.Background(), t)

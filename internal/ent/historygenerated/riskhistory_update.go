@@ -139,15 +139,6 @@ func (_u *RiskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.DelegateIdentityHolderIDCleared() {
 		_spec.ClearField(riskhistory.FieldDelegateIdentityHolderID, field.TypeString)
 	}
-	if _u.mutation.SystemOwnedCleared() {
-		_spec.ClearField(riskhistory.FieldSystemOwned, field.TypeBool)
-	}
-	if _u.mutation.InternalNotesCleared() {
-		_spec.ClearField(riskhistory.FieldInternalNotes, field.TypeString)
-	}
-	if _u.mutation.SystemInternalIDCleared() {
-		_spec.ClearField(riskhistory.FieldSystemInternalID, field.TypeString)
-	}
 	if _u.mutation.RiskKindNameCleared() {
 		_spec.ClearField(riskhistory.FieldRiskKindName, field.TypeString)
 	}
@@ -406,15 +397,6 @@ func (_u *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHistory
 	}
 	if _u.mutation.DelegateIdentityHolderIDCleared() {
 		_spec.ClearField(riskhistory.FieldDelegateIdentityHolderID, field.TypeString)
-	}
-	if _u.mutation.SystemOwnedCleared() {
-		_spec.ClearField(riskhistory.FieldSystemOwned, field.TypeBool)
-	}
-	if _u.mutation.InternalNotesCleared() {
-		_spec.ClearField(riskhistory.FieldInternalNotes, field.TypeString)
-	}
-	if _u.mutation.SystemInternalIDCleared() {
-		_spec.ClearField(riskhistory.FieldSystemInternalID, field.TypeString)
 	}
 	if _u.mutation.RiskKindNameCleared() {
 		_spec.ClearField(riskhistory.FieldRiskKindName, field.TypeString)

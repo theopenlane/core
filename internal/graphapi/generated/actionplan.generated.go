@@ -174,7 +174,7 @@ type MutationResolver interface {
 	DeleteBulkEntity(ctx context.Context, ids []string) (*model.EntityBulkDeletePayload, error)
 	UpdateBulkEntity(ctx context.Context, ids []string, input generated.UpdateEntityInput) (*model.EntityBulkUpdatePayload, error)
 	UpdateBulkCSVEntity(ctx context.Context, input graphql.Upload) (*model.EntityBulkUpdatePayload, error)
-	AdoptEntity(ctx context.Context, catalogEntityID string) (*model.EntityCreatePayload, error)
+	AdoptEntity(ctx context.Context, catalogID string, input *generated.CreateEntityInput) (*model.EntityCreatePayload, error)
 	CreateEntityType(ctx context.Context, input generated.CreateEntityTypeInput) (*model.EntityTypeCreatePayload, error)
 	CreateBulkEntityType(ctx context.Context, input []*generated.CreateEntityTypeInput) (*model.EntityTypeBulkCreatePayload, error)
 	CreateBulkCSVEntityType(ctx context.Context, input graphql.Upload) (*model.EntityTypeBulkCreatePayload, error)
@@ -624,14 +624,22 @@ func (ec *executionContext) field_Mutation_adminReassignWorkflowAssignment_args(
 func (ec *executionContext) field_Mutation_adoptEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "catalogEntityID",
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "catalogID",
 		func(ctx context.Context, v any) (string, error) {
 			return ec.unmarshalNID2string(ctx, v)
 		})
 	if err != nil {
 		return nil, err
 	}
-	args["catalogEntityID"] = arg0
+	args["catalogID"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (*generated.CreateEntityInput, error) {
+			return ec.unmarshalOCreateEntityInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateEntityInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
 	return args, nil
 }
 
@@ -18200,7 +18208,7 @@ func (ec *executionContext) _Mutation_adoptEntity(ctx context.Context, field gra
 		},
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().AdoptEntity(ctx, fc.Args["catalogEntityID"].(string))
+			return ec.Resolvers.Mutation().AdoptEntity(ctx, fc.Args["catalogID"].(string), fc.Args["input"].(*generated.CreateEntityInput))
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.EntityCreatePayload) graphql.Marshaler {

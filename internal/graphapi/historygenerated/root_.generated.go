@@ -674,6 +674,7 @@ type ComplexityRoot struct {
 		AutoRenews                            func(childComplexity int) int
 		BillingModel                          func(childComplexity int) int
 		CatalogEntityID                       func(childComplexity int) int
+		CatalogEntityKey                      func(childComplexity int) int
 		ContractEndDate                       func(childComplexity int) int
 		ContractRenewalAt                     func(childComplexity int) int
 		ContractStartDate                     func(childComplexity int) int
@@ -692,6 +693,7 @@ type ComplexityRoot struct {
 		EnvironmentID                         func(childComplexity int) int
 		EnvironmentName                       func(childComplexity int) int
 		ExternalID                            func(childComplexity int) int
+		ExternallyVisible                     func(childComplexity int) int
 		HasSoc2                               func(childComplexity int) int
 		HistoryTime                           func(childComplexity int) int
 		ID                                    func(childComplexity int) int
@@ -2010,7 +2012,6 @@ type ComplexityRoot struct {
 		Impact                      func(childComplexity int) int
 		IntegrationID               func(childComplexity int) int
 		IntegrationRunID            func(childComplexity int) int
-		InternalNotes               func(childComplexity int) int
 		LastReviewedAt              func(childComplexity int) int
 		Likelihood                  func(childComplexity int) int
 		ManagedBy                   func(childComplexity int) int
@@ -2043,8 +2044,6 @@ type ComplexityRoot struct {
 		StakeholderName             func(childComplexity int) int
 		StakeholderUserID           func(childComplexity int) int
 		Status                      func(childComplexity int) int
-		SystemInternalID            func(childComplexity int) int
-		SystemOwned                 func(childComplexity int) int
 		Tags                        func(childComplexity int) int
 		UpdatedAt                   func(childComplexity int) int
 		UpdatedBy                   func(childComplexity int) int
@@ -6136,6 +6135,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.CatalogEntityID(childComplexity), true
+	case "EntityHistory.catalogEntityKey":
+		if e.ComplexityRoot.EntityHistory.CatalogEntityKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.CatalogEntityKey(childComplexity), true
 	case "EntityHistory.contractEndDate":
 		if e.ComplexityRoot.EntityHistory.ContractEndDate == nil {
 			break
@@ -6244,6 +6249,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityHistory.ExternalID(childComplexity), true
+	case "EntityHistory.externallyVisible":
+		if e.ComplexityRoot.EntityHistory.ExternallyVisible == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.ExternallyVisible(childComplexity), true
 	case "EntityHistory.hasSoc2":
 		if e.ComplexityRoot.EntityHistory.HasSoc2 == nil {
 			break
@@ -13082,12 +13093,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.IntegrationRunID(childComplexity), true
-	case "RiskHistory.internalNotes":
-		if e.ComplexityRoot.RiskHistory.InternalNotes == nil {
-			break
-		}
-
-		return e.ComplexityRoot.RiskHistory.InternalNotes(childComplexity), true
 	case "RiskHistory.lastReviewedAt":
 		if e.ComplexityRoot.RiskHistory.LastReviewedAt == nil {
 			break
@@ -13280,18 +13285,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RiskHistory.Status(childComplexity), true
-	case "RiskHistory.systemInternalID":
-		if e.ComplexityRoot.RiskHistory.SystemInternalID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.RiskHistory.SystemInternalID(childComplexity), true
-	case "RiskHistory.systemOwned":
-		if e.ComplexityRoot.RiskHistory.SystemOwned == nil {
-			break
-		}
-
-		return e.ComplexityRoot.RiskHistory.SystemOwned(childComplexity), true
 	case "RiskHistory.tags":
 		if e.ComplexityRoot.RiskHistory.Tags == nil {
 			break
@@ -25629,6 +25622,18 @@ type EntityHistory implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  the system-owned catalogue entity this entity was adopted from
+  """
+  catalogEntityID: String
+  """
+  whether this system-owned row is published for organizations to adopt
+  """
+  externallyVisible: Boolean
+  """
+  the lookup key of the catalogue entity this entity was adopted from
+  """
+  catalogEntityKey: String
+  """
   the relationship_state of the entity
   """
   entityRelationshipStateName: String
@@ -25812,10 +25817,6 @@ type EntityHistory implements Node {
   stable identifier assigned by the source system, used for integration ingest deduplication
   """
   externalID: String
-  """
-  the system-owned catalogue entity this entity was adopted from
-  """
-  catalogEntityID: String
   """
   time when this entity was last observed by the source integration
   """
@@ -26295,6 +26296,41 @@ input EntityHistoryWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  catalog_entity_id field predicates
+  """
+  catalogEntityID: String
+  catalogEntityIDNEQ: String
+  catalogEntityIDIn: [String!]
+  catalogEntityIDNotIn: [String!]
+  catalogEntityIDContains: String
+  catalogEntityIDHasPrefix: String
+  catalogEntityIDHasSuffix: String
+  catalogEntityIDIsNil: Boolean
+  catalogEntityIDNotNil: Boolean
+  catalogEntityIDEqualFold: String
+  catalogEntityIDContainsFold: String
+  """
+  externally_visible field predicates
+  """
+  externallyVisible: Boolean
+  externallyVisibleNEQ: Boolean
+  externallyVisibleIsNil: Boolean
+  externallyVisibleNotNil: Boolean
+  """
+  catalog_entity_key field predicates
+  """
+  catalogEntityKey: String
+  catalogEntityKeyNEQ: String
+  catalogEntityKeyIn: [String!]
+  catalogEntityKeyNotIn: [String!]
+  catalogEntityKeyContains: String
+  catalogEntityKeyHasPrefix: String
+  catalogEntityKeyHasSuffix: String
+  catalogEntityKeyIsNil: Boolean
+  catalogEntityKeyNotNil: Boolean
+  catalogEntityKeyEqualFold: String
+  catalogEntityKeyContainsFold: String
+  """
   entity_relationship_state_name field predicates
   """
   entityRelationshipStateName: String
@@ -26767,20 +26803,6 @@ input EntityHistoryWhereInput {
   externalIDNotNil: Boolean
   externalIDEqualFold: String
   externalIDContainsFold: String
-  """
-  catalog_entity_id field predicates
-  """
-  catalogEntityID: String
-  catalogEntityIDNEQ: String
-  catalogEntityIDIn: [String!]
-  catalogEntityIDNotIn: [String!]
-  catalogEntityIDContains: String
-  catalogEntityIDHasPrefix: String
-  catalogEntityIDHasSuffix: String
-  catalogEntityIDIsNil: Boolean
-  catalogEntityIDNotNil: Boolean
-  catalogEntityIDEqualFold: String
-  catalogEntityIDContainsFold: String
   """
   observed_at field predicates
   """
@@ -42165,18 +42187,6 @@ type RiskHistory implements Node {
   """
   delegateIdentityHolderID: String
   """
-  indicates if the record is owned by the the openlane system and not by an organization
-  """
-  systemOwned: Boolean
-  """
-  internal notes about the object creation, this field is only available to system admins
-  """
-  internalNotes: String @hidden(if: true)
-  """
-  an internal identifier for the mapping, this field is only available to system admins
-  """
-  systemInternalID: String @hidden(if: true)
-  """
   the kind of the risk
   """
   riskKindName: String
@@ -42756,41 +42766,6 @@ input RiskHistoryWhereInput {
   delegateIdentityHolderIDNotNil: Boolean
   delegateIdentityHolderIDEqualFold: String
   delegateIdentityHolderIDContainsFold: String
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
   """
   risk_kind_name field predicates
   """
@@ -54825,6 +54800,12 @@ func (ec *executionContext) childFields_EntityHistory(ctx context.Context, field
 		return ec.fieldContext_EntityHistory_internalNotes(ctx, field)
 	case "systemInternalID":
 		return ec.fieldContext_EntityHistory_systemInternalID(ctx, field)
+	case "catalogEntityID":
+		return ec.fieldContext_EntityHistory_catalogEntityID(ctx, field)
+	case "externallyVisible":
+		return ec.fieldContext_EntityHistory_externallyVisible(ctx, field)
+	case "catalogEntityKey":
+		return ec.fieldContext_EntityHistory_catalogEntityKey(ctx, field)
 	case "entityRelationshipStateName":
 		return ec.fieldContext_EntityHistory_entityRelationshipStateName(ctx, field)
 	case "entityRelationshipStateID":
@@ -54917,8 +54898,6 @@ func (ec *executionContext) childFields_EntityHistory(ctx context.Context, field
 		return ec.fieldContext_EntityHistory_logoFileID(ctx, field)
 	case "externalID":
 		return ec.fieldContext_EntityHistory_externalID(ctx, field)
-	case "catalogEntityID":
-		return ec.fieldContext_EntityHistory_catalogEntityID(ctx, field)
 	case "observedAt":
 		return ec.fieldContext_EntityHistory_observedAt(ctx, field)
 	}
@@ -57317,12 +57296,6 @@ func (ec *executionContext) childFields_RiskHistory(ctx context.Context, field g
 		return ec.fieldContext_RiskHistory_delegateGroupID(ctx, field)
 	case "delegateIdentityHolderID":
 		return ec.fieldContext_RiskHistory_delegateIdentityHolderID(ctx, field)
-	case "systemOwned":
-		return ec.fieldContext_RiskHistory_systemOwned(ctx, field)
-	case "internalNotes":
-		return ec.fieldContext_RiskHistory_internalNotes(ctx, field)
-	case "systemInternalID":
-		return ec.fieldContext_RiskHistory_systemInternalID(ctx, field)
 	case "riskKindName":
 		return ec.fieldContext_RiskHistory_riskKindName(ctx, field)
 	case "riskKindID":
