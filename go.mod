@@ -52,7 +52,7 @@ require (
 	github.com/getkin/kin-openapi v0.149.0
 	github.com/go-jose/go-jose/v4 v4.1.5
 	github.com/go-webauthn/webauthn v0.18.1
-	github.com/gocarina/gocsv v0.0.0-20260824135904-1713ebc4797a
+	github.com/gocarina/gocsv v0.0.0-20260908110832-9ab82d65b1cc
 	github.com/goccy/go-yaml v1.19.2
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/google/cel-go v0.31.0
