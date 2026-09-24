@@ -3,7 +3,6 @@ package s3
 import (
 	"context"
 	"errors"
-	"fmt"
 	"io"
 	"path"
 	"time"
@@ -258,7 +257,7 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 			Region:       p.options.Region,
 			ContentType:  opts.ContentType,
 			ProviderType: storagetypes.S3Provider,
-			FullURI:      fmt.Sprintf("s3://%s/%s", p.options.Bucket, objectKey),
+			FullURI:      storage.Scheme(storagetypes.S3Provider) + p.options.Bucket + "/" + objectKey,
 		},
 	}, nil
 }
@@ -413,7 +412,7 @@ func (p *Provider) ListObjects(ctx context.Context, prefix string, limit int) ([
 
 // GetScheme returns the URI scheme for S3
 func (p *Provider) GetScheme() *string {
-	scheme := "s3://"
+	scheme := storage.Scheme(storagetypes.S3Provider)
 
 	return &scheme
 }

@@ -33,6 +33,7 @@ import (
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/fga/fgaversion"
 	"github.com/theopenlane/core/v2/internal/ent/entconfig"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/validator"
@@ -95,6 +96,7 @@ type GraphTestSuite struct {
 	IntegrationsRT     *intruntime.Runtime
 	WorkflowEngine     *engine.WorkflowEngine
 	SlackMock          *slackdef.MockSlackRuntime
+	ObjectStoreRuntime objectstore.RuntimeConfig
 }
 
 // Client contains all the clients the test need to interact with
@@ -329,6 +331,11 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	RequireNoError(t, err)
 
 	suite.SlackMock = slackdef.NewMockSlackRuntime()
+
+	suite.ObjectStoreRuntime = objectstore.RuntimeConfig{
+		Providers: storage.Providers{Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: objectStoreFixtureDir}}},
+		Import:    objectstore.ImportRecords{Prefix: "vendors/", Schema: entityops.SchemaEntity.Name, Variant: "vendor"},
+	}
 
 	rt, err := intruntime.New(intruntime.Config{
 		DB:          c.DB,

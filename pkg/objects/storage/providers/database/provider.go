@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"time"
 
@@ -60,7 +59,7 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 			Size:         size,
 			Bucket:       bucket,
 			ProviderType: storagetypes.DatabaseProvider,
-			FullURI:      fmt.Sprintf("database://%s/%s", bucket, fileID),
+			FullURI:      storage.Scheme(storagetypes.DatabaseProvider) + bucket + "/" + fileID,
 		},
 	}
 
@@ -183,7 +182,7 @@ func (p *Provider) ListBuckets() ([]string, error) {
 
 // GetScheme identifies the provider URI scheme.
 func (p *Provider) GetScheme() *string {
-	scheme := "database://"
+	scheme := storage.Scheme(storagetypes.DatabaseProvider)
 	return &scheme
 }
 

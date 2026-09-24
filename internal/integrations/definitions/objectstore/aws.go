@@ -16,34 +16,48 @@ import (
 	"github.com/theopenlane/core/v2/pkg/objects/storage/providers/s3"
 )
 
-// runtimeBuilderOptions selects the AWS default credential chain for a runtime S3 bucket configured without keys
-func runtimeBuilderOptions(ctx context.Context, provider storage.ProviderType, cfg storage.ProviderConfigs) ([]resolver.BuilderOption, error) {
-	if provider != storage.S3Provider || cfg.Credentials.AccessKeyID != "" {
-		return nil, nil
-	}
-
-	awsCfg, err := awsconfig.LoadDefaultConfig(ctx, awsconfig.WithRegion(cfg.Region))
-	if err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrClientCreate, err)
-	}
-
-	return []resolver.BuilderOption{resolver.WithS3Options(s3.WithAWSConfig(awsCfg))}, nil
-}
-
-// assumeRoleConfig builds the AWS config that assumes the customer role from the platform source identity,
-// using the operator's static keys when set and the default credential chain otherwise
-func assumeRoleConfig(ctx context.Context, cred AWSAssumeRoleCredentialSchema, source Config) (aws.Config, error) {
+// loadAWSConfig loads the AWS config for a region, using the static keys when set and the default credential chain otherwise
+func loadAWSConfig(ctx context.Context, region string, keys storage.AccessKeyCredentials) (aws.Config, error) {
 	opts := []func(*awsconfig.LoadOptions) error{
-		awsconfig.WithRegion(cred.Region),
+		awsconfig.WithRegion(region),
 	}
 
-	if source.AccessKeyID != "" && source.SecretAccessKey != "" {
-		opts = append(opts, awsconfig.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(source.AccessKeyID, source.SecretAccessKey, "")))
+	if keys.AccessKeyID != "" && keys.SecretAccessKey != "" {
+		opts = append(opts, awsconfig.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(keys.AccessKeyID, keys.SecretAccessKey, "")))
 	}
 
 	cfg, err := awsconfig.LoadDefaultConfig(ctx, opts...)
 	if err != nil {
 		return aws.Config{}, fmt.Errorf("%w: %w", ErrClientCreate, err)
+	}
+
+	return cfg, nil
+}
+
+// runtimeBuilderOptions selects the AWS default credential chain for a runtime S3 bucket configured without keys
+func runtimeBuilderOptions(ctx context.Context, provider storage.ProviderType, cfg RuntimeConfig) ([]resolver.BuilderOption, error) {
+	if provider != storage.S3Provider || cfg.Providers.S3.Credentials.AccessKeyID != "" {
+		return nil, nil
+	}
+
+	awsCfg, err := loadAWSConfig(ctx, cfg.Providers.S3.Region, storage.AccessKeyCredentials{})
+	if err != nil {
+		return nil, err
+	}
+
+	return []resolver.BuilderOption{resolver.WithS3Options(s3.WithAWSConfig(awsCfg))}, nil
+}
+
+// assumeRoleProvider builds S3 through the cross-account role bound to the installation, assumed from the platform source identity
+func (c clientBuilder) assumeRoleProvider(ctx context.Context, bindings types.CredentialBindings) (storage.Provider, error) {
+	cred, err := decodeCredential(bindings, awsAssumeRoleCredential)
+	if err != nil {
+		return nil, err
+	}
+
+	cfg, err := loadAWSConfig(ctx, cred.Region, storage.AccessKeyCredentials{AccessKeyID: c.aws.AccessKeyID, SecretAccessKey: c.aws.SecretAccessKey})
+	if err != nil {
+		return nil, err
 	}
 
 	provider := stscreds.NewAssumeRoleProvider(sts.NewFromConfig(cfg), cred.RoleARN, func(options *stscreds.AssumeRoleOptions) {
@@ -54,49 +68,22 @@ func assumeRoleConfig(ctx context.Context, cred AWSAssumeRoleCredentialSchema, s
 	})
 	cfg.Credentials = aws.NewCredentialsCache(provider)
 
-	return cfg, nil
+	return newProvider(ctx, storage.S3Provider, storage.Providers{S3: storage.S3Config{
+		ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: cred.Bucket},
+		Region:         cred.Region,
+	}}, resolver.WithS3Options(s3.WithAWSConfig(cfg)))
 }
 
-// assumeRoleSpec selects S3 through the cross-account role bound to the installation
-func (c clientBuilder) assumeRoleSpec(ctx context.Context, bindings types.CredentialBindings) (providerSpec, error) {
-	cred, err := decodeCredential(bindings, awsAssumeRoleCredential)
-	if err != nil {
-		return providerSpec{}, err
-	}
-
-	cfg, err := assumeRoleConfig(ctx, cred, c.aws)
-	if err != nil {
-		return providerSpec{}, err
-	}
-
-	return providerSpec{
-		provider: storage.S3Provider,
-		config: storage.ProviderConfigs{
-			Enabled: true,
-			Bucket:  cred.Bucket,
-			Region:  cred.Region,
-		},
-		options: []resolver.BuilderOption{resolver.WithS3Options(s3.WithAWSConfig(cfg))},
-	}, nil
-}
-
-// accessKeySpec selects S3 with the static IAM keys bound to the installation
-func accessKeySpec(bindings types.CredentialBindings) (providerSpec, error) {
+// accessKeyProvider builds S3 with the static IAM keys bound to the installation
+func accessKeyProvider(ctx context.Context, bindings types.CredentialBindings) (storage.Provider, error) {
 	cred, err := decodeCredential(bindings, awsAccessKeyCredential)
 	if err != nil {
-		return providerSpec{}, err
+		return nil, err
 	}
 
-	return providerSpec{
-		provider: storage.S3Provider,
-		config: storage.ProviderConfigs{
-			Enabled: true,
-			Bucket:  cred.Bucket,
-			Region:  cred.Region,
-			Credentials: storage.ProviderCredentials{
-				AccessKeyID:     cred.AccessKeyID,
-				SecretAccessKey: cred.SecretAccessKey,
-			},
-		},
-	}, nil
+	return newProvider(ctx, storage.S3Provider, storage.Providers{S3: storage.S3Config{
+		ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: cred.Bucket},
+		Region:         cred.Region,
+		Credentials:    storage.AccessKeyCredentials{AccessKeyID: cred.AccessKeyID, SecretAccessKey: cred.SecretAccessKey},
+	}})
 }

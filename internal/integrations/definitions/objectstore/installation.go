@@ -30,7 +30,7 @@ func resolveInstallationMetadata(_ context.Context, req types.InstallationReques
 	case workloadIdentityCredential.ID():
 		meta, err = installationMetadataFrom(req.Credentials, workloadIdentityCredential, func(cred WorkloadIdentityCredentialSchema) InstallationMetadata {
 			return InstallationMetadata{
-				Provider:            string(storage.GCSProvider),
+				Provider:            storage.GCSProvider,
 				Bucket:              cred.Bucket,
 				ProjectID:           cred.ProjectID,
 				ServiceAccountEmail: cred.ServiceAccountEmail,
@@ -39,7 +39,7 @@ func resolveInstallationMetadata(_ context.Context, req types.InstallationReques
 	case serviceAccountCredential.ID():
 		meta, err = installationMetadataFrom(req.Credentials, serviceAccountCredential, func(cred ServiceAccountCredentialSchema) InstallationMetadata {
 			return InstallationMetadata{
-				Provider:            string(storage.GCSProvider),
+				Provider:            storage.GCSProvider,
 				Bucket:              cred.Bucket,
 				ProjectID:           cred.ProjectID,
 				ServiceAccountEmail: serviceAccountEmail(cred.ServiceAccountKey),
@@ -48,7 +48,7 @@ func resolveInstallationMetadata(_ context.Context, req types.InstallationReques
 	case awsAssumeRoleCredential.ID():
 		meta, err = installationMetadataFrom(req.Credentials, awsAssumeRoleCredential, func(cred AWSAssumeRoleCredentialSchema) InstallationMetadata {
 			return InstallationMetadata{
-				Provider: string(storage.S3Provider),
+				Provider: storage.S3Provider,
 				Bucket:   cred.Bucket,
 				Region:   cred.Region,
 			}
@@ -56,7 +56,7 @@ func resolveInstallationMetadata(_ context.Context, req types.InstallationReques
 	case awsAccessKeyCredential.ID():
 		meta, err = installationMetadataFrom(req.Credentials, awsAccessKeyCredential, func(cred AWSAccessKeyCredentialSchema) InstallationMetadata {
 			return InstallationMetadata{
-				Provider: string(storage.S3Provider),
+				Provider: storage.S3Provider,
 				Bucket:   cred.Bucket,
 				Region:   cred.Region,
 			}
@@ -64,7 +64,7 @@ func resolveInstallationMetadata(_ context.Context, req types.InstallationReques
 	case r2Credential.ID():
 		meta, err = installationMetadataFrom(req.Credentials, r2Credential, func(cred R2CredentialSchema) InstallationMetadata {
 			return InstallationMetadata{
-				Provider: string(storage.R2Provider),
+				Provider: storage.R2Provider,
 				Bucket:   cred.Bucket,
 			}
 		})

@@ -10,6 +10,7 @@ import (
 	"time"
 
 	gstorage "cloud.google.com/go/storage"
+	"golang.org/x/oauth2/google"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 
@@ -21,8 +22,8 @@ import (
 const (
 	// DefaultPresignedURLExpiry defines the default expiry time for signed URLs
 	DefaultPresignedURLExpiry = 15 * time.Minute
-	// scheme is the URI scheme for Google Cloud Storage objects
-	scheme = "gs://"
+	// ReadWriteScope is the OAuth scope granting object reads and writes in a bucket
+	ReadWriteScope = "https://www.googleapis.com/auth/devstorage.read_write"
 )
 
 // Provider implements storagetypes.Provider against Google Cloud Storage
@@ -46,6 +47,16 @@ func WithClientOptions(opts ...option.ClientOption) Option {
 	return func(cfg *providerConfig) {
 		cfg.clientOptions = append(cfg.clientOptions, opts...)
 	}
+}
+
+// WithServiceAccountKey authenticates the client with a service account key JSON under ReadWriteScope
+func WithServiceAccountKey(ctx context.Context, key []byte) (Option, error) {
+	creds, err := google.CredentialsFromJSONWithType(ctx, key, google.ServiceAccount, ReadWriteScope)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrServiceAccountKeyInvalid, err)
+	}
+
+	return WithClientOptions(option.WithCredentials(creds)), nil
 }
 
 // NewProvider creates a GCS provider for the bucket in options, authenticating with application default credentials unless client options say otherwise
@@ -116,7 +127,7 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 			Bucket:       p.bucket,
 			ContentType:  opts.ContentType,
 			ProviderType: storage.GCSProvider,
-			FullURI:      scheme + p.bucket + "/" + objectKey,
+			FullURI:      storage.Scheme(storage.GCSProvider) + p.bucket + "/" + objectKey,
 		},
 	}, nil
 }
@@ -191,7 +202,7 @@ func (p *Provider) Exists(ctx context.Context, file *storagetypes.File) (bool, e
 
 // GetScheme implements storagetypes.Provider
 func (p *Provider) GetScheme() *string {
-	s := scheme
+	s := storage.Scheme(storage.GCSProvider)
 
 	return &s
 }

@@ -3,7 +3,6 @@ package objectstore
 import (
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -15,16 +14,8 @@ const (
 	defaultContentType = "application/json"
 	// variantVendor is the mapping variant that links imported entities to the vendor entity type
 	variantVendor = "vendor"
-	// gcsScope is the OAuth scope requested for every Google Cloud Storage credential
-	gcsScope = "https://www.googleapis.com/auth/devstorage.read_write"
 	// jsonObjectSuffix selects the objects under a prefix that hold JSON records
 	jsonObjectSuffix = ".json"
-	// gcsScheme is the URI scheme for Google Cloud Storage buckets
-	gcsScheme = "gs://"
-	// s3Scheme is the URI scheme for Amazon S3 buckets
-	s3Scheme = "s3://"
-	// r2Scheme is the URI scheme for Cloudflare R2 buckets
-	r2Scheme = "r2://"
 )
 
 var (
@@ -77,20 +68,20 @@ type RuntimeConfig struct {
 }
 
 // enabledProvider returns the single enabled provider, failing when none or more than one is enabled
-func (c RuntimeConfig) enabledProvider() (storage.ProviderType, storage.ProviderConfigs, error) {
-	enabled := lo.PickBy(c.Providers.ByType(), func(_ storage.ProviderType, cfg storage.ProviderConfigs) bool {
+func (c RuntimeConfig) enabledProvider() (storage.ProviderType, storage.ProviderCommon, error) {
+	enabled := lo.PickBy(c.Providers.ByType(), func(_ storage.ProviderType, cfg storage.ProviderCommon) bool {
 		return cfg.Enabled
 	})
 
 	switch len(enabled) {
 	case 0:
-		return "", storage.ProviderConfigs{}, ErrRuntimeConfigInvalid
+		return "", storage.ProviderCommon{}, ErrRuntimeConfigInvalid
 	case 1:
 		providerType := lo.Keys(enabled)[0]
 
 		return providerType, enabled[providerType], nil
 	default:
-		return "", storage.ProviderConfigs{}, ErrRuntimeProviderAmbiguous
+		return "", storage.ProviderCommon{}, ErrRuntimeProviderAmbiguous
 	}
 }
 
@@ -187,7 +178,7 @@ type R2CredentialSchema struct {
 // InstallationMetadata holds the stable provider, bucket and identity attributes for one installation
 type InstallationMetadata struct {
 	// Provider is the storage provider holding the bucket
-	Provider string `json:"provider,omitempty" jsonschema:"title=Provider"`
+	Provider storage.ProviderType `json:"provider,omitempty" jsonschema:"title=Provider"`
 	// Bucket is the bucket the installation is scoped to
 	Bucket string `json:"bucket,omitempty" jsonschema:"title=Bucket"`
 	// Region is the AWS region of the bucket when the provider is s3
@@ -200,21 +191,7 @@ type InstallationMetadata struct {
 
 // InstallationIdentity implements types.InstallationIdentifiable
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
-	return types.IntegrationInstallationIdentity{ExternalID: providerScheme(storagetypes.ProviderType(m.Provider)) + m.Bucket}
-}
-
-// providerScheme returns the bucket URI scheme for a storage provider
-func providerScheme(provider storagetypes.ProviderType) string {
-	switch provider {
-	case storage.GCSProvider:
-		return gcsScheme
-	case storage.S3Provider:
-		return s3Scheme
-	case storage.R2Provider:
-		return r2Scheme
-	default:
-		return ""
-	}
+	return types.IntegrationInstallationIdentity{ExternalID: storage.Scheme(m.Provider) + m.Bucket}
 }
 
 // ImportRecords selects the objects under a bucket prefix to map and upsert
@@ -273,5 +250,5 @@ type WriteObjectResult struct {
 // HealthCheck holds the result of a bucket health check
 type HealthCheck struct {
 	// Provider is the storage provider whose bucket was listed
-	Provider string `json:"provider"`
+	Provider storage.ProviderType `json:"provider"`
 }

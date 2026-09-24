@@ -176,7 +176,7 @@ func TestClientBuildRequiresCredential(t *testing.T) {
 
 func TestRuntimeClientBuilderDisk(t *testing.T) {
 	cfg := RuntimeConfig{
-		Providers: storage.Providers{Disk: storage.ProviderConfigs{Enabled: true, Bucket: t.TempDir()}},
+		Providers: storage.Providers{Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: t.TempDir()}}},
 		Import:    ImportRecords{Prefix: "records/", Schema: "Entity", Variant: "vendor"},
 	}
 
@@ -194,7 +194,7 @@ func TestRuntimeClientBuilderDisk(t *testing.T) {
 
 func TestRuntimeClientBuilderRejectsNoEnabledProvider(t *testing.T) {
 	config, err := json.Marshal(RuntimeConfig{
-		Providers: storage.Providers{Disk: storage.ProviderConfigs{Bucket: "records"}},
+		Providers: storage.Providers{Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Bucket: "records"}}},
 		Import:    ImportRecords{Prefix: "records/", Schema: "Entity"},
 	})
 	assert.NilError(t, err)
@@ -206,8 +206,8 @@ func TestRuntimeClientBuilderRejectsNoEnabledProvider(t *testing.T) {
 func TestRuntimeClientBuilderRejectsAmbiguousProviders(t *testing.T) {
 	config, err := json.Marshal(RuntimeConfig{
 		Providers: storage.Providers{
-			S3:   storage.ProviderConfigs{Enabled: true, Bucket: "records"},
-			Disk: storage.ProviderConfigs{Enabled: true, Bucket: "records"},
+			S3:   storage.S3Config{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: "records"}},
+			Disk: storage.DiskConfig{ProviderCommon: storage.ProviderCommon{Enabled: true, Bucket: "records"}},
 		},
 		Import: ImportRecords{Prefix: "records/", Schema: "Entity"},
 	})
@@ -218,7 +218,38 @@ func TestRuntimeClientBuilderRejectsAmbiguousProviders(t *testing.T) {
 }
 
 func TestInstallationIdentityCarriesProviderScheme(t *testing.T) {
-	assert.Equal(t, "s3://records", InstallationMetadata{Provider: string(storage.S3Provider), Bucket: "records"}.InstallationIdentity().ExternalID)
-	assert.Equal(t, "gs://records", InstallationMetadata{Provider: string(storage.GCSProvider), Bucket: "records"}.InstallationIdentity().ExternalID)
-	assert.Equal(t, "r2://records", InstallationMetadata{Provider: string(storage.R2Provider), Bucket: "records"}.InstallationIdentity().ExternalID)
+	assert.Equal(t, "s3://records", InstallationMetadata{Provider: storage.S3Provider, Bucket: "records"}.InstallationIdentity().ExternalID)
+	assert.Equal(t, "gs://records", InstallationMetadata{Provider: storage.GCSProvider, Bucket: "records"}.InstallationIdentity().ExternalID)
+	assert.Equal(t, "r2://records", InstallationMetadata{Provider: storage.R2Provider, Bucket: "records"}.InstallationIdentity().ExternalID)
+}
+
+func TestLoadAWSConfig(t *testing.T) {
+	cfg, err := loadAWSConfig(context.Background(), "us-east-1", storage.AccessKeyCredentials{AccessKeyID: "k", SecretAccessKey: "s"})
+	assert.NilError(t, err)
+	assert.Equal(t, "us-east-1", cfg.Region)
+
+	creds, err := cfg.Credentials.Retrieve(context.Background())
+	assert.NilError(t, err)
+	assert.Equal(t, "k", creds.AccessKeyID)
+	assert.Equal(t, "s", creds.SecretAccessKey)
+
+	cfg, err = loadAWSConfig(context.Background(), "eu-west-1", storage.AccessKeyCredentials{})
+	assert.NilError(t, err)
+	assert.Equal(t, "eu-west-1", cfg.Region)
+}
+
+func TestClientBuildServiceAccountRejectsInvalidKey(t *testing.T) {
+	raw, err := json.Marshal(ServiceAccountCredentialSchema{
+		ServiceAccountKey: `{"type":"authorized_user"}`,
+		BucketScope:       BucketScope{Bucket: "records"},
+	})
+	assert.NilError(t, err)
+
+	_, err = clientBuilder{}.Build(context.Background(), types.ClientBuildRequest{
+		Credentials: types.CredentialBindings{
+			{Ref: serviceAccountCredential.ID(), Credential: types.CredentialSet{Data: raw}},
+		},
+		Integration: installationWithImport,
+	})
+	assert.Assert(t, errors.Is(err, ErrServiceAccountKeyInvalid))
 }

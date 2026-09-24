@@ -38,7 +38,8 @@ func (b *Builder) Build(_ context.Context, credentials storage.ProviderCredentia
 		return nil, ErrS3CredentialsRequired
 	}
 
-	if cfg.Credentials.AccessKeyID == "" || cfg.Credentials.SecretAccessKey == "" {
+	// a supplied aws config carries its own credentials, so static keys are only required without one
+	if !b.suppliesAWSConfig() && (cfg.Credentials.AccessKeyID == "" || cfg.Credentials.SecretAccessKey == "") {
 		return nil, ErrS3SecretCredentialRequired
 	}
 
@@ -48,6 +49,16 @@ func (b *Builder) Build(_ context.Context, credentials storage.ProviderCredentia
 	}
 
 	return provider, nil
+}
+
+// suppliesAWSConfig reports whether the builder options include an aws config
+func (b *Builder) suppliesAWSConfig() bool {
+	var cfg providerConfig
+	for _, opt := range b.opts {
+		opt(&cfg)
+	}
+
+	return cfg.awsConfig != nil
 }
 
 // ProviderType implements eddy.Builder

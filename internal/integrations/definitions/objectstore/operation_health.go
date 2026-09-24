@@ -13,10 +13,10 @@ import (
 // Handle adapts the health check to the generic operation registration boundary
 func (HealthCheck) Handle() types.OperationHandler {
 	return providerkit.WithClient(storageClient, func(ctx context.Context, client *Client) (json.RawMessage, error) {
-		provider := string(client.Provider.ProviderType())
+		provider := client.Provider.ProviderType()
 
 		if _, err := client.Provider.ListObjects(ctx, "", 1); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("provider", provider).Msg("objectstore: bucket listing failed")
+			logx.FromContext(ctx).Error().Err(err).Str("provider", provider.String()).Msg("objectstore: bucket listing failed")
 
 			return nil, fmt.Errorf("%w: %w", ErrHealthCheckFailed, err)
 		}
