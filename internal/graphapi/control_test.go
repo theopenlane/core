@@ -2086,6 +2086,7 @@ func TestMutationDeleteControl(t *testing.T) {
 	// create objects to be deleted
 	control1 := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 	control2 := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	control3 := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	controlSystem := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
@@ -2142,6 +2143,12 @@ func TestMutationDeleteControl(t *testing.T) {
 			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: th.NotFoundErrorMsg,
 		},
+		{
+			name:       "support user can delete control",
+			idToDelete: control3.ID,
+			client:     suite.Client.API,
+			ctx:        th.NewSupportCtx(th.SharedTestUser2.UserCtx, th.SharedTestUser1.OrganizationID),
+		},
 	}
 
 	for _, tc := range testCases {
@@ -2171,6 +2178,9 @@ func TestMutationDeleteBulkControl(t *testing.T) {
 
 	controlAnotherUser := (&th.ControlBuilder{Client: suite.Client}).MustNew(anotherUser.UserCtx, t)
 
+	supportControl1 := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	supportControl2 := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+
 	testCases := []struct {
 		name                 string
 		idsToDelete          []string
@@ -2192,6 +2202,13 @@ func TestMutationDeleteBulkControl(t *testing.T) {
 			client:               suite.Client.API,
 			ctx:                  anotherUser.UserCtx,
 			expectedDeletedCount: 1,
+		},
+		{
+			name:                 "support user can delete multiple controls",
+			idsToDelete:          []string{supportControl1.ID, supportControl2.ID},
+			client:               suite.Client.API,
+			ctx:                  th.NewSupportCtx(th.SharedTestUser2.UserCtx, th.SharedTestUser1.OrganizationID),
+			expectedDeletedCount: 2,
 		},
 	}
 

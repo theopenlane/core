@@ -127,7 +127,7 @@ func CheckSubjectScope(ctx context.Context, objectType string, relation string, 
 	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.OrganizationID != "" &&
 		caller.Has(auth.CapOrgSupport) {
 
-    // support user should be able to perform delete objects asides the actual organization
+		// support user should be able to perform delete objects asides the actual organization
 		switch strings.HasPrefix(scopedRelation, CanDeletePrefix) {
 		case false:
 			return privacy.Allow
