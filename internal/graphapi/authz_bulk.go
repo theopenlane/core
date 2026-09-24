@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -31,7 +30,7 @@ func (r *mutationResolver) filterAuthorizedIDs(ctx context.Context, ids []string
 		return nil
 	}
 
-	if caller.Has(auth.CapOrgSupport) && !strings.HasPrefix(relation, rule.CanDeletePrefix) {
+	if caller.Has(auth.CapOrgSupport) {
 		return ids
 	}
 
