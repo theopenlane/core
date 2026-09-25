@@ -15,9 +15,6 @@ import (
 // control identifier printed by the report such as ACF-60 or a derived code such as CC6.1.1
 var criterionPattern = regexp.MustCompile(`^[A-Z]+\d+\.\d+$`)
 
-// whitespacePattern collapses runs of whitespace when comparing test text
-var whitespacePattern = regexp.MustCompile(`\s+`)
-
 // reviewStream merges streamed review payloads by external id and tracks which controls have
 // been covered so a continuation can resume after the last one
 type reviewStream struct {
@@ -89,23 +86,17 @@ func mergeReviews(reviews []schema.Review) []schema.Review {
 	return merged
 }
 
-// reviewKey identifies the test a review records, the control it was printed under paired with the
-// verbatim test text, so a control keeps its genuinely distinct tests as separate reviews
+// reviewKey identifies the test a review records, falling back to its external id when the review
+// carries no test text to identify it by
 func reviewKey(review schema.Review) string {
-	details := normalizeTestText(review.Details)
-	if details == "" {
+	controlCode, _ := splitRefCodes(review.RefCodes)
+
+	key, ok := testKey(controlCode, review.Details)
+	if !ok {
 		return review.ExternalID
 	}
 
-	controlCode, _ := splitRefCodes(review.RefCodes)
-
-	return controlCode + "\x00" + details
-}
-
-// normalizeTestText lowers and collapses whitespace so the same text reprinted with different
-// wrapping still matches
-func normalizeTestText(details string) string {
-	return whitespacePattern.ReplaceAllString(strings.ToLower(strings.TrimSpace(details)), " ")
+	return key
 }
 
 // unionRefCodes appends the ref codes not already present, keeping the order they were seen in

@@ -7,17 +7,18 @@ const (
 	testDetailsKey = "testDetails"
 )
 
-// candidateReview is the part of a review needed to attribute a finding to it
-type candidateReview struct {
-	externalID string
-	details    string
+// reviewIndex is what a finding is matched against: every review addressed by the test it records,
+// and every review grouped under its control for when the control has only one
+type reviewIndex struct {
+	byTest    map[string]string
+	byControl map[string][]string
 }
 
 // LinkFindings points each finding at the review whose test produced it, reporting how many were
 // attributed and how many were not; a report states its exceptions against a specific test, so an
 // unlinked finding means the attribution failed rather than that none exists
 func LinkFindings(reviews, findings []any) (linked int, unlinked int) {
-	byControl := reviewsByControl(reviews)
+	index := indexReviews(reviews)
 
 	for _, item := range findings {
 		finding, ok := item.(map[string]any)
@@ -25,7 +26,7 @@ func LinkFindings(reviews, findings []any) (linked int, unlinked int) {
 			continue
 		}
 
-		externalID, found := matchReview(byControl, finding)
+		externalID, found := matchReview(index, finding)
 		if !found {
 			unlinked++
 
@@ -39,9 +40,10 @@ func LinkFindings(reviews, findings []any) (linked int, unlinked int) {
 	return linked, unlinked
 }
 
-// reviewsByControl groups reviews under the control the report printed them beneath
-func reviewsByControl(reviews []any) map[string][]candidateReview {
-	grouped := map[string][]candidateReview{}
+// indexReviews builds the lookups a finding is matched against; a test key shared by two reviews
+// is recorded as ambiguous so no finding is attributed to an arbitrary one of them
+func indexReviews(reviews []any) reviewIndex {
+	index := reviewIndex{byTest: map[string]string{}, byControl: map[string][]string{}}
 
 	for _, item := range reviews {
 		review, ok := item.(map[string]any)
@@ -59,75 +61,70 @@ func reviewsByControl(reviews []any) map[string][]candidateReview {
 			continue
 		}
 
+		index.byControl[controlCode] = append(index.byControl[controlCode], externalID)
+
 		details, _ := review["details"].(string)
 
-		grouped[controlCode] = append(grouped[controlCode], candidateReview{externalID: externalID, details: details})
+		key, ok := testKey(controlCode, details)
+		if !ok {
+			continue
+		}
+
+		if _, clash := index.byTest[key]; clash {
+			index.byTest[key] = ""
+
+			continue
+		}
+
+		index.byTest[key] = externalID
 	}
 
-	return grouped
+	return index
 }
 
 // matchReview picks the review a finding belongs to; the exception and the test it was reported
 // against are printed in one table row, so the test text carried on the finding identifies the
 // review outright, and a control with a single test needs no text at all. Anything else is left
 // unlinked and reported, because attributing a finding to the wrong test is worse than not doing it
-func matchReview(byControl map[string][]candidateReview, finding map[string]any) (string, bool) {
-	candidates := candidatesFor(byControl, refCodesOf(finding))
-
-	if len(candidates) == 0 {
-		return "", false
-	}
+func matchReview(index reviewIndex, finding map[string]any) (string, bool) {
+	refCodes := refCodesOf(finding)
 
 	testDetails, _ := finding[testDetailsKey].(string)
-	if externalID, found := exactMatch(candidates, testDetails); found {
-		return externalID, true
+
+	// the finding names its control among its ref codes, in no guaranteed order
+	for _, refCode := range refCodes {
+		key, ok := testKey(refCode, testDetails)
+		if !ok {
+			continue
+		}
+
+		if externalID := index.byTest[key]; externalID != "" {
+			return externalID, true
+		}
 	}
 
+	candidates := candidatesFor(index.byControl, refCodes)
 	if len(candidates) == 1 {
-		return candidates[0].externalID, true
+		return candidates[0], true
 	}
 
 	return "", false
 }
 
-// exactMatch finds the one review whose test text is the text the finding was reported against,
-// ignoring the case and wrapping a second pass over the same table can change
-func exactMatch(candidates []candidateReview, testDetails string) (string, bool) {
-	wanted := normalizeTestText(testDetails)
-	if wanted == "" {
-		return "", false
-	}
-
-	matches := make([]string, 0, 1)
-
-	for _, candidate := range candidates {
-		if normalizeTestText(candidate.details) == wanted {
-			matches = append(matches, candidate.externalID)
-		}
-	}
-
-	if len(matches) != 1 {
-		return "", false
-	}
-
-	return matches[0], true
-}
-
-// candidatesFor collects the reviews of every control the finding names, so a finding is matched
-// whichever order its ref codes are listed in
-func candidatesFor(byControl map[string][]candidateReview, refCodes []string) []candidateReview {
-	candidates := make([]candidateReview, 0, len(refCodes))
+// candidatesFor collects the reviews of every control the finding names
+func candidatesFor(byControl map[string][]string, refCodes []string) []string {
+	candidates := make([]string, 0, len(refCodes))
 	seen := map[string]bool{}
 
 	for _, refCode := range refCodes {
-		for _, candidate := range byControl[refCode] {
-			if seen[candidate.externalID] {
+		for _, externalID := range byControl[refCode] {
+			if seen[externalID] {
 				continue
 			}
 
-			seen[candidate.externalID] = true
+			seen[externalID] = true
 
-			candidates = append(candidates, candidate)
+			candidates = append(candidates, externalID)
 		}
 	}
 
