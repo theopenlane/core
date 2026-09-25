@@ -156,6 +156,9 @@
         "cloudflareruntime": {
           "$ref": "#/$defs/cloudflare.RuntimeConfig"
         },
+        "gemini": {
+          "$ref": "#/$defs/gemini.RuntimeConfig"
+        },
         "githubapp": {
           "$ref": "#/$defs/githubapp.Config"
         },
@@ -943,6 +946,59 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "gemini.Prompts": {
+      "properties": {
+        "systeminstruction": {
+          "type": "string",
+          "description": "System instruction applied to every extraction request"
+        },
+        "soc2": {
+          "$ref": "#/$defs/soc2.Prompts",
+          "description": "Prompts used to extract from a SOC 2 report"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "gemini.RuntimeConfig": {
+      "properties": {
+        "backend": {
+          "type": "string",
+          "enum": [
+            "gemini",
+            "vertex"
+          ],
+          "description": "Gemini backend to use: gemini for the Gemini Developer API or vertex for Vertex AI",
+          "default": "gemini"
+        },
+        "apikey": {
+          "type": "string",
+          "description": "Gemini API key for the operator-owned account"
+        },
+        "project": {
+          "type": "string",
+          "description": "Google Cloud project for the Vertex AI backend"
+        },
+        "location": {
+          "type": "string",
+          "description": "Google Cloud region for the Vertex AI backend"
+        },
+        "modelarmortemplate": {
+          "type": "string",
+          "description": "Model Armor template resource name used to screen uploaded reports for prompt injection"
+        },
+        "model": {
+          "type": "string",
+          "description": "Gemini model used for extraction"
+        },
+        "prompts": {
+          "$ref": "#/$defs/gemini.Prompts",
+          "description": "Prompt text used for extraction"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "github.ProviderConfig": {
       "properties": {
         "clientid": {
@@ -1619,6 +1675,28 @@
     },
     "slog.Logger": {
       "properties": {},
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "soc2.Prompts": {
+      "properties": {
+        "report": {
+          "type": "string",
+          "description": "Base prompt describing the SOC 2 report layout"
+        },
+        "sections": {
+          "$ref": "#/$defs/map[string]string",
+          "description": "Per-section extraction prompts keyed by section name"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Template appended to scope an extraction to the control ref codes in .RefCodes"
+        },
+        "continuation": {
+          "type": "string",
+          "description": "Template sent to resume a trimmed reviews stream after .LastControl mapped to .LastCriterion"
+        }
+      },
       "additionalProperties": false,
       "type": "object"
     },
@@ -2386,6 +2464,9 @@
           "type": "integer"
         },
         "maxretries": {
+          "type": "integer"
+        },
+        "jobtimeout": {
           "type": "integer"
         },
         "failonenqueueerror": {

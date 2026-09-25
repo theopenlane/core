@@ -438,7 +438,7 @@ func (suite *HandlerTestSuite) TestQuestionnaireWithCampaign() {
 	}
 
 	responseWithoutCampaignID, responseWithoutCampaignDocID := assessmentResponseFn("", "orphan answer")
-	campaignResposeWithID, campaignDocDataResponseID := assessmentResponseFn(campaign.ID, "here is my answer")
+	campaignResponseWithID, campaignDocDataResponseID := assessmentResponseFn(campaign.ID, "here is my answer")
 
 	anonUserID := fmt.Sprintf("anon_questionnaire_%s", assessment.ID)
 	accessToken, _, err := suite.h.DBClient.TokenManager.CreateTokenPair(&tokens.Claims{
@@ -494,7 +494,7 @@ func (suite *HandlerTestSuite) TestQuestionnaireWithCampaign() {
 		assert.Equal(t, "COMPLETED", out.Status)
 		assert.NotEmpty(t, out.CompletedAt)
 
-		updated, err := suite.db.AssessmentResponse.Get(questionnaireCtx, campaignResposeWithID)
+		updated, err := suite.db.AssessmentResponse.Get(questionnaireCtx, campaignResponseWithID)
 		require.NoError(t, err)
 		assert.Equal(t, enums.AssessmentResponseStatusCompleted, updated.Status)
 
@@ -510,7 +510,7 @@ func (suite *HandlerTestSuite) TestQuestionnaireWithCampaign() {
 
 	suite.db.DocumentData.DeleteOneID(campaignDocDataResponseID).Exec(questionnaireCtx)
 	suite.db.DocumentData.DeleteOneID(responseWithoutCampaignDocID).Exec(questionnaireCtx)
-	suite.db.AssessmentResponse.DeleteOneID(campaignResposeWithID).Exec(questionnaireCtx)
+	suite.db.AssessmentResponse.DeleteOneID(campaignResponseWithID).Exec(questionnaireCtx)
 	suite.db.AssessmentResponse.DeleteOneID(responseWithoutCampaignID).Exec(questionnaireCtx)
 	suite.db.Campaign.DeleteOneID(campaign.ID).Exec(questionnaireCtx)
 	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(questionnaireCtx)

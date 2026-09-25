@@ -86,6 +86,8 @@ type Scan struct {
 	ScanSchedule *models.Cron `json:"scan_schedule,omitempty"`
 	// when the scan is scheduled to run next
 	NextScanRunAt *models.DateTime `json:"next_scan_run_at,omitempty"`
+	// how the scan was created, derived from the caller on create and never supplied as input
+	Origin enums.ScanOrigin `json:"origin,omitempty"`
 	// who performed the scan when no user or group is linked
 	PerformedBy string `json:"performed_by,omitempty"`
 	// the user id that performed the scan
@@ -452,7 +454,7 @@ func (*Scan) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case scan.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case scan.FieldID, scan.FieldCreatedBy, scan.FieldUpdatedBy, scan.FieldUpdatedByImpersonator, scan.FieldDeletedBy, scan.FieldOwnerID, scan.FieldInternalNotes, scan.FieldSystemInternalID, scan.FieldReviewedBy, scan.FieldReviewedByUserID, scan.FieldReviewedByGroupID, scan.FieldReviewedByIdentityHolderID, scan.FieldAssignedTo, scan.FieldAssignedToUserID, scan.FieldAssignedToGroupID, scan.FieldAssignedToIdentityHolderID, scan.FieldEnvironmentName, scan.FieldEnvironmentID, scan.FieldScopeName, scan.FieldScopeID, scan.FieldTarget, scan.FieldScanType, scan.FieldPerformedBy, scan.FieldPerformedByUserID, scan.FieldPerformedByGroupID, scan.FieldGeneratedByPlatformID, scan.FieldStatus:
+		case scan.FieldID, scan.FieldCreatedBy, scan.FieldUpdatedBy, scan.FieldUpdatedByImpersonator, scan.FieldDeletedBy, scan.FieldOwnerID, scan.FieldInternalNotes, scan.FieldSystemInternalID, scan.FieldReviewedBy, scan.FieldReviewedByUserID, scan.FieldReviewedByGroupID, scan.FieldReviewedByIdentityHolderID, scan.FieldAssignedTo, scan.FieldAssignedToUserID, scan.FieldAssignedToGroupID, scan.FieldAssignedToIdentityHolderID, scan.FieldEnvironmentName, scan.FieldEnvironmentID, scan.FieldScopeName, scan.FieldScopeID, scan.FieldTarget, scan.FieldScanType, scan.FieldOrigin, scan.FieldPerformedBy, scan.FieldPerformedByUserID, scan.FieldPerformedByGroupID, scan.FieldGeneratedByPlatformID, scan.FieldStatus:
 			values[i] = new(sql.NullString)
 		case scan.FieldCreatedAt, scan.FieldUpdatedAt, scan.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -668,6 +670,12 @@ func (_m *Scan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.NextScanRunAt = new(models.DateTime)
 				*_m.NextScanRunAt = *value.S.(*models.DateTime)
+			}
+		case scan.FieldOrigin:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field origin", values[i])
+			} else if value.Valid {
+				_m.Origin = enums.ScanOrigin(value.String)
 			}
 		case scan.FieldPerformedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -981,6 +989,9 @@ func (_m *Scan) String() string {
 		builder.WriteString("next_scan_run_at=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
+	builder.WriteString(", ")
+	builder.WriteString("origin=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Origin))
 	builder.WriteString(", ")
 	builder.WriteString("performed_by=")
 	builder.WriteString(_m.PerformedBy)

@@ -143,6 +143,14 @@ Config contains the configuration for the core server
         "cloudflareruntime": {
             "domainscan": {}
         },
+        "gemini": {
+            "backend": "gemini",
+            "prompts": {
+                "soc2": {
+                    "sections": {}
+                }
+            }
+        },
         "githubapp": {},
         "slack": {},
         "slackruntime": {},
@@ -1826,6 +1834,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**consoleintegrationpath**|`string`|||
 |[**awssecurityhub**](#defsawssecurityhubconfig)|`object`|||
 |[**cloudflareruntime**](#defscloudflareruntimeconfig)|`object`|||
+|[**gemini**](#defsgeminiruntimeconfig)|`object`|||
 |[**githubapp**](#defsgithubappconfig)|`object`|||
 |[**slack**](#defsslackconfig)|`object`|||
 |[**slackruntime**](#defsslackruntimeslackconfig)|`object`|||
@@ -1848,6 +1857,14 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
     "awssecurityhub": {},
     "cloudflareruntime": {
         "domainscan": {}
+    },
+    "gemini": {
+        "backend": "gemini",
+        "prompts": {
+            "soc2": {
+                "sections": {}
+            }
+        }
     },
     "githubapp": {},
     "slack": {},
@@ -1931,6 +1948,90 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 **Items**
 
 **Item Type:** `string`   
+   
+<a name="defsgeminiruntimeconfig"></a>
+### $defs/gemini\.RuntimeConfig: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**backend**|`string`|Gemini backend to use: gemini for the Gemini Developer API or vertex for Vertex AI<br/>Default: `"gemini"`<br/>Enum: `"gemini"`, `"vertex"`<br/>||
+|**apikey**|`string`|Gemini API key for the operator-owned account<br/>||
+|**project**|`string`|Google Cloud project for the Vertex AI backend<br/>||
+|**location**|`string`|Google Cloud region for the Vertex AI backend<br/>||
+|**modelarmortemplate**|`string`|Model Armor template resource name used to screen uploaded reports for prompt injection<br/>||
+|**model**|`string`|Gemini model used for extraction<br/>||
+|[**prompts**](#defsgeminiprompts)|`object`|||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "backend": "gemini",
+    "prompts": {
+        "soc2": {
+            "sections": {}
+        }
+    }
+}
+```
+
+   
+<a name="defsgeminiprompts"></a>
+#### $defs/gemini\.Prompts: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**systeminstruction**|`string`|System instruction applied to every extraction request<br/>||
+|[**soc2**](#defssoc2prompts)|`object`|||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "soc2": {
+        "sections": {}
+    }
+}
+```
+
+   
+<a name="defssoc2prompts"></a>
+##### $defs/soc2\.Prompts: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**report**|`string`|Base prompt describing the SOC 2 report layout<br/>||
+|[**sections**](#defsmapstringstring)|`object`|||
+|**scope**|`string`|Template appended to scope an extraction to the control ref codes in .RefCodes<br/>||
+|**continuation**|`string`|Template sent to resume a trimmed reviews stream after .LastControl mapped to .LastCriterion<br/>||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "sections": {}
+}
+```
+
+   
+<a name="defsmapstringstring"></a>
+###### $defs/map\[string\]string: object
+
+**Additional Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**Additional Properties**|`string`|||
+
    
 <a name="defsgithubappconfig"></a>
 ### $defs/githubapp\.Config: object
@@ -2224,6 +2325,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**enabled**|`boolean`|||
 |**workercount**|`integer`|||
 |**maxretries**|`integer`|||
+|**jobtimeout**|`integer`|||
 |**failonenqueueerror**|`boolean`|||
 |**queuename**|`string`|||
 

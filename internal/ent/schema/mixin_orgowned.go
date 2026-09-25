@@ -308,7 +308,12 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 // denied rather than falling through to the organization filter
 func isAnonTrustCenterCaller(ctx context.Context) (string, bool, error) {
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
+	if !ok || caller == nil {
+		return "", false, auth.ErrNoAuthUser
+	}
+
+	// a personal access token carries its org in the authorized list rather than as the active org
+	if _, hasOrg := caller.ActiveOrg(); !hasOrg {
 		return "", false, auth.ErrNoAuthUser
 	}
 

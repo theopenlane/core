@@ -80580,6 +80580,12 @@ type ScanWhereInput struct {
 	NextScanRunAtIsNil  bool             `json:"nextScanRunAtIsNil,omitempty"`
 	NextScanRunAtNotNil bool             `json:"nextScanRunAtNotNil,omitempty"`
 
+	// "origin" field predicates.
+	Origin      *enums.ScanOrigin  `json:"origin,omitempty"`
+	OriginNEQ   *enums.ScanOrigin  `json:"originNEQ,omitempty"`
+	OriginIn    []enums.ScanOrigin `json:"originIn,omitempty"`
+	OriginNotIn []enums.ScanOrigin `json:"originNotIn,omitempty"`
+
 	// "performed_by" field predicates.
 	PerformedBy             *string  `json:"performedBy,omitempty"`
 	PerformedByNEQ          *string  `json:"performedByNEQ,omitempty"`
@@ -81566,6 +81572,18 @@ func (i *ScanWhereInput) P() (predicate.Scan, error) {
 	}
 	if i.NextScanRunAtNotNil {
 		predicates = append(predicates, scan.NextScanRunAtNotNil())
+	}
+	if i.Origin != nil {
+		predicates = append(predicates, scan.OriginEQ(*i.Origin))
+	}
+	if i.OriginNEQ != nil {
+		predicates = append(predicates, scan.OriginNEQ(*i.OriginNEQ))
+	}
+	if len(i.OriginIn) > 0 {
+		predicates = append(predicates, scan.OriginIn(i.OriginIn...))
+	}
+	if len(i.OriginNotIn) > 0 {
+		predicates = append(predicates, scan.OriginNotIn(i.OriginNotIn...))
 	}
 	if i.PerformedBy != nil {
 		predicates = append(predicates, scan.PerformedByEQ(*i.PerformedBy))

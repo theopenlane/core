@@ -77430,6 +77430,11 @@ func (_q *ScanQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, scan.FieldNextScanRunAt)
 				fieldSeen[scan.FieldNextScanRunAt] = struct{}{}
 			}
+		case "origin":
+			if _, ok := fieldSeen[scan.FieldOrigin]; !ok {
+				selectedFields = append(selectedFields, scan.FieldOrigin)
+				fieldSeen[scan.FieldOrigin] = struct{}{}
+			}
 		case "performedBy":
 			if _, ok := fieldSeen[scan.FieldPerformedBy]; !ok {
 				selectedFields = append(selectedFields, scan.FieldPerformedBy)

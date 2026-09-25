@@ -7401,6 +7401,7 @@ func init() {
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
 		{Name: "next_scan_run_at", Label: "NextScanRunAt", Type: "models.DateTime", Clearable: true},
+		{Name: "origin", Label: "Origin", Type: "enums.ScanOrigin"},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "performed_by", Label: "PerformedBy", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "performed_by_group_id", Label: "PerformedByGroupID", Type: "string", MatchKey: true, Clearable: true},

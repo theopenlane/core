@@ -148265,6 +148265,29 @@ func (ec *executionContext) fieldContext_Scan_nextScanRunAt(_ context.Context, f
 	return graphql.NewScalarFieldContext("Scan", field, false, false, errors.New("field of type DateTime does not have child fields"))
 }
 
+func (ec *executionContext) _Scan_origin(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Scan_origin(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Origin, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v enums.ScanOrigin) graphql.Marshaler {
+			return ec.marshalNScanScanOrigin2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Scan_origin(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Scan", field, false, false, errors.New("field of type ScanScanOrigin does not have child fields"))
+}
+
 func (ec *executionContext) _Scan_performedBy(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -304729,7 +304752,7 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "assignedToIdentityHolderID", "assignedToIdentityHolderIDNEQ", "assignedToIdentityHolderIDIn", "assignedToIdentityHolderIDNotIn", "assignedToIdentityHolderIDContains", "assignedToIdentityHolderIDHasPrefix", "assignedToIdentityHolderIDHasSuffix", "assignedToIdentityHolderIDIsNil", "assignedToIdentityHolderIDNotNil", "assignedToIdentityHolderIDEqualFold", "assignedToIdentityHolderIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "target", "targetNEQ", "targetIn", "targetNotIn", "targetContains", "targetHasPrefix", "targetHasSuffix", "targetEqualFold", "targetContainsFold", "scanType", "scanTypeNEQ", "scanTypeIn", "scanTypeNotIn", "scanDate", "scanDateGT", "scanDateGTE", "scanDateLT", "scanDateLTE", "scanDateIsNil", "scanDateNotNil", "nextScanRunAt", "nextScanRunAtGT", "nextScanRunAtGTE", "nextScanRunAtLT", "nextScanRunAtLTE", "nextScanRunAtIsNil", "nextScanRunAtNotNil", "performedBy", "performedByNEQ", "performedByIn", "performedByNotIn", "performedByContains", "performedByHasPrefix", "performedByHasSuffix", "performedByIsNil", "performedByNotNil", "performedByEqualFold", "performedByContainsFold", "performedByUserID", "performedByUserIDNEQ", "performedByUserIDIn", "performedByUserIDNotIn", "performedByUserIDContains", "performedByUserIDHasPrefix", "performedByUserIDHasSuffix", "performedByUserIDIsNil", "performedByUserIDNotNil", "performedByUserIDEqualFold", "performedByUserIDContainsFold", "performedByGroupID", "performedByGroupIDNEQ", "performedByGroupIDIn", "performedByGroupIDNotIn", "performedByGroupIDContains", "performedByGroupIDHasPrefix", "performedByGroupIDHasSuffix", "performedByGroupIDIsNil", "performedByGroupIDNotNil", "performedByGroupIDEqualFold", "performedByGroupIDContainsFold", "generatedByPlatformID", "generatedByPlatformIDNEQ", "generatedByPlatformIDIn", "generatedByPlatformIDNotIn", "generatedByPlatformIDContains", "generatedByPlatformIDHasPrefix", "generatedByPlatformIDHasSuffix", "generatedByPlatformIDIsNil", "generatedByPlatformIDNotNil", "generatedByPlatformIDEqualFold", "generatedByPlatformIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasAssignedToIdentityHolder", "hasAssignedToIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasEvidence", "hasEvidenceWith", "hasFiles", "hasFilesWith", "hasRemediations", "hasRemediationsWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasPlatforms", "hasPlatformsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasFindings", "hasFindingsWith", "hasGeneratedByPlatform", "hasGeneratedByPlatformWith", "hasPerformedByUser", "hasPerformedByUserWith", "hasPerformedByGroup", "hasPerformedByGroupWith", "tagsHas", "discoveredVulnerabilityIdsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "assignedToIdentityHolderID", "assignedToIdentityHolderIDNEQ", "assignedToIdentityHolderIDIn", "assignedToIdentityHolderIDNotIn", "assignedToIdentityHolderIDContains", "assignedToIdentityHolderIDHasPrefix", "assignedToIdentityHolderIDHasSuffix", "assignedToIdentityHolderIDIsNil", "assignedToIdentityHolderIDNotNil", "assignedToIdentityHolderIDEqualFold", "assignedToIdentityHolderIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "target", "targetNEQ", "targetIn", "targetNotIn", "targetContains", "targetHasPrefix", "targetHasSuffix", "targetEqualFold", "targetContainsFold", "scanType", "scanTypeNEQ", "scanTypeIn", "scanTypeNotIn", "scanDate", "scanDateGT", "scanDateGTE", "scanDateLT", "scanDateLTE", "scanDateIsNil", "scanDateNotNil", "nextScanRunAt", "nextScanRunAtGT", "nextScanRunAtGTE", "nextScanRunAtLT", "nextScanRunAtLTE", "nextScanRunAtIsNil", "nextScanRunAtNotNil", "origin", "originNEQ", "originIn", "originNotIn", "performedBy", "performedByNEQ", "performedByIn", "performedByNotIn", "performedByContains", "performedByHasPrefix", "performedByHasSuffix", "performedByIsNil", "performedByNotNil", "performedByEqualFold", "performedByContainsFold", "performedByUserID", "performedByUserIDNEQ", "performedByUserIDIn", "performedByUserIDNotIn", "performedByUserIDContains", "performedByUserIDHasPrefix", "performedByUserIDHasSuffix", "performedByUserIDIsNil", "performedByUserIDNotNil", "performedByUserIDEqualFold", "performedByUserIDContainsFold", "performedByGroupID", "performedByGroupIDNEQ", "performedByGroupIDIn", "performedByGroupIDNotIn", "performedByGroupIDContains", "performedByGroupIDHasPrefix", "performedByGroupIDHasSuffix", "performedByGroupIDIsNil", "performedByGroupIDNotNil", "performedByGroupIDEqualFold", "performedByGroupIDContainsFold", "generatedByPlatformID", "generatedByPlatformIDNEQ", "generatedByPlatformIDIn", "generatedByPlatformIDNotIn", "generatedByPlatformIDContains", "generatedByPlatformIDHasPrefix", "generatedByPlatformIDHasSuffix", "generatedByPlatformIDIsNil", "generatedByPlatformIDNotNil", "generatedByPlatformIDEqualFold", "generatedByPlatformIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasAssignedToIdentityHolder", "hasAssignedToIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasEvidence", "hasEvidenceWith", "hasFiles", "hasFilesWith", "hasRemediations", "hasRemediationsWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasPlatforms", "hasPlatformsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasFindings", "hasFindingsWith", "hasGeneratedByPlatform", "hasGeneratedByPlatformWith", "hasPerformedByUser", "hasPerformedByUserWith", "hasPerformedByGroup", "hasPerformedByGroupWith", "tagsHas", "discoveredVulnerabilityIdsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -306500,6 +306523,34 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.NextScanRunAtNotNil = data
+		case "origin":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("origin"))
+			data, err := ec.unmarshalOScanScanOrigin2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Origin = data
+		case "originNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("originNEQ"))
+			data, err := ec.unmarshalOScanScanOrigin2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OriginNEQ = data
+		case "originIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("originIn"))
+			data, err := ec.unmarshalOScanScanOrigin2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOriginᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OriginIn = data
+		case "originNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("originNotIn"))
+			data, err := ec.unmarshalOScanScanOrigin2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOriginᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OriginNotIn = data
 		case "performedBy":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("performedBy"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -447849,6 +447900,11 @@ func (ec *executionContext) _Scan(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "origin":
+			out.Values[i] = ec._Scan_origin(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "performedBy":
 			out.Values[i] = ec._Scan_performedBy(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -471497,6 +471553,16 @@ func (ec *executionContext) marshalNScanOrderField2ᚖgithubᚗcomᚋtheopenlane
 	return v
 }
 
+func (ec *executionContext) unmarshalNScanScanOrigin2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx context.Context, v any) (enums.ScanOrigin, error) {
+	var res enums.ScanOrigin
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNScanScanOrigin2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx context.Context, sel ast.SelectionSet, v enums.ScanOrigin) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNScanScanStatus2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanStatus(ctx context.Context, v any) (enums.ScanStatus, error) {
 	var res enums.ScanStatus
 	err := res.UnmarshalGQL(v)
@@ -484884,6 +484950,58 @@ func (ec *executionContext) unmarshalOScanOrder2ᚕᚖgithubᚗcomᚋtheopenlane
 		}
 	}
 	return res, nil
+}
+
+func (ec *executionContext) unmarshalOScanScanOrigin2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOriginᚄ(ctx context.Context, v any) ([]enums.ScanOrigin, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]enums.ScanOrigin, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNScanScanOrigin2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOScanScanOrigin2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOriginᚄ(ctx context.Context, sel ast.SelectionSet, v []enums.ScanOrigin) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNScanScanOrigin2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOScanScanOrigin2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx context.Context, v any) (*enums.ScanOrigin, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(enums.ScanOrigin)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOScanScanOrigin2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanOrigin(ctx context.Context, sel ast.SelectionSet, v *enums.ScanOrigin) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) unmarshalOScanScanStatus2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐScanStatusᚄ(ctx context.Context, v any) ([]enums.ScanStatus, error) {

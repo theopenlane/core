@@ -216058,6 +216058,7 @@ type ScanMutation struct {
 	scan_date                          *models.DateTime
 	scan_schedule                      *models.Cron
 	next_scan_run_at                   *models.DateTime
+	origin                             *enums.ScanOrigin
 	performed_by                       *string
 	discovered_vulnerability_ids       *[]string
 	appenddiscovered_vulnerability_ids []string
@@ -217698,6 +217699,42 @@ func (m *ScanMutation) ResetNextScanRunAt() {
 	delete(m.clearedFields, scan.FieldNextScanRunAt)
 }
 
+// SetOrigin sets the "origin" field.
+func (m *ScanMutation) SetOrigin(eo enums.ScanOrigin) {
+	m.origin = &eo
+}
+
+// Origin returns the value of the "origin" field in the mutation.
+func (m *ScanMutation) Origin() (r enums.ScanOrigin, exists bool) {
+	v := m.origin
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOrigin returns the old "origin" field's value of the Scan entity.
+// If the Scan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScanMutation) OldOrigin(ctx context.Context) (v enums.ScanOrigin, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOrigin is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOrigin requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOrigin: %w", err)
+	}
+	return oldValue.Origin, nil
+}
+
+// ResetOrigin resets all changes to the "origin" field.
+func (m *ScanMutation) ResetOrigin() {
+	m.origin = nil
+}
+
 // SetPerformedBy sets the "performed_by" field.
 func (m *ScanMutation) SetPerformedBy(s string) {
 	m.performed_by = &s
@@ -219109,7 +219146,7 @@ func (m *ScanMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScanMutation) Fields() []string {
-	fields := make([]string, 0, 36)
+	fields := make([]string, 0, 37)
 	if m.created_at != nil {
 		fields = append(fields, scan.FieldCreatedAt)
 	}
@@ -219200,6 +219237,9 @@ func (m *ScanMutation) Fields() []string {
 	if m.next_scan_run_at != nil {
 		fields = append(fields, scan.FieldNextScanRunAt)
 	}
+	if m.origin != nil {
+		fields = append(fields, scan.FieldOrigin)
+	}
 	if m.performed_by != nil {
 		fields = append(fields, scan.FieldPerformedBy)
 	}
@@ -219286,6 +219326,8 @@ func (m *ScanMutation) Field(name string) (ent.Value, bool) {
 		return m.ScanSchedule()
 	case scan.FieldNextScanRunAt:
 		return m.NextScanRunAt()
+	case scan.FieldOrigin:
+		return m.Origin()
 	case scan.FieldPerformedBy:
 		return m.PerformedBy()
 	case scan.FieldPerformedByUserID:
@@ -219367,6 +219409,8 @@ func (m *ScanMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldScanSchedule(ctx)
 	case scan.FieldNextScanRunAt:
 		return m.OldNextScanRunAt(ctx)
+	case scan.FieldOrigin:
+		return m.OldOrigin(ctx)
 	case scan.FieldPerformedBy:
 		return m.OldPerformedBy(ctx)
 	case scan.FieldPerformedByUserID:
@@ -219597,6 +219641,13 @@ func (m *ScanMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetNextScanRunAt(v)
+		return nil
+	case scan.FieldOrigin:
+		v, ok := value.(enums.ScanOrigin)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOrigin(v)
 		return nil
 	case scan.FieldPerformedBy:
 		v, ok := value.(string)
@@ -219979,6 +220030,9 @@ func (m *ScanMutation) ResetField(name string) error {
 		return nil
 	case scan.FieldNextScanRunAt:
 		m.ResetNextScanRunAt()
+		return nil
+	case scan.FieldOrigin:
+		m.ResetOrigin()
 		return nil
 	case scan.FieldPerformedBy:
 		m.ResetPerformedBy()

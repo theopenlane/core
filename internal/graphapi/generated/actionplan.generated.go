@@ -414,11 +414,11 @@ type MutationResolver interface {
 	DeleteRisk(ctx context.Context, id string) (*model.RiskDeletePayload, error)
 	DeleteBulkRisk(ctx context.Context, ids []string) (*model.RiskBulkDeletePayload, error)
 	UpdateBulkCSVRisk(ctx context.Context, input graphql.Upload) (*model.RiskBulkUpdatePayload, error)
-	CreateScan(ctx context.Context, input generated.CreateScanInput) (*model.ScanCreatePayload, error)
+	CreateScan(ctx context.Context, input generated.CreateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) (*model.ScanCreatePayload, error)
 	CreateBulkScan(ctx context.Context, input []*generated.CreateScanInput) (*model.ScanBulkCreatePayload, error)
 	CreateBulkCSVScan(ctx context.Context, input graphql.Upload) (*model.ScanBulkCreatePayload, error)
 	UpdateBulkScan(ctx context.Context, ids []string, input generated.UpdateScanInput) (*model.ScanBulkUpdatePayload, error)
-	UpdateScan(ctx context.Context, id string, input generated.UpdateScanInput) (*model.ScanUpdatePayload, error)
+	UpdateScan(ctx context.Context, id string, input generated.UpdateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) (*model.ScanUpdatePayload, error)
 	DeleteScan(ctx context.Context, id string) (*model.ScanDeletePayload, error)
 	DeleteBulkScan(ctx context.Context, ids []string) (*model.ScanBulkDeletePayload, error)
 	UpdateBulkCSVScan(ctx context.Context, input graphql.Upload) (*model.ScanBulkUpdatePayload, error)
@@ -3731,6 +3731,22 @@ func (ec *executionContext) field_Mutation_createScan_args(ctx context.Context, 
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "scanFiles",
+		func(ctx context.Context, v any) ([]*graphql.Upload, error) {
+			return ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["scanFiles"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "scanFilesMetadata",
+		func(ctx context.Context, v any) ([]*model.FileMetadataInput, error) {
+			return ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["scanFilesMetadata"] = arg2
 	return args, nil
 }
 
@@ -10069,6 +10085,22 @@ func (ec *executionContext) field_Mutation_updateScan_args(ctx context.Context, 
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "scanFiles",
+		func(ctx context.Context, v any) ([]*graphql.Upload, error) {
+			return ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["scanFiles"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "scanFilesMetadata",
+		func(ctx context.Context, v any) ([]*model.FileMetadataInput, error) {
+			return ec.unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["scanFilesMetadata"] = arg3
 	return args, nil
 }
 
@@ -28745,7 +28777,7 @@ func (ec *executionContext) _Mutation_createScan(ctx context.Context, field grap
 		},
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().CreateScan(ctx, fc.Args["input"].(generated.CreateScanInput))
+			return ec.Resolvers.Mutation().CreateScan(ctx, fc.Args["input"].(generated.CreateScanInput), fc.Args["scanFiles"].([]*graphql.Upload), fc.Args["scanFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.ScanCreatePayload) graphql.Marshaler {
@@ -28921,7 +28953,7 @@ func (ec *executionContext) _Mutation_updateScan(ctx context.Context, field grap
 		},
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().UpdateScan(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateScanInput))
+			return ec.Resolvers.Mutation().UpdateScan(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateScanInput), fc.Args["scanFiles"].([]*graphql.Upload), fc.Args["scanFilesMetadata"].([]*model.FileMetadataInput))
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.ScanUpdatePayload) graphql.Marshaler {

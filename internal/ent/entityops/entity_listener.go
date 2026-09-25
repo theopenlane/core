@@ -4,6 +4,7 @@ package entityops
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"entgo.io/ent"
@@ -13,6 +14,7 @@ import (
 
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	gala "github.com/theopenlane/core/v2/pkg/gala"
+	jsonx "github.com/theopenlane/core/v2/pkg/jsonx"
 	logx "github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -49,6 +51,9 @@ type MutationListener struct {
 	Fields []string
 	// Match optionally gates handling on every proposed-value predicate holding
 	Match []FieldMatch
+	// RowMatch optionally gates handling on every predicate holding against the stored row
+	// loaded after the mutation, for fields an update does not propose
+	RowMatch []FieldMatch
 	// Caller optionally replaces or augments the restored caller; it receives the restored
 	// caller (never nil) and its result is set on the context and Invocation.Caller
 	Caller func(*auth.Caller, MutationPayload) *auth.Caller
@@ -71,6 +76,9 @@ type Invocation struct {
 	Schema *Schema
 	// EntityID is the mutated entity identifier
 	EntityID string
+	// Row is the stored entity loaded once after the mutation, populated when the listener
+	// declares RowMatch or Notify so handlers need not reload it; nil otherwise
+	Row json.RawMessage
 	// Caller is the pre-resolved caller for this dispatch, never nil
 	Caller *auth.Caller
 	// Envelope is the envelope being processed
@@ -123,13 +131,41 @@ func (listener MutationListener) validate() error {
 		}
 	}
 
-	for _, match := range listener.Match {
+	for _, match := range append(append([]FieldMatch{}, listener.Match...), listener.RowMatch...) {
 		if _, ok := listener.Schema.FieldByName(match.Field); !ok {
 			return fmt.Errorf("%w: %s.%s", ErrFieldNotFound, listener.Schema.Name, match.Field)
 		}
 	}
 
 	return nil
+}
+
+// rowMatches reports whether every row predicate holds against the loaded row, stringifying
+// values the same way proposed-value matches do so booleans and numbers compare as written
+func (listener MutationListener) rowMatches(row json.RawMessage) bool {
+	if len(listener.RowMatch) == 0 {
+		return true
+	}
+
+	entity, _ := jsonx.Decode[map[string]any](row)
+
+	for _, match := range listener.RowMatch {
+		value, ok := nonEmptyString(entity[match.Field])
+		if !ok {
+			return false
+		}
+
+		if lo.Contains(match.In, value) == match.Negate {
+			return false
+		}
+	}
+
+	return true
+}
+
+// loadsRow reports whether the listener needs the stored row before its handler runs
+func (listener MutationListener) loadsRow() bool {
+	return len(listener.RowMatch) > 0 || listener.Notify != nil
 }
 
 // concern returns the listener concern, defaulting to the direct namespace
@@ -258,11 +294,36 @@ func mutationHandler(listener MutationListener) gala.Handler[MutationPayload] {
 
 		invocationCtx = logx.WithFields(invocationCtx, fields)
 
+		var row json.RawMessage
+
+		// the row is loaded once here and handed to the handler; a row deleted between
+		// mutation and delivery is a skipped event, not an error
+		if listener.loadsRow() {
+			loaded, err := listener.Schema.Load(invocationCtx, client, entityID)
+			switch {
+			case generated.IsNotFound(err):
+				logx.FromContext(invocationCtx).Debug().Str("listener", listener.Name()).Msg("mutation listener skipped: entity not found")
+
+				return nil
+			case err != nil:
+				logx.FromContext(invocationCtx).Error().Err(err).Str("listener", listener.Name()).Msg("failed to load entity for mutation listener")
+
+				return err
+			}
+
+			row = loaded
+
+			if !listener.rowMatches(row) {
+				return nil
+			}
+		}
+
 		return listener.Handle(Invocation{
 			Context:  invocationCtx,
 			Client:   client,
 			Schema:   listener.Schema,
 			EntityID: entityID,
+			Row:      row,
 			Caller:   ctx.Caller,
 			Envelope: ctx.Envelope,
 			Injector: ctx.Injector,

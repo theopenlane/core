@@ -3646,7 +3646,7 @@ type ComplexityRoot struct {
 		CreateReview                         func(childComplexity int, input generated.CreateReviewInput, reviewFiles []*graphql.Upload, reviewFilesMetadata []*model.FileMetadataInput) int
 		CreateRisk                           func(childComplexity int, input generated.CreateRiskInput) int
 		CreateSLADefinition                  func(childComplexity int, input generated.CreateSLADefinitionInput) int
-		CreateScan                           func(childComplexity int, input generated.CreateScanInput) int
+		CreateScan                           func(childComplexity int, input generated.CreateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) int
 		CreateStandard                       func(childComplexity int, input generated.CreateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		CreateSubcontrol                     func(childComplexity int, input generated.CreateSubcontrolInput) int
 		CreateSubprocessor                   func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
@@ -3990,7 +3990,7 @@ type ComplexityRoot struct {
 		UpdateRisk                           func(childComplexity int, id string, input generated.UpdateRiskInput) int
 		UpdateRiskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateSLADefinition                  func(childComplexity int, id string, input generated.UpdateSLADefinitionInput) int
-		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
+		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput, scanFiles []*graphql.Upload, scanFilesMetadata []*model.FileMetadataInput) int
 		UpdateStandard                       func(childComplexity int, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		UpdateSubcontrol                     func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
 		UpdateSubcontrolComment              func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
@@ -5885,6 +5885,7 @@ type ComplexityRoot struct {
 		InternalNotes              func(childComplexity int) int
 		Metadata                   func(childComplexity int) int
 		NextScanRunAt              func(childComplexity int) int
+		Origin                     func(childComplexity int) int
 		Owner                      func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
 		PerformedBy                func(childComplexity int) int
@@ -26361,7 +26362,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.CreateScan(childComplexity, args["input"].(generated.CreateScanInput)), true
+		return e.ComplexityRoot.Mutation.CreateScan(childComplexity, args["input"].(generated.CreateScanInput), args["scanFiles"].([]*graphql.Upload), args["scanFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.createStandard":
 		if e.ComplexityRoot.Mutation.CreateStandard == nil {
 			break
@@ -30140,7 +30141,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.ComplexityRoot.Mutation.UpdateScan(childComplexity, args["id"].(string), args["input"].(generated.UpdateScanInput)), true
+		return e.ComplexityRoot.Mutation.UpdateScan(childComplexity, args["id"].(string), args["input"].(generated.UpdateScanInput), args["scanFiles"].([]*graphql.Upload), args["scanFilesMetadata"].([]*model.FileMetadataInput)), true
 	case "Mutation.updateStandard":
 		if e.ComplexityRoot.Mutation.UpdateStandard == nil {
 			break
@@ -41697,6 +41698,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Scan.NextScanRunAt(childComplexity), true
+	case "Scan.origin":
+		if e.ComplexityRoot.Scan.Origin == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Scan.Origin(childComplexity), true
 	case "Scan.owner":
 		if e.ComplexityRoot.Scan.Owner == nil {
 			break
@@ -96272,6 +96279,7 @@ enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/
   EXPORT
   STANDARD_UPDATE
   DOMAIN_SCAN
+  REPORT_SCAN
   IMPORT_COMPLETE
   ORGANIZATION_READY
   INTEGRATION
@@ -117067,6 +117075,10 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
   """
   nextScanRunAt: DateTime
   """
+  how the scan was created, derived from the caller on create and never supplied as input
+  """
+  origin: ScanScanOrigin!
+  """
   who performed the scan when no user or group is linked
   """
   performedBy: String
@@ -117589,7 +117601,17 @@ enum ScanOrderField {
   SCAN_TYPE
   scan_date
   next_scan_run_at
+  ORIGIN
   STATUS
+}
+"""
+ScanScanOrigin is enum for the field origin
+"""
+enum ScanScanOrigin @goModel(model: "github.com/theopenlane/core/common/enums.ScanOrigin") {
+  USER
+  SYSTEM
+  INTEGRATION
+  API
 }
 """
 ScanScanStatus is enum for the field status
@@ -117608,6 +117630,7 @@ enum ScanScanType @goModel(model: "github.com/theopenlane/core/common/enums.Scan
   VULNERABILITY
   VENDOR
   PROVIDER
+  REPORT
 }
 """
 ScanWhereInput is used for filtering Scan objects.
@@ -117944,6 +117967,13 @@ input ScanWhereInput {
   nextScanRunAtLTE: DateTime
   nextScanRunAtIsNil: Boolean
   nextScanRunAtNotNil: Boolean
+  """
+  origin field predicates
+  """
+  origin: ScanScanOrigin
+  originNEQ: ScanScanOrigin
+  originIn: [ScanScanOrigin!]
+  originNotIn: [ScanScanOrigin!]
   """
   performed_by field predicates
   """
@@ -150457,6 +150487,8 @@ extend type Mutation{
         values of the scan
         """
         input: CreateScanInput!
+        scanFiles: [Upload!]
+        scanFilesMetadata: [FileMetadataInput!]
     ): ScanCreatePayload!
     """
     Create multiple new scans
@@ -150501,6 +150533,8 @@ extend type Mutation{
         New values for the scan
         """
         input: UpdateScanInput!
+        scanFiles: [Upload!]
+        scanFilesMetadata: [FileMetadataInput!]
     ): ScanUpdatePayload!
     """
     Delete an existing scan
@@ -166298,6 +166332,8 @@ func (ec *executionContext) childFields_Scan(ctx context.Context, field graphql.
 		return ec.fieldContext_Scan_scanSchedule(ctx, field)
 	case "nextScanRunAt":
 		return ec.fieldContext_Scan_nextScanRunAt(ctx, field)
+	case "origin":
+		return ec.fieldContext_Scan_origin(ctx, field)
 	case "performedBy":
 		return ec.fieldContext_Scan_performedBy(ctx, field)
 	case "performedByUserID":

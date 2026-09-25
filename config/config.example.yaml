@@ -207,6 +207,20 @@ integrations:
         rooturl: https://www.theopenlane.io
         supportemail: support@theopenlane.io
         testdir: fixtures/email
+    gemini:
+        apikey: ""
+        backend: ""
+        location: ""
+        model: ""
+        modelarmortemplate: ""
+        project: ""
+        prompts:
+            soc2:
+                continuation: ""
+                report: ""
+                scope: ""
+                sections: {}
+            systeminstruction: ""
     githubapp:
         appid: ""
         appslug: ""
@@ -522,6 +536,7 @@ workflows:
     gala:
         enabled: false
         failonenqueueerror: false
+        jobtimeout: 900000000000
         maxretries: 5
         queuename: events
         workercount: 10
