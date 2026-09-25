@@ -1960,7 +1960,6 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**apikey**|`string`|Gemini API key for the operator-owned account<br/>||
 |**project**|`string`|Google Cloud project for the Vertex AI backend<br/>||
 |**location**|`string`|Google Cloud region for the Vertex AI backend<br/>||
-|**credentialsjson**|`string`|Service account key JSON for the Vertex AI backend<br/>||
 |**modelarmortemplate**|`string`|Model Armor template resource name used to screen uploaded reports for prompt injection<br/>||
 |**model**|`string`|Gemini model used for extraction<br/>||
 |[**prompts**](#defsgeminiprompts)|`object`|||

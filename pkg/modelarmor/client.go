@@ -8,7 +8,6 @@ import (
 	"slices"
 	"strings"
 
-	"cloud.google.com/go/auth"
 	armor "cloud.google.com/go/modelarmor/apiv1"
 	"cloud.google.com/go/modelarmor/apiv1/modelarmorpb"
 	"google.golang.org/api/option"
@@ -19,6 +18,8 @@ const (
 	templateLocationIndex = 3
 	// templateNameParts is how many segments a full template resource name has
 	templateNameParts = 6
+	// modelarmourendpoint is the model armour api endpoint
+	modelarmorendpoint = "modelarmor.%s.rep.googleapis.com:443"
 )
 
 var (
@@ -47,20 +48,17 @@ type Verdict struct {
 	Reported []string
 }
 
-// New builds a client for the template, authenticating with the given credentials or
-// application default credentials when nil; sanitize calls are served from the template's region
-func New(ctx context.Context, template string, creds *auth.Credentials) (*Client, error) {
+// New builds a client for the template, authenticating with application default credentials so
+// the workload's own identity is used; sanitize calls are served from the template's region
+func New(ctx context.Context, template string) (*Client, error) {
 	parts := strings.Split(template, "/")
 	if len(parts) != templateNameParts || parts[0] != "projects" || parts[2] != "locations" || parts[4] != "templates" {
 		return nil, ErrTemplateInvalid
 	}
 
-	opts := []option.ClientOption{option.WithEndpoint(fmt.Sprintf("modelarmor.%s.rep.googleapis.com:443", parts[templateLocationIndex]))}
-	if creds != nil {
-		opts = append(opts, option.WithAuthCredentials(creds))
-	}
+	endpoint := option.WithEndpoint(fmt.Sprintf(modelarmorendpoint, parts[templateLocationIndex]))
 
-	api, err := armor.NewClient(ctx, opts...)
+	api, err := armor.NewClient(ctx, endpoint)
 	if err != nil {
 		return nil, err
 	}

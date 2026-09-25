@@ -91,8 +91,6 @@ type RuntimeConfig struct {
 	Project string `json:"project" koanf:"project" jsonschema:"description=Google Cloud project for the Vertex AI backend"`
 	// Location is the Google Cloud region used by the Vertex AI backend
 	Location string `json:"location" koanf:"location" jsonschema:"description=Google Cloud region for the Vertex AI backend, for example us-central1"`
-	// CredentialsJSON is a service account key for the Vertex AI backend; application default credentials are used when empty
-	CredentialsJSON string `json:"credentialsjson" koanf:"credentialsjson" jsonschema:"description=Service account key JSON for the Vertex AI backend, application default credentials are used when empty" sensitive:"true"`
 	// ModelArmorTemplate is the full resource name of the Model Armor template uploaded reports are screened against; empty disables screening
 	ModelArmorTemplate string `json:"modelarmortemplate" koanf:"modelarmortemplate" jsonschema:"description=Model Armor template resource name used to screen uploaded reports for prompt injection, empty disables screening"`
 	// Model is the Gemini model used for extraction, defaults to the client's default when empty

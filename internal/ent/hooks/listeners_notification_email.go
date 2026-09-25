@@ -19,20 +19,17 @@ func init() {
 // defaultNotificationEmail mirrors the in-app notification as a branded email: the title becomes
 // the subject and headline, the body the single paragraph, and a url in the data the button
 func defaultNotificationEmail(_ entityops.Invocation, _ entityops.MutationPayload, _ json.RawMessage, recipient entityops.EmailRecipient) (email.BrandedMessageRequest, error) {
-	request := email.BrandedMessageRequest{
+	link, _ := recipient.Data["url"].(string)
+
+	return email.BrandedMessageRequest{
 		RecipientInfo: emailRecipientInfo(recipient.Users...),
 		Subject:       recipient.Title,
 		Preheader:     recipient.Body,
 		Title:         recipient.Title,
 		Intros:        []string{recipient.Body},
-	}
-
-	if link, ok := recipient.Data["url"].(string); ok && link != "" {
-		request.ButtonText = "View"
-		request.ButtonLink = link
-	}
-
-	return request, nil
+		ButtonText:    "View",
+		ButtonLink:    link,
+	}, nil
 }
 
 // emailRecipientInfo builds the email recipient block: a single user is addressed by name, several

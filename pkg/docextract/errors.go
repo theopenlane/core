@@ -21,8 +21,6 @@ var (
 	ErrMaxAttemptsReached = errors.New("docextract: max generation attempts reached")
 	// ErrPromptTemplateInvalid is returned when a configured prompt template fails to parse or render
 	ErrPromptTemplateInvalid = errors.New("docextract: prompt template invalid")
-	// ErrCredentialsInvalid is returned when the configured service account key cannot be parsed
-	ErrCredentialsInvalid = errors.New("docextract: credentials invalid")
 	// ErrCacheMissing is returned when the shared document cache named in a request no longer exists
 	ErrCacheMissing = errors.New("docextract: document cache missing")
 )

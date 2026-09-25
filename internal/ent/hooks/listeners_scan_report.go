@@ -214,8 +214,6 @@ func handleScanReportCompleted(inv entityops.Invocation, _ entityops.MutationPay
 		}
 	}
 
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-
 	scanRecord, ok, err := entityops.LoadEntity(ctx, inv.EntityID, inv.Client.Scan.Get)
 	if err != nil || !ok {
 		return err
@@ -239,7 +237,7 @@ func handleScanReportCompleted(inv entityops.Invocation, _ entityops.MutationPay
 
 	create := inv.Client.TrustCenterDoc.Create().
 		SetTrustCenterID(trustCenterID).
-		SetTitle(scanRecord.Target).
+		SetTitle("SOC 2 Report").
 		SetOriginalFileID(reportFile.ID).
 		SetTags([]string{"soc2"}).
 		SetTrustCenterDocKindName("compliance").

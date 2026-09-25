@@ -2,18 +2,12 @@ package docextract
 
 import (
 	"context"
-	"fmt"
 
-	"cloud.google.com/go/auth"
-	"cloud.google.com/go/auth/credentials"
 	"google.golang.org/genai"
 )
 
 // DefaultModel is the Gemini model used when none is configured
 const DefaultModel = "gemini-3.1-pro-preview"
-
-// cloudPlatformScope is the oauth scope Vertex AI requests need
-const cloudPlatformScope = "https://www.googleapis.com/auth/cloud-platform"
 
 // Client wraps the genai client with the model and system instruction used for extraction
 type Client struct {
@@ -34,8 +28,6 @@ type Config struct {
 	Project string
 	// Location is the Google Cloud region, required for the Vertex AI backend
 	Location string
-	// CredentialsJSON is a service account key for the Vertex AI backend; application default credentials are used when empty
-	CredentialsJSON string
 	// Model is the Gemini model used for content generation
 	Model string
 	// SystemInstruction is the system prompt applied to every extraction request
@@ -67,13 +59,6 @@ func WithProject(project string) func(*Config) {
 func WithLocation(location string) func(*Config) {
 	return func(c *Config) {
 		c.Location = location
-	}
-}
-
-// WithCredentialsJSON sets a service account key for the Vertex AI backend
-func WithCredentialsJSON(credentialsJSON string) func(*Config) {
-	return func(c *Config) {
-		c.CredentialsJSON = credentialsJSON
 	}
 }
 
@@ -110,34 +95,10 @@ func NewClient(ctx context.Context, opts ...func(*Config)) (*Client, error) {
 		Location: config.Location,
 	}
 
-	if config.Backend == genai.BackendVertexAI {
-		creds, err := LoadCredentials(config.CredentialsJSON)
-		if err != nil {
-			return nil, err
-		}
-
-		clientConfig.Credentials = creds
-	}
-
 	client, err := genai.NewClient(ctx, clientConfig)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Client{Client: *client, backend: config.Backend, model: config.Model, systemInstruction: config.SystemInstruction}, nil
-}
-
-// LoadCredentials builds Google Cloud credentials from a service account key, or returns nil so
-// callers fall back to application default credentials when no key is configured
-func LoadCredentials(credentialsJSON string) (*auth.Credentials, error) {
-	if credentialsJSON == "" {
-		return nil, nil
-	}
-
-	creds, err := credentials.NewCredentialsFromJSON(credentials.ServiceAccount, []byte(credentialsJSON), &credentials.DetectOptions{Scopes: []string{cloudPlatformScope}})
-	if err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrCredentialsInvalid, err)
-	}
-
-	return creds, nil
 }

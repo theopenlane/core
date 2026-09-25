@@ -7,7 +7,7 @@ A standalone page for exercising the report scan flow end to end: upload a SOC 2
 - Core running on `http://localhost:17608` with the integrations runtime enabled
 - `integrations.gemini` provisioned for one of the two backends, since the parse operations are disabled otherwise:
   - `backend: gemini` needs `apikey`
-  - `backend: vertex` needs `project` and `location`; credentials come from `credentialsjson`
+  - `backend: vertex` needs `project` and `location`; authentication uses application default credentials, so the workload identity of the process must have Vertex AI access
 - `integrations.gemini.prompts` populated, since a section with no configured prompt is never parsed
 - Either a PAT / API token with write access to the organization
 
