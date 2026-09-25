@@ -11,6 +11,8 @@ import (
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/objectstore"
 )
@@ -50,6 +52,35 @@ func TestObjectStoreSystemImportCreatesVendors(t *testing.T) {
 		Count(systemCtx)
 	th.RequireNoError(t, err)
 	assert.Check(t, is.Equal(0, filtered), "a record with another entity type must not be created")
+}
+
+// TestObjectStoreSystemImportSeedsVendorEntityType verifies the vendor variant creates the system-owned vendor
+// entity type when none exists and links the imported rows to it
+func TestObjectStoreSystemImportSeedsVendorEntityType(t *testing.T) {
+	systemCtx := th.SetContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
+
+	existing, err := suite.Client.DB.EntityType.Query().
+		Where(entitytype.NameEqualFold(vendorEntityTypeName), entitytype.SystemOwned(true)).
+		IDs(systemCtx)
+	th.RequireNoError(t, err)
+
+	if len(existing) > 0 {
+		// the org filter hides ownerless rows from the delete lookup, so bypass it the way other tests do
+		(&th.Cleanup[*ent.EntityTypeDeleteOne]{Client: suite.Client.DB.EntityType, IDs: existing}).MustDelete(privacy.DecisionContext(th.SharedSystemAdminUser.UserCtx, privacy.Allow), t)
+	}
+
+	rows, _ := importFixtureVendors(t, systemCtx, fixturePrefixDefault, fixtureAlpha, fixtureBeta, fixtureHidden)
+
+	seeded, err := suite.Client.DB.EntityType.Query().
+		Where(entitytype.NameEqualFold(vendorEntityTypeName), entitytype.SystemOwned(true)).
+		Only(systemCtx)
+	th.RequireNoError(t, err)
+	assert.Check(t, seeded.SystemOwned, "the import must seed a system-owned vendor entity type")
+	assert.Check(t, is.Equal("", seeded.OwnerID), "the seeded vendor entity type carries no owner")
+
+	for _, vendor := range []fixtureVendor{fixtureAlpha, fixtureBeta, fixtureHidden} {
+		assert.Check(t, is.Equal(seeded.ID, rows[vendor.ExternalID].EntityTypeID), "the import must link %s to the seeded vendor entity type", vendor.ExternalID)
+	}
 }
 
 // TestObjectStoreSystemImportUpsertsExisting verifies the import upserts by external id

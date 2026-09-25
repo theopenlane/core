@@ -10,6 +10,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/storagetypes"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -27,15 +28,59 @@ func (ImportRecords) IngestHandle() types.IngestHandler {
 			return nil, err
 		}
 
+		if err := cfg.ensureLinkTargets(ctx, request); err != nil {
+			return nil, err
+		}
+
 		return cfg.Run(ctx, client.Provider)
 	})
 }
 
 // IngestHandle adapts the triggered system import to the ingest operation registration boundary
 func (SystemImport) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientConfig(storageClient, SystemImportOp, ErrOperationConfigInvalid, func(ctx context.Context, client *Client, cfg SystemImport) ([]types.IngestPayloadSet, error) {
-		return cfg.spec(client.Import).Run(ctx, client.Provider)
+	return providerkit.WithClientRequestConfig(storageClient, SystemImportOp, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *Client, cfg SystemImport) ([]types.IngestPayloadSet, error) {
+		spec := cfg.spec(client.Import)
+
+		if err := spec.ensureLinkTargets(ctx, request); err != nil {
+			return nil, err
+		}
+
+		return spec.Run(ctx, client.Provider)
 	})
+}
+
+// ensureLinkTargets creates the entity type the vendor mapping variant links records to when it does not exist in the
+// scope the link resolver searches: system-owned for the ownerless runtime import, the installation's organization otherwise
+func (i ImportRecords) ensureLinkTargets(ctx context.Context, request types.OperationRequest) error {
+	if i.Variant != variantVendor {
+		return nil
+	}
+
+	ownerScope := entitytype.SystemOwned(true)
+	create := request.DB.EntityType.Create().SetName(variantVendor)
+
+	if request.Integration != nil {
+		ownerScope = entitytype.OwnerID(request.Integration.OwnerID)
+		create = create.SetOwnerID(request.Integration.OwnerID)
+	}
+
+	exists, err := request.DB.EntityType.Query().Where(entitytype.NameEqualFold(variantVendor), ownerScope).Exist(ctx)
+	if err != nil {
+		return fmt.Errorf("%w: %w", ErrVendorEntityTypeSeed, err)
+	}
+
+	if exists {
+		return nil
+	}
+
+	created, err := create.Save(ctx)
+	if err != nil {
+		return fmt.Errorf("%w: %w", ErrVendorEntityTypeSeed, err)
+	}
+
+	logx.FromContext(ctx).Info().Str("entity_type_id", created.ID).Bool("system_owned", created.SystemOwned).Msg("objectstore: created vendor entity type for import link")
+
+	return nil
 }
 
 // resolveImportConfig decodes the operation config, falling back to the import spec carried on the client

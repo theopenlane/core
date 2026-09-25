@@ -41,4 +41,6 @@ var (
 	ErrObjectUploadFailed = errors.New("objectstore: object upload failed")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("objectstore: result encode failed")
+	// ErrVendorEntityTypeSeed indicates the vendor entity type the vendor variant links to could not be found or created
+	ErrVendorEntityTypeSeed = errors.New("objectstore: vendor entity type seed failed")
 )

@@ -244,47 +244,25 @@ integrations:
                 backup: null
                 baseurl: http://localhost:17608/v1/files
                 bucket: ""
-                credentials:
-                    accesskeyid: ""
-                    accountid: ""
-                    apitoken: ""
-                    projectid: ""
-                    secretaccesskey: ""
                 enabled: false
-                endpoint: ""
                 ensureavailable: false
-                proxypresignenabled: false
-                region: ""
             disk:
                 backup: null
                 baseurl: http://localhost:17608/v1/files
                 bucket: ""
-                credentials:
-                    accesskeyid: ""
-                    accountid: ""
-                    apitoken: ""
-                    projectid: ""
-                    secretaccesskey: ""
                 enabled: false
                 endpoint: ""
                 ensureavailable: false
                 proxypresignenabled: false
-                region: ""
             gcs:
                 backup: null
                 baseurl: http://localhost:17608/v1/files
                 bucket: ""
-                credentials:
-                    accesskeyid: ""
-                    accountid: ""
-                    apitoken: ""
-                    projectid: ""
-                    secretaccesskey: ""
                 enabled: false
                 endpoint: ""
                 ensureavailable: false
+                projectid: ""
                 proxypresignenabled: false
-                region: ""
             r2:
                 backup: null
                 baseurl: http://localhost:17608/v1/files
@@ -292,23 +270,17 @@ integrations:
                 credentials:
                     accesskeyid: ""
                     accountid: ""
-                    apitoken: ""
-                    projectid: ""
                     secretaccesskey: ""
                 enabled: false
                 endpoint: ""
                 ensureavailable: false
                 proxypresignenabled: false
-                region: ""
             s3:
                 backup: null
                 baseurl: http://localhost:17608/v1/files
                 bucket: ""
                 credentials:
                     accesskeyid: ""
-                    accountid: ""
-                    apitoken: ""
-                    projectid: ""
                     secretaccesskey: ""
                 enabled: false
                 endpoint: ""

@@ -11,5 +11,6 @@
     "airtable.com"
   ],
   "entityTypeName": "vendor",
+  "externallyVisible": true,
   "logoRemoteURL": "https://www.google.com/s2/favicons?domain=airtable.com&sz=128"
 }

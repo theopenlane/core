@@ -234,9 +234,9 @@ tables are skipped. Lookups scope on `system_owned = true`, so re-imports update
 schemas that carry the `system_owned` marker can be imported on this path; anything else is refused
 with `ErrIngestSchemaNotSystemOwned`.
 
-Prerequisite for `variant: vendor`: a system-owned `EntityType` named `vendor` must exist (created by a
-system admin, so the hook marks it system-owned). Without it the link resolves nothing and entities
-are created untyped.
+For `variant: vendor` the import links each record to the `EntityType` named `vendor` visible to the
+caller, creating it first when none exists (on the runtime path the system-admin caller makes it
+system-owned), so imported vendors are never created untyped.
 
 ### GKE workload identity (gcs)
 

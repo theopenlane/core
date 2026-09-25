@@ -11,5 +11,6 @@
     "adobe.com"
   ],
   "entityTypeName": "vendor",
+  "externallyVisible": true,
   "logoRemoteURL": "https://www.google.com/s2/favicons?domain=adobe.com&sz=128"
 }

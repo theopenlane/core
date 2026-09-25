@@ -145,7 +145,8 @@ func HookEntityCreate() ent.Hook {
 	}, ent.OpCreate)
 }
 
-// inheritCatalogEntityType types an adopted entity like its catalogue row when the adoption did not set a type
+// inheritCatalogEntityType types an adopted entity like its catalogue row when the adoption did not set a type,
+// creating the organization's own type of that name when it does not exist yet
 func inheritCatalogEntityType(ctx context.Context, m *generated.EntityMutation) error {
 	catalogID, ok := m.CatalogEntityID()
 	if !ok || catalogID == "" {
@@ -169,17 +170,35 @@ func inheritCatalogEntityType(ctx context.Context, m *generated.EntityMutation) 
 		return err
 	}
 
-	typeID, err := m.Client().EntityType.Query().Where(entitytype.NameEqualFold(typeName), entitytype.OwnerID(ownerID)).OnlyID(ctx)
-	switch {
-	case generated.IsNotFound(err):
-		return nil
-	case err != nil:
+	typeID, err := orgEntityTypeID(ctx, m.Client(), typeName, ownerID)
+	if err != nil {
 		return err
 	}
 
 	m.SetEntityTypeID(typeID)
 
 	return nil
+}
+
+// orgEntityTypeID returns the organization's entity type of the given name, creating it when missing; a concurrent
+// create of the same name is absorbed by re-reading after the unique constraint fires
+func orgEntityTypeID(ctx context.Context, client *generated.Client, name, ownerID string) (string, error) {
+	lookup := client.EntityType.Query().Where(entitytype.NameEqualFold(name), entitytype.OwnerID(ownerID))
+
+	typeID, err := lookup.OnlyID(ctx)
+	if err == nil || !generated.IsNotFound(err) {
+		return typeID, err
+	}
+
+	created, err := client.EntityType.Create().SetName(name).SetOwnerID(ownerID).Save(ctx)
+	switch {
+	case generated.IsConstraintError(err):
+		return lookup.OnlyID(ctx)
+	case err != nil:
+		return "", err
+	}
+
+	return created.ID, nil
 }
 
 func enrichLogoFromSubprocessor(ctx context.Context, m *generated.EntityMutation) error {

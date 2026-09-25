@@ -11,5 +11,6 @@
     "aiven.io"
   ],
   "entityTypeName": "vendor",
+  "externallyVisible": true,
   "logoRemoteURL": "https://www.google.com/s2/favicons?domain=aiven.io&sz=128"
 }

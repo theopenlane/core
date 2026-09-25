@@ -467,7 +467,41 @@ func TestMutationAdoptEntity(t *testing.T) {
 		assert.Check(t, is.Equal(th.SharedTestUser1.OrganizationID, copyRow.OwnerID))
 	})
 
-	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: []string{adopted.ID, overlayAdoptedID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	var partnerAdoptedID string
+
+	t.Run("adopting creates the organization's entity type when it has none of that name", func(t *testing.T) {
+		partnerTypeName := "partner-" + ulids.New().String()
+
+		systemPartnerType, err := suite.Client.DB.EntityType.Create().SetName(partnerTypeName).Save(systemCtx)
+		assert.NilError(t, err)
+		assert.Check(t, systemPartnerType.SystemOwned)
+
+		partnerEntity, err := suite.Client.DB.Entity.Create().
+			SetName("Partner Catalog Row " + ulids.New().String()).
+			SetExternallyVisible(true).
+			SetEntityTypeID(systemPartnerType.ID).
+			Save(systemCtx)
+		assert.NilError(t, err)
+
+		resp, err := suite.Client.API.AdoptEntity(th.SharedTestUser1.UserCtx, partnerEntity.ID, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		partnerAdoptedID = resp.AdoptEntity.Entity.ID
+		assert.Assert(t, resp.AdoptEntity.Entity.EntityType != nil)
+		assert.Check(t, is.Equal(partnerTypeName, resp.AdoptEntity.Entity.EntityType.Name))
+		assert.Check(t, systemPartnerType.ID != resp.AdoptEntity.Entity.EntityType.ID, "the copy must not point at the system-owned type")
+
+		orgType, err := suite.Client.DB.EntityType.Get(th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB), resp.AdoptEntity.Entity.EntityType.ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(th.SharedTestUser1.OrganizationID, orgType.OwnerID))
+		assert.Check(t, !orgType.SystemOwned)
+
+		(&th.Cleanup[*generated.EntityTypeDeleteOne]{Client: suite.Client.DB.EntityType, ID: orgType.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, ID: partnerEntity.ID}).MustDelete(systemCtx, t)
+	})
+
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: []string{adopted.ID, overlayAdoptedID, partnerAdoptedID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, ID: other.AdoptEntity.Entity.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
 	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: []string{catalogEntity.ID, hiddenEntity.ID, overlayEntity.ID}}).MustDelete(systemCtx, t)
 }
