@@ -15,6 +15,13 @@ func review(externalID, details string, refCodes ...string) map[string]any {
 	return map[string]any{"externalID": externalID, "details": details, "refCodes": codes}
 }
 
+func findingWithTest(description, testDetails string, refCodes ...string) map[string]any {
+	item := finding(description, refCodes...)
+	item["testDetails"] = testDetails
+
+	return item
+}
+
 func finding(description string, refCodes ...string) map[string]any {
 	codes := make([]any, 0, len(refCodes))
 	for _, refCode := range refCodes {
@@ -82,4 +89,39 @@ func TestLinkFindingsLeavesAmbiguousMatchUnlinked(t *testing.T) {
 
 	assert.Check(t, linked == 0)
 	assert.Check(t, unlinked == 1)
+}
+
+func TestLinkFindingsPrefersTheTestFromTheSameRow(t *testing.T) {
+	reviews := []any{
+		review("soc2-CC 6.1-04-01", "Inspected the termination tickets related to a sample of terminated employees", "CC 6.1-04"),
+		review("soc2-CC 6.1-04-02", "Observed the password parameters configured for minimum length and complexity", "CC 6.1-04"),
+	}
+	target := findingWithTest(
+		"One terminated employee retained access because the termination ticket was not raised",
+		"Observed the  password parameters\nconfigured for MINIMUM length and complexity",
+		"CC 6.1-04",
+	)
+
+	linked, unlinked := LinkFindings(reviews, []any{target})
+
+	assert.Check(t, linked == 1)
+	assert.Check(t, unlinked == 0)
+	assert.Check(t, target[ReviewExternalIDKey] == "soc2-CC 6.1-04-02")
+}
+
+func TestLinkFindingsFallsBackWhenTestTextDoesNotMatch(t *testing.T) {
+	reviews := []any{
+		review("soc2-CC 6.1-04-01", "Inspected the termination tickets related to a sample of terminated employees", "CC 6.1-04"),
+		review("soc2-CC 6.1-04-02", "Observed the password parameters configured for minimum length", "CC 6.1-04"),
+	}
+	target := findingWithTest(
+		"One terminated employee retained access because the termination ticket was not raised",
+		"a paraphrase the model invented",
+		"CC 6.1-04",
+	)
+
+	linked, _ := LinkFindings(reviews, []any{target})
+
+	assert.Check(t, linked == 1)
+	assert.Check(t, target[ReviewExternalIDKey] == "soc2-CC 6.1-04-01")
 }

@@ -174,12 +174,6 @@ func wrapDefinitionHandle[T any](g *Gala, definition Definition[T]) func(Handler
 		caller, _ := auth.CallerFromContext(handlerCtx.Context)
 
 		if definition.Caller != nil {
-			// an event emitted from a system context restores no caller, and the hook is documented
-			// to receive one, so it is given an empty caller to build on rather than nil
-			if caller == nil {
-				caller = &auth.Caller{}
-			}
-
 			caller = definition.Caller(caller, typedPayload)
 			handlerCtx.Context = auth.WithCaller(handlerCtx.Context, caller)
 		}
