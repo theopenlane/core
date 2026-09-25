@@ -91,5 +91,5 @@ func (r generationRetry) wait(attempt int) time.Duration {
 // jitter extends a delay by up to a quarter so concurrent batches do not come back at the same
 // moment; it only adds, so a delay the api asked for is always honored in full
 func jitter(delay time.Duration) time.Duration {
-	return delay + time.Duration(rand.Int64N(int64(delay/4)+1))
+	return delay + time.Duration(rand.Int64N(int64(delay/4)+1)) //nolint:gosec,mnd
 }

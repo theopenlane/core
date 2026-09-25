@@ -175,7 +175,7 @@ func sharedWordCount(first, second map[string]bool) int {
 
 // isWordBreak reports whether a rune separates words
 func isWordBreak(r rune) bool {
-	return !(r >= 'a' && r <= 'z') && !(r >= '0' && r <= '9')
+	return (r < 'a' || r > 'z') && (r < '0' || r > '9')
 }
 
 // refCodesOf reads an item's ref codes out of a decoded metadata map
