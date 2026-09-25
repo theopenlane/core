@@ -42,7 +42,7 @@ func TestLinkFindingsUsesTheOnlyReviewForAControl(t *testing.T) {
 	assert.Check(t, target[ReviewExternalIDKey] == "soc2-CC 5.2-14-01")
 }
 
-func TestLinkFindingsChoosesAmongSeveralTests(t *testing.T) {
+func TestLinkFindingsLeavesSeveralTestsUnlinkedWithoutRowText(t *testing.T) {
 	reviews := []any{
 		review("soc2-CC 6.1-04-01", "Inspected the termination tickets related to a sample of terminated employees", "CC 6.1-04"),
 		review("soc2-CC 6.1-04-02", "Observed the password parameters configured for minimum length and complexity", "CC 6.1-04"),
@@ -51,9 +51,11 @@ func TestLinkFindingsChoosesAmongSeveralTests(t *testing.T) {
 
 	linked, unlinked := LinkFindings(reviews, []any{target})
 
-	assert.Check(t, linked == 1)
-	assert.Check(t, unlinked == 0)
-	assert.Check(t, target[ReviewExternalIDKey] == "soc2-CC 6.1-04-01")
+	assert.Check(t, linked == 0)
+	assert.Check(t, unlinked == 1)
+
+	_, set := target[ReviewExternalIDKey]
+	assert.Check(t, !set)
 }
 
 func TestLinkFindingsIgnoresRefCodeOrder(t *testing.T) {
@@ -78,19 +80,6 @@ func TestLinkFindingsReportsUnmatchedControl(t *testing.T) {
 	assert.Check(t, !set)
 }
 
-func TestLinkFindingsLeavesAmbiguousMatchUnlinked(t *testing.T) {
-	reviews := []any{
-		review("soc2-CC 6.1-04-01", "Inspected the termination tickets for terminated employees", "CC 6.1-04"),
-		review("soc2-CC 6.1-04-02", "Observed the password parameters for minimum length", "CC 6.1-04"),
-	}
-	target := finding("An exception", "CC 6.1-04")
-
-	linked, unlinked := LinkFindings(reviews, []any{target})
-
-	assert.Check(t, linked == 0)
-	assert.Check(t, unlinked == 1)
-}
-
 func TestLinkFindingsPrefersTheTestFromTheSameRow(t *testing.T) {
 	reviews := []any{
 		review("soc2-CC 6.1-04-01", "Inspected the termination tickets related to a sample of terminated employees", "CC 6.1-04"),
@@ -109,7 +98,7 @@ func TestLinkFindingsPrefersTheTestFromTheSameRow(t *testing.T) {
 	assert.Check(t, target[ReviewExternalIDKey] == "soc2-CC 6.1-04-02")
 }
 
-func TestLinkFindingsFallsBackWhenTestTextDoesNotMatch(t *testing.T) {
+func TestLinkFindingsLeavesUnlinkedWhenRowTextDoesNotMatch(t *testing.T) {
 	reviews := []any{
 		review("soc2-CC 6.1-04-01", "Inspected the termination tickets related to a sample of terminated employees", "CC 6.1-04"),
 		review("soc2-CC 6.1-04-02", "Observed the password parameters configured for minimum length", "CC 6.1-04"),
@@ -120,8 +109,8 @@ func TestLinkFindingsFallsBackWhenTestTextDoesNotMatch(t *testing.T) {
 		"CC 6.1-04",
 	)
 
-	linked, _ := LinkFindings(reviews, []any{target})
+	linked, unlinked := LinkFindings(reviews, []any{target})
 
-	assert.Check(t, linked == 1)
-	assert.Check(t, target[ReviewExternalIDKey] == "soc2-CC 6.1-04-01")
+	assert.Check(t, linked == 0)
+	assert.Check(t, unlinked == 1)
 }

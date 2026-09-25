@@ -318,7 +318,7 @@ func linkFindings(ctx context.Context, metadata map[string]any) {
 	}
 
 	if linked, unlinked := soc2.LinkFindings(reviews, findings); unlinked > 0 {
-		logx.FromContext(ctx).Warn().Int("linked", linked).Int("unlinked", unlinked).Msg("report scan: findings could not be attributed to a review")
+		logx.FromContext(ctx).Info().Int("linked", linked).Int("unlinked", unlinked).Msg("report scan: findings could not be attributed to a review")
 	}
 }
 
@@ -384,7 +384,7 @@ func (s reportScanSaga) retryOrFailPart(ctx context.Context, envelope ReportScan
 	if envelope.Attempt+1 < PartMaxAttempts {
 		scheduledAt := time.Now().Add(partBackoff(envelope.Attempt))
 
-		logx.FromContext(ctx).Warn().Err(cause).Time("scheduled_at", scheduledAt).Str("cache", docextract.CacheID(envelope.Cache)).Msg("report scan: part failed, scheduling retry")
+		logx.FromContext(ctx).Info().Err(cause).Time("scheduled_at", scheduledAt).Str("cache", docextract.CacheID(envelope.Cache)).Msg("report scan: part failed, scheduling retry")
 
 		// the retry keeps the batch scope so a failed batch does not come back as the whole part
 		retry := envelope
