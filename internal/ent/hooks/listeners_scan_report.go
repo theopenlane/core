@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/gemini"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
@@ -198,25 +199,27 @@ func internalCaller(restored *auth.Caller, _ entityops.MutationPayload) *auth.Ca
 // organization's own report is on hand once its controls and reviews are imported; organizations
 // without the trust center module or a trust center are skipped
 func handleScanReportCompleted(inv entityops.Invocation, _ entityops.MutationPayload) error {
-	scanRecord, err := jsonx.Decode[*generated.Scan](inv.Row)
-	if err != nil {
-		return err
-	}
+	ctx := logx.WithFields(inv.Context, map[string]any{"scan_id": inv.EntityID})
 
-	ctx := logx.WithFields(inv.Context, map[string]any{"scan_id": scanRecord.ID})
+	if utils.ModulesEnabled(inv.Client) {
+		ok, err := rule.HasFeature(ctx, models.CatalogTrustCenterModule.String())
+		if err != nil {
+			logx.FromContext(ctx).Debug().Err(err).Msg("report scan: trust center module lookup failed")
 
-	ok, err := rule.HasFeature(ctx, models.CatalogTrustCenterModule.String())
-	if err != nil {
-		logx.FromContext(ctx).Debug().Err(err).Msg("report scan: trust center module lookup failed")
+			return err
+		}
 
-		return err
-	}
-
-	if !ok {
-		return nil
+		if !ok {
+			return nil
+		}
 	}
 
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+	scanRecord, ok, err := entityops.LoadEntity(ctx, inv.EntityID, inv.Client.Scan.Get)
+	if err != nil || !ok {
+		return err
+	}
 
 	trustCenterID, err := inv.Client.TrustCenter.Query().Where(trustcenter.OwnerID(scanRecord.OwnerID)).OnlyID(ctx)
 	if generated.IsNotFound(err) {
@@ -238,6 +241,8 @@ func handleScanReportCompleted(inv entityops.Invocation, _ entityops.MutationPay
 		SetTrustCenterID(trustCenterID).
 		SetTitle(scanRecord.Target).
 		SetOriginalFileID(reportFile.ID).
+		SetTags([]string{"soc2"}).
+		SetTrustCenterDocKindName("compliance").
 		SetVisibility(enums.TrustCenterDocumentVisibilityNotVisible)
 
 	if standardID, ok := soc2StandardID(ctx, inv.Client); ok {
@@ -247,6 +252,7 @@ func handleScanReportCompleted(inv entityops.Invocation, _ entityops.MutationPay
 	doc, err := create.Save(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("report scan: trust center document failed to be created")
+
 		return nil
 	}
 

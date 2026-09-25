@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"runtime/debug"
 	"strings"
 	"sync"
 	"time"
@@ -478,6 +479,9 @@ func (g *Gala) executeListener(handlerContext HandlerContext, listener registere
 
 	defer func() {
 		if recovered := recover(); recovered != nil {
+			// the recovered value alone does not say where a nil dereference came from
+			logx.FromContext(handlerContext.Context).Error().Str("listener", listener.name).Interface("panic", recovered).Str("stack", string(debug.Stack())).Msg("gala listener panicked")
+
 			err = ListenerError{
 				ListenerName: listener.name,
 				Cause:        fmt.Errorf("%w: %v", ErrListenerPanicked, recovered),

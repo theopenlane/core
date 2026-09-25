@@ -13,10 +13,11 @@ import (
 // and requests those sections
 
 const (
-	// ReviewBatchSize is how many controls one reviews job covers
-	ReviewBatchSize = 10
+	// ReviewBatchSize is how many controls one reviews job covers; every batch is one concurrent
+	// model call, so a smaller batch trades quota pressure for shorter requests
+	ReviewBatchSize = 20
 	// FindingBatchSize is how many controls one findings job covers; most controls have none so batches can be larger
-	FindingBatchSize = 25
+	FindingBatchSize = 50
 )
 
 // controlScopedBatchSizes are the sections scoped by control ref codes, with how many controls

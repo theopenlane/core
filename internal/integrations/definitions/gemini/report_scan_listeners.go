@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/docextract"
 	"github.com/theopenlane/core/v2/pkg/docextract/soc2"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -300,6 +301,27 @@ func (s reportScanSaga) completeBatchedPart(ctx context.Context, envelope Report
 	return s.maybeFinalize(ctx, envelope)
 }
 
+// linkFindings attributes each finding to the review whose test produced it, once every part has
+// landed so both sections are complete; the findings are updated in place on the metadata written
+// by the caller
+func linkFindings(ctx context.Context, metadata map[string]any) {
+	report, ok := metadata[ReportMetadataKey].(map[string]any)
+	if !ok {
+		return
+	}
+
+	reviews, _ := report[soc2.ReviewsPart].([]any)
+	findings, _ := report[soc2.FindingsPart].([]any)
+
+	if len(reviews) == 0 || len(findings) == 0 {
+		return
+	}
+
+	if linked, unlinked := soc2.LinkFindings(reviews, findings); unlinked > 0 {
+		logx.FromContext(ctx).Warn().Int("linked", linked).Int("unlinked", unlinked).Msg("report scan: findings could not be attributed to a review")
+	}
+}
+
 // dedupeByExternalID drops items that repeat an earlier item's externalID, keeping the first
 // occurrence, and reports how many were removed
 func dedupeByExternalID(section any) (json.RawMessage, int, error) {
@@ -362,7 +384,7 @@ func (s reportScanSaga) retryOrFailPart(ctx context.Context, envelope ReportScan
 	if envelope.Attempt+1 < PartMaxAttempts {
 		scheduledAt := time.Now().Add(partBackoff(envelope.Attempt))
 
-		logx.FromContext(ctx).Warn().Err(cause).Time("scheduled_at", scheduledAt).Msg("report scan: part failed, scheduling retry")
+		logx.FromContext(ctx).Warn().Err(cause).Time("scheduled_at", scheduledAt).Str("cache", docextract.CacheID(envelope.Cache)).Msg("report scan: part failed, scheduling retry")
 
 		// the retry keeps the batch scope so a failed batch does not come back as the whole part
 		retry := envelope
@@ -564,6 +586,8 @@ func (s reportScanSaga) maybeFinalize(ctx context.Context, envelope ReportScanPa
 		status = enums.ScanStatusFailed
 		metadata[ErrorMetadataKey] = scanFailedReason
 	}
+
+	linkFindings(ctx, metadata)
 
 	// a not-found here means a sibling part finalized first, which is the expected race outcome
 	err = s.services.DB().Scan.UpdateOneID(envelope.ScanID).
