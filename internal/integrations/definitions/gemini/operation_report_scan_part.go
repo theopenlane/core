@@ -58,7 +58,7 @@ func (ReportScanPartRequest) Run(ctx context.Context, request types.OperationReq
 			return ReportScanPartResult{}, err
 		}
 
-		logx.FromContext(ctx).Warn().Err(err).Msg("report scan: document cache missing, rebuilding")
+		logx.FromContext(ctx).Warn().Err(err).Str("cache", docextract.CacheID(req.Cache)).Msg("report scan: document cache missing, rebuilding")
 	}
 
 	pdf, err := downloadReport(systemCtx, request.DB, scanRecord)

@@ -38,6 +38,56 @@ func TestMergeDedupesAndSorts(t *testing.T) {
 	assert.Check(t, result.Reviews[2].ExternalID == "c")
 }
 
+func TestMergeCollapsesRestatedTest(t *testing.T) {
+	stream := newReviewStream(testPrompts())
+
+	details := "Inspected the written job descriptions related to a sample of job roles within Engineering"
+
+	streamed := reviewsJSON(t,
+		schema.Review{ExternalID: "soc2-CC 1.1-01-01", Details: details, RefCodes: []string{"CC 1.1-01", "CC1.1"}},
+		schema.Review{ExternalID: "soc2-CC 1.1-01-02", Details: details, RefCodes: []string{"CC 1.1-01", "CC1.5"}},
+	)
+
+	merged, err := stream.Merge(streamed, "")
+
+	assert.NilError(t, err)
+
+	var result schema.Reviews
+	assert.NilError(t, json.Unmarshal([]byte(merged), &result))
+	assert.Check(t, len(result.Reviews) == 1)
+	assert.DeepEqual(t, result.Reviews[0].RefCodes, []string{"CC 1.1-01", "CC1.1", "CC1.5"})
+}
+
+func TestMergeKeepsDistinctTestsForOneControl(t *testing.T) {
+	stream := newReviewStream(testPrompts())
+
+	streamed := reviewsJSON(t,
+		schema.Review{ExternalID: "a", Details: "Inspected the job descriptions", RefCodes: []string{"CC 1.1-01", "CC1.1"}},
+		schema.Review{ExternalID: "b", Details: "Observed the onboarding checklist", RefCodes: []string{"CC 1.1-01", "CC1.1"}},
+	)
+
+	merged, err := stream.Merge(streamed, "")
+
+	assert.NilError(t, err)
+	assert.Check(t, stream.Count(merged) == 2)
+}
+
+func TestMergeCollapsesAcrossPayloads(t *testing.T) {
+	stream := newReviewStream(testPrompts())
+
+	collected := reviewsJSON(t, schema.Review{ExternalID: "a", Details: "Inspected  the\njob descriptions", RefCodes: []string{"CC 1.1-01", "CC1.1"}})
+	streamed := reviewsJSON(t, schema.Review{ExternalID: "b", Details: "inspected the job descriptions", RefCodes: []string{"CC 1.1-01", "CC1.5"}})
+
+	merged, err := stream.Merge(streamed, collected)
+
+	assert.NilError(t, err)
+
+	var result schema.Reviews
+	assert.NilError(t, json.Unmarshal([]byte(merged), &result))
+	assert.Check(t, len(result.Reviews) == 1)
+	assert.DeepEqual(t, result.Reviews[0].RefCodes, []string{"CC 1.1-01", "CC1.1", "CC1.5"})
+}
+
 func TestMergeIntoEmpty(t *testing.T) {
 	stream := newReviewStream(testPrompts())
 

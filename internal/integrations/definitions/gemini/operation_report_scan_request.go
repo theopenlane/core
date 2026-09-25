@@ -160,7 +160,7 @@ func (r ReportScanRequest) Run(ctx context.Context, request types.OperationReque
 		}
 	}
 
-	logx.FromContext(ctx).Debug().Int("parts", len(partNames)).Msg("report scan: part jobs scheduled")
+	logx.FromContext(ctx).Debug().Int("parts", len(partNames)).Str("cache", docextract.CacheID(cacheName)).Msg("report scan: part jobs scheduled")
 
 	return ReportScanRequestResult{Message: "report scan submitted", ScanID: scanRecord.ID}, nil
 }

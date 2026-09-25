@@ -184,7 +184,7 @@ func TestResumeFailsOnCancelledContext(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 
-	_, err := (&sectionExtraction{}).resume(ctx, "")
+	_, err := (&sectionExtraction{}).resume(ctx, "", generationRetry{needed: true})
 
 	assert.ErrorIs(t, err, context.Canceled)
 }
@@ -192,7 +192,7 @@ func TestResumeFailsOnCancelledContext(t *testing.T) {
 func TestResumeKeepsPartialPayloadAtMaxAttempts(t *testing.T) {
 	extraction := &sectionExtraction{stream: unionStream{}, attempt: maxAttempts, collected: `{"items":["a"]}`}
 
-	_, err := extraction.resume(context.Background(), `{"items":["b"]}`)
+	_, err := extraction.resume(context.Background(), `{"items":["b"]}`, generationRetry{needed: true})
 
 	assert.ErrorIs(t, err, ErrMaxAttemptsReached)
 	assert.Check(t, extraction.stream.Count(extraction.collected) == 2)

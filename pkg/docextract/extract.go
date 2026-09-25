@@ -169,11 +169,11 @@ const (
 // attempt budget runs out
 func (e *sectionExtraction) collect(ctx context.Context) error {
 	for {
-		logx.FromContext(ctx).Debug().Int("attempt", e.attempt).Int("max_attempts", maxAttempts).Int("collected_items", count(e.stream, e.collected)).Int("collected_bytes", len(e.collected)).Dur("elapsed", time.Since(e.started)).Bool("continuation", e.continuation != "").Msg("docextract: starting request")
+		logx.FromContext(ctx).Debug().Int("attempt", e.attempt).Int("max_attempts", maxAttempts).Int("collected_items", count(e.stream, e.collected)).Int("collected_bytes", len(e.collected)).Dur("elapsed", time.Since(e.started)).Bool("continuation", e.continuation != "").Bool("shared_cache", e.cache != "").Msg("docextract: starting request")
 
 		attemptStarted := time.Now()
 
-		output, interrupted, err := e.generate(ctx)
+		output, retry, err := e.generate(ctx)
 		if err != nil {
 			return err
 		}
@@ -181,8 +181,8 @@ func (e *sectionExtraction) collect(ctx context.Context) error {
 		var outcome attemptOutcome
 
 		switch {
-		case interrupted:
-			outcome, err = e.resume(ctx, output)
+		case retry.needed:
+			outcome, err = e.resume(ctx, output, retry)
 		case e.stream == nil:
 			outcome = e.takeWholeOutput(ctx, output)
 		default:
@@ -203,7 +203,7 @@ func (e *sectionExtraction) collect(ctx context.Context) error {
 
 // generate runs one generation, caching the document and prompt for this attempt alone when no
 // shared cache was supplied
-func (e *sectionExtraction) generate(ctx context.Context) (string, bool, error) {
+func (e *sectionExtraction) generate(ctx context.Context) (string, generationRetry, error) {
 	contents := []*genai.Content{genai.NewContentFromParts(requestParts(e.doc, e.plan.Prompt+e.continuation), genai.RoleUser)}
 
 	cacheName := e.cache
@@ -213,7 +213,7 @@ func (e *sectionExtraction) generate(ctx context.Context) (string, bool, error) 
 	if cacheName == "" {
 		created, err := e.client.createCache(ctx, contents)
 		if err != nil {
-			return "", false, err
+			return "", generationRetry{}, err
 		}
 
 		cache, cacheName = created, created.Name
@@ -226,7 +226,7 @@ func (e *sectionExtraction) generate(ctx context.Context) (string, bool, error) 
 
 // resume keeps whatever complete payloads streamed before an interruption and waits out the retry
 // delay before the next generation
-func (e *sectionExtraction) resume(ctx context.Context, output string) (attemptOutcome, error) {
+func (e *sectionExtraction) resume(ctx context.Context, output string, retry generationRetry) (attemptOutcome, error) {
 	if ctx.Err() != nil {
 		return attemptDone, fmt.Errorf("content generation error: %w", ctx.Err())
 	}
@@ -241,7 +241,11 @@ func (e *sectionExtraction) resume(ctx context.Context, output string) (attemptO
 		return attemptDone, fmt.Errorf("content generation error: %w", ErrMaxAttemptsReached)
 	}
 
-	time.Sleep(retryDelay)
+	wait := retry.wait(e.attempt)
+
+	logx.FromContext(ctx).Debug().Int("attempt", e.attempt).Dur("wait", wait).Bool("quota", retry.quota).Msg("docextract: waiting before the next generation")
+
+	time.Sleep(wait)
 
 	return attemptContinue, nil
 }
@@ -362,7 +366,7 @@ func count(stream Streamer, output string) int {
 
 // streamContent runs one generation and returns the accumulated text; retry is true when the
 // generation was cancelled or only partially succeeded and should be re-requested
-func (c *Client) streamContent(ctx context.Context, contents []*genai.Content, responseSchema *genai.Schema, cache string, stream Streamer) (string, bool, error) {
+func (c *Client) streamContent(ctx context.Context, contents []*genai.Content, responseSchema *genai.Schema, cache string, stream Streamer) (string, generationRetry, error) {
 	iter := c.Models.GenerateContentStream(ctx, c.model, contents, c.generateConfig(responseSchema, cache))
 
 	var buffer strings.Builder
@@ -376,24 +380,24 @@ func (c *Client) streamContent(ctx context.Context, contents []*genai.Content, r
 
 			var apiErr genai.APIError
 			if errors.As(err, &apiErr) {
-				if isRetryableStatus(apiErr.Status) {
-					logx.FromContext(ctx).Warn().Str("status", apiErr.Status).Str("message", apiErr.Message).Msg("docextract: retrying generation")
+				if retry, ok := retryFor(apiErr); ok {
+					logx.FromContext(ctx).Warn().Str("status", apiErr.Status).Str("message", apiErr.Message).Str("cache", CacheID(cache)).Dur("retry_after", retry.after).Msg("docextract: retrying generation")
 
-					return merged, true, nil
+					return merged, retry, nil
 				}
 
 				// a shared cache that expired or was deleted is reported so the caller can rebuild it
 				if cache != "" && apiErr.Code == http.StatusNotFound {
-					return "", false, fmt.Errorf("%w: %w", ErrCacheMissing, err)
+					return "", generationRetry{}, fmt.Errorf("%w: %w", ErrCacheMissing, err)
 				}
 
-				return "", false, fmt.Errorf("content generation error: %w", err)
+				return "", generationRetry{}, fmt.Errorf("content generation error: %w", err)
 			}
 
 			// a transport failure mid-stream is retried rather than failing the whole extraction
-			logx.FromContext(ctx).Warn().Err(err).Msg("docextract: stream interrupted, retrying generation")
+			logx.FromContext(ctx).Warn().Err(err).Str("cache", CacheID(cache)).Msg("docextract: stream interrupted, retrying generation")
 
-			return merged, true, nil
+			return merged, generationRetry{needed: true}, nil
 		}
 
 		if len(resp.Candidates) > 0 && resp.Candidates[0].Content != nil {
@@ -420,10 +424,10 @@ func (c *Client) streamContent(ctx context.Context, contents []*genai.Content, r
 	}
 
 	if stream == nil {
-		return buffer.String(), false, nil
+		return buffer.String(), generationRetry{}, nil
 	}
 
-	return merged, false, nil
+	return merged, generationRetry{}, nil
 }
 
 // api error statuses are canonical google api codes, not job states

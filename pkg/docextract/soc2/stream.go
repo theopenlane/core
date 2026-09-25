@@ -15,6 +15,9 @@ import (
 // control identifier printed by the report such as ACF-60 or a derived code such as CC6.1.1
 var criterionPattern = regexp.MustCompile(`^[A-Z]+\d+\.\d+$`)
 
+// whitespacePattern collapses runs of whitespace when comparing test text
+var whitespacePattern = regexp.MustCompile(`\s+`)
+
 // reviewStream merges streamed review payloads by external id and tracks which controls have
 // been covered so a continuation can resume after the last one
 type reviewStream struct {
@@ -28,7 +31,8 @@ func newReviewStream(prompts Prompts) *reviewStream {
 	return &reviewStream{prompts: prompts, controls: map[string][]string{}}
 }
 
-// Merge folds the reviews in streamed into collected, keyed by external id and sorted for stable output
+// Merge folds the reviews in streamed into collected, collapsing restatements of the same test and
+// sorting for stable output
 func (*reviewStream) Merge(streamed, collected string) (string, error) {
 	var incoming schema.Reviews
 	if err := json.Unmarshal([]byte(streamed), &incoming); err != nil {
@@ -43,19 +47,7 @@ func (*reviewStream) Merge(streamed, collected string) (string, error) {
 		}
 	}
 
-	byExternalID := make(map[string]schema.Review, len(existing.Reviews)+len(incoming.Reviews))
-	for _, review := range existing.Reviews {
-		byExternalID[review.ExternalID] = review
-	}
-
-	for _, review := range incoming.Reviews {
-		byExternalID[review.ExternalID] = review
-	}
-
-	combined := schema.Reviews{Reviews: make([]schema.Review, 0, len(byExternalID))}
-	for _, review := range byExternalID {
-		combined.Reviews = append(combined.Reviews, review)
-	}
+	combined := schema.Reviews{Reviews: mergeReviews(append(existing.Reviews, incoming.Reviews...))}
 
 	slices.SortFunc(combined.Reviews, compareReviewExternalID)
 
@@ -65,6 +57,68 @@ func (*reviewStream) Merge(streamed, collected string) (string, error) {
 	}
 
 	return string(merged), nil
+}
+
+// mergeReviews folds reviews recording the same test for the same control into one, keeping the
+// latest body and collecting every criterion the report restated it under; a report prints the
+// same test once per criterion it satisfies, which would otherwise land as several reviews
+func mergeReviews(reviews []schema.Review) []schema.Review {
+	order := make([]string, 0, len(reviews))
+	byTest := make(map[string]schema.Review, len(reviews))
+
+	for _, review := range reviews {
+		key := reviewKey(review)
+
+		previous, seen := byTest[key]
+		if !seen {
+			order = append(order, key)
+			byTest[key] = review
+
+			continue
+		}
+
+		review.RefCodes = unionRefCodes(previous.RefCodes, review.RefCodes)
+		byTest[key] = review
+	}
+
+	merged := make([]schema.Review, 0, len(order))
+	for _, key := range order {
+		merged = append(merged, byTest[key])
+	}
+
+	return merged
+}
+
+// reviewKey identifies the test a review records, the control it was printed under paired with the
+// verbatim test text, so a control keeps its genuinely distinct tests as separate reviews
+func reviewKey(review schema.Review) string {
+	details := normalizeTestText(review.Details)
+	if details == "" {
+		return review.ExternalID
+	}
+
+	controlCode, _ := splitRefCodes(review.RefCodes)
+
+	return controlCode + "\x00" + details
+}
+
+// normalizeTestText lowers and collapses whitespace so the same text reprinted with different
+// wrapping still matches
+func normalizeTestText(details string) string {
+	return whitespacePattern.ReplaceAllString(strings.ToLower(strings.TrimSpace(details)), " ")
+}
+
+// unionRefCodes appends the ref codes not already present, keeping the order they were seen in
+func unionRefCodes(first, second []string) []string {
+	union := slices.Clone(first)
+
+	for _, refCode := range second {
+		if !slices.Contains(union, refCode) {
+			union = append(union, refCode)
+		}
+	}
+
+	return union
 }
 
 // Count returns how many reviews the output holds
