@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"slices"
 	"strings"
 
 	"cloud.google.com/go/auth"
@@ -37,10 +38,13 @@ type Client struct {
 
 // Verdict is the outcome of screening one document
 type Verdict struct {
-	// Blocked is true when any filter matched
+	// Blocked is true when a filter that must stop the upload matched
 	Blocked bool
-	// Filters names the filters that matched
+	// Filters names the matched filters that stop the upload
 	Filters []string
+	// Reported names the matched filters that do not stop the upload; sensitive data detection is
+	// reported so the caller can act on it under its own data policy rather than rejecting the file
+	Reported []string
 }
 
 // New builds a client for the template, authenticating with the given credentials or
@@ -74,7 +78,8 @@ func (c *Client) Close() error {
 	return c.api.Close()
 }
 
-// ScreenDocument submits the pdf to Model Armor and reports whether any filter matched
+// ScreenDocument submits the pdf to Model Armor and reports which filters matched; only the filters
+// that make a document unsafe to send to a model stop the upload
 func (c *Client) ScreenDocument(ctx context.Context, pdf []byte) (Verdict, error) {
 	resp, err := c.api.SanitizeUserPrompt(ctx, &modelarmorpb.SanitizeUserPromptRequest{
 		Name: c.template,
@@ -88,30 +93,48 @@ func (c *Client) ScreenDocument(ctx context.Context, pdf []byte) (Verdict, error
 		return Verdict{}, fmt.Errorf("%w: %w", ErrSanitizeFailed, err)
 	}
 
-	result := resp.GetSanitizationResult()
-	verdict := Verdict{Blocked: result.GetFilterMatchState() == modelarmorpb.FilterMatchState_MATCH_FOUND}
+	var verdict Verdict
 
-	for name, filter := range result.GetFilterResults() {
-		if filterMatched(filter) {
+	// the overall match state is set by any filter, so each filter's own result decides the outcome
+	for name, filter := range resp.GetSanitizationResult().GetFilterResults() {
+		switch {
+		case blockingMatch(filter):
+			verdict.Blocked = true
 			verdict.Filters = append(verdict.Filters, name)
+		case sensitiveDataMatch(filter):
+			verdict.Reported = append(verdict.Reported, name)
 		}
 	}
+
+	slices.Sort(verdict.Filters)
+	slices.Sort(verdict.Reported)
 
 	return verdict, nil
 }
 
-// filterMatched reports whether the filter's own result carries a match, whichever kind it is
-func filterMatched(filter *modelarmorpb.FilterResult) bool {
-	states := []modelarmorpb.FilterMatchState{
-		filter.GetRaiFilterResult().GetMatchState(),
+// blockingMatch reports whether the filter found something that makes the document unsafe to send
+// to a model, which is every filter except sensitive data detection
+func blockingMatch(filter *modelarmorpb.FilterResult) bool {
+	return matched(
 		filter.GetPiAndJailbreakFilterResult().GetMatchState(),
+		filter.GetRaiFilterResult().GetMatchState(),
 		filter.GetMaliciousUriFilterResult().GetMatchState(),
 		filter.GetCsamFilterFilterResult().GetMatchState(),
 		filter.GetVirusScanFilterResult().GetMatchState(),
+	)
+}
+
+// sensitiveDataMatch reports whether the filter found sensitive data, which a report legitimately
+// contains and which says nothing about whether the document is trying to instruct a model
+func sensitiveDataMatch(filter *modelarmorpb.FilterResult) bool {
+	return matched(
 		filter.GetSdpFilterResult().GetInspectResult().GetMatchState(),
 		filter.GetSdpFilterResult().GetDeidentifyResult().GetMatchState(),
-	}
+	)
+}
 
+// matched reports whether any of the states carries a match
+func matched(states ...modelarmorpb.FilterMatchState) bool {
 	for _, state := range states {
 		if state == modelarmorpb.FilterMatchState_MATCH_FOUND {
 			return true

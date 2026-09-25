@@ -92,7 +92,7 @@ func (r ReportScanRequest) Run(ctx context.Context, request types.OperationReque
 			return ReportScanRequestResult{}, err
 		}
 
-		logx.FromContext(ctx).Debug().Bool("blocked", verdict.Blocked).Strs("filters", verdict.Filters).Str("template", client.Screener.Template()).Msg("report scan: upload screened")
+		logx.FromContext(ctx).Debug().Bool("blocked", verdict.Blocked).Strs("filters", verdict.Filters).Strs("reported", verdict.Reported).Str("template", client.Screener.Template()).Msg("report scan: upload screened")
 
 		if verdict.Blocked {
 			if err := failScan(systemCtx, request.DB, scanRecord, modelarmor.ErrDocumentBlocked.Error(), validation); err != nil {
