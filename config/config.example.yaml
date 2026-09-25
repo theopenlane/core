@@ -210,7 +210,6 @@ integrations:
     gemini:
         apikey: ""
         backend: ""
-        credentialsjson: ""
         location: ""
         model: ""
         modelarmortemplate: ""

@@ -983,10 +983,6 @@
           "type": "string",
           "description": "Google Cloud region for the Vertex AI backend"
         },
-        "credentialsjson": {
-          "type": "string",
-          "description": "Service account key JSON for the Vertex AI backend"
-        },
         "modelarmortemplate": {
           "type": "string",
           "description": "Model Armor template resource name used to screen uploaded reports for prompt injection"

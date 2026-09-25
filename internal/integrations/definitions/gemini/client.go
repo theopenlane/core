@@ -34,7 +34,6 @@ func runtimeClientBuilder() func(context.Context, json.RawMessage) (any, error) 
 			docextract.WithAPIKey(cfg.APIKey),
 			docextract.WithProject(cfg.Project),
 			docextract.WithLocation(cfg.Location),
-			docextract.WithCredentialsJSON(cfg.CredentialsJSON),
 			docextract.WithModel(cfg.Model),
 			docextract.WithSystemInstruction(cfg.Prompts.SystemInstruction),
 		)
@@ -51,16 +50,12 @@ func runtimeClientBuilder() func(context.Context, json.RawMessage) (any, error) 
 	}
 }
 
-// newScreener builds the Model Armor client when a template is configured, sharing the Vertex credentials
+// newScreener builds the Model Armor client when a template is configured, authenticating with the
+// same application default credentials the Vertex backend uses
 func newScreener(ctx context.Context, cfg RuntimeConfig) (*modelarmor.Client, error) {
 	if cfg.ModelArmorTemplate == "" {
 		return nil, nil
 	}
 
-	creds, err := docextract.LoadCredentials(cfg.CredentialsJSON)
-	if err != nil {
-		return nil, err
-	}
-
-	return modelarmor.New(ctx, cfg.ModelArmorTemplate, creds)
+	return modelarmor.New(ctx, cfg.ModelArmorTemplate)
 }

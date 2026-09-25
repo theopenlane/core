@@ -1046,14 +1046,6 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_GEMINI_APIKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-gemini-apikey"  # @schema type:string
-    # -- core-integrations-gemini-credentialsjson secret configuration
-    core-integrations-gemini-credentialsjson:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrations.gemini.credentialsjson
-      secretKey: "CORE_INTEGRATIONS_GEMINI_CREDENTIALSJSON"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-integrations-gemini-credentialsjson"  # @schema type:string
     # -- core-integrations-githubapp-appid secret configuration
     core-integrations-githubapp-appid:
       # -- Enable this external secret

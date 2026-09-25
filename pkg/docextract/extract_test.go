@@ -208,16 +208,3 @@ func TestCacheIDKeepsOnlyTheTrailingIdentifier(t *testing.T) {
 	assert.Check(t, CacheID("987654") == "987654")
 	assert.Check(t, CacheID("") == "")
 }
-
-func TestLoadCredentialsWithoutKey(t *testing.T) {
-	creds, err := LoadCredentials("")
-
-	assert.NilError(t, err)
-	assert.Check(t, creds == nil)
-}
-
-func TestLoadCredentialsRejectsMalformedKey(t *testing.T) {
-	_, err := LoadCredentials("{not json")
-
-	assert.ErrorIs(t, err, ErrCredentialsInvalid)
-}
