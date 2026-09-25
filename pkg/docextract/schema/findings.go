@@ -35,6 +35,10 @@ var FindingSchema = &genai.Schema{
 							Type: genai.TypeString,
 						},
 					},
+					"testDetails": {
+						Type:        genai.TypeString,
+						Description: "The verbatim text of the test procedure printed in the same table row as this exception, copied exactly and not summarized",
+					},
 					"environmentName": {
 						Type: genai.TypeString,
 						Enum: []string{"production"},

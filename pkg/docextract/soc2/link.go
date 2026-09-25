@@ -13,6 +13,8 @@ const (
 	minMatchWords = 3
 	// minWordLength is the shortest word considered distinctive enough to match on
 	minWordLength = 4
+	// testDetailsKey is the field on a finding carrying the test procedure printed in its table row
+	testDetailsKey = "testDetails"
 )
 
 // commonWords appear in nearly every test description, so they carry no signal when choosing
@@ -82,21 +84,51 @@ func reviewsByControl(reviews []any) map[string][]candidateReview {
 	return grouped
 }
 
-// matchReview picks the review a finding belongs to; a control usually has a single test, so the
-// control alone decides it, and only a control with several tests needs the finding's text
+// matchReview picks the review a finding belongs to; the exception and the test it was reported
+// against are printed in one table row, so the test text carried on the finding identifies the
+// review outright, and comparing wording is only the fallback when the model did not copy it
 func matchReview(byControl map[string][]candidateReview, finding map[string]any) (string, bool) {
 	candidates := candidatesFor(byControl, refCodesOf(finding))
 
-	switch len(candidates) {
-	case 0:
+	if len(candidates) == 0 {
 		return "", false
-	case 1:
+	}
+
+	testDetails, _ := finding[testDetailsKey].(string)
+	if externalID, found := exactMatch(candidates, testDetails); found {
+		return externalID, true
+	}
+
+	if len(candidates) == 1 {
 		return candidates[0].externalID, true
 	}
 
 	description, _ := finding["description"].(string)
 
 	return bestMatch(candidates, description)
+}
+
+// exactMatch finds the one review whose test text is the text the finding was reported against,
+// ignoring the case and wrapping a second pass over the same table can change
+func exactMatch(candidates []candidateReview, testDetails string) (string, bool) {
+	wanted := normalizeTestText(testDetails)
+	if wanted == "" {
+		return "", false
+	}
+
+	matches := make([]string, 0, 1)
+
+	for _, candidate := range candidates {
+		if normalizeTestText(candidate.details) == wanted {
+			matches = append(matches, candidate.externalID)
+		}
+	}
+
+	if len(matches) != 1 {
+		return "", false
+	}
+
+	return matches[0], true
 }
 
 // candidatesFor collects the reviews of every control the finding names, so a finding is matched
@@ -150,6 +182,12 @@ func distinctiveWords(text string) map[string]bool {
 	words := map[string]bool{}
 
 	for _, word := range strings.FieldsFunc(strings.ToLower(text), isWordBreak) {
+		if slices.Contains(commonWords, word) {
+			continue
+		}
+
+		word = singular(word)
+
 		if len(word) < minWordLength || slices.Contains(commonWords, word) {
 			continue
 		}
@@ -158,6 +196,16 @@ func distinctiveWords(text string) map[string]bool {
 	}
 
 	return words
+}
+
+// singular drops a trailing plural s so a test describing a sample of employees matches a finding
+// about one employee; a word it mangles is mangled the same way on both sides of the comparison
+func singular(word string) string {
+	if len(word) > minWordLength && strings.HasSuffix(word, "s") {
+		return strings.TrimSuffix(word, "s")
+	}
+
+	return word
 }
 
 // sharedWordCount counts the words the two sets have in common
