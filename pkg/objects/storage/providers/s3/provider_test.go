@@ -275,7 +275,7 @@ func TestWithOptions_Builder(t *testing.T) {
 }
 
 const (
-	minioImage  = "quay.io/minio/minio:latest"
+	minioImage  = "pgsty/silo:latest"
 	minioUser   = "provider1"
 	minioSecret = "provider1secret"
 	minioBucket = "provider1-bucket"

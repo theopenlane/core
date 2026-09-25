@@ -14,7 +14,7 @@ require (
 	github.com/theopenlane/core/v2 v2.4.7
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.34.5
-	github.com/theopenlane/utils v0.7.1
+	github.com/theopenlane/utils v0.7.2
 	github.com/zitadel/oidc/v3 v3.49.6
 	golang.org/x/oauth2 v0.37.0
 	gotest.tools/v3 v3.5.2
