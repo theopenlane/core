@@ -15,9 +15,9 @@ var (
 	// installation is the typed installation metadata handle for the Slack definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// slackCredential is the auth-managed credential slot used by the OAuth connection
-	_, slackCredential = providerkit.CredentialSchema[slackCred]()
+	slackCredential = types.NewCredentialRef[slackCred]()
 	// slackBotTokenCredential is the credential slot for user-provisioned bot tokens
-	slackBotTokenCredentialSchema, slackBotTokenCredential = providerkit.CredentialSchema[slackBotTokenCred]()
+	slackBotTokenCredential = types.NewCredentialRef[slackBotTokenCred]()
 	// slackClient is the unified client ref for every Slack operation; runtime and customer
 	// paths both build a SlackClient that wraps the Web API client and any system-notification transport
 	slackClient = types.NewClientRef[*SlackClient]()

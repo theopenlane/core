@@ -2,6 +2,7 @@ package jsonx
 
 import (
 	"encoding/json"
+	"fmt"
 	"path"
 
 	"github.com/invopop/jsonschema"
@@ -29,16 +30,8 @@ func SchemaFrom[T any]() json.RawMessage {
 // from the generated JSON schema. Properties from embedded structs are promoted
 // by the reflector and appear as top-level names.
 func PropertyNames[T any]() []string {
-	schema := Reflector.Reflect(new(T))
-
-	if schema.Ref != "" {
-		defKey := path.Base(schema.Ref)
-		if def, ok := schema.Definitions[defKey]; ok {
-			schema = def
-		}
-	}
-
-	if schema.Properties == nil {
+	schema, _, err := SchemaRoot(SchemaFrom[T]())
+	if err != nil || schema.Properties == nil {
 		return nil
 	}
 
@@ -63,16 +56,8 @@ type PropertyDescriptor struct {
 // with names and descriptions from the generated JSON schema. Properties from embedded
 // structs are promoted by the reflector and appear as top-level entries.
 func PropertyDescriptors[T any]() []PropertyDescriptor {
-	schema := Reflector.Reflect(new(T))
-
-	if schema.Ref != "" {
-		defKey := path.Base(schema.Ref)
-		if def, ok := schema.Definitions[defKey]; ok {
-			schema = def
-		}
-	}
-
-	if schema.Properties == nil {
+	schema, _, err := SchemaRoot(SchemaFrom[T]())
+	if err != nil || schema.Properties == nil {
 		return nil
 	}
 
@@ -86,6 +71,35 @@ func PropertyDescriptors[T any]() []PropertyDescriptor {
 	}
 
 	return out
+}
+
+// SchemaRoot decodes a raw schema and follows its root $ref into its definitions, returning the resolved root and the definitions; an empty document yields an empty schema
+func SchemaRoot(schema json.RawMessage) (*jsonschema.Schema, jsonschema.Definitions, error) {
+	var doc jsonschema.Schema
+	if err := UnmarshalIfPresent(schema, &doc); err != nil {
+		return nil, nil, err
+	}
+
+	root, err := followSchemaRef(&doc, doc.Definitions)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return root, doc.Definitions, nil
+}
+
+// followSchemaRef returns the definition a node's $ref names by its base path, or the node itself when it has none
+func followSchemaRef(node *jsonschema.Schema, defs jsonschema.Definitions) (*jsonschema.Schema, error) {
+	if node.Ref == "" {
+		return node, nil
+	}
+
+	target, ok := defs[path.Base(node.Ref)]
+	if !ok {
+		return nil, fmt.Errorf("%w: %s", ErrSchemaRefUnresolved, node.Ref)
+	}
+
+	return target, nil
 }
 
 // SchemaID extracts the definition key from a reflected JSON schema's $ref path.
@@ -110,17 +124,12 @@ func InjectDefaults(schema json.RawMessage, defaults map[string]any) (json.RawMe
 		return schema, err
 	}
 
-	typeName := SchemaID(schema)
-	if typeName == "" {
+	root, err := followSchemaRef(&doc, doc.Definitions)
+	if err != nil || root.Properties == nil {
 		return schema, nil
 	}
 
-	typeDef, ok := doc.Definitions[typeName]
-	if !ok || typeDef.Properties == nil {
-		return schema, nil
-	}
-
-	injectSchemaDefaults(typeDef, doc.Definitions, defaults)
+	injectSchemaDefaults(root, doc.Definitions, defaults)
 
 	out, err := json.Marshal(&doc)
 	if err != nil || out == nil {

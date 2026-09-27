@@ -29,17 +29,15 @@ func Builder(federationIssuer string) registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         workloadIdentityCredential.ID(),
+					Ref:         workloadIdentityCredential,
 					Name:        "GCP Workload Identity Federation",
 					Description: "Federated access to Security Command Center with no stored keys.",
-					Schema:      workloadIdentitySchema,
 					Recommended: true,
 				},
 				{
-					Ref:         sccCredential.ID(),
+					Ref:         sccCredential,
 					Name:        "GCP SCC Credential",
 					Description: "GCP service account key used to access Security Command Center.",
-					Schema:      sccSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{

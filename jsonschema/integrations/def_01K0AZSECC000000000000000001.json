@@ -1,0 +1,46 @@
+{
+  "id": "def_01K0AZSECC000000000000000001",
+  "credentials": [
+    {
+      "ref": "CredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter/credential-schema",
+        "$ref": "#/$defs/CredentialSchema",
+        "$defs": {
+          "CredentialSchema": {
+            "properties": {
+              "tenantId": {
+                "type": "string",
+                "title": "Tenant ID"
+              },
+              "clientId": {
+                "type": "string",
+                "title": "Client ID"
+              },
+              "clientSecret": {
+                "type": "string",
+                "title": "Client Secret"
+              },
+              "subscriptionId": {
+                "type": "string",
+                "title": "Subscription ID"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "tenantId",
+              "clientId",
+              "clientSecret",
+              "subscriptionId"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "CredentialSchema"
+  ]
+}

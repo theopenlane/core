@@ -124,7 +124,7 @@ func integrationWorkflowProviders(ctx context.Context, rt *intr.Runtime, db *ent
 		if len(def.CredentialRegistrations) > 0 {
 			entry.CredentialSchemas = lo.Map(def.CredentialRegistrations, func(credential types.CredentialRegistration, _ int) integrationCredentialEntry {
 				return integrationCredentialEntry{
-					Ref:         credential.Ref,
+					Ref:         credential.Ref.ID(),
 					Name:        credential.Name,
 					Description: credential.Description,
 					Schema:      jsonx.CloneRawMessage(credential.Schema),

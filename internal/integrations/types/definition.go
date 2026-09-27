@@ -82,13 +82,13 @@ type UserInputRegistration struct {
 
 // CredentialRegistration declares how a definition accepts credentials
 type CredentialRegistration struct {
-	// Ref is the durable credential slot identifier
-	Ref CredentialSlotID `json:"ref"`
+	// Ref is the typed credential slot; its name and stored schema derive from the credential type
+	Ref CredentialSlot `json:"ref"`
 	// Name is the user-facing credential slot name
 	Name string `json:"name,omitempty"`
 	// Description describes when this credential slot should be used
 	Description string `json:"description,omitempty"`
-	// Schema is the JSON schema used to collect credentials
+	// Schema is the JSON schema used to collect credentials from the user, filled by the registry
 	Schema json.RawMessage `json:"schema,omitempty"`
 	// Recommended indicates the method that is recommend if there are multiple options
 	Recommended bool `json:"recommended,omitempty"`
@@ -138,7 +138,7 @@ type MetaInfo struct {
 // CredentialRegistration returns the credential registration for the given ref
 func (d Definition) CredentialRegistration(ref CredentialSlotID) (CredentialRegistration, error) {
 	reg, found := lo.Find(d.CredentialRegistrations, func(r CredentialRegistration) bool {
-		return r.Ref == ref
+		return r.Ref.ID() == ref
 	})
 	if !found {
 		return CredentialRegistration{}, ErrCredentialRefNotFound

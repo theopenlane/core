@@ -157,7 +157,7 @@ func TestOAuthRegistrationStartDelegates(t *testing.T) {
 	t.Parallel()
 
 	reg := OAuthRegistration(OAuthRegistrationOptions[testCredential]{
-		CredentialRef: types.NewCredentialRef[testCredential]("test"),
+		CredentialRef: types.NewCredentialRef[testCredential](),
 		Config:        testOAuthCfg,
 		Material: func(mat OAuthMaterial) (testCredential, error) {
 			return testCredential{AccessToken: mat.AccessToken}, nil
@@ -178,7 +178,7 @@ func TestOAuthRegistrationCompleteCodeExchangeError(t *testing.T) {
 	t.Parallel()
 
 	reg := OAuthRegistration(OAuthRegistrationOptions[testCredential]{
-		CredentialRef: types.NewCredentialRef[testCredential]("test"),
+		CredentialRef: types.NewCredentialRef[testCredential](),
 		Config:        testOAuthCfg,
 		Material: func(mat OAuthMaterial) (testCredential, error) {
 			return testCredential{AccessToken: mat.AccessToken}, nil

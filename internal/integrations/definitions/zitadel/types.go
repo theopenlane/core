@@ -12,12 +12,10 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0ZITADEL000000000000001")
 	// integration is the typed installation metadata handle for the Zitadel definition
 	integration = types.NewInstallationRef(resolveInstallationMetadata)
-	// zitadelPATCredentialSchema is the JSON schema for the Zitadel PAT credential
 	// zitadelPATCredential is the typed runtime ref for resolving the PAT credential
-	zitadelPATCredentialSchema, zitadelPATCredential = providerkit.CredentialSchema[CredentialSchema]()
-	// zitadelOAuthCredentialSchema is the JSON schema for the Zitadel OAuth2 client-credentials credential
+	zitadelPATCredential = types.NewCredentialRef[CredentialSchema]()
 	// zitadelOAuthCredential is the typed runtime ref for resolving the OAuth credential
-	zitadelOAuthCredentialSchema, zitadelOAuthCredential = providerkit.CredentialSchema[OAuthCredentialSchema]()
+	zitadelOAuthCredential = types.NewCredentialRef[OAuthCredentialSchema]()
 	// zitadelClient is the client ref for the Zitadel unified API client
 	zitadelClient = types.NewClientRef[*client.Client]()
 	// directorySyncSchema, directorySyncOperation is the operation ref for directory sync

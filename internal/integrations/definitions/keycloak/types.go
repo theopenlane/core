@@ -11,9 +11,8 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0KEYCLOAK000000000000001")
 	// integration is the typed installation metadata handle for the Keycloak definition
 	integration = types.NewInstallationRef(resolveInstallationMetadata)
-	// keycloakCredentialSchema is the JSON schema for the Keycloak credential
 	// keycloakCredential is the typed runtime ref for resolving the credential
-	keycloakCredentialSchema, keycloakCredential = providerkit.CredentialSchema[CredentialSchema]()
+	keycloakCredential = types.NewCredentialRef[CredentialSchema]()
 	// keycloakClient is the client ref for the Keycloak API client
 	keycloakClient = types.NewClientRef[*gocloak.GoCloak]()
 	// directorySyncSchema, directorySyncOperation is the operation ref for directory sync

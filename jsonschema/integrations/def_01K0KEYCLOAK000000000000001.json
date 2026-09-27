@@ -1,0 +1,46 @@
+{
+  "id": "def_01K0KEYCLOAK000000000000001",
+  "credentials": [
+    {
+      "ref": "CredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/keycloak/credential-schema",
+        "$ref": "#/$defs/CredentialSchema",
+        "$defs": {
+          "CredentialSchema": {
+            "properties": {
+              "baseUrl": {
+                "type": "string",
+                "title": "Base URL"
+              },
+              "realm": {
+                "type": "string",
+                "title": "Realm"
+              },
+              "clientId": {
+                "type": "string",
+                "title": "Client ID"
+              },
+              "clientSecret": {
+                "type": "string",
+                "title": "Client Secret"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "baseUrl",
+              "realm",
+              "clientId",
+              "clientSecret"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "CredentialSchema"
+  ]
+}

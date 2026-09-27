@@ -13,6 +13,7 @@ import (
 	mockprovider "github.com/theopenlane/newman/providers/mock"
 
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/utils/ulids"
@@ -60,11 +61,13 @@ func harnessReconcileOperation(t *testing.T, mode string) string {
 func newHarnessInstallation(t *testing.T, ctx context.Context, mode string) (*ent.Integration, string) {
 	t.Helper()
 
-	installation, err := suite.Client.DB.Integration.Create().
-		SetName(th.RandomName(t)).
-		SetKind("testintegration").
-		SetDefinitionID(testint.DefinitionID.ID()).
-		Save(ctx)
+	def, ok := suite.IntegrationsRT.Registry().Definition(testint.DefinitionID.ID())
+	require.True(t, ok)
+
+	ownerID, err := auth.GetOrganizationIDFromContext(ctx)
+	require.NoError(t, err)
+
+	installation, _, err := suite.IntegrationsRT.EnsureInstallation(ctx, ownerID, "", def)
 	require.NoError(t, err)
 
 	credentialRef := testint.TokenCredential.ID()

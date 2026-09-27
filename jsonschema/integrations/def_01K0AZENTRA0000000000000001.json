@@ -1,0 +1,31 @@
+{
+  "id": "def_01K0AZENTRA0000000000000001",
+  "credentials": [
+    {
+      "ref": "entraIDCred",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid/entra-id-cred",
+        "$ref": "#/$defs/entraIDCred",
+        "$defs": {
+          "entraIDCred": {
+            "properties": {
+              "tenantId": {
+                "type": "string",
+                "title": "Tenant ID"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "tenantId"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "entraIDCred"
+  ]
+}

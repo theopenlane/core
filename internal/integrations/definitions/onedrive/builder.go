@@ -36,7 +36,7 @@ func Builder(cfg Config) registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         oneDriveCredential.ID(),
+					Ref:         oneDriveCredential,
 					Name:        "OneDrive Credential",
 					Description: "OAuth credential used to access Microsoft OneDrive documents.",
 				},

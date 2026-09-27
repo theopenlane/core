@@ -291,18 +291,17 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInstallationNotFound()
 func (suite *HandlerTestSuite) createOperationTestIntegration(t *testing.T, ctx context.Context, orgID, definitionID string) string {
 	t.Helper()
 
-	rec, err := suite.db.Integration.Create().
-		SetOwnerID(orgID).
-		SetName(definitionID).
-		SetDefinitionID(definitionID).
-		Save(ctx)
+	def, ok := suite.h.IntegrationsRuntime.Definition(definitionID)
+	require.True(t, ok)
+
+	rec, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(ctx, orgID, "", def)
 	require.NoError(t, err)
 
 	credential := types.CredentialSet{
 		Data: json.RawMessage(`{"token":"test-token"}`),
 	}
 
-	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, operationTestCredentialRef, &credential, nil)
+	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, operationTestCredentialRef.ID(), &credential, nil)
 	require.NoError(t, err)
 
 	return rec.ID

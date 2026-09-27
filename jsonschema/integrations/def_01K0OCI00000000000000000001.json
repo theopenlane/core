@@ -1,0 +1,66 @@
+{
+  "id": "def_01K0OCI00000000000000000001",
+  "credentials": [
+    {
+      "ref": "CredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oci/credential-schema",
+        "$ref": "#/$defs/CredentialSchema",
+        "$defs": {
+          "CredentialSchema": {
+            "properties": {
+              "tenancyOcid": {
+                "type": "string",
+                "title": "Tenancy OCID",
+                "description": "OCID of the tenancy Openlane should read from (e.g. ocid1.tenancy.oc1..aaaa)"
+              },
+              "userOcid": {
+                "type": "string",
+                "title": "User OCID",
+                "description": "OCID of the user the API signing key is registered against (e.g. ocid1.user.oc1..aaaa)"
+              },
+              "fingerprint": {
+                "type": "string",
+                "title": "API Key Fingerprint",
+                "description": "Fingerprint shown in the OCI console for the uploaded public key"
+              },
+              "privateKey": {
+                "type": "string",
+                "title": "API Private Key",
+                "description": "PEM encoded private key matching the uploaded public key"
+              },
+              "privateKeyPassphrase": {
+                "type": "string",
+                "title": "Private Key Passphrase",
+                "description": "Only required when the private key is encrypted"
+              },
+              "region": {
+                "type": "string",
+                "title": "Region",
+                "description": "OCI region identifier used for API calls (e.g. us-ashburn-1)"
+              },
+              "compartmentOcid": {
+                "type": "string",
+                "title": "Compartment OCID",
+                "description": "Compartment to collect from including its subcompartments. Defaults to the tenancy root compartment"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "tenancyOcid",
+              "userOcid",
+              "fingerprint",
+              "privateKey",
+              "region"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "CredentialSchema"
+  ]
+}

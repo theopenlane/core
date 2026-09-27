@@ -15,9 +15,15 @@ import (
 // HelperTestHealthCheck is the config type for the helper test health check operation
 type HelperTestHealthCheck struct{}
 
+// githubTestCredential is the credential type stored by the GitHub disconnect test definition
+type githubTestCredential struct {
+	// Token is the stored token
+	Token string `json:"token"`
+}
+
 var (
 	githubAppDefinitionID   = githubapp.DefinitionID.ID()
-	githubTestCredentialRef = types.NewCredentialSlotID("github_test")
+	githubTestCredentialRef = types.NewCredentialRef[githubTestCredential]()
 	_, _                    = providerkit.OperationSchema[HelperTestHealthCheck]()
 )
 
@@ -61,17 +67,16 @@ func githubTestDefinitionBuilder(definitionID string) registry.Builder {
 					Ref:         githubTestCredentialRef,
 					Name:        "GitHub Test Credential",
 					Description: "Credential slot used by the GitHub disconnect test definition.",
-					Schema:      json.RawMessage(`{"type":"object","properties":{"token":{"type":"string"}}}`),
 				},
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:  githubTestCredentialRef,
+					CredentialRef:  githubTestCredentialRef.ID(),
 					Name:           "GitHub Test Connection",
 					Description:    "Test connection used for handler disconnect flows.",
-					CredentialRefs: []types.CredentialSlotID{githubTestCredentialRef},
+					CredentialRefs: []types.CredentialSlotID{githubTestCredentialRef.ID()},
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: githubTestCredentialRef,
+						CredentialRef: githubTestCredentialRef.ID(),
 						Description:   "Remove the persisted GitHub test credential and disconnect this installation.",
 					},
 				},

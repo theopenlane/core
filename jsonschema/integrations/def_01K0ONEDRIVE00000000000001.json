@@ -1,0 +1,34 @@
+{
+  "id": "def_01K0ONEDRIVE00000000000001",
+  "credentials": [
+    {
+      "ref": "oneDriveCred",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/one-drive-cred",
+        "$ref": "#/$defs/oneDriveCred",
+        "$defs": {
+          "oneDriveCred": {
+            "properties": {
+              "accessToken": {
+                "type": "string"
+              },
+              "refreshToken": {
+                "type": "string"
+              },
+              "expiry": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "oneDriveCred"
+  ]
+}

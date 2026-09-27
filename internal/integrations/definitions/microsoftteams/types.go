@@ -15,7 +15,7 @@ var (
 	// installation is the typed installation metadata handle for the Microsoft Teams definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// teamsCredential is the auth-managed credential slot used by the Teams client
-	teamsCredentialSchema, teamsCredential = providerkit.CredentialSchema[teamsCred]()
+	teamsCredential = types.NewCredentialRef[teamsCred]()
 	// teamsClient is the client ref for the Microsoft Graph service client used by this definition
 	teamsClient = types.NewClientRef[*msgraphsdk.GraphServiceClient]()
 	// messageSendSchema is the operation ref for the Microsoft Teams message send operation

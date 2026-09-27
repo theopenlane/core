@@ -13,7 +13,7 @@ var (
 	// integration is the typed installation metadata handle for the Okta definition
 	integration = types.NewInstallationRef(resolveInstallationMetadata)
 	// oktaCredential is the auth-managed credential slot used by the Okta client
-	oktaCredentialSchema, oktaCredential = providerkit.CredentialSchema[CredentialSchema]()
+	oktaCredential = types.NewCredentialRef[CredentialSchema]()
 	// oktaClient is the client ref for the Okta API client used by this definition
 	oktaClient = types.NewClientRef[*oktagosdk.APIClient]()
 	// directorySyncSchema is the operation ref for the Okta directory sync operation

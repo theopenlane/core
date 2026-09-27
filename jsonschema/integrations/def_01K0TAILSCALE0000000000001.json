@@ -1,0 +1,38 @@
+{
+  "id": "def_01K0TAILSCALE0000000000001",
+  "credentials": [
+    {
+      "ref": "CredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/tailscale/credential-schema",
+        "$ref": "#/$defs/CredentialSchema",
+        "$defs": {
+          "CredentialSchema": {
+            "properties": {
+              "clientId": {
+                "type": "string",
+                "title": "Client ID",
+                "description": "OAuth client ID from the Tailscale admin console."
+              },
+              "clientSecret": {
+                "type": "string",
+                "title": "Client Secret",
+                "description": "OAuth client secret from the Tailscale admin console."
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "clientId",
+              "clientSecret"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "CredentialSchema"
+  ]
+}

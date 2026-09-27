@@ -2,7 +2,9 @@ package registry
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/samber/lo"
@@ -29,6 +31,53 @@ type Registry struct {
 	galaListeners []types.GalaListenerRegistration
 }
 
+// Surface is the installation-facing surface of a definition: its credential slots with their stored schemas and its connection modes
+type Surface struct {
+	// ID is the canonical definition identifier
+	ID string `json:"id"`
+	// Credentials lists every credential slot with its stored schema, sorted by ref
+	Credentials []SurfaceCredential `json:"credentials"`
+	// Connections lists every connection mode's selecting credential ref, sorted
+	Connections []string `json:"connections"`
+}
+
+// SurfaceCredential is one credential slot and the schema of what it stores
+type SurfaceCredential struct {
+	// Ref is the stable credential slot name
+	Ref string `json:"ref"`
+	// Schema is the reflected JSON schema of the stored credential type
+	Schema json.RawMessage `json:"schema"`
+	// Replaces lists the retired slot names whose stored payloads this slot takes over, sorted
+	Replaces []string `json:"replaces,omitempty"`
+	// Backfill reports whether the slot declares a backfill for payloads missing values
+	Backfill bool `json:"backfill,omitempty"`
+}
+
+// DefinitionSurface projects a definition onto its installation-facing surface, sorted for stable encoding
+func DefinitionSurface(def types.Definition) Surface {
+	credentials := lo.Map(def.CredentialRegistrations, func(registration types.CredentialRegistration, _ int) SurfaceCredential {
+		replaces := lo.Map(registration.Ref.Replaces(), func(id types.CredentialSlotID, _ int) string {
+			return id.String()
+		})
+
+		slices.Sort(replaces)
+
+		return SurfaceCredential{Ref: registration.Ref.ID().String(), Schema: registration.Ref.Schema(), Replaces: replaces, Backfill: registration.Ref.Backfills()}
+	})
+
+	slices.SortFunc(credentials, func(a, b SurfaceCredential) int {
+		return strings.Compare(a.Ref, b.Ref)
+	})
+
+	connections := lo.Map(def.Connections, func(connection types.ConnectionRegistration, _ int) string {
+		return connection.CredentialRef.String()
+	})
+
+	slices.Sort(connections)
+
+	return Surface{ID: def.ID, Credentials: credentials, Connections: connections}
+}
+
 // definitionEntry captures the indexed details for one registered definition
 type definitionEntry struct {
 	// definition holds the original definition as supplied by the caller
@@ -46,6 +95,8 @@ type definitionEntry struct {
 	// runtimeClient holds the pre-built client for runtime integrations.
 	// Non-nil only when the definition has a RuntimeIntegration with populated config
 	runtimeClient any
+	// version is the hash of the definition's declarative composition
+	version string
 }
 
 // New constructs an empty registry
@@ -64,6 +115,7 @@ func (r *Registry) Register(def types.Definition) error {
 	}
 
 	populateMappingLinkTargets(def.Mappings)
+	populateCredentialSchemas(def)
 
 	entry, err := compileDefinition(def)
 	if err != nil {
@@ -126,6 +178,16 @@ func (r *Registry) Definition(id string) (types.Definition, bool) {
 	return entry.definition, true
 }
 
+// Version returns the computed version of one definition, or empty when unregistered
+func (r *Registry) Version(id string) string {
+	entry, ok := r.definitions[id]
+	if !ok {
+		return ""
+	}
+
+	return entry.version
+}
+
 // Definitions returns all registered definitions in stable id order
 func (r *Registry) Definitions() []types.Definition {
 	return mapx.SortedProjection(r.definitions, func(e definitionEntry) types.Definition { return e.definition }, func(d types.Definition) string { return d.ID })
@@ -171,18 +233,14 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 		return ErrOperatorConfigSchemaRequired
 	}
 
-	authCredentialNames := make(map[string]struct{}, len(def.Connections))
-	for _, connection := range def.Connections {
-		if connection.Auth != nil && connection.Auth.CredentialRef != (types.CredentialSlotID{}) {
-			authCredentialNames[connection.Auth.CredentialRef.String()] = struct{}{}
+	for _, credential := range def.CredentialRegistrations {
+		if credential.Ref == nil || credential.Ref.ID() == (types.CredentialSlotID{}) {
+			return ErrCredentialRefRequired
 		}
-	}
 
-	if lo.ContainsBy(def.CredentialRegistrations, func(credential types.CredentialRegistration) bool {
-		_, authManaged := authCredentialNames[credential.Ref.String()]
-		return len(credential.Schema) == 0 && !authManaged
-	}) {
-		return ErrCredentialSchemaRequired
+		if len(credential.Ref.Schema()) == 0 {
+			return ErrCredentialSchemaRequired
+		}
 	}
 
 	if def.UserInput != nil && len(def.UserInput.Schema) == 0 {
@@ -418,6 +476,11 @@ func compileDefinition(def types.Definition) (definitionEntry, error) {
 		return definitionEntry{}, err
 	}
 
+	version, err := computeVersion(def)
+	if err != nil {
+		return definitionEntry{}, err
+	}
+
 	return definitionEntry{
 		definition:    def,
 		connections:   connections,
@@ -425,14 +488,30 @@ func compileDefinition(def types.Definition) (definitionEntry, error) {
 		operations:    operations,
 		webhooks:      webhooks,
 		webhookEvents: webhookEvents,
+		version:       version,
 	}, nil
 }
 
 // indexCredentialNames builds a set of declared credential ref names for a definition
 func indexCredentialNames(registrations []types.CredentialRegistration) map[string]struct{} {
 	return lo.SliceToMap(registrations, func(reg types.CredentialRegistration) (string, struct{}) {
-		return reg.Ref.String(), struct{}{}
+		return reg.Ref.ID().String(), struct{}{}
 	})
+}
+
+// populateCredentialSchemas fills each registration's user-facing schema from its typed slot, leaving slots an auth flow fills empty
+func populateCredentialSchemas(def types.Definition) {
+	for i := range def.CredentialRegistrations {
+		registration := &def.CredentialRegistrations[i]
+
+		authManaged := lo.SomeBy(def.Connections, func(connection types.ConnectionRegistration) bool {
+			return connection.Auth != nil && connection.Auth.CredentialRef == registration.Ref.ID()
+		})
+
+		if !authManaged {
+			registration.Schema = registration.Ref.Schema()
+		}
+	}
 }
 
 // indexClients indexes client registrations by client ref while validating credential cross-references

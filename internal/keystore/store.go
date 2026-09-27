@@ -1,12 +1,14 @@
 package keystore
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"sync"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/samber/lo"
 	"github.com/theopenlane/eddy"
 	"github.com/theopenlane/iam/auth"
 
@@ -95,6 +97,21 @@ func (s *Store) LoadCredentials(ctx context.Context, installation *ent.Integrati
 	return bindings, nil
 }
 
+// LoadAllCredentials resolves every persisted credential slot for one installation record
+func (s *Store) LoadAllCredentials(ctx context.Context, installation *ent.Integration) (map[types.CredentialSlotID]types.CredentialSet, error) {
+	records, err := s.activeCredentialRecords(integrationSystemContext(ctx), installation.ID, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	out := make(map[types.CredentialSlotID]types.CredentialSet, len(records))
+	for secretName, record := range records {
+		out[types.NewCredentialSlotID(secretName)] = cloneCredentialSet(types.CredentialSet(record.CredentialSet))
+	}
+
+	return out, nil
+}
+
 // SaveCredential upserts one credential slot for one installation record
 func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integration, credentialRef types.CredentialSlotID, credential types.CredentialSet) error {
 	if credentialRef == (types.CredentialSlotID{}) {
@@ -144,6 +161,55 @@ func (s *Store) DeleteCredential(ctx context.Context, integrationID string) erro
 	}
 
 	s.InvalidateClients(integrationID)
+
+	return nil
+}
+
+// ReplaceCredentials applies the change from previous to next: slots in previous that differ are updated, slots absent from previous are created only when no row exists, slots in previous but not in next are deleted, and rows outside previous are never overwritten
+func (s *Store) ReplaceCredentials(ctx context.Context, installation *ent.Integration, previous, next map[types.CredentialSlotID]types.CredentialSet) error {
+	systemCtx := integrationSystemContext(ctx)
+
+	for slot, credential := range next {
+		existing, tracked := previous[slot]
+
+		if tracked && bytes.Equal(existing.Data, credential.Data) {
+			continue
+		}
+
+		if !tracked {
+			_, exists, err := s.activeCredentialRecord(systemCtx, installation.ID, slot)
+			if err != nil {
+				return err
+			}
+
+			if exists {
+				continue
+			}
+		}
+
+		if err := s.SaveCredential(ctx, installation, slot, credential); err != nil {
+			return err
+		}
+	}
+
+	removed := lo.FilterMap(lo.Keys(previous), func(slot types.CredentialSlotID, _ int) (string, bool) {
+		_, keep := next[slot]
+
+		return slot.String(), !keep
+	})
+
+	if len(removed) > 0 {
+		if _, err := s.db.Hush.Delete().
+			Where(
+				enthush.HasIntegrationsWith(entintegration.IDEQ(installation.ID)),
+				enthush.SecretNameIn(removed...),
+			).
+			Exec(systemCtx); err != nil {
+			return err
+		}
+	}
+
+	s.InvalidateClients(installation.ID)
 
 	return nil
 }

@@ -7,4 +7,6 @@ var (
 	ErrObjectExpected = errors.New("json value is not an object")
 	// ErrKeyRequired is returned when a JSON object key is empty
 	ErrKeyRequired = errors.New("json key is required")
+	// ErrSchemaRefUnresolved is returned when a schema $ref points outside the schema document
+	ErrSchemaRefUnresolved = errors.New("json schema ref could not be resolved")
 )

@@ -34,17 +34,15 @@ func Builder(cfg Config) registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         awsAssumeRoleCredential.ID(),
+					Ref:         awsAssumeRoleCredential,
 					Name:        "AWS Assume Role",
 					Description: "Cross-account IAM role used to access Security Hub.",
-					Schema:      awsAssumeRoleSchema,
 					Recommended: true,
 				},
 				{
-					Ref:         awsServiceAccountCredential.ID(),
+					Ref:         awsServiceAccountCredential,
 					Name:        "AWS Static Credentials",
 					Description: "Static IAM access keys for direct Security Hub access without assume-role.",
-					Schema:      awsServiceAccountSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{

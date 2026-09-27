@@ -23,9 +23,6 @@ import (
 // so BackfillInstallationProvenance can resolve a definition for both installations
 var provenanceConversionDefinitionID = testint.DefinitionID.ID()
 
-// provenanceConversionDefinitionVersion is the definition version the conversion must copy onto stamped rows
-const provenanceConversionDefinitionVersion = "v1"
-
 // provenanceConversionTenant is the primary installation's pre-resolved instance id
 const provenanceConversionTenant = "tenant-provconv"
 
@@ -109,12 +106,13 @@ func TestBackfillInstallationProvenanceStampsOrganizationRows(t *testing.T) {
 	internalCtx := auth.WithInternalOperationContext(ctx)
 
 	providerState := provenanceConversionProviderState(t)
+	definitionVersion := suite.IntegrationsRT.Registry().Version(provenanceConversionDefinitionID)
 
 	installation, err := suite.Client.DB.Integration.Create().
 		SetName("Provenance Conversion Primary").
 		SetKind("provconvprimary").
 		SetDefinitionID(provenanceConversionDefinitionID).
-		SetDefinitionVersion(provenanceConversionDefinitionVersion).
+		SetDefinitionVersion(definitionVersion).
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: provenanceConversionTenant}}).
 		SetProviderState(providerState).
 		Save(ctx)
@@ -124,7 +122,7 @@ func TestBackfillInstallationProvenanceStampsOrganizationRows(t *testing.T) {
 		SetName("Provenance Conversion Other").
 		SetKind("provconvother").
 		SetDefinitionID(provenanceConversionDefinitionID).
-		SetDefinitionVersion(provenanceConversionDefinitionVersion).
+		SetDefinitionVersion(definitionVersion).
 		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: provenanceConversionOtherTenant}}).
 		SetProviderState(providerState).
 		Save(ctx)
@@ -167,7 +165,7 @@ func TestBackfillInstallationProvenanceStampsOrganizationRows(t *testing.T) {
 		SetOwnerID(installation.OwnerID).
 		SetIntegrationID(installation.ID).
 		SetSourceDefinitionID(provenanceConversionDefinitionID).
-		SetSourceDefinitionVersion(provenanceConversionDefinitionVersion).
+		SetSourceDefinitionVersion(definitionVersion).
 		SetSourceInstanceID(provenanceConversionStaleTenant).
 		SetManagedBy(installation.ID).
 		Save(ctx)
@@ -180,7 +178,7 @@ func TestBackfillInstallationProvenanceStampsOrganizationRows(t *testing.T) {
 		SetOwnerID(installation.OwnerID).
 		SetIntegrationID(installation.ID).
 		SetSourceDefinitionID(provenanceConversionDefinitionID).
-		SetSourceDefinitionVersion(provenanceConversionDefinitionVersion).
+		SetSourceDefinitionVersion(definitionVersion).
 		SetSourceInstanceID(provenanceConversionStaleTenant).
 		SetManagedBy(other.ID).
 		Save(ctx)
@@ -193,7 +191,7 @@ func TestBackfillInstallationProvenanceStampsOrganizationRows(t *testing.T) {
 		SetOwnerID(installation.OwnerID).
 		SetIntegrationID(other.ID).
 		SetSourceDefinitionID(provenanceConversionDefinitionID).
-		SetSourceDefinitionVersion(provenanceConversionDefinitionVersion).
+		SetSourceDefinitionVersion(definitionVersion).
 		SetSourceInstanceID(provenanceConversionStaleTenant).
 		SetManagedBy(installation.ID).
 		Save(ctx)
@@ -238,43 +236,43 @@ func TestBackfillInstallationProvenanceStampsOrganizationRows(t *testing.T) {
 
 	unclaimedAfter := directoryAccountProvenance(ctx, t, unclaimedAccount.ID)
 	assert.Check(t, is.Equal(provenanceConversionDefinitionID, unclaimedAfter.DefinitionID), "an unclaimed FK-linked row must gain the installation's definition")
-	assert.Check(t, is.Equal(provenanceConversionDefinitionVersion, unclaimedAfter.DefinitionVersion), "an unclaimed FK-linked row must gain the installation's definition version")
+	assert.Check(t, is.Equal(definitionVersion, unclaimedAfter.DefinitionVersion), "an unclaimed FK-linked row must gain the installation's definition version")
 	assert.Check(t, is.Equal(installation.ID, unclaimedAfter.InstanceID), "an unclaimed FK-linked row must gain the installation's instance id")
 	assert.Check(t, is.Equal(installation.ID, unclaimedAfter.ManagedBy), "an unclaimed FK-linked row must become managed by the installation")
 
 	partialAfter := directoryAccountProvenance(ctx, t, partialAccount.ID)
 	assert.Check(t, is.Equal(provenanceConversionDefinitionID, partialAfter.DefinitionID))
-	assert.Check(t, is.Equal(provenanceConversionDefinitionVersion, partialAfter.DefinitionVersion), "a self-managed row missing only its instance must gain the definition version")
+	assert.Check(t, is.Equal(definitionVersion, partialAfter.DefinitionVersion), "a self-managed row missing only its instance must gain the definition version")
 	assert.Check(t, is.Equal(installation.ID, partialAfter.InstanceID), "a self-managed row missing only its instance must gain the instance id")
 	assert.Check(t, is.Equal(installation.ID, partialAfter.ManagedBy))
 
 	foreignAfter := directoryAccountProvenance(ctx, t, foreignAccount.ID)
 	assert.Check(t, is.Equal(provenanceConversionDefinitionID, foreignAfter.DefinitionID), "a row managed by another installation in the same organization is stamped by that installation's own conversion")
-	assert.Check(t, is.Equal(provenanceConversionDefinitionVersion, foreignAfter.DefinitionVersion))
+	assert.Check(t, is.Equal(definitionVersion, foreignAfter.DefinitionVersion))
 	assert.Check(t, is.Equal(other.ID, foreignAfter.InstanceID), "a row managed by another installation gains that installation's instance id, not the caller's")
 	assert.Check(t, is.Equal(other.ID, foreignAfter.ManagedBy))
 
 	staleManagedAfter := directoryAccountProvenance(ctx, t, staleManagedAccount.ID)
 	assert.Check(t, is.Equal(provenanceConversionDefinitionID, staleManagedAfter.DefinitionID))
-	assert.Check(t, is.Equal(provenanceConversionDefinitionVersion, staleManagedAfter.DefinitionVersion))
+	assert.Check(t, is.Equal(definitionVersion, staleManagedAfter.DefinitionVersion))
 	assert.Check(t, is.Equal(installation.ID, staleManagedAfter.InstanceID), "a row managed by the installation with a stale instance id must be re-stamped to the installation's current instance id")
 	assert.Check(t, is.Equal(installation.ID, staleManagedAfter.ManagedBy))
 
 	staleForeignAfter := directoryAccountProvenance(ctx, t, staleForeignAccount.ID)
 	assert.Check(t, is.Equal(provenanceConversionDefinitionID, staleForeignAfter.DefinitionID))
-	assert.Check(t, is.Equal(provenanceConversionDefinitionVersion, staleForeignAfter.DefinitionVersion))
+	assert.Check(t, is.Equal(definitionVersion, staleForeignAfter.DefinitionVersion))
 	assert.Check(t, is.Equal(other.ID, staleForeignAfter.InstanceID), "a row managed by another installation with a stale instance id is re-stamped to that installation's own current instance id by its own conversion")
 	assert.Check(t, is.Equal(other.ID, staleForeignAfter.ManagedBy))
 
 	staleManagedCrossLinkedAfter := directoryAccountProvenance(ctx, t, staleManagedCrossLinkedAccount.ID)
 	assert.Check(t, is.Equal(provenanceConversionDefinitionID, staleManagedCrossLinkedAfter.DefinitionID))
-	assert.Check(t, is.Equal(provenanceConversionDefinitionVersion, staleManagedCrossLinkedAfter.DefinitionVersion))
+	assert.Check(t, is.Equal(definitionVersion, staleManagedCrossLinkedAfter.DefinitionVersion))
 	assert.Check(t, is.Equal(installation.ID, staleManagedCrossLinkedAfter.InstanceID), "a row managed by the installation with a stale instance id must be re-stamped to the installation's current instance id regardless of which installation its integration link points at")
 	assert.Check(t, is.Equal(installation.ID, staleManagedCrossLinkedAfter.ManagedBy))
 
 	singleAfter := findingProvenance(ctx, t, singleFinding.ID)
 	assert.Check(t, is.Equal(provenanceConversionDefinitionID, singleAfter.DefinitionID), "an M2M row linked only to the installation must gain its definition")
-	assert.Check(t, is.Equal(provenanceConversionDefinitionVersion, singleAfter.DefinitionVersion))
+	assert.Check(t, is.Equal(definitionVersion, singleAfter.DefinitionVersion))
 	assert.Check(t, is.Equal(installation.ID, singleAfter.InstanceID), "an M2M row linked only to the installation must gain its instance id")
 	assert.Check(t, is.Equal(installation.ID, singleAfter.ManagedBy))
 

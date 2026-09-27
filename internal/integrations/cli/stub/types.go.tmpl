@@ -10,8 +10,8 @@ var (
 	definitionID = types.NewDefinitionRef("{{ defid }}")
 	// installation is the typed installation metadata handle for the {{ display }} definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// {{ name }}Schema is the credential schema for {{ display }} credentials
-	{{ name }}Schema, {{ name }}Credential = providerkit.CredentialSchema[CredentialSchema]()
+	// {{ name }}Credential is the credential ref for {{ display }} credentials
+	{{ name }}Credential = types.NewCredentialRef[CredentialSchema]()
 	// {{ name }}Client is the client ref for the {{ display }} client used by this definition
 	{{ name }}Client = types.NewClientRef[*APIClient]()
 	// healthCheckSchema is the operation schema for the {{ display }} health check operation

@@ -1,0 +1,39 @@
+{
+  "id": "def_01EMAILINT00000000000000001",
+  "credentials": [
+    {
+      "ref": "Credential",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/email/credential",
+        "$ref": "#/$defs/Credential",
+        "$defs": {
+          "Credential": {
+            "properties": {
+              "apiKey": {
+                "type": "string",
+                "description": "Email provider API key"
+              },
+              "provider": {
+                "type": "string",
+                "enum": [
+                  "resend"
+                ],
+                "description": "Email service provider"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "apiKey",
+              "provider"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "Credential"
+  ]
+}

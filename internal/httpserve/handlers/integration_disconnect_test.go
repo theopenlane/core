@@ -129,18 +129,17 @@ func (suite *HandlerTestSuite) TestDisconnectIntegration() {
 func (suite *HandlerTestSuite) createTestIntegration(t *testing.T, ctx context.Context, orgID, definitionID string) string {
 	t.Helper()
 
-	rec, err := suite.db.Integration.Create().
-		SetOwnerID(orgID).
-		SetName(definitionID).
-		SetDefinitionID(definitionID).
-		Save(ctx)
+	def, ok := suite.h.IntegrationsRuntime.Definition(definitionID)
+	assert.True(t, ok)
+
+	rec, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(ctx, orgID, "", def)
 	assert.NoError(t, err)
 
 	credential := types.CredentialSet{
 		Data: json.RawMessage(`{"token":"secret"}`),
 	}
 
-	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, githubTestCredentialRef, &credential, nil)
+	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, githubTestCredentialRef.ID(), &credential, nil)
 	assert.NoError(t, err)
 
 	return rec.ID

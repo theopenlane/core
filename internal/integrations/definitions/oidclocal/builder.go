@@ -36,7 +36,7 @@ func Builder(cfg Config) registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         oidcCredential.ID(),
+					Ref:         oidcCredential,
 					Name:        "Local OIDC Credential",
 					Description: "Auth-managed OIDC credential issued by the local Dex development provider.",
 				},

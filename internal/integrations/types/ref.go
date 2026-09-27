@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
@@ -118,20 +120,128 @@ func (r *CredentialSlotID) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// CredentialRef is a typed handle for one credential slot, parameterized by the credential schema type
-type CredentialRef[T any] struct {
-	// id is the non-generic credential slot identity
-	id CredentialSlotID
+// CredentialSlot is the typed identity a credential registration points at; only CredentialRef satisfies it
+type CredentialSlot interface {
+	// ID returns the non-generic credential slot identity
+	ID() CredentialSlotID
+	// Schema returns the reflected JSON schema of the stored credential type
+	Schema() json.RawMessage
+	// Replaces lists the retired slots whose stored payloads this slot takes over
+	Replaces() []CredentialSlotID
+	// Convert reshapes a payload stored under one of the replaced slots into this slot's shape
+	Convert(from CredentialSlotID, old json.RawMessage) (json.RawMessage, error)
+	// Backfills reports whether the slot declares how to complete a stored payload missing values
+	Backfills() bool
+	// Backfill derives values a stored payload lacks from the live installation
+	Backfill(ctx context.Context, req InstallationRequest, payload json.RawMessage) (json.RawMessage, error)
 }
 
-// NewCredentialRef creates a typed credential slot identity handle
-func NewCredentialRef[T any](name string) CredentialRef[T] {
-	return CredentialRef[T]{id: NewCredentialSlotID(name)}
+// CredentialRef is a typed handle for one credential slot, parameterized by the credential schema type
+type CredentialRef[T any] struct {
+	// id is the non-generic credential slot identity derived from the type name
+	id CredentialSlotID
+	// schema is the reflected JSON schema of T
+	schema json.RawMessage
+	// replacements decode payloads stored under retired slots into T
+	replacements map[CredentialSlotID]func(json.RawMessage) (T, error)
+	// backfill derives values a decoded payload lacks from the live installation
+	backfill func(context.Context, InstallationRequest, *T) error
+}
+
+// NewCredentialRef reflects T once and creates the typed credential slot handle named after it
+func NewCredentialRef[T any]() CredentialRef[T] {
+	schema := jsonx.SchemaFrom[T]()
+
+	return CredentialRef[T]{id: NewCredentialSlotID(jsonx.SchemaID(schema)), schema: schema}
+}
+
+// Replacing declares that ref takes over payloads stored under old, converted with convert or decoded directly into T when convert is nil
+func Replacing[T, Old any](ref CredentialRef[T], old CredentialRef[Old], convert func(Old) T) CredentialRef[T] {
+	if ref.replacements == nil {
+		ref.replacements = map[CredentialSlotID]func(json.RawMessage) (T, error){}
+	}
+
+	ref.replacements[old.ID()] = func(payload json.RawMessage) (T, error) {
+		if convert == nil {
+			return jsonx.Decode[T](payload)
+		}
+
+		previous, err := jsonx.Decode[Old](payload)
+		if err != nil {
+			var zero T
+
+			return zero, err
+		}
+
+		return convert(previous), nil
+	}
+
+	return ref
+}
+
+// Backfilled declares how a stored payload missing values is completed from the live installation
+func (r CredentialRef[T]) Backfilled(fn func(context.Context, InstallationRequest, *T) error) CredentialRef[T] {
+	r.backfill = fn
+
+	return r
+}
+
+// Replaces lists the retired slots whose stored payloads this slot takes over
+func (r CredentialRef[T]) Replaces() []CredentialSlotID {
+	return lo.Keys(r.replacements)
+}
+
+// Convert reshapes a payload stored under one of the replaced slots into this slot's shape
+func (r CredentialRef[T]) Convert(from CredentialSlotID, old json.RawMessage) (json.RawMessage, error) {
+	decode, ok := r.replacements[from]
+	if !ok {
+		return nil, fmt.Errorf("%w: %s does not replace %s", ErrCredentialNotReplaced, r.id, from)
+	}
+
+	value, err := decode(old)
+	if err != nil {
+		return nil, err
+	}
+
+	return jsonx.ToRawMessage(value)
+}
+
+// Backfills reports whether the slot declares how to complete a stored payload missing values
+func (r CredentialRef[T]) Backfills() bool {
+	return r.backfill != nil
+}
+
+// Backfill derives values a stored payload lacks from the live installation, returning it unchanged when none is declared
+func (r CredentialRef[T]) Backfill(ctx context.Context, req InstallationRequest, payload json.RawMessage) (json.RawMessage, error) {
+	if r.backfill == nil {
+		return payload, nil
+	}
+
+	var value T
+	if err := jsonx.UnmarshalIfPresent(payload, &value); err != nil {
+		return nil, err
+	}
+
+	if err := r.backfill(ctx, req, &value); err != nil {
+		return nil, err
+	}
+
+	return jsonx.ToRawMessage(value)
 }
 
 // ID returns the non-generic credential slot identity
 func (r CredentialRef[T]) ID() CredentialSlotID {
 	return r.id
+}
+
+// Schema returns the reflected JSON schema of the stored credential type
+func (r CredentialRef[T]) Schema() json.RawMessage {
+	return jsonx.CloneRawMessage(r.schema)
+}
+
+// MarshalJSON encodes the ref as its stable slot name
+func (r CredentialRef[T]) MarshalJSON() ([]byte, error) {
+	return json.Marshal(r.id)
 }
 
 // String returns the stable credential name used for persistence and equality comparisons

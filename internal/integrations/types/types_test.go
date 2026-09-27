@@ -7,11 +7,48 @@ import (
 	"testing"
 )
 
+// oauthCredential is the credential type behind the OAuth test slot
+type oauthCredential struct{}
+
+// apiKeyCredential is the credential type behind the API key test slot
+type apiKeyCredential struct{}
+
+var (
+	oauthCredentialRef  = NewCredentialRef[oauthCredential]()
+	apiKeyCredentialRef = NewCredentialRef[apiKeyCredential]()
+)
+
+func TestCredentialRegistrationMarshalJSON(t *testing.T) {
+	t.Parallel()
+
+	encoded, err := json.Marshal(CredentialRegistration{Ref: apiKeyCredentialRef, Name: "API key"})
+	if err != nil {
+		t.Fatalf("marshal: %v", err)
+	}
+
+	var wire map[string]json.RawMessage
+	if err := json.Unmarshal(encoded, &wire); err != nil {
+		t.Fatalf("decode: %v", err)
+	}
+
+	if string(wire["ref"]) != `"apiKeyCredential"` {
+		t.Fatalf("expected ref to be the slot name, got %s", wire["ref"])
+	}
+
+	if _, ok := wire["schema"]; ok {
+		t.Fatal("expected an unfilled schema to stay off the wire")
+	}
+
+	if _, ok := wire["Ref"]; ok {
+		t.Fatal("expected the typed ref to stay off the wire")
+	}
+}
+
 func TestCredentialBindingsResolve(t *testing.T) {
 	t.Parallel()
 
-	refA := NewCredentialSlotID("oauth")
-	refB := NewCredentialSlotID("api_key")
+	refA := oauthCredentialRef.ID()
+	refB := apiKeyCredentialRef.ID()
 
 	bindings := CredentialBindings{
 		{Ref: refA, Credential: CredentialSet{Data: json.RawMessage(`{"token":"abc"}`)}},
@@ -21,7 +58,7 @@ func TestCredentialBindingsResolve(t *testing.T) {
 	t.Run("found", func(t *testing.T) {
 		t.Parallel()
 
-		lookup := NewCredentialSlotID("oauth")
+		lookup := oauthCredentialRef.ID()
 		cred, ok := bindings.Resolve(lookup)
 		if !ok {
 			t.Fatal("expected binding to be found")
@@ -46,21 +83,18 @@ func TestCredentialBindingsResolve(t *testing.T) {
 func TestDefinitionCredentialRegistration(t *testing.T) {
 	t.Parallel()
 
-	refA := NewCredentialSlotID("oauth")
-	refB := NewCredentialSlotID("api_key")
-
 	def := Definition{
 		DefinitionSpec: DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []CredentialRegistration{
-			{Ref: refA, Name: "OAuth"},
-			{Ref: refB, Name: "API Key"},
+			{Ref: oauthCredentialRef, Name: "OAuth"},
+			{Ref: apiKeyCredentialRef, Name: "API Key"},
 		},
 	}
 
 	t.Run("found", func(t *testing.T) {
 		t.Parallel()
 
-		lookup := NewCredentialSlotID("api_key")
+		lookup := apiKeyCredentialRef.ID()
 		reg, err := def.CredentialRegistration(lookup)
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
@@ -85,21 +119,18 @@ func TestDefinitionCredentialRegistration(t *testing.T) {
 func TestDefinitionConnectionRegistration(t *testing.T) {
 	t.Parallel()
 
-	refA := NewCredentialSlotID("oauth")
-	refB := NewCredentialSlotID("api_key")
-
 	def := Definition{
 		DefinitionSpec: DefinitionSpec{ID: "test-def"},
 		Connections: []ConnectionRegistration{
-			{CredentialRef: refA, Name: "OAuth Flow"},
-			{CredentialRef: refB, Name: "API Key Flow"},
+			{CredentialRef: oauthCredentialRef.ID(), Name: "OAuth Flow"},
+			{CredentialRef: apiKeyCredentialRef.ID(), Name: "API Key Flow"},
 		},
 	}
 
 	t.Run("found", func(t *testing.T) {
 		t.Parallel()
 
-		lookup := NewCredentialSlotID("oauth")
+		lookup := oauthCredentialRef.ID()
 		reg, err := def.ConnectionRegistration(lookup)
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
@@ -189,7 +220,7 @@ func TestDefinitionWithProviderState(t *testing.T) {
 	}
 
 	next := DefinitionProviderState{
-		CredentialRef: NewCredentialSlotID("oauth"),
+		CredentialRef: oauthCredentialRef.ID(),
 	}
 
 	t.Run("empty state", func(t *testing.T) {
@@ -228,8 +259,8 @@ func TestDefinitionWithProviderState(t *testing.T) {
 			t.Fatalf("unmarshal error: %v", err)
 		}
 
-		if parsed.CredentialRef.String() != "oauth" {
-			t.Fatalf("got credential ref %q, want %q", parsed.CredentialRef.String(), "oauth")
+		if parsed.CredentialRef != oauthCredentialRef.ID() {
+			t.Fatalf("got credential ref %q, want %q", parsed.CredentialRef.String(), oauthCredentialRef.String())
 		}
 	})
 

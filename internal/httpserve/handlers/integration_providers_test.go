@@ -11,10 +11,23 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
+
+// providerResponse is the wire shape of one listed provider that the test asserts on
+type providerResponse struct {
+	Spec                    types.DefinitionSpec         `json:"spec"`
+	CredentialRegistrations []providerCredentialResponse `json:"credentialRegistrations"`
+	UserInput               *types.UserInputRegistration `json:"userInput"`
+	Operations              []json.RawMessage            `json:"operations"`
+}
+
+// providerCredentialResponse is the wire shape of one credential registration
+type providerCredentialResponse struct {
+	Ref    string          `json:"ref"`
+	Schema json.RawMessage `json:"schema"`
+}
 
 func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	t := suite.T()
@@ -34,22 +47,26 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	suite.e.ServeHTTP(rec, req)
 	assert.Equal(t, http.StatusOK, rec.Code)
 
-	var resp handlers.IntegrationProvidersResponse
+	var resp struct {
+		Success   bool               `json:"success"`
+		Providers []providerResponse `json:"providers"`
+	}
 	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
 	assert.GreaterOrEqual(t, len(resp.Providers), 2)
 
-	providers := map[string]types.Definition{}
+	providers := map[string]providerResponse{}
 	for _, provider := range resp.Providers {
-		providers[provider.ID] = provider
+		providers[provider.Spec.ID] = provider
 	}
 
 	provider, ok := providers[configTestProviderID]
 	assert.True(t, ok)
-	assert.True(t, provider.Active)
-	assert.True(t, provider.Visible)
+	assert.True(t, provider.Spec.Active)
+	assert.True(t, provider.Spec.Visible)
 	assert.Len(t, provider.CredentialRegistrations, 1)
-	assert.NotNil(t, provider.CredentialRegistrations[0].Schema)
+	assert.Equal(t, configTestCredentialRef.ID().String(), provider.CredentialRegistrations[0].Ref)
+	assert.NotEmpty(t, provider.CredentialRegistrations[0].Schema)
 	assert.NotNil(t, provider.UserInput)
 	assert.Empty(t, provider.Operations)
 

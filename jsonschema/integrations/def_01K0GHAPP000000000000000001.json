@@ -1,0 +1,40 @@
+{
+  "id": "def_01K0GHAPP000000000000000001",
+  "credentials": [
+    {
+      "ref": "githubAppCredential",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp/github-app-credential",
+        "$ref": "#/$defs/githubAppCredential",
+        "$defs": {
+          "githubAppCredential": {
+            "properties": {
+              "appId": {
+                "type": "integer"
+              },
+              "installationId": {
+                "type": "integer"
+              },
+              "accessToken": {
+                "type": "string"
+              },
+              "expiry": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "organizationName": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "githubAppCredential"
+  ]
+}

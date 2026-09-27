@@ -12,8 +12,8 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0TAILSCALE0000000000001")
 	// installation is the typed installation metadata handle for the Tailscale definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// tailscaleSchema is the credential schema for the Tailscale integration definition
-	tailscaleSchema, tailscaleCredential = providerkit.CredentialSchema[CredentialSchema]()
+	// tailscaleCredential is the credential slot for the Tailscale integration definition
+	tailscaleCredential = types.NewCredentialRef[CredentialSchema]()
 	// tailscaleClient is the client ref for the Tailscale API client used by this definition
 	tailscaleClient = types.NewClientRef[*tsclient.Client]()
 	// directorySyncSchema is the operation schema for the directory sync operation

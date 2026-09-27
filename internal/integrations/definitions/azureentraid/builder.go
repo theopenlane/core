@@ -35,7 +35,7 @@ func Builder(cfg Config) registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         entraTenantCredential.ID(),
+					Ref:         entraTenantCredential,
 					Name:        "Azure Entra ID Credential",
 					Description: "OAuth credential used to access Microsoft Graph for Entra ID directory data.",
 				},

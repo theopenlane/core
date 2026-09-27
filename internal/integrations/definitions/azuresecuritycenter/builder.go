@@ -27,10 +27,9 @@ func Builder() registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         securityCenterCredential.ID(),
+					Ref:         securityCenterCredential,
 					Name:        "Azure Security Center Credential",
 					Description: "Azure service principal used to access Microsoft Defender for Cloud.",
-					Schema:      securityCenterSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{

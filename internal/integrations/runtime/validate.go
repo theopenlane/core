@@ -3,6 +3,8 @@ package runtime
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"strings"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -36,14 +38,11 @@ func validatePayload(ctx context.Context, schema, data json.RawMessage, sentinel
 	}
 
 	if !result.Valid() {
-		logger := logx.FromContext(ctx).Info()
-		for _, resultErr := range result.Errors() {
-			logger = logger.Str(resultErr.Field(), resultErr.Description())
-		}
+		issues := jsonx.ValidationErrorStrings(result)
 
-		logger.Msg("schema validation failed")
+		logx.FromContext(ctx).Info().Strs("issues", issues).Msg("schema validation failed")
 
-		return sentinel
+		return fmt.Errorf("%w: %s", sentinel, strings.Join(issues, "; "))
 	}
 
 	return nil
