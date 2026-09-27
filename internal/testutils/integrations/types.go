@@ -3,6 +3,7 @@
 package integrations
 
 import (
+	"context"
 	"encoding/json"
 	"time"
 
@@ -25,12 +26,20 @@ var (
 	// UnresolvableOp is the client-resolving loop seeded without a credential
 	unresolvableSchema, UnresolvableOp = providerkit.OperationSchema[unresolvableCycle]()
 
-	// TokenCredential is the credential slot the test client is built from
-	tokenSchema, TokenCredential = providerkit.CredentialSchema[tokenCred]()
+	// LegacyTokenCredential is the slot an earlier definition version stored the token under; it is not registered
+	LegacyTokenCredential = types.NewCredentialRef[legacyTokenCred]()
+	// TokenCredential is the credential slot the test client is built from, taking over payloads stored under the legacy slot
+	TokenCredential = types.Replacing(types.NewCredentialRef[tokenCred](), LegacyTokenCredential, func(l legacyTokenCred) tokenCred { return tokenCred{Token: l.AccessToken} })
 	// OAuthCredential is the auth-managed slot filled by the OAuth fixture
-	_, OAuthCredential = providerkit.CredentialSchema[oauthTokenCred]()
-	// ServiceAccountCredential is the strict-schema slot used by config flows
-	serviceAccountSchema, ServiceAccountCredential = providerkit.CredentialSchema[serviceAccountCred]()
+	OAuthCredential = types.NewCredentialRef[oauthTokenCred]()
+	// ServiceAccountCredential is the strict-schema slot used by config flows, backfilling a missing email from the installation id
+	ServiceAccountCredential = types.NewCredentialRef[serviceAccountCred]().Backfilled(func(_ context.Context, req types.InstallationRequest, c *serviceAccountCred) error {
+		if c.ServiceAccountEmail == "" {
+			c.ServiceAccountEmail = req.Integration.ID + "@backfilled.example.com"
+		}
+
+		return nil
+	})
 
 	// testClient builds from the token credential
 	testClient = types.NewClientRef[*Client]()
@@ -115,6 +124,12 @@ func ModeInput(mode string) json.RawMessage {
 	}
 
 	return raw
+}
+
+// legacyTokenCred is the token shape stored under the retired slot
+type legacyTokenCred struct {
+	// AccessToken is the legacy field name for the token
+	AccessToken string `json:"accessToken"`
 }
 
 // TokenCredentialSet builds the token credential payload

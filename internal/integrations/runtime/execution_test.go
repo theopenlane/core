@@ -14,6 +14,11 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
+// executionTestAPIKey is the credential type bound to the operation under test
+type executionTestAPIKey struct{}
+
+var executionTestAPIKeyRef = types.NewCredentialRef[executionTestAPIKey]()
+
 func TestExecuteOperationNilInstallation(t *testing.T) {
 	t.Parallel()
 
@@ -176,7 +181,7 @@ func TestExecuteOperationWithCredentials(t *testing.T) {
 
 	rt := NewForTesting(registry.New())
 
-	ref := types.NewCredentialSlotID("api-key")
+	ref := executionTestAPIKeyRef.ID()
 	credentials := types.CredentialBindings{
 		{Ref: ref, Credential: types.CredentialSet{Data: json.RawMessage(`{"key":"secret"}`)}},
 	}

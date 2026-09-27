@@ -10,11 +10,17 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
-// testCredentialSlot is a reusable credential slot for tests
-var testCredentialSlot = integrationtypes.NewCredentialSlotID("api_key")
+// testCredential is the credential type behind the reusable test slot
+type testCredential struct{}
 
-// testCredentialSchema is a minimal valid JSON schema for credential registration
-var testCredentialSchema = json.RawMessage(`{"type":"object"}`)
+// testAuthCredential is the credential type behind the auth-managed test slot
+type testAuthCredential struct{}
+
+// testCredentialRef is the reusable typed credential slot for tests
+var testCredentialRef = integrationtypes.NewCredentialRef[testCredential]()
+
+// testAuthCredentialRef is the typed credential slot an auth flow fills in tests
+var testAuthCredentialRef = integrationtypes.NewCredentialRef[testAuthCredential]()
 
 // newTestHandler returns a no-op operation handler
 func newTestHandler() integrationtypes.OperationHandler {
@@ -42,12 +48,12 @@ func minimalDefinition(id string) (integrationtypes.Definition, integrationtypes
 			Visible:     true,
 		},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialSlot, Schema: testCredentialSchema},
+			{Ref: testCredentialRef},
 		},
 		Clients: []integrationtypes.ClientRegistration{
 			{
 				Ref:            clientRef.ID(),
-				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialSlot},
+				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialRef.ID()},
 				Build: func(context.Context, integrationtypes.ClientBuildRequest) (any, error) {
 					return "ok", nil
 				},
@@ -225,58 +231,22 @@ func TestValidateOperatorConfigSchemaRequired(t *testing.T) {
 	}
 }
 
-// TestValidateCredentialSchemaRequired verifies credential without schema (non-auth-managed) is rejected
-func TestValidateCredentialSchemaRequired(t *testing.T) {
+// TestValidateCredentialRefRequired verifies a credential registration without a typed slot ref is rejected
+func TestValidateCredentialRefRequired(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("orphan")
 
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_credschema"},
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_credref"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: nil},
+			{Name: "Orphan"},
 		},
 	}
 
 	err := reg.Register(def)
-	if !errors.Is(err, ErrCredentialSchemaRequired) {
-		t.Fatalf("expected ErrCredentialSchemaRequired, got %v", err)
-	}
-}
-
-// TestValidateCredentialSchemaSkippedForAuthManaged verifies auth-managed credential slots bypass schema requirement
-func TestValidateCredentialSchemaSkippedForAuthManaged(t *testing.T) {
-	t.Parallel()
-
-	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("oauth_token")
-
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_authmanaged"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot},
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
-				Auth: &integrationtypes.AuthRegistration{
-					CredentialRef: slot,
-				},
-			},
-		},
-		Operations: []integrationtypes.OperationRegistration{
-			{
-				Name:   "health",
-				Topic:  gala.TopicName("integration.def_authmanaged.health"),
-				Handle: newTestHandler(),
-			},
-		},
-	}
-
-	if err := reg.Register(def); err != nil {
-		t.Fatalf("Register() should succeed for auth-managed credential, got %v", err)
+	if !errors.Is(err, ErrCredentialRefRequired) {
+		t.Fatalf("expected ErrCredentialRefRequired, got %v", err)
 	}
 }
 
@@ -914,18 +884,17 @@ func TestConnectionAdditionalCredentialRefNotDeclared(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("valid")
 	extra := integrationtypes.NewCredentialSlotID("extra_ghost")
 
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_extraref"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
+			{Ref: testCredentialRef},
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot, extra},
+				CredentialRef:  testCredentialRef.ID(),
+				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialRef.ID(), extra},
 			},
 		},
 		Operations: []integrationtypes.OperationRegistration{
@@ -944,18 +913,17 @@ func TestConnectionClientRefNotDeclared(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("tok")
 	ghost := integrationtypes.NewClientRef[string]()
 
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_badclient"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
+			{Ref: testCredentialRef},
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
+				CredentialRef:  testCredentialRef.ID(),
+				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialRef.ID()},
 				ClientRefs:     []integrationtypes.ClientID{ghost.ID()},
 			},
 		},
@@ -975,17 +943,16 @@ func TestConnectionHealthCheckHandlerRequired(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("tok")
 
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_nohealthhandler"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
+			{Ref: testCredentialRef},
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
+				CredentialRef:  testCredentialRef.ID(),
+				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialRef.ID()},
 				HealthCheck:    &integrationtypes.HealthCheckRegistration{},
 			},
 		},
@@ -1005,18 +972,17 @@ func TestConnectionHealthCheckClientNotDeclared(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("tok")
 	unknownClient := integrationtypes.NewClientRef[string]()
 
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_badhealthclient"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
+			{Ref: testCredentialRef},
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
+				CredentialRef:  testCredentialRef.ID(),
+				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialRef.ID()},
 				HealthCheck: &integrationtypes.HealthCheckRegistration{
 					ClientRef: unknownClient.ID(),
 					Handle:    newTestHandler(),
@@ -1039,18 +1005,17 @@ func TestConnectionAuthCredentialRefNotDeclared(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("tok")
 	authSlot := integrationtypes.NewCredentialSlotID("auth_ghost")
 
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_badauth"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
+			{Ref: testCredentialRef},
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
+				CredentialRef:  testCredentialRef.ID(),
+				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialRef.ID()},
 				Auth:           &integrationtypes.AuthRegistration{CredentialRef: authSlot},
 			},
 		},
@@ -1070,17 +1035,16 @@ func TestConnectionAuthCredentialRefEmpty(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("tok")
 
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_emptyauth"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
+			{Ref: testCredentialRef},
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
+				CredentialRef:  testCredentialRef.ID(),
+				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialRef.ID()},
 				Auth:           &integrationtypes.AuthRegistration{},
 			},
 		},
@@ -1100,18 +1064,17 @@ func TestConnectionDisconnectCredentialRefNotDeclared(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("tok")
 	discSlot := integrationtypes.NewCredentialSlotID("disc_ghost")
 
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_baddisc"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
+			{Ref: testCredentialRef},
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
+				CredentialRef:  testCredentialRef.ID(),
+				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialRef.ID()},
 				Disconnect:     &integrationtypes.DisconnectRegistration{CredentialRef: discSlot},
 			},
 		},
@@ -1131,17 +1094,16 @@ func TestConnectionDisconnectCredentialRefEmpty(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("tok")
 
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_emptydisc"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
+			{Ref: testCredentialRef},
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
+				CredentialRef:  testCredentialRef.ID(),
+				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialRef.ID()},
 				Disconnect:     &integrationtypes.DisconnectRegistration{},
 			},
 		},
@@ -1161,20 +1123,18 @@ func TestConnectionFullyWiredSuccess(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("primary")
-	authSlot := integrationtypes.NewCredentialSlotID("oauth")
 	clientRef := integrationtypes.NewClientRef[string]()
 
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_full"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
-			{Ref: authSlot},
+			{Ref: testCredentialRef},
+			{Ref: testAuthCredentialRef},
 		},
 		Clients: []integrationtypes.ClientRegistration{
 			{
 				Ref:            clientRef.ID(),
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot},
+				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialRef.ID()},
 				Build:          func(context.Context, integrationtypes.ClientBuildRequest) (any, error) { return "ok", nil },
 			},
 		},
@@ -1183,15 +1143,15 @@ func TestConnectionFullyWiredSuccess(t *testing.T) {
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
-				CredentialRef:  slot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{slot, authSlot},
+				CredentialRef:  testCredentialRef.ID(),
+				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialRef.ID(), testAuthCredentialRef.ID()},
 				ClientRefs:     []integrationtypes.ClientID{clientRef.ID()},
 				HealthCheck: &integrationtypes.HealthCheckRegistration{
 					ClientRef: clientRef.ID(),
 					Handle:    newTestHandler(),
 				},
-				Auth:       &integrationtypes.AuthRegistration{CredentialRef: authSlot},
-				Disconnect: &integrationtypes.DisconnectRegistration{CredentialRef: slot},
+				Auth:       &integrationtypes.AuthRegistration{CredentialRef: testAuthCredentialRef.ID()},
+				Disconnect: &integrationtypes.DisconnectRegistration{CredentialRef: testCredentialRef.ID()},
 			},
 		},
 	}
@@ -1206,16 +1166,15 @@ func TestConnectionAutoAppendsCredentialRef(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
-	slot := integrationtypes.NewCredentialSlotID("auto")
 
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_autoappend"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: slot, Schema: testCredentialSchema},
+			{Ref: testCredentialRef},
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
-				CredentialRef: slot,
+				CredentialRef: testCredentialRef.ID(),
 				// CredentialRefs intentionally empty — should auto-append slot
 			},
 		},
@@ -1329,12 +1288,12 @@ func TestRuntimeCoexistsWithCredentials(t *testing.T) {
 			},
 		},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialSlot, Schema: testCredentialSchema},
+			{Ref: testCredentialRef},
 		},
 		Clients: []integrationtypes.ClientRegistration{
 			{
 				Ref:            integrationtypes.NewClientRef[string]().ID(),
-				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialSlot},
+				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialRef.ID()},
 				Build: func(_ context.Context, _ integrationtypes.ClientBuildRequest) (any, error) {
 					return "customer-client", nil
 				},
@@ -1342,8 +1301,8 @@ func TestRuntimeCoexistsWithCredentials(t *testing.T) {
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
-				CredentialRef:  testCredentialSlot,
-				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialSlot},
+				CredentialRef:  testCredentialRef.ID(),
+				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialRef.ID()},
 			},
 		},
 		UserInput: &integrationtypes.UserInputRegistration{

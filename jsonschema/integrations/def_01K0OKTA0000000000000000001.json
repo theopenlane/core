@@ -1,0 +1,36 @@
+{
+  "id": "def_01K0OKTA0000000000000000001",
+  "credentials": [
+    {
+      "ref": "CredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/okta/credential-schema",
+        "$ref": "#/$defs/CredentialSchema",
+        "$defs": {
+          "CredentialSchema": {
+            "properties": {
+              "orgUrl": {
+                "type": "string",
+                "title": "Org URL"
+              },
+              "apiToken": {
+                "type": "string",
+                "title": "API Token"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "orgUrl",
+              "apiToken"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "CredentialSchema"
+  ]
+}

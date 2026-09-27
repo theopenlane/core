@@ -1,0 +1,72 @@
+{
+  "id": "def_01K0ZITADEL000000000000001",
+  "credentials": [
+    {
+      "ref": "CredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/zitadel/credential-schema",
+        "$ref": "#/$defs/CredentialSchema",
+        "$defs": {
+          "CredentialSchema": {
+            "properties": {
+              "domain": {
+                "type": "string",
+                "title": "Domain",
+                "description": "Zitadel instance domain (e.g. my-instance.zitadel.cloud). Uses TLS by default; prefix with http:// for a non-TLS self-hosted instance."
+              },
+              "token": {
+                "type": "string",
+                "title": "Personal Access Token"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "domain",
+              "token"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "ref": "OAuthCredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/zitadel/o-auth-credential-schema",
+        "$ref": "#/$defs/OAuthCredentialSchema",
+        "$defs": {
+          "OAuthCredentialSchema": {
+            "properties": {
+              "domain": {
+                "type": "string",
+                "title": "Domain",
+                "description": "Zitadel instance domain (e.g. my-instance.zitadel.cloud). Uses TLS by default; prefix with http:// for a non-TLS self-hosted instance."
+              },
+              "clientId": {
+                "type": "string",
+                "title": "Client ID"
+              },
+              "clientSecret": {
+                "type": "string",
+                "title": "Client Secret"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "domain",
+              "clientId",
+              "clientSecret"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "CredentialSchema",
+    "OAuthCredentialSchema"
+  ]
+}

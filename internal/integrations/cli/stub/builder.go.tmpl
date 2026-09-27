@@ -26,10 +26,9 @@ func Builder() registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         {{ name }}Credential.ID(),
+					Ref:         {{ name }}Credential,
 					Name:        "{{ display }} Credential",
 					Description: "API token used to access {{ display }}.",
-					Schema:      {{ name }}Schema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{

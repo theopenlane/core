@@ -11,8 +11,8 @@ var (
 	DefinitionID = types.NewDefinitionRef("def_01EMAILINT00000000000000001")
 	// runtimeEmailSchema is the JSON schema and typed ref for the runtime email config
 	runtimeEmailSchema, runtimeEmailRef = providerkit.RuntimeSchema[RuntimeEmailConfig]()
-	// emailCredentialSchema is the JSON schema and typed credential ref for customer-provisioned email
-	emailCredentialSchema, emailCredentialRef = providerkit.CredentialSchema[Credential]()
+	// emailCredentialRef is the typed credential ref for customer-provisioned email
+	emailCredentialRef = types.NewCredentialRef[Credential]()
 	// emailClientRef is the client ref for the email client used by this definition
 	emailClientRef = types.NewClientRef[*Client]()
 	// sendEmailSchema is the operation schema for the generic send-email operation

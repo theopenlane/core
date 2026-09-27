@@ -1,0 +1,59 @@
+{
+  "id": "def_01K0SLACK000000000000000001",
+  "credentials": [
+    {
+      "ref": "slackBotTokenCred",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/slack-bot-token-cred",
+        "$ref": "#/$defs/slackBotTokenCred",
+        "$defs": {
+          "slackBotTokenCred": {
+            "properties": {
+              "botToken": {
+                "type": "string",
+                "title": "Bot Token",
+                "description": "Bot User OAuth Token from your Slack app (starts with xoxb-)"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "botToken"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "ref": "slackCred",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/slack-cred",
+        "$ref": "#/$defs/slackCred",
+        "$defs": {
+          "slackCred": {
+            "properties": {
+              "accessToken": {
+                "type": "string"
+              },
+              "refreshToken": {
+                "type": "string"
+              },
+              "expiry": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "slackBotTokenCred",
+    "slackCred"
+  ]
+}

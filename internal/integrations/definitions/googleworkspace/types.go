@@ -13,7 +13,7 @@ var (
 	// definitionID is the stable identifier for the Google Workspace integration definition
 	definitionID = types.NewDefinitionRef("def_01K0GWKSP000000000000000001")
 	// workspaceCredential is the credential slot for Google Workspace OAuth credentials
-	_, workspaceCredential = providerkit.CredentialSchema[googleWorkspaceCred]()
+	workspaceCredential = types.NewCredentialRef[googleWorkspaceCred]()
 	// workspaceClient is the client ref for the Google Workspace Admin SDK
 	workspaceClient = types.NewClientRef[*admin.Service]()
 	// directorySyncSchema is the operation ref for the directory sync operation

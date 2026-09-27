@@ -1,0 +1,58 @@
+{
+  "id": "def_01K0OIDCLOCAL000000000000001",
+  "credentials": [
+    {
+      "ref": "oidcLocalCred",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oidclocal/oidc-local-cred",
+        "$ref": "#/$defs/oidcLocalCred",
+        "$defs": {
+          "oidcLocalCred": {
+            "properties": {
+              "accessToken": {
+                "type": "string"
+              },
+              "refreshToken": {
+                "type": "string"
+              },
+              "expiry": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "issuer": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "preferredUsername": {
+                "type": "string"
+              },
+              "groups": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "claims": {
+                "type": "object"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "oidcLocalCred"
+  ]
+}

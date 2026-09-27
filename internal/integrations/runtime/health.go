@@ -316,6 +316,10 @@ func (r *Runtime) RunHealthAssessment(ctx context.Context, installation *ent.Int
 		return HealthAssessment{}, err
 	}
 
+	if err := r.ensureCurrentVersion(ctx, installation); err != nil {
+		return HealthAssessment{}, err
+	}
+
 	failed, err := r.checkConnectionHealth(ctx, installation, def)
 	if err != nil {
 		return HealthAssessment{}, err

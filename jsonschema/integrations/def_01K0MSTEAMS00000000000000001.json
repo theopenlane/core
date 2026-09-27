@@ -1,0 +1,34 @@
+{
+  "id": "def_01K0MSTEAMS00000000000000001",
+  "credentials": [
+    {
+      "ref": "teamsCred",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/teams-cred",
+        "$ref": "#/$defs/teamsCred",
+        "$defs": {
+          "teamsCred": {
+            "properties": {
+              "accessToken": {
+                "type": "string"
+              },
+              "refreshToken": {
+                "type": "string"
+              },
+              "expiry": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "teamsCred"
+  ]
+}

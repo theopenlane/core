@@ -61,7 +61,12 @@ func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID
 	record, err := r.DB().Integration.Create().
 		SetOwnerID(ownerID).
 		SetName(def.DisplayName).
+		SetDescription(def.Description).
+		SetKind(def.Family).
+		SetIntegrationType(def.Category).
 		SetDefinitionID(def.ID).
+		SetDefinitionVersion(r.Registry().Version(def.ID)).
+		SetDefinitionSlug(def.ID).
 		SetFamily(def.Family).
 		SetStatus(enums.IntegrationStatusPending).
 		SetExpiresAt(time.Now().Add(PendingInstallationTTL)).

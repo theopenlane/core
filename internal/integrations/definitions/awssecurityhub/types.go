@@ -12,10 +12,10 @@ import (
 var (
 	// definitionID is the stable identifier for the AWS Security Hub integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AWSSECHUB0000000000001")
-	// awsAssumeRoleScheme is the cred schema for AWS STS auth
-	awsAssumeRoleSchema, awsAssumeRoleCredential = providerkit.CredentialSchema[AssumeRoleCredentialSchema]()
-	// awsServiceAccountSchema is the cred schema for AWS service account credentials
-	awsServiceAccountSchema, awsServiceAccountCredential = providerkit.CredentialSchema[ServiceAccountCredentialSchema]()
+	// awsAssumeRoleCredential is the credential slot for AWS STS auth
+	awsAssumeRoleCredential = types.NewCredentialRef[AssumeRoleCredentialSchema]()
+	// awsServiceAccountCredential is the credential slot for AWS service account credentials
+	awsServiceAccountCredential = types.NewCredentialRef[ServiceAccountCredentialSchema]()
 	// SecurityHubClient is the client ref for the AWS Security Hub client used by this definition
 	securityHubClient = types.NewClientRef[*securityhub.Client]()
 	// configServiceClient is the client ref for the AWS Config client used by config controls operations

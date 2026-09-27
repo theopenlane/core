@@ -30,21 +30,19 @@ func Builder() registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         TokenCredential.ID(),
+					Ref:         TokenCredential,
 					Name:        "Test Token",
 					Description: "API token the test client is built from.",
-					Schema:      tokenSchema,
 				},
 				{
-					Ref:         OAuthCredential.ID(),
+					Ref:         OAuthCredential,
 					Name:        "Test OAuth",
 					Description: "Auth-managed credential slot filled by the OAuth fixture.",
 				},
 				{
-					Ref:         ServiceAccountCredential.ID(),
+					Ref:         ServiceAccountCredential,
 					Name:        "Test Service Account",
 					Description: "Strict-schema credential slot used by config flows.",
-					Schema:      serviceAccountSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{

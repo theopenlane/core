@@ -483,7 +483,15 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 // testAuthDefinitionID is the canonical ID for the test OAuth definition.
 const testAuthDefinitionID = "def_01TEST0AUTH0000000000000001"
 
-var testAuthCredentialRef = types.NewCredentialSlotID("test_oauth")
+// testOAuthCredential is the credential type the test OAuth flow stores
+type testOAuthCredential struct {
+	// AccessToken is the issued access token
+	AccessToken string `json:"access_token"`
+	// RefreshToken is the issued refresh token
+	RefreshToken string `json:"refresh_token"`
+}
+
+var testAuthCredentialRef = types.NewCredentialRef[testOAuthCredential]()
 
 // configureIntegrationOAuthRuntime sets up the integrations runtime with a test OAuth definition
 func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime() {
@@ -517,17 +525,17 @@ func buildTestOAuthDefinition() (types.Definition, error) {
 		},
 		Connections: []types.ConnectionRegistration{
 			{
-				CredentialRef:  testAuthCredentialRef,
+				CredentialRef:  testAuthCredentialRef.ID(),
 				Name:           "Test OAuth",
 				Description:    "Authenticate the test definition using the OAuth callback fixture.",
-				CredentialRefs: []types.CredentialSlotID{testAuthCredentialRef},
+				CredentialRefs: []types.CredentialSlotID{testAuthCredentialRef.ID()},
 				Auth: &types.AuthRegistration{
-					CredentialRef: testAuthCredentialRef,
+					CredentialRef: testAuthCredentialRef.ID(),
 					Start:         testAuthStart,
 					Complete:      testAuthComplete,
 				},
 				Disconnect: &types.DisconnectRegistration{
-					CredentialRef: testAuthCredentialRef,
+					CredentialRef: testAuthCredentialRef.ID(),
 					Description:   "Remove the persisted test OAuth credential and disconnect this installation.",
 				},
 			},

@@ -29,10 +29,9 @@ func Builder() registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         authentikCredential.ID(),
+					Ref:         authentikCredential,
 					Name:        "Authentik Credential",
 					Description: "API token used to access Authentik instance data.",
-					Schema:      authentikCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{

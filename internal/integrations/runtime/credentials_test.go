@@ -11,6 +11,17 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
+// credentialTestOAuth is the credential type behind the OAuth test slot
+type credentialTestOAuth struct{}
+
+// credentialTestAPIKey is the credential type behind the API key test slot
+type credentialTestAPIKey struct{}
+
+var (
+	credentialTestOAuthRef  = types.NewCredentialRef[credentialTestOAuth]()
+	credentialTestAPIKeyRef = types.NewCredentialRef[credentialTestAPIKey]()
+)
+
 // --- resolveConnectionFromState ---
 
 func TestResolveConnectionFromStateEmptyProviderState(t *testing.T) {
@@ -57,11 +68,11 @@ func TestResolveConnectionFromStateNilProviders(t *testing.T) {
 func TestResolveConnectionFromStateWithPersistedRef(t *testing.T) {
 	t.Parallel()
 
-	credRef := types.NewCredentialSlotID("oauth")
+	credRef := credentialTestOAuthRef.ID()
 	def := types.Definition{
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []types.CredentialRegistration{
-			{Ref: credRef, Name: "OAuth", Schema: json.RawMessage(`{"type":"object"}`)},
+			{Ref: credentialTestOAuthRef, Name: "OAuth"},
 		},
 		Connections: []types.ConnectionRegistration{
 			{CredentialRef: credRef, Name: "OAuth Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
@@ -121,11 +132,11 @@ func TestResolveConnectionFromStateUnknownRef(t *testing.T) {
 func TestResolveConnectionForCredentialFromPersistedState(t *testing.T) {
 	t.Parallel()
 
-	credRef := types.NewCredentialSlotID("oauth")
+	credRef := credentialTestOAuthRef.ID()
 	def := types.Definition{
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []types.CredentialRegistration{
-			{Ref: credRef, Name: "OAuth", Schema: json.RawMessage(`{"type":"object"}`)},
+			{Ref: credentialTestOAuthRef, Name: "OAuth"},
 		},
 		Connections: []types.ConnectionRegistration{
 			{CredentialRef: credRef, Name: "OAuth Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
@@ -156,12 +167,12 @@ func TestResolveConnectionForCredentialFromPersistedState(t *testing.T) {
 func TestResolveConnectionForCredentialRefNotDeclared(t *testing.T) {
 	t.Parallel()
 
-	credRef := types.NewCredentialSlotID("oauth")
-	otherRef := types.NewCredentialSlotID("api-key")
+	credRef := credentialTestOAuthRef.ID()
+	otherRef := credentialTestAPIKeyRef.ID()
 	def := types.Definition{
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []types.CredentialRegistration{
-			{Ref: credRef, Name: "OAuth", Schema: json.RawMessage(`{"type":"object"}`)},
+			{Ref: credentialTestOAuthRef, Name: "OAuth"},
 		},
 		Connections: []types.ConnectionRegistration{
 			{CredentialRef: credRef, Name: "OAuth Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
@@ -188,11 +199,11 @@ func TestResolveConnectionForCredentialRefNotDeclared(t *testing.T) {
 func TestResolveConnectionForCredentialNoStateWithRef(t *testing.T) {
 	t.Parallel()
 
-	credRef := types.NewCredentialSlotID("api-key")
+	credRef := credentialTestAPIKeyRef.ID()
 	def := types.Definition{
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []types.CredentialRegistration{
-			{Ref: credRef, Name: "API Key", Schema: json.RawMessage(`{"type":"object"}`)},
+			{Ref: credentialTestAPIKeyRef, Name: "API Key"},
 		},
 		Connections: []types.ConnectionRegistration{
 			{CredentialRef: credRef, Name: "API Key Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
@@ -272,31 +283,6 @@ func TestDisconnectMissingDefinition(t *testing.T) {
 	}
 }
 
-func TestDisconnectConnectionResolutionError(t *testing.T) {
-	t.Parallel()
-
-	credRef := types.NewCredentialSlotID("unknown")
-	providerState, _ := json.Marshal(types.DefinitionProviderState{CredentialRef: credRef})
-
-	reg := registry.New()
-	_ = reg.Register(types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-	})
-
-	rt := NewForTesting(reg)
-	_, err := rt.Disconnect(context.Background(), &ent.Integration{
-		DefinitionID: "test-def",
-		ProviderState: types.IntegrationProviderState{
-			Providers: map[string]json.RawMessage{
-				"test-def": providerState,
-			},
-		},
-	})
-	if !errors.Is(err, ErrConnectionNotFound) {
-		t.Fatalf("expected ErrConnectionNotFound, got %v", err)
-	}
-}
-
 // --- Reconcile ---
 
 func TestReconcileNilInstallation(t *testing.T) {
@@ -331,7 +317,8 @@ func TestReconcileNoInputNoCredential(t *testing.T) {
 
 	rt := NewForTesting(reg)
 	err := rt.Reconcile(context.Background(), &ent.Integration{
-		DefinitionID: "test-def",
+		DefinitionID:      "test-def",
+		DefinitionVersion: reg.Version("test-def"),
 	}, nil, types.CredentialSlotID{}, nil, nil)
 	if err != nil {
 		t.Fatalf("expected no error for no-op reconcile, got %v", err)
@@ -349,7 +336,8 @@ func TestReconcileEmptyInputNoCredential(t *testing.T) {
 	rt := NewForTesting(reg)
 	// Empty JSON objects and null are treated as empty by jsonx.IsEmptyRawMessage
 	err := rt.Reconcile(context.Background(), &ent.Integration{
-		DefinitionID: "test-def",
+		DefinitionID:      "test-def",
+		DefinitionVersion: reg.Version("test-def"),
 	}, json.RawMessage(`null`), types.CredentialSlotID{}, nil, nil)
 	if err != nil {
 		t.Fatalf("expected no error for null input reconcile, got %v", err)
@@ -361,12 +349,12 @@ func TestReconcileEmptyInputNoCredential(t *testing.T) {
 func TestResolvePersistedConnectionSingleConnectionFallback(t *testing.T) {
 	t.Parallel()
 
-	credRef := types.NewCredentialSlotID("oauth")
+	credRef := credentialTestOAuthRef.ID()
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []types.CredentialRegistration{
-			{Ref: credRef, Name: "OAuth", Schema: json.RawMessage(`{"type":"object"}`)},
+			{Ref: credentialTestOAuthRef, Name: "OAuth"},
 		},
 		Connections: []types.ConnectionRegistration{
 			{CredentialRef: credRef, Name: "Only Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
@@ -394,8 +382,8 @@ func TestResolvePersistedConnectionSingleConnectionFallback(t *testing.T) {
 func TestResolvePersistedConnectionMultipleConnectionsNoState(t *testing.T) {
 	t.Parallel()
 
-	refA := types.NewCredentialSlotID("oauth")
-	refB := types.NewCredentialSlotID("api-key")
+	refA := credentialTestOAuthRef.ID()
+	refB := credentialTestAPIKeyRef.ID()
 
 	rt := NewForTesting(registry.New())
 	_, err := rt.resolvePersistedConnection(types.Definition{
@@ -433,7 +421,7 @@ func TestCheckInstallationInstanceMatchRejectsInstanceMismatch(t *testing.T) {
 	}
 	metadata := types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: "tenant-b"}}
 
-	err := checkInstallationInstanceMatch(context.Background(), installation, metadata)
+	err := checkInstallationInstanceMatch(installation, metadata)
 	if !errors.Is(err, ErrInstallationInstanceMismatch) {
 		t.Fatalf("expected ErrInstallationInstanceMismatch, got %v", err)
 	}
@@ -447,7 +435,7 @@ func TestCheckInstallationInstanceMatchKeepsMatchingInstance(t *testing.T) {
 	}
 	metadata := types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: "tenant-a"}}
 
-	if err := checkInstallationInstanceMatch(context.Background(), installation, metadata); err != nil {
+	if err := checkInstallationInstanceMatch(installation, metadata); err != nil {
 		t.Fatalf("expected no error for a matching instance, got %v", err)
 	}
 }
@@ -457,7 +445,7 @@ func TestCheckInstallationInstanceMatchAcceptsFirstResolution(t *testing.T) {
 
 	metadata := types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: "tenant-b"}}
 
-	if err := checkInstallationInstanceMatch(context.Background(), &ent.Integration{}, metadata); err != nil {
+	if err := checkInstallationInstanceMatch(&ent.Integration{}, metadata); err != nil {
 		t.Fatalf("expected no error for a first resolution, got %v", err)
 	}
 }

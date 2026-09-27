@@ -28,10 +28,9 @@ func Builder() registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         ociCredential.ID(),
+					Ref:         ociCredential,
 					Name:        "OCI API Key Credential",
 					Description: "OCI API signing key used to authenticate against the tenancy.",
-					Schema:      ociSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{

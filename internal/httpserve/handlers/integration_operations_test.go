@@ -40,8 +40,14 @@ type OperationTestValidated struct {
 	Target string `json:"target" jsonschema:"required"`
 }
 
+// operationTestCredential is the credential type stored by the operation test definition
+type operationTestCredential struct {
+	// Token is the stored token
+	Token string `json:"token"`
+}
+
 var (
-	operationTestCredentialRef                      = types.NewCredentialSlotID("op_test")
+	operationTestCredentialRef                      = types.NewCredentialRef[operationTestCredential]()
 	opTestHealthSchema, opTestHealthCheckOperation  = providerkit.OperationSchema[OperationTestHealthCheck]()
 	opTestRepoSyncSchema, opTestRepoSyncOperation   = providerkit.OperationSchema[OperationTestRepoSync]()
 	opTestValidatedSchema, opTestValidatedOperation = providerkit.OperationSchema[OperationTestValidated]()
@@ -58,16 +64,15 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:    operationTestCredentialRef,
-					Name:   "Op Test Credential",
-					Schema: json.RawMessage(`{"type":"object","properties":{"token":{"type":"string"}}}`),
+					Ref:  operationTestCredentialRef,
+					Name: "Op Test Credential",
 				},
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:  operationTestCredentialRef,
+					CredentialRef:  operationTestCredentialRef.ID(),
 					Name:           "Op Test Connection",
-					CredentialRefs: []types.CredentialSlotID{operationTestCredentialRef},
+					CredentialRefs: []types.CredentialSlotID{operationTestCredentialRef.ID()},
 				},
 			},
 			Operations: []types.OperationRegistration{
@@ -376,18 +381,17 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInstallationNotFound()
 func (suite *HandlerTestSuite) createOperationTestIntegration(t *testing.T, ctx context.Context, orgID, definitionID string) string {
 	t.Helper()
 
-	rec, err := suite.db.Integration.Create().
-		SetOwnerID(orgID).
-		SetName(definitionID).
-		SetDefinitionID(definitionID).
-		Save(ctx)
+	def, ok := suite.h.IntegrationsRuntime.Definition(definitionID)
+	require.True(t, ok)
+
+	rec, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(ctx, orgID, "", def)
 	require.NoError(t, err)
 
 	credential := types.CredentialSet{
 		Data: json.RawMessage(`{"token":"test-token"}`),
 	}
 
-	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, operationTestCredentialRef, &credential, nil)
+	err = suite.h.IntegrationsRuntime.Reconcile(ctx, rec, nil, operationTestCredentialRef.ID(), &credential, nil)
 	require.NoError(t, err)
 
 	return rec.ID

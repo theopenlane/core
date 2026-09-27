@@ -29,10 +29,9 @@ func Builder() registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         oktaCredential.ID(),
+					Ref:         oktaCredential,
 					Name:        "Okta Credential",
 					Description: "API token used to access Okta organization data.",
-					Schema:      oktaCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{

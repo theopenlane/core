@@ -31,4 +31,6 @@ var (
 	ErrInstallationInstanceIDRequired = errors.New("integrations/runtime: installation instance id required")
 	// ErrInstallationInstanceMismatch indicates the credential resolves to a different external instance than the one the installation already records
 	ErrInstallationInstanceMismatch = errors.New("integrations/runtime: installation instance mismatch")
+	// ErrInstallationUpgradeFailed indicates the installation's stored state could not be brought to its definition's current version
+	ErrInstallationUpgradeFailed = errors.New("integrations/runtime: installation upgrade failed")
 )

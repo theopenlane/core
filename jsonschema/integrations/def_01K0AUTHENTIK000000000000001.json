@@ -1,0 +1,36 @@
+{
+  "id": "def_01K0AUTHENTIK000000000000001",
+  "credentials": [
+    {
+      "ref": "CredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/authentik/credential-schema",
+        "$ref": "#/$defs/CredentialSchema",
+        "$defs": {
+          "CredentialSchema": {
+            "properties": {
+              "baseUrl": {
+                "type": "string",
+                "title": "Base URL"
+              },
+              "token": {
+                "type": "string",
+                "title": "API Token"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "baseUrl",
+              "token"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "CredentialSchema"
+  ]
+}

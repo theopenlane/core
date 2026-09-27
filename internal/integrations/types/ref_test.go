@@ -2,8 +2,137 @@ package types //nolint:revive
 
 import (
 	"encoding/json"
+	"errors"
 	"testing"
 )
+
+// refTestCredential is the credential type the credential ref tests reflect
+type refTestCredential struct {
+	Token string `json:"token" jsonschema:"required"`
+}
+
+// refTestRetiredCredential is the shape an earlier definition version stored the token under
+type refTestRetiredCredential struct {
+	AccessToken string `json:"accessToken"`
+}
+
+func TestReplacingConvert(t *testing.T) {
+	t.Parallel()
+
+	retired := NewCredentialRef[refTestRetiredCredential]()
+
+	tests := []struct {
+		name    string
+		slot    CredentialRef[refTestCredential]
+		from    CredentialSlotID
+		payload string
+		want    string
+		wantErr error
+	}{
+		{
+			name:    "nil convert decodes matching fields",
+			slot:    Replacing(NewCredentialRef[refTestCredential](), retired, nil),
+			from:    retired.ID(),
+			payload: `{"token":"t","accessToken":"ignored"}`,
+			want:    `{"token":"t"}`,
+		},
+		{
+			name: "convert maps fields",
+			slot: Replacing(NewCredentialRef[refTestCredential](), retired, func(r refTestRetiredCredential) refTestCredential {
+				return refTestCredential{Token: r.AccessToken}
+			}),
+			from:    retired.ID(),
+			payload: `{"accessToken":"t"}`,
+			want:    `{"token":"t"}`,
+		},
+		{
+			name:    "unknown from is not replaced",
+			slot:    Replacing(NewCredentialRef[refTestCredential](), retired, nil),
+			from:    NewCredentialSlotID("unknown"),
+			payload: `{"token":"t"}`,
+			wantErr: ErrCredentialNotReplaced,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			got, err := tc.slot.Convert(tc.from, json.RawMessage(tc.payload))
+
+			if tc.wantErr != nil {
+				if !errors.Is(err, tc.wantErr) {
+					t.Fatalf("expected %v, got %v", tc.wantErr, err)
+				}
+
+				return
+			}
+
+			if err != nil {
+				t.Fatalf("Convert() error = %v", err)
+			}
+
+			if string(got) != tc.want {
+				t.Fatalf("Convert() = %s, want %s", got, tc.want)
+			}
+		})
+	}
+}
+
+func TestNewCredentialRefDerivesIdentityAndSchemaFromType(t *testing.T) {
+	t.Parallel()
+
+	ref := NewCredentialRef[refTestCredential]()
+
+	if ref.ID() != NewCredentialSlotID("refTestCredential") {
+		t.Fatalf("expected the slot to be named after the type, got %q", ref.String())
+	}
+
+	var schema struct {
+		Ref  string `json:"$ref"`
+		Defs map[string]struct {
+			Required []string `json:"required"`
+		} `json:"$defs"`
+	}
+	if err := json.Unmarshal(ref.Schema(), &schema); err != nil {
+		t.Fatalf("schema is not valid JSON: %v", err)
+	}
+
+	if schema.Ref != "#/$defs/refTestCredential" || len(schema.Defs["refTestCredential"].Required) != 1 {
+		t.Fatalf("expected the reflected schema of the type, got %s", ref.Schema())
+	}
+
+	var slot CredentialSlot = ref
+	if slot.ID() != ref.ID() {
+		t.Fatal("expected the typed ref to satisfy CredentialSlot")
+	}
+}
+
+func TestCredentialRefSchemaIsCloned(t *testing.T) {
+	t.Parallel()
+
+	ref := NewCredentialRef[refTestCredential]()
+
+	first := ref.Schema()
+	first[0] = 'x'
+
+	if ref.Schema()[0] != '{' {
+		t.Fatal("expected Schema to return a copy the caller cannot mutate")
+	}
+}
+
+func TestCredentialRefMarshalsAsSlotName(t *testing.T) {
+	t.Parallel()
+
+	encoded, err := json.Marshal(NewCredentialRef[refTestCredential]())
+	if err != nil {
+		t.Fatalf("marshal: %v", err)
+	}
+
+	if string(encoded) != `"refTestCredential"` {
+		t.Fatalf("expected the slot name on the wire, got %s", encoded)
+	}
+}
 
 func TestDefinitionRefID(t *testing.T) {
 	t.Parallel()

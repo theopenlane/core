@@ -1,0 +1,135 @@
+{
+  "id": "def_01K0GCPSCC00000000000000001",
+  "credentials": [
+    {
+      "ref": "CredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/gcpscc/credential-schema",
+        "$ref": "#/$defs/CredentialSchema",
+        "$defs": {
+          "CredentialSchema": {
+            "properties": {
+              "serviceAccountKey": {
+                "type": "string",
+                "title": "Service Account Key JSON",
+                "description": "Service Account JSON used to authenticate on your behalf to GCP SCC"
+              },
+              "organizationId": {
+                "type": "string",
+                "title": "Organization ID",
+                "description": "The ID of the organization to use as the parent - either organization ID or project ID are required"
+              },
+              "projectId": {
+                "type": "string",
+                "title": "Project ID",
+                "description": "The ID of the project to use as the parent - either organization ID or project ID are required"
+              },
+              "projectScope": {
+                "type": "string",
+                "enum": [
+                  "all",
+                  "specific"
+                ],
+                "title": "Project Scope",
+                "description": "Filter project scope; only used if using an Organization ID as the initial filter",
+                "default": "all"
+              },
+              "projectIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "title": "Project IDs",
+                "description": "List of project IDs to include if the project scope is set to specific"
+              },
+              "sourceIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "title": "SCC Source IDs",
+                "description": "Limit sources to include in pulling in findings from SCC"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "serviceAccountKey"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "ref": "WorkloadIdentityCredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/gcpscc/workload-identity-credential-schema",
+        "$ref": "#/$defs/WorkloadIdentityCredentialSchema",
+        "$defs": {
+          "WorkloadIdentityCredentialSchema": {
+            "properties": {
+              "projectNumber": {
+                "type": "string",
+                "pattern": "^[0-9]+$",
+                "title": "GCP Project Number",
+                "description": "Numeric project number of the GCP project hosting the openlane workload identity pool and provider"
+              },
+              "serviceAccountEmail": {
+                "type": "string",
+                "title": "Service Account Email",
+                "description": "Optional service account to impersonate"
+              },
+              "organizationId": {
+                "type": "string",
+                "title": "Organization ID",
+                "description": "The ID of the organization to use as the parent - either organization ID or project ID are required"
+              },
+              "projectId": {
+                "type": "string",
+                "title": "Project ID",
+                "description": "The ID of the project to use as the parent - either organization ID or project ID are required"
+              },
+              "projectScope": {
+                "type": "string",
+                "enum": [
+                  "all",
+                  "specific"
+                ],
+                "title": "Project Scope",
+                "description": "Filter project scope; only used if using an Organization ID as the initial filter",
+                "default": "all"
+              },
+              "projectIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "title": "Project IDs",
+                "description": "List of project IDs to include if the project scope is set to specific"
+              },
+              "sourceIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "title": "SCC Source IDs",
+                "description": "Limit sources to include in pulling in findings from SCC"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "projectNumber"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "CredentialSchema",
+    "WorkloadIdentityCredentialSchema"
+  ]
+}

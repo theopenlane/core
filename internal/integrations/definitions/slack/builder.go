@@ -36,15 +36,14 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         slackCredential.ID(),
+					Ref:         slackCredential,
 					Name:        "Slack OAuth Credential",
 					Description: "OAuth credential used to access the Slack workspace",
 				},
 				{
-					Ref:         slackBotTokenCredential.ID(),
+					Ref:         slackBotTokenCredential,
 					Name:        "Slack Bot Token",
 					Description: "User-provisioned bot token from a custom Slack app",
-					Schema:      slackBotTokenCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{

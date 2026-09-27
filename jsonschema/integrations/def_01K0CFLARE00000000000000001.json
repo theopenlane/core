@@ -1,0 +1,37 @@
+{
+  "id": "def_01K0CFLARE00000000000000001",
+  "credentials": [
+    {
+      "ref": "CredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/credential-schema",
+        "$ref": "#/$defs/CredentialSchema",
+        "$defs": {
+          "CredentialSchema": {
+            "properties": {
+              "apiToken": {
+                "type": "string",
+                "title": "API Token"
+              },
+              "accountId": {
+                "type": "string",
+                "title": "Account ID",
+                "description": "Cloudflare account ID required for listing account members."
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "apiToken",
+              "accountId"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": [
+    "CredentialSchema"
+  ]
+}
