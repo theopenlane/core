@@ -6,6 +6,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -23,7 +24,7 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 	return privacy.InviteMutationRuleFunc(func(ctx context.Context, m *generated.InviteMutation) error {
 		oID, err := getInviteOwnerID(ctx, m)
 		if err != nil || oID == "" {
-			return privacy.Skipf("no owner set on request, cannot check access")
+			return generated.ErrPermissionDenied
 		}
 
 		caller, ok := auth.CallerFromContext(ctx)
@@ -38,6 +39,18 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 			return err
 		}
 
+		// owner invites are only allowed as an ownership transfer by the current owner
+		role, _ := m.Role()
+		transfer, _ := m.OwnershipTransfer()
+
+		if (role == enums.RoleOwner) != transfer {
+			return generated.ErrPermissionDenied
+		}
+
+		if transfer {
+			relation = fgax.OwnerRelation
+		}
+
 		ac := fgax.AccessCheck{
 			SubjectID:   caller.SubjectID,
 			SubjectType: caller.SubjectType(),
@@ -49,7 +62,9 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 
 		access, err := m.Authz.CheckOrgAccess(ctx, ac)
 		if err != nil {
-			return privacy.Skipf("unable to check access, %s", err.Error())
+			logx.FromContext(ctx).Error().Err(err).Interface("tuple", ac).Msg("unable to check invite access")
+
+			return generated.ErrPermissionDenied
 		}
 
 		if access {
@@ -58,8 +73,7 @@ func CanInviteUsers() privacy.InviteMutationRuleFunc {
 			return privacy.Allow
 		}
 
-		// proceed to next rule
-		return nil
+		return generated.ErrPermissionDenied
 	})
 }
 
@@ -82,15 +96,17 @@ func getInviteOwnerID(ctx context.Context, m *generated.InviteMutation) (string,
 func getRelationToCheck(ctx context.Context, m *generated.InviteMutation) (string, error) {
 	role, ok := m.Role()
 	if !ok {
+		role = enums.RoleMember
+
 		// if it is not a create operation, we need to to check the existing invite for the role
 		if m.Op() != generated.OpCreate {
 			id, ok := m.ID()
 			if !ok {
-				return "", privacy.Skipf("unable to determine invite, cannot check access")
+				return "", generated.ErrPermissionDenied
 			}
 
 			// get the role from the existing invite
-			invite, err := generated.FromContext(ctx).Invite.Get(ctx, id)
+			invite, err := m.Client().Invite.Get(ctx, id)
 			if err != nil {
 				return "", err
 			}
