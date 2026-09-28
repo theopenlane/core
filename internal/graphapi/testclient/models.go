@@ -52312,18 +52312,20 @@ func (e TrustCenterSettingOrderField) MarshalJSON() ([]byte, error) {
 type TrustCenterSubprocessorOrderField string
 
 const (
-	TrustCenterSubprocessorOrderFieldCreatedAt TrustCenterSubprocessorOrderField = "created_at"
-	TrustCenterSubprocessorOrderFieldUpdatedAt TrustCenterSubprocessorOrderField = "updated_at"
+	TrustCenterSubprocessorOrderFieldCreatedAt        TrustCenterSubprocessorOrderField = "created_at"
+	TrustCenterSubprocessorOrderFieldUpdatedAt        TrustCenterSubprocessorOrderField = "updated_at"
+	TrustCenterSubprocessorOrderFieldSubprocessorName TrustCenterSubprocessorOrderField = "SUBPROCESSOR_name"
 )
 
 var AllTrustCenterSubprocessorOrderField = []TrustCenterSubprocessorOrderField{
 	TrustCenterSubprocessorOrderFieldCreatedAt,
 	TrustCenterSubprocessorOrderFieldUpdatedAt,
+	TrustCenterSubprocessorOrderFieldSubprocessorName,
 }
 
 func (e TrustCenterSubprocessorOrderField) IsValid() bool {
 	switch e {
-	case TrustCenterSubprocessorOrderFieldCreatedAt, TrustCenterSubprocessorOrderFieldUpdatedAt:
+	case TrustCenterSubprocessorOrderFieldCreatedAt, TrustCenterSubprocessorOrderFieldUpdatedAt, TrustCenterSubprocessorOrderFieldSubprocessorName:
 		return true
 	}
 	return false
