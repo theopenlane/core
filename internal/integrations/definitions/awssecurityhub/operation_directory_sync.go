@@ -59,21 +59,11 @@ type iamMembershipPayload struct {
 	Member iamEntityRef `json:"member"`
 }
 
-// IngestHandle adapts IAM directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(iamClient, directorySyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, _ types.OperationRequest, client *iam.Client, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
-		if cfg.Disable {
-			logx.FromContext(ctx).Debug().Msg("awsiam: directory sync is disabled")
+// directorySyncOperation is the AWS IAM directory sync operation
+var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(iamClient, runDirectorySync)
 
-			return nil, nil
-		}
-
-		return d.Run(ctx, client, cfg)
-	})
-}
-
-// Run collects AWS IAM users, and optionally groups and memberships
-func (DirectorySync) Run(ctx context.Context, client *iam.Client, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
+// runDirectorySync collects AWS IAM users, and optionally groups and memberships
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *iam.Client, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listIAMUsers(ctx, client)
 	if err != nil {
 		return nil, err
@@ -221,8 +211,7 @@ func arnAccountID(arn string) string {
 	return parts[arnAccountIndex]
 }
 
-// listIAMUsers pages through all IAM users using Marker-based pagination and
-// fetches tags for each user separately
+// listIAMUsers pages through all IAM users using Marker-based pagination and fetches tags for each user separately
 func listIAMUsers(ctx context.Context, client *iam.Client) ([]iamtypes.User, error) {
 	var users []iamtypes.User
 	input := &iam.ListUsersInput{MaxItems: awssdk.Int32(iamPageSize)}

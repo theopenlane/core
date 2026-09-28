@@ -19,32 +19,30 @@ const directoryDefaultPageSize = int64(200)
 // defaultCustomerID is Google's alias for the authorized account's own customer
 const defaultCustomerID = "my_customer"
 
-// DirectorySync collects Google Workspace directory users for ingest
-type DirectorySync struct{}
+// directorySyncOperation is the Google Workspace directory sync operation
+var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(workspaceClient, runDirectorySync)
 
-// IngestHandle adapts directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(workspaceClient, func(ctx context.Context, request types.OperationRequest, svc *admin.Service) ([]types.IngestPayloadSet, error) {
-		var meta InstallationMetadata
+// runDirectorySync resolves the installation customer and collects Google Workspace directory users, groups, and memberships
+func runDirectorySync(ctx context.Context, request types.OperationRequest, svc *admin.Service, _ DirectorySync) ([]types.IngestPayloadSet, error) {
+	var meta InstallationMetadata
 
-		if err := jsonx.UnmarshalIfPresent(request.Integration.InstallationMetadata.Attributes, &meta); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("attribute_bytes", len(request.Integration.InstallationMetadata.Attributes)).Msg("googleworkspace: installation metadata could not be decoded")
+	if err := jsonx.UnmarshalIfPresent(request.Integration.InstallationMetadata.Attributes, &meta); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Int("attribute_bytes", len(request.Integration.InstallationMetadata.Attributes)).Msg("googleworkspace: installation metadata could not be decoded")
 
-			return nil, fmt.Errorf("%w: %w", ErrInstallationMetadataInvalid, err)
-		}
+		return nil, fmt.Errorf("%w: %w", ErrInstallationMetadataInvalid, err)
+	}
 
-		if meta.CustomerID == "" {
-			logx.FromContext(ctx).Error().Int("attribute_bytes", len(request.Integration.InstallationMetadata.Attributes)).Str("external_id", request.Integration.InstallationMetadata.Display.ExternalID).Str("domain", meta.Domain).Msg("googleworkspace: no customer id in installation metadata, the integration needs to be reauthorized")
+	if meta.CustomerID == "" {
+		logx.FromContext(ctx).Error().Int("attribute_bytes", len(request.Integration.InstallationMetadata.Attributes)).Str("external_id", request.Integration.InstallationMetadata.Display.ExternalID).Str("domain", meta.Domain).Msg("googleworkspace: no customer id in installation metadata, the integration needs to be reauthorized")
 
-			return nil, types.Unhealthy(ErrCustomerIDMissing, "the Google Workspace connection is missing its customer identifier and needs to be reauthorized")
-		}
+		return nil, types.Unhealthy(ErrCustomerIDMissing, "the Google Workspace connection is missing its customer identifier and needs to be reauthorized")
+	}
 
-		return d.Run(ctx, svc, meta.CustomerID)
-	})
+	return collectDirectory(ctx, svc, meta.CustomerID)
 }
 
-// Run collects Google Workspace directory users, groups, and memberships
-func (DirectorySync) Run(ctx context.Context, svc *admin.Service, customerID string) ([]types.IngestPayloadSet, error) {
+// collectDirectory collects Google Workspace directory users, groups, and memberships for one customer
+func collectDirectory(ctx context.Context, svc *admin.Service, customerID string) ([]types.IngestPayloadSet, error) {
 	users, err := listDirectoryUsers(ctx, svc, customerID)
 	if err != nil {
 		return nil, err

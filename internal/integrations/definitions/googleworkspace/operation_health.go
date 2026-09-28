@@ -20,13 +20,8 @@ type HealthCheck struct {
 	UserCount int `json:"userCount"`
 }
 
-// Handle adapts the health check to the generic operation registration boundary
-func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClient(workspaceClient, h.Run)
-}
-
-// Run executes the health check using the Google Admin SDK
-func (HealthCheck) Run(ctx context.Context, svc *admin.Service) (json.RawMessage, error) {
+// checkHealth executes the health check using the Google Admin SDK
+func checkHealth(ctx context.Context, _ types.OperationRequest, svc *admin.Service) (json.RawMessage, error) {
 	resp, err := svc.Users.List().
 		Customer(defaultCustomerID).
 		MaxResults(healthMaxResults).

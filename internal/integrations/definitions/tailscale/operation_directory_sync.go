@@ -28,20 +28,16 @@ type tailscaleMembershipPayload struct {
 	UserID string `json:"user_id"`
 }
 
-// IngestHandle adapts Tailscale directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(tailscaleClient, directorySyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, _ types.OperationRequest, client *tsclient.Client, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
-		if cfg.Disable {
-			logx.FromContext(ctx).Debug().Msg("tailscale: directory sync is disabled")
-			return nil, nil
-		}
+// directorySyncOperation is the operation ref for the directory sync operation
+var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(tailscaleClient, runDirectorySync)
 
-		return d.Run(ctx, client, cfg)
-	})
-}
+// runDirectorySync collects Tailscale users and optionally role-based groups and memberships
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *tsclient.Client, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
+	if cfg.Disable {
+		logx.FromContext(ctx).Debug().Msg("tailscale: directory sync is disabled")
+		return nil, nil
+	}
 
-// Run collects Tailscale users and optionally role-based groups and memberships
-func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listTailscaleUsers(ctx, client)
 	if err != nil {
 		return nil, err
@@ -70,7 +66,6 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 		return payloadSets, nil
 	}
 
-	// Build role-based groups from the unique set of roles across all users
 	rolesSeen := make(map[tsclient.UserRole]struct{})
 	groupEnvelopes := make([]types.MappingEnvelope, 0)
 	membershipEnvelopes := make([]types.MappingEnvelope, 0)
@@ -115,7 +110,6 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 		membershipEnvelopes = append(membershipEnvelopes, envelope)
 	}
 
-	// Also sync user-defined ACL groups from the policy file
 	userByEmail := make(map[string]string, len(users))
 	for _, u := range users {
 		userByEmail[u.LoginName] = u.ID
@@ -143,7 +137,6 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 			for _, member := range members {
 				userID, ok := userByEmail[member]
 				if !ok {
-					// skip group references, tags, autogroups, wildcards
 					continue
 				}
 
@@ -174,9 +167,8 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 			SnapshotComplete: membershipsComplete,
 		},
 		types.IngestPayloadSet{
-			Schema:    entityops.SchemaDirectoryMembership.Name,
-			Envelopes: membershipEnvelopes,
-			// memberships derived without policy data are incomplete
+			Schema:           entityops.SchemaDirectoryMembership.Name,
+			Envelopes:        membershipEnvelopes,
 			SnapshotComplete: membershipsComplete,
 		},
 	)

@@ -52,7 +52,6 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerSuccess() {
 func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerMissingEndpointID() {
 	t := suite.T()
 
-	// Register with a path that will result in empty endpointID
 	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/webhooks/", suite.h.IntegrationWebhookHandler)
 
 	payload := []byte(`{"event":"test"}`)
@@ -62,7 +61,6 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerMissingEndpointID() 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
 
-	// Endpoint not matched or returns bad request
 	assert.True(t, rec.Code == http.StatusBadRequest || rec.Code == http.StatusNotFound)
 }
 
@@ -156,7 +154,6 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEmptyEventNameReturn
 
 	wh := suite.createWebhookTestIntegration(t, user.UserCtx, user.OrganizationID, webhookTestDefinitionID)
 
-	// Payload with empty event name - the event handler returns empty name which should be a no-op success
 	payload := []byte(`{"event":"","delivery_id":"del-004"}`)
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhooks/"+wh.endpointID, strings.NewReader(string(payload)))
 	req.Header.Set("Content-Type", "application/json")
@@ -174,8 +171,7 @@ type webhookTestIntegration struct {
 	secretToken string
 }
 
-// createWebhookTestIntegration creates an integration and webhook record for testing,
-// returning the webhook endpoint ID and auto-generated secret token
+// createWebhookTestIntegration creates an integration and webhook record for testing, returning the endpoint ID and secret token
 func (suite *HandlerTestSuite) createWebhookTestIntegration(t *testing.T, ctx context.Context, orgID, definitionID string) webhookTestIntegration {
 	t.Helper()
 

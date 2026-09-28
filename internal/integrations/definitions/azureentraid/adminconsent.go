@@ -20,12 +20,10 @@ type adminConsentState struct {
 	State string `json:"state"`
 }
 
-// adminConsentRegistration builds an auth registration that uses the Azure admin consent endpoint
-// which grants application permissions so the client credentials flow can access the tenant directory
+// adminConsentRegistration builds an auth registration that uses the Azure admin consent endpoint, which grants application permissions so the client credentials flow can access the tenant directory
 func adminConsentRegistration(cfg Config) *types.AuthRegistration {
 	return &types.AuthRegistration{
 		CredentialRef: entraTenantCredential.ID(),
-		Schema:        entraTenantCredential.Schema(),
 		Start: func(ctx context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 			csrfState, err := iamauth.GenerateOAuthState(0)
 			if err != nil {

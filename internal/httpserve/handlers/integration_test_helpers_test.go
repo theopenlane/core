@@ -22,8 +22,7 @@ var (
 	githubTestCredentialRef = types.CredentialRefOf[githubTestCredential]()
 )
 
-// withDefinitionRuntime returns a restore function that resets IntegrationsConfig.
-// All definitions and gala listeners are registered once in SetupSuite
+// withDefinitionRuntime returns a restore function that resets IntegrationsConfig
 func (suite *HandlerTestSuite) withDefinitionRuntime(_ *testing.T, _ []registry.Builder) func() {
 	originalConfig := suite.h.IntegrationsConfig
 
@@ -32,8 +31,7 @@ func (suite *HandlerTestSuite) withDefinitionRuntime(_ *testing.T, _ []registry.
 	}
 }
 
-// withGitHubAppIntegrationRuntime sets the handler's GitHubApp config for the test
-// and returns a restore function that resets it
+// withGitHubAppIntegrationRuntime sets the handler's GitHubApp config for the test and returns a restore function that resets it
 func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, cfg githubapp.Config) func() {
 	t.Helper()
 
@@ -45,9 +43,7 @@ func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, cfg
 	}
 }
 
-// githubTestDefinitionBuilder returns a minimal test definition used for disconnect tests.
-// The definition has no credentials schema or auth flow; it only needs to be present in
-// the registry so the handler can resolve the provider by ID.
+// githubTestDefinitionBuilder returns a minimal test definition used for disconnect tests
 func githubTestDefinitionBuilder(definitionID string) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
@@ -61,9 +57,11 @@ func githubTestDefinitionBuilder(definitionID string) registry.Builder {
 				githubTestCredentialRef.Registration(types.CredentialRegistration{
 					Name:        "GitHub Test Credential",
 					Description: "Credential slot used by the GitHub disconnect test definition.",
-					Schema:      githubTestCredentialRef.Schema(),
 				}),
 			},
+			HealthCheck: types.CredentialHealthCheck(func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+				return json.RawMessage(`{"ok":true}`), nil
+			}),
 			Connections: []types.ConnectionRegistration{
 				{
 					CredentialRef:  githubTestCredentialRef.ID(),

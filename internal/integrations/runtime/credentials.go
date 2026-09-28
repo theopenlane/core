@@ -61,8 +61,7 @@ func (r *Runtime) cleanupInstallation(ctx context.Context, integrationID string)
 	return r.DB().Integration.DeleteOneID(integrationID).Exec(ctx)
 }
 
-// ReapExpiredInstallation soft-deletes one expired never-connected installation and its credentials;
-// the predicated delete is the atomic guard against a concurrently completing auth flow
+// ReapExpiredInstallation soft-deletes one expired never-connected installation and its credentials; the predicated delete is the atomic guard against a concurrently completing auth flow
 func (r *Runtime) ReapExpiredInstallation(ctx context.Context, integrationID string) (bool, error) {
 	reaped, err := r.DB().Integration.Delete().Where(integration.ID(integrationID), integration.ExpiresAtLTE(time.Now())).Exec(ctx)
 	if err != nil {
@@ -235,12 +234,12 @@ func selfInstanceMetadata(installation *ent.Integration) types.IntegrationInstal
 }
 
 // resolveConnectionIdentity resolves installation metadata through the connection's resolver, falling to the installation's own id when the connection declares none, and rejects a resolver answer without an instance id
-func resolveConnectionIdentity(ctx context.Context, installation *ent.Integration, connection types.ConnectionRegistration, bindings types.CredentialBindings, input json.RawMessage) (types.IntegrationInstallationMetadata, error) {
-	if connection.Integration == nil {
+func resolveConnectionIdentity(ctx context.Context, installation *ent.Integration, def types.Definition, connection types.ConnectionRegistration, bindings types.CredentialBindings, input json.RawMessage) (types.IntegrationInstallationMetadata, error) {
+	if def.Installation == nil {
 		return selfInstanceMetadata(installation), nil
 	}
 
-	metadata, ok, err := connection.Integration.Resolve(ctx, types.InstallationRequest{
+	metadata, ok, err := def.Installation.Resolve(ctx, types.InstallationRequest{
 		Integration: installation,
 		Connection:  connection,
 		Credentials: bindings,
@@ -272,8 +271,7 @@ func checkInstallationInstanceMatch(installation *ent.Integration, metadata type
 	return fmt.Errorf("%w: stored %s, resolved %s", ErrInstallationInstanceMismatch, stored, resolved)
 }
 
-// saveInstallationMetadata persists installation metadata and syncs the normalized
-// display identity into the GraphQL-visible metadata map
+// saveInstallationMetadata persists installation metadata and syncs the normalized display identity into the GraphQL-visible metadata map
 func (r *Runtime) saveInstallationMetadata(ctx context.Context, installation *ent.Integration, metadata types.IntegrationInstallationMetadata) error {
 	displayMeta, _ := jsonx.ToMap(metadata.Display)
 	merged := mapx.DeepMergeMapAny(installation.Metadata, mapx.PruneMapZeroAny(displayMeta))
@@ -293,9 +291,7 @@ func (r *Runtime) saveInstallationMetadata(ctx context.Context, installation *en
 	return nil
 }
 
-// RefreshInstallationMetadata re-resolves and persists the installation's metadata from its
-// connected credential; installations without a connected credential or metadata resolver, or
-// whose resolver reports none, keep their stored metadata
+// RefreshInstallationMetadata re-resolves and persists the installation's metadata from its connected credential; installations without a connected credential or metadata resolver, or whose resolver reports none, keep their stored metadata
 func (r *Runtime) RefreshInstallationMetadata(ctx context.Context, installation *ent.Integration) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
@@ -333,7 +329,7 @@ func (r *Runtime) RefreshInstallationMetadata(ctx context.Context, installation 
 		return err
 	}
 
-	metadata, err := resolveConnectionIdentity(ctx, installation, connection, bindings, nil)
+	metadata, err := resolveConnectionIdentity(ctx, installation, def, connection, bindings, nil)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to resolve connection identity")
 
@@ -374,8 +370,8 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 
 	bindings = bindings.With(credentialRef, credential)
 
-	if connection.HealthCheck != nil {
-		if err := r.runConnectionHealthCheck(ctx, installation, connection, bindings); err != nil {
+	if def.HealthCheck != nil {
+		if err := r.runConnectionHealthCheck(ctx, installation, def.HealthCheck, bindings); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("validation failed during reconcile")
 
 			return fmt.Errorf("validation failed: %w", err)
@@ -386,7 +382,7 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		logx.FromContext(ctx).Debug().Err(err).Msg("reconcile: instance id refresh before match check failed; comparing against stored id")
 	}
 
-	metadata, err := resolveConnectionIdentity(ctx, installation, connection, bindings, installationInput)
+	metadata, err := resolveConnectionIdentity(ctx, installation, def, connection, bindings, installationInput)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to resolve connection identity")
 
@@ -427,7 +423,6 @@ func (r *Runtime) activateReconciledInstallation(ctx context.Context, installati
 	wasFirstConnection := installation.Status == enums.IntegrationStatusPending
 	wasErrored := installation.Status == enums.IntegrationStatusErrored
 
-	// a credential change invalidates recorded per-operation failures; probes re-derive them
 	health := installation.Health
 	health.UnhealthyOperations = nil
 	installation.Health = health
@@ -436,8 +431,6 @@ func (r *Runtime) activateReconciledInstallation(ctx context.Context, installati
 
 	update := r.DB().Integration.UpdateOneID(installation.ID).SetHealth(health).SetDefinitionVersion(version).ClearExpiresAt()
 
-	// an errored installation transitions through ClearIntegrationUnhealthy so the recovery
-	// notification fires and the unhealthy reason is wiped
 	if !wasErrored {
 		update = update.SetStatus(enums.IntegrationStatusConnected)
 	}
@@ -544,8 +537,7 @@ func (r *Runtime) resolveConnectionForCredential(def types.Definition, installat
 	return connection, nil
 }
 
-// notifyIntegrationInstalled dispatches a Slack system message when an integration
-// is connected for the first time. Failures are logged and do not block the installation
+// notifyIntegrationInstalled dispatches a Slack system message when an integration is connected for the first time; failures are logged and do not block the installation
 func (r *Runtime) notifyIntegrationInstalled(ctx context.Context, installation *ent.Integration, def types.Definition) {
 	org, err := r.DB().Organization.Get(ctx, installation.OwnerID)
 	if err != nil {

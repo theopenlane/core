@@ -21,15 +21,8 @@ type HealthCheck struct {
 	UserCount uint64 `json:"userCount"`
 }
 
-// Handle adapts the health check to the generic operation registration boundary
-func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClientRequest(zitadelClient, func(ctx context.Context, req types.OperationRequest, c *client.Client) (json.RawMessage, error) {
-		return h.Run(ctx, c, req)
-	})
-}
-
-// Run executes the Zitadel health check
-func (HealthCheck) Run(ctx context.Context, c *client.Client, req types.OperationRequest) (json.RawMessage, error) {
+// checkHealth executes the Zitadel health check
+func checkHealth(ctx context.Context, req types.OperationRequest, c *client.Client) (json.RawMessage, error) {
 	domain, ok := resolveDomain(req.Credentials)
 	if !ok {
 		logx.FromContext(ctx).Error().Msg("missing domain in credentials")

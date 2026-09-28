@@ -19,24 +19,20 @@ var (
 	gitHubAppConnection = types.NewConnectionRef(gitHubAppCredential).Enables(gitHubClient)
 	// InstallationEventsWebhook is the webhook ref for GitHub App installation-scoped deliveries
 	InstallationEventsWebhook = types.NewWebhookRef("installation.events")
-	// PingWebhookEvent is the webhook event ref for GitHub ping events
+	// pingWebhookEvent is the webhook event ref for GitHub ping events
 	pingWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("ping")
-	// InstallationCreatedWebhookEvent is the webhook event ref for GitHub installation created events
+	// installationCreatedWebhookEvent is the webhook event ref for GitHub installation created events
 	installationCreatedWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("installation.created")
-	// InstallationDeletedWebhookEvent is the webhook event ref for GitHub installation deleted events
+	// installationDeletedWebhookEvent is the webhook event ref for GitHub installation deleted events
 	installationDeletedWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("installation.deleted")
-	// DependabotAlertWebhookEvent is the webhook event ref for Dependabot alert events
+	// dependabotAlertWebhookEvent is the webhook event ref for Dependabot alert events
 	dependabotAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("dependabot_alert")
-	// CodeScanningAlertWebhookEvent is the webhook event ref for code scanning alert events
+	// codeScanningAlertWebhookEvent is the webhook event ref for code scanning alert events
 	codeScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("code_scanning_alert")
-	// SecretScanningAlertWebhookEvent is the webhook event ref for secret scanning alert events
+	// secretScanningAlertWebhookEvent is the webhook event ref for secret scanning alert events
 	secretScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("secret_scanning_alert")
-	// repositorySyncOperation is the operation ref for the GitHub repository sync operation
-	repositorySyncOperation = types.OperationRefOf[RepositorySync]().Using(gitHubClient)
-	// vulnerabilityCollectOperation is the operation ref for the GitHub vulnerability collection operation, pinned to its persisted name
-	vulnerabilityCollectOperation = types.OperationRefOf[VulnerabilitySync]().Using(gitHubClient)
-	// directorySyncOperation is the operation ref for the GitHub directory sync operation
-	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(gitHubClient)
+	// userInput is the installation user input layout for the GitHub App definition
+	userInput = types.NewUserInputRef[UserInput]("githubapp")
 )
 
 const (
@@ -75,8 +71,8 @@ type UserInput struct {
 }
 
 type DirectorySync struct {
-	// Disable is used to disable the directory sync operation from GitHub
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from GitHub"`
+	// Switch toggles the directory sync operation off for the installation
+	types.Switch
 	// DisableGroupSync will just sync users and no groups or group memberships
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from GitHub, disable groups sync operations"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
@@ -85,8 +81,8 @@ type DirectorySync struct {
 
 // VulnerabilitySync controls the vulnerability collect operation
 type VulnerabilitySync struct {
-	// Disable is used to disable the directory sync operation from GitHub
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of vulnerabilities from Github Security"`
+	// Switch toggles the vulnerability collect operation off for the installation
+	types.Switch
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.state == 'open'"`
 	// MaxRepos caps the number of repositories scanned during one run
@@ -94,8 +90,8 @@ type VulnerabilitySync struct {
 }
 
 type RepositorySync struct {
-	// Disable is used to disable the directory sync operation from GitHub
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of vulnerabilities from Github Security"`
+	// Switch toggles the repository sync operation off for the installation
+	types.Switch
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.IsPrivate == 'true'"`
 }

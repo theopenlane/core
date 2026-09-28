@@ -21,14 +21,15 @@ var (
 	zitadelPATConnection = types.NewConnectionRef(zitadelPATCredential).Enables(zitadelClient)
 	// zitadelOAuthConnection is the connection mode selected by the OAuth client-credentials slot
 	zitadelOAuthConnection = types.NewConnectionRef(zitadelOAuthCredential).Enables(zitadelClient)
-	// directorySyncOperation is the operation ref for directory sync
-	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(zitadelClient)
+	// userInput is the installation user input layout, replacing the flat v1 layout
+	userInput = types.NewUserInputRef[UserInput]("zitadel").Replacing(types.NewUserInputRef[oldUserInput]("zitadel-v1"), func(old oldUserInput) UserInput {
+		return UserInput{PrimaryDirectory: old.PrimaryDirectory, DirectorySync: DirectorySync{FilterExpr: old.FilterExpr}}
+	})
 )
 
 // CredentialSchema holds the Zitadel instance credentials for one installation
 type CredentialSchema struct {
-	// Domain is the Zitadel instance domain (e.g. my-instance.zitadel.cloud). It connects over
-	// TLS by default; prefix with http:// for a self-hosted or local instance without TLS.
+	// Domain is the Zitadel instance domain (e.g. my-instance.zitadel.cloud)
 	Domain string `json:"domain" jsonschema:"required,title=Domain,description=Zitadel instance domain (e.g. my-instance.zitadel.cloud). Uses TLS by default; prefix with http:// for a non-TLS self-hosted instance."`
 	// Token is the Zitadel Personal Access Token
 	Token string `json:"token" jsonschema:"required,title=Personal Access Token"`
@@ -36,8 +37,7 @@ type CredentialSchema struct {
 
 // OAuthCredentialSchema holds the Zitadel OAuth2 client-credentials for one installation
 type OAuthCredentialSchema struct {
-	// Domain is the Zitadel instance domain (e.g. my-instance.zitadel.cloud). It connects over
-	// TLS by default; prefix with http:// for a self-hosted or local instance without TLS.
+	// Domain is the Zitadel instance domain (e.g. my-instance.zitadel.cloud)
 	Domain string `json:"domain" jsonschema:"required,title=Domain,description=Zitadel instance domain (e.g. my-instance.zitadel.cloud). Uses TLS by default; prefix with http:// for a non-TLS self-hosted instance."`
 	// ClientID is the Zitadel service user client ID used for the client-credentials grant
 	ClientID string `json:"clientId" jsonschema:"required,title=Client ID"`
@@ -47,6 +47,22 @@ type OAuthCredentialSchema struct {
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
+	// PrimaryDirectory marks this installation as the authoritative source for identity holder sync
+	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory,description=Mark this as the authoritative source for identity holder enrichment and lifecycle"`
+	// DirectorySync configures the directory sync operation
+	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Sync"`
+}
+
+// DirectorySync configures collection of Zitadel directory users
+type DirectorySync struct {
+	// Switch turns the directory sync off for the installation
+	types.Switch
+	// FilterExpr limits imported records to envelopes matching a CEL expression
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
+}
+
+// oldUserInput is the flat v1 installation user input layout
+type oldUserInput struct {
 	// PrimaryDirectory marks this installation as the authoritative source for identity holder sync
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory,description=Mark this as the authoritative source for identity holder enrichment and lifecycle"`
 	// FilterExpr limits imported records to envelopes matching a CEL expression

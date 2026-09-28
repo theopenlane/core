@@ -5,7 +5,6 @@ import (
 
 	"google.golang.org/api/drive/v3"
 
-	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -18,10 +17,10 @@ var (
 	driveClient = types.ClientRefOf[DriveClient]().Using(driveCredential)
 	// driveConnection is the OAuth connection mode enabling the Drive client
 	driveConnection = types.NewConnectionRef(driveCredential).Enables(driveClient)
-	// documentExportOperation is the operation ref for the document export operation
-	documentExportOperation = types.OperationRefOf[operations.DocumentExport]().Using(driveClient)
-	// folderSyncOperation is the operation ref for the folder sync operation
-	folderSyncOperation = types.OperationRefOf[FolderSync]().Using(driveClient)
+	// userInput is the installation user input layout, replacing the flat v1 layout
+	userInput = types.NewUserInputRef[UserInput]("googledrive").Replacing(types.NewUserInputRef[oldUserInput]("googledrive-v1"), func(old oldUserInput) UserInput {
+		return UserInput{Primary: old.Primary, FolderSync: FolderSync{FolderID: old.FolderID, FilterExpr: old.FilterExpr}}
+	})
 )
 
 // DriveClient wraps the client for Google operations
@@ -44,8 +43,15 @@ type googleDriveCred struct {
 type UserInput struct {
 	// Primary marks this installation as the authoritative Drive source for live document exports
 	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
-	// FolderID is the Google Drive folder ID (or full URL) containing policy documents; required so
-	// an install is scoped to one folder rather than the caller's entire Drive
+	// FolderSync configures the folder sync operation
+	FolderSync FolderSync `json:"folderSync,omitempty" jsonschema:"title=Folder Sync"`
+}
+
+// oldUserInput is the flat v1 installation user input layout replaced by UserInput
+type oldUserInput struct {
+	// Primary marks this installation as the authoritative Drive source for live document exports
+	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
+	// FolderID is the Google Drive folder ID (or full URL) containing policy documents; required so an install is scoped to one folder rather than the caller's entire Drive
 	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder ID,description=Google Drive folder ID or URL containing policy documents,required"`
 	// FilterExpr is an optional CEL expression to filter which documents in the folder are eligible
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to filter documents before creating policies"`

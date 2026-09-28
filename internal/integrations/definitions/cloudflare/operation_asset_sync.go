@@ -15,19 +15,12 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// AssetCollect collects Cloudflare domain registrations and stores them as assets
-type AssetCollect struct{}
+// assetSyncOperation is the operation ref for the domain asset sync operation
+var assetSyncOperation = types.OperationRefOf[AssetSync]().Ingests(cloudflareClient, runAssetCollect)
 
-// IngestHandle adapts asset collection to the ingest operation registration boundary
-func (a AssetCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(cloudflareClient, func(ctx context.Context, request types.OperationRequest, client *CloudflareClient) ([]types.IngestPayloadSet, error) {
-		return a.Run(ctx, request.Credentials, client)
-	})
-}
-
-// Run collects Cloudflare domain registrations and emits asset ingest payloads
-func (AssetCollect) Run(ctx context.Context, credentials types.CredentialBindings, client *CloudflareClient) ([]types.IngestPayloadSet, error) {
-	meta, err := resolveCredential(credentials)
+// runAssetCollect collects Cloudflare domain registrations and emits asset ingest payloads
+func runAssetCollect(ctx context.Context, request types.OperationRequest, client *CloudflareClient, _ AssetSync) ([]types.IngestPayloadSet, error) {
+	meta, err := resolveCredential(request.Credentials)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +31,6 @@ func (AssetCollect) Run(ctx context.Context, credentials types.CredentialBinding
 
 	registrations, err := fetchRegistrarRegistrations(ctx, client, meta.AccountID)
 	if err != nil {
-		// the sentinel alone lands on the run record and says nothing about status or permissions
 		return nil, fmt.Errorf("%w: %w", ErrAssetsFetchFailed, err)
 	}
 
@@ -80,7 +72,6 @@ func fetchRegistrarRegistrations(ctx context.Context, client *CloudflareClient, 
 		}
 
 		if _, err := client.Registrar.Registrations.List(ctx, params, option.WithResponseBodyInto(&response)); err != nil {
-			// the page index separates a token/permission failure from a late-page client timeout
 			logx.FromContext(ctx).Error().Err(err).Str("account_id", accountID).Int("page", page).Int("collected", len(domains)).Bool("context_cancelled", ctx.Err() != nil).Msg("cloudflare: registrar registrations page request failed")
 
 			return nil, err

@@ -6,7 +6,6 @@ import (
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -21,10 +20,10 @@ var (
 	oneDriveClient = types.ClientRefOf[*DriveClient]().Using(oneDriveCredential)
 	// oneDriveConnection is the connection mode selected by the OneDrive OAuth credential slot
 	oneDriveConnection = types.NewConnectionRef(oneDriveCredential).Enables(oneDriveClient)
-	// documentExportOperation is the operation ref for the document export operation
-	documentExportOperation = types.OperationRefOf[operations.DocumentExport]().Using(oneDriveClient)
-	// folderSyncOperation is the operation ref for the folder sync operation
-	folderSyncOperation = types.OperationRefOf[FolderSync]().Using(oneDriveClient)
+	// userInput is the installation user input layout, replacing the flat v1 layout
+	userInput = types.NewUserInputRef[UserInput]("onedrive").Replacing(types.NewUserInputRef[oldUserInput]("onedrive-v1"), func(old oldUserInput) UserInput {
+		return UserInput{Primary: old.Primary, FolderSync: FolderSync{FolderID: old.FolderID, FilterExpr: old.FilterExpr}}
+	})
 )
 
 // oneDriveCred holds the provider-owned credential material for a OneDrive installation
@@ -49,6 +48,14 @@ type DriveClient struct {
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
+	// Primary marks this installation as the authoritative OneDrive source for live document exports
+	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
+	// FolderSync configures the folder sync operation
+	FolderSync FolderSync `json:"folderSync,omitempty" jsonschema:"title=Folder Sync"`
+}
+
+// oldUserInput is the flat v1 installation user input layout replaced by UserInput
+type oldUserInput struct {
 	// Primary marks this installation as the authoritative OneDrive source for live document exports
 	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
 	// FolderID is the folder path relative to the drive root (e.g. "Policies"); leave empty to sync the root

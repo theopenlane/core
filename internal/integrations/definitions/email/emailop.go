@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/newman/render"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -31,16 +30,12 @@ type Recipient interface {
 }
 
 // Dispatcher describes a catalog-addressable email operation that can be invoked by key
-// The implementation owns typed decoding of the payload and projection into render.EmailContent;
-// callers supply a raw JSON payload whose shape matches the registered input type
 type Dispatcher interface {
 	// Name returns the catalog key identifying the dispatcher
 	Name() string
 	// Registration returns the integration operation registration for this entry
 	Registration() types.OperationRegistration
-	// SendByKey decodes the payload into the entry's typed input, runs any registered PreHook,
-	// and dispatches through the shared render/send pipeline. Additional newman options are
-	// appended after the operation's own MessageOptions
+	// SendByKey decodes the payload into the entry's typed input, runs any registered PreHook, and dispatches through the shared render/send pipeline
 	SendByKey(ctx context.Context, req types.OperationRequest, client *Client, payload json.RawMessage, extraOpts ...newman.MessageOption) error
 	// RenderMessage decodes the payload and renders the email into a newman message without sending it, for use in batch send paths
 	RenderMessage(ctx context.Context, client *Client, payload json.RawMessage, extraOpts ...newman.MessageOption) (*newman.EmailMessage, error)
@@ -60,8 +55,7 @@ type RecipientInfo struct {
 	FirstName string `json:"firstName,omitempty" jsonschema:"description=Recipient first name"`
 	// LastName is the recipient last name
 	LastName string `json:"lastName,omitempty" jsonschema:"description=Recipient last name"`
-	// UnsubscribeToken is the per-recipient token used to build an unsubscribe link in templates
-	// via {{ .unsubscribeToken }}; it is populated per send and never authored in the template
+	// UnsubscribeToken is the per-recipient token used to build an unsubscribe link in templates via {{ .unsubscribeToken }}; it is populated per send and never authored in the template
 	UnsubscribeToken string `json:"unsubscribeToken,omitempty" jsonschema:"description=Per-recipient unsubscribe token"`
 	// Tags are delivery tracking tags forwarded to the email provider for webhook correlation
 	Tags []newman.Tag `json:"tags,omitempty" jsonschema:"description=Delivery tracking tags"`
@@ -72,9 +66,7 @@ func (r RecipientInfo) GetRecipient() RecipientInfo {
 	return r
 }
 
-// CampaignContext carries campaign-scoped metadata for catalog entries that render campaign-bound
-// emails. Entries that need campaign fields embed this struct in their input type; the campaign
-// dispatcher populates the JSON overlay before calling SendByKey
+// CampaignContext carries campaign-scoped metadata for catalog entries that render campaign-bound emails
 type CampaignContext struct {
 	// CampaignID is the identifier of the campaign producing the send
 	CampaignID string `json:"campaignId,omitempty" jsonschema:"description=Campaign identifier"`
@@ -100,7 +92,6 @@ func RegisterEmailOperation[T Recipient](op Operation[T]) Operation[T] {
 }
 
 // Operation is a generic helper which defines a single system email type as a registered integration operation
-// this allows us to do AllEmailOperations() in the builder rather than manually wiring each
 type Operation[T Recipient] struct {
 	// Op is the typed operation ref with name derived from the schema definition key, declared against the email client
 	Op types.OperationRef[T]
@@ -108,8 +99,7 @@ type Operation[T Recipient] struct {
 	Description string
 	// CustomerSelectable gates whether the entry is exposed via the customer-facing catalog query
 	CustomerSelectable *bool
-	// Example is a representative input used to render catalog previews and to seed the
-	// form preview with demo values for fields the author has not yet filled in
+	// Example is a representative input used to render catalog previews and to seed the form preview with demo values for fields the author has not yet filled in
 	Example T
 	// UISchema is the RJSF-style UI schema describing how the configurable fields render as a form
 	UISchema json.RawMessage
@@ -186,9 +176,7 @@ func (e Operation[T]) RenderMessage(_ context.Context, client *Client, payload j
 	return e.renderToMessage(client, input, extraOpts...)
 }
 
-// dispatch runs PreHook, assembles the per-op newman options, and invokes renderAndSend.
-// It is the shared tail of both the operation-framework handler and the catalog-dispatcher
-// SendByKey entry points, so the two invocation paths render identically
+// dispatch runs PreHook, renders the message, and sends it through the client sender
 func (e Operation[T]) dispatch(ctx context.Context, req types.OperationRequest, client *Client, input T, extraOpts ...newman.MessageOption) error {
 	if e.PreHook != nil {
 		if err := e.PreHook(ctx, req, client.Config, &input); err != nil {
@@ -237,29 +225,17 @@ func (e Operation[T]) renderToMessage(client *Client, input T, extraOpts ...newm
 	return renderMessage(client, e.Theme, recipient, e.Subject(client.Config, input), content, opts...)
 }
 
-// Registration returns the types.OperationRegistration for wiring into the definition builder.
-// Catalog-facing fields (Description, CustomerSelectable) travel on the registration
-// so downstream filters (e.g. customer-facing catalog query) can operate on AllEmailOperations directly
+// Registration returns the types.OperationRegistration for wiring into the definition builder
 func (e Operation[T]) Registration() types.OperationRegistration {
-	return e.Op.Registration(DefinitionID, types.OperationRegistration{
+	return e.Op.Handles(emailClientRef, func(ctx context.Context, req types.OperationRequest, client *Client, input T) (json.RawMessage, error) {
+		return nil, e.dispatch(ctx, req, client, input)
+	}).Registration(DefinitionID, types.OperationRegistration{
 		Description:        e.Description,
 		CustomerSelectable: lo.ToPtr(e.CustomerSelectable != nil && *e.CustomerSelectable),
-		Handle:             e.handler(),
 	})
 }
 
-// handler returns the typed operation handler that renders and sends the email
-func (e Operation[T]) handler() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(emailClientRef, e.Op, ErrTemplateRenderFailed,
-		func(ctx context.Context, req types.OperationRequest, client *Client, input T) (json.RawMessage, error) {
-			return nil, e.dispatch(ctx, req, client, input)
-		},
-	)
-}
-
-// RenderCatalogPreview renders a customer-selectable catalog entry to HTML for UI preview.
-// The dispatcher example is the base layer and draft holds the in-progress form values that
-// override it, so fields the author has not yet filled in still render with demo content
+// RenderCatalogPreview renders a customer-selectable catalog entry to HTML for UI preview
 func RenderCatalogPreview(ctx context.Context, client *Client, d Dispatcher, draft map[string]any) (string, error) {
 	var example map[string]any
 	if err := jsonx.RoundTrip(d.ExamplePayload(), &example); err != nil {
@@ -318,11 +294,6 @@ func renderMessage(client *Client, theme *render.Theme, recipient RecipientInfo,
 	}
 	opts = append(opts, extraOpts...)
 
-	// RFC 8058 one-click unsubscribe: emit List-Unsubscribe (and the One-Click POST marker) so mail clients
-	// surface a native one-click control. The footer link (cfg.UnsubscribeURL) targets the trust center
-	// page; the header must hit the POST one-click API route instead, derived from the same per-recipient
-	// URL — its origin + token, pointed at /api/unsubscribe (the token alone identifies the subscriber, so
-	// the page slug is dropped). A still-templated URL is skipped so a placeholder is never sent
 	if cfg, ok := content.Config.(RuntimeEmailConfig); ok && cfg.UnsubscribeURL != "" && !strings.Contains(cfg.UnsubscribeURL, templatePlaceholderOpen) {
 		if u, err := urlx.ParseAbsolute(cfg.UnsubscribeURL); err == nil {
 			u.Path = oneClickUnsubscribePath

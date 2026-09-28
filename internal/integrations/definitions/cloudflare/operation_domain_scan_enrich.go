@@ -13,17 +13,13 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// DomainScanBuildReport combines a completed URL Scanner result with previously-gathered
-// enrichment data (company profile, compliance, and DNS vendor data) and builds the
-// structured onboarding domain scan report
+// DomainScanBuildReport combines a completed URL Scanner result with previously-gathered enrichment data (company profile, compliance, and DNS vendor data) and builds the structured onboarding domain scan report
 type DomainScanBuildReport struct {
 	// InternalScanID is the openlane Scan record id the built report belongs to
 	InternalScanID string `json:"internalScanId"`
-	// Result is the completed URL Scanner task result to build the report from, allowed to be empty
-	// so if the url scanner failed the enrichment data can still be used for a partial report
+	// Result is the completed URL Scanner task result to build the report from, allowed to be empty so a partial report can still be built if the scan failed
 	Result json.RawMessage `json:"result,omitempty"`
-	// Enrichment is the company profile, compliance, and DNS vendor data gathered via
-	// DomainScanGatherEnrichment
+	// Enrichment is the company profile, compliance, and DNS vendor data gathered via DomainScanGatherEnrichment
 	Enrichment domainscan.Enrichment `json:"enrichment"`
 }
 
@@ -33,20 +29,20 @@ type DomainScanBuildReportResult struct {
 	Data map[string]any `json:"data"`
 }
 
-// Handle adapts domain scan report building to the generic operation registration boundary
-func (b DomainScanBuildReport) Handle() types.OperationHandler {
-	return providerkit.WithClientConfig(cloudflareClient, DomainScanBuildReportOp, ErrOperationConfigInvalid, func(ctx context.Context, client *CloudflareClient, cfg DomainScanBuildReport) (json.RawMessage, error) {
-		result, err := b.Run(ctx, client, cfg)
-		if err != nil {
-			return nil, err
-		}
+// DomainScanBuildReportOp is the operation ref for building the scan report from a completed URL Scanner result and gathered enrichment
+var DomainScanBuildReportOp = types.OperationRefOf[DomainScanBuildReport]().Handles(cloudflareClient, runDomainScanBuildReport) //nolint:revive
 
-		return providerkit.EncodeResult(result, ErrResultEncode)
-	})
+// runDomainScanBuildReport builds the structured scan report and encodes it
+func runDomainScanBuildReport(ctx context.Context, _ types.OperationRequest, client *CloudflareClient, cfg DomainScanBuildReport) (json.RawMessage, error) {
+	result, err := DomainScanBuildReport{}.Run(ctx, client, cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	return providerkit.EncodeResult(result, ErrResultEncode)
 }
 
-// Run builds the structured scan report from the submitted URL Scanner result plus the
-// already-gathered enrichment data
+// Run builds the structured scan report from the submitted URL Scanner result plus the already-gathered enrichment data
 func (DomainScanBuildReport) Run(ctx context.Context, client *CloudflareClient, cfg DomainScanBuildReport) (DomainScanBuildReportResult, error) {
 	var scanResult *url_scanner.ScanGetResponse
 

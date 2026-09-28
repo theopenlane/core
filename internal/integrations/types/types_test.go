@@ -113,6 +113,144 @@ func TestDefinitionCredentialRegistration(t *testing.T) {
 	})
 }
 
+// TestDefinitionCredentialSchema verifies the stored schema resolves from the registration's StoredSchema, nil for unknown slots
+func TestDefinitionCredentialSchema(t *testing.T) {
+	t.Parallel()
+
+	stored := json.RawMessage(`{"type":"object","properties":{"token":{"type":"string"}}}`)
+	form := json.RawMessage(`{"type":"object","properties":{"code":{"type":"string"}}}`)
+
+	def := Definition{
+		DefinitionSpec: DefinitionSpec{ID: "test-def"},
+		CredentialRegistrations: []CredentialRegistration{
+			{Ref: apiKeyCredentialRef.ID(), Schema: form, StoredSchema: stored},
+			{Ref: oauthCredentialRef.ID(), StoredSchema: stored},
+		},
+		Connections: []ConnectionRegistration{
+			{CredentialRef: oauthCredentialRef.ID(), Auth: &AuthRegistration{CredentialRef: oauthCredentialRef.ID()}},
+		},
+	}
+
+	t.Run("stored schema wins over the form schema", func(t *testing.T) {
+		t.Parallel()
+
+		if got := def.CredentialSchema(apiKeyCredentialRef.ID()); string(got) != string(stored) {
+			t.Fatalf("got %s, want %s", got, stored)
+		}
+	})
+
+	t.Run("auth-managed slot resolves its stored schema", func(t *testing.T) {
+		t.Parallel()
+
+		if got := def.CredentialSchema(oauthCredentialRef.ID()); string(got) != string(stored) {
+			t.Fatalf("got %s, want %s", got, stored)
+		}
+	})
+
+	t.Run("unknown slot", func(t *testing.T) {
+		t.Parallel()
+
+		if got := def.CredentialSchema(NewCredentialSlotID("missing")); got != nil {
+			t.Fatalf("got %s, want nil", got)
+		}
+	})
+}
+
+func TestOperationRegistrationDisabledFor(t *testing.T) {
+	t.Parallel()
+
+	byInput := func(userInput json.RawMessage) bool { return string(userInput) == `{"off":true}` }
+
+	tests := []struct {
+		name  string
+		op    OperationRegistration
+		input string
+		want  bool
+	}{
+		{name: "no switches", op: OperationRegistration{}, input: `{"off":true}`, want: false},
+		{name: "disabled for all ignores input", op: OperationRegistration{DisabledForAll: true}, input: `{}`, want: true},
+		{name: "per-installation switch on", op: OperationRegistration{Disabled: byInput}, input: `{"off":true}`, want: true},
+		{name: "per-installation switch off", op: OperationRegistration{Disabled: byInput}, input: `{}`, want: false},
+		{name: "nil input with per-installation switch", op: OperationRegistration{Disabled: byInput}, want: false},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			var input json.RawMessage
+			if tc.input != "" {
+				input = json.RawMessage(tc.input)
+			}
+
+			if got := tc.op.DisabledFor(input); got != tc.want {
+				t.Fatalf("DisabledFor() = %v, want %v", got, tc.want)
+			}
+		})
+	}
+}
+
+func TestSwitchDisabled(t *testing.T) {
+	t.Parallel()
+
+	if (Switch{}).Disabled() {
+		t.Fatal("expected the zero switch to be enabled")
+	}
+
+	if !(Switch{Disable: true}).Disabled() {
+		t.Fatal("expected a set switch to be disabled")
+	}
+
+	encoded, err := json.Marshal(struct {
+		Switch
+		Limit int `json:"limit"`
+	}{Switch: Switch{Disable: true}, Limit: 1})
+	if err != nil {
+		t.Fatalf("marshal: %v", err)
+	}
+
+	if string(encoded) != `{"disable":true,"limit":1}` {
+		t.Fatalf("expected the embedded switch promoted to the disable key, got %s", encoded)
+	}
+}
+
+// TestDefinitionCredentialReplacing verifies the registration whose Replaces contains the retired slot is found
+func TestDefinitionCredentialReplacing(t *testing.T) {
+	t.Parallel()
+
+	retired := NewCredentialSlotID("retiredCredential")
+
+	def := Definition{
+		DefinitionSpec: DefinitionSpec{ID: "test-def"},
+		CredentialRegistrations: []CredentialRegistration{
+			{Ref: apiKeyCredentialRef.ID()},
+			{Ref: oauthCredentialRef.ID(), Replaces: []CredentialSlotID{retired}},
+		},
+	}
+
+	t.Run("found", func(t *testing.T) {
+		t.Parallel()
+
+		reg, ok := def.CredentialReplacing(retired)
+		if !ok {
+			t.Fatal("expected a replacing registration to be found")
+		}
+
+		if reg.Ref != oauthCredentialRef.ID() {
+			t.Fatalf("got ref %q, want %q", reg.Ref.String(), oauthCredentialRef.String())
+		}
+	})
+
+	t.Run("not found", func(t *testing.T) {
+		t.Parallel()
+
+		_, ok := def.CredentialReplacing(NewCredentialSlotID("nonexistent"))
+		if ok {
+			t.Fatal("expected no replacing registration to be found")
+		}
+	})
+}
+
 func TestDefinitionConnectionRegistration(t *testing.T) {
 	t.Parallel()
 
@@ -367,7 +505,6 @@ func TestScopeVarsCELVars(t *testing.T) {
 			t.Fatalf("got installation_id %v, want %q", cel[ScopeVariableInstallationID], "inst_xyz")
 		}
 
-		// payload should decode to a map
 		payloadMap, ok := cel[ScopeVariablePayload].(map[string]any)
 		if !ok {
 			t.Fatalf("expected payload to be map[string]any, got %T", cel[ScopeVariablePayload])

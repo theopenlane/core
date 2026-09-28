@@ -4,11 +4,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Builder returns the Tailscale definition builder
@@ -26,29 +24,21 @@ func Builder() registry.Builder {
 				Active:      true,
 				Visible:     true,
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput:    userInput.Registration(),
+			HealthCheck:  tailscaleClient.HealthCheck(checkHealth),
+			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				tailscaleCredential.Registration(types.CredentialRegistration{
 					Name:        "Tailscale OAuth Client",
 					Description: "OAuth client credentials used to read users and devices from your tailnet.",
-					Schema:      tailscaleCredential.Schema(),
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
 				tailscaleConnection.Registration(types.ConnectionRegistration{
-					Name:           "Tailscale OAuth",
-					Description:    "Configure Tailscale access using an OAuth client scoped to your tailnet.",
-					CredentialRefs: []types.CredentialSlotID{tailscaleCredential.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: tailscaleClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: installation.Registration(),
+					Name:        "Tailscale OAuth",
+					Description: "Configure Tailscale access using an OAuth client scoped to your tailnet.",
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: tailscaleCredential.ID(),
-						Description:   "Removes the stored OAuth credentials from Openlane. If the client is no longer needed, revoke it in the Tailscale admin console.",
+						Description: "Removes the stored OAuth credentials from Openlane. If the client is no longer needed, revoke it in the Tailscale admin console.",
 					},
 				}),
 			},
@@ -59,10 +49,8 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				directorySyncOperation.Registration(definitionID, types.OperationRegistration{
-					Description:    "Sync Tailscale users and role-based groups as directory accounts",
-					Policy:         types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
-					ConfigResolver: directorySyncOperation.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
+					Description: "Sync Tailscale users and role-based groups as directory accounts",
+					Policy:      types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -74,22 +62,18 @@ func Builder() registry.Builder {
 							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
-					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"users:read", "policy_file:read"},
 					Schedule:            gala.NewFullFetchSchedule(),
 				}),
 				assetSyncOperation.Registration(definitionID, types.OperationRegistration{
-					Description:    "Sync Tailscale devices as assets",
-					Policy:         types.ExecutionPolicy{Reconcile: true},
-					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.AssetSync.Disable }),
-					ConfigResolver: assetSyncOperation.ConfigFrom(func(u UserInput) AssetSync { return u.AssetSync }),
+					Description: "Sync Tailscale devices as assets",
+					Policy:      types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaAsset.Name,
 						},
 					},
-					IngestHandle:        AssetSync{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"devices:core:read", "devices:posture_attributes:read", "devices:routes:read"},
 					Schedule:            gala.NewFullFetchSchedule(),

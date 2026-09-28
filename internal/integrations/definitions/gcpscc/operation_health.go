@@ -20,16 +20,9 @@ type HealthCheck struct {
 	Parents []string `json:"parents"`
 }
 
-// Handle adapts the health check to the generic operation registration boundary
-func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClientRequest(sccClient, func(ctx context.Context, request types.OperationRequest, client *cloudscc.Client) (json.RawMessage, error) {
-		return h.Run(ctx, request.Credentials, client)
-	})
-}
-
-// Run executes the GCP SCC health check
-func (HealthCheck) Run(ctx context.Context, credentials types.CredentialBindings, c *cloudscc.Client) (json.RawMessage, error) {
-	scope, err := resolveScope(credentials)
+// checkHealth executes the GCP SCC health check
+func checkHealth(ctx context.Context, request types.OperationRequest, c *cloudscc.Client) (json.RawMessage, error) {
+	scope, err := resolveScope(request.Credentials)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("gcpscc: error attempting to resolve credentials")
 		return nil, err

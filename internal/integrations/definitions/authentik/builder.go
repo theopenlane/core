@@ -6,7 +6,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Builder returns the Authentik definition builder
@@ -24,29 +23,21 @@ func Builder() registry.Builder {
 				Active:      true,
 				Visible:     true,
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput:    userInput.Registration(),
+			HealthCheck:  authentikClient.HealthCheck(checkHealth),
+			Installation: integration.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				authentikCredential.Registration(types.CredentialRegistration{
 					Name:        "Authentik Credential",
 					Description: "API token used to access Authentik instance data.",
-					Schema:      authentikCredential.Schema(),
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
 				authentikConnection.Registration(types.ConnectionRegistration{
-					Name:           "Authentik API Token",
-					Description:    "Configure Authentik access using an API token from your instance.",
-					CredentialRefs: []types.CredentialSlotID{authentikCredential.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: authentikClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: integration.Registration(),
+					Name:        "Authentik API Token",
+					Description: "Configure Authentik access using an API token from your instance.",
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: authentikCredential.ID(),
-						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Authentik admin panel under Directory > Tokens.",
+						Description: "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Authentik admin panel under Directory > Tokens.",
 					},
 				}),
 			},
@@ -70,7 +61,6 @@ func Builder() registry.Builder {
 							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
-					IngestHandle: DirectorySync{}.IngestHandle(),
 				}),
 			},
 			Mappings: []types.MappingRegistration{

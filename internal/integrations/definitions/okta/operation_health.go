@@ -20,13 +20,8 @@ type HealthCheck struct {
 	Email string `json:"email"`
 }
 
-// Handle adapts the health check to the generic operation registration boundary
-func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClient(oktaClient, h.Run)
-}
-
-// Run executes the Okta health check
-func (HealthCheck) Run(ctx context.Context, c *oktagosdk.APIClient) (json.RawMessage, error) {
+// checkHealth executes the Okta health check
+func checkHealth(ctx context.Context, _ types.OperationRequest, c *oktagosdk.APIClient) (json.RawMessage, error) {
 	user, _, err := c.UserAPI.GetUser(ctx, "me").Execute()
 	if err != nil {
 		return nil, ErrUserLookupFailed

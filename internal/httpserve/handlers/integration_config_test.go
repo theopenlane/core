@@ -626,8 +626,6 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 
 	assert.Equal(t, http.StatusBadRequest, rec.Code)
 
-	// A PENDING installation row must be created even when the health check fails.
-	// The credential must not be stored and the status must not advance to CONNECTED.
 	records, err := suite.db.Integration.Query().
 		Where(
 			integration.OwnerIDEQ(testUser.OrganizationID),

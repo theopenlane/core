@@ -25,14 +25,8 @@ var (
 	awsAssumeRoleConnection = types.NewConnectionRef(awsAssumeRoleCredential).Enables(securityHubClient)
 	// awsServiceAccountConnection is the connection mode selected by the static service account credential
 	awsServiceAccountConnection = types.NewConnectionRef(awsServiceAccountCredential).Enables(securityHubClient)
-	// findingsCollectOperation is the AWS Security Hub finding and vulnerabilities collection operation, pinned to its persisted name
-	findingsCollectOperation = types.OperationRefOf[FindingSync]().Using(securityHubClient)
-	// directorySyncOperation is the AWS IAM directory sync operation
-	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(iamClient)
-	// checkSyncOperation is the AWS Config check sync operation
-	checkSyncOperation = types.OperationRefOf[CheckSync]().Using(configServiceClient)
-	// assetSyncOperation is the AWS Config asset sync operation
-	assetSyncOperation = types.OperationRefOf[AssetSync]().Using(configServiceClient)
+	// userInput is the installation user input layout for the AWS Security Hub definition
+	userInput = types.NewUserInputRef[UserInput]("awssecurityhub")
 )
 
 // UserInput holds installation-specific configuration collected from the user
@@ -48,8 +42,8 @@ type UserInput struct {
 }
 
 type DirectorySync struct {
-	// Disable is used to disable the directory sync operation from aws
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from AWS IAM"`
+	// Switch toggles the directory sync operation off for the installation
+	types.Switch
 	// DisableGroupSync will just sync users and no groups or group memberships
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from AWS IAM, disable groups sync operations"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
@@ -58,24 +52,24 @@ type DirectorySync struct {
 
 // FindingSync are configuration settings for the findings sync
 type FindingSync struct {
-	// Disable will stop any of this type of ingest from being performed
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of findings from AWS Security Hub"`
+	// Switch toggles the findings sync operation off for the installation
+	types.Switch
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.Severity.Label == 'CRITICAL' || payload.Severity.Label == 'HIGH'"`
 }
 
 // CheckSync are the configuration settings for the check sync from AWS Config
 type CheckSync struct {
-	// Disable will stop any of this type of ingest from being performed
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of checks from AWS Config"`
+	// Switch toggles the check sync operation off for the installation
+	types.Switch
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.ComplianceType == 'NON_COMPLIANT' || payload.ComplianceType == 'COMPLIANT'"`
 }
 
 // AssetSync are the configuration settings for the asset sync
 type AssetSync struct {
-	// Disable will stop any of this type of ingest from being performed
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of assets from AWS"`
+	// Switch toggles the asset sync operation off for the installation
+	types.Switch
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
 }

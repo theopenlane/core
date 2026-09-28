@@ -35,7 +35,7 @@ func ingestPayloadSets(ctx context.Context, client *generated.Client, rt *integr
 			Runtime:     rt.Gala(),
 			Integration: integration,
 		},
-		"",
+		definitionscim.DirectorySyncOperationName(),
 		contracts,
 		integrationtypes.ExecutionPolicy{},
 		payloadSets,
@@ -45,7 +45,6 @@ func ingestPayloadSets(ctx context.Context, client *generated.Client, rt *integr
 		return err
 	}
 
-	// SCIM must reject records the batch skipped so the provider sees the failure status
 	return errors.Join(lo.Map(result.Failures, func(failure integrationops.RecordFailure, _ int) error {
 		return failure.Err
 	})...)

@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // directoryDefaultPageSize is the number of records requested per Okta API page
@@ -30,24 +29,11 @@ type directoryMembershipPayload struct {
 	Member *oktagosdk.User `json:"member,omitempty"`
 }
 
-// DirectorySync collects Okta directory users, groups, and memberships for ingest
-type DirectorySync struct{}
+// directorySyncOperation is the Okta directory sync operation
+var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(oktaClient, runDirectorySync)
 
-// IngestHandle adapts directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(oktaClient, func(ctx context.Context, request types.OperationRequest, c *oktagosdk.APIClient) ([]types.IngestPayloadSet, error) {
-		var cfg UserInput
-
-		if request.Integration != nil {
-			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
-		}
-
-		return d.Run(ctx, c, cfg)
-	})
-}
-
-// Run collects Okta directory users, groups, and memberships
-func (DirectorySync) Run(ctx context.Context, c *oktagosdk.APIClient, cfg UserInput) ([]types.IngestPayloadSet, error) {
+// runDirectorySync collects Okta directory users, groups, and memberships
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *oktagosdk.APIClient, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listDirectoryUsers(ctx, c, cfg)
 	if err != nil {
 		return nil, err
@@ -143,7 +129,7 @@ func (DirectorySync) Run(ctx context.Context, c *oktagosdk.APIClient, cfg UserIn
 }
 
 // listDirectoryUsers pages through Okta users using the resolved sync settings
-func listDirectoryUsers(ctx context.Context, c *oktagosdk.APIClient, cfg UserInput) ([]oktagosdk.User, error) {
+func listDirectoryUsers(ctx context.Context, c *oktagosdk.APIClient, cfg DirectorySync) ([]oktagosdk.User, error) {
 	users := make([]oktagosdk.User, 0)
 	cursor := ""
 
@@ -152,8 +138,6 @@ func listDirectoryUsers(ctx context.Context, c *oktagosdk.APIClient, cfg UserInp
 			return nil, err
 		}
 
-		// Default to `status pr` so that DEPROVISIONED users are included in the result set;
-		// Okta's list API omits DEPROVISIONED users unless a search expression is provided.
 		search := cfg.Search
 		if search == "" {
 			search = "status pr"

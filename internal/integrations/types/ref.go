@@ -17,7 +17,6 @@ import (
 
 // =========
 // Definitions
-// This is the only entity in here that uses plain string because its string identity is the canonical ID
 // =========
 
 // DefinitionRef is the durable identity for one registered definition
@@ -144,7 +143,6 @@ func sortedNames[T any](replacements map[string]replacement[T]) []string {
 // =========
 
 // CredentialSlotID is the non-generic durable identity for one credential slot used by a definition
-// It is used in registration structs, bindings, and persistence where the credential schema type is not needed
 type CredentialSlotID struct {
 	// name is the stable credential slot name used for persistence and equality comparisons
 	name string
@@ -274,6 +272,7 @@ func (r CredentialRef[T]) Backfill(ctx context.Context, req InstallationRequest,
 // Registration projects the slot identity and declared lifecycle onto base, leaving Schema and the descriptive fields as authored
 func (r CredentialRef[T]) Registration(base CredentialRegistration) CredentialRegistration {
 	base.Ref = r.ID()
+	base.StoredSchema = r.Schema()
 
 	if len(r.replacements) > 0 {
 		base.Replaces = r.Replaces()
@@ -294,13 +293,14 @@ func (r CredentialRef[T]) Registration(base CredentialRegistration) CredentialRe
 // UserInputRef is a typed handle for one definition's installation-scoped user input layout
 type UserInputRef[T any] struct {
 	name         string
+	schema       json.RawMessage
 	replacements map[string]replacement[T]
 	backfill     func(context.Context, InstallationRequest, *T) error
 }
 
-// NewUserInputRef creates a typed user input layout handle
+// NewUserInputRef creates a typed user input layout handle with the schema reflected from T
 func NewUserInputRef[T any](name string) UserInputRef[T] {
-	return UserInputRef[T]{name: name}
+	return UserInputRef[T]{name: name, schema: jsonx.SchemaFrom[T]()}
 }
 
 // Name returns the stable layout name
@@ -342,6 +342,22 @@ func (r UserInputRef[T]) Convert(old json.RawMessage) (json.RawMessage, error) {
 // Backfill completes stored user input missing values through the declared backfill
 func (r UserInputRef[T]) Backfill(ctx context.Context, req InstallationRequest, payload json.RawMessage) (json.RawMessage, error) {
 	return backfillPayload(ctx, req, r.backfill, payload)
+}
+
+// Registration projects the reflected schema and declared lifecycle into a user input registration
+func (r UserInputRef[T]) Registration() *UserInputRegistration {
+	reg := &UserInputRegistration{Schema: jsonx.CloneRawMessage(r.schema)}
+
+	if len(r.replacements) > 0 {
+		reg.Replaces = r.Replaces()
+		reg.Convert = r.Convert
+	}
+
+	if r.backfill != nil {
+		reg.Backfill = r.Backfill
+	}
+
+	return reg
 }
 
 // =========
@@ -426,6 +442,26 @@ func (r ClientRef[C]) Registration(build func(context.Context, ClientBuildReques
 	return base
 }
 
+// HealthCheck binds fn as a definition health check that runs against this client
+func (r ClientRef[C]) HealthCheck(fn func(context.Context, OperationRequest, C) (json.RawMessage, error)) *HealthCheckRegistration {
+	return &HealthCheckRegistration{
+		ClientRef: r.ID(),
+		Handle: func(ctx context.Context, request OperationRequest) (json.RawMessage, error) {
+			client, err := r.Cast(request.Client)
+			if err != nil {
+				return nil, err
+			}
+
+			return fn(ctx, request, client)
+		},
+	}
+}
+
+// CredentialHealthCheck binds fn as a definition health check that receives only the credential bindings
+func CredentialHealthCheck(fn func(context.Context, OperationRequest) (json.RawMessage, error)) *HealthCheckRegistration {
+	return &HealthCheckRegistration{Handle: fn}
+}
+
 // =========
 // OperationRef
 // =========
@@ -438,18 +474,75 @@ type OperationRef[Cfg any] struct {
 	schema json.RawMessage
 	// client is the registered client the operation runs against, invalid when the operation has none
 	client ClientID
+	// handle executes the operation when it does not produce ingest payloads
+	handle OperationHandler
+	// ingest executes the operation and returns typed payload sets for the ingest pipeline
+	ingest IngestHandler
+	// disabled reports whether a config section switches the operation off, nil when Cfg is not Switchable
+	disabled func(json.RawMessage) bool
+	// replaces lists the retired operation names this operation takes over
+	replaces []string
 }
 
 // NewOperationRef creates a typed operation identity handle with the schema reflected from Cfg
 func NewOperationRef[Cfg any](name string) OperationRef[Cfg] {
-	return OperationRef[Cfg]{name: name, schema: jsonx.SchemaFrom[Cfg]()}
+	return OperationRef[Cfg]{name: name, schema: jsonx.SchemaFrom[Cfg](), disabled: configDisabled[Cfg]()}
 }
 
 // OperationRefOf creates a typed operation identity handle named after the reflected schema of Cfg
 func OperationRefOf[Cfg any]() OperationRef[Cfg] {
 	schema := jsonx.SchemaFrom[Cfg]()
 
-	return OperationRef[Cfg]{name: jsonx.SchemaID(schema), schema: schema}
+	return OperationRef[Cfg]{name: jsonx.SchemaID(schema), schema: schema, disabled: configDisabled[Cfg]()}
+}
+
+// configDisabled returns a predicate decoding a config section into Cfg and reporting its switch, nil when Cfg is not Switchable
+func configDisabled[Cfg any]() func(json.RawMessage) bool {
+	if !reflect.TypeFor[Cfg]().Implements(reflect.TypeFor[Switchable]()) {
+		return nil
+	}
+
+	return func(config json.RawMessage) bool {
+		var cfg Cfg
+
+		if err := jsonx.UnmarshalIfPresent(config, &cfg); err != nil {
+			return false
+		}
+
+		switchable, ok := any(cfg).(Switchable)
+
+		return ok && switchable.Disabled()
+	}
+}
+
+// decodeConfig decodes an operation config payload into Cfg, treating an absent payload as the zero config
+func decodeConfig[Cfg any](raw json.RawMessage) (Cfg, error) {
+	var cfg Cfg
+
+	if err := jsonx.UnmarshalIfPresent(raw, &cfg); err != nil {
+		return cfg, fmt.Errorf("%w: %w", ErrOperationConfigInvalid, err)
+	}
+
+	return cfg, nil
+}
+
+// bindRequest casts the request client through client and decodes the request config into Cfg
+func bindRequest[C, Cfg any](client ClientRef[C], request OperationRequest) (C, Cfg, error) {
+	typed, err := client.Cast(request.Client)
+	if err != nil {
+		var cfg Cfg
+
+		return typed, cfg, err
+	}
+
+	cfg, err := decodeConfig[Cfg](request.Config)
+
+	return typed, cfg, err
+}
+
+// sortedUnique returns the names sorted with duplicates removed
+func sortedUnique(names []string) []string {
+	return slices.Compact(slices.Sorted(slices.Values(names)))
 }
 
 // Name returns the stable operation name
@@ -462,39 +555,58 @@ func (r OperationRef[Cfg]) Schema() json.RawMessage {
 	return jsonx.CloneRawMessage(r.schema)
 }
 
-// UnmarshalConfig decodes a JSON operation config document into the typed config value
-func (r OperationRef[Cfg]) UnmarshalConfig(raw json.RawMessage) (Cfg, error) {
-	var out Cfg
-
-	return out, jsonx.UnmarshalIfPresent(raw, &out)
-}
-
-// Using declares that the operation runs against the given client
-func (r OperationRef[Cfg]) Using[C any](client ClientRef[C]) OperationRef[Cfg] {
+// Ingests binds fn as the operation's ingest handler, run against client with the typed config decoded from the request
+func (r OperationRef[Cfg]) Ingests[C any](client ClientRef[C], fn func(context.Context, OperationRequest, C, Cfg) ([]IngestPayloadSet, error)) OperationRef[Cfg] {
 	r.client = client.ID()
+	r.ingest = func(ctx context.Context, request OperationRequest) ([]IngestPayloadSet, error) {
+		typed, cfg, err := bindRequest[C, Cfg](client, request)
+		if err != nil {
+			return nil, err
+		}
+
+		return fn(ctx, request, typed, cfg)
+	}
 
 	return r
 }
 
-// ConfigFrom returns an OperationRegistration.ConfigResolver that decodes the installation's user input
-// as U, extracts this operation's config through fn, and re-encodes it as JSON
-func (r OperationRef[Cfg]) ConfigFrom[U any](fn func(U) Cfg) func(json.RawMessage) json.RawMessage {
-	return func(userInput json.RawMessage) json.RawMessage {
-		var input U
-		if err := json.Unmarshal(userInput, &input); err != nil {
-			return nil
-		}
-
-		out, err := json.Marshal(fn(input))
+// Handles binds fn as the operation's handler, run against client with the typed config decoded from the request
+func (r OperationRef[Cfg]) Handles[C any](client ClientRef[C], fn func(context.Context, OperationRequest, C, Cfg) (json.RawMessage, error)) OperationRef[Cfg] {
+	r.client = client.ID()
+	r.handle = func(ctx context.Context, request OperationRequest) (json.RawMessage, error) {
+		typed, cfg, err := bindRequest[C, Cfg](client, request)
 		if err != nil {
-			return nil
+			return nil, err
 		}
 
-		return out
+		return fn(ctx, request, typed, cfg)
 	}
+
+	return r
 }
 
-// Registration projects the operation name, topic, config schema, and declared client onto base
+// HandlesRequest binds fn as the operation's handler, run without a client with the typed config decoded from the request
+func (r OperationRef[Cfg]) HandlesRequest(fn func(context.Context, OperationRequest, Cfg) (json.RawMessage, error)) OperationRef[Cfg] {
+	r.handle = func(ctx context.Context, request OperationRequest) (json.RawMessage, error) {
+		cfg, err := decodeConfig[Cfg](request.Config)
+		if err != nil {
+			return nil, err
+		}
+
+		return fn(ctx, request, cfg)
+	}
+
+	return r
+}
+
+// Replacing declares that the operation takes over the recorded runs and health of old
+func (r OperationRef[Cfg]) Replacing[Old any](old OperationRef[Old]) OperationRef[Cfg] {
+	r.replaces = append(slices.Clone(r.replaces), old.Name())
+
+	return r
+}
+
+// Registration projects the operation name, topic, config schema, bound client and handler, retired names, and config switch onto base
 func (r OperationRef[Cfg]) Registration(definition DefinitionRef, base OperationRegistration) OperationRegistration {
 	base.Name = r.name
 	base.Topic = definition.OperationTopic(r.name)
@@ -502,6 +614,22 @@ func (r OperationRef[Cfg]) Registration(definition DefinitionRef, base Operation
 
 	if r.client.Valid() {
 		base.ClientRef = r.client
+	}
+
+	if r.handle != nil {
+		base.Handle = r.handle
+	}
+
+	if r.ingest != nil {
+		base.IngestHandle = r.ingest
+	}
+
+	if len(r.replaces) > 0 {
+		base.Replaces = sortedUnique(r.replaces)
+	}
+
+	if r.disabled != nil {
+		base.ConfigDisabled = r.disabled
 	}
 
 	return base
@@ -572,10 +700,17 @@ func (r ConnectionRef) Enables[C any](client ClientRef[C]) ConnectionRef {
 	return r
 }
 
-// Registration projects the selecting credential slot and enabled clients onto base, leaving CredentialRefs as authored
+// Registration projects the selecting credential slot onto the connection and its disconnect flow, and the enabled clients onto base
 func (r ConnectionRef) Registration(base ConnectionRegistration) ConnectionRegistration {
 	base.CredentialRef = r.credential
+	base.CredentialRefs = []CredentialSlotID{r.credential}
 	base.ClientRefs = slices.Clone(r.clients)
+
+	if base.Disconnect != nil {
+		disconnect := *base.Disconnect
+		disconnect.CredentialRef = r.credential
+		base.Disconnect = &disconnect
+	}
 
 	return base
 }
@@ -588,6 +723,8 @@ func (r ConnectionRef) Registration(base ConnectionRegistration) ConnectionRegis
 type WebhookRef struct {
 	// name is the stable webhook contract name used for persistence
 	name string
+	// replaces lists the retired contract names whose persisted webhook rows move onto this contract
+	replaces []string
 }
 
 // NewWebhookRef creates a webhook contract identity handle
@@ -600,9 +737,20 @@ func (r WebhookRef) Name() string {
 	return r.name
 }
 
-// Registration projects the webhook contract name onto base
+// Replacing declares that the contract takes over the persisted webhook rows of old
+func (r WebhookRef) Replacing(old WebhookRef) WebhookRef {
+	r.replaces = append(slices.Clone(r.replaces), old.Name())
+
+	return r
+}
+
+// Registration projects the webhook contract name and retired names onto base
 func (r WebhookRef) Registration(base WebhookRegistration) WebhookRegistration {
 	base.Name = r.name
+
+	if len(r.replaces) > 0 {
+		base.Replaces = sortedUnique(r.replaces)
+	}
 
 	return base
 }

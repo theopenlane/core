@@ -8,16 +8,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// Handle adapts the OIDC health check to the generic operation registration boundary
-func (h HealthCheck) Handle() types.OperationHandler {
-	return func(_ context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		return h.Run(request.Credentials)
-	}
-}
-
-// Run validates the stored OIDC credential and returns a small identity summary
-func (HealthCheck) Run(bindings types.CredentialBindings) (json.RawMessage, error) {
-	cred, ok, err := oidcCredential.Resolve(bindings)
+// checkHealth validates the stored OIDC credential and returns a small identity summary
+func checkHealth(_ context.Context, req types.OperationRequest) (json.RawMessage, error) {
+	cred, ok, err := oidcCredential.Resolve(req.Credentials)
 	if err != nil {
 		return nil, ErrCredentialDecode
 	}

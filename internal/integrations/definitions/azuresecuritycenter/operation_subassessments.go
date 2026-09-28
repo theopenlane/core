@@ -17,15 +17,7 @@ const (
 	variantSubAssessment = "subassessment"
 )
 
-// SubAssessmentPayload is the raw provider payload emitted per sub-assessment for ingest.
-// Sub-assessments are granular findings under a top-level assessment. Container registry
-// and server sub-assessments carry actual CVE identifiers and CVSS scores; SQL sub-assessments
-// carry configuration check results. All types map to the Vulnerability schema.
-//
-// Note: CVE IDs are intentionally stored in raw_payload rather than mapped to the cve_id
-// field, because the Vulnerability schema enforces a (cve_id, owner_id) unique constraint
-// that assumes one record per CVE per organization. Azure sub-assessments are scoped per
-// resource, so the same CVE can appear across multiple container images or servers.
+// SubAssessmentPayload is the raw provider payload emitted per sub-assessment for ingest
 type SubAssessmentPayload struct {
 	// ID is the full ARM resource ID of the sub-assessment — used as external_id
 	ID string `json:"id"`
@@ -61,18 +53,14 @@ type SubAssessmentPayload struct {
 	CVSSScore *float32 `json:"cvss_score,omitempty"`
 }
 
+// subAssessmentsCollectOperation is the operation ref for the Azure Security Center sub-assessments collect operation
+var subAssessmentsCollectOperation = types.OperationRefOf[SubAssessmentsCollect]().Ingests(securityCenterClient, runSubAssessmentsCollect)
+
 // SubAssessmentsCollect collects Azure Defender for Cloud sub-assessment findings for ingest
 type SubAssessmentsCollect struct{}
 
-// IngestHandle adapts sub-assessments collection to the ingest operation registration boundary
-func (s SubAssessmentsCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(securityCenterClient, func(ctx context.Context, _ types.OperationRequest, client *azureSecurityClient) ([]types.IngestPayloadSet, error) {
-		return s.Run(ctx, client)
-	})
-}
-
-// Run collects all unhealthy sub-assessment findings for the subscription
-func (SubAssessmentsCollect) Run(ctx context.Context, client *azureSecurityClient) ([]types.IngestPayloadSet, error) {
+// runSubAssessmentsCollect collects all unhealthy sub-assessment findings for the subscription
+func runSubAssessmentsCollect(ctx context.Context, _ types.OperationRequest, client *SecurityClient, _ SubAssessmentsCollect) ([]types.IngestPayloadSet, error) {
 	pager := client.subassessments.NewListAllPager(client.scope(), nil)
 
 	var envelopes []types.MappingEnvelope
@@ -158,9 +146,7 @@ func buildSubAssessmentPayload(sa *armsecurity.SubAssessment) SubAssessmentPaylo
 	return payload
 }
 
-// extractCVEIDs collects CVE identifiers from a CVE list.
-// The armsecurity.CVE struct exposes the identifier via the Title field
-// (e.g. "CVE-2021-44228") rather than a dedicated ID field.
+// extractCVEIDs collects CVE identifiers from a CVE list
 func extractCVEIDs(cves []*armsecurity.CVE) []string {
 	ids := make([]string, 0, len(cves))
 

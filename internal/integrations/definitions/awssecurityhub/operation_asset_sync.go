@@ -5,26 +5,14 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/service/configservice"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// IngestHandle adapts IAM directory sync to the ingest operation registration boundary
-func (d AssetSync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(configServiceClient, assetSyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, _ types.OperationRequest, client *configservice.Client, cfg AssetSync) ([]types.IngestPayloadSet, error) {
-		if cfg.Disable {
-			logx.FromContext(ctx).Debug().Msg("aws: check sync is disabled")
+// assetSyncOperation is the AWS Config asset sync operation
+var assetSyncOperation = types.OperationRefOf[AssetSync]().Ingests(configServiceClient, runAssetSync)
 
-			return nil, nil
-		}
-
-		return d.Run(ctx, client, cfg)
-	})
-}
-
-// Run collects AWS IAM users, and optionally groups and memberships
-func (AssetSync) Run(_ context.Context, _ *configservice.Client, _ AssetSync) ([]types.IngestPayloadSet, error) {
+// runAssetSync collects AWS assets
+func runAssetSync(_ context.Context, _ types.OperationRequest, _ *configservice.Client, _ AssetSync) ([]types.IngestPayloadSet, error) {
 
 	return nil, nil
 }

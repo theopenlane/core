@@ -19,8 +19,7 @@ import (
 // Builder builds one manifest-backed definition
 type Builder func() (types.Definition, error)
 
-// Registry is the in-memory index of registered definitions.
-// Built once at startup via RegisterAll; all state is read-only after construction
+// Registry is the in-memory index of registered definitions
 type Registry struct {
 	// definitions maps definition ID to its compiled entry
 	definitions map[string]definitionEntry
@@ -40,12 +39,12 @@ type Surface struct {
 	Credentials []SurfaceCredential `json:"credentials"`
 	// UserInput is the stored user input schema when the definition declares a typed user input
 	UserInput *SurfaceSchema `json:"userInput,omitempty"`
-	// Metadata lists the derived installation metadata schema of every connection that declares one, sorted by connection
-	Metadata []SurfaceConnectionMetadata `json:"metadata,omitempty"`
+	// Installation is the derived installation metadata schema when the definition declares one
+	Installation *SurfaceSchema `json:"installation,omitempty"`
 	// Connections lists every connection mode's selecting credential ref, sorted
 	Connections []string `json:"connections"`
-	// Operations lists every operation name with the retired names it takes over, sorted by name
-	Operations []SurfaceNamed `json:"operations,omitempty"`
+	// Operations lists every operation name with the retired names it takes over and its config schema, sorted by name
+	Operations []SurfaceOperation `json:"operations,omitempty"`
 	// Webhooks lists every webhook contract with its events, sorted by name
 	Webhooks []SurfaceWebhook `json:"webhooks,omitempty"`
 }
@@ -68,20 +67,22 @@ type SurfaceCredential struct {
 	SurfaceSchema
 }
 
-// SurfaceConnectionMetadata is the derived installation metadata schema of one connection mode
-type SurfaceConnectionMetadata struct {
-	// Connection is the connection mode's selecting credential ref
-	Connection string `json:"connection"`
-	// Schema is the reflected JSON schema of the derived metadata type
-	Schema json.RawMessage `json:"schema"`
-}
-
 // SurfaceNamed is one named registration and the retired names whose stored data it takes over
 type SurfaceNamed struct {
 	// Name is the stable registration name
 	Name string `json:"name"`
 	// Replaces lists the retired names this registration takes over, sorted
 	Replaces []string `json:"replaces,omitempty"`
+}
+
+// SurfaceOperation is one operation registration, the retired names it takes over, and the schema of its config
+type SurfaceOperation struct {
+	// Name is the stable operation name
+	Name string `json:"name"`
+	// Replaces lists the retired operation names this operation takes over, sorted
+	Replaces []string `json:"replaces,omitempty"`
+	// Schema is the reflected JSON schema of the operation's config
+	Schema json.RawMessage `json:"schema,omitempty"`
 }
 
 // SurfaceWebhook is one webhook contract with its events
@@ -99,7 +100,7 @@ func DefinitionSurface(def types.Definition) Surface {
 	credentials := lo.Map(def.CredentialRegistrations, func(registration types.CredentialRegistration, _ int) SurfaceCredential {
 		replaces := lo.Map(registration.Replaces, func(slot types.CredentialSlotID, _ int) string { return slot.String() })
 
-		return SurfaceCredential{Ref: registration.Ref.String(), SurfaceSchema: SurfaceSchema{Schema: def.CredentialSchema(registration.Ref), Replaces: sortedNames(replaces), Backfill: registration.Backfill != nil}}
+		return SurfaceCredential{Ref: registration.Ref.String(), SurfaceSchema: SurfaceSchema{Schema: registration.StoredSchema, Replaces: sortedNames(replaces), Backfill: registration.Backfill != nil}}
 	})
 
 	slices.SortFunc(credentials, func(a, b SurfaceCredential) int {
@@ -112,20 +113,8 @@ func DefinitionSurface(def types.Definition) Surface {
 
 	slices.Sort(connections)
 
-	metadata := lo.FilterMap(def.Connections, func(connection types.ConnectionRegistration, _ int) (SurfaceConnectionMetadata, bool) {
-		if connection.Integration == nil || len(connection.Integration.Schema) == 0 {
-			return SurfaceConnectionMetadata{}, false
-		}
-
-		return SurfaceConnectionMetadata{Connection: connection.CredentialRef.String(), Schema: connection.Integration.Schema}, true
-	})
-
-	slices.SortFunc(metadata, func(a, b SurfaceConnectionMetadata) int {
-		return strings.Compare(a.Connection, b.Connection)
-	})
-
-	operations := sortedNamed(lo.Map(def.Operations, func(operation types.OperationRegistration, _ int) SurfaceNamed {
-		return SurfaceNamed{Name: operation.Name, Replaces: sortedNames(operation.Replaces)}
+	operations := sortedOperations(lo.Map(def.Operations, func(operation types.OperationRegistration, _ int) SurfaceOperation {
+		return SurfaceOperation{Name: operation.Name, Replaces: sortedNames(operation.Replaces), Schema: operation.ConfigSchema}
 	}))
 
 	webhooks := lo.Map(def.Webhooks, func(webhook types.WebhookRegistration, _ int) SurfaceWebhook {
@@ -138,10 +127,14 @@ func DefinitionSurface(def types.Definition) Surface {
 		return strings.Compare(a.Name, b.Name)
 	})
 
-	surface := Surface{ID: def.ID, Credentials: credentials, Metadata: metadata, Connections: connections, Operations: operations, Webhooks: webhooks}
+	surface := Surface{ID: def.ID, Credentials: credentials, Connections: connections, Operations: operations, Webhooks: webhooks}
 
 	if def.UserInput != nil {
 		surface.UserInput = &SurfaceSchema{Schema: def.UserInput.Schema, Replaces: sortedNames(def.UserInput.Replaces), Backfill: def.UserInput.Backfill != nil}
+	}
+
+	if def.Installation != nil && len(def.Installation.Schema) > 0 {
+		surface.Installation = &SurfaceSchema{Schema: def.Installation.Schema}
 	}
 
 	return surface
@@ -165,6 +158,15 @@ func sortedNamed(entries []SurfaceNamed) []SurfaceNamed {
 	return entries
 }
 
+// sortedOperations sorts operation surface entries by name
+func sortedOperations(entries []SurfaceOperation) []SurfaceOperation {
+	slices.SortFunc(entries, func(a, b SurfaceOperation) int {
+		return strings.Compare(a.Name, b.Name)
+	})
+
+	return entries
+}
+
 // definitionEntry captures the indexed details for one registered definition
 type definitionEntry struct {
 	// definition holds the original definition as supplied by the caller
@@ -179,8 +181,7 @@ type definitionEntry struct {
 	webhooks map[string]types.WebhookRegistration
 	// webhookEvents maps webhook name to a nested map of event name to event registration
 	webhookEvents map[string]map[string]types.WebhookEventRegistration
-	// runtimeClient holds the pre-built client for runtime integrations.
-	// Non-nil only when the definition has a RuntimeIntegration with populated config
+	// runtimeClient holds the pre-built client for runtime integrations
 	runtimeClient any
 	// version is the hash of the definition's declarative composition
 	version string
@@ -197,6 +198,11 @@ func New() *Registry {
 
 // Register adds one definition to the registry
 func (r *Registry) Register(def types.Definition) error {
+	def, err := finalizeDefinition(def)
+	if err != nil {
+		return err
+	}
+
 	if err := r.validateDefinition(def); err != nil {
 		return err
 	}
@@ -340,13 +346,17 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 	}
 
 	if lo.ContainsBy(def.CredentialRegistrations, func(credential types.CredentialRegistration) bool {
-		return len(def.CredentialSchema(credential.Ref)) == 0
+		return len(credential.StoredSchema) == 0
 	}) {
 		return ErrCredentialSchemaRequired
 	}
 
 	if def.UserInput != nil && len(def.UserInput.Schema) == 0 {
 		return ErrUserInputSchemaRequired
+	}
+
+	if err := validateHealthCheck(def); err != nil {
+		return err
 	}
 
 	if def.RuntimeIntegration != nil {
@@ -362,10 +372,39 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 	return nil
 }
 
-// populateMappingLinkTargets fills each mapping's cross-link inventory from the entityops catalog —
-// one entry per edge, carrying the edge name, the target's match-key fields, and the source's mapped
-// input keys — so the definition payload surfaces the exact identifiers a LinkRule may reference and
-// configuration never falls back to free-typed field names
+// validateHealthCheck requires a health check with a handler when the definition declares connections, and a health check client built from every connection's credential slot
+func validateHealthCheck(def types.Definition) error {
+	check := def.HealthCheck
+
+	switch {
+	case check == nil && len(def.Connections) > 0:
+		return ErrHealthCheckRequired
+	case check == nil:
+		return nil
+	case check.Handle == nil:
+		return ErrConnectionHealthCheckHandlerRequired
+	case !check.ClientRef.Valid():
+		return nil
+	}
+
+	client, declared := lo.Find(def.Clients, func(client types.ClientRegistration) bool {
+		return client.Ref == check.ClientRef
+	})
+	if !declared {
+		return ErrConnectionClientRefNotDeclared
+	}
+
+	uncovered, found := lo.Find(def.Connections, func(connection types.ConnectionRegistration) bool {
+		return !lo.Contains(client.CredentialRefs, connection.CredentialRef)
+	})
+	if found {
+		return fmt.Errorf("%w: definition %s client %s connection %s", ErrHealthCheckClientCredentialMissing, def.ID, check.ClientRef, uncovered.CredentialRef)
+	}
+
+	return nil
+}
+
+// populateMappingLinkTargets fills each mapping's cross-link inventory from the entityops catalog — one entry per edge, carrying the edge name, the target's match-key fields, and the source's mapped input keys — so the definition payload surfaces the exact identifiers a LinkRule may reference and configuration never falls back to free-typed field names
 func populateMappingLinkTargets(mappings []types.MappingRegistration) {
 	for i := range mappings {
 		sourceSchema, ok := entityops.LookupSchema(mappings[i].Schema)
@@ -395,8 +434,7 @@ func populateMappingLinkTargets(mappings []types.MappingRegistration) {
 	}
 }
 
-// targetLinkFields projects the match-key (indexed string) fields of a target schema — the fields a
-// LinkRule.TargetField may name
+// targetLinkFields projects the match-key (indexed string) fields of a target schema — the fields a LinkRule.TargetField may name
 func targetLinkFields(fields []entityops.FieldDescriptor) []types.LinkFieldInfo {
 	return lo.FilterMap(fields, func(f entityops.FieldDescriptor, _ int) (types.LinkFieldInfo, bool) {
 		if !f.MatchKey {
@@ -407,8 +445,7 @@ func targetLinkFields(fields []entityops.FieldDescriptor) []types.LinkFieldInfo 
 	})
 }
 
-// sourceLinkFields projects the mapped input keys of the source schema — the keys present in the
-// mapped ingest payload that a LinkRule.SourceField (scalar) or SourceList (list) may name
+// sourceLinkFields projects the mapped input keys of the source schema — the keys present in the mapped ingest payload that a LinkRule.SourceField (scalar) or SourceList (list) may name
 func sourceLinkFields(fields []entityops.FieldDescriptor) []types.LinkFieldInfo {
 	return lo.FilterMap(fields, func(f entityops.FieldDescriptor, _ int) (types.LinkFieldInfo, bool) {
 		if f.InputKey == "" {
@@ -419,10 +456,7 @@ func sourceLinkFields(fields []entityops.FieldDescriptor) []types.LinkFieldInfo 
 	})
 }
 
-// ResolveLinkEdge resolves the edge a link rule links through: an explicit rule edge is looked up by
-// name and checked against the declared target type; otherwise the target type must identify exactly
-// one edge, since silently picking one of several (e.g. editors vs viewers, both targeting Group)
-// would link through an arbitrary edge
+// ResolveLinkEdge resolves the edge a link rule links through: an explicit rule edge is looked up by name and checked against the declared target type; otherwise the target type must identify exactly one edge, since silently picking one of several (e.g. editors vs viewers, both targeting Group) would link through an arbitrary edge
 func ResolveLinkEdge(sourceSchema *entityops.Schema, rule types.LinkRule) (entityops.EdgeDescriptor, error) {
 	if rule.Edge != "" {
 		edge, found := sourceSchema.EdgeByName(rule.Edge)
@@ -453,11 +487,7 @@ func ResolveLinkEdge(sourceSchema *entityops.Schema, rule types.LinkRule) (entit
 	}
 }
 
-// validateMappingLinks verifies every link rule a mapping declares against the entityops catalog —
-// the edge resolves unambiguously, the match shape is coherent, the target field is a match key on
-// the target, and the source fields are mapped input keys of the right shape — so a typo or an
-// ambiguous target in a definition's link defaults fails at registration instead of silently
-// misbehaving at ingest
+// validateMappingLinks verifies every link rule a mapping declares against the entityops catalog — the edge resolves unambiguously, the match shape is coherent, the target field is a match key on the target, and the source fields are mapped input keys of the right shape — so a typo or an ambiguous target in a definition's link defaults fails at registration instead of silently misbehaving at ingest
 func validateMappingLinks(mappings []types.MappingRegistration) error {
 	for _, mapping := range mappings {
 		if len(mapping.Spec.Links) == 0 {
@@ -477,10 +507,7 @@ func validateMappingLinks(mappings []types.MappingRegistration) error {
 	return nil
 }
 
-// ValidateLinkRules validates each rule against the source schema's catalog: the edge resolves
-// unambiguously, the match shape is coherent, and the referenced fields exist with the right
-// shape. It is shared by definition registration and installation config validation so a bad
-// rule fails at declaration or save time rather than at ingest
+// ValidateLinkRules validates each rule against the source schema's catalog: the edge resolves unambiguously, the match shape is coherent, and the referenced fields exist with the right shape
 func ValidateLinkRules(sourceSchema *entityops.Schema, rules []types.LinkRule) error {
 	for _, rule := range rules {
 		edge, err := ResolveLinkEdge(sourceSchema, rule)
@@ -496,8 +523,7 @@ func ValidateLinkRules(sourceSchema *entityops.Schema, rules []types.LinkRule) e
 	return nil
 }
 
-// validateLinkRuleFields checks one resolved rule's match configuration; edges targeting an
-// unregistered schema are rejected since link resolution needs the target catalog
+// validateLinkRuleFields checks one resolved rule's match configuration; edges targeting an unregistered schema are rejected since link resolution needs the target catalog
 func validateLinkRuleFields(sourceSchema *entityops.Schema, edge entityops.EdgeDescriptor, rule types.LinkRule) error {
 	if edge.Target == nil {
 		return fmt.Errorf("%w: %s.%s targets %s", ErrLinkTargetNotRegistered, sourceSchema.Name, edge.Name, edge.TargetType)
@@ -532,8 +558,7 @@ func validateLinkRuleFields(sourceSchema *entityops.Schema, edge entityops.EdgeD
 	return nil
 }
 
-// validateSourceKey checks that key is a mapped input key on the source schema whose type shape
-// (scalar vs list) matches its LinkRule slot
+// validateSourceKey checks that key is a mapped input key on the source schema whose type shape (scalar vs list) matches its LinkRule slot
 func validateSourceKey(sourceSchema *entityops.Schema, key string, wantList bool) error {
 	field, found := lo.Find(sourceSchema.Fields, func(f entityops.FieldDescriptor) bool {
 		return f.InputKey == key
@@ -626,7 +651,7 @@ func indexClients(definitionID string, clients []types.ClientRegistration, crede
 	return index, nil
 }
 
-// indexConnections indexes connection registrations while enforcing credential, client, health check, and unique slot constraints
+// indexConnections indexes connection registrations while enforcing credential, client, auth, disconnect, and unique slot constraints
 func indexConnections(definitionID string, connections []types.ConnectionRegistration, credentialNames map[string]struct{}, clients map[types.ClientID]types.ClientRegistration) (map[string]types.ConnectionRegistration, error) {
 	connectionIndex := make(map[string]types.ConnectionRegistration, len(connections))
 
@@ -658,18 +683,6 @@ func indexConnections(definitionID string, connections []types.ConnectionRegistr
 		for _, clientRef := range connection.ClientRefs {
 			if _, declared := clients[clientRef]; !declared {
 				return nil, ErrConnectionClientRefNotDeclared
-			}
-		}
-
-		if connection.HealthCheck != nil {
-			if connection.HealthCheck.Handle == nil {
-				return nil, ErrConnectionHealthCheckHandlerRequired
-			}
-
-			if connection.HealthCheck.ClientRef.Valid() {
-				if _, declared := clients[connection.HealthCheck.ClientRef]; !declared {
-					return nil, ErrConnectionClientRefNotDeclared
-				}
 			}
 		}
 
@@ -803,9 +816,7 @@ func (r *Registry) GalaListeners() []types.GalaListenerRegistration {
 	return append([]types.GalaListenerRegistration(nil), r.galaListeners...)
 }
 
-// RuntimeClient returns the cached runtime client for the given definition ID.
-// Returns the client and true if a runtime integration was provisioned,
-// or nil and false otherwise
+// RuntimeClient returns the cached runtime client for the given definition ID
 func (r *Registry) RuntimeClient(definitionID string) (any, bool) {
 	entry, ok := r.definitions[definitionID]
 	if !ok || entry.runtimeClient == nil {
@@ -834,8 +845,7 @@ func (r *Registry) StaticWebhooks() []types.StaticWebhookEntry {
 	return entries
 }
 
-// IsRuntimeIntegration reports whether the given definition was provisioned
-// as a runtime integration (no DB record, no keystore)
+// IsRuntimeIntegration reports whether the given definition was provisioned as a runtime integration (no DB record, no keystore)
 func (r *Registry) IsRuntimeIntegration(definitionID string) bool {
 	entry, ok := r.definitions[definitionID]
 

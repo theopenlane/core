@@ -16,8 +16,10 @@ var (
 	keycloakClient = types.ClientRefOf[*gocloak.GoCloak]().Using(keycloakCredential)
 	// keycloakConnection is the connection mode selected by the Keycloak credential slot
 	keycloakConnection = types.NewConnectionRef(keycloakCredential).Enables(keycloakClient)
-	// directorySyncOperation is the operation ref for directory sync
-	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(keycloakClient)
+	// userInput is the installation user input layout, replacing the flat v1 layout
+	userInput = types.NewUserInputRef[UserInput]("keycloak").Replacing(types.NewUserInputRef[oldUserInput]("keycloak-v1"), func(old oldUserInput) UserInput {
+		return UserInput{PrimaryDirectory: old.PrimaryDirectory, DirectorySync: DirectorySync{DisableGroupSync: old.DisableGroupSync, FilterExpr: old.FilterExpr}}
+	})
 )
 
 // CredentialSchema holds the Keycloak instance credentials for one installation
@@ -34,6 +36,24 @@ type CredentialSchema struct {
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
+	// PrimaryDirectory marks this installation as the authoritative source for identity holder sync
+	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory,description=Mark this as the authoritative source for identity holder enrichment and lifecycle"`
+	// DirectorySync configures the directory sync operation
+	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Sync"`
+}
+
+// DirectorySync configures collection of Keycloak directory users, groups, and memberships
+type DirectorySync struct {
+	// Switch turns the directory sync off for the installation
+	types.Switch
+	// DisableGroupSync when true only syncs users, skipping groups and memberships
+	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users disable group and membership sync operations"`
+	// FilterExpr limits imported records to envelopes matching a CEL expression
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting, example=Example: payload.enabled == true"`
+}
+
+// oldUserInput is the flat v1 installation user input layout
+type oldUserInput struct {
 	// PrimaryDirectory marks this installation as the authoritative source for identity holder sync
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory,description=Mark this as the authoritative source for identity holder enrichment and lifecycle"`
 	// DisableGroupSync when true only syncs users, skipping groups and memberships

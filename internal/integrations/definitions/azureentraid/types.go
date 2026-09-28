@@ -18,12 +18,34 @@ var (
 	entraClient = types.ClientRefOf[*msgraphsdk.GraphServiceClient]().Using(entraTenantCredential)
 	// entraConnection is the connection mode selected by the admin-consented tenant credential
 	entraConnection = types.NewConnectionRef(entraTenantCredential).Enables(entraCredential).Enables(entraClient)
-	// directorySyncOperation is the operation ref for the Azure Entra ID directory sync operation
-	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(entraClient)
+	// userInput is the installation user input layout, replacing the flat v1 layout
+	userInput = types.NewUserInputRef[UserInput]("azureentraid").Replacing(types.NewUserInputRef[oldUserInput]("azureentraid-v1"), func(old oldUserInput) UserInput {
+		return UserInput{PrimaryDirectory: old.PrimaryDirectory, DirectorySync: DirectorySync{DisableGroupSync: old.DisableGroupSync, IncludeGuestUsers: old.IncludeGuestUsers, FilterExpr: old.FilterExpr}}
+	})
 )
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
+	// PrimaryDirectory marks this installation as the authoritative directory source for identity holder enrichment and lifecycle derivation
+	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
+	// DirectorySync configures the directory sync operation
+	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Sync"`
+}
+
+// DirectorySync configures collection of Azure Entra ID directory users, groups, and memberships
+type DirectorySync struct {
+	// Switch turns the directory sync off for the installation
+	types.Switch
+	// DisableGroupSync when true only syncs users, skipping groups and memberships
+	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from Azure Entra ID, disable groups sync operations"`
+	// IncludeGuestUsers controls whether guest-type accounts are included in the sync
+	IncludeGuestUsers bool `json:"includeGuestUsers,omitempty" jsonschema:"title=Include Guest Users"`
+	// FilterExpr limits imported records to envelopes matching the CEL expression
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
+}
+
+// oldUserInput is the flat v1 installation user input layout
+type oldUserInput struct {
 	// PrimaryDirectory marks this installation as the authoritative directory source for identity holder enrichment and lifecycle derivation
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
 	// DisableGroupSync when true only syncs users, skipping groups and memberships

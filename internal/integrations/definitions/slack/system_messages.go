@@ -10,11 +10,10 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// joinStrings is a template helper that joins a string slice with the given separator
+// templateFuncs is the shared helper func map for the inline system message templates
 var templateFuncs = template.FuncMap{
 	"joinStrings": strings.Join,
 }
@@ -58,22 +57,20 @@ type DemoRequestMessage struct {
 	DemoRequested bool `json:"demoRequested,omitempty" jsonschema:"description=Requester asked for a personalized demo"`
 }
 
-// OrganizationsPendingDeletionMessage renders the deletion-reminder summary sent to Slack.
+// OrganizationsPendingDeletionMessage renders the deletion-reminder summary sent to Slack
 type OrganizationsPendingDeletionMessage struct {
 	Count         int      `json:"count" jsonschema:"required,description=Number of organizations marked for deletion in this run"`
 	Organizations []string `json:"organizations" jsonschema:"required,description=Organizations marked for deletion"`
 	DryRun        bool     `json:"dryRun,omitempty" jsonschema:"description=Whether this was a dry-run reminder pass"`
 }
 
-// System message operation refs
 var (
-	NewUserOp                      = types.OperationRefOf[NewUserMessage]().Using(slackClient)                      //nolint:revive
-	IntegrationInstalledOp         = types.OperationRefOf[IntegrationInstalledMessage]().Using(slackClient)         //nolint:revive
-	DemoRequestOp                  = types.OperationRefOf[DemoRequestMessage]().Using(slackClient)                  //nolint:revive
-	OrganizationsPendingDeletionOp = types.OperationRefOf[OrganizationsPendingDeletionMessage]().Using(slackClient) //nolint:revive
+	NewUserOp                      = types.OperationRefOf[NewUserMessage]()                      //nolint:revive
+	IntegrationInstalledOp         = types.OperationRefOf[IntegrationInstalledMessage]()         //nolint:revive
+	DemoRequestOp                  = types.OperationRefOf[DemoRequestMessage]()                  //nolint:revive
+	OrganizationsPendingDeletionOp = types.OperationRefOf[OrganizationsPendingDeletionMessage]() //nolint:revive
 )
 
-// Inline system message templates
 var (
 	newUserTemplate = newSystemTemplate("new_user",
 		`New user registered: {{ .Email }}`)
@@ -115,18 +112,14 @@ Organizations marked for deletion: {{ .Count }}
 {{ end -}}`)
 )
 
-// systemMessageRegistration builds an OperationRegistration for a fire-and-forget Slack system
-// message: the input is rendered through tmpl and posted via the SlackClient's active transport
+// systemMessageRegistration builds an OperationRegistration for a fire-and-forget Slack system message
 func systemMessageRegistration[T any](op types.OperationRef[T], description string, tmpl *template.Template) types.OperationRegistration {
-	return op.Registration(DefinitionID, types.OperationRegistration{
+	return op.Handles(slackClient, func(ctx context.Context, _ types.OperationRequest, c *SlackClient, cfg T) (json.RawMessage, error) {
+		return nil, renderAndSendSystemMessage(ctx, c, tmpl, cfg)
+	}).Registration(DefinitionID, types.OperationRegistration{
 		Description:        description,
 		CustomerSelectable: lo.ToPtr(false),
 		Policy:             types.ExecutionPolicy{SkipRunRecord: true},
-		Handle: providerkit.WithClientConfig(slackClient, op, ErrOperationConfigInvalid,
-			func(ctx context.Context, c *SlackClient, cfg T) (json.RawMessage, error) {
-				return nil, renderAndSendSystemMessage(ctx, c, tmpl, cfg)
-			},
-		),
 	})
 }
 

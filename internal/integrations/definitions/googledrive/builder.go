@@ -29,9 +29,9 @@ func Builder(cfg Config) registry.Builder {
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput:    userInput.Registration(),
+			HealthCheck:  driveClient.HealthCheck(checkHealth),
+			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				driveCredential.Registration(types.CredentialRegistration{
 					Name:        "Google Drive Credential",
@@ -40,14 +40,8 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				driveConnection.Registration(types.ConnectionRegistration{
-					Name:           "Google Drive OAuth",
-					Description:    "Connect your Google account using OAuth to access Drive documents.",
-					CredentialRefs: []types.CredentialSlotID{driveCredential.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: driveClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: installation.Registration(),
+					Name:        "Google Drive OAuth",
+					Description: "Connect your Google account using OAuth to access Drive documents.",
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[googleDriveCred]{
 						CredentialRef: driveCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -72,8 +66,7 @@ func Builder(cfg Config) registry.Builder {
 						EncodeCredentialError: ErrCredentialEncode,
 					}),
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: driveCredential.ID(),
-						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Google account under Security > Third-party access.",
+						Description: "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Google account under Security > Third-party access.",
 					},
 				}),
 			},
@@ -86,7 +79,6 @@ func Builder(cfg Config) registry.Builder {
 				documentExportOperation.Registration(definitionID, types.OperationRegistration{
 					Description: "Export a Google Doc as HTML via the Drive files.export endpoint",
 					Policy:      types.ExecutionPolicy{Inline: true},
-					Handle:      Handle(),
 				}),
 				folderSyncOperation.Registration(definitionID, types.OperationRegistration{
 					Description: "List Google Docs in the configured folder and emit policy ingest envelopes",
@@ -96,8 +88,7 @@ func Builder(cfg Config) registry.Builder {
 							Schema: entityops.SchemaInternalPolicy.Name,
 						},
 					},
-					IngestHandle: FolderSync{}.IngestHandle(),
-					Schedule:     gala.NewFullFetchSchedule(),
+					Schedule: gala.NewFullFetchSchedule(),
 				}),
 			},
 			Mappings: []types.MappingRegistration{

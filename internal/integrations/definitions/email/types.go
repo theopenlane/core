@@ -18,12 +18,8 @@ var (
 	emailClientRef = types.ClientRefOf[*Client]().Using(emailCredentialRef)
 	// emailConnection is the API key connection mode enabling the email client
 	emailConnection = types.NewConnectionRef(emailCredentialRef).Enables(emailClientRef)
-	// SendEmailOp is the operation ref for the generic send-email operation
-	SendEmailOp = types.OperationRefOf[SendEmailRequest]().Using(emailClientRef) //nolint:revive
-	// SendCampaignOp is the operation ref for the branded campaign dispatch operation
-	SendCampaignOp = types.OperationRefOf[SendBrandedCampaignRequest]().Using(emailClientRef) //nolint:revive
-	// SendQuestionnaireCampaignOp is the operation ref for the questionnaire campaign dispatch operation
-	SendQuestionnaireCampaignOp = types.OperationRefOf[SendQuestionnaireCampaignRequest]().Using(emailClientRef) //nolint:revive
+	// userInput is the installation user input layout for customer-provisioned email
+	userInput = types.NewUserInputRef[UserInput]("email")
 	// resendWebhookRef is the webhook ref for inbound Resend delivery events
 	resendWebhookRef = types.NewWebhookRef("resend.delivery")
 	// resendEmailSentEvent is the webhook event ref for Resend email.sent deliveries
@@ -50,10 +46,7 @@ const (
 	TagIsTest = "is_test"
 )
 
-// RuntimeEmailConfig is the complete config for runtime-provisioned email.
-// Operational fields (API key, provider, URLs) are sourced from koanf/environment
-// at startup. Branding and presentation fields carry struct-tag defaults only and
-// are overridable per-send via UserInput or per-operation Config functions
+// RuntimeEmailConfig is the complete config for runtime-provisioned email
 type RuntimeEmailConfig struct {
 	// TestDir is the directory where dev-mode email files are written
 	TestDir string `json:"testdir,omitempty" koanf:"testdir" jsonschema:"description=Directory for dev-mode email output" default:"fixtures/email"`
@@ -75,8 +68,7 @@ type RuntimeEmailConfig struct {
 	ProductURL string `json:"producturl" koanf:"producturl" jsonschema:"description=Product home URL" default:"https://console.theopenlane.io"`
 	// DocsURL is the documentation URL
 	DocsURL string `json:"docsurl" koanf:"docsurl" jsonschema:"description=Documentation URL" default:"https://docs.theopenlane.io"`
-	// APIURL is the public base URL of this API, used for email links that must hit the API directly
-	// (rather than the console), e.g. the subscriber verify link that confirms then redirects to the trust center
+	// APIURL is the public base URL of this API, used for email links that must hit the API directly (rather than the console), e.g. the subscriber verify link that confirms then redirects to the trust center
 	APIURL string `json:"apiurl" koanf:"apiurl" jsonschema:"description=Public base URL of the API for email links that hit the API directly" default:"https://api.theopenlane.io"`
 	// CompanyName is the display name of the sending company
 	CompanyName string `json:"companyName" jsonschema:"description=Company display name" default:"Openlane"`
@@ -118,8 +110,7 @@ type RuntimeEmailConfig struct {
 	TextColor string `json:"textColor,omitempty" jsonschema:"description=Body paragraph text color" default:"#43454b"`
 	// FooterTextColor is the muted text color for headers, footers, and secondary content
 	FooterTextColor string `json:"footerTextColor,omitempty" jsonschema:"description=Muted text color for headers footers and secondary content" default:"#5f6165"`
-	// AccentBorderColor is an optional decorative accent applied to borders only (e.g. the card top
-	// bar and callout edge); it never drives container, text, or button colors
+	// AccentBorderColor is an optional decorative accent applied to borders only (e.g. the card top bar and callout edge); it never drives container, text, or button colors
 	AccentBorderColor string `json:"accentBorderColor,omitempty" jsonschema:"description=Decorative accent color applied to borders only"`
 	// Tagline is a short descriptive footer line rendered in modern themes above the social row
 	Tagline string `json:"tagline,omitempty" jsonschema:"description=Short descriptive footer line rendered above the social row in modern themes"`
@@ -127,8 +118,7 @@ type RuntimeEmailConfig struct {
 	Social []SocialLink `json:"social,omitempty" jsonschema:"-"`
 }
 
-// DefaultSocial is the default set of social footer links applied to runtime email configs
-// when no explicit social links are provided
+// DefaultSocial is the default set of social footer links applied to runtime email configs when no explicit social links are provided
 var DefaultSocial = []SocialLink{
 	{Platform: "Openlane", IconURL: "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/2c681874-6b4a-41de-73ea-58e550a95800/w=36", URL: "https://www.theopenlane.io"},
 	{Platform: "GitHub", IconURL: "https://www.theopenlane.io/cdn-cgi/imagedelivery/2gi-D0CFOlSOflWJG-LQaA/39a11dc8-8e01-44ed-8557-0b78ae050a00/w=36", URL: "https://github.com/theopenlane"},
@@ -146,8 +136,7 @@ type SocialLink struct {
 	URL string `json:"url" koanf:"url" jsonschema:"required,description=Destination URL the icon links to"`
 }
 
-// Provisioned reports whether the runtime config has the minimum required fields
-// to build a working email client (API key, provider, and from address)
+// Provisioned reports whether the runtime config has the minimum required fields to build a working email client (API key, provider, and from address)
 func (c RuntimeEmailConfig) Provisioned() bool {
 	return c.APIKey != "" && c.Provider != "" && c.FromEmail != ""
 }
@@ -160,12 +149,7 @@ type Credential struct {
 	Provider string `json:"provider" jsonschema:"required,enum=resend,description=Email service provider"`
 }
 
-// UserInput is the installation-scoped configuration that customers provide
-// when setting up their own email integration. It carries only the sender identity
-// and the footer identity that cannot come from an email template. Email appearance
-// and content (colors, layout, logos, body) are defined by the email template
-// associated with the send, and trust center update emails additionally inherit the
-// trust center's own branding, so those values are intentionally not collected here
+// UserInput is the installation-scoped configuration that customers provide when setting up their own email integration
 type UserInput struct {
 	// FromEmail is the address customer-initiated emails are sent from, using the configured provider key
 	FromEmail string `json:"fromEmail" jsonschema:"required,description=Email address your emails are sent from using your configured provider key"`

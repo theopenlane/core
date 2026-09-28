@@ -15,8 +15,8 @@ var (
 	{{ name }}Client = types.ClientRefOf[*APIClient]().Using({{ name }}Credential)
 	// {{ name }}Connection is the connection mode selected by the {{ display }} credential slot
 	{{ name }}Connection = types.NewConnectionRef({{ name }}Credential).Enables({{ name }}Client)
-	// healthCheckOperation is the operation ref for the {{ display }} health check operation
-	healthCheckOperation = types.OperationRefOf[HealthCheck]().Using({{ name }}Client)
+	// userInput is the installation user input layout for the {{ display }} definition
+	userInput = types.NewUserInputRef[UserInput]("{{ name }}")
 )
 
 // APIClient is the client handed to {{ display }} operations; swap this for the provider SDK client type

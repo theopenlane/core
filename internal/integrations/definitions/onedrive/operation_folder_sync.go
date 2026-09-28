@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -45,25 +44,22 @@ type driveItemPayload struct {
 	CreatedDateTime time.Time `json:"createdDateTime,omitempty"`
 }
 
+// folderSyncOperation is the operation ref for the folder sync operation
+var folderSyncOperation = types.OperationRefOf[FolderSync]().Ingests(oneDriveClient, runFolderSync)
+
 // FolderSync lists OneDrive documents in a configured folder and emits ingest envelopes for policy creation
-type FolderSync struct{}
-
-// IngestHandle adapts folder sync to the ingest operation registration boundary
-func (f FolderSync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(oneDriveClient, func(ctx context.Context, request types.OperationRequest, c *DriveClient) ([]types.IngestPayloadSet, error) {
-		var input UserInput
-
-		if request.Integration != nil {
-			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &input)
-		}
-
-		return f.Run(ctx, c, parseFolderID(input.FolderID))
-	})
+type FolderSync struct {
+	// Switch toggles the folder sync off for the installation
+	types.Switch
+	// FolderID is the folder path relative to the drive root (e.g. "Policies"); leave empty to sync the root
+	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder Path,description=Folder path relative to drive root (e.g. Policies). Leave empty to sync the entire drive root."`
+	// FilterExpr is an optional CEL expression to filter which documents in the folder are eligible
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to filter documents before creating policies"`
 }
 
-// Run lists all document files in the given folder (or the drive root if folderID is empty) and returns ingest payload sets
-func (FolderSync) Run(ctx context.Context, c *DriveClient, folderID string) ([]types.IngestPayloadSet, error) {
-	items, err := listFolderDocs(ctx, c, folderID)
+// runFolderSync lists all document files in the configured folder (or the drive root if none is set) and returns ingest payload sets
+func runFolderSync(ctx context.Context, _ types.OperationRequest, c *DriveClient, cfg FolderSync) ([]types.IngestPayloadSet, error) {
+	items, err := listFolderDocs(ctx, c, parseFolderID(cfg.FolderID))
 	if err != nil {
 		return nil, err
 	}
@@ -94,9 +90,7 @@ const (
 	meDrivePathChildrenURL = "https://graph.microsoft.com/v1.0/me/drive/root:/%s:/children"
 )
 
-// folderChildrenURL returns the Graph API URL for listing children of the given folder.
-// An empty path lists the drive root; any other value is treated as a path relative to the root
-// (e.g. "Policies"). Raw OneDrive CIDs and item IDs are not supported — use paths.
+// folderChildrenURL returns the Graph API URL for listing children of the given folder
 func folderChildrenURL(folderPath string) string {
 	if folderPath == "" {
 		return meDriveRootChildrenURL

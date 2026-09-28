@@ -8,9 +8,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/domainscan"
 )
 
-// DomainScanImportVendor is one vendor the reviewer accepted, keyed by a client-assigned
-// Ref so DomainScanImportPlatform/DomainScanImportSystem can reference it before it
-// has a real Entity ID
+// DomainScanImportVendor is one vendor the reviewer accepted, keyed by a client-assigned Ref so DomainScanImportPlatform/DomainScanImportSystem can reference it before it has a real Entity ID
 type DomainScanImportVendor struct {
 	// Ref is a client-assigned identifier for this vendor, referenced by EntityRefs elsewhere in the envelope
 	Ref string `json:"ref"`
@@ -24,9 +22,7 @@ type DomainScanImportVendor struct {
 	Categories []string `json:"categories,omitempty"`
 }
 
-// DomainScanImportAsset is one asset the reviewer accepted, keyed by a client-assigned Ref
-// so DomainScanImportPlatform/DomainScanImportSystem can reference it before it has a
-// real Asset ID
+// DomainScanImportAsset is one asset the reviewer accepted, keyed by a client-assigned Ref so DomainScanImportPlatform/DomainScanImportSystem can reference it before it has a real Asset ID
 type DomainScanImportAsset struct {
 	// Ref is a client-assigned identifier for this asset, referenced by AssetRefs elsewhere in the envelope
 	Ref string `json:"ref"`
@@ -40,9 +36,7 @@ type DomainScanImportAsset struct {
 	Categories []string `json:"categories,omitempty"`
 }
 
-// DomainScanImportPlatform is one accepted platform, linked to a subset of the accepted
-// vendors/assets, and keyed by a client-assigned Ref so DomainScanImportSystem can
-// reference it before it has a real Platform ID
+// DomainScanImportPlatform is one accepted platform, linked to a subset of the accepted vendors/assets, and keyed by a client-assigned Ref so DomainScanImportSystem can reference it before it has a real Platform ID
 type DomainScanImportPlatform struct {
 	// Ref is a client-assigned identifier for this platform, referenced by PlatformRefs elsewhere in the envelope
 	Ref string `json:"ref"`
@@ -56,8 +50,7 @@ type DomainScanImportPlatform struct {
 	AssetRefs []string `json:"assetRefs,omitempty"`
 }
 
-// DomainScanImportSystem is one accepted system detail, linked to its own subset of the
-// accepted vendors/assets/platforms
+// DomainScanImportSystem is one accepted system detail, linked to its own subset of the accepted vendors/assets/platforms
 type DomainScanImportSystem struct {
 	// Name is the system's name
 	Name string `json:"name"`
@@ -83,8 +76,7 @@ type DomainScanImportFinding struct {
 	Domain string `json:"domain,omitempty"`
 }
 
-// DomainScanImport imports a reviewer-accepted domain scan report into real
-// Platform/SystemDetail/Entity/Asset/Finding records
+// DomainScanImport imports a reviewer-accepted domain scan report into real Platform/SystemDetail/Entity/Asset/Finding records
 type DomainScanImport struct {
 	// OrganizationID is the organization the created records belong to
 	OrganizationID string `json:"organizationId"`
@@ -104,16 +96,12 @@ type DomainScanImport struct {
 	Branding *domainscan.BrandDesignProfile `json:"branding,omitempty"`
 }
 
-// Handle adapts DomainScanImport to the generic operation registration boundary
-func (d DomainScanImport) Handle() types.OperationHandler {
-	return func(ctx context.Context, request types.OperationRequest) (json.RawMessage, error) {
-		var cfg DomainScanImport
-		if err := json.Unmarshal(request.Config, &cfg); err != nil {
-			return nil, ErrOperationConfigInvalid
-		}
+// DomainScanImportOp is the operation ref for importing an accepted domain scan review
+var DomainScanImportOp = types.OperationRefOf[DomainScanImport]().HandlesRequest(runDomainScanImport) //nolint:revive
 
-		saga := domainScanSaga{services: request.Services}
+// runDomainScanImport imports the reviewer-accepted domain scan report through the domain scan saga
+func runDomainScanImport(ctx context.Context, request types.OperationRequest, cfg DomainScanImport) (json.RawMessage, error) {
+	saga := domainScanSaga{services: request.Services}
 
-		return nil, saga.HandleImportDomainScanReview(ctx, cfg)
-	}
+	return nil, saga.HandleImportDomainScanReview(ctx, cfg)
 }

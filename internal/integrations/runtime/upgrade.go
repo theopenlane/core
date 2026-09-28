@@ -143,7 +143,6 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 		}
 	}
 
-	// ensure we can make the necessary updates to the connection state
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	if credentialRef != providerState.CredentialRef {
@@ -234,37 +233,17 @@ func (r *Runtime) upgradeUserInput(ctx context.Context, req types.InstallationRe
 	return nil
 }
 
-// conformUserInput conforms stored user input to the registered schema, converting it from a retired layout when it no longer validates
+// conformUserInput conforms stored user input to the registered schema, converting it from a retired layout when it no longer validates, then backfilling and validating the result through conformPayload
 func conformUserInput(ctx context.Context, req types.InstallationRequest, input types.UserInputRegistration, stored json.RawMessage) (json.RawMessage, error) {
-	conformed, err := jsonx.ConformToSchema(input.Schema, stored)
-	if err != nil {
-		return nil, err
-	}
+	document := stored
 
-	if validatePayload(ctx, input.Schema, conformed, ErrUserInputInvalid) == nil {
-		return conformed, nil
-	}
-
-	if input.Convert != nil {
-		converted, err := input.Convert(stored)
-		if err != nil {
-			logx.FromContext(ctx).Debug().Err(err).Msg("stored user input matches no retired layout")
-
-			return conformPayload(ctx, req, input.Schema, input.Backfill, stored, ErrUserInputInvalid)
-		}
-
-		if input.Backfill != nil {
-			if converted, err = input.Backfill(ctx, req, converted); err != nil {
-				return nil, err
-			}
-		}
-
-		if err := validatePayload(ctx, input.Schema, converted, ErrUserInputInvalid); err == nil {
-			return converted, nil
+	if validatePayload(ctx, input.Schema, stored, ErrUserInputInvalid) != nil && input.Convert != nil {
+		if converted, convertErr := input.Convert(stored); convertErr == nil {
+			document = converted
 		}
 	}
 
-	return conformPayload(ctx, req, input.Schema, input.Backfill, stored, ErrUserInputInvalid)
+	return conformPayload(ctx, req, input.Schema, input.Backfill, document, ErrUserInputInvalid)
 }
 
 // upgradeOperations moves recorded operation health and run history stored under retired operation names onto the operations that replace them, cancels reconcile loops still queued under retired names, and drops health records of operations the definition no longer declares
@@ -423,7 +402,7 @@ func upgradeExclusions(def types.Definition, skip []types.CredentialSlotID) []ty
 	})
 }
 
-// conformPayload strips and defaults the payload to the schema, backfilling missing values when a backfill is declared
+// conformPayload strips and defaults the payload to the schema, applies the declared backfill when one is set, then validates the result once
 func conformPayload(ctx context.Context, req types.InstallationRequest, schema json.RawMessage, backfill types.BackfillFunc, payload json.RawMessage, sentinel error) (json.RawMessage, error) {
 	conformed, err := jsonx.ConformToSchema(schema, payload)
 	if err != nil {
@@ -432,27 +411,19 @@ func conformPayload(ctx context.Context, req types.InstallationRequest, schema j
 		return nil, err
 	}
 
-	invalid := validatePayload(ctx, schema, conformed, sentinel)
-	if invalid == nil {
-		return conformed, nil
+	if backfill != nil {
+		if conformed, err = backfill(ctx, req, conformed); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to backfill payload")
+
+			return nil, err
+		}
 	}
 
-	if backfill == nil {
-		return nil, invalid
-	}
-
-	backfilled, err := backfill(ctx, req, conformed)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to backfill payload")
-
-		return nil, err
-	}
-
-	if err := validatePayload(ctx, schema, backfilled, sentinel); err != nil {
+	if err := validatePayload(ctx, schema, conformed, sentinel); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to validate backfilled payload")
 
 		return nil, err
 	}
 
-	return backfilled, nil
+	return conformed, nil
 }

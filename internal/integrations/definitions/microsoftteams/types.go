@@ -19,8 +19,8 @@ var (
 	teamsClient = types.ClientRefOf[*msgraphsdk.GraphServiceClient]().Using(teamsCredential)
 	// teamsConnection is the connection mode selected by the Teams OAuth credential slot
 	teamsConnection = types.NewConnectionRef(teamsCredential).Enables(teamsClient)
-	// MessageSendOp is the operation ref for the Microsoft Teams message send operation
-	MessageSendOp = types.OperationRefOf[MessageSendOperation]().Using(teamsClient)
+	// userInput is the installation user input layout for the Microsoft Teams definition
+	userInput = types.NewUserInputRef[UserInput]("microsoftteams")
 )
 
 // teamsCred holds the provider-owned credential material for a Microsoft Teams installation

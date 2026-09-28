@@ -34,11 +34,9 @@ type DocumentExport struct {
 	Name string `json:"name,omitempty"`
 }
 
-// Handle adapts the document export to the generic operation registration boundary
-func Handle[C DocClient](ref types.ClientRef[C], op types.OperationRef[DocumentExport]) types.OperationHandler {
-	return providerkit.WithClientConfig(ref, op, ErrExportFailed, func(ctx context.Context, svc C, cfg DocumentExport) (json.RawMessage, error) {
-		return Run(ctx, svc, &cfg)
-	})
+// ExportDocument runs the document export against the typed client with the decoded export config
+func ExportDocument[C DocClient](ctx context.Context, _ types.OperationRequest, svc C, cfg DocumentExport) (json.RawMessage, error) {
+	return Run(ctx, svc, &cfg)
 }
 
 // Run executes the HTML export using the Google Drive API files.export endpoint

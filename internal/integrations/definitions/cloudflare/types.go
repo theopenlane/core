@@ -16,26 +16,8 @@ var (
 	cloudflareClient = types.ClientRefOf[*CloudflareClient]().Using(cloudflareCredential)
 	// cloudflareConnection is the connection mode selected by the Cloudflare API token credential
 	cloudflareConnection = types.NewConnectionRef(cloudflareCredential).Enables(cloudflareClient)
-	// directorySyncOperation is the operation ref for the directory account sync operation
-	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(cloudflareClient)
-	// assetSyncOperation is the operation ref for the domain asset sync operation
-	assetSyncOperation = types.OperationRefOf[AssetSync]().Using(cloudflareClient)
-	// findingsSyncOperation is the operation ref for the Security Center insights finding sync operation
-	findingsSyncOperation = types.OperationRefOf[FindingsSync]().Using(cloudflareClient)
-	// DomainScanSubmitOp is the operation ref for submitting domains to the URL Scanner
-	DomainScanSubmitOp = types.OperationRefOf[DomainScanSubmit]().Using(cloudflareClient) //nolint:revive
-	// DomainScanPollOp is the operation ref for polling a submitted URL Scanner result
-	DomainScanPollOp = types.OperationRefOf[DomainScanPoll]().Using(cloudflareClient) //nolint:revive
-	// DomainScanEnrichmentOp is the operation ref for gathering enrichment data for a domain
-	DomainScanEnrichmentOp = types.OperationRefOf[DomainScanGatherEnrichment]().Using(cloudflareClient) //nolint:revive
-	// DomainScanBuildReportOp is the operation ref for building the scan report from a completed URL Scanner result and gathered enrichment
-	DomainScanBuildReportOp = types.OperationRefOf[DomainScanBuildReport]().Using(cloudflareClient) //nolint:revive
-	// DomainScanRequestOp is the operation ref for requesting a domain scan; used both by
-	// customer-facing calls (queues a pending Scan) and the system re-dispatch from the listener
-	// on Scan creation (actually runs the saga for it)
-	DomainScanRequestOp = types.OperationRefOf[DomainScanRequest]() //nolint:revive
-	// DomainScanImportOp is the operation ref for importing an accepted domain scan review
-	DomainScanImportOp = types.OperationRefOf[DomainScanImport]() //nolint:revive
+	// userInput is the installation user input layout for the Cloudflare definition
+	userInput = types.NewUserInputRef[UserInput]("cloudflare")
 	// runtimeCloudflareRef is the typed ref for the runtime Cloudflare config
 	runtimeCloudflareRef = types.RuntimeRefOf[RuntimeConfig]()
 )
@@ -53,23 +35,17 @@ const (
 	// DomainScanApplyBrandDesignToLiveMetadataKey makes sure we apply the extracted brand design to only the live trustcenter environment
 	DomainScanApplyBrandDesignToLiveMetadataKey = "applyBrandDesignToLive"
 
-	// DomainScanGroupMetadataKey is the Scan.Metadata key carrying the shared group id for scans
-	// created together (e.g. every domain from one organization settings update), so scans
-	// submitted independently can still be recombined into a single notification once the whole
-	// group reaches a terminal state
+	// DomainScanGroupMetadataKey is the Scan.Metadata key carrying the shared group id for scans created together (e.g. every domain from one organization settings update), so scans submitted independently can still be recombined into a single notification once the whole group reaches a terminal state
 	DomainScanGroupMetadataKey = "scan_group_id"
 )
 
-// RuntimeConfig is the runtime-provisioned configuration for the operator-owned
-// Cloudflare account. Sourced from koanf/environment at startup; used for system-initiated
-// Cloudflare calls (e.g. onboarding domain scans) that are not tied to a customer installation
+// RuntimeConfig is the runtime-provisioned configuration for the operator-owned Cloudflare account
 type RuntimeConfig struct {
 	// APIToken is the Cloudflare API token for the operator-owned account
 	APIToken string `json:"apitoken" koanf:"apitoken" jsonschema:"description=Cloudflare API token for the operator-owned account" sensitive:"true"`
 	// AccountID is the Cloudflare account identifier for the operator-owned account
 	AccountID string `json:"accountid" koanf:"accountid" jsonschema:"description=Cloudflare account ID for the operator-owned account"`
-	// DomainScan configures vendor/technology classification and enrichment behavior for
-	// onboarding domain scan reports
+	// DomainScan configures vendor/technology classification and enrichment behavior for onboarding domain scan reports
 	DomainScan domainscan.ReportConfig `json:"domainscan" koanf:"domainscan" jsonschema:"description=Vendor/technology classification and enrichment behavior for onboarding domain scan reports"`
 }
 
@@ -96,24 +72,24 @@ type UserInput struct {
 
 // DirectorySync holds installation-specific configuration collected from the user
 type DirectorySync struct {
-	// Disable is used to disable the directory sync operation from Cloudflare
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from Cloudflare"`
+	// Switch toggles the directory sync operation off for the installation
+	types.Switch
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.status = 'ACTIVE'"`
 }
 
 // FindingsSync holds installation-specific configuration for Cloudflare Security Center insights
 type FindingsSync struct {
-	// Disable is used to disable the findings sync operation from Cloudflare
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of findings from Cloudflare Security Center insights"`
+	// Switch toggles the findings sync operation off for the installation
+	types.Switch
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.severity == 'Critical'"`
 }
 
 // AssetSync holds installation-specific configuration for Cloudflare domain assets
 type AssetSync struct {
-	// Disable is used to disable the asset sync operation from Cloudflare
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of domains from Cloudflare Registrar"`
+	// Switch toggles the asset sync operation off for the installation
+	types.Switch
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.status == 'active'"`
 }

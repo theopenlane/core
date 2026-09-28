@@ -6,7 +6,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Builder returns the Keycloak definition builder
@@ -24,29 +23,21 @@ func Builder() registry.Builder {
 				Active:      false,
 				Visible:     true,
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput:    userInput.Registration(),
+			HealthCheck:  keycloakClient.HealthCheck(checkHealth),
+			Installation: integration.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				keycloakCredential.Registration(types.CredentialRegistration{
 					Name:        "Keycloak Credential",
 					Description: "Client credentials used to access Keycloak realm data.",
-					Schema:      keycloakCredential.Schema(),
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
 				keycloakConnection.Registration(types.ConnectionRegistration{
-					Name:           "Keycloak Client Credentials",
-					Description:    "Configure Keycloak access using client credentials from your realm.",
-					CredentialRefs: []types.CredentialSlotID{keycloakCredential.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: keycloakClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: integration.Registration(),
+					Name:        "Keycloak Client Credentials",
+					Description: "Configure Keycloak access using client credentials from your realm.",
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: keycloakCredential.ID(),
-						Description:   "Removes the stored client credentials from Openlane. If the client is no longer needed, disable or delete it in your Keycloak admin console under Clients.",
+						Description: "Removes the stored client credentials from Openlane. If the client is no longer needed, disable or delete it in your Keycloak admin console under Clients.",
 					},
 				}),
 			},
@@ -72,7 +63,6 @@ func Builder() registry.Builder {
 							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
-					IngestHandle: DirectorySync{}.IngestHandle(),
 				}),
 			},
 			Mappings: []types.MappingRegistration{

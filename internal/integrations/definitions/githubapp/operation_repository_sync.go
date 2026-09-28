@@ -2,7 +2,6 @@ package githubapp
 
 import (
 	"context"
-	"time"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
@@ -12,16 +11,12 @@ import (
 // repositoryAssetVariant is the mapping variant for repository asset payloads
 const repositoryAssetVariant = "repository"
 
-// IngestHandle adapts repository sync to the ingest operation registration boundary
-func (r RepositorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(gitHubClient, func(ctx context.Context, request types.OperationRequest, client GraphQLClient) ([]types.IngestPayloadSet, error) {
-		return r.Run(ctx, client, request.LastRunAt)
-	})
-}
+// repositorySyncOperation is the operation ref for the GitHub repository sync operation
+var repositorySyncOperation = types.OperationRefOf[RepositorySync]().Ingests(gitHubClient, runRepositorySync)
 
-// Run enumerates repositories accessible to the installation and emits Asset ingest payloads
-func (RepositorySync) Run(ctx context.Context, client GraphQLClient, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
-	repositories, err := queryRepositories(ctx, client, defaultPageSize, lastRunAt)
+// runRepositorySync enumerates repositories accessible to the installation and emits Asset ingest payloads
+func runRepositorySync(ctx context.Context, request types.OperationRequest, client GraphQLClient, _ RepositorySync) ([]types.IngestPayloadSet, error) {
+	repositories, err := queryRepositories(ctx, client, defaultPageSize, request.LastRunAt)
 	if err != nil {
 		return nil, err
 	}

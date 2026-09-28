@@ -8,13 +8,13 @@ import (
 	"github.com/invopop/jsonschema"
 )
 
-// Reflector is the shared JSON schema reflector used by SchemaFrom and SchemaID.
+// Reflector is the shared JSON schema reflector used by SchemaFrom and SchemaID
 var Reflector = &jsonschema.Reflector{
 	AllowAdditionalProperties:  false,
 	RequiredFromJSONSchemaTags: true,
 }
 
-// SchemaFrom reflects a JSON schema from a Go type and returns it as raw JSON.
+// SchemaFrom reflects a JSON schema from a Go type and returns it as raw JSON
 func SchemaFrom[T any]() json.RawMessage {
 	schema := Reflector.Reflect(new(T))
 
@@ -26,9 +26,7 @@ func SchemaFrom[T any]() json.RawMessage {
 	return out
 }
 
-// PropertyNames reflects a Go type and returns the top-level JSON property names
-// from the generated JSON schema. Properties from embedded structs are promoted
-// by the reflector and appear as top-level names.
+// PropertyNames reflects a Go type and returns the top-level JSON property names from the generated JSON schema
 func PropertyNames[T any]() []string {
 	schema, _, err := SchemaRoot(SchemaFrom[T]())
 	if err != nil || schema.Properties == nil {
@@ -44,17 +42,15 @@ func PropertyNames[T any]() []string {
 	return names
 }
 
-// PropertyDescriptor is a top-level JSON schema property with its name and description.
+// PropertyDescriptor is a top-level JSON schema property with its name and description
 type PropertyDescriptor struct {
-	// Name is the JSON property key as it appears in the reflected schema.
+	// Name is the JSON property key as it appears in the reflected schema
 	Name string
-	// Description is the human-readable description extracted from the jsonschema description tag.
+	// Description is the human-readable description extracted from the jsonschema description tag
 	Description string
 }
 
-// PropertyDescriptors reflects a Go type and returns its top-level JSON properties
-// with names and descriptions from the generated JSON schema. Properties from embedded
-// structs are promoted by the reflector and appear as top-level entries.
+// PropertyDescriptors reflects a Go type and returns its top-level JSON properties with names and descriptions from the generated JSON schema
 func PropertyDescriptors[T any]() []PropertyDescriptor {
 	schema, _, err := SchemaRoot(SchemaFrom[T]())
 	if err != nil || schema.Properties == nil {
@@ -73,7 +69,27 @@ func PropertyDescriptors[T any]() []PropertyDescriptor {
 	return out
 }
 
-// SchemaRoot decodes a raw schema and follows its root $ref into its definitions, returning the resolved root and the definitions; an empty document yields an empty schema
+// PropertyRefs returns each property key mapped to the base name of its $ref
+func PropertyRefs(schema json.RawMessage) (map[string]string, error) {
+	root, _, err := SchemaRoot(schema)
+	if err != nil {
+		return nil, err
+	}
+
+	refs := make(map[string]string, root.Properties.Len())
+
+	for pair := root.Properties.Oldest(); pair != nil; pair = pair.Next() {
+		refs[pair.Key] = ""
+
+		if pair.Value.Ref != "" {
+			refs[pair.Key] = path.Base(pair.Value.Ref)
+		}
+	}
+
+	return refs, nil
+}
+
+// SchemaRoot decodes a raw schema and follows its root $ref into its definitions
 func SchemaRoot(schema json.RawMessage) (*jsonschema.Schema, jsonschema.Definitions, error) {
 	var doc jsonschema.Schema
 	if err := UnmarshalIfPresent(schema, &doc); err != nil {
@@ -102,7 +118,7 @@ func followSchemaRef(node *jsonschema.Schema, defs jsonschema.Definitions) (*jso
 	return target, nil
 }
 
-// SchemaID extracts the definition key from a reflected JSON schema's $ref path.
+// SchemaID extracts the definition key from a reflected JSON schema's $ref path
 func SchemaID(schema json.RawMessage) string {
 	var doc struct {
 		Ref string `json:"$ref"`
@@ -115,9 +131,7 @@ func SchemaID(schema json.RawMessage) string {
 	return path.Base(doc.Ref)
 }
 
-// InjectDefaults returns the schema document as raw JSON with stored values injected
-// as "default" at every level of nesting, following $ref pointers into $defs recursively.
-// Using jsonschema.Schema preserves the original property ordering on serialization.
+// InjectDefaults returns the schema document as raw JSON with stored values injected as "default" at every level of nesting, following $ref pointers into $defs recursively
 func InjectDefaults(schema json.RawMessage, defaults map[string]any) (json.RawMessage, error) {
 	var doc jsonschema.Schema
 	if err := json.Unmarshal(schema, &doc); err != nil {
@@ -139,8 +153,7 @@ func InjectDefaults(schema json.RawMessage, defaults map[string]any) (json.RawMe
 	return out, nil
 }
 
-// injectSchemaDefaults recursively injects stored values as "default" on each property,
-// following $ref pointers into defs so per-field defaults are available at every level.
+// injectSchemaDefaults recursively injects stored values as "default" on each property, following $ref pointers into defs so per-field defaults are available at every level
 func injectSchemaDefaults(typeDef *jsonschema.Schema, defs jsonschema.Definitions, stored map[string]any) {
 	for pair := typeDef.Properties.Oldest(); pair != nil; pair = pair.Next() {
 		k, prop := pair.Key, pair.Value

@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -36,9 +35,9 @@ func Builder(cfg Config) registry.Builder {
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput:    userInput.Registration(),
+			HealthCheck:  gitHubClient.HealthCheck(checkHealth),
+			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				gitHubAppCredential.Registration(types.CredentialRegistration{
 					Name:        "GitHub App Credential",
@@ -47,17 +46,10 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				gitHubAppConnection.Registration(types.ConnectionRegistration{
-					Name:           "GitHub App installation",
-					Description:    "Install the Openlane GitHub App into your GitHub organization.",
-					CredentialRefs: []types.CredentialSlotID{gitHubAppCredential.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: gitHubClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: installation.Registration(),
+					Name:        "GitHub App installation",
+					Description: "Install the Openlane GitHub App into your GitHub organization.",
 					Auth: &types.AuthRegistration{
 						CredentialRef: gitHubAppCredential.ID(),
-						Schema:        gitHubAppCredential.Schema(),
 						Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 							return startAppInstall(cfg)
 						},
@@ -66,8 +58,7 @@ func Builder(cfg Config) registry.Builder {
 						},
 					},
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: gitHubAppCredential.ID(),
-						Description:   "Uninstall the Openlane GitHub App from your GitHub organization settings. Openlane will complete the removal after GitHub confirms the uninstall.",
+						Description: "Uninstall the Openlane GitHub App from your GitHub organization settings. Openlane will complete the removal after GitHub confirms the uninstall.",
 						Disconnect: func(ctx context.Context, req types.DisconnectRequest) (types.DisconnectResult, error) {
 							integrationID, name, err := disconnectInstallationID(ctx, req)
 							if err != nil {
@@ -103,35 +94,27 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				repositorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
-					Description:    "Collect repository inventory from the installation as assets",
-					Policy:         types.ExecutionPolicy{Reconcile: true},
-					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.RepositorySync.Disable }),
-					ConfigResolver: repositorySyncOperation.ConfigFrom(func(u UserInput) RepositorySync { return u.RepositorySync }),
+					Description: "Collect repository inventory from the installation as assets",
+					Policy:      types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaAsset.Name,
 						},
 					},
-					IngestHandle:        RepositorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
 				}),
 				vulnerabilityCollectOperation.Registration(DefinitionID, types.OperationRegistration{
-					Description:    "Collect vulnerability alerts from the installation",
-					Policy:         types.ExecutionPolicy{Reconcile: true},
-					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.VulnerabilitySync.Disable }),
-					ConfigResolver: vulnerabilityCollectOperation.ConfigFrom(func(u UserInput) VulnerabilitySync { return u.VulnerabilitySync }),
+					Description: "Collect vulnerability alerts from the installation",
+					Policy:      types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaVulnerability.Name,
 						},
 					},
-					IngestHandle: VulnerabilityCollect{}.IngestHandle(),
 				}),
 				directorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
-					Description:    "Collect organization members, teams, and team memberships",
-					Policy:         types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
-					ConfigResolver: directorySyncOperation.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
+					Description: "Collect organization members, teams, and team memberships",
+					Policy:      types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -143,7 +126,6 @@ func Builder(cfg Config) registry.Builder {
 							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
-					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					Schedule:            gala.NewFullFetchSchedule(),
 				}),

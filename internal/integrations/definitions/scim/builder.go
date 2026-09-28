@@ -3,10 +3,8 @@ package scim
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Builder returns a registry builder that constructs the SCIM directory sync definition
@@ -24,9 +22,7 @@ func Builder() registry.Builder {
 				Active:      true,
 				Visible:     false,
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput: userInput.Registration(),
 			Webhooks: []types.WebhookRegistration{
 				SCIMAuthWebhook.Registration(types.WebhookRegistration{
 					EndpointURLTemplate: "/v1/integrations/scim/{endpointID}/v2",
@@ -41,7 +37,6 @@ func Builder() registry.Builder {
 						{Schema: entityops.SchemaDirectoryGroup.Name},
 						{Schema: entityops.SchemaDirectoryMembership.Name},
 					},
-					Handle:              providerkit.StaticHandler(DirectorySync{}.Run),
 					SkipDefaultLookback: true,
 				}),
 			},

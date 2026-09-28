@@ -67,4 +67,16 @@ var (
 	ErrLinkTargetFieldInvalid = errors.New("integrations/registry: link target field is not a match key on the target schema")
 	// ErrLinkSourceFieldInvalid indicates a link rule's source field is not a mapped input key of the required shape
 	ErrLinkSourceFieldInvalid = errors.New("integrations/registry: link source field is not a mapped input key of the required shape")
+	// ErrHealthCheckRequired indicates a definition declares connections without a definition health check
+	ErrHealthCheckRequired = errors.New("integrations/registry: health check required when the definition declares connections")
+	// ErrHealthCheckClientCredentialMissing indicates the health check client is not built from every connection's credential slot
+	ErrHealthCheckClientCredentialMissing = errors.New("integrations/registry: health check client does not use every connection credential slot")
+	// ErrConfigSectionAmbiguous indicates an operation config type is referenced by more than one user input property or one section is claimed by more than one operation
+	ErrConfigSectionAmbiguous = errors.New("integrations/registry: operation config section is ambiguous")
+	// ErrConfigSectionMismatch indicates a user input section references an operation config type by name but declares a different schema for it
+	ErrConfigSectionMismatch = errors.New("integrations/registry: user input section schema does not match the operation config schema")
+	// ErrConfigSectionRequired indicates a reconciled operation with configurable fields has no user input section and no authored resolver
+	ErrConfigSectionRequired = errors.New("integrations/registry: reconciled operation config requires a user input section")
+	// ErrDestructiveSurfaceChange indicates a credential slot, operation, or webhook was removed without a registration declaring that it replaces it
+	ErrDestructiveSurfaceChange = errors.New("integrations/registry: removed credential slot, operation, or webhook has no replacing registration")
 )

@@ -6,14 +6,12 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/auth"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// Builder returns the Slack definition builder with the supplied operator and runtime config applied.
-// When runtime.Provisioned() is true, a RuntimeIntegration is included for system-send.
+// Builder returns the Slack definition builder with the supplied operator and runtime config applied
 func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{
@@ -31,9 +29,9 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput:    userInput.Registration(),
+			HealthCheck:  slackClient.HealthCheck(checkHealth),
+			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				slackCredential.Registration(types.CredentialRegistration{
 					Name:        "Slack OAuth Credential",
@@ -42,19 +40,12 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 				slackBotTokenCredential.Registration(types.CredentialRegistration{
 					Name:        "Slack Bot Token",
 					Description: "User-provisioned bot token from a custom Slack app",
-					Schema:      slackBotTokenCredential.Schema(),
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
 				slackOAuthConnection.Registration(types.ConnectionRegistration{
-					Name:           "Slack OAuth",
-					Description:    "Connect your Slack workspace via OAuth",
-					CredentialRefs: []types.CredentialSlotID{slackCredential.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: slackClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: installation.Registration(),
+					Name:        "Slack OAuth",
+					Description: "Connect your Slack workspace via OAuth",
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[slackCred]{
 						CredentialRef: slackCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -75,8 +66,7 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 						EncodeCredentialError: ErrCredentialEncode,
 					}),
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: slackCredential.ID(),
-						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Slack workspace under Administration > Manage apps.",
+						Description: "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Slack workspace under Administration > Manage apps.",
 						Disconnect: func(_ context.Context, req types.DisconnectRequest) (types.DisconnectResult, error) {
 							teamID, err := disconnectTeamID(req)
 							if err != nil {
@@ -101,17 +91,10 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 					},
 				}),
 				slackBotTokenConnection.Registration(types.ConnectionRegistration{
-					Name:           "Slack Bot Token",
-					Description:    "Connect your Slack workspace using a bot token from a custom Slack app.",
-					CredentialRefs: []types.CredentialSlotID{slackBotTokenCredential.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: slackClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: installation.Registration(),
+					Name:        "Slack Bot Token",
+					Description: "Connect your Slack workspace using a bot token from a custom Slack app.",
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: slackBotTokenCredential.ID(),
-						Description:   "Removes the stored bot token from Openlane. To fully revoke access, delete or regenerate the token in your Slack app under OAuth & Permissions.",
+						Description: "Removes the stored bot token from Openlane. To fully revoke access, delete or regenerate the token in your Slack app under OAuth & Permissions.",
 					},
 				}),
 			},
@@ -123,7 +106,6 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 			Operations: append(AllSlackSystemMessages(),
 				MessageSendOp.Registration(DefinitionID, types.OperationRegistration{
 					Description:         "Send a Slack message via chat.postMessage",
-					Handle:              MessageSend{}.Handle(),
 					RequiredPermissions: scopes,
 				}),
 				directorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
@@ -134,10 +116,7 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 							Schema: entityops.SchemaDirectoryAccount.Name,
 						},
 					},
-					IngestHandle:        DirectorySync{}.IngestHandle(),
 					RequiredPermissions: scopes,
-					Disabled:            providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
-					ConfigResolver:      directorySyncOperation.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 				}),
 			),
 			Mappings: []types.MappingRegistration{

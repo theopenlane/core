@@ -57,13 +57,11 @@ import (
 	authmiddleware "github.com/theopenlane/core/v2/pkg/middleware/auth"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 
-	// import generated runtime which is required to prevent cyclical dependencies
 	_ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 	_ "github.com/theopenlane/core/v2/internal/ent/historygenerated/runtime"
 )
 
 var (
-	// commonly used vars in tests
 	emptyResponse    = "null\n"
 	validPassword    = "sup3rs3cu7e!"
 	otpManagerSecret = totp.Secret{
@@ -118,34 +116,27 @@ func (suite *HandlerTestSuite) SetupSuite() {
 		zerolog.SetGlobalLevel(zerolog.Disabled)
 	}
 
-	// setup db container
 	suite.tf = entdb.NewTestFixture()
 
 	version, err := fgaversion.GetVersion()
 	require.NoError(suite.T(), err)
 
-	// setup openFGA container
 	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
 		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
 	)
 
-	// shared token manager to avoid RSA key generation
 	suite.sharedTokenManager, err = coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
 	require.NoError(suite.T(), err)
 
-	// shared redis client to avoid miniredis server startup
 	suite.sharedRedisClient = coreutils.NewRedisClient()
 
-	// shared session manager to avoid random key generation
 	suite.sharedSessionManager = coreutils.CreateSessionManager()
 
-	// shared FGA client to avoid repeated container connections
 	suite.sharedFGAClient, err = suite.ofgaTF.NewFgaClient(context.Background())
 	require.NoError(suite.T(), err)
 
-	// shared OTP manager
 	otpOpts := []totp.ConfigOption{
 		totp.WithCodeLength(6),
 		totp.WithIssuer("authenticator.local"),
@@ -157,13 +148,11 @@ func (suite *HandlerTestSuite) SetupSuite() {
 		Manager: otpMan,
 	}
 
-	// shared pool to avoid worker pool creation
 	suite.sharedPool = gala.NewPool(
 		gala.WithWorkers(100), //nolint:mnd
 		gala.WithPoolName("ent_client_pool"),
 	)
 
-	// shared durable gala runtime for integration tests
 	galaInstance, err := gala.NewGala(context.Background(), gala.Config{
 		DispatchMode:      gala.DispatchModeDurable,
 		ConnectionURI:     suite.tf.URI,
@@ -179,8 +168,6 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	suite.galaRuntime = galaInstance
 
-	// suite-scoped ent client for gala listeners — stays open for the entire suite
-	// so durable job handlers never reference a closed connection
 	hc, err := entdb.NewTestHistoryClient(context.Background(), suite.tf)
 	require.NoError(suite.T(), err)
 
@@ -236,7 +223,6 @@ func (suite *HandlerTestSuite) SetupSuite() {
 		Save(previewDomainCtx)
 	require.NoError(suite.T(), err)
 
-	// single integration runtime for the entire suite — listeners registered once
 	credStore, err := keystore.NewStore(suite.galaDB)
 	require.NoError(suite.T(), err)
 
@@ -269,7 +255,6 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	suite.sharedIntegrationsRT = rt
 
-	// provide ent client to gala's injector so ingest listeners can resolve it
 	require.NoError(suite.T(), suite.galaRuntime.Attach(
 		gala.WithValue(suite.galaDB),
 		gala.WithRestoredValue("ent_client", ent.NewContext),
@@ -283,7 +268,6 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	ctx := context.Background()
 
-	// use all shared instances to avoid expensive recreation
 	sessionConfig := sessions.NewSessionConfig(
 		suite.sharedSessionManager,
 		sessions.WithPersistence(suite.sharedRedisClient),
@@ -291,11 +275,9 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	sessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
 
-	// setup history client
 	hc, err := entdb.NewTestHistoryClient(ctx, suite.tf)
 	require.NoError(t, err)
 
-	// setup mock entitlements client
 	entitlements, err := suite.mockStripeClient()
 	require.NoError(t, err)
 
@@ -316,7 +298,6 @@ func (suite *HandlerTestSuite) SetupTest() {
 		ent.HistoryClient(hc),
 	}
 
-	// create database connection
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
 	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, nil, opts)
@@ -325,25 +306,19 @@ func (suite *HandlerTestSuite) SetupTest() {
 	suite.objectStore, _, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, nil)
 	require.NoError(t, err)
 
-	// truncate river tables
 	err = db.Job.TruncateRiverTables(ctx)
 	require.NoError(t, err)
 
-	// reset mock email sender so messages don't bleed across tests
 	suite.mockEmailSender().Reset()
 
-	// add db to test client and wire integration runtime so email dispatch works
 	runtime.SetDefault(suite.sharedIntegrationsRT)
 	suite.db = db
 
-	// add the client
 	suite.api, err = coreutils.TestClient(suite.db, suite.objectStore)
 	require.NoError(t, err)
 
-	// setup runtime router
 	suite.router = setupRouter()
 
-	// setup handler
 	suite.h = handlerSetup(suite.db)
 	suite.configureIntegrationOAuthRuntime()
 	if suite.h.Entitlements.Config.StripeWebhookSecrets == nil {
@@ -351,20 +326,15 @@ func (suite *HandlerTestSuite) SetupTest() {
 	}
 	suite.h.Entitlements.Config.StripeWebhookSecrets[stripe.APIVersion] = webhookSecret
 
-	// use shared OTP manager
 	suite.h.OTPManager = suite.sharedOTPManager
 
-	// setup echo router with transaction middleware
 	suite.e = suite.router.Echo
 
-	// Add transaction middleware to router's echo instance for tests
 	transactionConfig := transaction.Client{
 		EntDBClient: suite.db,
 	}
 	suite.e.Use(transactionConfig.Middleware)
 
-	// shared auth middleware once per test to avoid JWK cache causing
-	// an infinite hanging
 	suite.sharedAuthMiddleware = suite.createAuthMiddleware()
 
 	suite.setupTestData(ctx)
@@ -377,11 +347,9 @@ func (suite *HandlerTestSuite) registerAuthenticatedTestHandler(method, path str
 
 // createAuthMiddleware creates authentication middleware for tests
 func (suite *HandlerTestSuite) createAuthMiddleware() echo.MiddlewareFunc {
-	// get keys from the token manager
 	keys, err := suite.db.TokenManager.Keys()
 	require.NoError(suite.T(), err)
 
-	// local validator to avoid JWK cache issues
 	validator := tokens.NewJWKSValidator(keys, "http://localhost:17608", "http://localhost:17608")
 
 	opts := []authmiddleware.Option{
@@ -437,7 +405,6 @@ func (suite *HandlerTestSuite) TearDownSuite() {
 
 	testutils.TeardownFixture(suite.tf)
 
-	// terminate all fga containers
 	err := suite.ofgaTF.TeardownFixture()
 	require.NoError(suite.T(), err)
 }
@@ -454,11 +421,11 @@ func (suite *HandlerTestSuite) waitForGala(runtime *gala.Gala) {
 func setupRouter() *route.Router {
 	return server.NewRouter(server.LogConfig{
 		PrettyLog: true,
-		LogLevel:  1, // INFO level
+		LogLevel:  1,
 	})
 }
 
-// handlerSetup to be used for required references in the handler tests
+// handlerSetup is used for required references in the handler tests
 func handlerSetup(db *ent.Client) *handlers.Handler {
 	as := authmanager.New(db)
 
@@ -483,7 +450,7 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 	return h
 }
 
-// testAuthDefinitionID is the canonical ID for the test OAuth definition.
+// testAuthDefinitionID is the canonical ID for the test OAuth definition
 const testAuthDefinitionID = "def_01TEST0AUTH0000000000000001"
 
 // testOAuthCredential is the credential type the test OAuth flow stores
@@ -525,6 +492,9 @@ func buildTestOAuthDefinition() (types.Definition, error) {
 				Description: "Auth-managed credential slot used by the test OAuth definition.",
 			}),
 		},
+		HealthCheck: types.CredentialHealthCheck(func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+			return json.RawMessage(`{"ok":true}`), nil
+		}),
 		Connections: []types.ConnectionRegistration{
 			{
 				CredentialRef:  testAuthCredentialRef.ID(),
@@ -533,7 +503,6 @@ func buildTestOAuthDefinition() (types.Definition, error) {
 				CredentialRefs: []types.CredentialSlotID{testAuthCredentialRef.ID()},
 				Auth: &types.AuthRegistration{
 					CredentialRef: testAuthCredentialRef.ID(),
-					Schema:        testAuthCredentialRef.Schema(),
 					Start:         testAuthStart,
 					Complete:      testAuthComplete,
 				},
@@ -610,7 +579,7 @@ func (suite *HandlerTestSuite) mockStripeClient() (*entitlements.StripeClient, e
 	)
 }
 
-// mockCustomer for webhook tests
+// mockCustomer is the stripe customer fixture used in webhook tests
 var mockCustomer = &stripe.Customer{
 	ID: "cus_test_customer",
 	Subscriptions: &stripe.SubscriptionList{
@@ -669,11 +638,9 @@ var mockProduct = &stripe.Product{
 
 // orgSubscriptionMocks mocks the stripe calls for org subscription during the webhook tests
 func (suite *HandlerTestSuite) orgSubscriptionMocks() {
-	// mock customer search
 	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.v1SearchPage[*github.com/stripe/stripe-go/v86.Customer]")).Run(func(args mock.Arguments) {
-		out := args.Get(4) // this is *v1SearchPage[*stripe.Customer] now, but unexported
+		out := args.Get(4)
 
-		// Build a payload that matches Stripe search response shape
 		payload := map[string]any{
 			"object":   "search_result",
 			"data":     []*stripe.Customer{mockCustomer},
@@ -684,7 +651,6 @@ func (suite *HandlerTestSuite) orgSubscriptionMocks() {
 		_ = json.Unmarshal(b, out)
 	}).Return(nil)
 
-	// setup mocks for get customer by id
 	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerRetrieveParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
 		mockCustomerSearchResult := args.Get(4).(*stripe.Customer)
 
@@ -692,7 +658,6 @@ func (suite *HandlerTestSuite) orgSubscriptionMocks() {
 
 	}).Return(nil)
 
-	// setup mocks for creating customer params
 	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerCreateParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
 		mockCustomerSearchResult := args.Get(4).(*stripe.Customer)
 
@@ -700,7 +665,6 @@ func (suite *HandlerTestSuite) orgSubscriptionMocks() {
 
 	}).Return(nil)
 
-	// mock for subscription create params
 	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionCreateParams"), mock.AnythingOfType("*stripe.Subscription")).Run(func(args mock.Arguments) {
 		mockSubscriptionSearchResult := args.Get(4).(*stripe.Subscription)
 
@@ -708,7 +672,6 @@ func (suite *HandlerTestSuite) orgSubscriptionMocks() {
 
 	}).Return(nil)
 
-	// mock for product retrieve params
 	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.ProductRetrieveParams"), mock.AnythingOfType("*stripe.Product")).Run(func(args mock.Arguments) {
 		mockProductRetrieveResult := args.Get(4).(*stripe.Product)
 
@@ -716,7 +679,6 @@ func (suite *HandlerTestSuite) orgSubscriptionMocks() {
 
 	}).Return(nil)
 
-	// mock for product params
 	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionRetrieveParams"), mock.AnythingOfType("*stripe.Product")).Run(func(args mock.Arguments) {
 		mockSubscriptionRetrieveResult := args.Get(4).(*stripe.Subscription)
 
@@ -724,7 +686,6 @@ func (suite *HandlerTestSuite) orgSubscriptionMocks() {
 
 	}).Return(nil)
 
-	// setup mocks for org subscription schedule
 	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionScheduleCreateParams"), mock.AnythingOfType("*stripe.SubscriptionSchedule")).Run(func(args mock.Arguments) {
 		mockSubscriptionScheduleResult := args.Get(4).(*stripe.SubscriptionSchedule)
 
@@ -745,7 +706,6 @@ func (suite *HandlerTestSuite) orgSubscriptionMocks() {
 
 	}).Return(nil)
 
-	// setup mocks for getting entitlements
 	suite.stripeMockBackend.On("CallRaw", context.Background(), mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.EntitlementsActiveEntitlementList")).Run(func(args mock.Arguments) {
 		mockCustomerSearchResult := args.Get(4).(*stripe.EntitlementsActiveEntitlementList)
 

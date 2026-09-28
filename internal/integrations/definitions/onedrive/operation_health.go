@@ -17,13 +17,8 @@ type HealthCheck struct {
 	DriveID string `json:"driveId"`
 }
 
-// Handle adapts the health check to the generic operation registration boundary
-func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClient(oneDriveClient, h.Run)
-}
-
-// Run executes the health check by verifying the user's drive is accessible
-func (HealthCheck) Run(ctx context.Context, c *DriveClient) (json.RawMessage, error) {
+// checkHealth executes the health check by verifying the user's drive is accessible
+func checkHealth(ctx context.Context, _ types.OperationRequest, c *DriveClient) (json.RawMessage, error) {
 	drive, err := c.Graph.Me().Drive().Get(ctx, nil)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("onedrive: health check drive.get failed")

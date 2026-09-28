@@ -95,13 +95,11 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 
 	s.ctx = context.Background()
 
-	// setup db container
 	s.tf = entdb.NewTestFixture()
 
 	version, err := fgaversion.GetVersion()
 	s.Require().NoError(err)
 
-	// setup openFGA container
 	s.ofgaTF = fgatest.NewFGATestcontainer(s.ctx,
 		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
@@ -204,7 +202,6 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	s.client = db
 	s.galaRuntime = runtime
 
-	// wire integration runtime with mock email and slack providers
 	credStore, err := keystore.NewStore(db)
 	s.Require().NoError(err)
 
@@ -232,7 +229,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 }
 
 // mockSlackRecorder returns the mock Slack message recorder
-func (s *WorkflowEngineTestSuite) mockSlackRecorder() *slackdef.SlackMessageRecorder {
+func (s *WorkflowEngineTestSuite) mockSlackRecorder() *slackdef.MessageRecorder {
 	s.Require().NotNil(s.slackMock, "slack mock not initialized")
 	return s.slackMock.Recorder
 }
@@ -288,8 +285,7 @@ func (s *WorkflowEngineTestSuite) Engine() *engine.WorkflowEngine {
 	return wfEngine
 }
 
-// NewIsolatedEngine creates a new workflow engine with a custom Gala runtime for tests that need
-// isolation (e.g., failure testing). Most tests should use Engine() instead.
+// NewIsolatedEngine creates a new workflow engine with a custom Gala runtime for tests that need isolation (e.g., failure testing)
 func (s *WorkflowEngineTestSuite) NewIsolatedEngine(runtime *gala.Gala) *engine.WorkflowEngine {
 	wfEngine, err := engine.NewWorkflowEngine(s.client, runtime)
 	s.Require().NoError(err)
@@ -327,7 +323,6 @@ func (s *WorkflowEngineTestSuite) WaitForEvents() {
 }
 
 // SetupSystemAdmin creates a system admin user and returns user ID, org ID, and admin context
-// Use this for tests that rely on ent hooks which need elevated permissions for internal queries
 func (s *WorkflowEngineTestSuite) SetupSystemAdmin() (string, string, context.Context) {
 	internalCtx := generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 
@@ -348,10 +343,8 @@ func (s *WorkflowEngineTestSuite) SetupSystemAdmin() (string, string, context.Co
 		Save(setCtx)
 	s.Require().NoError(err)
 
-	// Enable all modules for the org (required for workflow operations)
 	s.enableModules(user.ID, testOrg.ID)
 
-	// Create system admin context
 	adminCtx := auth.NewTestContextForSystemAdmin(user.ID, testOrg.ID)
 	adminCtx = generated.NewContext(adminCtx, s.client)
 
@@ -379,7 +372,6 @@ func (s *WorkflowEngineTestSuite) SetupTestUser() (string, string, context.Conte
 		Save(setCtx)
 	s.Require().NoError(err)
 
-	// Enable all modules for the org (required for workflow operations)
 	s.enableModules(user.ID, testOrg.ID)
 
 	userCtx = auth.NewTestContextWithOrgID(user.ID, testOrg.ID)
@@ -392,14 +384,12 @@ func (s *WorkflowEngineTestSuite) SetupTestUser() (string, string, context.Conte
 func (s *WorkflowEngineTestSuite) enableModules(userID, orgID string) {
 	features := models.AllOrgModules
 
-	// Create authenticated context with user and org IDs
 	userCtx := auth.NewTestContextWithOrgID(userID, orgID)
 	// Run seeding operations as an internal operation
 	userCtx = auth.WithInternalOperationContext(userCtx)
 	// Add client to context
 	userCtx = generated.NewContext(userCtx, s.client)
 
-	// Create org modules for each feature
 	for _, feature := range features {
 		_, err := s.client.OrgModule.Create().
 			SetOwnerID(orgID).
@@ -410,12 +400,11 @@ func (s *WorkflowEngineTestSuite) enableModules(userID, orgID string) {
 		s.Require().NoError(err)
 	}
 
-	// Create FGA tuples for the features
 	err := entitlements.CreateFeatureTuples(userCtx, &s.client.Authz, orgID, features)
 	s.Require().NoError(err)
 }
 
-// CreateTestUserID creates an additional test user and returns the ID.
+// CreateTestUserID creates an additional test user and returns the ID
 func (s *WorkflowEngineTestSuite) CreateTestUserID() string {
 	internalCtx := generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 
@@ -428,7 +417,7 @@ func (s *WorkflowEngineTestSuite) CreateTestUserID() string {
 	return user.ID
 }
 
-// CreateTestUserInOrg creates a user and attaches them to the provided organization.
+// CreateTestUserInOrg creates a user and attaches them to the provided organization
 func (s *WorkflowEngineTestSuite) CreateTestUserInOrg(orgID string, role enums.Role) (string, context.Context) {
 	internalCtx := generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 
@@ -438,7 +427,6 @@ func (s *WorkflowEngineTestSuite) CreateTestUserInOrg(orgID string, role enums.R
 		Save(internalCtx)
 	s.Require().NoError(err)
 
-	// OrgMembership hooks require authenticated user context for creating managed groups
 	authCtx := auth.NewTestContextWithOrgID(user.ID, orgID)
 	membershipCtx := generated.NewContext(auth.WithInternalCrossOrgContext(authCtx), s.client)
 
@@ -577,8 +565,7 @@ func (s *WorkflowEngineTestSuite) UpdateWorkflowDefinitionInactive(def *generate
 	return updated
 }
 
-// ClearWorkflowDefinitionsForOrg removes all workflow definitions and related entities for a specific organization.
-// Use this when subtests share an org and need isolation between test cases.
+// ClearWorkflowDefinitionsForOrg removes all workflow definitions and related entities for a specific organization
 func (s *WorkflowEngineTestSuite) ClearWorkflowDefinitionsForOrg(orgID string) {
 	internalCtx := generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 
@@ -612,12 +599,7 @@ func (s *WorkflowEngineTestSuite) InternalContext() context.Context {
 	return generated.NewContext(auth.WithInternalCrossOrgContext(s.ctx), s.client)
 }
 
-// SeedContext creates a context with auth info and privacy bypass for seeding test data.
-// Use this for creating test entities (Groups, Controls, etc.) that require privacy bypass.
-// The returned context has:
-// - User authentication info (userID, orgID)
-// - Privacy.Allow decision
-// - Ent client
+// SeedContext creates a context with auth info and privacy bypass for seeding test data
 func (s *WorkflowEngineTestSuite) SeedContext(userID, orgID string) context.Context {
 	ctx := auth.NewTestContextWithOrgID(userID, orgID)
 	ctx = auth.WithInternalOperationContext(ctx)
@@ -630,8 +612,7 @@ func (s *WorkflowEngineTestSuite) SeedContext(userID, orgID string) context.Cont
 	return ctx
 }
 
-// TriggerInstance creates a workflow instance via the engine to avoid manual instance construction in tests.
-// This wraps TriggerWorkflow with required assertions and returns the created instance.
+// TriggerInstance creates a workflow instance via the engine to avoid manual instance construction in tests
 func (s *WorkflowEngineTestSuite) TriggerInstance(ctx context.Context, wfEngine *engine.WorkflowEngine, def *generated.WorkflowDefinition, obj *workflows.Object, input engine.TriggerInput) *generated.WorkflowInstance {
 	instance, err := wfEngine.TriggerWorkflow(ctx, def, obj, input)
 	s.Require().NoError(err)
@@ -721,7 +702,7 @@ var mockItems = []*stripe.SubscriptionItem{
 	},
 }
 
-// mockCustomer for webhook tests
+// mockCustomer is the mock customer used for webhook tests
 var mockCustomer = &stripe.Customer{
 	ID: "cus_test_customer",
 	Subscriptions: &stripe.SubscriptionList{
@@ -754,7 +735,7 @@ var mockSubscription = &stripe.Subscription{
 	Customer: &stripe.Customer{
 		ID: custID,
 	},
-	TrialEnd:     time.Now().Add(7 * 24 * time.Hour).Unix(), // 7 days from now
+	TrialEnd:     time.Now().Add(7 * 24 * time.Hour).Unix(),
 	DaysUntilDue: 15,
 }
 
@@ -765,7 +746,6 @@ var mockProduct = &stripe.Product{
 
 // orgSubscriptionMocks mocks the stripe calls for org subscription during the webhook tests
 func (suite *WorkflowEngineTestSuite) orgSubscriptionMocks() {
-	// setup mocks for get customer by id
 	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerRetrieveParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
 		mockCustomerSearchResult := args.Get(4).(*stripe.Customer)
 
@@ -773,7 +753,6 @@ func (suite *WorkflowEngineTestSuite) orgSubscriptionMocks() {
 
 	}).Return(nil)
 
-	// setup mocks for creating customer params
 	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerCreateParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
 		mockCustomerSearchResult := args.Get(4).(*stripe.Customer)
 
@@ -781,11 +760,9 @@ func (suite *WorkflowEngineTestSuite) orgSubscriptionMocks() {
 
 	}).Return(nil)
 
-	// mock customer search
 	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.v1SearchPage[*github.com/stripe/stripe-go/v86.Customer]")).Run(func(args mock.Arguments) {
-		out := args.Get(4) // this is *v1SearchPage[*stripe.Customer] now, but unexported
+		out := args.Get(4)
 
-		// Build a payload that matches Stripe search response shape
 		payload := map[string]any{
 			"object":   "search_result",
 			"data":     []*stripe.Customer{mockCustomer},
@@ -796,7 +773,6 @@ func (suite *WorkflowEngineTestSuite) orgSubscriptionMocks() {
 		_ = json.Unmarshal(b, out)
 	}).Return(nil)
 
-	// mock for subscription create params
 	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionCreateParams"), mock.AnythingOfType("*stripe.Subscription")).Run(func(args mock.Arguments) {
 		mockSubscriptionSearchResult := args.Get(4).(*stripe.Subscription)
 
@@ -804,7 +780,6 @@ func (suite *WorkflowEngineTestSuite) orgSubscriptionMocks() {
 
 	}).Return(nil)
 
-	// mock for product retrieve params
 	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.ProductRetrieveParams"), mock.AnythingOfType("*stripe.Product")).Run(func(args mock.Arguments) {
 		mockProductRetrieveResult := args.Get(4).(*stripe.Product)
 
@@ -812,7 +787,6 @@ func (suite *WorkflowEngineTestSuite) orgSubscriptionMocks() {
 
 	}).Return(nil)
 
-	// mock for product params
 	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionRetrieveParams"), mock.AnythingOfType("*stripe.Product")).Run(func(args mock.Arguments) {
 		mockSubscriptionRetrieveResult := args.Get(4).(*stripe.Subscription)
 
@@ -820,7 +794,6 @@ func (suite *WorkflowEngineTestSuite) orgSubscriptionMocks() {
 
 	}).Return(nil)
 
-	// setup mocks for getting entitlements
 	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.EntitlementsActiveEntitlementList")).Run(func(args mock.Arguments) {
 		mockCustomerSearchResult := args.Get(4).(*stripe.EntitlementsActiveEntitlementList)
 
@@ -837,7 +810,6 @@ func (suite *WorkflowEngineTestSuite) orgSubscriptionMocks() {
 
 	}).Return(nil)
 
-	// setup mocks for subscription schedule creation
 	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionScheduleCreateParams"), mock.AnythingOfType("*stripe.SubscriptionSchedule")).Run(func(args mock.Arguments) {
 		mockSubscriptionScheduleResult := args.Get(4).(*stripe.SubscriptionSchedule)
 
@@ -848,7 +820,6 @@ func (suite *WorkflowEngineTestSuite) orgSubscriptionMocks() {
 
 	}).Return(nil)
 
-	// setup mocks for customer update params
 	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerUpdateParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
 		mockCustomerUpdateResult := args.Get(4).(*stripe.Customer)
 

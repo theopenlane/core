@@ -6,7 +6,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Builder returns the Okta definition builder
@@ -24,29 +23,21 @@ func Builder() registry.Builder {
 				Active:      false,
 				Visible:     true,
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput:    userInput.Registration(),
+			HealthCheck:  oktaClient.HealthCheck(checkHealth),
+			Installation: integration.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				oktaCredential.Registration(types.CredentialRegistration{
 					Name:        "Okta Credential",
 					Description: "API token used to access Okta organization data.",
-					Schema:      oktaCredential.Schema(),
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
 				oktaConnection.Registration(types.ConnectionRegistration{
-					Name:           "Okta API Token",
-					Description:    "Configure Okta access using an API token from your organization.",
-					CredentialRefs: []types.CredentialSlotID{oktaCredential.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: oktaClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: integration.Registration(),
+					Name:        "Okta API Token",
+					Description: "Configure Okta access using an API token from your organization.",
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: oktaCredential.ID(),
-						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Okta admin console under Security > API.",
+						Description: "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Okta admin console under Security > API.",
 					},
 				}),
 			},
@@ -70,7 +61,6 @@ func Builder() registry.Builder {
 							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
-					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
 				}),
 			},

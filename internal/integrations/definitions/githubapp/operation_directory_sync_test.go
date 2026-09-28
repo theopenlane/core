@@ -110,7 +110,7 @@ func TestDirectorySyncSnapshotComplete(t *testing.T) {
 
 			client := newDirectorySyncGraphQLServer(t, tc.teamsResponse)
 
-			sets, err := tc.cfg.Run(context.Background(), client)
+			sets, err := runDirectorySync(context.Background(), types.OperationRequest{}, client, tc.cfg)
 			assert.NilError(t, err)
 			assert.DeepEqual(t, lo.SliceToMap(sets, func(set types.IngestPayloadSet) (string, bool) { return set.Schema, set.SnapshotComplete }), tc.want)
 		})

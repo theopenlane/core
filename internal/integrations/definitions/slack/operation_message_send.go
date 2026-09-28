@@ -12,6 +12,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
+// MessageSendOp is the operation ref for the Slack message send operation
+var MessageSendOp = types.OperationRefOf[MessageSendOperation]().Handles(slackClient, MessageSend{}.Run) //nolint:revive
+
 // MessageSendOperation holds per-invocation parameters for the message.send operation
 type MessageSendOperation struct {
 	// TemplateID references a notification template by database ID
@@ -48,11 +51,6 @@ type MessageDelivery struct {
 	Channel string `json:"channel"`
 	// TS is the message timestamp
 	TS string `json:"ts"`
-}
-
-// Handle adapts message send to the generic operation registration boundary
-func (m MessageSend) Handle() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(slackClient, MessageSendOp, ErrOperationConfigInvalid, m.Run)
 }
 
 // Run sends a Slack message via chat.postMessage
