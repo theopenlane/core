@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
@@ -45,8 +46,6 @@ func HookSubscriberCreate() ent.Hook {
 				return nil, err
 			}
 
-			var retValue ent.Value
-
 			existingSubscriber, err := getSubscriber(ctx, m)
 
 			if existingSubscriber != nil && err == nil {
@@ -57,22 +56,24 @@ func HookSubscriberCreate() ent.Hook {
 						ErrUserAlreadySubscriber)
 				}
 
-				retValue, err = updateSubscriber(ctx, m, existingSubscriber)
-				if err != nil {
+				_, newErr := updateSubscriber(ctx, m, existingSubscriber)
+				if newErr != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("unable to update email subscription")
 
-					return retValue, err
-				}
-			} else {
-				// create new subscription
-				retValue, err = next.Mutate(ctx, m)
-				if err != nil {
-					return retValue, err
+					return nil, err
 				}
 			}
 
+			if err != nil && !generated.IsNotFound(err) {
+				return nil, err
+			}
+
+			retValue, err := next.Mutate(ctx, m)
+			if err != nil {
+				return retValue, err
+			}
+
 			tokenValue, _ := m.Token()
-			emailAddress, _ := m.Email()
 			orgID, _ := m.OwnerID()
 			trustCenterID, _ := m.TrustCenterID()
 
@@ -84,7 +85,7 @@ func HookSubscriberCreate() ent.Hook {
 			customDomain, slug, branding := subscriberTrustCenterDomain(ctx, m.Client(), trustCenterID)
 
 			if err := sendSystemEmail(ctx, emaildef.SubscribeOp.Name(), emaildef.SubscribeRequest{
-				RecipientInfo:       emaildef.RecipientInfo{Email: emailAddress},
+				RecipientInfo:       emaildef.RecipientInfo{Email: email},
 				TrustCenterBranding: branding,
 				OrgName:             orgName,
 				Token:               tokenValue,
