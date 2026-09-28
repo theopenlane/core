@@ -95,25 +95,25 @@ func getInviteOwnerID(ctx context.Context, m *generated.InviteMutation) (string,
 // getRelationToCheck returns the relation to check based on the role on the mutation
 func getRelationToCheck(ctx context.Context, m *generated.InviteMutation) (string, error) {
 	role, ok := m.Role()
-	if !ok {
-		role = enums.RoleMember
-
-		// if it is not a create operation, we need to to check the existing invite for the role
-		if m.Op() != generated.OpCreate {
-			id, ok := m.ID()
-			if !ok {
-				return "", generated.ErrPermissionDenied
-			}
-
-			// get the role from the existing invite
-			invite, err := m.Client().Invite.Get(ctx, id)
-			if err != nil {
-				return "", err
-			}
-
-			role = invite.Role
-		}
+	if ok {
+		return InviteRelationForRole(role), nil
 	}
 
-	return InviteRelationForRole(role), nil
+	if m.Op() == generated.OpCreate {
+		return InviteRelationForRole(enums.RoleMember), nil
+	}
+
+	// if it is not a create operation, we need to to check the existing invite for the role
+	id, ok := m.ID()
+	if !ok {
+		return "", generated.ErrPermissionDenied
+	}
+
+	// get the role from the existing invite
+	invite, err := m.Client().Invite.Get(ctx, id)
+	if err != nil {
+		return "", err
+	}
+
+	return InviteRelationForRole(invite.Role), nil
 }
