@@ -65,7 +65,7 @@ func (r *mutationResolver) cloneMappings(ctx context.Context, ids []string, orgI
 		q.Select(subcontrol.FieldID, subcontrol.FieldControlID, subcontrol.FieldRefCode)
 	}
 
-	//check mappings from either the to side or from of controls or subcontrols
+	// check mappings from either the to side or from of controls or subcontrols
 	mappings, err := client.MappedControl.Query().Where(
 		mappedcontrol.SystemOwned(true),
 		mappedcontrol.Or(
