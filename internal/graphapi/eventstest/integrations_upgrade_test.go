@@ -148,6 +148,9 @@ func previousDefinition(primary retiredSlot, extra ...retiredSlot) registry.Buil
 				DisplayName: "Test Integration",
 				Active:      true,
 			},
+			HealthCheck: integrationtypes.CredentialHealthCheck(func(context.Context, integrationtypes.OperationRequest) (json.RawMessage, error) {
+				return json.RawMessage(`{"ok":true}`), nil
+			}),
 		}
 
 		connection := integrationtypes.ConnectionRegistration{CredentialRef: primary.id}
@@ -543,7 +546,6 @@ func TestInstallationUpgrade(t *testing.T) {
 		require.Zero(t, integrationNotificationCount(t, subCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 	})
 
-	// the unhealthy record and the two runs are written directly because they represent history recorded under the operation's retired name before the rename shipped
 	t.Run("an operation rename moves health keys and run history", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)

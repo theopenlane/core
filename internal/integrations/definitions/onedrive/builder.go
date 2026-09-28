@@ -31,9 +31,9 @@ func Builder(cfg Config) registry.Builder {
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput:    userInput.Registration(),
+			HealthCheck:  oneDriveClient.HealthCheck(checkHealth),
+			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				oneDriveCredential.Registration(types.CredentialRegistration{
 					Name:        "OneDrive Credential",
@@ -42,14 +42,8 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				oneDriveConnection.Registration(types.ConnectionRegistration{
-					Name:           "OneDrive OAuth",
-					Description:    "Connect your Microsoft account using OAuth to access OneDrive documents.",
-					CredentialRefs: []types.CredentialSlotID{oneDriveCredential.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: oneDriveClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: installation.Registration(),
+					Name:        "OneDrive OAuth",
+					Description: "Connect your Microsoft account using OAuth to access OneDrive documents.",
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[oneDriveCred]{
 						CredentialRef: oneDriveCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -74,8 +68,7 @@ func Builder(cfg Config) registry.Builder {
 						EncodeCredentialError: ErrCredentialEncode,
 					}),
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: oneDriveCredential.ID(),
-						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Microsoft account under Account settings > Privacy.",
+						Description: "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Microsoft account under Account settings > Privacy.",
 					},
 				}),
 			},
@@ -88,7 +81,6 @@ func Builder(cfg Config) registry.Builder {
 				documentExportOperation.Registration(definitionID, types.OperationRegistration{
 					Description: "Download a OneDrive file and return its content",
 					Policy:      types.ExecutionPolicy{Inline: true},
-					Handle:      Handle(),
 				}),
 				folderSyncOperation.Registration(definitionID, types.OperationRegistration{
 					Description: "List document files in the configured OneDrive folder and emit policy ingest envelopes",
@@ -98,8 +90,7 @@ func Builder(cfg Config) registry.Builder {
 							Schema: entityops.SchemaInternalPolicy.Name,
 						},
 					},
-					IngestHandle: FolderSync{}.IngestHandle(),
-					Schedule:     gala.NewFullFetchSchedule(),
+					Schedule: gala.NewFullFetchSchedule(),
 				}),
 			},
 			Mappings: []types.MappingRegistration{

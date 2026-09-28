@@ -56,22 +56,64 @@ func TestConformToSchema(t *testing.T) {
 func TestConformToSchemaFollowsRefs(t *testing.T) {
 	t.Parallel()
 
-	got, err := ConformToSchema(SchemaFrom[conformOuter](), json.RawMessage(`{"name":"n","nested":{"extra":true},"stale":1}`))
+	tests := []struct {
+		name       string
+		doc        string
+		wantNested string
+		wantAbsent bool
+	}{
+		{name: "strips nested undeclared keys and fills nested defaults", doc: `{"name":"n","nested":{"extra":true},"stale":1}`, wantNested: `{"mode":"fast"}`},
+		{name: "strips nested undeclared keys and keeps declared values", doc: `{"name":"n","nested":{"mode":"slow","extra":true}}`, wantNested: `{"mode":"slow"}`},
+		{name: "leaves a conforming nested object unchanged", doc: `{"name":"n","nested":{"mode":"slow"}}`, wantNested: `{"mode":"slow"}`},
+		{name: "leaves an absent nested object absent", doc: `{"name":"n","stale":1}`, wantAbsent: true},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			got, err := ConformToSchema(SchemaFrom[conformOuter](), json.RawMessage(tc.doc))
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+
+			var out map[string]json.RawMessage
+			if err := json.Unmarshal(got, &out); err != nil {
+				t.Fatalf("decode: %v", err)
+			}
+
+			if _, ok := out["stale"]; ok {
+				t.Fatal("expected the undeclared top-level property to be stripped")
+			}
+
+			nested, present := out["nested"]
+			if tc.wantAbsent {
+				if present {
+					t.Fatalf("expected the nested object to stay absent, got %s", nested)
+				}
+
+				return
+			}
+
+			if string(nested) != tc.wantNested {
+				t.Fatalf("nested = %s, want %s", nested, tc.wantNested)
+			}
+		})
+	}
+}
+
+func TestConformToSchemaInlineNestedObject(t *testing.T) {
+	t.Parallel()
+
+	schema := `{"type":"object","properties":{"sync":{"type":"object","additionalProperties":false,"required":["limit"],"properties":{"limit":{"type":"integer","default":10}}}}}`
+
+	got, err := ConformToSchema(json.RawMessage(schema), json.RawMessage(`{"sync":{"legacy":true},"other":1}`))
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	var out map[string]json.RawMessage
-	if err := json.Unmarshal(got, &out); err != nil {
-		t.Fatalf("decode: %v", err)
-	}
-
-	if _, ok := out["stale"]; ok {
-		t.Fatal("expected the undeclared top-level property to be stripped")
-	}
-
-	if string(out["nested"]) != `{"extra":true}` {
-		t.Fatalf("expected the nested object to pass through unchanged, got %s", out["nested"])
+	if string(got) != `{"other":1,"sync":{"limit":10}}` {
+		t.Fatalf("got %s", got)
 	}
 }
 

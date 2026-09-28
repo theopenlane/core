@@ -25,8 +25,6 @@ var (
 	credentialTestAPIKeyRef    = types.NewCredentialRef[credentialTestAPIKey]("credentialTestAPIKey")
 )
 
-// --- resolveConnectionFromState ---
-
 func TestResolveConnectionFromStateEmptyProviderState(t *testing.T) {
 	t.Parallel()
 
@@ -129,8 +127,6 @@ func TestResolveConnectionFromStateUnknownRef(t *testing.T) {
 		t.Fatalf("expected ErrConnectionNotFound, got %v", err)
 	}
 }
-
-// --- resolveConnectionForCredential ---
 
 func TestResolveConnectionForCredentialFromPersistedState(t *testing.T) {
 	t.Parallel()
@@ -262,8 +258,6 @@ func TestResolveConnectionForCredentialNoStateUnknownRef(t *testing.T) {
 	}
 }
 
-// --- Disconnect ---
-
 func TestDisconnectNilInstallation(t *testing.T) {
 	t.Parallel()
 
@@ -285,8 +279,6 @@ func TestDisconnectMissingDefinition(t *testing.T) {
 		t.Fatalf("expected ErrDefinitionNotFound, got %v", err)
 	}
 }
-
-// --- Reconcile ---
 
 func TestReconcileNilInstallation(t *testing.T) {
 	t.Parallel()
@@ -337,7 +329,6 @@ func TestReconcileEmptyInputNoCredential(t *testing.T) {
 	})
 
 	rt := NewForTesting(reg)
-	// Empty JSON objects and null are treated as empty by jsonx.IsEmptyRawMessage
 	err := rt.Reconcile(context.Background(), &ent.Integration{
 		DefinitionID:      "test-def",
 		DefinitionVersion: reg.Version("test-def"),
@@ -346,8 +337,6 @@ func TestReconcileEmptyInputNoCredential(t *testing.T) {
 		t.Fatalf("expected no error for null input reconcile, got %v", err)
 	}
 }
-
-// --- resolvePersistedConnection (additional cases beyond definitions_test.go) ---
 
 func TestResolvePersistedConnectionSingleConnectionFallback(t *testing.T) {
 	t.Parallel()
@@ -362,6 +351,7 @@ func TestResolvePersistedConnectionSingleConnectionFallback(t *testing.T) {
 		Connections: []types.ConnectionRegistration{
 			{CredentialRef: credRef, Name: "Only Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
 		},
+		HealthCheck: types.CredentialHealthCheck(func(context.Context, types.OperationRequest) (json.RawMessage, error) { return nil, nil }),
 	})
 
 	rt := NewForTesting(reg)
@@ -403,12 +393,10 @@ func TestResolvePersistedConnectionMultipleConnectionsNoState(t *testing.T) {
 	}
 }
 
-// --- checkInstallationInstanceMatch ---
-
-// staticIdentityConnection builds a connection whose installation resolver always answers with the given instance id
-func staticIdentityConnection(instanceID string) types.ConnectionRegistration {
-	return types.ConnectionRegistration{
-		Integration: &types.InstallationRegistration{
+// staticIdentityDefinition builds a definition whose installation resolver always answers with the given instance id
+func staticIdentityDefinition(instanceID string) types.Definition {
+	return types.Definition{
+		Installation: &types.InstallationRegistration{
 			Resolve: func(context.Context, types.InstallationRequest) (types.IntegrationInstallationMetadata, bool, error) {
 				return types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: instanceID}}, true, nil
 			},
@@ -453,8 +441,6 @@ func TestCheckInstallationInstanceMatchAcceptsFirstResolution(t *testing.T) {
 	}
 }
 
-// --- resolveConnectionIdentity ---
-
 func TestResolveConnectionIdentityDoesNotRejectInstanceMismatch(t *testing.T) {
 	t.Parallel()
 
@@ -462,7 +448,7 @@ func TestResolveConnectionIdentityDoesNotRejectInstanceMismatch(t *testing.T) {
 		InstallationMetadata: types.IntegrationInstallationMetadata{Display: types.IntegrationInstallationIdentity{ExternalID: "tenant-a"}},
 	}
 
-	metadata, err := resolveConnectionIdentity(context.Background(), installation, staticIdentityConnection("tenant-b"), nil, nil)
+	metadata, err := resolveConnectionIdentity(context.Background(), installation, staticIdentityDefinition("tenant-b"), types.ConnectionRegistration{}, nil, nil)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -475,16 +461,31 @@ func TestResolveConnectionIdentityDoesNotRejectInstanceMismatch(t *testing.T) {
 func TestResolveConnectionIdentityRejectsResolverWithoutInstanceID(t *testing.T) {
 	t.Parallel()
 
-	connection := types.ConnectionRegistration{
-		Integration: &types.InstallationRegistration{
+	def := types.Definition{
+		Installation: &types.InstallationRegistration{
 			Resolve: func(context.Context, types.InstallationRequest) (types.IntegrationInstallationMetadata, bool, error) {
 				return types.IntegrationInstallationMetadata{}, false, nil
 			},
 		},
 	}
 
-	_, err := resolveConnectionIdentity(context.Background(), &ent.Integration{}, connection, nil, nil)
+	_, err := resolveConnectionIdentity(context.Background(), &ent.Integration{}, def, types.ConnectionRegistration{}, nil, nil)
 	if !errors.Is(err, ErrInstallationInstanceIDRequired) {
 		t.Fatalf("expected ErrInstallationInstanceIDRequired, got %v", err)
+	}
+}
+
+func TestResolveConnectionIdentityFallsBackToSelfWithoutInstallation(t *testing.T) {
+	t.Parallel()
+
+	installation := &ent.Integration{ID: "installation-id"}
+
+	metadata, err := resolveConnectionIdentity(context.Background(), installation, types.Definition{}, types.ConnectionRegistration{}, nil, nil)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	if metadata.Display.ExternalID != installation.ID {
+		t.Fatalf("expected the installation's own id, got %q", metadata.Display.ExternalID)
 	}
 }

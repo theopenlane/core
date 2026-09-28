@@ -31,6 +31,12 @@ type refTestRetiredInput struct {
 	Zone string `json:"zone"`
 }
 
+// refTestSwitchConfig is an operation config type carrying the embedded disable switch
+type refTestSwitchConfig struct {
+	Switch
+	Limit int `json:"limit"`
+}
+
 func TestCredentialRefReplacingConvert(t *testing.T) {
 	t.Parallel()
 
@@ -382,31 +388,196 @@ func TestClientRefCastFailure(t *testing.T) {
 	}
 }
 
-func TestOperationRefUnmarshalConfig(t *testing.T) {
+func TestOperationRefHandles(t *testing.T) {
 	t.Parallel()
 
-	type cfg struct {
-		Name string `json:"name"`
+	definition := NewDefinitionRef("def_001")
+	client := NewClientRef[string]("client")
+
+	ref := NewOperationRef[refTestSwitchConfig]("sync").Handles(client, func(_ context.Context, _ OperationRequest, c string, cfg refTestSwitchConfig) (json.RawMessage, error) {
+		return json.Marshal(struct {
+			Client string `json:"client"`
+			Limit  int    `json:"limit"`
+		}{Client: c, Limit: cfg.Limit})
+	})
+
+	reg := ref.Registration(definition, OperationRegistration{})
+
+	if reg.Handle == nil || reg.IngestHandle != nil {
+		t.Fatalf("expected only Handle projected, got %+v", reg)
 	}
 
-	ref := NewOperationRef[cfg]("cfg")
-	got, err := ref.UnmarshalConfig(json.RawMessage(`{"name":"foo"}`))
-	if err != nil {
-		t.Fatalf("UnmarshalConfig() error = %v", err)
+	if reg.ClientRef != client.ID() {
+		t.Fatalf("ClientRef = %v, want %v", reg.ClientRef, client.ID())
 	}
 
-	if got.Name != "foo" {
-		t.Fatalf("UnmarshalConfig() name = %q, want %q", got.Name, "foo")
+	tests := []struct {
+		name    string
+		request OperationRequest
+		want    string
+		wantErr error
+	}{
+		{name: "passes the typed client and config", request: OperationRequest{Client: "c", Config: json.RawMessage(`{"limit":3}`)}, want: `{"client":"c","limit":3}`},
+		{name: "absent config is the zero config", request: OperationRequest{Client: "c"}, want: `{"client":"c","limit":0}`},
+		{name: "client cast failure", request: OperationRequest{Client: 1, Config: json.RawMessage(`{"limit":3}`)}, wantErr: ErrClientCastFailed},
+		{name: "config decode failure", request: OperationRequest{Client: "c", Config: json.RawMessage(`{"limit":"x"}`)}, wantErr: ErrOperationConfigInvalid},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			got, err := reg.Handle(context.Background(), tc.request)
+
+			if tc.wantErr != nil {
+				if !errors.Is(err, tc.wantErr) {
+					t.Fatalf("expected %v, got %v", tc.wantErr, err)
+				}
+
+				return
+			}
+
+			if err != nil {
+				t.Fatalf("Handle() error = %v", err)
+			}
+
+			if string(got) != tc.want {
+				t.Fatalf("Handle() = %s, want %s", got, tc.want)
+			}
+		})
 	}
 }
 
-func TestOperationRefUnmarshalConfigNil(t *testing.T) {
+func TestOperationRefIngests(t *testing.T) {
 	t.Parallel()
 
-	ref := NewOperationRef[struct{}]("empty")
-	_, err := ref.UnmarshalConfig(nil)
-	if err != nil {
-		t.Fatalf("UnmarshalConfig(nil) error = %v", err)
+	definition := NewDefinitionRef("def_001")
+	client := NewClientRef[string]("client")
+
+	ref := NewOperationRef[refTestSwitchConfig]("sync").Ingests(client, func(_ context.Context, _ OperationRequest, c string, cfg refTestSwitchConfig) ([]IngestPayloadSet, error) {
+		return []IngestPayloadSet{{Schema: c, Envelopes: make([]MappingEnvelope, cfg.Limit)}}, nil
+	})
+
+	reg := ref.Registration(definition, OperationRegistration{})
+
+	if reg.IngestHandle == nil || reg.Handle != nil {
+		t.Fatalf("expected only IngestHandle projected, got %+v", reg)
+	}
+
+	if reg.ClientRef != client.ID() {
+		t.Fatalf("ClientRef = %v, want %v", reg.ClientRef, client.ID())
+	}
+
+	t.Run("passes the typed client and config", func(t *testing.T) {
+		t.Parallel()
+
+		got, err := reg.IngestHandle(context.Background(), OperationRequest{Client: "User", Config: json.RawMessage(`{"limit":2}`)})
+		if err != nil {
+			t.Fatalf("IngestHandle() error = %v", err)
+		}
+
+		if len(got) != 1 || got[0].Schema != "User" || len(got[0].Envelopes) != 2 {
+			t.Fatalf("IngestHandle() = %+v", got)
+		}
+	})
+
+	t.Run("client cast failure", func(t *testing.T) {
+		t.Parallel()
+
+		if _, err := reg.IngestHandle(context.Background(), OperationRequest{Client: 1}); !errors.Is(err, ErrClientCastFailed) {
+			t.Fatalf("expected %v, got %v", ErrClientCastFailed, err)
+		}
+	})
+
+	t.Run("config decode failure", func(t *testing.T) {
+		t.Parallel()
+
+		if _, err := reg.IngestHandle(context.Background(), OperationRequest{Client: "User", Config: json.RawMessage(`not json`)}); !errors.Is(err, ErrOperationConfigInvalid) {
+			t.Fatalf("expected %v, got %v", ErrOperationConfigInvalid, err)
+		}
+	})
+}
+
+func TestOperationRefHandlesRequest(t *testing.T) {
+	t.Parallel()
+
+	definition := NewDefinitionRef("def_001")
+
+	ref := NewOperationRef[refTestSwitchConfig]("sweep").HandlesRequest(func(_ context.Context, _ OperationRequest, cfg refTestSwitchConfig) (json.RawMessage, error) {
+		return json.Marshal(cfg.Limit)
+	})
+
+	reg := ref.Registration(definition, OperationRegistration{})
+
+	if reg.Handle == nil || reg.ClientRef.Valid() {
+		t.Fatalf("expected a client-less Handle projected, got %+v", reg)
+	}
+
+	got, err := reg.Handle(context.Background(), OperationRequest{Config: json.RawMessage(`{"limit":5}`)})
+	if err != nil || string(got) != `5` {
+		t.Fatalf("Handle() = %s, %v", got, err)
+	}
+
+	if _, err := reg.Handle(context.Background(), OperationRequest{Config: json.RawMessage(`[]`)}); !errors.Is(err, ErrOperationConfigInvalid) {
+		t.Fatalf("expected %v, got %v", ErrOperationConfigInvalid, err)
+	}
+}
+
+func TestOperationRefConfigDisabled(t *testing.T) {
+	t.Parallel()
+
+	definition := NewDefinitionRef("def_001")
+
+	t.Run("switchable config projects the switch", func(t *testing.T) {
+		t.Parallel()
+
+		for _, ref := range []OperationRef[refTestSwitchConfig]{NewOperationRef[refTestSwitchConfig]("sync"), OperationRefOf[refTestSwitchConfig]()} {
+			reg := ref.Registration(definition, OperationRegistration{})
+
+			if reg.ConfigDisabled == nil {
+				t.Fatalf("expected ConfigDisabled projected for %s", ref.Name())
+			}
+
+			if !reg.ConfigDisabled(json.RawMessage(`{"disable":true}`)) {
+				t.Fatal("expected a set switch to disable the operation")
+			}
+
+			if reg.ConfigDisabled(json.RawMessage(`{"disable":false,"limit":1}`)) || reg.ConfigDisabled(nil) {
+				t.Fatal("expected an unset or absent switch to leave the operation enabled")
+			}
+
+			if reg.ConfigDisabled(json.RawMessage(`not json`)) {
+				t.Fatal("expected an undecodable section to leave the operation enabled")
+			}
+
+			if reg.Disabled != nil || reg.ConfigResolver != nil {
+				t.Fatal("expected Registration not to touch Disabled or ConfigResolver")
+			}
+		}
+	})
+
+	t.Run("config without a switch projects nothing", func(t *testing.T) {
+		t.Parallel()
+
+		if reg := NewOperationRef[refTestInput]("plain").Registration(definition, OperationRegistration{}); reg.ConfigDisabled != nil {
+			t.Fatal("expected no ConfigDisabled for a config without a switch")
+		}
+	})
+}
+
+func TestOperationRefReplacing(t *testing.T) {
+	t.Parallel()
+
+	definition := NewDefinitionRef("def_001")
+	base := NewOperationRef[refTestInput]("current")
+	replaced := base.Replacing(NewOperationRef[struct{}]("zeta")).Replacing(NewOperationRef[refTestRetiredInput]("alpha")).Replacing(NewOperationRef[struct{}]("zeta"))
+
+	if got := replaced.Registration(definition, OperationRegistration{}).Replaces; !slices.Equal(got, []string{"alpha", "zeta"}) {
+		t.Fatalf("Replaces = %v, want sorted unique [alpha zeta]", got)
+	}
+
+	if got := base.Registration(definition, OperationRegistration{}).Replaces; got != nil {
+		t.Fatalf("expected the source ref to stay without replacements, got %v", got)
 	}
 }
 
@@ -487,6 +658,10 @@ func TestCredentialRefRegistration(t *testing.T) {
 			t.Fatalf("expected the authored schema preserved, got %s", reg.Schema)
 		}
 
+		if string(reg.StoredSchema) != string(plain.Schema()) {
+			t.Fatalf("expected StoredSchema from the ref, got %s", reg.StoredSchema)
+		}
+
 		if len(reg.Replaces) != 0 || reg.Convert != nil || reg.Backfill != nil {
 			t.Fatalf("expected no lifecycle on a plain slot, got %+v", reg)
 		}
@@ -531,6 +706,10 @@ func TestCredentialRefRegistration(t *testing.T) {
 
 		if len(reg.Schema) != 0 {
 			t.Fatalf("expected Registration not to fill Schema, got %s", reg.Schema)
+		}
+
+		if string(reg.StoredSchema) != string(plain.Schema()) {
+			t.Fatalf("expected StoredSchema from the ref, got %s", reg.StoredSchema)
 		}
 	})
 }
@@ -670,7 +849,9 @@ func TestOperationRefRegistration(t *testing.T) {
 	t.Run("with a client", func(t *testing.T) {
 		t.Parallel()
 
-		reg := NewOperationRef[refTestInput]("refTestInput").Using(client).Registration(definition, base)
+		reg := NewOperationRef[refTestInput]("refTestInput").Handles(client, func(context.Context, OperationRequest, string, refTestInput) (json.RawMessage, error) {
+			return nil, nil
+		}).Registration(definition, base)
 
 		if reg.ClientRef != client.ID() {
 			t.Fatalf("ClientRef = %v, want %v", reg.ClientRef, client.ID())
@@ -688,37 +869,21 @@ func TestOperationRefRegistration(t *testing.T) {
 	})
 }
 
-func TestOperationRefUsingDoesNotAliasTheReceiver(t *testing.T) {
+func TestOperationRefHandlesDoesNotAliasTheReceiver(t *testing.T) {
 	t.Parallel()
 
 	definition := NewDefinitionRef("def_001")
 	base := NewOperationRef[refTestInput]("refTestInput")
-	bound := base.Using(NewClientRef[string]("client"))
+	bound := base.Handles(NewClientRef[string]("client"), func(context.Context, OperationRequest, string, refTestInput) (json.RawMessage, error) {
+		return nil, nil
+	})
 
-	if base.Registration(definition, OperationRegistration{}).ClientRef.Valid() {
+	if reg := base.Registration(definition, OperationRegistration{}); reg.ClientRef.Valid() || reg.Handle != nil {
 		t.Fatal("expected the source ref to stay unbound")
 	}
 
-	if !bound.Registration(definition, OperationRegistration{}).ClientRef.Valid() {
-		t.Fatal("expected the bound ref to carry the client")
-	}
-}
-
-func TestOperationRefConfigFrom(t *testing.T) {
-	t.Parallel()
-
-	type userInput struct {
-		Sync refTestInput `json:"sync"`
-	}
-
-	resolve := NewOperationRef[refTestInput]("refTestInput").ConfigFrom(func(u userInput) refTestInput { return u.Sync })
-
-	if got := resolve(json.RawMessage(`{"sync":{"region":"eu"}}`)); string(got) != `{"region":"eu"}` {
-		t.Fatalf("ConfigFrom() = %s", got)
-	}
-
-	if got := resolve(json.RawMessage(`not json`)); got != nil {
-		t.Fatalf("expected nil on undecodable input, got %s", got)
+	if reg := bound.Registration(definition, OperationRegistration{}); !reg.ClientRef.Valid() || reg.Handle == nil {
+		t.Fatal("expected the bound ref to carry the client and handler")
 	}
 }
 
@@ -733,6 +898,25 @@ func TestWebhookRefRegistration(t *testing.T) {
 
 	if reg.StaticRoute != "/hooks" || !slices.Equal(reg.Replaces, []string{"old"}) {
 		t.Fatalf("expected base fields preserved, got %+v", reg)
+	}
+}
+
+func TestWebhookRefReplacing(t *testing.T) {
+	t.Parallel()
+
+	base := NewWebhookRef("installation.events")
+	replaced := base.Replacing(NewWebhookRef("zeta.events")).Replacing(NewWebhookRef("alpha.events")).Replacing(NewWebhookRef("zeta.events"))
+
+	if got := replaced.Registration(WebhookRegistration{}).Replaces; !slices.Equal(got, []string{"alpha.events", "zeta.events"}) {
+		t.Fatalf("Replaces = %v, want sorted unique [alpha.events zeta.events]", got)
+	}
+
+	if got := base.Registration(WebhookRegistration{}).Replaces; got != nil {
+		t.Fatalf("expected the source ref to stay without replacements, got %v", got)
+	}
+
+	if replaced.Name() != "installation.events" {
+		t.Fatalf("expected Replacing to keep the contract name, got %q", replaced.Name())
 	}
 }
 
@@ -774,8 +958,7 @@ func TestConnectionRefRegistration(t *testing.T) {
 	t.Run("derives the credential and clients", func(t *testing.T) {
 		t.Parallel()
 
-		authored := []CredentialSlotID{cred.ID(), other.ID()}
-		reg := ref.Registration(ConnectionRegistration{Name: "Token", CredentialRefs: authored})
+		reg := ref.Registration(ConnectionRegistration{Name: "Token", CredentialRefs: []CredentialSlotID{other.ID()}})
 
 		if reg.CredentialRef != cred.ID() {
 			t.Fatalf("CredentialRef = %q, want %q", reg.CredentialRef, cred.ID())
@@ -785,8 +968,8 @@ func TestConnectionRefRegistration(t *testing.T) {
 			t.Fatalf("ClientRefs = %v", reg.ClientRefs)
 		}
 
-		if !slices.Equal(reg.CredentialRefs, authored) {
-			t.Fatalf("expected CredentialRefs untouched, got %v", reg.CredentialRefs)
+		if !slices.Equal(reg.CredentialRefs, []CredentialSlotID{cred.ID()}) {
+			t.Fatalf("expected CredentialRefs derived from the selecting slot, got %v", reg.CredentialRefs)
 		}
 
 		if reg.Name != "Token" {
@@ -794,11 +977,109 @@ func TestConnectionRefRegistration(t *testing.T) {
 		}
 	})
 
-	t.Run("leaves unset credential refs unset", func(t *testing.T) {
+	t.Run("projects the credential onto the disconnect flow without aliasing base", func(t *testing.T) {
 		t.Parallel()
 
-		if reg := ref.Registration(ConnectionRegistration{}); reg.CredentialRefs != nil {
-			t.Fatalf("expected nil CredentialRefs, got %v", reg.CredentialRefs)
+		disconnect := &DisconnectRegistration{Description: "teardown"}
+		reg := ref.Registration(ConnectionRegistration{Disconnect: disconnect})
+
+		if reg.Disconnect == nil || reg.Disconnect.CredentialRef != cred.ID() || reg.Disconnect.Description != "teardown" {
+			t.Fatalf("Disconnect = %+v", reg.Disconnect)
+		}
+
+		if disconnect.CredentialRef != (CredentialSlotID{}) {
+			t.Fatal("expected the authored disconnect registration left unmodified")
+		}
+	})
+
+	t.Run("leaves an absent disconnect absent", func(t *testing.T) {
+		t.Parallel()
+
+		if reg := ref.Registration(ConnectionRegistration{}); reg.Disconnect != nil {
+			t.Fatalf("expected nil Disconnect, got %+v", reg.Disconnect)
+		}
+	})
+}
+
+func TestClientRefHealthCheck(t *testing.T) {
+	t.Parallel()
+
+	client := NewClientRef[string]("client")
+	check := client.HealthCheck(func(_ context.Context, _ OperationRequest, c string) (json.RawMessage, error) {
+		return json.Marshal(c)
+	})
+
+	if check.ClientRef != client.ID() {
+		t.Fatalf("ClientRef = %v, want %v", check.ClientRef, client.ID())
+	}
+
+	got, err := check.Handle(context.Background(), OperationRequest{Client: "live"})
+	if err != nil || string(got) != `"live"` {
+		t.Fatalf("Handle() = %s, %v", got, err)
+	}
+
+	if _, err := check.Handle(context.Background(), OperationRequest{Client: 1}); !errors.Is(err, ErrClientCastFailed) {
+		t.Fatalf("expected %v, got %v", ErrClientCastFailed, err)
+	}
+}
+
+func TestCredentialHealthCheck(t *testing.T) {
+	t.Parallel()
+
+	check := CredentialHealthCheck(func(_ context.Context, req OperationRequest) (json.RawMessage, error) {
+		return json.Marshal(len(req.Credentials))
+	})
+
+	if check.ClientRef.Valid() {
+		t.Fatal("expected a credential health check to carry no client")
+	}
+
+	got, err := check.Handle(context.Background(), OperationRequest{Credentials: CredentialBindings{{Ref: NewCredentialSlotID("slot")}}})
+	if err != nil || string(got) != `1` {
+		t.Fatalf("Handle() = %s, %v", got, err)
+	}
+}
+
+func TestUserInputRefRegistration(t *testing.T) {
+	t.Parallel()
+
+	t.Run("plain layout projects only the schema", func(t *testing.T) {
+		t.Parallel()
+
+		reg := NewUserInputRef[refTestInput]("refTestInput").Registration()
+
+		if jsonx.SchemaID(reg.Schema) != "refTestInput" {
+			t.Fatalf("expected the reflected schema, got %s", reg.Schema)
+		}
+
+		if len(reg.Replaces) != 0 || reg.Convert != nil || reg.Backfill != nil {
+			t.Fatalf("expected no lifecycle on a plain layout, got %+v", reg)
+		}
+	})
+
+	t.Run("lifecycle layout projects convert and backfill", func(t *testing.T) {
+		t.Parallel()
+
+		reg := NewUserInputRef[refTestInput]("refTestInput").Replacing(NewUserInputRef[refTestRetiredInput]("refTestRetiredInput"), func(r refTestRetiredInput) refTestInput {
+			return refTestInput{Region: r.Zone}
+		}).Backfilled(func(_ context.Context, _ InstallationRequest, in *refTestInput) error {
+			in.Region = "derived"
+
+			return nil
+		}).Registration()
+
+		if !slices.Equal(reg.Replaces, []string{"refTestRetiredInput"}) {
+			t.Fatalf("Replaces = %v", reg.Replaces)
+		}
+
+		converted, err := reg.Convert(json.RawMessage(`{"zone":"eu"}`))
+		if err != nil || string(converted) != `{"region":"eu"}` {
+			t.Fatalf("Convert() = %s, %v", converted, err)
+		}
+
+		filled, err := reg.Backfill(context.Background(), InstallationRequest{}, json.RawMessage(`{"region":""}`))
+		if err != nil || string(filled) != `{"region":"derived"}` {
+			t.Fatalf("Backfill() = %s, %v", filled, err)
 		}
 	})
 }

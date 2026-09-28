@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -88,24 +87,11 @@ type directoryMembershipPayload struct {
 	Member directoryEntityRef `json:"member"`
 }
 
-// DirectorySync collects Azure Entra ID directory users, groups, and memberships for ingest
-type DirectorySync struct{}
+// directorySyncOperation is the Azure Entra ID directory sync operation
+var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(entraClient, runDirectorySync)
 
-// IngestHandle adapts directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(entraClient, func(ctx context.Context, request types.OperationRequest, c *msgraphsdk.GraphServiceClient) ([]types.IngestPayloadSet, error) {
-		var cfg UserInput
-
-		if request.Integration != nil {
-			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
-		}
-
-		return d.Run(ctx, c, cfg)
-	})
-}
-
-// Run collects Azure Entra ID directory users, groups, and memberships
-func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, cfg UserInput) ([]types.IngestPayloadSet, error) {
+// runDirectorySync collects Azure Entra ID directory users, groups, and memberships
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *msgraphsdk.GraphServiceClient, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listEntraUsers(ctx, c)
 	if err != nil {
 		return nil, err
@@ -241,8 +227,7 @@ func paginateOData[T any, P odataPage[T]](ctx context.Context, fetchFirst func()
 	return items, nil
 }
 
-// userSelectFields are the Graph API fields explicitly requested for user listings;
-// accountEnabled is not returned by default and must be $selected
+// userSelectFields are the Graph API fields explicitly requested for user listings; accountEnabled is not returned by default and must be $selected
 var userSelectFields = []string{
 	"id", "displayName", "mail", "userPrincipalName", "otherMails",
 	"accountEnabled", "userType", "department", "givenName", "surname", "jobTitle",
@@ -318,7 +303,7 @@ func listEntraGroupUserMembers(ctx context.Context, c *msgraphsdk.GraphServiceCl
 }
 
 // isEntraUserIncluded applies inclusion filters based on installation config
-func isEntraUserIncluded(user models.Userable, cfg UserInput) bool {
+func isEntraUserIncluded(user models.Userable, cfg DirectorySync) bool {
 	if !cfg.IncludeGuestUsers && strings.EqualFold(lo.FromPtr(user.GetUserType()), "Guest") {
 		return false
 	}

@@ -19,8 +19,6 @@ var (
 	ErrCompartmentRequired = errors.New("oci: compartment or tenancy OCID required")
 	// ErrListProblemsFailed indicates the Cloud Guard problem listing request failed
 	ErrListProblemsFailed = errors.New("oci: list problems failed")
-	// ErrOperationConfigInvalid indicates operation config could not be decoded
-	ErrOperationConfigInvalid = errors.New("oci: operation config invalid")
 	// ErrPayloadEncode indicates a provider payload could not be serialized
 	ErrPayloadEncode = errors.New("oci: payload encode failed")
 	// ErrResultEncode indicates an operation result could not be serialized

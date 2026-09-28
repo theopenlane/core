@@ -15,15 +15,15 @@ var DefinitionID = types.NewDefinitionRef("def_01K0TESTDEF0000000000000001")
 
 var (
 	// RepoSyncOp is the async client-resolving operation
-	RepoSyncOp = types.OperationRefOf[repoSync]().Using(testClient)
+	RepoSyncOp = types.OperationRefOf[repoSync]().Handles(testClient, repoSyncHandler)
 	// ValidatedOp is the inline operation with a required config field
-	ValidatedOp = types.OperationRefOf[validatedRun]()
+	ValidatedOp = types.OperationRefOf[validatedRun]().HandlesRequest(validatedHandler)
 	// RecurringOp is the healthy idle loop
-	RecurringOp = types.OperationRefOf[recurringCycle]()
+	RecurringOp = types.OperationRefOf[recurringCycle]().HandlesRequest(idleCycle[recurringCycle])
 	// ExhaustingOp is the always-failing loop
-	ExhaustingOp = types.OperationRefOf[exhaustingCycle]()
+	ExhaustingOp = types.OperationRefOf[exhaustingCycle]().HandlesRequest(failingCycle)
 	// UnresolvableOp is the client-resolving loop seeded without a credential
-	UnresolvableOp = types.OperationRefOf[unresolvableCycle]().Using(testClient)
+	UnresolvableOp = types.OperationRefOf[unresolvableCycle]().Handles(testClient, idleClientCycle)
 
 	// LegacyTokenCredential is the slot an earlier definition version stored the token under; it is not registered
 	LegacyTokenCredential = types.CredentialRefOf[legacyTokenCred]()
@@ -52,6 +52,9 @@ var (
 
 	// WebhookAlertCreated is the webhook event contract
 	WebhookAlertCreated = types.NewWebhookEventRef[webhookAlertEnvelope]("alert.created")
+
+	// userInput is the installation user input layout for the shared test definition
+	userInput = types.NewUserInputRef[UserInput]("test-input")
 )
 
 const (

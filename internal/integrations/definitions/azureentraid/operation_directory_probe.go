@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 
-	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 	"github.com/microsoftgraph/msgraph-sdk-go/users"
 
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
@@ -21,14 +20,14 @@ type DirectoryProbe struct {
 	DirectoryReadable bool `json:"directoryReadable"`
 }
 
-// Handle adapts the probe to the operation health check boundary
-func (p DirectoryProbe) Handle() types.OperationHandler {
-	return providerkit.WithClient(entraClient, p.Run)
-}
+// probeDirectory verifies the granted Graph permissions can read the directory by fetching a single user
+func probeDirectory(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+	c, err := entraClient.Cast(req.Client)
+	if err != nil {
+		return nil, err
+	}
 
-// Run verifies the granted Graph permissions can read the directory by fetching a single user
-func (DirectoryProbe) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient) (json.RawMessage, error) {
-	_, err := c.Users().Get(ctx, &users.UsersRequestBuilderGetRequestConfiguration{
+	_, err = c.Users().Get(ctx, &users.UsersRequestBuilderGetRequestConfiguration{
 		QueryParameters: &users.UsersRequestBuilderGetQueryParameters{Top: new(int32(1))},
 	})
 	if err != nil {

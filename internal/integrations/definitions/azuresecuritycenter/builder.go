@@ -4,7 +4,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Builder returns the Azure Security Center definition builder
@@ -22,29 +21,21 @@ func Builder() registry.Builder {
 				Active:      false,
 				Visible:     true,
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput:    userInput.Registration(),
+			HealthCheck:  securityCenterClient.HealthCheck(checkHealth),
+			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				securityCenterCredential.Registration(types.CredentialRegistration{
 					Name:        "Azure Security Center Credential",
 					Description: "Azure service principal used to access Microsoft Defender for Cloud.",
-					Schema:      securityCenterCredential.Schema(),
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
 				securityCenterConnection.Registration(types.ConnectionRegistration{
-					Name:           "Azure Service Principal",
-					Description:    "Configure Defender for Cloud access using an Azure service principal.",
-					CredentialRefs: []types.CredentialSlotID{securityCenterCredential.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: securityCenterClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: installation.Registration(),
+					Name:        "Azure Service Principal",
+					Description: "Configure Defender for Cloud access using an Azure service principal.",
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: securityCenterCredential.ID(),
-						Description:   "Removes the stored service principal credentials from Openlane. If the Azure app registration is no longer needed, delete it from your Azure tenant.",
+						Description: "Removes the stored service principal credentials from Openlane. If the Azure app registration is no longer needed, delete it from your Azure tenant.",
 					},
 				}),
 			},
@@ -62,7 +53,6 @@ func Builder() registry.Builder {
 							Schema: entityops.SchemaVulnerability.Name,
 						},
 					},
-					IngestHandle: AssessmentsCollect{}.IngestHandle(),
 				}),
 				subAssessmentsCollectOperation.Registration(definitionID, types.OperationRegistration{
 					Description: "Collect granular sub-assessment vulnerability findings (CVEs from container images, servers, and SQL checks)",
@@ -72,7 +62,6 @@ func Builder() registry.Builder {
 							Schema: entityops.SchemaVulnerability.Name,
 						},
 					},
-					IngestHandle: SubAssessmentsCollect{}.IngestHandle(),
 				}),
 			},
 			Mappings: []types.MappingRegistration{

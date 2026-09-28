@@ -39,9 +39,9 @@ func Builder(cfg Config) registry.Builder {
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput:    userInput.Registration(),
+			HealthCheck:  workspaceClient.HealthCheck(checkHealth),
+			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				workspaceCredential.Registration(types.CredentialRegistration{
 					Name:        "Google Workspace Credential",
@@ -50,14 +50,8 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				workspaceConnection.Registration(types.ConnectionRegistration{
-					Name:           "Google Workspace OAuth",
-					Description:    "Connect your Google Workspace domain using OAuth.",
-					CredentialRefs: []types.CredentialSlotID{workspaceCredential.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: workspaceClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: installation.Registration(),
+					Name:        "Google Workspace OAuth",
+					Description: "Connect your Google Workspace domain using OAuth.",
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[googleWorkspaceCred]{
 						CredentialRef: workspaceCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -82,8 +76,7 @@ func Builder(cfg Config) registry.Builder {
 						EncodeCredentialError: ErrCredentialEncode,
 					}),
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: workspaceCredential.ID(),
-						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Google Workspace admin console under Security > API controls.",
+						Description: "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Google Workspace admin console under Security > API controls.",
 					},
 				}),
 			},
@@ -107,7 +100,6 @@ func Builder(cfg Config) registry.Builder {
 							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
-					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: directorySyncScopes,
 					Schedule:            gala.NewFullFetchSchedule(),

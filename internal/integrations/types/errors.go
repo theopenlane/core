@@ -13,12 +13,11 @@ var (
 	ErrNotReplaced = errors.New("integrations: retired name not replaced")
 	// ErrLayoutMismatch indicates a payload does not match the retired layout it was stored under
 	ErrLayoutMismatch = errors.New("integrations: payload does not match retired layout")
+	// ErrOperationConfigInvalid indicates an operation config payload could not be decoded into the operation's config type
+	ErrOperationConfigInvalid = errors.New("operation config invalid")
 )
 
-// UnhealthyError marks an operation failure as terminal for recurring cycles: the installation
-// cannot recover without user action such as reauthorization or reconfiguration, so the runtime
-// marks the integration unhealthy, notifies the owning organization, and stops the loop instead
-// of retrying with backoff forever
+// UnhealthyError marks an operation failure as terminal for recurring cycles: the installation cannot recover without user action such as reauthorization or reconfiguration, so the runtime marks the integration unhealthy, notifies the owning organization, and stops the loop instead of retrying with backoff forever
 type UnhealthyError struct {
 	// Reason is the user-facing explanation included in the organization notification
 	Reason string
@@ -46,10 +45,7 @@ func UnhealthyFrom(err error) (*UnhealthyError, bool) {
 	return errors.AsType[*UnhealthyError](err)
 }
 
-// DegradedError marks an operation failure as terminal for that operation only: the
-// installation's credentials remain valid but a prerequisite specific to this operation is
-// absent, so the runtime records the operation unhealthy and stops its loop while the rest
-// of the installation keeps running
+// DegradedError marks an operation failure as terminal for that operation only: the installation's credentials remain valid but a prerequisite specific to this operation is absent, so the runtime records the operation unhealthy and stops its loop while the rest of the installation keeps running
 type DegradedError struct {
 	// Reason is the user-facing explanation recorded against the operation
 	Reason string

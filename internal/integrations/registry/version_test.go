@@ -49,13 +49,14 @@ func surfaceDefinition(id string) integrationtypes.Definition {
 	}
 
 	def.Connections = []integrationtypes.ConnectionRegistration{
-		{
-			CredentialRef: testCredentialRef.ID(),
-			Integration: integrationtypes.NewInstallationRef(func(context.Context, integrationtypes.InstallationRequest) (versionMetadata, bool, error) {
-				return versionMetadata{}, true, nil
-			}).Registration(),
-		},
+		{CredentialRef: testCredentialRef.ID()},
 	}
+
+	def.HealthCheck = &integrationtypes.HealthCheckRegistration{ClientRef: clientRef.ID(), Handle: newTestHandler()}
+
+	def.Installation = integrationtypes.NewInstallationRef(func(context.Context, integrationtypes.InstallationRequest) (versionMetadata, bool, error) {
+		return versionMetadata{}, true, nil
+	}).Registration()
 
 	def.Operations = []integrationtypes.OperationRegistration{
 		{
@@ -129,20 +130,20 @@ func TestDefinitionSurface(t *testing.T) {
 		t.Fatal("expected the user input schema to be surfaced")
 	}
 
-	if got := lo.Map(surface.Metadata, func(m SurfaceConnectionMetadata, _ int) string { return m.Connection }); !slices.Equal(got, []string{testCredentialRef.String()}) {
-		t.Fatalf("Metadata connections = %v", got)
+	if surface.Installation == nil || len(surface.Installation.Schema) == 0 {
+		t.Fatal("expected the installation metadata schema to be surfaced")
 	}
 
-	if len(surface.Metadata[0].Schema) == 0 {
-		t.Fatal("expected the metadata schema to be surfaced")
-	}
-
-	if got := lo.Map(surface.Operations, func(o SurfaceNamed, _ int) string { return o.Name }); !slices.Equal(got, []string{"sync.groups", "sync.users"}) {
+	if got := lo.Map(surface.Operations, func(o SurfaceOperation, _ int) string { return o.Name }); !slices.Equal(got, []string{"sync.groups", "sync.users"}) {
 		t.Fatalf("Operations = %v, want sorted names", got)
 	}
 
 	if got := surface.Operations[1].Replaces; !slices.Equal(got, []string{"sync.people"}) {
 		t.Fatalf("sync.users Replaces = %v", got)
+	}
+
+	if len(surface.Operations[0].Schema) == 0 || len(surface.Operations[1].Schema) == 0 {
+		t.Fatal("expected every operation's config schema to be surfaced")
 	}
 
 	if got := lo.Map(surface.Webhooks, func(w SurfaceWebhook, _ int) string { return w.Name }); !slices.Equal(got, []string{"events.v2", "static"}) {
@@ -161,7 +162,12 @@ func TestDefinitionSurface(t *testing.T) {
 		t.Fatalf("static webhook = %+v, want no events and no replacements", surface.Webhooks[1])
 	}
 
-	minimal, _ := minimalDefinition("minimal-def")
+	unfinalized, _ := minimalDefinition("minimal-def")
+
+	minimal, err := finalizeDefinition(unfinalized)
+	if err != nil {
+		t.Fatalf("finalize: %v", err)
+	}
 
 	encoded, err := json.Marshal(DefinitionSurface(minimal))
 	if err != nil {
@@ -173,7 +179,7 @@ func TestDefinitionSurface(t *testing.T) {
 		t.Fatalf("decode: %v", err)
 	}
 
-	for _, absent := range []string{"userInput", "metadata", "webhooks"} {
+	for _, absent := range []string{"userInput", "installation", "webhooks"} {
 		if _, present := keys[absent]; present {
 			t.Fatalf("expected %s to be omitted from a surface without it: %s", absent, encoded)
 		}
@@ -247,18 +253,16 @@ func TestVersionIsStableAndChangesWithTheDefinition(t *testing.T) {
 	}
 
 	requiredField, _ := minimalDefinition("version-def")
-	requiredField.CredentialRegistrations[0].Schema = jsonx.SchemaFrom[testCredential]()
+	requiredField.CredentialRegistrations[0].StoredSchema = jsonx.SchemaFrom[testCredential]()
 
 	addedSlot, _ := minimalDefinition("version-def")
-	addedSlot.CredentialRegistrations = append(addedSlot.CredentialRegistrations, integrationtypes.CredentialRegistration{
-		Ref:    versionSecondCredentialRef.ID(),
-		Schema: versionSecondCredentialRef.Schema(),
-	})
+	addedSlot.CredentialRegistrations = append(addedSlot.CredentialRegistrations, versionSecondCredentialRef.Registration(integrationtypes.CredentialRegistration{}))
 
 	connectionAdded, _ := minimalDefinition("version-def")
 	connectionAdded.Connections = []integrationtypes.ConnectionRegistration{
 		{CredentialRef: testCredentialRef.ID()},
 	}
+	connectionAdded.HealthCheck = newTestHealthCheck()
 
 	for name, def := range map[string]integrationtypes.Definition{
 		"same slot with a required field": requiredField,
@@ -301,5 +305,87 @@ func TestVersionChangesWhenASlotDeclaresAReplacement(t *testing.T) {
 
 	if got, want := surface.Credentials[0].Replaces, []string{versionSecondCredentialRef.String()}; !slices.Equal(got, want) {
 		t.Fatalf("Replaces = %v, want %v", got, want)
+	}
+}
+
+// TestVersionChangesWithSurfacedNameAndSchemaFields verifies each independently changeable surfaced field moves the version when nothing else about the definition changes
+func TestVersionChangesWithSurfacedNameAndSchemaFields(t *testing.T) {
+	t.Parallel()
+
+	base := surfaceDefinition("version-def")
+
+	webhookName := surfaceDefinition("version-def")
+	webhookName.Webhooks[0].Name = "static-v2"
+
+	webhookReplaces := surfaceDefinition("version-def")
+	webhookReplaces.Webhooks[0].Replaces = []string{"static-old"}
+
+	webhookEventName := surfaceDefinition("version-def")
+	webhookEventName.Webhooks[1].Events[0].Name = "member.left"
+
+	userInputSchema := surfaceDefinition("version-def")
+	userInputSchema.UserInput.Schema = json.RawMessage(`{"type":"object","required":["different"]}`)
+
+	installationSchema := surfaceDefinition("version-def")
+	installationSchema.Installation.Schema = json.RawMessage(`{"type":"object","properties":{"zone":{"type":"string"}}}`)
+
+	operationConfigSchema := surfaceDefinition("version-def")
+	operationConfigSchema.Operations[0].ConfigSchema = json.RawMessage(`{"type":"object","required":["limit"]}`)
+
+	for name, def := range map[string]integrationtypes.Definition{
+		"webhook name":              webhookName,
+		"webhook replaces declared": webhookReplaces,
+		"webhook event name":        webhookEventName,
+		"user input schema alone":   userInputSchema,
+		"installation schema":       installationSchema,
+		"operation config schema":   operationConfigSchema,
+	} {
+		if versionOf(t, def) == versionOf(t, base) {
+			t.Fatalf("%s: expected the version to change", name)
+		}
+	}
+}
+
+// TestVersionUnchangedForDescriptionMetaAndHandlers verifies fields absent from the surface leave the version unchanged
+func TestVersionUnchangedForDescriptionMetaAndHandlers(t *testing.T) {
+	t.Parallel()
+
+	base := surfaceDefinition("version-def")
+
+	changed := surfaceDefinition("version-def")
+	changed.Description = "a new description"
+	changed.Connections[0].Meta = map[string]integrationtypes.MetaInfo{"note": {Value: "hello"}}
+	changed.Operations[0].Handle = newTestHandler()
+	changed.Webhooks[1].Events[0].Handle = func(context.Context, integrationtypes.WebhookHandleRequest) error { return nil }
+
+	if versionOf(t, changed) != versionOf(t, base) {
+		t.Fatal("expected description, meta, and handler changes to leave the version unchanged")
+	}
+}
+
+// TestVersionChangesWhenAuthManagedCredentialSchemaChanges verifies an auth-managed slot's stored schema moves the version although the slot has no form schema
+func TestVersionChangesWhenAuthManagedCredentialSchemaChanges(t *testing.T) {
+	t.Parallel()
+
+	build := func(storedSchema json.RawMessage) integrationtypes.Definition {
+		def, _ := minimalDefinition("version-def")
+		def.CredentialRegistrations = append(def.CredentialRegistrations, integrationtypes.CredentialRegistration{Ref: testAuthCredentialRef.ID(), StoredSchema: storedSchema})
+		def.Connections = []integrationtypes.ConnectionRegistration{
+			{
+				CredentialRef:  testAuthCredentialRef.ID(),
+				CredentialRefs: []integrationtypes.CredentialSlotID{testAuthCredentialRef.ID()},
+				Auth:           &integrationtypes.AuthRegistration{CredentialRef: testAuthCredentialRef.ID()},
+			},
+		}
+		def.HealthCheck = newTestHealthCheck()
+
+		return def
+	}
+
+	base := build(testAuthCredentialRef.Schema())
+	changed := build(json.RawMessage(`{"type":"object","required":["token"]}`))
+
+	if versionOf(t, changed) == versionOf(t, base) {
+		t.Fatal("expected an auth-managed credential's Auth schema to change the version")
 	}
 }

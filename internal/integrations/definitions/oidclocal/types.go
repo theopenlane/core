@@ -15,8 +15,6 @@ var (
 	oidcCredential = types.CredentialRefOf[oidcLocalCred]()
 	// oidcConnection is the connection mode selected by the local OIDC credential slot
 	oidcConnection = types.NewConnectionRef(oidcCredential)
-	// claimsInspectOperation is the operation ref for the OIDC claims inspection operation
-	claimsInspectOperation = types.OperationRefOf[ClaimsInspect]()
 )
 
 // oidcLocalCred holds the provider-owned credential material for a local OIDC installation

@@ -15,8 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// emitReconcileLoop starts one operation's loop unless a live one exists; the metadata guard is
-// what stops seeds from spawning parallel chains, since successor cycles change their unique key
+// emitReconcileLoop starts one operation's loop unless a live one exists; the metadata guard is what stops seeds from spawning parallel chains, since successor cycles change their unique key
 func (r *Runtime) emitReconcileLoop(ctx context.Context, installation *ent.Integration, operationName string) error {
 	oc := types.NewOperationContext(installation.OwnerID, operationName, types.IntegrationSource{
 		IntegrationID: installation.ID,
@@ -62,11 +61,7 @@ func (r *Runtime) emitReconcileLoop(ctx context.Context, installation *ent.Integ
 	return nil
 }
 
-// reconcileLoopFragment builds the JSONB containment fragment matching one operation's recurring
-// loop jobs on one installation; the keys must match the emitted GetPropertiesForOperationContext
-// projection, where installation-bound contexts promote the integration as the operation's entity
-// (entityId) and the reconcile run type keeps the match disjoint from one-shot event jobs sharing
-// the same installation and operation
+// reconcileLoopFragment builds the JSONB containment fragment matching one operation's recurring loop jobs on one installation; the keys must match the emitted GetPropertiesForOperationContext projection, where installation-bound contexts promote the integration as the operation's entity (entityId) and the reconcile run type keeps the match disjoint from one-shot event jobs sharing the same installation and operation
 func reconcileLoopFragment(integrationID, operationName string) (string, error) {
 	return types.PropertiesFragment(map[string]string{
 		"entityId":  integrationID,
@@ -104,10 +99,7 @@ func (r *Runtime) markReconcileExhausted(ctx context.Context, e operations.Recon
 	}
 }
 
-// ResetReconcileLoops collapses each reconcilable operation on the installation to exactly one
-// recurring loop: an operation already running a single loop is left untouched (preserving its
-// adaptive schedule state), while zero or multiple loops are cancelled and reseeded as one fresh
-// unique loop
+// ResetReconcileLoops collapses each reconcilable operation on the installation to exactly one recurring loop: an operation already running a single loop is left untouched (preserving its adaptive schedule state), while zero or multiple loops are cancelled and reseeded as one fresh unique loop
 func (r *Runtime) ResetReconcileLoops(ctx context.Context, installation *ent.Integration) error {
 	if !lo.Contains(enums.IntegrationOperationalStatuses, installation.Status) {
 		return nil
@@ -140,7 +132,7 @@ func (r *Runtime) ResetReconcileLoops(ctx context.Context, installation *ent.Int
 			continue
 		}
 
-		if op.Disabled != nil && op.Disabled(installation.Config.ClientConfig) {
+		if op.DisabledFor(installation.Config.ClientConfig) {
 			continue
 		}
 

@@ -39,6 +39,45 @@ type retiredUserInput struct {
 	Zone string `json:"zone"`
 }
 
+// upgradeCredentialRegion is the credential type with a region required by presence only, so an empty stored value still satisfies schema validation without the declared backfill
+type upgradeCredentialRegion struct {
+	// Token is the token field
+	Token string `json:"token"`
+	// Region is required by presence only
+	Region string `json:"region" jsonschema:"required"`
+}
+
+// flatDirectoryUserInput is the retired layout carrying an optional knob at the top level
+type flatDirectoryUserInput struct {
+	// FilterExpr is the optional top-level filter expression
+	FilterExpr string `json:"filterExpr,omitempty"`
+}
+
+// nestedDirectorySync is the section the optional knob moves into
+type nestedDirectorySync struct {
+	// FilterExpr is the optional filter expression inside the section
+	FilterExpr string `json:"filterExpr,omitempty"`
+}
+
+// nestedDirectoryUserInput is the current layout nesting the optional knob under a section
+type nestedDirectoryUserInput struct {
+	// DirectorySync is the section holding the knob
+	DirectorySync nestedDirectorySync `json:"directorySync,omitempty"`
+}
+
+func TestConformUserInputConvertsReNestedOptionalKey(t *testing.T) {
+	t.Parallel()
+
+	flat := types.NewUserInputRef[flatDirectoryUserInput]("flatDirectoryUserInput")
+	nested := types.NewUserInputRef[nestedDirectoryUserInput]("nestedDirectoryUserInput").Replacing(flat, func(old flatDirectoryUserInput) nestedDirectoryUserInput {
+		return nestedDirectoryUserInput{DirectorySync: nestedDirectorySync{FilterExpr: old.FilterExpr}}
+	})
+
+	got, err := conformUserInput(t.Context(), types.InstallationRequest{}, *nested.Registration(), json.RawMessage(`{"filterExpr":"x"}`))
+	assert.NilError(t, err)
+	assert.Equal(t, string(got), `{"directorySync":{"filterExpr":"x"}}`)
+}
+
 func TestUpgradeExclusions(t *testing.T) {
 	t.Parallel()
 
@@ -102,6 +141,25 @@ func TestConformPayload(t *testing.T) {
 	filling := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Backfilled(fillToken)
 	idle := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Backfilled(noop)
 
+	retagRegion := func(_ context.Context, _ types.InstallationRequest, v *upgradeCredential) error {
+		v.Region = "override"
+
+		return nil
+	}
+
+	retagging := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Backfilled(retagRegion)
+
+	fillRegionIfEmpty := func(_ context.Context, _ types.InstallationRequest, v *upgradeCredentialRegion) error {
+		if v.Region == "" {
+			v.Region = "resolved"
+		}
+
+		return nil
+	}
+
+	regionSchema := jsonx.SchemaFrom[upgradeCredentialRegion]()
+	regionBackfill := types.NewCredentialRef[upgradeCredentialRegion]("upgradeCredentialRegion").Backfilled(fillRegionIfEmpty)
+
 	tests := []struct {
 		name     string
 		schema   json.RawMessage
@@ -162,6 +220,22 @@ func TestConformPayload(t *testing.T) {
 			payload:  `{"region":""}`,
 			wantErr:  ErrUserInputInvalid,
 		},
+		{
+			name:     "declared backfill runs even when the stored payload already validates",
+			schema:   credentialSchema,
+			backfill: retagging.Backfill,
+			sentinel: ErrCredentialInvalid,
+			payload:  `{"token":"t","region":"eu"}`,
+			want:     `{"token":"t","region":"override"}`,
+		},
+		{
+			name:     "a required field present but empty after conversion is filled by the declared backfill",
+			schema:   regionSchema,
+			backfill: regionBackfill.Backfill,
+			sentinel: ErrCredentialInvalid,
+			payload:  `{"token":"t","region":""}`,
+			want:     `{"token":"t","region":"resolved"}`,
+		},
 	}
 
 	for _, tc := range tests {
@@ -200,6 +274,23 @@ func TestConformUserInput(t *testing.T) {
 		Schema: jsonx.SchemaFrom[upgradeUserInput](),
 	}
 
+	backfilled := types.NewUserInputRef[upgradeUserInput]("upgradeUserInputBackfilled").
+		Replacing(retired, func(r retiredUserInput) upgradeUserInput { return upgradeUserInput{Region: r.Zone} }).
+		Backfilled(func(_ context.Context, _ types.InstallationRequest, v *upgradeUserInput) error {
+			if v.Region == "" {
+				v.Region = "fallback"
+			}
+
+			return nil
+		})
+
+	backfilledInput := types.UserInputRegistration{
+		Schema:   jsonx.SchemaFrom[upgradeUserInput](),
+		Replaces: backfilled.Replaces(),
+		Convert:  backfilled.Convert,
+		Backfill: backfilled.Backfill,
+	}
+
 	tests := []struct {
 		name    string
 		input   types.UserInputRegistration
@@ -230,6 +321,12 @@ func TestConformUserInput(t *testing.T) {
 			input:   renamedInput,
 			stored:  `{"zone":""}`,
 			wantErr: ErrUserInputInvalid,
+		},
+		{
+			name:   "backfill runs after conversion of a retired layout",
+			input:  backfilledInput,
+			stored: `{"zone":""}`,
+			want:   `{"region":"fallback"}`,
 		},
 	}
 

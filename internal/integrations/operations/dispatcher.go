@@ -20,9 +20,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// Dispatch validates and enqueues one operation execution request. When
-// DispatchRequest.Runtime is true, no DB integration lookup is performed and
-// the client is resolved from the registry at execution time
+// Dispatch validates and enqueues one operation execution request
 func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runtime *gala.Gala, req types.DispatchRequest) (types.DispatchResult, error) {
 	if req.Operation == "" || (!req.Runtime && req.IntegrationID == "") {
 		return types.DispatchResult{}, ErrDispatchInputInvalid
@@ -32,6 +30,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		definitionID string
 		ownerID      = req.OwnerID
 		installation *ent.Integration
+		userInput    json.RawMessage
 	)
 
 	switch {
@@ -44,6 +43,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		}
 
 		installation = record
+		userInput = record.Config.ClientConfig
 		definitionID = record.DefinitionID
 		ownerID = record.OwnerID
 
@@ -55,7 +55,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		return types.DispatchResult{}, err
 	}
 
-	if operation.DisabledForAll {
+	if operation.DisabledFor(userInput) {
 		logx.FromContext(ctx).Debug().Str(intobvs.FieldOperation, req.Operation).Msg("operation is disabled, skipping dispatch")
 
 		return types.DispatchResult{Status: enums.IntegrationRunStatusCancelled}, nil
@@ -129,8 +129,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	}, nil
 }
 
-// ResolveIntegration resolves one integration by explicit ID with optional owner
-// and definition cross-checks
+// ResolveIntegration resolves one integration by explicit ID with optional owner and definition cross-checks
 func ResolveIntegration(ctx context.Context, db *ent.Client, integrationID, ownerID, definitionID string) (*ent.Integration, error) {
 	if integrationID == "" {
 		return nil, ErrIntegrationIDRequired
@@ -153,10 +152,7 @@ func ResolveIntegration(ctx context.Context, db *ent.Client, integrationID, owne
 	return record, nil
 }
 
-// ResolveOwnerIntegration finds an operational integration for the given definition
-// and owner. When multiple operational integrations exist, the optional prefer
-// function selects among them. Returns empty string with no error when no
-// integration is found, allowing the caller to fall through to runtime dispatch
+// ResolveOwnerIntegration finds an operational integration for the given definition and owner
 func ResolveOwnerIntegration(ctx context.Context, db *ent.Client, definitionID, ownerID string, prefer ...func(*ent.Integration) bool) (string, error) {
 	integrations, err := db.Integration.Query().
 		Where(
@@ -183,8 +179,7 @@ func ResolveOwnerIntegration(ctx context.Context, db *ent.Client, definitionID, 
 	return "", nil
 }
 
-// inheritWebhookContext propagates webhook/event context from a parent execution
-// so the envelope carries the triggering event identity
+// inheritWebhookContext propagates webhook/event context from a parent execution so the envelope carries the triggering event identity
 func inheritWebhookContext(ctx context.Context, src *types.IntegrationSource) {
 	oc, ok := gala.OperationContextFromContext(ctx)
 	if !ok {

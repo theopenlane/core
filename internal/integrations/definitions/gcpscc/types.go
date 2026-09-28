@@ -24,8 +24,8 @@ var (
 	workloadIdentityConnection = types.NewConnectionRef(workloadIdentityCredential).Enables(sccClient)
 	// sccConnection is the service account connection mode enabling the SCC client
 	sccConnection = types.NewConnectionRef(sccCredential).Enables(sccClient)
-	// findingsCollectOperation is the operation ref for the GCP Security Command Center findings collection operation
-	findingsCollectOperation = types.OperationRefOf[FindingsSync]().Using(sccClient)
+	// userInput is the installation user input layout for the GCP Security Command Center definition
+	userInput = types.NewUserInputRef[UserInput]("gcpscc")
 )
 
 const (
@@ -55,6 +55,8 @@ type UserInput struct {
 
 // FindingsSync holds the user-configurable and per-invocation parameters for the findings collection operation
 type FindingsSync struct {
+	// Switch toggles the findings collection operation off for the installation
+	types.Switch
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.category != \"GKE_SECURITY_BULLETIN\""`
 	// PageSize controls the number of findings per API page
@@ -83,9 +85,7 @@ type CredentialSchema struct {
 	CollectionScope
 }
 
-// WorkloadIdentityCredentialSchema holds the GCP workload identity federation inputs for
-// one installation. Openlane signs a short-lived assertion with its own keys and exchanges
-// it at Google STS, so nothing in this schema is secret
+// WorkloadIdentityCredentialSchema holds the GCP workload identity federation inputs for one installation
 type WorkloadIdentityCredentialSchema struct {
 	// ProjectNumber is the numeric project number of the GCP project hosting the openlane workload identity pool and provider
 	ProjectNumber string `json:"projectNumber" jsonschema:"required,title=GCP Project Number,pattern=^[0-9]+$,description=Numeric project number of the GCP project hosting the openlane workload identity pool and provider"`

@@ -28,9 +28,7 @@ type DomainScanPollResult struct {
 	Result *url_scanner.ScanGetResponse `json:"result"`
 	// TaskErrors lists task-level errors reported alongside the result, if any
 	TaskErrors ScanTaskErrors `json:"taskErrors,omitempty"`
-	// NotReady is true when Cloudflare reported the scan isn't available yet (either not yet
-	// indexed, or still running) rather than a genuine fetch failure. The caller's own poll
-	// backoff/retry schedule is responsible for trying again, not this operation
+	// NotReady is true when Cloudflare reported the scan isn't available yet (either not yet indexed, or still running) rather than a genuine fetch failure
 	NotReady bool `json:"notReady,omitempty"`
 }
 
@@ -81,21 +79,20 @@ func (e ScanTaskErrors) Error() string {
 	return strings.Join(messages, "; ")
 }
 
-// Handle adapts domain scan polling to the generic operation registration boundary
-func (p DomainScanPoll) Handle() types.OperationHandler {
-	return providerkit.WithClientConfig(cloudflareClient, DomainScanPollOp, ErrOperationConfigInvalid, func(ctx context.Context, client *CloudflareClient, cfg DomainScanPoll) (json.RawMessage, error) {
-		result, err := p.Run(ctx, client, cfg)
-		if err != nil {
-			return nil, err
-		}
+// DomainScanPollOp is the operation ref for polling a submitted URL Scanner result
+var DomainScanPollOp = types.OperationRefOf[DomainScanPoll]().Handles(cloudflareClient, runDomainScanPoll) //nolint:revive
 
-		return providerkit.EncodeResult(result, ErrResultEncode)
-	})
+// runDomainScanPoll retrieves the configured URL Scanner result and encodes it
+func runDomainScanPoll(ctx context.Context, _ types.OperationRequest, client *CloudflareClient, cfg DomainScanPoll) (json.RawMessage, error) {
+	result, err := DomainScanPoll{}.Run(ctx, client, cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	return providerkit.EncodeResult(result, ErrResultEncode)
 }
 
-// Run retrieves a URL Scanner result by scan ID. Cloudflare reports both "not yet indexed" and
-// "still running" through a 400/404, so those are reported back as NotReady rather than an error -
-// the caller's own poll backoff/retry schedule owns waiting for the scan to finish, not this operation
+// Run retrieves a URL Scanner result by scan ID
 func (DomainScanPoll) Run(ctx context.Context, client *CloudflareClient, cfg DomainScanPoll) (DomainScanPollResult, error) {
 	result, taskErrors, err := getScanResultOnce(ctx, client, cfg.ScanResultID)
 	if err == nil {

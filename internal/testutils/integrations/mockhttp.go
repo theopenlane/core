@@ -18,12 +18,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// MockHTTPDefinitionID is the stable id for the mock HTTP provider that exercises the full
-// connect/health/resolve/ingest flow against a real httptest server
+// MockHTTPDefinitionID is the stable id for the mock HTTP provider that exercises the full connect/health/resolve/ingest flow against a real httptest server
 var MockHTTPDefinitionID = types.NewDefinitionRef("def_01K0MOCKHTTP00000000000001")
 
-// MockHTTPSyncOperation is the mock provider's directory sync operation, used to drive ingest through
-// the installed definition
+// MockHTTPSyncOperation is the mock provider's directory sync operation, used to drive ingest through the installed definition
 const MockHTTPSyncOperation = "mock.sync"
 
 var (
@@ -35,7 +33,12 @@ var (
 	mockHTTPClient = types.ClientRefOf[*mockHTTPClientInstance]().Using(MockHTTPCredential)
 	// mockHTTPConnection is the connection mode selected by the mock provider credential slot
 	mockHTTPConnection = types.NewConnectionRef(MockHTTPCredential)
+	// mockHTTPSyncOp is the mock provider's directory sync operation bound to its ingest handler
+	mockHTTPSyncOp = types.NewOperationRef[mockHTTPSync](MockHTTPSyncOperation).Ingests(mockHTTPClient, mockHTTPIngest)
 )
+
+// mockHTTPSync is the config for the mock provider's directory sync operation
+type mockHTTPSync struct{}
 
 // mockHTTPCred carries the bearer token and base URL of the mock provider the installation connects to
 type mockHTTPCred struct {
@@ -55,13 +58,10 @@ func MockHTTPCredentialSet(token, baseURL string) types.CredentialSet {
 	return types.CredentialSet{Data: raw}
 }
 
-// mockHTTPClientInstance is the mock provider operation client; the ingest handler reads its
-// connection from the request credentials, so the client itself carries no state and exists only to
-// bind the stored credential onto the operation request through the runtime's client resolution
+// mockHTTPClientInstance is the mock provider operation client; the ingest handler reads its connection from the request credentials, so the client itself carries no state and exists only to bind the stored credential onto the operation request through the runtime's client resolution
 type mockHTTPClientInstance struct{}
 
-// buildMockHTTPClient validates the installation's stored credential resolves and returns the stateless
-// mock provider client
+// buildMockHTTPClient validates the installation's stored credential resolves and returns the stateless mock provider client
 func buildMockHTTPClient(_ context.Context, req types.ClientBuildRequest) (*mockHTTPClientInstance, error) {
 	if _, ok, err := MockHTTPCredential.Resolve(req.Credentials); err != nil || !ok {
 		return nil, ErrMockHTTPUnhealthy
@@ -119,8 +119,7 @@ func mockHTTPHealthCheck(ctx context.Context, req types.OperationRequest) (json.
 	return json.RawMessage(`{"ok":true}`), nil
 }
 
-// mockHTTPGet performs an authenticated GET against the mock provider, returning the body on a 200
-// and an error otherwise
+// mockHTTPGet performs an authenticated GET against the mock provider, returning the body on a 200 and an error otherwise
 func mockHTTPGet(ctx context.Context, url, token string) ([]byte, error) {
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
@@ -153,9 +152,8 @@ type mockHTTPDirectory struct {
 	Memberships []json.RawMessage `json:"memberships"`
 }
 
-// mockHTTPIngest fetches the mock provider directory under the installation's credential and returns the
-// account, group, and membership payload sets for the ingest pipeline to map, link, and persist
-func mockHTTPIngest(ctx context.Context, req types.OperationRequest) ([]types.IngestPayloadSet, error) {
+// mockHTTPIngest fetches the mock provider directory under the installation's credential and returns the account, group, and membership payload sets for the ingest pipeline to map, link, and persist
+func mockHTTPIngest(ctx context.Context, req types.OperationRequest, _ *mockHTTPClientInstance, _ mockHTTPSync) ([]types.IngestPayloadSet, error) {
 	cred, ok, err := MockHTTPCredential.Resolve(req.Credentials)
 	if err != nil || !ok {
 		return nil, ErrMockHTTPUnhealthy
@@ -185,9 +183,7 @@ func mockHTTPEnvelopes(records []json.RawMessage) []types.MappingEnvelope {
 	})
 }
 
-// MockHTTPBuilder returns the mock HTTP provider definition; a single credentialed connection with a
-// health check and a metadata resolver and no operations, so an installation connects and comes up
-// healthy without seeding reconcile loops
+// MockHTTPBuilder returns the mock HTTP provider definition; a single credentialed connection with a health check and a metadata resolver and no operations, so an installation connects and comes up healthy without seeding reconcile loops
 func MockHTTPBuilder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
@@ -204,41 +200,34 @@ func MockHTTPBuilder() registry.Builder {
 				MockHTTPCredential.Registration(types.CredentialRegistration{
 					Name:        "Mock HTTP Token",
 					Description: "Bearer token and base URL the mock provider validates.",
-					Schema:      MockHTTPCredential.Schema(),
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
 				mockHTTPConnection.Registration(types.ConnectionRegistration{
-					Name:           "Mock HTTP",
-					Description:    "Connect to the mock HTTP provider and resolve its instance id.",
-					CredentialRefs: []types.CredentialSlotID{MockHTTPCredential.ID()},
-					HealthCheck:    &types.HealthCheckRegistration{Handle: mockHTTPHealthCheck},
-					Integration:    mockHTTPInstallation.Registration(),
+					Name:        "Mock HTTP",
+					Description: "Connect to the mock HTTP provider and resolve its instance id.",
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: MockHTTPCredential.ID(),
-						Description:   "Remove the persisted mock provider credential and disconnect this installation.",
+						Description: "Remove the persisted mock provider credential and disconnect this installation.",
 					},
 				}),
 			},
+			HealthCheck:  types.CredentialHealthCheck(mockHTTPHealthCheck),
+			Installation: mockHTTPInstallation.Registration(),
 			Clients: []types.ClientRegistration{
 				mockHTTPClient.Registration(buildMockHTTPClient, types.ClientRegistration{
 					Description: "Mock provider client built from the stored token and base URL credential.",
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         MockHTTPSyncOperation,
-					Description:  "Directory sync ingest for the mock provider",
-					Topic:        MockHTTPDefinitionID.OperationTopic(MockHTTPSyncOperation),
-					ClientRef:    mockHTTPClient.ID(),
-					Policy:       types.ExecutionPolicy{Snapshot: true},
-					IngestHandle: mockHTTPIngest,
+				mockHTTPSyncOp.Registration(MockHTTPDefinitionID, types.OperationRegistration{
+					Description: "Directory sync ingest for the mock provider",
+					Policy:      types.ExecutionPolicy{Snapshot: true},
 					Ingest: []types.IngestContract{
 						{Schema: entityops.SchemaDirectoryAccount.Name},
 						{Schema: entityops.SchemaDirectoryGroup.Name},
 						{Schema: entityops.SchemaDirectoryMembership.Name},
 					},
-				},
+				}),
 			},
 			Mappings: []types.MappingRegistration{
 				{Schema: entityops.SchemaDirectoryAccount.Name, Spec: types.MappingOverride{MapExpr: "payload"}},
@@ -255,9 +244,7 @@ func MockHTTPBuilder() registry.Builder {
 	})
 }
 
-// MockHTTPServer is a concurrency-safe httptest-backed mock provider whose reported instance id and
-// directory records can be mutated at runtime, so a test drives connect, health, reconnect, and ingest
-// flows by changing what the provider reports rather than by writing installation state directly
+// MockHTTPServer is a concurrency-safe httptest-backed mock provider whose reported instance id and directory records can be mutated at runtime, so a test drives connect, health, reconnect, and ingest flows by changing what the provider reports rather than by writing installation state directly
 type MockHTTPServer struct {
 	// server is the running httptest server serving the mock provider endpoints
 	server *httptest.Server
@@ -275,8 +262,7 @@ type MockHTTPServer struct {
 	memberships []json.RawMessage
 }
 
-// NewMockHTTPServer starts a mock provider httptest server that authenticates the bearer token and
-// serves its health, instance, and directory endpoints from mutable state
+// NewMockHTTPServer starts a mock provider httptest server that authenticates the bearer token and serves its health, instance, and directory endpoints from mutable state
 func NewMockHTTPServer(token, instanceID string) *MockHTTPServer {
 	server := &MockHTTPServer{token: token, instanceID: instanceID}
 	server.server = httptest.NewServer(http.HandlerFunc(server.handle))
@@ -284,8 +270,7 @@ func NewMockHTTPServer(token, instanceID string) *MockHTTPServer {
 	return server
 }
 
-// handle routes one mock provider request, rejecting a bad bearer token and serving the health,
-// instance, and directory endpoints from a snapshot taken under the mutex
+// handle routes one mock provider request, rejecting a bad bearer token and serving the health, instance, and directory endpoints from a snapshot taken under the mutex
 func (m *MockHTTPServer) handle(w http.ResponseWriter, r *http.Request) {
 	m.mu.Lock()
 	token := m.token

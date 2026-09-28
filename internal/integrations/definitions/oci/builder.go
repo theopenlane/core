@@ -2,10 +2,8 @@ package oci
 
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Builder returns the Oracle Cloud Infrastructure definition builder
@@ -23,29 +21,21 @@ func Builder() registry.Builder {
 				Active:      false,
 				Visible:     true,
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput:    userInput.Registration(),
+			HealthCheck:  identityClient.HealthCheck(checkHealth),
+			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				ociCredential.Registration(types.CredentialRegistration{
 					Name:        "OCI API Key Credential",
 					Description: "OCI API signing key used to authenticate against the tenancy.",
-					Schema:      ociCredential.Schema(),
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
 				ociConnection.Registration(types.ConnectionRegistration{
-					Name:           "OCI API Key",
-					Description:    "Configure Oracle Cloud Infrastructure access using an API signing key registered to a tenancy user.",
-					CredentialRefs: []types.CredentialSlotID{ociCredential.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: identityClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: installation.Registration(),
+					Name:        "OCI API Key",
+					Description: "Configure Oracle Cloud Infrastructure access using an API signing key registered to a tenancy user.",
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: ociCredential.ID(),
-						Description:   "Removes the stored API signing key from Openlane. If the key is no longer needed, delete it from the user's API keys in the OCI console.",
+						Description: "Removes the stored API signing key from Openlane. If the key is no longer needed, delete it from the user's API keys in the OCI console.",
 					},
 				}),
 			},
@@ -59,16 +49,13 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				findingsSyncOperation.Registration(definitionID, types.OperationRegistration{
-					Description:    "Collect OCI Cloud Guard problems as findings",
-					Policy:         types.ExecutionPolicy{Reconcile: true},
-					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.FindingsSync.Disable }),
-					ConfigResolver: findingsSyncOperation.ConfigFrom(func(u UserInput) FindingsSync { return u.FindingsSync }),
+					Description: "Collect OCI Cloud Guard problems as findings",
+					Policy:      types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaFinding.Name,
 						},
 					},
-					IngestHandle:        FindingsCollect{}.IngestHandle(),
 					RequiredPermissions: []string{"read cloud-guard-problems in tenancy"},
 				}),
 			},

@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -163,7 +164,6 @@ func TestExecuteOperationEmptyConfigSkipsValidation(t *testing.T) {
 		},
 	}
 
-	// Empty config should skip schema validation even when schema is present
 	_, err := rt.ExecuteOperation(context.Background(), &ent.Integration{
 		ID:           "install-1",
 		DefinitionID: "test-def",
@@ -320,6 +320,47 @@ func TestExecuteOperationResolvesConfigFromInstallation(t *testing.T) {
 	}, nil, nil)
 	assert.NilError(t, err)
 	assert.Equal(t, string(captured.Config), `{"filterExpr":"payload.active"}`)
+}
+
+func TestExecuteOperationRefusesDisabledOperation(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+	installation := &ent.Integration{
+		ID:           "install-1",
+		DefinitionID: "test-def",
+		Config:       openapi.IntegrationConfig{ClientConfig: json.RawMessage(`{"directorySync":{"disable":true}}`)},
+	}
+
+	cases := map[string]types.OperationRegistration{
+		"disabled for all": {
+			Name:           "test-op",
+			DisabledForAll: true,
+		},
+		"disabled for the installation": {
+			Name: "test-op",
+			Disabled: func(userInput json.RawMessage) bool {
+				return string(userInput) == `{"directorySync":{"disable":true}}`
+			},
+		},
+	}
+
+	for name, op := range cases {
+		called := false
+		op.Handle = func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+			called = true
+			return nil, nil
+		}
+
+		_, err := rt.ExecuteOperation(context.Background(), installation, op, nil, nil)
+		if !errors.Is(err, operations.ErrOperationDisabled) {
+			t.Fatalf("%s: expected ErrOperationDisabled, got %v", name, err)
+		}
+
+		if called {
+			t.Fatalf("%s: expected the handler not to run", name)
+		}
+	}
 }
 
 func TestExecuteOperationExplicitConfigWinsOverResolver(t *testing.T) {

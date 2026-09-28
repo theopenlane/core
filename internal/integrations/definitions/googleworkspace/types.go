@@ -17,8 +17,10 @@ var (
 	workspaceClient = types.ClientRefOf[*admin.Service]().Using(workspaceCredential)
 	// workspaceConnection is the OAuth connection mode enabling the Admin SDK client
 	workspaceConnection = types.NewConnectionRef(workspaceCredential).Enables(workspaceClient)
-	// directorySyncOperation is the operation ref for the directory sync operation
-	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(workspaceClient)
+	// userInput is the installation user input layout, replacing the flat v1 layout
+	userInput = types.NewUserInputRef[UserInput]("googleworkspace").Replacing(types.NewUserInputRef[oldUserInput]("googleworkspace-v1"), func(old oldUserInput) UserInput {
+		return UserInput{PrimaryDirectory: old.PrimaryDirectory, DirectorySync: DirectorySync{FilterExpr: old.FilterExpr}}
+	})
 )
 
 // googleWorkspaceCred holds the provider-owned credential material for a Google Workspace installation
@@ -33,6 +35,22 @@ type googleWorkspaceCred struct {
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
+	// PrimaryDirectory marks this installation as the authoritative directory source for identity holder enrichment and lifecycle derivation
+	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
+	// DirectorySync configures the directory sync operation
+	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Sync"`
+}
+
+// DirectorySync configures collection of Google Workspace directory users, groups, and memberships
+type DirectorySync struct {
+	// Switch turns the directory sync off for the installation
+	types.Switch
+	// FilterExpr limits imported records to envelopes matching the CEL expression
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.orgUnitPath.startsWith('/engineering/')"`
+}
+
+// oldUserInput is the flat v1 installation user input layout
+type oldUserInput struct {
 	// PrimaryDirectory marks this installation as the authoritative directory source for identity holder enrichment and lifecycle derivation
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression

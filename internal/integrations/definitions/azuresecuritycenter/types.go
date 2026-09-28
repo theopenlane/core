@@ -12,13 +12,11 @@ var (
 	// securityCenterCredential is the typed credential slot for the Azure service principal
 	securityCenterCredential = types.CredentialRefOf[CredentialSchema]()
 	// securityCenterClient is the client ref for the Azure Security Center client
-	securityCenterClient = types.ClientRefOf[*azureSecurityClient]().Using(securityCenterCredential)
+	securityCenterClient = types.ClientRefOf[*SecurityClient]().Using(securityCenterCredential)
 	// securityCenterConnection is the connection mode selected by the Azure service principal credential
 	securityCenterConnection = types.NewConnectionRef(securityCenterCredential).Enables(securityCenterClient)
-	// assessmentsCollectOperation is the operation ref for the Azure Security Center assessments collect operation
-	assessmentsCollectOperation = types.OperationRefOf[AssessmentsCollect]().Using(securityCenterClient)
-	// subAssessmentsCollectOperation is the operation ref for the Azure Security Center sub-assessments collect operation
-	subAssessmentsCollectOperation = types.OperationRefOf[SubAssessmentsCollect]().Using(securityCenterClient)
+	// userInput is the installation user input layout for the Azure Security Center definition
+	userInput = types.NewUserInputRef[UserInput]("azuresecuritycenter")
 )
 
 // UserInput holds installation-specific configuration collected from the user

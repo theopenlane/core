@@ -7,14 +7,14 @@ import (
 
 	"github.com/theopenlane/newman"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// SendEmailRequest is the operation config for dispatching a single templated email.
-// The template is resolved by database ID; its Key selects the catalog entry that owns
-// the render pipeline and its Defaults supplies the pre-filled typed fields
+// SendEmailOp is the operation ref for the generic send-email operation
+var SendEmailOp = types.OperationRefOf[SendEmailRequest]().Handles(emailClientRef, sendEmail) //nolint:revive
+
+// SendEmailRequest is the operation config for dispatching a single templated email
 type SendEmailRequest struct {
 	// TemplateID references the email template by database ID
 	TemplateID string `json:"templateId" jsonschema:"required,description=Email template ID"`
@@ -30,17 +30,8 @@ type SendEmailRequest struct {
 	ReplyTo string `json:"replyTo,omitempty" jsonschema:"description=Reply-to email address"`
 }
 
-// SendEmail dispatches a single templated email through the resolved email client
-type SendEmail struct{}
-
-// Handle returns the typed operation handler for builder registration
-func (s SendEmail) Handle() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(emailClientRef, SendEmailOp, ErrTemplateRenderFailed, s.Run)
-}
-
-// Run resolves the email template, looks up the catalog dispatcher by Key, builds a typed
-// payload from the template defaults + per-invocation recipient, and sends through the dispatcher
-func (SendEmail) Run(ctx context.Context, req types.OperationRequest, client *Client, cfg SendEmailRequest) (json.RawMessage, error) {
+// sendEmail resolves the email template, looks up the catalog dispatcher by Key, builds a typed payload from the template defaults + per-invocation recipient, and sends through the dispatcher
+func sendEmail(ctx context.Context, req types.OperationRequest, client *Client, cfg SendEmailRequest) (json.RawMessage, error) {
 	template, err := loadEmailTemplate(ctx, req.DB, cfg.OwnerID, cfg.TemplateID)
 	if err != nil {
 		return nil, err

@@ -14,13 +14,8 @@ type HealthCheck struct {
 	Count int `json:"count"`
 }
 
-// Handle adapts the health check to the generic operation registration boundary
-func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClient(securityCenterClient, h.Run)
-}
-
-// Run verifies access by fetching the first page of security assessments
-func (HealthCheck) Run(ctx context.Context, client *azureSecurityClient) (json.RawMessage, error) {
+// checkHealth verifies access by fetching the first page of security assessments
+func checkHealth(ctx context.Context, _ types.OperationRequest, client *SecurityClient) (json.RawMessage, error) {
 	pager := client.assessments.NewListPager(client.scope(), nil)
 
 	page, err := pager.NextPage(ctx)

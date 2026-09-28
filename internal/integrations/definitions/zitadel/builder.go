@@ -4,7 +4,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Builder returns the Zitadel definition builder
@@ -22,49 +21,33 @@ func Builder() registry.Builder {
 				Active:      false,
 				Visible:     true,
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput:    userInput.Registration(),
+			HealthCheck:  zitadelClient.HealthCheck(checkHealth),
+			Installation: integration.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				zitadelPATCredential.Registration(types.CredentialRegistration{
 					Name:        "Zitadel Personal Access Token",
 					Description: "Personal Access Token used to access Zitadel instance data.",
-					Schema:      zitadelPATCredential.Schema(),
 				}),
 				zitadelOAuthCredential.Registration(types.CredentialRegistration{
 					Name:        "Zitadel OAuth (Client Credentials)",
 					Description: "Service user Client ID and Client Secret used to access Zitadel instance data via the OAuth2 client-credentials grant.",
-					Schema:      zitadelOAuthCredential.Schema(),
 					Recommended: true,
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
 				zitadelPATConnection.Registration(types.ConnectionRegistration{
-					Name:           "Zitadel Personal Access Token",
-					Description:    "Configure Zitadel access using a Personal Access Token from your instance.",
-					CredentialRefs: []types.CredentialSlotID{zitadelPATCredential.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: zitadelClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: integration.Registration(),
+					Name:        "Zitadel Personal Access Token",
+					Description: "Configure Zitadel access using a Personal Access Token from your instance.",
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: zitadelPATCredential.ID(),
-						Description:   "Removes the stored Personal Access Token from Openlane. If the token is no longer needed, revoke it in your Zitadel admin console under Personal Access Tokens.",
+						Description: "Removes the stored Personal Access Token from Openlane. If the token is no longer needed, revoke it in your Zitadel admin console under Personal Access Tokens.",
 					},
 				}),
 				zitadelOAuthConnection.Registration(types.ConnectionRegistration{
-					Name:           "Zitadel OAuth (Client Credentials)",
-					Description:    "Configure Zitadel access using a service user Client ID and Client Secret.",
-					CredentialRefs: []types.CredentialSlotID{zitadelOAuthCredential.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: zitadelClient.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: integration.Registration(),
+					Name:        "Zitadel OAuth (Client Credentials)",
+					Description: "Configure Zitadel access using a service user Client ID and Client Secret.",
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: zitadelOAuthCredential.ID(),
-						Description:   "Removes the stored Client ID and Client Secret from Openlane. If the service user is no longer needed, delete it in your Zitadel admin console.",
+						Description: "Removes the stored Client ID and Client Secret from Openlane. If the service user is no longer needed, delete it in your Zitadel admin console.",
 					},
 				}),
 			},
@@ -83,7 +66,6 @@ func Builder() registry.Builder {
 							Schema: entityops.SchemaDirectoryAccount.Name,
 						},
 					},
-					IngestHandle: DirectorySync{}.IngestHandle(),
 				}),
 			},
 			Mappings: zitadelMappings(),

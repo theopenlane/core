@@ -17,8 +17,7 @@ var (
 	slackCredential = types.CredentialRefOf[slackCred]()
 	// slackBotTokenCredential is the credential slot for user-provisioned bot tokens
 	slackBotTokenCredential = types.CredentialRefOf[slackBotTokenCred]()
-	// slackClient is the unified client ref for every Slack operation; runtime and customer
-	// paths both build a SlackClient that wraps the Web API client and any system-notification transport
+	// slackClient is the unified client ref for every Slack operation
 	slackClient = types.ClientRefOf[*SlackClient]().Using(slackCredential).Using(slackBotTokenCredential)
 	// slackOAuthConnection is the connection mode selected by the OAuth credential slot
 	slackOAuthConnection = types.NewConnectionRef(slackCredential).Enables(slackClient)
@@ -26,16 +25,11 @@ var (
 	slackBotTokenConnection = types.NewConnectionRef(slackBotTokenCredential).Enables(slackClient)
 	// runtimeSlackRef is the typed ref for the runtime Slack config
 	runtimeSlackRef = types.RuntimeRefOf[RuntimeSlackConfig]()
-	// directorySyncOperation is the operation ref for the directory account sync operation
-	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(slackClient)
-	// MessageSendOp is the operation ref for the Slack message send operation
-	MessageSendOp = types.OperationRefOf[MessageSendOperation]().Using(slackClient) //nolint:revive
+	// userInput is the installation user input layout for the Slack definition
+	userInput = types.NewUserInputRef[UserInput]("slack")
 )
 
-// RuntimeSlackConfig is the runtime-provisioned configuration for the system Slack integration.
-// Sourced from koanf/environment at startup; populated for the platform-owned workspace.
-// Two modes are supported: webhook-only (fire-and-forget via incoming webhook URL) and
-// bot-token mode (full Web API access with channel targeting and Block Kit support)
+// RuntimeSlackConfig is the runtime-provisioned configuration for the system Slack integration
 type RuntimeSlackConfig struct {
 	// WebhookURL is the Slack incoming webhook URL used to deliver system notifications
 	WebhookURL string `json:"webhookURL,omitempty" koanf:"webhookURL" jsonschema:"description=Slack incoming webhook URL for fire-and-forget system notifications"`
@@ -50,10 +44,7 @@ func (c RuntimeSlackConfig) Provisioned() bool {
 	return c.WebhookURL != "" || c.BotToken != ""
 }
 
-// SlackClient is the unified Slack client used by every Slack operation. Both runtime and
-// customer paths produce a SlackClient; the active transport depends on which fields are populated:
-// API (bot token or OAuth) enables chat.postMessage with channel targeting; WebhookURL provides
-// fire-and-forget delivery when no API client is available
+// SlackClient is the unified Slack client used by every Slack operation
 type SlackClient struct { //nolint:revive
 	// API is the Slack Web API client (present for bot-token runtime and customer installations)
 	API *slackgo.Client
@@ -90,8 +81,8 @@ type UserInput struct {
 }
 
 type DirectorySync struct {
-	// Disable is used to disable the directory sync operation from GitHub
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users from Slack"`
+	// Switch toggles the directory sync off for the installation
+	types.Switch
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.is_external == false'"`
 }
@@ -106,8 +97,7 @@ type InstallationMetadata struct {
 	DefaultChannel string `json:"defaultChannel,omitempty" jsonschema:"title=Default Channel"`
 }
 
-// InstallationInput is the provider-defined input supplied when installing the Slack integration.
-// Bot-token connections populate it at install time; OAuth connections leave it empty for now
+// InstallationInput is the provider-defined input supplied when installing the Slack integration
 type InstallationInput struct {
 	// DefaultChannel is the Slack channel id used as the default delivery target for system messages
 	DefaultChannel string `json:"defaultChannel,omitempty" jsonschema:"title=Default Channel,description=Slack channel id used as the default delivery target for system notifications"`

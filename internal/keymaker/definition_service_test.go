@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // keymakerTestCredential is the credential type behind the auth-managed test slot
@@ -365,7 +364,6 @@ func authTestDefinition(definitionID string, flow *fakeAuthFlow) types.Definitio
 func (f *fakeAuthFlow) registration(credentialRef types.CredentialSlotID) *types.AuthRegistration {
 	return &types.AuthRegistration{
 		CredentialRef: credentialRef,
-		Schema:        jsonx.SchemaFrom[keymakerTestCredential](),
 		Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 			return f.startResult, f.startErr
 		},

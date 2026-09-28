@@ -14,6 +14,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
+// MessageSendOp is the operation ref for the Microsoft Teams message send operation
+var MessageSendOp = types.OperationRefOf[MessageSendOperation]().Handles(teamsClient, MessageSend{}.Run)
+
 // MessageSendOperation holds per-invocation parameters for the message.send operation
 type MessageSendOperation struct {
 	// TemplateID references a notification template by database ID
@@ -40,11 +43,6 @@ type MessageSend struct {
 	ChannelID string `json:"channelId"`
 	// MessageID is the identifier of the created message
 	MessageID string `json:"messageId"`
-}
-
-// Handle adapts message send to the generic operation registration boundary
-func (m MessageSend) Handle() types.OperationHandler {
-	return providerkit.WithClientRequestConfig(teamsClient, MessageSendOp, ErrOperationConfigInvalid, m.Run)
 }
 
 // Run sends a Microsoft Teams channel message via Microsoft Graph

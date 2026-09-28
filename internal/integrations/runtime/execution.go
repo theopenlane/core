@@ -25,8 +25,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// reconcileOperations emits one reconciliation envelope per reconcilable operation,
-// starting an independent adaptive scheduling cycle for each
+// reconcileOperations emits one reconciliation envelope per reconcilable operation, starting an independent adaptive scheduling cycle for each
 func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Integration) error {
 	def, ok := r.Registry().Definition(integration.DefinitionID)
 	if !ok {
@@ -44,7 +43,7 @@ func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Inte
 
 		opCtx := intobvs.WithOperation(ctx, op.Name)
 
-		if op.Disabled != nil && op.Disabled(integration.Config.ClientConfig) {
+		if op.DisabledFor(integration.Config.ClientConfig) {
 			logx.FromContext(opCtx).Debug().Msg("operation is disabled, skipping reconcile")
 
 			continue
@@ -79,8 +78,7 @@ type reconcileOutput struct {
 	DurationMS int64 `json:"duration_ms"`
 }
 
-// HandleReconcile executes one recurring operation cycle inline and returns the delta
-// for adaptive scheduling; envelopes with no integration ID run the scheduled runtime path
+// HandleReconcile executes one recurring operation cycle inline and returns the delta for adaptive scheduling; envelopes with no integration ID run the scheduled runtime path
 func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.ReconcileEnvelope) (int, error) {
 	oc := envelope.OperationContext
 	src := types.IntegrationSourceFrom(oc)
@@ -113,7 +111,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, err
 	}
 
-	if operation.Disabled != nil && operation.Disabled(installation.Config.ClientConfig) {
+	if operation.DisabledFor(installation.Config.ClientConfig) {
 		logx.FromContext(ctx).Debug().Msg("operation is disabled, stopping reconcile cycle")
 
 		return 0, operations.ErrOperationDisabled
@@ -277,8 +275,7 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, integration *ent.Integra
 	return r.executeOperationInline(ctx, integration, integration.DefinitionID, operation, credentials, config)
 }
 
-// ExecuteRuntimeOperation runs one system-initiated operation inline against a definition's cached runtime client,
-// with no Integration installation and no run tracking. Used for operator-owned calls that need their result back synchronously
+// ExecuteRuntimeOperation runs one system-initiated operation inline against a definition's cached runtime client, with no Integration installation and no run tracking
 func (r *Runtime) ExecuteRuntimeOperation(ctx context.Context, definitionID, operationName string, config json.RawMessage) (json.RawMessage, error) {
 	operation, err := r.Registry().Operation(definitionID, operationName)
 	if err != nil {
@@ -291,6 +288,10 @@ func (r *Runtime) ExecuteRuntimeOperation(ctx context.Context, definitionID, ope
 // executeOperationInline runs one integration operation inline without run tracking, if there is no integration ID it runs as an runtime client
 func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.Integration, definitionID string, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage) (json.RawMessage, error) {
 	if integration != nil {
+		if operation.DisabledFor(integration.Config.ClientConfig) {
+			return nil, operations.ErrOperationDisabled
+		}
+
 		ctx = intobvs.WithInstallation(ctx, integration)
 	} else {
 		ctx = intobvs.WithContext(ctx, types.NewOperationContext("", operation.Name, types.IntegrationSource{
@@ -447,8 +448,7 @@ func (r *Runtime) resumeTrackedRun(ctx context.Context, oc *gala.OperationContex
 	return ctx, nil
 }
 
-// BuildClientForIntegration builds a typed client for a specific integration installation.
-// It resolves credentials from the keystore and delegates to the registered client builder
+// BuildClientForIntegration builds a typed client for a specific integration installation
 func (r *Runtime) BuildClientForIntegration(ctx context.Context, integration *ent.Integration, clientID types.ClientID) (any, error) {
 	registration, err := r.Registry().Client(integration.DefinitionID, clientID)
 	if err != nil {
@@ -463,9 +463,7 @@ func (r *Runtime) BuildClientForIntegration(ctx context.Context, integration *en
 	return r.keystore().BuildClient(ctx, integration, registration, credentials, nil, false)
 }
 
-// executeResolvedOperation executes the given operation with the input integration and registered Operation.
-// When integration is nil the client is resolved from the registry's runtime client.
-// Returns the response payload, the ingest result (zero-valued for non-ingest operations), and any error
+// executeResolvedOperation executes the given operation with the input integration and registered Operation
 func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, operations.IngestResult, error) {
 	client, credentials, _, err := r.resolveOperationClient(ctx, integration, operation, credentials, config, clientForce)
 	if err != nil {
@@ -552,9 +550,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 	return response, operations.IngestResult{}, nil
 }
 
-// SeedReconcileJobs ensures every connected integration with reconcilable operations
-// has an active River job. It is intended to be called once at startup to recover
-// reconcile cycles that were lost due to job deletion or a queue flush
+// SeedReconcileJobs ensures every connected integration with reconcilable operations has an active River job
 func (r *Runtime) SeedReconcileJobs(ctx context.Context) error {
 	definitionIDs := r.reconcilableDefinitionIDs()
 	if len(definitionIDs) == 0 {
@@ -588,14 +584,12 @@ func (r *Runtime) SeedReconcileJobs(ctx context.Context) error {
 	return errors.Join(errs...)
 }
 
-// SeedReconcileJobsForInstallation checks every reconcilable operation on the given
-// installation and emits a ReconcileEnvelope for any that do not have an active River job
+// SeedReconcileJobsForInstallation checks every reconcilable operation on the given installation and emits a ReconcileEnvelope for any that do not have an active River job
 func (r *Runtime) SeedReconcileJobsForInstallation(ctx context.Context, inst *ent.Integration) error {
 	return r.seedReconcileJobsForInstallation(privacy.DecisionContext(ctx, privacy.Allow), inst)
 }
 
-// seedReconcileJobsForInstallation is the shared implementation used by both
-// SeedReconcileJobs and SeedReconcileJobsForInstallation
+// seedReconcileJobsForInstallation is the shared implementation used by both SeedReconcileJobs and SeedReconcileJobsForInstallation
 func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *ent.Integration) error {
 	if !lo.Contains(enums.IntegrationOperationalStatuses, inst.Status) {
 		return nil
@@ -628,7 +622,7 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 			continue
 		}
 
-		if op.Disabled != nil && op.Disabled(inst.Config.ClientConfig) {
+		if op.DisabledFor(inst.Config.ClientConfig) {
 			continue
 		}
 
@@ -670,8 +664,7 @@ func (r *Runtime) isOrgSubscriptionActive(ctx context.Context, orgID string) (bo
 		Exist(privacy.DecisionContext(ctx, privacy.Allow))
 }
 
-// reconcilableDefinitionIDs returns the IDs of all registered definitions that
-// have at least one operation with Policy.Reconcile set
+// reconcilableDefinitionIDs returns the IDs of all registered definitions that have at least one operation with Policy.Reconcile set
 func (r *Runtime) reconcilableDefinitionIDs() []string {
 	var ids []string
 
@@ -696,10 +689,7 @@ func (r *Runtime) reconcilableDefinitionIDs() []string {
 	return ids
 }
 
-// PurgeInstallationJobs removes every queued River job bound to the installation across all
-// job families and returns how many were purged. Operation-context jobs (reconcile loops,
-// event operations) carry the installation as properties.entityId; ingest record jobs carry
-// properties.integration_id
+// PurgeInstallationJobs removes every queued River job bound to the installation across all job families and returns how many were purged
 func (r *Runtime) PurgeInstallationJobs(ctx context.Context, integrationID string) (int, error) {
 	fragments, err := installationJobFragments(integrationID)
 	if err != nil {
@@ -720,8 +710,7 @@ func (r *Runtime) PurgeInstallationJobs(ctx context.Context, integrationID strin
 	return purged, nil
 }
 
-// PurgeInstallationIngestJobs removes every queued per-record ingest job bound to the installation
-// and returns how many were purged, leaving its operation-context jobs in place
+// PurgeInstallationIngestJobs removes every queued per-record ingest job bound to the installation and returns how many were purged, leaving its operation-context jobs in place
 func (r *Runtime) PurgeInstallationIngestJobs(ctx context.Context, integrationID string) (int, error) {
 	fragment, err := installationIngestJobFragment(integrationID)
 	if err != nil {
@@ -731,8 +720,7 @@ func (r *Runtime) PurgeInstallationIngestJobs(ctx context.Context, integrationID
 	return r.Gala().PurgeActiveJobsWithMetadata(ctx, fragment)
 }
 
-// installationJobFragments builds the JSONB containment fragments matching every job family
-// bound to one installation
+// installationJobFragments builds the JSONB containment fragments matching every job family bound to one installation
 func installationJobFragments(integrationID string) ([]string, error) {
 	operationJobs, err := types.PropertiesFragment(map[string]string{"entityId": integrationID, "entityType": "integration"})
 	if err != nil {
@@ -747,16 +735,12 @@ func installationJobFragments(integrationID string) ([]string, error) {
 	return []string{operationJobs, ingestJobs}, nil
 }
 
-// installationIngestJobFragment builds the JSONB containment fragment matching the per-record
-// ingest jobs bound to one installation
+// installationIngestJobFragment builds the JSONB containment fragment matching the per-record ingest jobs bound to one installation
 func installationIngestJobFragment(integrationID string) (string, error) {
 	return types.PropertiesFragment(map[string]string{"integration_id": integrationID})
 }
 
-// resolveOperationClient resolves the client for an operation. When integration
-// is non-nil, credentials are loaded from the keystore and the client is built
-// via the registered builder. When integration is nil, the pre-built runtime
-// client is retrieved from the registry
+// resolveOperationClient resolves the client for an operation
 func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool) (any, types.CredentialBindings, string, error) {
 	if !operation.ClientRef.Valid() {
 		if integration != nil {

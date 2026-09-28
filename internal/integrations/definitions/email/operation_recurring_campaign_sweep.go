@@ -21,18 +21,16 @@ import (
 type RecurringCampaignSweep struct{}
 
 // RecurringCampaignOp is the operation ref for the global recurring campaign sweep, which runs without a client
-var RecurringCampaignOp = types.OperationRefOf[RecurringCampaignSweep]() //nolint:revive
+var RecurringCampaignOp = types.OperationRefOf[RecurringCampaignSweep]().HandlesRequest(runRecurringCampaignSweep) //nolint:revive
 
-// Handle adapts the recurring campaign sweep to the generic operation registration boundary
-func (r RecurringCampaignSweep) Handle() types.OperationHandler {
-	return func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
-		processed, err := r.Run(ctx, req)
-		if err != nil {
-			return nil, err
-		}
-
-		return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
+// runRecurringCampaignSweep runs one recurring campaign sweep cycle and encodes the processed count
+func runRecurringCampaignSweep(ctx context.Context, req types.OperationRequest, sweep RecurringCampaignSweep) (json.RawMessage, error) {
+	processed, err := sweep.Run(ctx, req)
+	if err != nil {
+		return nil, err
 	}
+
+	return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
 }
 
 // Run executes one recurring campaign sweep and returns the number of campaigns dispatched

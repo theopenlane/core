@@ -47,6 +47,10 @@ type Definition struct {
 	CredentialRegistrations []CredentialRegistration `json:"credentialRegistrations,omitempty"`
 	// Connections describes the connection modes exposed by the definition
 	Connections []ConnectionRegistration `json:"connections,omitempty"`
+	// HealthCheck exercises the active connection's credentials before persistence and during health assessments
+	HealthCheck *HealthCheckRegistration `json:"-"`
+	// Installation describes installation-scoped metadata derived for the definition
+	Installation *InstallationRegistration `json:"installation,omitempty"`
 	// Clients lists the clients the definition can build
 	Clients []ClientRegistration `json:"clients,omitempty"`
 	// Operations lists the operations the definition exposes
@@ -100,6 +104,8 @@ type CredentialRegistration struct {
 	Description string `json:"description,omitempty"`
 	// Schema is the JSON schema used to collect credentials
 	Schema json.RawMessage `json:"schema,omitempty"`
+	// StoredSchema is the reflected schema of the persisted credential payload, filled from the typed ref; Schema is the form the UI renders and stays empty for auth-managed slots
+	StoredSchema json.RawMessage `json:"-"`
 	// Recommended indicates the method that is recommend if there are multiple options
 	Recommended bool `json:"recommended,omitempty"`
 	// Replaces lists the retired slots whose stored payloads convert into this slot
@@ -124,20 +130,15 @@ type ConnectionRegistration struct {
 	CredentialRefs []CredentialSlotID `json:"credentialRefs,omitempty"`
 	// ClientRefs lists the clients initialized by this connection mode
 	ClientRefs []ClientID `json:"-"`
-	// HealthCheck exercises the connection's credentials before persistence and during health assessments
-	HealthCheck *HealthCheckRegistration `json:"-"`
-	// Integration describes installation-scoped metadata derived by this connection mode
-	Integration *InstallationRegistration `json:"installation,omitempty"`
 	// Auth describes how this connection mode performs auth when supported
 	Auth *AuthRegistration `json:"auth,omitempty"`
 	// Disconnect describes how this connection mode tears down an installation
 	Disconnect *DisconnectRegistration `json:"disconnect,omitempty"`
 }
 
-// HealthCheckRegistration declares the credential-exercising health check for one connection mode
+// HealthCheckRegistration declares the definition's health check, which exercises the active connection's credentials
 type HealthCheckRegistration struct {
-	// ClientRef identifies which registered client the check builds; when empty the handler
-	// receives only the credential bindings
+	// ClientRef identifies which registered client the check builds; when empty the handler receives only the credential bindings
 	ClientRef ClientID `json:"-"`
 	// Handle executes the check
 	Handle OperationHandler `json:"-"`
@@ -147,7 +148,7 @@ type HealthCheckRegistration struct {
 type MetaInfo struct {
 	// Value is the Value to show to the user
 	Value string
-	// allow copy will display a opy to clipboard button
+	// AllowCopy displays a copy to clipboard button
 	AllowCopy bool
 }
 
@@ -163,21 +164,14 @@ func (d Definition) CredentialRegistration(ref CredentialSlotID) (CredentialRegi
 	return reg, nil
 }
 
-// CredentialSchema returns the stored schema of one credential slot, from its registration or from the auth flow that fills it
+// CredentialSchema returns the stored schema of one credential slot, nil when the slot is unknown
 func (d Definition) CredentialSchema(slot CredentialSlotID) json.RawMessage {
 	registration, err := d.CredentialRegistration(slot)
-	if err == nil && len(registration.Schema) > 0 {
-		return registration.Schema
-	}
-
-	connection, found := lo.Find(d.Connections, func(c ConnectionRegistration) bool {
-		return c.Auth != nil && c.Auth.CredentialRef == slot
-	})
-	if !found {
+	if err != nil {
 		return nil
 	}
 
-	return connection.Auth.Schema
+	return registration.StoredSchema
 }
 
 // CredentialReplacing returns the credential registration whose slot takes over payloads stored under the retired slot

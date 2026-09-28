@@ -65,10 +65,12 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				operationTestCredentialRef.Registration(types.CredentialRegistration{
-					Name:   "Op Test Credential",
-					Schema: operationTestCredentialRef.Schema(),
+					Name: "Op Test Credential",
 				}),
 			},
+			HealthCheck: types.CredentialHealthCheck(func(context.Context, types.OperationRequest) (json.RawMessage, error) {
+				return json.RawMessage(`{"ok":true}`), nil
+			}),
 			Connections: []types.ConnectionRegistration{
 				{
 					CredentialRef:  operationTestCredentialRef.ID(),

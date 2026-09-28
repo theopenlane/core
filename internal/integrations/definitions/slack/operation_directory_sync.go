@@ -51,16 +51,12 @@ type slackUserPayload struct {
 	IsExternal bool `json:"is_external"`
 }
 
-// IngestHandle adapts directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(slackClient, func(ctx context.Context, _ types.OperationRequest, client *SlackClient) ([]types.IngestPayloadSet, error) {
-		return d.Run(ctx, client.API)
-	})
-}
+// directorySyncOperation is the operation ref for the directory account sync operation
+var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(slackClient, runDirectorySync)
 
-// Run collects Slack workspace users and emits directory account ingest payloads
-func (DirectorySync) Run(ctx context.Context, client *slackgo.Client) ([]types.IngestPayloadSet, error) {
-	users, err := client.GetUsersContext(ctx)
+// runDirectorySync collects Slack workspace users and emits directory account ingest payloads
+func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *SlackClient, _ DirectorySync) ([]types.IngestPayloadSet, error) {
+	users, err := client.API.GetUsersContext(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("slack directory sync: failed to fetch users")
 		return nil, ErrUsersFetchFailed

@@ -449,8 +449,6 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoes
 
 	assert.Equal(t, http.StatusBadRequest, rec.Code)
 
-	// A PENDING installation row must be created even when the health check fails.
-	// The credential must not be stored and the status must not advance to CONNECTED.
 	records, err := suite.db.Integration.Query().
 		Where(
 			integration.OwnerIDEQ(testUser.OrganizationID),
@@ -490,16 +488,15 @@ func configTestDefinitionBuilder(definitionID string, failHealth bool) registry.
 				configTestCredentialRef.Registration(types.CredentialRegistration{
 					Name:        "Config Test Credential",
 					Description: "Credential slot used by the config test definition.",
-					Schema:      configTestCredentialRef.Schema(),
 				}),
 			},
+			HealthCheck: types.CredentialHealthCheck(healthHandler),
 			Connections: []types.ConnectionRegistration{
 				{
 					CredentialRef:  configTestCredentialRef.ID(),
 					Name:           "Config Test Connection",
 					Description:    "Connect the config test definition using the configured credential payload.",
 					CredentialRefs: []types.CredentialSlotID{configTestCredentialRef.ID()},
-					HealthCheck:    &types.HealthCheckRegistration{Handle: healthHandler},
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: configTestCredentialRef.ID(),
 						Description:   "Remove the persisted config test credential and disconnect this installation.",

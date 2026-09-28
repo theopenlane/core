@@ -30,9 +30,9 @@ func Builder(cfg Config) registry.Builder {
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
-			UserInput: &types.UserInputRegistration{
-				Schema: jsonx.SchemaFrom[UserInput](),
-			},
+			UserInput:    userInput.Registration(),
+			HealthCheck:  entraCredential.HealthCheck(checkHealth),
+			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				entraTenantCredential.Registration(types.CredentialRegistration{
 					Name:        "Azure Entra ID Credential",
@@ -41,18 +41,11 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				entraConnection.Registration(types.ConnectionRegistration{
-					Name:           "Azure Entra ID Admin Consent",
-					Description:    "Connect your Azure Entra ID tenant using admin consent.",
-					CredentialRefs: []types.CredentialSlotID{entraTenantCredential.ID()},
-					HealthCheck: &types.HealthCheckRegistration{
-						ClientRef: entraCredential.ID(),
-						Handle:    HealthCheck{}.Handle(),
-					},
-					Integration: installation.Registration(),
+					Name:        "Azure Entra ID Admin Consent",
+					Description: "Connect your Azure Entra ID tenant using admin consent.",
 					Auth:        adminConsentRegistration(cfg),
 					Disconnect: &types.DisconnectRegistration{
-						CredentialRef: entraTenantCredential.ID(),
-						Description:   "Removes the stored credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.",
+						Description: "Removes the stored credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.",
 					},
 				}),
 			},
@@ -69,7 +62,7 @@ func Builder(cfg Config) registry.Builder {
 					Description: "Collect Azure Entra ID users, groups, and memberships as directory accounts",
 					Policy:      types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Schedule:    gala.NewFullFetchSchedule(),
-					HealthCheck: DirectoryProbe{}.Handle(),
+					HealthCheck: probeDirectory,
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -81,7 +74,6 @@ func Builder(cfg Config) registry.Builder {
 							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
-					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"User.Read.All", "Group.Read.All", "GroupMember.Read.All", "Directory.Read.All"},
 				}),

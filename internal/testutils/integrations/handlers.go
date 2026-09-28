@@ -6,9 +6,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
-
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // healthHandler validates the bound credential, failing on the marker values
@@ -25,26 +24,27 @@ func healthHandler(_ context.Context, req types.OperationRequest) (json.RawMessa
 }
 
 // repoSyncHandler runs with the built client
-func repoSyncHandler(_ context.Context, req types.OperationRequest) (json.RawMessage, error) {
-	if _, ok := req.Client.(*Client); !ok {
-		return nil, ErrTokenMissing
-	}
-
+func repoSyncHandler(context.Context, types.OperationRequest, *Client, repoSync) (json.RawMessage, error) {
 	return json.RawMessage(`{"synced":true}`), nil
 }
 
 // validatedHandler backs the inline operation with a required config field
-func validatedHandler(context.Context, types.OperationRequest) (json.RawMessage, error) {
+func validatedHandler(context.Context, types.OperationRequest, validatedRun) (json.RawMessage, error) {
 	return json.RawMessage(`{"validated":true}`), nil
 }
 
 // idleCycle reports zero drift
-func idleCycle(context.Context, types.OperationRequest) (json.RawMessage, error) {
+func idleCycle[Cfg any](context.Context, types.OperationRequest, Cfg) (json.RawMessage, error) {
+	return nil, nil
+}
+
+// idleClientCycle reports zero drift once the test client resolves
+func idleClientCycle(context.Context, types.OperationRequest, *Client, unresolvableCycle) (json.RawMessage, error) {
 	return nil, nil
 }
 
 // failingCycle always fails
-func failingCycle(context.Context, types.OperationRequest) (json.RawMessage, error) {
+func failingCycle(context.Context, types.OperationRequest, exhaustingCycle) (json.RawMessage, error) {
 	return nil, ErrCycleFailed
 }
 
@@ -71,5 +71,13 @@ func webhookInboundEvent(req types.WebhookInboundRequest) (types.WebhookReceived
 
 // disabledUnlessMode gates a reconcile operation on the installation's mode input
 func disabledUnlessMode(mode string) func(json.RawMessage) bool {
-	return providerkit.DisabledWhen(func(u UserInput) bool { return u.Mode != mode })
+	return func(userInput json.RawMessage) bool {
+		var input UserInput
+
+		if err := jsonx.UnmarshalIfPresent(userInput, &input); err != nil {
+			return false
+		}
+
+		return input.Mode != mode
+	}
 }

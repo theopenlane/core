@@ -18,29 +18,22 @@ import (
 const (
 	// defaultPageSize is the number of Security Hub findings requested per paginated API call
 	defaultPageSize = int32(100)
-	// vul
+	// vulnerabilityType is the Security Hub finding type that identifies vulnerability findings
 	vulnerabilityType = "Software and Configuration Checks/Vulnerabilities/CVE"
 )
 
-// FindingsCollect collects AWS Security Hub findings
-type FindingsCollect struct{}
+// findingsCollectOperation is the AWS Security Hub finding and vulnerabilities collection operation, pinned to its persisted name
+var findingsCollectOperation = types.OperationRefOf[FindingSync]().Ingests(securityHubClient, runFindingsCollect)
 
-// IngestHandle adapts vulnerabilities collection to the ingest operation registration boundary
-func (v FindingsCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(securityHubClient, func(ctx context.Context, request types.OperationRequest, client *securityhub.Client) ([]types.IngestPayloadSet, error) {
-		return v.Run(ctx, client, request.Credentials, request.LastRunAt)
-	})
-}
-
-// Run collects Security Hub findings
-func (FindingsCollect) Run(ctx context.Context, c *securityhub.Client, credentials types.CredentialBindings, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
+// runFindingsCollect collects Security Hub findings
+func runFindingsCollect(ctx context.Context, request types.OperationRequest, c *securityhub.Client, _ FindingSync) ([]types.IngestPayloadSet, error) {
 	var (
 		findingEnvelopes       []types.MappingEnvelope
 		vulnerabilityEnvelopes []types.MappingEnvelope
 		nextToken              *string
 	)
 
-	filters, err := buildFilters(ctx, credentials, lastRunAt)
+	filters, err := buildFilters(ctx, request.Credentials, request.LastRunAt)
 	if err != nil {
 		return nil, err
 	}

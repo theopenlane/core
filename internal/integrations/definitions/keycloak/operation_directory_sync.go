@@ -8,39 +8,31 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// DirectorySync collects Keycloak directory users, groups, and memberships for ingest
-type DirectorySync struct{}
+// directorySyncOperation is the Keycloak directory sync operation
+var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(keycloakClient, runDirectorySync)
 
-// IngestHandle adapts directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(keycloakClient, func(ctx context.Context, request types.OperationRequest, gc *gocloak.GoCloak) ([]types.IngestPayloadSet, error) {
-		var cfg UserInput
-		if request.Integration != nil {
-			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
-		}
+// runDirectorySync acquires a realm token and collects Keycloak directory users, groups, and memberships
+func runDirectorySync(ctx context.Context, request types.OperationRequest, gc *gocloak.GoCloak, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
+	cred, err := resolveCredential(request.Credentials)
+	if err != nil {
+		return nil, err
+	}
 
-		cred, err := resolveCredential(request.Credentials)
-		if err != nil {
-			return nil, err
-		}
+	token, err := gc.LoginClient(ctx, cred.ClientID, cred.ClientSecret, cred.Realm)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error acquiring keycloak token")
 
-		token, err := gc.LoginClient(ctx, cred.ClientID, cred.ClientSecret, cred.Realm)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error acquiring keycloak token")
+		return nil, ErrTokenAcquireFailed
+	}
 
-			return nil, ErrTokenAcquireFailed
-		}
-
-		return d.Run(ctx, gc, token.AccessToken, cred.Realm, cfg)
-	})
+	return collectDirectory(ctx, gc, token.AccessToken, cred.Realm, cfg)
 }
 
-// Run collects Keycloak directory users, groups, and memberships
-func (DirectorySync) Run(ctx context.Context, gc *gocloak.GoCloak, token, realm string, cfg UserInput) ([]types.IngestPayloadSet, error) {
+// collectDirectory collects Keycloak directory users, groups, and memberships
+func collectDirectory(ctx context.Context, gc *gocloak.GoCloak, token, realm string, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listDirectoryUsers(ctx, gc, token, realm)
 	if err != nil {
 		return nil, err

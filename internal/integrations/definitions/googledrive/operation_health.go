@@ -18,13 +18,8 @@ type HealthCheck struct {
 	FileCount int `json:"fileCount"`
 }
 
-// Handle adapts the health check to the generic operation registration boundary
-func (h HealthCheck) Handle() types.OperationHandler {
-	return providerkit.WithClient(driveClient, h.Run)
-}
-
-// Run executes the health check by listing files accessible via the Drive API
-func (HealthCheck) Run(ctx context.Context, c DriveClient) (json.RawMessage, error) {
+// checkHealth executes the health check by listing files accessible via the Drive API
+func checkHealth(ctx context.Context, _ types.OperationRequest, c DriveClient) (json.RawMessage, error) {
 	resp, err := c.Svc.Files.List().
 		PageSize(healthCheckMaxResults).
 		Fields("files(id)").

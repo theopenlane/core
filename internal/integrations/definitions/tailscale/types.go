@@ -17,10 +17,8 @@ var (
 	tailscaleClient = types.ClientRefOf[*tsclient.Client]().Using(tailscaleCredential)
 	// tailscaleConnection is the connection mode selected by the Tailscale OAuth client credential
 	tailscaleConnection = types.NewConnectionRef(tailscaleCredential).Enables(tailscaleClient)
-	// directorySyncOperation is the operation ref for the directory sync operation
-	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(tailscaleClient)
-	// assetSyncOperation is the operation ref for the asset sync operation
-	assetSyncOperation = types.OperationRefOf[AssetSync]().Using(tailscaleClient)
+	// userInput is the installation user input layout for the Tailscale definition
+	userInput = types.NewUserInputRef[UserInput]("tailscale")
 )
 
 // UserInput holds installation-specific configuration collected from the user
@@ -33,8 +31,8 @@ type UserInput struct {
 
 // DirectorySync holds configuration for the Tailscale directory sync operation
 type DirectorySync struct {
-	// Disable stops the directory sync operation from running
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from Tailscale"`
+	// Switch toggles the directory sync operation off for the installation
+	types.Switch
 	// DisableGroupSync skips group and membership sync, importing only users
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from Tailscale; disable role-based group sync"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
@@ -43,8 +41,8 @@ type DirectorySync struct {
 
 // AssetSync holds configuration for the Tailscale asset sync operation
 type AssetSync struct {
-	// Disable stops the asset sync operation from running
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of Tailscale devices as assets"`
+	// Switch toggles the asset sync operation off for the installation
+	types.Switch
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
 }

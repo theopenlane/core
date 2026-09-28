@@ -23,6 +23,4 @@ var (
 	ErrDevicesFetchFailed = errors.New("tailscale: devices fetch failed")
 	// ErrPayloadEncode indicates a collected Tailscale payload could not be serialized for ingest
 	ErrPayloadEncode = errors.New("tailscale: ingest payload encode failed")
-	// ErrOperationConfigInvalid indicates operation config could not be decoded
-	ErrOperationConfigInvalid = errors.New("tailscale: operation config invalid")
 )

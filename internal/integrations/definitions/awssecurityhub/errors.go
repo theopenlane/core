@@ -23,10 +23,8 @@ var (
 	ErrAccountIDMismatch = errors.New("awssecurityhub: configured account id does not match role arn account")
 	// ErrDescribeHubFailed indicates DescribeHub failed
 	ErrDescribeHubFailed = errors.New("awssecurityhub: describe hub failed")
-	// ErrDescribeHubFailed indicates DescribeHub failed
+	// ErrSecurityHubNotEnabled indicates security hub is not enabled for the account
 	ErrSecurityHubNotEnabled = errors.New("awssecurityhub: security hub not enabled for account")
-	// ErrOperationConfigInvalid indicates operation config could not be decoded
-	ErrOperationConfigInvalid = errors.New("awssecurityhub: operation config invalid")
 	// ErrListAssessmentsFailed indicates ListAssessments failed
 	ErrListAssessmentsFailed = errors.New("awssecurityhub: list assessments failed")
 	// ErrAssessmentEncode indicates an assessment payload could not be serialized for ingest
