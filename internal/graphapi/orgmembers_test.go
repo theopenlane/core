@@ -349,7 +349,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 			userID: th.SharedTestUser2.ID,
 			role:   enums.RoleMember,
 			ctx:    th.SharedTestUser2.UserCtx,
-			errMsg: th.NotFoundErrorMsg, // organization is not found because user does not have access to it
+			errMsg: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:   "add user to personal org not allowed",
@@ -415,6 +415,116 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 	// delete created org and users
 	th.CleanupOrganizationDataWithContext(otherOrgCtx, t)
 	th.CleanupOrganizationDataWithContext(localTestOrg.UserCtx, t)
+}
+
+func TestMutationCreateOrgMemberRoleCeiling(t *testing.T) {
+	t.Parallel()
+
+	org := suite.SeedFreshOrgUsers(t)
+	t.Cleanup(func() { th.CleanupOrganizationDataWithContext(org.Owner.UserCtx, t) })
+
+	testCases := []struct {
+		name   string
+		ctx    context.Context
+		role   enums.Role
+		errMsg string
+	}{
+		{
+			name: "admin can add admin",
+			ctx:  org.Admin.UserCtx,
+			role: enums.RoleAdmin,
+		},
+		{
+			name: "super admin can add super admin",
+			ctx:  org.SuperAdmin.UserCtx,
+			role: enums.RoleSuperAdmin,
+		},
+		{
+			name: "owner can add super admin",
+			ctx:  org.Owner.UserCtx,
+			role: enums.RoleSuperAdmin,
+		},
+		{
+			name:   "admin cannot add super admin",
+			ctx:    org.Admin.UserCtx,
+			role:   enums.RoleSuperAdmin,
+			errMsg: th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:   "admin cannot add owner",
+			ctx:    org.Admin.UserCtx,
+			role:   enums.RoleOwner,
+			errMsg: th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:   "super admin cannot add owner",
+			ctx:    org.SuperAdmin.UserCtx,
+			role:   enums.RoleOwner,
+			errMsg: th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:   "owner cannot add another owner",
+			ctx:    org.Owner.UserCtx,
+			role:   enums.RoleOwner,
+			errMsg: th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:   "member cannot add admin",
+			ctx:    org.Member.UserCtx,
+			role:   enums.RoleAdmin,
+			errMsg: th.NotAuthorizedErrorMsg,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			target := (&th.UserBuilder{Client: suite.Client}).MustNew(org.Owner.UserCtx, t)
+
+			input := testclient.CreateOrgMembershipInput{
+				OrganizationID: org.Owner.OrganizationID,
+				UserID:         target.ID,
+				Role:           &tc.role,
+			}
+
+			resp, err := suite.Client.API.AddUserToOrgWithRole(tc.ctx, input)
+
+			if tc.errMsg != "" {
+				assert.ErrorContains(t, err, tc.errMsg)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.role, resp.CreateOrgMembership.OrgMembership.Role))
+		})
+	}
+
+	for _, role := range []enums.Role{enums.RoleOwner, enums.RoleSuperAdmin} {
+		t.Run("bulk, admin cannot add "+role.String(), func(t *testing.T) {
+			target := (&th.UserBuilder{Client: suite.Client}).MustNew(org.Owner.UserCtx, t)
+
+			input := []*testclient.CreateOrgMembershipInput{
+				{
+					OrganizationID: org.Owner.OrganizationID,
+					UserID:         target.ID,
+					Role:           &role,
+				},
+			}
+
+			_, err := suite.Client.API.CreateBulkOrgMembers(org.Admin.UserCtx, input)
+			assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
+		})
+	}
+
+	owners, err := suite.Client.DB.OrgMembership.Query().
+		Where(
+			orgmembership.OrganizationID(org.Owner.OrganizationID),
+			orgmembership.RoleEQ(enums.RoleOwner),
+		).
+		All(privacy.DecisionContext(context.Background(), privacy.Allow))
+	assert.NilError(t, err)
+	assert.Assert(t, is.Len(owners, 1))
+	assert.Check(t, is.Equal(org.Owner.ID, owners[0].UserID))
 }
 
 func TestMutationUpdateOrgMembers(t *testing.T) {
