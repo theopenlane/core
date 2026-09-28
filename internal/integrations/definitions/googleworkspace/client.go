@@ -39,7 +39,7 @@ func tokenSource(ctx context.Context, cfg Config, cred googleWorkspaceCred) oaut
 }
 
 // Build constructs the Google Workspace Admin SDK client for one installation
-func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (*admin.Service, error) {
 	cred, _, err := workspaceCredential.Resolve(req.Credentials)
 	if err != nil {
 		return nil, ErrCredentialDecode

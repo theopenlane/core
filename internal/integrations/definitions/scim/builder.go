@@ -28,18 +28,14 @@ func Builder() registry.Builder {
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			Webhooks: []types.WebhookRegistration{
-				{
-					Name:                SCIMAuthWebhook.Name(),
+				SCIMAuthWebhook.Registration(types.WebhookRegistration{
 					EndpointURLTemplate: "/v1/integrations/scim/{endpointID}/v2",
-				},
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         directorySyncOperation.Name(),
-					Description:  "Synchronize directory state through SCIM",
-					Topic:        DefinitionID.OperationTopic(directorySyncOperation.Name()),
-					ConfigSchema: directorySyncSchema,
-					Policy:       types.ExecutionPolicy{Inline: true},
+				directorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
+					Description: "Synchronize directory state through SCIM",
+					Policy:      types.ExecutionPolicy{Inline: true},
 					Ingest: []types.IngestContract{
 						{Schema: entityops.SchemaDirectoryAccount.Name},
 						{Schema: entityops.SchemaDirectoryGroup.Name},
@@ -47,7 +43,7 @@ func Builder() registry.Builder {
 					},
 					Handle:              providerkit.StaticHandler(DirectorySync{}.Run),
 					SkipDefaultLookback: true,
-				},
+				}),
 			},
 			Mappings: []types.MappingRegistration{
 				{

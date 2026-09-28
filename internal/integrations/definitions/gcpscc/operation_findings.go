@@ -27,12 +27,6 @@ const (
 	findingsMaxPageSize = 1000
 )
 
-// FindingsSync holds per-invocation parameters for the findings.collect operation
-type FindingsSync struct {
-	// PageSize controls the number of findings per API page
-	PageSize int `json:"page_size,omitempty"`
-}
-
 // FindingsCollect collects GCP SCC findings for ingest
 type FindingsCollect struct{}
 

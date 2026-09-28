@@ -17,7 +17,7 @@ const defaultScope = "https://www.googleapis.com/auth/cloud-platform"
 type Client struct{}
 
 // Build constructs the GCP Security Command Center client for one installation
-func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (*cloudscc.Client, error) {
 	scope, err := resolveScope(req.Credentials)
 	if err != nil {
 		return nil, err

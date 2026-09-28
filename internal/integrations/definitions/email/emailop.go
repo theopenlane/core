@@ -102,10 +102,8 @@ func RegisterEmailOperation[T Recipient](op Operation[T]) Operation[T] {
 // Operation is a generic helper which defines a single system email type as a registered integration operation
 // this allows us to do AllEmailOperations() in the builder rather than manually wiring each
 type Operation[T Recipient] struct {
-	// Op is the typed operation ref with name derived from the schema definition key
+	// Op is the typed operation ref with name derived from the schema definition key, declared against the email client
 	Op types.OperationRef[T]
-	// Schema is the reflected JSON schema for the input type
-	Schema json.RawMessage
 	// Description is the human-readable summary shown in the catalog picker
 	Description string
 	// CustomerSelectable gates whether the entry is exposed via the customer-facing catalog query
@@ -243,15 +241,11 @@ func (e Operation[T]) renderToMessage(client *Client, input T, extraOpts ...newm
 // Catalog-facing fields (Description, CustomerSelectable) travel on the registration
 // so downstream filters (e.g. customer-facing catalog query) can operate on AllEmailOperations directly
 func (e Operation[T]) Registration() types.OperationRegistration {
-	return types.OperationRegistration{
-		Name:               e.Op.Name(),
+	return e.Op.Registration(DefinitionID, types.OperationRegistration{
 		Description:        e.Description,
-		Topic:              DefinitionID.OperationTopic(e.Op.Name()),
-		ClientRef:          emailClientRef.ID(),
-		ConfigSchema:       e.Schema,
 		CustomerSelectable: lo.ToPtr(e.CustomerSelectable != nil && *e.CustomerSelectable),
 		Handle:             e.handler(),
-	}
+	})
 }
 
 // handler returns the typed operation handler that renders and sends the email

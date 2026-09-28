@@ -36,7 +36,7 @@ type Client struct {
 }
 
 // Build constructs the GitHub GraphQL client for one installation
-func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (GraphQLClient, error) {
 	credential, err := credentialFromBindings(req.Credentials)
 	if err != nil {
 		return nil, err

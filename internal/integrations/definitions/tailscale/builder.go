@@ -30,20 +30,17 @@ func Builder() registry.Builder {
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         tailscaleCredential.ID(),
+				tailscaleCredential.Registration(types.CredentialRegistration{
 					Name:        "Tailscale OAuth Client",
 					Description: "OAuth client credentials used to read users and devices from your tailnet.",
-					Schema:      tailscaleSchema,
-				},
+					Schema:      tailscaleCredential.Schema(),
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  tailscaleCredential.ID(),
+				tailscaleConnection.Registration(types.ConnectionRegistration{
 					Name:           "Tailscale OAuth",
 					Description:    "Configure Tailscale access using an OAuth client scoped to your tailnet.",
 					CredentialRefs: []types.CredentialSlotID{tailscaleCredential.ID()},
-					ClientRefs:     []types.ClientID{tailscaleClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: tailscaleClient.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -53,26 +50,19 @@ func Builder() registry.Builder {
 						CredentialRef: tailscaleCredential.ID(),
 						Description:   "Removes the stored OAuth credentials from Openlane. If the client is no longer needed, revoke it in the Tailscale admin console.",
 					},
-				},
+				}),
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            tailscaleClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{tailscaleCredential.ID()},
-					Description:    "Tailscale HTTP API client",
-					Build:          Client{}.Build,
-				},
+				tailscaleClient.Registration(Client{}.Build, types.ClientRegistration{
+					Description: "Tailscale HTTP API client",
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:           directorySyncOperation.Name(),
+				directorySyncOperation.Registration(definitionID, types.OperationRegistration{
 					Description:    "Sync Tailscale users and role-based groups as directory accounts",
-					Topic:          definitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:      tailscaleClient.ID(),
-					ConfigSchema:   directorySyncSchema,
 					Policy:         types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
-					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
+					ConfigResolver: directorySyncOperation.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -88,16 +78,12 @@ func Builder() registry.Builder {
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"users:read", "policy_file:read"},
 					Schedule:            gala.NewFullFetchSchedule(),
-				},
-				{
-					Name:           assetSyncOperation.Name(),
+				}),
+				assetSyncOperation.Registration(definitionID, types.OperationRegistration{
 					Description:    "Sync Tailscale devices as assets",
-					Topic:          definitionID.OperationTopic(assetSyncOperation.Name()),
-					ClientRef:      tailscaleClient.ID(),
-					ConfigSchema:   assetSyncSchema,
 					Policy:         types.ExecutionPolicy{Reconcile: true},
 					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.AssetSync.Disable }),
-					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) AssetSync { return u.AssetSync }),
+					ConfigResolver: assetSyncOperation.ConfigFrom(func(u UserInput) AssetSync { return u.AssetSync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaAsset.Name,
@@ -107,7 +93,7 @@ func Builder() registry.Builder {
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"devices:core:read", "devices:posture_attributes:read", "devices:routes:read"},
 					Schedule:            gala.NewFullFetchSchedule(),
-				},
+				}),
 			},
 			Mappings: []types.MappingRegistration{
 				{

@@ -17,7 +17,6 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -41,9 +40,9 @@ type webhookTestCredential struct {
 }
 
 var (
-	webhookTestCredentialSchema, webhookTestCredentialRef = providerkit.CredentialSchema[webhookTestCredential]()
-	webhookHealthCheckSchema, webhookHealthCheckOperation = providerkit.OperationSchema[WebhookTestHealthCheck]()
-	webhookAlertCreatedEvent                              = types.NewWebhookEventRef[webhookTestAlertEnvelope]("alert.created")
+	webhookTestCredentialRef    = types.CredentialRefOf[webhookTestCredential]()
+	webhookHealthCheckOperation = types.OperationRefOf[WebhookTestHealthCheck]()
+	webhookAlertCreatedEvent    = types.NewWebhookEventRef[webhookTestAlertEnvelope]("alert.created")
 )
 
 func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
@@ -58,11 +57,10 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 				Visible:     true,
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:    webhookTestCredentialRef.ID(),
+				webhookTestCredentialRef.Registration(types.CredentialRegistration{
 					Name:   "Webhook Test Credential",
-					Schema: webhookTestCredentialSchema,
-				},
+					Schema: webhookTestCredentialRef.Schema(),
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
 				{
@@ -94,27 +92,22 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 						}, nil
 					},
 					Events: []types.WebhookEventRegistration{
-						{
-							Name:  webhookAlertCreatedEvent.Name(),
-							Topic: definition.WebhookEventTopic(webhookAlertCreatedEvent.Name()),
+						webhookAlertCreatedEvent.Registration(definition, types.WebhookEventRegistration{
 							Handle: func(context.Context, types.WebhookHandleRequest) error {
 								return nil
 							},
-						},
+						}),
 					},
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         webhookHealthCheckOperation.Name(),
-					Description:  "Health check",
-					Topic:        definition.OperationTopic(webhookHealthCheckOperation.Name()),
-					ConfigSchema: webhookHealthCheckSchema,
-					Policy:       types.ExecutionPolicy{Inline: true},
+				webhookHealthCheckOperation.Registration(definition, types.OperationRegistration{
+					Description: "Health check",
+					Policy:      types.ExecutionPolicy{Inline: true},
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"ok":true}`), nil
 					},
-				},
+				}),
 			},
 		}, nil
 	})

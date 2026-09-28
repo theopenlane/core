@@ -27,7 +27,7 @@ type Client struct {
 // Build constructs a DriveClient from the installation OAuth credential.
 // It wraps an oauth2.TokenSource so that expired access tokens are automatically
 // refreshed using the stored refresh token, matching the behavior of the Google Drive client.
-func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (*DriveClient, error) {
 	cred, _, err := oneDriveCredential.Resolve(req.Credentials)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error decoding onedrive credentials")

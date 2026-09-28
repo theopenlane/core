@@ -47,7 +47,7 @@ func runtimeClientBuilder(devMode bool) func(context.Context, json.RawMessage) (
 }
 
 // buildCustomerClient constructs an Client from resolved credentials and user input
-func buildCustomerClient(_ context.Context, req types.ClientBuildRequest) (any, error) {
+func buildCustomerClient(_ context.Context, req types.ClientBuildRequest) (*Client, error) {
 	cred, _, err := emailCredentialRef.Resolve(req.Credentials)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)

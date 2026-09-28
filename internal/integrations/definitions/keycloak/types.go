@@ -2,7 +2,6 @@ package keycloak
 
 import (
 	gocloak "github.com/Nerzal/gocloak/v13"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -11,13 +10,14 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0KEYCLOAK000000000000001")
 	// integration is the typed installation metadata handle for the Keycloak definition
 	integration = types.NewInstallationRef(resolveInstallationMetadata)
-	// keycloakCredentialSchema is the JSON schema for the Keycloak credential
-	// keycloakCredential is the typed runtime ref for resolving the credential
-	keycloakCredentialSchema, keycloakCredential = providerkit.CredentialSchema[CredentialSchema]()
+	// keycloakCredential is the typed credential slot for the Keycloak client credentials
+	keycloakCredential = types.CredentialRefOf[CredentialSchema]()
 	// keycloakClient is the client ref for the Keycloak API client
-	keycloakClient = types.NewClientRef[*gocloak.GoCloak]()
-	// directorySyncSchema, directorySyncOperation is the operation ref for directory sync
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	keycloakClient = types.ClientRefOf[*gocloak.GoCloak]().Using(keycloakCredential)
+	// keycloakConnection is the connection mode selected by the Keycloak credential slot
+	keycloakConnection = types.NewConnectionRef(keycloakCredential).Enables(keycloakClient)
+	// directorySyncOperation is the operation ref for directory sync
+	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(keycloakClient)
 )
 
 // CredentialSchema holds the Keycloak instance credentials for one installation

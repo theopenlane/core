@@ -1,7 +1,6 @@
 package authentik
 
 import (
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	authentikSDK "goauthentik.io/api/v3"
 )
@@ -11,13 +10,14 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0AUTHENTIK000000000000001")
 	// integration is the typed installation metadata handle for the Authentik definition
 	integration = types.NewInstallationRef(resolveInstallationMetadata)
-	// authentikCredentialSchema is the JSON schema for the Authentik credential
-	// authentikCredential is the typed runtime ref for resolving the credential
-	authentikCredentialSchema, authentikCredential = providerkit.CredentialSchema[CredentialSchema]()
+	// authentikCredential is the typed credential slot for the Authentik API token
+	authentikCredential = types.CredentialRefOf[CredentialSchema]()
 	// authentikClient is the client ref for the Authentik API client
-	authentikClient = types.NewClientRef[*authentikSDK.APIClient]()
-	// directorySyncSchema, directorySyncOperation is the operation ref for directory sync
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	authentikClient = types.ClientRefOf[*authentikSDK.APIClient]().Using(authentikCredential)
+	// authentikConnection is the connection mode selected by the Authentik API token credential
+	authentikConnection = types.NewConnectionRef(authentikCredential).Enables(authentikClient)
+	// directorySyncOperation is the operation ref for directory sync
+	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(authentikClient)
 )
 
 // CredentialSchema holds the Authentik instance credentials for one installation

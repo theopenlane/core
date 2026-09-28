@@ -26,20 +26,17 @@ func Builder() registry.Builder {
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         securityCenterCredential.ID(),
+				securityCenterCredential.Registration(types.CredentialRegistration{
 					Name:        "Azure Security Center Credential",
 					Description: "Azure service principal used to access Microsoft Defender for Cloud.",
-					Schema:      securityCenterSchema,
-				},
+					Schema:      securityCenterCredential.Schema(),
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  securityCenterCredential.ID(),
+				securityCenterConnection.Registration(types.ConnectionRegistration{
 					Name:           "Azure Service Principal",
 					Description:    "Configure Defender for Cloud access using an Azure service principal.",
 					CredentialRefs: []types.CredentialSlotID{securityCenterCredential.ID()},
-					ClientRefs:     []types.ClientID{securityCenterClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: securityCenterClient.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -49,45 +46,34 @@ func Builder() registry.Builder {
 						CredentialRef: securityCenterCredential.ID(),
 						Description:   "Removes the stored service principal credentials from Openlane. If the Azure app registration is no longer needed, delete it from your Azure tenant.",
 					},
-				},
+				}),
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            securityCenterClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{securityCenterCredential.ID()},
-					Description:    "Azure Security Center assessments and sub-assessments client",
-					Build:          Client{}.Build,
-				},
+				securityCenterClient.Registration(Client{}.Build, types.ClientRegistration{
+					Description: "Azure Security Center assessments and sub-assessments client",
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         assessmentsCollectOperation.Name(),
-					Description:  "Collect unhealthy security posture assessment findings for vulnerability ingestion",
-					Topic:        definitionID.OperationTopic(assessmentsCollectOperation.Name()),
-					ClientRef:    securityCenterClient.ID(),
-					ConfigSchema: assessmentsCollectSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true},
+				assessmentsCollectOperation.Registration(definitionID, types.OperationRegistration{
+					Description: "Collect unhealthy security posture assessment findings for vulnerability ingestion",
+					Policy:      types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaVulnerability.Name,
 						},
 					},
 					IngestHandle: AssessmentsCollect{}.IngestHandle(),
-				},
-				{
-					Name:         subAssessmentsCollectOperation.Name(),
-					Description:  "Collect granular sub-assessment vulnerability findings (CVEs from container images, servers, and SQL checks)",
-					Topic:        definitionID.OperationTopic(subAssessmentsCollectOperation.Name()),
-					ClientRef:    securityCenterClient.ID(),
-					ConfigSchema: subAssessmentsCollectSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true},
+				}),
+				subAssessmentsCollectOperation.Registration(definitionID, types.OperationRegistration{
+					Description: "Collect granular sub-assessment vulnerability findings (CVEs from container images, servers, and SQL checks)",
+					Policy:      types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaVulnerability.Name,
 						},
 					},
 					IngestHandle: SubAssessmentsCollect{}.IngestHandle(),
-				},
+				}),
 			},
 			Mappings: []types.MappingRegistration{
 				{

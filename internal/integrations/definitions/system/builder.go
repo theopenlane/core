@@ -23,42 +23,33 @@ func Builder(paymentReminder PaymentReminderConfig, organizationDelete Organizat
 				Visible:     false,
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:                PaymentReminderOp.Name(),
+				PaymentReminderOp.Registration(DefinitionID, types.OperationRegistration{
 					Description:         "Mark canceled organizations for deletion and dispatch deletion notice emails",
-					Topic:               DefinitionID.OperationTopic(PaymentReminderOp.Name()),
-					ConfigSchema:        paymentReminderSchema,
 					Policy:              types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true},
 					Schedule:            &gala.Schedule{MinInterval: PaymentReminderMinInterval, MaxInterval: PaymentReminderMaxInterval},
 					Handle:              paymentReminder.Sweep().Handle(),
 					CustomerSelectable:  lo.ToPtr(false),
 					DisabledForAll:      !paymentReminder.Enabled,
 					SkipDefaultLookback: true,
-				},
-				{
-					Name:                OrganizationDeleteOp.Name(),
+				}),
+				OrganizationDeleteOp.Registration(DefinitionID, types.OperationRegistration{
 					Description:         "Delete overdue organizations that still have no active or trialing subscription",
-					Topic:               DefinitionID.OperationTopic(OrganizationDeleteOp.Name()),
-					ConfigSchema:        organizationDeleteSchema,
 					Policy:              types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true},
 					Schedule:            &gala.Schedule{MinInterval: OrganizationDeleteMinInterval, MaxInterval: OrganizationDeleteMaxInterval},
 					Handle:              organizationDelete.Sweep().Handle(),
 					CustomerSelectable:  lo.ToPtr(false),
 					DisabledForAll:      !organizationDelete.Enabled,
 					SkipDefaultLookback: true,
-				},
-				{
-					Name:                IntegrationLifecycleOp.Name(),
+				}),
+				IntegrationLifecycleOp.Registration(DefinitionID, types.OperationRegistration{
 					Description:         "Reap expired integration installations that never connected",
-					Topic:               DefinitionID.OperationTopic(IntegrationLifecycleOp.Name()),
-					ConfigSchema:        integrationLifecycleSchema,
 					Policy:              types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true},
 					Schedule:            &gala.Schedule{MinInterval: IntegrationLifecycleMinInterval, MaxInterval: IntegrationLifecycleMaxInterval},
 					Handle:              integrationLifecycle.Sweep().Handle(),
 					CustomerSelectable:  lo.ToPtr(false),
 					DisabledForAll:      !integrationLifecycle.Enabled,
 					SkipDefaultLookback: true,
-				},
+				}),
 			},
 		}, nil
 	})

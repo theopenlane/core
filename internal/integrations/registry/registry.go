@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"maps"
 	"slices"
 	"strings"
 
@@ -216,21 +217,41 @@ func (r *Registry) Register(def types.Definition) error {
 		entry.runtimeClient = client
 	}
 
-	for _, operation := range entry.operations {
-		r.operationsByTopic[operation.Topic] = operation
+	operationTopics := make(map[gala.TopicName]types.OperationRegistration, len(def.Operations))
+
+	for _, operation := range def.Operations {
+		if lo.HasKey(r.operationsByTopic, operation.Topic) || lo.HasKey(operationTopics, operation.Topic) {
+			return duplicateRegistration(def.ID, "operation topic", string(operation.Topic))
+		}
+
+		operationTopics[operation.Topic] = operation
 	}
 
-	for _, events := range entry.webhookEvents {
-		for _, event := range events {
-			r.webhookEventsByTopic[event.Topic] = event
+	webhookEventTopics := make(map[gala.TopicName]types.WebhookEventRegistration)
+
+	for _, webhook := range def.Webhooks {
+		for _, event := range webhook.Events {
+			if lo.HasKey(r.webhookEventsByTopic, event.Topic) || lo.HasKey(webhookEventTopics, event.Topic) {
+				return duplicateRegistration(def.ID, "webhook event topic", string(event.Topic))
+			}
+
+			webhookEventTopics[event.Topic] = event
 		}
 	}
+
+	maps.Copy(r.operationsByTopic, operationTopics)
+	maps.Copy(r.webhookEventsByTopic, webhookEventTopics)
 
 	r.definitions[def.ID] = entry
 
 	r.galaListeners = append(r.galaListeners, def.GalaListeners...)
 
 	return nil
+}
+
+// duplicateRegistration reports a second registration of one kind under a name a definition already holds
+func duplicateRegistration(definitionID, kind, name string) error {
+	return fmt.Errorf("%w: definition %s %s %q", ErrDuplicateRegistration, definitionID, kind, name)
 }
 
 // RegisterAll builds and registers every supplied definition builder in order
@@ -537,22 +558,22 @@ func validateSourceKey(sourceSchema *entityops.Schema, key string, wantList bool
 func compileDefinition(def types.Definition) (definitionEntry, error) {
 	credentialNames := indexCredentialNames(def.CredentialRegistrations)
 
-	clients, err := indexClients(def.Clients, credentialNames)
+	clients, err := indexClients(def.ID, def.Clients, credentialNames)
 	if err != nil {
 		return definitionEntry{}, err
 	}
 
-	operations, err := indexOperations(def.Operations, clients)
+	operations, err := indexOperations(def.ID, def.Operations, clients)
 	if err != nil {
 		return definitionEntry{}, err
 	}
 
-	connections, err := indexConnections(def.Connections, credentialNames, clients)
+	connections, err := indexConnections(def.ID, def.Connections, credentialNames, clients)
 	if err != nil {
 		return definitionEntry{}, err
 	}
 
-	webhooks, webhookEvents, err := indexWebhooks(def.Webhooks)
+	webhooks, webhookEvents, err := indexWebhooks(def.ID, def.Webhooks)
 	if err != nil {
 		return definitionEntry{}, err
 	}
@@ -580,8 +601,8 @@ func indexCredentialNames(registrations []types.CredentialRegistration) map[stri
 	})
 }
 
-// indexClients indexes client registrations by client ref while validating credential cross-references
-func indexClients(clients []types.ClientRegistration, credentialNames map[string]struct{}) (map[types.ClientID]types.ClientRegistration, error) {
+// indexClients indexes client registrations by client ref while validating credential cross-references and rejecting repeated refs
+func indexClients(definitionID string, clients []types.ClientRegistration, credentialNames map[string]struct{}) (map[types.ClientID]types.ClientRegistration, error) {
 	index := make(map[types.ClientID]types.ClientRegistration, len(clients))
 
 	for _, client := range clients {
@@ -595,14 +616,18 @@ func indexClients(clients []types.ClientRegistration, credentialNames map[string
 			}
 		}
 
+		if lo.HasKey(index, client.Ref) {
+			return nil, duplicateRegistration(definitionID, "client", client.Ref.String())
+		}
+
 		index[client.Ref] = client
 	}
 
 	return index, nil
 }
 
-// indexConnections indexes connection registrations while enforcing credential, client, and health check constraints
-func indexConnections(connections []types.ConnectionRegistration, credentialNames map[string]struct{}, clients map[types.ClientID]types.ClientRegistration) (map[string]types.ConnectionRegistration, error) {
+// indexConnections indexes connection registrations while enforcing credential, client, health check, and unique slot constraints
+func indexConnections(definitionID string, connections []types.ConnectionRegistration, credentialNames map[string]struct{}, clients map[types.ClientID]types.ClientRegistration) (map[string]types.ConnectionRegistration, error) {
 	connectionIndex := make(map[string]types.ConnectionRegistration, len(connections))
 
 	for _, connection := range connections {
@@ -612,8 +637,12 @@ func indexConnections(connections []types.ConnectionRegistration, credentialName
 
 		name := connection.CredentialRef.String()
 
-		if _, declared := credentialNames[connection.CredentialRef.String()]; !declared {
+		if _, declared := credentialNames[name]; !declared {
 			return nil, ErrConnectionCredentialRefNotDeclared
+		}
+
+		if lo.HasKey(connectionIndex, name) {
+			return nil, duplicateRegistration(definitionID, "connection", name)
 		}
 
 		if !lo.Contains(connection.CredentialRefs, connection.CredentialRef) {
@@ -670,8 +699,8 @@ func indexConnections(connections []types.ConnectionRegistration, credentialName
 	return connectionIndex, nil
 }
 
-// indexOperations indexes operations by name while validating handler and client cross-references
-func indexOperations(operations []types.OperationRegistration, clients map[types.ClientID]types.ClientRegistration) (map[string]types.OperationRegistration, error) {
+// indexOperations indexes operations by name while validating handler and client cross-references and rejecting repeated names
+func indexOperations(definitionID string, operations []types.OperationRegistration, clients map[types.ClientID]types.ClientRegistration) (map[string]types.OperationRegistration, error) {
 	index := make(map[string]types.OperationRegistration, len(operations))
 
 	for _, operation := range operations {
@@ -694,14 +723,18 @@ func indexOperations(operations []types.OperationRegistration, clients map[types
 			}
 		}
 
+		if lo.HasKey(index, operation.Name) {
+			return nil, duplicateRegistration(definitionID, "operation", operation.Name)
+		}
+
 		index[operation.Name] = operation
 	}
 
 	return index, nil
 }
 
-// indexWebhooks indexes webhook contracts and webhook events while validating structural constraints
-func indexWebhooks(webhooks []types.WebhookRegistration) (map[string]types.WebhookRegistration, map[string]map[string]types.WebhookEventRegistration, error) {
+// indexWebhooks indexes webhook contracts and webhook events while validating structural constraints and rejecting repeated names
+func indexWebhooks(definitionID string, webhooks []types.WebhookRegistration) (map[string]types.WebhookRegistration, map[string]map[string]types.WebhookEventRegistration, error) {
 	webhookIndex := make(map[string]types.WebhookRegistration, len(webhooks))
 	webhookEventIndex := make(map[string]map[string]types.WebhookEventRegistration, len(webhooks))
 
@@ -710,11 +743,19 @@ func indexWebhooks(webhooks []types.WebhookRegistration) (map[string]types.Webho
 			return nil, nil, ErrWebhookEventResolverRequired
 		}
 
+		if lo.HasKey(webhookIndex, webhook.Name) {
+			return nil, nil, duplicateRegistration(definitionID, "webhook", webhook.Name)
+		}
+
 		eventIndex := make(map[string]types.WebhookEventRegistration, len(webhook.Events))
 
 		for _, event := range webhook.Events {
 			if event.Handle == nil {
 				return nil, nil, ErrWebhookEventHandlerRequired
+			}
+
+			if lo.HasKey(eventIndex, event.Name) {
+				return nil, nil, duplicateRegistration(definitionID, "webhook event", event.Name)
 			}
 
 			eventIndex[event.Name] = event

@@ -143,6 +143,9 @@
               "examples": [
                 "Example: payload.category != \"GKE_SECURITY_BULLETIN\""
               ]
+            },
+            "page_size": {
+              "type": "integer"
             }
           },
           "additionalProperties": false,

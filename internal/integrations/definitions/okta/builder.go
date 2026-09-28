@@ -28,20 +28,17 @@ func Builder() registry.Builder {
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         oktaCredential.ID(),
+				oktaCredential.Registration(types.CredentialRegistration{
 					Name:        "Okta Credential",
 					Description: "API token used to access Okta organization data.",
-					Schema:      oktaCredentialSchema,
-				},
+					Schema:      oktaCredential.Schema(),
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  oktaCredential.ID(),
+				oktaConnection.Registration(types.ConnectionRegistration{
 					Name:           "Okta API Token",
 					Description:    "Configure Okta access using an API token from your organization.",
 					CredentialRefs: []types.CredentialSlotID{oktaCredential.ID()},
-					ClientRefs:     []types.ClientID{oktaClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: oktaClient.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -51,24 +48,17 @@ func Builder() registry.Builder {
 						CredentialRef: oktaCredential.ID(),
 						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Okta admin console under Security > API.",
 					},
-				},
+				}),
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            oktaClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{oktaCredential.ID()},
-					Description:    "Okta API client",
-					Build:          Client{}.Build,
-				},
+				oktaClient.Registration(Client{}.Build, types.ClientRegistration{
+					Description: "Okta API client",
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         directorySyncOperation.Name(),
-					Description:  "Collect Okta directory users, groups, and memberships as directory accounts",
-					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:    oktaClient.ID(),
-					ConfigSchema: directorySyncSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
+				directorySyncOperation.Registration(definitionID, types.OperationRegistration{
+					Description: "Collect Okta directory users, groups, and memberships as directory accounts",
+					Policy:      types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -82,7 +72,7 @@ func Builder() registry.Builder {
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
-				},
+				}),
 			},
 			Mappings: []types.MappingRegistration{
 				{

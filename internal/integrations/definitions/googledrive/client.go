@@ -40,16 +40,16 @@ func tokenSource(ctx context.Context, cfg Config, cred googleDriveCred) oauth2.T
 }
 
 // Build constructs the Google Drive SDK client for one installation
-func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (DriveClient, error) {
 	cred, _, err := driveCredential.Resolve(req.Credentials)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("Failed to resolve drive credentials")
 
-		return nil, ErrCredentialDecode
+		return DriveClient{}, ErrCredentialDecode
 	}
 
 	if cred.AccessToken == "" {
-		return nil, ErrOAuthTokenMissing
+		return DriveClient{}, ErrOAuthTokenMissing
 	}
 
 	// context background used intentionally in this slot
@@ -59,7 +59,7 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, e
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("Failed to init drive client with provided credentials")
 
-		return nil, ErrDriveServiceBuildFailed
+		return DriveClient{}, ErrDriveServiceBuildFailed
 	}
 
 	return DriveClient{Svc: svc}, nil

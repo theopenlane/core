@@ -5,7 +5,6 @@ import (
 
 	admin "google.golang.org/api/admin/directory/v1"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -13,11 +12,13 @@ var (
 	// definitionID is the stable identifier for the Google Workspace integration definition
 	definitionID = types.NewDefinitionRef("def_01K0GWKSP000000000000000001")
 	// workspaceCredential is the credential slot for Google Workspace OAuth credentials
-	_, workspaceCredential = providerkit.CredentialSchema[googleWorkspaceCred]()
+	workspaceCredential = types.CredentialRefOf[googleWorkspaceCred]()
 	// workspaceClient is the client ref for the Google Workspace Admin SDK
-	workspaceClient = types.NewClientRef[*admin.Service]()
-	// directorySyncSchema is the operation ref for the directory sync operation
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	workspaceClient = types.ClientRefOf[*admin.Service]().Using(workspaceCredential)
+	// workspaceConnection is the OAuth connection mode enabling the Admin SDK client
+	workspaceConnection = types.NewConnectionRef(workspaceCredential).Enables(workspaceClient)
+	// directorySyncOperation is the operation ref for the directory sync operation
+	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(workspaceClient)
 )
 
 // googleWorkspaceCred holds the provider-owned credential material for a Google Workspace installation

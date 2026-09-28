@@ -40,19 +40,16 @@ func Builder(cfg Config) registry.Builder {
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         gitHubAppCredential.ID(),
+				gitHubAppCredential.Registration(types.CredentialRegistration{
 					Name:        "GitHub App Credential",
 					Description: "Integration credential managed by the GitHub App install flow.",
-				},
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  gitHubAppCredential.ID(),
+				gitHubAppConnection.Registration(types.ConnectionRegistration{
 					Name:           "GitHub App installation",
 					Description:    "Install the Openlane GitHub App into your GitHub organization.",
 					CredentialRefs: []types.CredentialSlotID{gitHubAppCredential.ID()},
-					ClientRefs:     []types.ClientID{gitHubClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: gitHubClient.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -60,7 +57,7 @@ func Builder(cfg Config) registry.Builder {
 					Integration: installation.Registration(),
 					Auth: &types.AuthRegistration{
 						CredentialRef: gitHubAppCredential.ID(),
-						Schema:        gitHubAppCredentialSchema,
+						Schema:        gitHubAppCredential.Schema(),
 						Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 							return startAppInstall(cfg)
 						},
@@ -97,26 +94,19 @@ func Builder(cfg Config) registry.Builder {
 							}, nil
 						},
 					},
-				},
+				}),
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            gitHubClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{gitHubAppCredential.ID()},
-					Description:    "GitHub GraphQL client",
-					Build:          Client{AppConfig: cfg}.Build,
-				},
+				gitHubClient.Registration(Client{AppConfig: cfg}.Build, types.ClientRegistration{
+					Description: "GitHub GraphQL client",
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:           repositorySyncOperation.Name(),
+				repositorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
 					Description:    "Collect repository inventory from the installation as assets",
-					Topic:          DefinitionID.OperationTopic(repositorySyncOperation.Name()),
-					ClientRef:      gitHubClient.ID(),
-					ConfigSchema:   repositorySyncSchema,
 					Policy:         types.ExecutionPolicy{Reconcile: true},
 					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.RepositorySync.Disable }),
-					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) RepositorySync { return u.RepositorySync }),
+					ConfigResolver: repositorySyncOperation.ConfigFrom(func(u UserInput) RepositorySync { return u.RepositorySync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaAsset.Name,
@@ -124,32 +114,24 @@ func Builder(cfg Config) registry.Builder {
 					},
 					IngestHandle:        RepositorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
-				},
-				{
-					Name:           vulnerabilityCollectOperation.Name(),
+				}),
+				vulnerabilityCollectOperation.Registration(DefinitionID, types.OperationRegistration{
 					Description:    "Collect vulnerability alerts from the installation",
-					Topic:          DefinitionID.OperationTopic(vulnerabilityCollectOperation.Name()),
-					ClientRef:      gitHubClient.ID(),
-					ConfigSchema:   vulnerabilityCollectSchema,
 					Policy:         types.ExecutionPolicy{Reconcile: true},
 					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.VulnerabilitySync.Disable }),
-					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) VulnerabilitySyncConfig { return u.VulnerabilitySync }),
+					ConfigResolver: vulnerabilityCollectOperation.ConfigFrom(func(u UserInput) VulnerabilitySync { return u.VulnerabilitySync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaVulnerability.Name,
 						},
 					},
 					IngestHandle: VulnerabilityCollect{}.IngestHandle(),
-				},
-				{
-					Name:           directorySyncOperation.Name(),
+				}),
+				directorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
 					Description:    "Collect organization members, teams, and team memberships",
-					Topic:          DefinitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:      gitHubClient.ID(),
-					ConfigSchema:   directorySyncSchema,
 					Policy:         types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
-					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
+					ConfigResolver: directorySyncOperation.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -164,7 +146,7 @@ func Builder(cfg Config) registry.Builder {
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					Schedule:            gala.NewFullFetchSchedule(),
-				},
+				}),
 			},
 			Mappings: []types.MappingRegistration{
 				{
@@ -242,61 +224,48 @@ func Builder(cfg Config) registry.Builder {
 				},
 			},
 			Webhooks: []types.WebhookRegistration{
-				{
-					Name:               InstallationEventsWebhook.Name(),
+				InstallationEventsWebhook.Registration(types.WebhookRegistration{
 					StaticRoute:        "/github/app/webhook",
 					SecretSource:       func() string { return cfg.WebhookSecret },
 					ResolveIntegration: ResolveWebhookIntegration,
 					Verify:             app.Verify,
 					Event:              app.Event,
 					Events: []types.WebhookEventRegistration{
-						{
-							Name:   pingWebhookEvent.Name(),
-							Topic:  DefinitionID.WebhookEventTopic(pingWebhookEvent.Name()),
+						pingWebhookEvent.Registration(DefinitionID, types.WebhookEventRegistration{
 							Handle: PingWebhook{}.Handle,
-						},
-						{
-							Name:   installationCreatedWebhookEvent.Name(),
-							Topic:  DefinitionID.WebhookEventTopic(installationCreatedWebhookEvent.Name()),
+						}),
+						installationCreatedWebhookEvent.Registration(DefinitionID, types.WebhookEventRegistration{
 							Handle: InstallationCreatedWebhook{}.Handle,
-						},
-						{
-							Name:   installationDeletedWebhookEvent.Name(),
-							Topic:  DefinitionID.WebhookEventTopic(installationDeletedWebhookEvent.Name()),
+						}),
+						installationDeletedWebhookEvent.Registration(DefinitionID, types.WebhookEventRegistration{
 							Handle: InstallationDeletedWebhook{}.Handle,
-						},
-						{
-							Name:  dependabotAlertWebhookEvent.Name(),
-							Topic: DefinitionID.WebhookEventTopic(dependabotAlertWebhookEvent.Name()),
+						}),
+						dependabotAlertWebhookEvent.Registration(DefinitionID, types.WebhookEventRegistration{
 							Ingest: []types.IngestContract{
 								{
 									Schema: entityops.SchemaVulnerability.Name,
 								},
 							},
 							Handle: DependabotAlertWebhook{}.Handle,
-						},
-						{
-							Name:  codeScanningAlertWebhookEvent.Name(),
-							Topic: DefinitionID.WebhookEventTopic(codeScanningAlertWebhookEvent.Name()),
+						}),
+						codeScanningAlertWebhookEvent.Registration(DefinitionID, types.WebhookEventRegistration{
 							Ingest: []types.IngestContract{
 								{
 									Schema: entityops.SchemaVulnerability.Name,
 								},
 							},
 							Handle: CodeScanningAlertWebhook{}.Handle,
-						},
-						{
-							Name:  secretScanningAlertWebhookEvent.Name(),
-							Topic: DefinitionID.WebhookEventTopic(secretScanningAlertWebhookEvent.Name()),
+						}),
+						secretScanningAlertWebhookEvent.Registration(DefinitionID, types.WebhookEventRegistration{
 							Ingest: []types.IngestContract{
 								{
 									Schema: entityops.SchemaVulnerability.Name,
 								},
 							},
 							Handle: SecretScanningAlertWebhook{}.Handle,
-						},
+						}),
 					},
-				},
+				}),
 			},
 		}, nil
 	})

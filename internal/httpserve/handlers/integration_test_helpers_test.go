@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -16,8 +15,8 @@ type githubTestCredential struct {
 }
 
 var (
-	githubAppDefinitionID                               = githubapp.DefinitionID.ID()
-	githubTestCredentialSchema, githubTestCredentialRef = providerkit.CredentialSchema[githubTestCredential]()
+	githubAppDefinitionID   = githubapp.DefinitionID.ID()
+	githubTestCredentialRef = types.CredentialRefOf[githubTestCredential]()
 )
 
 // withDefinitionRuntime returns a restore function that resets IntegrationsConfig.
@@ -56,12 +55,11 @@ func githubTestDefinitionBuilder(definitionID string) registry.Builder {
 				Visible:     true,
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         githubTestCredentialRef.ID(),
+				githubTestCredentialRef.Registration(types.CredentialRegistration{
 					Name:        "GitHub Test Credential",
 					Description: "Credential slot used by the GitHub disconnect test definition.",
-					Schema:      githubTestCredentialSchema,
-				},
+					Schema:      githubTestCredentialRef.Schema(),
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
 				{

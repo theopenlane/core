@@ -33,19 +33,16 @@ func Builder(cfg Config) registry.Builder {
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         driveCredential.ID(),
+				driveCredential.Registration(types.CredentialRegistration{
 					Name:        "Google Drive Credential",
 					Description: "OAuth credential used to access Google Drive documents.",
-				},
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  driveCredential.ID(),
+				driveConnection.Registration(types.ConnectionRegistration{
 					Name:           "Google Drive OAuth",
 					Description:    "Connect your Google account using OAuth to access Drive documents.",
 					CredentialRefs: []types.CredentialSlotID{driveCredential.ID()},
-					ClientRefs:     []types.ClientID{driveClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: driveClient.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -78,31 +75,21 @@ func Builder(cfg Config) registry.Builder {
 						CredentialRef: driveCredential.ID(),
 						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Google account under Security > Third-party access.",
 					},
-				},
+				}),
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            driveClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{driveCredential.ID()},
-					Description:    "Google Drive API client",
-					Build:          Client{cfg: cfg}.Build,
-				},
+				driveClient.Registration(Client{cfg: cfg}.Build, types.ClientRegistration{
+					Description: "Google Drive API client",
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         documentExportOperation.Name(),
-					Description:  "Export a Google Doc as HTML via the Drive files.export endpoint",
-					Topic:        definitionID.OperationTopic(documentExportOperation.Name()),
-					ClientRef:    driveClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: documentExportSchema,
-					Handle:       Handle(),
-				},
-				{
-					Name:        folderSyncOperation.Name(),
+				documentExportOperation.Registration(definitionID, types.OperationRegistration{
+					Description: "Export a Google Doc as HTML via the Drive files.export endpoint",
+					Policy:      types.ExecutionPolicy{Inline: true},
+					Handle:      Handle(),
+				}),
+				folderSyncOperation.Registration(definitionID, types.OperationRegistration{
 					Description: "List Google Docs in the configured folder and emit policy ingest envelopes",
-					Topic:       definitionID.OperationTopic(folderSyncOperation.Name()),
-					ClientRef:   driveClient.ID(),
 					Policy:      types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
@@ -110,9 +97,8 @@ func Builder(cfg Config) registry.Builder {
 						},
 					},
 					IngestHandle: FolderSync{}.IngestHandle(),
-					ConfigSchema: folderSyncSchema,
 					Schedule:     gala.NewFullFetchSchedule(),
-				},
+				}),
 			},
 			Mappings: []types.MappingRegistration{
 				{

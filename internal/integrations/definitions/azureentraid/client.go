@@ -3,6 +3,7 @@ package azureentraid
 import (
 	"context"
 
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	kiotaauth "github.com/microsoft/kiota-authentication-azure-go"
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
@@ -21,7 +22,7 @@ type CredentialClient struct {
 }
 
 // Build constructs the Azure client credentials token credential for one installation
-func (c CredentialClient) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+func (c CredentialClient) Build(ctx context.Context, req types.ClientBuildRequest) (azcore.TokenCredential, error) {
 	meta, err := credentialFromRequest(req)
 	if err != nil {
 		return nil, err
@@ -43,7 +44,7 @@ type GraphClient struct {
 }
 
 // Build constructs the Microsoft Graph service client for one installation
-func (c GraphClient) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
+func (c GraphClient) Build(_ context.Context, req types.ClientBuildRequest) (*msgraphsdk.GraphServiceClient, error) {
 	meta, err := credentialFromRequest(req)
 	if err != nil {
 		return nil, err

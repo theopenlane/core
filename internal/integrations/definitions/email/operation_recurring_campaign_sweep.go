@@ -20,7 +20,8 @@ import (
 // RecurringCampaignSweep configures one recurring campaign sweep cycle
 type RecurringCampaignSweep struct{}
 
-var recurringCampaignSweepSchema, RecurringCampaignOp = providerkit.OperationSchema[RecurringCampaignSweep]() //nolint:revive
+// RecurringCampaignOp is the operation ref for the global recurring campaign sweep, which runs without a client
+var RecurringCampaignOp = types.OperationRefOf[RecurringCampaignSweep]() //nolint:revive
 
 // Handle adapts the recurring campaign sweep to the generic operation registration boundary
 func (r RecurringCampaignSweep) Handle() types.OperationHandler {

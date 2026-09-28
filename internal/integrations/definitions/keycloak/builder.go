@@ -28,20 +28,17 @@ func Builder() registry.Builder {
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         keycloakCredential.ID(),
+				keycloakCredential.Registration(types.CredentialRegistration{
 					Name:        "Keycloak Credential",
 					Description: "Client credentials used to access Keycloak realm data.",
-					Schema:      keycloakCredentialSchema,
-				},
+					Schema:      keycloakCredential.Schema(),
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  keycloakCredential.ID(),
+				keycloakConnection.Registration(types.ConnectionRegistration{
 					Name:           "Keycloak Client Credentials",
 					Description:    "Configure Keycloak access using client credentials from your realm.",
 					CredentialRefs: []types.CredentialSlotID{keycloakCredential.ID()},
-					ClientRefs:     []types.ClientID{keycloakClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: keycloakClient.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -51,23 +48,16 @@ func Builder() registry.Builder {
 						CredentialRef: keycloakCredential.ID(),
 						Description:   "Removes the stored client credentials from Openlane. If the client is no longer needed, disable or delete it in your Keycloak admin console under Clients.",
 					},
-				},
+				}),
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            keycloakClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{keycloakCredential.ID()},
-					Description:    "Keycloak API client",
-					Build:          Client{}.Build,
-				},
+				keycloakClient.Registration(Client{}.Build, types.ClientRegistration{
+					Description: "Keycloak API client",
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:                directorySyncOperation.Name(),
+				directorySyncOperation.Registration(definitionID, types.OperationRegistration{
 					Description:         "Collect Keycloak realm users, groups, and memberships as directory accounts",
-					Topic:               definitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:           keycloakClient.ID(),
-					ConfigSchema:        directorySyncSchema,
 					Policy:              types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"view-realm", "view-users", "query-groups", "view-events"},
@@ -83,7 +73,7 @@ func Builder() registry.Builder {
 						},
 					},
 					IngestHandle: DirectorySync{}.IngestHandle(),
-				},
+				}),
 			},
 			Mappings: []types.MappingRegistration{
 				{

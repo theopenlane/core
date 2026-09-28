@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	definitionscim "github.com/theopenlane/core/v2/internal/integrations/definitions/scim"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -40,7 +39,7 @@ type configTestCredential struct {
 	ServiceAccountEmail string `json:"serviceAccountEmail" jsonschema:"required"`
 }
 
-var configTestCredentialSchema, configTestCredentialRef = providerkit.CredentialSchema[configTestCredential]()
+var configTestCredentialRef = types.CredentialRefOf[configTestCredential]()
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	t := suite.T()
@@ -488,12 +487,11 @@ func configTestDefinitionBuilder(definitionID string, failHealth bool) registry.
 				Schema: json.RawMessage(`{"type":"object","properties":{"filterExpr":{"type":"string"}}}`),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         configTestCredentialRef.ID(),
+				configTestCredentialRef.Registration(types.CredentialRegistration{
 					Name:        "Config Test Credential",
 					Description: "Credential slot used by the config test definition.",
-					Schema:      configTestCredentialSchema,
-				},
+					Schema:      configTestCredentialRef.Schema(),
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
 				{

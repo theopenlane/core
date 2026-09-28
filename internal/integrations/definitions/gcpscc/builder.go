@@ -3,7 +3,6 @@ package gcpscc
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -28,25 +27,22 @@ func Builder(federationIssuer string) registry.Builder {
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         workloadIdentityCredential.ID(),
+				workloadIdentityCredential.Registration(types.CredentialRegistration{
 					Name:        "GCP Workload Identity Federation",
 					Description: "Federated access to Security Command Center with no stored keys.",
-					Schema:      workloadIdentitySchema,
+					Schema:      workloadIdentityCredential.Schema(),
 					Recommended: true,
-				},
-				{
-					Ref:         sccCredential.ID(),
+				}),
+				sccCredential.Registration(types.CredentialRegistration{
 					Name:        "GCP SCC Credential",
 					Description: "GCP service account key used to access Security Command Center.",
-					Schema:      sccSchema,
-				},
+					Schema:      sccCredential.Schema(),
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef: workloadIdentityCredential.ID(),
-					Name:          "GCP Workload Identity Federation",
-					Description:   "Configure Security Command Center access by trusting Openlane as an OIDC identity provider, so no service account key is ever stored.",
+				workloadIdentityConnection.Registration(types.ConnectionRegistration{
+					Name:        "GCP Workload Identity Federation",
+					Description: "Configure Security Command Center access by trusting Openlane as an OIDC identity provider, so no service account key is ever stored.",
 					Meta: map[string]types.MetaInfo{
 						"Openlane Issuer URI": {
 							Value:     federationIssuer,
@@ -54,7 +50,6 @@ func Builder(federationIssuer string) registry.Builder {
 						},
 					},
 					CredentialRefs: []types.CredentialSlotID{workloadIdentityCredential.ID()},
-					ClientRefs:     []types.ClientID{sccClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: sccClient.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -64,13 +59,11 @@ func Builder(federationIssuer string) registry.Builder {
 						CredentialRef: workloadIdentityCredential.ID(),
 						Description:   "Removes the stored workload identity configuration from Openlane. If the workload identity pool is no longer needed, delete the pool and its provider from your Google Cloud project.",
 					},
-				},
-				{
-					CredentialRef:  sccCredential.ID(),
+				}),
+				sccConnection.Registration(types.ConnectionRegistration{
 					Name:           "GCP Service Account",
 					Description:    "Configure Security Command Center access using a GCP service account.",
 					CredentialRefs: []types.CredentialSlotID{sccCredential.ID()},
-					ClientRefs:     []types.ClientID{sccClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: sccClient.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -80,24 +73,17 @@ func Builder(federationIssuer string) registry.Builder {
 						CredentialRef: sccCredential.ID(),
 						Description:   "Removes the stored service account credentials from Openlane. If the GCP service account is no longer needed, delete it from your Google Cloud project.",
 					},
-				},
+				}),
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            sccClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{workloadIdentityCredential.ID(), sccCredential.ID()},
-					Description:    "Google Cloud Security Command Center v2 client",
-					Build:          Client{}.Build,
-				},
+				sccClient.Registration(Client{}.Build, types.ClientRegistration{
+					Description: "Google Cloud Security Command Center v2 client",
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         findingsCollectOperation.Name(),
-					Description:  "Collect GCP Security Command Center findings for vulnerabilities, findings, and risk ingestion",
-					Topic:        definitionID.OperationTopic(findingsCollectOperation.Name()),
-					ClientRef:    sccClient.ID(),
-					ConfigSchema: findingsCollectSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true},
+				findingsCollectOperation.Registration(definitionID, types.OperationRegistration{
+					Description: "Collect GCP Security Command Center findings for vulnerabilities, findings, and risk ingestion",
+					Policy:      types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaVulnerability.Name,
@@ -111,8 +97,8 @@ func Builder(federationIssuer string) registry.Builder {
 					},
 					IngestHandle:        FindingsCollect{}.IngestHandle(),
 					RequiredPermissions: []string{"https://www.googleapis.com/auth/cloud-platform"},
-					ConfigResolver:      providerkit.ConfigFrom(func(u UserInput) FindingsSyncConfig { return u.FindingsSync }),
-				},
+					ConfigResolver:      findingsCollectOperation.ConfigFrom(func(u UserInput) FindingsSync { return u.FindingsSync }),
+				}),
 			},
 			Mappings: []types.MappingRegistration{
 				{

@@ -29,20 +29,16 @@ func Builder(cfg Config) registry.Builder {
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         teamsCredential.ID(),
+				teamsCredential.Registration(types.CredentialRegistration{
 					Name:        "Microsoft Teams Credential",
 					Description: "OAuth credential used to send messages to Microsoft Teams channels.",
-					Schema:      teamsCredentialSchema,
-				},
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  teamsCredential.ID(),
+				teamsConnection.Registration(types.ConnectionRegistration{
 					Name:           "Microsoft Teams OAuth",
 					Description:    "Connect your Microsoft Teams workspace using OAuth.",
 					CredentialRefs: []types.CredentialSlotID{teamsCredential.ID()},
-					ClientRefs:     []types.ClientID{teamsClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: teamsClient.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -75,25 +71,18 @@ func Builder(cfg Config) registry.Builder {
 						CredentialRef: teamsCredential.ID(),
 						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.",
 					},
-				},
+				}),
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            teamsClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{teamsCredential.ID()},
-					Description:    "Microsoft Graph API client",
-					Build:          Client{}.Build,
-				},
+				teamsClient.Registration(Client{}.Build, types.ClientRegistration{
+					Description: "Microsoft Graph API client",
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         MessageSendOp.Name(),
-					Description:  "Send a Teams channel message via Microsoft Graph",
-					Topic:        DefinitionID.OperationTopic(MessageSendOp.Name()),
-					ClientRef:    teamsClient.ID(),
-					ConfigSchema: messageSendSchema,
-					Handle:       MessageSend{}.Handle(),
-				},
+				MessageSendOp.Registration(DefinitionID, types.OperationRegistration{
+					Description: "Send a Teams channel message via Microsoft Graph",
+					Handle:      MessageSend{}.Handle(),
+				}),
 			},
 		}, nil
 	})

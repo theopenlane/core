@@ -6,7 +6,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/newman/render"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // subprocessorNotificationSubject and the related copy back the subprocessor change email when the
@@ -51,14 +51,11 @@ type SubprocessorNotificationRequest struct {
 	UnsubscribeURL string `json:"unsubscribeURL,omitempty" jsonschema:"description=Unsubscribe link shown in the footer"`
 }
 
-// subprocessorNotificationSchema is the reflected JSON schema for the subprocessor notification input
-// type and SubprocessorNotificationOp is the typed operation ref used for catalog dispatch
-var (
-	subprocessorNotificationSchema, SubprocessorNotificationOp = providerkit.OperationSchema[SubprocessorNotificationRequest]() //nolint:revive
-)
+// SubprocessorNotificationOp is the typed operation ref used for catalog dispatch
+var SubprocessorNotificationOp = types.OperationRefOf[SubprocessorNotificationRequest]().Using(emailClientRef) //nolint:revive
 
 var _ = RegisterEmailOperation(Operation[SubprocessorNotificationRequest]{
-	Op: SubprocessorNotificationOp, Schema: subprocessorNotificationSchema, Theme: baseTheme,
+	Op: SubprocessorNotificationOp, Theme: baseTheme,
 	Description: "System notification listing subprocessor changes for a trust center's subscribers",
 	Subject: func(_ RuntimeEmailConfig, req SubprocessorNotificationRequest) string {
 		if req.CompanyName != "" {

@@ -42,20 +42,17 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         cloudflareCredential.ID(),
+				cloudflareCredential.Registration(types.CredentialRegistration{
 					Name:        "Cloudflare API Credential",
 					Description: "API token used to access Cloudflare account and zone data.",
-					Schema:      cloudflareSchema,
-				},
+					Schema:      cloudflareCredential.Schema(),
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  cloudflareCredential.ID(),
+				cloudflareConnection.Registration(types.ConnectionRegistration{
 					Name:           "Cloudflare API Token",
 					Description:    "Configure Cloudflare access using an API token scoped to your account and zones.",
 					CredentialRefs: []types.CredentialSlotID{cloudflareCredential.ID()},
-					ClientRefs:     []types.ClientID{cloudflareClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: cloudflareClient.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -65,26 +62,19 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 						CredentialRef: cloudflareCredential.ID(),
 						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Cloudflare dashboard.",
 					},
-				},
+				}),
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            cloudflareClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{cloudflareCredential.ID()},
-					Description:    "Cloudflare REST API client",
-					Build:          Client{}.Build,
-				},
+				cloudflareClient.Registration(Client{}.Build, types.ClientRegistration{
+					Description: "Cloudflare REST API client",
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:           directorySyncOperation.Name(),
+				directorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
 					Description:    "Collect account members as directory accounts",
-					Topic:          DefinitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:      cloudflareClient.ID(),
-					ConfigSchema:   directorySyncSchema,
 					Policy:         types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
-					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
+					ConfigResolver: directorySyncOperation.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -100,16 +90,12 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"Account Settings Read", "Access: Users Read", "Access: Groups Read", "Access: Organizations, Identity Providers, and Groups Read"},
 					Schedule:            gala.NewFullFetchSchedule(),
-				},
-				{
-					Name:           findingsSyncOperation.Name(),
+				}),
+				findingsSyncOperation.Registration(DefinitionID, types.OperationRegistration{
 					Description:    "Collect Cloudflare Security Center insights as findings",
-					Topic:          DefinitionID.OperationTopic(findingsSyncOperation.Name()),
-					ClientRef:      cloudflareClient.ID(),
-					ConfigSchema:   findingsSyncSchema,
 					Policy:         types.ExecutionPolicy{Reconcile: true},
 					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.FindingsSync.Disable }),
-					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) FindingsSync { return u.FindingsSync }),
+					ConfigResolver: findingsSyncOperation.ConfigFrom(func(u UserInput) FindingsSync { return u.FindingsSync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaFinding.Name,
@@ -117,16 +103,12 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					},
 					IngestHandle:        FindingsCollect{}.IngestHandle(),
 					RequiredPermissions: []string{"Account Security Center Insights Read"},
-				},
-				{
-					Name:           assetSyncOperation.Name(),
+				}),
+				assetSyncOperation.Registration(DefinitionID, types.OperationRegistration{
 					Description:    "Collect Cloudflare domain registrations as assets",
-					Topic:          DefinitionID.OperationTopic(assetSyncOperation.Name()),
-					ClientRef:      cloudflareClient.ID(),
-					ConfigSchema:   assetSyncSchema,
 					Policy:         types.ExecutionPolicy{Reconcile: true},
 					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.AssetSync.Disable }),
-					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) AssetSync { return u.AssetSync }),
+					ConfigResolver: assetSyncOperation.ConfigFrom(func(u UserInput) AssetSync { return u.AssetSync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaAsset.Name,
@@ -140,57 +122,38 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 						MaxInterval:        assetSyncMaxIntervalDays * assetSyncMinIntervalHours * time.Hour,
 						HighDriftThreshold: gala.FullHighDriftThreshold,
 					},
-				},
-				{
-					Name:               DomainScanSubmitOp.Name(),
+				}),
+				DomainScanSubmitOp.Registration(DefinitionID, types.OperationRegistration{
 					Description:        "Submit domains to Cloudflare's URL Scanner for scanning",
-					Topic:              DefinitionID.OperationTopic(DomainScanSubmitOp.Name()),
-					ClientRef:          cloudflareClient.ID(),
-					ConfigSchema:       domainScanSubmitSchema,
 					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
 					Handle:             DomainScanSubmit{}.Handle(),
 					CustomerSelectable: lo.ToPtr(false),
 					Internal:           true,
-				},
-				{
-					Name:               DomainScanPollOp.Name(),
+				}),
+				DomainScanPollOp.Registration(DefinitionID, types.OperationRegistration{
 					Description:        "Poll a previously submitted Cloudflare URL Scanner result",
-					Topic:              DefinitionID.OperationTopic(DomainScanPollOp.Name()),
-					ClientRef:          cloudflareClient.ID(),
-					ConfigSchema:       domainScanPollSchema,
 					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
 					Handle:             DomainScanPoll{}.Handle(),
 					CustomerSelectable: lo.ToPtr(false),
 					Internal:           true,
-				},
-				{
-					Name:               DomainScanEnrichmentOp.Name(),
+				}),
+				DomainScanEnrichmentOp.Registration(DefinitionID, types.OperationRegistration{
 					Description:        "Gather company profile, compliance, and DNS vendor data for a domain",
-					Topic:              DefinitionID.OperationTopic(DomainScanEnrichmentOp.Name()),
-					ClientRef:          cloudflareClient.ID(),
-					ConfigSchema:       domainScanGatherEnrichmentSchema,
 					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
 					Handle:             DomainScanGatherEnrichment{}.Handle(),
 					CustomerSelectable: lo.ToPtr(false),
 					Internal:           true,
-				},
-				{
-					Name:               DomainScanBuildReportOp.Name(),
+				}),
+				DomainScanBuildReportOp.Registration(DefinitionID, types.OperationRegistration{
 					Description:        "Build the onboarding domain scan report from a completed URL Scanner result and gathered enrichment",
-					Topic:              DefinitionID.OperationTopic(DomainScanBuildReportOp.Name()),
-					ClientRef:          cloudflareClient.ID(),
-					ConfigSchema:       domainScanBuildReportSchema,
 					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
 					Handle:             DomainScanBuildReport{}.Handle(),
 					CustomerSelectable: lo.ToPtr(false),
 					Internal:           true,
-				},
-				{
-					Name:         DomainScanRequestOp.Name(),
-					Description:  "Request a domain scan for a single domain",
-					Topic:        DefinitionID.OperationTopic(DomainScanRequestOp.Name()),
-					ConfigSchema: domainScanRequestSchema,
-					Policy:       types.ExecutionPolicy{Inline: true, SkipRunRecord: true},
+				}),
+				DomainScanRequestOp.Registration(DefinitionID, types.OperationRegistration{
+					Description: "Request a domain scan for a single domain",
+					Policy:      types.ExecutionPolicy{Inline: true, SkipRunRecord: true},
 					// Disable if the runtime is not provisioned
 					DisabledForAll: !runtime.Provisioned(),
 					// only applied to user created scans, not onboarding scans
@@ -198,17 +161,14 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					Handle:                DomainScanRequest{}.Handle(),
 					CustomerSelectable:    lo.ToPtr(false),
 					RequiresPaymentMethod: true,
-				},
-				{
-					Name:               DomainScanImportOp.Name(),
+				}),
+				DomainScanImportOp.Registration(DefinitionID, types.OperationRegistration{
 					Description:        "Import a reviewer-accepted domain scan report into real records",
-					Topic:              DefinitionID.OperationTopic(DomainScanImportOp.Name()),
-					ConfigSchema:       domainScanImportSchema,
 					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
 					Handle:             DomainScanImport{}.Handle(),
 					CustomerSelectable: lo.ToPtr(false),
 					Internal:           true,
-				},
+				}),
 			},
 			GalaListeners: []types.GalaListenerRegistration{
 				domainScanListeners(),
@@ -280,12 +240,10 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 				return types.Definition{}, fmt.Errorf("%w: %w", ErrRuntimeConfigDecode, err)
 			}
 
-			def.RuntimeIntegration = &types.RuntimeIntegrationRegistration{
-				Ref:    runtimeCloudflareRef.ID(),
-				Schema: runtimeCloudflareSchema,
+			def.RuntimeIntegration = lo.ToPtr(runtimeCloudflareRef.Registration(types.RuntimeIntegrationRegistration{
 				Config: marshaledConfig,
 				Build:  runtimeCloudflareClientBuilder(),
-			}
+			}))
 		}
 
 		return def, nil

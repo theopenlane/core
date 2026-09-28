@@ -15,7 +15,7 @@ type Client struct {
 }
 
 // buildClient constructs the client from the stored token credential
-func buildClient(_ context.Context, req types.ClientBuildRequest) (any, error) {
+func buildClient(_ context.Context, req types.ClientBuildRequest) (*Client, error) {
 	cred, ok, err := TokenCredential.Resolve(req.Credentials)
 	if err != nil || !ok || cred.Token == "" {
 		return nil, ErrTokenMissing

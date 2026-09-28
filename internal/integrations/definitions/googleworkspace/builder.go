@@ -43,19 +43,16 @@ func Builder(cfg Config) registry.Builder {
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         workspaceCredential.ID(),
+				workspaceCredential.Registration(types.CredentialRegistration{
 					Name:        "Google Workspace Credential",
 					Description: "OAuth credential used to access Google Workspace directory data.",
-				},
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  workspaceCredential.ID(),
+				workspaceConnection.Registration(types.ConnectionRegistration{
 					Name:           "Google Workspace OAuth",
 					Description:    "Connect your Google Workspace domain using OAuth.",
 					CredentialRefs: []types.CredentialSlotID{workspaceCredential.ID()},
-					ClientRefs:     []types.ClientID{workspaceClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: workspaceClient.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -88,24 +85,17 @@ func Builder(cfg Config) registry.Builder {
 						CredentialRef: workspaceCredential.ID(),
 						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Google Workspace admin console under Security > API controls.",
 					},
-				},
+				}),
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            workspaceClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{workspaceCredential.ID()},
-					Description:    "Google Workspace Admin SDK client",
-					Build:          Client{cfg: cfg}.Build,
-				},
+				workspaceClient.Registration(Client{cfg: cfg}.Build, types.ClientRegistration{
+					Description: "Google Workspace Admin SDK client",
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         directorySyncOperation.Name(),
-					Description:  "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",
-					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:    workspaceClient.ID(),
-					ConfigSchema: directorySyncSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
+				directorySyncOperation.Registration(definitionID, types.OperationRegistration{
+					Description: "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",
+					Policy:      types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -121,7 +111,7 @@ func Builder(cfg Config) registry.Builder {
 					SkipDefaultLookback: true,
 					RequiredPermissions: directorySyncScopes,
 					Schedule:            gala.NewFullFetchSchedule(),
-				},
+				}),
 			},
 			Mappings: []types.MappingRegistration{
 				{

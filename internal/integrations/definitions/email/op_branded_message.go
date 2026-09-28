@@ -6,7 +6,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/newman/render"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // BrandedMessageRequest is a customer-selectable catalog entry providing a flexible,
@@ -75,11 +75,8 @@ type BrandedMessageRequest struct {
 	Social []SocialLink `json:"social,omitempty" jsonschema:"description=Social footer links rendered beneath the body"`
 }
 
-// brandedMessageSchema is the reflected JSON schema for the branded message input type
-// and BrandedMessageOp is the typed operation ref used for catalog dispatch
-var (
-	brandedMessageSchema, BrandedMessageOp = providerkit.OperationSchema[BrandedMessageRequest]() //nolint:revive
-)
+// BrandedMessageOp is the typed operation ref used for catalog dispatch
+var BrandedMessageOp = types.OperationRefOf[BrandedMessageRequest]().Using(emailClientRef) //nolint:revive
 
 // brandedMessageExample is a representative input used to render the catalog preview
 // and to seed the form preview with demo values for fields the author has not yet filled.
@@ -125,7 +122,6 @@ var brandedMessageUISchema = json.RawMessage(`{
 
 var _ = RegisterEmailOperation(Operation[BrandedMessageRequest]{
 	Op:                 BrandedMessageOp,
-	Schema:             brandedMessageSchema,
 	Theme:              baseTheme,
 	Description:        "Customer-authored branded message with headline, body paragraphs, and an optional call-to-action",
 	CustomerSelectable: lo.ToPtr(true),

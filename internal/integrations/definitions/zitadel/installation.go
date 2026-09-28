@@ -23,7 +23,7 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 		return InstallationMetadata{}, false, err
 	}
 
-	instanceID, err := resolveInstanceID(ctx, api.(*client.Client))
+	instanceID, err := resolveInstanceID(ctx, api)
 	if err != nil {
 		return InstallationMetadata{}, false, err
 	}

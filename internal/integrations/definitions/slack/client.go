@@ -15,7 +15,7 @@ import (
 type Client struct{}
 
 // Build constructs the unified SlackClient for one customer installation
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
+func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*SlackClient, error) {
 	token, err := resolveAccessToken(req.Credentials)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)

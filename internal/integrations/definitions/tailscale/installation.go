@@ -22,7 +22,7 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 		return InstallationMetadata{}, false, err
 	}
 
-	tailnet, err := resolveTailnet(ctx, built.(*tsclient.Client))
+	tailnet, err := resolveTailnet(ctx, built)
 	if err != nil {
 		return InstallationMetadata{}, false, err
 	}

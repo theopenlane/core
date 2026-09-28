@@ -3,7 +3,6 @@ package githubapp
 import (
 	"time"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -12,10 +11,12 @@ var (
 	DefinitionID = types.NewDefinitionRef("def_01K0GHAPP000000000000000001")
 	// installation is the typed installation metadata handle for the GitHub App definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// gitHubAppCredentialSchema and gitHubAppCredential are the credential slot for GitHub App installation credentials
-	gitHubAppCredentialSchema, gitHubAppCredential = providerkit.CredentialSchema[githubAppCredential]()
-	// GitHubClient is the client ref for the GitHub GraphQL client used by this definition
-	gitHubClient = types.NewClientRef[GraphQLClient]()
+	// gitHubAppCredential is the credential slot for GitHub App installation credentials
+	gitHubAppCredential = types.CredentialRefOf[githubAppCredential]()
+	// gitHubClient is the client ref for the GitHub GraphQL client used by this definition
+	gitHubClient = types.ClientRefOf[GraphQLClient]().Using(gitHubAppCredential)
+	// gitHubAppConnection is the GitHub App installation connection mode enabling the GraphQL client
+	gitHubAppConnection = types.NewConnectionRef(gitHubAppCredential).Enables(gitHubClient)
 	// InstallationEventsWebhook is the webhook ref for GitHub App installation-scoped deliveries
 	InstallationEventsWebhook = types.NewWebhookRef("installation.events")
 	// PingWebhookEvent is the webhook event ref for GitHub ping events
@@ -30,12 +31,12 @@ var (
 	codeScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("code_scanning_alert")
 	// SecretScanningAlertWebhookEvent is the webhook event ref for secret scanning alert events
 	secretScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("secret_scanning_alert")
-	// repositorySyncSchema is the operation schema for the GitHub repository sync operation
-	repositorySyncSchema, repositorySyncOperation = providerkit.OperationSchema[RepositorySync]()
-	// vulnerabilityCollectSchema is the operation schema for the GitHub vulnerability collection operation
-	vulnerabilityCollectSchema, vulnerabilityCollectOperation = providerkit.OperationSchema[VulnerabilitySync]()
-	// directorySyncSchema is the operation schema for the GitHub directory sync operationß
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	// repositorySyncOperation is the operation ref for the GitHub repository sync operation
+	repositorySyncOperation = types.OperationRefOf[RepositorySync]().Using(gitHubClient)
+	// vulnerabilityCollectOperation is the operation ref for the GitHub vulnerability collection operation, pinned to its persisted name
+	vulnerabilityCollectOperation = types.OperationRefOf[VulnerabilitySync]().Using(gitHubClient)
+	// directorySyncOperation is the operation ref for the GitHub directory sync operation
+	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(gitHubClient)
 )
 
 const (
@@ -66,7 +67,7 @@ type githubAppCredential struct {
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
 	// VulnerabilitySync includes the configuration for findings from GitHub Security
-	VulnerabilitySync VulnerabilitySyncConfig `json:"findingSync,omitempty" jsonschema:"title=GitHub Security Hub Sync"`
+	VulnerabilitySync VulnerabilitySync `json:"findingSync,omitempty" jsonschema:"title=GitHub Security Hub Sync"`
 	// DirectorySync includes the configuration for identity accounts from GitHub organization members
 	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Account Sync"`
 	// RepositorySync included the configuration of repos as assets from GitHub
@@ -82,11 +83,14 @@ type DirectorySync struct {
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.Org == 'my-org'"`
 }
 
-type VulnerabilitySyncConfig struct {
+// VulnerabilitySync controls the vulnerability collect operation
+type VulnerabilitySync struct {
 	// Disable is used to disable the directory sync operation from GitHub
 	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of vulnerabilities from Github Security"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.state == 'open'"`
+	// MaxRepos caps the number of repositories scanned during one run
+	MaxRepos int `json:"maxRepos,omitempty" jsonschema:"title=Max Repositories,description=Optional cap on the number of repositories to scan."`
 }
 
 type RepositorySync struct {

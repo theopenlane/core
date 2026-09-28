@@ -35,25 +35,21 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         slackCredential.ID(),
+				slackCredential.Registration(types.CredentialRegistration{
 					Name:        "Slack OAuth Credential",
 					Description: "OAuth credential used to access the Slack workspace",
-				},
-				{
-					Ref:         slackBotTokenCredential.ID(),
+				}),
+				slackBotTokenCredential.Registration(types.CredentialRegistration{
 					Name:        "Slack Bot Token",
 					Description: "User-provisioned bot token from a custom Slack app",
-					Schema:      slackBotTokenSchema,
-				},
+					Schema:      slackBotTokenCredential.Schema(),
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  slackCredential.ID(),
+				slackOAuthConnection.Registration(types.ConnectionRegistration{
 					Name:           "Slack OAuth",
 					Description:    "Connect your Slack workspace via OAuth",
 					CredentialRefs: []types.CredentialSlotID{slackCredential.ID()},
-					ClientRefs:     []types.ClientID{slackClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: slackClient.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -103,13 +99,11 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 							}, nil
 						},
 					},
-				},
-				{
-					CredentialRef:  slackBotTokenCredential.ID(),
+				}),
+				slackBotTokenConnection.Registration(types.ConnectionRegistration{
 					Name:           "Slack Bot Token",
 					Description:    "Connect your Slack workspace using a bot token from a custom Slack app.",
 					CredentialRefs: []types.CredentialSlotID{slackBotTokenCredential.ID()},
-					ClientRefs:     []types.ClientID{slackClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: slackClient.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -119,33 +113,22 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 						CredentialRef: slackBotTokenCredential.ID(),
 						Description:   "Removes the stored bot token from Openlane. To fully revoke access, delete or regenerate the token in your Slack app under OAuth & Permissions.",
 					},
-				},
+				}),
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            slackClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{slackCredential.ID(), slackBotTokenCredential.ID()},
-					Description:    "Unified Slack client wrapping the Web API and system-notification transports",
-					Build:          Client{}.Build,
-				},
+				slackClient.Registration(Client{}.Build, types.ClientRegistration{
+					Description: "Unified Slack client wrapping the Web API and system-notification transports",
+				}),
 			},
 			Operations: append(AllSlackSystemMessages(),
-				types.OperationRegistration{
-					Name:                MessageSendOp.Name(),
+				MessageSendOp.Registration(DefinitionID, types.OperationRegistration{
 					Description:         "Send a Slack message via chat.postMessage",
-					Topic:               DefinitionID.OperationTopic(MessageSendOp.Name()),
-					ClientRef:           slackClient.ID(),
-					ConfigSchema:        messageSendSchema,
 					Handle:              MessageSend{}.Handle(),
 					RequiredPermissions: scopes,
-				},
-				types.OperationRegistration{
-					Name:         directorySyncOperation.Name(),
-					Description:  "Collect workspace users as directory accounts",
-					Topic:        DefinitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:    slackClient.ID(),
-					ConfigSchema: directorySyncSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
+				}),
+				directorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
+					Description: "Collect workspace users as directory accounts",
+					Policy:      types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -154,8 +137,8 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					RequiredPermissions: scopes,
 					Disabled:            providerkit.DisabledWhen(func(u UserInput) bool { return u.DirectorySync.Disable }),
-					ConfigResolver:      providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
-				},
+					ConfigResolver:      directorySyncOperation.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
+				}),
 			),
 			Mappings: []types.MappingRegistration{
 				{
@@ -176,12 +159,12 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 				return types.Definition{}, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 			}
 
-			def.RuntimeIntegration = &types.RuntimeIntegrationRegistration{
-				Ref:    runtimeSlackRef.ID(),
-				Schema: runtimeSlackSchema,
+			runtimeRegistration := runtimeSlackRef.Registration(types.RuntimeIntegrationRegistration{
 				Config: marshaledConfig,
 				Build:  runtimeSlackClientBuilder(devMode && !runtime.Provisioned()),
-			}
+			})
+
+			def.RuntimeIntegration = &runtimeRegistration
 		}
 
 		return def, nil

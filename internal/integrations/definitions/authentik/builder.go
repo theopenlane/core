@@ -28,20 +28,17 @@ func Builder() registry.Builder {
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         authentikCredential.ID(),
+				authentikCredential.Registration(types.CredentialRegistration{
 					Name:        "Authentik Credential",
 					Description: "API token used to access Authentik instance data.",
-					Schema:      authentikCredentialSchema,
-				},
+					Schema:      authentikCredential.Schema(),
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  authentikCredential.ID(),
+				authentikConnection.Registration(types.ConnectionRegistration{
 					Name:           "Authentik API Token",
 					Description:    "Configure Authentik access using an API token from your instance.",
 					CredentialRefs: []types.CredentialSlotID{authentikCredential.ID()},
-					ClientRefs:     []types.ClientID{authentikClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: authentikClient.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -51,24 +48,17 @@ func Builder() registry.Builder {
 						CredentialRef: authentikCredential.ID(),
 						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Authentik admin panel under Directory > Tokens.",
 					},
-				},
+				}),
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            authentikClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{authentikCredential.ID()},
-					Description:    "Authentik API client",
-					Build:          Client{}.Build,
-				},
+				authentikClient.Registration(Client{}.Build, types.ClientRegistration{
+					Description: "Authentik API client",
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         directorySyncOperation.Name(),
-					Description:  "Collect Authentik directory users, groups, and memberships as directory accounts",
-					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:    authentikClient.ID(),
-					ConfigSchema: directorySyncSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
+				directorySyncOperation.Registration(definitionID, types.OperationRegistration{
+					Description: "Collect Authentik directory users, groups, and memberships as directory accounts",
+					Policy:      types.ExecutionPolicy{Reconcile: true, Snapshot: true},
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -81,7 +71,7 @@ func Builder() registry.Builder {
 						},
 					},
 					IngestHandle: DirectorySync{}.IngestHandle(),
-				},
+				}),
 			},
 			Mappings: []types.MappingRegistration{
 				{

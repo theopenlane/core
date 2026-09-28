@@ -6,7 +6,6 @@ import (
 
 	cloudscc "cloud.google.com/go/securitycenter/apiv2"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -15,14 +14,18 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0GCPSCC00000000000000001")
 	// installation is the typed installation metadata handle for the GCP Security Command Center definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
+	// sccCredential is the credential slot for GCP Security Command Center service account credentials
+	sccCredential = types.CredentialRefOf[CredentialSchema]()
+	// workloadIdentityCredential is the credential slot for GCP workload identity federation
+	workloadIdentityCredential = types.CredentialRefOf[WorkloadIdentityCredentialSchema]()
 	// sccClient is the client ref for the GCP Security Command Center client used by this definition
-	sccClient = types.NewClientRef[*cloudscc.Client]()
-	// sccSchema is the credential schema for GCP Security Command Center service account credentials
-	sccSchema, sccCredential = providerkit.CredentialSchema[CredentialSchema]()
-	// workloadIdentitySchema is the credential schema for GCP workload identity federation
-	workloadIdentitySchema, workloadIdentityCredential = providerkit.CredentialSchema[WorkloadIdentityCredentialSchema]()
-	// findingsCollectSchema is the operation schema for the GCP Security Command Center findings collection operation
-	findingsCollectSchema, findingsCollectOperation = providerkit.OperationSchema[FindingsSync]()
+	sccClient = types.ClientRefOf[*cloudscc.Client]().Using(workloadIdentityCredential).Using(sccCredential)
+	// workloadIdentityConnection is the workload identity federation connection mode enabling the SCC client
+	workloadIdentityConnection = types.NewConnectionRef(workloadIdentityCredential).Enables(sccClient)
+	// sccConnection is the service account connection mode enabling the SCC client
+	sccConnection = types.NewConnectionRef(sccCredential).Enables(sccClient)
+	// findingsCollectOperation is the operation ref for the GCP Security Command Center findings collection operation
+	findingsCollectOperation = types.OperationRefOf[FindingsSync]().Using(sccClient)
 )
 
 const (
@@ -47,12 +50,15 @@ func projectParent(projectID string) string {
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
 	// FindingsSync includes the configuration for the findings collection operation
-	FindingsSync FindingsSyncConfig `json:"findingsSync" jsonschema:"title=Findings Sync"`
+	FindingsSync FindingsSync `json:"findingsSync" jsonschema:"title=Findings Sync"`
 }
 
-type FindingsSyncConfig struct {
+// FindingsSync holds the user-configurable and per-invocation parameters for the findings collection operation
+type FindingsSync struct {
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.category != \"GKE_SECURITY_BULLETIN\""`
+	// PageSize controls the number of findings per API page
+	PageSize int `json:"page_size,omitempty"`
 }
 
 // CollectionScope holds the SCC collection targeting shared by both credential schemas

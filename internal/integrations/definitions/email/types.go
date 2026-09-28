@@ -1,7 +1,8 @@
 package email
 
 import (
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/resend/resend-go/v3"
+
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
@@ -9,20 +10,34 @@ import (
 var (
 	// DefinitionID is the stable identifier for the email integration definition
 	DefinitionID = types.NewDefinitionRef("def_01EMAILINT00000000000000001")
-	// runtimeEmailSchema is the JSON schema and typed ref for the runtime email config
-	runtimeEmailSchema, runtimeEmailRef = providerkit.RuntimeSchema[RuntimeEmailConfig]()
-	// emailCredentialSchema is the JSON schema and typed credential ref for customer-provisioned email
-	emailCredentialSchema, emailCredentialRef = providerkit.CredentialSchema[Credential]()
+	// runtimeEmailRef is the typed ref for the runtime email config
+	runtimeEmailRef = types.RuntimeRefOf[RuntimeEmailConfig]()
+	// emailCredentialRef is the typed credential ref for customer-provisioned email
+	emailCredentialRef = types.CredentialRefOf[Credential]()
 	// emailClientRef is the client ref for the email client used by this definition
-	emailClientRef = types.NewClientRef[*Client]()
-	// sendEmailSchema is the operation schema for the generic send-email operation
-	sendEmailSchema, SendEmailOp = providerkit.OperationSchema[SendEmailRequest]() //nolint:revive
-	// sendBrandedCampaignSchema is the operation schema for the branded campaign dispatch operation
-	sendBrandedCampaignSchema, SendCampaignOp = providerkit.OperationSchema[SendBrandedCampaignRequest]() //nolint:revive
-	// sendQuestionnaireCampaignSchema is the operation schema for the questionnaire campaign dispatch operation
-	sendQuestionnaireCampaignSchema, SendQuestionnaireCampaignOp = providerkit.OperationSchema[SendQuestionnaireCampaignRequest]() //nolint:revive
+	emailClientRef = types.ClientRefOf[*Client]().Using(emailCredentialRef)
+	// emailConnection is the API key connection mode enabling the email client
+	emailConnection = types.NewConnectionRef(emailCredentialRef).Enables(emailClientRef)
+	// SendEmailOp is the operation ref for the generic send-email operation
+	SendEmailOp = types.OperationRefOf[SendEmailRequest]().Using(emailClientRef) //nolint:revive
+	// SendCampaignOp is the operation ref for the branded campaign dispatch operation
+	SendCampaignOp = types.OperationRefOf[SendBrandedCampaignRequest]().Using(emailClientRef) //nolint:revive
+	// SendQuestionnaireCampaignOp is the operation ref for the questionnaire campaign dispatch operation
+	SendQuestionnaireCampaignOp = types.OperationRefOf[SendQuestionnaireCampaignRequest]().Using(emailClientRef) //nolint:revive
 	// resendWebhookRef is the webhook ref for inbound Resend delivery events
 	resendWebhookRef = types.NewWebhookRef("resend.delivery")
+	// resendEmailSentEvent is the webhook event ref for Resend email.sent deliveries
+	resendEmailSentEvent = types.NewWebhookEventRef[resendWebhookEvent](resend.EventEmailSent)
+	// resendEmailDeliveredEvent is the webhook event ref for Resend email.delivered deliveries
+	resendEmailDeliveredEvent = types.NewWebhookEventRef[resendWebhookEvent](resend.EventEmailDelivered)
+	// resendEmailOpenedEvent is the webhook event ref for Resend email.opened deliveries
+	resendEmailOpenedEvent = types.NewWebhookEventRef[resendWebhookEvent](resend.EventEmailOpened)
+	// resendEmailClickedEvent is the webhook event ref for Resend email.clicked deliveries
+	resendEmailClickedEvent = types.NewWebhookEventRef[resendWebhookEvent](resend.EventEmailClicked)
+	// resendEmailBouncedEvent is the webhook event ref for Resend email.bounced deliveries
+	resendEmailBouncedEvent = types.NewWebhookEventRef[resendWebhookEvent](resend.EventEmailBounced)
+	// resendEmailFailedEvent is the webhook event ref for Resend email.failed deliveries
+	resendEmailFailedEvent = types.NewWebhookEventRef[resendWebhookEvent](resend.EventEmailFailed)
 )
 
 // Tag key constants for email delivery tracking via provider webhooks

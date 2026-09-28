@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -47,10 +46,10 @@ type operationTestCredential struct {
 }
 
 var (
-	operationTestCredentialSchema, operationTestCredentialRef = providerkit.CredentialSchema[operationTestCredential]()
-	opTestHealthCheckSchema, opTestHealthCheckOperation       = providerkit.OperationSchema[OperationTestHealthCheck]()
-	opTestRepoSyncSchema, opTestRepoSyncOperation             = providerkit.OperationSchema[OperationTestRepoSync]()
-	opTestValidatedSchema, opTestValidatedOperation           = providerkit.OperationSchema[OperationTestValidated]()
+	operationTestCredentialRef = types.CredentialRefOf[operationTestCredential]()
+	opTestHealthCheckOperation = types.OperationRefOf[OperationTestHealthCheck]()
+	opTestRepoSyncOperation    = types.OperationRefOf[OperationTestRepoSync]()
+	opTestValidatedOperation   = types.OperationRefOf[OperationTestValidated]()
 )
 
 func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) registry.Builder {
@@ -65,11 +64,10 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 				Visible:     true,
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:    operationTestCredentialRef.ID(),
+				operationTestCredentialRef.Registration(types.CredentialRegistration{
 					Name:   "Op Test Credential",
-					Schema: operationTestCredentialSchema,
-				},
+					Schema: operationTestCredentialRef.Schema(),
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
 				{
@@ -79,36 +77,27 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         opTestHealthCheckOperation.Name(),
-					Description:  "Validate the test credential",
-					Topic:        definition.OperationTopic(opTestHealthCheckOperation.Name()),
-					ConfigSchema: opTestHealthCheckSchema,
-					Policy:       types.ExecutionPolicy{Inline: true},
+				opTestHealthCheckOperation.Registration(definition, types.OperationRegistration{
+					Description: "Validate the test credential",
+					Policy:      types.ExecutionPolicy{Inline: true},
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"ok":true}`), nil
 					},
-				},
-				{
-					Name:         opTestRepoSyncOperation.Name(),
-					Description:  "Sync repositories",
-					Topic:        definition.OperationTopic(opTestRepoSyncOperation.Name()),
-					ConfigSchema: opTestRepoSyncSchema,
-					Policy:       types.ExecutionPolicy{Inline: inlineNonHealth},
+				}),
+				opTestRepoSyncOperation.Registration(definition, types.OperationRegistration{
+					Description: "Sync repositories",
+					Policy:      types.ExecutionPolicy{Inline: inlineNonHealth},
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"synced":true}`), nil
 					},
-				},
-				{
-					Name:         opTestValidatedOperation.Name(),
-					Description:  "Operation with config schema",
-					Topic:        definition.OperationTopic(opTestValidatedOperation.Name()),
-					ConfigSchema: opTestValidatedSchema,
-					Policy:       types.ExecutionPolicy{Inline: true},
+				}),
+				opTestValidatedOperation.Registration(definition, types.OperationRegistration{
+					Description: "Operation with config schema",
+					Policy:      types.ExecutionPolicy{Inline: true},
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"validated":true}`), nil
 					},
-				},
+				}),
 			},
 		}, nil
 	})
