@@ -742,6 +742,19 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 		subcontrolID2s = append(subcontrolID2s, subcontrol2.ID)
 	}
 
+	sourceFrom, sourceTo := controls[0], controls2[0]
+
+	mappedControl := (&th.MappedControlBuilder{
+		Client:            suite.Client,
+		FromControlIDs:    []string{sourceFrom.ID},
+		ToControlIDs:      []string{sourceTo.ID},
+		FromSubcontrolIDs: []string{subcontrols[0].ID},
+		ToSubcontrolIDs:   []string{subcontrols2[0].ID},
+		Source:            enums.MappingSourceSuggested,
+	}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+
+	clonedControls := map[string]*testclient.CreateControlsByClone_CreateControlsByClone_Controls{}
+
 	// ensure the standard exists and has the correct number of controls for the non-system admin user
 	standard, err := suite.Client.API.GetStandardByID(th.SharedTestUser2.UserCtx, publicStandard.ID)
 	assert.NilError(t, err)
@@ -763,24 +776,26 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	controlIDsToDelete := []string{}
 	subcontrolIDsToDelete := []string{}
 	testCases := []struct {
-		name               string
-		request            testclient.CloneControlInput
-		expectedControls   []*generated.Control
-		client             *testclient.TestClient
-		ctx                context.Context
-		expectedStandard   *string
-		expectedNumProgram int
-		expectedErr        string
+		name                  string
+		request               testclient.CloneControlInput
+		expectedControls      []*generated.Control
+		client                *testclient.TestClient
+		ctx                   context.Context
+		expectedStandard      *string
+		expectedNumProgram    int
+		expectedErr           string
+		expectedMappingsCount int
 	}{
 		{
 			name: "happy path, all controls under standard using standard id",
 			request: testclient.CloneControlInput{
 				StandardID: &publicStandard.ID,
 			},
-			expectedStandard: lo.ToPtr(publicStandard.ShortName),
-			expectedControls: controls,
-			client:           suite.Client.API,
-			ctx:              th.SharedTestUser1.UserCtx,
+			expectedMappingsCount: 0,
+			expectedStandard:      lo.ToPtr(publicStandard.ShortName),
+			expectedControls:      controls,
+			client:                suite.Client.API,
+			ctx:                   th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all controls under standard using standard id and program set",
@@ -788,30 +803,33 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				StandardID: &publicStandard2.ID,
 				ProgramID:  &program.ID,
 			},
-			expectedStandard: lo.ToPtr(publicStandard2.ShortName),
-			expectedControls: controls2,
-			client:           suite.Client.API,
-			ctx:              th.SharedTestUser1.UserCtx,
+			expectedMappingsCount: 1,
+			expectedStandard:      lo.ToPtr(publicStandard2.ShortName),
+			expectedControls:      controls2,
+			client:                suite.Client.API,
+			ctx:                   th.SharedTestUser1.UserCtx,
 		},
 		{
-			name: "happy path, all controls under standard",
+			name: "reimport controls under standard preserves the imported mapping",
 			request: testclient.CloneControlInput{
 				ControlIDs: controlIDs,
 			},
-			expectedStandard: &publicStandard.ShortName,
-			expectedControls: controls,
-			client:           suite.Client.API,
-			ctx:              th.SharedTestUser1.UserCtx,
+			expectedMappingsCount: 1,
+			expectedStandard:      &publicStandard.ShortName,
+			expectedControls:      controls,
+			client:                suite.Client.API,
+			ctx:                   th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, clone single control, should  be a no-op. because the control already exists",
 			request: testclient.CloneControlInput{
 				ControlIDs: []string{controls[7].ID},
 			},
-			expectedControls: []*generated.Control{controls[7]},
-			expectedStandard: &publicStandard.ShortName,
-			client:           suite.Client.API,
-			ctx:              th.SharedTestUser1.UserCtx,
+			expectedMappingsCount: 1,
+			expectedControls:      []*generated.Control{controls[7]},
+			expectedStandard:      &publicStandard.ShortName,
+			client:                suite.Client.API,
+			ctx:                   th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all controls under standard with program",
@@ -819,11 +837,12 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ControlIDs: controlIDs,
 				ProgramID:  &program.ID,
 			},
-			expectedControls:   controls,
-			expectedStandard:   &publicStandard.ShortName,
-			expectedNumProgram: 1,
-			client:             suite.Client.API,
-			ctx:                th.SharedTestUser1.UserCtx,
+			expectedMappingsCount: 1,
+			expectedControls:      controls,
+			expectedStandard:      &publicStandard.ShortName,
+			expectedNumProgram:    1,
+			client:                suite.Client.API,
+			ctx:                   th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path for support user, all controls under standard with program",
@@ -831,11 +850,12 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ControlIDs: controlIDs,
 				ProgramID:  &program.ID,
 			},
-			expectedControls:   controls,
-			expectedStandard:   &publicStandard.ShortName,
-			expectedNumProgram: 1,
-			client:             suite.Client.API,
-			ctx:                th.NewSupportCtx(th.SharedTestUser1.UserCtx, th.SharedTestUser1.OrganizationID),
+			expectedMappingsCount: 1,
+			expectedControls:      controls,
+			expectedStandard:      &publicStandard.ShortName,
+			expectedNumProgram:    1,
+			client:                suite.Client.API,
+			ctx:                   th.NewSupportCtx(th.SharedTestUser1.UserCtx, th.SharedTestUser1.OrganizationID),
 		},
 		{
 			name: "all controls under standard with program no access",
@@ -854,10 +874,11 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			request: testclient.CloneControlInput{
 				ControlIDs: []string{orgOwnedControl.ID},
 			},
-			expectedControls: []*generated.Control{orgOwnedControl},
-			expectedStandard: &orgStandard.Name,
-			client:           suite.Client.API,
-			ctx:              th.SharedTestUser1.UserCtx,
+			expectedMappingsCount: 1,
+			expectedControls:      []*generated.Control{orgOwnedControl},
+			expectedStandard:      &orgStandard.Name,
+			client:                suite.Client.API,
+			ctx:                   th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, clone control under org with program",
@@ -865,11 +886,12 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ControlIDs: []string{orgOwnedControl.ID},
 				ProgramID:  &program.ID,
 			},
-			expectedStandard:   &orgStandard.Name,
-			expectedControls:   []*generated.Control{orgOwnedControl},
-			expectedNumProgram: 1,
-			client:             suite.Client.API,
-			ctx:                th.SharedTestUser1.UserCtx,
+			expectedMappingsCount: 1,
+			expectedStandard:      &orgStandard.Name,
+			expectedControls:      []*generated.Control{orgOwnedControl},
+			expectedNumProgram:    1,
+			client:                suite.Client.API,
+			ctx:                   th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, clone single control using personal access token",
@@ -877,22 +899,24 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ControlIDs: []string{controls[:1][0].ID},
 				OwnerID:    &th.SharedTestUser1.OrganizationID,
 			},
-			expectedStandard:   &publicStandard.ShortName,
-			expectedControls:   controls[:1],
-			expectedNumProgram: 1, // control was cloned, so the previous program will still be here
-			client:             suite.Client.APIWithPAT,
-			ctx:                context.Background(),
+			expectedMappingsCount: 1,
+			expectedStandard:      &publicStandard.ShortName,
+			expectedControls:      controls[:1],
+			expectedNumProgram:    1, // control was cloned, so the previous program will still be here
+			client:                suite.Client.APIWithPAT,
+			ctx:                   context.Background(),
 		},
 		{
 			name: "happy path, clone single control using api token",
 			request: testclient.CloneControlInput{
 				ControlIDs: []string{controls[:1][0].ID},
 			},
-			expectedStandard:   &publicStandard.ShortName,
-			expectedControls:   controls[:1],
-			expectedNumProgram: 1, // api token has scopes for program
-			client:             suite.Client.APIWithToken,
-			ctx:                context.Background(),
+			expectedMappingsCount: 1,
+			expectedStandard:      &publicStandard.ShortName,
+			expectedControls:      controls[:1],
+			expectedNumProgram:    1, // api token has scopes for program
+			client:                suite.Client.APIWithToken,
+			ctx:                   context.Background(),
 		},
 		{
 			name: "clone control under org, no access to control",
@@ -942,6 +966,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			})
 
 			for i, control := range resp.CreateControlsByClone.Controls {
+				clonedControls[tc.expectedControls[i].ID] = control
 				// check required fields
 				assert.Check(t, len(control.ID) != 0)
 				assert.Check(t, len(control.DisplayID) != 0)
@@ -1031,8 +1056,53 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 					}
 				}
 			}
+
+			controlsFromEdge := clonedControls[sourceFrom.ID]
+			assert.Assert(t, controlsFromEdge != nil)
+
+			mappings, err := tc.client.GetMappedControls(tc.ctx, nil, nil, &testclient.MappedControlWhereInput{
+				Source:              lo.ToPtr(enums.MappingSourceImported),
+				HasOwnerWith:        []*testclient.OrganizationWhereInput{{ID: &th.SharedTestUser1.OrganizationID}},
+				HasFromControlsWith: []*testclient.ControlWhereInput{{ID: &controlsFromEdge.ID}},
+			})
+			assert.NilError(t, err)
+			assert.Assert(t, is.Equal(mappings.MappedControls.TotalCount, int64(tc.expectedMappingsCount)))
+			assert.Assert(t, is.Len(mappings.MappedControls.Edges, tc.expectedMappingsCount))
+
+			if tc.expectedMappingsCount == 0 {
+				return
+			}
+
+			controlsToEdge := clonedControls[sourceTo.ID]
+			assert.Assert(t, controlsToEdge != nil)
+			assert.Assert(t, is.Len(controlsFromEdge.Subcontrols.Edges, 1))
+			assert.Assert(t, is.Len(controlsToEdge.Subcontrols.Edges, 1))
+
+			mapping := mappings.MappedControls.Edges[0].Node
+			assert.Assert(t, is.Len(mapping.FromControls.Edges, 1))
+			assert.Assert(t, is.Len(mapping.ToControls.Edges, 1))
+			assert.Assert(t, is.Len(mapping.FromSubcontrols.Edges, 1))
+			assert.Assert(t, is.Len(mapping.ToSubcontrols.Edges, 1))
+
+			assert.Equal(t, mapping.FromControls.Edges[0].Node.ID, controlsFromEdge.ID)
+			assert.Equal(t, mapping.ToControls.Edges[0].Node.ID, controlsToEdge.ID)
+			assert.Equal(t, mapping.FromSubcontrols.Edges[0].Node.ID, controlsFromEdge.Subcontrols.Edges[0].Node.ID)
+			assert.Equal(t, mapping.ToSubcontrols.Edges[0].Node.ID, controlsToEdge.Subcontrols.Edges[0].Node.ID)
 		})
 	}
+
+	mappingsForOrg, err := suite.Client.API.GetMappedControls(th.SharedTestUser1.UserCtx, nil, nil, &testclient.MappedControlWhereInput{
+		HasOwnerWith: []*testclient.OrganizationWhereInput{{ID: &th.SharedTestUser1.OrganizationID}},
+	})
+
+	assert.NilError(t, err)
+
+	ids := lo.Map(mappingsForOrg.MappedControls.Edges, func(edge *testclient.GetMappedControls_MappedControls_Edges, _ int) string {
+		return edge.Node.ID
+	})
+
+	(&th.Cleanup[*generated.MappedControlDeleteOne]{Client: suite.Client.DB.MappedControl, IDs: ids}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.MappedControlDeleteOne]{Client: suite.Client.DB.MappedControl, ID: mappedControl.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 
 	// cleanup created controls and standards
 	(&th.Cleanup[*generated.SubcontrolDeleteOne]{Client: suite.Client.DB.Subcontrol, IDs: subcontrolIDsToDelete}).MustDelete(th.SharedTestUser1.UserCtx, t)
