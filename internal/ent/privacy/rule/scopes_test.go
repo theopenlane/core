@@ -51,7 +51,8 @@ func TestCheckSubjectScopeOrgSupport(t *testing.T) {
 		{name: "support can query", objectType: "Control", relation: "can_view", expected: privacy.Allow},
 		{name: "support can create", objectType: "Control", op: lo.ToPtr(ent.OpCreate), expected: privacy.Allow},
 		{name: "support can edit", objectType: "Control", op: lo.ToPtr(ent.OpUpdateOne), expected: privacy.Allow},
-		{name: "support cannot delete", objectType: "Control", op: lo.ToPtr(ent.OpDeleteOne), expected: ErrRequiredScopeNotSet},
+		{name: "support can delete", objectType: "Control", op: lo.ToPtr(ent.OpDeleteOne), expected: privacy.Allow},
+		{name: "support cannot delete organization", objectType: "Organization", op: lo.ToPtr(ent.OpDeleteOne), expected: ErrRequiredScopeNotSet},
 	}
 
 	for _, tt := range tests {
