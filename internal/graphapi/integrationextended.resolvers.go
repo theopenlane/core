@@ -54,7 +54,7 @@ func (r *integrationResolver) Credentials(ctx context.Context, obj *generated.In
 
 	var credentialType *types.CredentialRegistration
 	for _, credType := range def.CredentialRegistrations {
-		if credType.Ref.ID().String() == obj.InstallationMetadata.Display.CredentialRef {
+		if credType.Ref.String() == obj.InstallationMetadata.Display.CredentialRef {
 			credentialType = &credType
 		}
 	}

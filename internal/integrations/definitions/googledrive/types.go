@@ -14,7 +14,7 @@ var (
 	// definitionID is the stable identifier for the Google Drive integration definition
 	definitionID = types.NewDefinitionRef("def_01K0GDRIVE00000000000000001")
 	// driveCredential is the credential slot for Google Drive OAuth credentials
-	driveCredential = types.NewCredentialRef[googleDriveCred]()
+	_, driveCredential = providerkit.CredentialSchema[googleDriveCred]()
 	// driveClient is the client ref for the Google Drive SDK
 	driveClient = types.NewClientRef[DriveClient]()
 	// documentExportSchema is the operation ref for the document export operation

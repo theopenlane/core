@@ -10,7 +10,7 @@ var (
 	DefinitionID = types.NewDefinitionRef("def_01K0SCIM000000000000000001")
 	// SCIMAuthWebhook is the stable identity handle for the SCIM authentication webhook
 	SCIMAuthWebhook = types.NewWebhookRef("scim.auth")
-	// directorySyncSchema is the operation ref for the SCIM directory sync operation
+	// directorySyncSchema is the operation schema for the SCIM directory sync operation
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )
 

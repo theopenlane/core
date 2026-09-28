@@ -15,18 +15,18 @@ var (
 	// installation is the typed installation metadata handle for the Slack definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// slackCredential is the auth-managed credential slot used by the OAuth connection
-	slackCredential = types.NewCredentialRef[slackCred]()
+	_, slackCredential = providerkit.CredentialSchema[slackCred]()
 	// slackBotTokenCredential is the credential slot for user-provisioned bot tokens
-	slackBotTokenCredential = types.NewCredentialRef[slackBotTokenCred]()
+	slackBotTokenSchema, slackBotTokenCredential = providerkit.CredentialSchema[slackBotTokenCred]()
 	// slackClient is the unified client ref for every Slack operation; runtime and customer
 	// paths both build a SlackClient that wraps the Web API client and any system-notification transport
 	slackClient = types.NewClientRef[*SlackClient]()
-	// runtimeSlackSchema is the JSON schema and typed ref for the runtime Slack config
+	// runtimeSlackRef is the typed ref for the runtime Slack config
 	runtimeSlackSchema, runtimeSlackRef = providerkit.RuntimeSchema[RuntimeSlackConfig]()
-	// directorySyncSchema is the operation ref for the directory account sync operation
+	// directorySyncOperation is the operation ref for the directory account sync operation
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
-	// messageSendSchema is the operation ref for the Slack message send operation
-	messageSendSchema, MessageSendOp = providerkit.OperationSchema[MessageSendOperation]() //nolint:revive // co-initialized with schema
+	// MessageSendOp is the operation ref for the Slack message send operation
+	messageSendSchema, MessageSendOp = providerkit.OperationSchema[MessageSendOperation]() //nolint:revive
 )
 
 // RuntimeSlackConfig is the runtime-provisioned configuration for the system Slack integration.

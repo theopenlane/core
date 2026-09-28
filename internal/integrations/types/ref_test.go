@@ -1,6 +1,7 @@
 package types //nolint:revive
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"testing"
@@ -16,29 +17,46 @@ type refTestRetiredCredential struct {
 	AccessToken string `json:"accessToken"`
 }
 
-func TestReplacingConvert(t *testing.T) {
+// refTestInput is the user input type the user input ref tests reflect
+type refTestInput struct {
+	Region string `json:"region" jsonschema:"required"`
+}
+
+// refTestRetiredInput is the shape an earlier definition version stored the region under
+type refTestRetiredInput struct {
+	Zone string `json:"zone"`
+}
+
+func TestCredentialRefReplacingConvert(t *testing.T) {
 	t.Parallel()
 
-	retired := NewCredentialRef[refTestRetiredCredential]()
+	retired := NewCredentialRef[refTestRetiredCredential]("refTestRetiredCredential")
 
 	tests := []struct {
 		name    string
-		slot    CredentialRef[refTestCredential]
+		ref     CredentialRef[refTestCredential]
 		from    CredentialSlotID
 		payload string
 		want    string
 		wantErr error
 	}{
 		{
-			name:    "nil convert decodes matching fields",
-			slot:    Replacing(NewCredentialRef[refTestCredential](), retired, nil),
+			name:    "nil convert decodes the retired payload directly",
+			ref:     NewCredentialRef[refTestCredential]("refTestCredential").Replacing(retired, nil),
 			from:    retired.ID(),
-			payload: `{"token":"t","accessToken":"ignored"}`,
-			want:    `{"token":"t"}`,
+			payload: `{"accessToken":"t"}`,
+			want:    `{"token":""}`,
+		},
+		{
+			name:    "payload outside the retired layout is rejected",
+			ref:     NewCredentialRef[refTestCredential]("refTestCredential").Replacing(retired, nil),
+			from:    retired.ID(),
+			payload: `{"token":"t"}`,
+			wantErr: ErrLayoutMismatch,
 		},
 		{
 			name: "convert maps fields",
-			slot: Replacing(NewCredentialRef[refTestCredential](), retired, func(r refTestRetiredCredential) refTestCredential {
+			ref: NewCredentialRef[refTestCredential]("refTestCredential").Replacing(retired, func(r refTestRetiredCredential) refTestCredential {
 				return refTestCredential{Token: r.AccessToken}
 			}),
 			from:    retired.ID(),
@@ -46,11 +64,11 @@ func TestReplacingConvert(t *testing.T) {
 			want:    `{"token":"t"}`,
 		},
 		{
-			name:    "unknown from is not replaced",
-			slot:    Replacing(NewCredentialRef[refTestCredential](), retired, nil),
+			name:    "undeclared slot is not replaced",
+			ref:     NewCredentialRef[refTestCredential]("refTestCredential").Replacing(retired, nil),
 			from:    NewCredentialSlotID("unknown"),
 			payload: `{"token":"t"}`,
-			wantErr: ErrCredentialNotReplaced,
+			wantErr: ErrNotReplaced,
 		},
 	}
 
@@ -58,7 +76,7 @@ func TestReplacingConvert(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := tc.slot.Convert(tc.from, json.RawMessage(tc.payload))
+			got, err := tc.ref.Convert(tc.from, json.RawMessage(tc.payload))
 
 			if tc.wantErr != nil {
 				if !errors.Is(err, tc.wantErr) {
@@ -79,58 +97,190 @@ func TestReplacingConvert(t *testing.T) {
 	}
 }
 
-func TestNewCredentialRefDerivesIdentityAndSchemaFromType(t *testing.T) {
+func TestCredentialRefReplacingDoesNotAliasTheSource(t *testing.T) {
 	t.Parallel()
 
-	ref := NewCredentialRef[refTestCredential]()
+	base := NewCredentialRef[refTestCredential]("refTestCredential").Replacing(NewCredentialRef[refTestRetiredCredential]("refTestRetiredCredential"), nil)
+	extended := base.Replacing(NewCredentialRef[struct{}]("other"), nil)
+
+	if got := len(base.Replaces()); got != 1 {
+		t.Fatalf("expected the source ref to keep one replacement, got %d", got)
+	}
+
+	if got := extended.Replaces(); len(got) != 2 || got[0] != NewCredentialSlotID("other") || got[1] != NewCredentialSlotID("refTestRetiredCredential") {
+		t.Fatalf("expected sorted replacements on the extended ref, got %v", got)
+	}
+}
+
+func TestCredentialRefBackfillWithoutDeclarationReturnsPayloadUnchanged(t *testing.T) {
+	t.Parallel()
+
+	plain := NewCredentialRef[refTestCredential]("refTestCredential")
+
+	unchanged, err := plain.Backfill(context.Background(), InstallationRequest{}, json.RawMessage(`{"token":""}`))
+	if err != nil || string(unchanged) != `{"token":""}` {
+		t.Fatalf("expected the payload unchanged, got %s, %v", unchanged, err)
+	}
+}
+
+func TestCredentialRefBackfilledReceivesTheInstallationRequest(t *testing.T) {
+	t.Parallel()
+
+	var seen InstallationRequest
+
+	ref := NewCredentialRef[refTestCredential]("refTestCredential").Backfilled(func(_ context.Context, req InstallationRequest, c *refTestCredential) error {
+		seen = req
+		c.Token = "derived"
+
+		return nil
+	})
+
+	got, err := ref.Backfill(context.Background(), InstallationRequest{Input: json.RawMessage(`{"marker":true}`)}, json.RawMessage(`{"token":""}`))
+	if err != nil {
+		t.Fatalf("Backfill() error = %v", err)
+	}
+
+	if string(got) != `{"token":"derived"}` {
+		t.Fatalf("Backfill() = %s", got)
+	}
+
+	if string(seen.Input) != `{"marker":true}` {
+		t.Fatalf("expected the backfill to receive the explicit request, got %s", seen.Input)
+	}
+}
+
+func TestNewCredentialRefKeepsNameAsSlotID(t *testing.T) {
+	t.Parallel()
+
+	ref := NewCredentialRef[refTestCredential]("refTestCredential")
 
 	if ref.ID() != NewCredentialSlotID("refTestCredential") {
-		t.Fatalf("expected the slot to be named after the type, got %q", ref.String())
+		t.Fatalf("expected the slot to carry the given name, got %q", ref.String())
 	}
 
-	var schema struct {
-		Ref  string `json:"$ref"`
-		Defs map[string]struct {
-			Required []string `json:"required"`
-		} `json:"$defs"`
-	}
-	if err := json.Unmarshal(ref.Schema(), &schema); err != nil {
-		t.Fatalf("schema is not valid JSON: %v", err)
-	}
-
-	if schema.Ref != "#/$defs/refTestCredential" || len(schema.Defs["refTestCredential"].Required) != 1 {
-		t.Fatalf("expected the reflected schema of the type, got %s", ref.Schema())
-	}
-
-	var slot CredentialSlot = ref
-	if slot.ID() != ref.ID() {
-		t.Fatal("expected the typed ref to satisfy CredentialSlot")
-	}
-}
-
-func TestCredentialRefSchemaIsCloned(t *testing.T) {
-	t.Parallel()
-
-	ref := NewCredentialRef[refTestCredential]()
-
-	first := ref.Schema()
-	first[0] = 'x'
-
-	if ref.Schema()[0] != '{' {
-		t.Fatal("expected Schema to return a copy the caller cannot mutate")
-	}
-}
-
-func TestCredentialRefMarshalsAsSlotName(t *testing.T) {
-	t.Parallel()
-
-	encoded, err := json.Marshal(NewCredentialRef[refTestCredential]())
+	encoded, err := json.Marshal(ref.ID())
 	if err != nil {
 		t.Fatalf("marshal: %v", err)
 	}
 
 	if string(encoded) != `"refTestCredential"` {
 		t.Fatalf("expected the slot name on the wire, got %s", encoded)
+	}
+}
+
+func TestUserInputRefName(t *testing.T) {
+	t.Parallel()
+
+	ref := NewUserInputRef[refTestInput]("installation.input")
+
+	if ref.Name() != "installation.input" {
+		t.Fatalf("Name() = %q", ref.Name())
+	}
+}
+
+func TestUserInputRefReplacingConvert(t *testing.T) {
+	t.Parallel()
+
+	retired := NewUserInputRef[refTestRetiredInput]("refTestRetiredInput")
+
+	tests := []struct {
+		name    string
+		ref     UserInputRef[refTestInput]
+		payload string
+		want    string
+		wantErr error
+	}{
+		{
+			name:    "nil convert decodes the retired payload directly",
+			ref:     NewUserInputRef[refTestInput]("refTestInput").Replacing(retired, nil),
+			payload: `{"zone":"eu"}`,
+			want:    `{"region":""}`,
+		},
+		{
+			name: "convert maps fields",
+			ref: NewUserInputRef[refTestInput]("refTestInput").Replacing(retired, func(r refTestRetiredInput) refTestInput {
+				return refTestInput{Region: r.Zone}
+			}),
+			payload: `{"zone":"eu"}`,
+			want:    `{"region":"eu"}`,
+		},
+		{
+			name:    "payload matching no retired layout is rejected",
+			ref:     NewUserInputRef[refTestInput]("refTestInput").Replacing(retired, nil),
+			payload: `{"region":"eu"}`,
+			wantErr: ErrLayoutMismatch,
+		},
+		{
+			name:    "layout without replacements rejects every payload",
+			ref:     NewUserInputRef[refTestInput]("refTestInput"),
+			payload: `{"zone":"eu"}`,
+			wantErr: ErrLayoutMismatch,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			got, err := tc.ref.Convert(json.RawMessage(tc.payload))
+
+			if tc.wantErr != nil {
+				if !errors.Is(err, tc.wantErr) {
+					t.Fatalf("expected %v, got %v", tc.wantErr, err)
+				}
+
+				return
+			}
+
+			if err != nil {
+				t.Fatalf("Convert() error = %v", err)
+			}
+
+			if string(got) != tc.want {
+				t.Fatalf("Convert() = %s, want %s", got, tc.want)
+			}
+		})
+	}
+}
+
+func TestUserInputRefReplacingDoesNotAliasTheSource(t *testing.T) {
+	t.Parallel()
+
+	base := NewUserInputRef[refTestInput]("refTestInput").Replacing(NewUserInputRef[refTestRetiredInput]("refTestRetiredInput"), nil)
+	extended := base.Replacing(NewUserInputRef[struct{}]("other"), nil)
+
+	if got := len(base.Replaces()); got != 1 {
+		t.Fatalf("expected the source ref to keep one replacement, got %d", got)
+	}
+
+	if got := extended.Replaces(); len(got) != 2 || got[0] != "other" || got[1] != "refTestRetiredInput" {
+		t.Fatalf("expected sorted replacements on the extended ref, got %v", got)
+	}
+}
+
+func TestUserInputRefBackfilledReceivesTheInstallationRequest(t *testing.T) {
+	t.Parallel()
+
+	var seen InstallationRequest
+
+	ref := NewUserInputRef[refTestInput]("refTestInput").Backfilled(func(_ context.Context, req InstallationRequest, in *refTestInput) error {
+		seen = req
+		in.Region = "derived"
+
+		return nil
+	})
+
+	got, err := ref.Backfill(context.Background(), InstallationRequest{Input: json.RawMessage(`{"marker":true}`)}, json.RawMessage(`{"region":""}`))
+	if err != nil {
+		t.Fatalf("Backfill() error = %v", err)
+	}
+
+	if string(got) != `{"region":"derived"}` {
+		t.Fatalf("Backfill() = %s", got)
+	}
+
+	if string(seen.Input) != `{"marker":true}` {
+		t.Fatalf("expected the backfill to receive the explicit request, got %s", seen.Input)
 	}
 }
 
@@ -169,8 +319,8 @@ func TestClientRefIDsAreDistinct(t *testing.T) {
 func TestOperationRefName(t *testing.T) {
 	t.Parallel()
 
-	ref := NewOperationRef[struct{}]("health.default")
-	if ref.Name() != "health.default" {
+	ref := NewOperationRef[refTestCredential]("refTestCredential")
+	if ref.Name() != "refTestCredential" {
 		t.Fatalf("OperationRef.Name() = %q", ref.Name())
 	}
 }
@@ -226,7 +376,7 @@ func TestOperationRefUnmarshalConfig(t *testing.T) {
 		Name string `json:"name"`
 	}
 
-	ref := NewOperationRef[cfg]("test.op")
+	ref := NewOperationRef[cfg]("cfg")
 	got, err := ref.UnmarshalConfig(json.RawMessage(`{"name":"foo"}`))
 	if err != nil {
 		t.Fatalf("UnmarshalConfig() error = %v", err)
@@ -240,7 +390,7 @@ func TestOperationRefUnmarshalConfig(t *testing.T) {
 func TestOperationRefUnmarshalConfigNil(t *testing.T) {
 	t.Parallel()
 
-	ref := NewOperationRef[struct{}]("test.noop")
+	ref := NewOperationRef[struct{}]("empty")
 	_, err := ref.UnmarshalConfig(nil)
 	if err != nil {
 		t.Fatalf("UnmarshalConfig(nil) error = %v", err)
@@ -255,6 +405,10 @@ func TestWebhookEventRefUnmarshalPayload(t *testing.T) {
 	}
 
 	ref := NewWebhookEventRef[payload]("created")
+	if ref.Name() != "created" {
+		t.Fatalf("WebhookEventRef.Name() = %q", ref.Name())
+	}
+
 	got, err := ref.UnmarshalPayload(json.RawMessage(`{"action":"opened"}`))
 	if err != nil {
 		t.Fatalf("UnmarshalPayload() error = %v", err)

@@ -95,6 +95,8 @@ type IngestHandler func(ctx context.Context, request OperationRequest) ([]Ingest
 type OperationRegistration struct {
 	// Name is the stable operation identifier within the definition
 	Name string `json:"name"`
+	// Replaces lists the retired operation names whose recorded runs and health move onto this operation
+	Replaces []string `json:"-"`
 	// Description describes what the operation does
 	Description string `json:"description,omitempty"`
 	// RequiredPermissions lists what scopes or permissions are needed to retrieve data for the Operation

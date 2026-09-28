@@ -13,12 +13,12 @@ var (
 	// installation is the typed installation metadata handle for the Tailscale definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// tailscaleCredential is the credential slot for the Tailscale integration definition
-	tailscaleCredential = types.NewCredentialRef[CredentialSchema]()
+	tailscaleSchema, tailscaleCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// tailscaleClient is the client ref for the Tailscale API client used by this definition
 	tailscaleClient = types.NewClientRef[*tsclient.Client]()
-	// directorySyncSchema is the operation schema for the directory sync operation
+	// directorySyncOperation is the operation ref for the directory sync operation
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
-	// assetSyncSchema is the operation schema for the asset sync operation
+	// assetSyncOperation is the operation ref for the asset sync operation
 	assetSyncSchema, assetSyncOperation = providerkit.OperationSchema[AssetSync]()
 )
 

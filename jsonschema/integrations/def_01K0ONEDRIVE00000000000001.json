@@ -28,7 +28,70 @@
       }
     }
   ],
+  "userInput": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/user-input",
+      "$ref": "#/$defs/UserInput",
+      "$defs": {
+        "UserInput": {
+          "properties": {
+            "primary": {
+              "type": "boolean",
+              "title": "Primary"
+            },
+            "folderId": {
+              "type": "string",
+              "title": "Folder Path",
+              "description": "Folder path relative to drive root (e.g. Policies). Leave empty to sync the entire drive root."
+            },
+            "filterExpr": {
+              "type": "string",
+              "title": "Filter Expression",
+              "description": "Optional CEL expression to filter documents before creating policies"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      }
+    }
+  },
+  "metadata": [
+    {
+      "connection": "oneDriveCred",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "tenantId": {
+                "type": "string",
+                "title": "Tenant ID"
+              },
+              "domain": {
+                "type": "string",
+                "title": "Domain"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
   "connections": [
     "oneDriveCred"
+  ],
+  "operations": [
+    {
+      "name": "DocumentExport"
+    },
+    {
+      "name": "FolderSync"
+    }
   ]
 }

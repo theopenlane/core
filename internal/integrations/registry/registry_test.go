@@ -6,6 +6,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
@@ -16,11 +17,32 @@ type testCredential struct{}
 // testAuthCredential is the credential type behind the auth-managed test slot
 type testAuthCredential struct{}
 
-// testCredentialRef is the reusable typed credential slot for tests
-var testCredentialRef = integrationtypes.NewCredentialRef[testCredential]()
+// testRuntimeConfig is the runtime config type behind the runtime integration tests
+type testRuntimeConfig struct {
+	Key string `json:"key"`
+}
 
-// testAuthCredentialRef is the typed credential slot an auth flow fills in tests
-var testAuthCredentialRef = integrationtypes.NewCredentialRef[testAuthCredential]()
+var (
+	// testCredentialSchema and testCredentialRef are the reusable credential slot and its stored schema for tests
+	testCredentialSchema, testCredentialRef = providerkit.CredentialSchema[testCredential]()
+	// testAuthCredentialSchema and testAuthCredentialRef are the credential slot an auth flow fills in tests
+	testAuthCredentialSchema, testAuthCredentialRef = providerkit.CredentialSchema[testAuthCredential]()
+	// testRuntimeRef is the typed runtime integration ref behind the runtime integration tests
+	_, testRuntimeRef = providerkit.RuntimeSchema[testRuntimeConfig]()
+)
+
+// testCredentialRegistration is the reusable credential registration declaring the test slot with its schema
+var testCredentialRegistration = integrationtypes.CredentialRegistration{Ref: testCredentialRef.ID(), Schema: testCredentialSchema}
+
+// testOperationConfig is the operation config type behind the typed operation ref tests
+type testOperationConfig struct {
+	Limit int `json:"limit"`
+}
+
+// testUserInput is the user input type behind the typed user input ref tests
+type testUserInput struct {
+	Region string `json:"region"`
+}
 
 // newTestHandler returns a no-op operation handler
 func newTestHandler() integrationtypes.OperationHandler {
@@ -48,7 +70,7 @@ func minimalDefinition(id string) (integrationtypes.Definition, integrationtypes
 			Visible:     true,
 		},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialRef},
+			testCredentialRegistration,
 		},
 		Clients: []integrationtypes.ClientRegistration{
 			{
@@ -231,22 +253,22 @@ func TestValidateOperatorConfigSchemaRequired(t *testing.T) {
 	}
 }
 
-// TestValidateCredentialRefRequired verifies a credential registration without a typed slot ref is rejected
-func TestValidateCredentialRefRequired(t *testing.T) {
+// TestValidateCredentialSchemaRequired verifies a credential registration without a stored schema is rejected unless an auth flow fills the slot
+func TestValidateCredentialSchemaRequired(t *testing.T) {
 	t.Parallel()
 
 	reg := New()
 
 	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_credref"},
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_credschema"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Name: "Orphan"},
+			{Ref: testCredentialRef.ID(), Name: "Orphan"},
 		},
 	}
 
 	err := reg.Register(def)
-	if !errors.Is(err, ErrCredentialRefRequired) {
-		t.Fatalf("expected ErrCredentialRefRequired, got %v", err)
+	if !errors.Is(err, ErrCredentialSchemaRequired) {
+		t.Fatalf("expected ErrCredentialSchemaRequired, got %v", err)
 	}
 }
 
@@ -889,7 +911,7 @@ func TestConnectionAdditionalCredentialRefNotDeclared(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_extraref"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialRef},
+			testCredentialRegistration,
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
@@ -918,7 +940,7 @@ func TestConnectionClientRefNotDeclared(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_badclient"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialRef},
+			testCredentialRegistration,
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
@@ -947,7 +969,7 @@ func TestConnectionHealthCheckHandlerRequired(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_nohealthhandler"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialRef},
+			testCredentialRegistration,
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
@@ -977,7 +999,7 @@ func TestConnectionHealthCheckClientNotDeclared(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_badhealthclient"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialRef},
+			testCredentialRegistration,
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
@@ -1010,7 +1032,7 @@ func TestConnectionAuthCredentialRefNotDeclared(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_badauth"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialRef},
+			testCredentialRegistration,
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
@@ -1039,7 +1061,7 @@ func TestConnectionAuthCredentialRefEmpty(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_emptyauth"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialRef},
+			testCredentialRegistration,
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
@@ -1069,7 +1091,7 @@ func TestConnectionDisconnectCredentialRefNotDeclared(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_baddisc"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialRef},
+			testCredentialRegistration,
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
@@ -1098,7 +1120,7 @@ func TestConnectionDisconnectCredentialRefEmpty(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_emptydisc"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialRef},
+			testCredentialRegistration,
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
@@ -1128,8 +1150,8 @@ func TestConnectionFullyWiredSuccess(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_full"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialRef},
-			{Ref: testAuthCredentialRef},
+			testCredentialRegistration,
+			{Ref: testAuthCredentialRef.ID()},
 		},
 		Clients: []integrationtypes.ClientRegistration{
 			{
@@ -1150,7 +1172,7 @@ func TestConnectionFullyWiredSuccess(t *testing.T) {
 					ClientRef: clientRef.ID(),
 					Handle:    newTestHandler(),
 				},
-				Auth:       &integrationtypes.AuthRegistration{CredentialRef: testAuthCredentialRef.ID()},
+				Auth:       &integrationtypes.AuthRegistration{CredentialRef: testAuthCredentialRef.ID(), Schema: testAuthCredentialSchema},
 				Disconnect: &integrationtypes.DisconnectRegistration{CredentialRef: testCredentialRef.ID()},
 			},
 		},
@@ -1170,7 +1192,7 @@ func TestConnectionAutoAppendsCredentialRef(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_autoappend"},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialRef},
+			testCredentialRegistration,
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
 			{
@@ -1202,8 +1224,8 @@ func TestRuntimeIntegrationRegistration(t *testing.T) {
 			Visible:     true,
 		},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    integrationtypes.NewRuntimeRefID("TestRuntimeConfig"),
-			Schema: json.RawMessage(`{"type":"object"}`),
+			Ref:    testRuntimeRef.ID(),
+			Schema: testRuntimeRef.Schema(),
 			Config: json.RawMessage(`{"key":"val"}`),
 			Build: func(_ context.Context, config json.RawMessage) (any, error) {
 				return "runtime-client-" + string(config), nil
@@ -1246,8 +1268,8 @@ func TestRuntimeIntegrationNilConfig(t *testing.T) {
 			Active:      true,
 		},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    integrationtypes.NewRuntimeRefID("Unconfigured"),
-			Schema: json.RawMessage(`{"type":"object"}`),
+			Ref:    testRuntimeRef.ID(),
+			Schema: testRuntimeRef.Schema(),
 			Build: func(_ context.Context, _ json.RawMessage) (any, error) {
 				return "should-not-be-called", nil
 			},
@@ -1280,15 +1302,15 @@ func TestRuntimeCoexistsWithCredentials(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_creds", Active: true, Visible: true},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    integrationtypes.NewRuntimeRefID("WithCreds"),
-			Schema: json.RawMessage(`{"type":"object"}`),
+			Ref:    testRuntimeRef.ID(),
+			Schema: testRuntimeRef.Schema(),
 			Config: json.RawMessage(`{"key":"val"}`),
 			Build: func(_ context.Context, config json.RawMessage) (any, error) {
 				return "runtime-client", nil
 			},
 		},
 		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			{Ref: testCredentialRef},
+			testCredentialRegistration,
 		},
 		Clients: []integrationtypes.ClientRegistration{
 			{
@@ -1341,8 +1363,9 @@ func TestRuntimeCoexistsWithOperatorConfig(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_opconf"},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:   integrationtypes.NewRuntimeRefID("OpConflict"),
-			Build: func(_ context.Context, _ json.RawMessage) (any, error) { return nil, nil },
+			Ref:    testRuntimeRef.ID(),
+			Schema: testRuntimeRef.Schema(),
+			Build:  func(_ context.Context, _ json.RawMessage) (any, error) { return nil, nil },
 		},
 		OperatorConfig: &integrationtypes.OperatorConfigRegistration{Schema: json.RawMessage(`{"type":"object"}`)},
 		Operations: []integrationtypes.OperationRegistration{
@@ -1364,7 +1387,8 @@ func TestRuntimeBuildRequired(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_nobuild"},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref: integrationtypes.NewRuntimeRefID("NoBuild"),
+			Ref:    testRuntimeRef.ID(),
+			Schema: testRuntimeRef.Schema(),
 		},
 		Operations: []integrationtypes.OperationRegistration{
 			{Name: "op", Topic: gala.TopicName("op"), Handle: newTestHandler()},
@@ -1387,7 +1411,8 @@ func TestRuntimeBuildError(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_buildfail"},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    integrationtypes.NewRuntimeRefID("FailBuild"),
+			Ref:    testRuntimeRef.ID(),
+			Schema: testRuntimeRef.Schema(),
 			Config: json.RawMessage(`{}`),
 			Build: func(_ context.Context, _ json.RawMessage) (any, error) {
 				return nil, buildErr

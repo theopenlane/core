@@ -32,7 +32,104 @@
       }
     }
   ],
+  "userInput": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/tailscale/user-input",
+      "$ref": "#/$defs/UserInput",
+      "$defs": {
+        "AssetSync": {
+          "properties": {
+            "disable": {
+              "type": "boolean",
+              "title": "Disable",
+              "description": "Disable the syncing of Tailscale devices as assets"
+            },
+            "filterExpr": {
+              "type": "string",
+              "title": "Filter Expression",
+              "description": "Optional CEL expression to apply to records before ingesting"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "DirectorySync": {
+          "properties": {
+            "disable": {
+              "type": "boolean",
+              "title": "Disable",
+              "description": "Disable the syncing of users and groups from Tailscale"
+            },
+            "disableGroupSync": {
+              "type": "boolean",
+              "title": "Disable Group Sync",
+              "description": "Only sync users from Tailscale; disable role-based group sync"
+            },
+            "filterExpr": {
+              "type": "string",
+              "title": "Filter Expression",
+              "description": "Optional CEL expression to apply to records before ingesting",
+              "examples": [
+                "Example: payload.status == 'active'"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "UserInput": {
+          "properties": {
+            "directorySync": {
+              "$ref": "#/$defs/DirectorySync",
+              "title": "Directory Sync"
+            },
+            "assetSync": {
+              "$ref": "#/$defs/AssetSync",
+              "title": "Asset Sync"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      }
+    }
+  },
+  "metadata": [
+    {
+      "connection": "CredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/tailscale/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "clientId": {
+                "type": "string",
+                "title": "Client ID"
+              },
+              "tailnet": {
+                "type": "string",
+                "title": "Tailnet"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
   "connections": [
     "CredentialSchema"
+  ],
+  "operations": [
+    {
+      "name": "AssetSync"
+    },
+    {
+      "name": "DirectorySync"
+    }
   ]
 }

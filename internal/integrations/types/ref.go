@@ -4,6 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"maps"
+	"slices"
+	"strings"
 
 	"github.com/samber/lo"
 
@@ -75,6 +78,89 @@ func (r DefinitionRef) WebhookEventTopic(name string) gala.TopicName {
 	return r.WebhookEventTopics().Name(name)
 }
 
+// replacement is one retired layout a typed ref takes over
+type replacement[T any] struct {
+	schema json.RawMessage
+	decode func(json.RawMessage) (T, error)
+}
+
+// replacing records a retired layout under name, decoded through convert or directly into T when convert is nil
+func replacing[T, Old any](replacements map[string]replacement[T], name string, convert func(Old) T) map[string]replacement[T] {
+	next := maps.Clone(replacements)
+	if next == nil {
+		next = map[string]replacement[T]{}
+	}
+
+	next[name] = replacement[T]{schema: jsonx.SchemaFrom[Old](), decode: func(payload json.RawMessage) (T, error) {
+		if convert == nil {
+			return jsonx.Decode[T](payload)
+		}
+
+		previous, err := jsonx.Decode[Old](payload)
+		if err != nil {
+			var zero T
+
+			return zero, err
+		}
+
+		return convert(previous), nil
+	}}
+
+	return next
+}
+
+// convertReplaced reshapes a payload stored under the retired layout from into T
+func convertReplaced[T any](replacements map[string]replacement[T], from string, old json.RawMessage) (json.RawMessage, error) {
+	retired, ok := replacements[from]
+	if !ok {
+		return nil, fmt.Errorf("%w: %s", ErrNotReplaced, from)
+	}
+
+	result, err := jsonx.ValidateSchema(retired.schema, old)
+	if err != nil {
+		return nil, err
+	}
+
+	if !result.Valid() {
+		return nil, fmt.Errorf("%w: %s: %s", ErrLayoutMismatch, from, strings.Join(jsonx.ValidationErrorStrings(result), "; "))
+	}
+
+	value, err := retired.decode(old)
+	if err != nil {
+		return nil, err
+	}
+
+	return jsonx.ToRawMessage(value)
+}
+
+// backfillPayload completes the payload through fn, returning it unchanged when fn is nil
+func backfillPayload[T any](ctx context.Context, req InstallationRequest, fn func(context.Context, InstallationRequest, *T) error, payload json.RawMessage) (json.RawMessage, error) {
+	if fn == nil {
+		return payload, nil
+	}
+
+	var value T
+
+	if err := jsonx.UnmarshalIfPresent(payload, &value); err != nil {
+		return nil, err
+	}
+
+	if err := fn(ctx, req, &value); err != nil {
+		return nil, err
+	}
+
+	return jsonx.ToRawMessage(value)
+}
+
+// sortedNames returns the retired layout names in sorted order
+func sortedNames[T any](replacements map[string]replacement[T]) []string {
+	names := lo.Keys(replacements)
+
+	slices.Sort(names)
+
+	return names
+}
+
 // =========
 // Credentials
 // =========
@@ -120,128 +206,21 @@ func (r *CredentialSlotID) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// CredentialSlot is the typed identity a credential registration points at; only CredentialRef satisfies it
-type CredentialSlot interface {
-	// ID returns the non-generic credential slot identity
-	ID() CredentialSlotID
-	// Schema returns the reflected JSON schema of the stored credential type
-	Schema() json.RawMessage
-	// Replaces lists the retired slots whose stored payloads this slot takes over
-	Replaces() []CredentialSlotID
-	// Convert reshapes a payload stored under one of the replaced slots into this slot's shape
-	Convert(from CredentialSlotID, old json.RawMessage) (json.RawMessage, error)
-	// Backfills reports whether the slot declares how to complete a stored payload missing values
-	Backfills() bool
-	// Backfill derives values a stored payload lacks from the live installation
-	Backfill(ctx context.Context, req InstallationRequest, payload json.RawMessage) (json.RawMessage, error)
-}
-
 // CredentialRef is a typed handle for one credential slot, parameterized by the credential schema type
 type CredentialRef[T any] struct {
-	// id is the non-generic credential slot identity derived from the type name
-	id CredentialSlotID
-	// schema is the reflected JSON schema of T
-	schema json.RawMessage
-	// replacements decode payloads stored under retired slots into T
-	replacements map[CredentialSlotID]func(json.RawMessage) (T, error)
-	// backfill derives values a decoded payload lacks from the live installation
-	backfill func(context.Context, InstallationRequest, *T) error
+	id           CredentialSlotID
+	replacements map[string]replacement[T]
+	backfill     func(context.Context, InstallationRequest, *T) error
 }
 
-// NewCredentialRef reflects T once and creates the typed credential slot handle named after it
-func NewCredentialRef[T any]() CredentialRef[T] {
-	schema := jsonx.SchemaFrom[T]()
-
-	return CredentialRef[T]{id: NewCredentialSlotID(jsonx.SchemaID(schema)), schema: schema}
-}
-
-// Replacing declares that ref takes over payloads stored under old, converted with convert or decoded directly into T when convert is nil
-func Replacing[T, Old any](ref CredentialRef[T], old CredentialRef[Old], convert func(Old) T) CredentialRef[T] {
-	if ref.replacements == nil {
-		ref.replacements = map[CredentialSlotID]func(json.RawMessage) (T, error){}
-	}
-
-	ref.replacements[old.ID()] = func(payload json.RawMessage) (T, error) {
-		if convert == nil {
-			return jsonx.Decode[T](payload)
-		}
-
-		previous, err := jsonx.Decode[Old](payload)
-		if err != nil {
-			var zero T
-
-			return zero, err
-		}
-
-		return convert(previous), nil
-	}
-
-	return ref
-}
-
-// Backfilled declares how a stored payload missing values is completed from the live installation
-func (r CredentialRef[T]) Backfilled(fn func(context.Context, InstallationRequest, *T) error) CredentialRef[T] {
-	r.backfill = fn
-
-	return r
-}
-
-// Replaces lists the retired slots whose stored payloads this slot takes over
-func (r CredentialRef[T]) Replaces() []CredentialSlotID {
-	return lo.Keys(r.replacements)
-}
-
-// Convert reshapes a payload stored under one of the replaced slots into this slot's shape
-func (r CredentialRef[T]) Convert(from CredentialSlotID, old json.RawMessage) (json.RawMessage, error) {
-	decode, ok := r.replacements[from]
-	if !ok {
-		return nil, fmt.Errorf("%w: %s does not replace %s", ErrCredentialNotReplaced, r.id, from)
-	}
-
-	value, err := decode(old)
-	if err != nil {
-		return nil, err
-	}
-
-	return jsonx.ToRawMessage(value)
-}
-
-// Backfills reports whether the slot declares how to complete a stored payload missing values
-func (r CredentialRef[T]) Backfills() bool {
-	return r.backfill != nil
-}
-
-// Backfill derives values a stored payload lacks from the live installation, returning it unchanged when none is declared
-func (r CredentialRef[T]) Backfill(ctx context.Context, req InstallationRequest, payload json.RawMessage) (json.RawMessage, error) {
-	if r.backfill == nil {
-		return payload, nil
-	}
-
-	var value T
-	if err := jsonx.UnmarshalIfPresent(payload, &value); err != nil {
-		return nil, err
-	}
-
-	if err := r.backfill(ctx, req, &value); err != nil {
-		return nil, err
-	}
-
-	return jsonx.ToRawMessage(value)
+// NewCredentialRef creates a typed credential slot identity handle
+func NewCredentialRef[T any](name string) CredentialRef[T] {
+	return CredentialRef[T]{id: NewCredentialSlotID(name)}
 }
 
 // ID returns the non-generic credential slot identity
 func (r CredentialRef[T]) ID() CredentialSlotID {
 	return r.id
-}
-
-// Schema returns the reflected JSON schema of the stored credential type
-func (r CredentialRef[T]) Schema() json.RawMessage {
-	return jsonx.CloneRawMessage(r.schema)
-}
-
-// MarshalJSON encodes the ref as its stable slot name
-func (r CredentialRef[T]) MarshalJSON() ([]byte, error) {
-	return json.Marshal(r.id)
 }
 
 // String returns the stable credential name used for persistence and equality comparisons
@@ -264,6 +243,94 @@ func (r CredentialRef[T]) Resolve(bindings CredentialBindings) (T, bool, error) 
 	}
 
 	return out, true, nil
+}
+
+// Replacing declares that the slot takes over payloads stored under old
+func (r CredentialRef[T]) Replacing[Old any](old CredentialRef[Old], convert func(Old) T) CredentialRef[T] {
+	r.replacements = replacing(r.replacements, old.String(), convert)
+
+	return r
+}
+
+// Backfilled declares how a stored payload missing values is completed
+func (r CredentialRef[T]) Backfilled(fn func(context.Context, InstallationRequest, *T) error) CredentialRef[T] {
+	r.backfill = fn
+
+	return r
+}
+
+// Replaces lists the retired slots whose stored payloads this slot takes over, sorted
+func (r CredentialRef[T]) Replaces() []CredentialSlotID {
+	return lo.Map(sortedNames(r.replacements), func(name string, _ int) CredentialSlotID {
+		return NewCredentialSlotID(name)
+	})
+}
+
+// Convert reshapes a payload stored under one of the replaced slots into this slot's shape
+func (r CredentialRef[T]) Convert(from CredentialSlotID, old json.RawMessage) (json.RawMessage, error) {
+	return convertReplaced(r.replacements, from.String(), old)
+}
+
+// Backfill completes a stored payload missing values through the declared backfill
+func (r CredentialRef[T]) Backfill(ctx context.Context, req InstallationRequest, payload json.RawMessage) (json.RawMessage, error) {
+	return backfillPayload(ctx, req, r.backfill, payload)
+}
+
+// =========
+// User input
+// =========
+
+// UserInputRef is a typed handle for one definition's installation-scoped user input layout
+type UserInputRef[T any] struct {
+	name         string
+	replacements map[string]replacement[T]
+	backfill     func(context.Context, InstallationRequest, *T) error
+}
+
+// NewUserInputRef creates a typed user input layout handle
+func NewUserInputRef[T any](name string) UserInputRef[T] {
+	return UserInputRef[T]{name: name}
+}
+
+// Name returns the stable layout name
+func (r UserInputRef[T]) Name() string {
+	return r.name
+}
+
+// Replacing declares that the layout takes over user input stored in old
+func (r UserInputRef[T]) Replacing[Old any](old UserInputRef[Old], convert func(Old) T) UserInputRef[T] {
+	r.replacements = replacing(r.replacements, old.name, convert)
+
+	return r
+}
+
+// Backfilled declares how stored user input missing values is completed
+func (r UserInputRef[T]) Backfilled(fn func(context.Context, InstallationRequest, *T) error) UserInputRef[T] {
+	r.backfill = fn
+
+	return r
+}
+
+// Replaces lists the retired layout names whose stored user input this layout takes over, sorted
+func (r UserInputRef[T]) Replaces() []string {
+	return sortedNames(r.replacements)
+}
+
+// Convert reshapes stored user input through the first retired layout it matches
+func (r UserInputRef[T]) Convert(old json.RawMessage) (json.RawMessage, error) {
+	for _, retired := range sortedNames(r.replacements) {
+		converted, err := convertReplaced(r.replacements, retired, old)
+		if err == nil {
+			return converted, nil
+		}
+	}
+
+	return nil, fmt.Errorf("%w: %s", ErrLayoutMismatch, r.name)
+}
+
+// Backfill completes stored user input missing values through the declared backfill
+func (r UserInputRef[T]) Backfill(ctx context.Context, req InstallationRequest, payload json.RawMessage) (json.RawMessage, error) {
+	return backfillPayload(ctx, req, r.backfill, payload)
 }
 
 // =========
@@ -343,13 +410,15 @@ func (r OperationRef[T]) UnmarshalConfig(raw json.RawMessage) (T, error) {
 type InstallationRef[T any] struct {
 	// key is the pointer-based in-process identity for the installation ref
 	key *keyID
+	// schema is the reflected JSON schema of the derived metadata type
+	schema json.RawMessage
 	// fn is the typed resolve function that derives installation metadata
 	fn func(ctx context.Context, req InstallationRequest) (T, bool, error)
 }
 
 // NewInstallationRef creates a typed installation metadata handle
 func NewInstallationRef[T any](fn func(ctx context.Context, req InstallationRequest) (T, bool, error)) InstallationRef[T] {
-	return InstallationRef[T]{key: new(keyID), fn: fn}
+	return InstallationRef[T]{key: new(keyID), schema: jsonx.SchemaFrom[T](), fn: fn}
 }
 
 // Resolve derives and marshals installation metadata for one installation
@@ -375,7 +444,7 @@ func (r InstallationRef[T]) Resolve(ctx context.Context, req InstallationRequest
 
 // Registration adapts the typed ref to the InstallationRegistration contract for use in a connection builder
 func (r InstallationRef[T]) Registration() *InstallationRegistration {
-	return &InstallationRegistration{Resolve: r.Resolve}
+	return &InstallationRegistration{Resolve: r.Resolve, Schema: jsonx.CloneRawMessage(r.schema)}
 }
 
 // =========

@@ -34,7 +34,7 @@ func Builder(cfg Config) registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         driveCredential,
+					Ref:         driveCredential.ID(),
 					Name:        "Google Drive Credential",
 					Description: "OAuth credential used to access Google Drive documents.",
 				},

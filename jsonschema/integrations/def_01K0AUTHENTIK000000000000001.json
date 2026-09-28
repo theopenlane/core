@@ -30,7 +30,75 @@
       }
     }
   ],
+  "userInput": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/authentik/user-input",
+      "$ref": "#/$defs/UserInput",
+      "$defs": {
+        "UserInput": {
+          "properties": {
+            "primaryDirectory": {
+              "type": "boolean",
+              "title": "Primary Directory",
+              "description": "Mark this as the authoritative source for identity holder enrichment and lifecycle"
+            },
+            "disableGroupSync": {
+              "type": "boolean",
+              "title": "Disable Group Sync",
+              "description": "Only sync users disable group and membership sync operations"
+            },
+            "filterExpr": {
+              "type": "string",
+              "title": "Filter Expression",
+              "description": "Optional CEL expression to apply to records before ingesting",
+              "examples": [
+                "Example: payload.type == 'internal'"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      }
+    }
+  },
+  "metadata": [
+    {
+      "connection": "CredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/authentik/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "brand": {
+                "type": "string"
+              },
+              "brandId": {
+                "type": "string"
+              },
+              "host": {
+                "type": "string"
+              },
+              "baseUrl": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
   "connections": [
     "CredentialSchema"
+  ],
+  "operations": [
+    {
+      "name": "DirectorySync"
+    }
   ]
 }

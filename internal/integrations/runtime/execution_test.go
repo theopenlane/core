@@ -17,7 +17,7 @@ import (
 // executionTestAPIKey is the credential type bound to the operation under test
 type executionTestAPIKey struct{}
 
-var executionTestAPIKeyRef = types.NewCredentialRef[executionTestAPIKey]()
+var executionTestAPIKeyRef = types.NewCredentialRef[executionTestAPIKey]("executionTestAPIKey")
 
 func TestExecuteOperationNilInstallation(t *testing.T) {
 	t.Parallel()

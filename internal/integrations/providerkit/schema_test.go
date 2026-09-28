@@ -22,6 +22,29 @@ func TestSchemaID_RoundTrip(t *testing.T) {
 	}
 }
 
+func TestCredentialSchema(t *testing.T) {
+	t.Parallel()
+
+	type testCred struct {
+		APIKey string `json:"api_key" jsonschema:"required"`
+	}
+
+	schema, ref := CredentialSchema[testCred]()
+
+	if schema == nil {
+		t.Fatal("expected non-nil schema")
+	}
+
+	var doc map[string]any
+	if err := json.Unmarshal(schema, &doc); err != nil {
+		t.Fatalf("schema is not valid JSON: %v", err)
+	}
+
+	if ref.String() == "" {
+		t.Fatal("expected non-empty credential ref identity")
+	}
+}
+
 func TestOperationSchema(t *testing.T) {
 	t.Parallel()
 

@@ -9,6 +9,7 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // credentialTestOAuth is the credential type behind the OAuth test slot
@@ -18,8 +19,10 @@ type credentialTestOAuth struct{}
 type credentialTestAPIKey struct{}
 
 var (
-	credentialTestOAuthRef  = types.NewCredentialRef[credentialTestOAuth]()
-	credentialTestAPIKeyRef = types.NewCredentialRef[credentialTestAPIKey]()
+	credentialTestOAuthSchema  = jsonx.SchemaFrom[credentialTestOAuth]()
+	credentialTestOAuthRef     = types.NewCredentialRef[credentialTestOAuth]("credentialTestOAuth")
+	credentialTestAPIKeySchema = jsonx.SchemaFrom[credentialTestAPIKey]()
+	credentialTestAPIKeyRef    = types.NewCredentialRef[credentialTestAPIKey]("credentialTestAPIKey")
 )
 
 // --- resolveConnectionFromState ---
@@ -72,7 +75,7 @@ func TestResolveConnectionFromStateWithPersistedRef(t *testing.T) {
 	def := types.Definition{
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []types.CredentialRegistration{
-			{Ref: credentialTestOAuthRef, Name: "OAuth"},
+			{Ref: credentialTestOAuthRef.ID(), Name: "OAuth", Schema: credentialTestOAuthSchema},
 		},
 		Connections: []types.ConnectionRegistration{
 			{CredentialRef: credRef, Name: "OAuth Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
@@ -136,7 +139,7 @@ func TestResolveConnectionForCredentialFromPersistedState(t *testing.T) {
 	def := types.Definition{
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []types.CredentialRegistration{
-			{Ref: credentialTestOAuthRef, Name: "OAuth"},
+			{Ref: credentialTestOAuthRef.ID(), Name: "OAuth", Schema: credentialTestOAuthSchema},
 		},
 		Connections: []types.ConnectionRegistration{
 			{CredentialRef: credRef, Name: "OAuth Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
@@ -172,7 +175,7 @@ func TestResolveConnectionForCredentialRefNotDeclared(t *testing.T) {
 	def := types.Definition{
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []types.CredentialRegistration{
-			{Ref: credentialTestOAuthRef, Name: "OAuth"},
+			{Ref: credentialTestOAuthRef.ID(), Name: "OAuth", Schema: credentialTestOAuthSchema},
 		},
 		Connections: []types.ConnectionRegistration{
 			{CredentialRef: credRef, Name: "OAuth Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
@@ -203,7 +206,7 @@ func TestResolveConnectionForCredentialNoStateWithRef(t *testing.T) {
 	def := types.Definition{
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []types.CredentialRegistration{
-			{Ref: credentialTestAPIKeyRef, Name: "API Key"},
+			{Ref: credentialTestAPIKeyRef.ID(), Name: "API Key", Schema: credentialTestAPIKeySchema},
 		},
 		Connections: []types.ConnectionRegistration{
 			{CredentialRef: credRef, Name: "API Key Connection", CredentialRefs: []types.CredentialSlotID{credRef}},
@@ -354,7 +357,7 @@ func TestResolvePersistedConnectionSingleConnectionFallback(t *testing.T) {
 	_ = reg.Register(types.Definition{
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []types.CredentialRegistration{
-			{Ref: credentialTestOAuthRef, Name: "OAuth"},
+			{Ref: credentialTestOAuthRef.ID(), Name: "OAuth", Schema: credentialTestOAuthSchema},
 		},
 		Connections: []types.ConnectionRegistration{
 			{CredentialRef: credRef, Name: "Only Connection", CredentialRefs: []types.CredentialSlotID{credRef}},

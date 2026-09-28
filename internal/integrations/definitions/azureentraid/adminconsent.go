@@ -25,6 +25,7 @@ type adminConsentState struct {
 func adminConsentRegistration(cfg Config) *types.AuthRegistration {
 	return &types.AuthRegistration{
 		CredentialRef: entraTenantCredential.ID(),
+		Schema:        entraTenantCredentialSchema,
 		Start: func(ctx context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 			csrfState, err := iamauth.GenerateOAuthState(0)
 			if err != nil {

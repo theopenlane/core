@@ -26,9 +26,10 @@ func Builder() registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         {{ name }}Credential,
+					Ref:         {{ name }}Credential.ID(),
 					Name:        "{{ display }} Credential",
 					Description: "API token used to access {{ display }}.",
+					Schema:      {{ name }}CredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -60,9 +61,9 @@ func Builder() registry.Builder {
 					Description:  "Verify {{ display }} credentials",
 					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
 					ClientRef:    {{ name }}Client.ID(),
+					ConfigSchema: healthCheckSchema,
 					Policy:       types.ExecutionPolicy{Inline: true},
 					Handle:       HealthCheck{}.Handle(),
-					ConfigSchema: healthCheckSchema,
 				},
 			},
 		}, nil

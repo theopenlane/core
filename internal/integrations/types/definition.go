@@ -1,6 +1,7 @@
 package types //nolint:revive
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 
@@ -74,24 +75,39 @@ type OperatorConfigRegistration struct {
 	Schema json.RawMessage `json:"schema,omitempty"`
 }
 
+// BackfillFunc completes a stored payload missing values from the live installation
+type BackfillFunc func(ctx context.Context, req InstallationRequest, payload json.RawMessage) (json.RawMessage, error)
+
 // UserInputRegistration describes installation-scoped user input
 type UserInputRegistration struct {
 	// Schema is the JSON schema used to collect installation-scoped user input
 	Schema json.RawMessage `json:"schema,omitempty"`
+	// Replaces lists the retired layout names whose stored user input converts into this schema
+	Replaces []string `json:"-"`
+	// Convert reshapes stored user input from a retired layout into this schema
+	Convert func(old json.RawMessage) (json.RawMessage, error) `json:"-"`
+	// Backfill completes stored user input missing values
+	Backfill BackfillFunc `json:"-"`
 }
 
 // CredentialRegistration declares how a definition accepts credentials
 type CredentialRegistration struct {
-	// Ref is the typed credential slot; its name and stored schema derive from the credential type
-	Ref CredentialSlot `json:"ref"`
+	// Ref is the durable credential slot identifier
+	Ref CredentialSlotID `json:"ref"`
 	// Name is the user-facing credential slot name
 	Name string `json:"name,omitempty"`
 	// Description describes when this credential slot should be used
 	Description string `json:"description,omitempty"`
-	// Schema is the JSON schema used to collect credentials from the user, filled by the registry
+	// Schema is the JSON schema used to collect credentials
 	Schema json.RawMessage `json:"schema,omitempty"`
 	// Recommended indicates the method that is recommend if there are multiple options
 	Recommended bool `json:"recommended,omitempty"`
+	// Replaces lists the retired slots whose stored payloads convert into this slot
+	Replaces []CredentialSlotID `json:"-"`
+	// Convert reshapes a payload stored under a retired slot into this slot's schema
+	Convert func(from CredentialSlotID, old json.RawMessage) (json.RawMessage, error) `json:"-"`
+	// Backfill completes a stored payload missing values
+	Backfill BackfillFunc `json:"-"`
 }
 
 // ConnectionRegistration describes one connection mode for a definition
@@ -138,13 +154,44 @@ type MetaInfo struct {
 // CredentialRegistration returns the credential registration for the given ref
 func (d Definition) CredentialRegistration(ref CredentialSlotID) (CredentialRegistration, error) {
 	reg, found := lo.Find(d.CredentialRegistrations, func(r CredentialRegistration) bool {
-		return r.Ref.ID() == ref
+		return r.Ref == ref
 	})
 	if !found {
 		return CredentialRegistration{}, ErrCredentialRefNotFound
 	}
 
 	return reg, nil
+}
+
+// CredentialSchema returns the stored schema of one credential slot, from its registration or from the auth flow that fills it
+func (d Definition) CredentialSchema(slot CredentialSlotID) json.RawMessage {
+	registration, err := d.CredentialRegistration(slot)
+	if err == nil && len(registration.Schema) > 0 {
+		return registration.Schema
+	}
+
+	connection, found := lo.Find(d.Connections, func(c ConnectionRegistration) bool {
+		return c.Auth != nil && c.Auth.CredentialRef == slot
+	})
+	if !found {
+		return nil
+	}
+
+	return connection.Auth.Schema
+}
+
+// CredentialReplacing returns the credential registration whose slot takes over payloads stored under the retired slot
+func (d Definition) CredentialReplacing(retired CredentialSlotID) (CredentialRegistration, bool) {
+	return lo.Find(d.CredentialRegistrations, func(r CredentialRegistration) bool {
+		return lo.Contains(r.Replaces, retired)
+	})
+}
+
+// WebhookReplacing returns the webhook registration whose contract takes over rows persisted under the retired name
+func (d Definition) WebhookReplacing(retired string) (WebhookRegistration, bool) {
+	return lo.Find(d.Webhooks, func(r WebhookRegistration) bool {
+		return lo.Contains(r.Replaces, retired)
+	})
 }
 
 // ConnectionRegistration returns the connection registration for the given credential slot

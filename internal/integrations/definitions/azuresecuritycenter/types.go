@@ -10,8 +10,8 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0AZSECC000000000000000001")
 	// installation is the typed installation metadata handle for the Azure Security Center definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// securityCenterCredential is the credential slot for the Azure Security Center integration definition
-	securityCenterCredential = types.NewCredentialRef[CredentialSchema]()
+	// securityCenterSchema is the credential schema for the Azure Security Center integration definition
+	securityCenterSchema, securityCenterCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// securityCenterClient is the client ref for the Azure Security Center client
 	securityCenterClient = types.NewClientRef[*azureSecurityClient]()
 	// assessmentsCollectSchema is the operation ref for the Azure Security Center assessments collect operation

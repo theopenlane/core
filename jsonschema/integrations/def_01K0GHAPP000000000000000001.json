@@ -34,7 +34,158 @@
       }
     }
   ],
+  "userInput": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp/user-input",
+      "$ref": "#/$defs/UserInput",
+      "$defs": {
+        "DirectorySync": {
+          "properties": {
+            "disable": {
+              "type": "boolean",
+              "title": "Disable",
+              "description": "Disable the syncing of users and groups from GitHub"
+            },
+            "disableGroupSync": {
+              "type": "boolean",
+              "title": "Disable Group Sync",
+              "description": "Only sync users from GitHub"
+            },
+            "filterExpr": {
+              "type": "string",
+              "title": "Filter Expression",
+              "description": "Optional CEL expression to apply to records before ingesting.",
+              "examples": [
+                "Example: payload.Org == 'my-org'"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "RepositorySync": {
+          "properties": {
+            "disable": {
+              "type": "boolean",
+              "title": "Disable",
+              "description": "Disable the syncing of vulnerabilities from Github Security"
+            },
+            "filterExpr": {
+              "type": "string",
+              "title": "Filter Expression",
+              "description": "Optional CEL expression to apply to records before ingesting.",
+              "examples": [
+                "Example: payload.IsPrivate == 'true'"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "UserInput": {
+          "properties": {
+            "findingSync": {
+              "$ref": "#/$defs/VulnerabilitySyncConfig",
+              "title": "GitHub Security Hub Sync"
+            },
+            "directorySync": {
+              "$ref": "#/$defs/DirectorySync",
+              "title": "Directory Account Sync"
+            },
+            "repositorySync": {
+              "$ref": "#/$defs/RepositorySync",
+              "title": "Repository Account Sync"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "VulnerabilitySyncConfig": {
+          "properties": {
+            "disable": {
+              "type": "boolean",
+              "title": "Disable",
+              "description": "Disable the syncing of vulnerabilities from Github Security"
+            },
+            "filterExpr": {
+              "type": "string",
+              "title": "Filter Expression",
+              "description": "Optional CEL expression to apply to records before ingesting.",
+              "examples": [
+                "Example: payload.state == 'open'"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      }
+    }
+  },
+  "metadata": [
+    {
+      "connection": "githubAppCredential",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "installationId": {
+                "type": "string",
+                "title": "installation ID"
+              },
+              "organizationName": {
+                "type": "string",
+                "title": "organization"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
   "connections": [
     "githubAppCredential"
+  ],
+  "operations": [
+    {
+      "name": "DirectorySync"
+    },
+    {
+      "name": "RepositorySync"
+    },
+    {
+      "name": "VulnerabilitySync"
+    }
+  ],
+  "webhooks": [
+    {
+      "name": "installation.events",
+      "events": [
+        {
+          "name": "code_scanning_alert"
+        },
+        {
+          "name": "dependabot_alert"
+        },
+        {
+          "name": "installation.created"
+        },
+        {
+          "name": "installation.deleted"
+        },
+        {
+          "name": "ping"
+        },
+        {
+          "name": "secret_scanning_alert"
+        }
+      ]
+    }
   ]
 }

@@ -52,7 +52,46 @@
       }
     }
   ],
+  "metadata": [
+    {
+      "connection": "oidcLocalCred",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oidclocal/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "issuer": {
+                "type": "string",
+                "title": "Issuer"
+              },
+              "subject": {
+                "type": "string",
+                "title": "Subject"
+              },
+              "email": {
+                "type": "string",
+                "title": "Email"
+              },
+              "preferredUsername": {
+                "type": "string",
+                "title": "Preferred Username"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
   "connections": [
     "oidcLocalCred"
+  ],
+  "operations": [
+    {
+      "name": "ClaimsInspect"
+    }
   ]
 }

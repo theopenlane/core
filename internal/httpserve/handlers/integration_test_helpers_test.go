@@ -12,9 +12,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// HelperTestHealthCheck is the config type for the helper test health check operation
-type HelperTestHealthCheck struct{}
-
 // githubTestCredential is the credential type stored by the GitHub disconnect test definition
 type githubTestCredential struct {
 	// Token is the stored token
@@ -22,9 +19,8 @@ type githubTestCredential struct {
 }
 
 var (
-	githubAppDefinitionID   = githubapp.DefinitionID.ID()
-	githubTestCredentialRef = types.NewCredentialRef[githubTestCredential]()
-	_, _                    = providerkit.OperationSchema[HelperTestHealthCheck]()
+	githubAppDefinitionID                               = githubapp.DefinitionID.ID()
+	githubTestCredentialSchema, githubTestCredentialRef = providerkit.CredentialSchema[githubTestCredential]()
 )
 
 // withDefinitionRuntime returns a restore function that resets IntegrationsConfig.
@@ -64,9 +60,10 @@ func githubTestDefinitionBuilder(definitionID string) registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         githubTestCredentialRef,
+					Ref:         githubTestCredentialRef.ID(),
 					Name:        "GitHub Test Credential",
 					Description: "Credential slot used by the GitHub disconnect test definition.",
+					Schema:      githubTestCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{

@@ -30,19 +30,24 @@ func Builder() registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         TokenCredential,
+					Ref:         TokenCredential.ID(),
 					Name:        "Test Token",
 					Description: "API token the test client is built from.",
+					Schema:      tokenSchema,
+					Replaces:    TokenCredential.Replaces(),
+					Convert:     TokenCredential.Convert,
 				},
 				{
-					Ref:         OAuthCredential,
+					Ref:         OAuthCredential.ID(),
 					Name:        "Test OAuth",
 					Description: "Auth-managed credential slot filled by the OAuth fixture.",
 				},
 				{
-					Ref:         ServiceAccountCredential,
+					Ref:         ServiceAccountCredential.ID(),
 					Name:        "Test Service Account",
 					Description: "Strict-schema credential slot used by config flows.",
+					Schema:      serviceAccountSchema,
+					Backfill:    ServiceAccountCredential.Backfill,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -53,6 +58,7 @@ func Builder() registry.Builder {
 					CredentialRefs: []types.CredentialSlotID{OAuthCredential.ID()},
 					Auth: &types.AuthRegistration{
 						CredentialRef: OAuthCredential.ID(),
+						Schema:        oauthSchema,
 						Start:         oauthStart,
 						Complete:      oauthComplete,
 					},

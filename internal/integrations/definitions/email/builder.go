@@ -32,9 +32,10 @@ func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         emailCredentialRef,
+					Ref:         emailCredentialRef.ID(),
 					Name:        "Email Provider Credential",
 					Description: "API key and provider selection for email delivery",
+					Schema:      emailCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{

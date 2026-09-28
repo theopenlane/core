@@ -14,6 +14,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -27,8 +28,8 @@ var MockHTTPDefinitionID = types.NewDefinitionRef("def_01K0MOCKHTTP0000000000000
 const MockHTTPSyncOperation = "mock.sync"
 
 var (
-	// MockHTTPCredential is the credential slot the mock provider authenticates with
-	MockHTTPCredential = types.NewCredentialRef[mockHTTPCred]()
+	// mockHTTPSchema and MockHTTPCredential are the credential slot the mock provider authenticates with
+	mockHTTPSchema, MockHTTPCredential = providerkit.CredentialSchema[mockHTTPCred]()
 	// mockHTTPInstallation resolves installation metadata from the mock provider's instance endpoint
 	mockHTTPInstallation = types.NewInstallationRef(resolveMockHTTPMetadata)
 	// mockHTTPClient is the operation client that carries the stored credential into the ingest handler
@@ -200,9 +201,10 @@ func MockHTTPBuilder() registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         MockHTTPCredential,
+					Ref:         MockHTTPCredential.ID(),
 					Name:        "Mock HTTP Token",
 					Description: "Bearer token and base URL the mock provider validates.",
+					Schema:      mockHTTPSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
