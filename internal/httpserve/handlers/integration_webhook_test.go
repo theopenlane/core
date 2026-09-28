@@ -41,13 +41,15 @@ type webhookTestCredential struct {
 }
 
 var (
-	webhookTestCredentialRef                         = types.NewCredentialRef[webhookTestCredential]()
-	webhookHealthSchema, webhookHealthCheckOperation = providerkit.OperationSchema[WebhookTestHealthCheck]()
-	webhookAlertCreatedEvent                         = types.NewWebhookEventRef[webhookTestAlertEnvelope]("alert.created")
+	webhookTestCredentialSchema, webhookTestCredentialRef = providerkit.CredentialSchema[webhookTestCredential]()
+	webhookHealthCheckSchema, webhookHealthCheckOperation = providerkit.OperationSchema[WebhookTestHealthCheck]()
+	webhookAlertCreatedEvent                              = types.NewWebhookEventRef[webhookTestAlertEnvelope]("alert.created")
 )
 
 func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
+		definition := types.NewDefinitionRef(definitionID)
+
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
@@ -57,8 +59,9 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:  webhookTestCredentialRef,
-					Name: "Webhook Test Credential",
+					Ref:    webhookTestCredentialRef.ID(),
+					Name:   "Webhook Test Credential",
+					Schema: webhookTestCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -93,7 +96,7 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 					Events: []types.WebhookEventRegistration{
 						{
 							Name:  webhookAlertCreatedEvent.Name(),
-							Topic: types.NewDefinitionRef(definitionID).WebhookEventTopic(webhookAlertCreatedEvent.Name()),
+							Topic: definition.WebhookEventTopic(webhookAlertCreatedEvent.Name()),
 							Handle: func(context.Context, types.WebhookHandleRequest) error {
 								return nil
 							},
@@ -105,9 +108,9 @@ func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 				{
 					Name:         webhookHealthCheckOperation.Name(),
 					Description:  "Health check",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(webhookHealthCheckOperation.Name()),
+					Topic:        definition.OperationTopic(webhookHealthCheckOperation.Name()),
+					ConfigSchema: webhookHealthCheckSchema,
 					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: webhookHealthSchema,
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"ok":true}`), nil
 					},

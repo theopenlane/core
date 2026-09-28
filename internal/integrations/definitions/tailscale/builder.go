@@ -31,9 +31,10 @@ func Builder() registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         tailscaleCredential,
+					Ref:         tailscaleCredential.ID(),
 					Name:        "Tailscale OAuth Client",
 					Description: "OAuth client credentials used to read users and devices from your tailnet.",
+					Schema:      tailscaleSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{

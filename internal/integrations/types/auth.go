@@ -15,6 +15,8 @@ type AuthCompleteFunc func(ctx context.Context, state json.RawMessage, input Aut
 type AuthRegistration struct {
 	// CredentialRef identifies which credential slot receives the auth result
 	CredentialRef CredentialSlotID `json:"credentialRef"`
+	// Schema is the reflected JSON schema of the credential the auth flow stores
+	Schema json.RawMessage `json:"-"`
 	// Start initiates the auth flow
 	Start AuthStartFunc `json:"-"`
 	// Complete finalizes the auth flow and returns the resulting credential

@@ -11,8 +11,8 @@ var (
 	DefinitionID = types.NewDefinitionRef("def_01K0CFLARE00000000000000001")
 	// installation is the typed installation metadata handle for the Cloudflare definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// cloudflareCredential is the credential slot for the Cloudflare integration definition
-	cloudflareCredential = types.NewCredentialRef[CredentialSchema]()
+	// cloudflareSchema is the credential schema for the Cloudflare integration definition
+	cloudflareSchema, cloudflareCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// cloudflareClient is the client ref for the Cloudflare API client used by this definition
 	cloudflareClient = types.NewClientRef[*CloudflareClient]()
 	// directorySyncSchema is the operation ref for the directory account sync operation

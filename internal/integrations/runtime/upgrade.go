@@ -12,6 +12,8 @@ import (
 	"github.com/samber/lo"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -37,8 +39,7 @@ func (r *Runtime) ensureCurrentVersion(ctx context.Context, installation *ent.In
 	return nil
 }
 
-// upgradeInstallation conforms every stored credential to the current definition
-// it moves payloads stored under retired slots onto the slots that replace them
+// upgradeInstallation conforms stored credentials and user input to the current definition and moves data stored under retired slot, operation and webhook names onto their replacements
 func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Integration, skip []types.CredentialSlotID) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
@@ -95,7 +96,7 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 
 		registration, err := def.CredentialRegistration(slot)
 		if err == nil {
-			payload, err := conformCredential(ctx, registration.Ref, req, credential.Data)
+			payload, err := conformPayload(ctx, req, def.CredentialSchema(slot), registration.Backfill, credential.Data, ErrCredentialInvalid)
 			if err != nil {
 				return fmt.Errorf("%w: slot %s", err, slot)
 			}
@@ -105,24 +106,24 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 			continue
 		}
 
-		registration, found := replacingRegistration(def, slot)
+		registration, found := def.CredentialReplacing(slot)
 		if !found {
 			logx.FromContext(ctx).Warn().Str("slot", slot.String()).Msg("stored credential slot is not declared by the definition and was left untouched")
 
 			continue
 		}
 
-		converted, err := registration.Ref.Convert(slot, credential.Data)
+		converted, err := registration.Convert(slot, credential.Data)
 		if err != nil {
 			return fmt.Errorf("%w: slot %s", err, slot)
 		}
 
-		if converted, err = conformCredential(ctx, registration.Ref, req, converted); err != nil {
+		if converted, err = conformPayload(ctx, req, def.CredentialSchema(registration.Ref), registration.Backfill, converted, ErrCredentialInvalid); err != nil {
 			return fmt.Errorf("%w: slot %s", err, slot)
 		}
 
-		if _, stored := records[registration.Ref.ID()]; !stored {
-			next[registration.Ref.ID()] = types.CredentialSet{Data: converted}
+		if _, stored := records[registration.Ref]; !stored {
+			next[registration.Ref] = types.CredentialSet{Data: converted}
 		}
 
 		delete(next, slot)
@@ -137,8 +138,8 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 	credentialRef := providerState.CredentialRef
 
 	if _, err := def.CredentialRegistration(credentialRef); err != nil {
-		if registration, found := replacingRegistration(def, credentialRef); found {
-			credentialRef = registration.Ref.ID()
+		if registration, found := def.CredentialReplacing(credentialRef); found {
+			credentialRef = registration.Ref
 		}
 	}
 
@@ -151,6 +152,24 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 
 			return err
 		}
+	}
+
+	if err := r.upgradeUserInput(systemCtx, req, installation, def); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to upgrade installation user input")
+
+		return err
+	}
+
+	if err := r.upgradeOperations(systemCtx, installation, def); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to upgrade installation operation records")
+
+		return err
+	}
+
+	if err := r.upgradeWebhooks(systemCtx, installation, def); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to upgrade installation webhook rows")
+
+		return err
 	}
 
 	if len(skip) > 0 {
@@ -176,6 +195,194 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 	return nil
 }
 
+// upgradeUserInput conforms the stored user input to the current definition, converting it from a retired layout when it no longer validates
+func (r *Runtime) upgradeUserInput(ctx context.Context, req types.InstallationRequest, installation *ent.Integration, def types.Definition) error {
+	if def.UserInput == nil {
+		return nil
+	}
+
+	conformed, err := conformUserInput(ctx, req, *def.UserInput, installation.Config.ClientConfig)
+	if err != nil {
+		return err
+	}
+
+	config := installation.Config
+	config.ClientConfig = conformed
+
+	if err := r.DB().Integration.UpdateOneID(installation.ID).SetConfig(config).Exec(ctx); err != nil {
+		return err
+	}
+
+	installation.Config = config
+
+	r.keystore().InvalidateClients(installation.ID)
+
+	return nil
+}
+
+// conformUserInput conforms stored user input to the registered schema, converting it from a retired layout when it no longer validates
+func conformUserInput(ctx context.Context, req types.InstallationRequest, input types.UserInputRegistration, stored json.RawMessage) (json.RawMessage, error) {
+	conformed, err := jsonx.ConformToSchema(input.Schema, stored)
+	if err != nil {
+		return nil, err
+	}
+
+	if validatePayload(ctx, input.Schema, conformed, ErrUserInputInvalid) == nil {
+		return conformed, nil
+	}
+
+	if input.Convert != nil {
+		converted, err := input.Convert(stored)
+		if err != nil {
+			logx.FromContext(ctx).Debug().Err(err).Msg("stored user input matches no retired layout")
+
+			return conformPayload(ctx, req, input.Schema, input.Backfill, stored, ErrUserInputInvalid)
+		}
+
+		if input.Backfill != nil {
+			if converted, err = input.Backfill(ctx, req, converted); err != nil {
+				return nil, err
+			}
+		}
+
+		if err := validatePayload(ctx, input.Schema, converted, ErrUserInputInvalid); err == nil {
+			return converted, nil
+		}
+	}
+
+	return conformPayload(ctx, req, input.Schema, input.Backfill, stored, ErrUserInputInvalid)
+}
+
+// upgradeOperations moves recorded operation health and run history stored under retired operation names onto the operations that replace them and drops health records of operations the definition no longer declares
+func (r *Runtime) upgradeOperations(ctx context.Context, installation *ent.Integration, def types.Definition) error {
+	unhealthy := map[string]string{}
+
+	maps.Copy(unhealthy, installation.Health.UnhealthyOperations)
+
+	for _, operation := range def.Operations {
+		retired := operation.Replaces
+		if len(retired) == 0 {
+			continue
+		}
+
+		for _, old := range retired {
+			reason, recorded := unhealthy[old]
+			if !recorded {
+				continue
+			}
+
+			if _, kept := unhealthy[operation.Name]; !kept {
+				unhealthy[operation.Name] = reason
+			}
+
+			delete(unhealthy, old)
+		}
+
+		if err := r.DB().IntegrationRun.Update().
+			Where(integrationrun.IntegrationIDEQ(installation.ID), integrationrun.OperationNameIn(retired...)).
+			SetOperationName(operation.Name).
+			Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	declared := lo.SliceToMap(def.Operations, func(operation types.OperationRegistration) (string, struct{}) {
+		return operation.Name, struct{}{}
+	})
+
+	maps.DeleteFunc(unhealthy, func(name string, _ string) bool {
+		_, ok := declared[name]
+
+		return !ok
+	})
+
+	if maps.Equal(unhealthy, installation.Health.UnhealthyOperations) {
+		return nil
+	}
+
+	health := installation.Health
+	health.UnhealthyOperations = unhealthy
+
+	if len(unhealthy) == 0 {
+		health.UnhealthyOperations = nil
+	}
+
+	if err := r.DB().Integration.UpdateOneID(installation.ID).SetHealth(health).Exec(ctx); err != nil {
+		return err
+	}
+
+	installation.Health = health
+
+	return nil
+}
+
+// upgradeWebhooks renames persisted webhook rows stored under retired contract names onto the contracts that replace them, keeping their endpoint and secret, and refreshes each endpoint row's allowed events
+func (r *Runtime) upgradeWebhooks(ctx context.Context, installation *ent.Integration, def types.Definition) error {
+	db := r.DB()
+
+	for _, webhook := range def.Webhooks {
+		retired := webhook.Replaces
+
+		rows, err := db.IntegrationWebhook.Query().
+			Where(
+				integrationwebhook.IntegrationIDEQ(installation.ID),
+				integrationwebhook.NameIn(append(slices.Clone(retired), webhook.Name)...),
+				integrationwebhook.ExternalEventIDIsNil(),
+			).
+			Order(integrationwebhook.ByCreatedAt()).
+			All(ctx)
+		if err != nil {
+			return err
+		}
+
+		if len(rows) == 0 {
+			continue
+		}
+
+		keep, renamed := lo.Find(rows, func(row *ent.IntegrationWebhook) bool {
+			return row.Name != webhook.Name
+		})
+		if !renamed {
+			keep = rows[0]
+		}
+
+		stale := lo.FilterMap(rows, func(row *ent.IntegrationWebhook, _ int) (string, bool) {
+			return row.ID, row.ID != keep.ID
+		})
+
+		if len(stale) > 0 {
+			if _, err := db.IntegrationWebhook.Delete().Where(integrationwebhook.IDIn(stale...)).Exec(ctx); err != nil {
+				return err
+			}
+		}
+
+		allowedEvents := lo.Map(webhook.Events, func(event types.WebhookEventRegistration, _ int) string {
+			return event.Name
+		})
+
+		if err := db.IntegrationWebhook.UpdateOneID(keep.ID).SetName(webhook.Name).SetAllowedEvents(allowedEvents).Exec(ctx); err != nil {
+			return err
+		}
+
+		if len(retired) == 0 {
+			continue
+		}
+
+		if err := db.IntegrationWebhook.Update().
+			Where(
+				integrationwebhook.IntegrationIDEQ(installation.ID),
+				integrationwebhook.NameIn(retired...),
+				integrationwebhook.ExternalEventIDNotNil(),
+			).
+			SetName(webhook.Name).
+			Exec(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 // upgradeExclusions expands the skipped slots to include every retired slot a skipped slot's ref replaces, so neither the skipped payload nor its source is processed or deleted
 func upgradeExclusions(def types.Definition, skip []types.CredentialSlotID) []types.CredentialSlotID {
 	return lo.FlatMap(skip, func(slot types.CredentialSlotID, _ int) []types.CredentialSlotID {
@@ -184,46 +391,37 @@ func upgradeExclusions(def types.Definition, skip []types.CredentialSlotID) []ty
 			return []types.CredentialSlotID{slot}
 		}
 
-		return append(registration.Ref.Replaces(), slot)
+		return append(slices.Clone(registration.Replaces), slot)
 	})
 }
 
-// replacingRegistration finds the declared registration whose slot takes over payloads stored under the retired slot
-func replacingRegistration(def types.Definition, retired types.CredentialSlotID) (types.CredentialRegistration, bool) {
-	return lo.Find(def.CredentialRegistrations, func(reg types.CredentialRegistration) bool {
-		return lo.Contains(reg.Ref.Replaces(), retired)
-	})
-}
-
-// conformCredential strips and defaults the payload to the slot schema
-func conformCredential(ctx context.Context, slot types.CredentialSlot, req types.InstallationRequest, payload json.RawMessage) (json.RawMessage, error) {
-	schema := slot.Schema()
-
+// conformPayload strips and defaults the payload to the schema, backfilling missing values when a backfill is declared
+func conformPayload(ctx context.Context, req types.InstallationRequest, schema json.RawMessage, backfill types.BackfillFunc, payload json.RawMessage, sentinel error) (json.RawMessage, error) {
 	conformed, err := jsonx.ConformToSchema(schema, payload)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to conform credential to slot schema")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to conform payload to schema")
 
 		return nil, err
 	}
 
-	invalid := validatePayload(ctx, schema, conformed, ErrCredentialInvalid)
+	invalid := validatePayload(ctx, schema, conformed, sentinel)
 	if invalid == nil {
 		return conformed, nil
 	}
 
-	if !slot.Backfills() {
+	if backfill == nil {
 		return nil, invalid
 	}
 
-	backfilled, err := slot.Backfill(ctx, req, conformed)
+	backfilled, err := backfill(ctx, req, conformed)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to backfill credential")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to backfill payload")
 
 		return nil, err
 	}
 
-	if err := validatePayload(ctx, schema, backfilled, ErrCredentialInvalid); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to validate backfilled credential")
+	if err := validatePayload(ctx, schema, backfilled, sentinel); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to validate backfilled payload")
 
 		return nil, err
 	}

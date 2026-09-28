@@ -14,14 +14,14 @@ type oauthCredential struct{}
 type apiKeyCredential struct{}
 
 var (
-	oauthCredentialRef  = NewCredentialRef[oauthCredential]()
-	apiKeyCredentialRef = NewCredentialRef[apiKeyCredential]()
+	oauthCredentialRef  = NewCredentialRef[oauthCredential]("oauthCredential")
+	apiKeyCredentialRef = NewCredentialRef[apiKeyCredential]("apiKeyCredential")
 )
 
 func TestCredentialRegistrationMarshalJSON(t *testing.T) {
 	t.Parallel()
 
-	encoded, err := json.Marshal(CredentialRegistration{Ref: apiKeyCredentialRef, Name: "API key"})
+	encoded, err := json.Marshal(CredentialRegistration{Ref: apiKeyCredentialRef.ID(), Name: "API key"})
 	if err != nil {
 		t.Fatalf("marshal: %v", err)
 	}
@@ -39,9 +39,6 @@ func TestCredentialRegistrationMarshalJSON(t *testing.T) {
 		t.Fatal("expected an unfilled schema to stay off the wire")
 	}
 
-	if _, ok := wire["Ref"]; ok {
-		t.Fatal("expected the typed ref to stay off the wire")
-	}
 }
 
 func TestCredentialBindingsResolve(t *testing.T) {
@@ -86,8 +83,8 @@ func TestDefinitionCredentialRegistration(t *testing.T) {
 	def := Definition{
 		DefinitionSpec: DefinitionSpec{ID: "test-def"},
 		CredentialRegistrations: []CredentialRegistration{
-			{Ref: oauthCredentialRef, Name: "OAuth"},
-			{Ref: apiKeyCredentialRef, Name: "API Key"},
+			{Ref: oauthCredentialRef.ID(), Name: "OAuth"},
+			{Ref: apiKeyCredentialRef.ID(), Name: "API Key"},
 		},
 	}
 
@@ -425,15 +422,6 @@ func TestWebhookRefNameBasic(t *testing.T) {
 	ref := NewWebhookRef("push.events")
 	if ref.Name() != "push.events" {
 		t.Fatalf("got %q, want %q", ref.Name(), "push.events")
-	}
-}
-
-func TestWebhookEventRefName(t *testing.T) {
-	t.Parallel()
-
-	ref := NewWebhookEventRef[struct{}]("pull_request.opened")
-	if ref.Name() != "pull_request.opened" {
-		t.Fatalf("got %q, want %q", ref.Name(), "pull_request.opened")
 	}
 }
 

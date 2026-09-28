@@ -29,9 +29,10 @@ func Builder() registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         keycloakCredential,
+					Ref:         keycloakCredential.ID(),
 					Name:        "Keycloak Credential",
 					Description: "Client credentials used to access Keycloak realm data.",
+					Schema:      keycloakCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{

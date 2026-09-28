@@ -24,6 +24,7 @@ type OAuthRegistrationOptions[T any] struct {
 func OAuthRegistration[T any](opts OAuthRegistrationOptions[T]) *types.AuthRegistration {
 	return &types.AuthRegistration{
 		CredentialRef: opts.CredentialRef.ID(),
+		Schema:        jsonx.SchemaFrom[T](),
 		Start: func(ctx context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
 			return StartOAuth(ctx, opts.Config)
 		},

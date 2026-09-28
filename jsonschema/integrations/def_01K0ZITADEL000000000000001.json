@@ -65,8 +65,84 @@
       }
     }
   ],
+  "userInput": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/zitadel/user-input",
+      "$ref": "#/$defs/UserInput",
+      "$defs": {
+        "UserInput": {
+          "properties": {
+            "primaryDirectory": {
+              "type": "boolean",
+              "title": "Primary Directory",
+              "description": "Mark this as the authoritative source for identity holder enrichment and lifecycle"
+            },
+            "filterExpr": {
+              "type": "string",
+              "title": "Filter Expression",
+              "description": "Optional CEL expression to apply to records before ingesting"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      }
+    }
+  },
+  "metadata": [
+    {
+      "connection": "CredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/zitadel/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "domain": {
+                "type": "string"
+              },
+              "instanceId": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    {
+      "connection": "OAuthCredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/zitadel/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "domain": {
+                "type": "string"
+              },
+              "instanceId": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
   "connections": [
     "CredentialSchema",
     "OAuthCredentialSchema"
+  ],
+  "operations": [
+    {
+      "name": "DirectorySync"
+    }
   ]
 }

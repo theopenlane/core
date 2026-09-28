@@ -30,4 +30,6 @@ type InstallationFunc func(ctx context.Context, req InstallationRequest) (Integr
 type InstallationRegistration struct {
 	// Resolve derives installation metadata for the connection mode
 	Resolve InstallationFunc `json:"-"`
+	// Schema is the reflected JSON schema of the derived metadata type, filled from the typed ref
+	Schema json.RawMessage `json:"-"`
 }

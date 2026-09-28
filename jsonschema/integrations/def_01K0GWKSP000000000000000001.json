@@ -28,7 +28,65 @@
       }
     }
   ],
+  "userInput": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/googleworkspace/user-input",
+      "$ref": "#/$defs/UserInput",
+      "$defs": {
+        "UserInput": {
+          "properties": {
+            "primaryDirectory": {
+              "type": "boolean",
+              "title": "Primary Directory"
+            },
+            "filterExpr": {
+              "type": "string",
+              "title": "Filter Expression",
+              "description": "Optional CEL expression to apply to records before ingesting (allows inclusion",
+              "examples": [
+                "Example: payload.orgUnitPath.startsWith('/engineering/')"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      }
+    }
+  },
+  "metadata": [
+    {
+      "connection": "googleWorkspaceCred",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/googleworkspace/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "customerId": {
+                "type": "string",
+                "title": "Customer ID"
+              },
+              "domain": {
+                "type": "string",
+                "title": "Domain"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
   "connections": [
     "googleWorkspaceCred"
+  ],
+  "operations": [
+    {
+      "name": "DirectorySync"
+    }
   ]
 }

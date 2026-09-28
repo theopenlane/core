@@ -31,38 +31,74 @@ type Registry struct {
 	galaListeners []types.GalaListenerRegistration
 }
 
-// Surface is the installation-facing surface of a definition: its credential slots with their stored schemas and its connection modes
+// Surface is the installation-facing surface of a definition: every kind that binds stored installation data to a definition type or name
 type Surface struct {
 	// ID is the canonical definition identifier
 	ID string `json:"id"`
 	// Credentials lists every credential slot with its stored schema, sorted by ref
 	Credentials []SurfaceCredential `json:"credentials"`
+	// UserInput is the stored user input schema when the definition declares a typed user input
+	UserInput *SurfaceSchema `json:"userInput,omitempty"`
+	// Metadata lists the derived installation metadata schema of every connection that declares one, sorted by connection
+	Metadata []SurfaceConnectionMetadata `json:"metadata,omitempty"`
 	// Connections lists every connection mode's selecting credential ref, sorted
 	Connections []string `json:"connections"`
+	// Operations lists every operation name with the retired names it takes over, sorted by name
+	Operations []SurfaceNamed `json:"operations,omitempty"`
+	// Webhooks lists every webhook contract with its events, sorted by name
+	Webhooks []SurfaceWebhook `json:"webhooks,omitempty"`
+}
+
+// SurfaceSchema is the stored schema of one kind and how its stored payloads are carried across versions
+type SurfaceSchema struct {
+	// Schema is the reflected JSON schema of the stored type
+	Schema json.RawMessage `json:"schema"`
+	// Replaces lists the retired names whose stored payloads this kind takes over, sorted
+	Replaces []string `json:"replaces,omitempty"`
+	// Backfill reports whether the kind declares a backfill for payloads missing values
+	Backfill bool `json:"backfill,omitempty"`
 }
 
 // SurfaceCredential is one credential slot and the schema of what it stores
 type SurfaceCredential struct {
 	// Ref is the stable credential slot name
 	Ref string `json:"ref"`
-	// Schema is the reflected JSON schema of the stored credential type
+	// SurfaceSchema is the stored credential schema with its replacement and backfill declarations
+	SurfaceSchema
+}
+
+// SurfaceConnectionMetadata is the derived installation metadata schema of one connection mode
+type SurfaceConnectionMetadata struct {
+	// Connection is the connection mode's selecting credential ref
+	Connection string `json:"connection"`
+	// Schema is the reflected JSON schema of the derived metadata type
 	Schema json.RawMessage `json:"schema"`
-	// Replaces lists the retired slot names whose stored payloads this slot takes over, sorted
+}
+
+// SurfaceNamed is one named registration and the retired names whose stored data it takes over
+type SurfaceNamed struct {
+	// Name is the stable registration name
+	Name string `json:"name"`
+	// Replaces lists the retired names this registration takes over, sorted
 	Replaces []string `json:"replaces,omitempty"`
-	// Backfill reports whether the slot declares a backfill for payloads missing values
-	Backfill bool `json:"backfill,omitempty"`
+}
+
+// SurfaceWebhook is one webhook contract with its events
+type SurfaceWebhook struct {
+	// Name is the stable webhook contract name
+	Name string `json:"name"`
+	// Replaces lists the retired contract names whose persisted webhook rows this contract takes over, sorted
+	Replaces []string `json:"replaces,omitempty"`
+	// Events lists the contract's events, sorted by name
+	Events []SurfaceNamed `json:"events,omitempty"`
 }
 
 // DefinitionSurface projects a definition onto its installation-facing surface, sorted for stable encoding
 func DefinitionSurface(def types.Definition) Surface {
 	credentials := lo.Map(def.CredentialRegistrations, func(registration types.CredentialRegistration, _ int) SurfaceCredential {
-		replaces := lo.Map(registration.Ref.Replaces(), func(id types.CredentialSlotID, _ int) string {
-			return id.String()
-		})
+		replaces := lo.Map(registration.Replaces, func(slot types.CredentialSlotID, _ int) string { return slot.String() })
 
-		slices.Sort(replaces)
-
-		return SurfaceCredential{Ref: registration.Ref.ID().String(), Schema: registration.Ref.Schema(), Replaces: replaces, Backfill: registration.Ref.Backfills()}
+		return SurfaceCredential{Ref: registration.Ref.String(), SurfaceSchema: SurfaceSchema{Schema: def.CredentialSchema(registration.Ref), Replaces: sortedNames(replaces), Backfill: registration.Backfill != nil}}
 	})
 
 	slices.SortFunc(credentials, func(a, b SurfaceCredential) int {
@@ -75,7 +111,57 @@ func DefinitionSurface(def types.Definition) Surface {
 
 	slices.Sort(connections)
 
-	return Surface{ID: def.ID, Credentials: credentials, Connections: connections}
+	metadata := lo.FilterMap(def.Connections, func(connection types.ConnectionRegistration, _ int) (SurfaceConnectionMetadata, bool) {
+		if connection.Integration == nil || len(connection.Integration.Schema) == 0 {
+			return SurfaceConnectionMetadata{}, false
+		}
+
+		return SurfaceConnectionMetadata{Connection: connection.CredentialRef.String(), Schema: connection.Integration.Schema}, true
+	})
+
+	slices.SortFunc(metadata, func(a, b SurfaceConnectionMetadata) int {
+		return strings.Compare(a.Connection, b.Connection)
+	})
+
+	operations := sortedNamed(lo.Map(def.Operations, func(operation types.OperationRegistration, _ int) SurfaceNamed {
+		return SurfaceNamed{Name: operation.Name, Replaces: sortedNames(operation.Replaces)}
+	}))
+
+	webhooks := lo.Map(def.Webhooks, func(webhook types.WebhookRegistration, _ int) SurfaceWebhook {
+		return SurfaceWebhook{Name: webhook.Name, Replaces: sortedNames(webhook.Replaces), Events: sortedNamed(lo.Map(webhook.Events, func(event types.WebhookEventRegistration, _ int) SurfaceNamed {
+			return SurfaceNamed{Name: event.Name}
+		}))}
+	})
+
+	slices.SortFunc(webhooks, func(a, b SurfaceWebhook) int {
+		return strings.Compare(a.Name, b.Name)
+	})
+
+	surface := Surface{ID: def.ID, Credentials: credentials, Metadata: metadata, Connections: connections, Operations: operations, Webhooks: webhooks}
+
+	if def.UserInput != nil {
+		surface.UserInput = &SurfaceSchema{Schema: def.UserInput.Schema, Replaces: sortedNames(def.UserInput.Replaces), Backfill: def.UserInput.Backfill != nil}
+	}
+
+	return surface
+}
+
+// sortedNames returns a sorted copy of the names, nil when there are none
+func sortedNames(names []string) []string {
+	if len(names) == 0 {
+		return nil
+	}
+
+	return slices.Sorted(slices.Values(names))
+}
+
+// sortedNamed sorts named surface entries by name
+func sortedNamed(entries []SurfaceNamed) []SurfaceNamed {
+	slices.SortFunc(entries, func(a, b SurfaceNamed) int {
+		return strings.Compare(a.Name, b.Name)
+	})
+
+	return entries
 }
 
 // definitionEntry captures the indexed details for one registered definition
@@ -115,7 +201,6 @@ func (r *Registry) Register(def types.Definition) error {
 	}
 
 	populateMappingLinkTargets(def.Mappings)
-	populateCredentialSchemas(def)
 
 	entry, err := compileDefinition(def)
 	if err != nil {
@@ -131,8 +216,6 @@ func (r *Registry) Register(def types.Definition) error {
 		entry.runtimeClient = client
 	}
 
-	r.definitions[def.ID] = entry
-
 	for _, operation := range entry.operations {
 		r.operationsByTopic[operation.Topic] = operation
 	}
@@ -142,6 +225,8 @@ func (r *Registry) Register(def types.Definition) error {
 			r.webhookEventsByTopic[event.Topic] = event
 		}
 	}
+
+	r.definitions[def.ID] = entry
 
 	r.galaListeners = append(r.galaListeners, def.GalaListeners...)
 
@@ -233,14 +318,10 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 		return ErrOperatorConfigSchemaRequired
 	}
 
-	for _, credential := range def.CredentialRegistrations {
-		if credential.Ref == nil || credential.Ref.ID() == (types.CredentialSlotID{}) {
-			return ErrCredentialRefRequired
-		}
-
-		if len(credential.Ref.Schema()) == 0 {
-			return ErrCredentialSchemaRequired
-		}
+	if lo.ContainsBy(def.CredentialRegistrations, func(credential types.CredentialRegistration) bool {
+		return len(def.CredentialSchema(credential.Ref)) == 0
+	}) {
+		return ErrCredentialSchemaRequired
 	}
 
 	if def.UserInput != nil && len(def.UserInput.Schema) == 0 {
@@ -495,23 +576,8 @@ func compileDefinition(def types.Definition) (definitionEntry, error) {
 // indexCredentialNames builds a set of declared credential ref names for a definition
 func indexCredentialNames(registrations []types.CredentialRegistration) map[string]struct{} {
 	return lo.SliceToMap(registrations, func(reg types.CredentialRegistration) (string, struct{}) {
-		return reg.Ref.ID().String(), struct{}{}
+		return reg.Ref.String(), struct{}{}
 	})
-}
-
-// populateCredentialSchemas fills each registration's user-facing schema from its typed slot, leaving slots an auth flow fills empty
-func populateCredentialSchemas(def types.Definition) {
-	for i := range def.CredentialRegistrations {
-		registration := &def.CredentialRegistrations[i]
-
-		authManaged := lo.SomeBy(def.Connections, func(connection types.ConnectionRegistration) bool {
-			return connection.Auth != nil && connection.Auth.CredentialRef == registration.Ref.ID()
-		})
-
-		if !authManaged {
-			registration.Schema = registration.Ref.Schema()
-		}
-	}
 }
 
 // indexClients indexes client registrations by client ref while validating credential cross-references

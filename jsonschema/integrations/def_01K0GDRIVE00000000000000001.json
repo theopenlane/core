@@ -28,7 +28,73 @@
       }
     }
   ],
+  "userInput": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/googledrive/user-input",
+      "$ref": "#/$defs/UserInput",
+      "$defs": {
+        "UserInput": {
+          "properties": {
+            "primary": {
+              "type": "boolean",
+              "title": "Primary"
+            },
+            "folderId": {
+              "type": "string",
+              "title": "Folder ID",
+              "description": "Google Drive folder ID or URL containing policy documents"
+            },
+            "filterExpr": {
+              "type": "string",
+              "title": "Filter Expression",
+              "description": "Optional CEL expression to filter documents before creating policies"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "folderId"
+          ]
+        }
+      }
+    }
+  },
+  "metadata": [
+    {
+      "connection": "googleDriveCred",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/googledrive/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "accountId": {
+                "type": "string",
+                "title": "Account ID"
+              },
+              "domain": {
+                "type": "string",
+                "title": "Domain"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
   "connections": [
     "googleDriveCred"
+  ],
+  "operations": [
+    {
+      "name": "DocumentExport"
+    },
+    {
+      "name": "FolderSync"
+    }
   ]
 }

@@ -44,7 +44,7 @@ func Builder(cfg Config) registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         workspaceCredential,
+					Ref:         workspaceCredential.ID(),
 					Name:        "Google Workspace Credential",
 					Description: "OAuth credential used to access Google Workspace directory data.",
 				},

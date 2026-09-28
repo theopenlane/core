@@ -17,10 +17,10 @@ var (
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// sccClient is the client ref for the GCP Security Command Center client used by this definition
 	sccClient = types.NewClientRef[*cloudscc.Client]()
-	// sccCredential is the credential slot for GCP Security Command Center service account credentials
-	sccCredential = types.NewCredentialRef[CredentialSchema]()
-	// workloadIdentityCredential is the credential slot for GCP workload identity federation
-	workloadIdentityCredential = types.NewCredentialRef[WorkloadIdentityCredentialSchema]()
+	// sccSchema is the credential schema for GCP Security Command Center service account credentials
+	sccSchema, sccCredential = providerkit.CredentialSchema[CredentialSchema]()
+	// workloadIdentitySchema is the credential schema for GCP workload identity federation
+	workloadIdentitySchema, workloadIdentityCredential = providerkit.CredentialSchema[WorkloadIdentityCredentialSchema]()
 	// findingsCollectSchema is the operation schema for the GCP Security Command Center findings collection operation
 	findingsCollectSchema, findingsCollectOperation = providerkit.OperationSchema[FindingsSync]()
 )

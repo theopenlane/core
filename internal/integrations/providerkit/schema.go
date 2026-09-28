@@ -7,6 +7,14 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
+// CredentialSchema reflects a credential schema type and returns both the JSON schema
+// and a typed credential ref whose slot identity is derived from the schema definition key
+func CredentialSchema[T any]() (json.RawMessage, types.CredentialRef[T]) {
+	schema := jsonx.SchemaFrom[T]()
+
+	return schema, types.NewCredentialRef[T](jsonx.SchemaID(schema))
+}
+
 // OperationSchema reflects an operation config type and returns both the JSON schema
 // and a typed operation ref whose name is derived from the schema definition key
 func OperationSchema[T any]() (json.RawMessage, types.OperationRef[T]) {

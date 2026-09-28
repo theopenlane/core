@@ -406,7 +406,7 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 
 	metadata.Display.CredentialRef = credentialRef.String()
 
-	if err := r.keystore().SaveCredential(systemCtx, installation, registration.Ref.ID(), credential); err != nil {
+	if err := r.keystore().SaveCredential(systemCtx, installation, registration.Ref, credential); err != nil {
 		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to save credential")
 
 		return err

@@ -33,8 +33,6 @@ var (
 	ErrWebhookNotFound = errors.New("integrations/registry: webhook not found")
 	// ErrOperatorConfigSchemaRequired indicates a definition has an operator config with no schema
 	ErrOperatorConfigSchemaRequired = errors.New("integrations/registry: operator config schema required")
-	// ErrCredentialRefRequired indicates a credential registration has no typed slot ref or its slot has no identity
-	ErrCredentialRefRequired = errors.New("integrations/registry: credential ref required")
 	// ErrCredentialSchemaRequired indicates a credential registration's slot reflects no schema
 	ErrCredentialSchemaRequired = errors.New("integrations/registry: credential schema required")
 	// ErrCredentialRefNotDeclared indicates a client references a credential ref not declared by the definition

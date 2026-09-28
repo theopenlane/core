@@ -30,9 +30,10 @@ func Builder(cfg Config) registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         teamsCredential,
+					Ref:         teamsCredential.ID(),
 					Name:        "Microsoft Teams Credential",
 					Description: "OAuth credential used to send messages to Microsoft Teams channels.",
+					Schema:      teamsCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{

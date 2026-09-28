@@ -9,8 +9,10 @@ var (
 	ErrCredentialRefNotFound = errors.New("integrations: credential ref not found")
 	// ErrConnectionRefNotFound indicates the requested connection credential ref was not found in the definition
 	ErrConnectionRefNotFound = errors.New("integrations: connection credential ref not found")
-	// ErrCredentialNotReplaced indicates a credential slot declares no replacement for the given retired slot
-	ErrCredentialNotReplaced = errors.New("integrations: credential slot not replaced")
+	// ErrNotReplaced indicates the retired name is not taken over by the definition
+	ErrNotReplaced = errors.New("integrations: retired name not replaced")
+	// ErrLayoutMismatch indicates a payload does not match the retired layout it was stored under
+	ErrLayoutMismatch = errors.New("integrations: payload does not match retired layout")
 )
 
 // UnhealthyError marks an operation failure as terminal for recurring cycles: the installation

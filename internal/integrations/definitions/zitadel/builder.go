@@ -27,14 +27,16 @@ func Builder() registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         zitadelPATCredential,
+					Ref:         zitadelPATCredential.ID(),
 					Name:        "Zitadel Personal Access Token",
 					Description: "Personal Access Token used to access Zitadel instance data.",
+					Schema:      zitadelPATCredentialSchema,
 				},
 				{
-					Ref:         zitadelOAuthCredential,
+					Ref:         zitadelOAuthCredential.ID(),
 					Name:        "Zitadel OAuth (Client Credentials)",
 					Description: "Service user Client ID and Client Secret used to access Zitadel instance data via the OAuth2 client-credentials grant.",
+					Schema:      zitadelOAuthCredentialSchema,
 					Recommended: true,
 				},
 			},

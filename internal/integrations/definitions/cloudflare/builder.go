@@ -43,9 +43,10 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:         cloudflareCredential,
+					Ref:         cloudflareCredential.ID(),
 					Name:        "Cloudflare API Credential",
 					Description: "API token used to access Cloudflare account and zone data.",
+					Schema:      cloudflareSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{

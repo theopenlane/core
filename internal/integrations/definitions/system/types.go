@@ -114,7 +114,7 @@ type IntegrationLifecycleSweep struct {
 }
 
 var (
-	paymentReminderSweepSchema, PaymentReminderOp           = providerkit.OperationSchema[PaymentReminderSweep]()      //nolint:revive
-	organizationDeleteSweepSchema, OrganizationDeleteOp     = providerkit.OperationSchema[OrganizationDeleteSweep]()   //nolint:revive
-	integrationLifecycleSweepSchema, IntegrationLifecycleOp = providerkit.OperationSchema[IntegrationLifecycleSweep]() //nolint:revive
+	paymentReminderSchema, PaymentReminderOp           = providerkit.OperationSchema[PaymentReminderSweep]()      //nolint:revive
+	organizationDeleteSchema, OrganizationDeleteOp     = providerkit.OperationSchema[OrganizationDeleteSweep]()   //nolint:revive
+	integrationLifecycleSchema, IntegrationLifecycleOp = providerkit.OperationSchema[IntegrationLifecycleSweep]() //nolint:revive
 )

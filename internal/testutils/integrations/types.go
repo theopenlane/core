@@ -27,13 +27,17 @@ var (
 	unresolvableSchema, UnresolvableOp = providerkit.OperationSchema[unresolvableCycle]()
 
 	// LegacyTokenCredential is the slot an earlier definition version stored the token under; it is not registered
-	LegacyTokenCredential = types.NewCredentialRef[legacyTokenCred]()
-	// TokenCredential is the credential slot the test client is built from, taking over payloads stored under the legacy slot
-	TokenCredential = types.Replacing(types.NewCredentialRef[tokenCred](), LegacyTokenCredential, func(l legacyTokenCred) tokenCred { return tokenCred{Token: l.AccessToken} })
-	// OAuthCredential is the auth-managed slot filled by the OAuth fixture
-	OAuthCredential = types.NewCredentialRef[oauthTokenCred]()
-	// ServiceAccountCredential is the strict-schema slot used by config flows, backfilling a missing email from the installation id
-	ServiceAccountCredential = types.NewCredentialRef[serviceAccountCred]().Backfilled(func(_ context.Context, req types.InstallationRequest, c *serviceAccountCred) error {
+	_, LegacyTokenCredential = providerkit.CredentialSchema[legacyTokenCred]()
+	// tokenSchema and tokenCredential are the credential slot the test client is built from
+	tokenSchema, tokenCredential = providerkit.CredentialSchema[tokenCred]()
+	// TokenCredential is the token slot taking over payloads stored under the legacy slot
+	TokenCredential = tokenCredential.Replacing(LegacyTokenCredential, func(l legacyTokenCred) tokenCred { return tokenCred{Token: l.AccessToken} })
+	// oauthSchema and OAuthCredential are the auth-managed slot filled by the OAuth fixture
+	oauthSchema, OAuthCredential = providerkit.CredentialSchema[oauthTokenCred]()
+	// serviceAccountSchema and serviceAccountCredential are the strict-schema slot used by config flows
+	serviceAccountSchema, serviceAccountCredential = providerkit.CredentialSchema[serviceAccountCred]()
+	// ServiceAccountCredential is the strict-schema slot backfilling a missing email from the installation id
+	ServiceAccountCredential = serviceAccountCredential.Backfilled(func(_ context.Context, req types.InstallationRequest, c *serviceAccountCred) error {
 		if c.ServiceAccountEmail == "" {
 			c.ServiceAccountEmail = req.Integration.ID + "@backfilled.example.com"
 		}

@@ -25,7 +25,90 @@
       }
     }
   ],
+  "userInput": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid/user-input",
+      "$ref": "#/$defs/UserInput",
+      "$defs": {
+        "UserInput": {
+          "properties": {
+            "primaryDirectory": {
+              "type": "boolean",
+              "title": "Primary Directory"
+            },
+            "disableGroupSync": {
+              "type": "boolean",
+              "title": "Disable Group Sync",
+              "description": "Only sync users from Azure Entra ID"
+            },
+            "includeGuestUsers": {
+              "type": "boolean",
+              "title": "Include Guest Users"
+            },
+            "filterExpr": {
+              "type": "string",
+              "title": "Filter Expression",
+              "description": "Optional CEL expression to apply to records before ingesting (allows inclusion"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      }
+    }
+  },
+  "metadata": [
+    {
+      "connection": "entraIDCred",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "tenantId": {
+                "type": "string",
+                "title": "Tenant ID"
+              },
+              "displayName": {
+                "type": "string",
+                "title": "Display Name"
+              },
+              "verifiedDomains": {
+                "items": {
+                  "$ref": "#/$defs/VerifiedDomain"
+                },
+                "type": "array",
+                "title": "Verified Domains"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          },
+          "VerifiedDomain": {
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "isDefault": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
   "connections": [
     "entraIDCred"
+  ],
+  "operations": [
+    {
+      "name": "DirectorySync"
+    }
   ]
 }

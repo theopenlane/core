@@ -52,8 +52,128 @@
       }
     }
   ],
+  "userInput": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/user-input",
+      "$ref": "#/$defs/UserInput",
+      "$defs": {
+        "DirectorySync": {
+          "properties": {
+            "disable": {
+              "type": "boolean",
+              "title": "Disable",
+              "description": "Disable the syncing of users from Slack"
+            },
+            "filterExpr": {
+              "type": "string",
+              "title": "Filter Expression",
+              "description": "Optional CEL expression to apply to records before ingesting.",
+              "examples": [
+                "Example: payload.is_external == false'"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "UserInput": {
+          "properties": {
+            "defaultMessaging": {
+              "type": "boolean",
+              "title": "Default Messaging"
+            },
+            "directorySync": {
+              "$ref": "#/$defs/DirectorySync",
+              "title": "Directory Account Sync"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      }
+    }
+  },
+  "metadata": [
+    {
+      "connection": "slackBotTokenCred",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "teamId": {
+                "type": "string",
+                "title": "Team ID"
+              },
+              "teamName": {
+                "type": "string",
+                "title": "Team Name"
+              },
+              "defaultChannel": {
+                "type": "string",
+                "title": "Default Channel"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    {
+      "connection": "slackCred",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "teamId": {
+                "type": "string",
+                "title": "Team ID"
+              },
+              "teamName": {
+                "type": "string",
+                "title": "Team Name"
+              },
+              "defaultChannel": {
+                "type": "string",
+                "title": "Default Channel"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
   "connections": [
     "slackBotTokenCred",
     "slackCred"
+  ],
+  "operations": [
+    {
+      "name": "DemoRequestMessage"
+    },
+    {
+      "name": "DirectorySync"
+    },
+    {
+      "name": "IntegrationInstalledMessage"
+    },
+    {
+      "name": "MessageSendOperation"
+    },
+    {
+      "name": "NewUserMessage"
+    },
+    {
+      "name": "OrganizationsPendingDeletionMessage"
+    }
   ]
 }

@@ -128,8 +128,142 @@
       }
     }
   ],
+  "userInput": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/gcpscc/user-input",
+      "$ref": "#/$defs/UserInput",
+      "$defs": {
+        "FindingsSyncConfig": {
+          "properties": {
+            "filterExpr": {
+              "type": "string",
+              "title": "Filter Expression",
+              "description": "Optional CEL expression to apply to records before ingesting (allows inclusion",
+              "examples": [
+                "Example: payload.category != \"GKE_SECURITY_BULLETIN\""
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "UserInput": {
+          "properties": {
+            "findingsSync": {
+              "$ref": "#/$defs/FindingsSyncConfig",
+              "title": "Findings Sync"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      }
+    }
+  },
+  "metadata": [
+    {
+      "connection": "CredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/gcpscc/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "title": "Organization ID"
+              },
+              "projectId": {
+                "type": "string",
+                "title": "Project ID"
+              },
+              "projectScope": {
+                "type": "string",
+                "title": "Project Scope"
+              },
+              "projectIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "title": "Project IDs"
+              },
+              "sourceIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "title": "SCC Source IDs",
+                "description": "Filter which sources findings are pulled from"
+              },
+              "serviceAccountEmail": {
+                "type": "string",
+                "title": "Service Account Email"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    {
+      "connection": "WorkloadIdentityCredentialSchema",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/gcpscc/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "organizationId": {
+                "type": "string",
+                "title": "Organization ID"
+              },
+              "projectId": {
+                "type": "string",
+                "title": "Project ID"
+              },
+              "projectScope": {
+                "type": "string",
+                "title": "Project Scope"
+              },
+              "projectIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "title": "Project IDs"
+              },
+              "sourceIds": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "title": "SCC Source IDs",
+                "description": "Filter which sources findings are pulled from"
+              },
+              "serviceAccountEmail": {
+                "type": "string",
+                "title": "Service Account Email"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
   "connections": [
     "CredentialSchema",
     "WorkloadIdentityCredentialSchema"
+  ],
+  "operations": [
+    {
+      "name": "FindingsSync"
+    }
   ]
 }

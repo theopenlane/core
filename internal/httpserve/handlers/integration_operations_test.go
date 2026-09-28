@@ -47,14 +47,16 @@ type operationTestCredential struct {
 }
 
 var (
-	operationTestCredentialRef                      = types.NewCredentialRef[operationTestCredential]()
-	opTestHealthSchema, opTestHealthCheckOperation  = providerkit.OperationSchema[OperationTestHealthCheck]()
-	opTestRepoSyncSchema, opTestRepoSyncOperation   = providerkit.OperationSchema[OperationTestRepoSync]()
-	opTestValidatedSchema, opTestValidatedOperation = providerkit.OperationSchema[OperationTestValidated]()
+	operationTestCredentialSchema, operationTestCredentialRef = providerkit.CredentialSchema[operationTestCredential]()
+	opTestHealthCheckSchema, opTestHealthCheckOperation       = providerkit.OperationSchema[OperationTestHealthCheck]()
+	opTestRepoSyncSchema, opTestRepoSyncOperation             = providerkit.OperationSchema[OperationTestRepoSync]()
+	opTestValidatedSchema, opTestValidatedOperation           = providerkit.OperationSchema[OperationTestValidated]()
 )
 
 func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
+		definition := types.NewDefinitionRef(definitionID)
+
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
@@ -64,8 +66,9 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
-					Ref:  operationTestCredentialRef,
-					Name: "Op Test Credential",
+					Ref:    operationTestCredentialRef.ID(),
+					Name:   "Op Test Credential",
+					Schema: operationTestCredentialSchema,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
@@ -79,9 +82,9 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 				{
 					Name:         opTestHealthCheckOperation.Name(),
 					Description:  "Validate the test credential",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(opTestHealthCheckOperation.Name()),
+					Topic:        definition.OperationTopic(opTestHealthCheckOperation.Name()),
+					ConfigSchema: opTestHealthCheckSchema,
 					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: opTestHealthSchema,
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"ok":true}`), nil
 					},
@@ -89,9 +92,9 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 				{
 					Name:         opTestRepoSyncOperation.Name(),
 					Description:  "Sync repositories",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(opTestRepoSyncOperation.Name()),
-					Policy:       types.ExecutionPolicy{Inline: inlineNonHealth},
+					Topic:        definition.OperationTopic(opTestRepoSyncOperation.Name()),
 					ConfigSchema: opTestRepoSyncSchema,
+					Policy:       types.ExecutionPolicy{Inline: inlineNonHealth},
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 						return json.RawMessage(`{"synced":true}`), nil
 					},
@@ -99,7 +102,7 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 				{
 					Name:         opTestValidatedOperation.Name(),
 					Description:  "Operation with config schema",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(opTestValidatedOperation.Name()),
+					Topic:        definition.OperationTopic(opTestValidatedOperation.Name()),
 					ConfigSchema: opTestValidatedSchema,
 					Policy:       types.ExecutionPolicy{Inline: true},
 					Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {

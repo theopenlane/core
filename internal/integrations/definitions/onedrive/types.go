@@ -17,7 +17,7 @@ var (
 	// installation is the typed installation metadata handle for the OneDrive definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// oneDriveCredential is the credential slot for OneDrive OAuth credentials
-	oneDriveCredential = types.NewCredentialRef[oneDriveCred]()
+	_, oneDriveCredential = providerkit.CredentialSchema[oneDriveCred]()
 	// oneDriveClient is the client ref for the wrapped OneDrive graph client
 	oneDriveClient = types.NewClientRef[*DriveClient]()
 	// documentExportSchema is the operation schema for the document export operation
