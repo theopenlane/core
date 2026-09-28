@@ -8,7 +8,6 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
@@ -27,8 +26,8 @@ type retiredUserInput struct {
 }
 
 var (
-	// versionSecondSchema and versionSecondCredentialRef are the extra credential slot and its stored schema
-	versionSecondSchema, versionSecondCredentialRef = providerkit.CredentialSchema[versionSecondCredential]()
+	// versionSecondCredentialRef is the extra credential slot added in the version test
+	versionSecondCredentialRef = integrationtypes.CredentialRefOf[versionSecondCredential]()
 	// retiredUserInputRef is the user input layout an earlier definition version stored
 	retiredUserInputRef = integrationtypes.NewUserInputRef[retiredUserInput]("retiredUserInput")
 	// surfaceUserInputRef is the current user input layout taking over the retired layout with a backfill
@@ -253,7 +252,7 @@ func TestVersionIsStableAndChangesWithTheDefinition(t *testing.T) {
 	addedSlot, _ := minimalDefinition("version-def")
 	addedSlot.CredentialRegistrations = append(addedSlot.CredentialRegistrations, integrationtypes.CredentialRegistration{
 		Ref:    versionSecondCredentialRef.ID(),
-		Schema: versionSecondSchema,
+		Schema: versionSecondCredentialRef.Schema(),
 	})
 
 	connectionAdded, _ := minimalDefinition("version-def")

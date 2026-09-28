@@ -36,7 +36,8 @@ const trustCenterNotificationGrace = time.Hour
 // TrustCenterNotificationSweep configures one trust center notification sweep cycle
 type TrustCenterNotificationSweep struct{}
 
-var trustCenterNotificationSweepSchema, TrustCenterNotificationOp = providerkit.OperationSchema[TrustCenterNotificationSweep]() //nolint:revive
+// TrustCenterNotificationOp is the operation ref for the global trust center notification sweep, which runs without a client
+var TrustCenterNotificationOp = types.OperationRefOf[TrustCenterNotificationSweep]() //nolint:revive
 
 // Handle adapts the trust center notification sweep to the generic operation registration boundary
 func (t TrustCenterNotificationSweep) Handle() types.OperationHandler {

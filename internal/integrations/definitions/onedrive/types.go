@@ -7,7 +7,6 @@ import (
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -16,14 +15,16 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0ONEDRIVE00000000000001")
 	// installation is the typed installation metadata handle for the OneDrive definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// oneDriveCredential is the credential slot for OneDrive OAuth credentials
-	_, oneDriveCredential = providerkit.CredentialSchema[oneDriveCred]()
+	// oneDriveCredential is the auth-managed credential slot for OneDrive OAuth credentials
+	oneDriveCredential = types.CredentialRefOf[oneDriveCred]()
 	// oneDriveClient is the client ref for the wrapped OneDrive graph client
-	oneDriveClient = types.NewClientRef[*DriveClient]()
-	// documentExportSchema is the operation schema for the document export operation
-	documentExportSchema, documentExportOperation = providerkit.OperationSchema[operations.DocumentExport]()
-	// folderSyncSchema is the operation schema for the folder sync operation
-	folderSyncSchema, folderSyncOperation = providerkit.OperationSchema[FolderSync]()
+	oneDriveClient = types.ClientRefOf[*DriveClient]().Using(oneDriveCredential)
+	// oneDriveConnection is the connection mode selected by the OneDrive OAuth credential slot
+	oneDriveConnection = types.NewConnectionRef(oneDriveCredential).Enables(oneDriveClient)
+	// documentExportOperation is the operation ref for the document export operation
+	documentExportOperation = types.OperationRefOf[operations.DocumentExport]().Using(oneDriveClient)
+	// folderSyncOperation is the operation ref for the folder sync operation
+	folderSyncOperation = types.OperationRefOf[FolderSync]().Using(oneDriveClient)
 )
 
 // oneDriveCred holds the provider-owned credential material for a OneDrive installation

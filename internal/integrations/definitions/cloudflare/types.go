@@ -1,7 +1,6 @@
 package cloudflare
 
 import (
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
 )
@@ -11,32 +10,34 @@ var (
 	DefinitionID = types.NewDefinitionRef("def_01K0CFLARE00000000000000001")
 	// installation is the typed installation metadata handle for the Cloudflare definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// cloudflareSchema is the credential schema for the Cloudflare integration definition
-	cloudflareSchema, cloudflareCredential = providerkit.CredentialSchema[CredentialSchema]()
+	// cloudflareCredential is the typed credential slot for the Cloudflare API token
+	cloudflareCredential = types.CredentialRefOf[CredentialSchema]()
 	// cloudflareClient is the client ref for the Cloudflare API client used by this definition
-	cloudflareClient = types.NewClientRef[*CloudflareClient]()
-	// directorySyncSchema is the operation ref for the directory account sync operation
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
-	// assetSyncSchema is the operation ref for the domain asset sync operation
-	assetSyncSchema, assetSyncOperation = providerkit.OperationSchema[AssetSync]()
-	// findingsSyncSchema is the operation ref for the Security Center insights finding sync operation
-	findingsSyncSchema, findingsSyncOperation = providerkit.OperationSchema[FindingsSync]()
-	// domainScanSubmitSchema is the operation ref for submitting domains to the URL Scanner
-	domainScanSubmitSchema, DomainScanSubmitOp = providerkit.OperationSchema[DomainScanSubmit]() //nolint:revive
-	// domainScanPollSchema is the operation ref for polling a submitted URL Scanner result
-	domainScanPollSchema, DomainScanPollOp = providerkit.OperationSchema[DomainScanPoll]() //nolint:revive
-	// domainScanGatherEnrichmentSchema is the operation ref for gathering enrichment data for a domain
-	domainScanGatherEnrichmentSchema, DomainScanEnrichmentOp = providerkit.OperationSchema[DomainScanGatherEnrichment]() //nolint:revive
-	// domainScanBuildReportSchema is the operation ref for building the scan report from a completed URL Scanner result and gathered enrichment
-	domainScanBuildReportSchema, DomainScanBuildReportOp = providerkit.OperationSchema[DomainScanBuildReport]() //nolint:revive
-	// domainScanRequestSchema is the operation ref for requesting a domain scan; used both by
+	cloudflareClient = types.ClientRefOf[*CloudflareClient]().Using(cloudflareCredential)
+	// cloudflareConnection is the connection mode selected by the Cloudflare API token credential
+	cloudflareConnection = types.NewConnectionRef(cloudflareCredential).Enables(cloudflareClient)
+	// directorySyncOperation is the operation ref for the directory account sync operation
+	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(cloudflareClient)
+	// assetSyncOperation is the operation ref for the domain asset sync operation
+	assetSyncOperation = types.OperationRefOf[AssetSync]().Using(cloudflareClient)
+	// findingsSyncOperation is the operation ref for the Security Center insights finding sync operation
+	findingsSyncOperation = types.OperationRefOf[FindingsSync]().Using(cloudflareClient)
+	// DomainScanSubmitOp is the operation ref for submitting domains to the URL Scanner
+	DomainScanSubmitOp = types.OperationRefOf[DomainScanSubmit]().Using(cloudflareClient) //nolint:revive
+	// DomainScanPollOp is the operation ref for polling a submitted URL Scanner result
+	DomainScanPollOp = types.OperationRefOf[DomainScanPoll]().Using(cloudflareClient) //nolint:revive
+	// DomainScanEnrichmentOp is the operation ref for gathering enrichment data for a domain
+	DomainScanEnrichmentOp = types.OperationRefOf[DomainScanGatherEnrichment]().Using(cloudflareClient) //nolint:revive
+	// DomainScanBuildReportOp is the operation ref for building the scan report from a completed URL Scanner result and gathered enrichment
+	DomainScanBuildReportOp = types.OperationRefOf[DomainScanBuildReport]().Using(cloudflareClient) //nolint:revive
+	// DomainScanRequestOp is the operation ref for requesting a domain scan; used both by
 	// customer-facing calls (queues a pending Scan) and the system re-dispatch from the listener
 	// on Scan creation (actually runs the saga for it)
-	domainScanRequestSchema, DomainScanRequestOp = providerkit.OperationSchema[DomainScanRequest]() //nolint:revive
-	// domainScanImportSchema is the operation ref for importing an accepted domain scan review
-	domainScanImportSchema, DomainScanImportOp = providerkit.OperationSchema[DomainScanImport]() //nolint:revive
-	// runtimeCloudflareSchema is the JSON schema and typed ref for the runtime Cloudflare config
-	runtimeCloudflareSchema, runtimeCloudflareRef = providerkit.RuntimeSchema[RuntimeConfig]()
+	DomainScanRequestOp = types.OperationRefOf[DomainScanRequest]() //nolint:revive
+	// DomainScanImportOp is the operation ref for importing an accepted domain scan review
+	DomainScanImportOp = types.OperationRefOf[DomainScanImport]() //nolint:revive
+	// runtimeCloudflareRef is the typed ref for the runtime Cloudflare config
+	runtimeCloudflareRef = types.RuntimeRefOf[RuntimeConfig]()
 )
 
 const (

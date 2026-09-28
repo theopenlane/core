@@ -101,7 +101,7 @@ func TestKeystoreCredentialSlots(t *testing.T) {
 		builds := 0
 
 		registration := integrationtypes.ClientRegistration{
-			Ref: integrationtypes.NewClientRef[string]().ID(),
+			Ref: integrationtypes.ClientRefOf[string]().ID(),
 			Build: func(context.Context, integrationtypes.ClientBuildRequest) (any, error) {
 				builds++
 

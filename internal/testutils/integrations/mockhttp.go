@@ -14,7 +14,6 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -28,12 +27,14 @@ var MockHTTPDefinitionID = types.NewDefinitionRef("def_01K0MOCKHTTP0000000000000
 const MockHTTPSyncOperation = "mock.sync"
 
 var (
-	// mockHTTPSchema and MockHTTPCredential are the credential slot the mock provider authenticates with
-	mockHTTPSchema, MockHTTPCredential = providerkit.CredentialSchema[mockHTTPCred]()
+	// MockHTTPCredential is the credential slot the mock provider authenticates with
+	MockHTTPCredential = types.CredentialRefOf[mockHTTPCred]()
 	// mockHTTPInstallation resolves installation metadata from the mock provider's instance endpoint
 	mockHTTPInstallation = types.NewInstallationRef(resolveMockHTTPMetadata)
 	// mockHTTPClient is the operation client that carries the stored credential into the ingest handler
-	mockHTTPClient = types.NewClientRef[*mockHTTPClientInstance]()
+	mockHTTPClient = types.ClientRefOf[*mockHTTPClientInstance]().Using(MockHTTPCredential)
+	// mockHTTPConnection is the connection mode selected by the mock provider credential slot
+	mockHTTPConnection = types.NewConnectionRef(MockHTTPCredential)
 )
 
 // mockHTTPCred carries the bearer token and base URL of the mock provider the installation connects to
@@ -61,7 +62,7 @@ type mockHTTPClientInstance struct{}
 
 // buildMockHTTPClient validates the installation's stored credential resolves and returns the stateless
 // mock provider client
-func buildMockHTTPClient(_ context.Context, req types.ClientBuildRequest) (any, error) {
+func buildMockHTTPClient(_ context.Context, req types.ClientBuildRequest) (*mockHTTPClientInstance, error) {
 	if _, ok, err := MockHTTPCredential.Resolve(req.Credentials); err != nil || !ok {
 		return nil, ErrMockHTTPUnhealthy
 	}
@@ -200,16 +201,14 @@ func MockHTTPBuilder() registry.Builder {
 				Visible:     true,
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         MockHTTPCredential.ID(),
+				MockHTTPCredential.Registration(types.CredentialRegistration{
 					Name:        "Mock HTTP Token",
 					Description: "Bearer token and base URL the mock provider validates.",
-					Schema:      mockHTTPSchema,
-				},
+					Schema:      MockHTTPCredential.Schema(),
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  MockHTTPCredential.ID(),
+				mockHTTPConnection.Registration(types.ConnectionRegistration{
 					Name:           "Mock HTTP",
 					Description:    "Connect to the mock HTTP provider and resolve its instance id.",
 					CredentialRefs: []types.CredentialSlotID{MockHTTPCredential.ID()},
@@ -219,15 +218,12 @@ func MockHTTPBuilder() registry.Builder {
 						CredentialRef: MockHTTPCredential.ID(),
 						Description:   "Remove the persisted mock provider credential and disconnect this installation.",
 					},
-				},
+				}),
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            mockHTTPClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{MockHTTPCredential.ID()},
-					Description:    "Mock provider client built from the stored token and base URL credential.",
-					Build:          buildMockHTTPClient,
-				},
+				mockHTTPClient.Registration(buildMockHTTPClient, types.ClientRegistration{
+					Description: "Mock provider client built from the stored token and base URL credential.",
+				}),
 			},
 			Operations: []types.OperationRegistration{
 				{

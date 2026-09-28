@@ -15,7 +15,7 @@ import (
 type IdentityClientBuilder struct{}
 
 // Build constructs the OCI Identity client for one installation
-func (IdentityClientBuilder) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
+func (IdentityClientBuilder) Build(_ context.Context, req types.ClientBuildRequest) (*identity.IdentityClient, error) {
 	provider, err := buildConfigurationProvider(req.Credentials)
 	if err != nil {
 		return nil, err
@@ -33,7 +33,7 @@ func (IdentityClientBuilder) Build(_ context.Context, req types.ClientBuildReque
 type CloudGuardClientBuilder struct{}
 
 // Build constructs the OCI Cloud Guard client for one installation
-func (CloudGuardClientBuilder) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
+func (CloudGuardClientBuilder) Build(_ context.Context, req types.ClientBuildRequest) (*cloudguard.CloudGuardClient, error) {
 	provider, err := buildConfigurationProvider(req.Credentials)
 	if err != nil {
 		return nil, err

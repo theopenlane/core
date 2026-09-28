@@ -18,14 +18,12 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 		return InstallationMetadata{}, false, ErrCredentialDecode
 	}
 
-	client, err := Client{}.Build(ctx, types.ClientBuildRequest{Credentials: req.Credentials})
+	apiClient, err := Client{}.Build(ctx, types.ClientBuildRequest{Credentials: req.Credentials})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error  during installation")
 
 		return InstallationMetadata{}, false, err
 	}
-
-	apiClient := client.(*authentikSDK.APIClient)
 
 	info, resp, err := apiClient.AdminApi.AdminSystemRetrieve(ctx).Execute()
 	if resp != nil {

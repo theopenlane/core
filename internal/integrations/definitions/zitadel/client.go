@@ -24,7 +24,7 @@ type Client struct{}
 // Build constructs the Zitadel user service client for one installation. It supports both
 // Personal Access Token and OAuth2 client-credentials auth modes, selecting whichever
 // credential the installation was configured with.
-func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, error) {
+func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (*client.Client, error) {
 	domain, auth, err := resolveAuth(req.Credentials)
 	if err != nil {
 		return nil, err

@@ -46,7 +46,7 @@ type ClientConfig struct {
 type Client struct{}
 
 // Build constructs the Cloudflare API client for one installation
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
+func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*CloudflareClient, error) {
 	cred, err := resolveCredential(req.Credentials)
 	if err != nil {
 		return nil, err

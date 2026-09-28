@@ -9,6 +9,8 @@ var (
 	ErrDefinitionAlreadyRegistered = errors.New("integrations/registry: definition already registered")
 	// ErrDefinitionNotFound indicates the requested definition does not exist
 	ErrDefinitionNotFound = errors.New("integrations/registry: definition not found")
+	// ErrDuplicateRegistration indicates a definition registers the same connection, client, operation, webhook, event, or topic more than once
+	ErrDuplicateRegistration = errors.New("integrations/registry: duplicate registration")
 	// ErrClientRequired indicates a client registration is missing its identity
 	ErrClientRequired = errors.New("integrations/registry: client required")
 	// ErrClientNotFound indicates the requested client does not exist

@@ -4,20 +4,22 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 var (
 	// definitionID is the stable identifier for the Azure Entra ID integration definition
-	definitionID                                       = types.NewDefinitionRef("def_01K0AZENTRA0000000000000001")
-	entraTenantCredentialSchema, entraTenantCredential = providerkit.CredentialSchema[entraIDCred]()
-	// EntraCredential is the client ref for the Azure token credential used by the health check
-	entraCredential = types.NewClientRef[azcore.TokenCredential]()
-	// EntraClient is the client ref for the Microsoft Graph service client used by directory operations
-	entraClient = types.NewClientRef[*msgraphsdk.GraphServiceClient]()
-	// DirectorySyncOperation is the operation ref for the Azure Entra ID directory sync operation
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	definitionID = types.NewDefinitionRef("def_01K0AZENTRA0000000000000001")
+	// entraTenantCredential is the auth-managed credential slot holding the consented tenant
+	entraTenantCredential = types.CredentialRefOf[entraIDCred]()
+	// entraCredential is the client ref for the Azure token credential used by the health check
+	entraCredential = types.ClientRefOf[azcore.TokenCredential]().Using(entraTenantCredential)
+	// entraClient is the client ref for the Microsoft Graph service client used by directory operations
+	entraClient = types.ClientRefOf[*msgraphsdk.GraphServiceClient]().Using(entraTenantCredential)
+	// entraConnection is the connection mode selected by the admin-consented tenant credential
+	entraConnection = types.NewConnectionRef(entraTenantCredential).Enables(entraCredential).Enables(entraClient)
+	// directorySyncOperation is the operation ref for the Azure Entra ID directory sync operation
+	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(entraClient)
 )
 
 // UserInput holds installation-specific configuration collected from the user

@@ -823,7 +823,8 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 		},
 		Operations: []types.OperationRegistration{
 			{
-				Name: "finding-sync",
+				Name:  "finding-sync",
+				Topic: types.NewDefinitionRef("test-def").OperationTopic("finding-sync"),
 				Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 					return nil, nil
 				},
@@ -837,7 +838,8 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 				},
 			},
 			{
-				Name: "asset-sync",
+				Name:  "asset-sync",
+				Topic: types.NewDefinitionRef("test-def").OperationTopic("asset-sync"),
 				Handle: func(context.Context, types.OperationRequest) (json.RawMessage, error) {
 					return nil, nil
 				},

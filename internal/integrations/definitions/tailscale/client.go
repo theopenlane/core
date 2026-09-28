@@ -12,7 +12,7 @@ import (
 type Client struct{}
 
 // Build constructs the Tailscale API client for one installation
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
+func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*tsclient.Client, error) {
 	cred, err := resolveCredential(req.Credentials)
 	if err != nil {
 		return nil, err

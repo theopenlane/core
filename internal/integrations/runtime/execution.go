@@ -471,6 +471,10 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		return nil, operations.IngestResult{}, err
 	}
 
+	if len(config) == 0 && integration != nil && operation.ConfigResolver != nil {
+		config = operation.ConfigResolver(integration.Config.ClientConfig)
+	}
+
 	var lastRunAt *time.Time
 
 	if db := r.dbOrNil(); db != nil && db.IntegrationRun != nil && integration != nil {

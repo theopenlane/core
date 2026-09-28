@@ -3,6 +3,8 @@ package types //nolint:revive
 import (
 	"context"
 	"encoding/json"
+
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // RuntimeRefID is the stable identifier for a runtime integration config, derived from the Go type name
@@ -43,10 +45,20 @@ type RuntimeRef[T any] struct {
 	config *T
 }
 
-// NewRuntimeRef creates a typed runtime integration ref with the given name and schema
-func NewRuntimeRef[T any](name string, schema json.RawMessage) RuntimeRef[T] {
+// NewRuntimeRef creates a typed runtime integration ref with the given name and the schema reflected from T
+func NewRuntimeRef[T any](name string) RuntimeRef[T] {
 	return RuntimeRef[T]{
 		id:     NewRuntimeRefID(name),
+		schema: jsonx.SchemaFrom[T](),
+	}
+}
+
+// RuntimeRefOf creates a typed runtime integration ref named after the reflected schema of T
+func RuntimeRefOf[T any]() RuntimeRef[T] {
+	schema := jsonx.SchemaFrom[T]()
+
+	return RuntimeRef[T]{
+		id:     NewRuntimeRefID(jsonx.SchemaID(schema)),
 		schema: schema,
 	}
 }
@@ -83,6 +95,14 @@ func (r RuntimeRef[T]) MarshalConfig() (json.RawMessage, error) {
 	}
 
 	return json.Marshal(r.config)
+}
+
+// Registration projects the runtime ref identity and schema onto base
+func (r RuntimeRef[T]) Registration(base RuntimeIntegrationRegistration) RuntimeIntegrationRegistration {
+	base.Ref = r.ID()
+	base.Schema = r.Schema()
+
+	return base
 }
 
 // RuntimeIntegrationRegistration is the non-generic registration stored on a Definition

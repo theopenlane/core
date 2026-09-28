@@ -115,6 +115,11 @@
               "examples": [
                 "Example: payload.state == 'open'"
               ]
+            },
+            "maxRepos": {
+              "type": "integer",
+              "title": "Max Repositories",
+              "description": "Optional cap on the number of repositories to scan."
             }
           },
           "additionalProperties": false,

@@ -1,7 +1,6 @@
 package scim
 
 import (
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -10,8 +9,8 @@ var (
 	DefinitionID = types.NewDefinitionRef("def_01K0SCIM000000000000000001")
 	// SCIMAuthWebhook is the stable identity handle for the SCIM authentication webhook
 	SCIMAuthWebhook = types.NewWebhookRef("scim.auth")
-	// directorySyncSchema is the operation schema for the SCIM directory sync operation
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	// directorySyncOperation is the operation ref for the SCIM directory sync operation
+	directorySyncOperation = types.OperationRefOf[DirectorySync]()
 )
 
 // UserInput captures optional user-provided configuration for the SCIM integration

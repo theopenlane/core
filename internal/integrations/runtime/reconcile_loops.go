@@ -26,11 +26,7 @@ func (r *Runtime) emitReconcileLoop(ctx context.Context, installation *ent.Integ
 
 	ctx, headers := intobvs.EmitContext(ctx, oc)
 
-	fragment, err := types.PropertiesFragment(map[string]string{
-		"entityId":  installation.ID,
-		"operation": operationName,
-		"runType":   enums.IntegrationRunTypeReconcile.String(),
-	})
+	fragment, err := reconcileLoopFragment(installation.ID, operationName)
 	if err != nil {
 		return err
 	}
@@ -64,6 +60,19 @@ func (r *Runtime) emitReconcileLoop(ctx context.Context, installation *ent.Integ
 	logx.FromContext(ctx).Info().Msg("reconcile loop emitted")
 
 	return nil
+}
+
+// reconcileLoopFragment builds the JSONB containment fragment matching one operation's recurring
+// loop jobs on one installation; the keys must match the emitted GetPropertiesForOperationContext
+// projection, where installation-bound contexts promote the integration as the operation's entity
+// (entityId) and the reconcile run type keeps the match disjoint from one-shot event jobs sharing
+// the same installation and operation
+func reconcileLoopFragment(integrationID, operationName string) (string, error) {
+	return types.PropertiesFragment(map[string]string{
+		"entityId":  integrationID,
+		"operation": operationName,
+		"runType":   enums.IntegrationRunTypeReconcile.String(),
+	})
 }
 
 // clientUnresolvedReasonFmt formats the actionable reason recorded when an integration cannot establish its client
@@ -141,15 +150,7 @@ func (r *Runtime) ResetReconcileLoops(ctx context.Context, installation *ent.Int
 
 		opCtx := intobvs.WithOperation(ctx, op.Name)
 
-		// the keys must match the emitted GetPropertiesForOperationContext projection:
-		// installation-bound contexts promote the integration as the operation's entity
-		// (entityId), and the reconcile run type keeps the match disjoint from one-shot
-		// event jobs sharing the same installation and operation
-		fragment, err := types.PropertiesFragment(map[string]string{
-			"entityId":  installation.ID,
-			"operation": op.Name,
-			"runType":   enums.IntegrationRunTypeReconcile.String(),
-		})
+		fragment, err := reconcileLoopFragment(installation.ID, op.Name)
 		if err != nil {
 			errs = append(errs, err)
 			continue

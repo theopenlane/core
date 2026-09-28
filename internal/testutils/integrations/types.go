@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -16,28 +15,24 @@ var DefinitionID = types.NewDefinitionRef("def_01K0TESTDEF0000000000000001")
 
 var (
 	// RepoSyncOp is the async client-resolving operation
-	repoSyncSchema, RepoSyncOp = providerkit.OperationSchema[repoSync]()
+	RepoSyncOp = types.OperationRefOf[repoSync]().Using(testClient)
 	// ValidatedOp is the inline operation with a required config field
-	validatedSchema, ValidatedOp = providerkit.OperationSchema[validatedRun]()
+	ValidatedOp = types.OperationRefOf[validatedRun]()
 	// RecurringOp is the healthy idle loop
-	recurringSchema, RecurringOp = providerkit.OperationSchema[recurringCycle]()
+	RecurringOp = types.OperationRefOf[recurringCycle]()
 	// ExhaustingOp is the always-failing loop
-	exhaustingSchema, ExhaustingOp = providerkit.OperationSchema[exhaustingCycle]()
+	ExhaustingOp = types.OperationRefOf[exhaustingCycle]()
 	// UnresolvableOp is the client-resolving loop seeded without a credential
-	unresolvableSchema, UnresolvableOp = providerkit.OperationSchema[unresolvableCycle]()
+	UnresolvableOp = types.OperationRefOf[unresolvableCycle]().Using(testClient)
 
 	// LegacyTokenCredential is the slot an earlier definition version stored the token under; it is not registered
-	_, LegacyTokenCredential = providerkit.CredentialSchema[legacyTokenCred]()
-	// tokenSchema and tokenCredential are the credential slot the test client is built from
-	tokenSchema, tokenCredential = providerkit.CredentialSchema[tokenCred]()
-	// TokenCredential is the token slot taking over payloads stored under the legacy slot
-	TokenCredential = tokenCredential.Replacing(LegacyTokenCredential, func(l legacyTokenCred) tokenCred { return tokenCred{Token: l.AccessToken} })
-	// oauthSchema and OAuthCredential are the auth-managed slot filled by the OAuth fixture
-	oauthSchema, OAuthCredential = providerkit.CredentialSchema[oauthTokenCred]()
-	// serviceAccountSchema and serviceAccountCredential are the strict-schema slot used by config flows
-	serviceAccountSchema, serviceAccountCredential = providerkit.CredentialSchema[serviceAccountCred]()
+	LegacyTokenCredential = types.CredentialRefOf[legacyTokenCred]()
+	// TokenCredential is the token slot the test client is built from, taking over payloads stored under the legacy slot
+	TokenCredential = types.CredentialRefOf[tokenCred]().Replacing(LegacyTokenCredential, func(l legacyTokenCred) tokenCred { return tokenCred{Token: l.AccessToken} })
+	// OAuthCredential is the auth-managed slot filled by the OAuth fixture
+	OAuthCredential = types.CredentialRefOf[oauthTokenCred]()
 	// ServiceAccountCredential is the strict-schema slot backfilling a missing email from the installation id
-	ServiceAccountCredential = serviceAccountCredential.Backfilled(func(_ context.Context, req types.InstallationRequest, c *serviceAccountCred) error {
+	ServiceAccountCredential = types.CredentialRefOf[serviceAccountCred]().Backfilled(func(_ context.Context, req types.InstallationRequest, c *serviceAccountCred) error {
 		if c.ServiceAccountEmail == "" {
 			c.ServiceAccountEmail = req.Integration.ID + "@backfilled.example.com"
 		}
@@ -46,7 +41,14 @@ var (
 	})
 
 	// testClient builds from the token credential
-	testClient = types.NewClientRef[*Client]()
+	testClient = types.ClientRefOf[*Client]().Using(TokenCredential)
+
+	// oauthConnection is the connection mode selected by the OAuth slot
+	oauthConnection = types.NewConnectionRef(OAuthCredential)
+	// tokenConnection is the connection mode selected by the token slot
+	tokenConnection = types.NewConnectionRef(TokenCredential)
+	// serviceAccountConnection is the connection mode selected by the service account slot
+	serviceAccountConnection = types.NewConnectionRef(ServiceAccountCredential)
 
 	// WebhookAlertCreated is the webhook event contract
 	WebhookAlertCreated = types.NewWebhookEventRef[webhookAlertEnvelope]("alert.created")

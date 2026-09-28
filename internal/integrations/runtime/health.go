@@ -187,11 +187,7 @@ func (r *Runtime) MarkOperationUnhealthy(ctx context.Context, installation *ent.
 
 	installation.Status = enums.IntegrationStatusDegraded
 
-	fragment, err := types.PropertiesFragment(map[string]string{
-		"entityId":  installation.ID,
-		"operation": operationName,
-		"runType":   enums.IntegrationRunTypeReconcile.String(),
-	})
+	fragment, err := reconcileLoopFragment(installation.ID, operationName)
 	if err != nil {
 		return err
 	}

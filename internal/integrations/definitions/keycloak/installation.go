@@ -3,7 +3,6 @@ package keycloak
 import (
 	"context"
 
-	gocloak "github.com/Nerzal/gocloak/v13"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -22,14 +21,12 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 		return InstallationMetadata{}, false, nil
 	}
 
-	client, err := Client{}.Build(ctx, types.ClientBuildRequest{Credentials: req.Credentials})
+	gc, err := Client{}.Build(ctx, types.ClientBuildRequest{Credentials: req.Credentials})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error building keycloak client")
 
 		return InstallationMetadata{}, false, err
 	}
-
-	gc := client.(*gocloak.GoCloak)
 
 	token, err := gc.LoginClient(ctx, cred.ClientID, cred.ClientSecret, cred.Realm)
 	if err != nil {

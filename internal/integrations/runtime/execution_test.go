@@ -9,6 +9,7 @@ import (
 
 	"gotest.tools/v3/assert"
 
+	"github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -289,4 +290,64 @@ func TestExecuteOperationPassesRequestFields(t *testing.T) {
 	if string(captured.Config) != `{"key":"value"}` {
 		t.Fatalf("expected config to be passed through, got %s", string(captured.Config))
 	}
+}
+
+func TestExecuteOperationResolvesConfigFromInstallation(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+	installation := &ent.Integration{
+		ID:           "install-1",
+		DefinitionID: "test-def",
+		Config:       openapi.IntegrationConfig{ClientConfig: json.RawMessage(`{"directorySync":{"filterExpr":"payload.active"}}`)},
+	}
+
+	var captured types.OperationRequest
+	_, err := rt.ExecuteOperation(context.Background(), installation, types.OperationRegistration{
+		Name: "test-op",
+		ConfigResolver: func(userInput json.RawMessage) json.RawMessage {
+			var top map[string]json.RawMessage
+			if err := json.Unmarshal(userInput, &top); err != nil {
+				return nil
+			}
+
+			return top["directorySync"]
+		},
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			captured = req
+			return nil, nil
+		},
+	}, nil, nil)
+	assert.NilError(t, err)
+	assert.Equal(t, string(captured.Config), `{"filterExpr":"payload.active"}`)
+}
+
+func TestExecuteOperationExplicitConfigWinsOverResolver(t *testing.T) {
+	t.Parallel()
+
+	rt := NewForTesting(registry.New())
+	installation := &ent.Integration{
+		ID:           "install-1",
+		DefinitionID: "test-def",
+		Config:       openapi.IntegrationConfig{ClientConfig: json.RawMessage(`{"directorySync":{"filterExpr":"payload.active"}}`)},
+	}
+
+	resolved := false
+
+	var captured types.OperationRequest
+	_, err := rt.ExecuteOperation(context.Background(), installation, types.OperationRegistration{
+		Name: "test-op",
+		ConfigResolver: func(json.RawMessage) json.RawMessage {
+			resolved = true
+
+			return json.RawMessage(`{"filterExpr":"payload.active"}`)
+		},
+		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+			captured = req
+			return nil, nil
+		},
+	}, nil, json.RawMessage(`{"key":"value"}`))
+	assert.NilError(t, err)
+	assert.Equal(t, string(captured.Config), `{"key":"value"}`)
+	assert.Assert(t, !resolved, "expected explicit config to bypass the resolver")
 }

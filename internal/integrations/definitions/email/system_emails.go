@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/newman/render"
 
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email/themes"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
@@ -296,27 +295,27 @@ type TrustCenterNDAApprovalRequestEmail struct {
 // --- Schema + operation ref vars ---
 
 var (
-	verifyEmailSchema, VerifyEmailOp                   = providerkit.OperationSchema[VerifyEmailRequest]()                 //nolint:revive
-	welcomeSchema, WelcomeOp                           = providerkit.OperationSchema[WelcomeRequest]()                     //nolint:revive
-	inviteSchema, InviteOp                             = providerkit.OperationSchema[InviteRequest]()                      //nolint:revive
-	inviteJoinedSchema, InviteJoinedOp                 = providerkit.OperationSchema[InviteJoinedRequest]()                //nolint:revive
-	resetRequestSchema, ResetRequestOp                 = providerkit.OperationSchema[PasswordResetEmailRequest]()          //nolint:revive
-	resetSuccessSchema, ResetSuccessOp                 = providerkit.OperationSchema[PasswordResetSuccessRequest]()        //nolint:revive
-	subscribeSchema, SubscribeOp                       = providerkit.OperationSchema[SubscribeRequest]()                   //nolint:revive
-	verifyBillingSchema, VerifyBillingOp               = providerkit.OperationSchema[VerifyBillingRequest]()               //nolint:revive
-	tcNDARequestSchema, TCNDARequestOp                 = providerkit.OperationSchema[TrustCenterNDARequestEmail]()         //nolint:revive
-	tcNDASignedSchema, TCNDASignedOp                   = providerkit.OperationSchema[TrustCenterNDASignedEmail]()          //nolint:revive
-	tcAuthSchema, TCAuthOp                             = providerkit.OperationSchema[TrustCenterAuthEmail]()               //nolint:revive
-	questionnaireAuthSchema, QuestionnaireAuthOp       = providerkit.OperationSchema[QuestionnaireAuthEmail]()             //nolint:revive
-	billingEmailChangedSchema, BillingEmailChangedOp   = providerkit.OperationSchema[BillingEmailChangedEmail]()           //nolint:revive
-	orgDeletionNoticeSchema, OrgDeletionNoticeOp       = providerkit.OperationSchema[OrgDeletionNoticeEmail]()             //nolint:revive
-	tcNDAApprovalRequestSchema, TCNDAApprovalRequestOp = providerkit.OperationSchema[TrustCenterNDAApprovalRequestEmail]() //nolint:revive
+	VerifyEmailOp          = types.OperationRefOf[VerifyEmailRequest]().Using(emailClientRef)                 //nolint:revive
+	WelcomeOp              = types.OperationRefOf[WelcomeRequest]().Using(emailClientRef)                     //nolint:revive
+	InviteOp               = types.OperationRefOf[InviteRequest]().Using(emailClientRef)                      //nolint:revive
+	InviteJoinedOp         = types.OperationRefOf[InviteJoinedRequest]().Using(emailClientRef)                //nolint:revive
+	ResetRequestOp         = types.OperationRefOf[PasswordResetEmailRequest]().Using(emailClientRef)          //nolint:revive
+	ResetSuccessOp         = types.OperationRefOf[PasswordResetSuccessRequest]().Using(emailClientRef)        //nolint:revive
+	SubscribeOp            = types.OperationRefOf[SubscribeRequest]().Using(emailClientRef)                   //nolint:revive
+	VerifyBillingOp        = types.OperationRefOf[VerifyBillingRequest]().Using(emailClientRef)               //nolint:revive
+	TCNDARequestOp         = types.OperationRefOf[TrustCenterNDARequestEmail]().Using(emailClientRef)         //nolint:revive
+	TCNDASignedOp          = types.OperationRefOf[TrustCenterNDASignedEmail]().Using(emailClientRef)          //nolint:revive
+	TCAuthOp               = types.OperationRefOf[TrustCenterAuthEmail]().Using(emailClientRef)               //nolint:revive
+	QuestionnaireAuthOp    = types.OperationRefOf[QuestionnaireAuthEmail]().Using(emailClientRef)             //nolint:revive
+	BillingEmailChangedOp  = types.OperationRefOf[BillingEmailChangedEmail]().Using(emailClientRef)           //nolint:revive
+	OrgDeletionNoticeOp    = types.OperationRefOf[OrgDeletionNoticeEmail]().Using(emailClientRef)             //nolint:revive
+	TCNDAApprovalRequestOp = types.OperationRefOf[TrustCenterNDAApprovalRequestEmail]().Using(emailClientRef) //nolint:revive
 )
 
 // --- Email operation definitions ---
 
 var _ = RegisterEmailOperation(Operation[VerifyEmailRequest]{
-	Op: VerifyEmailOp, Schema: verifyEmailSchema, Theme: baseTheme,
+	Op: VerifyEmailOp, Theme: baseTheme,
 	Description: "System email prompting a new user to verify their email address",
 	Subject: func(cfg RuntimeEmailConfig, _ VerifyEmailRequest) string {
 		return "Please verify your email address to login to " + cfg.CompanyName
@@ -345,7 +344,7 @@ var _ = RegisterEmailOperation(Operation[VerifyEmailRequest]{
 })
 
 var _ = RegisterEmailOperation(Operation[WelcomeRequest]{
-	Op: WelcomeOp, Schema: welcomeSchema, Theme: baseTheme,
+	Op: WelcomeOp, Theme: baseTheme,
 	Description: "System welcome email delivered after account signup",
 	Subject: func(cfg RuntimeEmailConfig, _ WelcomeRequest) string {
 		return "Welcome to " + cfg.CompanyName + "!"
@@ -385,7 +384,7 @@ var _ = RegisterEmailOperation(Operation[WelcomeRequest]{
 })
 
 var _ = RegisterEmailOperation(Operation[InviteRequest]{
-	Op: InviteOp, Schema: inviteSchema, Theme: baseTheme,
+	Op: InviteOp, Theme: baseTheme,
 	Description: "System email inviting a user to join an organization",
 	Subject: func(cfg RuntimeEmailConfig, req InviteRequest) string {
 		return "Join Your Teammate " + req.InviterName + " on " + cfg.CompanyName + "!"
@@ -421,7 +420,7 @@ var _ = RegisterEmailOperation(Operation[InviteRequest]{
 })
 
 var _ = RegisterEmailOperation(Operation[InviteJoinedRequest]{
-	Op: InviteJoinedOp, Schema: inviteJoinedSchema, Theme: baseTheme,
+	Op: InviteJoinedOp, Theme: baseTheme,
 	Description: "System notification confirming an invited user has joined an organization",
 	Subject: func(cfg RuntimeEmailConfig, _ InviteJoinedRequest) string {
 		return "You've been added to an Organization on " + cfg.CompanyName
@@ -461,7 +460,7 @@ var _ = RegisterEmailOperation(Operation[InviteJoinedRequest]{
 })
 
 var _ = RegisterEmailOperation(Operation[PasswordResetEmailRequest]{
-	Op: ResetRequestOp, Schema: resetRequestSchema, Theme: baseTheme,
+	Op: ResetRequestOp, Theme: baseTheme,
 	Description: "System email delivering a password reset link to a user",
 	Subject: func(cfg RuntimeEmailConfig, _ PasswordResetEmailRequest) string {
 		return cfg.CompanyName + " Password Reset - Action Required"
@@ -490,7 +489,7 @@ var _ = RegisterEmailOperation(Operation[PasswordResetEmailRequest]{
 })
 
 var _ = RegisterEmailOperation(Operation[PasswordResetSuccessRequest]{
-	Op: ResetSuccessOp, Schema: resetSuccessSchema, Theme: baseTheme,
+	Op: ResetSuccessOp, Theme: baseTheme,
 	Description: "System email confirming a successful password reset",
 	Subject: func(cfg RuntimeEmailConfig, _ PasswordResetSuccessRequest) string {
 		return cfg.CompanyName + " Password Reset Confirmation"
@@ -514,7 +513,7 @@ var _ = RegisterEmailOperation(Operation[PasswordResetSuccessRequest]{
 })
 
 var _ = RegisterEmailOperation(Operation[SubscribeRequest]{
-	Op: SubscribeOp, Schema: subscribeSchema, Theme: baseTheme,
+	Op: SubscribeOp, Theme: baseTheme,
 	Description: "System email asking a trust center subscriber to confirm their email address",
 	Subject: func(cfg RuntimeEmailConfig, req SubscribeRequest) string {
 		return "Confirm your subscription to " + subscribeOrgName(cfg, req) + " updates"
@@ -572,7 +571,7 @@ func subscribeOrgName(cfg RuntimeEmailConfig, req SubscribeRequest) string {
 }
 
 var _ = RegisterEmailOperation(Operation[VerifyBillingRequest]{
-	Op: VerifyBillingOp, Schema: verifyBillingSchema, Theme: baseTheme,
+	Op: VerifyBillingOp, Theme: baseTheme,
 	Description: "System email prompting verification of the billing email on file",
 	Subject: func(cfg RuntimeEmailConfig, _ VerifyBillingRequest) string {
 		return "Please verify the billing email for " + cfg.CompanyName + " to ensure your account stays up to date"
@@ -606,7 +605,7 @@ var _ = RegisterEmailOperation(Operation[VerifyBillingRequest]{
 })
 
 var _ = RegisterEmailOperation(Operation[TrustCenterNDARequestEmail]{
-	Op: TCNDARequestOp, Schema: tcNDARequestSchema, Theme: baseTheme,
+	Op: TCNDARequestOp, Theme: baseTheme,
 	Description: "System email requesting an NDA signature before granting trust center access",
 	PreHook:     resolveTrustCenterNDARequestFields,
 	Subject: func(_ RuntimeEmailConfig, req TrustCenterNDARequestEmail) string {
@@ -630,7 +629,7 @@ var _ = RegisterEmailOperation(Operation[TrustCenterNDARequestEmail]{
 })
 
 var _ = RegisterEmailOperation(Operation[TrustCenterNDASignedEmail]{
-	Op: TCNDASignedOp, Schema: tcNDASignedSchema, Theme: baseTheme,
+	Op: TCNDASignedOp, Theme: baseTheme,
 	Description: "System email confirming a signed NDA and attaching the signed copy",
 	PreHook:     resolveTrustCenterNDASignedFields,
 	Subject: func(_ RuntimeEmailConfig, req TrustCenterNDASignedEmail) string {
@@ -663,7 +662,7 @@ var _ = RegisterEmailOperation(Operation[TrustCenterNDASignedEmail]{
 })
 
 var _ = RegisterEmailOperation(Operation[TrustCenterAuthEmail]{
-	Op: TCAuthOp, Schema: tcAuthSchema, Theme: baseTheme,
+	Op: TCAuthOp, Theme: baseTheme,
 	Description: "System email delivering a time-limited authentication link to a trust center",
 	PreHook:     resolveTrustCenterAuthFields,
 	Subject: func(_ RuntimeEmailConfig, req TrustCenterAuthEmail) string {
@@ -687,7 +686,7 @@ var _ = RegisterEmailOperation(Operation[TrustCenterAuthEmail]{
 })
 
 var _ = RegisterEmailOperation(Operation[TrustCenterNDAApprovalRequestEmail]{
-	Op: TCNDAApprovalRequestOp, Schema: tcNDAApprovalRequestSchema, Theme: baseTheme,
+	Op: TCNDAApprovalRequestOp, Theme: baseTheme,
 	Description: "System email notifying a designated approver that a trust center NDA request is pending approval",
 	Subject: func(cfg RuntimeEmailConfig, _ TrustCenterNDAApprovalRequestEmail) string {
 		return "Trust Center NDA Request Pending Approval in " + cfg.CompanyName
@@ -735,7 +734,7 @@ var _ = RegisterEmailOperation(Operation[TrustCenterNDAApprovalRequestEmail]{
 })
 
 var questionnaireAuthEmail = RegisterEmailOperation(Operation[QuestionnaireAuthEmail]{
-	Op: QuestionnaireAuthOp, Schema: questionnaireAuthSchema, Theme: baseTheme,
+	Op: QuestionnaireAuthOp, Theme: baseTheme,
 	Description: "System email delivering a time-limited authentication link to a questionnaire",
 	PreHook:     resolveQuestionnaireOrgName,
 	Subject: func(_ RuntimeEmailConfig, req QuestionnaireAuthEmail) string {
@@ -768,7 +767,7 @@ var questionnaireAuthEmail = RegisterEmailOperation(Operation[QuestionnaireAuthE
 })
 
 var _ = RegisterEmailOperation(Operation[BillingEmailChangedEmail]{
-	Op: BillingEmailChangedOp, Schema: billingEmailChangedSchema, Theme: baseTheme,
+	Op: BillingEmailChangedOp, Theme: baseTheme,
 	Description: "System notification confirming a change to the billing email on file",
 	Subject: func(_ RuntimeEmailConfig, req BillingEmailChangedEmail) string {
 		return "Billing Email Changed for " + req.OrgName
@@ -803,7 +802,7 @@ var _ = RegisterEmailOperation(Operation[BillingEmailChangedEmail]{
 })
 
 var _ = RegisterEmailOperation(Operation[OrgDeletionNoticeEmail]{
-	Op: OrgDeletionNoticeOp, Schema: orgDeletionNoticeSchema, Theme: baseTheme,
+	Op: OrgDeletionNoticeOp, Theme: baseTheme,
 	Description: "System notification that an organization has been scheduled for deletion due to missing payment method",
 	Subject: func(_ RuntimeEmailConfig, req OrgDeletionNoticeEmail) string {
 		return fmt.Sprintf("Organization Deletion Notice for %s", req.OrgName)

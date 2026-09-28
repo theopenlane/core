@@ -35,15 +35,13 @@ func Builder(cfg Config) registry.Builder {
 				Schema: jsonx.SchemaFrom[Config](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         oidcCredential.ID(),
+				oidcCredential.Registration(types.CredentialRegistration{
 					Name:        "Local OIDC Credential",
 					Description: "Auth-managed OIDC credential issued by the local Dex development provider.",
-				},
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  oidcCredential.ID(),
+				oidcConnection.Registration(types.ConnectionRegistration{
 					Name:           "Local Dex OIDC",
 					Description:    "Connect through the local Dex development provider to test integration OAuth callback flows end to end.",
 					CredentialRefs: []types.CredentialSlotID{oidcCredential.ID()},
@@ -95,17 +93,14 @@ func Builder(cfg Config) registry.Builder {
 						CredentialRef: oidcCredential.ID(),
 						Description:   "Removes the stored local Dex credential from Openlane.",
 					},
-				},
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         claimsInspectOperation.Name(),
-					Description:  "Return the raw OIDC ID token claims stored with the auth-managed credential.",
-					Topic:        definitionID.OperationTopic(claimsInspectOperation.Name()),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: claimsInspectSchema,
-					Handle:       ClaimsInspect{}.Handle(),
-				},
+				claimsInspectOperation.Registration(definitionID, types.OperationRegistration{
+					Description: "Return the raw OIDC ID token claims stored with the auth-managed credential.",
+					Policy:      types.ExecutionPolicy{Inline: true},
+					Handle:      ClaimsInspect{}.Handle(),
+				}),
 			},
 		}, nil
 	})

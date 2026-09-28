@@ -45,7 +45,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp"
 	definitionscim "github.com/theopenlane/core/v2/internal/integrations/definitions/scim"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -495,7 +494,7 @@ type testOAuthCredential struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
-var testAuthCredentialSchema, testAuthCredentialRef = providerkit.CredentialSchema[testOAuthCredential]()
+var testAuthCredentialRef = types.CredentialRefOf[testOAuthCredential]()
 
 // configureIntegrationOAuthRuntime sets up the integrations runtime with a test OAuth definition
 func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime() {
@@ -521,11 +520,10 @@ func buildTestOAuthDefinition() (types.Definition, error) {
 			Active:      true,
 		},
 		CredentialRegistrations: []types.CredentialRegistration{
-			{
-				Ref:         testAuthCredentialRef.ID(),
+			testAuthCredentialRef.Registration(types.CredentialRegistration{
 				Name:        "Test OAuth Credential",
 				Description: "Auth-managed credential slot used by the test OAuth definition.",
-			},
+			}),
 		},
 		Connections: []types.ConnectionRegistration{
 			{
@@ -535,7 +533,7 @@ func buildTestOAuthDefinition() (types.Definition, error) {
 				CredentialRefs: []types.CredentialSlotID{testAuthCredentialRef.ID()},
 				Auth: &types.AuthRegistration{
 					CredentialRef: testAuthCredentialRef.ID(),
-					Schema:        testAuthCredentialSchema,
+					Schema:        testAuthCredentialRef.Schema(),
 					Start:         testAuthStart,
 					Complete:      testAuthComplete,
 				},

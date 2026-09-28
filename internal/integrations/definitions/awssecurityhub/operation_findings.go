@@ -22,9 +22,6 @@ const (
 	vulnerabilityType = "Software and Configuration Checks/Vulnerabilities/CVE"
 )
 
-// FindingSync holds per-invocation execution controls for the vulnerabilities.collect operation
-type FindingSync struct{}
-
 // FindingsCollect collects AWS Security Hub findings
 type FindingsCollect struct{}
 

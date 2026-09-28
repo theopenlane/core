@@ -27,20 +27,17 @@ func Builder() registry.Builder {
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         ociCredential.ID(),
+				ociCredential.Registration(types.CredentialRegistration{
 					Name:        "OCI API Key Credential",
 					Description: "OCI API signing key used to authenticate against the tenancy.",
-					Schema:      ociSchema,
-				},
+					Schema:      ociCredential.Schema(),
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  ociCredential.ID(),
+				ociConnection.Registration(types.ConnectionRegistration{
 					Name:           "OCI API Key",
 					Description:    "Configure Oracle Cloud Infrastructure access using an API signing key registered to a tenancy user.",
 					CredentialRefs: []types.CredentialSlotID{ociCredential.ID()},
-					ClientRefs:     []types.ClientID{identityClient.ID(), cloudGuardClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: identityClient.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -50,32 +47,22 @@ func Builder() registry.Builder {
 						CredentialRef: ociCredential.ID(),
 						Description:   "Removes the stored API signing key from Openlane. If the key is no longer needed, delete it from the user's API keys in the OCI console.",
 					},
-				},
+				}),
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            identityClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{ociCredential.ID()},
-					Description:    "Oracle Cloud Infrastructure Identity client",
-					Build:          IdentityClientBuilder{}.Build,
-				},
-				{
-					Ref:            cloudGuardClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{ociCredential.ID()},
-					Description:    "Oracle Cloud Infrastructure Cloud Guard client",
-					Build:          CloudGuardClientBuilder{}.Build,
-				},
+				identityClient.Registration(IdentityClientBuilder{}.Build, types.ClientRegistration{
+					Description: "Oracle Cloud Infrastructure Identity client",
+				}),
+				cloudGuardClient.Registration(CloudGuardClientBuilder{}.Build, types.ClientRegistration{
+					Description: "Oracle Cloud Infrastructure Cloud Guard client",
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:           findingsSyncOperation.Name(),
+				findingsSyncOperation.Registration(definitionID, types.OperationRegistration{
 					Description:    "Collect OCI Cloud Guard problems as findings",
-					Topic:          definitionID.OperationTopic(findingsSyncOperation.Name()),
-					ClientRef:      cloudGuardClient.ID(),
-					ConfigSchema:   findingsSyncSchema,
 					Policy:         types.ExecutionPolicy{Reconcile: true},
 					Disabled:       providerkit.DisabledWhen(func(u UserInput) bool { return u.FindingsSync.Disable }),
-					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) FindingsSync { return u.FindingsSync }),
+					ConfigResolver: findingsSyncOperation.ConfigFrom(func(u UserInput) FindingsSync { return u.FindingsSync }),
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaFinding.Name,
@@ -83,7 +70,7 @@ func Builder() registry.Builder {
 					},
 					IngestHandle:        FindingsCollect{}.IngestHandle(),
 					RequiredPermissions: []string{"read cloud-guard-problems in tenancy"},
-				},
+				}),
 			},
 			Mappings: []types.MappingRegistration{
 				{

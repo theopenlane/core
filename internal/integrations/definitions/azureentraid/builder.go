@@ -34,19 +34,16 @@ func Builder(cfg Config) registry.Builder {
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
-				{
-					Ref:         entraTenantCredential.ID(),
+				entraTenantCredential.Registration(types.CredentialRegistration{
 					Name:        "Azure Entra ID Credential",
 					Description: "OAuth credential used to access Microsoft Graph for Entra ID directory data.",
-				},
+				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				{
-					CredentialRef:  entraTenantCredential.ID(),
+				entraConnection.Registration(types.ConnectionRegistration{
 					Name:           "Azure Entra ID Admin Consent",
 					Description:    "Connect your Azure Entra ID tenant using admin consent.",
 					CredentialRefs: []types.CredentialSlotID{entraTenantCredential.ID()},
-					ClientRefs:     []types.ClientID{entraCredential.ID(), entraClient.ID()},
 					HealthCheck: &types.HealthCheckRegistration{
 						ClientRef: entraCredential.ID(),
 						Handle:    HealthCheck{}.Handle(),
@@ -57,32 +54,22 @@ func Builder(cfg Config) registry.Builder {
 						CredentialRef: entraTenantCredential.ID(),
 						Description:   "Removes the stored credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.",
 					},
-				},
+				}),
 			},
 			Clients: []types.ClientRegistration{
-				{
-					Ref:            entraCredential.ID(),
-					CredentialRefs: []types.CredentialSlotID{entraTenantCredential.ID()},
-					Description:    "Azure client credentials token credential for auth verification",
-					Build:          CredentialClient{cfg: cfg}.Build,
-				},
-				{
-					Ref:            entraClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{entraTenantCredential.ID()},
-					Description:    "Microsoft Graph service client for directory operations",
-					Build:          GraphClient{cfg: cfg}.Build,
-				},
+				entraCredential.Registration(CredentialClient{cfg: cfg}.Build, types.ClientRegistration{
+					Description: "Azure client credentials token credential for auth verification",
+				}),
+				entraClient.Registration(GraphClient{cfg: cfg}.Build, types.ClientRegistration{
+					Description: "Microsoft Graph service client for directory operations",
+				}),
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         directorySyncOperation.Name(),
-					Description:  "Collect Azure Entra ID users, groups, and memberships as directory accounts",
-					Topic:        definitionID.OperationTopic(directorySyncOperation.Name()),
-					ClientRef:    entraClient.ID(),
-					ConfigSchema: directorySyncSchema,
-					Policy:       types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Schedule:     gala.NewFullFetchSchedule(),
-					HealthCheck:  DirectoryProbe{}.Handle(),
+				directorySyncOperation.Registration(definitionID, types.OperationRegistration{
+					Description: "Collect Azure Entra ID users, groups, and memberships as directory accounts",
+					Policy:      types.ExecutionPolicy{Reconcile: true, Snapshot: true},
+					Schedule:    gala.NewFullFetchSchedule(),
+					HealthCheck: DirectoryProbe{}.Handle(),
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
@@ -97,7 +84,7 @@ func Builder(cfg Config) registry.Builder {
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"User.Read.All", "Group.Read.All", "GroupMember.Read.All", "Directory.Read.All"},
-				},
+				}),
 			},
 			Mappings: []types.MappingRegistration{
 				{

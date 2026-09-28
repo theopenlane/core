@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"testing"
+	"time"
 
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
@@ -20,8 +21,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
@@ -74,6 +75,9 @@ type renameEvent struct{}
 // backfilledToken is the token the current user input backfills when the stored input carries none
 const backfilledToken = "x"
 
+// suiteQueueName is the durable gala queue the suite harness runs, shared by runtimes whose loop jobs the suite must count and run
+const suiteQueueName = "graphapi_integration_test"
+
 var (
 	numericTokenRef          = integrationtypes.NewCredentialRef[tokenCred](testint.TokenCredential.String())
 	straySlotRef             = integrationtypes.NewCredentialRef[straySlotCred]("straySlot")
@@ -91,8 +95,8 @@ var (
 			return nil
 		})
 
-	retiredSyncSchema, retiredSyncOp = providerkit.OperationSchema[retiredSync]()
-	renamedSyncSchema, renamedSyncOp = providerkit.OperationSchema[renamedSync]()
+	retiredSyncOp = integrationtypes.OperationRefOf[retiredSync]()
+	renamedSyncOp = integrationtypes.OperationRefOf[renamedSync]()
 
 	retiredEventsWebhook = integrationtypes.NewWebhookRef("events.v1")
 	renamedEventsWebhook = integrationtypes.NewWebhookRef("events.v2")
@@ -106,39 +110,33 @@ type retiredSlot struct {
 	schema json.RawMessage
 }
 
-// slotOf pairs a typed credential ref with the reflected schema of its credential type
+// slotOf pairs a typed credential ref with the schema it reflects
 func slotOf[T any](ref integrationtypes.CredentialRef[T]) retiredSlot {
-	return retiredSlot{id: ref.ID(), schema: jsonx.SchemaFrom[T]()}
+	return retiredSlot{id: ref.ID(), schema: ref.Schema()}
 }
 
-// syncOperation declares one inline operation under name that does no work, taking over the retired operation names in replaces
-func syncOperation(name string, schema json.RawMessage, replaces ...string) integrationtypes.OperationRegistration {
-	return integrationtypes.OperationRegistration{
-		Name:         name,
-		Replaces:     replaces,
-		Topic:        testint.DefinitionID.OperationTopic(name),
-		ConfigSchema: schema,
-		Policy:       integrationtypes.ExecutionPolicy{Inline: true},
-		Handle:       func(context.Context, integrationtypes.OperationRequest) (json.RawMessage, error) { return nil, nil },
-	}
+// syncOperation declares op under policy doing no work, taking over the retired operation names in replaces
+func syncOperation[Cfg any](op integrationtypes.OperationRef[Cfg], policy integrationtypes.ExecutionPolicy, replaces ...string) integrationtypes.OperationRegistration {
+	return op.Registration(testint.DefinitionID, integrationtypes.OperationRegistration{
+		Replaces: replaces,
+		Policy:   policy,
+		Handle:   func(context.Context, integrationtypes.OperationRequest) (json.RawMessage, error) { return nil, nil },
+	})
 }
 
-// eventsWebhook declares one webhook contract under name accepting the given events, taking over the retired contract names in replaces
-func eventsWebhook(name string, replaces []string, events ...integrationtypes.WebhookEventRef[renameEvent]) integrationtypes.WebhookRegistration {
-	return integrationtypes.WebhookRegistration{
-		Name:     name,
+// eventsWebhook declares webhook accepting the given events, taking over the retired contract names in replaces
+func eventsWebhook(webhook integrationtypes.WebhookRef, replaces []string, events ...integrationtypes.WebhookEventRef[renameEvent]) integrationtypes.WebhookRegistration {
+	return webhook.Registration(integrationtypes.WebhookRegistration{
 		Replaces: replaces,
 		Event: func(req integrationtypes.WebhookInboundRequest) (integrationtypes.WebhookReceivedEvent, error) {
 			return integrationtypes.WebhookReceivedEvent{Name: string(req.Payload), Payload: req.Payload}, nil
 		},
 		Events: lo.Map(events, func(event integrationtypes.WebhookEventRef[renameEvent], _ int) integrationtypes.WebhookEventRegistration {
-			return integrationtypes.WebhookEventRegistration{
-				Name:   event.Name(),
-				Topic:  testint.DefinitionID.WebhookEventTopic(event.Name()),
+			return event.Registration(testint.DefinitionID, integrationtypes.WebhookEventRegistration{
 				Handle: func(context.Context, integrationtypes.WebhookHandleRequest) error { return nil },
-			}
+			})
 		}),
-	}
+	})
 }
 
 // previousDefinition builds an earlier version of the shared test definition with one connection over the given slots
@@ -187,6 +185,24 @@ func runtimeFor(t *testing.T, builder registry.Builder) *intruntime.Runtime {
 	require.NoError(t, err)
 	t.Cleanup(func() { _ = instance.Close() })
 
+	return runtimeOn(t, instance, builder)
+}
+
+// queuedRuntimeFor builds a runtime over the suite database running one version of the shared test definition on a durable gala that shares the suite queue but starts no workers, so the loops its upgrade purges and reseeds are the ones the suite gala counts and runs
+func queuedRuntimeFor(t *testing.T, builder registry.Builder) *intruntime.Runtime {
+	t.Helper()
+
+	instance, err := gala.NewGala(context.Background(), gala.Config{DispatchMode: gala.DispatchModeDurable, ConnectionURI: suite.TF.URI, QueueName: suiteQueueName, WorkerCount: 1})
+	require.NoError(t, err)
+	t.Cleanup(func() { _ = instance.Close() })
+
+	return runtimeOn(t, instance, builder)
+}
+
+// runtimeOn builds a runtime over the suite database and the given gala running one version of the shared test definition
+func runtimeOn(t *testing.T, instance *gala.Gala, builder registry.Builder) *intruntime.Runtime {
+	t.Helper()
+
 	store, err := keystore.NewStore(suite.Client.DB)
 	require.NoError(t, err)
 
@@ -194,6 +210,24 @@ func runtimeFor(t *testing.T, builder registry.Builder) *intruntime.Runtime {
 	require.NoError(t, err)
 
 	return rt
+}
+
+// seedRetiredLoop queues one future reconcile cycle for the installation under a retired operation name, bypassing the loop uniqueness key the way a live successor would already hold it
+func seedRetiredLoop(t *testing.T, ctx context.Context, installation *ent.Integration, operationName string) {
+	t.Helper()
+
+	oc := integrationtypes.NewOperationContext(installation.OwnerID, operationName, integrationtypes.IntegrationSource{
+		IntegrationID: installation.ID,
+		DefinitionID:  installation.DefinitionID,
+		RunType:       enums.IntegrationRunTypeReconcile,
+	})
+
+	emitCtx, headers := intobvs.EmitContext(ctx, oc)
+	headers.SkipUniqueKey = true
+	headers.ScheduledAt = lo.ToPtr(time.Now().Add(time.Hour))
+
+	_, err := suite.GalaRuntime.EmitWithHeaders(emitCtx, operations.ReconcileTopic.Name, operations.ReconcileEnvelope{OperationContext: oc}, headers)
+	require.NoError(t, err)
 }
 
 // installOn installs the shared test definition through rt with the given user input and primary credential and returns the reloaded installation
@@ -515,7 +549,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
-			def.Operations = []integrationtypes.OperationRegistration{syncOperation(retiredSyncOp.Name(), retiredSyncSchema)}
+			def.Operations = []integrationtypes.OperationRegistration{syncOperation(retiredSyncOp, integrationtypes.ExecutionPolicy{Inline: true})}
 		}))
 		installation := installOn(t, subCtx, previous, testint.ModeInput("none"), testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
 
@@ -538,7 +572,7 @@ func TestInstallationUpgrade(t *testing.T) {
 			Exec(subCtx))
 
 		renamed := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
-			def.Operations = []integrationtypes.OperationRegistration{syncOperation(renamedSyncOp.Name(), renamedSyncSchema, retiredSyncOp.Name())}
+			def.Operations = []integrationtypes.OperationRegistration{syncOperation(renamedSyncOp, integrationtypes.ExecutionPolicy{Inline: true}, retiredSyncOp.Name())}
 		}))
 
 		assessment, err := renamed.RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
@@ -567,12 +601,48 @@ func TestInstallationUpgrade(t *testing.T) {
 		require.Nil(t, retiredAt)
 	})
 
+	t.Run("an operation rename cancels the loop queued under the retired name and reseeds one under the current name", func(t *testing.T) {
+		subOrg := suite.UserBuilder(context.Background(), t)
+		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
+
+		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
+			def.Operations = []integrationtypes.OperationRegistration{syncOperation(retiredSyncOp, integrationtypes.ExecutionPolicy{Inline: true})}
+		}))
+		installation := installOn(t, subCtx, previous, testint.ModeInput(testint.ModeRecurring), testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+
+		retiredFragment := reconcileLoopFragment(t, installation.ID, retiredSyncOp.Name())
+		currentFragment := reconcileLoopFragment(t, installation.ID, testint.RecurringOp.Name())
+
+		waitForEvents()
+
+		_, err := suite.GalaRuntime.PurgeActiveJobsWithMetadata(subCtx, currentFragment)
+		require.NoError(t, err)
+		require.Zero(t, activeReconcileJobs(t, currentFragment))
+
+		seedRetiredLoop(t, subCtx, installation, retiredSyncOp.Name())
+		require.Equal(t, 1, activeReconcileJobs(t, retiredFragment))
+
+		renamed := queuedRuntimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
+			def.Operations = []integrationtypes.OperationRegistration{syncOperation(testint.RecurringOp, integrationtypes.ExecutionPolicy{Reconcile: true}, retiredSyncOp.Name())}
+		}))
+
+		assessment, err := renamed.RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
+		require.NoError(t, err)
+		require.True(t, assessment.Connection.Healthy)
+		require.Equal(t, renamed.Registry().Version(testint.DefinitionID.ID()), reloadIntegration(t, subCtx, installation.ID).DefinitionVersion)
+
+		waitForEvents()
+
+		require.Zero(t, activeReconcileJobs(t, retiredFragment))
+		require.Equal(t, 1, activeReconcileJobs(t, currentFragment))
+	})
+
 	t.Run("a webhook rename keeps the provider-facing endpoint", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
-			def.Webhooks = []integrationtypes.WebhookRegistration{eventsWebhook(retiredEventsWebhook.Name(), nil, renameEventA)}
+			def.Webhooks = []integrationtypes.WebhookRegistration{eventsWebhook(retiredEventsWebhook, nil, renameEventA)}
 		}))
 		installation := installOn(t, subCtx, previous, testint.ModeInput("none"), testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
 
@@ -586,7 +656,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		require.NotEmpty(t, secret)
 
 		renamed := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
-			def.Webhooks = []integrationtypes.WebhookRegistration{eventsWebhook(renamedEventsWebhook.Name(), []string{retiredEventsWebhook.Name()}, renameEventA, renameEventB)}
+			def.Webhooks = []integrationtypes.WebhookRegistration{eventsWebhook(renamedEventsWebhook, []string{retiredEventsWebhook.Name()}, renameEventA, renameEventB)}
 		}))
 
 		early, err := renamed.EnsureWebhook(subCtx, installation, renamedEventsWebhook.Name(), "")

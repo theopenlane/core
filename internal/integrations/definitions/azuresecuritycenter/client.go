@@ -34,7 +34,7 @@ func (c *azureSecurityClient) scope() string {
 type Client struct{}
 
 // Build constructs an Azure Security Center client using client credentials
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
+func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*azureSecurityClient, error) {
 	cred, _, err := securityCenterCredential.Resolve(req.Credentials)
 	if err != nil {
 		return nil, ErrCredentialInvalid

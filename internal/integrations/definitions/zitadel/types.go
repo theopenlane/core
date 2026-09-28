@@ -3,7 +3,6 @@ package zitadel
 import (
 	"github.com/zitadel/zitadel-go/v3/pkg/client"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -12,16 +11,18 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0ZITADEL000000000000001")
 	// integration is the typed installation metadata handle for the Zitadel definition
 	integration = types.NewInstallationRef(resolveInstallationMetadata)
-	// zitadelPATCredentialSchema is the JSON schema for the PAT credential
 	// zitadelPATCredential is the typed runtime ref for resolving the PAT credential
-	zitadelPATCredentialSchema, zitadelPATCredential = providerkit.CredentialSchema[CredentialSchema]()
-	// zitadelOAuthCredentialSchema is the JSON schema for the OAuth credential
+	zitadelPATCredential = types.CredentialRefOf[CredentialSchema]()
 	// zitadelOAuthCredential is the typed runtime ref for resolving the OAuth credential
-	zitadelOAuthCredentialSchema, zitadelOAuthCredential = providerkit.CredentialSchema[OAuthCredentialSchema]()
+	zitadelOAuthCredential = types.CredentialRefOf[OAuthCredentialSchema]()
 	// zitadelClient is the client ref for the Zitadel unified API client
-	zitadelClient = types.NewClientRef[*client.Client]()
-	// directorySyncSchema, directorySyncOperation is the operation ref for directory sync
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	zitadelClient = types.ClientRefOf[*client.Client]().Using(zitadelPATCredential).Using(zitadelOAuthCredential)
+	// zitadelPATConnection is the connection mode selected by the PAT credential slot
+	zitadelPATConnection = types.NewConnectionRef(zitadelPATCredential).Enables(zitadelClient)
+	// zitadelOAuthConnection is the connection mode selected by the OAuth client-credentials slot
+	zitadelOAuthConnection = types.NewConnectionRef(zitadelOAuthCredential).Enables(zitadelClient)
+	// directorySyncOperation is the operation ref for directory sync
+	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(zitadelClient)
 )
 
 // CredentialSchema holds the Zitadel instance credentials for one installation

@@ -3,7 +3,6 @@ package system
 import (
 	"time"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -114,7 +113,10 @@ type IntegrationLifecycleSweep struct {
 }
 
 var (
-	paymentReminderSchema, PaymentReminderOp           = providerkit.OperationSchema[PaymentReminderSweep]()      //nolint:revive
-	organizationDeleteSchema, OrganizationDeleteOp     = providerkit.OperationSchema[OrganizationDeleteSweep]()   //nolint:revive
-	integrationLifecycleSchema, IntegrationLifecycleOp = providerkit.OperationSchema[IntegrationLifecycleSweep]() //nolint:revive
+	// PaymentReminderOp is the operation ref for the payment reminder sweep
+	PaymentReminderOp = types.OperationRefOf[PaymentReminderSweep]() //nolint:revive
+	// OrganizationDeleteOp is the operation ref for the organization deletion sweep
+	OrganizationDeleteOp = types.OperationRefOf[OrganizationDeleteSweep]() //nolint:revive
+	// IntegrationLifecycleOp is the operation ref for the integration lifecycle sweep
+	IntegrationLifecycleOp = types.OperationRefOf[IntegrationLifecycleSweep]() //nolint:revive
 )

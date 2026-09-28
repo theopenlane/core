@@ -3,7 +3,6 @@ package okta
 import (
 	oktagosdk "github.com/okta/okta-sdk-golang/v6/okta"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -12,12 +11,14 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0OKTA0000000000000000001")
 	// integration is the typed installation metadata handle for the Okta definition
 	integration = types.NewInstallationRef(resolveInstallationMetadata)
-	// oktaCredential is the auth-managed credential slot used by the Okta client
-	oktaCredentialSchema, oktaCredential = providerkit.CredentialSchema[CredentialSchema]()
+	// oktaCredential is the typed credential slot used by the Okta client
+	oktaCredential = types.CredentialRefOf[CredentialSchema]()
 	// oktaClient is the client ref for the Okta API client used by this definition
-	oktaClient = types.NewClientRef[*oktagosdk.APIClient]()
-	// directorySyncSchema is the operation ref for the Okta directory sync operation
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	oktaClient = types.ClientRefOf[*oktagosdk.APIClient]().Using(oktaCredential)
+	// oktaConnection is the connection mode selected by the Okta API token credential slot
+	oktaConnection = types.NewConnectionRef(oktaCredential).Enables(oktaClient)
+	// directorySyncOperation is the operation ref for the Okta directory sync operation
+	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(oktaClient)
 )
 
 // UserInput holds installation-specific configuration collected from the user

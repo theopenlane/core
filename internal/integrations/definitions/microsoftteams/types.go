@@ -5,7 +5,6 @@ import (
 
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -15,11 +14,13 @@ var (
 	// installation is the typed installation metadata handle for the Microsoft Teams definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// teamsCredential is the auth-managed credential slot used by the Teams client
-	teamsCredentialSchema, teamsCredential = providerkit.CredentialSchema[teamsCred]()
+	teamsCredential = types.CredentialRefOf[teamsCred]()
 	// teamsClient is the client ref for the Microsoft Graph service client used by this definition
-	teamsClient = types.NewClientRef[*msgraphsdk.GraphServiceClient]()
-	// messageSendSchema is the operation ref for the Microsoft Teams message send operation
-	messageSendSchema, MessageSendOp = providerkit.OperationSchema[MessageSendOperation]() //nolint:revive // co-initialized with schema
+	teamsClient = types.ClientRefOf[*msgraphsdk.GraphServiceClient]().Using(teamsCredential)
+	// teamsConnection is the connection mode selected by the Teams OAuth credential slot
+	teamsConnection = types.NewConnectionRef(teamsCredential).Enables(teamsClient)
+	// MessageSendOp is the operation ref for the Microsoft Teams message send operation
+	MessageSendOp = types.OperationRefOf[MessageSendOperation]().Using(teamsClient)
 )
 
 // teamsCred holds the provider-owned credential material for a Microsoft Teams installation

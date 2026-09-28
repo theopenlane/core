@@ -19,7 +19,7 @@ const teamsGraphScope = "https://graph.microsoft.com/.default"
 type Client struct{}
 
 // Build constructs the Microsoft Graph service client from the installation OAuth access token
-func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error) {
+func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*msgraphsdk.GraphServiceClient, error) {
 	tc, _, err := teamsCredential.Resolve(req.Credentials)
 	if err != nil {
 		return nil, ErrCredentialDecode

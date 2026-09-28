@@ -1,7 +1,6 @@
 package {{ name }}
 
 import (
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -10,13 +9,14 @@ var (
 	definitionID = types.NewDefinitionRef("{{ defid }}")
 	// installation is the typed installation metadata handle for the {{ display }} definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// {{ name }}CredentialSchema is the JSON schema for the {{ display }} credential
 	// {{ name }}Credential is the credential ref for {{ display }} credentials
-	{{ name }}CredentialSchema, {{ name }}Credential = providerkit.CredentialSchema[CredentialSchema]()
+	{{ name }}Credential = types.CredentialRefOf[CredentialSchema]()
 	// {{ name }}Client is the client ref for the {{ display }} client used by this definition
-	{{ name }}Client = types.NewClientRef[*APIClient]()
-	// healthCheckSchema, healthCheckOperation is the operation ref for the {{ display }} health check operation
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
+	{{ name }}Client = types.ClientRefOf[*APIClient]().Using({{ name }}Credential)
+	// {{ name }}Connection is the connection mode selected by the {{ display }} credential slot
+	{{ name }}Connection = types.NewConnectionRef({{ name }}Credential).Enables({{ name }}Client)
+	// healthCheckOperation is the operation ref for the {{ display }} health check operation
+	healthCheckOperation = types.OperationRefOf[HealthCheck]().Using({{ name }}Client)
 )
 
 // APIClient is the client handed to {{ display }} operations; swap this for the provider SDK client type

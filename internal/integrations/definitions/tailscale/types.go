@@ -3,7 +3,6 @@ package tailscale
 import (
 	tsclient "github.com/tailscale/tailscale-client-go/v2"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -13,13 +12,15 @@ var (
 	// installation is the typed installation metadata handle for the Tailscale definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// tailscaleCredential is the credential slot for the Tailscale integration definition
-	tailscaleSchema, tailscaleCredential = providerkit.CredentialSchema[CredentialSchema]()
+	tailscaleCredential = types.CredentialRefOf[CredentialSchema]()
 	// tailscaleClient is the client ref for the Tailscale API client used by this definition
-	tailscaleClient = types.NewClientRef[*tsclient.Client]()
+	tailscaleClient = types.ClientRefOf[*tsclient.Client]().Using(tailscaleCredential)
+	// tailscaleConnection is the connection mode selected by the Tailscale OAuth client credential
+	tailscaleConnection = types.NewConnectionRef(tailscaleCredential).Enables(tailscaleClient)
 	// directorySyncOperation is the operation ref for the directory sync operation
-	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
+	directorySyncOperation = types.OperationRefOf[DirectorySync]().Using(tailscaleClient)
 	// assetSyncOperation is the operation ref for the asset sync operation
-	assetSyncSchema, assetSyncOperation = providerkit.OperationSchema[AssetSync]()
+	assetSyncOperation = types.OperationRefOf[AssetSync]().Using(tailscaleClient)
 )
 
 // UserInput holds installation-specific configuration collected from the user

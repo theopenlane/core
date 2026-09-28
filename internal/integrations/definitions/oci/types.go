@@ -4,7 +4,6 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/cloudguard"
 	"github.com/oracle/oci-go-sdk/v65/identity"
 
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -13,14 +12,16 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0OCI00000000000000000001")
 	// installation is the typed installation metadata handle for the Oracle Cloud Infrastructure definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// ociSchema is the credential schema for Oracle Cloud Infrastructure API signing key credentials
-	ociSchema, ociCredential = providerkit.CredentialSchema[CredentialSchema]()
+	// ociCredential is the typed credential slot for Oracle Cloud Infrastructure API signing key credentials
+	ociCredential = types.CredentialRefOf[CredentialSchema]()
 	// identityClient is the client ref for the OCI Identity client used by the health check
-	identityClient = types.NewClientRef[*identity.IdentityClient]()
+	identityClient = types.ClientRefOf[*identity.IdentityClient]().Using(ociCredential)
 	// cloudGuardClient is the client ref for the OCI Cloud Guard client used by findings collection
-	cloudGuardClient = types.NewClientRef[*cloudguard.CloudGuardClient]()
-	// findingsSyncSchema is the operation schema for the Cloud Guard findings collection operation
-	findingsSyncSchema, findingsSyncOperation = providerkit.OperationSchema[FindingsSync]()
+	cloudGuardClient = types.ClientRefOf[*cloudguard.CloudGuardClient]().Using(ociCredential)
+	// ociConnection is the connection mode selected by the OCI API key credential slot
+	ociConnection = types.NewConnectionRef(ociCredential).Enables(identityClient).Enables(cloudGuardClient)
+	// findingsSyncOperation is the operation ref for the Cloud Guard findings collection operation
+	findingsSyncOperation = types.OperationRefOf[FindingsSync]().Using(cloudGuardClient)
 )
 
 // UserInput holds installation-specific configuration collected from the user

@@ -192,6 +192,20 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 		return err
 	}
 
+	renamed := lo.SomeBy(def.Operations, func(operation types.OperationRegistration) bool {
+		return len(operation.Replaces) > 0
+	})
+
+	if !renamed {
+		return nil
+	}
+
+	if err := r.ResetReconcileLoops(ctx, installation); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to reseed reconcile loops after operation rename")
+
+		return err
+	}
+
 	return nil
 }
 
@@ -253,7 +267,7 @@ func conformUserInput(ctx context.Context, req types.InstallationRequest, input 
 	return conformPayload(ctx, req, input.Schema, input.Backfill, stored, ErrUserInputInvalid)
 }
 
-// upgradeOperations moves recorded operation health and run history stored under retired operation names onto the operations that replace them and drops health records of operations the definition no longer declares
+// upgradeOperations moves recorded operation health and run history stored under retired operation names onto the operations that replace them, cancels reconcile loops still queued under retired names, and drops health records of operations the definition no longer declares
 func (r *Runtime) upgradeOperations(ctx context.Context, installation *ent.Integration, def types.Definition) error {
 	unhealthy := map[string]string{}
 
@@ -266,6 +280,20 @@ func (r *Runtime) upgradeOperations(ctx context.Context, installation *ent.Integ
 		}
 
 		for _, old := range retired {
+			fragment, err := reconcileLoopFragment(installation.ID, old)
+			if err != nil {
+				return err
+			}
+
+			purged, err := r.Gala().PurgeActiveJobsWithMetadata(ctx, fragment)
+			if err != nil {
+				return err
+			}
+
+			if purged > 0 {
+				logx.FromContext(ctx).Info().Str("retired_operation", old).Str("operation", operation.Name).Int("purged", purged).Msg("cancelled reconcile loops queued under a retired operation name")
+			}
+
 			reason, recorded := unhealthy[old]
 			if !recorded {
 				continue

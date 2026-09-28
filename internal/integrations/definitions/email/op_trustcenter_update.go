@@ -45,16 +45,11 @@ type TrustCenterUpdateRequest struct {
 	UnsubscribeURL string `json:"unsubscribeURL,omitempty" jsonschema:"description=Unsubscribe link shown in the footer"`
 }
 
-// trustCenterUpdateSchema is the reflected JSON schema for the trust center update input type and
-// TrustCenterUpdateOp is the typed operation ref registered under the durable template key
-var (
-	trustCenterUpdateSchema = jsonx.SchemaFrom[TrustCenterUpdateRequest]()
-	// TrustCenterUpdateOp is the typed operation ref for the trust center post notification
-	TrustCenterUpdateOp = types.NewOperationRef[TrustCenterUpdateRequest](TrustCenterUpdateTemplate)
-)
+// TrustCenterUpdateOp is the typed operation ref for the trust center post notification, registered under the durable template key
+var TrustCenterUpdateOp = types.NewOperationRef[TrustCenterUpdateRequest](TrustCenterUpdateTemplate).Using(emailClientRef)
 
 var _ = RegisterEmailOperation(Operation[TrustCenterUpdateRequest]{
-	Op: TrustCenterUpdateOp, Schema: trustCenterUpdateSchema, Theme: baseTheme,
+	Op: TrustCenterUpdateOp, Theme: baseTheme,
 	Description: "System notification announcing a new trust center post to subscribers",
 	Example: TrustCenterUpdateRequest{
 		RecipientInfo: RecipientInfo{
