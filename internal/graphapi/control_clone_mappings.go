@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 )
 
@@ -46,9 +47,9 @@ func (c controlMappings) uniqueKey() dedupSetKey {
 	}
 }
 
-// cloneMappings fetches the system owned control mappings that are connected to the provided ids,
-// validates the controls exists in the org, skips any one that is already mapped and creates the rest
-func (r *mutationResolver) cloneMappings(ctx context.Context, ids []string, orgID string) error {
+// cloneTemplateMappings replaces template IDs with organization IDs in their mappings.
+// Framework controls keep their system IDs; reports resolve them to organization copies.
+func (r *mutationResolver) cloneTemplateMappings(ctx context.Context, ids []string, orgID string, program *generated.Program) error {
 	if len(ids) == 0 {
 		return nil
 	}
@@ -109,38 +110,60 @@ func (r *mutationResolver) cloneMappings(ctx context.Context, ids []string, orgI
 		return nil
 	}
 
-	orgControls, err := client.Control.Query().
-		Where(
-			control.IDIn(controlIDs...)).
-		WithStandard().
-		All(allowCtx)
+	// fetch controls that match the provided ids but if program is provided,
+	// make sure to include it as a filter too
+	controlsQuery := client.Control.Query().Where(control.IDIn(controlIDs...))
+
+	if program != nil {
+		controlsIDsPredicate := control.IDIn(ids...)
+
+		if program.FrameworkName == "" {
+
+			controlsQuery.Where(controlsIDsPredicate)
+		} else {
+
+			controlsQuery.Where(
+				control.Or(
+					controlsIDsPredicate,
+					control.ReferenceFramework(program.FrameworkName)),
+			)
+		}
+	}
+
+	matchedControls, err := controlsQuery.
+		Select(control.FieldID, control.FieldRefCode, control.FieldStandardID).
+		WithStandard(func(q *generated.StandardQuery) {
+			q.Select(standard.FieldID, standard.FieldSystemOwned)
+		}).All(allowCtx)
 	if err != nil {
 		return err
 	}
 
-	if len(orgControls) == 0 {
+	// filter out to match known system templates
+	templateControls := lo.Filter(matchedControls, func(c *generated.Control, _ int) bool {
+		return controls.IsOpenlaneBaseControl(c)
+	})
+
+	if len(templateControls) == 0 {
 		return nil
 	}
 
-	sourceKeys := lo.Associate(orgControls, func(c *generated.Control) (string, controlKey) {
-
-		input, _ := controls.CreateCloneControlInput(c, nil, orgID)
-
-		return c.ID, controlKey{
-			refCode:    input.RefCode,
-			standardID: lo.FromPtr(input.StandardID),
-		}
+	sourceRefCodes := lo.Associate(templateControls, func(c *generated.Control) (string, string) {
+		return c.ID, c.RefCode
 	})
 
-	refCodesToRetrieve := lo.Map(orgControls, func(c *generated.Control, _ int) string {
+	refCodesToRetrieve := lo.Map(templateControls, func(c *generated.Control, _ int) string {
 		return c.RefCode
 	})
 
 	controlsToMap, err := client.Control.Query().
-		Select(control.FieldID, control.FieldRefCode, control.FieldStandardID).
+		Select(control.FieldID, control.FieldRefCode).
 		Where(
+			control.StandardIDIsNil(),
+			control.DeletedAtIsNil(),
 			control.SystemOwned(false),
-			control.RefCodeIn(refCodesToRetrieve...)).
+			control.RefCodeIn(refCodesToRetrieve...),
+		).
 		WithSubcontrols(func(q *generated.SubcontrolQuery) {
 			q.Where(
 				subcontrol.OwnerID(orgID),
@@ -157,34 +180,33 @@ func (r *mutationResolver) cloneMappings(ctx context.Context, ids []string, orgI
 		return nil
 	}
 
-	controlLookup, subcontrolLookup := mapControls(sourceKeys, sourceSubcontrols, controlsToMap)
+	controlLookup, subcontrolLookup := mapControls(sourceRefCodes, sourceSubcontrols, controlsToMap)
 
-	type cloneTarget struct {
-		template *generated.MappedControl
-		controls controlMappings
+	for _, c := range matchedControls {
+		if _, ok := sourceRefCodes[c.ID]; !ok {
+			controlLookup[c.ID] = c.ID
+		}
 	}
 
-	itemsToClone := lo.FilterMap(mappings, func(m *generated.MappedControl, _ int) (cloneTarget, bool) {
-		mappedControls, hasBothSides := buildMappings(m, controlLookup, subcontrolLookup)
-		return cloneTarget{template: m, controls: mappedControls}, hasBothSides
-	})
-
-	if len(itemsToClone) == 0 {
-		return nil
+	for id, sc := range sourceSubcontrols {
+		if _, ok := sourceRefCodes[sc.ControlID]; !ok && controlLookup[sc.ControlID] != "" {
+			subcontrolLookup[id] = id
+		}
 	}
 
 	destinationIDs := lo.Map(controlsToMap, func(c *generated.Control, _ int) string {
 		return c.ID
 	})
 
-	existingMappedControls, err := client.MappedControl.Query().Where(
-		mappedcontrol.Or(
-			mappedcontrol.HasFromControlsWith(control.IDIn(destinationIDs...)),
-			mappedcontrol.HasToControlsWith(control.IDIn(destinationIDs...)),
-			mappedcontrol.HasFromSubcontrolsWith(subcontrol.ControlIDIn(destinationIDs...)),
-			mappedcontrol.HasToSubcontrolsWith(subcontrol.ControlIDIn(destinationIDs...)),
-		),
-	).
+	existingMappedControls, err := client.MappedControl.Query().
+		Where(
+			mappedcontrol.Or(
+				mappedcontrol.HasFromControlsWith(control.IDIn(destinationIDs...)),
+				mappedcontrol.HasToControlsWith(control.IDIn(destinationIDs...)),
+				mappedcontrol.HasFromSubcontrolsWith(subcontrol.ControlIDIn(destinationIDs...)),
+				mappedcontrol.HasToSubcontrolsWith(subcontrol.ControlIDIn(destinationIDs...)),
+			),
+		).
 		Select(mappedcontrol.FieldID).
 		WithFromControls(controlIDsOnlyPredicate).
 		WithToControls(controlIDsOnlyPredicate).
@@ -204,8 +226,32 @@ func (r *mutationResolver) cloneMappings(ctx context.Context, ids []string, orgI
 		return mappingControls.uniqueKey(), struct{}{}
 	})
 
-	mapped := lo.FilterMap(itemsToClone, func(mapping cloneTarget, _ int) (*generated.CreateMappedControlInput, bool) {
-		m, controls := mapping.template, mapping.controls
+	mapped := lo.FilterMap(mappings, func(m *generated.MappedControl, _ int) (*generated.CreateMappedControlInput, bool) {
+
+		controls, hasBothSides := buildMappings(m, controlLookup, subcontrolLookup)
+		if !hasBothSides {
+			return nil, false
+		}
+
+		combinedControls := slices.Concat(m.Edges.FromControls, m.Edges.ToControls)
+
+		// check the from and to side for a template control that has an already existing copy in the org
+		controlExists := lo.SomeBy(combinedControls, func(c *generated.Control) bool {
+			_, ok := sourceRefCodes[c.ID]
+			return ok && controlLookup[c.ID] != ""
+		})
+
+		combinedSubcontrols := slices.Concat(m.Edges.FromSubcontrols, m.Edges.ToSubcontrols)
+
+		// subcontrols can be mapped but parent control must exists ( which is already the template one)
+		subcontrolsExists := lo.SomeBy(combinedSubcontrols, func(sc *generated.Subcontrol) bool {
+			_, ok := sourceRefCodes[sc.ControlID]
+			return ok && subcontrolLookup[sc.ID] != ""
+		})
+
+		if !controlExists && !subcontrolsExists {
+			return nil, false
+		}
 
 		// if an existing mapping already exists, skip it
 		key := controls.uniqueKey()
@@ -236,56 +282,45 @@ func (r *mutationResolver) cloneMappings(ctx context.Context, ids []string, orgI
 	return err
 }
 
-type controlKey struct {
-	refCode    string
-	standardID string
-}
-
-func mapControls(keys map[string]controlKey, subcontrols map[string]*generated.Subcontrol, controls []*generated.Control) (map[string][]string, map[string][]string) {
-
+// mapControls tries to match the templates to the already retrieved org control copies
+func mapControls(refCodes map[string]string, subcontrols map[string]*generated.Subcontrol, controls []*generated.Control) (map[string]string, map[string]string) {
 	type subcontrolKey struct {
 		controlID string
 		refCode   string
 	}
 
-	controlsByKey := map[controlKey][]string{}
-	subcontrolsByKey := map[subcontrolKey][]string{}
-
+	controlsByRefCode := map[string]string{}
+	subcontrolsByKey := map[subcontrolKey]string{}
 	for _, c := range controls {
-		key := controlKey{c.RefCode, c.StandardID}
-		controlsByKey[key] = append(controlsByKey[key], c.ID)
-
+		controlsByRefCode[c.RefCode] = c.ID
 		for _, sc := range c.Edges.Subcontrols {
-			key := subcontrolKey{c.ID, sc.RefCode}
-			subcontrolsByKey[key] = append(subcontrolsByKey[key], sc.ID)
+			subcontrolsByKey[subcontrolKey{c.ID, sc.RefCode}] = sc.ID
 		}
 	}
 
-	controlLookup := lo.MapValues(keys, func(key controlKey, _ string) []string {
-		return controlsByKey[key]
+	controlLookup := lo.MapValues(refCodes, func(refCode string, _ string) string {
+		return controlsByRefCode[refCode]
 	})
 
-	subcontrolLookup := lo.MapValues(subcontrols, func(sc *generated.Subcontrol, _ string) []string {
-		var ids []string
-		for _, controlID := range controlLookup[sc.ControlID] {
-			key := subcontrolKey{controlID, sc.RefCode}
-			ids = append(ids, subcontrolsByKey[key]...)
-		}
-		return ids
+	subcontrolLookup := lo.MapValues(subcontrols, func(sc *generated.Subcontrol, _ string) string {
+		return subcontrolsByKey[subcontrolKey{controlLookup[sc.ControlID], sc.RefCode}]
 	})
 
 	return controlLookup, subcontrolLookup
 }
 
-func buildMappings(m *generated.MappedControl, controlLookup, subcontrolLookup map[string][]string) (controlMappings, bool) {
+func buildMappings(m *generated.MappedControl, controlLookup, subcontrolLookup map[string]string) (controlMappings, bool) {
 	mappings := controlMappings{}
 
-	fn := func(ids []string, id string, lookup map[string][]string) []string {
+	fn := func(ids []string, id string, lookup map[string]string) []string {
 		if lookup == nil {
 			return append(ids, id)
 		}
 
-		return append(ids, lookup[id]...)
+		if mappedID := lookup[id]; mappedID != "" {
+			return append(ids, mappedID)
+		}
+		return ids
 	}
 
 	for _, c := range m.Edges.FromControls {

@@ -803,18 +803,18 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				StandardID: &publicStandard2.ID,
 				ProgramID:  &program.ID,
 			},
-			expectedMappingsCount: 1,
+			expectedMappingsCount: 0,
 			expectedStandard:      lo.ToPtr(publicStandard2.ShortName),
 			expectedControls:      controls2,
 			client:                suite.Client.API,
 			ctx:                   th.SharedTestUser1.UserCtx,
 		},
 		{
-			name: "reimport controls under standard preserves the imported mapping",
+			name: "reimport framework controls does not create organization mappings",
 			request: testclient.CloneControlInput{
 				ControlIDs: controlIDs,
 			},
-			expectedMappingsCount: 1,
+			expectedMappingsCount: 0,
 			expectedStandard:      &publicStandard.ShortName,
 			expectedControls:      controls,
 			client:                suite.Client.API,
@@ -825,7 +825,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			request: testclient.CloneControlInput{
 				ControlIDs: []string{controls[7].ID},
 			},
-			expectedMappingsCount: 1,
+			expectedMappingsCount: 0,
 			expectedControls:      []*generated.Control{controls[7]},
 			expectedStandard:      &publicStandard.ShortName,
 			client:                suite.Client.API,
@@ -837,7 +837,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ControlIDs: controlIDs,
 				ProgramID:  &program.ID,
 			},
-			expectedMappingsCount: 1,
+			expectedMappingsCount: 0,
 			expectedControls:      controls,
 			expectedStandard:      &publicStandard.ShortName,
 			expectedNumProgram:    1,
@@ -850,7 +850,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ControlIDs: controlIDs,
 				ProgramID:  &program.ID,
 			},
-			expectedMappingsCount: 1,
+			expectedMappingsCount: 0,
 			expectedControls:      controls,
 			expectedStandard:      &publicStandard.ShortName,
 			expectedNumProgram:    1,
@@ -874,7 +874,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			request: testclient.CloneControlInput{
 				ControlIDs: []string{orgOwnedControl.ID},
 			},
-			expectedMappingsCount: 1,
+			expectedMappingsCount: 0,
 			expectedControls:      []*generated.Control{orgOwnedControl},
 			expectedStandard:      &orgStandard.Name,
 			client:                suite.Client.API,
@@ -886,7 +886,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ControlIDs: []string{orgOwnedControl.ID},
 				ProgramID:  &program.ID,
 			},
-			expectedMappingsCount: 1,
+			expectedMappingsCount: 0,
 			expectedStandard:      &orgStandard.Name,
 			expectedControls:      []*generated.Control{orgOwnedControl},
 			expectedNumProgram:    1,
@@ -899,7 +899,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				ControlIDs: []string{controls[:1][0].ID},
 				OwnerID:    &th.SharedTestUser1.OrganizationID,
 			},
-			expectedMappingsCount: 1,
+			expectedMappingsCount: 0,
 			expectedStandard:      &publicStandard.ShortName,
 			expectedControls:      controls[:1],
 			expectedNumProgram:    1, // control was cloned, so the previous program will still be here
@@ -911,7 +911,7 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			request: testclient.CloneControlInput{
 				ControlIDs: []string{controls[:1][0].ID},
 			},
-			expectedMappingsCount: 1,
+			expectedMappingsCount: 0,
 			expectedStandard:      &publicStandard.ShortName,
 			expectedControls:      controls[:1],
 			expectedNumProgram:    1, // api token has scopes for program
@@ -1069,25 +1069,6 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			assert.Assert(t, is.Equal(mappings.MappedControls.TotalCount, int64(tc.expectedMappingsCount)))
 			assert.Assert(t, is.Len(mappings.MappedControls.Edges, tc.expectedMappingsCount))
 
-			if tc.expectedMappingsCount == 0 {
-				return
-			}
-
-			controlsToEdge := clonedControls[sourceTo.ID]
-			assert.Assert(t, controlsToEdge != nil)
-			assert.Assert(t, is.Len(controlsFromEdge.Subcontrols.Edges, 1))
-			assert.Assert(t, is.Len(controlsToEdge.Subcontrols.Edges, 1))
-
-			mapping := mappings.MappedControls.Edges[0].Node
-			assert.Assert(t, is.Len(mapping.FromControls.Edges, 1))
-			assert.Assert(t, is.Len(mapping.ToControls.Edges, 1))
-			assert.Assert(t, is.Len(mapping.FromSubcontrols.Edges, 1))
-			assert.Assert(t, is.Len(mapping.ToSubcontrols.Edges, 1))
-
-			assert.Equal(t, mapping.FromControls.Edges[0].Node.ID, controlsFromEdge.ID)
-			assert.Equal(t, mapping.ToControls.Edges[0].Node.ID, controlsToEdge.ID)
-			assert.Equal(t, mapping.FromSubcontrols.Edges[0].Node.ID, controlsFromEdge.Subcontrols.Edges[0].Node.ID)
-			assert.Equal(t, mapping.ToSubcontrols.Edges[0].Node.ID, controlsToEdge.Subcontrols.Edges[0].Node.ID)
 		})
 	}
 
@@ -1175,21 +1156,207 @@ func TestMutationCreateControlsByCloneOpenlaneControls(t *testing.T) {
 	assert.Check(t, subcontrol.ReferenceFramework == nil)
 	assert.Check(t, subcontrol.ReferenceFrameworkRevision == nil)
 
-	resp, err = suite.Client.API.CreateControlsByClone(th.SharedTestUser1.UserCtx, testclient.CloneControlInput{
-		StandardID: &standard.ID,
-	})
-	assert.NilError(t, err)
-	assert.Check(t, resp != nil)
-	assert.Check(t, is.Len(resp.CreateControlsByClone.Controls, 1))
-	assert.Check(t, is.Equal(clonedControlID, resp.CreateControlsByClone.Controls[0].ID))
-
-	// subcontrols do not cascade with control deletion; remove them explicitly so
-	// they don't linger as orphans visible to later subcontrol queries
 	(&th.Cleanup[*generated.SubcontrolDeleteOne]{Client: suite.Client.DB.Subcontrol, ID: subcontrol.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	(&th.Cleanup[*generated.SubcontrolDeleteOne]{Client: suite.Client.DB.Subcontrol, ID: systemSubcontrol.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: clonedControlID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: ctrl.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 	(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, ID: standard.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+}
+
+func TestMutationCreateControlsByClone_Mappings(t *testing.T) {
+
+	systemCtx := th.SharedSystemAdminUser.UserCtx
+
+	standards := []*generated.Standard{}
+	frameworkControls := []*generated.Control{}
+	frameworkSubcontrols := []*generated.Subcontrol{}
+
+	for _, name := range []string{"SOC 2", "ISO 27001", "GDPR"} {
+		standard := (&th.StandardBuilder{
+			Client:   suite.Client,
+			Name:     name + " " + ulids.New().String(),
+			IsPublic: true,
+		}).MustNew(systemCtx, t)
+
+		control := (&th.ControlBuilder{
+			Client:     suite.Client,
+			StandardID: standard.ID,
+		}).MustNew(systemCtx, t)
+
+		subcontrol := (&th.SubcontrolBuilder{
+			Client:    suite.Client,
+			ControlID: control.ID,
+		}).MustNew(systemCtx, t)
+
+		standards = append(standards, standard)
+		frameworkControls = append(frameworkControls, control)
+		frameworkSubcontrols = append(frameworkSubcontrols, subcontrol)
+	}
+
+	for _, tc := range []struct {
+		name              string
+		selectedFramework int
+		excludedFramework int
+		expectedCount     int
+
+		// flipMapping flips the from and to controls in the mapped controls
+		// so we can test both sides
+		flipMapping bool
+	}{
+		{
+			name: "SOC 2 template to framework", 
+			selectedFramework: 0,
+			excludedFramework: 1,
+			expectedCount:     1,
+		},
+		{
+			name:              "SOC 2 framework to template",
+			selectedFramework: 0,
+			excludedFramework: 1,
+			expectedCount:     1,
+			flipMapping:       true,
+		},
+		{
+			name:              "ISO template to framework",
+			selectedFramework: 1,
+			expectedCount:     1,
+		},
+		{
+			name:              "GDPR with no template mappings",
+			selectedFramework: 2,
+			expectedCount:     0,
+		},
+	} {
+
+		templateStandard := (&th.StandardBuilder{Client: suite.Client, Name: "Openlane Standard" + ulids.New().String(), IsPublic: true}).MustNew(systemCtx, t)
+
+		template := (&th.ControlBuilder{Client: suite.Client, StandardID: templateStandard.ID, RefCode: "OL-" + ulids.New().String()}).MustNew(systemCtx, t)
+
+		templateSubcontrol := (&th.SubcontrolBuilder{Client: suite.Client, ControlID: template.ID}).MustNew(systemCtx, t)
+
+		frameworkControl := frameworkControls[tc.selectedFramework]
+
+		excludedControl := frameworkControls[tc.excludedFramework]
+
+		input := th.MappedControlBuilder{
+			Client:            suite.Client,
+			FromControlIDs:    []string{template.ID},
+			FromSubcontrolIDs: []string{templateSubcontrol.ID},
+			ToControlIDs:      []string{frameworkControls[0].ID, frameworkControls[1].ID},
+			ToSubcontrolIDs:   []string{frameworkSubcontrols[0].ID, frameworkSubcontrols[1].ID},
+			Source:            enums.MappingSourceSuggested,
+		}
+
+		if tc.flipMapping {
+			input.FromControlIDs, input.ToControlIDs = input.ToControlIDs, input.FromControlIDs
+			input.FromSubcontrolIDs, input.ToSubcontrolIDs = input.ToSubcontrolIDs, input.FromSubcontrolIDs
+		}
+
+		mixedMapping := input.MustNew(systemCtx, t)
+
+		excludedMapping := (&th.MappedControlBuilder{Client: suite.Client, FromControlIDs: []string{template.ID}, ToControlIDs: []string{excludedControl.ID}}).MustNew(systemCtx, t)
+		frameworkMapping := (&th.MappedControlBuilder{Client: suite.Client, FromControlIDs: []string{frameworkControl.ID}, ToControlIDs: []string{excludedControl.ID}}).MustNew(systemCtx, t)
+
+		t.Run(tc.name, func(t *testing.T) {
+			ctx := th.SharedTestUser1.UserCtx
+
+			selectedProgram := (&th.ProgramBuilder{Client: suite.Client}).MustNew(ctx, t)
+			_, err := suite.Client.API.UpdateProgram(ctx, selectedProgram.ID, testclient.UpdateProgramInput{FrameworkName: frameworkControl.ReferenceFramework})
+			assert.NilError(t, err)
+
+			getMappedFilter := &testclient.MappedControlWhereInput{
+				HasOwnerWith: []*testclient.OrganizationWhereInput{{ID: &th.SharedTestUser1.OrganizationID}},
+				Or: []*testclient.MappedControlWhereInput{
+					{
+						HasFromControlsWith: []*testclient.ControlWhereInput{{
+							RefCodeIn: []string{template.RefCode, frameworkControl.RefCode, excludedControl.RefCode}},
+						}},
+					{HasToControlsWith: []*testclient.ControlWhereInput{{
+						RefCodeIn: []string{
+							template.RefCode, frameworkControl.RefCode, excludedControl.RefCode}},
+					}},
+				},
+			}
+
+			firstImportRun, err := suite.Client.API.CreateControlsByClone(ctx, testclient.CloneControlInput{
+				ControlIDs: []string{frameworkControl.ID},
+				ProgramID:  &selectedProgram.ID,
+			})
+			assert.NilError(t, err)
+			assert.Assert(t, is.Len(firstImportRun.CreateControlsByClone.Controls, 1))
+
+			beforeTemplate, err := suite.Client.API.GetMappedControls(ctx, nil, nil, getMappedFilter)
+			assert.NilError(t, err)
+			assert.Equal(t, beforeTemplate.MappedControls.TotalCount, int64(0))
+
+			cloneRequest := testclient.CloneControlInput{ControlIDs: []string{template.ID}, ProgramID: &selectedProgram.ID}
+
+			imported, err := suite.Client.API.CreateControlsByClone(ctx, cloneRequest)
+			assert.NilError(t, err)
+			assert.Assert(t, is.Len(imported.CreateControlsByClone.Controls, 1))
+			orgTemplate := imported.CreateControlsByClone.Controls[0]
+			assert.Assert(t, is.Len(orgTemplate.Subcontrols.Edges, 1))
+			assert.Assert(t, is.Len(orgTemplate.Programs.Edges, 1))
+			assert.Equal(t, orgTemplate.Programs.Edges[0].Node.ID, selectedProgram.ID)
+			orgSubcontrolID := orgTemplate.Subcontrols.Edges[0].Node.ID
+
+			mappings, err := suite.Client.API.GetMappedControls(ctx, nil, nil, getMappedFilter)
+			assert.NilError(t, err)
+			assert.Equal(t, mappings.MappedControls.TotalCount, int64(tc.expectedCount))
+			assert.Assert(t, is.Len(mappings.MappedControls.Edges, tc.expectedCount))
+
+			secondImportRun, err := suite.Client.API.CreateControlsByClone(ctx, cloneRequest)
+			assert.NilError(t, err)
+			assert.Assert(t, is.Len(secondImportRun.CreateControlsByClone.Controls, 1))
+			assert.Equal(t, secondImportRun.CreateControlsByClone.Controls[0].ID, orgTemplate.ID)
+
+			mappedControls2, err := suite.Client.API.GetMappedControls(ctx, nil, nil, getMappedFilter)
+			assert.NilError(t, err)
+			assert.Equal(t, mappedControls2.MappedControls.TotalCount, int64(tc.expectedCount))
+			assert.Assert(t, is.Len(mappedControls2.MappedControls.Edges, tc.expectedCount))
+
+			// verify that the mappings matched eachother even on the second run
+			mappingIDs := lo.Map(mappings.MappedControls.Edges, func(edge *testclient.GetMappedControls_MappedControls_Edges, _ int) string {
+				return edge.Node.ID
+			})
+
+			reimportedMappingIDs := lo.Map(mappedControls2.MappedControls.Edges, func(edge *testclient.GetMappedControls_MappedControls_Edges, _ int) string {
+				return edge.Node.ID
+			})
+
+			assert.DeepEqual(t, reimportedMappingIDs, mappingIDs)
+
+			original, err := suite.Client.API.GetMappedControlByID(systemCtx, mixedMapping.ID)
+			assert.NilError(t, err)
+			assert.Equal(t, lo.FromPtr(original.MappedControl.SystemOwned), true)
+			assert.Equal(t, lo.FromPtr(original.MappedControl.Source), enums.MappingSourceSuggested)
+			assert.Equal(t, len(original.MappedControl.FromControls.Edges), len(input.FromControlIDs))
+			assert.Equal(t, len(original.MappedControl.ToControls.Edges), len(input.ToControlIDs))
+
+			(&th.Cleanup[*generated.MappedControlDeleteOne]{Client: suite.Client.DB.MappedControl, IDs: mappingIDs}).MustDelete(ctx, t)
+			(&th.Cleanup[*generated.MappedControlDeleteOne]{Client: suite.Client.DB.MappedControl, IDs: []string{mixedMapping.ID, excludedMapping.ID, frameworkMapping.ID}}).MustDelete(systemCtx, t)
+
+			orgFramework := firstImportRun.CreateControlsByClone.Controls[0]
+
+			(&th.Cleanup[*generated.SubcontrolDeleteOne]{Client: suite.Client.DB.Subcontrol, IDs: []string{orgSubcontrolID, orgFramework.Subcontrols.Edges[0].Node.ID}}).MustDelete(ctx, t)
+
+			(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: []string{orgTemplate.ID, orgFramework.ID}}).MustDelete(ctx, t)
+
+			(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, ID: selectedProgram.ID}).MustDelete(ctx, t)
+
+			(&th.Cleanup[*generated.SubcontrolDeleteOne]{Client: suite.Client.DB.Subcontrol, ID: templateSubcontrol.ID}).MustDelete(systemCtx, t)
+
+			(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: template.ID}).MustDelete(systemCtx, t)
+			(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, ID: templateStandard.ID}).MustDelete(systemCtx, t)
+
+		})
+	}
+
+	for k, v := range standards {
+		(&th.Cleanup[*generated.SubcontrolDeleteOne]{Client: suite.Client.DB.Subcontrol, ID: frameworkSubcontrols[k].ID}).MustDelete(systemCtx, t)
+		(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: frameworkControls[k].ID}).MustDelete(systemCtx, t)
+		(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, ID: v.ID}).MustDelete(systemCtx, t)
+	}
 }
 
 func TestMutationCreateControlsByCloneCSV(t *testing.T) {
