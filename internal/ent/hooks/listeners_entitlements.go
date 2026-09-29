@@ -13,6 +13,7 @@ import (
 	entgen "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/entitlements/reconciler"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -29,8 +30,8 @@ func EntitlementListeners() []gala.Registration {
 		entityops.MutationListener{
 			Schema:     entityops.SchemaOrganization,
 			Operations: []string{entityops.OpCreate},
-			Caller: func(_ *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-				return auth.NewWebhookCaller("")
+			Caller: func(_ *auth.Caller, payload entityops.MutationPayload) *auth.Caller {
+				return rule.OrgInternalCaller(payload.EntityID)
 			},
 			Handle: entityops.RequireDep(handleOrganizationCreatedGala),
 		},
@@ -39,8 +40,8 @@ func EntitlementListeners() []gala.Registration {
 			Priority:   listenerPriorityFirst,
 			Schema:     entityops.SchemaOrganization,
 			Operations: []string{entityops.OpSoftDelete, entityops.OpDelete, entityops.OpDeleteOne},
-			Caller: func(_ *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-				return auth.NewWebhookCaller("")
+			Caller: func(_ *auth.Caller, payload entityops.MutationPayload) *auth.Caller {
+				return rule.OrgInternalCaller(payload.EntityID)
 			},
 			ContextKeys: []func(context.Context) context.Context{entx.SkipSoftDelete},
 			Handle:      entityops.RequireDep(handleOrganizationDeleteGala),
@@ -54,7 +55,7 @@ func EntitlementListeners() []gala.Registration {
 				organizationsetting.FieldBillingAddress,
 			},
 			Caller: func(_ *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-				return auth.NewWebhookCaller("")
+				return rule.OrgInternalCaller("")
 			},
 			Handle: entityops.RequireDep(handleOrganizationSettingsUpdateOneGala),
 		},

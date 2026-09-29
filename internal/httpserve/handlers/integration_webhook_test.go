@@ -16,7 +16,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -43,7 +42,6 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerSuccess() {
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhooks/"+wh.endpointID, strings.NewReader(string(payload)))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Webhook-Signature-256", webhookHMACSHA256(wh.secretToken, payload))
-	req = req.WithContext(privacy.DecisionContext(req.Context(), privacy.Allow))
 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
@@ -98,7 +96,6 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerInvalidSignature() {
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhooks/"+wh.endpointID, strings.NewReader(string(payload)))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Webhook-Signature-256", webhookHMACSHA256("wrong-secret", payload))
-	req = req.WithContext(privacy.DecisionContext(req.Context(), privacy.Allow))
 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
@@ -121,7 +118,6 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerMissingSignature() {
 	payload := []byte(`{"event":"alert.created","delivery_id":"del-003"}`)
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhooks/"+wh.endpointID, strings.NewReader(string(payload)))
 	req.Header.Set("Content-Type", "application/json")
-	req = req.WithContext(privacy.DecisionContext(req.Context(), privacy.Allow))
 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
@@ -141,7 +137,6 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEndpointNotFound() {
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhooks/nonexistent-endpoint", strings.NewReader(string(payload)))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Webhook-Signature-256", webhookHMACSHA256(webhookTestSecret, payload))
-	req = req.WithContext(privacy.DecisionContext(req.Context(), privacy.Allow))
 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
@@ -166,7 +161,6 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEmptyEventNameReturn
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhooks/"+wh.endpointID, strings.NewReader(string(payload)))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Webhook-Signature-256", webhookHMACSHA256(wh.secretToken, payload))
-	req = req.WithContext(privacy.DecisionContext(req.Context(), privacy.Allow))
 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)

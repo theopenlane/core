@@ -13,9 +13,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/echox/middleware/echocontext"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -27,8 +26,7 @@ func (suite *HandlerTestSuite) TestACMESolverHandler() {
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 
-	ctx := privacy.DecisionContext(ec, privacy.Allow)
-	ctx = auth.WithCaller(ctx, auth.NewAcmeSolverCaller(""))
+	ctx := rule.WithOrgInternalCaller(ec, testUser1.OrganizationID)
 
 	// Test data
 	testPath := gofakeit.UUID()
@@ -36,8 +34,7 @@ func (suite *HandlerTestSuite) TestACMESolverHandler() {
 	nonExistentPath := gofakeit.UUID()
 
 	// Create a DNS verification record with ACME challenge data
-	// Use ExecContext to bypass privacy policies completely
-	_, err := suite.db.DNSVerification.Create().
+	err := suite.db.DNSVerification.Create().
 		SetCloudflareHostnameID(gofakeit.UUID()).
 		SetDNSTxtRecord("_acme-challenge.example.com").
 		SetDNSTxtValue(gofakeit.UUID()).
@@ -46,11 +43,11 @@ func (suite *HandlerTestSuite) TestACMESolverHandler() {
 		SetExpectedAcmeChallengeValue(testValue).
 		SetAcmeChallengeStatus(enums.SSLVerificationStatusInitializing).
 		SetOwnerID(testUser1.OrganizationID).
-		Save(ctx)
+		Exec(ctx)
 	require.NoError(t, err)
 
 	// Create a deleted DNS verification record (should not be found)
-	_, err = suite.db.DNSVerification.Create().
+	err = suite.db.DNSVerification.Create().
 		SetCloudflareHostnameID(gofakeit.UUID()).
 		SetDNSTxtRecord("_acme-challenge.deleted.com").
 		SetDNSTxtValue(gofakeit.UUID()).
@@ -61,7 +58,7 @@ func (suite *HandlerTestSuite) TestACMESolverHandler() {
 		SetOwnerID(testUser1.OrganizationID).
 		SetDeletedAt(time.Now()).
 		SetDeletedBy("test").
-		Save(ctx)
+		Exec(ctx)
 	require.NoError(t, err)
 
 	testCases := []struct {

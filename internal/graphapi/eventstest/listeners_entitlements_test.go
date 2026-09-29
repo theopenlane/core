@@ -12,6 +12,7 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/stretchr/testify/mock"
+	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -127,11 +128,21 @@ func TestEntitlementListenerBillingUpdate(t *testing.T) {
 		Only(allowCtx)
 	assert.NilError(t, err)
 
-	assert.NilError(t, suite.Client.DB.OrganizationSetting.UpdateOneID(setting.ID).SetBillingEmail("billing@theopenlane.io").Exec(allowCtx))
+	billingEmail := "billing-" + strings.ToLower(ulids.New().String()) + "@theopenlane.io"
+
+	assert.NilError(t, suite.Client.DB.OrganizationSetting.UpdateOneID(setting.ID).SetBillingEmail(billingEmail).Exec(allowCtx))
 
 	// the billing listener pushes the change through the mocked CustomerUpdate then
 	// reconciles; the drain proves neither call parked a retrying job
 	waitForEvents()
+
+	suite.StripeMockBackend.AssertCalled(t, "Call", mock.Anything,
+		mock.MatchedBy(func(path string) bool { return strings.HasSuffix(path, customerID) }),
+		mock.Anything,
+		mock.MatchedBy(func(params *stripe.CustomerUpdateParams) bool {
+			return params.Email != nil && *params.Email == billingEmail
+		}),
+		mock.Anything)
 
 	org, err := suite.Client.DB.Organization.Get(allowCtx, user.OrganizationID)
 	assert.NilError(t, err)

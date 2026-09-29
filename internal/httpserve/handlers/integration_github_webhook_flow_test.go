@@ -22,7 +22,6 @@ import (
 	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp"
 )
@@ -66,7 +65,6 @@ func (suite *HandlerTestSuite) TestGitHubAppWebhookDoesNotRequireCaller() {
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-GitHub-Event", "ping")
 	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
-	req = req.WithContext(privacy.DecisionContext(req.Context(), privacy.Allow))
 	rec := httptest.NewRecorder()
 
 	suite.e.ServeHTTP(rec, req)
@@ -346,7 +344,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 	reqB := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payloadB)))
 	reqB.Header.Set("X-GitHub-Event", "ping")
 	reqB.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payloadB))
-	reqB = reqB.WithContext(privacy.DecisionContext(reqB.Context(), privacy.Allow))
 	recB := httptest.NewRecorder()
 
 	suite.e.ServeHTTP(recB, reqB)
@@ -371,7 +368,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 	reqA := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payloadA)))
 	reqA.Header.Set("X-GitHub-Event", "ping")
 	reqA.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payloadA))
-	reqA = reqA.WithContext(privacy.DecisionContext(reqA.Context(), privacy.Allow))
 	recA := httptest.NewRecorder()
 
 	suite.e.ServeHTTP(recA, reqA)
@@ -433,7 +429,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 	req.Header.Set("X-GitHub-Event", "dependabot_alert")
 	req.Header.Set("X-GitHub-Delivery", "delivery-vuln-001")
 	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
-	req = req.WithContext(privacy.DecisionContext(req.Context(), privacy.Allow))
 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
@@ -514,7 +509,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 	reqOpen.Header.Set("X-GitHub-Event", "dependabot_alert")
 	reqOpen.Header.Set("X-GitHub-Delivery", "delivery-upsert-001")
 	reqOpen.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payloadOpen))
-	reqOpen = reqOpen.WithContext(privacy.DecisionContext(reqOpen.Context(), privacy.Allow))
 
 	recOpen := httptest.NewRecorder()
 	suite.e.ServeHTTP(recOpen, reqOpen)
@@ -560,7 +554,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 	reqFixed.Header.Set("X-GitHub-Event", "dependabot_alert")
 	reqFixed.Header.Set("X-GitHub-Delivery", "delivery-upsert-002")
 	reqFixed.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payloadFixed))
-	reqFixed = reqFixed.WithContext(privacy.DecisionContext(reqFixed.Context(), privacy.Allow))
 
 	recFixed := httptest.NewRecorder()
 	suite.e.ServeHTTP(recFixed, reqFixed)
@@ -637,7 +630,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 	reqA.Header.Set("X-GitHub-Event", "dependabot_alert")
 	reqA.Header.Set("X-GitHub-Delivery", "delivery-multiorg-001")
 	reqA.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payloadA))
-	reqA = reqA.WithContext(privacy.DecisionContext(reqA.Context(), privacy.Allow))
 
 	recA := httptest.NewRecorder()
 	suite.e.ServeHTTP(recA, reqA)
@@ -668,7 +660,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 	reqB.Header.Set("X-GitHub-Event", "dependabot_alert")
 	reqB.Header.Set("X-GitHub-Delivery", "delivery-multiorg-002")
 	reqB.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payloadB))
-	reqB = reqB.WithContext(privacy.DecisionContext(reqB.Context(), privacy.Allow))
 
 	recB := httptest.NewRecorder()
 	suite.e.ServeHTTP(recB, reqB)

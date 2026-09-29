@@ -13,10 +13,9 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	enthush "github.com/theopenlane/core/v2/internal/ent/generated/hush"
 	entintegration "github.com/theopenlane/core/v2/internal/ent/generated/integration"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/iam/auth"
 )
 
 // Store persists and retrieves installation credentials via Ent-backed hush secrets
@@ -62,7 +61,7 @@ func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integratio
 		return types.CredentialSet{}, false, ErrCredentialNotFound
 	}
 
-	record, ok, err := s.activeCredentialRecord(integrationSystemContext(ctx), installation.ID, credentialRef)
+	record, ok, err := s.activeCredentialRecord(rule.WithOrgInternalCaller(ctx, installation.OwnerID), installation.ID, credentialRef)
 	if err != nil {
 		return types.CredentialSet{}, false, err
 	}
@@ -75,7 +74,7 @@ func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integratio
 
 // LoadCredentials resolves the requested credential slots for one installation record
 func (s *Store) LoadCredentials(ctx context.Context, installation *ent.Integration, credentialRefs []types.CredentialSlotID) (types.CredentialBindings, error) {
-	records, err := s.activeCredentialRecords(integrationSystemContext(ctx), installation.ID, credentialRefs)
+	records, err := s.activeCredentialRecords(rule.WithOrgInternalCaller(ctx, installation.OwnerID), installation.ID, credentialRefs)
 	if err != nil {
 		return nil, err
 	}
@@ -294,10 +293,4 @@ func (s *Store) activeCredentialRecords(ctx context.Context, integrationID strin
 	}
 
 	return out, nil
-}
-
-// integrationSystemContext returns a context with system-level privileges for integration operations
-func integrationSystemContext(ctx context.Context) context.Context {
-	callCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	return auth.WithCaller(callCtx, auth.NewKeystoreCaller())
 }
