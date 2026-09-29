@@ -60,45 +60,66 @@
       }
     }
   },
-  "metadata": [
-    {
-      "connection": "CredentialSchema",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter/installation-metadata",
-        "$ref": "#/$defs/InstallationMetadata",
-        "$defs": {
-          "InstallationMetadata": {
-            "properties": {
-              "tenantId": {
-                "type": "string",
-                "title": "Tenant ID"
-              },
-              "clientId": {
-                "type": "string",
-                "title": "Client ID"
-              },
-              "subscriptionId": {
-                "type": "string",
-                "title": "Subscription ID"
-              }
+  "installation": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter/installation-metadata",
+      "$ref": "#/$defs/InstallationMetadata",
+      "$defs": {
+        "InstallationMetadata": {
+          "properties": {
+            "tenantId": {
+              "type": "string",
+              "title": "Tenant ID"
             },
-            "additionalProperties": false,
-            "type": "object"
-          }
+            "clientId": {
+              "type": "string",
+              "title": "Client ID"
+            },
+            "subscriptionId": {
+              "type": "string",
+              "title": "Subscription ID"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
         }
       }
     }
-  ],
+  },
   "connections": [
     "CredentialSchema"
   ],
   "operations": [
     {
-      "name": "AssessmentsCollect"
+      "name": "AssessmentsCollect",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter/assessments-collect",
+        "$ref": "#/$defs/AssessmentsCollect",
+        "$defs": {
+          "AssessmentsCollect": {
+            "properties": {},
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
     },
     {
-      "name": "SubAssessmentsCollect"
+      "name": "SubAssessmentsCollect",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter/sub-assessments-collect",
+        "$ref": "#/$defs/SubAssessmentsCollect",
+        "$defs": {
+          "SubAssessmentsCollect": {
+            "properties": {},
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
     }
   ]
 }

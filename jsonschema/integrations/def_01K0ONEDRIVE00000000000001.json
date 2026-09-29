@@ -34,11 +34,12 @@
       "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/user-input",
       "$ref": "#/$defs/UserInput",
       "$defs": {
-        "UserInput": {
+        "FolderSync": {
           "properties": {
-            "primary": {
+            "disable": {
               "type": "boolean",
-              "title": "Primary"
+              "title": "Disable",
+              "description": "Disable this sync"
             },
             "folderId": {
               "type": "string",
@@ -53,27 +54,78 @@
           },
           "additionalProperties": false,
           "type": "object"
+        },
+        "UserInput": {
+          "properties": {
+            "primary": {
+              "type": "boolean",
+              "title": "Primary"
+            },
+            "folderSync": {
+              "$ref": "#/$defs/FolderSync",
+              "title": "Folder Sync"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      }
+    },
+    "replaces": [
+      "onedrive-v1"
+    ]
+  },
+  "installation": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/installation-metadata",
+      "$ref": "#/$defs/InstallationMetadata",
+      "$defs": {
+        "InstallationMetadata": {
+          "properties": {
+            "tenantId": {
+              "type": "string",
+              "title": "Tenant ID"
+            },
+            "domain": {
+              "type": "string",
+              "title": "Domain"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
         }
       }
     }
   },
-  "metadata": [
+  "connections": [
+    "oneDriveCred"
+  ],
+  "operations": [
     {
-      "connection": "oneDriveCred",
+      "name": "DocumentExport",
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/installation-metadata",
-        "$ref": "#/$defs/InstallationMetadata",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/operations/document-export",
+        "$ref": "#/$defs/DocumentExport",
         "$defs": {
-          "InstallationMetadata": {
+          "DocumentExport": {
             "properties": {
-              "tenantId": {
-                "type": "string",
-                "title": "Tenant ID"
+              "fileId": {
+                "type": "string"
               },
-              "domain": {
+              "html": {
+                "type": "string"
+              },
+              "pdf": {
                 "type": "string",
-                "title": "Domain"
+                "contentEncoding": "base64"
+              },
+              "mimeType": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
               }
             },
             "additionalProperties": false,
@@ -81,17 +133,38 @@
           }
         }
       }
-    }
-  ],
-  "connections": [
-    "oneDriveCred"
-  ],
-  "operations": [
-    {
-      "name": "DocumentExport"
     },
     {
-      "name": "FolderSync"
+      "name": "FolderSync",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/folder-sync",
+        "$ref": "#/$defs/FolderSync",
+        "$defs": {
+          "FolderSync": {
+            "properties": {
+              "disable": {
+                "type": "boolean",
+                "title": "Disable",
+                "description": "Disable this sync"
+              },
+              "folderId": {
+                "type": "string",
+                "title": "Folder Path",
+                "description": "Folder path relative to drive root (e.g. Policies). Leave empty to sync the entire drive root."
+              },
+              "filterExpr": {
+                "type": "string",
+                "title": "Filter Expression",
+                "description": "Optional CEL expression to filter documents before creating policies"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      },
+      "section": true
     }
   ]
 }

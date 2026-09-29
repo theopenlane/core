@@ -45,7 +45,7 @@
             "disable": {
               "type": "boolean",
               "title": "Disable",
-              "description": "Disable the syncing of users and groups from GitHub"
+              "description": "Disable this sync"
             },
             "disableGroupSync": {
               "type": "boolean",
@@ -69,7 +69,7 @@
             "disable": {
               "type": "boolean",
               "title": "Disable",
-              "description": "Disable the syncing of vulnerabilities from Github Security"
+              "description": "Disable this sync"
             },
             "filterExpr": {
               "type": "string",
@@ -86,7 +86,7 @@
         "UserInput": {
           "properties": {
             "findingSync": {
-              "$ref": "#/$defs/VulnerabilitySyncConfig",
+              "$ref": "#/$defs/VulnerabilitySync",
               "title": "GitHub Security Hub Sync"
             },
             "directorySync": {
@@ -101,12 +101,12 @@
           "additionalProperties": false,
           "type": "object"
         },
-        "VulnerabilitySyncConfig": {
+        "VulnerabilitySync": {
           "properties": {
             "disable": {
               "type": "boolean",
               "title": "Disable",
-              "description": "Disable the syncing of vulnerabilities from Github Security"
+              "description": "Disable this sync"
             },
             "filterExpr": {
               "type": "string",
@@ -128,44 +128,132 @@
       }
     }
   },
-  "metadata": [
+  "installation": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp/installation-metadata",
+      "$ref": "#/$defs/InstallationMetadata",
+      "$defs": {
+        "InstallationMetadata": {
+          "properties": {
+            "installationId": {
+              "type": "string",
+              "title": "installation ID"
+            },
+            "organizationName": {
+              "type": "string",
+              "title": "organization"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      }
+    }
+  },
+  "connections": [
+    "githubAppCredential"
+  ],
+  "operations": [
     {
-      "connection": "githubAppCredential",
+      "name": "DirectorySync",
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp/installation-metadata",
-        "$ref": "#/$defs/InstallationMetadata",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp/directory-sync",
+        "$ref": "#/$defs/DirectorySync",
         "$defs": {
-          "InstallationMetadata": {
+          "DirectorySync": {
             "properties": {
-              "installationId": {
-                "type": "string",
-                "title": "installation ID"
+              "disable": {
+                "type": "boolean",
+                "title": "Disable",
+                "description": "Disable this sync"
               },
-              "organizationName": {
+              "disableGroupSync": {
+                "type": "boolean",
+                "title": "Disable Group Sync",
+                "description": "Only sync users from GitHub"
+              },
+              "filterExpr": {
                 "type": "string",
-                "title": "organization"
+                "title": "Filter Expression",
+                "description": "Optional CEL expression to apply to records before ingesting.",
+                "examples": [
+                  "Example: payload.Org == 'my-org'"
+                ]
               }
             },
             "additionalProperties": false,
             "type": "object"
           }
         }
-      }
-    }
-  ],
-  "connections": [
-    "githubAppCredential"
-  ],
-  "operations": [
-    {
-      "name": "DirectorySync"
+      },
+      "section": true
     },
     {
-      "name": "RepositorySync"
+      "name": "RepositorySync",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp/repository-sync",
+        "$ref": "#/$defs/RepositorySync",
+        "$defs": {
+          "RepositorySync": {
+            "properties": {
+              "disable": {
+                "type": "boolean",
+                "title": "Disable",
+                "description": "Disable this sync"
+              },
+              "filterExpr": {
+                "type": "string",
+                "title": "Filter Expression",
+                "description": "Optional CEL expression to apply to records before ingesting.",
+                "examples": [
+                  "Example: payload.IsPrivate == 'true'"
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      },
+      "section": true
     },
     {
-      "name": "VulnerabilitySync"
+      "name": "VulnerabilitySync",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp/vulnerability-sync",
+        "$ref": "#/$defs/VulnerabilitySync",
+        "$defs": {
+          "VulnerabilitySync": {
+            "properties": {
+              "disable": {
+                "type": "boolean",
+                "title": "Disable",
+                "description": "Disable this sync"
+              },
+              "filterExpr": {
+                "type": "string",
+                "title": "Filter Expression",
+                "description": "Optional CEL expression to apply to records before ingesting.",
+                "examples": [
+                  "Example: payload.state == 'open'"
+                ]
+              },
+              "maxRepos": {
+                "type": "integer",
+                "title": "Max Repositories",
+                "description": "Optional cap on the number of repositories to scan."
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      },
+      "section": true
     }
   ],
   "webhooks": [

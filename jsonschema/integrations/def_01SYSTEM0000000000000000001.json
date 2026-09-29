@@ -4,13 +4,70 @@
   "connections": [],
   "operations": [
     {
-      "name": "IntegrationLifecycleSweep"
+      "name": "IntegrationLifecycleSweep",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/system/integration-lifecycle-sweep",
+        "$ref": "#/$defs/IntegrationLifecycleSweep",
+        "$defs": {
+          "IntegrationLifecycleSweep": {
+            "properties": {
+              "dryRun": {
+                "type": "boolean"
+              },
+              "maxPerRun": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
     },
     {
-      "name": "OrganizationDeleteSweep"
+      "name": "OrganizationDeleteSweep",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/system/organization-delete-sweep",
+        "$ref": "#/$defs/OrganizationDeleteSweep",
+        "$defs": {
+          "OrganizationDeleteSweep": {
+            "properties": {
+              "maxDeletesPerRun": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
     },
     {
-      "name": "PaymentReminderSweep"
+      "name": "PaymentReminderSweep",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/system/payment-reminder-sweep",
+        "$ref": "#/$defs/PaymentReminderSweep",
+        "$defs": {
+          "PaymentReminderSweep": {
+            "properties": {
+              "paymentMethodInterval": {
+                "type": "integer"
+              },
+              "deletionDays": {
+                "type": "integer"
+              },
+              "dryRun": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
     }
   ]
 }

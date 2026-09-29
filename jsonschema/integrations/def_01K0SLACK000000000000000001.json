@@ -63,7 +63,7 @@
             "disable": {
               "type": "boolean",
               "title": "Disable",
-              "description": "Disable the syncing of users from Slack"
+              "description": "Disable this sync"
             },
             "filterExpr": {
               "type": "string",
@@ -94,86 +94,261 @@
       }
     }
   },
-  "metadata": [
-    {
-      "connection": "slackBotTokenCred",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/installation-metadata",
-        "$ref": "#/$defs/InstallationMetadata",
-        "$defs": {
-          "InstallationMetadata": {
-            "properties": {
-              "teamId": {
-                "type": "string",
-                "title": "Team ID"
-              },
-              "teamName": {
-                "type": "string",
-                "title": "Team Name"
-              },
-              "defaultChannel": {
-                "type": "string",
-                "title": "Default Channel"
-              }
+  "installation": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/installation-metadata",
+      "$ref": "#/$defs/InstallationMetadata",
+      "$defs": {
+        "InstallationMetadata": {
+          "properties": {
+            "teamId": {
+              "type": "string",
+              "title": "Team ID"
             },
-            "additionalProperties": false,
-            "type": "object"
-          }
-        }
-      }
-    },
-    {
-      "connection": "slackCred",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/installation-metadata",
-        "$ref": "#/$defs/InstallationMetadata",
-        "$defs": {
-          "InstallationMetadata": {
-            "properties": {
-              "teamId": {
-                "type": "string",
-                "title": "Team ID"
-              },
-              "teamName": {
-                "type": "string",
-                "title": "Team Name"
-              },
-              "defaultChannel": {
-                "type": "string",
-                "title": "Default Channel"
-              }
+            "teamName": {
+              "type": "string",
+              "title": "Team Name"
             },
-            "additionalProperties": false,
-            "type": "object"
-          }
+            "defaultChannel": {
+              "type": "string",
+              "title": "Default Channel"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
         }
       }
     }
-  ],
+  },
   "connections": [
     "slackBotTokenCred",
     "slackCred"
   ],
   "operations": [
     {
-      "name": "DemoRequestMessage"
+      "name": "DemoRequestMessage",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/demo-request-message",
+        "$ref": "#/$defs/DemoRequestMessage",
+        "$defs": {
+          "DemoRequestMessage": {
+            "properties": {
+              "companyName": {
+                "type": "string",
+                "description": "Requesting company name"
+              },
+              "email": {
+                "type": "string",
+                "description": "Requester email address"
+              },
+              "domains": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "description": "Additional domains associated with the request"
+              },
+              "companyDetails": {
+                "type": "object",
+                "description": "Company attributes surfaced in the notification"
+              },
+              "userDetails": {
+                "type": "object",
+                "description": "User attributes surfaced in the notification"
+              },
+              "compliance": {
+                "type": "object",
+                "description": "Compliance interests surfaced in the notification"
+              },
+              "demoRequested": {
+                "type": "boolean",
+                "description": "Requester asked for a personalized demo"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "companyName",
+              "email"
+            ]
+          }
+        }
+      }
     },
     {
-      "name": "DirectorySync"
+      "name": "DirectorySync",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/directory-sync",
+        "$ref": "#/$defs/DirectorySync",
+        "$defs": {
+          "DirectorySync": {
+            "properties": {
+              "disable": {
+                "type": "boolean",
+                "title": "Disable",
+                "description": "Disable this sync"
+              },
+              "filterExpr": {
+                "type": "string",
+                "title": "Filter Expression",
+                "description": "Optional CEL expression to apply to records before ingesting.",
+                "examples": [
+                  "Example: payload.is_external == false'"
+                ]
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      },
+      "section": true
     },
     {
-      "name": "IntegrationInstalledMessage"
+      "name": "IntegrationInstalledMessage",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/integration-installed-message",
+        "$ref": "#/$defs/IntegrationInstalledMessage",
+        "$defs": {
+          "IntegrationInstalledMessage": {
+            "properties": {
+              "integrationName": {
+                "type": "string",
+                "description": "Display name of the installed integration"
+              },
+              "organizationName": {
+                "type": "string",
+                "description": "Openlane organization display name"
+              },
+              "organizationId": {
+                "type": "string",
+                "description": "Openlane organization id"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "integrationName",
+              "organizationName",
+              "organizationId"
+            ]
+          }
+        }
+      }
     },
     {
-      "name": "MessageSendOperation"
+      "name": "MessageSendOperation",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/message-send-operation",
+        "$ref": "#/$defs/MessageSendOperation",
+        "$defs": {
+          "MessageSendOperation": {
+            "properties": {
+              "templateId": {
+                "type": "string",
+                "title": "Template ID"
+              },
+              "templateKey": {
+                "type": "string",
+                "title": "Template Key"
+              },
+              "channel": {
+                "type": "string",
+                "title": "Channel"
+              },
+              "destinations": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "title": "Destinations"
+              },
+              "text": {
+                "type": "string",
+                "title": "Message Text"
+              },
+              "blocks": {
+                "items": true,
+                "type": "array",
+                "title": "Block Kit Payload"
+              },
+              "thread_ts": {
+                "type": "string",
+                "title": "Thread Timestamp"
+              },
+              "unfurl_links": {
+                "type": "boolean",
+                "title": "Unfurl Links"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
     },
     {
-      "name": "NewUserMessage"
+      "name": "NewUserMessage",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/new-user-message",
+        "$ref": "#/$defs/NewUserMessage",
+        "$defs": {
+          "NewUserMessage": {
+            "properties": {
+              "email": {
+                "type": "string",
+                "description": "New user email address"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "email"
+            ]
+          }
+        }
+      }
     },
     {
-      "name": "OrganizationsPendingDeletionMessage"
+      "name": "OrganizationsPendingDeletionMessage",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/slack/organizations-pending-deletion-message",
+        "$ref": "#/$defs/OrganizationsPendingDeletionMessage",
+        "$defs": {
+          "OrganizationsPendingDeletionMessage": {
+            "properties": {
+              "count": {
+                "type": "integer",
+                "description": "Number of organizations marked for deletion in this run"
+              },
+              "organizations": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "description": "Organizations marked for deletion"
+              },
+              "dryRun": {
+                "type": "boolean",
+                "description": "Whether this was a dry-run reminder pass"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "count",
+              "organizations"
+            ]
+          }
+        }
+      }
     }
   ]
 }

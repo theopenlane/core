@@ -22,6 +22,11 @@ func opConfig(name, schema string, replaces ...string) SurfaceOperation {
 	return SurfaceOperation{Name: name, Schema: json.RawMessage(schema), Replaces: replaces}
 }
 
+// sectionOpConfig builds an operation surface entry whose config schema is resolved from a user input section
+func sectionOpConfig(name, schema string) SurfaceOperation {
+	return SurfaceOperation{Name: name, Schema: json.RawMessage(schema), Section: true}
+}
+
 // findingsText joins findings into one string for substring assertions
 func findingsText(findings []string) string {
 	return strings.Join(findings, "\n")
@@ -137,16 +142,75 @@ func TestClassifySurfaceChange(t *testing.T) {
 			wantEmpty: true,
 		},
 		{
-			name:         "operation config property type change is errored",
-			old:          Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
-			next:         Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"string"}}}`)}},
+			name:         "section operation config property type change is errored",
+			old:          Surface{ID: "acme", Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
+			next:         Surface{ID: "acme", Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"string"}}}`)}},
 			wantContains: []string{"operation sync.users config property limit type changed from", outcomeErrored},
 		},
 		{
-			name:         "new required operation config property without default is errored",
+			name:         "caller-supplied operation config property type change is supplied by each caller",
+			old:          Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
+			next:         Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"string"}}}`)}},
+			wantContains: []string{`acme: operation sync.users config property limit type changed from "integer" to "string": supplied by each caller`},
+			wantAbsent:   []string{outcomeErrored},
+		},
+		{
+			name:         "caller-supplied operation config enum narrowing is supplied by each caller",
+			old:          Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"level":{"type":"string","enum":["low","high"]}}}`)}},
+			next:         Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"level":{"type":"string","enum":["low"]}}}`)}},
+			wantContains: []string{"acme: operation sync.users config property level enum narrowed: supplied by each caller"},
+			wantAbsent:   []string{outcomeErrored},
+		},
+		{
+			name:         "new required caller-supplied operation config property is supplied by each caller",
 			old:          Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
 			next:         Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"},"region":{"type":"string"}},"required":["region"]}`)}},
+			wantContains: []string{"acme: operation sync.users config required property region added: supplied by each caller"},
+			wantAbsent:   []string{outcomeErrored, "without default"},
+		},
+		{
+			name:         "new required section operation config property without default is errored",
+			old:          Surface{ID: "acme", Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
+			next:         Surface{ID: "acme", Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"},"region":{"type":"string"}},"required":["region"]}`)}},
 			wantContains: []string{"operation sync.users config required property region added without default", outcomeErrored},
+		},
+		{
+			name: "new required section operation config property without default follows the user input backfill",
+			old:  Surface{ID: "acme", Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
+			next: Surface{
+				ID:         "acme",
+				UserInput:  &SurfaceSchema{Schema: json.RawMessage(`{"type":"object"}`), Backfill: true},
+				Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"},"region":{"type":"string"}},"required":["region"]}`)},
+			},
+			wantContains: []string{"operation sync.users config required property region added without default: backfilled on upgrade"},
+			wantAbsent:   []string{outcomeErrored},
+		},
+		{
+			name:         "removed caller-supplied operation config property affects no stored value",
+			old:          Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
+			next:         Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object"}`)}},
+			wantContains: []string{"acme: operation sync.users config property limit removed: no stored value affected"},
+			wantAbsent:   []string{"dropped on upgrade"},
+		},
+		{
+			name:         "removed section operation config property is dropped",
+			old:          Surface{ID: "acme", Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
+			next:         Surface{ID: "acme", Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object"}`)}},
+			wantContains: []string{"acme: operation sync.users config property limit removed: stored value is dropped on upgrade"},
+		},
+		{
+			name:         "removed user input property without replacement is dropped",
+			old:          Surface{ID: "acme", UserInput: &SurfaceSchema{Schema: json.RawMessage(`{"type":"object","properties":{"zone":{"type":"string"}}}`)}},
+			next:         Surface{ID: "acme", UserInput: &SurfaceSchema{Schema: json.RawMessage(`{"type":"object"}`)}},
+			wantContains: []string{"acme: user input property zone removed: stored value is dropped on upgrade"},
+			wantAbsent:   []string{"converted through declared layout replacement"},
+		},
+		{
+			name:         "removed user input property with replacement is converted",
+			old:          Surface{ID: "acme", UserInput: &SurfaceSchema{Schema: json.RawMessage(`{"type":"object","properties":{"zone":{"type":"string"}}}`)}},
+			next:         Surface{ID: "acme", UserInput: &SurfaceSchema{Schema: json.RawMessage(`{"type":"object","properties":{"region":{"type":"string"}}}`), Replaces: []string{"retiredUserInput"}}},
+			wantContains: []string{"acme: user input property zone removed: converted through declared layout replacement"},
+			wantAbsent:   []string{"dropped on upgrade"},
 		},
 		{
 			name:      "added optional operation config property produces no finding",

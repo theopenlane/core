@@ -52,19 +52,69 @@
       }
     }
   },
-  "metadata": [
+  "installation": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/installation-metadata",
+      "$ref": "#/$defs/InstallationMetadata",
+      "$defs": {
+        "InstallationMetadata": {
+          "properties": {
+            "tenantId": {
+              "type": "string",
+              "title": "Tenant ID"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      }
+    }
+  },
+  "connections": [
+    "teamsCred"
+  ],
+  "operations": [
     {
-      "connection": "teamsCred",
+      "name": "MessageSendOperation",
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/installation-metadata",
-        "$ref": "#/$defs/InstallationMetadata",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/message-send-operation",
+        "$ref": "#/$defs/MessageSendOperation",
         "$defs": {
-          "InstallationMetadata": {
+          "MessageSendOperation": {
             "properties": {
-              "tenantId": {
+              "templateId": {
                 "type": "string",
-                "title": "Tenant ID"
+                "title": "Template ID"
+              },
+              "templateKey": {
+                "type": "string",
+                "title": "Template Key"
+              },
+              "teamId": {
+                "type": "string",
+                "title": "Team ID"
+              },
+              "channelId": {
+                "type": "string",
+                "title": "Channel ID"
+              },
+              "body": {
+                "type": "string",
+                "title": "Message Body"
+              },
+              "bodyFormat": {
+                "type": "string",
+                "enum": [
+                  "text",
+                  "html"
+                ],
+                "title": "Body Format"
+              },
+              "subject": {
+                "type": "string",
+                "title": "Subject"
               }
             },
             "additionalProperties": false,
@@ -72,14 +122,6 @@
           }
         }
       }
-    }
-  ],
-  "connections": [
-    "teamsCred"
-  ],
-  "operations": [
-    {
-      "name": "MessageSendOperation"
     }
   ]
 }
