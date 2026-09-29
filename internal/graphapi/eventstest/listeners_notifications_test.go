@@ -19,7 +19,6 @@ import (
 
 func TestNotificationListenerTaskAssignment(t *testing.T) {
 	org := suite.SeedFreshMinimalOrgUsers(t, false)
-	assigneeCtx := th.SetContext(org.Member.UserCtx, suite.Client.DB)
 
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, notifications.Listeners())
 	assert.NilError(t, err)
@@ -39,7 +38,7 @@ func TestNotificationListenerTaskAssignment(t *testing.T) {
 				notification.UserID(org.Member.ID),
 				notification.TopicEQ(enums.NotificationTopicTaskAssignment),
 			).
-			Exist(assigneeCtx)
+			Exist(org.Member.UserCtx)
 
 		return err == nil && exists
 	}, "assignee should receive a task assignment notification")
@@ -47,8 +46,6 @@ func TestNotificationListenerTaskAssignment(t *testing.T) {
 
 func TestNotificationListenerStandardUpdate(t *testing.T) {
 	org := suite.SeedFreshMinimalOrgUsers(t, false)
-	allowCtx := th.SetContext(org.Owner.UserCtx, suite.Client.DB)
-	adminCtx := th.SetContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
 
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, notifications.Listeners())
 	assert.NilError(t, err)
@@ -57,10 +54,10 @@ func TestNotificationListenerStandardUpdate(t *testing.T) {
 	std := (&th.StandardBuilder{Client: suite.Client, IsPublic: true}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 	assert.Assert(t, std.SystemOwned)
 
-	assert.NilError(t, suite.Client.DB.Standard.UpdateOneID(std.ID).SetRevision("v1.0.0").Exec(adminCtx))
+	assert.NilError(t, suite.Client.DB.Standard.UpdateOneID(std.ID).SetRevision("v1.0.0").Exec(th.SharedSystemAdminUser.UserCtx))
 
 	ctrl := (&th.ControlBuilder{Client: suite.Client, StandardID: std.ID}).MustNew(org.Owner.UserCtx, t)
-	assert.NilError(t, suite.Client.DB.Control.UpdateOneID(ctrl.ID).SetReferenceFrameworkRevision("v1.0.0").Exec(allowCtx))
+	assert.NilError(t, suite.Client.DB.Control.UpdateOneID(ctrl.ID).SetReferenceFrameworkRevision("v1.0.0").Exec(org.Owner.UserCtx))
 
 	_, err = suite.Client.API.UpdateStandard(th.SharedSystemAdminUser.UserCtx, std.ID, testclient.UpdateStandardInput{
 		Revision: lo.ToPtr("v2.0.0"),
@@ -75,7 +72,7 @@ func TestNotificationListenerStandardUpdate(t *testing.T) {
 				notification.UserID(org.Owner.ID),
 				notification.TopicEQ(enums.NotificationTopicStandardUpdate),
 			).
-			Exist(allowCtx)
+			Exist(org.Owner.UserCtx)
 
 		return err == nil && exists
 	}, "org owner should receive a standard update notification")

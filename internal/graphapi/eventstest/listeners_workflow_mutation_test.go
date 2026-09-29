@@ -135,104 +135,10 @@ func TestWorkflowAssignmentMutationListener(t *testing.T) {
 	})
 }
 
-func TestWorkflowMutationListenerCreateCallers(t *testing.T) {
-	owner := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+func TestWorkflowMutationListenerInternalPolicy(t *testing.T) {
+	org := suite.SeedOrgOwner(t)
+	owner := *org.Owner
 	policyManager := suite.OrgMemberWithFunctionalRoles(t, owner, "policy_manager")
-	ctx := th.SetContext(owner.UserCtx, suite.Client.DB)
-	tokenClient := suite.SetupAPITokenClient(owner.UserCtx, t)
-
-	_, workflowRuntime := acquireWorkflowRuntime(t)
-
-	workflowDef := createWorkflowDefinition(ctx, t, owner.OrganizationID, "InternalPolicy", enums.WorkflowKindNotification, models.WorkflowDefinitionDocument{
-		Triggers:   []models.WorkflowTrigger{{Operation: "CREATE"}},
-		Conditions: []models.WorkflowCondition{{Expression: "true"}},
-		Actions: []models.WorkflowAction{{
-			Type: enums.WorkflowActionTypeNotification.String(),
-			Key:  "policy_created_notification",
-		}},
-	})
-
-	testCases := []struct {
-		name   string
-		client *testclient.TestClient
-		ctx    context.Context
-	}{
-		{
-			name:   "policy manager creates a policy",
-			client: suite.Client.API,
-			ctx:    policyManager.UserCtx,
-		},
-		{
-			name:   "api token creates a policy",
-			client: tokenClient,
-			ctx:    context.Background(),
-		},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			resp, err := tc.client.CreateInternalPolicy(tc.ctx, testclient.CreateInternalPolicyInput{
-				Name: "workflow trigger policy " + ulids.New().String(),
-			})
-			assert.NilError(t, err)
-
-			waitForGala(t, workflowRuntime)
-
-			waitForWorkflowInstance(ctx, t, workflowDef.ID, workflowinstance.InternalPolicyIDEQ(resp.CreateInternalPolicy.InternalPolicy.ID), "policy create should start the workflow")
-		})
-	}
-}
-
-func TestWorkflowMutationListenerMemberUpdateStartsReview(t *testing.T) {
-	owner := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	policyManager := suite.OrgMemberWithFunctionalRoles(t, owner, "policy_manager")
-	ctx := th.SetContext(owner.UserCtx, suite.Client.DB)
-
-	_, workflowRuntime := acquireWorkflowRuntime(t)
-
-	params, err := json.Marshal(workflows.ReviewActionParams{
-		TargetedActionParams: workflows.TargetedActionParams{
-			Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: owner.ID}},
-		},
-		Label: "Policy Name Review",
-	})
-	assert.NilError(t, err)
-
-	workflowDef := createWorkflowDefinition(ctx, t, owner.OrganizationID, "InternalPolicy", enums.WorkflowKindApproval, models.WorkflowDefinitionDocument{
-		Triggers:   []models.WorkflowTrigger{{Operation: "UPDATE", Fields: []string{"name"}}},
-		Conditions: []models.WorkflowCondition{{Expression: "true"}},
-		Actions: []models.WorkflowAction{{
-			Type:   enums.WorkflowActionTypeReview.String(),
-			Key:    "policy_name_review",
-			Params: params,
-		}},
-	})
-
-	created, err := suite.Client.API.CreateInternalPolicy(policyManager.UserCtx, testclient.CreateInternalPolicyInput{
-		Name: "workflow review policy " + ulids.New().String(),
-	})
-	assert.NilError(t, err)
-
-	policyID := created.CreateInternalPolicy.InternalPolicy.ID
-
-	_, err = suite.Client.API.UpdateInternalPolicy(policyManager.UserCtx, policyID, testclient.UpdateInternalPolicyInput{
-		Name: lo.ToPtr("workflow review policy renamed " + ulids.New().String()),
-	})
-	assert.NilError(t, err)
-
-	waitForGala(t, workflowRuntime)
-
-	instance := waitForWorkflowInstance(ctx, t, workflowDef.ID, workflowinstance.InternalPolicyIDEQ(policyID), "policy updated by a non-admin should start the review workflow")
-
-	assignments, err := graphapi.WaitForAssignments(ctx, suite.Client.DB, instance.ID, 1)
-	assert.NilError(t, err)
-	assert.Check(t, is.Equal(enums.WorkflowAssignmentStatusPending, assignments[0].Status))
-}
-
-func TestWorkflowMutationListenerGroupSelectorMatchesPrivateGroup(t *testing.T) {
-	owner := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	policyManager := suite.OrgMemberWithFunctionalRoles(t, owner, "policy_manager")
-	ctx := th.SetContext(owner.UserCtx, suite.Client.DB)
 
 	_, workflowRuntime := acquireWorkflowRuntime(t)
 
@@ -249,40 +155,101 @@ func TestWorkflowMutationListenerGroupSelectorMatchesPrivateGroup(t *testing.T) 
 	_, err = suite.Client.API.GetGroupByID(policyManager.UserCtx, privateGroup.ID)
 	assert.Assert(t, err != nil)
 
-	workflowDef := createWorkflowDefinition(ctx, t, owner.OrganizationID, "InternalPolicy", enums.WorkflowKindNotification, models.WorkflowDefinitionDocument{
-		Triggers: []models.WorkflowTrigger{{
-			Operation: "UPDATE",
-			Fields:    []string{"details"},
-			Selector:  models.WorkflowSelector{GroupIDs: []string{privateGroup.ID}},
-		}},
-		Conditions: []models.WorkflowCondition{{Expression: "true"}},
-		Actions: []models.WorkflowAction{{
-			Type: enums.WorkflowActionTypeNotification.String(),
-			Key:  "private_group_policy_notification",
-		}},
-	})
-
-	created, err := suite.Client.API.CreateInternalPolicy(owner.UserCtx, testclient.CreateInternalPolicyInput{
-		Name:      "workflow selector policy " + ulids.New().String(),
-		EditorIDs: []string{privateGroup.ID},
+	reviewParams, err := json.Marshal(workflows.ReviewActionParams{
+		TargetedActionParams: workflows.TargetedActionParams{
+			Targets: []workflows.TargetConfig{{Type: enums.WorkflowTargetTypeUser, ID: owner.ID}},
+		},
+		Label: "Policy Name Review",
 	})
 	assert.NilError(t, err)
 
-	policyID := created.CreateInternalPolicy.InternalPolicy.ID
+	testCases := []struct {
+		name                string
+		client              *testclient.TestClient
+		ctx                 context.Context
+		kind                enums.WorkflowKind
+		trigger             models.WorkflowTrigger
+		action              models.WorkflowAction
+		editorIDs           []string
+		update              *testclient.UpdateInternalPolicyInput
+		expectedAssignments int
+	}{
+		{
+			name:    "policy manager create starts the workflow",
+			client:  suite.Client.API,
+			ctx:     policyManager.UserCtx,
+			kind:    enums.WorkflowKindNotification,
+			trigger: models.WorkflowTrigger{Operation: "CREATE"},
+			action:  models.WorkflowAction{Type: enums.WorkflowActionTypeNotification.String(), Key: "policy_created_notification"},
+		},
+		{
+			name:    "api token create starts the workflow",
+			client:  org.APIClient,
+			ctx:     context.Background(),
+			kind:    enums.WorkflowKindNotification,
+			trigger: models.WorkflowTrigger{Operation: "CREATE"},
+			action:  models.WorkflowAction{Type: enums.WorkflowActionTypeNotification.String(), Key: "policy_created_notification"},
+		},
+		{
+			name:                "policy manager update starts the review workflow",
+			client:              suite.Client.API,
+			ctx:                 policyManager.UserCtx,
+			kind:                enums.WorkflowKindApproval,
+			trigger:             models.WorkflowTrigger{Operation: "UPDATE", Fields: []string{"name"}},
+			action:              models.WorkflowAction{Type: enums.WorkflowActionTypeReview.String(), Key: "policy_name_review", Params: reviewParams},
+			update:              &testclient.UpdateInternalPolicyInput{Name: lo.ToPtr("workflow review policy renamed " + ulids.New().String())},
+			expectedAssignments: 1,
+		},
+		{
+			name:      "policy manager update matches a private group selector",
+			client:    suite.Client.API,
+			ctx:       owner.UserCtx,
+			kind:      enums.WorkflowKindNotification,
+			trigger:   models.WorkflowTrigger{Operation: "UPDATE", Fields: []string{"details"}, Selector: models.WorkflowSelector{GroupIDs: []string{privateGroup.ID}}},
+			action:    models.WorkflowAction{Type: enums.WorkflowActionTypeNotification.String(), Key: "private_group_policy_notification"},
+			editorIDs: []string{privateGroup.ID},
+			update:    &testclient.UpdateInternalPolicyInput{Details: lo.ToPtr("updated by the policy manager")},
+		},
+	}
 
-	_, err = suite.Client.API.UpdateInternalPolicy(policyManager.UserCtx, policyID, testclient.UpdateInternalPolicyInput{
-		Details: lo.ToPtr("updated by the policy manager"),
-	})
-	assert.NilError(t, err)
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			workflowDef := createWorkflowDefinition(owner.UserCtx, t, owner.OrganizationID, "InternalPolicy", tc.kind, models.WorkflowDefinitionDocument{
+				Triggers:   []models.WorkflowTrigger{tc.trigger},
+				Conditions: []models.WorkflowCondition{{Expression: "true"}},
+				Actions:    []models.WorkflowAction{tc.action},
+			})
 
-	waitForGala(t, workflowRuntime)
+			created, err := tc.client.CreateInternalPolicy(tc.ctx, testclient.CreateInternalPolicyInput{
+				Name:      "workflow trigger policy " + ulids.New().String(),
+				EditorIDs: tc.editorIDs,
+			})
+			assert.NilError(t, err)
 
-	waitForWorkflowInstance(ctx, t, workflowDef.ID, workflowinstance.InternalPolicyIDEQ(policyID), "policy in a private group updated by a non-admin should start the workflow")
+			policyID := created.CreateInternalPolicy.InternalPolicy.ID
+
+			if tc.update != nil {
+				_, err = suite.Client.API.UpdateInternalPolicy(policyManager.UserCtx, policyID, *tc.update)
+				assert.NilError(t, err)
+			}
+
+			waitForGala(t, workflowRuntime)
+
+			instance := waitForWorkflowInstance(owner.UserCtx, t, workflowDef.ID, workflowinstance.InternalPolicyIDEQ(policyID), tc.name)
+
+			if tc.expectedAssignments == 0 {
+				return
+			}
+
+			assignments, err := graphapi.WaitForAssignments(owner.UserCtx, suite.Client.DB, instance.ID, tc.expectedAssignments)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(enums.WorkflowAssignmentStatusPending, assignments[0].Status))
+		})
+	}
 }
 
 func TestWorkflowMutationListenerTriggeredByAnonymousRespondent(t *testing.T) {
 	owner := suite.UserBuilder(context.Background(), t)
-	ctx := th.SetContext(owner.UserCtx, suite.Client.DB)
 
 	_, workflowRuntime := acquireWorkflowRuntime(t)
 
@@ -290,7 +257,7 @@ func TestWorkflowMutationListenerTriggeredByAnonymousRespondent(t *testing.T) {
 	assessment := (&th.AssessmentBuilder{Client: suite.Client, TemplateID: template.ID}).MustNew(owner.UserCtx, t)
 	response := (&th.AssessmentResponseBuilder{Client: suite.Client, AssessmentID: assessment.ID, OwnerID: owner.OrganizationID}).MustNew(owner.UserCtx, t)
 
-	workflowDef := createWorkflowDefinition(ctx, t, owner.OrganizationID, "AssessmentResponse", enums.WorkflowKindNotification, models.WorkflowDefinitionDocument{
+	workflowDef := createWorkflowDefinition(owner.UserCtx, t, owner.OrganizationID, "AssessmentResponse", enums.WorkflowKindNotification, models.WorkflowDefinitionDocument{
 		Triggers:   []models.WorkflowTrigger{{Operation: "UPDATE", Fields: []string{"status"}}},
 		Conditions: []models.WorkflowCondition{{Expression: "true"}},
 		Actions: []models.WorkflowAction{{
@@ -299,6 +266,7 @@ func TestWorkflowMutationListenerTriggeredByAnonymousRespondent(t *testing.T) {
 		}},
 	})
 
+	// covers the listener under the anonymous respondent caller which is why the privacy.Allow is here, the handler path is covered by TestSubmitQuestionnaire
 	respondent := auth.NewQuestionnaireCaller(owner.OrganizationID, ulids.New().String(), "Anonymous Respondent", "")
 	respondentCtx := privacy.DecisionContext(auth.WithCaller(context.Background(), respondent), privacy.Allow)
 
@@ -308,5 +276,5 @@ func TestWorkflowMutationListenerTriggeredByAnonymousRespondent(t *testing.T) {
 
 	waitForGala(t, workflowRuntime)
 
-	waitForWorkflowInstance(ctx, t, workflowDef.ID, workflowinstance.AssessmentResponseIDEQ(response.ID), "response completed by an anonymous respondent should start the workflow")
+	waitForWorkflowInstance(owner.UserCtx, t, workflowDef.ID, workflowinstance.AssessmentResponseIDEQ(response.ID), "response completed by an anonymous respondent should start the workflow")
 }

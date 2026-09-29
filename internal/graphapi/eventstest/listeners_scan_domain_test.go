@@ -10,21 +10,17 @@ import (
 	"testing"
 	"time"
 
-	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
-
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/graphapi"
@@ -39,9 +35,9 @@ import (
 )
 
 func TestDomainScanListeners(t *testing.T) {
-	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	ctx := th.SetContext(user.UserCtx, suite.Client.DB)
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	org := suite.SeedOrgOwner(t)
+	user := org.Owner
+	ctx := org.Owner.UserCtx
 
 	// workers on the dispatch runtime are never started, so dispatched cloudflare runs
 	// stay queued for counting instead of executing against the fake credentials
@@ -131,24 +127,25 @@ func TestDomainScanListeners(t *testing.T) {
 	t.Run("organization setting domains update dispatches one run per domain", func(t *testing.T) {
 		setting, err := suite.Client.DB.OrganizationSetting.Query().
 			Where(organizationsetting.OrganizationID(user.OrganizationID)).
-			Only(allowCtx)
+			Only(ctx)
 		assert.NilError(t, err)
 
 		domains := []string{"one.dispatch.example.com", "two.dispatch.example.com"}
 
 		assert.NilError(t, suite.Client.DB.OrganizationSetting.UpdateOneID(setting.ID).
 			SetDomains(domains).
-			Exec(allowCtx))
+			Exec(ctx))
 
 		waitForCondition(t, func() bool { return countRuns(t) == baseline+1+len(domains) }, "domains update should dispatch one run per current domain")
 	})
 }
 
 func TestImportDomainScanReviewRequiresCreatePermissions(t *testing.T) {
-	owner := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	riskManager := suite.OrgMemberWithFunctionalRoles(t, owner, "risk_manager")
+	org := suite.SeedFreshMinimalOrgUsers(t, false)
+	owner := org.Owner
+	riskManager := suite.OrgMemberWithFunctionalRoles(t, *owner, "risk_manager")
 
-	ctx := th.SetContext(owner.UserCtx, suite.Client.DB)
+	ctx := owner.UserCtx
 
 	domainScan, err := suite.Client.DB.Scan.Create().
 		SetOwnerID(owner.OrganizationID).
@@ -180,8 +177,14 @@ func TestImportDomainScanReviewRequiresCreatePermissions(t *testing.T) {
 			expectCreated: true,
 		},
 		{
-			name: "risk manager who can view scans cannot create records through import",
-			ctx:  riskManager.UserCtx,
+			name:          "risk manager who can view scans cannot create records through import",
+			ctx:           riskManager.UserCtx,
+			expectCreated: false,
+		},
+		{
+			name:          "member cannot create objects",
+			ctx:           org.Member.UserCtx,
+			expectCreated: false,
 		},
 	}
 
@@ -218,8 +221,9 @@ func TestImportDomainScanReviewRequiresCreatePermissions(t *testing.T) {
 }
 
 func TestDomainScanPollFinalizesAndNotifiesGroup(t *testing.T) {
-	owner := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	ctx := th.SetContext(owner.UserCtx, suite.Client.DB)
+	org := suite.SeedOrgOwner(t)
+	owner := org.Owner
+	ctx := org.Owner.UserCtx
 
 	readyScan := createProcessingDomainScan(ctx, t, owner.OrganizationID)
 	brokenScan := createProcessingDomainScan(ctx, t, owner.OrganizationID)
