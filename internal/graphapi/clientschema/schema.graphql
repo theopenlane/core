@@ -18648,6 +18648,10 @@ input CreateTrustCenterNDARequestInput {
 	"""
 	accessLevel: TrustCenterNDARequestTrustCenterNDARequestAccessLevel
 	"""
+	status of the NDA request
+	"""
+	status: TrustCenterNDARequestTrustCenterNDARequestStatus
+	"""
 	timestamp when the request was approved
 	"""
 	approvedAt: DateTime
@@ -18825,6 +18829,10 @@ input CreateTrustCenterSettingInput {
 	URL to the company's status page
 	"""
 	statusPageURL: String
+	"""
+	allow trustcenter to be indexed on google
+	"""
+	noindexDefaultDomain: Boolean
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	logoFileID: ID
@@ -86222,6 +86230,10 @@ type TrustCenterSetting implements Node @modules(names: ["trust_center_module"])
 	URL to the company's status page
 	"""
 	statusPageURL: String
+	"""
+	allow trustcenter to be indexed on google
+	"""
+	noindexDefaultDomain: Boolean
 	blockedGroups(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -86819,6 +86831,13 @@ input TrustCenterSettingWhereInput {
 	statusPageURLEqualFold: String
 	statusPageURLContainsFold: String
 	"""
+	noindex_default_domain field predicates
+	"""
+	noindexDefaultDomain: Boolean
+	noindexDefaultDomainNEQ: Boolean
+	noindexDefaultDomainIsNil: Boolean
+	noindexDefaultDomainNotNil: Boolean
+	"""
 	blocked_groups edge predicates
 	"""
 	hasBlockedGroups: Boolean
@@ -87059,6 +87078,7 @@ Properties by which TrustCenterSubprocessor connections can be ordered.
 enum TrustCenterSubprocessorOrderField {
 	created_at
 	updated_at
+	SUBPROCESSOR_name
 }
 """
 Return response for updateTrustCenterSubprocessor mutation
@@ -95894,6 +95914,11 @@ input UpdateTrustCenterSettingInput {
 	"""
 	statusPageURL: String
 	clearStatusPageURL: Boolean
+	"""
+	allow trustcenter to be indexed on google
+	"""
+	noindexDefaultDomain: Boolean
+	clearNoindexDefaultDomain: Boolean
 	addBlockedGroupIDs: [ID!]
 	removeBlockedGroupIDs: [ID!]
 	clearBlockedGroups: Boolean

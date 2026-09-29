@@ -35435,8 +35435,12 @@ func (p *trustcentersubprocessorPager) applyOrder(query *TrustCenterSubprocessor
 		if o.Field.column == DefaultTrustCenterSubprocessorOrder.Field.column {
 			defaultOrdered = true
 		}
-		if len(query.ctx.Fields) > 0 {
-			query.ctx.AppendFieldOnce(o.Field.column)
+		switch o.Field.column {
+		case TrustCenterSubprocessorOrderFieldSubprocessorName.column:
+		default:
+			if len(query.ctx.Fields) > 0 {
+				query.ctx.AppendFieldOnce(o.Field.column)
+			}
 		}
 	}
 	if !defaultOrdered {
@@ -35450,9 +35454,18 @@ func (p *trustcentersubprocessorPager) applyOrder(query *TrustCenterSubprocessor
 }
 
 func (p *trustcentersubprocessorPager) orderExpr(query *TrustCenterSubprocessorQuery) sql.Querier {
-	if len(query.ctx.Fields) > 0 {
-		for _, o := range p.order {
-			query.ctx.AppendFieldOnce(o.Field.column)
+	for _, o := range p.order {
+		switch o.Field.column {
+		case TrustCenterSubprocessorOrderFieldSubprocessorName.column:
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		default:
+			if len(query.ctx.Fields) > 0 {
+				query.ctx.AppendFieldOnce(o.Field.column)
+			}
 		}
 	}
 	return sql.ExprFunc(func(b *sql.Builder) {
@@ -35566,6 +35579,26 @@ var (
 			}
 		},
 	}
+	// TrustCenterSubprocessorOrderFieldSubprocessorName orders by SUBPROCESSOR_name.
+	TrustCenterSubprocessorOrderFieldSubprocessorName = &TrustCenterSubprocessorOrderField{
+		Value: func(_m *TrustCenterSubprocessor) (ent.Value, error) {
+			return _m.Value("subprocessor_name")
+		},
+		column: "subprocessor_name",
+		toTerm: func(opts ...sql.OrderTermOption) trustcentersubprocessor.OrderOption {
+			return trustcentersubprocessor.BySubprocessorField(
+				subprocessor.FieldName,
+				append(opts, sql.OrderSelectAs("subprocessor_name"))...,
+			)
+		},
+		toCursor: func(_m *TrustCenterSubprocessor) Cursor {
+			cv, _ := _m.Value("subprocessor_name")
+			return Cursor{
+				ID:    _m.ID,
+				Value: cv,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -35576,6 +35609,8 @@ func (f TrustCenterSubprocessorOrderField) String() string {
 		str = "created_at"
 	case TrustCenterSubprocessorOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case TrustCenterSubprocessorOrderFieldSubprocessorName.column:
+		str = "SUBPROCESSOR_name"
 	}
 	return str
 }
@@ -35596,6 +35631,8 @@ func (f *TrustCenterSubprocessorOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TrustCenterSubprocessorOrderFieldCreatedAt
 	case "updated_at":
 		*f = *TrustCenterSubprocessorOrderFieldUpdatedAt
+	case "SUBPROCESSOR_name":
+		*f = *TrustCenterSubprocessorOrderFieldSubprocessorName
 	default:
 		return fmt.Errorf("%s is not a valid TrustCenterSubprocessorOrderField", str)
 	}

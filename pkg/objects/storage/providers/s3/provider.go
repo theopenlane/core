@@ -130,34 +130,37 @@ func validateS3Config(cfg providerConfig) mo.Result[providerConfig] {
 
 // createS3Provider creates the S3 provider after configuration is validated
 func createS3Provider(cfg providerConfig) mo.Result[*Provider] {
-	// Check credentials similar to original implementation
-	if lo.IsEmpty(cfg.options.Credentials.AccessKeyID) || lo.IsEmpty(cfg.options.Credentials.SecretAccessKey) {
-		log.Info().Msg("AWS credentials not provided, attempting to use environment variables")
-
-		awsEnvConfig, err := config.NewEnvConfig()
-		if err != nil {
-			return mo.Err[*Provider](err)
-		}
-
-		if lo.IsEmpty(awsEnvConfig.Credentials.AccessKeyID) || lo.IsEmpty(awsEnvConfig.Credentials.SecretAccessKey) {
-			log.Error().Err(err).Msg("AWS credentials not found in environment variables")
-			return mo.Err[*Provider](ErrS3LoadCredentials)
-		}
-	}
-
-	// Create credentials with cache as in original
-	creds := aws.NewCredentialsCache(credentials.NewStaticCredentialsProvider(cfg.options.Credentials.AccessKeyID, cfg.options.Credentials.SecretAccessKey, ""))
-
 	awsConfig := aws.Config{}
 	if cfg.awsConfig != nil {
 		awsConfig = *cfg.awsConfig
 	}
 
+	// a supplied config carrying credentials (assume-role, default chain) is used as-is
+	if awsConfig.Credentials == nil {
+		// Check credentials similar to original implementation
+		if lo.IsEmpty(cfg.options.Credentials.AccessKeyID) || lo.IsEmpty(cfg.options.Credentials.SecretAccessKey) {
+			log.Info().Msg("AWS credentials not provided, attempting to use environment variables")
+
+			awsEnvConfig, err := config.NewEnvConfig()
+			if err != nil {
+				return mo.Err[*Provider](err)
+			}
+
+			if lo.IsEmpty(awsEnvConfig.Credentials.AccessKeyID) || lo.IsEmpty(awsEnvConfig.Credentials.SecretAccessKey) {
+				log.Error().Err(err).Msg("AWS credentials not found in environment variables")
+				return mo.Err[*Provider](ErrS3LoadCredentials)
+			}
+		}
+
+		// Create credentials with cache as in original
+		awsConfig.Credentials = aws.NewCredentialsCache(credentials.NewStaticCredentialsProvider(cfg.options.Credentials.AccessKeyID, cfg.options.Credentials.SecretAccessKey, ""))
+	}
+
+	creds := awsConfig.Credentials
+
 	if awsConfig.Region == "" {
 		awsConfig.Region = cfg.options.Region
 	}
-
-	awsConfig.Credentials = creds
 
 	if cfg.options.Endpoint != "" {
 		awsConfig.BaseEndpoint = aws.String(cfg.options.Endpoint)
@@ -379,6 +382,33 @@ func (p *Provider) Exists(ctx context.Context, file *storagetypes.File) (bool, e
 	}
 
 	return true, nil
+}
+
+// ListObjects returns the object keys under prefix, at most limit when limit is positive
+func (p *Provider) ListObjects(ctx context.Context, prefix string, limit int) ([]string, error) {
+	var keys []string
+
+	paginator := s3.NewListObjectsV2Paginator(p.client, &s3.ListObjectsV2Input{
+		Bucket: aws.String(p.options.Bucket),
+		Prefix: aws.String(prefix),
+	})
+
+	for paginator.HasMorePages() {
+		page, err := paginator.NextPage(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, obj := range page.Contents {
+			keys = append(keys, *obj.Key)
+		}
+
+		if limit > 0 && len(keys) >= limit {
+			return keys[:limit], nil
+		}
+	}
+
+	return keys, nil
 }
 
 // GetScheme returns the URI scheme for S3

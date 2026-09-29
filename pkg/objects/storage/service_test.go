@@ -107,6 +107,10 @@ func (m *mockProvider) GetScheme() *string {
 	return &scheme
 }
 
+func (m *mockProvider) ListObjects(context.Context, string, int) ([]string, error) {
+	return nil, nil
+}
+
 func (m *mockProvider) ListBuckets() ([]string, error) {
 	return []string{"bucket1", "bucket2"}, nil
 }

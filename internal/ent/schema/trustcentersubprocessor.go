@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -95,6 +96,7 @@ func (t TrustCenterSubprocessor) Edges() []ent.Edge {
 			required:   true,
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Organization{}.Name()),
+				entgql.OrderField("SUBPROCESSOR_name"),
 			},
 		}),
 	}

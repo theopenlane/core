@@ -177,12 +177,12 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 		email = qCaller.SubjectEmail
 		ownerID = qCaller.OrganizationID
 
-		// bypass org filter and FGA tuple creation for questionnaire submissions;
+		// bypass FGA tuple creation for questionnaire submissions;
 		// DocumentData ownership is tracked via AssessmentResponse, not FGA tuples
 		allowCtx = auth.WithCaller(allowCtx, &auth.Caller{
 			OrganizationID: qCaller.OrganizationID,
 			SubjectID:      qCaller.SubjectID,
-			Capabilities:   auth.CapBypassFGA | auth.CapBypassOrgFilter,
+			Capabilities:   auth.CapBypassFGA,
 		})
 	}
 

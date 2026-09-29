@@ -23988,6 +23988,10 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetNillableStatusPageURL(&statusPageURL)
 	}
 
+	if noindexDefaultDomain, exists := m.NoindexDefaultDomain(); exists {
+		create = create.SetNoindexDefaultDomain(noindexDefaultDomain)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -24232,6 +24236,12 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNillableStatusPageURL(trustcentersetting.StatusPageURL)
 		}
 
+		if noindexDefaultDomain, exists := m.NoindexDefaultDomain(); exists {
+			create = create.SetNoindexDefaultDomain(noindexDefaultDomain)
+		} else {
+			create = create.SetNoindexDefaultDomain(trustcentersetting.NoindexDefaultDomain)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -24305,6 +24315,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetNillableSubprocessorsNotifiedAt(trustcentersetting.SubprocessorsNotifiedAt).
 			SetNillableNdaApproverGroupID(trustcentersetting.NdaApproverGroupID).
 			SetNillableStatusPageURL(trustcentersetting.StatusPageURL).
+			SetNoindexDefaultDomain(trustcentersetting.NoindexDefaultDomain).
 			Save(ctx)
 		if err != nil {
 			return err

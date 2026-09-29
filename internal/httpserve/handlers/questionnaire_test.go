@@ -2,6 +2,7 @@ package handlers_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -20,6 +21,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
@@ -438,7 +440,7 @@ func (suite *HandlerTestSuite) TestQuestionnaireWithCampaign() {
 	}
 
 	responseWithoutCampaignID, responseWithoutCampaignDocID := assessmentResponseFn("", "orphan answer")
-	campaignResposeWithID, campaignDocDataResponseID := assessmentResponseFn(campaign.ID, "here is my answer")
+	campaignResponseWithID, campaignDocDataResponseID := assessmentResponseFn(campaign.ID, "here is my answer")
 
 	anonUserID := fmt.Sprintf("anon_questionnaire_%s", assessment.ID)
 	accessToken, _, err := suite.h.DBClient.TokenManager.CreateTokenPair(&tokens.Claims{
@@ -494,7 +496,7 @@ func (suite *HandlerTestSuite) TestQuestionnaireWithCampaign() {
 		assert.Equal(t, "COMPLETED", out.Status)
 		assert.NotEmpty(t, out.CompletedAt)
 
-		updated, err := suite.db.AssessmentResponse.Get(questionnaireCtx, campaignResposeWithID)
+		updated, err := suite.db.AssessmentResponse.Get(questionnaireCtx, campaignResponseWithID)
 		require.NoError(t, err)
 		assert.Equal(t, enums.AssessmentResponseStatusCompleted, updated.Status)
 
@@ -510,7 +512,7 @@ func (suite *HandlerTestSuite) TestQuestionnaireWithCampaign() {
 
 	suite.db.DocumentData.DeleteOneID(campaignDocDataResponseID).Exec(questionnaireCtx)
 	suite.db.DocumentData.DeleteOneID(responseWithoutCampaignDocID).Exec(questionnaireCtx)
-	suite.db.AssessmentResponse.DeleteOneID(campaignResposeWithID).Exec(questionnaireCtx)
+	suite.db.AssessmentResponse.DeleteOneID(campaignResponseWithID).Exec(questionnaireCtx)
 	suite.db.AssessmentResponse.DeleteOneID(responseWithoutCampaignID).Exec(questionnaireCtx)
 	suite.db.Campaign.DeleteOneID(campaign.ID).Exec(questionnaireCtx)
 	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(questionnaireCtx)
@@ -1114,6 +1116,14 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireCaller() {
 		},
 	}
 
+	otherOrgAssessment, err := suite.db.Assessment.Create().
+		SetName("Other Org Assessment").
+		SetAssessmentType(enums.AssessmentTypeExternal).
+		SetJsonconfig(map[string]any{"title": "Other Org Assessment"}).
+		SetOwnerID(testUser2.OrganizationID).
+		Save(testUser2.UserCtx)
+	require.NoError(t, err)
+
 	testCases := []struct {
 		name           string
 		requestBody    models.SubmitQuestionnaireRequest
@@ -1139,6 +1149,26 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireCaller() {
 			expectedStatus: http.StatusBadRequest,
 			expectSuccess:  false,
 			expectedError:  "missing assessment ID",
+		},
+		{
+			name: "assessment in another organization",
+			requestBody: models.SubmitQuestionnaireRequest{
+				AssessmentID: otherOrgAssessment.ID,
+				Data:         submissionData.Data,
+			},
+			expectedStatus: http.StatusNotFound,
+			expectSuccess:  false,
+			expectedError:  "assessment not found",
+		},
+		{
+			name: "assessment that does not exist",
+			requestBody: models.SubmitQuestionnaireRequest{
+				AssessmentID: ulids.New().String(),
+				Data:         submissionData.Data,
+			},
+			expectedStatus: http.StatusNotFound,
+			expectSuccess:  false,
+			expectedError:  "assessment not found",
 		},
 	}
 
@@ -1205,6 +1235,54 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireCaller() {
 		})
 	}
 
+	t.Run("org member with a response can submit", func(t *testing.T) {
+		member := suite.userBuilder(context.Background())
+
+		err := suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+			OrganizationID: testUser1.OrganizationID,
+			UserID:         member.ID,
+			Role:           &enums.RoleMember,
+		}).Exec(testUser1.UserCtx)
+		require.NoError(t, err)
+
+		memberResponse, err := suite.db.AssessmentResponse.Create().
+			SetAssessmentID(assessment.ID).
+			SetEmail(member.UserInfo.Email).
+			SetOwnerID(testUser1.OrganizationID).
+			SetStatus(enums.AssessmentResponseStatusSent).
+			Save(testUser1.UserCtx)
+		require.NoError(t, err)
+
+		t.Cleanup(func() {
+			require.NoError(t, suite.db.AssessmentResponse.DeleteOneID(memberResponse.ID).Exec(testUser1.UserCtx))
+		})
+
+		bodyBytes, err := json.Marshal(submissionData)
+		require.NoError(t, err)
+
+		req := httptest.NewRequest(http.MethodPost, "/questionnaire", bytes.NewReader(bodyBytes))
+		req.Header.Set("Content-Type", "application/json")
+
+		reqCtx := auth.WithCaller(member.UserCtx, &auth.Caller{
+			SubjectID:      member.ID,
+			SubjectEmail:   member.UserInfo.Email,
+			OrganizationID: testUser1.OrganizationID,
+		})
+
+		recorder := httptest.NewRecorder()
+		suite.e.ServeHTTP(recorder, req.WithContext(reqCtx))
+
+		assert.Equal(t, http.StatusOK, recorder.Code)
+
+		updatedResponse, err := suite.db.AssessmentResponse.Get(testUser1.UserCtx, memberResponse.ID)
+		require.NoError(t, err)
+		assert.Equal(t, enums.AssessmentResponseStatusCompleted, updatedResponse.Status)
+
+		if updatedResponse.DocumentDataID != "" {
+			documentDataIDs = append(documentDataIDs, updatedResponse.DocumentDataID)
+		}
+	})
+
 	for _, docID := range documentDataIDs {
 		err := suite.db.DocumentData.DeleteOneID(docID).Exec(testUser1.UserCtx)
 		require.NoError(t, err)
@@ -1215,6 +1293,8 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireCaller() {
 	err = suite.db.Assessment.DeleteOneID(assessment.ID).Exec(testUser1.UserCtx)
 	require.NoError(t, err)
 	err = suite.db.Template.DeleteOneID(template.ID).Exec(testUser1.UserCtx)
+	require.NoError(t, err)
+	err = suite.db.Assessment.DeleteOneID(otherOrgAssessment.ID).Exec(testUser2.UserCtx)
 	require.NoError(t, err)
 }
 

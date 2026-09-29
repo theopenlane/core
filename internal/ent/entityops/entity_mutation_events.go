@@ -50,6 +50,9 @@ const (
 	MutationConcernWorkflow MutationConcern = "workflow"
 	// MutationConcernNotification is the concern for notification mutation listeners
 	MutationConcernNotification MutationConcern = "notification"
+	// MutationConcernTaskRule is the concern for task rule listeners, kept off the direct
+	// namespace so suggested tasks are not queued behind slower direct listeners
+	MutationConcernTaskRule MutationConcern = "task_rule"
 )
 
 const (
@@ -69,6 +72,8 @@ func concernNamespace(concern MutationConcern) gala.Namespace {
 		return gala.Mutation.Prefixed("workflow")
 	case MutationConcernNotification:
 		return gala.Mutation.Prefixed("notification")
+	case MutationConcernTaskRule:
+		return gala.Mutation.Prefixed("task_rule")
 	default:
 		return gala.Mutation
 	}
@@ -126,11 +131,12 @@ func MutationTopic(concern MutationConcern, schemaType string) gala.Topic[Mutati
 }
 
 // MutationConcernTopics returns the concern topic names a schema mutation fans out to
-func MutationConcernTopics(schemaType string) [3]gala.TopicName {
-	return [3]gala.TopicName{
+func MutationConcernTopics(schemaType string) [4]gala.TopicName {
+	return [4]gala.TopicName{
 		MutationTopicName(MutationConcernDirect, schemaType),
 		MutationTopicName(MutationConcernWorkflow, schemaType),
 		MutationTopicName(MutationConcernNotification, schemaType),
+		MutationTopicName(MutationConcernTaskRule, schemaType),
 	}
 }
 

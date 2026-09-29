@@ -2626,6 +2626,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldSubprocessorsNotifiedAt:               {Type: field.TypeTime, Column: trustcentersettinghistory.FieldSubprocessorsNotifiedAt},
 			trustcentersettinghistory.FieldNdaApproverGroupID:                    {Type: field.TypeString, Column: trustcentersettinghistory.FieldNdaApproverGroupID},
 			trustcentersettinghistory.FieldStatusPageURL:                         {Type: field.TypeString, Column: trustcentersettinghistory.FieldStatusPageURL},
+			trustcentersettinghistory.FieldNoindexDefaultDomain:                  {Type: field.TypeBool, Column: trustcentersettinghistory.FieldNoindexDefaultDomain},
 		},
 	}
 	graph.Nodes[58] = &sqlgraph.Node{
@@ -14329,6 +14330,11 @@ func (f *TrustCenterSettingHistoryFilter) WhereNdaApproverGroupID(p entql.String
 // WhereStatusPageURL applies the entql string predicate on the status_page_url field.
 func (f *TrustCenterSettingHistoryFilter) WhereStatusPageURL(p entql.StringP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldStatusPageURL))
+}
+
+// WhereNoindexDefaultDomain applies the entql bool predicate on the noindex_default_domain field.
+func (f *TrustCenterSettingHistoryFilter) WhereNoindexDefaultDomain(p entql.BoolP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldNoindexDefaultDomain))
 }
 
 // addPredicate implements the predicateAdder interface.

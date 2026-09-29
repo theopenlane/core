@@ -16,6 +16,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
@@ -192,6 +193,10 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Validate(validator.ValidateURL()).
 			Optional().
 			Nillable(),
+		field.Bool("noindex_default_domain").
+			Comment("allow trustcenter to be indexed on google").
+			Default(true).
+			Optional(),
 	}
 }
 

@@ -4,7 +4,7 @@ go 1.27.1
 
 require (
 	entgo.io/ent v0.14.6
-	github.com/go-webauthn/webauthn v0.17.4
+	github.com/go-webauthn/webauthn v0.18.1
 	github.com/google/uuid v1.6.0
 	github.com/riverqueue/river v0.47.0
 	github.com/robfig/cron/v3 v3.0.1
@@ -13,7 +13,7 @@ require (
 	github.com/stretchr/testify v1.12.1
 	github.com/theopenlane/core/v2 v2.4.7
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.34.2
+	github.com/theopenlane/entx v0.34.4
 	github.com/theopenlane/utils v0.7.1
 	github.com/zitadel/oidc/v3 v3.49.6
 	golang.org/x/oauth2 v0.37.0
@@ -40,7 +40,7 @@ require (
 	github.com/go-openapi/inflect v1.0.0 // indirect
 	github.com/go-test/deep v1.1.1 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
-	github.com/go-webauthn/x v0.3.0 // indirect
+	github.com/go-webauthn/x v0.3.1 // indirect
 	github.com/goccy/go-yaml v1.19.2 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect

@@ -142112,6 +142112,7 @@ type TrustCenterSettingHistoryMutation struct {
 	subprocessors_notified_at                 *time.Time
 	nda_approver_group_id                     *string
 	status_page_url                           *string
+	noindex_default_domain                    *bool
 	clearedFields                             map[string]struct{}
 	done                                      bool
 	oldValue                                  func(context.Context) (*TrustCenterSettingHistory, error)
@@ -144058,6 +144059,55 @@ func (m *TrustCenterSettingHistoryMutation) ResetStatusPageURL() {
 	delete(m.clearedFields, trustcentersettinghistory.FieldStatusPageURL)
 }
 
+// SetNoindexDefaultDomain sets the "noindex_default_domain" field.
+func (m *TrustCenterSettingHistoryMutation) SetNoindexDefaultDomain(b bool) {
+	m.noindex_default_domain = &b
+}
+
+// NoindexDefaultDomain returns the value of the "noindex_default_domain" field in the mutation.
+func (m *TrustCenterSettingHistoryMutation) NoindexDefaultDomain() (r bool, exists bool) {
+	v := m.noindex_default_domain
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNoindexDefaultDomain returns the old "noindex_default_domain" field's value of the TrustCenterSettingHistory entity.
+// If the TrustCenterSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterSettingHistoryMutation) OldNoindexDefaultDomain(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNoindexDefaultDomain is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNoindexDefaultDomain requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNoindexDefaultDomain: %w", err)
+	}
+	return oldValue.NoindexDefaultDomain, nil
+}
+
+// ClearNoindexDefaultDomain clears the value of the "noindex_default_domain" field.
+func (m *TrustCenterSettingHistoryMutation) ClearNoindexDefaultDomain() {
+	m.noindex_default_domain = nil
+	m.clearedFields[trustcentersettinghistory.FieldNoindexDefaultDomain] = struct{}{}
+}
+
+// NoindexDefaultDomainCleared returns if the "noindex_default_domain" field was cleared in this mutation.
+func (m *TrustCenterSettingHistoryMutation) NoindexDefaultDomainCleared() bool {
+	_, ok := m.clearedFields[trustcentersettinghistory.FieldNoindexDefaultDomain]
+	return ok
+}
+
+// ResetNoindexDefaultDomain resets all changes to the "noindex_default_domain" field.
+func (m *TrustCenterSettingHistoryMutation) ResetNoindexDefaultDomain() {
+	m.noindex_default_domain = nil
+	delete(m.clearedFields, trustcentersettinghistory.FieldNoindexDefaultDomain)
+}
+
 // Where appends a list predicates to the TrustCenterSettingHistoryMutation builder.
 func (m *TrustCenterSettingHistoryMutation) Where(ps ...predicate.TrustCenterSettingHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -144092,7 +144142,7 @@ func (m *TrustCenterSettingHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TrustCenterSettingHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 38)
+	fields := make([]string, 0, 39)
 	if m.history_time != nil {
 		fields = append(fields, trustcentersettinghistory.FieldHistoryTime)
 	}
@@ -144207,6 +144257,9 @@ func (m *TrustCenterSettingHistoryMutation) Fields() []string {
 	if m.status_page_url != nil {
 		fields = append(fields, trustcentersettinghistory.FieldStatusPageURL)
 	}
+	if m.noindex_default_domain != nil {
+		fields = append(fields, trustcentersettinghistory.FieldNoindexDefaultDomain)
+	}
 	return fields
 }
 
@@ -144291,6 +144344,8 @@ func (m *TrustCenterSettingHistoryMutation) Field(name string) (ent.Value, bool)
 		return m.NdaApproverGroupID()
 	case trustcentersettinghistory.FieldStatusPageURL:
 		return m.StatusPageURL()
+	case trustcentersettinghistory.FieldNoindexDefaultDomain:
+		return m.NoindexDefaultDomain()
 	}
 	return nil, false
 }
@@ -144376,6 +144431,8 @@ func (m *TrustCenterSettingHistoryMutation) OldField(ctx context.Context, name s
 		return m.OldNdaApproverGroupID(ctx)
 	case trustcentersettinghistory.FieldStatusPageURL:
 		return m.OldStatusPageURL(ctx)
+	case trustcentersettinghistory.FieldNoindexDefaultDomain:
+		return m.OldNoindexDefaultDomain(ctx)
 	}
 	return nil, fmt.Errorf("unknown TrustCenterSettingHistory field %s", name)
 }
@@ -144651,6 +144708,13 @@ func (m *TrustCenterSettingHistoryMutation) SetField(name string, value ent.Valu
 		}
 		m.SetStatusPageURL(v)
 		return nil
+	case trustcentersettinghistory.FieldNoindexDefaultDomain:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNoindexDefaultDomain(v)
+		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSettingHistory field %s", name)
 }
@@ -144789,6 +144853,9 @@ func (m *TrustCenterSettingHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(trustcentersettinghistory.FieldStatusPageURL) {
 		fields = append(fields, trustcentersettinghistory.FieldStatusPageURL)
 	}
+	if m.FieldCleared(trustcentersettinghistory.FieldNoindexDefaultDomain) {
+		fields = append(fields, trustcentersettinghistory.FieldNoindexDefaultDomain)
+	}
 	return fields
 }
 
@@ -144911,6 +144978,9 @@ func (m *TrustCenterSettingHistoryMutation) ClearField(name string) error {
 	case trustcentersettinghistory.FieldStatusPageURL:
 		m.ClearStatusPageURL()
 		return nil
+	case trustcentersettinghistory.FieldNoindexDefaultDomain:
+		m.ClearNoindexDefaultDomain()
+		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSettingHistory nullable field %s", name)
 }
@@ -145032,6 +145102,9 @@ func (m *TrustCenterSettingHistoryMutation) ResetField(name string) error {
 		return nil
 	case trustcentersettinghistory.FieldStatusPageURL:
 		m.ResetStatusPageURL()
+		return nil
+	case trustcentersettinghistory.FieldNoindexDefaultDomain:
+		m.ResetNoindexDefaultDomain()
 		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSettingHistory field %s", name)

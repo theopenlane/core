@@ -28200,6 +28200,7 @@ type CreateTrustCenterNDARequestInput struct {
 	CompanyName       *string                                 `json:"company_name,omitempty"`
 	Reason            *string                                 `json:"reason,omitempty"`
 	AccessLevel       *enums.TrustCenterNDARequestAccessLevel `json:"access_level,omitempty"`
+	Status            *enums.TrustCenterNDARequestStatus      `json:"status,omitempty"`
 	ApprovedAt        *models.DateTime                        `json:"approved_at,omitempty"`
 	SignedAt          *models.DateTime                        `json:"signed_at,omitempty"`
 	BlockedGroupIDs   []string                                `json:"blocked_group_ids,omitempty"`
@@ -28227,6 +28228,9 @@ func (i *CreateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	}
 	if v := i.AccessLevel; v != nil {
 		m.SetAccessLevel(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
 	}
 	if v := i.ApprovedAt; v != nil {
 		m.SetApprovedAt(*v)
@@ -28439,6 +28443,7 @@ type CreateTrustCenterSettingInput struct {
 	AllowSubscribers                      *bool                         `json:"allow_subscribers,omitempty"`
 	NotifySubscribersOnSubprocessorChange *bool                         `json:"notify_subscribers_on_subprocessor_change,omitempty"`
 	StatusPageURL                         *string                       `json:"status_page_url,omitempty"`
+	NoindexDefaultDomain                  *bool                         `json:"noindex_default_domain,omitempty"`
 	BlockedGroupIDs                       []string                      `json:"blocked_group_ids,omitempty"`
 	EditorIDs                             []string                      `json:"editor_ids,omitempty"`
 	LogoFileID                            *string                       `json:"logo_file_id,omitempty"`
@@ -28515,6 +28520,9 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.StatusPageURL; v != nil {
 		m.SetStatusPageURL(*v)
 	}
+	if v := i.NoindexDefaultDomain; v != nil {
+		m.SetNoindexDefaultDomain(*v)
+	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
 	}
@@ -28585,6 +28593,8 @@ type UpdateTrustCenterSettingInput struct {
 	NotifySubscribersOnSubprocessorChange      *bool `json:"notify_subscribers_on_subprocessor_change,omitempty"`
 	ClearStatusPageURL                         bool
 	StatusPageURL                              *string `json:"status_page_url,omitempty"`
+	ClearNoindexDefaultDomain                  bool
+	NoindexDefaultDomain                       *bool `json:"noindex_default_domain,omitempty"`
 	ClearBlockedGroups                         bool
 	AddBlockedGroupIDs                         []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs                      []string `json:"remove_blocked_group_ids,omitempty"`
@@ -28728,6 +28738,12 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.StatusPageURL; v != nil {
 		m.SetStatusPageURL(*v)
+	}
+	if i.ClearNoindexDefaultDomain {
+		m.ClearNoindexDefaultDomain()
+	}
+	if v := i.NoindexDefaultDomain; v != nil {
+		m.SetNoindexDefaultDomain(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()

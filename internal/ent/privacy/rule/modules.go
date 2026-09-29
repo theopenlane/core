@@ -6,8 +6,10 @@ import (
 	"strings"
 
 	"entgo.io/ent"
+	openfga "github.com/openfga/go-sdk"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
 
 	features "github.com/theopenlane/core/v2/internal/entitlements/features"
 
@@ -29,22 +31,43 @@ func HasFeature(ctx context.Context, feature string) (bool, error) {
 		return true, nil
 	}
 
+	ok, err := hasFeature(ctx, feature)
+	if err != nil || ok || isFreshFeatureRead(ctx) {
+		return ok, err
+	}
+
+	// cached lookups can lag a tuple write, so verify once against openfga before denying
+	return hasFeature(withFreshFeatureRead(ctx), feature)
+}
+
+func hasFeature(ctx context.Context, feature string) (bool, error) {
 	feats, err := GetOrgFeatures(ctx)
 	if err != nil {
 		return false, err
 	}
 
-	if slices.Contains(feats, feature) {
-		return true, nil
-	}
+	return slices.Contains(feats, feature), nil
+}
 
-	return false, nil
+var freshFeatureReadKey = contextx.NewKey[struct{}]()
+
+// withFreshFeatureRead marks the context so feature lookups bypass the permission cache and openfga caches
+func withFreshFeatureRead(ctx context.Context) context.Context {
+	return freshFeatureReadKey.Set(ctx, struct{}{})
+}
+
+func isFreshFeatureRead(ctx context.Context) bool {
+	_, fresh := freshFeatureReadKey.Get(ctx)
+
+	return fresh
 }
 
 // GetFeaturesForSpecificOrganization returns the enabled features for a specific organization
 func GetFeaturesForSpecificOrganization(ctx context.Context, orgID string) ([]string, error) {
+	fresh := isFreshFeatureRead(ctx)
+
 	// try feature cache first
-	if cache, ok := permissioncache.CacheFromContext(ctx); ok {
+	if cache, ok := permissioncache.CacheFromContext(ctx); ok && !fresh {
 		moduleFeats, err := cache.GetFeatures(ctx, orgID)
 		if err != nil {
 			logx.FromContext(ctx).Err(err).Msg("failed to get feature cache")
@@ -70,7 +93,12 @@ func GetFeaturesForSpecificOrganization(ctx context.Context, orgID string) ([]st
 		Relation:    entitlements.TupleRelation,
 	}
 
-	resp, err := ac.ListObjectsRequest(ctx, req)
+	consistency := openfga.CONSISTENCYPREFERENCE_MINIMIZE_LATENCY
+	if fresh {
+		consistency = openfga.CONSISTENCYPREFERENCE_HIGHER_CONSISTENCY
+	}
+
+	resp, err := ac.ListObjectsRequestWithConsistency(ctx, req, consistency)
 	if err != nil {
 		return nil, err
 	}
@@ -154,6 +182,16 @@ func HasAllFeatures(ctx context.Context, feats ...models.OrgModule) (bool, *mode
 //
 // If false, at least one must be enabled.
 func checkFeatures(ctx context.Context, requireAll bool, modules ...models.OrgModule) (bool, *models.OrgModule, error) {
+	ok, missing, err := evaluateFeatures(ctx, requireAll, modules...)
+	if err != nil || ok || isFreshFeatureRead(ctx) {
+		return ok, missing, err
+	}
+
+	// cached lookups can lag a tuple write, so verify once against openfga before denying
+	return evaluateFeatures(withFreshFeatureRead(ctx), requireAll, modules...)
+}
+
+func evaluateFeatures(ctx context.Context, requireAll bool, modules ...models.OrgModule) (bool, *models.OrgModule, error) {
 	enabled, err := GetOrgFeatures(ctx)
 	if err != nil {
 		return false, nil, err

@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/lestrrat-go/jwx/v3/jwk"
+	"github.com/lestrrat-go/jwx/v4/jwk"
 	"github.com/oklog/ulid/v2"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/tokens"
@@ -253,7 +253,7 @@ func chooseSigningKID(entries []keyDirEntry, margin time.Duration) (string, bool
 
 // thumbprintKID derives a stable kid from the RFC 7638 JWK thumbprint of the public key
 func thumbprintKID(pub crypto.PublicKey) (string, error) {
-	key, err := jwk.Import(pub)
+	key, err := jwk.Import[jwk.Key](pub)
 	if err != nil {
 		return "", err
 	}

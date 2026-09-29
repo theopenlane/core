@@ -22,12 +22,6 @@ import (
 // - authenticated users with only the trust center module (not compliance) only see trust center controls
 func InterceptorTrustCenterControl() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		// skip if modules are not enabled
-		client := generated.FromContext(ctx)
-		if !utils.ModulesEnabled(client) {
-			return nil
-		}
-
 		// anonymous trust center users can only see controls that are:
 		// 1. marked as trust center controls (cloned from the trust center standard)
 		// 2. have public visibility
@@ -45,6 +39,13 @@ func InterceptorTrustCenterControl() ent.Interceptor {
 				sql.FieldEQ(control.FieldOwnerID, orgID),
 			)
 
+			return nil
+		}
+
+		// skip if modules are not enabled after the filter for anon users
+		// doing this first would skip the filter when modules are off
+		client := generated.FromContext(ctx)
+		if !utils.ModulesEnabled(client) {
 			return nil
 		}
 
