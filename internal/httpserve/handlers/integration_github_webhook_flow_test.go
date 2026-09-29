@@ -3,6 +3,7 @@
 package handlers_test
 
 import (
+	"context"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
@@ -49,8 +50,7 @@ func (suite *HandlerTestSuite) TestGitHubAppWebhookDoesNotRequireCaller() {
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "456"})
 	_, err := suite.db.Integration.Create().
@@ -82,8 +82,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "1001"})
 	integrationRecord, err := suite.db.Integration.Create().
@@ -125,8 +124,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookInstallationDeletedRemovesIntegr
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	installAttrs, err := json.Marshal(githubapp.InstallationMetadata{InstallationID: "7007"})
 	require.NoError(t, err)
@@ -164,8 +162,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "1004"})
 	integrationRecord, err := suite.db.Integration.Create().
@@ -202,8 +199,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "1003"})
 	_, err := suite.db.Integration.Create().
@@ -324,8 +320,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	// Create two integrations in the same Openlane org, each representing a different GitHub org installation
 	installAttrsOrgA, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "7001"})
@@ -398,8 +393,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	installMeta := githubapp.InstallationMetadata{InstallationID: "8001"}
 	installAttrs, _ := json.Marshal(installMeta)
@@ -483,8 +477,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	installMeta := githubapp.InstallationMetadata{InstallationID: "8002"}
 	installAttrs, _ := json.Marshal(installMeta)
@@ -596,8 +589,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	// Two GitHub org installations under the same Openlane org
 	installMetaOrgA := githubapp.InstallationMetadata{InstallationID: "9001"}
