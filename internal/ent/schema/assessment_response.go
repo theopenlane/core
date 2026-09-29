@@ -18,6 +18,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
@@ -291,6 +292,7 @@ func (AssessmentResponse) Policy() ent.Policy {
 // Annotations of the AssessmentResponse
 func (AssessmentResponse) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.SequentialBulkCreate(),
 		entfga.SelfAccessChecks(),
 		entgql.Skip(
 			entgql.SkipMutationUpdateInput,

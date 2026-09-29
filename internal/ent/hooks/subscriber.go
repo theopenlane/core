@@ -60,6 +60,12 @@ func HookSubscriberCreate() ent.Hook {
 				if err != nil {
 					return retValue, err
 				}
+
+				// if active on creation, we do not need to send the email again
+				active, _ := m.Active()
+				if active {
+					return retValue, nil
+				}
 			}
 
 			tokenValue, _ := m.Token()
