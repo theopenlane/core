@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
@@ -625,7 +626,8 @@ func createOrgMemberOwner(ctx context.Context, oID string, m *generated.Organiza
 		SSOExemptReason: &exemptReason,
 	}
 
-	if err := m.Client().OrgMembership.Create().SetInput(input).Exec(ctx); err != nil {
+	// the creator has no tuples on the new org yet, allow bypass of role ceiling check
+	if err := m.Client().OrgMembership.Create().SetInput(input).Exec(privacy.DecisionContext(ctx, privacy.Allow)); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error creating org membership for owner")
 
 		return err

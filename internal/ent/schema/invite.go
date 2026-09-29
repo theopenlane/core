@@ -173,11 +173,9 @@ func (i Invite) Policy() ent.Policy {
 		policy.WithQueryRules(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
 		),
-		policy.WithMutationRules(
+		policy.WithMutationRulesBeforeScope(
 			rule.AllowIfContextHasPrivacyTokenOfType[*token.OrgInviteToken](),
 			rule.CanInviteUsers(),
-			policy.CheckOrgWriteAccess(),
-			rule.AllowMutationAfterApplyingOwnerFilter(),
 		),
 	)
 }

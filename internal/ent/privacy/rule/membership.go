@@ -102,16 +102,8 @@ func AllowOrgMemberRoleUpdate() privacy.OrgMembershipMutationRuleFunc {
 				return privacy.Skip
 			}
 
-			check := fgax.AccessCheck{
-				SubjectID:   caller.SubjectID,
-				SubjectType: caller.SubjectType(),
-				ObjectID:    member.OrganizationID,
-				Relation:    InviteRelationForRole(member.Role),
-			}
-
-			access, err := m.Authz.CheckOrgAccess(ctx, check)
+			access, err := canAssignOrgRole(ctx, m.Authz, caller, member.OrganizationID, member.Role)
 			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Interface("tuple", check).Msg("unable to check role assignment access")
 				return privacy.Skipf("unable to check access: %v", err)
 			}
 
@@ -119,12 +111,8 @@ func AllowOrgMemberRoleUpdate() privacy.OrgMembershipMutationRuleFunc {
 				return generated.ErrPermissionDenied
 			}
 
-			newRoleAccess := check
-			newRoleAccess.Relation = InviteRelationForRole(newRole)
-
-			access, err = m.Authz.CheckOrgAccess(ctx, newRoleAccess)
+			access, err = canAssignOrgRole(ctx, m.Authz, caller, member.OrganizationID, newRole)
 			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Interface("tuple", newRoleAccess).Msg("unable to check role assignment access")
 				return privacy.Skipf("unable to check access: %v", err)
 			}
 
@@ -135,4 +123,55 @@ func AllowOrgMemberRoleUpdate() privacy.OrgMembershipMutationRuleFunc {
 
 		return privacy.Allow
 	})
+}
+
+// DenyOrgMemberRoleAboveCeiling denies creating a membership with a role the caller is not allowed to invite
+func DenyOrgMemberRoleAboveCeiling() privacy.OrgMembershipMutationRuleFunc {
+	return privacy.OrgMembershipMutationRuleFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) error {
+		orgID, ok := m.OrganizationID()
+		if !ok || orgID == "" {
+			return privacy.Skip
+		}
+
+		role, ok := m.Role()
+		if !ok {
+			// add same default as the db would have
+			role = enums.RoleMember
+		}
+
+		// an org has a single owner, set only on org creation or ownership transfer
+		if role == enums.RoleOwner {
+			return generated.ErrPermissionDenied
+		}
+
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil {
+			return auth.ErrNoAuthUser
+		}
+
+		access, err := canAssignOrgRole(ctx, m.Authz, caller, orgID, role)
+		if err != nil || !access {
+			return generated.ErrPermissionDenied
+		}
+
+		return privacy.Skip
+	})
+}
+
+// canAssignOrgRole checks the caller has the invite relation required to grant the role in the organization
+func canAssignOrgRole(ctx context.Context, authz fgax.Client, caller *auth.Caller, orgID string, role enums.Role) (bool, error) {
+	check := fgax.AccessCheck{
+		SubjectID:   caller.SubjectID,
+		SubjectType: caller.SubjectType(),
+		ObjectID:    orgID,
+		Relation:    InviteRelationForRole(role),
+	}
+
+	access, err := authz.CheckOrgAccess(ctx, check)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Interface("tuple", check).Msg("unable to check role assignment access")
+		return false, err
+	}
+
+	return access, nil
 }
