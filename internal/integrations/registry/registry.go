@@ -83,6 +83,8 @@ type SurfaceOperation struct {
 	Replaces []string `json:"replaces,omitempty"`
 	// Schema is the reflected JSON schema of the operation's config
 	Schema json.RawMessage `json:"schema,omitempty"`
+	// Section reports whether the operation's config is resolved from the stored user input rather than supplied by each caller
+	Section bool `json:"section,omitempty"`
 }
 
 // SurfaceWebhook is one webhook contract with its events
@@ -114,7 +116,7 @@ func DefinitionSurface(def types.Definition) Surface {
 	slices.Sort(connections)
 
 	operations := sortedOperations(lo.Map(def.Operations, func(operation types.OperationRegistration, _ int) SurfaceOperation {
-		return SurfaceOperation{Name: operation.Name, Replaces: sortedNames(operation.Replaces), Schema: operation.ConfigSchema}
+		return SurfaceOperation{Name: operation.Name, Replaces: sortedNames(operation.Replaces), Schema: operation.ConfigSchema, Section: operation.ConfigResolver != nil}
 	}))
 
 	webhooks := lo.Map(def.Webhooks, func(webhook types.WebhookRegistration, _ int) SurfaceWebhook {

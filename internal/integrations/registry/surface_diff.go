@@ -14,6 +14,42 @@ import (
 // outcomeErrored is reported when the upgrade of an existing installation fails on its first use
 const outcomeErrored = "existing installations are marked errored on first use until reconnected"
 
+const (
+	// removedDropped is reported for a removed property whose stored value is discarded
+	removedDropped = "removed: stored value is dropped on upgrade"
+	// removedConverted is reported for a removed property whose stored value passes through a declared layout replacement
+	removedConverted = "removed: converted through declared layout replacement"
+	// removedUnstored is reported for a removed property of a schema whose values are never persisted
+	removedUnstored = "removed: no stored value affected"
+	// outcomeCallerSupplied is reported for a change to a schema whose values each caller supplies
+	outcomeCallerSupplied = "supplied by each caller"
+)
+
+// propertyOutcomes is the reported outcome of each property rule under one schema
+type propertyOutcomes struct {
+	// removed is reported after the name of a property the next schema drops
+	removed string
+	// required is reported after the name of a required property the next schema adds without a default
+	required string
+	// typeChanged is reported for a property whose type changed
+	typeChanged string
+	// enumNarrowed is reported for a property whose enum lost values
+	enumNarrowed string
+}
+
+// callerOutcomes is the property outcomes for a schema whose values each caller supplies and nothing persists
+var callerOutcomes = propertyOutcomes{removed: removedUnstored, required: "added: " + outcomeCallerSupplied, typeChanged: outcomeCallerSupplied, enumNarrowed: outcomeCallerSupplied}
+
+// storedOutcomes returns the property outcomes for values persisted on the installation, backfilled when the schema declares a backfill
+func storedOutcomes(removed string, backfill bool) propertyOutcomes {
+	return propertyOutcomes{removed: removed, required: "added without default: " + lo.Ternary(backfill, "backfilled on upgrade", outcomeErrored), typeChanged: outcomeErrored, enumNarrowed: outcomeErrored}
+}
+
+// userInputOutcomes returns the property outcomes for values stored in the user input, converted when the user input declares a layout replacement
+func userInputOutcomes(userInput SurfaceSchema) propertyOutcomes {
+	return storedOutcomes(lo.Ternary(len(userInput.Replaces) > 0, removedConverted, removedDropped), userInput.Backfill)
+}
+
 // GateSurfaceChange prints each change from the committed snapshot with what the runtime does about it, failing only when a removed slot, operation, or webhook has no replacing registration
 func GateSurfaceChange(target string, existing []byte, next Surface) error {
 	var old Surface
@@ -40,7 +76,7 @@ func ClassifySurfaceChange(old, next Surface) ([]string, error) {
 	for _, credential := range old.Credentials {
 		nextCredential, kept := lo.Find(next.Credentials, func(candidate SurfaceCredential) bool { return candidate.Ref == credential.Ref })
 		if kept {
-			slotFindings, err := classifySchemaChange(fmt.Sprintf("%s: credential slot %s", next.ID, credential.Ref), credential.SurfaceSchema, nextCredential.SurfaceSchema)
+			slotFindings, err := classifySchemaChange(fmt.Sprintf("%s: credential slot %s", next.ID, credential.Ref), credential.SurfaceSchema, nextCredential.SurfaceSchema, storedOutcomes(removedDropped, nextCredential.Backfill))
 			if err != nil {
 				return findings, err
 			}
@@ -79,7 +115,9 @@ func ClassifySurfaceChange(old, next Surface) ([]string, error) {
 	for _, operation := range old.Operations {
 		nextOperation, kept := lo.Find(next.Operations, func(candidate SurfaceOperation) bool { return candidate.Name == operation.Name })
 		if kept {
-			configFindings, err := classifySchemaChange(fmt.Sprintf("%s: operation %s config", next.ID, operation.Name), SurfaceSchema{Schema: operation.Schema}, SurfaceSchema{Schema: nextOperation.Schema})
+			outcomes := lo.Ternary(nextOperation.Section, userInputOutcomes(lo.FromPtr(next.UserInput)), callerOutcomes)
+
+			configFindings, err := classifySchemaChange(fmt.Sprintf("%s: operation %s config", next.ID, operation.Name), SurfaceSchema{Schema: operation.Schema}, SurfaceSchema{Schema: nextOperation.Schema}, outcomes)
 			if err != nil {
 				return findings, err
 			}
@@ -132,11 +170,11 @@ func classifyUserInputChange(definitionID string, old, next *SurfaceSchema) ([]s
 	case next == nil:
 		return []string{label + " removed: stored config is left untouched"}, nil
 	case old == nil:
-		findings, err := classifySchemaChange(label, SurfaceSchema{}, *next)
+		findings, err := classifySchemaChange(label, SurfaceSchema{}, *next, userInputOutcomes(*next))
 
 		return append([]string{label + " added: stored config is conformed on upgrade"}, findings...), err
 	default:
-		return classifySchemaChange(label, *old, *next)
+		return classifySchemaChange(label, *old, *next, userInputOutcomes(*next))
 	}
 }
 
@@ -193,8 +231,8 @@ func sameJSON(a, b json.RawMessage) bool {
 	return reflect.DeepEqual(left, right)
 }
 
-// classifySchemaChange applies the property rules to one kind's committed and next schemas under the given finding label
-func classifySchemaChange(label string, old, next SurfaceSchema) ([]string, error) {
+// classifySchemaChange applies the property rules to one kind's committed and next schemas under the given finding label, reporting removals and new required properties with the given outcomes
+func classifySchemaChange(label string, old, next SurfaceSchema, outcomes propertyOutcomes) ([]string, error) {
 	oldRoot, _, err := jsonx.SchemaRoot(old.Schema)
 	if err != nil {
 		return nil, fmt.Errorf("%s committed schema: %w", label, err)
@@ -218,17 +256,17 @@ func classifySchemaChange(label string, old, next SurfaceSchema) ([]string, erro
 	for pair := oldRoot.Properties.Oldest(); pair != nil; pair = pair.Next() {
 		nextProperty, kept := nextRoot.Properties.Get(pair.Key)
 		if !kept {
-			findings = append(findings, fmt.Sprintf("%s property %s removed: stored value is dropped on upgrade", label, pair.Key))
+			findings = append(findings, fmt.Sprintf("%s property %s %s", label, pair.Key, outcomes.removed))
 
 			continue
 		}
 
 		if pair.Value.Type != nextProperty.Type {
-			findings = append(findings, fmt.Sprintf("%s property %s type changed from %q to %q: %s", label, pair.Key, pair.Value.Type, nextProperty.Type, outcomeErrored))
+			findings = append(findings, fmt.Sprintf("%s property %s type changed from %q to %q: %s", label, pair.Key, pair.Value.Type, nextProperty.Type, outcomes.typeChanged))
 		}
 
 		if len(pair.Value.Enum) > 0 && len(nextProperty.Enum) > 0 && !lo.Every(nextProperty.Enum, pair.Value.Enum) {
-			findings = append(findings, fmt.Sprintf("%s property %s enum narrowed: %s", label, pair.Key, outcomeErrored))
+			findings = append(findings, fmt.Sprintf("%s property %s enum narrowed: %s", label, pair.Key, outcomes.enumNarrowed))
 		}
 	}
 
@@ -238,7 +276,7 @@ func classifySchemaChange(label string, old, next SurfaceSchema) ([]string, erro
 			continue
 		}
 
-		findings = append(findings, fmt.Sprintf("%s required property %s added without default: %s", label, name, lo.Ternary(next.Backfill, "backfilled on upgrade", outcomeErrored)))
+		findings = append(findings, fmt.Sprintf("%s required property %s %s", label, name, outcomes.required))
 	}
 
 	return findings, nil

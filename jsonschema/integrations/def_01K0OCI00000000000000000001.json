@@ -71,7 +71,7 @@
             "disable": {
               "type": "boolean",
               "title": "Disable",
-              "description": "Disable the syncing of findings from OCI Cloud Guard"
+              "description": "Disable this sync"
             },
             "filterExpr": {
               "type": "string",
@@ -103,42 +103,71 @@
       }
     }
   },
-  "metadata": [
+  "installation": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oci/installation-metadata",
+      "$ref": "#/$defs/InstallationMetadata",
+      "$defs": {
+        "InstallationMetadata": {
+          "properties": {
+            "tenancyOcid": {
+              "type": "string",
+              "title": "Tenancy OCID"
+            },
+            "compartmentOcid": {
+              "type": "string",
+              "title": "Compartment OCID"
+            },
+            "region": {
+              "type": "string",
+              "title": "Region"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      }
+    }
+  },
+  "connections": [
+    "CredentialSchema"
+  ],
+  "operations": [
     {
-      "connection": "CredentialSchema",
+      "name": "FindingsSync",
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oci/installation-metadata",
-        "$ref": "#/$defs/InstallationMetadata",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oci/findings-sync",
+        "$ref": "#/$defs/FindingsSync",
         "$defs": {
-          "InstallationMetadata": {
+          "FindingsSync": {
             "properties": {
-              "tenancyOcid": {
-                "type": "string",
-                "title": "Tenancy OCID"
+              "disable": {
+                "type": "boolean",
+                "title": "Disable",
+                "description": "Disable this sync"
               },
-              "compartmentOcid": {
+              "filterExpr": {
                 "type": "string",
-                "title": "Compartment OCID"
+                "title": "Filter Expression",
+                "description": "Optional CEL expression to apply to records before ingesting",
+                "examples": [
+                  "Example: payload.riskLevel == 'CRITICAL' || payload.riskLevel == 'HIGH'"
+                ]
               },
-              "region": {
-                "type": "string",
-                "title": "Region"
+              "skipProblemDetails": {
+                "type": "boolean",
+                "title": "Skip Problem Details",
+                "description": "Skip the per-problem detail lookup. Far fewer API calls on large tenancies"
               }
             },
             "additionalProperties": false,
             "type": "object"
           }
         }
-      }
-    }
-  ],
-  "connections": [
-    "CredentialSchema"
-  ],
-  "operations": [
-    {
-      "name": "FindingsSync"
+      },
+      "section": true
     }
   ]
 }

@@ -46,12 +46,12 @@
       "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/keycloak/user-input",
       "$ref": "#/$defs/UserInput",
       "$defs": {
-        "UserInput": {
+        "DirectorySync": {
           "properties": {
-            "primaryDirectory": {
+            "disable": {
               "type": "boolean",
-              "title": "Primary Directory",
-              "description": "Mark this as the authoritative source for identity holder enrichment and lifecycle"
+              "title": "Disable",
+              "description": "Disable this sync"
             },
             "disableGroupSync": {
               "type": "boolean",
@@ -66,46 +66,90 @@
           },
           "additionalProperties": false,
           "type": "object"
+        },
+        "UserInput": {
+          "properties": {
+            "primaryDirectory": {
+              "type": "boolean",
+              "title": "Primary Directory",
+              "description": "Mark this as the authoritative source for identity holder enrichment and lifecycle"
+            },
+            "directorySync": {
+              "$ref": "#/$defs/DirectorySync",
+              "title": "Directory Sync"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      }
+    },
+    "replaces": [
+      "keycloak-v1"
+    ]
+  },
+  "installation": {
+    "schema": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/keycloak/installation-metadata",
+      "$ref": "#/$defs/InstallationMetadata",
+      "$defs": {
+        "InstallationMetadata": {
+          "properties": {
+            "realmId": {
+              "type": "string"
+            },
+            "realmName": {
+              "type": "string"
+            },
+            "displayName": {
+              "type": "string"
+            },
+            "keycloakVersion": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
         }
       }
     }
   },
-  "metadata": [
+  "connections": [
+    "CredentialSchema"
+  ],
+  "operations": [
     {
-      "connection": "CredentialSchema",
+      "name": "DirectorySync",
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/keycloak/installation-metadata",
-        "$ref": "#/$defs/InstallationMetadata",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/keycloak/directory-sync",
+        "$ref": "#/$defs/DirectorySync",
         "$defs": {
-          "InstallationMetadata": {
+          "DirectorySync": {
             "properties": {
-              "realmId": {
-                "type": "string"
+              "disable": {
+                "type": "boolean",
+                "title": "Disable",
+                "description": "Disable this sync"
               },
-              "realmName": {
-                "type": "string"
+              "disableGroupSync": {
+                "type": "boolean",
+                "title": "Disable Group Sync",
+                "description": "Only sync users disable group and membership sync operations"
               },
-              "displayName": {
-                "type": "string"
-              },
-              "keycloakVersion": {
-                "type": "string"
+              "filterExpr": {
+                "type": "string",
+                "title": "Filter Expression",
+                "description": "Optional CEL expression to apply to records before ingesting"
               }
             },
             "additionalProperties": false,
             "type": "object"
           }
         }
-      }
-    }
-  ],
-  "connections": [
-    "CredentialSchema"
-  ],
-  "operations": [
-    {
-      "name": "DirectorySync"
+      },
+      "section": true
     }
   ]
 }

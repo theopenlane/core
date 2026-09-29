@@ -146,6 +146,22 @@ func TestDefinitionSurface(t *testing.T) {
 		t.Fatal("expected every operation's config schema to be surfaced")
 	}
 
+	if surface.Operations[0].Section || surface.Operations[1].Section {
+		t.Fatalf("Operations = %+v, want caller-supplied config outside any user input section", surface.Operations)
+	}
+
+	sectioned := sectionDefinition(integrationtypes.NewUserInputRef[sectionUserInput]("sectionUserInput").Registration(), sectionOperation("sync"))
+
+	sectionReg := New()
+	if err := sectionReg.Register(sectioned); err != nil {
+		t.Fatalf("register sectioned: %v", err)
+	}
+
+	sectionedRegistered, _ := sectionReg.Definition(sectioned.ID)
+	if got := DefinitionSurface(sectionedRegistered).Operations; len(got) != 1 || !got[0].Section {
+		t.Fatalf("sectioned Operations = %+v, want the config resolved from its user input section", got)
+	}
+
 	if got := lo.Map(surface.Webhooks, func(w SurfaceWebhook, _ int) string { return w.Name }); !slices.Equal(got, []string{"events.v2", "static"}) {
 		t.Fatalf("Webhooks = %v, want sorted names", got)
 	}
@@ -332,6 +348,9 @@ func TestVersionChangesWithSurfacedNameAndSchemaFields(t *testing.T) {
 	operationConfigSchema := surfaceDefinition("version-def")
 	operationConfigSchema.Operations[0].ConfigSchema = json.RawMessage(`{"type":"object","required":["limit"]}`)
 
+	operationConfigSection := surfaceDefinition("version-def")
+	operationConfigSection.Operations[0].ConfigResolver = func(userInput json.RawMessage) json.RawMessage { return userInput }
+
 	for name, def := range map[string]integrationtypes.Definition{
 		"webhook name":              webhookName,
 		"webhook replaces declared": webhookReplaces,
@@ -339,6 +358,7 @@ func TestVersionChangesWithSurfacedNameAndSchemaFields(t *testing.T) {
 		"user input schema alone":   userInputSchema,
 		"installation schema":       installationSchema,
 		"operation config schema":   operationConfigSchema,
+		"operation config section":  operationConfigSection,
 	} {
 		if versionOf(t, def) == versionOf(t, base) {
 			t.Fatalf("%s: expected the version to change", name)
