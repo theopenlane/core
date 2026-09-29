@@ -87,20 +87,23 @@ type ContactEdges struct {
 	Campaigns []*Campaign `json:"campaigns,omitempty"`
 	// CampaignTargets holds the value of the campaign_targets edge.
 	CampaignTargets []*CampaignTarget `json:"campaign_targets,omitempty"`
+	// AudienceMembers holds the value of the audience_members edge.
+	AudienceMembers []*AudienceMember `json:"audience_members,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
 	// Subscribers holds the value of the subscribers edge.
 	Subscribers []*Subscriber `json:"subscribers,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [8]map[string]int
 
 	namedIntegrationRuns map[string][]*IntegrationRun
 	namedEntities        map[string][]*Entity
 	namedCampaigns       map[string][]*Campaign
 	namedCampaignTargets map[string][]*CampaignTarget
+	namedAudienceMembers map[string][]*AudienceMember
 	namedFiles           map[string][]*File
 	namedSubscribers     map[string][]*Subscriber
 }
@@ -152,10 +155,19 @@ func (e ContactEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
 	return nil, &NotLoadedError{edge: "campaign_targets"}
 }
 
+// AudienceMembersOrErr returns the AudienceMembers value or an error if the edge
+// was not loaded in eager-loading.
+func (e ContactEdges) AudienceMembersOrErr() ([]*AudienceMember, error) {
+	if e.loadedTypes[5] {
+		return e.AudienceMembers, nil
+	}
+	return nil, &NotLoadedError{edge: "audience_members"}
+}
+
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e ContactEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[6] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -164,7 +176,7 @@ func (e ContactEdges) FilesOrErr() ([]*File, error) {
 // SubscribersOrErr returns the Subscribers value or an error if the edge
 // was not loaded in eager-loading.
 func (e ContactEdges) SubscribersOrErr() ([]*Subscriber, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[7] {
 		return e.Subscribers, nil
 	}
 	return nil, &NotLoadedError{edge: "subscribers"}
@@ -390,6 +402,11 @@ func (_m *Contact) QueryCampaignTargets() *CampaignTargetQuery {
 	return NewContactClient(_m.config).QueryCampaignTargets(_m)
 }
 
+// QueryAudienceMembers queries the "audience_members" edge of the Contact entity.
+func (_m *Contact) QueryAudienceMembers() *AudienceMemberQuery {
+	return NewContactClient(_m.config).QueryAudienceMembers(_m)
+}
+
 // QueryFiles queries the "files" edge of the Contact entity.
 func (_m *Contact) QueryFiles() *FileQuery {
 	return NewContactClient(_m.config).QueryFiles(_m)
@@ -595,6 +612,30 @@ func (_m *Contact) appendNamedCampaignTargets(name string, edges ...*CampaignTar
 		_m.Edges.namedCampaignTargets[name] = []*CampaignTarget{}
 	} else {
 		_m.Edges.namedCampaignTargets[name] = append(_m.Edges.namedCampaignTargets[name], edges...)
+	}
+}
+
+// NamedAudienceMembers returns the AudienceMembers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Contact) NamedAudienceMembers(name string) ([]*AudienceMember, error) {
+	if _m.Edges.namedAudienceMembers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedAudienceMembers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Contact) appendNamedAudienceMembers(name string, edges ...*AudienceMember) {
+	if _m.Edges.namedAudienceMembers == nil {
+		_m.Edges.namedAudienceMembers = make(map[string][]*AudienceMember)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedAudienceMembers[name] = []*AudienceMember{}
+	} else {
+		_m.Edges.namedAudienceMembers[name] = append(_m.Edges.namedAudienceMembers[name], edges...)
 	}
 }
 

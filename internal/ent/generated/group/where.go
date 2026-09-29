@@ -2205,6 +2205,75 @@ func HasCampaignViewersWith(preds ...predicate.Campaign) predicate.Group {
 	})
 }
 
+// HasAudienceEditors applies the HasEdge predicate on the "audience_editors" edge.
+func HasAudienceEditors() predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, AudienceEditorsTable, AudienceEditorsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAudienceEditorsWith applies the HasEdge predicate on the "audience_editors" edge with a given conditions (other predicates).
+func HasAudienceEditorsWith(preds ...predicate.Audience) predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := newAudienceEditorsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAudienceBlockedGroups applies the HasEdge predicate on the "audience_blocked_groups" edge.
+func HasAudienceBlockedGroups() predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, AudienceBlockedGroupsTable, AudienceBlockedGroupsPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAudienceBlockedGroupsWith applies the HasEdge predicate on the "audience_blocked_groups" edge with a given conditions (other predicates).
+func HasAudienceBlockedGroupsWith(preds ...predicate.Audience) predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := newAudienceBlockedGroupsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAudienceViewers applies the HasEdge predicate on the "audience_viewers" edge.
+func HasAudienceViewers() predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, AudienceViewersTable, AudienceViewersPrimaryKey...),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAudienceViewersWith applies the HasEdge predicate on the "audience_viewers" edge with a given conditions (other predicates).
+func HasAudienceViewersWith(preds ...predicate.Audience) predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := newAudienceViewersStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasProcedureEditors applies the HasEdge predicate on the "procedure_editors" edge.
 func HasProcedureEditors() predicate.Group {
 	return predicate.Group(func(s *sql.Selector) {
@@ -2818,6 +2887,29 @@ func HasCampaignTargets() predicate.Group {
 func HasCampaignTargetsWith(preds ...predicate.CampaignTarget) predicate.Group {
 	return predicate.Group(func(s *sql.Selector) {
 		step := newCampaignTargetsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAudienceMembers applies the HasEdge predicate on the "audience_members" edge.
+func HasAudienceMembers() predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AudienceMembersTable, AudienceMembersColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAudienceMembersWith applies the HasEdge predicate on the "audience_members" edge with a given conditions (other predicates).
+func HasAudienceMembersWith(preds ...predicate.AudienceMember) predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := newAudienceMembersStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -111,6 +111,8 @@ type UserEdges struct {
 	Campaigns []*Campaign `json:"campaigns,omitempty"`
 	// CampaignTargets holds the value of the campaign_targets edge.
 	CampaignTargets []*CampaignTarget `json:"campaign_targets,omitempty"`
+	// AudienceMembers holds the value of the audience_members edge.
+	AudienceMembers []*AudienceMember `json:"audience_members,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
 	// AssignerTasks holds the value of the assigner_tasks edge.
@@ -137,9 +139,9 @@ type UserEdges struct {
 	ProgramMemberships []*ProgramMembership `json:"program_memberships,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [27]bool
+	loadedTypes [28]bool
 	// totalCount holds the count of the edges above.
-	totalCount [22]map[string]int
+	totalCount [23]map[string]int
 
 	namedPersonalAccessTokens    map[string][]*PersonalAccessToken
 	namedTfaSettings             map[string][]*TFASetting
@@ -154,6 +156,7 @@ type UserEdges struct {
 	namedActionPlans             map[string][]*ActionPlan
 	namedCampaigns               map[string][]*Campaign
 	namedCampaignTargets         map[string][]*CampaignTarget
+	namedAudienceMembers         map[string][]*AudienceMember
 	namedSubcontrols             map[string][]*Subcontrol
 	namedAssignerTasks           map[string][]*Task
 	namedAssigneeTasks           map[string][]*Task
@@ -307,10 +310,19 @@ func (e UserEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
 	return nil, &NotLoadedError{edge: "campaign_targets"}
 }
 
+// AudienceMembersOrErr returns the AudienceMembers value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) AudienceMembersOrErr() ([]*AudienceMember, error) {
+	if e.loadedTypes[15] {
+		return e.AudienceMembers, nil
+	}
+	return nil, &NotLoadedError{edge: "audience_members"}
+}
+
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -319,7 +331,7 @@ func (e UserEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // AssignerTasksOrErr returns the AssignerTasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) AssignerTasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.AssignerTasks, nil
 	}
 	return nil, &NotLoadedError{edge: "assigner_tasks"}
@@ -328,7 +340,7 @@ func (e UserEdges) AssignerTasksOrErr() ([]*Task, error) {
 // AssigneeTasksOrErr returns the AssigneeTasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) AssigneeTasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.AssigneeTasks, nil
 	}
 	return nil, &NotLoadedError{edge: "assignee_tasks"}
@@ -337,7 +349,7 @@ func (e UserEdges) AssigneeTasksOrErr() ([]*Task, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -346,7 +358,7 @@ func (e UserEdges) ProgramsOrErr() ([]*Program, error) {
 // ProgramsOwnedOrErr returns the ProgramsOwned value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) ProgramsOwnedOrErr() ([]*Program, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.ProgramsOwned, nil
 	}
 	return nil, &NotLoadedError{edge: "programs_owned"}
@@ -355,7 +367,7 @@ func (e UserEdges) ProgramsOwnedOrErr() ([]*Program, error) {
 // PlatformsOwnedOrErr returns the PlatformsOwned value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) PlatformsOwnedOrErr() ([]*Platform, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.PlatformsOwned, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms_owned"}
@@ -364,7 +376,7 @@ func (e UserEdges) PlatformsOwnedOrErr() ([]*Platform, error) {
 // IdentityHolderProfilesOrErr returns the IdentityHolderProfiles value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) IdentityHolderProfilesOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.IdentityHolderProfiles, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holder_profiles"}
@@ -373,7 +385,7 @@ func (e UserEdges) IdentityHolderProfilesOrErr() ([]*IdentityHolder, error) {
 // ImpersonationEventsOrErr returns the ImpersonationEvents value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) ImpersonationEventsOrErr() ([]*ImpersonationEvent, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.ImpersonationEvents, nil
 	}
 	return nil, &NotLoadedError{edge: "impersonation_events"}
@@ -382,7 +394,7 @@ func (e UserEdges) ImpersonationEventsOrErr() ([]*ImpersonationEvent, error) {
 // TargetedImpersonationsOrErr returns the TargetedImpersonations value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) TargetedImpersonationsOrErr() ([]*ImpersonationEvent, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[24] {
 		return e.TargetedImpersonations, nil
 	}
 	return nil, &NotLoadedError{edge: "targeted_impersonations"}
@@ -391,7 +403,7 @@ func (e UserEdges) TargetedImpersonationsOrErr() ([]*ImpersonationEvent, error) 
 // GroupMembershipsOrErr returns the GroupMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) GroupMembershipsOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[25] {
 		return e.GroupMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "group_memberships"}
@@ -400,7 +412,7 @@ func (e UserEdges) GroupMembershipsOrErr() ([]*GroupMembership, error) {
 // OrgMembershipsOrErr returns the OrgMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) OrgMembershipsOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[26] {
 		return e.OrgMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "org_memberships"}
@@ -409,7 +421,7 @@ func (e UserEdges) OrgMembershipsOrErr() ([]*OrgMembership, error) {
 // ProgramMembershipsOrErr returns the ProgramMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) ProgramMembershipsOrErr() ([]*ProgramMembership, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[27] {
 		return e.ProgramMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "program_memberships"}
@@ -702,6 +714,11 @@ func (_m *User) QueryCampaigns() *CampaignQuery {
 // QueryCampaignTargets queries the "campaign_targets" edge of the User entity.
 func (_m *User) QueryCampaignTargets() *CampaignTargetQuery {
 	return NewUserClient(_m.config).QueryCampaignTargets(_m)
+}
+
+// QueryAudienceMembers queries the "audience_members" edge of the User entity.
+func (_m *User) QueryAudienceMembers() *AudienceMemberQuery {
+	return NewUserClient(_m.config).QueryAudienceMembers(_m)
 }
 
 // QuerySubcontrols queries the "subcontrols" edge of the User entity.
@@ -1192,6 +1209,30 @@ func (_m *User) appendNamedCampaignTargets(name string, edges ...*CampaignTarget
 		_m.Edges.namedCampaignTargets[name] = []*CampaignTarget{}
 	} else {
 		_m.Edges.namedCampaignTargets[name] = append(_m.Edges.namedCampaignTargets[name], edges...)
+	}
+}
+
+// NamedAudienceMembers returns the AudienceMembers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *User) NamedAudienceMembers(name string) ([]*AudienceMember, error) {
+	if _m.Edges.namedAudienceMembers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedAudienceMembers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *User) appendNamedAudienceMembers(name string, edges ...*AudienceMember) {
+	if _m.Edges.namedAudienceMembers == nil {
+		_m.Edges.namedAudienceMembers = make(map[string][]*AudienceMember)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedAudienceMembers[name] = []*AudienceMember{}
+	} else {
+		_m.Edges.namedAudienceMembers[name] = append(_m.Edges.namedAudienceMembers[name], edges...)
 	}
 }
 

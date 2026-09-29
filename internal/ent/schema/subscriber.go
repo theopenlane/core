@@ -155,6 +155,7 @@ func (s Subscriber) Edges() []ent.Edge {
 			edgeSchema: User{},
 			field:      "user_id",
 		}),
+		defaultEdgeToWithPagination(s, AudienceMember{}),
 	}
 }
 

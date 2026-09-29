@@ -18,6 +18,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/audiencehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/audiencememberhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaignhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaigntargethistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/contacthistory"
@@ -144,6 +146,8 @@ func checkColumn(t, c string) error {
 			assessmenthistory.Table:                 assessmenthistory.ValidColumn,
 			assessmentresponsehistory.Table:         assessmentresponsehistory.ValidColumn,
 			assethistory.Table:                      assethistory.ValidColumn,
+			audiencehistory.Table:                   audiencehistory.ValidColumn,
+			audiencememberhistory.Table:             audiencememberhistory.ValidColumn,
 			campaignhistory.Table:                   campaignhistory.ValidColumn,
 			campaigntargethistory.Table:             campaigntargethistory.ValidColumn,
 			contacthistory.Table:                    contacthistory.ValidColumn,

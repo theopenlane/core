@@ -69,6 +69,30 @@ func (f AssetFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.AssetMutation", m)
 }
 
+// The AudienceFunc type is an adapter to allow the use of ordinary
+// function as Audience mutator.
+type AudienceFunc func(context.Context, *generated.AudienceMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AudienceFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.AudienceMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.AudienceMutation", m)
+}
+
+// The AudienceMemberFunc type is an adapter to allow the use of ordinary
+// function as AudienceMember mutator.
+type AudienceMemberFunc func(context.Context, *generated.AudienceMemberMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AudienceMemberFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.AudienceMemberMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.AudienceMemberMutation", m)
+}
+
 // The CampaignFunc type is an adapter to allow the use of ordinary
 // function as Campaign mutator.
 type CampaignFunc func(context.Context, *generated.CampaignMutation) (generated.Value, error)

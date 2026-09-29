@@ -11,6 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audience"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
@@ -730,6 +732,51 @@ func (_c *GroupCreate) AddCampaignViewers(v ...*Campaign) *GroupCreate {
 	return _c.AddCampaignViewerIDs(ids...)
 }
 
+// AddAudienceEditorIDs adds the "audience_editors" edge to the Audience entity by IDs.
+func (_c *GroupCreate) AddAudienceEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddAudienceEditorIDs(ids...)
+	return _c
+}
+
+// AddAudienceEditors adds the "audience_editors" edges to the Audience entity.
+func (_c *GroupCreate) AddAudienceEditors(v ...*Audience) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAudienceEditorIDs(ids...)
+}
+
+// AddAudienceBlockedGroupIDs adds the "audience_blocked_groups" edge to the Audience entity by IDs.
+func (_c *GroupCreate) AddAudienceBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddAudienceBlockedGroupIDs(ids...)
+	return _c
+}
+
+// AddAudienceBlockedGroups adds the "audience_blocked_groups" edges to the Audience entity.
+func (_c *GroupCreate) AddAudienceBlockedGroups(v ...*Audience) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAudienceBlockedGroupIDs(ids...)
+}
+
+// AddAudienceViewerIDs adds the "audience_viewers" edge to the Audience entity by IDs.
+func (_c *GroupCreate) AddAudienceViewerIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddAudienceViewerIDs(ids...)
+	return _c
+}
+
+// AddAudienceViewers adds the "audience_viewers" edges to the Audience entity.
+func (_c *GroupCreate) AddAudienceViewers(v ...*Audience) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAudienceViewerIDs(ids...)
+}
+
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
 func (_c *GroupCreate) AddProcedureEditorIDs(ids ...string) *GroupCreate {
 	_c.mutation.AddProcedureEditorIDs(ids...)
@@ -1141,6 +1188,21 @@ func (_c *GroupCreate) AddCampaignTargets(v ...*CampaignTarget) *GroupCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddCampaignTargetIDs(ids...)
+}
+
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by IDs.
+func (_c *GroupCreate) AddAudienceMemberIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddAudienceMemberIDs(ids...)
+	return _c
+}
+
+// AddAudienceMembers adds the "audience_members" edges to the AudienceMember entity.
+func (_c *GroupCreate) AddAudienceMembers(v ...*AudienceMember) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAudienceMemberIDs(ids...)
 }
 
 // AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
@@ -1815,6 +1877,54 @@ func (_c *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.AudienceEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AudienceEditorsTable,
+			Columns: group.AudienceEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audience.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AudienceBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AudienceBlockedGroupsTable,
+			Columns: group.AudienceBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audience.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AudienceViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.AudienceViewersTable,
+			Columns: group.AudienceViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audience.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.ProcedureEditorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -2248,6 +2358,22 @@ func (_c *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AudienceMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   group.AudienceMembersTable,
+			Columns: []string{group.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

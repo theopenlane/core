@@ -13,6 +13,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audience"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
@@ -116,6 +118,42 @@ func searchAssets(ctx context.Context, query string, after *entgql.Cursor[string
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $5", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchAudience searches for Audience based on the query string looking for matches
+func searchAudiences(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AudienceConnection, error) {
+	request := withTransactionalMutation(ctx).Audience.Query().
+		Where(
+			audience.Or(
+				audience.DisplayID(query),        // search equal to DisplayID
+				audience.ID(query),               // search equal to ID
+				audience.NameContainsFold(query), // search by Name
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchAudienceMember searches for AudienceMember based on the query string looking for matches
+func searchAudienceMembers(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AudienceMemberConnection, error) {
+	request := withTransactionalMutation(ctx).AudienceMember.Query().
+		Where(
+			audiencemember.Or(
+				audiencemember.DisplayID(query),         // search equal to DisplayID
+				audiencemember.EmailContainsFold(query), // search by Email
+				audiencemember.ID(query),                // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 				},
 			),
 		)

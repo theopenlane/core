@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
@@ -38,6 +39,7 @@ type ContactQuery struct {
 	withEntities             *EntityQuery
 	withCampaigns            *CampaignQuery
 	withCampaignTargets      *CampaignTargetQuery
+	withAudienceMembers      *AudienceMemberQuery
 	withFiles                *FileQuery
 	withSubscribers          *SubscriberQuery
 	loadTotal                []func(context.Context, []*Contact) error
@@ -46,6 +48,7 @@ type ContactQuery struct {
 	withNamedEntities        map[string]*EntityQuery
 	withNamedCampaigns       map[string]*CampaignQuery
 	withNamedCampaignTargets map[string]*CampaignTargetQuery
+	withNamedAudienceMembers map[string]*AudienceMemberQuery
 	withNamedFiles           map[string]*FileQuery
 	withNamedSubscribers     map[string]*SubscriberQuery
 	// intermediate query (i.e. traversal path).
@@ -187,6 +190,28 @@ func (_q *ContactQuery) QueryCampaignTargets() *CampaignTargetQuery {
 			sqlgraph.From(contact.Table, contact.FieldID, selector),
 			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, contact.CampaignTargetsTable, contact.CampaignTargetsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAudienceMembers chains the current query on the "audience_members" edge.
+func (_q *ContactQuery) QueryAudienceMembers() *AudienceMemberQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, selector),
+			sqlgraph.To(audiencemember.Table, audiencemember.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, contact.AudienceMembersTable, contact.AudienceMembersColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -435,6 +460,7 @@ func (_q *ContactQuery) Clone() *ContactQuery {
 		withEntities:        _q.withEntities.Clone(),
 		withCampaigns:       _q.withCampaigns.Clone(),
 		withCampaignTargets: _q.withCampaignTargets.Clone(),
+		withAudienceMembers: _q.withAudienceMembers.Clone(),
 		withFiles:           _q.withFiles.Clone(),
 		withSubscribers:     _q.withSubscribers.Clone(),
 		// clone intermediate query.
@@ -496,6 +522,17 @@ func (_q *ContactQuery) WithCampaignTargets(opts ...func(*CampaignTargetQuery)) 
 		opt(query)
 	}
 	_q.withCampaignTargets = query
+	return _q
+}
+
+// WithAudienceMembers tells the query-builder to eager-load the nodes that are connected to
+// the "audience_members" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ContactQuery) WithAudienceMembers(opts ...func(*AudienceMemberQuery)) *ContactQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAudienceMembers = query
 	return _q
 }
 
@@ -605,12 +642,13 @@ func (_q *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	var (
 		nodes       = []*Contact{}
 		_spec       = _q.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
 			_q.withIntegrationRuns != nil,
 			_q.withOwner != nil,
 			_q.withEntities != nil,
 			_q.withCampaigns != nil,
 			_q.withCampaignTargets != nil,
+			_q.withAudienceMembers != nil,
 			_q.withFiles != nil,
 			_q.withSubscribers != nil,
 		}
@@ -670,6 +708,13 @@ func (_q *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	if query := _q.withAudienceMembers; query != nil {
+		if err := _q.loadAudienceMembers(ctx, query, nodes,
+			func(n *Contact) { n.Edges.AudienceMembers = []*AudienceMember{} },
+			func(n *Contact, e *AudienceMember) { n.Edges.AudienceMembers = append(n.Edges.AudienceMembers, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withFiles; query != nil {
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Contact) { n.Edges.Files = []*File{} },
@@ -709,6 +754,13 @@ func (_q *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := _q.loadCampaignTargets(ctx, query, nodes,
 			func(n *Contact) { n.appendNamedCampaignTargets(name) },
 			func(n *Contact, e *CampaignTarget) { n.appendNamedCampaignTargets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAudienceMembers {
+		if err := _q.loadAudienceMembers(ctx, query, nodes,
+			func(n *Contact) { n.appendNamedAudienceMembers(name) },
+			func(n *Contact, e *AudienceMember) { n.appendNamedAudienceMembers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -976,6 +1028,36 @@ func (_q *ContactQuery) loadCampaignTargets(ctx context.Context, query *Campaign
 	}
 	return nil
 }
+func (_q *ContactQuery) loadAudienceMembers(ctx context.Context, query *AudienceMemberQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *AudienceMember)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Contact)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(audiencemember.FieldContactID)
+	}
+	query.Where(predicate.AudienceMember(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(contact.AudienceMembersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ContactID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "contact_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *ContactQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Contact, init func(*Contact), assign func(*Contact, *File)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Contact)
@@ -1217,6 +1299,20 @@ func (_q *ContactQuery) WithNamedCampaignTargets(name string, opts ...func(*Camp
 		_q.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery)
 	}
 	_q.withNamedCampaignTargets[name] = query
+	return _q
+}
+
+// WithNamedAudienceMembers tells the query-builder to eager-load the nodes that are connected to the "audience_members"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ContactQuery) WithNamedAudienceMembers(name string, opts ...func(*AudienceMemberQuery)) *ContactQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAudienceMembers == nil {
+		_q.withNamedAudienceMembers = make(map[string]*AudienceMemberQuery)
+	}
+	_q.withNamedAudienceMembers[name] = query
 	return _q
 }
 

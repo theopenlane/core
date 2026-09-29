@@ -22,6 +22,12 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*AssetMutation]() {
 		c.Asset.Use(hook)
 	}
+	for _, hook := range history.Hooks[*AudienceMutation]() {
+		c.Audience.Use(hook)
+	}
+	for _, hook := range history.Hooks[*AudienceMemberMutation]() {
+		c.AudienceMember.Use(hook)
+	}
 	for _, hook := range history.Hooks[*CampaignMutation]() {
 		c.Campaign.Use(hook)
 	}

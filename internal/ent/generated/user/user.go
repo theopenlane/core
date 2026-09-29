@@ -100,6 +100,8 @@ const (
 	EdgeCampaigns = "campaigns"
 	// EdgeCampaignTargets holds the string denoting the campaign_targets edge name in mutations.
 	EdgeCampaignTargets = "campaign_targets"
+	// EdgeAudienceMembers holds the string denoting the audience_members edge name in mutations.
+	EdgeAudienceMembers = "audience_members"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
 	EdgeSubcontrols = "subcontrols"
 	// EdgeAssignerTasks holds the string denoting the assigner_tasks edge name in mutations.
@@ -223,6 +225,13 @@ const (
 	CampaignTargetsInverseTable = "campaign_targets"
 	// CampaignTargetsColumn is the table column denoting the campaign_targets relation/edge.
 	CampaignTargetsColumn = "user_id"
+	// AudienceMembersTable is the table that holds the audience_members relation/edge.
+	AudienceMembersTable = "audience_members"
+	// AudienceMembersInverseTable is the table name for the AudienceMember entity.
+	// It exists in this package in order to avoid circular dependency with the "audiencemember" package.
+	AudienceMembersInverseTable = "audience_members"
+	// AudienceMembersColumn is the table column denoting the audience_members relation/edge.
+	AudienceMembersColumn = "user_id"
 	// SubcontrolsTable is the table that holds the subcontrols relation/edge.
 	SubcontrolsTable = "subcontrols"
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
@@ -768,6 +777,20 @@ func ByCampaignTargets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByAudienceMembersCount orders the results by audience_members count.
+func ByAudienceMembersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAudienceMembersStep(), opts...)
+	}
+}
+
+// ByAudienceMembers orders the results by audience_members terms.
+func ByAudienceMembers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAudienceMembersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // BySubcontrolsCount orders the results by subcontrols count.
 func BySubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1038,6 +1061,13 @@ func newCampaignTargetsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(CampaignTargetsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, CampaignTargetsTable, CampaignTargetsColumn),
+	)
+}
+func newAudienceMembersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AudienceMembersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AudienceMembersTable, AudienceMembersColumn),
 	)
 }
 func newSubcontrolsStep() *sqlgraph.Step {
