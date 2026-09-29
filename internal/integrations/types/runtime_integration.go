@@ -92,7 +92,7 @@ type RuntimeIntegrationRegistration struct {
 	// Schema is the reflected JSON schema of the runtime config struct
 	Schema json.RawMessage `json:"schema,omitempty"`
 	// Config is the marshaled runtime config, nil when not provisioned
-	Config json.RawMessage `json:"config,omitempty"`
+	Config json.RawMessage `json:"-"`
 	// Build constructs the client from the runtime config.
 	// Called once at startup when Config is non-nil. The returned client
 	// is cached for the lifetime of the process
