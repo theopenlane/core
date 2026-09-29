@@ -234,7 +234,7 @@ func TestMutationCreateInvite(t *testing.T) {
 		{
 			name:        "new user with invalid email",
 			recipient:   "woof",
-			orgID:       th.SharedTestUser1.OrganizationID,
+			orgID:       localTestOrg.OrganizationID,
 			role:        enums.RoleMember,
 			client:      suite.Client.API,
 			ctx:         user1Context,
@@ -310,6 +310,86 @@ func TestMutationCreateInvite(t *testing.T) {
 	// delete organization created
 	th.CleanupOrganizationDataWithContext(localTestOrg.UserCtx, t)
 	th.CleanupOrganizationDataWithContext(orgWithRestrictionsCtx, t)
+}
+
+func TestMutationCreateInviteRoleCeiling(t *testing.T) {
+	t.Parallel()
+
+	org := suite.SeedFreshOrgUsers(t)
+	t.Cleanup(func() { th.CleanupOrganizationDataWithContext(org.Owner.UserCtx, t) })
+
+	testCases := []struct {
+		name      string
+		recipient string
+		ctx       context.Context
+		role      enums.Role
+		transfer  bool
+		errMsg    string
+	}{
+		{
+			name:      "admin can invite admin",
+			recipient: "ceiling-admin@theopenlane.io",
+			ctx:       org.Admin.UserCtx,
+			role:      enums.RoleAdmin,
+		},
+		{
+			name:      "super admin can invite super admin",
+			recipient: "ceiling-superadmin@theopenlane.io",
+			ctx:       org.SuperAdmin.UserCtx,
+			role:      enums.RoleSuperAdmin,
+		},
+		{
+			name:      "admin cannot invite super admin",
+			recipient: "ceiling-admin-superadmin@theopenlane.io",
+			ctx:       org.Admin.UserCtx,
+			role:      enums.RoleSuperAdmin,
+			errMsg:    th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:      "admin cannot invite owner",
+			recipient: "ceiling-admin-owner@theopenlane.io",
+			ctx:       org.Admin.UserCtx,
+			role:      enums.RoleOwner,
+			errMsg:    th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:      "super admin cannot invite owner as ownership transfer",
+			recipient: "ceiling-superadmin-transfer@theopenlane.io",
+			ctx:       org.SuperAdmin.UserCtx,
+			role:      enums.RoleOwner,
+			transfer:  true,
+			errMsg:    th.NotAuthorizedErrorMsg,
+		},
+		{
+			name:      "owner can invite owner as ownership transfer",
+			recipient: "ceiling-owner-transfer@theopenlane.io",
+			ctx:       org.Owner.UserCtx,
+			role:      enums.RoleOwner,
+			transfer:  true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			input := testclient.CreateInviteInput{
+				Recipient:         tc.recipient,
+				OwnerID:           &org.Owner.OrganizationID,
+				Role:              &tc.role,
+				OwnershipTransfer: &tc.transfer,
+			}
+
+			resp, err := suite.Client.API.CreateInvite(tc.ctx, input)
+
+			if tc.errMsg != "" {
+				assert.ErrorContains(t, err, tc.errMsg)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(tc.role, resp.CreateInvite.Invite.Role))
+		})
+	}
 }
 
 func TestMutationCreateBulkInvite(t *testing.T) {

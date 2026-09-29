@@ -3405,6 +3405,19 @@ func TestQueryControlTrustCenterVisibility(t *testing.T) {
 		assert.Check(t, is.Equal(publicControl.ID, resp.Controls.Edges[0].Node.ID))
 	})
 
+	t.Run("anonymous user list query with modules disabled returns only public trust center controls", func(t *testing.T) {
+		entCfg := *suite.Client.DB.EntConfig
+		entCfg.Modules.Enabled = false
+
+		modulesDisabledClient := *suite.Client.DB
+		modulesDisabledClient.EntConfig = &entCfg
+
+		controls, err := suite.Client.DB.Control.Query().All(generated.NewContext(anonCtx, &modulesDisabledClient))
+		assert.NilError(t, err)
+		assert.Assert(t, is.Len(controls, 1))
+		assert.Check(t, is.Equal(publicControl.ID, controls[0].ID))
+	})
+
 	// cleanup
 	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: []string{publicControl.ID, hiddenControl.ID, regularControl.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	(&th.Cleanup[*generated.TrustCenterDeleteOne]{Client: suite.Client.DB.TrustCenter, ID: trustCenter.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)

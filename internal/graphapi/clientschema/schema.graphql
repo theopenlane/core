@@ -85312,6 +85312,7 @@ Properties by which TrustCenterSubprocessor connections can be ordered.
 enum TrustCenterSubprocessorOrderField {
 	created_at
 	updated_at
+	SUBPROCESSOR_name
 }
 """
 Return response for updateTrustCenterSubprocessor mutation

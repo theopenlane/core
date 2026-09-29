@@ -16,15 +16,18 @@ import (
 )
 
 type mockQuery struct {
-	typ string
+	typ        string
+	predicates []func(*sql.Selector)
 }
 
-func (m *mockQuery) Type() string                  { return m.typ }
-func (m *mockQuery) Limit(int)                     {}
-func (m *mockQuery) Offset(int)                    {}
-func (m *mockQuery) Unique(bool)                   {}
-func (m *mockQuery) Order(...func(*sql.Selector))  {}
-func (m *mockQuery) WhereP(...func(*sql.Selector)) {}
+func (m *mockQuery) Type() string                 { return m.typ }
+func (m *mockQuery) Limit(int)                    {}
+func (m *mockQuery) Offset(int)                   {}
+func (m *mockQuery) Unique(bool)                  {}
+func (m *mockQuery) Order(...func(*sql.Selector)) {}
+func (m *mockQuery) WhereP(ps ...func(*sql.Selector)) {
+	m.predicates = append(m.predicates, ps...)
+}
 
 func orgQuery() intercept.Query { return &mockQuery{typ: "Organization"} }
 

@@ -127056,6 +127056,7 @@ Properties by which TrustCenterSubprocessor connections can be ordered.
 enum TrustCenterSubprocessorOrderField {
   created_at
   updated_at
+  SUBPROCESSOR_name
 }
 """
 TrustCenterSubprocessorWhereInput is used for filtering TrustCenterSubprocessor objects.
