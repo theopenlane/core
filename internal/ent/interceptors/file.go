@@ -43,10 +43,6 @@ func InterceptorFile() ent.Interceptor {
 			return nil
 		}
 
-		if caller.Has(auth.CapBypassOrgFilter) {
-			return nil
-		}
-
 		orgs := caller.OrgIDs()
 
 		// if this is a request for avatar file, add all org ids the user is a part of
