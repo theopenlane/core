@@ -417,7 +417,7 @@ func (r *Reconciler) AnalyzeStripeSystemMismatches(ctx context.Context, action s
 
 	// Get all organizations from internal system for lookup
 	// Add internal context for administrative operations
-	internalCtx := rule.WithInternalContext(ctx)
+	internalCtx := rule.WithInternalCrossOrgContext(ctx)
 
 	orgs, err := r.db.Organization.Query().
 		WithOrgSubscriptions().
@@ -542,7 +542,7 @@ func (r *Reconciler) CleanupOrphanedStripeCustomers(ctx context.Context) (*Clean
 
 	// Get all organizations from internal system for lookup
 	// Add internal context for administrative operations
-	internalCtx := rule.WithInternalContext(ctx)
+	internalCtx := rule.WithInternalCrossOrgContext(ctx)
 
 	orgs, err := r.db.Organization.Query().
 		Where(
@@ -683,7 +683,7 @@ func (r *Reconciler) UpdatePersonalOrgMetadata(ctx context.Context) (*MetadataUp
 	}
 
 	// Add internal context for administrative operations
-	internalCtx := rule.WithInternalContext(ctx)
+	internalCtx := rule.WithInternalCrossOrgContext(ctx)
 
 	orgs, err := r.db.Organization.Query().
 		WithOrgSubscriptions().

@@ -18,7 +18,7 @@ func TestWorkflowContexts(t *testing.T) {
 	bypass := WithContext(base)
 	assert.True(t, IsWorkflowBypass(bypass))
 
-	assert.True(t, rule.IsInternalRequest(rule.WithInternalContext(base)))
+	assert.True(t, rule.IsInternalRequest(rule.WithInternalCrossOrgContext(base)))
 
 	orgID := ulids.New().String()
 	orgCtx := auth.NewTestContextWithOrgID(ulids.New().String(), orgID)

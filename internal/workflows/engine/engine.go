@@ -112,8 +112,8 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 			workflowproposal.FieldDomainKey: domain.DomainKey,
 		})
 	}
-	// Scope guards and instance creation to the organization owning the object, with privacy bypass for internal workflow operations
-	ownerID, err := workflows.ObjectOwnerID(rule.WithInternalContext(ctx), e.client, obj.Type, obj.ID)
+	// the owning org is not known yet and the caller may not have one selected, so this lookup bypasses the org filter; guards and instance creation after are scoped to the owner
+	ownerID, err := workflows.ObjectOwnerID(rule.WithInternalCrossOrgContext(ctx), e.client, obj.Type, obj.ID)
 	if err != nil {
 		return nil, scope.Fail(err, nil)
 	}
@@ -160,7 +160,7 @@ func (e *WorkflowEngine) TriggerExistingInstance(ctx context.Context, instance *
 	userID, _ := auth.GetSubjectIDFromContext(ctx)
 	contextData := applyTriggerContext(instance.Context, def.ID, obj, input, userID)
 
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 	if err := e.client.WorkflowInstance.UpdateOneID(instance.ID).
 		SetWorkflowDefinitionID(def.ID).
 		SetState(enums.WorkflowInstanceStateRunning).
@@ -313,7 +313,7 @@ func (e *WorkflowEngine) ProcessAction(ctx context.Context, instance *generated.
 	}
 
 	// Use allow context for internal workflow operations
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	objRef, err := e.client.WorkflowObjectRef.
 		Query().
@@ -411,7 +411,7 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 		CompletedBy:  userID,
 	}
 
-	allowCtx = rule.WithInternalContext(ctx)
+	allowCtx = rule.WithInternalOperationContext(ctx)
 
 	instance, instanceErr := loadWorkflowInstance(allowCtx, e.client, assignment.WorkflowInstanceID, orgID)
 	if instanceErr != nil {

@@ -17,7 +17,7 @@ import (
 
 // clearEmitFailedEvents removes emit failure events to isolate test cases.
 func (s *WorkflowEngineTestSuite) clearEmitFailedEvents(ctx context.Context) {
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalCrossOrgContext(ctx)
 	_, err := s.client.WorkflowEvent.Delete().
 		Where(workflowevent.EventTypeEQ(enums.WorkflowEventTypeEmitFailed)).
 		Exec(allowCtx)
@@ -67,7 +67,7 @@ func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
 	s.Require().NoError(err)
 	s.Require().NotNil(instance)
 
-	allowCtx := rule.WithInternalContext(userCtx)
+	allowCtx := rule.WithInternalCrossOrgContext(userCtx)
 	event, err := s.client.WorkflowEvent.Query().
 		Where(
 			workflowevent.WorkflowInstanceIDEQ(instance.ID),
@@ -139,7 +139,7 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 	s.Equal(1, result.Attempted)
 	s.Equal(1, result.Recovered)
 
-	allowCtx := rule.WithInternalContext(userCtx)
+	allowCtx := rule.WithInternalCrossOrgContext(userCtx)
 	recovered, err := s.client.WorkflowEvent.Query().
 		Where(
 			workflowevent.WorkflowInstanceIDEQ(instance.ID),
@@ -210,7 +210,7 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureTerminalAfterMaxAttemp
 	rec, err := reconciler.New(s.client, brokenEmitter, reconciler.WithMaxAttempts(3))
 	s.Require().NoError(err)
 
-	allowCtx := rule.WithInternalContext(userCtx)
+	allowCtx := rule.WithInternalCrossOrgContext(userCtx)
 
 	_, err = rec.ReconcileEmitFailures(userCtx)
 	s.Require().NoError(err)

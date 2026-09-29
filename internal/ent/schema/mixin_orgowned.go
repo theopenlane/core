@@ -206,9 +206,7 @@ var orgHookCreateServiceOnlyFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 // setOwnerIDField sets the owner id field on the mutation based on the current organization
 func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) error {
 	caller, ok := auth.CallerFromContext(ctx)
-	// skip setting owner if this is a service-level internal operation (e.g. org creation, subscription management)
-	// CapBypassFGA distinguishes real service callers from test internal contexts created by
-	// rule.WithInternalContext, which adds CapInternalOperation but not CapBypassFGA
+	// skip setting owner when the caller has both caps, e.g. org creation and subscription management
 	if ok && caller != nil && caller.Has(auth.CapInternalOperation|auth.CapBypassFGA) {
 		return nil
 	}
@@ -278,7 +276,8 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 		}
 
 		// check API Token scope and return error if scope not set on token for object
-		if auth.IsAPITokenAuthentication(ctx) {
+		// internal operations query on behalf of the system, not the token, so token scopes do not apply
+		if auth.IsAPITokenAuthentication(ctx) && !rule.IsInternalRequest(ctx) {
 			if err := rule.CheckSubjectScope(ctx, q.Type(), fgax.CanView, nil); errors.Is(err, rule.ErrRequiredScopeNotSet) {
 				return err
 			}
@@ -308,8 +307,12 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 // denied rather than falling through to the organization filter
 func isAnonTrustCenterCaller(ctx context.Context) (string, bool, error) {
 	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil || caller.OrganizationID == "" {
+	if !ok || caller == nil {
 		return "", false, auth.ErrNoAuthUser
+	}
+
+	if _, err := auth.GetOrganizationIDFromContext(ctx); err != nil {
+		return "", false, err
 	}
 
 	if _, orgID, ok := auth.TrustCenterScopeFromContext(ctx); ok {
@@ -343,9 +346,7 @@ func (o ObjectOwnedMixin) orgHookSkipper(ctx context.Context) (bool, error) {
 		return true, nil
 	}
 
-	// skip the hook for internal operations (subscription management, acme solver, keystore, etc.)
-	// CapBypassFGA distinguishes real service callers from test internal contexts created by
-	// rule.WithInternalContext, which adds CapBypassOrgFilter|CapInternalOperation but not CapBypassFGA
+	// skip the hook when the caller has all three caps, e.g. org creation, backfill and system subscription management
 	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassOrgFilter|auth.CapInternalOperation|auth.CapBypassFGA) {
 		return true, nil
 	}

@@ -49,7 +49,7 @@ func (s *WorkflowEngineTestSuite) TestResolveUserTarget() {
 
 	wfEngine := s.Engine()
 
-	internalCtx := generated.NewContext(rule.WithInternalContext(s.ctx), s.client)
+	internalCtx := generated.NewContext(rule.WithInternalCrossOrgContext(s.ctx), s.client)
 	user, err := s.client.User.Create().
 		SetEmail("test-" + ulid.Make().String() + "@example.com").
 		SetLastLoginProvider(enums.AuthProviderCredentials).

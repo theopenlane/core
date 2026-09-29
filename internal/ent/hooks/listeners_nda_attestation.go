@@ -23,6 +23,7 @@ func NDAAttestationListeners() []gala.Registration {
 		entityops.MutationListener{
 			Schema:     entityops.SchemaDocumentData,
 			Operations: []string{entityops.OpCreate},
+			// the signer is an anonymous trust center caller and DocumentData does not allow anonymous trust center access, so reading the signed document needs the org filter bypass
 			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
 				return restored.WithCapabilities(auth.CapBypassOrgFilter)
 			},

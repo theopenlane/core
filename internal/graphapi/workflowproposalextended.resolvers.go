@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -113,7 +114,6 @@ func (r *mutationResolver) SubmitWorkflowProposal(ctx context.Context, id string
 	if !ok || submitCaller == nil || submitCaller.SubjectID == "" {
 		return nil, rout.ErrPermissionDenied
 	}
-	userID := submitCaller.SubjectID
 
 	if proposal.OwnerID != "" {
 		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID)
@@ -134,7 +134,7 @@ func (r *mutationResolver) SubmitWorkflowProposal(ctx context.Context, id string
 	updated, err := r.db.WorkflowProposal.UpdateOneID(proposal.ID).
 		SetState(enums.WorkflowProposalStateSubmitted).
 		SetSubmittedAt(now).
-		SetSubmittedByUserID(userID).
+		SetNillableSubmittedByUserID(lo.EmptyableToPtr(workflows.ActingUserID(ctx))).
 		SetProposedHash(proposedHash).
 		Save(allowCtx)
 	if err != nil {
@@ -176,7 +176,7 @@ func (r *mutationResolver) WithdrawWorkflowProposal(ctx context.Context, id stri
 	if !ok || withdrawCaller == nil || withdrawCaller.SubjectID == "" {
 		return nil, rout.ErrPermissionDenied
 	}
-	userID := withdrawCaller.SubjectID
+	userID := workflows.ActingUserID(ctx)
 
 	if proposal.OwnerID != "" {
 		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &proposal.OwnerID)

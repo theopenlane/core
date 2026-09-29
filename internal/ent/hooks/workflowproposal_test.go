@@ -21,7 +21,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments() {
 	orgID := user.Edges.OrgMemberships[0].OrganizationID
 	userCtx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	userCtx = generated.NewContext(userCtx, suite.client)
-	internalCtx := rule.WithInternalContext(userCtx)
+	internalCtx := rule.WithInternalCrossOrgContext(userCtx)
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)
@@ -117,7 +117,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments_DraftS
 	orgID := user.Edges.OrgMemberships[0].OrganizationID
 	userCtx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	userCtx = generated.NewContext(userCtx, suite.client)
-	internalCtx := rule.WithInternalContext(userCtx)
+	internalCtx := rule.WithInternalCrossOrgContext(userCtx)
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)
@@ -187,7 +187,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments_NonCha
 	orgID := user.Edges.OrgMemberships[0].OrganizationID
 	userCtx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	userCtx = generated.NewContext(userCtx, suite.client)
-	internalCtx := rule.WithInternalContext(userCtx)
+	internalCtx := rule.WithInternalCrossOrgContext(userCtx)
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)
@@ -257,7 +257,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalTriggerOnSubmitResumesInstan
 	orgID := user.Edges.OrgMemberships[0].OrganizationID
 	userCtx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	userCtx = generated.NewContext(userCtx, suite.client)
-	internalCtx := rule.WithInternalContext(userCtx)
+	internalCtx := rule.WithInternalCrossOrgContext(userCtx)
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)

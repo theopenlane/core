@@ -152,7 +152,7 @@ func (s *DefinitionSeeder) SeedDefinitionsFromManifestURL(ctx context.Context, m
 
 // SeedDefinitionsFromManifest upserts system-owned definitions from an in-memory manifest payload.
 func (s *DefinitionSeeder) SeedDefinitionsFromManifest(ctx context.Context, manifest DefinitionSeedManifest) error {
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalCrossOrgContext(ctx)
 
 	for _, item := range manifest.Definitions {
 		if _, err := s.upsertWorkflowDefinition(allowCtx, item); err != nil {

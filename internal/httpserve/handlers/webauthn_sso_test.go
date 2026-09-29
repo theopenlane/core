@@ -53,6 +53,7 @@ func (suite *HandlerTestSuite) TestBeginWebauthnRegistration() {
 	require.NotNil(t, out.CredentialCreation)
 	require.NotEmpty(t, out.Session)
 
+	// add privacy allow to run the query to check that the user is created
 	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
 
 	exists, err := suite.db.User.Query().Where(user.Email(email)).Exist(allowCtx)

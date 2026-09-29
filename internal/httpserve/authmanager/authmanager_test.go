@@ -27,7 +27,7 @@ func TestSkipOrgValidation(t *testing.T) {
 	if skipOrgValidation(ctx) {
 		t.Fatalf("expected false")
 	}
-	ctx = rule.WithInternalContext(ctx)
+	ctx = rule.WithInternalCrossOrgContext(ctx)
 	if !skipOrgValidation(ctx) {
 		t.Fatalf("expected true for internal request")
 	}
