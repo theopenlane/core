@@ -87,6 +87,7 @@ func gqlGenerate() {
 			resolvergen.WithForceRegenerateBulkResolvers(false),
 		)), // replace the resolvergen plugin
 		api.AddPlugin(bulkgen.NewWithOptions(
+			bulkgen.WithSchemaPath("./internal/ent/schema"),
 			bulkgen.WithModelPackage(modelImport),
 			bulkgen.WithEntGeneratedPackage(entPackage),
 			bulkgen.WithCSVOutputPath(csvDir),

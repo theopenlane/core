@@ -25,14 +25,7 @@ import (
 func HookSubscriberCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.SubscriberFunc(func(ctx context.Context, m *generated.SubscriberMutation) (generated.Value, error) {
-			email, ok := m.Email()
-			if !ok || email == "" {
-				return nil, gqlerrors.NewCustomError(
-					gqlerrors.BadRequestErrorCode,
-					"subscriber email is required, please provide a valid email",
-
-					ErrEmailRequired)
-			}
+			email, _ := m.Email()
 
 			// lowercase the email for uniqueness
 			m.SetEmail(strings.ToLower(email))
@@ -46,31 +39,27 @@ func HookSubscriberCreate() ent.Hook {
 				return nil, err
 			}
 
+			var retValue ent.Value
+
 			existingSubscriber, err := getSubscriber(ctx, m)
 
 			if existingSubscriber != nil && err == nil {
 				if existingSubscriber.Active {
-					return nil, gqlerrors.NewCustomError(
-						gqlerrors.AlreadyExistsErrorCode,
-						"email is already subscribed to this organization",
-						ErrUserAlreadySubscriber)
+					return existingSubscriber, nil
 				}
 
-				_, newErr := updateSubscriber(ctx, m, existingSubscriber)
-				if newErr != nil {
+				retValue, err = updateSubscriber(ctx, m, existingSubscriber)
+				if err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("unable to update email subscription")
 
-					return nil, err
+					return retValue, err
 				}
-			}
-
-			if err != nil && !generated.IsNotFound(err) {
-				return nil, err
-			}
-
-			retValue, err := next.Mutate(ctx, m)
-			if err != nil {
-				return retValue, err
+			} else {
+				// create new subscription
+				retValue, err = next.Mutate(ctx, m)
+				if err != nil {
+					return retValue, err
+				}
 			}
 
 			tokenValue, _ := m.Token()

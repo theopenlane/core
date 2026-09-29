@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"strings"
 	"text/template"
 
@@ -37,6 +38,9 @@ type NotificationContent struct {
 	// Data is static base data carried on the notification; string values render as templates
 	// and empty rendered values are omitted, matching the ent defaults column semantics
 	Data map[string]any
+	// Channels are the delivery channels set on emitted notifications, matching the ent channels
+	// column; when none are specified the notification is delivered in-app only
+	Channels []enums.Channel
 }
 
 // NotifySpec declares a declarative notification on a mutation listener: recipients resolve
@@ -158,13 +162,10 @@ func notifyHandler(listener MutationListener) func(Invocation, MutationPayload) 
 	spec := listener.Notify
 
 	return func(inv Invocation, payload MutationPayload) error {
-		row, err := inv.Schema.Load(inv.Context, inv.Client, payload.EntityID)
-		switch {
-		case generated.IsNotFound(err):
-			return nil
-		case err != nil:
-			logx.FromContext(inv.Context).Error().Err(err).Msg("failed to load entity for notification")
-			return err
+		// the mutation handler loads the row for notify listeners before invoking this
+		row := inv.Row
+		if row == nil {
+			return fmt.Errorf("%w: %s", ErrMutationListenerInvalid, listener.Name())
 		}
 
 		recipients, err := spec.Recipients(inv, payload, row)
@@ -191,6 +192,7 @@ func notifyHandler(listener MutationListener) func(Invocation, MutationPayload) 
 			Title:            title,
 			Body:             body,
 			Data:             data,
+			Channels:         spec.Content.Channels,
 			Topic:            &topic,
 			ObjectType:       payload.MutationType,
 		}
@@ -199,7 +201,11 @@ func notifyHandler(listener MutationListener) func(Invocation, MutationPayload) 
 			input.OwnerID = &ownerID
 		}
 
-		return CreateNotifications(inv.Context, inv.Client, recipients, input)
+		if err := CreateNotifications(inv.Context, inv.Client, recipients, input); err != nil {
+			return err
+		}
+
+		return nil
 	}
 }
 

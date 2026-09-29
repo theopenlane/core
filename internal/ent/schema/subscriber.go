@@ -187,6 +187,7 @@ func (Subscriber) Indexes() []ent.Index {
 // Annotations of the Subscriber
 func (Subscriber) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.SequentialBulkCreate(),
 		history.Annotations{
 			Exclude: true,
 		},
