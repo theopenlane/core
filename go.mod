@@ -36,7 +36,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.111.0
 	github.com/aws/aws-sdk-go-v2/service/securityhub v1.80.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.49.0
-	github.com/brianvoe/gofakeit/v7 v7.17.0
+	github.com/brianvoe/gofakeit/v7 v7.17.1
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v7 v7.10.0
 	github.com/coder/websocket v1.8.15
@@ -85,7 +85,7 @@ require (
 	github.com/nyaruka/phonenumbers v1.8.1
 	github.com/oklog/ulid/v2 v2.1.2
 	github.com/okta/okta-sdk-golang/v6 v6.1.7
-	github.com/olekukonko/tablewriter v1.1.4
+	github.com/olekukonko/tablewriter v1.1.5
 	github.com/openfga/go-sdk v0.8.2
 	github.com/openfga/language/pkg/go v0.3.2-0.20260730144454-83fedf8a4e70
 	github.com/oracle/oci-go-sdk/v65 v65.124.1
@@ -118,14 +118,14 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/eddy v0.1.0
-	github.com/theopenlane/entx v0.34.5
+	github.com/theopenlane/entx v0.36.0
 	github.com/theopenlane/go-client v0.14.0
-	github.com/theopenlane/gqlgen-plugins v0.18.0
+	github.com/theopenlane/gqlgen-plugins v0.18.2-0.20260929204951-8015c7cc685a
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.39.3
 	github.com/theopenlane/newman v0.4.3
 	github.com/theopenlane/riverboat v0.14.0
-	github.com/theopenlane/utils v0.7.1
+	github.com/theopenlane/utils v0.7.2
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.11.0
 	github.com/vektah/gqlparser/v2 v2.5.58
@@ -149,10 +149,6 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
 )
-
-replace github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins/
-
-replace github.com/theopenlane/entx => ../entx
 
 require (
 	cel.dev/expr v0.25.2 // indirect
@@ -206,7 +202,6 @@ require (
 	github.com/boombuler/barcode v1.1.0 // indirect
 	github.com/brunoga/deep v1.3.1 // indirect
 	github.com/buger/jsonparser v1.1.2 // indirect
-	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/chzyer/readline v1.5.1 // indirect
@@ -225,6 +220,8 @@ require (
 	github.com/distribution/reference v0.6.0 // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/dnephin/pflag v1.0.7 // indirect
+	github.com/docker/cli v27.4.1+incompatible // indirect
+	github.com/docker/docker v28.2.2+incompatible // indirect
 	github.com/docker/go-connections v0.8.1 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/ebitengine/purego v0.10.1 // indirect
@@ -238,7 +235,7 @@ require (
 	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
-	github.com/go-openapi/inflect v1.0.0 // indirect
+	github.com/go-openapi/inflect v1.0.1 // indirect
 	github.com/go-openapi/jsonpointer v1.0.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
 	github.com/go-resty/resty/v2 v2.7.0 // indirect
@@ -246,6 +243,7 @@ require (
 	github.com/go-webauthn/x v0.3.1 // indirect
 	github.com/goccy/go-json v0.10.6 // indirect
 	github.com/gofrs/flock v0.10.0 // indirect
+	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/go-github/v91 v91.0.0 // indirect
@@ -327,7 +325,7 @@ require (
 	github.com/openfga/api/proto v0.0.0-20260723150800-6981fff8d33b // indirect
 	github.com/openfga/openfga v1.20.0 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
-	github.com/ory/dockertest v3.3.5+incompatible // indirect
+	github.com/ory/dockertest/v3 v3.12.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pb33f/ordered-map/v2 v2.3.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.3.1 // indirect
@@ -424,5 +422,6 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20260819154853-08b0e4226688 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260831171406-18b4a7587f8a // indirect
 	google.golang.org/grpc v1.83.2 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gotest.tools/gotestsum v1.13.0 // indirect
 )
