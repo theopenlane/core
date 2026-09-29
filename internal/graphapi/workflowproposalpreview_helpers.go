@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/internal/workflows"
@@ -65,7 +66,7 @@ func (r *Resolver) workflowInstanceProposalPreview(ctx context.Context, instance
 		}
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	proposal, err := r.db.WorkflowProposal.Get(allowCtx, instance.WorkflowProposalID)
 	if err != nil {
@@ -127,7 +128,7 @@ func buildWorkflowProposalPreview(ctx context.Context, client *generated.Client,
 
 	currentValues := map[string]any{}
 	if len(fields) > 0 {
-		allowCtx := workflows.AllowContext(ctx)
+		allowCtx := rule.WithInternalOperationContext(ctx)
 		entity, err := workflows.LoadWorkflowObject(allowCtx, client, objectType.String(), objectID)
 		if err != nil {
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobject"})
@@ -202,7 +203,7 @@ func workflowInstanceObjectContext(ctx context.Context, client *generated.Client
 		return "", "", nil
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 	query := client.WorkflowObjectRef.Query().
 		Where(workflowobjectref.WorkflowInstanceIDEQ(instance.ID))
 	if instance.OwnerID != "" {
@@ -240,7 +241,7 @@ func workflowProposalObjectContext(ctx context.Context, client *generated.Client
 		return "", "", nil
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 	ref, err := client.WorkflowObjectRef.Get(allowCtx, proposal.WorkflowObjectRefID)
 	if err != nil {
 		if generated.IsNotFound(err) {
@@ -276,7 +277,7 @@ func workflowInstanceHasApprover(ctx context.Context, client *generated.Client, 
 		return false, nil
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	direct, err := client.WorkflowAssignmentTarget.Query().
 		Where(
@@ -324,7 +325,7 @@ func workflowProposalHasApprover(ctx context.Context, client *generated.Client, 
 		return false, nil
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	direct, err := client.WorkflowAssignmentTarget.Query().
 		Where(

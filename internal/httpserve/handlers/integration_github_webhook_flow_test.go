@@ -19,6 +19,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
@@ -114,6 +115,45 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 	verifiedAtString, ok := verifiedAtValue.(string)
 	assert.True(t, ok)
 	assert.NotEmpty(t, verifiedAtString)
+}
+
+func (suite *HandlerTestSuite) TestGitHubWebhookInstallationDeletedRemovesIntegration() {
+	t := suite.T()
+
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	t.Cleanup(restore)
+
+	suite.registerGitHubAppWebhookRoute()
+
+	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
+	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+
+	installAttrs, err := json.Marshal(githubapp.InstallationMetadata{InstallationID: "7007"})
+	require.NoError(t, err)
+
+	integrationRecord, err := suite.db.Integration.Create().
+		SetOwnerID(user.OrganizationID).
+		SetName("GitHub App").
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
+		SetDefinitionID(githubAppDefinitionID).
+		Save(user.UserCtx)
+	require.NoError(t, err)
+
+	payload := []byte(`{"action":"deleted","installation":{"id":7007}}`)
+	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
+	req.Header.Set("X-GitHub-Event", "installation")
+	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+
+	assert.Equal(t, http.StatusOK, rec.Code)
+
+	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
+
+	exists, err := suite.db.Integration.Query().Where(integration.ID(integrationRecord.ID)).Exist(user.UserCtx)
+	require.NoError(t, err)
+	assert.False(t, exists)
 }
 
 func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {

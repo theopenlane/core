@@ -376,3 +376,15 @@ func (suite *GraphTestSuite) AddFunctionalRoleForUser(ctx context.Context, t *te
 	_, err := suite.Client.DB.Authz.WriteTupleKeys(ctx, tuples, nil)
 	require.NoError(t, err)
 }
+
+// OrgMemberWithFunctionalRoles creates a user, adds them to the owner's organization as a member,
+// and grants them the functional roles
+func (suite *GraphTestSuite) OrgMemberWithFunctionalRoles(t *testing.T, owner TestUserDetails, roles ...string) TestUserDetails {
+	t.Helper()
+
+	member := suite.UserBuilder(context.Background(), t)
+	suite.AddUserToOrganization(owner.UserCtx, t, &member, enums.RoleMember, owner.OrganizationID)
+	suite.AddFunctionalRoleForUser(owner.UserCtx, t, member.ID, owner.OrganizationID, roles)
+
+	return member
+}

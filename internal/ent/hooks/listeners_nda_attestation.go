@@ -6,8 +6,8 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -83,22 +83,21 @@ func handleNDAAttestationCreated(inv entityops.Invocation, payload entityops.Mut
 		return err
 	}
 
-	allowCtx := privacy.DecisionContext(inv.Context, privacy.Allow)
-
 	requestID, err := inv.Client.TrustCenterNDARequest.Query().Where(
 		trustcenterndarequest.EmailEqualFold(inv.Caller.SubjectEmail),
 		trustcenterndarequest.TrustCenterID(tcID),
 		trustcenterndarequest.StatusEQ(enums.TrustCenterNDARequestStatusSigned),
-	).FirstID(allowCtx)
+	).FirstID(inv.Context)
 	if err != nil {
 		logx.FromContext(logCtx).Error().Err(err).Msg("nda attestation listener: failed to resolve nda request id for email")
 
 		return err
 	}
 
+	// anonymous signers cannot update their own request, so the signed file is recorded as an internal operation
 	if err := inv.Client.TrustCenterNDARequest.UpdateOneID(requestID).
 		SetFileID(result.TemplateFileID).
-		Exec(allowCtx); err != nil {
+		Exec(rule.WithInternalOperationContext(inv.Context)); err != nil {
 		logx.FromContext(logCtx).Error().Err(err).Msg("nda attestation listener: failed to set file ID on nda request")
 
 		return err

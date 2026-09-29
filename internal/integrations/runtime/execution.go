@@ -587,7 +587,7 @@ func (r *Runtime) SeedReconcileJobs(ctx context.Context) error {
 // SeedReconcileJobsForInstallation checks every reconcilable operation on the given
 // installation and emits a ReconcileEnvelope for any that do not have an active River job
 func (r *Runtime) SeedReconcileJobsForInstallation(ctx context.Context, inst *ent.Integration) error {
-	return r.seedReconcileJobsForInstallation(privacy.DecisionContext(ctx, privacy.Allow), inst)
+	return r.seedReconcileJobsForInstallation(ctx, inst)
 }
 
 // seedReconcileJobsForInstallation is the shared implementation used by both
@@ -663,7 +663,7 @@ func (r *Runtime) isOrgSubscriptionActive(ctx context.Context, orgID string) (bo
 			),
 			orgsubscription.StripeSubscriptionStatusNEQ(string(stripe.SubscriptionStatusCanceled)),
 		).
-		Exist(privacy.DecisionContext(ctx, privacy.Allow))
+		Exist(ctx)
 }
 
 // reconcilableDefinitionIDs returns the IDs of all registered definitions that

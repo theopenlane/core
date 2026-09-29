@@ -13,12 +13,13 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
-	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
@@ -43,7 +44,7 @@ func (r *mutationResolver) ApproveWorkflowAssignment(ctx context.Context, id str
 	approvalMeta.ApprovedByUserID = decisionCtx.UserID
 
 	// Use allow context for the update since we've already validated the user is an authorized target
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	updatedCount, err := withTransactionalMutation(ctx).WorkflowAssignment.Update().
 		Where(
@@ -96,7 +97,7 @@ func (r *mutationResolver) RejectWorkflowAssignment(ctx context.Context, id stri
 	}
 
 	// Use allow context for the update since we've already validated the user is an authorized target
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	updatedCount, err := withTransactionalMutation(ctx).WorkflowAssignment.Update().
 		Where(
@@ -165,7 +166,7 @@ func (r *mutationResolver) RequestChangesWorkflowAssignment(ctx context.Context,
 		rejectionMeta.ActionKey = resolveAssignmentActionKey(assignment)
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	update := withTransactionalMutation(ctx).WorkflowAssignment.Update().
 		Where(
@@ -219,7 +220,22 @@ func (r *mutationResolver) ReassignWorkflowAssignment(ctx context.Context, id st
 	}
 
 	assignment := decisionCtx.Assignment
-	allowCtx := workflows.AllowContext(ctx)
+
+	isMember, err := withTransactionalMutation(ctx).OrgMembership.Query().
+		Where(
+			orgmembership.UserIDEQ(targetUserID),
+			orgmembership.OrganizationIDEQ(assignment.OwnerID),
+		).
+		Exist(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "orgmembership"})
+	}
+
+	if !isMember {
+		return nil, common.NewNotFoundError("target user")
+	}
+
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	create := withTransactionalMutation(ctx).WorkflowAssignmentTarget.Create().
 		SetWorkflowAssignmentID(assignment.ID).

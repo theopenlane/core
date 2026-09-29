@@ -27,8 +27,11 @@ type standardControl struct {
 }
 
 type standardSubcontrol struct {
-	ControlID string `json:"control_id"`
-	standardControl
+	ID                         string  `json:"id"`
+	ControlID                  string  `json:"control_id"`
+	RefCode                    string  `json:"ref_code"`
+	Title                      *string `json:"title,omitempty"`
+	ReferenceFrameworkRevision *string `json:"reference_framework_revision"`
 }
 
 // handleStandardMutation processes standard mutations and creates notifications

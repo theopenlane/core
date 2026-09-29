@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/workflows"
 )
@@ -66,7 +67,7 @@ func recordWorkflowInstanceAdminCompletion(ctx context.Context, client *generate
 		return err
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 	return client.WorkflowEvent.Create().
 		SetWorkflowInstanceID(instance.ID).
 		SetEventType(enums.WorkflowEventTypeInstanceCompleted).
@@ -115,7 +116,7 @@ func closeWorkflowAssignments(ctx context.Context, client *generated.Client, ins
 		return nil
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 	if ownerID != "" {
 		var err error
 		allowCtx, err = common.SetOrganizationInAuthContext(allowCtx, &ownerID)
@@ -182,7 +183,7 @@ func derefString(value *string) string {
 }
 
 func (r *mutationResolver) forceCompleteWorkflowInstance(ctx context.Context, id string, applyProposal bool) (*generated.WorkflowInstance, error) {
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 	instance, err := r.db.WorkflowInstance.Get(allowCtx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowinstance"})
@@ -268,7 +269,7 @@ func (r *mutationResolver) forceCompleteWorkflowInstance(ctx context.Context, id
 }
 
 func (r *mutationResolver) cancelWorkflowInstance(ctx context.Context, id string, reason *string) (*generated.WorkflowInstance, error) {
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 	instance, err := r.db.WorkflowInstance.Get(allowCtx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowinstance"})

@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
@@ -499,8 +500,8 @@ func (s *WorkflowEngineTestSuite) TestApplyObjectFieldUpdates_CoercesEnums() {
 		Save(seedCtx)
 	s.Require().NoError(err)
 
-	// Use AllowContext for workflow operations that need privacy bypass
-	bypassCtx := workflows.AllowContext(userCtx)
+	// Use rule.WithInternalContext for workflow operations that need privacy bypass
+	bypassCtx := rule.WithInternalContext(userCtx)
 
 	obj := &workflows.Object{
 		ID:   control.ID,

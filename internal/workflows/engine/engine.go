@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/observability"
@@ -112,7 +113,7 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 		})
 	}
 	// Scope guards and instance creation to the organization owning the object, with privacy bypass for internal workflow operations
-	ownerID, err := workflows.ObjectOwnerID(workflows.AllowContext(ctx), e.client, obj.Type, obj.ID)
+	ownerID, err := workflows.ObjectOwnerID(rule.WithInternalContext(ctx), e.client, obj.Type, obj.ID)
 	if err != nil {
 		return nil, scope.Fail(err, nil)
 	}
@@ -159,7 +160,7 @@ func (e *WorkflowEngine) TriggerExistingInstance(ctx context.Context, instance *
 	userID, _ := auth.GetSubjectIDFromContext(ctx)
 	contextData := applyTriggerContext(instance.Context, def.ID, obj, input, userID)
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalContext(ctx)
 	if err := e.client.WorkflowInstance.UpdateOneID(instance.ID).
 		SetWorkflowDefinitionID(def.ID).
 		SetState(enums.WorkflowInstanceStateRunning).
@@ -312,7 +313,7 @@ func (e *WorkflowEngine) ProcessAction(ctx context.Context, instance *generated.
 	}
 
 	// Use allow context for internal workflow operations
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalContext(ctx)
 
 	objRef, err := e.client.WorkflowObjectRef.
 		Query().
@@ -410,7 +411,7 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 		CompletedBy:  userID,
 	}
 
-	allowCtx = workflows.AllowContext(ctx)
+	allowCtx = rule.WithInternalContext(ctx)
 
 	instance, instanceErr := loadWorkflowInstance(allowCtx, e.client, assignment.WorkflowInstanceID, orgID)
 	if instanceErr != nil {

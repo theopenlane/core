@@ -59,3 +59,6 @@ extend type organization
     define can_manage_campaigns: campaign_manager or admin
     # @role: Campaign Manager | Manage campaigns, assessments, templates, and email configuration
     define campaign_manager: [service, user, group#member]
+
+    # @view: sla_definition
+    define sla_definition_viewer: can_view or can_view_risk or can_view_finding or can_view_vulnerability

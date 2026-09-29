@@ -8,4 +8,6 @@ use (
 	// common contains shared code between core and other components, anything that needs to be imported by other modules should
 	// be placed here to prevent circular dependencies.
 	./common
+	// privacyallow is the golangci-lint module plugin for bare privacy.Allow decision contexts
+	./tools/linters/privacyallow
 )

@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -656,9 +655,8 @@ func (run *payloadRun) removeUnseen(ctx context.Context) error {
 
 // persistFailedRecords writes the exclusion-tracking state onto the installation's health from a fresh read of the row, so concurrent health writers are not clobbered by the batch's stale snapshot
 func persistFailedRecords(ctx context.Context, ic IngestContext, records []models.FailedRecord) error {
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	current, err := ic.DB.Integration.Get(systemCtx, ic.Integration.ID)
+	current, err := ic.DB.Integration.Get(ctx, ic.Integration.ID)
 	if err != nil {
 		return err
 	}
@@ -666,7 +664,7 @@ func persistFailedRecords(ctx context.Context, ic IngestContext, records []model
 	health := current.Health
 	health.FailedRecords = records
 
-	if err := ic.DB.Integration.UpdateOneID(ic.Integration.ID).SetHealth(health).Exec(systemCtx); err != nil {
+	if err := ic.DB.Integration.UpdateOneID(ic.Integration.ID).SetHealth(health).Exec(ctx); err != nil {
 		return err
 	}
 
