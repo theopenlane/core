@@ -6,15 +6,14 @@ import (
 
 	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgprice"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgproduct"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
@@ -69,7 +68,7 @@ func (h *Handler) syncSubscriptionItemsWithStripe(ctx context.Context, subscript
 
 // upsertOrgProduct creates or updates an OrgProduct based on the Stripe product data
 func upsertOrgProduct(ctx context.Context, orgSub *ent.OrgSubscription, p *stripe.Product) (*ent.OrgProduct, error) {
-	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(orgSub.OwnerID))
+	allowCtx := rule.WithOrgInternalCaller(ctx, orgSub.OwnerID)
 	tx := transaction.FromContext(ctx)
 
 	existing, err := tx.OrgProduct.Query().Where(orgproduct.StripeProductID(p.ID), orgproduct.SubscriptionID(orgSub.ID)).Only(allowCtx)
@@ -97,7 +96,7 @@ func upsertOrgProduct(ctx context.Context, orgSub *ent.OrgSubscription, p *strip
 
 // upsertOrgPrice creates or updates an OrgPrice based on the Stripe price data
 func upsertOrgPrice(ctx context.Context, orgSub *ent.OrgSubscription, prod *ent.OrgProduct, price *stripe.Price) (*ent.OrgPrice, error) {
-	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(orgSub.OwnerID))
+	allowCtx := rule.WithOrgInternalCaller(ctx, orgSub.OwnerID)
 	tx := transaction.FromContext(ctx)
 
 	existing, err := tx.OrgPrice.Query().Where(orgprice.StripePriceID(price.ID), orgprice.SubscriptionID(orgSub.ID)).Only(allowCtx)
@@ -134,29 +133,16 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 		return nil, nil
 	}
 
-	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(orgSub.OwnerID))
+	allowCtx := rule.WithOrgInternalCaller(ctx, orgSub.OwnerID)
 	tx := transaction.FromContext(ctx)
 
 	productMetadata := em.GetProductMetadata(ctx, item.Price.Product, client)
 	moduleKey := strings.TrimSpace(productMetadata["module"])
 
 	if moduleKey == models.CatalogTrustCenterModule.String() {
-		// use a fresh context to avoid inheriting the webhook caller bypass and others
-		newCtx := auth.WithCaller(context.Background(), &auth.Caller{
-			SubjectID:          orgSub.CreatedBy,
-			OrganizationID:     orgSub.OwnerID,
-			OrganizationIDs:    []string{orgSub.OwnerID},
-			AuthenticationType: auth.JWTAuthentication,
-		})
-
-		// add tx back to the context
-		newCtx = transaction.NewContext(newCtx, tx)
-
-		newCtx = privacy.DecisionContext(newCtx, privacy.Allow)
-
 		// check for trustcenter existence for this org user
 		exists, err := tx.TrustCenter.Query().Where(trustcenter.OwnerID(orgSub.OwnerID)).
-			Exist(ctx)
+			Exist(allowCtx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("could not query for trustcenter existence while syncing modules")
 			return nil, err
@@ -165,7 +151,7 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 		// if for some reason they do not have the trustcenter, then create it
 		if !exists {
 			err = tx.TrustCenter.Create().SetOwnerID(orgSub.OwnerID).
-				Exec(newCtx)
+				Exec(allowCtx)
 			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error creating trust center")
 				return nil, err
@@ -215,7 +201,7 @@ func upsertOrgModule(ctx context.Context, orgSub *ent.OrgSubscription, price *en
 // reconcileModules makes sure to match the modules accessible to the org
 // with what is in stripe
 func reconcileModules(ctx context.Context, orgSub *ent.OrgSubscription, currentModules []models.OrgModule) error {
-	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(orgSub.OwnerID))
+	allowCtx := rule.WithOrgInternalCaller(ctx, orgSub.OwnerID)
 	tx := transaction.FromContext(ctx)
 
 	_, err := tx.OrgModule.Delete().Where(
@@ -236,7 +222,7 @@ func (h *Handler) removeAllModules(ctx context.Context, subscription *stripe.Sub
 		return err
 	}
 
-	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(orgSub.OwnerID))
+	allowCtx := rule.WithOrgInternalCaller(ctx, orgSub.OwnerID)
 	tx := transaction.FromContext(ctx)
 
 	_, err = tx.OrgModule.Delete().Where(
