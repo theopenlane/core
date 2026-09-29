@@ -13,6 +13,7 @@ tasks:
       - task: workflow-schema
       - task: docs
       - task: workflow-docs
+      - task: openapi
 
   schema:
     desc: generate a new jsonschema and corresponding config/config.example.yaml
@@ -33,6 +34,11 @@ tasks:
     desc: generate documentation from the workflow jsonschema
     cmds:
       - npx jsonschema2mk --schema jsonschema/workflow.definition.json > jsonschema/workflow-docs.md
+
+  openapi:
+    desc: generate the OpenAPI specification and its spec types from the registered routes
+    cmds:
+      - go generate internal/httpserve/specs/generate/generate.go
 
   ci:
     desc: a task that runs during CI to confirm there are no changes after running generate
