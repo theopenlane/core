@@ -230,8 +230,10 @@ func TestInterceptorFileOrgFilter(t *testing.T) {
 			expectFilter: true,
 		},
 		{
-			name:   "caller with org filter bypass is not filtered",
-			caller: (&auth.Caller{SubjectID: ulids.New().String()}).WithCapabilities(auth.CapBypassOrgFilter),
+			// at the time this test was written, no active use-cases were there for bypass of the file organization interceptor so this test expect filters even though you'd expect it to work like any other org level filter with the bypass.
+			name:         "caller with org filter bypass is filtered because there is no bypass",
+			caller:       (&auth.Caller{SubjectID: ulids.New().String()}).WithCapabilities(auth.CapBypassOrgFilter),
+			expectFilter: true,
 		},
 		{
 			name:   "system admin is not filtered",
