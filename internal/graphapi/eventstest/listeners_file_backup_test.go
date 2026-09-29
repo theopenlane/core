@@ -46,27 +46,6 @@ func TestFileBackupListener(t *testing.T) {
 		suite.Client.DB.ObjectManager = original
 	})
 
-	newFile := func(t *testing.T, fileCtx context.Context, name string, state *models.FileBackupState) *generated.File {
-		t.Helper()
-
-		create := suite.Client.DB.File.Create()
-		if state != nil {
-			create = create.SetBackupState(*state)
-		}
-
-		f, err := create.
-			SetProvidedFileName(name).
-			SetProvidedFileExtension(".txt").
-			SetDetectedContentType("text/plain").
-			SetStorageProvider(backupSourceProvider.String()).
-			SetStoragePath(user.OrganizationID + "/" + name).
-			SetStorageVolume("source-bucket").
-			Save(fileCtx)
-		assert.NilError(t, err)
-
-		return f
-	}
-
 	backupState := func(t *testing.T, id string) models.FileBackupState {
 		t.Helper()
 
@@ -113,7 +92,7 @@ func TestFileBackupListener(t *testing.T) {
 			}).
 			Once()
 
-		f := newFile(t, ctx, "listener-backup-create.txt", nil)
+		f := newBackupFile(t, ctx, user.OrganizationID, "listener-backup-create.txt", nil)
 
 		waitForCondition(t, func() bool {
 			return backupState(t, f.ID).Status == enums.FileBackupStatusCompleted
@@ -141,7 +120,7 @@ func TestFileBackupListener(t *testing.T) {
 			Maybe()
 
 		// seeded one short of the cap so the failure exhausts rather than retrying into a later subtest
-		f := newFile(t, ctx, "listener-backup-failure.txt", &models.FileBackupState{
+		f := newBackupFile(t, ctx, user.OrganizationID, "listener-backup-failure.txt", &models.FileBackupState{
 			Status:   enums.FileBackupStatusFailed,
 			Attempts: hooks.MaxFileBackupAttempts - 1,
 		})
@@ -164,7 +143,7 @@ func TestFileBackupListener(t *testing.T) {
 
 		backup.EXPECT().ProviderType().Return(backupSourceProvider).Maybe()
 
-		f := newFile(t, ctx, "listener-backup-readfrombackup.txt", nil)
+		f := newBackupFile(t, ctx, user.OrganizationID, "listener-backup-readfrombackup.txt", nil)
 
 		waitForGala(t, setup.Runtime)
 
@@ -183,7 +162,7 @@ func TestFileBackupListener(t *testing.T) {
 		idleBackup.EXPECT().ProviderType().Return(backupSourceProvider).Maybe()
 		suite.Client.DB.ObjectManager = idle
 
-		f := newFile(t, ctx, "listener-backup-requested.txt", nil)
+		f := newBackupFile(t, ctx, user.OrganizationID, "listener-backup-requested.txt", nil)
 
 		waitForGala(t, setup.Runtime)
 		assert.Equal(t, backupState(t, f.ID).Status, enums.FileBackupStatus(""))
@@ -221,8 +200,7 @@ func TestFileBackupListener(t *testing.T) {
 	t.Run("file created by an org member replicates", func(t *testing.T) {
 		setupReplicatingBackup(t, "backups/member.txt")
 
-		memberCtx := privacy.DecisionContext(generated.NewContext(user.UserCtx, suite.Client.DB), privacy.Allow)
-		f := newFile(t, memberCtx, "listener-backup-member.txt", nil)
+		f := newBackupFile(t, user.UserCtx, user.OrganizationID, "listener-backup-member.txt", nil)
 
 		waitForCondition(t, func() bool {
 			return backupState(t, f.ID).Status == enums.FileBackupStatusCompleted
@@ -232,9 +210,10 @@ func TestFileBackupListener(t *testing.T) {
 	t.Run("file created by an anonymous questionnaire respondent replicates", func(t *testing.T) {
 		setupReplicatingBackup(t, "backups/respondent.txt")
 
+		// covers the listener under the anonymous respondent caller which is why the privacy.Allow is here
 		respondent := auth.NewQuestionnaireCaller(user.OrganizationID, ulids.New().String(), "Anonymous Respondent", "")
 		respondentCtx := privacy.DecisionContext(generated.NewContext(auth.WithCaller(context.Background(), respondent), suite.Client.DB), privacy.Allow)
-		f := newFile(t, respondentCtx, "listener-backup-respondent.txt", nil)
+		f := newBackupFile(t, respondentCtx, user.OrganizationID, "listener-backup-respondent.txt", nil)
 
 		waitForCondition(t, func() bool {
 			return backupState(t, f.ID).Status == enums.FileBackupStatusCompleted
@@ -260,7 +239,7 @@ func TestFileBackupListener(t *testing.T) {
 			}, nil).
 			Once()
 
-		f := newFile(t, ctx, "listener-backup-unrelated.txt", nil)
+		f := newBackupFile(t, ctx, user.OrganizationID, "listener-backup-unrelated.txt", nil)
 
 		waitForCondition(t, func() bool {
 			return backupState(t, f.ID).Status == enums.FileBackupStatusCompleted
@@ -276,6 +255,27 @@ func TestFileBackupListener(t *testing.T) {
 		assert.Equal(t, backupState(t, f.ID).CompletedAt.Equal(*completedAt), true)
 		assert.Equal(t, backupState(t, f.ID).Attempts, 1)
 	})
+}
+
+func newBackupFile(t *testing.T, ctx context.Context, orgID, name string, state *models.FileBackupState) *generated.File {
+	t.Helper()
+
+	create := suite.Client.DB.File.Create()
+	if state != nil {
+		create = create.SetBackupState(*state)
+	}
+
+	f, err := create.
+		SetProvidedFileName(name).
+		SetProvidedFileExtension(".txt").
+		SetDetectedContentType("text/plain").
+		SetStorageProvider(backupSourceProvider.String()).
+		SetStoragePath(orgID + "/" + name).
+		SetStorageVolume("source-bucket").
+		Save(ctx)
+	assert.NilError(t, err)
+
+	return f
 }
 
 func setupReplicatingBackup(t *testing.T, key string) {
