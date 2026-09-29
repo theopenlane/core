@@ -17,6 +17,7 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/graphapi"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
@@ -80,6 +81,8 @@ func createControlForWorkflow(t *testing.T, ctx context.Context, ownerID string)
 func createWorkflowInstance(t *testing.T, ctx context.Context, ownerID string, definitionID string, control *ent.Control) *ent.WorkflowInstance {
 	t.Helper()
 
+	ctx = rule.WithInternalOperationContext(ctx)
+
 	instance, err := suite.Client.DB.WorkflowInstance.Create().
 		SetWorkflowDefinitionID(definitionID).
 		SetOwnerID(ownerID).
@@ -98,6 +101,8 @@ func createWorkflowAssignmentWithTarget(t *testing.T, ctx context.Context, owner
 	t.Helper()
 
 	actionKey := "action_" + ulids.New().String()
+
+	ctx = rule.WithInternalOperationContext(ctx)
 
 	assignment, err := suite.Client.DB.WorkflowAssignment.Create().
 		SetWorkflowInstanceID(instanceID).
@@ -124,6 +129,8 @@ func createWorkflowAssignmentWithTarget(t *testing.T, ctx context.Context, owner
 func createWorkflowProposal(t *testing.T, ctx context.Context, ownerID string, instance *ent.WorkflowInstance, control *ent.Control, domainKey string, changes map[string]any) *ent.WorkflowProposal {
 	t.Helper()
 
+	ctx = rule.WithInternalOperationContext(ctx)
+
 	objRef, err := suite.Client.DB.WorkflowObjectRef.Create().
 		SetWorkflowInstanceID(instance.ID).
 		SetControlID(control.ID).
@@ -147,7 +154,7 @@ func TestRequestChangesWorkflowAssignment(t *testing.T) {
 	t.Parallel()
 
 	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	ctx := th.SetContext(user.UserCtx, suite.Client.DB)
+	ctx := user.UserCtx
 
 	resolver := graphapi.NewResolver(suite.Client.DB, nil)
 
@@ -159,7 +166,7 @@ func TestRequestChangesWorkflowAssignment(t *testing.T) {
 	reason := "needs more info"
 	inputs := map[string]any{"status": "in_review"}
 
-	res, err := resolver.Mutation().RequestChangesWorkflowAssignment(th.SetUserContext(user.UserCtx, suite.Client.DB), assignment.ID, &reason, inputs)
+	res, err := resolver.Mutation().RequestChangesWorkflowAssignment(user.UserCtx, assignment.ID, &reason, inputs)
 	assert.NilError(t, err)
 	assert.Check(t, res != nil)
 	assert.Check(t, res.WorkflowAssignment != nil)
@@ -197,12 +204,12 @@ func TestReassignWorkflowAssignment(t *testing.T) {
 	ensureWorkflowEngine(t)
 	t.Parallel()
 
-	owner := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	orgMember := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	suite.AddUserToOrganization(owner.UserCtx, t, &orgMember, enums.RoleAdmin, owner.OrganizationID)
-	outsider := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	org := suite.SeedFreshMinimalOrgUsers(t, false)
+	owner := *org.Owner
+	orgMember := *org.Admin
+	outsider := suite.UserBuilder(context.Background(), t)
 
-	ctx := th.SetContext(owner.UserCtx, suite.Client.DB)
+	ctx := owner.UserCtx
 	resolver := graphapi.NewResolver(suite.Client.DB, nil)
 
 	control := createControlForWorkflow(t, ctx, owner.OrganizationID)
@@ -229,7 +236,7 @@ func TestReassignWorkflowAssignment(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			assignment := createWorkflowAssignmentWithTarget(t, ctx, owner.OrganizationID, instance.ID, owner.ID)
 
-			updated, err := resolver.Mutation().ReassignWorkflowAssignment(th.SetUserContext(owner.UserCtx, suite.Client.DB), assignment.ID, tc.targetUserID)
+			updated, err := resolver.Mutation().ReassignWorkflowAssignment(owner.UserCtx, assignment.ID, tc.targetUserID)
 
 			exists, existsErr := suite.Client.DB.WorkflowAssignmentTarget.Query().
 				Where(
@@ -263,7 +270,7 @@ func TestAdminReassignWorkflowAssignment(t *testing.T) {
 	suite.AddUserToOrganization(owner.UserCtx, t, &oldTarget, enums.RoleAdmin, owner.OrganizationID)
 	suite.AddUserToOrganization(owner.UserCtx, t, &newTarget, enums.RoleAdmin, owner.OrganizationID)
 
-	ctx := th.SetContext(owner.UserCtx, suite.Client.DB)
+	ctx := owner.UserCtx
 	resolver := graphapi.NewResolver(suite.Client.DB, nil)
 
 	control := createControlForWorkflow(t, ctx, owner.OrganizationID)
@@ -278,7 +285,7 @@ func TestAdminReassignWorkflowAssignment(t *testing.T) {
 		SetRejectionMetadata(models.WorkflowAssignmentRejection{
 			RejectionReason: "not good",
 		}).
-		Save(ctx)
+		Save(rule.WithInternalOperationContext(ctx))
 	assert.NilError(t, err)
 
 	targetID := newTarget.ID
@@ -292,7 +299,7 @@ func TestAdminReassignWorkflowAssignment(t *testing.T) {
 		},
 	}
 
-	res, err := resolver.Mutation().AdminReassignWorkflowAssignment(th.SetUserContext(owner.UserCtx, suite.Client.DB), input)
+	res, err := resolver.Mutation().AdminReassignWorkflowAssignment(owner.UserCtx, input)
 	assert.NilError(t, err)
 	assert.Check(t, res != nil)
 	assert.Check(t, res.WorkflowAssignment != nil)
@@ -326,7 +333,7 @@ func TestWorkflowProposalSubmitAndWithdraw(t *testing.T) {
 	ensureWorkflowEngine(t)
 
 	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	ctx := th.SetContext(user.UserCtx, suite.Client.DB)
+	ctx := user.UserCtx
 
 	resolver := graphapi.NewResolver(suite.Client.DB, nil)
 
@@ -337,7 +344,7 @@ func TestWorkflowProposalSubmitAndWithdraw(t *testing.T) {
 	changes := map[string]any{"status": string(enums.ControlStatusApproved)}
 	proposal := createWorkflowProposal(t, ctx, user.OrganizationID, instance, control, "Control:status", changes)
 
-	submitRes, err := resolver.Mutation().SubmitWorkflowProposal(th.SetUserContext(user.UserCtx, suite.Client.DB), proposal.ID)
+	submitRes, err := resolver.Mutation().SubmitWorkflowProposal(user.UserCtx, proposal.ID)
 	assert.NilError(t, err)
 	assert.Check(t, submitRes != nil)
 	assert.Check(t, submitRes.WorkflowProposal != nil)
@@ -346,7 +353,7 @@ func TestWorkflowProposalSubmitAndWithdraw(t *testing.T) {
 	assert.Check(t, is.Equal(submitRes.WorkflowProposal.SubmittedByUserID, user.ID))
 	assert.Check(t, submitRes.WorkflowProposal.ProposedHash != "")
 
-	withdrawRes, err := resolver.Mutation().WithdrawWorkflowProposal(th.SetUserContext(user.UserCtx, suite.Client.DB), proposal.ID, nil)
+	withdrawRes, err := resolver.Mutation().WithdrawWorkflowProposal(user.UserCtx, proposal.ID, nil)
 	assert.NilError(t, err)
 	assert.Check(t, withdrawRes != nil)
 	assert.Check(t, withdrawRes.WorkflowProposal != nil)
@@ -358,7 +365,7 @@ func TestWorkflowProposalPreview(t *testing.T) {
 	t.Parallel()
 
 	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	ctx := th.SetContext(user.UserCtx, suite.Client.DB)
+	ctx := user.UserCtx
 
 	resolver := graphapi.NewResolver(suite.Client.DB, nil)
 
@@ -371,12 +378,12 @@ func TestWorkflowProposalPreview(t *testing.T) {
 
 	_, err := suite.Client.DB.WorkflowInstance.UpdateOneID(instance.ID).
 		SetWorkflowProposalID(proposal.ID).
-		Save(ctx)
+		Save(rule.WithInternalOperationContext(ctx))
 	assert.NilError(t, err)
 
 	_ = createWorkflowAssignmentWithTarget(t, ctx, user.OrganizationID, instance.ID, user.ID)
 
-	preview, err := resolver.WorkflowProposal().Preview(th.SetUserContext(user.UserCtx, suite.Client.DB), proposal)
+	preview, err := resolver.WorkflowProposal().Preview(user.UserCtx, proposal)
 	assert.NilError(t, err)
 	assert.Check(t, preview != nil)
 	assert.Check(t, is.Equal(preview.ProposalID, proposal.ID))
@@ -389,12 +396,12 @@ func TestWorkflowProposalAccess(t *testing.T) {
 	ensureWorkflowEngine(t)
 	t.Parallel()
 
-	owner := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	member := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	suite.AddUserToOrganization(owner.UserCtx, t, &member, enums.RoleMember, owner.OrganizationID)
-	otherOrgUser := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	org := suite.SeedFreshMinimalOrgUsers(t, false)
+	owner := *org.Owner
+	member := *org.Member
+	otherOrgUser := suite.UserBuilder(context.Background(), t)
 
-	ctx := th.SetContext(owner.UserCtx, suite.Client.DB)
+	ctx := owner.UserCtx
 	resolver := graphapi.NewResolver(suite.Client.DB, nil)
 
 	control := createControlForWorkflow(t, ctx, owner.OrganizationID)
@@ -411,31 +418,31 @@ func TestWorkflowProposalAccess(t *testing.T) {
 	}{
 		{
 			name:       "happy path, owner views the proposal",
-			ctx:        th.SetUserContext(owner.UserCtx, suite.Client.DB),
+			ctx:        owner.UserCtx,
 			proposalID: proposal.ID,
 		},
 		{
 			name:        "member who is not an editor or approver is denied",
-			ctx:         th.SetUserContext(member.UserCtx, suite.Client.DB),
+			ctx:         member.UserCtx,
 			proposalID:  proposal.ID,
 			expectedErr: rout.ErrPermissionDenied.Error(),
 		},
 		{
 			name:        "other organization view is not found",
-			ctx:         th.SetUserContext(otherOrgUser.UserCtx, suite.Client.DB),
+			ctx:         otherOrgUser.UserCtx,
 			proposalID:  proposal.ID,
 			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:        "other organization submit is not found",
-			ctx:         th.SetUserContext(otherOrgUser.UserCtx, suite.Client.DB),
+			ctx:         otherOrgUser.UserCtx,
 			proposalID:  proposal.ID,
 			submit:      true,
 			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:        "nonexistent proposal submit is not found",
-			ctx:         th.SetUserContext(otherOrgUser.UserCtx, suite.Client.DB),
+			ctx:         otherOrgUser.UserCtx,
 			proposalID:  ulids.New().String(),
 			submit:      true,
 			expectedErr: th.NotFoundErrorMsg,
@@ -474,33 +481,67 @@ func TestPreCommitApprovalRoutesMemberUpdateToProposal(t *testing.T) {
 	owner := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	complianceManager := suite.OrgMemberWithFunctionalRoles(t, owner, "compliance_manager")
 
-	ctx := th.SetContext(owner.UserCtx, suite.Client.DB)
+	ctx := owner.UserCtx
 
 	definition := createPreCommitApprovalDefinition(t, ctx, owner.OrganizationID, owner.ID)
-	control := createControlForWorkflow(t, ctx, owner.OrganizationID)
 
-	resp, err := suite.Client.API.UpdateControl(complianceManager.UserCtx, control.ID, testclient.UpdateControlInput{
-		Status: &enums.ControlStatusApproved,
-	})
-	assert.NilError(t, err)
-	assert.Check(t, is.Equal(enums.ControlStatusNotImplemented, *resp.UpdateControl.Control.Status))
+	renamed := "Renamed Control " + ulids.New().String()
 
-	reloaded, err := suite.Client.DB.Control.Get(ctx, control.ID)
-	assert.NilError(t, err)
-	assert.Check(t, is.Equal(enums.ControlStatusNotImplemented, reloaded.Status))
+	testCases := []struct {
+		name            string
+		input           testclient.UpdateControlInput
+		expectedStatus  enums.ControlStatus
+		expectedTitle   string
+		expectsProposal bool
+	}{
+		{
+			name:            "gated status update is routed to a proposal",
+			input:           testclient.UpdateControlInput{Status: &enums.ControlStatusApproved},
+			expectedStatus:  enums.ControlStatusNotImplemented,
+			expectedTitle:   "Test Control",
+			expectsProposal: true,
+		},
+		{
+			name:           "ungated title update applies directly",
+			input:          testclient.UpdateControlInput{Title: &renamed},
+			expectedStatus: enums.ControlStatusNotImplemented,
+			expectedTitle:  renamed,
+		},
+	}
 
-	instance, err := suite.Client.DB.WorkflowInstance.Query().
-		Where(
-			workflowinstance.WorkflowDefinitionIDEQ(definition.ID),
-			workflowinstance.ControlIDEQ(control.ID),
-		).
-		Only(ctx)
-	assert.NilError(t, err)
-	assert.Assert(t, instance.WorkflowProposalID != "")
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			control := createControlForWorkflow(t, ctx, owner.OrganizationID)
 
-	proposal, err := suite.Client.DB.WorkflowProposal.Get(ctx, instance.WorkflowProposalID)
-	assert.NilError(t, err)
-	assert.Check(t, is.Equal(string(enums.ControlStatusApproved), proposal.Changes["status"]))
+			_, err := suite.Client.API.UpdateControl(complianceManager.UserCtx, control.ID, tc.input)
+			assert.NilError(t, err)
+
+			reloaded, err := suite.Client.DB.Control.Get(ctx, control.ID)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tc.expectedStatus, reloaded.Status))
+			assert.Check(t, is.Equal(tc.expectedTitle, reloaded.Title))
+
+			instance, err := suite.Client.DB.WorkflowInstance.Query().
+				Where(
+					workflowinstance.WorkflowDefinitionIDEQ(definition.ID),
+					workflowinstance.ControlIDEQ(control.ID),
+				).
+				Only(ctx)
+
+			if !tc.expectsProposal {
+				assert.Check(t, ent.IsNotFound(err))
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, instance.WorkflowProposalID != "")
+
+			proposal, err := suite.Client.DB.WorkflowProposal.Get(ctx, instance.WorkflowProposalID)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(string(enums.ControlStatusApproved), proposal.Changes["status"]))
+		})
+	}
 }
 
 func createPreCommitApprovalDefinition(t *testing.T, ctx context.Context, ownerID, approverID string) *ent.WorkflowDefinition {

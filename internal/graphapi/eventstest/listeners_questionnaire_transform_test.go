@@ -148,6 +148,7 @@ func TestQuestionnaireTransformListener(t *testing.T) {
 
 		anonResponse := (&th.AssessmentResponseBuilder{Client: suite.Client, AssessmentID: assessment.ID, OwnerID: orgID}).MustNew(user.UserCtx, t)
 
+		// covers the listener under the anonymous respondent caller which is with the privacy.Allow is here; the handler path is covered by TestSubmitQuestionnaire
 		respondent := auth.NewQuestionnaireCaller(orgID, ulids.New().String(), "Anonymous Respondent", "")
 		respondentCtx := privacy.DecisionContext(auth.WithCaller(context.Background(), respondent), privacy.Allow)
 
