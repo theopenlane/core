@@ -35,8 +35,7 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerSuccess() {
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{webhookTestDefinitionBuilder(webhookTestDefinitionID)})
 	defer restore()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	wh := suite.createWebhookTestIntegration(t, user.UserCtx, user.OrganizationID, webhookTestDefinitionID)
 
@@ -91,8 +90,7 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerInvalidSignature() {
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{webhookTestDefinitionBuilder(webhookTestDefinitionID)})
 	defer restore()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	wh := suite.createWebhookTestIntegration(t, user.UserCtx, user.OrganizationID, webhookTestDefinitionID)
 
@@ -116,8 +114,7 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerMissingSignature() {
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{webhookTestDefinitionBuilder(webhookTestDefinitionID)})
 	defer restore()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	wh := suite.createWebhookTestIntegration(t, user.UserCtx, user.OrganizationID, webhookTestDefinitionID)
 
@@ -160,8 +157,7 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEmptyEventNameReturn
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{webhookTestDefinitionBuilder(webhookTestDefinitionID)})
 	defer restore()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	wh := suite.createWebhookTestIntegration(t, user.UserCtx, user.OrganizationID, webhookTestDefinitionID)
 
