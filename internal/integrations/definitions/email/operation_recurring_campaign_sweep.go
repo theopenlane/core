@@ -10,7 +10,6 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -150,7 +149,7 @@ func dispatchRecurringCampaign(ctx context.Context, req types.OperationRequest, 
 		update.SetNextRunAt(models.DateTime(nextRun))
 	}
 
-	if err := update.Exec(privacy.DecisionContext(ctx, privacy.Allow)); err != nil {
+	if err := update.Exec(ctx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Msg("failed updating recurring campaign schedule")
 
 		return err

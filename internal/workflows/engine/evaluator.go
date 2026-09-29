@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/observability"
 	"github.com/theopenlane/iam/auth"
@@ -99,7 +100,7 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 
 	// Ensure the object node is loaded so CEL has access to concrete fields.
 	if obj != nil && obj.Node == nil {
-		allowCtx := workflows.AllowContext(ctx)
+		allowCtx := rule.WithInternalContext(ctx)
 		if _, err := e.loadObjectNode(allowCtx, obj); err != nil {
 			return nil, err
 		}
@@ -112,7 +113,7 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 			return nil, err
 		}
 
-		allowCtx := workflows.AllowContext(ctx)
+		allowCtx := rule.WithInternalContext(ctx)
 
 		proposal, err := e.client.WorkflowProposal.Query().
 			Where(
@@ -138,7 +139,7 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 
 	// Merge assignment context (assignments, instance, initiator)
 	// Use privacy bypass for internal workflow operations that query assignment state
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalContext(ctx)
 	assignmentCtx, err := workflows.BuildAssignmentContext(allowCtx, e.client, instance.ID)
 	if err != nil {
 		return nil, err
@@ -165,7 +166,7 @@ func (e *WorkflowEngine) FindMatchingDefinitions(ctx context.Context, schemaType
 	defer scope.End(err, nil)
 
 	// Use privacy bypass for internal workflow operations, scoped to the organization owning the object
-	orgID, err := workflows.ObjectOwnerID(workflows.AllowContext(ctx), e.client, obj.Type, obj.ID)
+	orgID, err := workflows.ObjectOwnerID(rule.WithInternalContext(ctx), e.client, obj.Type, obj.ID)
 	if err != nil {
 		return nil, scope.Fail(err, nil)
 	}

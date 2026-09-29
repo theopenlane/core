@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/urlx"
 )
@@ -151,7 +152,7 @@ func (s *DefinitionSeeder) SeedDefinitionsFromManifestURL(ctx context.Context, m
 
 // SeedDefinitionsFromManifest upserts system-owned definitions from an in-memory manifest payload.
 func (s *DefinitionSeeder) SeedDefinitionsFromManifest(ctx context.Context, manifest DefinitionSeedManifest) error {
-	allowCtx := AllowContext(ctx)
+	allowCtx := rule.WithInternalContext(ctx)
 
 	for _, item := range manifest.Definitions {
 		if _, err := s.upsertWorkflowDefinition(allowCtx, item); err != nil {

@@ -60,17 +60,15 @@ func (s domainScanSaga) HandleImportDomainScanReview(ctx context.Context, envelo
 		"scan_ids":        envelope.ScanIDs,
 	})
 
-	systemCtx := domainScanSystemContext(ctx, envelope.OrganizationID)
-
-	summary, err := workflows.WithTx(systemCtx, s.services.DB(), nil, func(systemCtx context.Context, tx *generated.Tx) (importSummary, error) {
-		return importDomainScanReview(systemCtx, tx.Client(), envelope)
+	summary, err := workflows.WithTx(ctx, s.services.DB(), nil, func(txCtx context.Context, tx *generated.Tx) (importSummary, error) {
+		return importDomainScanReview(txCtx, tx.Client(), envelope)
 	})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed importing accepted review")
 		return err
 	}
 
-	return s.notifyDomainScanImportComplete(systemCtx, envelope.OrganizationID, summary)
+	return s.notifyDomainScanImportComplete(domainScanSystemContext(ctx, envelope.OrganizationID), envelope.OrganizationID, summary)
 }
 
 // notifyDomainScanImportComplete sends the Notification that surfaces an import's results

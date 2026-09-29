@@ -63,6 +63,8 @@ func TestDocumentAssociationListeners(t *testing.T) {
 	parentControl := (&th.ControlBuilder{Client: suite.Client}).MustNew(docUser.UserCtx, t)
 	subcontrol := (&th.SubcontrolBuilder{Client: suite.Client, Name: "AC-1.1", ControlID: parentControl.ID}).MustNew(docUser.UserCtx, t)
 
+	policyManager := suite.OrgMemberWithFunctionalRoles(t, docUser, "policy_manager")
+
 	t.Run("policy create links referenced controls and subcontrols without bumping revision", func(t *testing.T) {
 		details := "This policy is governed by CC-2\nand implements AC-1.1 for access reviews"
 
@@ -119,6 +121,31 @@ func TestDocumentAssociationListeners(t *testing.T) {
 			}
 
 			return suite.Client.DB.Procedure.QueryControls(procedure).IDs(ctx)
+		}, func(ids []string) bool {
+			return len(ids) > 0
+		})
+		assert.NilError(t, err)
+		assert.Check(t, is.DeepEqual([]string{control.ID}, controlIDs))
+	})
+
+	t.Run("policy manager links controls they can view but not edit", func(t *testing.T) {
+		details := "Aligned with CC-2 for policy manager review"
+
+		resp, err := suite.Client.API.CreateInternalPolicy(policyManager.UserCtx, testclient.CreateInternalPolicyInput{
+			Name:    "doc assoc policy manager policy",
+			Details: &details,
+		})
+		assert.NilError(t, err)
+
+		policyID := resp.CreateInternalPolicy.InternalPolicy.ID
+
+		controlIDs, err := listenerPoll(func() ([]string, error) {
+			policy, err := suite.Client.DB.InternalPolicy.Get(ctx, policyID)
+			if err != nil {
+				return nil, err
+			}
+
+			return suite.Client.DB.InternalPolicy.QueryControls(policy).IDs(ctx)
 		}, func(ids []string) bool {
 			return len(ids) > 0
 		})

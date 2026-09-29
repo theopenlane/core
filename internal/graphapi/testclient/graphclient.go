@@ -194,6 +194,7 @@ type TestGraphClient interface {
 	DeleteDocumentData(ctx context.Context, deleteDocumentDataID string, interceptors ...clientv2.RequestInterceptor) (*DeleteDocumentData, error)
 	GetDocumentDataByID(ctx context.Context, documentDataID string, interceptors ...clientv2.RequestInterceptor) (*GetDocumentDataByID, error)
 	UpdateDocumentData(ctx context.Context, updateDocumentDataID string, input UpdateDocumentDataInput, documentDataFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateDocumentData, error)
+	ImportDomainScanReview(ctx context.Context, input ImportDomainScanReviewInput, interceptors ...clientv2.RequestInterceptor) (*ImportDomainScanReview, error)
 	CreateBulkCSVEmailTemplate(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVEmailTemplate, error)
 	CreateBulkEmailTemplate(ctx context.Context, input []*CreateEmailTemplateInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkEmailTemplate, error)
 	CreateEmailTemplate(ctx context.Context, input CreateEmailTemplateInput, interceptors ...clientv2.RequestInterceptor) (*CreateEmailTemplate, error)
@@ -39671,6 +39672,17 @@ func (t *UpdateDocumentData_UpdateDocumentData) GetDocumentData() *UpdateDocumen
 		t = &UpdateDocumentData_UpdateDocumentData{}
 	}
 	return &t.DocumentData
+}
+
+type ImportDomainScanReview_ImportDomainScanReview struct {
+	Accepted bool "json:\"accepted\" graphql:\"accepted\""
+}
+
+func (t *ImportDomainScanReview_ImportDomainScanReview) GetAccepted() bool {
+	if t == nil {
+		t = &ImportDomainScanReview_ImportDomainScanReview{}
+	}
+	return t.Accepted
 }
 
 type CreateBulkCSVEmailTemplate_CreateBulkCSVEmailTemplate_EmailTemplates struct {
@@ -167073,6 +167085,17 @@ func (t *UpdateDocumentData) GetUpdateDocumentData() *UpdateDocumentData_UpdateD
 	return &t.UpdateDocumentData
 }
 
+type ImportDomainScanReview struct {
+	ImportDomainScanReview ImportDomainScanReview_ImportDomainScanReview "json:\"importDomainScanReview\" graphql:\"importDomainScanReview\""
+}
+
+func (t *ImportDomainScanReview) GetImportDomainScanReview() *ImportDomainScanReview_ImportDomainScanReview {
+	if t == nil {
+		t = &ImportDomainScanReview{}
+	}
+	return &t.ImportDomainScanReview
+}
+
 type CreateBulkCSVEmailTemplate struct {
 	CreateBulkCSVEmailTemplate CreateBulkCSVEmailTemplate_CreateBulkCSVEmailTemplate "json:\"createBulkCSVEmailTemplate\" graphql:\"createBulkCSVEmailTemplate\""
 }
@@ -183208,6 +183231,30 @@ func (c *Client) UpdateDocumentData(ctx context.Context, updateDocumentDataID st
 
 	var res UpdateDocumentData
 	if err := c.Client.Post(ctx, "UpdateDocumentData", UpdateDocumentDataDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const ImportDomainScanReviewDocument = `mutation ImportDomainScanReview ($input: ImportDomainScanReviewInput!) {
+	importDomainScanReview(input: $input) {
+		accepted
+	}
+}
+`
+
+func (c *Client) ImportDomainScanReview(ctx context.Context, input ImportDomainScanReviewInput, interceptors ...clientv2.RequestInterceptor) (*ImportDomainScanReview, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res ImportDomainScanReview
+	if err := c.Client.Post(ctx, "ImportDomainScanReview", ImportDomainScanReviewDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -215351,6 +215398,7 @@ var DocumentOperationNames = map[string]string{
 	DeleteDocumentDataDocument:                    "DeleteDocumentData",
 	GetDocumentDataByIDDocument:                   "GetDocumentDataByID",
 	UpdateDocumentDataDocument:                    "UpdateDocumentData",
+	ImportDomainScanReviewDocument:                "ImportDomainScanReview",
 	CreateBulkCSVEmailTemplateDocument:            "CreateBulkCSVEmailTemplate",
 	CreateBulkEmailTemplateDocument:               "CreateBulkEmailTemplate",
 	CreateEmailTemplateDocument:                   "CreateEmailTemplate",

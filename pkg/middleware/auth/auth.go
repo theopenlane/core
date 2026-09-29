@@ -271,7 +271,7 @@ func updateLastUsed(ctx context.Context, dbClient *ent.Client, caller *auth.Call
 	switch caller.AuthenticationType {
 	case auth.PATAuthentication:
 		// allow the request, we know the user has access to the token, no need to check
-		allowCtx := withOrgFilterBypass(privacy.DecisionContext(ctx, privacy.Allow))
+		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 		if err := dbClient.PersonalAccessToken.UpdateOneID(tokenID).SetLastUsedAt(time.Now()).Exec(allowCtx); err != nil {
 			logger.Error().Err(err).Msg("unable to update last used time for personal access token")
 
@@ -279,7 +279,7 @@ func updateLastUsed(ctx context.Context, dbClient *ent.Client, caller *auth.Call
 		}
 	case auth.APITokenAuthentication:
 		// allow the request, we know the user has access to the token, no need to check
-		allowCtx := withOrgFilterBypass(privacy.DecisionContext(ctx, privacy.Allow))
+		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 		if err := dbClient.APIToken.UpdateOneID(tokenID).SetLastUsedAt(time.Now()).Exec(allowCtx); err != nil {
 			logger.Error().Err(err).Msg("unable to update last used time for API token")
 

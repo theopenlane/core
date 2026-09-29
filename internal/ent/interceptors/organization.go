@@ -9,12 +9,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 )
 
 // InterceptorOrganization is middleware to change the Organization query
@@ -126,7 +126,9 @@ func getParentOrgIDs(ctx context.Context, childOrgID string) ([]string, error) {
 	// allow the request, otherwise we would be in an infinite loop, as this function is called by the interceptor
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	parentOrgs, err := generated.FromContext(ctx).Organization.
+	client := utils.EntClientFromContext(ctx)
+
+	parentOrgs, err := client.Organization.
 		Query().
 		Where(
 			organization.HasChildrenWith(organization.ID(childOrgID)),

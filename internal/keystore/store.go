@@ -102,9 +102,7 @@ func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integratio
 		return ErrCredentialNotFound
 	}
 
-	systemCtx := integrationSystemContext(ctx)
-
-	existing, ok, err := s.activeCredentialRecord(systemCtx, installation.ID, credentialRef)
+	existing, ok, err := s.activeCredentialRecord(ctx, installation.ID, credentialRef)
 	if err != nil {
 		return err
 	}
@@ -117,13 +115,13 @@ func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integratio
 			SetSecretName(secretName).
 			SetCredentialSet(credential).
 			AddIntegrationIDs(installation.ID).
-			Exec(systemCtx); err != nil {
+			Exec(ctx); err != nil {
 			return err
 		}
 	} else {
 		if err := existing.Update().
 			SetCredentialSet(credential).
-			Exec(systemCtx); err != nil {
+			Exec(ctx); err != nil {
 			return err
 		}
 	}
@@ -133,40 +131,15 @@ func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integratio
 	return nil
 }
 
-// SaveInstallationCredential loads the installation record by ID and upserts one credential slot
-func (s *Store) SaveInstallationCredential(ctx context.Context, integrationID string, credentialRef types.CredentialSlotID, credential types.CredentialSet) error {
-	if integrationID == "" {
-		return ErrInstallationIDRequired
-	}
-	if credentialRef == (types.CredentialSlotID{}) {
-		return ErrCredentialNotFound
-	}
-
-	systemCtx := integrationSystemContext(ctx)
-
-	installation, err := s.db.Integration.Get(systemCtx, integrationID)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			return ErrCredentialNotFound
-		}
-
-		return err
-	}
-
-	return s.SaveCredential(ctx, installation, credentialRef, credential)
-}
-
 // DeleteCredential removes all credentials for one installation by identifier
 func (s *Store) DeleteCredential(ctx context.Context, integrationID string) error {
 	if integrationID == "" {
 		return ErrInstallationIDRequired
 	}
 
-	systemCtx := integrationSystemContext(ctx)
-
 	_, err := s.db.Hush.Delete().
 		Where(enthush.HasIntegrationsWith(entintegration.IDEQ(integrationID))).
-		Exec(systemCtx)
+		Exec(ctx)
 	if err != nil {
 		return err
 	}

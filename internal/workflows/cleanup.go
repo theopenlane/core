@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/pkg/mapx"
 )
 
@@ -22,7 +23,7 @@ func FindOrphanWorkflowInstanceIDs(ctx context.Context, client *generated.Client
 		return nil, ErrNilClient
 	}
 
-	allowCtx := AllowContext(ctx)
+	allowCtx := rule.WithInternalContext(ctx)
 
 	query := client.WorkflowInstance.Query().
 		Where(
@@ -46,7 +47,7 @@ func DeleteWorkflowInstanceChildren(ctx context.Context, client *generated.Clien
 		return nil
 	}
 
-	allowCtx := AllowContext(ctx)
+	allowCtx := rule.WithInternalContext(ctx)
 
 	assignmentIDs, err := client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDIn(instanceIDs...)).
@@ -142,7 +143,7 @@ func DeleteWorkflowInstancesCascade(ctx context.Context, client *generated.Clien
 		return nil
 	}
 
-	allowCtx := AllowContext(ctx)
+	allowCtx := rule.WithInternalContext(ctx)
 
 	if _, err := client.WorkflowInstance.Delete().
 		Where(workflowinstance.IDIn(instanceIDs...)).

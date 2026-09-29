@@ -4143,13 +4143,13 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: true,
 }, "applicable_frameworks": {
 	ObjectType:          "standard",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "generated_scans": {
 	ObjectType:          "scan",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "platform_owner": {
 	ObjectType:          "user",
