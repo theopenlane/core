@@ -71990,6 +71990,10 @@ input CreateSubscriberInput {
   phone number of the subscriber
   """
   phoneNumber: String
+  """
+  indicates if the subscriber is active or not, active users will have at least one verified contact method
+  """
+  active: Boolean
   ownerID: ID
   eventIDs: [ID!]
   trustCenterID: ID

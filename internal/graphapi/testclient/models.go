@@ -8990,7 +8990,9 @@ type CreateSubscriberInput struct {
 	// email address of the subscriber
 	Email string `json:"email"`
 	// phone number of the subscriber
-	PhoneNumber       *string  `json:"phoneNumber,omitempty"`
+	PhoneNumber *string `json:"phoneNumber,omitempty"`
+	// indicates if the subscriber is active or not, active users will have at least one verified contact method
+	Active            *bool    `json:"active,omitempty"`
 	OwnerID           *string  `json:"ownerID,omitempty"`
 	EventIDs          []string `json:"eventIDs,omitempty"`
 	TrustCenterID     *string  `json:"trustCenterID,omitempty"`

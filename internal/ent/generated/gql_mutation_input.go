@@ -25326,6 +25326,7 @@ type CreateSubscriberInput struct {
 	Tags              []string `json:"tags,omitempty"`
 	Email             string   `json:"email,omitempty"`
 	PhoneNumber       *string  `json:"phone_number,omitempty"`
+	Active            *bool    `json:"active,omitempty"`
 	OwnerID           *string  `json:"owner_id,omitempty"`
 	EventIDs          []string `json:"event_ids,omitempty"`
 	TrustCenterID     *string  `json:"trust_center_id,omitempty"`
@@ -25342,6 +25343,9 @@ func (i *CreateSubscriberInput) Mutate(m *SubscriberMutation) {
 	m.SetEmail(i.Email)
 	if v := i.PhoneNumber; v != nil {
 		m.SetPhoneNumber(*v)
+	}
+	if v := i.Active; v != nil {
+		m.SetActive(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
