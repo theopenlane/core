@@ -41,6 +41,16 @@ func (e *WorkflowCreationError) Unwrap() error {
 	return e.Err
 }
 
+// ActingUserID returns the acting caller's user id, or empty when the caller is an API token and not a user
+func ActingUserID(ctx context.Context) string {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || auth.IsAPITokenAuthentication(ctx) {
+		return ""
+	}
+
+	return caller.SubjectID
+}
+
 // ResolveOwnerID returns the provided owner ID or derives it from the context when empty.
 func ResolveOwnerID(ctx context.Context, ownerID string) (string, error) {
 	if ownerID != "" {

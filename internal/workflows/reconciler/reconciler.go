@@ -81,7 +81,7 @@ func New(client *generated.Client, runtime *gala.Gala, opts ...Option) (*Reconci
 func (r *Reconciler) ReconcileEmitFailures(ctx context.Context) (EmitReconcileResult, error) {
 	var result EmitReconcileResult
 
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalCrossOrgContext(ctx)
 
 	events, err := r.client.WorkflowEvent.Query().
 		Where(workflowevent.EventTypeEQ(enums.WorkflowEventTypeEmitFailed)).

@@ -79,7 +79,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			allowCtx := rule.WithInternalContext(ctx)
+			allowCtx := rule.WithInternalOperationContext(ctx)
 			entity, err := workflows.LoadWorkflowObject(allowCtx, client, mut.Type(), id)
 			if err != nil {
 				return nil, err
@@ -96,7 +96,11 @@ func HookWorkflowApprovalRouting() ent.Hook {
 			}
 
 			definitions, err := wfEngine.FindMatchingDefinitions(allowCtx, mut.Type(), "UPDATE", changedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, proposedChanges, obj)
-			if err != nil || len(definitions) == 0 {
+			if err != nil {
+				return nil, err
+			}
+
+			if len(definitions) == 0 {
 				return next.Mutate(ctx, m)
 			}
 
@@ -163,7 +167,7 @@ func routeMutationToProposals(ctx context.Context, client *generated.Client, m u
 		return nil, ErrMutationMissingID
 	}
 
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	if len(proposedChanges) == 0 {
 		return workflows.LoadWorkflowObject(allowCtx, client, m.Type(), id)
@@ -178,7 +182,7 @@ func routeMutationToProposals(ctx context.Context, client *generated.Client, m u
 	}
 
 	for _, def := range defs {
-		if err := stageWorkflowProposals(ctx, client, def, *objectType, id, proposedChanges, wfaCaller.SubjectID); err != nil {
+		if err := stageWorkflowProposals(ctx, client, def, *objectType, id, proposedChanges, workflows.ActingUserID(ctx)); err != nil {
 			return nil, err
 		}
 	}
@@ -260,7 +264,7 @@ func resolveApprovalSubmissionMode(def *generated.WorkflowDefinition) enums.Work
 // stageProposalChanges creates or updates WorkflowProposal records for each domain
 func stageProposalChanges(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID string, domainChanges []workflows.DomainChanges, userID string) error {
 	// Use privacy bypass for internal workflow operations
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	submissionMode := resolveApprovalSubmissionMode(def)
 	initialState := lo.Ternary(
@@ -331,7 +335,7 @@ func stageProposalChanges(ctx context.Context, client *generated.Client, def *ge
 // ensureInstanceForExistingProposal makes sure a workflow instance exists for the definition + proposal.
 func ensureInstanceForExistingProposal(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID, ownerID string, proposal *generated.WorkflowProposal) (*generated.WorkflowInstance, error) {
 	// Use privacy bypass for internal workflow operations
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	instance, err := client.WorkflowInstance.Query().
 		Where(
@@ -413,7 +417,7 @@ func stageWorkflowProposals(ctx context.Context, client *generated.Client, def *
 // updateExistingProposal updates an existing proposal with new changes
 func updateExistingProposal(ctx context.Context, def *generated.WorkflowDefinition, existing *generated.WorkflowProposal, changes map[string]any, proposedHash, userID string, now time.Time) error {
 	// Use privacy bypass for internal workflow operations
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	submissionMode := resolveApprovalSubmissionMode(def)
 	updater := existing.Update().
@@ -425,7 +429,7 @@ func updateExistingProposal(ctx context.Context, def *generated.WorkflowDefiniti
 		updater = updater.
 			SetState(enums.WorkflowProposalStateSubmitted).
 			SetSubmittedAt(now).
-			SetSubmittedByUserID(userID)
+			SetNillableSubmittedByUserID(lo.EmptyableToPtr(userID))
 	}
 
 	if err := updater.Exec(allowCtx); err != nil {
@@ -445,7 +449,7 @@ type proposalCreationResult struct {
 // createProposalWithInstance creates a new WorkflowInstance, WorkflowObjectRef, and WorkflowProposal in a transaction
 func createProposalWithInstance(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID string, domain workflows.DomainChanges, proposedHash, ownerID, userID string, initialState enums.WorkflowProposalState, now time.Time) (*proposalCreationResult, error) {
 	// Use privacy bypass for internal workflow operations
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	var result proposalCreationResult
 
@@ -508,7 +512,7 @@ func createProposalWithInstance(ctx context.Context, client *generated.Client, d
 			if err := tx.WorkflowProposal.UpdateOneID(proposal.ID).
 				SetState(enums.WorkflowProposalStateSubmitted).
 				SetSubmittedAt(now).
-				SetSubmittedByUserID(userID).
+				SetNillableSubmittedByUserID(lo.EmptyableToPtr(userID)).
 				Exec(bypassCtx); err != nil {
 				return "", ErrFailedToUpdateWorkflowProposal
 			}
@@ -552,7 +556,7 @@ func triggerWorkflowAfterProposalCreation(ctx context.Context, client *generated
 		return nil
 	}
 
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	instance, err := client.WorkflowInstance.Get(allowCtx, instanceID)
 	if err != nil {

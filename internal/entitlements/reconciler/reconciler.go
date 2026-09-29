@@ -120,7 +120,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, orgIDs []string) (*Reconcile
 	}
 
 	// Add internal context for administrative operations
-	internalCtx := rule.WithInternalContext(ctx)
+	internalCtx := rule.WithInternalCrossOrgContext(ctx)
 
 	orgs, err := r.db.Organization.Query().
 		WithOrgSubscriptions().
@@ -160,7 +160,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, orgIDs []string) (*Reconcile
 // reconcileOrg ensures the organization has a customer and subscription in Stripe, creating them if missing
 func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) error {
 	// Add internal context for administrative operations
-	internalCtx := rule.WithInternalContext(ctx)
+	internalCtx := rule.WithInternalCrossOrgContext(ctx)
 
 	var sub *ent.OrgSubscription
 	if len(org.Edges.OrgSubscriptions) > 0 {
@@ -277,7 +277,7 @@ func (r *Reconciler) disableIntegrations(ctx context.Context, orgID string) erro
 			integration.StatusNotIn(enums.IntegrationStatusDisabled),
 		).
 		SetStatus(enums.IntegrationStatusDisabled).
-		Exec(rule.WithInternalContext(ctx))
+		Exec(rule.WithInternalCrossOrgContext(ctx))
 	if err != nil {
 		return fmt.Errorf("error disabling integrations: %w", err)
 	}
@@ -335,7 +335,7 @@ func (r *Reconciler) createSubscription(ctx context.Context, cust *entitlements.
 // updateSubscription updates the organization subscription in the database with current Stripe data
 func (r *Reconciler) updateSubscription(ctx context.Context, c *entitlements.OrganizationCustomer) error {
 	// Add internal context for administrative operations
-	internalCtx := rule.WithInternalContext(ctx)
+	internalCtx := rule.WithInternalCrossOrgContext(ctx)
 
 	if c.OrganizationSubscriptionID == "" {
 		return ErrMissingSubscriptionID
@@ -391,7 +391,7 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 				integration.DeletedAtIsNil(),
 				integration.StatusNotIn(enums.IntegrationStatusDisabled),
 			).
-			Count(rule.WithInternalContext(ctx))
+			Count(rule.WithInternalCrossOrgContext(ctx))
 		if err != nil {
 			return "", fmt.Errorf("query integrations: %w", err)
 		}

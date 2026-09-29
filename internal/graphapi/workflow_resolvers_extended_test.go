@@ -337,27 +337,55 @@ func TestWorkflowProposalSubmitAndWithdraw(t *testing.T) {
 
 	resolver := graphapi.NewResolver(suite.Client.DB, nil)
 
-	control := createControlForWorkflow(t, ctx, user.OrganizationID)
-	definition := createWorkflowDefinition(t, ctx, user.OrganizationID)
-	instance := createWorkflowInstance(t, ctx, user.OrganizationID, definition.ID, control)
+	testCases := []struct {
+		name            string
+		ctx             context.Context
+		expectedActorID string
+	}{
+		{
+			name:            "user submits and withdraws",
+			ctx:             user.UserCtx,
+			expectedActorID: user.ID,
+		},
+		{
+			name: "api token submits and withdraws",
+			ctx:  suite.SetupAPITokenContext(user.UserCtx, t, user.OrganizationID),
+		},
+	}
 
-	changes := map[string]any{"status": string(enums.ControlStatusApproved)}
-	proposal := createWorkflowProposal(t, ctx, user.OrganizationID, instance, control, "Control:status", changes)
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			control := createControlForWorkflow(t, ctx, user.OrganizationID)
+			definition := createWorkflowDefinition(t, ctx, user.OrganizationID)
+			instance := createWorkflowInstance(t, ctx, user.OrganizationID, definition.ID, control)
 
-	submitRes, err := resolver.Mutation().SubmitWorkflowProposal(user.UserCtx, proposal.ID)
-	assert.NilError(t, err)
-	assert.Check(t, submitRes != nil)
-	assert.Check(t, submitRes.WorkflowProposal != nil)
-	assert.Check(t, is.Equal(submitRes.WorkflowProposal.State, enums.WorkflowProposalStateSubmitted))
-	assert.Check(t, submitRes.WorkflowProposal.SubmittedAt != nil)
-	assert.Check(t, is.Equal(submitRes.WorkflowProposal.SubmittedByUserID, user.ID))
-	assert.Check(t, submitRes.WorkflowProposal.ProposedHash != "")
+			changes := map[string]any{"status": string(enums.ControlStatusApproved)}
+			proposal := createWorkflowProposal(t, ctx, user.OrganizationID, instance, control, "Control:status", changes)
 
-	withdrawRes, err := resolver.Mutation().WithdrawWorkflowProposal(user.UserCtx, proposal.ID, nil)
-	assert.NilError(t, err)
-	assert.Check(t, withdrawRes != nil)
-	assert.Check(t, withdrawRes.WorkflowProposal != nil)
-	assert.Check(t, is.Equal(withdrawRes.WorkflowProposal.State, enums.WorkflowProposalStateSuperseded))
+			_, err := suite.Client.DB.WorkflowInstance.UpdateOneID(instance.ID).
+				SetWorkflowProposalID(proposal.ID).
+				Save(rule.WithInternalOperationContext(ctx))
+			assert.NilError(t, err)
+
+			assignment := createWorkflowAssignmentWithTarget(t, ctx, user.OrganizationID, instance.ID, user.ID)
+
+			submitRes, err := resolver.Mutation().SubmitWorkflowProposal(tc.ctx, proposal.ID)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(submitRes.WorkflowProposal.State, enums.WorkflowProposalStateSubmitted))
+			assert.Check(t, submitRes.WorkflowProposal.SubmittedAt != nil)
+			assert.Check(t, is.Equal(submitRes.WorkflowProposal.SubmittedByUserID, tc.expectedActorID))
+			assert.Check(t, submitRes.WorkflowProposal.ProposedHash != "")
+
+			withdrawRes, err := resolver.Mutation().WithdrawWorkflowProposal(tc.ctx, proposal.ID, nil)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(withdrawRes.WorkflowProposal.State, enums.WorkflowProposalStateSuperseded))
+
+			closed, err := suite.Client.DB.WorkflowAssignment.Get(ctx, assignment.ID)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(enums.WorkflowAssignmentStatusRejected, closed.Status))
+			assert.Check(t, is.Equal(tc.expectedActorID, closed.ActorUserID))
+		})
+	}
 }
 
 func TestWorkflowProposalPreview(t *testing.T) {
@@ -489,6 +517,8 @@ func TestPreCommitApprovalRoutesMemberUpdateToProposal(t *testing.T) {
 
 	testCases := []struct {
 		name            string
+		client          *testclient.TestClient
+		ctx             context.Context
 		input           testclient.UpdateControlInput
 		expectedStatus  enums.ControlStatus
 		expectedTitle   string
@@ -496,6 +526,26 @@ func TestPreCommitApprovalRoutesMemberUpdateToProposal(t *testing.T) {
 	}{
 		{
 			name:            "gated status update is routed to a proposal",
+			client:          suite.Client.API,
+			ctx:             complianceManager.UserCtx,
+			input:           testclient.UpdateControlInput{Status: &enums.ControlStatusApproved},
+			expectedStatus:  enums.ControlStatusNotImplemented,
+			expectedTitle:   "Test Control",
+			expectsProposal: true,
+		},
+		{
+			name:            "gated status update by a single org pat without an org header is routed to a proposal",
+			client:          suite.SetupSingleOrgPatClient(owner, t),
+			ctx:             context.Background(),
+			input:           testclient.UpdateControlInput{Status: &enums.ControlStatusApproved},
+			expectedStatus:  enums.ControlStatusNotImplemented,
+			expectedTitle:   "Test Control",
+			expectsProposal: true,
+		},
+		{
+			name:            "gated status update by an api token is routed to a proposal",
+			client:          suite.SetupAPITokenClient(owner.UserCtx, t),
+			ctx:             context.Background(),
 			input:           testclient.UpdateControlInput{Status: &enums.ControlStatusApproved},
 			expectedStatus:  enums.ControlStatusNotImplemented,
 			expectedTitle:   "Test Control",
@@ -503,6 +553,8 @@ func TestPreCommitApprovalRoutesMemberUpdateToProposal(t *testing.T) {
 		},
 		{
 			name:           "ungated title update applies directly",
+			client:         suite.Client.API,
+			ctx:            complianceManager.UserCtx,
 			input:          testclient.UpdateControlInput{Title: &renamed},
 			expectedStatus: enums.ControlStatusNotImplemented,
 			expectedTitle:  renamed,
@@ -513,7 +565,7 @@ func TestPreCommitApprovalRoutesMemberUpdateToProposal(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			control := createControlForWorkflow(t, ctx, owner.OrganizationID)
 
-			_, err := suite.Client.API.UpdateControl(complianceManager.UserCtx, control.ID, tc.input)
+			_, err := tc.client.UpdateControl(tc.ctx, control.ID, tc.input)
 			assert.NilError(t, err)
 
 			reloaded, err := suite.Client.DB.Control.Get(ctx, control.ID)

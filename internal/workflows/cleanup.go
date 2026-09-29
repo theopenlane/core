@@ -23,7 +23,7 @@ func FindOrphanWorkflowInstanceIDs(ctx context.Context, client *generated.Client
 		return nil, ErrNilClient
 	}
 
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalCrossOrgContext(ctx)
 
 	query := client.WorkflowInstance.Query().
 		Where(
@@ -47,7 +47,7 @@ func DeleteWorkflowInstanceChildren(ctx context.Context, client *generated.Clien
 		return nil
 	}
 
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	assignmentIDs, err := client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDIn(instanceIDs...)).
@@ -143,7 +143,7 @@ func DeleteWorkflowInstancesCascade(ctx context.Context, client *generated.Clien
 		return nil
 	}
 
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalCrossOrgContext(ctx)
 
 	if _, err := client.WorkflowInstance.Delete().
 		Where(workflowinstance.IDIn(instanceIDs...)).

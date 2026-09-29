@@ -127,7 +127,7 @@ func (m *ProposalManager) ComputeHash(ctx context.Context, instance *generated.W
 		return "", nil
 	}
 
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 	objRefIDs, err := workflows.ObjectRefIDs(allowCtx, m.client, obj)
 	if err != nil {
 		return "", fmt.Errorf("%w: %w", ErrFailedToQueryObjectRefs, err)
@@ -157,7 +157,7 @@ func (m *ProposalManager) Apply(scope *observability.Scope, proposalID string, o
 
 	orgID := caller.OrganizationID
 
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 	proposal, err := m.client.WorkflowProposal.Query().
 		Where(
 			workflowproposal.IDEQ(proposalID),

@@ -187,7 +187,7 @@ func (l *WorkflowListeners) recordEmitFailure(scope *observability.Scope, instan
 
 // persistWorkflowEvent stores a workflow event payload for an instance.
 func persistWorkflowEvent(ctx context.Context, client *generated.Client, instance *generated.WorkflowInstance, eventType enums.WorkflowEventType, actionKey string, details any) error {
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	payload := models.WorkflowEventPayload{
 		EventType: eventType,

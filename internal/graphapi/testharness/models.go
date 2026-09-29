@@ -562,7 +562,7 @@ func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, t *testing.T) {
 // SetContext is a helper function to set the context for the client
 // setting privacy to allow and adding the client to the context
 func SetContext(ctx context.Context, db *ent.Client) context.Context {
-	return SetUserContext(rule.WithInternalContext(ctx), db)
+	return SetUserContext(rule.WithInternalCrossOrgContext(ctx), db)
 }
 
 // SetUserContext adds the ent client and graphql response context without elevating the caller

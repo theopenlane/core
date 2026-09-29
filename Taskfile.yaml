@@ -507,6 +507,17 @@ tasks:
     cmds:
       - gotestsum --packages "github.com/theopenlane/core/v2/internal/graphapi/eventstest" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
 
+  go:test:onboarding:fgacache:
+    desc: runs the onboarding tests against openfga with the production cache settings enabled
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
+      OPENLANE_TEST_FGA_CACHE: "true"
+    aliases: ['test:onboarding:fgacache']
+    cmds:
+      - go test -v -tags test ./internal/graphapi/ -run '^TestMutationCreateOnboarding$'
+      - go test -v -tags test ./internal/graphapi/eventstest/ -run '^(TestOnboardingProgramListener|TestDomainScanListeners)$'
+      - go test -v -tags test ./internal/ent/hooks/ -run '^TestHookTestSuite$' -testify.m 'Onboarding'
+
   go:fmt:
     desc: format all go code
     env:

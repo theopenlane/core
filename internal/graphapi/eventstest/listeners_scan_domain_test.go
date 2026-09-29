@@ -13,6 +13,7 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -137,6 +138,23 @@ func TestDomainScanListeners(t *testing.T) {
 			Exec(ctx))
 
 		waitForCondition(t, func() bool { return countRuns(t) == baseline+1+len(domains) }, "domains update should dispatch one run per current domain")
+	})
+
+	t.Run("onboarding a new organization with domains dispatches one run per domain", func(t *testing.T) {
+		before := countRuns(t)
+
+		onboardingUser := suite.UserBuilder(context.Background(), t)
+		personalOrgCtx := auth.NewTestContextWithOrgID(onboardingUser.ID, onboardingUser.PersonalOrgID)
+
+		domains := []string{"one.onboarding.example.com", "two.onboarding.example.com"}
+
+		_, err := suite.Client.API.CreateOnboarding(personalOrgCtx, testclient.CreateOnboardingInput{
+			CompanyName: "Domain Scan Onboarding " + ulids.New().String(),
+			Domains:     domains,
+		})
+		assert.NilError(t, err)
+
+		waitForCondition(t, func() bool { return countRuns(t) == before+len(domains) }, "onboarding with domains should dispatch one run per domain for the new organization")
 	})
 }
 

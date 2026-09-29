@@ -100,7 +100,7 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 
 	// Ensure the object node is loaded so CEL has access to concrete fields.
 	if obj != nil && obj.Node == nil {
-		allowCtx := rule.WithInternalContext(ctx)
+		allowCtx := rule.WithInternalOperationContext(ctx)
 		if _, err := e.loadObjectNode(allowCtx, obj); err != nil {
 			return nil, err
 		}
@@ -113,7 +113,7 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 			return nil, err
 		}
 
-		allowCtx := rule.WithInternalContext(ctx)
+		allowCtx := rule.WithInternalOperationContext(ctx)
 
 		proposal, err := e.client.WorkflowProposal.Query().
 			Where(
@@ -139,7 +139,7 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 
 	// Merge assignment context (assignments, instance, initiator)
 	// Use privacy bypass for internal workflow operations that query assignment state
-	allowCtx := rule.WithInternalContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 	assignmentCtx, err := workflows.BuildAssignmentContext(allowCtx, e.client, instance.ID)
 	if err != nil {
 		return nil, err
@@ -165,8 +165,8 @@ func (e *WorkflowEngine) FindMatchingDefinitions(ctx context.Context, schemaType
 	ctx = scope.Context()
 	defer scope.End(err, nil)
 
-	// Use privacy bypass for internal workflow operations, scoped to the organization owning the object
-	orgID, err := workflows.ObjectOwnerID(rule.WithInternalContext(ctx), e.client, obj.Type, obj.ID)
+	// the owning org is not known yet and the caller may not have one selected, so this lookup bypasses the org filter; everything after is scoped to the owner
+	orgID, err := workflows.ObjectOwnerID(rule.WithInternalCrossOrgContext(ctx), e.client, obj.Type, obj.ID)
 	if err != nil {
 		return nil, scope.Fail(err, nil)
 	}

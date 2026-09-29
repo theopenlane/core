@@ -158,18 +158,28 @@ func (suite *GraphTestSuite) SetupTestData(ctx context.Context, t *testing.T) {
 }
 
 func (suite *GraphTestSuite) SetupPatClient(user TestUserDetails, t *testing.T) *testclient.TestClient {
+	return suite.setupPatClient(user, t, []string{user.OrganizationID, user.PersonalOrgID}, true)
+}
+
+// SetupSingleOrgPatClient returns a client using a PAT authorized only for the user's org without an organization header
+func (suite *GraphTestSuite) SetupSingleOrgPatClient(user TestUserDetails, t *testing.T) *testclient.TestClient {
+	return suite.setupPatClient(user, t, []string{user.OrganizationID}, false)
+}
+
+func (suite *GraphTestSuite) setupPatClient(user TestUserDetails, t *testing.T, orgIDs []string, withOrgHeader bool) *testclient.TestClient {
 	// setup client with a personal access token
-	pat := (&PersonalAccessTokenBuilder{Client: suite.Client, OrganizationIDs: []string{user.OrganizationID, user.PersonalOrgID}}).MustNew(user.UserCtx, t)
+	pat := (&PersonalAccessTokenBuilder{Client: suite.Client, OrganizationIDs: orgIDs}).MustNew(user.UserCtx, t)
 
 	authHeaderPAT := testclient.Authorization{
 		BearerToken: pat.Token,
 	}
 
-	apiClientPat, err := coreutils.TestClientWithAuth(suite.Client.DB, suite.Client.ObjectStore,
-		testclient.WithCredentials(authHeaderPAT),
-		testclient.WithInterceptors(
-			testclient.WithOrganizationHeader(user.OrganizationID),
-		))
+	opts := []testclient.ClientOption{testclient.WithCredentials(authHeaderPAT)}
+	if withOrgHeader {
+		opts = append(opts, testclient.WithInterceptors(testclient.WithOrganizationHeader(user.OrganizationID)))
+	}
+
+	apiClientPat, err := coreutils.TestClientWithAuth(suite.Client.DB, suite.Client.ObjectStore, opts...)
 	RequireNoError(t, err)
 
 	return apiClientPat
@@ -177,7 +187,26 @@ func (suite *GraphTestSuite) SetupPatClient(user TestUserDetails, t *testing.T) 
 
 func (suite *GraphTestSuite) SetupAPITokenClient(ctx context.Context, t *testing.T) *testclient.TestClient {
 	// setup client with an API token with comprehensive scopes for testing
-	// Get all available scopes from the FGA model
+	return SetupAPIToken(ctx, t, allAPITokenScopes(t))
+}
+
+// SetupAPITokenContext creates an API token with all scopes and returns a context carrying the caller the auth middleware builds for it
+func (suite *GraphTestSuite) SetupAPITokenContext(ctx context.Context, t *testing.T, orgID string) context.Context {
+	apiToken := (&APITokenBuilder{Client: suite.Client, Scopes: allAPITokenScopes(t)}).MustNew(ctx, t)
+
+	caller := &auth.Caller{
+		SubjectID:          apiToken.ID,
+		SubjectName:        "service: " + apiToken.Name,
+		OrganizationID:     orgID,
+		OrganizationIDs:    []string{orgID},
+		AuthenticationType: auth.APITokenAuthentication,
+	}
+
+	return SetUserContext(auth.WithCaller(context.Background(), caller), suite.Client.DB)
+}
+
+// allAPITokenScopes returns every scope available in the FGA model
+func allAPITokenScopes(t *testing.T) []string {
 	scopeOpts, err := fgamodel.ScopeOptions()
 	RequireNoError(t, err)
 
@@ -188,7 +217,7 @@ func (suite *GraphTestSuite) SetupAPITokenClient(ctx context.Context, t *testing
 		}
 	}
 
-	return SetupAPIToken(ctx, t, scopes)
+	return scopes
 }
 
 // SetupAPIToken takes scopes and returns an api client with those scopes set

@@ -10,9 +10,9 @@ import (
 
 const internalRequestCaps = auth.CapInternalOperation | auth.CapBypassOrgFilter
 
-// WithInternalContext marks a request as internal by attaching internal bypass
+// WithInternalCrossOrgContext marks a request as internal by attaching internal bypass
 // capabilities to the caller in context.
-func WithInternalContext(ctx context.Context) context.Context {
+func WithInternalCrossOrgContext(ctx context.Context) context.Context {
 	return withCallerCapabilities(ctx, internalRequestCaps)
 }
 

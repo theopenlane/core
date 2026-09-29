@@ -500,8 +500,7 @@ func (s *WorkflowEngineTestSuite) TestApplyObjectFieldUpdates_CoercesEnums() {
 		Save(seedCtx)
 	s.Require().NoError(err)
 
-	// Use rule.WithInternalContext for workflow operations that need privacy bypass
-	bypassCtx := rule.WithInternalContext(userCtx)
+	bypassCtx := rule.WithInternalCrossOrgContext(userCtx)
 
 	obj := &workflows.Object{
 		ID:   control.ID,
