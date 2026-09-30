@@ -30,6 +30,14 @@ func HookSubscriberCreate() ent.Hook {
 			// lowercase the email for uniqueness
 			m.SetEmail(strings.ToLower(email))
 
+			isEmailVerified, _ := m.VerifiedEmail()
+			isPhoneVerified, _ := m.VerifiedPhone()
+
+			// if either of this is true, we need to mark as active
+			if isEmailVerified || isPhoneVerified {
+				m.SetActive(true)
+			}
+
 			// block subscriber creation for a trust center that has not enabled accepting subscribers
 			if err := checkTrustCenterAllowsSubscribers(ctx, m); err != nil {
 				return nil, err
@@ -61,11 +69,12 @@ func HookSubscriberCreate() ent.Hook {
 					return retValue, err
 				}
 
-				// if active on creation, we do not need to send the email again
-				active, _ := m.Active()
-				if active {
-					return retValue, nil
-				}
+			}
+
+			// if active, we do not need to send the email again
+			active, _ := m.Active()
+			if active {
+				return retValue, nil
 			}
 
 			tokenValue, _ := m.Token()
@@ -233,6 +242,10 @@ func updateSubscriber(ctx context.Context,
 		subscriber.Unsubscribed = false
 	}
 
+	// use the active state from the hook earlier so we can track new verification status
+	active, _ := m.Active()
+	subscriber.Active = true
+
 	secret, _ := m.Secret()
 	token, _ := m.Token()
 	ttl, _ := m.TTL()
@@ -241,7 +254,7 @@ func updateSubscriber(ctx context.Context,
 		UpdateOneID(subscriber.ID).
 		SetSendAttempts(subscriber.SendAttempts).
 		SetUnsubscribed(subscriber.Unsubscribed).
-		SetVerifiedEmail(false).
+		SetActive(active).
 		SetToken(token).
 		SetSecret(secret).
 		SetTTL(ttl).

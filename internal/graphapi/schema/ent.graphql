@@ -15539,9 +15539,13 @@ input CreateSubscriberInput {
   """
   phoneNumber: String
   """
-  indicates if the subscriber is active or not, active users will have at least one verified contact method
+  indicates if the email address has been verified
   """
-  active: Boolean
+  verifiedEmail: Boolean
+  """
+  indicates if the phone number has been verified
+  """
+  verifiedPhone: Boolean
   ownerID: ID
   eventIDs: [ID!]
   trustCenterID: ID

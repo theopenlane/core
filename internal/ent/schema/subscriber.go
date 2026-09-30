@@ -78,16 +78,16 @@ func (Subscriber) Fields() []ent.Field {
 		field.Bool("verified_email").
 			Comment("indicates if the email address has been verified").
 			Default(false).
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)),
+			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.Bool("verified_phone").
 			Comment("indicates if the phone number has been verified").
 			Default(false).
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)),
+			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.Bool("active").
 			Comment("indicates if the subscriber is active or not, active users will have at least one verified contact method").
 			Default(false).
 			Annotations(
-				entgql.Skip(entgql.SkipMutationUpdateInput),
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 				entgql.OrderField("active"),
 			),
 		field.String("token").
