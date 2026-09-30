@@ -90,6 +90,8 @@ type TrustCenterSetting struct {
 	NdaApproverGroupID *string `json:"nda_approver_group_id,omitempty"`
 	// URL to the company's status page
 	StatusPageURL *string `json:"status_page_url,omitempty"`
+	// allow trustcenter to be indexed on google
+	NoindexDefaultDomain bool `json:"noindex_default_domain,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterSettingQuery when eager-loading is set.
 	Edges        TrustCenterSettingEdges `json:"edges"`
@@ -187,7 +189,7 @@ func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcentersetting.FieldRemoveBranding, trustcentersetting.FieldNdaApprovalRequired, trustcentersetting.FieldAllowSubscribers, trustcentersetting.FieldNotifySubscribersOnSubprocessorChange:
+		case trustcentersetting.FieldRemoveBranding, trustcentersetting.FieldNdaApprovalRequired, trustcentersetting.FieldAllowSubscribers, trustcentersetting.FieldNotifySubscribersOnSubprocessorChange, trustcentersetting.FieldNoindexDefaultDomain:
 			values[i] = new(sql.NullBool)
 		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldUpdatedByImpersonator, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldCompanyName, trustcentersetting.FieldCompanyDescription, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldHeroImageLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor, trustcentersetting.FieldEnvironment, trustcentersetting.FieldCompanyDomain, trustcentersetting.FieldSecurityContact, trustcentersetting.FieldNdaApproverGroupID, trustcentersetting.FieldStatusPageURL:
 			values[i] = new(sql.NullString)
@@ -435,6 +437,12 @@ func (_m *TrustCenterSetting) assignValues(columns []string, values []any) error
 				_m.StatusPageURL = new(string)
 				*_m.StatusPageURL = value.String
 			}
+		case trustcentersetting.FieldNoindexDefaultDomain:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field noindex_default_domain", values[i])
+			} else if value.Valid {
+				_m.NoindexDefaultDomain = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -627,6 +635,9 @@ func (_m *TrustCenterSetting) String() string {
 		builder.WriteString("status_page_url=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("noindex_default_domain=")
+	builder.WriteString(fmt.Sprintf("%v", _m.NoindexDefaultDomain))
 	builder.WriteByte(')')
 	return builder.String()
 }

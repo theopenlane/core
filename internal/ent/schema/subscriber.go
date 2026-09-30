@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
@@ -77,15 +78,18 @@ func (Subscriber) Fields() []ent.Field {
 		field.Bool("verified_email").
 			Comment("indicates if the email address has been verified").
 			Default(false).
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)),
+			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.Bool("verified_phone").
 			Comment("indicates if the phone number has been verified").
 			Default(false).
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput)),
+			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.Bool("active").
 			Comment("indicates if the subscriber is active or not, active users will have at least one verified contact method").
 			Default(false).
-			Annotations(entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput), entgql.OrderField("active")),
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				entgql.OrderField("active"),
+			),
 		field.String("token").
 			Comment("the verification token sent to the user via email which should only be provided to the /subscribe endpoint + handler").
 			Unique().
@@ -187,6 +191,7 @@ func (Subscriber) Indexes() []ent.Index {
 // Annotations of the Subscriber
 func (Subscriber) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.SequentialBulkCreate(),
 		history.Annotations{
 			Exclude: true,
 		},

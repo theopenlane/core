@@ -50,6 +50,10 @@ func (p *downloadProvider) GetScheme() *string {
 	return nil
 }
 
+func (p *downloadProvider) ListObjects(context.Context, string, int) ([]string, error) {
+	return nil, nil
+}
+
 func (p *downloadProvider) ListBuckets() ([]string, error) {
 	return nil, nil
 }

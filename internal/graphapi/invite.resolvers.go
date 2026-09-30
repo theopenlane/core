@@ -53,21 +53,7 @@ func (r *mutationResolver) CreateBulkInvite(ctx context.Context, input []*genera
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// don't use the bulk endpoint, it won't work correctly on resend
-	results := make([]*generated.Invite, 0, len(input))
-	for _, i := range input {
-		res, err := r.CreateInvite(ctx, *i)
-		if err != nil {
-			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "invite"})
-		}
-
-		results = append(results, res.Invite)
-	}
-
-	// return the correct payload
-	return &model.InviteBulkCreatePayload{
-		Invites: results,
-	}, nil
+	return r.bulkCreateInvite(ctx, input)
 }
 
 // CreateBulkCSVInvite is the resolver for the createBulkCSVInvite field.

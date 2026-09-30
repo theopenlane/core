@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
-	"encoding/json"
 	"testing"
 
 	"github.com/pdfcpu/pdfcpu/pkg/api"
@@ -15,6 +14,7 @@ import (
 	storagetypes "github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
+	"github.com/theopenlane/core/v2/internal/testutils/pdftest"
 )
 
 var (
@@ -62,7 +62,7 @@ func TestCreateAttestationCertificate_EmptyFields(t *testing.T) {
 }
 
 func TestAppendAttestationPage(t *testing.T) {
-	originalPDF := generateMinimalPDF(t)
+	originalPDF := pdftest.MinimalPDF(t)
 
 	data := &signedNDADocumentData{
 		SignatoryInfo: signatoryInformation{
@@ -78,7 +78,7 @@ func TestAppendAttestationPage(t *testing.T) {
 		},
 	}
 
-	merged, err := appendAttestationPage(bytes.NewReader(originalPDF), data)
+	merged, err := appendAttestationPage(t.Context(), bytes.NewReader(originalPDF), data)
 	require.NoError(t, err)
 	require.NotEmpty(t, merged)
 
@@ -90,6 +90,37 @@ func TestAppendAttestationPage(t *testing.T) {
 
 	err = api.Validate(bytes.NewReader(merged), conf)
 	assert.NoError(t, err)
+}
+
+func TestAppendAttestationPage_OwnerLockedSource(t *testing.T) {
+	encryptedPDF := pdftest.EncryptPDF(t, pdftest.MinimalPDF(t), "")
+
+	info, err := api.PDFInfo(bytes.NewReader(encryptedPDF), "", nil, false, model.NewDefaultConfiguration())
+	require.NoError(t, err)
+	require.True(t, info.Encrypted)
+
+	attested, err := appendAttestationPage(t.Context(), bytes.NewReader(encryptedPDF), testSignedNDAData())
+	require.NoError(t, err)
+
+	pageCount, err := api.PageCount(bytes.NewReader(attested), conf)
+	require.NoError(t, err)
+	assert.Equal(t, info.PageCount+1, pageCount)
+
+	require.NoError(t, api.Validate(bytes.NewReader(attested), conf))
+}
+
+func TestAppendAttestationPage_PasswordProtectedSource(t *testing.T) {
+	encryptedPDF := pdftest.EncryptPDF(t, pdftest.MinimalPDF(t), "user-secret")
+
+	_, err := appendAttestationPage(t.Context(), bytes.NewReader(encryptedPDF), testSignedNDAData())
+	require.ErrorIs(t, err, ErrFailedToDecryptNDAPDF)
+}
+
+func testSignedNDAData() *signedNDADocumentData {
+	return &signedNDADocumentData{
+		SignatoryInfo:     signatoryInformation{FirstName: "Jane", LastName: "Doe", Email: "jane@example.com", CompanyName: "Acme Corp"},
+		SignatureMetadata: signatureMetadata{Timestamp: "2025-06-15T14:30:00Z", IPAddress: "192.168.1.1", UserAgent: "Mozilla/5.0"},
+	}
 }
 
 func TestFormatAttestTimestamp(t *testing.T) {
@@ -290,7 +321,7 @@ func TestAttestationFieldsFrom_IncludesHash(t *testing.T) {
 }
 
 func TestAppendAttestationPage_TwoPassHash(t *testing.T) {
-	originalPDF := generateMinimalPDF(t)
+	originalPDF := pdftest.MinimalPDF(t)
 
 	data := &signedNDADocumentData{
 		SignatoryInfo: signatoryInformation{
@@ -307,7 +338,7 @@ func TestAppendAttestationPage_TwoPassHash(t *testing.T) {
 	}
 
 	// first pass: generate combined document to compute hash
-	combined, err := appendAttestationPage(bytes.NewReader(originalPDF), data)
+	combined, err := appendAttestationPage(t.Context(), bytes.NewReader(originalPDF), data)
 	require.NoError(t, err)
 
 	pdfHash := sha256.Sum256(combined)
@@ -317,7 +348,7 @@ func TestAppendAttestationPage_TwoPassHash(t *testing.T) {
 	// second pass: assign hash and regenerate
 	data.SignatureMetadata.PDFHash = computedHash
 
-	attestedPDF, err := appendAttestationPage(bytes.NewReader(originalPDF), data)
+	attestedPDF, err := appendAttestationPage(t.Context(), bytes.NewReader(originalPDF), data)
 	require.NoError(t, err)
 	require.NotEmpty(t, attestedPDF)
 
@@ -339,34 +370,4 @@ func TestAppendAttestationPage_TwoPassHash(t *testing.T) {
 	}
 
 	assert.Equal(t, computedHash, hashField.Value)
-}
-
-// generateMinimalPDF creates a valid single-page PDF for use as the original NDA document in merge tests
-func generateMinimalPDF(t *testing.T) []byte {
-	t.Helper()
-
-	page := map[string]any{
-		"paper":  "A4P",
-		"origin": "UpperLeft",
-		"fonts": map[string]any{
-			"f": map[string]any{"name": "Helvetica", "size": 12},
-		},
-		"pages": map[string]any{
-			"1": map[string]any{
-				"content": map[string]any{
-					"text": []map[string]any{
-						{"value": "Original NDA", "pos": [2]float64{20, 20}, "font": map[string]any{"name": "$f"}},
-					},
-				},
-			},
-		},
-	}
-
-	jsonData, err := json.Marshal(page)
-	require.NoError(t, err)
-
-	var buf bytes.Buffer
-	require.NoError(t, api.Create(nil, bytes.NewReader(jsonData), &buf, nil))
-
-	return buf.Bytes()
 }

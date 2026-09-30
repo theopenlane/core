@@ -19,6 +19,7 @@ type providerBuilder = eddy.Builder[storage.Provider, storage.ProviderCredential
 type providerBuilders struct {
 	s3   providerBuilder
 	r2   providerBuilder
+	gcs  providerBuilder
 	disk providerBuilder
 	db   providerBuilder
 }
@@ -98,7 +99,6 @@ func (rc *ruleCoordinator) getBuilder(provider storage.ProviderType) providerBui
 func devModeOptions() *storage.ProviderOptions {
 	return storage.NewProviderOptions(
 		storage.WithBucket(objects.DefaultDevStorageBucket),
-		storage.WithBasePath(objects.DefaultDevStorageBucket),
 		storage.WithProxyPresignEnabled(true),
 		storage.WithEndpoint(objects.DefaultLocalDiskURL),
 		storage.WithProxyPresignConfig(&storage.ProxyPresignConfig{
@@ -161,9 +161,15 @@ func (rc *ruleCoordinator) addBackupTargetRule() {
 				return nil, errUnsupportedProvider
 			}
 
-			options, creds, err := providerOptionsFromProviderConfig(destination.Provider, destination.Config, rc.runtime)
+			options, creds, err := providerOptionsFromConfig(destination.Provider, rc.config, rc.runtime)
 			if err != nil {
 				return nil, err
+			}
+
+			options.Apply(storage.WithBucket(storage.BackupBucket(options.Bucket)))
+
+			if destination.Region != "" {
+				options.Apply(storage.WithRegion(destination.Region))
 			}
 
 			storage.WithExtra(storage.BackupTargetExtraKey, true)(options)
@@ -258,6 +264,7 @@ func (rc *ruleCoordinator) defaultProvider() (storage.ProviderType, bool) {
 	for _, provider := range []storage.ProviderType{
 		storage.S3Provider,
 		storage.R2Provider,
+		storage.GCSProvider,
 		storage.DiskProvider,
 		storage.DatabaseProvider,
 	} {

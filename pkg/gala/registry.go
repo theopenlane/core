@@ -2,6 +2,7 @@ package gala
 
 import (
 	"encoding/json"
+	"sort"
 	"strings"
 	"sync"
 
@@ -61,6 +62,8 @@ type registeredListener struct {
 	definitionName string
 	// ops is the set of operations this listener is interested in, empty means topic-level interest
 	ops map[string]struct{}
+	// priority orders listeners sharing a topic, lowest first
+	priority int
 	// handle wraps the definition's Handle for non-generic payloads
 	handle func(HandlerContext, any, string) error
 }
@@ -136,10 +139,17 @@ func attachListener[T any](g *Gala, definition Definition[T]) (ListenerID, error
 		name:           name + "#" + string(listenerID),
 		definitionName: name,
 		ops:            normalizeOperations(definition.Operations),
+		priority:       definition.Priority,
 		handle:         wrapDefinitionHandle(g, definition),
 	}
 
 	g.registry.listeners[topic] = append(g.registry.listeners[topic], listener)
+
+	// stable sort keeps registration order within a priority
+	listeners := g.registry.listeners[topic]
+	sort.SliceStable(listeners, func(i, j int) bool {
+		return listeners[i].priority < listeners[j].priority
+	})
 
 	return listenerID, nil
 }
@@ -172,8 +182,8 @@ func wrapDefinitionHandle[T any](g *Gala, definition Definition[T]) func(Handler
 
 		handlerCtx.Context = logx.WithCallerIdentity(handlerCtx.Context)
 		handlerCtx.Context = logx.WithFields(handlerCtx.Context, map[string]any{
-			"event_id": string(handlerCtx.Envelope.ID),
-			"topic":    string(handlerCtx.Envelope.Topic),
+			logx.FieldEventID: string(handlerCtx.Envelope.ID),
+			logx.FieldTopic:   string(handlerCtx.Envelope.Topic),
 		})
 
 		if definition.LogFields != nil {

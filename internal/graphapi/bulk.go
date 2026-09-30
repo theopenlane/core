@@ -5460,17 +5460,17 @@ func (r *mutationResolver) bulkDeleteInternalPolicy(ctx context.Context, ids []s
 	}, nil
 }
 
-// bulkCreateInvite uses the CreateBulk function to create multiple Invite entities
+// bulkCreateInvite creates Invite entities one at a time
 func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*generated.CreateInviteInput) (*model.InviteBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.InviteCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.Invite.Create().SetInput(*data)
-	}
+	res := make([]*generated.Invite, 0, len(input))
+	for _, data := range input {
+		entity, err := c.Invite.Create().SetInput(*data).Save(ctx)
+		if err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "invite"})
+		}
 
-	res, err := c.Invite.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "invite"})
+		res = append(res, entity)
 	}
 
 	// return response
@@ -9421,17 +9421,17 @@ func (r *mutationResolver) bulkDeleteSubprocessor(ctx context.Context, ids []str
 	}, nil
 }
 
-// bulkCreateSubscriber uses the CreateBulk function to create multiple Subscriber entities
+// bulkCreateSubscriber creates Subscriber entities one at a time
 func (r *mutationResolver) bulkCreateSubscriber(ctx context.Context, input []*generated.CreateSubscriberInput) (*model.SubscriberBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.SubscriberCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.Subscriber.Create().SetInput(*data)
-	}
+	res := make([]*generated.Subscriber, 0, len(input))
+	for _, data := range input {
+		entity, err := c.Subscriber.Create().SetInput(*data).Save(ctx)
+		if err != nil {
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "subscriber"})
+		}
 
-	res, err := c.Subscriber.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "subscriber"})
+		res = append(res, entity)
 	}
 
 	// return response

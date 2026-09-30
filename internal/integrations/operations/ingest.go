@@ -13,6 +13,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
@@ -379,7 +380,7 @@ func (run *payloadRun) prepare(ctx context.Context, payloadSet types.IngestPaylo
 		}
 
 		record.schema = sourceSchema
-		record.Payload = entityops.StampProvenance(record.Payload, sourceSchema, run.ic.Integration, run.batch.Options.RunID)
+		record.Payload = entityops.StampProvenance(record.Payload, sourceSchema, run.ic.Integration, run.definition.ID, run.batch.Options.RunID)
 
 		prepared = append(prepared, preparedIngestRecord{resource: envelope.Resource, record: record, links: mapping.Links})
 	}

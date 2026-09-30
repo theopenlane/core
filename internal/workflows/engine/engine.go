@@ -111,7 +111,15 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 			workflowproposal.FieldDomainKey: domain.DomainKey,
 		})
 	}
-	if err := e.guardTrigger(ctx, def, obj, domain); err != nil {
+	// Scope guards and instance creation to the organization owning the object, with privacy bypass for internal workflow operations
+	ownerID, err := workflows.ObjectOwnerID(workflows.AllowContext(ctx), e.client, obj.Type, obj.ID)
+	if err != nil {
+		return nil, scope.Fail(err, nil)
+	}
+
+	allowCtx := workflows.AllowContextForOrg(ctx, ownerID)
+
+	if err := e.guardTrigger(allowCtx, def, obj, domain); err != nil {
 		return nil, scope.Fail(err, nil)
 	}
 
@@ -121,11 +129,6 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 	contextData := buildTriggerContext(def.ID, obj, input, userID)
 
 	// Wrap instance + object ref creation in transaction to prevent stranded instances
-	// Use privacy bypass for internal workflow operations
-	allowCtx, ownerID, err := workflows.AllowContextWithOrg(ctx)
-	if err != nil {
-		return nil, scope.Fail(err, nil)
-	}
 	instance, err = e.createInstanceTx(allowCtx, def, obj, domain, defSnapshot, contextData, ownerID, scope)
 	if err != nil {
 		return nil, scope.Fail(err, nil)

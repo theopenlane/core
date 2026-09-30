@@ -79,6 +79,10 @@ func TestMutationConcernTopics(t *testing.T) {
 	if topics[2] != entityops.MutationTopicName(entityops.MutationConcernNotification, entgen.TypeTask) {
 		t.Fatalf("unexpected notification topic %q", topics[2])
 	}
+
+	if topics[3] != entityops.MutationTopicName(entityops.MutationConcernTaskRule, entgen.TypeTask) {
+		t.Fatalf("unexpected task rule topic %q", topics[3])
+	}
 }
 
 // fakeMutation is a minimal ent.Mutation and utils.GenericMutation for driving EmitGalaEventHook without a database
@@ -388,5 +392,31 @@ func TestEmitGalaEventHookUpdateNeverClassifiesSoftDelete(t *testing.T) {
 		if event.softDelete {
 			t.Fatal("expected no soft-delete marker on an update emission")
 		}
+	}
+}
+
+func TestTaskRuleListenersUseDedicatedConcern(t *testing.T) {
+	directTopic := entityops.MutationTopicName(entityops.MutationConcernDirect, entgen.TypeOnboarding)
+	taskRuleTopic := entityops.MutationTopicName(entityops.MutationConcernTaskRule, entgen.TypeOnboarding)
+
+	if directTopic == taskRuleTopic {
+		t.Fatal("expected the task rule concern to resolve to its own topic")
+	}
+
+	runtime, err := gala.NewGala(context.Background(), gala.Config{DispatchMode: gala.DispatchModeInMemory, WorkerCount: 1})
+	if err != nil {
+		t.Fatalf("failed to create runtime: %v", err)
+	}
+
+	if _, err := gala.Register(runtime, TaskRuleListeners()...); err != nil {
+		t.Fatalf("failed to register task rule listeners: %v", err)
+	}
+
+	if !runtime.InterestedIn(taskRuleTopic, ent.OpCreate.String()) {
+		t.Fatal("expected the task rule topic to have a registered listener")
+	}
+
+	if runtime.InterestedIn(directTopic, ent.OpCreate.String()) {
+		t.Fatal("expected no task rule listener on the direct topic")
 	}
 }

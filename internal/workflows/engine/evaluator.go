@@ -107,10 +107,12 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 
 	// Fallback to loading from proposal if instance context doesn't have proposed changes
 	if len(proposedChanges) == 0 && instance.WorkflowProposalID != "" {
-		allowCtx, orgID, err := workflows.AllowContextWithOrg(ctx)
+		orgID, err := workflows.ResolveOwnerID(ctx, instance.OwnerID)
 		if err != nil {
 			return nil, err
 		}
+
+		allowCtx := workflows.AllowContext(ctx)
 
 		proposal, err := e.client.WorkflowProposal.Query().
 			Where(
@@ -162,11 +164,13 @@ func (e *WorkflowEngine) FindMatchingDefinitions(ctx context.Context, schemaType
 	ctx = scope.Context()
 	defer scope.End(err, nil)
 
-	// Use privacy bypass for internal workflow operations
-	allowCtx, orgID, err := workflows.AllowContextWithOrg(ctx)
+	// Use privacy bypass for internal workflow operations, scoped to the organization owning the object
+	orgID, err := workflows.ObjectOwnerID(workflows.AllowContext(ctx), e.client, obj.Type, obj.ID)
 	if err != nil {
 		return nil, scope.Fail(err, nil)
 	}
+
+	allowCtx := workflows.AllowContextForOrg(ctx, orgID)
 
 	query := e.client.WorkflowDefinition.
 		Query().

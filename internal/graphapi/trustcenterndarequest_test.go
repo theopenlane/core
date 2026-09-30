@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"testing"
+	"time"
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
@@ -13,8 +14,10 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 )
@@ -420,6 +423,132 @@ func TestMutationBulkDeleteTrustCenterNDARequest(t *testing.T) {
 	resp, err := suite.Client.API.DeleteBulkTrustCenterNDARequest(tcOrg.Member.UserCtx, ids)
 	assert.NilError(t, err)
 	assert.Equal(t, expectedDeletedItems, len(resp.DeleteBulkTrustCenterNDARequest.DeletedIDs))
+
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
+}
+
+func TestMutationCreateTrustCenterNDARequestRecordSigned(t *testing.T) {
+	t.Parallel()
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+	trustCenter := tcOrg.TrustCenter
+
+	protectedDoc := (&th.TrustCenterDocBuilder{
+		Client:        suite.Client,
+		TrustCenterID: trustCenter.ID,
+		Visibility:    enums.TrustCenterDocumentVisibilityProtected,
+	}).MustNew(tcOrg.Owner.UserCtx, t)
+
+	t.Run("recorded signed request grants document access", func(t *testing.T) {
+		resp, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+			FirstName:     gofakeit.FirstName(),
+			LastName:      gofakeit.LastName(),
+			Email:         gofakeit.Email(),
+			TrustCenterID: &trustCenter.ID,
+			Status:        lo.ToPtr(enums.TrustCenterNDARequestStatusSigned),
+		})
+		assert.NilError(t, err)
+
+		request := resp.CreateTrustCenterNDARequest.TrustCenterNDARequest
+		assert.Assert(t, request.Status != nil)
+		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusSigned, *request.Status))
+		assert.Check(t, request.SignedAt != nil)
+
+		anonCtx, _ := th.CreateAnonymousTrustCenterContextForSubject(trustCenter.ID, trustCenter.OwnerID, request.ID, "")
+
+		docResp, err := suite.Client.API.GetTrustCenterDocByID(anonCtx, protectedDoc.ID)
+		assert.NilError(t, err)
+		assert.Check(t, docResp.TrustCenterDoc.OriginalFile != nil)
+	})
+
+	t.Run("explicit signed timestamp is preserved", func(t *testing.T) {
+		signedAt, err := models.ToDateTime("2024-01-15T10:30:00Z")
+		assert.NilError(t, err)
+
+		resp, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+			FirstName:     gofakeit.FirstName(),
+			LastName:      gofakeit.LastName(),
+			Email:         gofakeit.Email(),
+			TrustCenterID: &trustCenter.ID,
+			Status:        lo.ToPtr(enums.TrustCenterNDARequestStatusSigned),
+			SignedAt:      signedAt,
+		})
+		assert.NilError(t, err)
+
+		request := resp.CreateTrustCenterNDARequest.TrustCenterNDARequest
+		assert.Assert(t, request.SignedAt != nil)
+		assert.Check(t, time.Time(*request.SignedAt).Equal(time.Time(*signedAt)))
+	})
+
+	t.Run("recording signed upgrades an existing request", func(t *testing.T) {
+		email := gofakeit.Email()
+
+		existing, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+			FirstName:     gofakeit.FirstName(),
+			LastName:      gofakeit.LastName(),
+			Email:         email,
+			TrustCenterID: &trustCenter.ID,
+		})
+		assert.NilError(t, err)
+
+		resp, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+			FirstName:     gofakeit.FirstName(),
+			LastName:      gofakeit.LastName(),
+			Email:         email,
+			TrustCenterID: &trustCenter.ID,
+			Status:        lo.ToPtr(enums.TrustCenterNDARequestStatusSigned),
+		})
+		assert.NilError(t, err)
+
+		request := resp.CreateTrustCenterNDARequest.TrustCenterNDARequest
+		assert.Check(t, is.Equal(existing.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, request.ID))
+		assert.Assert(t, request.Status != nil)
+		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusSigned, *request.Status))
+
+		anonCtx, _ := th.CreateAnonymousTrustCenterContextForSubject(trustCenter.ID, trustCenter.OwnerID, request.ID, "")
+
+		docResp, err := suite.Client.API.GetTrustCenterDocByID(anonCtx, protectedDoc.ID)
+		assert.NilError(t, err)
+		assert.Check(t, docResp.TrustCenterDoc.OriginalFile != nil)
+	})
+
+	rejectedAnonStatuses := []enums.TrustCenterNDARequestStatus{
+		enums.TrustCenterNDARequestStatusSigned,
+		enums.TrustCenterNDARequestStatusApproved,
+		enums.TrustCenterNDARequestStatusNeedsApproval,
+		enums.TrustCenterNDARequestStatusDeclined,
+	}
+
+	for _, status := range rejectedAnonStatuses {
+		t.Run("anonymous caller cannot set status "+status.String(), func(t *testing.T) {
+			anonCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, gofakeit.Email())
+
+			_, err := suite.Client.API.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
+				FirstName:     gofakeit.FirstName(),
+				LastName:      gofakeit.LastName(),
+				Email:         gofakeit.Email(),
+				TrustCenterID: &trustCenter.ID,
+				Status:        lo.ToPtr(status),
+			})
+			assert.ErrorContains(t, err, "status not allowed to be set")
+		})
+	}
+
+	t.Run("anonymous caller can set the default requested status", func(t *testing.T) {
+		anonCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, gofakeit.Email())
+
+		resp, err := suite.Client.API.CreateTrustCenterNDARequest(anonCtx, testclient.CreateTrustCenterNDARequestInput{
+			FirstName:     gofakeit.FirstName(),
+			LastName:      gofakeit.LastName(),
+			Email:         gofakeit.Email(),
+			TrustCenterID: &trustCenter.ID,
+			Status:        lo.ToPtr(enums.TrustCenterNDARequestStatusRequested),
+		})
+		assert.NilError(t, err)
+
+		request := resp.CreateTrustCenterNDARequest.TrustCenterNDARequest
+		assert.Assert(t, request.Status != nil)
+		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusRequested, *request.Status))
+	})
 
 	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }

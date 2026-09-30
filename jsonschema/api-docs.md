@@ -116,19 +116,20 @@ Config contains the configuration for the core server
     "objectstorage": {
         "providers": {
             "s3": {
-                "credentials": {},
-                "backup": {}
+                "backup": {},
+                "credentials": {}
             },
             "r2": {
-                "credentials": {},
+                "backup": {},
+                "credentials": {}
+            },
+            "gcs": {
                 "backup": {}
             },
             "disk": {
-                "credentials": {},
                 "backup": {}
             },
             "database": {
-                "credentials": {},
                 "backup": {}
             }
         }
@@ -1406,7 +1407,7 @@ ProviderConfig contains configuration for object storage providers
 |**maxsizemb**|`integer`|MaxSizeMB is the maximum file size allowed in MB<br/>||
 |**maxmemorymb**|`integer`|MaxMemoryMB is the maximum memory to use for file uploads in MB<br/>||
 |**devmode**|`boolean`|DevMode automatically configures a local disk storage provider (and ensures directories exist) and ignores other provider configs<br/>||
-|[**providers**](#defsstorageproviders)|`object`|||
+|[**providers**](#defsstorageproviders)|`object`|Providers contains the configuration for each storage provider<br/>||
 
 **Additional Properties:** not allowed   
 **Example**
@@ -1415,19 +1416,20 @@ ProviderConfig contains configuration for object storage providers
 {
     "providers": {
         "s3": {
-            "credentials": {},
-            "backup": {}
+            "backup": {},
+            "credentials": {}
         },
         "r2": {
-            "credentials": {},
+            "backup": {},
+            "credentials": {}
+        },
+        "gcs": {
             "backup": {}
         },
         "disk": {
-            "credentials": {},
             "backup": {}
         },
         "database": {
-            "credentials": {},
             "backup": {}
         }
     }
@@ -1445,14 +1447,18 @@ ProviderConfig contains configuration for object storage providers
 <a name="defsstorageproviders"></a>
 ### $defs/storage\.Providers: object
 
+Providers contains the configuration for each storage provider
+
+
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|[**s3**](#defsstorageproviderconfigs)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
-|[**r2**](#defsstorageproviderconfigs)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
-|[**disk**](#defsstorageproviderconfigs)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
-|[**database**](#defsstorageproviderconfigs)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
+|[**s3**](#defsstorages3config)|`object`|S3Config configures the Amazon S3 provider<br/>||
+|[**r2**](#defsstorager2config)|`object`|R2Config configures the Cloudflare R2 provider<br/>||
+|[**gcs**](#defsstoragegcsconfig)|`object`|GCSConfig configures the Google Cloud Storage provider<br/>||
+|[**disk**](#defsstoragediskconfig)|`object`|DiskConfig configures the local filesystem provider<br/>||
+|[**database**](#defsstoragedatabaseconfig)|`object`|DatabaseConfig configures the provider that stores file bytes in the database<br/>||
 
 **Additional Properties:** not allowed   
 **Example**
@@ -1460,30 +1466,30 @@ ProviderConfig contains configuration for object storage providers
 ```json
 {
     "s3": {
-        "credentials": {},
-        "backup": {}
+        "backup": {},
+        "credentials": {}
     },
     "r2": {
-        "credentials": {},
+        "backup": {},
+        "credentials": {}
+    },
+    "gcs": {
         "backup": {}
     },
     "disk": {
-        "credentials": {},
         "backup": {}
     },
     "database": {
-        "credentials": {},
         "backup": {}
     }
 }
 ```
 
    
-<a name="defsstorageproviderconfigs"></a>
-#### $defs/storage\.ProviderConfigs: object
+<a name="defsstorages3config"></a>
+#### $defs/storage\.S3Config: object
 
-ProviderConfigs contains configuration for all storage providers
-This is structured to allow easy extension for additional providers in the future
+S3Config configures the Amazon S3 provider
 
 
 **Properties**
@@ -1492,42 +1498,244 @@ This is structured to allow easy extension for additional providers in the futur
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled indicates if this provider is enabled<br/>||
 |**ensureavailable**|`boolean`|EnsureAvailable enforces provider availability before completing server startup<br/>||
-|**region**|`string`|Region for cloud providers<br/>||
-|**bucket**|`string`|Bucket name for cloud providers<br/>||
-|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
-|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
-|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#defsstorageprovidercredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|**bucket**|`string`|Bucket is the bucket name, or the directory path for the disk provider<br/>||
 |[**backup**](#defsstoragebackupconfig)|`object`|BackupConfig defines an asynchronous replication target for a provider's objects. It only<br/>||
+|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
+|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)<br/>||
+|**region**|`string`|Region the bucket lives in<br/>||
+|**endpoint**|`string`|Endpoint overrides the AWS endpoint for S3 compatible services<br/>||
+|[**credentials**](#defsstorageaccesskeycredentials)|`object`|AccessKeyCredentials is the access key pair used by S3 compatible providers<br/>||
 
 **Additional Properties:** not allowed   
 **Example**
 
 ```json
 {
-    "credentials": {},
-    "backup": {}
+    "backup": {},
+    "credentials": {}
 }
 ```
 
    
-<a name="defsstorageprovidercredentials"></a>
-##### $defs/storage\.ProviderCredentials: object
+<a name="defsstoragebackupconfig"></a>
+##### $defs/storage\.BackupConfig: object
 
-ProviderCredentials contains credentials for a storage provider
+BackupConfig defines an asynchronous replication target for a provider's objects. It only
+names whether backups run and where they go; the destination provider's own configuration
+supplies the region, endpoint, and credentials
 
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**accesskeyid**|`string`|AccessKeyID for cloud providers<br/>||
-|**secretaccesskey**|`string`|SecretAccessKey for cloud providers<br/>||
-|**projectid**|`string`|ProjectID for GCS<br/>||
-|**accountid**|`string`|AccountID for Cloudflare R2<br/>||
-|**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
+|**enabled**|`boolean`|Enabled indicates if this backup target is enabled<br/>||
+|**provider**|`string`|Provider names the destination backend type, e.g. s3; empty replicates to the source<br/>provider itself, which writes the backup to the suffixed bucket alongside the live one<br/>||
+|**readfrombackup**|`boolean`|ReadFromBackup serves reads from this backup target instead of the source provider, intended<br/>to be enabled during a disaster recovery event when the source provider storage is lost<br/>||
+|**region**|`string`|Region optionally overrides the destination provider's region, so a backup can replicate<br/>into a region other than the one holding the live objects<br/>||
 
 **Additional Properties:** not allowed   
+   
+<a name="defsstorageaccesskeycredentials"></a>
+##### $defs/storage\.AccessKeyCredentials: object
+
+AccessKeyCredentials is the access key pair used by S3 compatible providers
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**accesskeyid**|`string`|AccessKeyID for the bucket<br/>||
+|**secretaccesskey**|`string`|SecretAccessKey for the bucket<br/>||
+
+**Additional Properties:** not allowed   
+   
+<a name="defsstorager2config"></a>
+#### $defs/storage\.R2Config: object
+
+R2Config configures the Cloudflare R2 provider
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates if this provider is enabled<br/>||
+|**ensureavailable**|`boolean`|EnsureAvailable enforces provider availability before completing server startup<br/>||
+|**bucket**|`string`|Bucket is the bucket name, or the directory path for the disk provider<br/>||
+|[**backup**](#defsstoragebackupconfig)|`object`|BackupConfig defines an asynchronous replication target for a provider's objects. It only<br/>||
+|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
+|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)<br/>||
+|**endpoint**|`string`|Endpoint overrides the account endpoint derived from the account ID<br/>||
+|[**credentials**](#defsstorager2credentials)|`object`|R2Credentials is the access key pair plus the Cloudflare account that owns the bucket<br/>||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "backup": {},
+    "credentials": {}
+}
+```
+
+   
+<a name="defsstoragebackupconfig"></a>
+##### $defs/storage\.BackupConfig: object
+
+BackupConfig defines an asynchronous replication target for a provider's objects. It only
+names whether backups run and where they go; the destination provider's own configuration
+supplies the region, endpoint, and credentials
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates if this backup target is enabled<br/>||
+|**provider**|`string`|Provider names the destination backend type, e.g. s3; empty replicates to the source<br/>provider itself, which writes the backup to the suffixed bucket alongside the live one<br/>||
+|**readfrombackup**|`boolean`|ReadFromBackup serves reads from this backup target instead of the source provider, intended<br/>to be enabled during a disaster recovery event when the source provider storage is lost<br/>||
+|**region**|`string`|Region optionally overrides the destination provider's region, so a backup can replicate<br/>into a region other than the one holding the live objects<br/>||
+
+**Additional Properties:** not allowed   
+   
+<a name="defsstorager2credentials"></a>
+##### $defs/storage\.R2Credentials: object
+
+R2Credentials is the access key pair plus the Cloudflare account that owns the bucket
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**accesskeyid**|`string`|AccessKeyID for the bucket<br/>||
+|**secretaccesskey**|`string`|SecretAccessKey for the bucket<br/>||
+|**accountid**|`string`|AccountID for Cloudflare R2<br/>||
+
+**Additional Properties:** not allowed   
+   
+<a name="defsstoragegcsconfig"></a>
+#### $defs/storage\.GCSConfig: object
+
+GCSConfig configures the Google Cloud Storage provider
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates if this provider is enabled<br/>||
+|**ensureavailable**|`boolean`|EnsureAvailable enforces provider availability before completing server startup<br/>||
+|**bucket**|`string`|Bucket is the bucket name, or the directory path for the disk provider<br/>||
+|[**backup**](#defsstoragebackupconfig)|`object`|BackupConfig defines an asynchronous replication target for a provider's objects. It only<br/>||
+|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
+|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)<br/>||
+|**endpoint**|`string`|Endpoint overrides the Google API endpoint, for an emulator<br/>||
+|**projectid**|`string`|ProjectID is the Google Cloud project that owns the bucket<br/>||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "backup": {}
+}
+```
+
+   
+<a name="defsstoragebackupconfig"></a>
+##### $defs/storage\.BackupConfig: object
+
+BackupConfig defines an asynchronous replication target for a provider's objects. It only
+names whether backups run and where they go; the destination provider's own configuration
+supplies the region, endpoint, and credentials
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates if this backup target is enabled<br/>||
+|**provider**|`string`|Provider names the destination backend type, e.g. s3; empty replicates to the source<br/>provider itself, which writes the backup to the suffixed bucket alongside the live one<br/>||
+|**readfrombackup**|`boolean`|ReadFromBackup serves reads from this backup target instead of the source provider, intended<br/>to be enabled during a disaster recovery event when the source provider storage is lost<br/>||
+|**region**|`string`|Region optionally overrides the destination provider's region, so a backup can replicate<br/>into a region other than the one holding the live objects<br/>||
+
+**Additional Properties:** not allowed   
+   
+<a name="defsstoragediskconfig"></a>
+#### $defs/storage\.DiskConfig: object
+
+DiskConfig configures the local filesystem provider
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates if this provider is enabled<br/>||
+|**ensureavailable**|`boolean`|EnsureAvailable enforces provider availability before completing server startup<br/>||
+|**bucket**|`string`|Bucket is the bucket name, or the directory path for the disk provider<br/>||
+|[**backup**](#defsstoragebackupconfig)|`object`|BackupConfig defines an asynchronous replication target for a provider's objects. It only<br/>||
+|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
+|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)<br/>||
+|**endpoint**|`string`|Endpoint is the URL files are served from when proxy presigning is disabled<br/>||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "backup": {}
+}
+```
+
+   
+<a name="defsstoragebackupconfig"></a>
+##### $defs/storage\.BackupConfig: object
+
+BackupConfig defines an asynchronous replication target for a provider's objects. It only
+names whether backups run and where they go; the destination provider's own configuration
+supplies the region, endpoint, and credentials
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates if this backup target is enabled<br/>||
+|**provider**|`string`|Provider names the destination backend type, e.g. s3; empty replicates to the source<br/>provider itself, which writes the backup to the suffixed bucket alongside the live one<br/>||
+|**readfrombackup**|`boolean`|ReadFromBackup serves reads from this backup target instead of the source provider, intended<br/>to be enabled during a disaster recovery event when the source provider storage is lost<br/>||
+|**region**|`string`|Region optionally overrides the destination provider's region, so a backup can replicate<br/>into a region other than the one holding the live objects<br/>||
+
+**Additional Properties:** not allowed   
+   
+<a name="defsstoragedatabaseconfig"></a>
+#### $defs/storage\.DatabaseConfig: object
+
+DatabaseConfig configures the provider that stores file bytes in the database
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates if this provider is enabled<br/>||
+|**ensureavailable**|`boolean`|EnsureAvailable enforces provider availability before completing server startup<br/>||
+|**bucket**|`string`|Bucket is the bucket name, or the directory path for the disk provider<br/>||
+|[**backup**](#defsstoragebackupconfig)|`object`|BackupConfig defines an asynchronous replication target for a provider's objects. It only<br/>||
+|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)<br/>||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "backup": {}
+}
+```
+
    
 <a name="defsstoragebackupconfig"></a>
 ##### $defs/storage\.BackupConfig: object

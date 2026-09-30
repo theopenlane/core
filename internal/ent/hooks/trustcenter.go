@@ -14,11 +14,13 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
+
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -370,6 +372,18 @@ func HookTrustCenterUpdate() ent.Hook {
 				}
 
 				return v, nil
+			}
+
+			if mutationCustomDomainIDExists && mutationCustomDomainID != "" {
+				err := m.Client().TrustCenterSetting.Update().
+					Where(
+						trustcentersetting.TrustCenterID(tcID),
+					).
+					SetNoindexDefaultDomain(true).
+					Exec(privacy.DecisionContext(ctx, privacy.Allow))
+				if err != nil {
+					return nil, err
+				}
 			}
 
 			if mutationCustomDomainIDExists && previousCustomDomainID == nil && mutationCustomDomainID != "" {

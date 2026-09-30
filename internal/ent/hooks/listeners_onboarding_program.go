@@ -49,8 +49,8 @@ func handleOnboardingProgram(inv entityops.Invocation, _ entityops.MutationPaylo
 		return nil
 	}
 
-	_, err = workflows.WithTx(inv.Context, inv.Client, nil, func(tx *generated.Tx) (struct{}, error) {
-		return struct{}{}, createProgram(inv.Context, tx.Client(), record.OrganizationID, record.Compliance)
+	_, err = workflows.WithTx(inv.Context, inv.Client, nil, func(ctx context.Context, tx *generated.Tx) (struct{}, error) {
+		return struct{}{}, createProgram(ctx, tx.Client(), record.OrganizationID, record.Compliance)
 	})
 
 	return err
@@ -84,6 +84,7 @@ func createProgram(ctx context.Context, client *generated.Client, orgID string, 
 	builder := client.Program.Create().
 		SetName(generateProgramName(standards, currentYear)).
 		SetDescription(description).
+		SetProgramKindName(enums.ProgramTypeFramework.String()).
 		SetFrameworkName(frameworks)
 
 	if auditor, ok := complianceData["auditor_name"].(string); ok && auditor != "" {

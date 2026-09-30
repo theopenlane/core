@@ -6,8 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
-
+	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -15,6 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 )
 
 func TestQuerySubscriber(t *testing.T) {
@@ -631,79 +631,73 @@ func TestDeleteSubscriber(t *testing.T) {
 	(&th.Cleanup[*generated.SubscriberDeleteOne]{Client: suite.Client.DB.Subscriber, ID: subscriberOtherOrg.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
 }
 
-func TestActiveSubscriber(t *testing.T) {
+
+func TestMutationCreateSubscriber_Active(t *testing.T) {
+
+	email := gofakeit.Email()
+	email2 := gofakeit.Email()
 
 	testCases := []struct {
-		name       string
-		email      string
-		ownerID    string
-		client     *testclient.TestClient
-		ctx        context.Context
-		wantErr    bool
-		markActive bool
+		name     string
+		request  testclient.CreateSubscriberInput
+		client   *testclient.TestClient
+		ctx      context.Context
+		wantErr  bool
+		isActive bool
 	}{
 		{
-			name:       "happy path, active subscriber",
-			email:      "c.stark@example.com",
-			client:     suite.Client.API,
-			ctx:        th.SharedTestUser1.UserCtx,
-			wantErr:    false,
-			markActive: true,
+			name:   "happy path, new subscriber",
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
+			request: testclient.CreateSubscriberInput{
+				Email: email,
+			},
+			isActive: false,
 		},
 		{
-			name:       "happy path, resubscribing",
-			email:      "aa.stark@example.com",
-			client:     suite.Client.API,
-			ctx:        th.SharedTestUser1.UserCtx,
-			wantErr:    false,
-			markActive: false,
+			name:     "happy path, duplicate subscriber but with email verified",
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			isActive: true,
+			request: testclient.CreateSubscriberInput{
+				Email:         email,
+				VerifiedEmail: lo.ToPtr(true),
+			},
+		},
+		{
+			name:     "happy path, new subscriber but with phone verified",
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			isActive: true,
+			request: testclient.CreateSubscriberInput{
+				Email:         email2,
+				VerifiedPhone: lo.ToPtr(true),
+			},
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			input := testclient.CreateSubscriberInput{
-				Email: tc.email,
-			}
 
-			if tc.ownerID != "" {
-				input.OwnerID = &tc.ownerID
-			}
-
-			resp, err := tc.client.CreateSubscriber(tc.ctx, input)
+			resp, err := tc.client.CreateSubscriber(tc.ctx, tc.request)
 
 			if tc.wantErr {
-				assert.Assert(t, is.Nil(resp))
-
-				return
-			}
-
-			assert.Assert(t, resp != nil)
-
-			if tc.markActive {
-				ctx := th.SetContext(tc.ctx, suite.Client.DB)
-
-				// update the subscriber and mark active
-				_, err = suite.Client.DB.Subscriber.
-					UpdateOneID(resp.CreateSubscriber.Subscriber.ID).
-					SetActive(true).
-					Save(ctx)
-
-				assert.NilError(t, err)
-			}
-
-			_, err = tc.client.CreateSubscriber(tc.ctx, input)
-			if tc.markActive {
-				// if we marked the user as active, this should fail
-				assert.ErrorContains(t, err, "subscriber already exists")
-
+				assert.Check(t, err != nil)
 				return
 			}
 
 			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
-			// cleanup
-			(&th.Cleanup[*generated.SubscriberDeleteOne]{Client: suite.Client.DB.Subscriber, ID: resp.CreateSubscriber.Subscriber.ID}).MustDelete(tc.ctx, t)
+			sub, err := tc.client.GetSubscriberByEmail(tc.ctx, tc.request.Email)
+			assert.NilError(t, err)
+
+			assert.Equal(t, tc.isActive, sub.Subscriber.Active)
 		})
+	}
+
+	for _, v := range []string{email, email2} {
+		_, err := suite.Client.API.DeleteSubscriber(th.SharedTestUser1.UserCtx, v, nil)
+		assert.NilError(t, err)
 	}
 }

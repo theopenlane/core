@@ -18,6 +18,15 @@ import (
 // takes options registers a closure supplying the defaults, and a constructor whose
 // result is already embedded in another family must not register itself again.
 
+// listener priorities order the listeners that share a concern topic, since those run
+// sequentially in one dispatch; unset listeners sit at zero and keep registration order
+const (
+	// listenerPriorityFirst runs a listener ahead of the unprioritized ones
+	listenerPriorityFirst = -100
+	// listenerPriorityLast runs a listener after the unprioritized ones
+	listenerPriorityLast = 100
+)
+
 // listenerProviders holds every listener family constructor registered by the init
 // functions in this package
 var listenerProviders []func() []gala.Registration

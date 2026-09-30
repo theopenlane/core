@@ -291,6 +291,33 @@ func (p *Provider) Exists(ctx context.Context, file *storagetypes.File) (bool, e
 	return true, nil
 }
 
+// ListObjects returns the object keys under prefix, at most limit when limit is positive
+func (p *Provider) ListObjects(ctx context.Context, prefix string, limit int) ([]string, error) {
+	var keys []string
+
+	paginator := s3.NewListObjectsV2Paginator(p.client, &s3.ListObjectsV2Input{
+		Bucket: aws.String(p.options.Bucket),
+		Prefix: aws.String(prefix),
+	})
+
+	for paginator.HasMorePages() {
+		page, err := paginator.NextPage(ctx)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, obj := range page.Contents {
+			keys = append(keys, *obj.Key)
+		}
+
+		if limit > 0 && len(keys) >= limit {
+			return keys[:limit], nil
+		}
+	}
+
+	return keys, nil
+}
+
 // GetScheme returns the URI scheme for R2
 func (p *Provider) GetScheme() *string {
 	scheme := "r2://"

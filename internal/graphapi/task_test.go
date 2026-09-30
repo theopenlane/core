@@ -1359,6 +1359,17 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 			expectedUpdatedCount: 2,
 		},
 		{
+			name: "support user should be able to update tasks",
+			ids:  []string{task1.ID, task2.ID},
+			input: testclient.UpdateTaskInput{
+				ClearTags: lo.ToPtr(true),
+				Details:   lo.ToPtr("Cleared all tags"),
+			},
+			client:               suite.Client.API,
+			ctx:                  th.NewSupportCtx(th.SharedTestUser1.UserCtx, testUser.Owner.OrganizationID),
+			expectedUpdatedCount: 2,
+		},
+		{
 			name:        "empty ids array",
 			ids:         []string{},
 			input:       testclient.UpdateTaskInput{Title: lo.ToPtr("test")},

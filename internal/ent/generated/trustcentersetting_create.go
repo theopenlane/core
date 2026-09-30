@@ -512,6 +512,20 @@ func (_c *TrustCenterSettingCreate) SetNillableStatusPageURL(v *string) *TrustCe
 	return _c
 }
 
+// SetNoindexDefaultDomain sets the "noindex_default_domain" field.
+func (_c *TrustCenterSettingCreate) SetNoindexDefaultDomain(v bool) *TrustCenterSettingCreate {
+	_c.mutation.SetNoindexDefaultDomain(v)
+	return _c
+}
+
+// SetNillableNoindexDefaultDomain sets the "noindex_default_domain" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableNoindexDefaultDomain(v *bool) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetNoindexDefaultDomain(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterSettingCreate) SetID(v string) *TrustCenterSettingCreate {
 	_c.mutation.SetID(v)
@@ -692,6 +706,10 @@ func (_c *TrustCenterSettingCreate) defaults() error {
 	if _, ok := _c.mutation.NotifySubscribersOnSubprocessorChange(); !ok {
 		v := trustcentersetting.DefaultNotifySubscribersOnSubprocessorChange
 		_c.mutation.SetNotifySubscribersOnSubprocessorChange(v)
+	}
+	if _, ok := _c.mutation.NoindexDefaultDomain(); !ok {
+		v := trustcentersetting.DefaultNoindexDefaultDomain
+		_c.mutation.SetNoindexDefaultDomain(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcentersetting.DefaultID == nil {
@@ -948,6 +966,10 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 	if value, ok := _c.mutation.StatusPageURL(); ok {
 		_spec.SetField(trustcentersetting.FieldStatusPageURL, field.TypeString, value)
 		_node.StatusPageURL = &value
+	}
+	if value, ok := _c.mutation.NoindexDefaultDomain(); ok {
+		_spec.SetField(trustcentersetting.FieldNoindexDefaultDomain, field.TypeBool, value)
+		_node.NoindexDefaultDomain = value
 	}
 	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
