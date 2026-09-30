@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"crypto/subtle"
+	"net/url"
 	"strings"
 	"time"
 
@@ -17,6 +18,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	apimodels "github.com/theopenlane/core/common/openapi"
+
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -161,7 +163,10 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
 
 	reason := ""
 	if c, cErr := sessions.GetCookie(ctx.Request(), supportReasonCookie); cErr == nil {
-		reason = c.Value
+		reason, err = url.QueryUnescape(c.Value)
+		if err != nil {
+			return h.BadRequest(ctx, err)
+		}
 	}
 
 	duration := time.Duration(supportSessionDefaultHours) * time.Hour
@@ -174,7 +179,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
 
 	// mint the support session token targeting the virtual support identity, attributed to the individual
 	token, err := h.TokenManager.CreateImpersonationToken(reqCtx, tokens.CreateImpersonationTokenOptions{
-		ImpersonatorID:    individualEmail,
+		ImpersonatorID:    individualID,
 		ImpersonatorEmail: individualEmail,
 		TargetUserID:      cfg.SubjectID,
 		TargetUserEmail:   cfg.Email,
@@ -224,7 +229,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
 		OrganizationID:    orgCookie.Value,
 	}
 
-	if err := h.logImpersonationEvent(reqCtx, "start", auditLog); err != nil {
+	if err := h.logImpersonationEvent(reqCtx, enums.ImpersonationActionStart, auditLog); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to log support access event")
 	}
 
