@@ -23,7 +23,7 @@ var (
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
-	// DirectorySync includes the configuration for syncing users, groups, and memberships from Tailscale
+	// DirectorySync includes configuration for syncing users, groups, and memberships
 	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Sync"`
 	// AssetSync includes the configuration for syncing Tailscale devices as assets
 	AssetSync AssetSync `json:"assetSync,omitempty" jsonschema:"title=Asset Sync"`

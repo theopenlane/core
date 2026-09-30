@@ -93,7 +93,7 @@ func (o OrganizationDeleteSweep) Run(ctx context.Context, req types.OperationReq
 	return len(deletedOrgs), nil
 }
 
-// clearRecoveredOrganizationDeletions clears pending deletion markers on organizations whose billing status recovered since being marked
+// clearRecoveredOrganizationDeletions clears pending deletion markers after billing recovers
 func clearRecoveredOrganizationDeletions(ctx context.Context, req types.OperationRequest) error {
 	db := req.DB
 	logger := logx.FromContext(ctx)

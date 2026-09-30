@@ -39,7 +39,7 @@ type retiredUserInput struct {
 	Zone string `json:"zone"`
 }
 
-// upgradeCredentialRegion is the credential type with a region required by presence only, so an empty stored value still satisfies schema validation without the declared backfill
+// upgradeCredentialRegion is a credential type whose region is required by presence only
 type upgradeCredentialRegion struct {
 	// Token is the token field
 	Token string `json:"token"`

@@ -11,16 +11,16 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// domainScanEnrichmentTimeout bounds how long to spend gathering company profile, branding, compliance, and DNS vendor data before finalizing the scan without it
+// domainScanEnrichmentTimeout bounds how long to spend gathering enrichment data
 const domainScanEnrichmentTimeout = 5 * time.Minute
 
-// DomainScanGatherEnrichment gathers company profile, branding, compliance, and DNS vendor data for a domain
+// DomainScanGatherEnrichment gathers enrichment data for a domain
 type DomainScanGatherEnrichment struct {
 	// Domain is the domain to gather enrichment for
 	Domain string `json:"domain"`
 	// ForceRefresh bypasses Cloudflare's Browser Rendering cache, forcing a fresh render
 	ForceRefresh bool `json:"forceRefresh,omitempty"`
-	// BrandDesignOnly instructs the scanning process to only extract the brand design, not the entire domain scan
+	// BrandDesignOnly instructs the scanning process to only extract the brand design
 	BrandDesignOnly bool `json:"brandDesignOnly,omitempty"`
 }
 
@@ -86,7 +86,7 @@ func (DomainScanGatherEnrichment) Run(ctx context.Context, client *CloudflareCli
 	return DomainScanGatherEnrichmentResult{Enrichment: enrichment}, nil
 }
 
-// logDomainScanEnrichmentErrors logs any per-lookup enrichment failures through the structured logger; each is best-effort (the report is built without that section) so these are warnings, not errors
+// logDomainScanEnrichmentErrors logs any per-lookup enrichment failures as warnings
 func logDomainScanEnrichmentErrors(ctx context.Context, errs domainscan.EnrichmentErrors) {
 	if errs.Company != nil {
 		logx.FromContext(ctx).Warn().Err(errs.Company).Msg("domain scan: failed to get company profile")

@@ -30,7 +30,7 @@ import (
 
 const findingIngestTestOperation = "finding.ingest"
 
-// findingIngestTestDefinition builds a minimal finding ingest definition whose mapping passes provider payloads through unchanged
+// findingIngestTestDefinition returns a minimal passthrough finding ingest definition
 func findingIngestTestDefinition(defID string) integrationtypes.Definition {
 	passthrough := integrationtypes.MappingOverride{MapExpr: "payload"}
 
@@ -54,7 +54,7 @@ func findingIngestTestDefinition(defID string) integrationtypes.Definition {
 	}
 }
 
-// ingestFindingPayloads pushes finding payloads through the synchronous catalog ingest path and returns the record-level result
+// ingestFindingPayloads returns the ingest result of finding payloads
 func ingestFindingPayloads(ctx context.Context, t *testing.T, installation *ent.Integration, payloads ...string) operations.IngestResult {
 	t.Helper()
 
@@ -88,7 +88,7 @@ func findingByExternalID(ctx context.Context, t *testing.T, externalID string) *
 	return f
 }
 
-// TestFindingVolatileOnlyReingestNoop verifies a Volatile-only field difference never writes on its own but rides along on a material change
+// TestFindingVolatileOnlyReingestNoop verifies volatile fields ride along on material changes
 func TestFindingVolatileOnlyReingestNoop(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -174,7 +174,7 @@ func TestFindingVolatileOnlyReingestNoop(t *testing.T) {
 	assert.Check(t, time.Time(*after.EventTime).Equal(time.Date(2024, 6, 1, 0, 0, 0, 0, time.UTC)))
 }
 
-// TestFindingForeignDefinitionReadOnly verifies a Finding claimed by one definition is read-only for a payload from a different definition
+// TestFindingForeignDefinitionReadOnly verifies findings are read-only for other definitions
 func TestFindingForeignDefinitionReadOnly(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -229,8 +229,7 @@ func TestFindingForeignDefinitionReadOnly(t *testing.T) {
 	assert.Check(t, !linkedToB, "a foreign-definition ingest must not add its integration edge")
 }
 
-// TestFindingClaimUnclaimedRowTakenOverInOneWrite verifies a finding ingest payload takes over a row
-// that carries no recorded source definition, in the same write that applies its other field changes
+// TestFindingClaimUnclaimedRowTakenOverInOneWrite verifies unclaimed findings are claimed in one write
 func TestFindingClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -267,8 +266,7 @@ func TestFindingClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
 	assert.Check(t, linked, "the claim must add the claiming installation's integration edge")
 }
 
-// TestFindingClaimActiveOtherInstallationReadOnly verifies a finding managed by another
-// still-active installation of the same definition is skipped untouched, pointer and data alike
+// TestFindingClaimActiveOtherInstallationReadOnly verifies findings managed by others are skipped
 func TestFindingClaimActiveOtherInstallationReadOnly(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -319,8 +317,7 @@ func TestFindingClaimActiveOtherInstallationReadOnly(t *testing.T) {
 	assert.Check(t, !linkedToB, "an active other installation's claim must not add the non-owning installation's integration edge")
 }
 
-// TestFindingClaimGoneOtherInstallationRepoints verifies a finding whose managing installation no
-// longer exists is repointed to the new installation in the same update as any other field change
+// TestFindingClaimGoneOtherInstallationRepoints verifies findings repoint when the manager is gone
 func TestFindingClaimGoneOtherInstallationRepoints(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -371,7 +368,7 @@ func TestFindingClaimGoneOtherInstallationRepoints(t *testing.T) {
 	assert.Check(t, linkedToB, "repointing must add the adopting installation's integration edge")
 }
 
-// TestFindingStatusCasingFoldUnchanged verifies a provider casing that folds to the stored canonical value is unchanged
+// TestFindingStatusCasingFoldUnchanged verifies folded casing is not counted as changed
 func TestFindingStatusCasingFoldUnchanged(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -399,9 +396,6 @@ func TestFindingStatusCasingFoldUnchanged(t *testing.T) {
 		Save(ctx)
 	th.RequireNoError(t, err)
 
-	// the test database carries no seeded system enums (db/seed/07_seed_status_exposure.sql is
-	// production-only), so the custom-enum hook's canonical lookup needs its own system-owned row
-	// to fold "NEW" against instead of auto-creating one from the raw provider casing
 	statusEnum := (&th.CustomTypeEnumBuilder{
 		Client:      suite.Client,
 		Name:        "New",

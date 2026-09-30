@@ -10,9 +10,9 @@ import (
 var (
 	// definitionID is the stable identifier for the Oracle Cloud Infrastructure integration definition
 	definitionID = types.NewDefinitionRef("def_01K0OCI00000000000000000001")
-	// installation is the typed installation metadata handle for the Oracle Cloud Infrastructure definition
+	// installation is the typed installation metadata handle for the definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// ociCredential is the typed credential slot for Oracle Cloud Infrastructure API signing key credentials
+	// ociCredential is the typed credential slot for OCI API signing key credentials
 	ociCredential = types.CredentialRefOf[CredentialSchema]()
 	// identityClient is the client ref for the OCI Identity client used by the health check
 	identityClient = types.ClientRefOf[*identity.IdentityClient]().Using(ociCredential)

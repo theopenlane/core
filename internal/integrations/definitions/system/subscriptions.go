@@ -7,7 +7,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
-// activeOrTrialingSubscriptionPredicates matches organizations with an active or trialing subscription
+// activeOrTrialingSubscriptionPredicates matches active or trialing subscriptions
 func activeOrTrialingSubscriptionPredicates() []predicate.OrgSubscription {
 	return []predicate.OrgSubscription{
 		orgsubscription.DeletedAtIsNil(),

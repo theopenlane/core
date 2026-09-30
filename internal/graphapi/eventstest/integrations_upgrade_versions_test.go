@@ -21,7 +21,7 @@ import (
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 )
 
-// TestInstallationUpgradeAcrossVersions drives the testutils/integrations version fixtures through real multi-version upgrades, including a direct v1-to-v3 jump
+// TestInstallationUpgradeAcrossVersions verifies multi-version upgrades including a v1-to-v3 jump
 func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 	store, err := keystore.NewStore(suite.Client.DB)
 	require.NoError(t, err)
@@ -269,7 +269,6 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		require.Equal(t, convergedWebhooks[0].SecretToken, webhookRows[0].SecretToken)
 	})
 
-	// Replacing may be removed once every installation has upgraded past the release that introduced it
 	t.Run("replacing removed before an installation upgraded strands it", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)

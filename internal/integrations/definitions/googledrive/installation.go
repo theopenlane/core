@@ -12,8 +12,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/ssoutils"
 )
 
-// installationRef builds the typed installation metadata handle for the Google Drive definition,
-// closing over the operator OAuth config needed to refresh the stored credential's access token
+// installationRef builds the installation metadata handle for the definition
 func installationRef(cfg Config) types.InstallationRef[InstallationMetadata] {
 	return types.NewInstallationRef(func(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 		return resolveInstallationMetadata(ctx, cfg, req)

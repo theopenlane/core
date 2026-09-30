@@ -61,7 +61,7 @@ func (c DriveClient) Export(ctx context.Context, cfg *operations.DocumentExport)
 	return nil
 }
 
-// fetchIframeEmbed calls the Graph preview API and returns an <iframe> pointing at the embeddable Office preview URL
+// fetchIframeEmbed returns an <iframe> for the Graph preview URL
 func fetchIframeEmbed(ctx context.Context, ts oauth2.TokenSource, itemID string) string {
 	log := logx.FromContext(ctx).With().Str("item_id", itemID).Logger()
 

@@ -17,8 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// newRuntimeWithMiniredis builds a Runtime backed by a miniredis instance so rate limit enforcement
-// can be exercised, returning the miniredis handle for TTL manipulation
+// newRuntimeWithMiniredis builds a Runtime backed by miniredis, for rate limit tests
 func newRuntimeWithMiniredis(t *testing.T) (*Runtime, *miniredis.Miniredis) {
 	t.Helper()
 
@@ -37,7 +36,7 @@ func newRuntimeWithMiniredis(t *testing.T) (*Runtime, *miniredis.Miniredis) {
 	return &Runtime{injector: injector, defaultLookback: defaultLookbackDuration}, mr
 }
 
-// newRuntimeWithRedis builds a Runtime backed by a miniredis instance so rate limit enforcement can be exercised
+// newRuntimeWithRedis builds a Runtime backed by miniredis for rate limit tests
 func newRuntimeWithRedis(t *testing.T) *Runtime {
 	t.Helper()
 
@@ -51,8 +50,7 @@ func callerCtx(orgID string) context.Context {
 	return auth.WithCaller(context.Background(), &auth.Caller{OrganizationID: orgID})
 }
 
-// internalCallerCtx returns a context carrying an auth caller with the given active organization and
-// the internal operation capability
+// internalCallerCtx returns a context with an auth caller carrying internal operation capability
 func internalCallerCtx(orgID string) context.Context {
 	return auth.WithCaller(context.Background(), &auth.Caller{OrganizationID: orgID, Capabilities: auth.CapInternalOperation})
 }
@@ -166,8 +164,7 @@ func TestCheckRateLimit(t *testing.T) {
 	}
 }
 
-// TestCheckRateLimitCountingWindow verifies a policy with Limit above one allows that many
-// executions per window before denying, scoped per calling organization
+// TestCheckRateLimitCountingWindow verifies a policy with Limit above one allows multiple runs
 func TestCheckRateLimitCountingWindow(t *testing.T) {
 	t.Parallel()
 
@@ -197,7 +194,7 @@ func TestCheckRateLimitCountingWindow(t *testing.T) {
 	assert.Equal(t, allowed, true, "other organizations have their own budget")
 }
 
-// TestAllowN verifies budget consumption, the refund on denial, key TTL assignment, and window expiry
+// TestAllowN verifies budget consumption, refund on denial, TTL assignment, and window expiry
 func TestAllowN(t *testing.T) {
 	t.Parallel()
 
@@ -224,7 +221,6 @@ func TestAllowN(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, allowed, false, "budget is exhausted")
 
-	// the denial refunded its increment, so the stored count still equals the limit
 	count, err := mr.Get(rateLimitKeyPrefix + key)
 	assert.NilError(t, err)
 	assert.Equal(t, count, "10")

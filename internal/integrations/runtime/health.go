@@ -23,7 +23,7 @@ const integrationUnhealthyObjectType = "INTEGRATION_RECONFIGURATION_REQUIRED"
 // integrationHealthyObjectType is the notification object type for a recovered installation
 const integrationHealthyObjectType = "INTEGRATION_RECONNECTED"
 
-// integrationDegradedObjectType is the notification object type for a partially working installation
+// integrationDegradedObjectType is the notification type for a partially working installation
 const integrationDegradedObjectType = "INTEGRATION_OPERATION_DEGRADED"
 
 // ConnectionHealthResult reports the connection-level health check outcome
@@ -54,7 +54,7 @@ type HealthAssessment struct {
 	Operations []OperationHealthResult `json:"operations,omitempty"`
 }
 
-// MarkIntegrationUnhealthy flags one installation as errored with a user-facing reason and notifies the owning organization; recurring cycles stop on their next status check
+// MarkIntegrationUnhealthy flags an installation errored and notifies the owning organization
 func (r *Runtime) MarkIntegrationUnhealthy(ctx context.Context, installation *ent.Integration, reason string) error {
 	health := installation.Health
 	health.UnhealthyReason = reason
@@ -90,7 +90,7 @@ func (r *Runtime) MarkIntegrationUnhealthy(ctx context.Context, installation *en
 		})
 }
 
-// ClearIntegrationUnhealthy returns an errored installation to connected, wipes its recorded failures so probes and runtime signals re-derive them, notifies the owning organization, and reseeds its recurring operations; a non-errored installation is left as is so concurrent recoveries don't stack duplicate notifications
+// ClearIntegrationUnhealthy returns an errored installation to connected and reseeds its loops
 func (r *Runtime) ClearIntegrationUnhealthy(ctx context.Context, installation *ent.Integration) error {
 	health := installation.Health
 	health.UnhealthyReason = ""
@@ -131,7 +131,7 @@ func (r *Runtime) ClearIntegrationUnhealthy(ctx context.Context, installation *e
 	return r.ResetReconcileLoops(systemCtx, installation)
 }
 
-// MarkOperationUnhealthy records one operation as failing on an installation and stops its recurring loop; when no healthy workload operation remains the whole installation is marked unhealthy instead
+// MarkOperationUnhealthy records an operation as failing and stops its recurring loop
 func (r *Runtime) MarkOperationUnhealthy(ctx context.Context, installation *ent.Integration, operationName, reason string) error {
 	health := installation.Health
 	if _, recorded := health.UnhealthyOperations[operationName]; recorded {
@@ -197,7 +197,7 @@ func (r *Runtime) MarkOperationUnhealthy(ctx context.Context, installation *ent.
 		})
 }
 
-// ClearOperationUnhealthy removes one operation's failure record and resets the installation's recurring loops so the recovered operation's loop resumes; the installation returns to connected when no failing operation remains
+// ClearOperationUnhealthy clears an operation's failure record and resumes its recurring loop
 func (r *Runtime) ClearOperationUnhealthy(ctx context.Context, installation *ent.Integration, operationName string) error {
 	health := installation.Health
 	if _, recorded := health.UnhealthyOperations[operationName]; !recorded {
@@ -259,7 +259,7 @@ func (r *Runtime) ClearOperationUnhealthy(ctx context.Context, installation *ent
 	return r.ResetReconcileLoops(ctx, installation)
 }
 
-// RunHealthAssessment executes the connection health check and every operation probe for one installation, records the resulting health state, and returns the assessment
+// RunHealthAssessment runs the connection and operation health checks and returns the assessment
 func (r *Runtime) RunHealthAssessment(ctx context.Context, installation *ent.Integration) (HealthAssessment, error) {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
@@ -302,7 +302,7 @@ func (r *Runtime) RunHealthAssessment(ctx context.Context, installation *ent.Int
 	}, nil
 }
 
-// checkConnectionHealth runs the persisted connection's health check, returning the errored assessment when it fails
+// checkConnectionHealth runs the persisted connection's health check, returning it on failure
 func (r *Runtime) checkConnectionHealth(ctx context.Context, installation *ent.Integration, def types.Definition) (*HealthAssessment, error) {
 	if len(def.Connections) == 0 {
 		return nil, nil
@@ -338,7 +338,7 @@ func (r *Runtime) checkConnectionHealth(ctx context.Context, installation *ent.I
 	}, nil
 }
 
-// assessOperationHealth probes every workload operation with a registered health check and records the per-operation outcome; probe failures degrade the operation instead of failing the caller
+// assessOperationHealth probes workload operations and records each outcome
 func (r *Runtime) assessOperationHealth(ctx context.Context, installation *ent.Integration, def types.Definition) []OperationHealthResult {
 	var results []OperationHealthResult
 
@@ -373,7 +373,7 @@ func (r *Runtime) assessOperationHealth(ctx context.Context, installation *ent.I
 	return results
 }
 
-// runConnectionHealthCheck executes the definition-level health check against the active connection's credential bindings
+// runConnectionHealthCheck runs the definition health check against the connection's credentials
 func (r *Runtime) runConnectionHealthCheck(ctx context.Context, installation *ent.Integration, check *types.HealthCheckRegistration, bindings types.CredentialBindings) error {
 	var client any
 
@@ -418,7 +418,7 @@ func (r *Runtime) runOperationProbe(ctx context.Context, installation *ent.Integ
 	return err
 }
 
-// verifyInstallationHealth runs the persisted connection's health check under stored credentials; connections without one pass
+// verifyInstallationHealth runs the persisted connection's health check under stored credentials
 func (r *Runtime) verifyInstallationHealth(ctx context.Context, installation *ent.Integration, def types.Definition) error {
 	checkErr, err := r.runPersistedHealthCheck(ctx, installation, def)
 	if err != nil {
@@ -428,7 +428,7 @@ func (r *Runtime) verifyInstallationHealth(ctx context.Context, installation *en
 	return checkErr
 }
 
-// runPersistedHealthCheck resolves the persisted connection, loads its stored credentials, and runs the definition health check, returning the check outcome apart from resolution failures; definitions without a health check pass
+// runPersistedHealthCheck loads the persisted connection's credentials and runs its health check
 func (r *Runtime) runPersistedHealthCheck(ctx context.Context, installation *ent.Integration, def types.Definition) (checkErr, err error) {
 	connection, err := r.resolvePersistedConnection(def, installation)
 	if err != nil {
@@ -475,14 +475,14 @@ func appendRecordedResults(results []OperationHealthResult, installation *ent.In
 	return results
 }
 
-// workloadOperations returns the operations that do work for one installation, excluding internal operations and those disabled globally or for the installation's user input
+// workloadOperations returns operations that do work, excluding internal or disabled ones
 func workloadOperations(def types.Definition, installation *ent.Integration) []types.OperationRegistration {
 	return lo.Filter(def.Operations, func(op types.OperationRegistration, _ int) bool {
 		return !op.Internal && !op.DisabledFor(installation.Config.ClientConfig)
 	})
 }
 
-// notifyIntegrationHealth sends one health notification to the owning organization's owners and admins
+// notifyIntegrationHealth sends a health notification to the organization's owners and admins
 func (r *Runtime) notifyIntegrationHealth(ctx context.Context, installation *ent.Integration, objectType, title, body string, data map[string]any) error {
 	// notifications are internal-only, and the member lookup needs the ent client on the context
 	ctx = auth.WithInternalOperationContext(ent.NewContext(ctx, r.DB()))
@@ -509,7 +509,7 @@ func (r *Runtime) notifyIntegrationHealth(ctx context.Context, installation *ent
 	})
 }
 
-// integrationDisplayName resolves the definition display name for one installation, falling back to the installation's own name when the definition is no longer registered
+// integrationDisplayName resolves the definition's display name, or the installation's own name
 func (r *Runtime) integrationDisplayName(installation *ent.Integration) string {
 	if def, ok := r.Registry().Definition(installation.DefinitionID); ok {
 		return def.DisplayName

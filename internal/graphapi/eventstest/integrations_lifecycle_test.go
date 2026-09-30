@@ -16,7 +16,7 @@ import (
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 )
 
-// harnessReconcileOperation returns the reconcile operation name for one harness mode
+// TestIntegrationLifecycle verifies reconcile loop seeding, collapse, and recovery
 func TestIntegrationLifecycle(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
 
@@ -63,8 +63,6 @@ func TestIntegrationLifecycle(t *testing.T) {
 		require.Equal(t, enums.IntegrationStatusConnected, reloaded.Status)
 		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconnectedObjectType))
 
-		// the direct seed and the async status-change listener reseed must collapse
-		// to exactly one loop
 		waitForEvents()
 
 		require.Equal(t, 1, activeReconcileJobs(t, fragment))
@@ -89,7 +87,6 @@ func TestIntegrationLifecycle(t *testing.T) {
 	})
 
 	t.Run("duplicate loops collapse to one on reset", func(t *testing.T) {
-		// mirror resetReconcileLoop's emit but skip the unique key so a second live loop lands
 		oc := integrationtypes.NewOperationContext(installation.OwnerID, opName, integrationtypes.IntegrationSource{
 			IntegrationID: installation.ID,
 			DefinitionID:  installation.DefinitionID,

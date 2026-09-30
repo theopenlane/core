@@ -9,7 +9,7 @@ import (
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// sectionConfig is the switchable operation config type located as a user input section in the finalize tests
+// sectionConfig is a test config type for a user input section
 type sectionConfig struct {
 	// Disable switches the operation off for the installation
 	Disable bool `json:"disable,omitempty"`
@@ -17,7 +17,7 @@ type sectionConfig struct {
 	Limit int `json:"limit,omitempty"`
 }
 
-// sectionUserInput is the user input layout carrying sectionConfig under the section key
+// sectionUserInput carries sectionConfig under the section key
 type sectionUserInput struct {
 	// Primary is a top-level knob outside any section
 	Primary string `json:"primary,omitempty"`
@@ -25,7 +25,7 @@ type sectionUserInput struct {
 	Section sectionConfig `json:"section,omitempty"`
 }
 
-// doubledSectionUserInput is a user input layout referencing sectionConfig from two properties
+// doubledSectionUserInput references sectionConfig from two properties
 type doubledSectionUserInput struct {
 	// First references the section type
 	First sectionConfig `json:"first,omitempty"`
@@ -33,10 +33,10 @@ type doubledSectionUserInput struct {
 	Second sectionConfig `json:"second,omitempty"`
 }
 
-// sectionDefinitionRef is the definition identity behind the finalize tests
+// sectionDefinitionRef is the definition identity for finalize tests
 var sectionDefinitionRef = integrationtypes.NewDefinitionRef("def_finalize")
 
-// sectionOperation returns a reconciled operation registration over sectionConfig with the given name
+// sectionOperation returns a reconciled operation registration over sectionConfig
 func sectionOperation(name string) integrationtypes.OperationRegistration {
 	return integrationtypes.NewOperationRef[sectionConfig](name).
 		HandlesRequest(func(context.Context, integrationtypes.OperationRequest, sectionConfig) (json.RawMessage, error) {
@@ -45,7 +45,7 @@ func sectionOperation(name string) integrationtypes.OperationRegistration {
 		Registration(sectionDefinitionRef, integrationtypes.OperationRegistration{Policy: integrationtypes.ExecutionPolicy{Reconcile: true}})
 }
 
-// sectionDefinition returns a definition whose user input is the given layout and whose operations are given
+// sectionDefinition returns a definition with the given user input and operations
 func sectionDefinition(userInput *integrationtypes.UserInputRegistration, operations ...integrationtypes.OperationRegistration) integrationtypes.Definition {
 	return integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: sectionDefinitionRef.ID()},
@@ -54,7 +54,7 @@ func sectionDefinition(userInput *integrationtypes.UserInputRegistration, operat
 	}
 }
 
-// TestFinalizeCredentialFormSchema verifies form slots receive their stored schema as the form schema, auth-managed slots keep none, and hand-built literals gain a stored schema
+// TestFinalizeCredentialFormSchema verifies form/stored schema derivation across slot kinds
 func TestFinalizeCredentialFormSchema(t *testing.T) {
 	t.Parallel()
 
@@ -104,7 +104,7 @@ func TestFinalizeCredentialFormSchema(t *testing.T) {
 	}
 }
 
-// TestFinalizeDerivesSectionResolverAndSwitch verifies an operation whose config type is a user input section resolves that section and is switched off by its disable flag
+// TestFinalizeDerivesSectionResolverAndSwitch verifies section resolver and switch derivation
 func TestFinalizeDerivesSectionResolverAndSwitch(t *testing.T) {
 	t.Parallel()
 
@@ -149,7 +149,7 @@ func TestFinalizeDerivesSectionResolverAndSwitch(t *testing.T) {
 	}
 }
 
-// TestFinalizeKeepsAuthoredResolverAndSwitch verifies authored resolvers and switches are not replaced by derived ones
+// TestFinalizeKeepsAuthoredResolverAndSwitch verifies authored resolver and switch are kept
 func TestFinalizeKeepsAuthoredResolverAndSwitch(t *testing.T) {
 	t.Parallel()
 
@@ -228,7 +228,7 @@ func TestFinalizeSectionErrors(t *testing.T) {
 	}
 }
 
-// TestFinalizeSectionRequiredExemptions verifies inline operations and operations with an authored resolver need no section
+// TestFinalizeSectionRequiredExemptions verifies inline and authored-resolver ops need no section
 func TestFinalizeSectionRequiredExemptions(t *testing.T) {
 	t.Parallel()
 

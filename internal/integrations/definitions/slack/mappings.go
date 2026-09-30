@@ -5,7 +5,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
-// mapExprDirectoryAccount is the CEL mapping expression for Slack workspace user payloads mapped to DirectoryAccount
+// mapExprDirectoryAccount maps Slack workspace user payloads to DirectoryAccount
 var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.ExternalID.Expr(`payload.id`),
 	entityops.DirectoryAccountFields.CanonicalEmail.Expr(`'email' in payload ? payload.email : ""`),

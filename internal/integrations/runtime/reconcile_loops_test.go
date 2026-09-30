@@ -7,7 +7,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 )
 
-// TestReconcileLoopFragment verifies the fragment carries the installation, operation, and reconcile run type
+// TestReconcileLoopFragment verifies the fragment carries installation, operation, and run type
 func TestReconcileLoopFragment(t *testing.T) {
 	t.Parallel()
 

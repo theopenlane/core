@@ -45,7 +45,7 @@ func (r *Runtime) handleScheduledCycle(ctx context.Context, envelope operations.
 	return result.Processed, nil
 }
 
-// SeedScheduledOperations ensures every operation with the Scheduled policy has an active polling loop, called once at startup
+// SeedScheduledOperations ensures every Scheduled-policy operation has an active polling loop
 func (r *Runtime) SeedScheduledOperations(ctx context.Context) error {
 	var errs []error
 
@@ -80,7 +80,7 @@ func (r *Runtime) SeedScheduledOperations(ctx context.Context) error {
 	return errors.Join(errs...)
 }
 
-// seedScheduledOperation emits one scheduled operation cycle envelope unless the loop is already live; successor cycles carry per-cycle unique keys the seed's key can't collide with
+// seedScheduledOperation emits one scheduled cycle envelope unless the loop is already live
 func (r *Runtime) seedScheduledOperation(ctx context.Context, oc gala.OperationContext) error {
 	ctx, headers := intobvs.EmitContext(ctx, oc)
 

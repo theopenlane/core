@@ -25,13 +25,10 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// domainScanImportVendorEntityType is the entityTypeName to use when creating the entities from
-// a completed scan
+// domainScanImportVendorEntityType is the entityTypeName used when creating entities from a scan
 const domainScanImportVendorEntityType = "vendor"
 
-// importSummary records what an accepted domain scan review resolved to, for the follow-up
-// notification. The per-type fields hold every resolved record; CreatedIDs holds the subset that
-// this import actually created, so a resubmission can report what was new versus already there
+// importSummary records what an accepted domain scan review resolved to
 type importSummary struct {
 	PlatformIDs        []string `json:"platform_ids,omitempty"`
 	SystemDetailIDs    []string `json:"system_detail_ids,omitempty"`
@@ -52,8 +49,7 @@ func (s importSummary) resolvedCount() int {
 	return len(s.EntityIDs) + len(s.AssetIDs) + len(s.PlatformIDs) + len(s.SystemDetailIDs) + len(s.FindingIDs)
 }
 
-// HandleImportDomainScanReview creates the records for a reviewer-accepted domain scan report,
-// all under one transaction, and sends a follow-up Notification once done
+// HandleImportDomainScanReview creates the records for a reviewer-accepted domain scan report
 func (s domainScanSaga) HandleImportDomainScanReview(ctx context.Context, envelope DomainScanImport) error {
 	ctx = logx.WithFields(ctx, logx.LogFields{
 		"organization_id": envelope.OrganizationID,
@@ -86,8 +82,6 @@ func (s domainScanSaga) notifyDomainScanImportComplete(ctx context.Context, orga
 		summary.createdCount(summary.FindingIDs),
 	)
 
-	// a resubmitted review resolves to records that already exist - call that out rather than
-	// reporting zeros with no explanation
 	if reused := summary.resolvedCount() - len(summary.CreatedIDs); reused > 0 {
 		body += fmt.Sprintf("; %d existing record(s) were linked to this scan", reused)
 	}
@@ -109,9 +103,7 @@ func (s domainScanSaga) notifyDomainScanImportComplete(ctx context.Context, orga
 	return err
 }
 
-// importDomainScanReview creates every accepted object in order: vendors and assets first (so
-// their real IDs are known), then the platform and its system details (which link back to the
-// vendors/assets via ref), then findings
+// importDomainScanReview creates every accepted object in dependency order
 func importDomainScanReview(ctx context.Context, client *generated.Client, envelope DomainScanImport) (importSummary, error) {
 	var summary importSummary
 
@@ -299,7 +291,6 @@ func updateTrustcenterBrandDesignSetting(ctx context.Context, setting *generated
 		brandDesign.SecondaryForegroundColor,
 	}
 
-	// check if this new palette imports have at least one valid color code
 	hasAcceptedColor := lo.SomeBy(palettes, func(color string) bool {
 		color = strings.TrimSpace(color)
 		return color != "" && validator.HexColorValidator(color) == nil
@@ -341,7 +332,6 @@ func updateTrustcenterBrandDesignSetting(ctx context.Context, setting *generated
 		return validator.HexColorValidator(color) == nil
 	})
 
-	// only convert to advanced mode if we have the complete color palette
 	if hasAcceptedColor && hasCompletePalette {
 		if setting.ThemeMode != enums.TrustCenterThemeModeAdvanced {
 			input.ThemeMode = new(enums.TrustCenterThemeModeAdvanced)
@@ -361,9 +351,7 @@ func updateTrustcenterBrandDesignSetting(ctx context.Context, setting *generated
 	return true, nil
 }
 
-// findOrCreateDomainScanVendors resolves each accepted vendor to an Entity ID, reusing an
-// existing org Entity by name if one already exists, and auto-links any accepted asset the scan
-// itself attributed to that vendor
+// findOrCreateDomainScanVendors resolves each accepted vendor to an Entity ID
 func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client, ownerID string, vendors []DomainScanImportVendor, assets []DomainScanImportAsset, assetIDByRef, vendorNameByAssetDomain map[string]string, scanIDs []string) (map[string]string, []string, error) {
 	ids := make(map[string]string, len(vendors))
 
@@ -450,8 +438,7 @@ func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client
 	return ids, createdIDs, nil
 }
 
-// domainScanAssetVendorNames maps each domain (lowercased) to the vendor name the scan itself
-// attributed it to, read back from the completed scans' own dns_records
+// domainScanAssetVendorNames maps each domain to the vendor name the scan attributed it to
 func domainScanAssetVendorNames(ctx context.Context, client *generated.Client, scanIDs []string) (map[string]string, error) {
 	scans, err := client.Scan.Query().Where(scan.IDIn(scanIDs...)).All(ctx)
 	if err != nil {
@@ -483,8 +470,7 @@ func domainScanAssetVendorNames(ctx context.Context, client *generated.Client, s
 	return vendorNameByDomain, nil
 }
 
-// domainScanMappingMatches returns the IDs of accepted assets whose lowercased, dot-trimmed
-// identifier satisfies match
+// domainScanMappingMatches returns the IDs of accepted assets whose identifier satisfies match
 func domainScanMappingMatches(assets []DomainScanImportAsset, assetIDByRef map[string]string, match func(assetDomain string) bool) []string {
 	var ids []string
 
@@ -506,9 +492,7 @@ func domainScanMappingMatches(assets []DomainScanImportAsset, assetIDByRef map[s
 	return ids
 }
 
-// findOrCreateDomainScanAssets resolves each accepted asset to an Asset ID, reusing the existing
-// org Asset of the same name when the review is imported more than once, and returns the subset
-// of IDs it created
+// findOrCreateDomainScanAssets resolves each accepted asset to an Asset ID
 func findOrCreateDomainScanAssets(ctx context.Context, client *generated.Client, ownerID string, assets []DomainScanImportAsset, scanIDs []string) (map[string]string, []string, error) {
 	ids := make(map[string]string, len(assets))
 
@@ -523,8 +507,6 @@ func findOrCreateDomainScanAssets(ctx context.Context, client *generated.Client,
 
 			update := client.Asset.UpdateOneID(existing.ID)
 
-			// a row matched by name predates the source identifier, so stamp it on to stop
-			// asset_sync creating a second row for the same domain
 			if existing.SourceIdentifier == "" && a.Identifier != "" {
 				update.SetSourceIdentifier(a.Identifier)
 			}
@@ -567,8 +549,7 @@ func findOrCreateDomainScanAssets(ctx context.Context, client *generated.Client,
 	return ids, createdIDs, nil
 }
 
-// findDomainScanAsset resolves one accepted asset to an existing org Asset, matching the
-// integration upsert key first so scan imports and asset syncs converge on the same row
+// findDomainScanAsset resolves one accepted asset to an existing org Asset
 func findDomainScanAsset(ctx context.Context, client *generated.Client, a DomainScanImportAsset) (*generated.Asset, error) {
 	if a.Identifier != "" {
 		existing, err := client.Asset.Query().
@@ -584,16 +565,12 @@ func findDomainScanAsset(ctx context.Context, client *generated.Client, a Domain
 		First(ctx)
 }
 
-// unlinkedDomainScanIDs returns the desired IDs that aren't already linked, so re-importing a
-// review doesn't try to insert an edge row that's already there
+// unlinkedDomainScanIDs returns the desired IDs that aren't already linked
 func unlinkedDomainScanIDs(desired, linked []string) []string {
 	return lo.Without(lo.Uniq(desired), linked...)
 }
 
-// findOrCreateDomainScanPlatforms resolves each accepted platform to a Platform ID, reusing the
-// existing org Platform of the same name, and links it to the scans it was generated from and to
-// whichever accepted vendors/assets the reviewer marked as belonging to it. Returns a
-// ref -> Platform ID map so systems can attach to them by ref, plus the subset of IDs it created
+// findOrCreateDomainScanPlatforms resolves each accepted platform to a Platform ID
 func findOrCreateDomainScanPlatforms(ctx context.Context, client *generated.Client, ownerID string, platforms []DomainScanImportPlatform, scanIDs []string, entityIDByRef, assetIDByRef map[string]string) (map[string]string, []string, error) {
 	ids := make(map[string]string, len(platforms))
 
@@ -669,10 +646,7 @@ func relinkDomainScanPlatform(ctx context.Context, client *generated.Client, exi
 	return update.Exec(ctx)
 }
 
-// findOrCreateDomainScanSystemDetails resolves each accepted system to a SystemDetail ID, reusing
-// the existing org SystemDetail of the same name, parented to the platforms it references by ref
-// (required by SystemDetail's policy) and linked to that system's own subset of accepted
-// vendors/assets. Returns every resolved ID plus the subset it created
+// findOrCreateDomainScanSystemDetails resolves each accepted system to a SystemDetail ID
 func findOrCreateDomainScanSystemDetails(ctx context.Context, client *generated.Client, ownerID string, systems []DomainScanImportSystem, platformIDByRef, entityIDByRef, assetIDByRef map[string]string) ([]string, []string, error) {
 	ids := make([]string, 0, len(systems))
 
@@ -721,8 +695,7 @@ func findOrCreateDomainScanSystemDetails(ctx context.Context, client *generated.
 	return ids, createdIDs, nil
 }
 
-// relinkDomainScanSystemDetail adds only the platform/vendor/asset links an existing SystemDetail
-// is missing
+// relinkDomainScanSystemDetail adds only the platform/vendor/asset links that are missing
 func relinkDomainScanSystemDetail(ctx context.Context, client *generated.Client, existing *generated.SystemDetail, platformIDs, entityIDs, assetIDs []string) error {
 	linkedPlatformIDs, err := existing.QueryPlatforms().IDs(ctx)
 	if err != nil {
@@ -747,17 +720,12 @@ func relinkDomainScanSystemDetail(ctx context.Context, client *generated.Client,
 	return update.Exec(ctx)
 }
 
-// findOrCreateDomainScanFindings resolves each accepted finding to a Finding ID, reusing the
-// existing org Finding with the same category and display name, linked to the scans it came from
-// and auto-linked to any accepted asset matching its domain. Returns every resolved ID plus the
-// subset it created
+// findOrCreateDomainScanFindings resolves each accepted finding to a Finding ID
 func findOrCreateDomainScanFindings(ctx context.Context, client *generated.Client, ownerID string, findings []DomainScanImportFinding, assets []DomainScanImportAsset, assetIDByRef map[string]string, scanIDs []string) ([]string, []string, error) {
 	ids := make([]string, 0, len(findings))
 
 	var createdIDs []string
 
-	// a single-domain review (the common case) has exactly one scan behind it, so its target
-	// stands in for any finding that didn't carry its own domain
 	fallbackDomain := domainScanSingleTarget(ctx, client, scanIDs)
 
 	for _, f := range findings {
@@ -836,8 +804,7 @@ func relinkDomainScanFinding(ctx context.Context, client *generated.Client, exis
 	return update.Exec(ctx)
 }
 
-// domainScanSingleTarget returns the target domain when scanIDs resolves to exactly one scan -
-// ambiguous for a multi-domain review, where it returns ""
+// domainScanSingleTarget returns the target domain when scanIDs resolves to exactly one scan
 func domainScanSingleTarget(ctx context.Context, client *generated.Client, scanIDs []string) string {
 	if len(scanIDs) != 1 {
 		return ""
@@ -851,10 +818,7 @@ func domainScanSingleTarget(ctx context.Context, client *generated.Client, scanI
 	return scanRecord.Target
 }
 
-// resolveDomainScanRefs looks up each ref in idByRef, skipping any that don't resolve. The
-// resolver that emitted this envelope already validated every ref before emitting, so an
-// unresolved ref here would only happen if that validation was bypassed - fail open (drop the
-// link) rather than erroring the whole import over a single bad link
+// resolveDomainScanRefs looks up each ref in idByRef, skipping any that don't resolve
 func resolveDomainScanRefs(refs []string, idByRef map[string]string) []string {
 	ids := make([]string, 0, len(refs))
 

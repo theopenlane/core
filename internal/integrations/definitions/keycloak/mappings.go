@@ -5,7 +5,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
-// mapExprDirectoryAccount is the CEL mapping expression for Keycloak user payloads mapped to DirectoryAccount
+// mapExprDirectoryAccount maps Keycloak user payloads to DirectoryAccount
 var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.ExternalID.Expr(`'id' in payload ? payload.id : ""`),
 	entityops.DirectoryAccountFields.CanonicalEmail.Expr(`'email' in payload && payload.email != "" ? payload.email : ""`),
@@ -21,7 +21,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
-// mapExprDirectoryGroup is the CEL mapping expression for Keycloak group payloads mapped to DirectoryGroup
+// mapExprDirectoryGroup maps Keycloak group payloads to DirectoryGroup
 var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.ExternalID.Expr(`'id' in payload ? payload.id : ""`),
 	entityops.DirectoryGroupFields.DisplayName.Expr(`'name' in payload ? payload.name : ""`),
@@ -31,7 +31,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
-// mapExprDirectoryMembership is the CEL mapping expression for Keycloak membership payloads mapped to DirectoryMembership
+// mapExprDirectoryMembership maps Keycloak membership payloads to DirectoryMembership
 var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryAccountID.Expr(`'id' in payload ? payload.id : ""`),
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`resource != "" ? resource : ""`),

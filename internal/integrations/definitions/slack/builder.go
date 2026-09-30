@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// Builder returns the Slack definition builder with the supplied operator and runtime config applied
+// Builder returns the Slack definition builder with the operator and runtime config
 func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{

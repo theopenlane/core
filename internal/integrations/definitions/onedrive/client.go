@@ -25,9 +25,7 @@ type Client struct {
 	cfg Config
 }
 
-// Build constructs a DriveClient from the installation OAuth credential.
-// It wraps an oauth2.TokenSource so that expired access tokens are automatically
-// refreshed using the stored refresh token, matching the behavior of the Google Drive client.
+// Build constructs a DriveClient with an auto-refreshing OAuth2 token source
 func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (*DriveClient, error) {
 	cred, _, err := oneDriveCredential.Resolve(req.Credentials)
 	if err != nil {
@@ -55,7 +53,6 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (*Drive
 		},
 	}
 
-	// context background used intentionally in this slot
 	ts := oauthCfg.TokenSource(context.Background(), providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
 
 	tokenCred := &oauthTokenCredential{ts: ts}
@@ -74,8 +71,7 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (*Drive
 	return &DriveClient{Graph: msgraphsdk.NewGraphServiceClient(adapter), TS: ts, Cfg: c.cfg}, nil
 }
 
-// oauthTokenCredential wraps an oauth2.TokenSource as an azcore.TokenCredential so that
-// the kiota authentication provider can obtain automatically-refreshed access tokens
+// oauthTokenCredential adapts an oauth2.TokenSource to azcore.TokenCredential
 type oauthTokenCredential struct {
 	ts oauth2.TokenSource
 }

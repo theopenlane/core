@@ -39,7 +39,7 @@ func (r *Runtime) ensureCurrentVersion(ctx context.Context, installation *ent.In
 	return nil
 }
 
-// upgradeInstallation conforms stored credentials and user input to the current definition and moves data stored under retired slot, operation and webhook names onto their replacements
+// upgradeInstallation conforms stored credentials and user input, moving data off retired names
 func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Integration, skip []types.CredentialSlotID) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
@@ -184,7 +184,7 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 	return nil
 }
 
-// upgradeUserInput conforms the stored user input to the current definition, converting it from a retired layout when it no longer validates
+// upgradeUserInput conforms stored user input to the current definition, converting retired layouts
 func (r *Runtime) upgradeUserInput(ctx context.Context, req types.InstallationRequest, installation *ent.Integration, def types.Definition) error {
 	if def.UserInput == nil {
 		return nil
@@ -209,7 +209,7 @@ func (r *Runtime) upgradeUserInput(ctx context.Context, req types.InstallationRe
 	return nil
 }
 
-// conformUserInput conforms stored user input to the registered schema, converting it from a retired layout when it no longer validates, then backfilling and validating the result through conformPayload
+// conformUserInput converts a retired layout when needed, then backfills and validates the result
 func conformUserInput(ctx context.Context, req types.InstallationRequest, input types.UserInputRegistration, stored json.RawMessage) (json.RawMessage, error) {
 	document := stored
 
@@ -224,7 +224,7 @@ func conformUserInput(ctx context.Context, req types.InstallationRequest, input 
 	return conformPayload(ctx, req, input.Schema, input.Backfill, document, ErrUserInputInvalid)
 }
 
-// upgradeOperations moves recorded operation health and run history stored under retired operation names onto the operations that replace them, cancels reconcile loops still queued under retired names, and drops health records of operations the definition no longer declares
+// upgradeOperations moves health and run history off retired operation names, cancels their loops
 func (r *Runtime) upgradeOperations(ctx context.Context, installation *ent.Integration, def types.Definition) error {
 	unhealthy := lo.Assign(installation.Health.UnhealthyOperations)
 
@@ -299,7 +299,7 @@ func (r *Runtime) upgradeOperations(ctx context.Context, installation *ent.Integ
 	return nil
 }
 
-// upgradeWebhooks renames persisted webhook rows stored under retired contract names onto the contracts that replace them, keeping their endpoint and secret, and refreshes each endpoint row's allowed events
+// upgradeWebhooks renames persisted webhook rows off retired contract names
 func (r *Runtime) upgradeWebhooks(ctx context.Context, installation *ent.Integration, def types.Definition) error {
 	db := r.DB()
 
@@ -366,7 +366,7 @@ func (r *Runtime) upgradeWebhooks(ctx context.Context, installation *ent.Integra
 	return nil
 }
 
-// upgradeExclusions expands the skipped slots to include every retired slot a skipped slot's ref replaces, so neither the skipped payload nor its source is processed or deleted
+// upgradeExclusions expands skipped slots to include every retired slot they replace
 func upgradeExclusions(def types.Definition, skip []types.CredentialSlotID) []types.CredentialSlotID {
 	return lo.FlatMap(skip, func(slot types.CredentialSlotID, _ int) []types.CredentialSlotID {
 		registration, err := def.CredentialRegistration(slot)
@@ -378,7 +378,7 @@ func upgradeExclusions(def types.Definition, skip []types.CredentialSlotID) []ty
 	})
 }
 
-// conformPayload strips and defaults the payload to the schema, applies the declared backfill when one is set, then validates the result once
+// conformPayload strips and defaults the payload to the schema, applies backfill, then validates
 func conformPayload(ctx context.Context, req types.InstallationRequest, schema json.RawMessage, backfill types.BackfillFunc, payload json.RawMessage, sentinel error) (json.RawMessage, error) {
 	conformed, err := jsonx.ConformToSchema(schema, payload)
 	if err != nil {

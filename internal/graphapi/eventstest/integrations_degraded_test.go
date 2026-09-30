@@ -13,9 +13,7 @@ import (
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 )
 
-// TestIntegrationDegradedLifecycle drives one installation through per-operation degradation,
-// idempotent marking, single-operation recovery, escalation to errored when the last healthy
-// workload operation fails, and full recovery; subtests share the installation and run in order
+// TestIntegrationDegradedLifecycle verifies per-operation degradation, recovery, and escalation
 func TestIntegrationDegradedLifecycle(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
 
@@ -37,7 +35,6 @@ func TestIntegrationDegradedLifecycle(t *testing.T) {
 		require.Contains(t, reloaded.Health.UnhealthyOperations, recurringOp)
 		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationOperationDegradedObjectType))
 
-		// the status-change listener reseed must skip the unhealthy operation
 		waitForEvents()
 
 		require.Equal(t, 0, activeReconcileJobs(t, fragment))
@@ -115,7 +112,6 @@ func TestIntegrationDegradedLifecycle(t *testing.T) {
 		reloaded = reloadIntegration(t, internalCtx, installation.ID)
 		require.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
 		require.NotEmpty(t, reloaded.Health.UnhealthyReason)
-		// escalation keeps the per-operation reasons for recovery surfaces
 		require.Len(t, reloaded.Health.UnhealthyOperations, 3)
 		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 

@@ -43,16 +43,13 @@ type Config struct {
 	CatalogConfig catalog.Config
 	// FederationIssuer is the issuer URI customer identity providers federate against
 	FederationIssuer string
-	// DevMode is the server-level development flag; when true, integrations that
-	// support it use local file-based senders instead of calling provider APIs
+	// DevMode routes supporting integrations to local file-based senders instead of provider APIs
 	DevMode bool
-	// DefaultLookback sets how far back to fetch data when an operation has no prior successful run;
-	// defaults to 90 days when zero
+	// DefaultLookback sets the fetch-back window when an operation has no prior successful run
 	DefaultLookback time.Duration
 }
 
-// PostExecutionHook is called after HandleOperation completes with the processed
-// envelope and any execution error
+// PostExecutionHook is called after HandleOperation completes with the envelope and any error
 type PostExecutionHook func(ctx context.Context, envelope operations.Envelope, err error)
 
 // Runtime bundles the integrations services behind a do injector
@@ -161,8 +158,7 @@ func normalizeDispatchError(err error) error {
 	}
 }
 
-// NewForTesting constructs a Runtime backed by the supplied registry and a stub DB client.
-// Use only in unit tests that exercise registry lookup or operation request wiring.
+// NewForTesting constructs a Runtime backed by the supplied registry and a stub DB client
 func NewForTesting(reg *registry.Registry) *Runtime {
 	injector := do.New()
 	do.ProvideValue(injector, reg)

@@ -39,9 +39,7 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (*SlackClie
 	}, nil
 }
 
-// runtimeSlackClientBuilder returns a build function that constructs a SlackClient
-// for the runtime (system) path. When devMode is true and credentials are absent
-// a no-op client is returned so dispatches succeed silently
+// runtimeSlackClientBuilder builds a SlackClient for the runtime system path
 func runtimeSlackClientBuilder(devMode bool) func(context.Context, json.RawMessage) (any, error) {
 	return func(_ context.Context, config json.RawMessage) (any, error) {
 		var cfg RuntimeSlackConfig
@@ -70,10 +68,7 @@ func runtimeSlackClientBuilder(devMode bool) func(context.Context, json.RawMessa
 	}
 }
 
-// sendText delivers a plain-text system message through the client's active transport.
-// When an API client is available it posts via chat.postMessage (supports channel targeting
-// and richer formatting); otherwise it falls back to the incoming webhook. In dev mode
-// with no transport configured the call is a silent no-op
+// sendText delivers a plain-text system message through the active transport
 func (c *SlackClient) sendText(ctx context.Context, text, channel string) error {
 	if text == "" {
 		return ErrMessageEmpty

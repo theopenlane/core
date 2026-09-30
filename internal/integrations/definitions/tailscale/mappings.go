@@ -5,7 +5,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
-// mapExprDirectoryAccount is the CEL mapping expression for Tailscale user payloads mapped to DirectoryAccount
+// mapExprDirectoryAccount maps Tailscale user payloads to DirectoryAccount
 var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.ExternalID.Expr(`'id' in payload ? payload.id : ""`),
 	entityops.DirectoryAccountFields.CanonicalEmail.Expr(`'loginName' in payload ? payload.loginName : ""`),
@@ -16,8 +16,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
-// mapExprDirectoryGroup is the CEL mapping expression for Tailscale role group payloads mapped to DirectoryGroup
-// Payload is tailscaleGroupPayload — a known struct, so direct field access is safe without 'key' in payload guards
+// mapExprDirectoryGroup maps Tailscale role group payloads to DirectoryGroup
 var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.ExternalID.Expr(`payload.id`),
 	entityops.DirectoryGroupFields.DisplayName.Expr(`payload.name != "" ? payload.name : payload.id`),
@@ -26,7 +25,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
-// mapExprDirectoryMembership is the CEL mapping expression for Tailscale membership payloads mapped to DirectoryMembership
+// mapExprDirectoryMembership maps Tailscale membership payloads to DirectoryMembership
 var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryAccountID.Expr(`'user_id' in payload ? payload.user_id : ""`),
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`'group_id' in payload ? payload.group_id : ""`),

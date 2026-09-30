@@ -47,17 +47,17 @@ type driveItemPayload struct {
 // folderSyncOperation is the operation ref for the folder sync operation
 var folderSyncOperation = types.OperationRefOf[FolderSync]().Ingests(oneDriveClient, runFolderSync)
 
-// FolderSync lists OneDrive documents in a configured folder and emits ingest envelopes for policy creation
+// FolderSync lists OneDrive documents in a folder and emits ingest envelopes
 type FolderSync struct {
 	// Disable switches the folder sync operation off for the installation
 	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of documents from OneDrive"`
-	// FolderID is the folder path relative to the drive root (e.g. "Policies"); leave empty to sync the root
+	// FolderID is the folder path relative to the drive root; empty syncs the root
 	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder Path,description=Folder path relative to drive root (e.g. Policies). Leave empty to sync the entire drive root."`
 	// FilterExpr is an optional CEL expression to filter which documents in the folder are eligible
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to filter documents before creating policies"`
 }
 
-// runFolderSync lists all document files in the configured folder (or the drive root if none is set) and returns ingest payload sets
+// runFolderSync lists document files in the configured folder and returns payload sets
 func runFolderSync(ctx context.Context, _ types.OperationRequest, c *DriveClient, cfg FolderSync) ([]types.IngestPayloadSet, error) {
 	items, err := listFolderDocs(ctx, c, parseFolderID(cfg.FolderID))
 	if err != nil {

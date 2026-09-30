@@ -11,7 +11,7 @@ import (
 // matchAllFilterExpr is the filter expression admitting every envelope to its mapping
 const matchAllFilterExpr = "true"
 
-// DirectoryIngestContracts returns the ingest contracts for an operation emitting directory accounts, groups, and memberships
+// DirectoryIngestContracts returns ingest contracts for directory accounts, groups, and memberships
 func DirectoryIngestContracts() []types.IngestContract {
 	return []types.IngestContract{
 		{Schema: entityops.SchemaDirectoryAccount.Name},
@@ -20,7 +20,7 @@ func DirectoryIngestContracts() []types.IngestContract {
 	}
 }
 
-// DirectoryMappings returns the directory account, group, and membership mappings for the supplied map expressions, linking each membership to its account and group by external id
+// DirectoryMappings returns account, group, and membership mappings linked by external id
 func DirectoryMappings(accountExpr, groupExpr, membershipExpr string) []types.MappingRegistration {
 	return []types.MappingRegistration{
 		{
@@ -59,7 +59,7 @@ func DirectoryMappings(accountExpr, groupExpr, membershipExpr string) []types.Ma
 	}
 }
 
-// FindingMapping returns the finding mapping for the supplied map expression, linking each finding to controls whose ref code matches its categories
+// FindingMapping returns the finding mapping linking findings to controls by ref code
 func FindingMapping(mapExpr string) types.MappingRegistration {
 	return types.MappingRegistration{
 		Schema: entityops.SchemaFinding.Name,

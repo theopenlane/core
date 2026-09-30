@@ -25,7 +25,7 @@ import (
 
 const checkResultIngestTestOperation = "checkresult.ingest"
 
-// checkResultIngestTestDefinition builds a minimal check-result ingest definition whose mapping passes provider payloads through unchanged
+// checkResultIngestTestDefinition returns a minimal passthrough check-result ingest definition
 func checkResultIngestTestDefinition(defID string) integrationtypes.Definition {
 	passthrough := integrationtypes.MappingOverride{MapExpr: "payload"}
 
@@ -49,7 +49,7 @@ func checkResultIngestTestDefinition(defID string) integrationtypes.Definition {
 	}
 }
 
-// ingestCheckResultPayloads pushes check-result payloads through the synchronous catalog ingest path and returns the record-level result
+// ingestCheckResultPayloads returns the ingest result of check-result payloads
 func ingestCheckResultPayloads(ctx context.Context, t *testing.T, installation *ent.Integration, payloads ...string) operations.IngestResult {
 	t.Helper()
 
@@ -83,7 +83,7 @@ func checkResultByParentExternalID(ctx context.Context, t *testing.T, parentExte
 	return cr
 }
 
-// TestCheckResultReingestUpdatesInPlace verifies a second ingest with a changed field updates the row in place
+// TestCheckResultReingestUpdatesInPlace verifies a changed field updates the row in place
 func TestCheckResultReingestUpdatesInPlace(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -124,10 +124,7 @@ func TestCheckResultReingestUpdatesInPlace(t *testing.T) {
 	assert.Check(t, is.Equal("updated details", lo.FromPtr(after.Details)))
 }
 
-// TestCheckResultFailedRecordExclusionAcrossBatchedRuns verifies a record that fails validation on
-// every batched run is recorded and requeue-eligible on its first failure (counted Failed), then
-// excluded on every subsequent batched run while tracked (counted Excluded, not Failed, attempts
-// incrementing), and drops out of tracking once it reaches the retention ceiling
+// TestCheckResultFailedRecordExclusionAcrossBatchedRuns verifies failed records are excluded then untracked
 func TestCheckResultFailedRecordExclusionAcrossBatchedRuns(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -143,8 +140,6 @@ func TestCheckResultFailedRecordExclusionAcrossBatchedRuns(t *testing.T) {
 		(&th.Cleanup[*ent.IntegrationDeleteOne]{Client: suite.Client.DB.Integration, ID: installation.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	})
 
-	// an out-of-range status fails CheckResult's enum validator on every attempt, deterministically,
-	// without ever creating a row; parent_external_id stays present so the failed-record key resolves
 	invalid := `{"parent_external_id":"checkexcl-1","status":"not-a-real-status","details":"invalid status"}`
 
 	first := ingestCheckResultPayloads(ctx, t, installation, invalid)
@@ -176,8 +171,7 @@ func TestCheckResultFailedRecordExclusionAcrossBatchedRuns(t *testing.T) {
 	assert.Check(t, is.Len(reloaded.Health.FailedRecords, 0), "a key must drop out of tracking once it reaches the retention ceiling")
 }
 
-// TestCheckResultFailedRecordDoesNotAbortBatch verifies a record failing validation inside a batched
-// run is counted Failed while the records after it in the same batch still persist
+// TestCheckResultFailedRecordDoesNotAbortBatch verifies a failing record does not abort its batch
 func TestCheckResultFailedRecordDoesNotAbortBatch(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 

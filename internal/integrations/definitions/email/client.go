@@ -15,8 +15,7 @@ import (
 	"github.com/theopenlane/newman/scrubber"
 )
 
-// Client wraps a newman.EmailSender with the RuntimeEmailConfig
-// needed for template rendering and branding
+// Client wraps a newman.EmailSender with the RuntimeEmailConfig needed for template rendering and branding
 type Client struct {
 	// Sender is the configured email provider client
 	Sender newman.EmailSender
@@ -24,9 +23,7 @@ type Client struct {
 	Config RuntimeEmailConfig
 }
 
-// runtimeClientBuilder returns a build function that constructs a Client from
-// marshaled RuntimeEmailConfig. When devMode is true the sender writes MIME
-// files to the configured TestDir instead of calling the provider API
+// runtimeClientBuilder returns a build function that constructs a Client from marshaled RuntimeEmailConfig, writing MIME files to TestDir instead of calling the provider API when devMode is true
 func runtimeClientBuilder(devMode bool) func(context.Context, json.RawMessage) (any, error) {
 	return func(_ context.Context, config json.RawMessage) (any, error) {
 		var cfg RuntimeEmailConfig
@@ -71,13 +68,10 @@ func buildCustomerClient(_ context.Context, req types.ClientBuildRequest) (*Clie
 	}, nil
 }
 
-// EmailHTMLScrubber is the shared scrubber instance used by email providers for render-time
-// HTML sanitization, preserving email-safe layout elements while stripping dangerous content
+// EmailHTMLScrubber is the shared scrubber instance used by email providers for render-time HTML sanitization, preserving email-safe layout elements while stripping dangerous content
 var EmailHTMLScrubber = scrubber.NewPolicyScrubber(scrubber.WithEmailDefaults())
 
-// EmailScrubber returns the shared HTML scrubber instance used for email
-// content sanitization. This is the canonical sanitization policy for both
-// storage-time and render-time email HTML processing
+// EmailScrubber returns the shared HTML scrubber instance used for email content sanitization, the canonical policy for both storage-time and render-time processing
 func EmailScrubber() scrubber.Scrubber { //nolint:revive
 	return EmailHTMLScrubber
 }
@@ -85,9 +79,7 @@ func EmailScrubber() scrubber.Scrubber { //nolint:revive
 // ProviderMock is the provider name for the mock email sender used in tests
 const ProviderMock = "mock"
 
-// buildSender constructs a newman.EmailSender for the given provider. When
-// devMode is true and the provider is resend, sends are routed to a mock
-// writer that outputs MIME files to testDir
+// buildSender constructs a newman.EmailSender for the given provider, routing resend sends to a mock writer that outputs MIME files to testDir when devMode is true
 func buildSender(provider, apiKey string, devMode bool, testDir string) (newman.EmailSender, error) {
 	switch provider {
 	case "resend":

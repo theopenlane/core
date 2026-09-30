@@ -393,7 +393,7 @@ func TestResolvePersistedConnectionMultipleConnectionsNoState(t *testing.T) {
 	}
 }
 
-// staticIdentityDefinition builds a definition whose installation resolver always answers with the given instance id
+// staticIdentityDefinition builds a definition whose resolver always answers with instance id
 func staticIdentityDefinition(instanceID string) types.Definition {
 	return types.Definition{
 		Installation: &types.InstallationRegistration{

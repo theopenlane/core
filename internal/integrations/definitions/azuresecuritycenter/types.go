@@ -7,13 +7,13 @@ import (
 var (
 	// definitionID is the stable identifier for the Azure Security Center integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AZSECC000000000000000001")
-	// installation is the typed installation metadata handle for the Azure Security Center definition
+	// installation is the typed installation metadata handle for the definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// securityCenterCredential is the typed credential slot for the Azure service principal
 	securityCenterCredential = types.CredentialRefOf[CredentialSchema]()
 	// securityCenterClient is the client ref for the Azure Security Center client
 	securityCenterClient = types.ClientRefOf[*SecurityClient]().Using(securityCenterCredential)
-	// securityCenterConnection is the connection mode selected by the Azure service principal credential
+	// securityCenterConnection is the connection mode for the Azure service principal
 	securityCenterConnection = types.NewConnectionRef(securityCenterCredential).Enables(securityCenterClient)
 	// userInput is the installation user input layout for the Azure Security Center definition
 	userInput = types.NewUserInputRef[UserInput]("azuresecuritycenter")

@@ -38,7 +38,7 @@ var (
 const (
 	// githubAlertTypeDependabot is the variant name for Dependabot webhook alert payloads
 	githubAlertTypeDependabot = "dependabot"
-	// githubAlertTypeDependabotPoll is the variant name for Dependabot alerts collected via GraphQL poll
+	// githubAlertTypeDependabotPoll is the variant name for Dependabot alerts collected via poll
 	githubAlertTypeDependabotPoll = "dependabot_poll"
 	// githubAlertTypeCodeScanning is the variant name for code scanning alert payloads
 	githubAlertTypeCodeScanning = "code_scanning"
@@ -56,7 +56,7 @@ type githubAppCredential struct {
 	AccessToken string `json:"accessToken"`
 	// Expiry is the token expiry timestamp when available
 	Expiry *time.Time `json:"expiry,omitempty"`
-	// OrganizationName is the organization this was installed in, needed for disconnect when installed in an organization
+	// OrganizationName is the organization this was installed in
 	OrganizationName string `json:"organizationName,omitempty"`
 }
 
@@ -100,7 +100,7 @@ type RepositorySync struct {
 type InstallationMetadata struct {
 	// InstallationID is the GitHub App installation identifier
 	InstallationID string `json:"installationId,omitempty" jsonschema:"title=installation ID"`
-	// OrganizationName is the Organization the Github App was installed into, if empty it is installed in a personal org
+	// OrganizationName is the organization the GitHub App was installed into, empty for a personal org
 	OrganizationName string `json:"organizationName,omitempty"  jsonschema:"title=organization"`
 }
 

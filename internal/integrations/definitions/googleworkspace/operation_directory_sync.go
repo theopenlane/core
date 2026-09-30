@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// directoryDefaultPageSize is the number of records to request per page when listing users, groups, and members
+// directoryDefaultPageSize is the page size for listing directory records
 const directoryDefaultPageSize = int64(200)
 
 // defaultCustomerID is Google's alias for the authorized account's own customer
@@ -21,7 +21,7 @@ const defaultCustomerID = "my_customer"
 // directorySyncOperation is the Google Workspace directory sync operation
 var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(workspaceClient, runDirectorySync)
 
-// runDirectorySync resolves the installation customer and collects Google Workspace directory users, groups, and memberships
+// runDirectorySync collects Google Workspace directory users, groups, and memberships
 func runDirectorySync(ctx context.Context, request types.OperationRequest, svc *admin.Service, _ DirectorySync) ([]types.IngestPayloadSet, error) {
 	var meta InstallationMetadata
 
@@ -40,7 +40,7 @@ func runDirectorySync(ctx context.Context, request types.OperationRequest, svc *
 	return collectDirectory(ctx, svc, meta.CustomerID)
 }
 
-// collectDirectory collects Google Workspace directory users, groups, and memberships for one customer
+// collectDirectory collects directory users, groups, and memberships for a customer
 func collectDirectory(ctx context.Context, svc *admin.Service, customerID string) ([]types.IngestPayloadSet, error) {
 	users, err := listDirectoryUsers(ctx, svc, customerID)
 	if err != nil {
@@ -215,7 +215,7 @@ func listGroupMembers(ctx context.Context, svc *admin.Service, group *admin.Grou
 	return members, nil
 }
 
-// isIncludedUserMember reports whether a group member is a user that was included in the account ingest set
+// isIncludedUserMember reports whether a member is a user in the account ingest set
 func isIncludedUserMember(member *admin.Member, includedUsers map[string]struct{}) bool {
 	if member.Type != "" && member.Type != "USER" {
 		return false

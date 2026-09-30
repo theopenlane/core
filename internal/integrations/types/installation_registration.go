@@ -21,9 +21,7 @@ type InstallationRequest struct {
 	Input json.RawMessage
 }
 
-// InstallationFunc derives, validates, and marshals installation metadata for one connection-backed installation
-// The bool return indicates whether metadata was produced; false with a nil error means the connection
-// does not yield metadata for this installation
+// InstallationFunc derives installation metadata for a connection; false means none was produced
 type InstallationFunc func(ctx context.Context, req InstallationRequest) (IntegrationInstallationMetadata, bool, error)
 
 // InstallationRegistration describes how one connection mode derives installation metadata

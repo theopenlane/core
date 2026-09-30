@@ -42,7 +42,7 @@ type straySlotCred struct {
 	Value string `json:"value"`
 }
 
-// serviceAccountCred is a previous version of the current service-account type that had no email field
+// serviceAccountCred is a previous service-account type with no email field
 type serviceAccountCred struct {
 	ProjectID string `json:"projectId" jsonschema:"required"`
 }
@@ -57,7 +57,7 @@ type zoneInput struct {
 	Zone string `json:"zone"`
 }
 
-// regionInput is the current user input layout, requiring the region the retired layout called zone and a token it never carried
+// regionInput is the current user input layout, requiring region and token
 type regionInput struct {
 	Region string `json:"region" jsonschema:"required"`
 	Token  string `json:"token" jsonschema:"required"`
@@ -66,16 +66,16 @@ type regionInput struct {
 // retiredSync is the config of the operation an earlier definition version declared
 type retiredSync struct{}
 
-// renamedSync is the config of the operation that takes over the retired operation's health keys and run history
+// renamedSync is the config of the operation replacing retiredSync
 type renamedSync struct{}
 
 // renameEvent is the payload of the events on the renamed webhook contract
 type renameEvent struct{}
 
-// backfilledToken is the token the current user input backfills when the stored input carries none
+// backfilledToken is the token the current user input backfills when empty
 const backfilledToken = "x"
 
-// suiteQueueName is the durable gala queue the suite harness runs, shared by runtimes whose loop jobs the suite must count and run
+// suiteQueueName is the durable gala queue the suite harness runs
 const suiteQueueName = "graphapi_integration_test"
 
 var (
@@ -104,7 +104,7 @@ var (
 	renameEventB         = integrationtypes.NewWebhookEventRef[renameEvent]("b")
 )
 
-// retiredSlot pairs a credential slot an earlier definition version declared with the schema it collected
+// retiredSlot pairs a retired credential slot id with its schema
 type retiredSlot struct {
 	id     integrationtypes.CredentialSlotID
 	schema json.RawMessage
@@ -115,7 +115,7 @@ func slotOf[T any](ref integrationtypes.CredentialRef[T]) retiredSlot {
 	return retiredSlot{id: ref.ID(), schema: ref.Schema()}
 }
 
-// syncOperation declares op under policy doing no work, taking over the retired operation names in replaces
+// syncOperation returns a no-op operation registration replacing retired names
 func syncOperation[Cfg any](op integrationtypes.OperationRef[Cfg], policy integrationtypes.ExecutionPolicy, replaces ...string) integrationtypes.OperationRegistration {
 	return op.Registration(testint.DefinitionID, integrationtypes.OperationRegistration{
 		Replaces: replaces,
@@ -124,7 +124,7 @@ func syncOperation[Cfg any](op integrationtypes.OperationRef[Cfg], policy integr
 	})
 }
 
-// eventsWebhook declares webhook accepting the given events, taking over the retired contract names in replaces
+// eventsWebhook returns a webhook registration accepting events, replacing retired names
 func eventsWebhook(webhook integrationtypes.WebhookRef, replaces []string, events ...integrationtypes.WebhookEventRef[renameEvent]) integrationtypes.WebhookRegistration {
 	return webhook.Registration(integrationtypes.WebhookRegistration{
 		Replaces: replaces,
@@ -139,7 +139,7 @@ func eventsWebhook(webhook integrationtypes.WebhookRef, replaces []string, event
 	})
 }
 
-// previousDefinition builds an earlier version of the shared test definition with one connection over the given slots
+// previousDefinition returns an earlier version of the shared test definition
 func previousDefinition(primary retiredSlot, extra ...retiredSlot) registry.Builder {
 	return func() (integrationtypes.Definition, error) {
 		def := integrationtypes.Definition{
@@ -166,7 +166,7 @@ func previousDefinition(primary retiredSlot, extra ...retiredSlot) registry.Buil
 	}
 }
 
-// definitionOver builds a version of the shared test definition over the token slot with shape applied, so the previous and current versions of one upgrade scenario differ only in what shape declares
+// definitionOver returns the shared test definition with shape applied over the token slot
 func definitionOver(shape func(def *integrationtypes.Definition)) registry.Builder {
 	return func() (integrationtypes.Definition, error) {
 		def, err := previousDefinition(slotOf(testint.TokenCredential))()
@@ -180,7 +180,7 @@ func definitionOver(shape func(def *integrationtypes.Definition)) registry.Build
 	}
 }
 
-// runtimeFor builds a runtime over the suite database running one version of the shared test definition on its own in-memory gala, so only the caller triggers an upgrade
+// runtimeFor returns a runtime on an in-memory gala running one definition version
 func runtimeFor(t *testing.T, builder registry.Builder) *intruntime.Runtime {
 	t.Helper()
 
@@ -191,7 +191,7 @@ func runtimeFor(t *testing.T, builder registry.Builder) *intruntime.Runtime {
 	return runtimeOn(t, instance, builder)
 }
 
-// queuedRuntimeFor builds a runtime over the suite database running one version of the shared test definition on a durable gala that shares the suite queue but starts no workers, so the loops its upgrade purges and reseeds are the ones the suite gala counts and runs
+// queuedRuntimeFor returns a runtime on the suite's durable gala queue with no workers
 func queuedRuntimeFor(t *testing.T, builder registry.Builder) *intruntime.Runtime {
 	t.Helper()
 
@@ -202,7 +202,7 @@ func queuedRuntimeFor(t *testing.T, builder registry.Builder) *intruntime.Runtim
 	return runtimeOn(t, instance, builder)
 }
 
-// runtimeOn builds a runtime over the suite database and the given gala running one version of the shared test definition
+// runtimeOn returns a runtime on instance running one definition version
 func runtimeOn(t *testing.T, instance *gala.Gala, builder registry.Builder) *intruntime.Runtime {
 	t.Helper()
 
@@ -215,7 +215,7 @@ func runtimeOn(t *testing.T, instance *gala.Gala, builder registry.Builder) *int
 	return rt
 }
 
-// seedRetiredLoop queues one future reconcile cycle for the installation under a retired operation name, bypassing the loop uniqueness key the way a live successor would already hold it
+// seedRetiredLoop queues one future reconcile cycle under a retired operation name
 func seedRetiredLoop(t *testing.T, ctx context.Context, installation *ent.Integration, operationName string) {
 	t.Helper()
 
@@ -233,7 +233,7 @@ func seedRetiredLoop(t *testing.T, ctx context.Context, installation *ent.Integr
 	require.NoError(t, err)
 }
 
-// installOn installs the shared test definition through rt with the given user input and primary credential and returns the reloaded installation
+// installOn returns the installation of the shared test definition through rt
 func installOn(t *testing.T, ctx context.Context, rt *intruntime.Runtime, userInput json.RawMessage, primary integrationtypes.CredentialSlotID, credential integrationtypes.CredentialSet) *ent.Integration {
 	t.Helper()
 
@@ -251,7 +251,7 @@ func installOn(t *testing.T, ctx context.Context, rt *intruntime.Runtime, userIn
 	return reloadIntegration(t, ctx, installation.ID)
 }
 
-// installUnder installs the test definition through a runtime running an earlier version of it, with every recurring loop disabled so only the caller triggers an upgrade, and returns the installation and that version
+// installUnder returns the installation and version from an earlier definition runtime
 func installUnder(t *testing.T, ctx context.Context, builder registry.Builder, primary integrationtypes.CredentialSlotID, credentials map[integrationtypes.CredentialSlotID]integrationtypes.CredentialSet) (*ent.Integration, string) {
 	t.Helper()
 
@@ -270,7 +270,7 @@ func installUnder(t *testing.T, ctx context.Context, builder registry.Builder, p
 	return reloadIntegration(t, ctx, installation.ID), rt.Registry().Version(testint.DefinitionID.ID())
 }
 
-// endpointRows returns the installation's persisted webhook endpoint rows, excluding delivery dedupe rows
+// endpointRows returns the installation's webhook endpoint rows, excluding dedupe rows
 func endpointRows(t *testing.T, ctx context.Context, integrationID string) []*ent.IntegrationWebhook {
 	t.Helper()
 

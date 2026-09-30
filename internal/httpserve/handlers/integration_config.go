@@ -14,9 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// ConfigureIntegrationProvider stores non-OAuth credentials for a provider definition.
-// When installation_id is provided the credentials on that installation are updated.
-// When omitted a new installation is created and its ID is returned in the response
+// ConfigureIntegrationProvider stores non-OAuth credentials, creating an installation if needed
 func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	payload, err := BindAndValidate[ConfigureIntegrationRequest](ctx)
 	if err != nil {
@@ -103,9 +101,6 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 		resp.WebhookSecret = primaryWebhookSecret
 	}
 
-	// ensure all reconcile jobs exist after any config update; a previously-disabled
-	// operation that was just re-enabled needs a new job seeded - this is a no-op
-	// when all jobs are already active
 	if lo.Contains(enums.IntegrationOperationalStatuses, installationRec.Status) {
 		if err := h.IntegrationsRuntime.SeedReconcileJobsForInstallation(requestCtx, installationRec); err != nil {
 			logx.FromContext(requestCtx).Warn().Err(err).Str("installation_id", installationRec.ID).Msg("failed to seed missing reconcile jobs after config update")

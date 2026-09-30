@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// EncodeResult serializes an operation result and maps any encode failure to the caller-supplied error
+// EncodeResult serializes an operation result, mapping encode failure to the caller's error
 func EncodeResult(value any, encodeErr error) (json.RawMessage, error) {
 	raw, err := jsonx.ToRawMessage(value)
 	if err != nil {
@@ -23,7 +23,7 @@ func MarshalEnvelope(resource string, payload any, encodeErr error) (types.Mappi
 	return MarshalEnvelopeVariant("", resource, payload, encodeErr)
 }
 
-// MarshalEnvelopeVariant serializes a provider payload into one mapping envelope for a specific variant
+// MarshalEnvelopeVariant serializes a provider payload into a variant-specific mapping envelope
 func MarshalEnvelopeVariant(variant string, resource string, payload any, encodeErr error) (types.MappingEnvelope, error) {
 	raw, err := jsonx.ToRawMessage(payload)
 	if err != nil {
@@ -38,7 +38,7 @@ func RawEnvelope(resource string, payload json.RawMessage) types.MappingEnvelope
 	return RawEnvelopeVariant("", resource, payload)
 }
 
-// RawEnvelopeVariant wraps an already-serialized provider payload in a variant-specific mapping envelope
+// RawEnvelopeVariant wraps a serialized provider payload in a variant-specific mapping envelope
 func RawEnvelopeVariant(variant string, resource string, payload json.RawMessage) types.MappingEnvelope {
 	return types.MappingEnvelope{
 		Variant:  variant,
@@ -47,7 +47,7 @@ func RawEnvelopeVariant(variant string, resource string, payload json.RawMessage
 	}
 }
 
-// DirectoryAccountPayloadSets wraps directory account envelopes in the complete-snapshot account payload set
+// DirectoryAccountPayloadSets wraps directory account envelopes in a complete-snapshot payload set
 func DirectoryAccountPayloadSets(accounts []types.MappingEnvelope) []types.IngestPayloadSet {
 	return []types.IngestPayloadSet{
 		{
@@ -58,7 +58,7 @@ func DirectoryAccountPayloadSets(accounts []types.MappingEnvelope) []types.Inges
 	}
 }
 
-// DirectoryGroupPayloadSets wraps directory group and membership envelopes in payload sets sharing one snapshot completeness flag
+// DirectoryGroupPayloadSets wraps group and membership envelopes with one completeness flag
 func DirectoryGroupPayloadSets(groups, memberships []types.MappingEnvelope, complete bool) []types.IngestPayloadSet {
 	return []types.IngestPayloadSet{
 		{

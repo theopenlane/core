@@ -185,7 +185,6 @@ func TestOAuthRegistrationCompleteCodeExchangeError(t *testing.T) {
 		},
 	})
 
-	// Valid state but code exchange will fail (no real OAuth server)
 	state := json.RawMessage(`{}`)
 	input := types.AuthCallbackInput{
 		Query: []types.AuthCallbackValue{
@@ -224,7 +223,6 @@ func TestStartOAuthWithAuthParams(t *testing.T) {
 func TestCompleteOAuthEmptyStartStateHitsCodeExchange(t *testing.T) {
 	t.Parallel()
 
-	// Empty start state skips CSRF validation but still attempts code exchange
 	state := json.RawMessage(`{}`)
 	input := types.AuthCallbackInput{
 		Query: []types.AuthCallbackValue{

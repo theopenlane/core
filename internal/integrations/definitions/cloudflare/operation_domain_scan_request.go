@@ -14,29 +14,29 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// DomainScanRequestOp is the operation ref for requesting a domain scan; used both by customer-facing calls (queues a pending Scan) and the system re-dispatch from the listener on Scan creation (actually runs the saga for it)
+// DomainScanRequestOp is the operation ref for requesting a domain scan
 var DomainScanRequestOp = types.OperationRefOf[DomainScanRequest]().HandlesRequest(runDomainScanRequest) //nolint:revive
 
-// DomainScanRequest queues a domain scan for a single domain by creating a pending Scan record which is then picked up to do the domain scan
+// DomainScanRequest queues a domain scan by creating a pending Scan record
 type DomainScanRequest struct {
 	// ScanID identifies the Scan record that triggered an internally dispatched request
 	ScanID string `json:"scanId,omitempty"`
-	// OrganizationID is the organization the scan belongs to, only used when dispatched without an Integration
+	// OrganizationID is the organization the scan belongs to, used only without an Integration
 	OrganizationID string `json:"organizationId,omitempty"`
 	// Domain is the domain to scan
 	Domain string `json:"domain" jsonschema:"required,title=Domain,description=Domain to scan"`
-	// ForceRefresh bypasses Cloudflare's Browser Rendering cache, forcing a fresh render instead of reusing one from a previous scan of the same domain
+	// ForceRefresh bypasses Cloudflare's Browser Rendering cache, forcing a fresh render
 	ForceRefresh bool `json:"forceRefresh,omitempty" jsonschema:"title=Force Refresh,description=Bypass the render cache and force a fresh scan"`
 	// BrandDesignOnly extracts the brand design without running the full domain scan
 	BrandDesignOnly bool `json:"brandDesignOnly,omitempty" jsonschema:"title=Brand Design Only,description=Extract and apply the brand design without building a full domain scan report"`
 
-	// ApplyBrandDesignToPreview instructs the gala implementation to apply the extracted brand design to the preview trustcenter environment
+	// ApplyBrandDesignToPreview applies the extracted brand design to the preview trustcenter
 	ApplyBrandDesignToPreview bool `json:"applyBrandDesignToPreview,omitempty" jsonschema:"title=Apply Brand Design to Preview,description=Apply extracted brand design to preview Trust Center settings"`
 
-	// ApplyBrandDesignToLive instructs the gala implementation to apply the extracted brand design to the live trustcenter environment
+	// ApplyBrandDesignToLive applies the extracted brand design to the live trustcenter
 	ApplyBrandDesignToLive bool `json:"applyBrandDesignToLive,omitempty" jsonschema:"title=Apply Brand Design to Live,description=Apply extracted brand design to live Trust Center settings"`
 
-	// GroupID links this scan to sibling scans requested together so they can be recombined into a single notification once the whole group finishes
+	// GroupID links this scan to sibling scans requested together for a combined notification
 	GroupID string `json:"groupId,omitempty"`
 }
 
@@ -48,7 +48,7 @@ type DomainScanRequestResult struct {
 	ScanID string `json:"scanId"`
 }
 
-// runDomainScanRequest queues a pending Scan for customer-facing calls, or runs the domain scan saga for internal dispatches
+// runDomainScanRequest queues a pending Scan, or runs the domain scan saga for internal dispatches
 func runDomainScanRequest(ctx context.Context, request types.OperationRequest, cfg DomainScanRequest) (json.RawMessage, error) {
 	organizationID := cfg.OrganizationID
 	groupID := cfg.GroupID

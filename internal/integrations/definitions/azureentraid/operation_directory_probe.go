@@ -20,7 +20,7 @@ type DirectoryProbe struct {
 	DirectoryReadable bool `json:"directoryReadable"`
 }
 
-// probeDirectory verifies the granted Graph permissions can read the directory by fetching a single user
+// probeDirectory verifies Graph permissions can read the directory
 func probeDirectory(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
 	c, err := entraClient.Cast(req.Client)
 	if err != nil {

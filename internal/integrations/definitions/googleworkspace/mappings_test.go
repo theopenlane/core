@@ -100,7 +100,7 @@ func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
 	assert.Equal(t, "OWNER", membershipMapped["role"])
 }
 
-// TestGoogleWorkspaceMappingsFallbacks verifies graceful fallback when fields are missing from the payload
+// TestGoogleWorkspaceMappingsFallbacks verifies fallback when payload fields are missing
 func TestGoogleWorkspaceMappingsFallbacks(t *testing.T) {
 	accountRaw, err := providerkit.EvalMap(context.Background(), mappingtest.MappingSpec(t, testMappings(t), entityops.SchemaDirectoryAccount.Name).MapExpr, types.MappingEnvelope{
 		Resource: "sparse@example.com",

@@ -15,7 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// resetReconcileLoop collapses one operation to exactly one recurring loop: a single live loop is left untouched, duplicates are purged, and a fresh loop is seeded when none remains; the metadata count is what stops seeds from spawning parallel chains, since successor cycles change their unique key
+// resetReconcileLoop collapses one operation to exactly one recurring loop, purging duplicates
 func (r *Runtime) resetReconcileLoop(ctx context.Context, installation *ent.Integration, op types.OperationRegistration) error {
 	oc := types.NewOperationContext(installation.OwnerID, op.Name, types.IntegrationSource{
 		IntegrationID: installation.ID,
@@ -64,7 +64,7 @@ func (r *Runtime) resetReconcileLoop(ctx context.Context, installation *ent.Inte
 	return nil
 }
 
-// reconcileLoopFragment builds the JSONB containment fragment matching one operation's recurring loop jobs on one installation; the keys must match the emitted GetPropertiesForOperationContext projection, where installation-bound contexts promote the integration as the operation's entity (entityId) and the reconcile run type keeps the match disjoint from one-shot event jobs sharing the same installation and operation
+// reconcileLoopFragment builds the JSONB fragment matching one operation's recurring loop jobs
 func reconcileLoopFragment(integrationID, operationName string) (string, error) {
 	return types.PropertiesFragment(map[string]string{
 		"entityId":  integrationID,
@@ -73,7 +73,7 @@ func reconcileLoopFragment(integrationID, operationName string) (string, error) 
 	})
 }
 
-// clientUnresolvedReasonFmt formats the actionable reason recorded when an integration cannot establish its client
+// clientUnresolvedReasonFmt formats the reason recorded when a client can't be established
 const clientUnresolvedReasonFmt = "the integration could not establish a connection and needs to be reconnected: %s"
 
 // reconcileExhaustedReasonFmt formats the user-facing reason recorded on the unhealthy installation
@@ -102,7 +102,7 @@ func (r *Runtime) markReconcileExhausted(ctx context.Context, e operations.Recon
 	}
 }
 
-// ResetReconcileLoops collapses every runnable reconcile operation on an operational installation to exactly one recurring loop, seeding missing loops and purging duplicates; operations that are disabled or recorded unhealthy, and installations whose owner subscription is inactive, are skipped
+// ResetReconcileLoops collapses every runnable reconcile operation to exactly one recurring loop
 func (r *Runtime) ResetReconcileLoops(ctx context.Context, installation *ent.Integration) error {
 	if !lo.Contains(enums.IntegrationOperationalStatuses, installation.Status) {
 		return nil

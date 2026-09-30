@@ -27,8 +27,7 @@ type DisconnectResult struct {
 	Message string `json:"message,omitempty"`
 	// Details is an opaque provider-specific payload describing teardown actions taken or required
 	Details json.RawMessage `json:"details,omitempty"`
-	// SkipLocalCleanup indicates the runtime should not delete credentials and the installation
-	// record, set when teardown is deferred to an external event such as a provider webhook
+	// SkipLocalCleanup defers deleting credentials and the installation to an external event
 	SkipLocalCleanup bool `json:"-"`
 }
 
@@ -39,7 +38,7 @@ type DisconnectFunc func(ctx context.Context, request DisconnectRequest) (Discon
 type DisconnectRegistration struct {
 	// CredentialRef identifies which credential slot this disconnect flow is bound to
 	CredentialRef CredentialSlotID `json:"credentialRef,omitempty"`
-	// Description is the user-facing explanation of what disconnect does and any recommended provider-side cleanup
+	// Description is the user-facing explanation of disconnect and any recommended cleanup
 	Description string `json:"description,omitempty"`
 	// Schema is the JSON schema describing the disconnect result details payload
 	Schema json.RawMessage `json:"schema,omitempty"`

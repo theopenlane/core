@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
-// Switch is the per-installation disable toggle decoded from an operation config section's disable key
+// Switch is the per-installation disable toggle decoded from a config section's disable key
 type Switch struct {
 	// Disable switches the operation off for the installation
 	Disable bool `json:"disable,omitempty"`
@@ -35,11 +35,11 @@ type WorkflowMeta struct {
 	ObjectType enums.WorkflowObjectType `json:"objectType,omitempty"`
 }
 
-// RateLimitPolicy bounds how often one operation may run per calling organization within a rolling window, enforced identically on every execution path
+// RateLimitPolicy bounds how often an operation may run per organization within a rolling window
 type RateLimitPolicy struct {
 	// Window is the rolling window duration for the operation's execution budget
 	Window time.Duration
-	// Limit is the number of executions allowed per window; values below one default to a single execution
+	// Limit is executions allowed per window; below one defaults to a single execution
 	Limit int
 }
 
@@ -47,9 +47,9 @@ type RateLimitPolicy struct {
 type ExecutionPolicy struct {
 	// Inline indicates the operation should execute synchronously for direct API callers
 	Inline bool `json:"inline,omitempty"`
-	// Reconcile indicates the operation should be dispatched on a recurring schedule per connected installation
+	// Reconcile dispatches the operation on a recurring schedule per connected installation
 	Reconcile bool `json:"reconcile,omitempty"`
-	// Scheduled indicates the operation runs on a recurring schedule through the runtime provider path, with no installation; used for system-level sweeps
+	// Scheduled runs the operation on a recurring schedule with no installation, for system sweeps
 	Scheduled bool `json:"scheduled,omitempty"`
 	// SkipRunRecord indicates the IntegrationRun record creation should be skipped
 	SkipRunRecord bool `json:"skipRunRecord,omitempty"`
@@ -57,7 +57,7 @@ type ExecutionPolicy struct {
 	Snapshot bool `json:"snapshot,omitempty"`
 }
 
-// ScheduledCycleResult is the conventional response payload for scheduled runtime operations, carrying the cycle delta used for adaptive scheduling
+// ScheduledCycleResult is the response payload scheduled operations use for adaptive scheduling
 type ScheduledCycleResult struct {
 	// Processed is the number of records handled during the cycle
 	Processed int `json:"processed"`
@@ -92,18 +92,18 @@ type OperationRequest struct {
 // OperationHandler executes one definition operation
 type OperationHandler func(ctx context.Context, request OperationRequest) (json.RawMessage, error)
 
-// IngestHandler executes one definition operation and returns typed ingest payload sets for pipeline routing
+// IngestHandler executes an operation and returns typed payload sets for the ingest pipeline
 type IngestHandler func(ctx context.Context, request OperationRequest) ([]IngestPayloadSet, error)
 
 // OperationRegistration declares one executable operation for a definition
 type OperationRegistration struct {
 	// Name is the stable operation identifier within the definition
 	Name string `json:"name"`
-	// Replaces lists the retired operation names whose recorded runs and health move onto this operation
+	// Replaces lists retired operation names whose runs and health move onto this operation
 	Replaces []string `json:"-"`
 	// Description describes what the operation does
 	Description string `json:"description,omitempty"`
-	// RequiredPermissions lists what scopes or permissions are needed to retrieve data for the Operation
+	// RequiredPermissions lists scopes or permissions needed to retrieve data for the operation
 	RequiredPermissions []string `json:"requiredPermissions,omitempty"`
 	// Topic is the gala topic used to execute the operation
 	Topic gala.TopicName `json:"topic"`
@@ -117,11 +117,11 @@ type OperationRegistration struct {
 	CustomerSelectable *bool `json:"customerSelectable,omitempty"`
 	// Internal marks the operation as reachable only through its own listener or saga machinery
 	Internal bool `json:"-"`
-	// RequiresPaymentMethod gates direct invocation through RunIntegrationOperation on the calling organization having a payment method on file
+	// RequiresPaymentMethod gates direct invocation on the org having a payment method on file
 	RequiresPaymentMethod bool `json:"-"`
 	// Policy controls synchronous execution behavior for the operation
 	Policy ExecutionPolicy `json:"policy"`
-	// RateLimit bounds how often this operation may run per organization; nil (default) means unlimited
+	// RateLimit bounds how often this operation may run per organization; nil means unlimited
 	RateLimit *RateLimitPolicy `json:"-"`
 	// Ingest declares the normalized schemas emitted by the operation
 	Ingest []IngestContract `json:"ingest,omitempty"`
@@ -131,19 +131,19 @@ type OperationRegistration struct {
 	Handle OperationHandler `json:"-"`
 	// IngestHandle executes the operation and returns typed payload sets for the ingest pipeline
 	IngestHandle IngestHandler `json:"-"`
-	// DisabledForAll indicates if the sync is not currently available for use and no config params are shown to the user
+	// DisabledForAll marks the sync unavailable, hiding config params from the user
 	DisabledForAll bool `json:"disabledForAll"`
 	// Disabled reports whether this operation is disabled for a given installation's user input JSON
 	Disabled func(userInput json.RawMessage) bool `json:"-"`
-	// ConfigResolver extracts the operation-specific config JSON from the installation's user input JSON
+	// ConfigResolver extracts the operation's config JSON from the installation's user input
 	ConfigResolver func(userInput json.RawMessage) json.RawMessage `json:"-"`
-	// Schedule overrides the default adaptive schedule for this operation's recurring reconcile or scheduled cycles
+	// Schedule overrides the default adaptive schedule for reconcile or scheduled cycles
 	Schedule *gala.Schedule `json:"-"`
 	// SkipDefaultLookback disables the runtime's default lookback window on initial runs
 	SkipDefaultLookback bool `json:"-"`
 }
 
-// DisabledFor reports whether the operation is switched off for everyone or for the installation whose user input is given
+// DisabledFor reports whether the operation is switched off globally or for this installation
 func (o OperationRegistration) DisabledFor(userInput json.RawMessage) bool {
 	return o.DisabledForAll || (o.Disabled != nil && o.Disabled(userInput))
 }

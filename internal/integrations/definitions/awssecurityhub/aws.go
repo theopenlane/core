@@ -36,7 +36,7 @@ func resolveAssumeRoleCredential(bindings types.CredentialBindings) (AssumeRoleC
 	return decoded, nil
 }
 
-// buildAWSConfig constructs an AWS SDK config with assume-role credentials sourced from the operator config
+// buildAWSConfig constructs an AWS SDK config with assume-role credentials
 func buildAWSConfig(ctx context.Context, assumeRoleCredential AssumeRoleCredentialSchema, opCfg Config) (awssdk.Config, error) {
 	opts := []func(*config.LoadOptions) error{
 		config.WithRegion(assumeRoleCredential.HomeRegion),
@@ -67,8 +67,7 @@ func buildAWSConfig(ctx context.Context, assumeRoleCredential AssumeRoleCredenti
 	return cfg, nil
 }
 
-// buildAWSServiceClient resolves credentials from the request and constructs a typed AWS service client.
-// It uses the assume-role path when an assume-role credential is bound, otherwise falls back to static credentials.
+// buildAWSServiceClient builds a typed AWS service client from the bound credential
 func buildAWSServiceClient[T any](ctx context.Context, cfg Config, req types.ClientBuildRequest, build func(awssdk.Config) T) (T, error) {
 	_, hasAssumeRole := req.Credentials.Resolve(awsAssumeRoleCredential.ID())
 	if hasAssumeRole {
@@ -121,7 +120,7 @@ func buildAWSServiceClientViaStaticCreds[T any](ctx context.Context, req types.C
 	return build(cfg), nil
 }
 
-// buildAWSConfigFromStaticCreds constructs an AWS SDK config using static IAM credentials and a region
+// buildAWSConfigFromStaticCreds constructs an AWS SDK config from static IAM credentials
 func buildAWSConfigFromStaticCreds(ctx context.Context, cred ServiceAccountCredentialSchema) (awssdk.Config, error) {
 	if cred.Region == "" {
 		return awssdk.Config{}, ErrRegionMissing

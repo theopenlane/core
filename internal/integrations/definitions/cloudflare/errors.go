@@ -41,6 +41,6 @@ var (
 	ErrDomainScanTaskFailed = errors.New("cloudflare: domain scan task failed")
 	// ErrDomainScanMaxAttemptsReached indicates a scan never completed within the poll budget
 	ErrDomainScanMaxAttemptsReached = errors.New("cloudflare: domain scan max poll attempts reached")
-	// ErrInstallationRequired indicates the operation requires a resolved installation but none was provided
+	// ErrInstallationRequired indicates the operation requires a resolved installation
 	ErrInstallationRequired = errors.New("cloudflare: installation required")
 )

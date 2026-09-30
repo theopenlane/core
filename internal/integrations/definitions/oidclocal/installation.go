@@ -6,7 +6,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// resolveInstallationMetadata derives OIDC installation metadata from the stored auth-managed credential
+// resolveInstallationMetadata derives OIDC installation metadata from the credential
 func resolveInstallationMetadata(_ context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	cred, ok, err := oidcCredential.Resolve(req.Credentials)
 	if err != nil {

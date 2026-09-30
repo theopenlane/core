@@ -7,7 +7,7 @@ var (
 	ErrCredentialMetadataRequired = errors.New("oci: credential metadata required")
 	// ErrMetadataDecode indicates credential metadata could not be decoded
 	ErrMetadataDecode = errors.New("oci: failed to decode credential metadata")
-	// ErrConfigurationProviderInvalid indicates the API signing key inputs do not produce a usable request signer
+	// ErrConfigurationProviderInvalid indicates the API signing key inputs are invalid
 	ErrConfigurationProviderInvalid = errors.New("oci: configuration provider invalid")
 	// ErrIdentityClientCreate indicates the OCI Identity client could not be created
 	ErrIdentityClientCreate = errors.New("oci: identity client creation failed")
@@ -15,7 +15,7 @@ var (
 	ErrCloudGuardClientCreate = errors.New("oci: cloud guard client creation failed")
 	// ErrTenancyLookupFailed indicates the tenancy read request failed
 	ErrTenancyLookupFailed = errors.New("oci: tenancy lookup failed")
-	// ErrCompartmentRequired indicates no compartment or tenancy OCID was available to scope collection
+	// ErrCompartmentRequired indicates no compartment or tenancy OCID was available
 	ErrCompartmentRequired = errors.New("oci: compartment or tenancy OCID required")
 	// ErrListProblemsFailed indicates the Cloud Guard problem listing request failed
 	ErrListProblemsFailed = errors.New("oci: list problems failed")

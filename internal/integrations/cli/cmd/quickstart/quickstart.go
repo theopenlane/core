@@ -22,21 +22,18 @@ import (
 	"github.com/theopenlane/go-client/graphclient"
 )
 
-// quickstartTag marks resources created by this command so they are easy to
-// spot (and clean up) later
+// quickstartTag marks resources created by this command for cleanup
 const quickstartTag = "cli-quickstart"
 
 // recipientFullName is the test recipient name used for all quickstart targets
 const recipientFullName = "Flynne Fisher"
 
-// defaultsJSON is the canonical BrandedMessageRequest payload used to seed the
-// quickstart template. Edit defaults.example.json to change the wording
+// defaultsJSON is the canonical BrandedMessageRequest payload seeding the quickstart template
 //
 //go:embed defaults.example.json
 var defaultsJSON []byte
 
-// cloudflareDefaultsJSON seeds a Cloudflare-branded campaign demonstrating
-// per-template color and branding overrides
+// cloudflareDefaultsJSON seeds a Cloudflare-branded campaign with custom theming
 //
 //go:embed cloudflare.example.json
 var cloudflareDefaultsJSON []byte
@@ -168,8 +165,7 @@ func runBrandedCampaign(ctx context.Context, client *openlaneclient.Client, reci
 	}, nil
 }
 
-// runCloudflareBrandedCampaign creates a Cloudflare-branded template and campaign to
-// demonstrate per-template color theming overrides
+// runCloudflareBrandedCampaign creates a Cloudflare-branded template and campaign
 func runCloudflareBrandedCampaign(ctx context.Context, client *openlaneclient.Client, recipient string) (*launchResult, error) {
 	templateKey := email.BrandedMessageOp.Name()
 
@@ -205,7 +201,7 @@ func runCloudflareBrandedCampaign(ctx context.Context, client *openlaneclient.Cl
 	}, nil
 }
 
-// runQuestionnaireCampaign creates an assessment, campaign, and launches the questionnaire dispatch
+// runQuestionnaireCampaign creates an assessment and campaign, launches the dispatch
 func runQuestionnaireCampaign(ctx context.Context, client *openlaneclient.Client, recipient string) (*launchResult, error) {
 	assessmentID, err := createAssessment(ctx, client)
 	if err != nil {
@@ -247,8 +243,7 @@ func resolveRecipient() (string, error) {
 	return "", ErrRecipientResolution
 }
 
-// loadDefaults unmarshals embedded JSON into the map shape expected by
-// graphclient.CreateEmailTemplateInput.Defaults
+// loadDefaults unmarshals embedded JSON into the map shape CreateEmailTemplateInput expects
 func loadDefaults(data []byte) (map[string]any, error) {
 	out := map[string]any{}
 	if err := json.Unmarshal(data, &out); err != nil {
@@ -258,7 +253,7 @@ func loadDefaults(data []byte) (map[string]any, error) {
 	return out, nil
 }
 
-// createBrandedTemplate creates a CAMPAIGN_RECIPIENT template bound to the branded-message catalog entry
+// createBrandedTemplate creates a CAMPAIGN_RECIPIENT template for the branded-message entry
 func createBrandedTemplate(ctx context.Context, client *openlaneclient.Client, key, name string, defaults map[string]any) (string, error) {
 	input := graphclient.CreateEmailTemplateInput{
 		Key:             key,

@@ -28,7 +28,7 @@ type directorySyncResult struct {
 	Message string `json:"message,omitempty"`
 }
 
-// DirectorySyncOperationName returns the name of the SCIM directory sync operation whose config section carries the installation filter
+// DirectorySyncOperationName returns the SCIM directory sync operation name
 func DirectorySyncOperationName() string {
 	return directorySyncOperation.Name()
 }

@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	// testProjectNumber is a representative numeric GCP project number hosting the workload identity pool
+	// testProjectNumber is a representative GCP project number for the identity pool
 	testProjectNumber = "123456789"
 	// testRSAKeySize is the smallest RSA key size the signing key loader accepts
 	testRSAKeySize = 2048

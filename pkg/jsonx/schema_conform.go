@@ -8,7 +8,7 @@ import (
 	"github.com/invopop/jsonschema"
 )
 
-// ConformToSchema strips undeclared properties and fills defaulted required properties, following the root $ref and recursing into nested object properties present in the document
+// ConformToSchema returns doc with undeclared properties stripped and required defaults filled
 func ConformToSchema(schema, doc json.RawMessage) (json.RawMessage, error) {
 	root, defs, err := SchemaRoot(schema)
 	if err != nil {

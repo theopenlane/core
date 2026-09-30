@@ -61,7 +61,7 @@ func runFindingsCollect(ctx context.Context, request types.OperationRequest, cli
 	}, nil
 }
 
-// cloudflareInsightsResponse wraps the SDK's insight list response since the SDK's own type models the wrong JSON structure
+// cloudflareInsightsResponse wraps the insight list response, correcting the SDK's JSON structure
 type cloudflareInsightsResponse struct {
 	Result security_center.InsightListResponse `json:"result"`
 }

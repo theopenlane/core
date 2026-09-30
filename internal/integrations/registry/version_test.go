@@ -30,13 +30,13 @@ var (
 	versionSecondCredentialRef = integrationtypes.CredentialRefOf[versionSecondCredential]()
 	// retiredUserInputRef is the user input layout an earlier definition version stored
 	retiredUserInputRef = integrationtypes.NewUserInputRef[retiredUserInput]("retiredUserInput")
-	// surfaceUserInputRef is the current user input layout taking over the retired layout with a backfill
+	// surfaceUserInputRef is the current layout replacing the retired one with a backfill
 	surfaceUserInputRef = integrationtypes.NewUserInputRef[testUserInput]("testUserInput").
 				Replacing(retiredUserInputRef, func(r retiredUserInput) testUserInput { return testUserInput{Region: r.Zone} }).
 				Backfilled(func(context.Context, integrationtypes.InstallationRequest, *testUserInput) error { return nil })
 )
 
-// surfaceDefinition returns a definition exercising every surfaced kind, declared in reverse name order to prove sorting
+// surfaceDefinition returns a definition exercising every surfaced kind in reverse name order
 func surfaceDefinition(id string) integrationtypes.Definition {
 	def, clientRef := minimalDefinition(id)
 	defRef := integrationtypes.NewDefinitionRef(id)
@@ -308,7 +308,7 @@ func TestVersionChangesWhenASlotDeclaresAReplacement(t *testing.T) {
 	}
 }
 
-// TestVersionChangesWhenAReplacementIsRemoved verifies dropping a declared replacement from a user input layout, operation, or webhook moves the version since Replaces is surfaced
+// TestVersionChangesWhenAReplacementIsRemoved verifies removing a replacement moves the version
 func TestVersionChangesWhenAReplacementIsRemoved(t *testing.T) {
 	t.Parallel()
 
@@ -335,7 +335,7 @@ func TestVersionChangesWhenAReplacementIsRemoved(t *testing.T) {
 	}
 }
 
-// TestVersionChangesWithSurfacedNameAndSchemaFields verifies each independently changeable surfaced field moves the version when nothing else about the definition changes
+// TestVersionChangesWithSurfacedNameAndSchemaFields verifies surfaced fields move the version
 func TestVersionChangesWithSurfacedNameAndSchemaFields(t *testing.T) {
 	t.Parallel()
 
@@ -373,7 +373,7 @@ func TestVersionChangesWithSurfacedNameAndSchemaFields(t *testing.T) {
 	}
 }
 
-// TestVersionUnchangedForDescriptionMetaAndHandlers verifies fields absent from the surface leave the version unchanged
+// TestVersionUnchangedForDescriptionMetaAndHandlers verifies non-surfaced fields don't change it
 func TestVersionUnchangedForDescriptionMetaAndHandlers(t *testing.T) {
 	t.Parallel()
 
@@ -390,7 +390,7 @@ func TestVersionUnchangedForDescriptionMetaAndHandlers(t *testing.T) {
 	}
 }
 
-// TestVersionChangesWhenAuthManagedCredentialSchemaChanges verifies an auth-managed slot's stored schema moves the version although the slot has no form schema
+// TestVersionChangesWhenAuthManagedCredentialSchemaChanges verifies its schema moves the version
 func TestVersionChangesWhenAuthManagedCredentialSchemaChanges(t *testing.T) {
 	t.Parallel()
 

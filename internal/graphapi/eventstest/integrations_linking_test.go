@@ -25,8 +25,7 @@ import (
 
 const linkTestOperationName = "findings.sync"
 
-// linkTestDefinition builds a minimal ingest-producing definition whose finding mapping passes the
-// provider payload through unchanged and declares the supplied cross-object link rules
+// linkTestDefinition returns a minimal finding ingest definition with link rules
 func linkTestDefinition(defID string, links []integrationtypes.LinkRule) integrationtypes.Definition {
 	return integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{
@@ -53,8 +52,7 @@ func linkTestDefinition(defID string, links []integrationtypes.LinkRule) integra
 	}
 }
 
-// ingestFindings registers the definition into a fresh registry and pushes the payloads through the
-// synchronous ingest path — mapping, link injection, and catalog upsert — exactly as an operation run would
+// ingestFindings ingests payloads through def's synchronous ingest path
 func ingestFindings(ctx context.Context, t *testing.T, integration *ent.Integration, def integrationtypes.Definition, payloads ...string) error {
 	t.Helper()
 
@@ -76,7 +74,7 @@ func ingestFindings(ctx context.Context, t *testing.T, integration *ent.Integrat
 	return err
 }
 
-// findingControls loads the ingested finding by external id and returns the ref codes of its linked controls
+// findingControls returns a finding and its linked controls' ref codes
 func findingControls(ctx context.Context, t *testing.T, externalID string) (*ent.Finding, []string) {
 	t.Helper()
 
@@ -92,7 +90,6 @@ func findingControls(ctx context.Context, t *testing.T, externalID string) (*ent
 func TestIntegrationCrossObjectLinking(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
-	// seed link targets with stable ref codes; other tests' controls use random UUID ref codes
 	controlIDs := make([]string, 0, 4)
 	for _, refCode := range []string{"LINK-CC-1", "LINK-CC-2", "LINK-CC-3", "LINK-EXPR-1"} {
 		seeded := (&th.ControlBuilder{Client: suite.Client, RefCode: refCode}).MustNew(th.SharedTestUser1.UserCtx, t)
@@ -108,9 +105,6 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 	th.RequireNoError(t, err)
 	assert.Assert(t, integration.OwnerID != "", "seeded integration must be org-owned")
 
-	// other tests assert exact integration/record counts in the shared org, so remove everything
-	// this test creates: join rows first (their FKs block finding deletion), then findings,
-	// controls, and the integration
 	t.Cleanup(func() {
 		findings, err := suite.Client.DB.Finding.Query().Where(finding.ExternalIDHasPrefix("link-f-")).All(ctx)
 		th.RequireNoError(t, err)

@@ -13,7 +13,7 @@ import (
 // directorySyncOperation is the Keycloak directory sync operation
 var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(keycloakClient, runDirectorySync)
 
-// runDirectorySync acquires a realm token and collects Keycloak directory users, groups, and memberships
+// runDirectorySync collects Keycloak directory users, groups, and memberships
 func runDirectorySync(ctx context.Context, request types.OperationRequest, gc *gocloak.GoCloak, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	cred, err := resolveCredential(request.Credentials)
 	if err != nil {

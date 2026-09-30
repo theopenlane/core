@@ -6,7 +6,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// mapExprDirectoryAccount is the CEL mapping expression for Zitadel user payloads mapped to DirectoryAccount
+// mapExprDirectoryAccount maps Zitadel user payloads to DirectoryAccount
 var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.ExternalID.Expr(`'user_id' in payload ? payload.user_id : ""`),
 	entityops.DirectoryAccountFields.CanonicalEmail.Expr(`'human' in payload && 'email' in payload.human && 'email' in payload.human.email ? payload.human.email.email : ""`),

@@ -43,7 +43,7 @@ type cloudflareMemberPayload struct {
 	Memberships []cloudflareGroupMemberPayload `json:"memberships,omitempty"`
 }
 
-// cloudflareGroupPayload is the normalized payload for a Cloudflare groups (roles, user groups, permission groups)
+// cloudflareGroupPayload is the normalized payload for a Cloudflare group (role or user group)
 type cloudflareGroupPayload struct {
 	// ID is the Cloudflare group identifier
 	ID string `json:"id,omitempty"`
@@ -65,7 +65,7 @@ type cloudflareGroupMemberPayload struct {
 	GroupID string `json:"group_id"`
 	// UserID is the clouldflare user id
 	UserID string `json:"user_id"`
-	// Email is the contact email of the member, the account's external id when Cloudflare reports no user id
+	// Email is the contact email of the member
 	Email string `json:"email,omitempty"`
 	// Meta is metadata from the policy group
 	Meta any `json:"meta,omitempty"`
@@ -148,7 +148,7 @@ func runDirectorySync(ctx context.Context, request types.OperationRequest, clien
 	return append(providerkit.DirectoryAccountPayloadSets(accountEnvelopes), providerkit.DirectoryGroupPayloadSets(groupEnvelopes, membershipEnvelopes, true)...), nil
 }
 
-// isIncludedUserMember reports whether a group member is a user that was included in the account ingest set
+// isIncludedUserMember reports whether member was included in the account ingest set
 func isIncludedUserMember(member cloudflareMemberPayload, includedUsers map[string]struct{}) bool {
 	_, ok := includedUsers[member.Email]
 	return ok
@@ -195,7 +195,7 @@ func listDirectoryUsers(ctx context.Context, client *CloudflareClient, accountID
 	return members, nil
 }
 
-// listDirectoryGroups pages through all Cloudflare user groups and permission groups for the given account
+// listDirectoryGroups pages through all Cloudflare user groups and permission groups
 func listDirectoryGroups(ctx context.Context, client *CloudflareClient, accountID string) ([]cloudflareGroupPayload, error) {
 	iterUser := client.IAM.UserGroups.ListAutoPaging(ctx, iam.UserGroupListParams{
 		AccountID: cf.F(accountID),
@@ -256,7 +256,7 @@ func permissionGroupLabel(g iam.PermissionGroupListResponse) string {
 	return raw.Meta.Label
 }
 
-// rawPayload prefers the untouched API response so attributes the typed SDK struct does not model (such as a permission group's meta label and scopes) survive into the stored payload
+// rawPayload prefers the untouched API response so fields the typed SDK struct omits survive
 func rawPayload(raw string, fallback any) any {
 	if raw == "" {
 		return fallback

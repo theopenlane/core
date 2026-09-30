@@ -8,7 +8,7 @@ import (
 	"github.com/samber/lo"
 )
 
-// unreplaced returns the retired names from old that no entry in next carries or replaces
+// unreplaced returns retired names not carried or replaced by next
 func unreplaced[T any](old []string, next []T, name func(T) string, replaces func(T) []string) []string {
 	carried := lo.FlatMap(next, func(entry T, _ int) []string {
 		return append([]string{name(entry)}, replaces(entry)...)
@@ -17,7 +17,7 @@ func unreplaced[T any](old []string, next []T, name func(T) string, replaces fun
 	return lo.Without(old, carried...)
 }
 
-// GateSurfaceChange refuses a next surface that drops a credential slot, operation or webhook the committed snapshot had without a registration replacing it
+// GateSurfaceChange refuses dropping a slot, operation, or webhook without a replacement
 func GateSurfaceChange(target string, existing []byte, next Surface) error {
 	var old Surface
 	if err := json.Unmarshal(existing, &old); err != nil {

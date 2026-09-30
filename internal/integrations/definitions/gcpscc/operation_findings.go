@@ -27,7 +27,7 @@ const (
 	findingsMaxPageSize = 1000
 )
 
-// findingsCollectOperation is the operation ref for the GCP Security Command Center findings collection operation
+// findingsCollectOperation is the operation ref for GCP SCC findings collection
 var findingsCollectOperation = types.OperationRefOf[FindingsSync]().Ingests(sccClient, runFindingsCollect)
 
 // runFindingsCollect collects GCP SCC findings from configured sources
@@ -106,7 +106,7 @@ func runFindingsCollect(ctx context.Context, request types.OperationRequest, c *
 	}, nil
 }
 
-// listAllFindings paginates through all pages of findings for a single source and returns every result
+// listAllFindings pages through all findings for a single source
 func listAllFindings(ctx context.Context, c *cloudscc.Client, sourceName string, pageSize int, timeFilter string) ([]*securitycenterpb.ListFindingsResponse_ListFindingsResult, error) {
 	req := &securitycenterpb.ListFindingsRequest{
 		PageSize: int32(min(pageSize, math.MaxInt32)), //nolint:gosec // bounds checked via min

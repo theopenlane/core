@@ -112,7 +112,7 @@ Organizations marked for deletion: {{ .Count }}
 {{ end -}}`)
 )
 
-// systemMessageRegistration builds an OperationRegistration for a fire-and-forget Slack system message
+// systemMessageRegistration builds an OperationRegistration for a system message
 func systemMessageRegistration[T any](op types.OperationRef[T], description string, tmpl *template.Template) types.OperationRegistration {
 	return op.Handles(slackClient, func(ctx context.Context, _ types.OperationRequest, c *SlackClient, cfg T) (json.RawMessage, error) {
 		return nil, renderAndSendSystemMessage(ctx, c, tmpl, cfg)
@@ -133,7 +133,7 @@ func renderAndSendSystemMessage[T any](ctx context.Context, c *SlackClient, tmpl
 	return c.sendText(ctx, buf.String(), "")
 }
 
-// AllSlackSystemMessages returns all system Slack message operation registrations for wiring into the builder
+// AllSlackSystemMessages returns all system Slack message operation registrations
 func AllSlackSystemMessages() []types.OperationRegistration {
 	return []types.OperationRegistration{
 		systemMessageRegistration(NewUserOp, "Notify the platform Slack workspace that a new user registered", newUserTemplate),

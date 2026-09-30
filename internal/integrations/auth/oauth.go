@@ -19,7 +19,6 @@ import (
 )
 
 // OAuthConfig describes OAuth2 or OIDC endpoint configuration for an integration auth flow
-// each individual provider will have their own respective fields (like ClientID, ClientSecret) so these aren't duplications
 type OAuthConfig struct {
 	// ClientID is the OAuth application client identifier
 	ClientID string

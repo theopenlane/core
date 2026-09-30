@@ -22,7 +22,7 @@ const (
 	vulnerabilityType = "Software and Configuration Checks/Vulnerabilities/CVE"
 )
 
-// findingsCollectOperation is the AWS Security Hub finding and vulnerabilities collection operation, pinned to its persisted name
+// findingsCollectOperation is the AWS Security Hub findings collection operation
 var findingsCollectOperation = types.OperationRefOf[FindingSync]().Ingests(securityHubClient, runFindingsCollect)
 
 // runFindingsCollect collects Security Hub findings

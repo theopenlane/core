@@ -61,7 +61,7 @@ func Builder(paymentReminder PaymentReminderConfig, organizationDelete Organizat
 	})
 }
 
-// sweepHandler returns the request handler that overlays the request config onto a copy of the operator sweep defaults, runs the sweep, and encodes the processed count
+// sweepHandler builds a request handler that runs the sweep and encodes the result
 func sweepHandler[S sweeper](defaults S) func(context.Context, types.OperationRequest, S) (json.RawMessage, error) {
 	return func(ctx context.Context, req types.OperationRequest, _ S) (json.RawMessage, error) {
 		sweep := defaults

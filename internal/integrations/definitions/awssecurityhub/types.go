@@ -15,17 +15,17 @@ var (
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// awsAssumeRoleCredential is the typed credential slot for AWS STS assume-role auth
 	awsAssumeRoleCredential = types.CredentialRefOf[AssumeRoleCredentialSchema]()
-	// awsServiceAccountCredential is the typed credential slot for AWS static service account credentials
+	// awsServiceAccountCredential is the credential slot for static service account credentials
 	awsServiceAccountCredential = types.CredentialRefOf[ServiceAccountCredentialSchema]()
 	// securityHubClient is the client ref for the AWS Security Hub client used by this definition
 	securityHubClient = types.ClientRefOf[*securityhub.Client]().Using(awsAssumeRoleCredential).Using(awsServiceAccountCredential)
-	// configServiceClient is the client ref for the AWS Config client used by config controls operations
+	// configServiceClient is the client ref for the AWS Config client
 	configServiceClient = types.ClientRefOf[*configservice.Client]().Using(awsAssumeRoleCredential).Using(awsServiceAccountCredential)
 	// iamClient is the client ref for the AWS IAM client used by directory sync operations
 	iamClient = types.ClientRefOf[*iam.Client]().Using(awsAssumeRoleCredential).Using(awsServiceAccountCredential)
 	// awsAssumeRoleConnection is the connection mode selected by the assume-role credential
 	awsAssumeRoleConnection = types.NewConnectionRef(awsAssumeRoleCredential).Enables(securityHubClient)
-	// awsServiceAccountConnection is the connection mode selected by the static service account credential
+	// awsServiceAccountConnection is the connection mode for the static service account credential
 	awsServiceAccountConnection = types.NewConnectionRef(awsServiceAccountCredential).Enables(securityHubClient)
 	// userInput is the installation user input layout for the AWS Security Hub definition
 	userInput = types.NewUserInputRef[UserInput]("awssecurityhub")
@@ -76,7 +76,7 @@ type AssetSync struct {
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
 }
 
-// AssumeRoleCredentialSchema holds the AWS assume-role and collection-scope inputs shared by the service clients
+// AssumeRoleCredentialSchema holds the AWS assume-role and collection-scope inputs
 type AssumeRoleCredentialSchema struct {
 	// RoleARN is the cross-account IAM role ARN Openlane should assume in the tenant environment
 	RoleARN string `json:"roleArn"                   jsonschema:"required,title=IAM Role ARN,description=Cross-account role Openlane should assume in the tenant environment.,secret=true"`
@@ -84,7 +84,7 @@ type AssumeRoleCredentialSchema struct {
 	ExternalID string `json:"externalId"                jsonschema:"required,title=External ID,description=External ID required in the tenant role trust policy." jsonschema_extras:"generate=true"`
 	// HomeRegion is the AWS region where Security Hub cross-region aggregation is managed
 	HomeRegion string `json:"homeRegion"                jsonschema:"required,title=Home Region,description=AWS region used for Security Hub aggregation and other service API calls (e.g. us-east-1)."`
-	// AccountID is the AWS account ID; when provided it must match the account segment of RoleARN, otherwise the account is derived from RoleARN
+	// AccountID is the AWS account ID, derived from RoleARN when not provided
 	AccountID string `json:"accountId,omitempty"       jsonschema:"title=Account ID,description=Optional AWS account ID for reference in results and reporting."`
 	// AccountScope controls whether collection covers all delegated accounts or a subset
 	AccountScope string `json:"accountScope,omitempty"    jsonschema:"title=Account Scope,description=Collect from all delegated accounts or restrict to specific account IDs.,enum=all,enum=specific"`
@@ -110,7 +110,7 @@ type ServiceAccountCredentialSchema struct {
 	Region string `json:"region" jsonschema:"required,title=Region,description=AWS region used for Security Hub and other service API calls (e.g. us-east-1)."`
 }
 
-// InstallationMetadata holds the non-secret AWS connection attributes persisted for one installation
+// InstallationMetadata holds the non-secret AWS connection attributes for an installation
 type InstallationMetadata struct {
 	// RoleARN is the cross-account IAM role ARN Openlane assumes for this installation
 	RoleARN string `json:"roleArn,omitempty" jsonschema:"title=IAM Role ARN"`

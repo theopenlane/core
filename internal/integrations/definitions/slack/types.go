@@ -37,7 +37,7 @@ type RuntimeSlackConfig struct {
 	DefaultChannel string `json:"defaultChannel,omitempty" koanf:"defaultChannel" jsonschema:"description=Default channel id for system messages when no explicit channel is provided"`
 }
 
-// Provisioned reports whether the runtime config has the minimum required fields to deliver system messages
+// Provisioned reports whether the runtime config has the minimum required fields
 func (c RuntimeSlackConfig) Provisioned() bool {
 	return c.WebhookURL != "" || c.BotToken != ""
 }
@@ -72,7 +72,7 @@ type slackBotTokenCred struct {
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
-	// DefaultMessaging marks this installation as the preferred Slack workspace for workflow messaging operations
+	// DefaultMessaging marks this installation as the preferred workspace for messaging
 	DefaultMessaging bool `json:"defaultMessaging,omitempty" jsonschema:"title=Default Messaging"`
 	// DirectorySync includes the configuration for identity accounts from Slack members
 	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Account Sync"`
@@ -91,7 +91,7 @@ type InstallationMetadata struct {
 	TeamID string `json:"teamId,omitempty" jsonschema:"title=Team ID"`
 	// TeamName is the Slack workspace display name
 	TeamName string `json:"teamName,omitempty" jsonschema:"title=Team Name"`
-	// DefaultChannel is the Slack channel id used for system notifications on the customer installation
+	// DefaultChannel is the Slack channel id used for system notifications
 	DefaultChannel string `json:"defaultChannel,omitempty" jsonschema:"title=Default Channel"`
 }
 
