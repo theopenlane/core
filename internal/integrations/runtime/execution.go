@@ -24,38 +24,8 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// reconcileOperations emits one reconciliation envelope per reconcilable operation, starting an independent adaptive scheduling cycle for each
-func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Integration) error {
-	def, ok := r.Registry().Definition(integration.DefinitionID)
-	if !ok {
-		return ErrDefinitionNotFound
-	}
-
-	ctx = intobvs.WithInstallation(ctx, integration)
-
-	var errs []error
-
-	for _, op := range def.Operations {
-		if !op.Policy.Reconcile {
-			continue
-		}
-
-		opCtx := intobvs.WithOperation(ctx, op.Name)
-
-		if op.DisabledFor(integration.Config.ClientConfig) {
-			logx.FromContext(opCtx).Debug().Msg("operation is disabled, skipping reconcile")
-
-			continue
-		}
-
-		if err := r.emitReconcileLoop(opCtx, integration, op.Name); err != nil {
-			logx.FromContext(opCtx).Error().Err(err).Msg("failed to emit reconcile envelope")
-			errs = append(errs, err)
-		}
-	}
-
-	return errors.Join(errs...)
-}
+// operationCompletedSummary is the run summary recorded for a successful operation that ingests no records
+const operationCompletedSummary = "operation completed"
 
 // reconcileOutput is the structured output recorded on reconcile River jobs for UI visibility
 type reconcileOutput struct {
@@ -180,14 +150,7 @@ func (r *Runtime) reconcileCyclePreflight(ctx context.Context, installation *ent
 func (r *Runtime) failReconcileCycle(ctx context.Context, cycle reconcileCycle, response json.RawMessage, ingestResult operations.IngestResult, execErr error) error {
 	logx.FromContext(ctx).Error().Err(execErr).Msg("reconcile operation failed")
 
-	metrics := operations.IngestMetrics(ingestResult)
-	metrics["response"] = jsonx.DecodeAnyOrNil(response)
-
-	if completeErr := operations.CompleteRun(ctx, r.DB(), cycle.runID, cycle.startedAt, operations.RunResult{
-		Status:  enums.IntegrationRunStatusFailed,
-		Error:   execErr.Error(),
-		Metrics: metrics,
-	}); completeErr != nil {
+	if completeErr := operations.CompleteRun(ctx, r.DB(), cycle.runID, cycle.startedAt, executionRunResult(false, response, ingestResult, execErr)); completeErr != nil {
 		return errors.Join(execErr, completeErr)
 	}
 
@@ -224,27 +187,9 @@ func (r *Runtime) failReconcileCycle(ctx context.Context, cycle reconcileCycle, 
 func (r *Runtime) completeReconcileCycle(ctx context.Context, cycle reconcileCycle, operation types.OperationRegistration, response json.RawMessage, ingestResult operations.IngestResult) (int, error) {
 	delta := ingestResult.Changed
 
-	metrics := operations.IngestMetrics(ingestResult)
-	metrics["response"] = jsonx.DecodeAnyOrNil(response)
-
 	logx.FromContext(ctx).Info().Int("records", ingestResult.Attempted).Int("changed", delta).Msg("reconcile operation completed")
 
-	summary := "operation completed"
-	if operation.IngestHandle != nil {
-		summary = operations.IngestRunSummary(ingestResult)
-	}
-
-	runResult := operations.RunResult{
-		Status:  enums.IntegrationRunStatusSuccess,
-		Summary: summary,
-		Metrics: metrics,
-	}
-
-	if ingestResult.Failed > 0 {
-		runResult.Error = operations.RecordFailureSummary(ingestResult)
-	}
-
-	if err := operations.CompleteRun(ctx, r.DB(), cycle.runID, cycle.startedAt, runResult); err != nil {
+	if err := operations.CompleteRun(ctx, r.DB(), cycle.runID, cycle.startedAt, executionRunResult(operation.IngestHandle != nil, response, ingestResult, nil)); err != nil {
 		return delta, err
 	}
 
@@ -261,6 +206,28 @@ func (r *Runtime) completeReconcileCycle(ctx context.Context, cycle reconcileCyc
 	}
 
 	return delta, nil
+}
+
+// executionRunResult renders one execution's terminal run result from its response, ingest counters, and error; ingest selects the record-count summary for successful ingest operations
+func executionRunResult(ingest bool, response json.RawMessage, ingestResult operations.IngestResult, execErr error) operations.RunResult {
+	metrics := operations.IngestMetrics(ingestResult)
+	metrics["response"] = jsonx.DecodeAnyOrNil(response)
+
+	if execErr != nil {
+		return operations.RunResult{Status: enums.IntegrationRunStatusFailed, Error: execErr.Error(), Metrics: metrics}
+	}
+
+	result := operations.RunResult{Status: enums.IntegrationRunStatusSuccess, Summary: operationCompletedSummary, Metrics: metrics}
+
+	if ingest {
+		result.Summary = operations.IngestRunSummary(ingestResult)
+	}
+
+	if ingestResult.Failed > 0 {
+		result.Error = operations.RecordFailureSummary(ingestResult)
+	}
+
+	return result
 }
 
 // ExecuteOperation runs one integration operation inline without run tracking
@@ -286,17 +253,16 @@ func (r *Runtime) ExecuteRuntimeOperation(ctx context.Context, definitionID, ope
 
 // executeOperationInline runs one integration operation inline without run tracking, if there is no integration ID it runs as an runtime client
 func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.Integration, definitionID string, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage) (json.RawMessage, error) {
-	if integration != nil {
-		if operation.DisabledFor(integration.Config.ClientConfig) {
-			return nil, operations.ErrOperationDisabled
-		}
-
-		ctx = intobvs.WithInstallation(ctx, integration)
-	} else {
+	switch {
+	case integration == nil:
 		ctx = intobvs.WithContext(ctx, types.NewOperationContext("", operation.Name, types.IntegrationSource{
 			DefinitionID: definitionID,
 			Runtime:      true,
 		}))
+	case operation.DisabledFor(integration.Config.ClientConfig):
+		return nil, operations.ErrOperationDisabled
+	default:
+		ctx = intobvs.WithInstallation(ctx, integration)
 	}
 
 	ctx = intobvs.WithOperation(ctx, operation.Name)
@@ -331,16 +297,9 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 		integration, bootstrapErr = r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: src.IntegrationID})
 	}
 
-	failRun := func(execErr error, response json.RawMessage, ingestResult operations.IngestResult) error {
+	finish := func(execErr error, ingest bool, response json.RawMessage, ingestResult operations.IngestResult) error {
 		if tracked {
-			metrics := operations.IngestMetrics(ingestResult)
-			metrics["response"] = jsonx.DecodeAnyOrNil(response)
-
-			if completeErr := operations.CompleteRun(ctx, db, src.RunID, startedAt, operations.RunResult{
-				Status:  enums.IntegrationRunStatusFailed,
-				Error:   execErr.Error(),
-				Metrics: metrics,
-			}); completeErr != nil {
+			if completeErr := operations.CompleteRun(ctx, db, src.RunID, startedAt, executionRunResult(ingest, response, ingestResult, execErr)); completeErr != nil {
 				execErr = errors.Join(execErr, completeErr)
 			}
 		}
@@ -355,7 +314,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	logx.FromContext(ctx).Debug().Msg("operation started")
 
 	if bootstrapErr != nil {
-		return failRun(bootstrapErr, nil, operations.IngestResult{})
+		return finish(bootstrapErr, false, nil, operations.IngestResult{})
 	}
 
 	if integration != nil {
@@ -365,7 +324,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	if tracked {
 		resumedCtx, err := r.resumeTrackedRun(ctx, &oc, &src)
 		if err != nil {
-			return failRun(err, nil, operations.IngestResult{})
+			return finish(err, false, nil, operations.IngestResult{})
 		}
 
 		ctx = resumedCtx
@@ -373,49 +332,19 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 
 	operation, err := r.Registry().Operation(src.DefinitionID, envelope.Operation)
 	if err != nil {
-		return failRun(err, nil, operations.IngestResult{})
+		return finish(err, false, nil, operations.IngestResult{})
 	}
 
-	ingestOptions := operations.IngestOptionsFromOperationContext(oc)
+	response, ingestResult, err := r.executeResolvedOperation(ctx, integration, operation, nil, envelope.Config, envelope.ForceClientRebuild, operations.IngestOptionsFromOperationContext(oc))
 
-	response, ingestResult, err := r.executeResolvedOperation(ctx, integration, operation, nil, envelope.Config, envelope.ForceClientRebuild, ingestOptions)
-	if err != nil {
+	switch {
+	case err != nil:
 		logx.FromContext(ctx).Error().Err(err).Msg("operation failed")
-
-		return failRun(err, response, ingestResult)
+	default:
+		logx.FromContext(ctx).Info().Msg("operation completed")
 	}
 
-	logx.FromContext(ctx).Info().Msg("operation completed")
-
-	summary := "operation completed"
-	if operation.IngestHandle != nil {
-		summary = operations.IngestRunSummary(ingestResult)
-	}
-
-	metrics := operations.IngestMetrics(ingestResult)
-	metrics["response"] = jsonx.DecodeAnyOrNil(response)
-
-	runResult := operations.RunResult{
-		Status:  enums.IntegrationRunStatusSuccess,
-		Summary: summary,
-		Metrics: metrics,
-	}
-
-	if ingestResult.Failed > 0 {
-		runResult.Error = operations.RecordFailureSummary(ingestResult)
-	}
-
-	var completeErr error
-
-	if tracked {
-		completeErr = operations.CompleteRun(ctx, db, src.RunID, startedAt, runResult)
-	}
-
-	if r.postExecutionHook != nil {
-		r.postExecutionHook(ctx, envelope, completeErr)
-	}
-
-	return completeErr
+	return finish(err, operation.IngestHandle != nil, response, ingestResult)
 }
 
 // resumeTrackedRun marks the envelope's run running, continuing under a retry run when the run already left pending
@@ -464,7 +393,7 @@ func (r *Runtime) BuildClientForIntegration(ctx context.Context, integration *en
 
 // executeResolvedOperation executes the given operation with the input integration and registered Operation
 func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, operations.IngestResult, error) {
-	client, credentials, _, err := r.resolveOperationClient(ctx, integration, operation, credentials, config, clientForce)
+	client, credentials, err := r.resolveOperationClient(ctx, integration, operation, credentials, config, clientForce)
 	if err != nil {
 		return nil, operations.IngestResult{}, err
 	}
@@ -509,49 +438,42 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		Services:    r,
 	}
 
-	if operation.IngestHandle != nil {
-		payloadSets, err := operation.IngestHandle(ctx, req)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("ingest handle failed")
+	if operation.IngestHandle == nil {
+		response, err := operation.Handle(ctx, req)
 
-			return nil, operations.IngestResult{}, err
-		}
-
-		var totalEnvelopes int
-		for _, ps := range payloadSets {
-			totalEnvelopes += len(ps.Envelopes)
-		}
-
-		logx.FromContext(ctx).Info().Int("payload_sets", len(payloadSets)).Int("envelopes", totalEnvelopes).Msg("ingest handle completed")
-
-		result, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
-			Registry:    r.Registry(),
-			DB:          r.DB(),
-			Runtime:     r.Gala(),
-			Integration: integration,
-		}, operation.Name, operation.Ingest, operation.Policy, payloadSets, ingestOptions)
-		if err != nil {
-			return nil, result, err
-		}
-
-		response, marshalErr := json.Marshal(result)
-		if marshalErr != nil {
-			return nil, operations.IngestResult{}, marshalErr
-		}
-		return response, result, nil
-	}
-
-	response, err := operation.Handle(ctx, req)
-	if err != nil {
 		return response, operations.IngestResult{}, err
 	}
 
-	return response, operations.IngestResult{}, nil
+	payloadSets, err := operation.IngestHandle(ctx, req)
+	if err != nil {
+		return nil, operations.IngestResult{}, err
+	}
+
+	logx.FromContext(ctx).Info().Int("payload_sets", len(payloadSets)).Int("envelopes", lo.SumBy(payloadSets, func(ps types.IngestPayloadSet) int { return len(ps.Envelopes) })).Msg("ingest handle completed")
+
+	result, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
+		Registry:    r.Registry(),
+		DB:          r.DB(),
+		Runtime:     r.Gala(),
+		Integration: integration,
+	}, operation.Name, operation.Ingest, operation.Policy, payloadSets, ingestOptions)
+	if err != nil {
+		return nil, result, err
+	}
+
+	response, err := json.Marshal(result)
+	if err != nil {
+		return nil, operations.IngestResult{}, err
+	}
+
+	return response, result, nil
 }
 
-// SeedReconcileJobs ensures every connected integration with reconcilable operations has an active River job
+// SeedReconcileJobs resets the recurring loops of every operational installation whose active definition declares a reconcilable operation
 func (r *Runtime) SeedReconcileJobs(ctx context.Context) error {
-	definitionIDs := r.reconcilableDefinitionIDs()
+	definitionIDs := lo.FilterMap(r.Registry().Definitions(), func(def types.Definition, _ int) (string, bool) {
+		return def.ID, def.Active && lo.SomeBy(def.Operations, func(op types.OperationRegistration) bool { return op.Policy.Reconcile })
+	})
 	if len(definitionIDs) == 0 {
 		return nil
 	}
@@ -567,8 +489,6 @@ func (r *Runtime) SeedReconcileJobs(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-
-	var errs []error
 
 	logx.FromContext(ctx).Debug().Int("count", len(installations)).Msg("installations found to check for reconciliation")
 
@@ -638,6 +558,7 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 	return errors.Join(errs...)
 }
 
+// isOrgSubscriptionActive reports whether the organization's subscription permits recurring operations, always true when entitlements are disabled
 func (r *Runtime) isOrgSubscriptionActive(ctx context.Context, orgID string) (bool, error) {
 	client := r.DB()
 
@@ -661,41 +582,21 @@ func (r *Runtime) isOrgSubscriptionActive(ctx context.Context, orgID string) (bo
 		Exist(ctx)
 }
 
-// reconcilableDefinitionIDs returns the IDs of all registered definitions that have at least one operation with Policy.Reconcile set
-func (r *Runtime) reconcilableDefinitionIDs() []string {
-	var ids []string
-
-	for _, spec := range r.Registry().Catalog() {
-		def, ok := r.Registry().Definition(spec.ID)
-		if !ok {
-			continue
-		}
-
-		if !def.Active {
-			continue
-		}
-
-		for _, op := range def.Operations {
-			if op.Policy.Reconcile {
-				ids = append(ids, spec.ID)
-				break
-			}
-		}
+// PurgeInstallationJobs removes every queued River job bound to the installation across the operation-context and per-record ingest job families and returns how many were purged
+func (r *Runtime) PurgeInstallationJobs(ctx context.Context, integrationID string) (int, error) {
+	operationJobs, err := types.PropertiesFragment(map[string]string{"entityId": integrationID, "entityType": "integration"})
+	if err != nil {
+		return 0, err
 	}
 
-	return ids
-}
-
-// PurgeInstallationJobs removes every queued River job bound to the installation across all job families and returns how many were purged
-func (r *Runtime) PurgeInstallationJobs(ctx context.Context, integrationID string) (int, error) {
-	fragments, err := installationJobFragments(integrationID)
+	ingestJobs, err := types.PropertiesFragment(map[string]string{"integration_id": integrationID})
 	if err != nil {
 		return 0, err
 	}
 
 	var purged int
 
-	for _, fragment := range fragments {
+	for _, fragment := range []string{operationJobs, ingestJobs} {
 		count, err := r.Gala().PurgeActiveJobsWithMetadata(ctx, fragment)
 		if err != nil {
 			return purged, err
@@ -707,83 +608,42 @@ func (r *Runtime) PurgeInstallationJobs(ctx context.Context, integrationID strin
 	return purged, nil
 }
 
-// PurgeInstallationIngestJobs removes every queued per-record ingest job bound to the installation and returns how many were purged, leaving its operation-context jobs in place
-func (r *Runtime) PurgeInstallationIngestJobs(ctx context.Context, integrationID string) (int, error) {
-	fragment, err := installationIngestJobFragment(integrationID)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.Gala().PurgeActiveJobsWithMetadata(ctx, fragment)
-}
-
-// installationJobFragments builds the JSONB containment fragments matching every job family bound to one installation
-func installationJobFragments(integrationID string) ([]string, error) {
-	operationJobs, err := types.PropertiesFragment(map[string]string{"entityId": integrationID, "entityType": "integration"})
-	if err != nil {
-		return nil, err
-	}
-
-	ingestJobs, err := installationIngestJobFragment(integrationID)
-	if err != nil {
-		return nil, err
-	}
-
-	return []string{operationJobs, ingestJobs}, nil
-}
-
-// installationIngestJobFragment builds the JSONB containment fragment matching the per-record ingest jobs bound to one installation
-func installationIngestJobFragment(integrationID string) (string, error) {
-	return types.PropertiesFragment(map[string]string{"integration_id": integrationID})
-}
-
-// resolveOperationClient resolves the client for an operation
-func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool) (any, types.CredentialBindings, string, error) {
-	if !operation.ClientRef.Valid() {
-		if integration != nil {
-			return nil, credentials, integration.DefinitionID, nil
-		}
-
+// resolveOperationClient resolves the client and credentials an operation runs with: none for client-less operations, the definition's cached runtime client without an installation, and the installation's built client otherwise
+func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool) (any, types.CredentialBindings, error) {
+	switch {
+	case !operation.ClientRef.Valid():
+		return nil, credentials, nil
+	case integration == nil:
 		oc, _ := gala.OperationContextFromContext(ctx)
-		definitionID := types.IntegrationSourceFrom(oc).DefinitionID
 
-		return nil, credentials, definitionID, nil
-	}
-
-	if integration == nil {
-		oc, _ := gala.OperationContextFromContext(ctx)
-		definitionID := types.IntegrationSourceFrom(oc).DefinitionID
-
-		client, ok := r.Registry().RuntimeClient(definitionID)
+		client, ok := r.Registry().RuntimeClient(types.IntegrationSourceFrom(oc).DefinitionID)
 		if !ok {
-			return nil, credentials, definitionID, ErrRuntimeClientNotFound
+			return nil, credentials, ErrRuntimeClientNotFound
 		}
 
 		logx.FromContext(ctx).Debug().Msg("runtime client resolved")
 
-		return client, credentials, definitionID, nil
+		return client, credentials, nil
 	}
 
 	registration, err := r.Registry().Client(integration.DefinitionID, operation.ClientRef)
 	if err != nil {
-		return nil, credentials, integration.DefinitionID, err
+		return nil, credentials, err
 	}
 
 	if credentials == nil {
 		credentials, err = r.loadCredentials(ctx, integration, registration.CredentialRefs)
 		if err != nil {
-			return nil, credentials, integration.DefinitionID, err
+			return nil, credentials, err
 		}
 	}
 
 	client, err := r.keystore().BuildClient(ctx, integration, registration, credentials, config, clientForce)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("client build failed")
-
-		return nil, credentials, integration.DefinitionID, types.Unhealthy(err, fmt.Sprintf(clientUnresolvedReasonFmt, err))
+		return nil, credentials, types.Unhealthy(err, fmt.Sprintf(clientUnresolvedReasonFmt, err))
 	}
 
 	logx.FromContext(ctx).Debug().Msg("client initialized")
 
-	return client, credentials, integration.DefinitionID, nil
+	return client, credentials, nil
 }

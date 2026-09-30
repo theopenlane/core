@@ -6,6 +6,7 @@ import (
 	admin "google.golang.org/api/admin/directory/v1"
 	"google.golang.org/api/option"
 
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -32,7 +33,7 @@ func resolveInstallationMetadata(ctx context.Context, cfg Config, req types.Inst
 		return InstallationMetadata{}, false, nil
 	}
 
-	svc, err := admin.NewService(ctx, option.WithTokenSource(tokenSource(ctx, cfg, cred)))
+	svc, err := admin.NewService(ctx, option.WithTokenSource(providerkit.GoogleTokenSource(ctx, cfg.ClientID, cfg.ClientSecret, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))))
 	if err != nil {
 		logx.FromContext(ctx).Err(err).Msg("googleworkspace: failed to create admin service")
 

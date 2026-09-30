@@ -67,14 +67,6 @@ type SurfaceCredential struct {
 	SurfaceSchema
 }
 
-// SurfaceNamed is one named registration and the retired names whose stored data it takes over
-type SurfaceNamed struct {
-	// Name is the stable registration name
-	Name string `json:"name"`
-	// Replaces lists the retired names this registration takes over, sorted
-	Replaces []string `json:"replaces,omitempty"`
-}
-
 // SurfaceOperation is one operation registration, the retired names it takes over, and the schema of its config
 type SurfaceOperation struct {
 	// Name is the stable operation name
@@ -83,8 +75,6 @@ type SurfaceOperation struct {
 	Replaces []string `json:"replaces,omitempty"`
 	// Schema is the reflected JSON schema of the operation's config
 	Schema json.RawMessage `json:"schema,omitempty"`
-	// Section reports whether the operation's config is resolved from the stored user input rather than supplied by each caller
-	Section bool `json:"section,omitempty"`
 }
 
 // SurfaceWebhook is one webhook contract with its events
@@ -93,21 +83,17 @@ type SurfaceWebhook struct {
 	Name string `json:"name"`
 	// Replaces lists the retired contract names whose persisted webhook rows this contract takes over, sorted
 	Replaces []string `json:"replaces,omitempty"`
-	// Events lists the contract's events, sorted by name
-	Events []SurfaceNamed `json:"events,omitempty"`
+	// Events lists the contract's event names, sorted
+	Events []string `json:"events,omitempty"`
 }
 
 // DefinitionSurface projects a definition onto its installation-facing surface, sorted for stable encoding
 func DefinitionSurface(def types.Definition) Surface {
-	credentials := lo.Map(def.CredentialRegistrations, func(registration types.CredentialRegistration, _ int) SurfaceCredential {
+	credentials := sortedProjection(def.CredentialRegistrations, func(registration types.CredentialRegistration) SurfaceCredential {
 		replaces := lo.Map(registration.Replaces, func(slot types.CredentialSlotID, _ int) string { return slot.String() })
 
-		return SurfaceCredential{Ref: registration.Ref.String(), SurfaceSchema: SurfaceSchema{Schema: registration.StoredSchema, Replaces: sortedNames(replaces), Backfill: registration.Backfill != nil}}
-	})
-
-	slices.SortFunc(credentials, func(a, b SurfaceCredential) int {
-		return strings.Compare(a.Ref, b.Ref)
-	})
+		return SurfaceCredential{Ref: registration.Ref.String(), SurfaceSchema: SurfaceSchema{Schema: registration.StoredSchema, Replaces: replaces, Backfill: registration.Backfill != nil}}
+	}, func(credential SurfaceCredential) string { return credential.Ref })
 
 	connections := lo.Map(def.Connections, func(connection types.ConnectionRegistration, _ int) string {
 		return connection.CredentialRef.String()
@@ -115,24 +101,22 @@ func DefinitionSurface(def types.Definition) Surface {
 
 	slices.Sort(connections)
 
-	operations := sortedOperations(lo.Map(def.Operations, func(operation types.OperationRegistration, _ int) SurfaceOperation {
-		return SurfaceOperation{Name: operation.Name, Replaces: sortedNames(operation.Replaces), Schema: operation.ConfigSchema, Section: operation.ConfigResolver != nil}
-	}))
+	operations := sortedProjection(def.Operations, func(operation types.OperationRegistration) SurfaceOperation {
+		return SurfaceOperation{Name: operation.Name, Replaces: operation.Replaces, Schema: operation.ConfigSchema}
+	}, func(operation SurfaceOperation) string { return operation.Name })
 
-	webhooks := lo.Map(def.Webhooks, func(webhook types.WebhookRegistration, _ int) SurfaceWebhook {
-		return SurfaceWebhook{Name: webhook.Name, Replaces: sortedNames(webhook.Replaces), Events: sortedNamed(lo.Map(webhook.Events, func(event types.WebhookEventRegistration, _ int) SurfaceNamed {
-			return SurfaceNamed{Name: event.Name}
-		}))}
-	})
+	webhooks := sortedProjection(def.Webhooks, func(webhook types.WebhookRegistration) SurfaceWebhook {
+		events := lo.Map(webhook.Events, func(event types.WebhookEventRegistration, _ int) string { return event.Name })
 
-	slices.SortFunc(webhooks, func(a, b SurfaceWebhook) int {
-		return strings.Compare(a.Name, b.Name)
-	})
+		slices.Sort(events)
+
+		return SurfaceWebhook{Name: webhook.Name, Replaces: webhook.Replaces, Events: events}
+	}, func(webhook SurfaceWebhook) string { return webhook.Name })
 
 	surface := Surface{ID: def.ID, Credentials: credentials, Connections: connections, Operations: operations, Webhooks: webhooks}
 
 	if def.UserInput != nil {
-		surface.UserInput = &SurfaceSchema{Schema: def.UserInput.Schema, Replaces: sortedNames(def.UserInput.Replaces), Backfill: def.UserInput.Backfill != nil}
+		surface.UserInput = &SurfaceSchema{Schema: def.UserInput.Schema, Replaces: def.UserInput.Replaces, Backfill: def.UserInput.Backfill != nil}
 	}
 
 	if def.Installation != nil && len(def.Installation.Schema) > 0 {
@@ -142,39 +126,21 @@ func DefinitionSurface(def types.Definition) Surface {
 	return surface
 }
 
-// sortedNames returns a sorted copy of the names, nil when there are none
-func sortedNames(names []string) []string {
-	if len(names) == 0 {
-		return nil
-	}
+// sortedProjection projects each item and sorts the projections by key
+func sortedProjection[T, R any](items []T, project func(T) R, key func(R) string) []R {
+	out := lo.Map(items, func(item T, _ int) R { return project(item) })
 
-	return slices.Sorted(slices.Values(names))
-}
-
-// sortedNamed sorts named surface entries by name
-func sortedNamed(entries []SurfaceNamed) []SurfaceNamed {
-	slices.SortFunc(entries, func(a, b SurfaceNamed) int {
-		return strings.Compare(a.Name, b.Name)
+	slices.SortFunc(out, func(a, b R) int {
+		return strings.Compare(key(a), key(b))
 	})
 
-	return entries
-}
-
-// sortedOperations sorts operation surface entries by name
-func sortedOperations(entries []SurfaceOperation) []SurfaceOperation {
-	slices.SortFunc(entries, func(a, b SurfaceOperation) int {
-		return strings.Compare(a.Name, b.Name)
-	})
-
-	return entries
+	return out
 }
 
 // definitionEntry captures the indexed details for one registered definition
 type definitionEntry struct {
 	// definition holds the original definition as supplied by the caller
 	definition types.Definition
-	// connections maps credential ref name to its connection registration
-	connections map[string]types.ConnectionRegistration
 	// clients maps client ID to its client registration
 	clients map[types.ClientID]types.ClientRegistration
 	// operations maps operation name to its operation registration
@@ -225,26 +191,20 @@ func (r *Registry) Register(def types.Definition) error {
 		entry.runtimeClient = client
 	}
 
-	operationTopics := make(map[gala.TopicName]types.OperationRegistration, len(def.Operations))
-
-	for _, operation := range def.Operations {
-		if lo.HasKey(r.operationsByTopic, operation.Topic) || lo.HasKey(operationTopics, operation.Topic) {
-			return duplicateRegistration(def.ID, "operation topic", string(operation.Topic))
-		}
-
-		operationTopics[operation.Topic] = operation
+	operationTopics, err := indexUnique(def.ID, "operation topic", def.Operations, func(operation types.OperationRegistration) gala.TopicName {
+		return operation.Topic
+	}, r.operationsByTopic)
+	if err != nil {
+		return err
 	}
 
-	webhookEventTopics := make(map[gala.TopicName]types.WebhookEventRegistration)
+	events := lo.FlatMap(def.Webhooks, func(webhook types.WebhookRegistration, _ int) []types.WebhookEventRegistration { return webhook.Events })
 
-	for _, webhook := range def.Webhooks {
-		for _, event := range webhook.Events {
-			if lo.HasKey(r.webhookEventsByTopic, event.Topic) || lo.HasKey(webhookEventTopics, event.Topic) {
-				return duplicateRegistration(def.ID, "webhook event topic", string(event.Topic))
-			}
-
-			webhookEventTopics[event.Topic] = event
-		}
+	webhookEventTopics, err := indexUnique(def.ID, "webhook event topic", events, func(event types.WebhookEventRegistration) gala.TopicName {
+		return event.Topic
+	}, r.webhookEventsByTopic)
+	if err != nil {
+		return err
 	}
 
 	maps.Copy(r.operationsByTopic, operationTopics)
@@ -257,9 +217,20 @@ func (r *Registry) Register(def types.Definition) error {
 	return nil
 }
 
-// duplicateRegistration reports a second registration of one kind under a name a definition already holds
-func duplicateRegistration(definitionID, kind, name string) error {
-	return fmt.Errorf("%w: definition %s %s %q", ErrDuplicateRegistration, definitionID, kind, name)
+// indexUnique indexes items by key, rejecting a key repeated within items or already held by taken
+func indexUnique[K comparable, V any](definitionID, kind string, items []V, key func(V) K, taken map[K]V) (map[K]V, error) {
+	index := make(map[K]V, len(items))
+
+	for _, item := range items {
+		name := key(item)
+		if lo.HasKey(index, name) || lo.HasKey(taken, name) {
+			return nil, fmt.Errorf("%w: definition %s %s %q", ErrDuplicateRegistration, definitionID, kind, fmt.Sprint(name))
+		}
+
+		index[name] = item
+	}
+
+	return index, nil
 }
 
 // RegisterAll builds and registers every supplied definition builder in order
@@ -285,21 +256,13 @@ func (r *Registry) RegisterAll(builders ...Builder) error {
 // Definition returns one definition by canonical identifier
 func (r *Registry) Definition(id string) (types.Definition, bool) {
 	entry, ok := r.definitions[id]
-	if !ok {
-		return types.Definition{}, false
-	}
 
-	return entry.definition, true
+	return entry.definition, ok
 }
 
 // Version returns the computed version of one definition, or empty when unregistered
 func (r *Registry) Version(id string) string {
-	entry, ok := r.definitions[id]
-	if !ok {
-		return ""
-	}
-
-	return entry.version
+	return r.definitions[id].version
 }
 
 // Definitions returns all registered definitions in stable id order
@@ -335,43 +298,26 @@ func (r *Registry) Catalog() []types.DefinitionSpec {
 
 // validateDefinition checks the top-level definition identity fields before registration
 func (r *Registry) validateDefinition(def types.Definition) error {
-	if def.ID == "" {
+	switch {
+	case def.ID == "":
 		return ErrDefinitionIDRequired
-	}
-
-	if _, exists := r.definitions[def.ID]; exists {
+	case lo.HasKey(r.definitions, def.ID):
 		return ErrDefinitionAlreadyRegistered
-	}
-
-	if def.OperatorConfig != nil && len(def.OperatorConfig.Schema) == 0 {
+	case def.OperatorConfig != nil && len(def.OperatorConfig.Schema) == 0:
 		return ErrOperatorConfigSchemaRequired
-	}
-
-	if lo.ContainsBy(def.CredentialRegistrations, func(credential types.CredentialRegistration) bool {
-		return len(credential.StoredSchema) == 0
-	}) {
+	case lo.ContainsBy(def.CredentialRegistrations, func(credential types.CredentialRegistration) bool { return len(credential.StoredSchema) == 0 }):
 		return ErrCredentialSchemaRequired
-	}
-
-	if def.UserInput != nil && len(def.UserInput.Schema) == 0 {
+	case def.UserInput != nil && len(def.UserInput.Schema) == 0:
 		return ErrUserInputSchemaRequired
+	case def.RuntimeIntegration != nil && def.RuntimeIntegration.Build == nil:
+		return ErrRuntimeBuildRequired
 	}
 
 	if err := validateHealthCheck(def); err != nil {
 		return err
 	}
 
-	if def.RuntimeIntegration != nil {
-		if def.RuntimeIntegration.Build == nil {
-			return ErrRuntimeBuildRequired
-		}
-	}
-
-	if err := validateMappingLinks(def.Mappings); err != nil {
-		return err
-	}
-
-	return nil
+	return validateMappingLinks(def.Mappings)
 }
 
 // validateHealthCheck requires a health check with a handler when the definition declares connections, and a health check client built from every connection's credential slot
@@ -570,12 +516,7 @@ func validateSourceKey(sourceSchema *entityops.Schema, key string, wantList bool
 	}
 
 	if isList := strings.HasPrefix(field.Type, "[]"); isList != wantList {
-		slot := "sourceField"
-		if wantList {
-			slot = "sourceList"
-		}
-
-		return fmt.Errorf("%w: %s.%s has type %s, which does not fit %s", ErrLinkSourceFieldInvalid, sourceSchema.Name, key, field.Type, slot)
+		return fmt.Errorf("%w: %s.%s has type %s, which does not fit %s", ErrLinkSourceFieldInvalid, sourceSchema.Name, key, field.Type, lo.Ternary(wantList, "sourceList", "sourceField"))
 	}
 
 	return nil
@@ -583,9 +524,11 @@ func validateSourceKey(sourceSchema *entityops.Schema, key string, wantList bool
 
 // compileDefinition builds the indexed client, operation, and webhook event maps for one definition
 func compileDefinition(def types.Definition) (definitionEntry, error) {
-	credentialNames := indexCredentialNames(def.CredentialRegistrations)
+	declared := lo.Map(def.CredentialRegistrations, func(registration types.CredentialRegistration, _ int) types.CredentialSlotID {
+		return registration.Ref
+	})
 
-	clients, err := indexClients(def.ID, def.Clients, credentialNames)
+	clients, err := indexClients(def.ID, def.Clients, declared)
 	if err != nil {
 		return definitionEntry{}, err
 	}
@@ -595,8 +538,7 @@ func compileDefinition(def types.Definition) (definitionEntry, error) {
 		return definitionEntry{}, err
 	}
 
-	connections, err := indexConnections(def.ID, def.Connections, credentialNames, clients)
-	if err != nil {
+	if err := validateConnections(def.ID, def.Connections, declared, clients); err != nil {
 		return definitionEntry{}, err
 	}
 
@@ -612,7 +554,6 @@ func compileDefinition(def types.Definition) (definitionEntry, error) {
 
 	return definitionEntry{
 		definition:    def,
-		connections:   connections,
 		clients:       clients,
 		operations:    operations,
 		webhooks:      webhooks,
@@ -621,103 +562,48 @@ func compileDefinition(def types.Definition) (definitionEntry, error) {
 	}, nil
 }
 
-// indexCredentialNames builds a set of declared credential ref names for a definition
-func indexCredentialNames(registrations []types.CredentialRegistration) map[string]struct{} {
-	return lo.SliceToMap(registrations, func(reg types.CredentialRegistration) (string, struct{}) {
-		return reg.Ref.String(), struct{}{}
-	})
-}
-
-// indexClients indexes client registrations by client ref while validating credential cross-references and rejecting repeated refs
-func indexClients(definitionID string, clients []types.ClientRegistration, credentialNames map[string]struct{}) (map[types.ClientID]types.ClientRegistration, error) {
-	index := make(map[types.ClientID]types.ClientRegistration, len(clients))
-
+// indexClients indexes client registrations by client ref, requiring each to be identified and built only from declared credential slots
+func indexClients(definitionID string, clients []types.ClientRegistration, declared []types.CredentialSlotID) (map[types.ClientID]types.ClientRegistration, error) {
 	for _, client := range clients {
-		if !client.Ref.Valid() {
+		switch {
+		case !client.Ref.Valid():
 			return nil, ErrClientRequired
+		case !lo.Every(declared, client.CredentialRefs):
+			return nil, ErrCredentialRefNotDeclared
 		}
-
-		for _, ref := range client.CredentialRefs {
-			if _, declared := credentialNames[ref.String()]; !declared {
-				return nil, ErrCredentialRefNotDeclared
-			}
-		}
-
-		if lo.HasKey(index, client.Ref) {
-			return nil, duplicateRegistration(definitionID, "client", client.Ref.String())
-		}
-
-		index[client.Ref] = client
 	}
 
-	return index, nil
+	return indexUnique(definitionID, "client", clients, func(client types.ClientRegistration) types.ClientID { return client.Ref }, nil)
 }
 
-// indexConnections indexes connection registrations while enforcing credential, client, auth, disconnect, and unique slot constraints
-func indexConnections(definitionID string, connections []types.ConnectionRegistration, credentialNames map[string]struct{}, clients map[types.ClientID]types.ClientRegistration) (map[string]types.ConnectionRegistration, error) {
-	connectionIndex := make(map[string]types.ConnectionRegistration, len(connections))
-
+// validateConnections requires each connection's selecting slot, credential slots, clients, auth slot, and disconnect slot to be declared, and each selecting slot to back one connection
+func validateConnections(definitionID string, connections []types.ConnectionRegistration, declared []types.CredentialSlotID, clients map[types.ClientID]types.ClientRegistration) error {
 	for _, connection := range connections {
-		if connection.CredentialRef == (types.CredentialSlotID{}) {
-			return nil, ErrConnectionCredentialRefRequired
+		slots := append([]types.CredentialSlotID{connection.CredentialRef}, connection.CredentialRefs...)
+
+		switch {
+		case connection.CredentialRef == (types.CredentialSlotID{}):
+			return ErrConnectionCredentialRefRequired
+		case !lo.Every(declared, slots):
+			return ErrConnectionCredentialRefNotDeclared
+		case !lo.EveryBy(connection.ClientRefs, func(client types.ClientID) bool { return lo.HasKey(clients, client) }):
+			return ErrConnectionClientRefNotDeclared
+		case connection.Auth != nil && !lo.Contains(slots, connection.Auth.CredentialRef):
+			return ErrConnectionAuthCredentialRefNotDeclared
+		case connection.Disconnect != nil && !lo.Contains(slots, connection.Disconnect.CredentialRef):
+			return ErrConnectionDisconnectCredentialRefNotDeclared
 		}
-
-		name := connection.CredentialRef.String()
-
-		if _, declared := credentialNames[name]; !declared {
-			return nil, ErrConnectionCredentialRefNotDeclared
-		}
-
-		if lo.HasKey(connectionIndex, name) {
-			return nil, duplicateRegistration(definitionID, "connection", name)
-		}
-
-		if !lo.Contains(connection.CredentialRefs, connection.CredentialRef) {
-			connection.CredentialRefs = append(connection.CredentialRefs, connection.CredentialRef)
-		}
-
-		for _, ref := range connection.CredentialRefs {
-			if _, declared := credentialNames[ref.String()]; !declared {
-				return nil, ErrConnectionCredentialRefNotDeclared
-			}
-		}
-
-		for _, clientRef := range connection.ClientRefs {
-			if _, declared := clients[clientRef]; !declared {
-				return nil, ErrConnectionClientRefNotDeclared
-			}
-		}
-
-		if connection.Auth != nil {
-			if connection.Auth.CredentialRef == (types.CredentialSlotID{}) {
-				return nil, ErrConnectionAuthCredentialRefNotDeclared
-			}
-
-			if !lo.Contains(connection.CredentialRefs, connection.Auth.CredentialRef) {
-				return nil, ErrConnectionAuthCredentialRefNotDeclared
-			}
-		}
-
-		if connection.Disconnect != nil {
-			if connection.Disconnect.CredentialRef == (types.CredentialSlotID{}) {
-				return nil, ErrConnectionDisconnectCredentialRefNotDeclared
-			}
-
-			if !lo.Contains(connection.CredentialRefs, connection.Disconnect.CredentialRef) {
-				return nil, ErrConnectionDisconnectCredentialRefNotDeclared
-			}
-		}
-
-		connectionIndex[name] = connection
 	}
 
-	return connectionIndex, nil
+	_, err := indexUnique(definitionID, "connection", connections, func(connection types.ConnectionRegistration) types.CredentialSlotID {
+		return connection.CredentialRef
+	}, nil)
+
+	return err
 }
 
-// indexOperations indexes operations by name while validating handler and client cross-references and rejecting repeated names
+// indexOperations indexes operations by name, requiring exactly one handler, ingest contracts for ingest handlers, and a declared client
 func indexOperations(definitionID string, operations []types.OperationRegistration, clients map[types.ClientID]types.ClientRegistration) (map[string]types.OperationRegistration, error) {
-	index := make(map[string]types.OperationRegistration, len(operations))
-
 	for _, operation := range operations {
 		switch {
 		case operation.Handle == nil && operation.IngestHandle == nil:
@@ -726,61 +612,42 @@ func indexOperations(definitionID string, operations []types.OperationRegistrati
 			return nil, ErrOperationHandlerAmbiguous
 		case operation.IngestHandle != nil && len(operation.Ingest) == 0:
 			return nil, ErrIngestContractsRequired
-		}
-
-		if operation.Policy.Snapshot && operation.IngestHandle == nil {
+		case operation.Policy.Snapshot && operation.IngestHandle == nil:
 			return nil, ErrIngestSnapshotRequiresIngestHandle
+		case operation.ClientRef.Valid() && !lo.HasKey(clients, operation.ClientRef):
+			return nil, ErrClientNotFound
 		}
-
-		if operation.ClientRef.Valid() {
-			if _, exists := clients[operation.ClientRef]; !exists {
-				return nil, ErrClientNotFound
-			}
-		}
-
-		if lo.HasKey(index, operation.Name) {
-			return nil, duplicateRegistration(definitionID, "operation", operation.Name)
-		}
-
-		index[operation.Name] = operation
 	}
 
-	return index, nil
+	return indexUnique(definitionID, "operation", operations, func(operation types.OperationRegistration) string { return operation.Name }, nil)
 }
 
-// indexWebhooks indexes webhook contracts and webhook events while validating structural constraints and rejecting repeated names
+// indexWebhooks indexes webhook contracts by name and their events by webhook and event name, requiring an event resolver and event handlers
 func indexWebhooks(definitionID string, webhooks []types.WebhookRegistration) (map[string]types.WebhookRegistration, map[string]map[string]types.WebhookEventRegistration, error) {
-	webhookIndex := make(map[string]types.WebhookRegistration, len(webhooks))
-	webhookEventIndex := make(map[string]map[string]types.WebhookEventRegistration, len(webhooks))
+	webhookEvents := make(map[string]map[string]types.WebhookEventRegistration, len(webhooks))
 
 	for _, webhook := range webhooks {
-		if len(webhook.Events) > 0 && webhook.Event == nil {
+		switch {
+		case len(webhook.Events) > 0 && webhook.Event == nil:
 			return nil, nil, ErrWebhookEventResolverRequired
+		case lo.ContainsBy(webhook.Events, func(event types.WebhookEventRegistration) bool { return event.Handle == nil }):
+			return nil, nil, ErrWebhookEventHandlerRequired
 		}
 
-		if lo.HasKey(webhookIndex, webhook.Name) {
-			return nil, nil, duplicateRegistration(definitionID, "webhook", webhook.Name)
+		events, err := indexUnique(definitionID, "webhook event", webhook.Events, func(event types.WebhookEventRegistration) string { return event.Name }, nil)
+		if err != nil {
+			return nil, nil, err
 		}
 
-		eventIndex := make(map[string]types.WebhookEventRegistration, len(webhook.Events))
-
-		for _, event := range webhook.Events {
-			if event.Handle == nil {
-				return nil, nil, ErrWebhookEventHandlerRequired
-			}
-
-			if lo.HasKey(eventIndex, event.Name) {
-				return nil, nil, duplicateRegistration(definitionID, "webhook event", event.Name)
-			}
-
-			eventIndex[event.Name] = event
-		}
-
-		webhookIndex[webhook.Name] = webhook
-		webhookEventIndex[webhook.Name] = eventIndex
+		webhookEvents[webhook.Name] = events
 	}
 
-	return webhookIndex, webhookEventIndex, nil
+	index, err := indexUnique(definitionID, "webhook", webhooks, func(webhook types.WebhookRegistration) string { return webhook.Name }, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return index, webhookEvents, nil
 }
 
 // Listeners returns all operation registrations in stable topic order
@@ -790,17 +657,14 @@ func (r *Registry) Listeners() []types.OperationRegistration {
 
 // WebhookEvent returns one webhook event registration for a definition
 func (r *Registry) WebhookEvent(id string, webhookName string, eventName string) (types.WebhookEventRegistration, error) {
-	entry, ok := r.definitions[id]
-	if !ok {
-		return types.WebhookEventRegistration{}, ErrDefinitionNotFound
+	events, err := lookupInEntry(r, id, webhookName, func(e definitionEntry) map[string]map[string]types.WebhookEventRegistration {
+		return e.webhookEvents
+	}, ErrWebhookNotFound)
+	if err != nil {
+		return types.WebhookEventRegistration{}, err
 	}
 
-	eventIndex, ok := entry.webhookEvents[webhookName]
-	if !ok {
-		return types.WebhookEventRegistration{}, ErrWebhookNotFound
-	}
-
-	event, ok := eventIndex[eventName]
+	event, ok := events[eventName]
 	if !ok {
 		return types.WebhookEventRegistration{}, ErrWebhookNotFound
 	}
@@ -820,12 +684,9 @@ func (r *Registry) GalaListeners() []types.GalaListenerRegistration {
 
 // RuntimeClient returns the cached runtime client for the given definition ID
 func (r *Registry) RuntimeClient(definitionID string) (any, bool) {
-	entry, ok := r.definitions[definitionID]
-	if !ok || entry.runtimeClient == nil {
-		return nil, false
-	}
+	client := r.definitions[definitionID].runtimeClient
 
-	return entry.runtimeClient, true
+	return client, client != nil
 }
 
 // StaticWebhooks returns all webhook registrations that declare a fixed static route
@@ -849,9 +710,7 @@ func (r *Registry) StaticWebhooks() []types.StaticWebhookEntry {
 
 // IsRuntimeIntegration reports whether the given definition was provisioned as a runtime integration (no DB record, no keystore)
 func (r *Registry) IsRuntimeIntegration(definitionID string) bool {
-	entry, ok := r.definitions[definitionID]
-
-	return ok && entry.definition.RuntimeIntegration != nil
+	return r.definitions[definitionID].definition.RuntimeIntegration != nil
 }
 
 // lookupInEntry finds an entry by definition id, then looks up a value in the sub-map returned by getMap

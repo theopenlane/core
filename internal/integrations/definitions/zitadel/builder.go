@@ -23,7 +23,7 @@ func Builder() registry.Builder {
 			},
 			UserInput:    userInput.Registration(),
 			HealthCheck:  zitadelClient.HealthCheck(checkHealth),
-			Installation: integration.Registration(),
+			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				zitadelPATCredential.Registration(types.CredentialRegistration{
 					Name:        "Zitadel Personal Access Token",

@@ -128,7 +128,7 @@ func (r *Runtime) ClearIntegrationUnhealthy(ctx context.Context, installation *e
 		return err
 	}
 
-	return r.SeedReconcileJobsForInstallation(ctx, installation)
+	return r.ResetReconcileLoops(systemCtx, installation)
 }
 
 // MarkOperationUnhealthy records one operation as failing on an installation and stops its recurring loop; when no healthy workload operation remains the whole installation is marked unhealthy instead
@@ -143,12 +143,7 @@ func (r *Runtime) MarkOperationUnhealthy(ctx context.Context, installation *ent.
 		return nil
 	}
 
-	unhealthy := make(map[string]string, len(health.UnhealthyOperations)+1)
-	for name, why := range health.UnhealthyOperations {
-		unhealthy[name] = why
-	}
-
-	unhealthy[operationName] = reason
+	unhealthy := lo.Assign(health.UnhealthyOperations, map[string]string{operationName: reason})
 	health.UnhealthyOperations = unhealthy
 	installation.Health = health
 
@@ -202,7 +197,7 @@ func (r *Runtime) MarkOperationUnhealthy(ctx context.Context, installation *ent.
 		})
 }
 
-// ClearOperationUnhealthy removes one operation's failure record and reseeds its recurring loop; the installation returns to connected when no failing operation remains
+// ClearOperationUnhealthy removes one operation's failure record and resets the installation's recurring loops so the recovered operation's loop resumes; the installation returns to connected when no failing operation remains
 func (r *Runtime) ClearOperationUnhealthy(ctx context.Context, installation *ent.Integration, operationName string) error {
 	health := installation.Health
 	if _, recorded := health.UnhealthyOperations[operationName]; !recorded {
@@ -224,7 +219,7 @@ func (r *Runtime) ClearOperationUnhealthy(ctx context.Context, installation *ent
 
 	installation.Health = health
 
-	if len(unhealthy) == 0 {
+	if health.UnhealthyOperations == nil {
 		transitioned, err := r.DB().Integration.Update().
 			Where(integration.ID(installation.ID), integration.StatusEQ(enums.IntegrationStatusDegraded)).
 			SetStatus(enums.IntegrationStatusConnected).
@@ -261,25 +256,7 @@ func (r *Runtime) ClearOperationUnhealthy(ctx context.Context, installation *ent
 
 	logx.FromContext(ctx).Info().Str("operation", operationName).Msg("operation recovered, its recurring loop resumes")
 
-	op, err := r.Registry().Operation(installation.DefinitionID, operationName)
-	if err != nil {
-		return err
-	}
-
-	if !op.Policy.Reconcile {
-		return nil
-	}
-
-	active, err := r.isOrgSubscriptionActive(ctx, installation.OwnerID)
-	if err != nil {
-		return err
-	}
-
-	if !active {
-		return nil
-	}
-
-	return r.emitReconcileLoop(ctx, installation, operationName)
+	return r.ResetReconcileLoops(ctx, installation)
 }
 
 // RunHealthAssessment executes the connection health check and every operation probe for one installation, records the resulting health state, and returns the assessment
@@ -331,8 +308,8 @@ func (r *Runtime) checkConnectionHealth(ctx context.Context, installation *ent.I
 		return nil, nil
 	}
 
-	connection, err := r.resolvePersistedConnection(def, installation)
-	if err != nil {
+	checkErr, err := r.runPersistedHealthCheck(ctx, installation, def)
+	if err != nil || checkErr == nil {
 		return nil, err
 	}
 
@@ -443,27 +420,31 @@ func (r *Runtime) runOperationProbe(ctx context.Context, installation *ent.Integ
 
 // verifyInstallationHealth runs the persisted connection's health check under stored credentials; connections without one pass
 func (r *Runtime) verifyInstallationHealth(ctx context.Context, installation *ent.Integration, def types.Definition) error {
-	connection, err := r.resolvePersistedConnection(def, installation)
+	checkErr, err := r.runPersistedHealthCheck(ctx, installation, def)
 	if err != nil {
 		return err
 	}
 
+	return checkErr
+}
+
+// runPersistedHealthCheck resolves the persisted connection, loads its stored credentials, and runs the definition health check, returning the check outcome apart from resolution failures; definitions without a health check pass
+func (r *Runtime) runPersistedHealthCheck(ctx context.Context, installation *ent.Integration, def types.Definition) (checkErr, err error) {
+	connection, err := r.resolvePersistedConnection(def, installation)
+	if err != nil {
+		return nil, err
+	}
+
 	if def.HealthCheck == nil {
-		return nil
+		return nil, nil
 	}
 
 	bindings, err := r.loadCredentials(ctx, installation, connection.CredentialRefs)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	if err := r.runConnectionHealthCheck(ctx, installation, def.HealthCheck, bindings); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("health check failed after configuration update, installation stays errored")
-
-		return err
-	}
-
-	return nil
+	return r.runConnectionHealthCheck(ctx, installation, def.HealthCheck, bindings), nil
 }
 
 // stampHealthCheck records the assessment time on the installation health record

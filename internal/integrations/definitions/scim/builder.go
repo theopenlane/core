@@ -3,6 +3,7 @@ package scim
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -30,13 +31,9 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				directorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Synchronize directory state through SCIM",
-					Policy:      types.ExecutionPolicy{Inline: true},
-					Ingest: []types.IngestContract{
-						{Schema: entityops.SchemaDirectoryAccount.Name},
-						{Schema: entityops.SchemaDirectoryGroup.Name},
-						{Schema: entityops.SchemaDirectoryMembership.Name},
-					},
+					Description:         "Synchronize directory state through SCIM",
+					Policy:              types.ExecutionPolicy{Inline: true},
+					Ingest:              providerkit.DirectoryIngestContracts(),
 					SkipDefaultLookback: true,
 				}),
 			},

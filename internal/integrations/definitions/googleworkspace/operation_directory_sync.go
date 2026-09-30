@@ -6,7 +6,6 @@ import (
 
 	admin "google.golang.org/api/admin/directory/v1"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -99,23 +98,7 @@ func collectDirectory(ctx context.Context, svc *admin.Service, customerID string
 		}
 	}
 
-	return []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        accountEnvelopes,
-			SnapshotComplete: true,
-		},
-		{
-			Schema:           entityops.SchemaDirectoryGroup.Name,
-			Envelopes:        groupEnvelopes,
-			SnapshotComplete: true,
-		},
-		{
-			Schema:           entityops.SchemaDirectoryMembership.Name,
-			Envelopes:        membershipEnvelopes,
-			SnapshotComplete: true,
-		},
-	}, nil
+	return append(providerkit.DirectoryAccountPayloadSets(accountEnvelopes), providerkit.DirectoryGroupPayloadSets(groupEnvelopes, membershipEnvelopes, true)...), nil
 }
 
 // listDirectoryUsers pages through all Google Workspace users for the given customer

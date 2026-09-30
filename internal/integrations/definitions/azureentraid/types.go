@@ -10,6 +10,8 @@ import (
 var (
 	// definitionID is the stable identifier for the Azure Entra ID integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AZENTRA0000000000000001")
+	// installation is the typed installation metadata handle for the Azure Entra ID definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// entraTenantCredential is the auth-managed credential slot holding the consented tenant
 	entraTenantCredential = types.CredentialRefOf[entraIDCred]()
 	// entraCredential is the client ref for the Azure token credential used by the health check
@@ -34,8 +36,8 @@ type UserInput struct {
 
 // DirectorySync configures collection of Azure Entra ID directory users, groups, and memberships
 type DirectorySync struct {
-	// Switch turns the directory sync off for the installation
-	types.Switch
+	// Disable switches the directory sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from Azure Entra ID"`
 	// DisableGroupSync when true only syncs users, skipping groups and memberships
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from Azure Entra ID, disable groups sync operations"`
 	// IncludeGuestUsers controls whether guest-type accounts are included in the sync

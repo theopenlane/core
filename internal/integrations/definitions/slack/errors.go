@@ -13,8 +13,6 @@ var (
 	ErrChannelMissing = errors.New("slack: channel missing")
 	// ErrMessageEmpty indicates the Slack message has no content
 	ErrMessageEmpty = errors.New("slack: message must have text, blocks, or attachments")
-	// ErrClientType indicates the provided client is not a Slack client
-	ErrClientType = errors.New("slack: unexpected client type")
 	// ErrAuthTestFailed indicates auth.test failed
 	ErrAuthTestFailed = errors.New("slack: auth test failed")
 	// ErrOperationConfigInvalid indicates operation config could not be decoded

@@ -49,8 +49,8 @@ var folderSyncOperation = types.OperationRefOf[FolderSync]().Ingests(oneDriveCli
 
 // FolderSync lists OneDrive documents in a configured folder and emits ingest envelopes for policy creation
 type FolderSync struct {
-	// Switch toggles the folder sync off for the installation
-	types.Switch
+	// Disable switches the folder sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of documents from OneDrive"`
 	// FolderID is the folder path relative to the drive root (e.g. "Policies"); leave empty to sync the root
 	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder Path,description=Folder path relative to drive root (e.g. Policies). Leave empty to sync the entire drive root."`
 	// FilterExpr is an optional CEL expression to filter which documents in the folder are eligible

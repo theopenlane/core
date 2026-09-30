@@ -8,7 +8,6 @@ import (
 	"github.com/samber/lo"
 	"github.com/shurcooL/githubv4"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -209,27 +208,10 @@ func runDirectorySync(ctx context.Context, _ types.OperationRequest, client Grap
 
 	logx.FromContext(ctx).Info().Int("org_count", len(orgs)).Int("member_count", len(userAccountEnvelopes)).Int("team_count", len(groupEnvelopes)).Int("membership_count", len(membershipEnvelopes)).Bool("group_sync_disabled", cfg.DisableGroupSync).Msg("githubapp_directorysync: collected directory records")
 
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        userAccountEnvelopes,
-			SnapshotComplete: true,
-		},
-	}
+	payloadSets := providerkit.DirectoryAccountPayloadSets(userAccountEnvelopes)
 
 	if !cfg.DisableGroupSync {
-		payloadSets = append(payloadSets,
-			types.IngestPayloadSet{
-				Schema:           entityops.SchemaDirectoryGroup.Name,
-				Envelopes:        groupEnvelopes,
-				SnapshotComplete: groupsComplete,
-			},
-			types.IngestPayloadSet{
-				Schema:           entityops.SchemaDirectoryMembership.Name,
-				Envelopes:        membershipEnvelopes,
-				SnapshotComplete: groupsComplete,
-			},
-		)
+		payloadSets = append(payloadSets, providerkit.DirectoryGroupPayloadSets(groupEnvelopes, membershipEnvelopes, groupsComplete)...)
 	}
 
 	return payloadSets, nil

@@ -13,13 +13,11 @@ var (
 	ErrTokenVerificationFailed = errors.New("cloudflare: token verification failed")
 	// ErrTokenNotActive indicates the Cloudflare token is not in an active state
 	ErrTokenNotActive = errors.New("cloudflare: token is not active")
-	// ErrClientType indicates the provided client is not a Cloudflare client
-	ErrClientType = errors.New("cloudflare: unexpected client type")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("cloudflare: result encode failed")
 	// ErrMembersFetchFailed indicates the account members list request failed
 	ErrMembersFetchFailed = errors.New("cloudflare: members fetch failed")
-	// ErrMembersFetchFailed indicates the account members list request failed
+	// ErrGroupsFetchFailed indicates the account groups list request failed
 	ErrGroupsFetchFailed = errors.New("cloudflare: groups fetch failed")
 	// ErrPayloadEncode indicates a collected Cloudflare payload could not be serialized for ingest
 	ErrPayloadEncode = errors.New("cloudflare: ingest payload encode failed")

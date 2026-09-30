@@ -32,7 +32,7 @@ func main() {
 	}
 }
 
-// generateIntegrationSchemas writes one surface snapshot per registered definition, refusing only a removed slot, operation, or webhook that no registration declares it replaces
+// generateIntegrationSchemas writes one surface snapshot per registered definition, refusing a removed slot, operation, webhook, or webhook event that no registration declares it replaces
 func generateIntegrationSchemas(dir string) error {
 	reg := registry.New()
 	if err := reg.RegisterAll(catalog.Builders(catalog.Config{}, "", false)...); err != nil {

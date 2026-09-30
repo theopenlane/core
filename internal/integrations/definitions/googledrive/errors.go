@@ -15,8 +15,6 @@ var (
 	ErrCredentialDecode = errors.New("googledrive: credential decode failed")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("googledrive: result encode failed")
-	// ErrExportFailed indicates the Drive file export request failed
-	ErrExportFailed = errors.New("googledrive: file export failed")
 	// ErrFolderIDMissing indicates the folder ID is not configured
 	ErrFolderIDMissing = errors.New("googledrive: folder id missing from user input")
 	// ErrFolderListFailed indicates the Drive folder listing request failed

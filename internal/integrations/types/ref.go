@@ -61,18 +61,29 @@ type replacement[T any] struct {
 	decode func(json.RawMessage) (T, error)
 }
 
-// replacing records a retired layout under name, decoded through convert or directly into T when convert is nil
-func replacing[T, Old any](replacements map[string]replacement[T], name string, convert func(Old) T) map[string]replacement[T] {
-	next := maps.Clone(replacements)
-	if next == nil {
-		next = map[string]replacement[T]{}
+// storedLayout is the reflected schema of a stored payload type with the retired layouts it takes over and the backfill completing it
+type storedLayout[T any] struct {
+	// schema is the reflected JSON schema of T
+	schema json.RawMessage
+	// replacements are the retired layouts this layout takes over, keyed by retired name
+	replacements map[string]replacement[T]
+	// backfill completes a stored payload missing values
+	backfill func(context.Context, InstallationRequest, *T) error
+}
+
+// newStoredLayout creates a stored layout with the schema reflected from T
+func newStoredLayout[T any]() storedLayout[T] {
+	return storedLayout[T]{schema: jsonx.SchemaFrom[T]()}
+}
+
+// replacing records a retired layout under name, decoded as Old and reshaped through convert, without aliasing the receiver's replacements
+func (l storedLayout[T]) replacing[Old any](name string, convert func(Old) T) storedLayout[T] {
+	l.replacements = maps.Clone(l.replacements)
+	if l.replacements == nil {
+		l.replacements = map[string]replacement[T]{}
 	}
 
-	next[name] = replacement[T]{schema: jsonx.SchemaFrom[Old](), decode: func(payload json.RawMessage) (T, error) {
-		if convert == nil {
-			return jsonx.Decode[T](payload)
-		}
-
+	l.replacements[name] = replacement[T]{schema: jsonx.SchemaFrom[Old](), decode: func(payload json.RawMessage) (T, error) {
 		previous, err := jsonx.Decode[Old](payload)
 		if err != nil {
 			var zero T
@@ -83,12 +94,17 @@ func replacing[T, Old any](replacements map[string]replacement[T], name string, 
 		return convert(previous), nil
 	}}
 
-	return next
+	return l
 }
 
-// convertReplaced reshapes a payload stored under the retired layout from into T
-func convertReplaced[T any](replacements map[string]replacement[T], from string, old json.RawMessage) (json.RawMessage, error) {
-	retired, ok := replacements[from]
+// retired lists the retired layout names this layout takes over, sorted
+func (l storedLayout[T]) retired() []string {
+	return slices.Sorted(maps.Keys(l.replacements))
+}
+
+// convert reshapes a payload stored under the retired layout from into T
+func (l storedLayout[T]) convert(from string, old json.RawMessage) (json.RawMessage, error) {
+	retired, ok := l.replacements[from]
 	if !ok {
 		return nil, fmt.Errorf("%w: %s", ErrNotReplaced, from)
 	}
@@ -110,9 +126,9 @@ func convertReplaced[T any](replacements map[string]replacement[T], from string,
 	return jsonx.ToRawMessage(value)
 }
 
-// backfillPayload completes the payload through fn, returning it unchanged when fn is nil
-func backfillPayload[T any](ctx context.Context, req InstallationRequest, fn func(context.Context, InstallationRequest, *T) error, payload json.RawMessage) (json.RawMessage, error) {
-	if fn == nil {
+// Backfill completes a stored payload missing values through the declared backfill, returning it unchanged when none is declared
+func (l storedLayout[T]) Backfill(ctx context.Context, req InstallationRequest, payload json.RawMessage) (json.RawMessage, error) {
+	if l.backfill == nil {
 		return payload, nil
 	}
 
@@ -122,20 +138,11 @@ func backfillPayload[T any](ctx context.Context, req InstallationRequest, fn fun
 		return nil, err
 	}
 
-	if err := fn(ctx, req, &value); err != nil {
+	if err := l.backfill(ctx, req, &value); err != nil {
 		return nil, err
 	}
 
 	return jsonx.ToRawMessage(value)
-}
-
-// sortedNames returns the retired layout names in sorted order
-func sortedNames[T any](replacements map[string]replacement[T]) []string {
-	names := lo.Keys(replacements)
-
-	slices.Sort(names)
-
-	return names
 }
 
 // =========
@@ -171,12 +178,6 @@ func (r *CredentialSlotID) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	if name == "" {
-		*r = CredentialSlotID{}
-
-		return nil
-	}
-
 	*r = NewCredentialSlotID(name)
 
 	return nil
@@ -186,24 +187,20 @@ func (r *CredentialSlotID) UnmarshalJSON(data []byte) error {
 type CredentialRef[T any] struct {
 	// id is the durable credential slot identity
 	id CredentialSlotID
-	// schema is the reflected JSON schema of the credential type
-	schema json.RawMessage
-	// replacements are the retired slot layouts this slot takes over, keyed by retired slot name
-	replacements map[string]replacement[T]
-	// backfill completes a stored payload missing values
-	backfill func(context.Context, InstallationRequest, *T) error
+	// storedLayout is the credential type's reflected schema with the retired slots it takes over and its backfill
+	storedLayout[T]
 }
 
 // NewCredentialRef creates a typed credential slot identity handle with the schema reflected from T
 func NewCredentialRef[T any](name string) CredentialRef[T] {
-	return CredentialRef[T]{id: NewCredentialSlotID(name), schema: jsonx.SchemaFrom[T]()}
+	return CredentialRef[T]{id: NewCredentialSlotID(name), storedLayout: newStoredLayout[T]()}
 }
 
 // CredentialRefOf creates a typed credential slot identity handle named after the reflected schema of T
 func CredentialRefOf[T any]() CredentialRef[T] {
-	schema := jsonx.SchemaFrom[T]()
+	layout := newStoredLayout[T]()
 
-	return CredentialRef[T]{id: NewCredentialSlotID(jsonx.SchemaID(schema)), schema: schema}
+	return CredentialRef[T]{id: NewCredentialSlotID(jsonx.SchemaID(layout.schema)), storedLayout: layout}
 }
 
 // ID returns the non-generic credential slot identity
@@ -229,18 +226,14 @@ func (r CredentialRef[T]) Resolve(bindings CredentialBindings) (T, bool, error) 
 		return zero, false, nil
 	}
 
-	var out T
+	out, err := jsonx.Decode[T](cred.Data)
 
-	if err := json.Unmarshal(cred.Data, &out); err != nil {
-		return out, true, err
-	}
-
-	return out, true, nil
+	return out, true, err
 }
 
 // Replacing declares that the slot takes over payloads stored under old
 func (r CredentialRef[T]) Replacing[Old any](old CredentialRef[Old], convert func(Old) T) CredentialRef[T] {
-	r.replacements = replacing(r.replacements, old.String(), convert)
+	r.storedLayout = r.replacing(old.String(), convert)
 
 	return r
 }
@@ -254,19 +247,14 @@ func (r CredentialRef[T]) Backfilled(fn func(context.Context, InstallationReques
 
 // Replaces lists the retired slots whose stored payloads this slot takes over, sorted
 func (r CredentialRef[T]) Replaces() []CredentialSlotID {
-	return lo.Map(sortedNames(r.replacements), func(name string, _ int) CredentialSlotID {
+	return lo.Map(r.retired(), func(name string, _ int) CredentialSlotID {
 		return NewCredentialSlotID(name)
 	})
 }
 
 // Convert reshapes a payload stored under one of the replaced slots into this slot's shape
 func (r CredentialRef[T]) Convert(from CredentialSlotID, old json.RawMessage) (json.RawMessage, error) {
-	return convertReplaced(r.replacements, from.String(), old)
-}
-
-// Backfill completes a stored payload missing values through the declared backfill
-func (r CredentialRef[T]) Backfill(ctx context.Context, req InstallationRequest, payload json.RawMessage) (json.RawMessage, error) {
-	return backfillPayload(ctx, req, r.backfill, payload)
+	return r.convert(from.String(), old)
 }
 
 // Registration projects the slot identity and declared lifecycle onto base, leaving Schema and the descriptive fields as authored
@@ -292,25 +280,20 @@ func (r CredentialRef[T]) Registration(base CredentialRegistration) CredentialRe
 
 // UserInputRef is a typed handle for one definition's installation-scoped user input layout
 type UserInputRef[T any] struct {
-	name         string
-	schema       json.RawMessage
-	replacements map[string]replacement[T]
-	backfill     func(context.Context, InstallationRequest, *T) error
+	// name is the stable layout name a later layout retires this one by
+	name string
+	// storedLayout is the user input type's reflected schema with the retired layouts it takes over and its backfill
+	storedLayout[T]
 }
 
 // NewUserInputRef creates a typed user input layout handle with the schema reflected from T
 func NewUserInputRef[T any](name string) UserInputRef[T] {
-	return UserInputRef[T]{name: name, schema: jsonx.SchemaFrom[T]()}
-}
-
-// Name returns the stable layout name
-func (r UserInputRef[T]) Name() string {
-	return r.name
+	return UserInputRef[T]{name: name, storedLayout: newStoredLayout[T]()}
 }
 
 // Replacing declares that the layout takes over user input stored in old
 func (r UserInputRef[T]) Replacing[Old any](old UserInputRef[Old], convert func(Old) T) UserInputRef[T] {
-	r.replacements = replacing(r.replacements, old.name, convert)
+	r.storedLayout = r.replacing(old.name, convert)
 
 	return r
 }
@@ -324,24 +307,19 @@ func (r UserInputRef[T]) Backfilled(fn func(context.Context, InstallationRequest
 
 // Replaces lists the retired layout names whose stored user input this layout takes over, sorted
 func (r UserInputRef[T]) Replaces() []string {
-	return sortedNames(r.replacements)
+	return r.retired()
 }
 
 // Convert reshapes stored user input through the first retired layout it matches
 func (r UserInputRef[T]) Convert(old json.RawMessage) (json.RawMessage, error) {
-	for _, retired := range sortedNames(r.replacements) {
-		converted, err := convertReplaced(r.replacements, retired, old)
+	for _, retired := range r.retired() {
+		converted, err := r.convert(retired, old)
 		if err == nil {
 			return converted, nil
 		}
 	}
 
 	return nil, fmt.Errorf("%w: %s", ErrLayoutMismatch, r.name)
-}
-
-// Backfill completes stored user input missing values through the declared backfill
-func (r UserInputRef[T]) Backfill(ctx context.Context, req InstallationRequest, payload json.RawMessage) (json.RawMessage, error) {
-	return backfillPayload(ctx, req, r.backfill, payload)
 }
 
 // Registration projects the reflected schema and declared lifecycle into a user input registration
@@ -478,41 +456,20 @@ type OperationRef[Cfg any] struct {
 	handle OperationHandler
 	// ingest executes the operation and returns typed payload sets for the ingest pipeline
 	ingest IngestHandler
-	// disabled reports whether a config section switches the operation off, nil when Cfg is not Switchable
-	disabled func(json.RawMessage) bool
 	// replaces lists the retired operation names this operation takes over
 	replaces []string
 }
 
 // NewOperationRef creates a typed operation identity handle with the schema reflected from Cfg
 func NewOperationRef[Cfg any](name string) OperationRef[Cfg] {
-	return OperationRef[Cfg]{name: name, schema: jsonx.SchemaFrom[Cfg](), disabled: configDisabled[Cfg]()}
+	return OperationRef[Cfg]{name: name, schema: jsonx.SchemaFrom[Cfg]()}
 }
 
 // OperationRefOf creates a typed operation identity handle named after the reflected schema of Cfg
 func OperationRefOf[Cfg any]() OperationRef[Cfg] {
 	schema := jsonx.SchemaFrom[Cfg]()
 
-	return OperationRef[Cfg]{name: jsonx.SchemaID(schema), schema: schema, disabled: configDisabled[Cfg]()}
-}
-
-// configDisabled returns a predicate decoding a config section into Cfg and reporting its switch, nil when Cfg is not Switchable
-func configDisabled[Cfg any]() func(json.RawMessage) bool {
-	if !reflect.TypeFor[Cfg]().Implements(reflect.TypeFor[Switchable]()) {
-		return nil
-	}
-
-	return func(config json.RawMessage) bool {
-		var cfg Cfg
-
-		if err := jsonx.UnmarshalIfPresent(config, &cfg); err != nil {
-			return false
-		}
-
-		switchable, ok := any(cfg).(Switchable)
-
-		return ok && switchable.Disabled()
-	}
+	return OperationRef[Cfg]{name: jsonx.SchemaID(schema), schema: schema}
 }
 
 // decodeConfig decodes an operation config payload into Cfg, treating an absent payload as the zero config
@@ -606,7 +563,7 @@ func (r OperationRef[Cfg]) Replacing[Old any](old OperationRef[Old]) OperationRe
 	return r
 }
 
-// Registration projects the operation name, topic, config schema, bound client and handler, retired names, and config switch onto base
+// Registration projects the operation name, topic, config schema, bound client and handler, and retired names onto base
 func (r OperationRef[Cfg]) Registration(definition DefinitionRef, base OperationRegistration) OperationRegistration {
 	base.Name = r.name
 	base.Topic = definition.OperationTopic(r.name)
@@ -626,10 +583,6 @@ func (r OperationRef[Cfg]) Registration(definition DefinitionRef, base Operation
 
 	if len(r.replaces) > 0 {
 		base.Replaces = sortedUnique(r.replaces)
-	}
-
-	if r.disabled != nil {
-		base.ConfigDisabled = r.disabled
 	}
 
 	return base

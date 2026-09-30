@@ -71,8 +71,8 @@ type UserInput struct {
 }
 
 type DirectorySync struct {
-	// Switch toggles the directory sync operation off for the installation
-	types.Switch
+	// Disable switches the directory sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from GitHub"`
 	// DisableGroupSync will just sync users and no groups or group memberships
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from GitHub, disable groups sync operations"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
@@ -81,8 +81,8 @@ type DirectorySync struct {
 
 // VulnerabilitySync controls the vulnerability collect operation
 type VulnerabilitySync struct {
-	// Switch toggles the vulnerability collect operation off for the installation
-	types.Switch
+	// Disable switches the vulnerability collect operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of vulnerabilities from GitHub"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.state == 'open'"`
 	// MaxRepos caps the number of repositories scanned during one run
@@ -90,8 +90,8 @@ type VulnerabilitySync struct {
 }
 
 type RepositorySync struct {
-	// Switch toggles the repository sync operation off for the installation
-	types.Switch
+	// Disable switches the repository sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of repositories from GitHub"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.IsPrivate == 'true'"`
 }

@@ -11,7 +11,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v7/shared"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -146,23 +145,7 @@ func runDirectorySync(ctx context.Context, request types.OperationRequest, clien
 		}
 	}
 
-	return []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        accountEnvelopes,
-			SnapshotComplete: true,
-		},
-		{
-			Schema:           entityops.SchemaDirectoryGroup.Name,
-			Envelopes:        groupEnvelopes,
-			SnapshotComplete: true,
-		},
-		{
-			Schema:           entityops.SchemaDirectoryMembership.Name,
-			Envelopes:        membershipEnvelopes,
-			SnapshotComplete: true,
-		},
-	}, nil
+	return append(providerkit.DirectoryAccountPayloadSets(accountEnvelopes), providerkit.DirectoryGroupPayloadSets(groupEnvelopes, membershipEnvelopes, true)...), nil
 }
 
 // isIncludedUserMember reports whether a group member is a user that was included in the account ingest set

@@ -113,49 +113,6 @@ func TestDefinitionCredentialRegistration(t *testing.T) {
 	})
 }
 
-// TestDefinitionCredentialSchema verifies the stored schema resolves from the registration's StoredSchema, nil for unknown slots
-func TestDefinitionCredentialSchema(t *testing.T) {
-	t.Parallel()
-
-	stored := json.RawMessage(`{"type":"object","properties":{"token":{"type":"string"}}}`)
-	form := json.RawMessage(`{"type":"object","properties":{"code":{"type":"string"}}}`)
-
-	def := Definition{
-		DefinitionSpec: DefinitionSpec{ID: "test-def"},
-		CredentialRegistrations: []CredentialRegistration{
-			{Ref: apiKeyCredentialRef.ID(), Schema: form, StoredSchema: stored},
-			{Ref: oauthCredentialRef.ID(), StoredSchema: stored},
-		},
-		Connections: []ConnectionRegistration{
-			{CredentialRef: oauthCredentialRef.ID(), Auth: &AuthRegistration{CredentialRef: oauthCredentialRef.ID()}},
-		},
-	}
-
-	t.Run("stored schema wins over the form schema", func(t *testing.T) {
-		t.Parallel()
-
-		if got := def.CredentialSchema(apiKeyCredentialRef.ID()); string(got) != string(stored) {
-			t.Fatalf("got %s, want %s", got, stored)
-		}
-	})
-
-	t.Run("auth-managed slot resolves its stored schema", func(t *testing.T) {
-		t.Parallel()
-
-		if got := def.CredentialSchema(oauthCredentialRef.ID()); string(got) != string(stored) {
-			t.Fatalf("got %s, want %s", got, stored)
-		}
-	})
-
-	t.Run("unknown slot", func(t *testing.T) {
-		t.Parallel()
-
-		if got := def.CredentialSchema(NewCredentialSlotID("missing")); got != nil {
-			t.Fatalf("got %s, want nil", got)
-		}
-	})
-}
-
 func TestOperationRegistrationDisabledFor(t *testing.T) {
 	t.Parallel()
 
@@ -201,16 +158,13 @@ func TestSwitchDisabled(t *testing.T) {
 		t.Fatal("expected a set switch to be disabled")
 	}
 
-	encoded, err := json.Marshal(struct {
-		Switch
-		Limit int `json:"limit"`
-	}{Switch: Switch{Disable: true}, Limit: 1})
-	if err != nil {
-		t.Fatalf("marshal: %v", err)
+	var decoded Switch
+	if err := json.Unmarshal(json.RawMessage(`{"disable":true,"limit":1}`), &decoded); err != nil {
+		t.Fatalf("unmarshal: %v", err)
 	}
 
-	if string(encoded) != `{"disable":true,"limit":1}` {
-		t.Fatalf("expected the embedded switch promoted to the disable key, got %s", encoded)
+	if !decoded.Disabled() {
+		t.Fatal("expected the section's disable key decoded into the switch")
 	}
 }
 

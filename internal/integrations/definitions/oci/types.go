@@ -32,8 +32,8 @@ type UserInput struct {
 
 // FindingsSync holds installation-specific configuration for OCI Cloud Guard problem collection
 type FindingsSync struct {
-	// Switch toggles the findings sync off for the installation
-	types.Switch
+	// Disable switches the findings sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of problems from OCI Cloud Guard"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.riskLevel == 'CRITICAL' || payload.riskLevel == 'HIGH'"`
 	// SkipProblemDetails collects only the list response and skips the per-problem detail lookup

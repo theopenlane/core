@@ -31,8 +31,8 @@ type UserInput struct {
 
 // DirectorySync holds configuration for the Tailscale directory sync operation
 type DirectorySync struct {
-	// Switch toggles the directory sync operation off for the installation
-	types.Switch
+	// Disable switches the directory sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from Tailscale"`
 	// DisableGroupSync skips group and membership sync, importing only users
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from Tailscale; disable role-based group sync"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
@@ -41,8 +41,8 @@ type DirectorySync struct {
 
 // AssetSync holds configuration for the Tailscale asset sync operation
 type AssetSync struct {
-	// Switch toggles the asset sync operation off for the installation
-	types.Switch
+	// Disable switches the asset sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of devices from Tailscale"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
 }

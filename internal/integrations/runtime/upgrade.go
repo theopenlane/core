@@ -43,30 +43,22 @@ func (r *Runtime) ensureCurrentVersion(ctx context.Context, installation *ent.In
 func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Integration, skip []types.CredentialSlotID) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to resolve definition for installation")
-
-		return err
+		return fmt.Errorf("resolve definition: %w", err)
 	}
 
 	records, err := r.keystore().LoadAllCredentials(ctx, installation)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to load all credentials for installation")
-
-		return err
+		return fmt.Errorf("load credentials: %w", err)
 	}
 
 	providerState, err := def.ProviderState(installation.ProviderState)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to resolve provider state for installation")
-
-		return err
+		return fmt.Errorf("resolve provider state: %w", err)
 	}
 
 	connection, err := r.resolvePersistedConnection(def, installation)
 	if err != nil && !errors.Is(err, ErrConnectionRequired) && !errors.Is(err, ErrConnectionNotFound) {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to resolve persisted connection for installation")
-
-		return err
+		return fmt.Errorf("resolve persisted connection: %w", err)
 	}
 
 	req := types.InstallationRequest{
@@ -96,7 +88,7 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 
 		registration, err := def.CredentialRegistration(slot)
 		if err == nil {
-			payload, err := conformPayload(ctx, req, def.CredentialSchema(slot), registration.Backfill, credential.Data, ErrCredentialInvalid)
+			payload, err := conformPayload(ctx, req, registration.StoredSchema, registration.Backfill, credential.Data, ErrCredentialInvalid)
 			if err != nil {
 				return fmt.Errorf("%w: slot %s", err, slot)
 			}
@@ -118,7 +110,7 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 			return fmt.Errorf("%w: slot %s", err, slot)
 		}
 
-		if converted, err = conformPayload(ctx, req, def.CredentialSchema(registration.Ref), registration.Backfill, converted, ErrCredentialInvalid); err != nil {
+		if converted, err = conformPayload(ctx, req, registration.StoredSchema, registration.Backfill, converted, ErrCredentialInvalid); err != nil {
 			return fmt.Errorf("%w: slot %s", err, slot)
 		}
 
@@ -130,9 +122,7 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 	}
 
 	if err := r.keystore().ReplaceCredentials(ctx, installation, records, next); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to replace credentials in keystore")
-
-		return err
+		return fmt.Errorf("replace credentials: %w", err)
 	}
 
 	credentialRef := providerState.CredentialRef
@@ -147,28 +137,20 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 
 	if credentialRef != providerState.CredentialRef {
 		if err := r.persistConnectionState(systemCtx, installation, def, credentialRef); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to persist connection state after credential slot replacement")
-
-			return err
+			return fmt.Errorf("persist connection state: %w", err)
 		}
 	}
 
 	if err := r.upgradeUserInput(systemCtx, req, installation, def); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to upgrade installation user input")
-
-		return err
+		return fmt.Errorf("upgrade user input: %w", err)
 	}
 
 	if err := r.upgradeOperations(systemCtx, installation, def); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to upgrade installation operation records")
-
-		return err
+		return fmt.Errorf("upgrade operations: %w", err)
 	}
 
 	if err := r.upgradeWebhooks(systemCtx, installation, def); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to upgrade installation webhook rows")
-
-		return err
+		return fmt.Errorf("upgrade webhooks: %w", err)
 	}
 
 	if len(skip) > 0 {
@@ -178,17 +160,13 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 	version := r.Registry().Version(def.ID)
 
 	if err := r.DB().Integration.UpdateOneID(installation.ID).SetDefinitionVersion(version).Exec(systemCtx); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to update installation to current definition version")
-
-		return err
+		return fmt.Errorf("set definition version: %w", err)
 	}
 
 	installation.DefinitionVersion = version
 
 	if err := r.RefreshInstallationMetadata(ctx, installation); err != nil {
-		logx.FromContext(ctx).Debug().Err(err).Msg("upgrade: installation metadata refresh failed")
-
-		return err
+		return fmt.Errorf("refresh installation metadata: %w", err)
 	}
 
 	renamed := lo.SomeBy(def.Operations, func(operation types.OperationRegistration) bool {
@@ -200,9 +178,7 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 	}
 
 	if err := r.ResetReconcileLoops(ctx, installation); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to reseed reconcile loops after operation rename")
-
-		return err
+		return fmt.Errorf("reset reconcile loops: %w", err)
 	}
 
 	return nil
@@ -237,9 +213,11 @@ func (r *Runtime) upgradeUserInput(ctx context.Context, req types.InstallationRe
 func conformUserInput(ctx context.Context, req types.InstallationRequest, input types.UserInputRegistration, stored json.RawMessage) (json.RawMessage, error) {
 	document := stored
 
-	if validatePayload(ctx, input.Schema, stored, ErrUserInputInvalid) != nil && input.Convert != nil {
-		if converted, convertErr := input.Convert(stored); convertErr == nil {
-			document = converted
+	if input.Convert != nil {
+		if result, err := jsonx.ValidateSchema(input.Schema, stored); err != nil || !result.Valid() {
+			if converted, convertErr := input.Convert(stored); convertErr == nil {
+				document = converted
+			}
 		}
 	}
 
@@ -248,9 +226,7 @@ func conformUserInput(ctx context.Context, req types.InstallationRequest, input 
 
 // upgradeOperations moves recorded operation health and run history stored under retired operation names onto the operations that replace them, cancels reconcile loops still queued under retired names, and drops health records of operations the definition no longer declares
 func (r *Runtime) upgradeOperations(ctx context.Context, installation *ent.Integration, def types.Definition) error {
-	unhealthy := map[string]string{}
-
-	maps.Copy(unhealthy, installation.Health.UnhealthyOperations)
+	unhealthy := lo.Assign(installation.Health.UnhealthyOperations)
 
 	for _, operation := range def.Operations {
 		retired := operation.Replaces
@@ -406,22 +382,16 @@ func upgradeExclusions(def types.Definition, skip []types.CredentialSlotID) []ty
 func conformPayload(ctx context.Context, req types.InstallationRequest, schema json.RawMessage, backfill types.BackfillFunc, payload json.RawMessage, sentinel error) (json.RawMessage, error) {
 	conformed, err := jsonx.ConformToSchema(schema, payload)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to conform payload to schema")
-
-		return nil, err
+		return nil, fmt.Errorf("conform to schema: %w", err)
 	}
 
 	if backfill != nil {
 		if conformed, err = backfill(ctx, req, conformed); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to backfill payload")
-
-			return nil, err
+			return nil, fmt.Errorf("backfill: %w", err)
 		}
 	}
 
 	if err := validatePayload(ctx, schema, conformed, sentinel); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to validate backfilled payload")
-
 		return nil, err
 	}
 

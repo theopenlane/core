@@ -260,24 +260,12 @@
     {
       "name": "installation.events",
       "events": [
-        {
-          "name": "code_scanning_alert"
-        },
-        {
-          "name": "dependabot_alert"
-        },
-        {
-          "name": "installation.created"
-        },
-        {
-          "name": "installation.deleted"
-        },
-        {
-          "name": "ping"
-        },
-        {
-          "name": "secret_scanning_alert"
-        }
+        "code_scanning_alert",
+        "dependabot_alert",
+        "installation.created",
+        "installation.deleted",
+        "ping",
+        "secret_scanning_alert"
       ]
     }
   ]

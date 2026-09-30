@@ -23,8 +23,6 @@ var (
 	slackOAuthConnection = types.NewConnectionRef(slackCredential).Enables(slackClient)
 	// slackBotTokenConnection is the connection mode selected by the bot token credential slot
 	slackBotTokenConnection = types.NewConnectionRef(slackBotTokenCredential).Enables(slackClient)
-	// runtimeSlackRef is the typed ref for the runtime Slack config
-	runtimeSlackRef = types.RuntimeRefOf[RuntimeSlackConfig]()
 	// userInput is the installation user input layout for the Slack definition
 	userInput = types.NewUserInputRef[UserInput]("slack")
 )
@@ -81,8 +79,8 @@ type UserInput struct {
 }
 
 type DirectorySync struct {
-	// Switch toggles the directory sync off for the installation
-	types.Switch
+	// Disable switches the directory sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of workspace members from Slack"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.is_external == false'"`
 }

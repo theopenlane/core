@@ -3,8 +3,6 @@ package gcpscc
 import "errors"
 
 var (
-	// ErrClientType indicates the provided client is not the expected type
-	ErrClientType = errors.New("gcpscc: unexpected client type")
 	// ErrCredentialMetadataRequired indicates no credential metadata was provided
 	ErrCredentialMetadataRequired = errors.New("gcpscc: credential metadata required")
 	// ErrMetadataDecode indicates credential metadata could not be decoded

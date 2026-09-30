@@ -25,24 +25,12 @@ var (
 	ErrDescribeHubFailed = errors.New("awssecurityhub: describe hub failed")
 	// ErrSecurityHubNotEnabled indicates security hub is not enabled for the account
 	ErrSecurityHubNotEnabled = errors.New("awssecurityhub: security hub not enabled for account")
-	// ErrListAssessmentsFailed indicates ListAssessments failed
-	ErrListAssessmentsFailed = errors.New("awssecurityhub: list assessments failed")
-	// ErrAssessmentEncode indicates an assessment payload could not be serialized for ingest
-	ErrAssessmentEncode = errors.New("awssecurityhub: assessment encode failed")
 	// ErrFindingsFetchFailed indicates GetFindings failed
 	ErrFindingsFetchFailed = errors.New("awssecurityhub: findings fetch failed")
 	// ErrFindingEncode indicates a finding payload could not be serialized
 	ErrFindingEncode = errors.New("awssecurityhub: finding encode failed")
 	// ErrResultEncode indicates an operation result could not be serialized
 	ErrResultEncode = errors.New("awssecurityhub: result encode failed")
-	// ErrConfigRulesFetchFailed indicates DescribeConfigRules failed
-	ErrConfigRulesFetchFailed = errors.New("awsconfig: config rules fetch failed")
-	// ErrConfigControlEncode indicates a config rule could not be serialized for ingest
-	ErrConfigControlEncode = errors.New("awsconfig: config control encode failed")
-	// ErrControlCatalogFetchFailed indicates ListControls failed
-	ErrControlCatalogFetchFailed = errors.New("awsconfig: control catalog fetch failed")
-	// ErrCatalogControlEncode indicates a control catalog entry could not be serialized for ingest
-	ErrCatalogControlEncode = errors.New("awsconfig: catalog control encode failed")
 	// ErrIAMUsersFetchFailed indicates ListUsers failed
 	ErrIAMUsersFetchFailed = errors.New("awsiam: IAM users fetch failed")
 	// ErrIAMGroupsFetchFailed indicates ListGroups failed

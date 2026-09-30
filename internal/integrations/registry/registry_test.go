@@ -8,6 +8,7 @@ import (
 
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // testCredential is the credential type behind the reusable test slot
@@ -26,8 +27,8 @@ var (
 	testCredentialRef = integrationtypes.CredentialRefOf[testCredential]()
 	// testAuthCredentialRef is the credential slot an auth flow fills in tests
 	testAuthCredentialRef = integrationtypes.CredentialRefOf[testAuthCredential]()
-	// testRuntimeRef is the typed runtime integration ref behind the runtime integration tests
-	testRuntimeRef = integrationtypes.RuntimeRefOf[testRuntimeConfig]()
+	// testRuntimeSchema is the reflected runtime config schema behind the runtime integration tests
+	testRuntimeSchema = jsonx.SchemaFrom[testRuntimeConfig]()
 )
 
 // testCredentialRegistration is the reusable credential registration declaring the test slot with its stored schema
@@ -1493,8 +1494,7 @@ func TestRuntimeIntegrationRegistration(t *testing.T) {
 			Visible:     true,
 		},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    testRuntimeRef.ID(),
-			Schema: testRuntimeRef.Schema(),
+			Schema: testRuntimeSchema,
 			Config: json.RawMessage(`{"key":"val"}`),
 			Build: func(_ context.Context, config json.RawMessage) (any, error) {
 				return "runtime-client-" + string(config), nil
@@ -1537,8 +1537,7 @@ func TestRuntimeIntegrationNilConfig(t *testing.T) {
 			Active:      true,
 		},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    testRuntimeRef.ID(),
-			Schema: testRuntimeRef.Schema(),
+			Schema: testRuntimeSchema,
 			Build: func(_ context.Context, _ json.RawMessage) (any, error) {
 				return "should-not-be-called", nil
 			},
@@ -1571,8 +1570,7 @@ func TestRuntimeCoexistsWithCredentials(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_creds", Active: true, Visible: true},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    testRuntimeRef.ID(),
-			Schema: testRuntimeRef.Schema(),
+			Schema: testRuntimeSchema,
 			Config: json.RawMessage(`{"key":"val"}`),
 			Build: func(_ context.Context, config json.RawMessage) (any, error) {
 				return "runtime-client", nil
@@ -1633,8 +1631,7 @@ func TestRuntimeCoexistsWithOperatorConfig(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_opconf"},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    testRuntimeRef.ID(),
-			Schema: testRuntimeRef.Schema(),
+			Schema: testRuntimeSchema,
 			Build:  func(_ context.Context, _ json.RawMessage) (any, error) { return nil, nil },
 		},
 		OperatorConfig: &integrationtypes.OperatorConfigRegistration{Schema: json.RawMessage(`{"type":"object"}`)},
@@ -1657,8 +1654,7 @@ func TestRuntimeBuildRequired(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_nobuild"},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    testRuntimeRef.ID(),
-			Schema: testRuntimeRef.Schema(),
+			Schema: testRuntimeSchema,
 		},
 		Operations: []integrationtypes.OperationRegistration{
 			{Name: "op", Topic: gala.TopicName("op"), Handle: newTestHandler()},
@@ -1681,8 +1677,7 @@ func TestRuntimeBuildError(t *testing.T) {
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_runtime_buildfail"},
 		RuntimeIntegration: &integrationtypes.RuntimeIntegrationRegistration{
-			Ref:    testRuntimeRef.ID(),
-			Schema: testRuntimeRef.Schema(),
+			Schema: testRuntimeSchema,
 			Config: json.RawMessage(`{}`),
 			Build: func(_ context.Context, _ json.RawMessage) (any, error) {
 				return nil, buildErr

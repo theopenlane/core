@@ -2,9 +2,7 @@ package awssecurityhub
 
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/internal/ent/generated/control"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -13,8 +11,6 @@ import (
 // Builder returns the AWS Security Hub definition builder with the supplied operator config applied
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
-		installation := installationRef()
-
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
@@ -89,19 +85,9 @@ func Builder(cfg Config) registry.Builder {
 					RequiredPermissions: []string{"AWSSecurityHubReadOnlyAccess"},
 				}),
 				directorySyncOperation.Registration(definitionID, types.OperationRegistration{
-					Description: "Sync AWS IAM users, groups, and memberships as directory accounts",
-					Policy:      types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaDirectoryAccount.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryGroup.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryMembership.Name,
-						},
-					},
+					Description:         "Sync AWS IAM users, groups, and memberships as directory accounts",
+					Policy:              types.ExecutionPolicy{Reconcile: true, Snapshot: true},
+					Ingest:              providerkit.DirectoryIngestContracts(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"iam:ListUsers", "iam:ListGroups", "iam:ListGroupsForUser", "iam:ListUserTags"},
 					Schedule:            gala.NewFullFetchSchedule(),
@@ -135,22 +121,8 @@ func Builder(cfg Config) registry.Builder {
 					DisabledForAll:      true,
 				}),
 			},
-			Mappings: []types.MappingRegistration{
-				{
-					Schema: entityops.SchemaFinding.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprFinding,
-						Links: []types.LinkRule{
-							{
-								TargetSchema: entityops.SchemaControl.Name,
-								TargetField:  control.FieldRefCode,
-								SourceField:  entityops.FindingFields.Category.InputKey,
-								SourceList:   entityops.FindingFields.Categories.InputKey,
-							},
-						},
-					},
-				},
+			Mappings: append([]types.MappingRegistration{
+				providerkit.FindingMapping(mapExprFinding),
 				{
 					Schema: entityops.SchemaVulnerability.Name,
 					Spec: types.MappingOverride{
@@ -158,40 +130,7 @@ func Builder(cfg Config) registry.Builder {
 						MapExpr:    mapExprVulnerability,
 					},
 				},
-				{
-					Schema: entityops.SchemaDirectoryAccount.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryAccount,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryGroup.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryGroup,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryMembership.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryMembership,
-						Links: []types.LinkRule{
-							{
-								TargetSchema: entityops.SchemaDirectoryAccount.Name,
-								TargetField:  directoryaccount.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
-							},
-							{
-								TargetSchema: entityops.SchemaDirectoryGroup.Name,
-								TargetField:  directorygroup.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
-							},
-						},
-					},
-				},
-			},
+			}, providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership)...),
 		}, nil
 	})
 }

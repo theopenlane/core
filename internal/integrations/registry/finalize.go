@@ -3,6 +3,8 @@ package registry
 import (
 	"encoding/json"
 	"fmt"
+	"path"
+	"reflect"
 	"slices"
 
 	"github.com/invopop/jsonschema"
@@ -11,14 +13,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
-
-// userInputSections is the user input schema's top-level properties that reference a named type, with the schema definitions they resolve against
-type userInputSections struct {
-	// refs maps each top-level property key to the basename of the type it references, empty for properties without a reference
-	refs map[string]string
-	// defs holds the user input schema definitions
-	defs jsonschema.Definitions
-}
 
 // finalizeDefinition derives the credential form schemas and the operation config sections, switches, and resolvers the builder leaves to the registry
 func finalizeDefinition(def types.Definition) (types.Definition, error) {
@@ -55,7 +49,7 @@ func finalizeCredential(connections []types.ConnectionRegistration, registration
 
 // finalizeOperations locates each operation's config section in the user input and derives its resolver and switch, enforcing one operation per section
 func finalizeOperations(def types.Definition) ([]types.OperationRegistration, error) {
-	sections, err := resolveUserInputSections(def.UserInput)
+	inputRoot, inputDefs, err := jsonx.SchemaRoot(lo.FromPtr(def.UserInput).Schema)
 	if err != nil {
 		return nil, fmt.Errorf("definition %s user input: %w", def.ID, err)
 	}
@@ -75,7 +69,7 @@ func finalizeOperations(def types.Definition) ([]types.OperationRegistration, er
 			return nil, fmt.Errorf("definition %s operation %s config: %w", def.ID, operation.Name, err)
 		}
 
-		key, err := sections.match(jsonx.SchemaID(operation.ConfigSchema), configDefs)
+		key, err := matchSection(inputRoot, inputDefs, jsonx.SchemaID(operation.ConfigSchema), configDefs)
 		if err != nil {
 			return nil, fmt.Errorf("%w: definition %s operation %s", err, def.ID, operation.Name)
 		}
@@ -98,7 +92,7 @@ func finalizeOperations(def types.Definition) ([]types.OperationRegistration, er
 	return operations, nil
 }
 
-// bindSection fills the operation's resolver with the section lookup and its switch with the config switch applied to the resolved section, leaving authored values in place
+// bindSection fills the operation's resolver with the section lookup and its switch with the section's disable toggle, leaving authored values in place
 func bindSection(operation *types.OperationRegistration, key string) {
 	if operation.ConfigResolver == nil {
 		operation.ConfigResolver = func(userInput json.RawMessage) json.RawMessage {
@@ -108,45 +102,33 @@ func bindSection(operation *types.OperationRegistration, key string) {
 		}
 	}
 
-	if operation.Disabled == nil && operation.ConfigDisabled != nil {
-		resolve, disabled := operation.ConfigResolver, operation.ConfigDisabled
+	if operation.Disabled == nil {
+		resolver := operation.ConfigResolver
 
 		operation.Disabled = func(userInput json.RawMessage) bool {
-			return disabled(resolve(userInput))
+			toggle, err := jsonx.Decode[types.Switch](resolver(userInput))
+
+			return err == nil && toggle.Disable
 		}
 	}
 }
 
-// resolveUserInputSections indexes the user input schema's top-level properties that reference a named type, empty when the definition has no user input
-func resolveUserInputSections(userInput *types.UserInputRegistration) (userInputSections, error) {
-	if userInput == nil {
-		return userInputSections{}, nil
+// matchSection returns the single user input property key whose referenced type is name and whose definition equals the operation config's, empty when no property references it
+func matchSection(inputRoot *jsonschema.Schema, inputDefs jsonschema.Definitions, name string, configDefs jsonschema.Definitions) (string, error) {
+	var candidates []string
+
+	for pair := inputRoot.Properties.Oldest(); pair != nil; pair = pair.Next() {
+		if pair.Value.Ref != "" && path.Base(pair.Value.Ref) == name {
+			candidates = append(candidates, pair.Key)
+		}
 	}
-
-	refs, err := jsonx.PropertyRefs(userInput.Schema)
-	if err != nil {
-		return userInputSections{}, err
-	}
-
-	_, defs, err := jsonx.SchemaRoot(userInput.Schema)
-	if err != nil {
-		return userInputSections{}, err
-	}
-
-	return userInputSections{refs: refs, defs: defs}, nil
-}
-
-// match returns the single property key whose referenced type is name and whose definition equals the operation config's, empty when no property references it
-func (s userInputSections) match(name string, configDefs jsonschema.Definitions) (string, error) {
-	candidates := lo.Keys(lo.PickBy(s.refs, func(_ string, ref string) bool { return ref != "" && ref == name }))
-	slices.Sort(candidates)
 
 	switch {
 	case len(candidates) == 0:
 		return "", nil
 	case len(candidates) > 1:
 		return "", fmt.Errorf("%w: properties %v reference %s", ErrConfigSectionAmbiguous, candidates, name)
-	case !sameSchema(s.defs[name], configDefs[name]):
+	case !sameSchema(inputDefs[name], configDefs[name]):
 		return "", fmt.Errorf("%w: property %s type %s", ErrConfigSectionMismatch, candidates[0], name)
 	default:
 		return candidates[0], nil
@@ -170,4 +152,19 @@ func sameSchema(a, b *jsonschema.Schema) bool {
 	}
 
 	return sameJSON(left, right)
+}
+
+// sameJSON reports whether two raw documents decode to the same value regardless of encoding
+func sameJSON(a, b json.RawMessage) bool {
+	var left, right any
+
+	if err := json.Unmarshal(a, &left); err != nil {
+		return false
+	}
+
+	if err := json.Unmarshal(b, &right); err != nil {
+		return false
+	}
+
+	return reflect.DeepEqual(left, right)
 }

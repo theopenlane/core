@@ -55,8 +55,8 @@ type UserInput struct {
 
 // FindingsSync holds the user-configurable and per-invocation parameters for the findings collection operation
 type FindingsSync struct {
-	// Switch toggles the findings collection operation off for the installation
-	types.Switch
+	// Disable switches the findings collection operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of findings from GCP Security Command Center"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.category != \"GKE_SECURITY_BULLETIN\""`
 	// PageSize controls the number of findings per API page

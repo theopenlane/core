@@ -18,8 +18,6 @@ var (
 	cloudflareConnection = types.NewConnectionRef(cloudflareCredential).Enables(cloudflareClient)
 	// userInput is the installation user input layout for the Cloudflare definition
 	userInput = types.NewUserInputRef[UserInput]("cloudflare")
-	// runtimeCloudflareRef is the typed ref for the runtime Cloudflare config
-	runtimeCloudflareRef = types.RuntimeRefOf[RuntimeConfig]()
 )
 
 const (
@@ -72,24 +70,24 @@ type UserInput struct {
 
 // DirectorySync holds installation-specific configuration collected from the user
 type DirectorySync struct {
-	// Switch toggles the directory sync operation off for the installation
-	types.Switch
+	// Disable switches the directory sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of account members from Cloudflare"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.status = 'ACTIVE'"`
 }
 
 // FindingsSync holds installation-specific configuration for Cloudflare Security Center insights
 type FindingsSync struct {
-	// Switch toggles the findings sync operation off for the installation
-	types.Switch
+	// Disable switches the findings sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of security insights from Cloudflare"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.severity == 'Critical'"`
 }
 
 // AssetSync holds installation-specific configuration for Cloudflare domain assets
 type AssetSync struct {
-	// Switch toggles the asset sync operation off for the installation
-	types.Switch
+	// Disable switches the asset sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of domains from Cloudflare"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.status == 'active'"`
 }

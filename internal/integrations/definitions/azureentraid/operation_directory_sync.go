@@ -10,7 +10,6 @@ import (
 	"github.com/microsoftgraph/msgraph-sdk-go/users"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -120,13 +119,7 @@ func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *msgraphs
 		}
 	}
 
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        accountEnvelopes,
-			SnapshotComplete: true,
-		},
-	}
+	payloadSets := providerkit.DirectoryAccountPayloadSets(accountEnvelopes)
 
 	if cfg.DisableGroupSync {
 		return payloadSets, nil
@@ -180,20 +173,7 @@ func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *msgraphs
 		}
 	}
 
-	payloadSets = append(payloadSets,
-		types.IngestPayloadSet{
-			Schema:           entityops.SchemaDirectoryGroup.Name,
-			Envelopes:        groupEnvelopes,
-			SnapshotComplete: true,
-		},
-		types.IngestPayloadSet{
-			Schema:           entityops.SchemaDirectoryMembership.Name,
-			Envelopes:        membershipEnvelopes,
-			SnapshotComplete: true,
-		},
-	)
-
-	return payloadSets, nil
+	return append(payloadSets, providerkit.DirectoryGroupPayloadSets(groupEnvelopes, membershipEnvelopes, true)...), nil
 }
 
 // odataPage is the minimal interface required from an OData collection response page

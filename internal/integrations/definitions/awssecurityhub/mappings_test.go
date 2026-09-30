@@ -7,7 +7,6 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/integrations/mappingtest"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -15,20 +14,7 @@ func TestMappingExpressionsValid(t *testing.T) {
 	def, err := Builder(Config{})()
 	assert.NilError(t, err)
 
-	for _, m := range def.Mappings {
-		name := m.Schema
-		if m.Variant != "" {
-			name += "/" + m.Variant
-		}
-
-		t.Run(name+"/filter", func(t *testing.T) {
-			assert.NilError(t, providerkit.ValidateExpr(m.Spec.FilterExpr))
-		})
-
-		t.Run(name+"/map", func(t *testing.T) {
-			assert.NilError(t, providerkit.ValidateExpr(m.Spec.MapExpr))
-		})
-	}
+	mappingtest.AssertExpressionsValid(t, def.Mappings)
 }
 
 // TestNullArrayPayloads guards against CEL "no such overload: size" errors that occur

@@ -164,16 +164,6 @@ func (d Definition) CredentialRegistration(ref CredentialSlotID) (CredentialRegi
 	return reg, nil
 }
 
-// CredentialSchema returns the stored schema of one credential slot, nil when the slot is unknown
-func (d Definition) CredentialSchema(slot CredentialSlotID) json.RawMessage {
-	registration, err := d.CredentialRegistration(slot)
-	if err != nil {
-		return nil
-	}
-
-	return registration.StoredSchema
-}
-
 // CredentialReplacing returns the credential registration whose slot takes over payloads stored under the retired slot
 func (d Definition) CredentialReplacing(retired CredentialSlotID) (CredentialRegistration, bool) {
 	return lo.Find(d.CredentialRegistrations, func(r CredentialRegistration) bool {
@@ -208,17 +198,8 @@ type DefinitionProviderState struct {
 
 // ProviderState returns the persisted provider state for this definition
 func (d Definition) ProviderState(state IntegrationProviderState) (DefinitionProviderState, error) {
-	if state.Providers == nil {
-		return DefinitionProviderState{}, nil
-	}
-
-	raw, ok := state.Providers[d.ID]
-	if !ok || len(raw) == 0 {
-		return DefinitionProviderState{}, nil
-	}
-
 	var out DefinitionProviderState
-	if err := jsonx.UnmarshalIfPresent(raw, &out); err != nil {
+	if err := jsonx.UnmarshalIfPresent(state.Providers[d.ID], &out); err != nil {
 		return DefinitionProviderState{}, err
 	}
 

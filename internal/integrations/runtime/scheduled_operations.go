@@ -97,8 +97,6 @@ func (r *Runtime) seedScheduledOperation(ctx context.Context, oc gala.OperationC
 
 	active, err := r.Gala().HasActiveJobWithMetadata(ctx, fragment)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to check for active scheduled operation job")
-
 		return err
 	}
 

@@ -164,19 +164,19 @@ func ResolveOwnerIntegration(ctx context.Context, db *ent.Client, definitionID, 
 		return "", err
 	}
 
-	if len(integrations) == 1 {
+	switch {
+	case len(integrations) == 1:
 		return integrations[0].ID, nil
+	case len(prefer) == 0:
+		return "", nil
 	}
 
-	if len(prefer) > 0 {
-		for _, inst := range integrations {
-			if prefer[0](inst) {
-				return inst.ID, nil
-			}
-		}
+	preferred, found := lo.Find(integrations, prefer[0])
+	if !found {
+		return "", nil
 	}
 
-	return "", nil
+	return preferred.ID, nil
 }
 
 // inheritWebhookContext propagates webhook/event context from a parent execution so the envelope carries the triggering event identity

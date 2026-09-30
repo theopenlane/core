@@ -7,7 +7,6 @@ import (
 
 	oktagosdk "github.com/okta/okta-sdk-golang/v6/okta"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -55,13 +54,7 @@ func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *oktagosd
 		}
 	}
 
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        accountEnvelopes,
-			SnapshotComplete: true,
-		},
-	}
+	payloadSets := providerkit.DirectoryAccountPayloadSets(accountEnvelopes)
 
 	if !cfg.EnableGroupSync {
 		return payloadSets, nil
@@ -112,20 +105,7 @@ func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *oktagosd
 		}
 	}
 
-	payloadSets = append(payloadSets,
-		types.IngestPayloadSet{
-			Schema:           entityops.SchemaDirectoryGroup.Name,
-			Envelopes:        groupEnvelopes,
-			SnapshotComplete: true,
-		},
-		types.IngestPayloadSet{
-			Schema:           entityops.SchemaDirectoryMembership.Name,
-			Envelopes:        membershipEnvelopes,
-			SnapshotComplete: true,
-		},
-	)
-
-	return payloadSets, nil
+	return append(payloadSets, providerkit.DirectoryGroupPayloadSets(groupEnvelopes, membershipEnvelopes, true)...), nil
 }
 
 // listDirectoryUsers pages through Okta users using the resolved sync settings

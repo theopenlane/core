@@ -5,8 +5,6 @@ import "errors"
 var (
 	// ErrOAuthTokenMissing indicates the OAuth access token is missing
 	ErrOAuthTokenMissing = errors.New("googleworkspace: oauth token missing")
-	// ErrClientType indicates the provided client is not the expected type
-	ErrClientType = errors.New("googleworkspace: unexpected client type")
 	// ErrAdminServiceBuildFailed indicates the Admin SDK client could not be constructed
 	ErrAdminServiceBuildFailed = errors.New("googleworkspace: admin service build failed")
 	// ErrHealthCheckFailed indicates the health check request failed

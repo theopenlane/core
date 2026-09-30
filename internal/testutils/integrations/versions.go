@@ -39,8 +39,10 @@ var (
 	TokenV1 = types.CredentialRefOf[tokenV1]()
 	// TokenV2 is the version 2 token credential slot, taking over payloads stored under TokenV1
 	TokenV2 = types.CredentialRefOf[tokenV2]().Replacing(TokenV1, func(o tokenV1) tokenV2 { return tokenV2{Token: o.AccessToken} })
+	// TokenV4 is the version 4 token credential slot, the version 3 slot with no replacement or backfill declared
+	TokenV4 = types.CredentialRefOf[tokenV3]()
 	// TokenV3 is the version 3 token credential slot, taking over payloads stored under TokenV2 or, chained, directly under TokenV1, backfilling the region from the installation id
-	TokenV3 = types.CredentialRefOf[tokenV3]().
+	TokenV3 = TokenV4.
 		Replacing(TokenV2, func(o tokenV2) tokenV3 { return tokenV3{Token: o.Token} }).
 		Replacing(TokenV1, func(o tokenV1) tokenV3 { return tokenV3{Token: o.AccessToken} }).
 		Backfilled(func(_ context.Context, req types.InstallationRequest, c *tokenV3) error {
@@ -54,32 +56,12 @@ var (
 
 // TokenV1Set builds the version 1 token credential payload
 func TokenV1Set(token string) types.CredentialSet {
-	raw, err := json.Marshal(tokenV1{AccessToken: token})
-	if err != nil {
-		panic(err)
-	}
-
-	return types.CredentialSet{Data: raw}
-}
-
-// TokenV2Set builds the version 2 token credential payload
-func TokenV2Set(token string) types.CredentialSet {
-	raw, err := json.Marshal(tokenV2{Token: token})
-	if err != nil {
-		panic(err)
-	}
-
-	return types.CredentialSet{Data: raw}
+	return credentialSet(tokenV1{AccessToken: token})
 }
 
 // TokenV3Set builds the version 3 token credential payload
 func TokenV3Set(token, region string) types.CredentialSet {
-	raw, err := json.Marshal(tokenV3{Token: token, Region: region})
-	if err != nil {
-		panic(err)
-	}
-
-	return types.CredentialSet{Data: raw}
+	return credentialSet(tokenV3{Token: token, Region: region})
 }
 
 // userInputV1 is the version 1 user input layout, a single optional filter expression
@@ -110,8 +92,11 @@ var userInputV1Ref = types.NewUserInputRef[userInputV1]("version-input.v1")
 // userInputV2Ref names the version 2 user input layout so the version 3 layout can retire it explicitly
 var userInputV2Ref = types.NewUserInputRef[userInputV2]("version-input.v2")
 
+// userInputV4Ref is the version 4 user input layout, the version 3 layout with no replacement or backfill declared
+var userInputV4Ref = types.NewUserInputRef[userInputV3]("version-input.v3")
+
 // UserInputV3 is the version 3 user input layout, taking over the version 2 layout's stored filter expression as its required filter and backfilling it when still empty
-var UserInputV3 = types.NewUserInputRef[userInputV3]("version-input.v3").
+var UserInputV3 = userInputV4Ref.
 	Replacing(userInputV2Ref, func(o userInputV2) userInputV3 { return userInputV3{Mode: o.Mode, Filter: o.FilterExpr} }).
 	Backfilled(func(_ context.Context, _ types.InstallationRequest, c *userInputV3) error {
 		if c.Filter == "" {
@@ -120,58 +105,6 @@ var UserInputV3 = types.NewUserInputRef[userInputV3]("version-input.v3").
 
 		return nil
 	})
-
-// versionClient is the client the version fixtures build from their active token slot
-type versionClient struct {
-	// Token is the resolved API token
-	Token string
-}
-
-// buildVersionClientV1 builds the client from the version 1 token credential
-func buildVersionClientV1(_ context.Context, req types.ClientBuildRequest) (*versionClient, error) {
-	cred, ok, err := TokenV1.Resolve(req.Credentials)
-	if err != nil || !ok {
-		return nil, ErrTokenMissing
-	}
-
-	return &versionClient{Token: cred.AccessToken}, nil
-}
-
-// buildVersionClientV2 builds the client from the version 2 token credential
-func buildVersionClientV2(_ context.Context, req types.ClientBuildRequest) (*versionClient, error) {
-	cred, ok, err := TokenV2.Resolve(req.Credentials)
-	if err != nil || !ok {
-		return nil, ErrTokenMissing
-	}
-
-	return &versionClient{Token: cred.Token}, nil
-}
-
-// buildVersionClientV3 builds the client from the version 3 token credential
-func buildVersionClientV3(_ context.Context, req types.ClientBuildRequest) (*versionClient, error) {
-	cred, ok, err := TokenV3.Resolve(req.Credentials)
-	if err != nil || !ok {
-		return nil, ErrTokenMissing
-	}
-
-	return &versionClient{Token: cred.Token}, nil
-}
-
-var (
-	// versionClientV1 is the version 1 client, built from the version 1 token credential
-	versionClientV1 = types.ClientRefOf[*versionClient]().Using(TokenV1)
-	// versionClientV2 is the version 2 client, built from the version 2 token credential
-	versionClientV2 = types.ClientRefOf[*versionClient]().Using(TokenV2)
-	// versionClientV3 is the version 3 client, built from the version 3 token credential
-	versionClientV3 = types.ClientRefOf[*versionClient]().Using(TokenV3)
-
-	// tokenConnectionV1 is the version 1 connection mode selected by the version 1 token slot
-	tokenConnectionV1 = types.NewConnectionRef(TokenV1)
-	// tokenConnectionV2 is the version 2 connection mode selected by the version 2 token slot
-	tokenConnectionV2 = types.NewConnectionRef(TokenV2)
-	// tokenConnectionV3 is the version 3 connection mode selected by the version 3 token slot
-	tokenConnectionV3 = types.NewConnectionRef(TokenV3)
-)
 
 // versionMetadata is the installation metadata the version 3 connection derives from the resolved token credential
 type versionMetadata struct {
@@ -208,8 +141,10 @@ type syncCfgV3 struct {
 var (
 	// SyncOp is the reconcile operation name used by versions 1 and 2
 	SyncOp = types.OperationRefOf[syncCfg]().HandlesRequest(idleCycle[syncCfg])
+	// SyncOpV4 is the version 4 reconcile operation, the version 3 operation with no replacement declared
+	SyncOpV4 = types.OperationRefOf[syncCfgV3]().HandlesRequest(syncHandlerV3)
 	// SyncOpV3 is the reconcile operation name version 3 renames SyncOp to
-	SyncOpV3 = types.OperationRefOf[syncCfgV3]().Replacing(SyncOp).HandlesRequest(syncHandlerV3)
+	SyncOpV3 = SyncOpV4.Replacing(SyncOp)
 )
 
 // SyncConfigV3 receives the resolved config each time the version 3 reconcile handler runs
@@ -241,51 +176,24 @@ func syncConfigV3From(userInput json.RawMessage) json.RawMessage {
 var (
 	// WebhookV1V2 is the webhook contract name used by versions 1 and 2
 	WebhookV1V2 = types.NewWebhookRef("version-events.v1")
+	// WebhookV4 is the version 4 webhook contract, the version 3 contract with no replacement declared
+	WebhookV4 = types.NewWebhookRef("version-events.v2")
 	// WebhookV3 is the webhook contract version 3 renames WebhookV1V2 to
-	WebhookV3 = types.NewWebhookRef("version-events.v2").Replacing(WebhookV1V2)
+	WebhookV3 = WebhookV4.Replacing(WebhookV1V2)
 )
 
 // BuilderV1 registers the version 1 shared test definition
 func BuilderV1() registry.Builder {
-	return func() (types.Definition, error) {
-		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
-				DisplayName: "Test Integration",
-				Active:      true,
-			},
-			UserInput: userInputV1Ref.Registration(),
-			CredentialRegistrations: []types.CredentialRegistration{
-				TokenV1.Registration(types.CredentialRegistration{
-					Name: "Test Token",
-				}),
-			},
-			Connections: []types.ConnectionRegistration{
-				tokenConnectionV1.Registration(types.ConnectionRegistration{
-					Name:       "Test Token",
-					Disconnect: &types.DisconnectRegistration{},
-				}),
-			},
-			HealthCheck: types.CredentialHealthCheck(healthHandler),
-			Clients: []types.ClientRegistration{
-				versionClientV1.Registration(buildVersionClientV1, types.ClientRegistration{
-					Description: "Version 1 client built from the version 1 token credential.",
-				}),
-			},
-			Operations: []types.OperationRegistration{
-				SyncOp.Registration(DefinitionID, types.OperationRegistration{
-					Policy: types.ExecutionPolicy{Inline: true},
-				}),
-			},
-			Webhooks: []types.WebhookRegistration{
-				WebhookV1V2.Registration(types.WebhookRegistration{}),
-			},
-		}, nil
-	}
+	return sharedVersionBuilder(userInputV1Ref, TokenV1, func(c tokenV1) string { return c.AccessToken })
 }
 
 // BuilderV2 registers the version 2 shared test definition, taking over version 1's credential and reusing its operation and webhook contract
 func BuilderV2() registry.Builder {
+	return sharedVersionBuilder(userInputV2Ref, TokenV2, func(c tokenV2) string { return c.Token })
+}
+
+// sharedVersionBuilder registers a shared test definition version over the given user input layout and token slot, whose client reads the token through tokenOf, sharing the version 1 operation and webhook contract
+func sharedVersionBuilder[In, Cred any](input types.UserInputRef[In], token types.CredentialRef[Cred], tokenOf func(Cred) string) registry.Builder {
 	return func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -293,22 +201,22 @@ func BuilderV2() registry.Builder {
 				DisplayName: "Test Integration",
 				Active:      true,
 			},
-			UserInput: userInputV2Ref.Registration(),
+			UserInput: input.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
-				TokenV2.Registration(types.CredentialRegistration{
+				token.Registration(types.CredentialRegistration{
 					Name: "Test Token",
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				tokenConnectionV2.Registration(types.ConnectionRegistration{
+				types.NewConnectionRef(token).Registration(types.ConnectionRegistration{
 					Name:       "Test Token",
 					Disconnect: &types.DisconnectRegistration{},
 				}),
 			},
 			HealthCheck: types.CredentialHealthCheck(healthHandler),
 			Clients: []types.ClientRegistration{
-				versionClientV2.Registration(buildVersionClientV2, types.ClientRegistration{
-					Description: "Version 2 client built from the version 2 token credential.",
+				types.ClientRefOf[*Client]().Using(token).Registration(tokenClient(token, tokenOf), types.ClientRegistration{
+					Description: "Version client built from the token credential.",
 				}),
 			},
 			Operations: []types.OperationRegistration{
@@ -325,6 +233,16 @@ func BuilderV2() registry.Builder {
 
 // BuilderV3 registers the version 3 shared test definition, chain-taking over version 2's and version 1's credential, and renaming the shared user input layout, reconcile operation, and webhook contract
 func BuilderV3() registry.Builder {
+	return latestVersionBuilder(UserInputV3, TokenV3, SyncOpV3, WebhookV3)
+}
+
+// BuilderV4 registers the version 4 shared test definition, version 3's names and schemas with every replacement and backfill declaration removed
+func BuilderV4() registry.Builder {
+	return latestVersionBuilder(userInputV4Ref, TokenV4, SyncOpV4, WebhookV4)
+}
+
+// latestVersionBuilder registers a shared test definition over the version 3 user input layout, token slot, reconcile operation, and webhook contract, carrying whatever lifecycle declarations the given refs hold
+func latestVersionBuilder(input types.UserInputRef[userInputV3], token types.CredentialRef[tokenV3], operation types.OperationRef[syncCfgV3], webhook types.WebhookRef) registry.Builder {
 	return func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -332,14 +250,14 @@ func BuilderV3() registry.Builder {
 				DisplayName: "Test Integration",
 				Active:      true,
 			},
-			UserInput: UserInputV3.Registration(),
+			UserInput: input.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
-				TokenV3.Registration(types.CredentialRegistration{
+				token.Registration(types.CredentialRegistration{
 					Name: "Test Token",
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				tokenConnectionV3.Registration(types.ConnectionRegistration{
+				types.NewConnectionRef(token).Registration(types.ConnectionRegistration{
 					Name:       "Test Token",
 					Disconnect: &types.DisconnectRegistration{},
 				}),
@@ -347,18 +265,18 @@ func BuilderV3() registry.Builder {
 			HealthCheck:  types.CredentialHealthCheck(healthHandler),
 			Installation: versionMetadataV3.Registration(),
 			Clients: []types.ClientRegistration{
-				versionClientV3.Registration(buildVersionClientV3, types.ClientRegistration{
+				types.ClientRefOf[*Client]().Using(token).Registration(tokenClient(token, func(c tokenV3) string { return c.Token }), types.ClientRegistration{
 					Description: "Version 3 client built from the version 3 token credential.",
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				SyncOpV3.Registration(DefinitionID, types.OperationRegistration{
+				operation.Registration(DefinitionID, types.OperationRegistration{
 					Policy:         types.ExecutionPolicy{Inline: true},
 					ConfigResolver: syncConfigV3From,
 				}),
 			},
 			Webhooks: []types.WebhookRegistration{
-				WebhookV3.Registration(types.WebhookRegistration{}),
+				webhook.Registration(types.WebhookRegistration{}),
 			},
 		}, nil
 	}

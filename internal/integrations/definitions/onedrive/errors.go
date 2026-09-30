@@ -17,8 +17,6 @@ var (
 	ErrResultEncode = errors.New("onedrive: result encode failed")
 	// ErrExportFailed indicates the file download request failed
 	ErrExportFailed = errors.New("onedrive: file export failed")
-	// ErrFolderIDMissing indicates the folder ID is not configured
-	ErrFolderIDMissing = errors.New("onedrive: folder id missing from user input")
 	// ErrFolderListFailed indicates the folder children listing request failed
 	ErrFolderListFailed = errors.New("onedrive: folder list failed")
 	// ErrPayloadEncode indicates a provider payload could not be serialized

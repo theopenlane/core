@@ -37,6 +37,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{
 		configTestDefinitionBuilder(configTestProviderID, false),
 		configTestDefinitionBuilder("def_01K0TESTOTH00000000000001", false),
+		hiddenDefinitionBuilder("def_01K0TESTHID00000000000001"),
 	})
 	defer restore()
 
@@ -72,4 +73,21 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 
 	_, ok = providers["def_01K0TESTOTH00000000000001"]
 	assert.True(t, ok)
+
+	_, ok = providers["def_01K0TESTHID00000000000001"]
+	assert.False(t, ok)
+}
+
+// hiddenDefinitionBuilder returns a builder for a definition that is active but not visible in catalog surfaces
+func hiddenDefinitionBuilder(definitionID string) registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
+		def, err := configTestDefinitionBuilder(definitionID, false)()
+		if err != nil {
+			return types.Definition{}, err
+		}
+
+		def.Visible = false
+
+		return def, nil
+	})
 }

@@ -11,7 +11,8 @@ import (
 
 // sectionConfig is the switchable operation config type located as a user input section in the finalize tests
 type sectionConfig struct {
-	integrationtypes.Switch
+	// Disable switches the operation off for the installation
+	Disable bool `json:"disable,omitempty"`
 	// Limit bounds the number of records the operation reads
 	Limit int `json:"limit,omitempty"`
 }

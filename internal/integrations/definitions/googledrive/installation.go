@@ -6,6 +6,7 @@ import (
 	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/option"
 
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/ssoutils"
@@ -32,7 +33,7 @@ func resolveInstallationMetadata(ctx context.Context, cfg Config, req types.Inst
 		return InstallationMetadata{}, false, nil
 	}
 
-	svc, err := drive.NewService(ctx, option.WithTokenSource(tokenSource(ctx, cfg, cred)))
+	svc, err := drive.NewService(ctx, option.WithTokenSource(providerkit.GoogleTokenSource(ctx, cfg.ClientID, cfg.ClientSecret, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))))
 	if err != nil {
 		logx.FromContext(ctx).Err(err).Msg("googledrive: failed to create drive service")
 

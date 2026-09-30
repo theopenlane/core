@@ -11,6 +11,8 @@ import (
 var (
 	// definitionID is the stable identifier for the AWS Security Hub integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AWSSECHUB0000000000001")
+	// installation is the typed installation metadata handle for the AWS Security Hub definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// awsAssumeRoleCredential is the typed credential slot for AWS STS assume-role auth
 	awsAssumeRoleCredential = types.CredentialRefOf[AssumeRoleCredentialSchema]()
 	// awsServiceAccountCredential is the typed credential slot for AWS static service account credentials
@@ -42,8 +44,8 @@ type UserInput struct {
 }
 
 type DirectorySync struct {
-	// Switch toggles the directory sync operation off for the installation
-	types.Switch
+	// Disable switches the directory sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from AWS IAM"`
 	// DisableGroupSync will just sync users and no groups or group memberships
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from AWS IAM, disable groups sync operations"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
@@ -52,24 +54,24 @@ type DirectorySync struct {
 
 // FindingSync are configuration settings for the findings sync
 type FindingSync struct {
-	// Switch toggles the findings sync operation off for the installation
-	types.Switch
+	// Disable switches the findings sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of findings from AWS Security Hub"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.Severity.Label == 'CRITICAL' || payload.Severity.Label == 'HIGH'"`
 }
 
 // CheckSync are the configuration settings for the check sync from AWS Config
 type CheckSync struct {
-	// Switch toggles the check sync operation off for the installation
-	types.Switch
+	// Disable switches the check sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of checks from AWS Config"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.ComplianceType == 'NON_COMPLIANT' || payload.ComplianceType == 'COMPLIANT'"`
 }
 
 // AssetSync are the configuration settings for the asset sync
 type AssetSync struct {
-	// Switch toggles the asset sync operation off for the installation
-	types.Switch
+	// Disable switches the asset sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of assets from AWS"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
 }

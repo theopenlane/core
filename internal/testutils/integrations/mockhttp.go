@@ -50,12 +50,7 @@ type mockHTTPCred struct {
 
 // MockHTTPCredentialSet builds the mock provider credential payload carrying the token and base URL
 func MockHTTPCredentialSet(token, baseURL string) types.CredentialSet {
-	raw, err := json.Marshal(mockHTTPCred{Token: token, BaseURL: baseURL})
-	if err != nil {
-		panic(err)
-	}
-
-	return types.CredentialSet{Data: raw}
+	return credentialSet(mockHTTPCred{Token: token, BaseURL: baseURL})
 }
 
 // mockHTTPClientInstance is the mock provider operation client; the ingest handler reads its connection from the request credentials, so the client itself carries no state and exists only to bind the stored credential onto the operation request through the runtime's client resolution
@@ -83,12 +78,7 @@ func (m MockHTTPInstallationMetadata) InstallationIdentity() types.IntegrationIn
 
 // resolveMockHTTPMetadata fetches the external instance id from the mock provider using the stored credential
 func resolveMockHTTPMetadata(ctx context.Context, req types.InstallationRequest) (MockHTTPInstallationMetadata, bool, error) {
-	cred, ok, err := MockHTTPCredential.Resolve(req.Credentials)
-	if err != nil || !ok {
-		return MockHTTPInstallationMetadata{}, false, err
-	}
-
-	body, err := mockHTTPGet(ctx, cred.BaseURL+"/instance", cred.Token)
+	body, err := mockHTTPGet(ctx, req.Credentials, "/instance")
 	if err != nil {
 		return MockHTTPInstallationMetadata{}, false, err
 	}
@@ -107,26 +97,26 @@ func resolveMockHTTPMetadata(ctx context.Context, req types.InstallationRequest)
 
 // mockHTTPHealthCheck validates the installation's credential against the mock provider's health endpoint
 func mockHTTPHealthCheck(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
-	cred, ok, err := MockHTTPCredential.Resolve(req.Credentials)
-	if err != nil || !ok {
-		return nil, ErrMockHTTPUnhealthy
-	}
-
-	if _, err := mockHTTPGet(ctx, cred.BaseURL+"/health", cred.Token); err != nil {
+	if _, err := mockHTTPGet(ctx, req.Credentials, "/health"); err != nil {
 		return nil, err
 	}
 
 	return json.RawMessage(`{"ok":true}`), nil
 }
 
-// mockHTTPGet performs an authenticated GET against the mock provider, returning the body on a 200 and an error otherwise
-func mockHTTPGet(ctx context.Context, url, token string) ([]byte, error) {
-	request, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+// mockHTTPGet performs a GET of path against the mock provider under the bound credential's token and base URL, returning the body on a 200 and an error otherwise
+func mockHTTPGet(ctx context.Context, credentials types.CredentialBindings, path string) ([]byte, error) {
+	cred, ok, err := MockHTTPCredential.Resolve(credentials)
+	if err != nil || !ok {
+		return nil, ErrMockHTTPUnhealthy
+	}
+
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet, cred.BaseURL+path, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	request.Header.Set("Authorization", "Bearer "+token)
+	request.Header.Set("Authorization", "Bearer "+cred.Token)
 
 	response, err := http.DefaultClient.Do(request)
 	if err != nil {
@@ -154,12 +144,7 @@ type mockHTTPDirectory struct {
 
 // mockHTTPIngest fetches the mock provider directory under the installation's credential and returns the account, group, and membership payload sets for the ingest pipeline to map, link, and persist
 func mockHTTPIngest(ctx context.Context, req types.OperationRequest, _ *mockHTTPClientInstance, _ mockHTTPSync) ([]types.IngestPayloadSet, error) {
-	cred, ok, err := MockHTTPCredential.Resolve(req.Credentials)
-	if err != nil || !ok {
-		return nil, ErrMockHTTPUnhealthy
-	}
-
-	body, err := mockHTTPGet(ctx, cred.BaseURL+"/directory", cred.Token)
+	body, err := mockHTTPGet(ctx, req.Credentials, "/directory")
 	if err != nil {
 		return nil, err
 	}
@@ -288,7 +273,7 @@ func (m *MockHTTPServer) handle(w http.ResponseWriter, r *http.Request) {
 	case "/health":
 		w.WriteHeader(http.StatusOK)
 	case "/instance":
-		_ = json.NewEncoder(w).Encode(map[string]string{"instanceId": instanceID})
+		_ = json.NewEncoder(w).Encode(MockHTTPInstallationMetadata{InstanceID: instanceID})
 	case "/directory":
 		_ = json.NewEncoder(w).Encode(directory)
 	default:

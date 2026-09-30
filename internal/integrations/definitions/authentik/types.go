@@ -8,8 +8,8 @@ import (
 var (
 	// definitionID is the stable identifier for the Authentik integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AUTHENTIK000000000000001")
-	// integration is the typed installation metadata handle for the Authentik definition
-	integration = types.NewInstallationRef(resolveInstallationMetadata)
+	// installation is the typed installation metadata handle for the Authentik definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// authentikCredential is the typed credential slot for the Authentik API token
 	authentikCredential = types.CredentialRefOf[CredentialSchema]()
 	// authentikClient is the client ref for the Authentik API client
@@ -40,8 +40,8 @@ type UserInput struct {
 
 // DirectorySync configures collection of Authentik directory users, groups, and memberships
 type DirectorySync struct {
-	// Switch turns the directory sync off for the installation
-	types.Switch
+	// Disable switches the directory sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from Authentik"`
 	// DisableGroupSync when true only syncs users, skipping groups and memberships
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users disable group and membership sync operations"`
 	// FilterExpr limits imported records to envelopes matching a CEL expression
