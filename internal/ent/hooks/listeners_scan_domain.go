@@ -38,7 +38,7 @@ func DomainScanListeners() []gala.Registration {
 			Schema:      entityops.SchemaOrganizationSetting,
 			Operations:  []string{entityops.OpUpdateOne},
 			Fields:      []string{organizationsetting.FieldDomains},
-			ContextKeys: []func(context.Context) context.Context{rule.WithInternalContext},
+			ContextKeys: []func(context.Context) context.Context{rule.WithInternalOperationContext},
 			Handle:      entityops.RequireDep(handleOrganizationSettingDomainsUpdated),
 		},
 	}

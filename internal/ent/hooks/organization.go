@@ -248,7 +248,7 @@ func createOrgSettings(ctx context.Context, m *generated.OrganizationMutation) e
 // createOrgSubscription creates the default organization subscription for a new org
 func createOrgSubscription(ctx context.Context, orgCreated *generated.Organization, m utils.GenericMutation) (*generated.OrgSubscription, error) {
 	// ensure we can always pull the org subscription for the organization
-	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(orgCreated.ID))
+	allowCtx := rule.WithOrgInternalCaller(ctx, orgCreated.ID)
 
 	orgSubscriptions, err := orgCreated.OrgSubscriptions(allowCtx)
 	if err != nil {

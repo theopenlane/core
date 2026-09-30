@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/keymaker"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -141,7 +142,7 @@ func (h *Handler) HandleIntegrationAuthCallback(ctx echo.Context) error {
 
 	callbackInput := normalizeIntegrationAuthCallbackInput(ctx.Request())
 
-	reqCtx = auth.WithCaller(reqCtx, auth.NewWebhookCaller(orgCookie.Value))
+	reqCtx = rule.WithOrgInternalCaller(reqCtx, orgCookie.Value)
 
 	_, err = h.IntegrationsRuntime.CompleteAuth(reqCtx, keymaker.CompleteRequest{
 		State:    stateCookie.Value,

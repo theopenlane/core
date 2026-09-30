@@ -97,7 +97,7 @@ func (suite *GraphTestSuite) UserBuilder(ctx context.Context, t *testing.T, feat
 	testUser.OrganizationID = testOrg.ID
 
 	// setup user context with the org; users who create an org are owners
-	testUser.UserCtx = auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID, auth.WithOrganizationRole(auth.OwnerRole))
+	testUser.UserCtx = SetUserContext(auth.NewTestContextWithOrgID(testUser.ID, testUser.OrganizationID, auth.WithOrganizationRole(auth.OwnerRole)), suite.Client.DB)
 
 	// create a group under the organization
 	testGroup := (&GroupBuilder{Client: suite.Client}).MustNew(testUser.UserCtx, t)
@@ -158,18 +158,28 @@ func (suite *GraphTestSuite) SetupTestData(ctx context.Context, t *testing.T) {
 }
 
 func (suite *GraphTestSuite) SetupPatClient(user TestUserDetails, t *testing.T) *testclient.TestClient {
+	return suite.setupPatClient(user, t, []string{user.OrganizationID, user.PersonalOrgID}, true)
+}
+
+// SetupSingleOrgPatClient returns a client using a PAT authorized only for the user's org without an organization header
+func (suite *GraphTestSuite) SetupSingleOrgPatClient(user TestUserDetails, t *testing.T) *testclient.TestClient {
+	return suite.setupPatClient(user, t, []string{user.OrganizationID}, false)
+}
+
+func (suite *GraphTestSuite) setupPatClient(user TestUserDetails, t *testing.T, orgIDs []string, withOrgHeader bool) *testclient.TestClient {
 	// setup client with a personal access token
-	pat := (&PersonalAccessTokenBuilder{Client: suite.Client, OrganizationIDs: []string{user.OrganizationID, user.PersonalOrgID}}).MustNew(user.UserCtx, t)
+	pat := (&PersonalAccessTokenBuilder{Client: suite.Client, OrganizationIDs: orgIDs}).MustNew(user.UserCtx, t)
 
 	authHeaderPAT := testclient.Authorization{
 		BearerToken: pat.Token,
 	}
 
-	apiClientPat, err := coreutils.TestClientWithAuth(suite.Client.DB, suite.Client.ObjectStore,
-		testclient.WithCredentials(authHeaderPAT),
-		testclient.WithInterceptors(
-			testclient.WithOrganizationHeader(user.OrganizationID),
-		))
+	opts := []testclient.ClientOption{testclient.WithCredentials(authHeaderPAT)}
+	if withOrgHeader {
+		opts = append(opts, testclient.WithInterceptors(testclient.WithOrganizationHeader(user.OrganizationID)))
+	}
+
+	apiClientPat, err := coreutils.TestClientWithAuth(suite.Client.DB, suite.Client.ObjectStore, opts...)
 	RequireNoError(t, err)
 
 	return apiClientPat
@@ -177,7 +187,26 @@ func (suite *GraphTestSuite) SetupPatClient(user TestUserDetails, t *testing.T) 
 
 func (suite *GraphTestSuite) SetupAPITokenClient(ctx context.Context, t *testing.T) *testclient.TestClient {
 	// setup client with an API token with comprehensive scopes for testing
-	// Get all available scopes from the FGA model
+	return SetupAPIToken(ctx, t, allAPITokenScopes(t))
+}
+
+// SetupAPITokenContext creates an API token with all scopes and returns a context carrying the caller the auth middleware builds for it
+func (suite *GraphTestSuite) SetupAPITokenContext(ctx context.Context, t *testing.T, orgID string) context.Context {
+	apiToken := (&APITokenBuilder{Client: suite.Client, Scopes: allAPITokenScopes(t)}).MustNew(ctx, t)
+
+	caller := &auth.Caller{
+		SubjectID:          apiToken.ID,
+		SubjectName:        "service: " + apiToken.Name,
+		OrganizationID:     orgID,
+		OrganizationIDs:    []string{orgID},
+		AuthenticationType: auth.APITokenAuthentication,
+	}
+
+	return SetUserContext(auth.WithCaller(context.Background(), caller), suite.Client.DB)
+}
+
+// allAPITokenScopes returns every scope available in the FGA model
+func allAPITokenScopes(t *testing.T) []string {
 	scopeOpts, err := fgamodel.ScopeOptions()
 	RequireNoError(t, err)
 
@@ -188,7 +217,7 @@ func (suite *GraphTestSuite) SetupAPITokenClient(ctx context.Context, t *testing
 		}
 	}
 
-	return SetupAPIToken(ctx, t, scopes)
+	return scopes
 }
 
 // SetupAPIToken takes scopes and returns an api client with those scopes set
@@ -216,7 +245,7 @@ func (suite *GraphTestSuite) AddUserToOrganization(ctx context.Context, t *testi
 	// update the user context for the org member; set the role so permission checks that read
 	// caller.OrganizationRole (instead of querying the DB) work correctly
 	orgRole, _ := auth.ToOrganizationRoleType(role.String())
-	userDetails.UserCtx = auth.NewTestContextWithOrgID(userDetails.ID, userDetails.OrganizationID, auth.WithOrganizationRole(orgRole))
+	userDetails.UserCtx = SetUserContext(auth.NewTestContextWithOrgID(userDetails.ID, userDetails.OrganizationID, auth.WithOrganizationRole(orgRole)), suite.Client.DB)
 }
 
 func (suite *GraphTestSuite) SystemAdminBuilder(ctx context.Context, t *testing.T) TestUserDetails {
@@ -235,7 +264,7 @@ func (suite *GraphTestSuite) SystemAdminBuilder(ctx context.Context, t *testing.
 	RequireNoError(t, err)
 
 	// set the user as a system admin
-	newUser.UserCtx = auth.NewTestContextForSystemAdmin(newUser.ID, newUser.OrganizationID)
+	newUser.UserCtx = SetUserContext(auth.NewTestContextForSystemAdmin(newUser.ID, newUser.OrganizationID), suite.Client.DB)
 
 	return newUser
 }
@@ -375,4 +404,16 @@ func (suite *GraphTestSuite) AddFunctionalRoleForUser(ctx context.Context, t *te
 
 	_, err := suite.Client.DB.Authz.WriteTupleKeys(ctx, tuples, nil)
 	require.NoError(t, err)
+}
+
+// OrgMemberWithFunctionalRoles creates a user, adds them to the owner's organization as a member,
+// and grants them the functional roles
+func (suite *GraphTestSuite) OrgMemberWithFunctionalRoles(t *testing.T, owner TestUserDetails, roles ...string) TestUserDetails {
+	t.Helper()
+
+	member := suite.UserBuilder(context.Background(), t)
+	suite.AddUserToOrganization(owner.UserCtx, t, &member, enums.RoleMember, owner.OrganizationID)
+	suite.AddFunctionalRoleForUser(owner.UserCtx, t, member.ID, owner.OrganizationID, roles)
+
+	return member
 }

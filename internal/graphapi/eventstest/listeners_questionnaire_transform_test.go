@@ -12,6 +12,7 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
@@ -133,6 +134,44 @@ func TestQuestionnaireTransformListener(t *testing.T) {
 		updated, err := suite.Client.DB.AssessmentResponse.Get(allowCtx, response.ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(entityID, updated.EntityID))
+	})
+
+	t.Run("response completed by anonymous respondent transforms into entity", func(t *testing.T) {
+		anonVendorName := "acme-vendor-" + ulids.New().String()
+
+		anonDoc, err := suite.Client.DB.DocumentData.Create().
+			SetOwnerID(orgID).
+			SetTemplateID(template.ID).
+			SetData(map[string]any{"vendorName": anonVendorName}).
+			Save(allowCtx)
+		assert.NilError(t, err)
+
+		anonResponse := (&th.AssessmentResponseBuilder{Client: suite.Client, AssessmentID: assessment.ID, OwnerID: orgID}).MustNew(user.UserCtx, t)
+
+		// covers the listener under the anonymous respondent caller which is with the privacy.Allow is here; the handler path is covered by TestSubmitQuestionnaire
+		respondent := auth.NewQuestionnaireCaller(orgID, ulids.New().String(), "Anonymous Respondent", "")
+		respondentCtx := privacy.DecisionContext(auth.WithCaller(context.Background(), respondent), privacy.Allow)
+
+		assert.NilError(t, suite.Client.DB.AssessmentResponse.UpdateOneID(anonResponse.ID).
+			SetDocumentDataID(anonDoc.ID).
+			SetStatus(enums.AssessmentResponseStatusCompleted).
+			Exec(respondentCtx))
+
+		waitForCondition(t, func() bool {
+			updated, err := suite.Client.DB.AssessmentResponse.Get(allowCtx, anonResponse.ID)
+			return err == nil && updated.EntityID != ""
+		}, "assessment response completed anonymously should link the transformed entity")
+
+		record, err := suite.Client.DB.Entity.Query().
+			Where(entity.ExternalIDEQ(anonVendorName), entity.OwnerIDEQ(orgID)).
+			Only(allowCtx)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(anonVendorName, record.Name))
+
+		t.Cleanup(func() {
+			(&th.Cleanup[*generated.AssessmentResponseDeleteOne]{Client: suite.Client.DB.AssessmentResponse, ID: anonResponse.ID}).MustDelete(user.UserCtx, t)
+			(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, ID: record.ID}).MustDelete(user.UserCtx, t)
+		})
 	})
 
 	vendorName2 := "acme-vendor-" + ulids.New().String()

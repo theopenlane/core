@@ -16,10 +16,7 @@ import (
 func HookGroupMembers() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.GroupMembershipFunc(func(ctx context.Context, m *generated.GroupMembershipMutation) (generated.Value, error) {
-			// skip for real internal system operations (e.g. org creation) where the user may not
-			// yet be a member of the org. CapBypassFGA distinguishes real service callers from
-			// test contexts created by rule.WithInternalContext, which adds CapInternalOperation
-			// but not CapBypassFGA.
+			// skip when the caller has both caps, e.g. org creation adding the creator to managed groups before they are an org member
 			if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapInternalOperation|auth.CapBypassFGA) {
 				return next.Mutate(ctx, m)
 			}

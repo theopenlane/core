@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/observability"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -186,7 +187,7 @@ func (l *WorkflowListeners) recordEmitFailure(scope *observability.Scope, instan
 
 // persistWorkflowEvent stores a workflow event payload for an instance.
 func persistWorkflowEvent(ctx context.Context, client *generated.Client, instance *generated.WorkflowInstance, eventType enums.WorkflowEventType, actionKey string, details any) error {
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 
 	payload := models.WorkflowEventPayload{
 		EventType: eventType,

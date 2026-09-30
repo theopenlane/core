@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/iam/auth"
@@ -315,7 +316,7 @@ func triggerWorkflowForProposal(ctx context.Context, client *generated.Client, w
 	}
 	obj.Node = entity
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := rule.WithInternalOperationContext(ctx)
 	definitions, err := wfEngine.FindMatchingDefinitions(allowCtx, obj.Type.String(), "UPDATE", changedFields, nil, nil, nil, proposal.Changes, obj)
 	if err != nil {
 		return ErrFailedToFindMatchingDefinitions

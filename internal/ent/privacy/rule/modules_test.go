@@ -227,13 +227,6 @@ func TestDenyIfMissingAllModules_BypassScenarios(t *testing.T) {
 		assert.Contains(t, err.Error(), "skip rule")
 	})
 
-	t.Run("bypass with WebhookCaller", func(t *testing.T) {
-		ctx := auth.WithCaller(baseCtx, auth.NewWebhookCaller(""))
-		err := featureRule.EvalMutation(ctx, testMutation)
-		require.Error(t, err)
-		assert.Contains(t, err.Error(), "skip rule")
-	})
-
 	t.Run("bypass with InternalOperationCaller", func(t *testing.T) {
 		ctx := auth.WithCaller(baseCtx, &auth.Caller{Capabilities: auth.CapInternalOperation})
 		err := featureRule.EvalMutation(ctx, testMutation)

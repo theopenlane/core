@@ -12,10 +12,14 @@ import (
 	"github.com/stretchr/testify/mock"
 	"gotest.tools/v3/assert"
 
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/graphapi"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
@@ -41,27 +45,6 @@ func TestFileBackupListener(t *testing.T) {
 	t.Cleanup(func() {
 		suite.Client.DB.ObjectManager = original
 	})
-
-	newFile := func(t *testing.T, name string, state *models.FileBackupState) *generated.File {
-		t.Helper()
-
-		create := suite.Client.DB.File.Create()
-		if state != nil {
-			create = create.SetBackupState(*state)
-		}
-
-		f, err := create.
-			SetProvidedFileName(name).
-			SetProvidedFileExtension(".txt").
-			SetDetectedContentType("text/plain").
-			SetStorageProvider(backupSourceProvider.String()).
-			SetStoragePath(user.OrganizationID + "/" + name).
-			SetStorageVolume("source-bucket").
-			Save(ctx)
-		assert.NilError(t, err)
-
-		return f
-	}
 
 	backupState := func(t *testing.T, id string) models.FileBackupState {
 		t.Helper()
@@ -109,7 +92,7 @@ func TestFileBackupListener(t *testing.T) {
 			}).
 			Once()
 
-		f := newFile(t, "listener-backup-create.txt", nil)
+		f := newBackupFile(t, ctx, user.OrganizationID, "listener-backup-create.txt", nil)
 
 		waitForCondition(t, func() bool {
 			return backupState(t, f.ID).Status == enums.FileBackupStatusCompleted
@@ -137,7 +120,7 @@ func TestFileBackupListener(t *testing.T) {
 			Maybe()
 
 		// seeded one short of the cap so the failure exhausts rather than retrying into a later subtest
-		f := newFile(t, "listener-backup-failure.txt", &models.FileBackupState{
+		f := newBackupFile(t, ctx, user.OrganizationID, "listener-backup-failure.txt", &models.FileBackupState{
 			Status:   enums.FileBackupStatusFailed,
 			Attempts: hooks.MaxFileBackupAttempts - 1,
 		})
@@ -160,7 +143,7 @@ func TestFileBackupListener(t *testing.T) {
 
 		backup.EXPECT().ProviderType().Return(backupSourceProvider).Maybe()
 
-		f := newFile(t, "listener-backup-readfrombackup.txt", nil)
+		f := newBackupFile(t, ctx, user.OrganizationID, "listener-backup-readfrombackup.txt", nil)
 
 		waitForGala(t, setup.Runtime)
 
@@ -179,7 +162,7 @@ func TestFileBackupListener(t *testing.T) {
 		idleBackup.EXPECT().ProviderType().Return(backupSourceProvider).Maybe()
 		suite.Client.DB.ObjectManager = idle
 
-		f := newFile(t, "listener-backup-requested.txt", nil)
+		f := newBackupFile(t, ctx, user.OrganizationID, "listener-backup-requested.txt", nil)
 
 		waitForGala(t, setup.Runtime)
 		assert.Equal(t, backupState(t, f.ID).Status, enums.FileBackupStatus(""))
@@ -214,6 +197,29 @@ func TestFileBackupListener(t *testing.T) {
 		assert.Equal(t, state.Attempts, 1)
 	})
 
+	t.Run("file created by an org member replicates", func(t *testing.T) {
+		setupReplicatingBackup(t, "backups/member.txt")
+
+		f := newBackupFile(t, user.UserCtx, user.OrganizationID, "listener-backup-member.txt", nil)
+
+		waitForCondition(t, func() bool {
+			return backupState(t, f.ID).Status == enums.FileBackupStatusCompleted
+		}, "a file uploaded by an org member should replicate")
+	})
+
+	t.Run("file created by an anonymous questionnaire respondent replicates", func(t *testing.T) {
+		setupReplicatingBackup(t, "backups/respondent.txt")
+
+		// covers the listener under the anonymous respondent caller which is why the privacy.Allow is here
+		respondent := auth.NewQuestionnaireCaller(user.OrganizationID, ulids.New().String(), "Anonymous Respondent", "")
+		respondentCtx := privacy.DecisionContext(generated.NewContext(auth.WithCaller(context.Background(), respondent), suite.Client.DB), privacy.Allow)
+		f := newBackupFile(t, respondentCtx, user.OrganizationID, "listener-backup-respondent.txt", nil)
+
+		waitForCondition(t, func() bool {
+			return backupState(t, f.ID).Status == enums.FileBackupStatusCompleted
+		}, "a file uploaded by an anonymous respondent should replicate")
+	})
+
 	t.Run("unrelated update does not re-replicate", func(t *testing.T) {
 		svc, source, backup, err := coreutils.MockStorageServiceWithBackup(t, backupSourceProvider, false)
 		assert.NilError(t, err)
@@ -233,7 +239,7 @@ func TestFileBackupListener(t *testing.T) {
 			}, nil).
 			Once()
 
-		f := newFile(t, "listener-backup-unrelated.txt", nil)
+		f := newBackupFile(t, ctx, user.OrganizationID, "listener-backup-unrelated.txt", nil)
 
 		waitForCondition(t, func() bool {
 			return backupState(t, f.ID).Status == enums.FileBackupStatusCompleted
@@ -249,4 +255,50 @@ func TestFileBackupListener(t *testing.T) {
 		assert.Equal(t, backupState(t, f.ID).CompletedAt.Equal(*completedAt), true)
 		assert.Equal(t, backupState(t, f.ID).Attempts, 1)
 	})
+}
+
+func newBackupFile(t *testing.T, ctx context.Context, orgID, name string, state *models.FileBackupState) *generated.File {
+	t.Helper()
+
+	create := suite.Client.DB.File.Create()
+	if state != nil {
+		create = create.SetBackupState(*state)
+	}
+
+	f, err := create.
+		SetProvidedFileName(name).
+		SetProvidedFileExtension(".txt").
+		SetDetectedContentType("text/plain").
+		SetStorageProvider(backupSourceProvider.String()).
+		SetStoragePath(orgID + "/" + name).
+		SetStorageVolume("source-bucket").
+		Save(ctx)
+	assert.NilError(t, err)
+
+	return f
+}
+
+func setupReplicatingBackup(t *testing.T, key string) {
+	t.Helper()
+
+	svc, source, backup, err := coreutils.MockStorageServiceWithBackup(t, backupSourceProvider, false)
+	assert.NilError(t, err)
+
+	suite.Client.DB.ObjectManager = svc
+
+	source.EXPECT().
+		Download(mock.Anything, mock.Anything, mock.Anything).
+		Return(&storagetypes.DownloadedFileMetadata{File: []byte("backup me"), Size: int64(len("backup me"))}, nil).
+		Maybe()
+
+	backup.EXPECT().ProviderType().Return(backupSourceProvider).Maybe()
+	backup.EXPECT().
+		Upload(mock.Anything, mock.Anything, mock.Anything).
+		Return(&storagetypes.UploadedFileMetadata{
+			FileMetadata: storagetypes.FileMetadata{
+				Key:    key,
+				Bucket: "backup-bucket",
+			},
+		}, nil).
+		Once()
 }

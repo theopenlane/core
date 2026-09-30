@@ -39,7 +39,7 @@ func TaskRuleListeners() []gala.Registration {
 			Schema:     schema,
 			Operations: taskRuleOperations(schema),
 			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-				return restored.WithCapabilities(auth.CapInternalOperation | auth.CapOrgSupport)
+				return restored.WithCapabilities(auth.CapInternalOperation)
 			},
 			Handle: handleTaskRuleMutation,
 		}

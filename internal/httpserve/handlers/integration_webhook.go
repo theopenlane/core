@@ -11,11 +11,10 @@ import (
 
 	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -40,10 +39,8 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, err)
 	}
 
-	// Webhook deliveries are unauthenticated — set privacy bypass and a synthetic caller
-	// so that ent queries succeed against privacy-policy-protected tables
-	webhookCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
-	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(""))
+	// deliveries are unauthenticated and the owning org is not known until the endpoint resolves, so the lookup is a cross-org internal read
+	webhookCtx := rule.WithInternalCrossOrgContext(req.Context())
 
 	persistedWebhook, err := h.IntegrationsRuntime.ResolveWebhookByEndpoint(webhookCtx, endpointID)
 	if err != nil {
@@ -65,7 +62,7 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context) error {
 	}
 
 	// Re-set the caller now that the owning organization is known
-	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(integration.OwnerID))
+	webhookCtx = rule.WithOrgInternalCaller(webhookCtx, integration.OwnerID)
 
 	webhookReg, err := h.IntegrationsRuntime.Registry().Webhook(integration.DefinitionID, persistedWebhook.Name)
 	if err != nil {
@@ -220,8 +217,8 @@ func (h *Handler) IntegrationStaticWebhookHandler(definitionID, webhookName stri
 			return h.BadRequest(ctx, errIntegrationWebhookNotConfigured)
 		}
 
-		webhookCtx := privacy.DecisionContext(req.Context(), privacy.Allow)
-		webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(""))
+		// the owning org, if any, is not known until the integration resolves, so this is a cross-org internal context
+		webhookCtx := rule.WithInternalCrossOrgContext(req.Context())
 
 		if webhookReg.Verify != nil {
 			if err := webhookReg.Verify(types.WebhookInboundRequest{
@@ -259,7 +256,7 @@ func (h *Handler) handleStaticWebhookWithIntegration(webhookCtx context.Context,
 		return h.BadRequest(ctx, ErrIntegrationNotFound)
 	}
 
-	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(integration.OwnerID))
+	webhookCtx = rule.WithOrgInternalCaller(webhookCtx, integration.OwnerID)
 
 	persistedWebhook, err := h.IntegrationsRuntime.EnsureWebhook(webhookCtx, integration, webhookName, "")
 	if err != nil {

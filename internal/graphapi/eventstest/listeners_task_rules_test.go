@@ -89,6 +89,13 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 			Exist(orgCtx)
 		assert.NilError(t, err)
 		assert.Check(t, exists)
+
+		tasks, err := suite.Client.DB.Task.Query().Where(task.OwnerIDEQ(orgID)).All(orgCtx)
+		assert.NilError(t, err)
+
+		for _, tk := range tasks {
+			assert.Check(t, is.Equal("", tk.AssignerID), "suggested task %s should not have an assigner", tk.SourceKey)
+		}
 	})
 
 	t.Run("organization ready notification emitted", func(t *testing.T) {

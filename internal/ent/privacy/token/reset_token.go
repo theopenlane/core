@@ -22,11 +22,9 @@ func (token *ResetToken) SetToken(t string) {
 
 // NewContextWithResetToken returns a new context with the reset token inside
 func NewContextWithResetToken(parent context.Context, resetToken string) context.Context {
-	ctx := resetTokenContextKey.Set(parent, &ResetToken{
+	return resetTokenContextKey.Set(parent, &ResetToken{
 		token: resetToken,
 	})
-
-	return withTokenContextBypassCaller(ctx)
 }
 
 // ResetTokenFromContext parses a context for a reset token and returns the token

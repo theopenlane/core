@@ -52,7 +52,7 @@ func TestSkipFilter(t *testing.T) {
 		},
 		{
 			name:        "internal request context skips regardless of forceFilter",
-			ctx:         rule.WithInternalContext(context.Background()),
+			ctx:         rule.WithInternalCrossOrgContext(context.Background()),
 			forceFilter: alwaysForce,
 			want:        true,
 		},

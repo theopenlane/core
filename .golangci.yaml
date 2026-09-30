@@ -12,7 +12,19 @@ linters:
     - misspell
     - mnd
     - noctx
+    - privacyallow
     - revive
+  settings:
+    custom:
+      privacyallow:
+        type: module
+        description: reports bare privacy.Allow decision contexts that are not wrapped in a scoped caller
+        settings:
+          include:
+            - internal/integrations/
+            - internal/ent/hooks/listeners_
+            - internal/ent/notifications/
+            - internal/workflows/
   exclusions:
     generated: lax
     warn-unused: true

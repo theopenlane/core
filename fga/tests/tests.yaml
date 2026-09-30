@@ -2482,6 +2482,44 @@ tests:
           can_edit: false
           can_delete: false
           audit_log_viewer: true
+  - name: sla_definition
+    description: sla definitions are viewable by anyone who can view the organization or its risks, findings, or vulnerabilities
+    tuple_file: tuples/sla_definitions.yaml
+    check:
+      - user: user:ulid-risk-viewer
+        object: organization:openlane
+        assertions:
+          sla_definition_viewer: true
+          can_view_sla_definition: true
+          can_edit_sla_definition: false
+      - user: user:ulid-finding-viewer
+        object: organization:openlane
+        assertions:
+          sla_definition_viewer: true
+          can_view_sla_definition: true
+          can_edit_sla_definition: false
+      - user: user:ulid-vulnerability-viewer
+        object: organization:openlane
+        assertions:
+          sla_definition_viewer: true
+          can_view_sla_definition: true
+          can_edit_sla_definition: false
+      - user: user:ulid-risk-manager
+        object: organization:openlane
+        assertions:
+          sla_definition_viewer: true
+          can_view_sla_definition: true
+      - user: user:ulid-of-member
+        object: organization:openlane
+        assertions:
+          sla_definition_viewer: true
+          can_view_sla_definition: true
+          can_edit_sla_definition: false
+      - user: user:ulid-of-owner-foobar
+        object: organization:openlane
+        assertions:
+          sla_definition_viewer: false
+          can_view_sla_definition: false
   - name: integration_run
     description: integration runs are service-driven and visible to org members via parent context
     tuple_file: tuples/integration_runs.yaml

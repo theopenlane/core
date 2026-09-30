@@ -25,7 +25,6 @@ var (
 // added to stripe already
 func RequirePaymentMethod() privacy.MutationRuleFunc {
 	return privacy.MutationRuleFunc(func(ctx context.Context, _ ent.Mutation) error {
-
 		client := generated.FromContext(ctx)
 
 		caller, ok := auth.CallerFromContext(ctx)

@@ -3,6 +3,7 @@
 package handlers_test
 
 import (
+	"context"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
@@ -19,8 +20,8 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp"
 )
@@ -48,8 +49,7 @@ func (suite *HandlerTestSuite) TestGitHubAppWebhookDoesNotRequireCaller() {
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "456"})
 	_, err := suite.db.Integration.Create().
@@ -65,7 +65,6 @@ func (suite *HandlerTestSuite) TestGitHubAppWebhookDoesNotRequireCaller() {
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-GitHub-Event", "ping")
 	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
-	req = req.WithContext(privacy.DecisionContext(req.Context(), privacy.Allow))
 	rec := httptest.NewRecorder()
 
 	suite.e.ServeHTTP(rec, req)
@@ -81,8 +80,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "1001"})
 	integrationRecord, err := suite.db.Integration.Create().
@@ -116,6 +114,44 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 	assert.NotEmpty(t, verifiedAtString)
 }
 
+func (suite *HandlerTestSuite) TestGitHubWebhookInstallationDeletedRemovesIntegration() {
+	t := suite.T()
+
+	restore := suite.withGitHubAppIntegrationRuntime(t, defaultGitHubAppSpec())
+	t.Cleanup(restore)
+
+	suite.registerGitHubAppWebhookRoute()
+
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
+
+	installAttrs, err := json.Marshal(githubapp.InstallationMetadata{InstallationID: "7007"})
+	require.NoError(t, err)
+
+	integrationRecord, err := suite.db.Integration.Create().
+		SetOwnerID(user.OrganizationID).
+		SetName("GitHub App").
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Attributes: installAttrs}).
+		SetDefinitionID(githubAppDefinitionID).
+		Save(user.UserCtx)
+	require.NoError(t, err)
+
+	payload := []byte(`{"action":"deleted","installation":{"id":7007}}`)
+	req := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payload)))
+	req.Header.Set("X-GitHub-Event", "installation")
+	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req)
+
+	assert.Equal(t, http.StatusOK, rec.Code)
+
+	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
+
+	exists, err := suite.db.Integration.Query().Where(integration.ID(integrationRecord.ID)).Exist(user.UserCtx)
+	require.NoError(t, err)
+	assert.False(t, exists)
+}
+
 func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 	t := suite.T()
 
@@ -124,8 +160,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingRejectsInvalidSignature() {
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "1004"})
 	integrationRecord, err := suite.db.Integration.Create().
@@ -162,8 +197,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDuplicateDeliveryIsIgnored() {
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	installAttrs, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "1003"})
 	_, err := suite.db.Integration.Create().
@@ -284,8 +318,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	// Create two integrations in the same Openlane org, each representing a different GitHub org installation
 	installAttrsOrgA, _ := json.Marshal(githubapp.InstallationMetadata{InstallationID: "7001"})
@@ -311,7 +344,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 	reqB := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payloadB)))
 	reqB.Header.Set("X-GitHub-Event", "ping")
 	reqB.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payloadB))
-	reqB = reqB.WithContext(privacy.DecisionContext(reqB.Context(), privacy.Allow))
 	recB := httptest.NewRecorder()
 
 	suite.e.ServeHTTP(recB, reqB)
@@ -336,7 +368,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 	reqA := httptest.NewRequest(http.MethodPost, githubAppWebhookPath, strings.NewReader(string(payloadA)))
 	reqA.Header.Set("X-GitHub-Event", "ping")
 	reqA.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payloadA))
-	reqA = reqA.WithContext(privacy.DecisionContext(reqA.Context(), privacy.Allow))
 	recA := httptest.NewRecorder()
 
 	suite.e.ServeHTTP(recA, reqA)
@@ -358,8 +389,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	installMeta := githubapp.InstallationMetadata{InstallationID: "8001"}
 	installAttrs, _ := json.Marshal(installMeta)
@@ -399,7 +429,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 	req.Header.Set("X-GitHub-Event", "dependabot_alert")
 	req.Header.Set("X-GitHub-Delivery", "delivery-vuln-001")
 	req.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payload))
-	req = req.WithContext(privacy.DecisionContext(req.Context(), privacy.Allow))
 
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req)
@@ -443,8 +472,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	installMeta := githubapp.InstallationMetadata{InstallationID: "8002"}
 	installAttrs, _ := json.Marshal(installMeta)
@@ -481,7 +509,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 	reqOpen.Header.Set("X-GitHub-Event", "dependabot_alert")
 	reqOpen.Header.Set("X-GitHub-Delivery", "delivery-upsert-001")
 	reqOpen.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payloadOpen))
-	reqOpen = reqOpen.WithContext(privacy.DecisionContext(reqOpen.Context(), privacy.Allow))
 
 	recOpen := httptest.NewRecorder()
 	suite.e.ServeHTTP(recOpen, reqOpen)
@@ -527,7 +554,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 	reqFixed.Header.Set("X-GitHub-Event", "dependabot_alert")
 	reqFixed.Header.Set("X-GitHub-Delivery", "delivery-upsert-002")
 	reqFixed.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payloadFixed))
-	reqFixed = reqFixed.WithContext(privacy.DecisionContext(reqFixed.Context(), privacy.Allow))
 
 	recFixed := httptest.NewRecorder()
 	suite.e.ServeHTTP(recFixed, reqFixed)
@@ -556,8 +582,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 
 	suite.registerGitHubAppWebhookRoute()
 
-	requestCtx := privacy.DecisionContext(httptest.NewRequest(http.MethodGet, "/", nil).Context(), privacy.Allow)
-	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+	user := suite.userBuilderWithInput(context.Background(), &userInput{confirmedUser: true})
 
 	// Two GitHub org installations under the same Openlane org
 	installMetaOrgA := githubapp.InstallationMetadata{InstallationID: "9001"}
@@ -605,7 +630,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 	reqA.Header.Set("X-GitHub-Event", "dependabot_alert")
 	reqA.Header.Set("X-GitHub-Delivery", "delivery-multiorg-001")
 	reqA.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payloadA))
-	reqA = reqA.WithContext(privacy.DecisionContext(reqA.Context(), privacy.Allow))
 
 	recA := httptest.NewRecorder()
 	suite.e.ServeHTTP(recA, reqA)
@@ -636,7 +660,6 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 	reqB.Header.Set("X-GitHub-Event", "dependabot_alert")
 	reqB.Header.Set("X-GitHub-Delivery", "delivery-multiorg-002")
 	reqB.Header.Set("X-Hub-Signature-256", githubWebhookSignature("secret", payloadB))
-	reqB = reqB.WithContext(privacy.DecisionContext(reqB.Context(), privacy.Allow))
 
 	recB := httptest.NewRecorder()
 	suite.e.ServeHTTP(recB, reqB)

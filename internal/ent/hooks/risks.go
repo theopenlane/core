@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
-	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -244,11 +243,10 @@ func setDueDateBasedOnSLAConfig(ctx context.Context, m *generated.RiskMutation) 
 		return err
 	}
 
-	// this is an internal lookup to default the due date, not a caller-requested view of SLA
-	// config, so bypass the caller's own view permissions but keep the query scoped to their org
+	// look up the org's sla config to default the due date; anyone who can view exposure data can view sla definitions which covers risks
 	slaConfig, err := m.Client().SLADefinition.Query().
 		Where(sladefinition.OwnerID(orgID)).
-		All(rule.WithInternalContext(ctx))
+		All(ctx)
 	if err != nil {
 		return err
 	}

@@ -69,7 +69,7 @@ func handleDocumentAssociationCreated(inv entityops.Invocation, _ entityops.Muta
 		return err
 	}
 
-	return inv.Schema.Update(rule.WithInternalContext(inv.Context), inv.Client, inv.EntityID, updatePayload)
+	return inv.Schema.Update(rule.WithInternalOperationContext(inv.Context), inv.Client, inv.EntityID, updatePayload)
 }
 
 // getDocumentAssociationsForDetails returns the control and subcontrol IDs referenced in a document's details

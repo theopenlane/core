@@ -13,10 +13,9 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	enthush "github.com/theopenlane/core/v2/internal/ent/generated/hush"
 	entintegration "github.com/theopenlane/core/v2/internal/ent/generated/integration"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/iam/auth"
 )
 
 // Store persists and retrieves installation credentials via Ent-backed hush secrets
@@ -62,7 +61,7 @@ func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integratio
 		return types.CredentialSet{}, false, ErrCredentialNotFound
 	}
 
-	record, ok, err := s.activeCredentialRecord(integrationSystemContext(ctx), installation.ID, credentialRef)
+	record, ok, err := s.activeCredentialRecord(rule.WithOrgInternalCaller(ctx, installation.OwnerID), installation.ID, credentialRef)
 	if err != nil {
 		return types.CredentialSet{}, false, err
 	}
@@ -75,7 +74,7 @@ func (s *Store) LoadCredential(ctx context.Context, installation *ent.Integratio
 
 // LoadCredentials resolves the requested credential slots for one installation record
 func (s *Store) LoadCredentials(ctx context.Context, installation *ent.Integration, credentialRefs []types.CredentialSlotID) (types.CredentialBindings, error) {
-	records, err := s.activeCredentialRecords(integrationSystemContext(ctx), installation.ID, credentialRefs)
+	records, err := s.activeCredentialRecords(rule.WithOrgInternalCaller(ctx, installation.OwnerID), installation.ID, credentialRefs)
 	if err != nil {
 		return nil, err
 	}
@@ -102,9 +101,7 @@ func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integratio
 		return ErrCredentialNotFound
 	}
 
-	systemCtx := integrationSystemContext(ctx)
-
-	existing, ok, err := s.activeCredentialRecord(systemCtx, installation.ID, credentialRef)
+	existing, ok, err := s.activeCredentialRecord(ctx, installation.ID, credentialRef)
 	if err != nil {
 		return err
 	}
@@ -117,13 +114,13 @@ func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integratio
 			SetSecretName(secretName).
 			SetCredentialSet(credential).
 			AddIntegrationIDs(installation.ID).
-			Exec(systemCtx); err != nil {
+			Exec(ctx); err != nil {
 			return err
 		}
 	} else {
 		if err := existing.Update().
 			SetCredentialSet(credential).
-			Exec(systemCtx); err != nil {
+			Exec(ctx); err != nil {
 			return err
 		}
 	}
@@ -133,40 +130,15 @@ func (s *Store) SaveCredential(ctx context.Context, installation *ent.Integratio
 	return nil
 }
 
-// SaveInstallationCredential loads the installation record by ID and upserts one credential slot
-func (s *Store) SaveInstallationCredential(ctx context.Context, integrationID string, credentialRef types.CredentialSlotID, credential types.CredentialSet) error {
-	if integrationID == "" {
-		return ErrInstallationIDRequired
-	}
-	if credentialRef == (types.CredentialSlotID{}) {
-		return ErrCredentialNotFound
-	}
-
-	systemCtx := integrationSystemContext(ctx)
-
-	installation, err := s.db.Integration.Get(systemCtx, integrationID)
-	if err != nil {
-		if ent.IsNotFound(err) {
-			return ErrCredentialNotFound
-		}
-
-		return err
-	}
-
-	return s.SaveCredential(ctx, installation, credentialRef, credential)
-}
-
 // DeleteCredential removes all credentials for one installation by identifier
 func (s *Store) DeleteCredential(ctx context.Context, integrationID string) error {
 	if integrationID == "" {
 		return ErrInstallationIDRequired
 	}
 
-	systemCtx := integrationSystemContext(ctx)
-
 	_, err := s.db.Hush.Delete().
 		Where(enthush.HasIntegrationsWith(entintegration.IDEQ(integrationID))).
-		Exec(systemCtx)
+		Exec(ctx)
 	if err != nil {
 		return err
 	}
@@ -321,10 +293,4 @@ func (s *Store) activeCredentialRecords(ctx context.Context, integrationID strin
 	}
 
 	return out, nil
-}
-
-// integrationSystemContext returns a context with system-level privileges for integration operations
-func integrationSystemContext(ctx context.Context) context.Context {
-	callCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	return auth.WithCaller(callCtx, auth.NewKeystoreCaller())
 }

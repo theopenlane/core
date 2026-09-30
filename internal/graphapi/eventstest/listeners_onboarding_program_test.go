@@ -17,7 +17,6 @@ import (
 )
 
 func TestOnboardingProgramListener(t *testing.T) {
-
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.OnboardingProgramListeners())
 	assert.NilError(t, err)
 	defer setup.Teardown()

@@ -260,8 +260,21 @@ tasks:
         msg: "Only runs on tag builds"
 
   ## Go tasks
+  go:lint:custom:
+    desc: builds the golangci-lint binary with the custom linter plugins from .custom-gcl.yml
+    sources:
+      - .custom-gcl.yml
+      - tools/linters/**/*.go
+      - tools/linters/**/go.mod
+    generates:
+      - bin/custom-gcl
+    cmds:
+      - golangci-lint custom
+
   go:lint:
     desc: runs golangci-lint (optionally only on changed files with --changed=true)
+    deps:
+      - go:lint:custom
     vars:
       CHANGED: '{{.CHANGED | default "false"}}'
     silent: true
@@ -271,7 +284,7 @@ tasks:
 
         if [ "$branch" = "main" ]; then
           echo "🔎 On main branch — running full linter only..."
-          golangci-lint run --config=.golangci.yaml --verbose
+          ./bin/custom-gcl run --config=.golangci.yaml --verbose
           # return the exit code from the linter
           exit $?
         fi
@@ -286,7 +299,7 @@ tasks:
             echo "$changed_files" | xargs -n1 dirname | sort -u | while read -r dir; do
             if [ -d "$dir" ]; then
               echo "➡️  Linting directory: $dir"
-              golangci-lint run --config=.golangci.yaml --verbose --fix --show-stats "$dir"
+              ./bin/custom-gcl run --config=.golangci.yaml --verbose --fix --show-stats "$dir"
             fi
           done
           else
@@ -294,14 +307,16 @@ tasks:
           fi
         else
           echo "🧹 Linting all Go files..."
-          golangci-lint run . --config=.golangci.yaml --verbose
+          ./bin/custom-gcl run ./... --config=.golangci.yaml --verbose
         fi
 
   go:lint:ci:
     desc: runs golangci-lint, the most annoying opinionated linter ever, for CI
     ## do not use --fix in CI
+    deps:
+      - go:lint:custom
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose --verbose
+      - ./bin/custom-gcl run --config=.golangci.yaml --verbose
 
   go:lint:local:
     desc: runs all the ci linter tasks in parallel for local linting equivalent to ci
@@ -313,21 +328,27 @@ tasks:
   go:lint:ci:graphapi:
     silent: true
     desc: runs golangci-lint only on the graphapi package for CI, excluding generated code
+    deps:
+      - go:lint:custom
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose $(go list ./... | grep internal/graphapi | grep -v generated | sed -E 's|^github.com/theopenlane/core(/v[0-9]+)?/||' | sed 's|^|./|')
+      - ./bin/custom-gcl run --config=.golangci.yaml --verbose $(go list ./... | grep internal/graphapi | grep -v generated | sed -E 's|^github.com/theopenlane/core(/v[0-9]+)?/||' | sed 's|^|./|')
 
   go:lint:ci:handlers:
     silent: true
     desc: runs golangci-lint only on the httpserve handlers package for CI
+    deps:
+      - go:lint:custom
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose --verbose ./internal/httpserve/handlers/...
+      - ./bin/custom-gcl run --config=.golangci.yaml --verbose ./internal/httpserve/handlers/...
 
   go:lint:ci:no-api:
     silent: true
     desc: runs golangci-lint on all packages except graphapi and handlers for CI
+    deps:
+      - go:lint:custom
     cmds:
       - |
-        golangci-lint run --config=.golangci.yaml --verbose $(
+        ./bin/custom-gcl run --config=.golangci.yaml --verbose $(
           go list ./... \
           | grep -v /internal/graphapi \
           | grep -v /internal/httpserve/handlers \
@@ -485,6 +506,17 @@ tasks:
     aliases: ['testsum:events']
     cmds:
       - gotestsum --packages "github.com/theopenlane/core/v2/internal/graphapi/eventstest" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
+
+  go:test:onboarding:fgacache:
+    desc: runs the onboarding tests against openfga with the production cache settings enabled
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
+      OPENLANE_TEST_FGA_CACHE: "true"
+    aliases: ['test:onboarding:fgacache']
+    cmds:
+      - go test -v -tags test ./internal/graphapi/ -run '^TestMutationCreateOnboarding$'
+      - go test -v -tags test ./internal/graphapi/eventstest/ -run '^(TestOnboardingProgramListener|TestDomainScanListeners)$'
+      - go test -v -tags test ./internal/ent/hooks/ -run '^TestHookTestSuite$' -testify.m 'Onboarding'
 
   go:fmt:
     desc: format all go code
