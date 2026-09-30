@@ -6,8 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
-
+	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -15,6 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 )
 
 func TestQuerySubscriber(t *testing.T) {
@@ -705,5 +705,75 @@ func TestActiveSubscriber(t *testing.T) {
 			// cleanup
 			(&th.Cleanup[*generated.SubscriberDeleteOne]{Client: suite.Client.DB.Subscriber, ID: resp.CreateSubscriber.Subscriber.ID}).MustDelete(tc.ctx, t)
 		})
+	}
+}
+
+func TestMutationCreateSubscriber_Active(t *testing.T) {
+
+	email := gofakeit.Email()
+	email2 := gofakeit.Email()
+
+	testCases := []struct {
+		name     string
+		request  testclient.CreateSubscriberInput
+		client   *testclient.TestClient
+		ctx      context.Context
+		wantErr  bool
+		isActive bool
+	}{
+		{
+			name:   "happy path, new subscriber",
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
+			request: testclient.CreateSubscriberInput{
+				Email: email,
+			},
+			isActive: false,
+		},
+		{
+			name:     "happy path, duplicate subscriber but with email verified",
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			isActive: true,
+			request: testclient.CreateSubscriberInput{
+				Email:         email,
+				VerifiedEmail: lo.ToPtr(true),
+			},
+		},
+		{
+			name:     "happy path, new subscriber but with phone verified",
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			isActive: true,
+			request: testclient.CreateSubscriberInput{
+				Email:         email2,
+				VerifiedPhone: lo.ToPtr(true),
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+
+			resp, err := tc.client.CreateSubscriber(tc.ctx, tc.request)
+
+			if tc.wantErr {
+				assert.Check(t, err != nil)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			sub, err := tc.client.GetSubscriberByEmail(tc.ctx, tc.request.Email)
+			assert.NilError(t, err)
+
+			assert.Equal(t, tc.isActive, sub.Subscriber.Active)
+		})
+	}
+
+	for _, v := range []string{email, email2} {
+		_, err := suite.Client.API.DeleteSubscriber(th.SharedTestUser1.UserCtx, v, nil)
+		assert.NilError(t, err)
 	}
 }

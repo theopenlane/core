@@ -25,7 +25,14 @@ import (
 func HookSubscriberCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.SubscriberFunc(func(ctx context.Context, m *generated.SubscriberMutation) (generated.Value, error) {
-			email, _ := m.Email()
+			email, ok := m.Email()
+			if !ok || email == "" {
+				return nil, gqlerrors.NewCustomError(
+					gqlerrors.BadRequestErrorCode,
+					"subscriber email is required, please provide a valid email",
+
+					ErrEmailRequired)
+			}
 
 			// lowercase the email for uniqueness
 			m.SetEmail(strings.ToLower(email))
