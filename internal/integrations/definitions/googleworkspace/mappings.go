@@ -5,7 +5,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
-// mapExprDirectoryAccount maps Google Workspace user payloads to DirectoryAccount
+// mapExprDirectoryAccount is the CEL mapping expression for Google Workspace user payloads mapped to DirectoryAccount
 var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.ExternalID.Expr(`'id' in payload ? payload.id : ""`),
 	entityops.DirectoryAccountFields.CanonicalEmail.Expr(`'primaryEmail' in payload ? payload.primaryEmail : ""`),
@@ -28,7 +28,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
-// mapExprDirectoryGroup maps Google Workspace group payloads to DirectoryGroup
+// mapExprDirectoryGroup is the CEL mapping expression for Google Workspace group payloads mapped to DirectoryGroup
 var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.ExternalID.Expr(`'id' in payload ? payload.id : ""`),
 	entityops.DirectoryGroupFields.Email.Expr(`'email' in payload ? payload.email : ""`),
@@ -40,7 +40,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
-// mapExprDirectoryMembership maps Google Workspace membership payloads to DirectoryMembership
+// mapExprDirectoryMembership is the CEL mapping expression for Google Workspace membership payloads mapped to DirectoryMembership
 var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryAccountID.Expr(`'id' in payload ? payload.id : ""`),
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`resource`),

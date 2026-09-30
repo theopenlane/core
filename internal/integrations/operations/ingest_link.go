@@ -8,7 +8,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// linkSpecs resolves a mapping variant's link rules into entityops link specs
+// linkSpecs resolves one mapping variant's cross-object link rules into entityops link specs, shared
+// by entityops.PrefetchLinkTargets and entityops.InjectCreateLinks across every record in the variant
+// group so edge resolution runs once per group instead of once per record
 func linkSpecs(sourceSchema *entityops.Schema, rules []types.LinkRule) ([]entityops.LinkSpec, error) {
 	specs := make([]entityops.LinkSpec, 0, len(rules))
 

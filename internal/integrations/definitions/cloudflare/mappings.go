@@ -5,7 +5,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
-// mapExprDirectoryAccount is the CEL mapping expression for Cloudflare account members
+// mapExprDirectoryAccount is the CEL mapping expression for Cloudflare account member payloads mapped to DirectoryAccount
 var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.ExternalID.Expr(`'user_id' in payload && payload.user_id != "" ? payload.user_id : ('email' in payload ? payload.email : "")`),
 	entityops.DirectoryAccountFields.CanonicalEmail.Expr(`'email' in payload ? payload.email : ""`),
@@ -19,7 +19,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
-// mapExprDirectoryGroup is the CEL mapping expression for Cloudflare groups and roles
+// mapExprDirectoryGroup is the CEL mapping expression for Cloudflare groups and roles payloads mapped to DirectoryGroup
 var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.ExternalID.Expr(`payload.id`),
 	entityops.DirectoryGroupFields.DisplayName.Expr(`payload.name`),
@@ -27,7 +27,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
-// mapExprDirectoryMembership is the CEL mapping expression for Cloudflare policy payloads
+// mapExprDirectoryMembership is the CEL mapping expression for Cloudflare policy payloads mapped to DirectoryMembership
 var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`payload.group_id`),
 	entityops.DirectoryMembershipFields.DirectoryAccountID.Expr(`'user_id' in payload && payload.user_id != "" ? payload.user_id : ('email' in payload ? payload.email : "")`),
@@ -35,7 +35,7 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
-// mapExprFinding is the CEL mapping expression for Cloudflare Security Center insights
+// mapExprFinding is the CEL mapping expression for Cloudflare Security Center insight payloads mapped to Finding
 var mapExprFinding = providerkit.CelMapExpr(
 	entityops.FindingFields.ExternalID.Expr(`'id' in payload ? payload.id : ""`),
 	entityops.FindingFields.ExternalOwnerID.Expr(`resource`),
@@ -57,7 +57,7 @@ var mapExprFinding = providerkit.CelMapExpr(
 	entityops.FindingFields.RawPayload.Expr("payload"),
 )
 
-// mapExprAsset is the CEL mapping expression for Cloudflare Registrar domain payloads
+// mapExprAsset is the CEL mapping expression for Cloudflare Registrar domain payloads mapped to Asset
 var mapExprAsset = providerkit.CelMapExpr(
 	entityops.AssetFields.SourceIdentifier.Expr(`'domain_name' in payload ? payload.domain_name : ""`),
 	entityops.AssetFields.DisplayName.Expr(`'domain_name' in payload ? payload.domain_name : ""`),

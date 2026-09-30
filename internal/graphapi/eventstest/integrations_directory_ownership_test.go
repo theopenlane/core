@@ -17,7 +17,8 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 )
 
-// directoryAccountByExternalIDAndIntegration returns a directory account scoped to one installation
+// directoryAccountByExternalIDAndIntegration loads one ingested directory account scoped to a
+// specific installation, disambiguating rows that share an external id across tenants
 func directoryAccountByExternalIDAndIntegration(ctx context.Context, t *testing.T, externalID string, integrationID string) *ent.DirectoryAccount {
 	t.Helper()
 
@@ -29,7 +30,9 @@ func directoryAccountByExternalIDAndIntegration(ctx context.Context, t *testing.
 	return da
 }
 
-// TestDirectorySameDefinitionTwoTenantsIsolated verifies same-definition tenants stay isolated
+// TestDirectorySameDefinitionTwoTenantsIsolated verifies two installations sharing one definition
+// but distinct source_instance_id tenants never see each other's rows even when every external id
+// in their snapshots is identical
 func TestDirectorySameDefinitionTwoTenantsIsolated(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -94,7 +97,9 @@ func TestDirectorySameDefinitionTwoTenantsIsolated(t *testing.T) {
 	assert.Check(t, t1After.UpdatedAt.Equal(t1Before.UpdatedAt), "T1's row must not be touched by T2's ingest")
 }
 
-// TestDirectoryLegacyRowsTakenOverThenProtected verifies legacy rows are claimed then protected
+// TestDirectoryLegacyRowsTakenOverThenProtected verifies an unclaimed row (no source_definition_id,
+// no source_instance_id, no managed_by) is claimed in full by the first matching installation, and
+// is then read-only for a different definition sharing the same tenant
 func TestDirectoryLegacyRowsTakenOverThenProtected(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -121,6 +126,8 @@ func TestDirectoryLegacyRowsTakenOverThenProtected(t *testing.T) {
 
 	base := newDirectorySnapshot(prefix)
 
+	// seed legacy rows exactly as pre-provenance rows were stored: integration_id set, no
+	// source_definition_id, no source_instance_id, no managed_by
 	legacyAccounts := make(map[string]*ent.DirectoryAccount, len(base.Accounts))
 	for _, a := range base.Accounts {
 		row, err := suite.Client.DB.DirectoryAccount.Create().
@@ -165,6 +172,9 @@ func TestDirectoryLegacyRowsTakenOverThenProtected(t *testing.T) {
 	assert.Check(t, is.Equal(0, claimed.Failed))
 	assert.Check(t, is.Equal(len(base.Accounts)+len(base.Groups)+len(base.Memberships), claimed.Changed), "claiming an unclaimed row is a material change")
 
+	// events emitted while claiming the legacy rows are expected and out of scope for this test;
+	// only events from here on (the protection check) are asserted. Duplication is ruled out below
+	// by the exact-one-row lookups: a duplicate external id would fail th.RequireNoError there.
 	counters, teardown := directoryEventCounters(t)
 	defer teardown()
 
@@ -231,7 +241,9 @@ func TestDirectoryLegacyRowsTakenOverThenProtected(t *testing.T) {
 	}
 }
 
-// TestDirectoryRemoveAndReaddKeepsFlowing verifies a reinstall keeps ingesting without duplication
+// TestDirectoryRemoveAndReaddKeepsFlowing verifies a same-tenant, same-definition reinstall keeps
+// ingesting normally when the very next sync after reinstall carries a material change, converging
+// every row onto the new installation without duplicating rows or removal-inferring memberships
 func TestDirectoryRemoveAndReaddKeepsFlowing(t *testing.T) {
 	ctx := th.SetInternalContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 

@@ -43,7 +43,7 @@ type PingWebhook struct{}
 // InstallationCreatedWebhook sends the GitHub App installation notification
 type InstallationCreatedWebhook struct{}
 
-// InstallationDeletedWebhook removes a disconnected GitHub App installation
+// InstallationDeletedWebhook removes a disconnected GitHub App installation after the uninstall webhook arrives
 type InstallationDeletedWebhook struct{}
 
 // DependabotAlertWebhook ingests one Dependabot alert from the webhook payload
@@ -103,13 +103,15 @@ type githubWebhookRepoOwner struct {
 	Login string `json:"login"`
 }
 
-// githubWebhookVerificationMetadata is the integration metadata patch written on ping verification
+// githubWebhookVerificationMetadata is the integration metadata patch written on successful ping verification
 type githubWebhookVerificationMetadata struct {
 	// GitHubWebhookVerifiedAt records the UTC timestamp of the verified ping event
 	GitHubWebhookVerifiedAt time.Time `json:"githubWebhookVerifiedAt"`
 }
 
-// Verify validates the HMAC-SHA256 signature on an inbound GitHub webhook request
+// Verify validates the HMAC-SHA256 signature on an inbound GitHub webhook request.
+// Follows the GitHub webhook verification pattern: the X-Hub-Signature-256 header
+// contains "sha256=<hex-encoded HMAC-SHA256>" computed using the app webhook secret
 func (a App) Verify(request types.WebhookInboundRequest) error {
 	if a.Config.WebhookSecret == "" {
 		return ErrWebhookSecretMissing
@@ -291,7 +293,8 @@ func githubRepoFromWebhook(repo *githubWebhookRepository) string {
 	return repo.Name
 }
 
-// ResolveWebhookIntegration locates the GitHub App integration record from an inbound webhook
+// ResolveWebhookIntegration locates the GitHub App integration record from an inbound webhook payload
+// by extracting the installation ID and querying the integration metadata
 func ResolveWebhookIntegration(ctx context.Context, db *ent.Client, req types.WebhookInboundRequest) (*ent.Integration, error) {
 	installationID, err := extractWebhookInstallationID(req.Payload)
 	if err != nil {
@@ -308,7 +311,7 @@ func ResolveWebhookIntegration(ctx context.Context, db *ent.Client, req types.We
 		Only(ctx)
 }
 
-// extractWebhookInstallationID extracts the GitHub App installation ID from the webhook payload
+// extractWebhookInstallationID extracts the GitHub App installation ID from the webhook payload envelope
 func extractWebhookInstallationID(payload []byte) (string, error) {
 	var envelope struct {
 		Installation *struct {

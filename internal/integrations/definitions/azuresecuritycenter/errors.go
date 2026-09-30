@@ -15,7 +15,7 @@ var (
 	ErrCredentialInvalid = errors.New("azuresecuritycenter: credential invalid")
 	// ErrCredentialBuildFailed indicates the Azure credential could not be constructed
 	ErrCredentialBuildFailed = errors.New("azuresecuritycenter: credential build failed")
-	// ErrAssessmentsClientBuildFailed indicates the assessments client could not be built
+	// ErrAssessmentsClientBuildFailed indicates an armsecurity assessments client could not be constructed
 	ErrAssessmentsClientBuildFailed = errors.New("azuresecuritycenter: assessments client build failed")
 	// ErrAssessmentFetchFailed indicates the assessments list request failed
 	ErrAssessmentFetchFailed = errors.New("azuresecuritycenter: assessment fetch failed")

@@ -5,7 +5,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
-// mapExprFinding maps OCI Cloud Guard problem payloads to Finding
+// mapExprFinding is the CEL mapping expression for OCI Cloud Guard problem payloads mapped to Finding; unset SDK pointer fields marshal as null, hence the != null guards
 var mapExprFinding = providerkit.CelMapExpr(
 	entityops.FindingFields.ExternalID.Expr(`'id' in payload && payload.id != null ? payload.id : ""`),
 	entityops.FindingFields.ExternalOwnerID.Expr(`resource`),

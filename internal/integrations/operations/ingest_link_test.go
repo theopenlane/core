@@ -13,6 +13,7 @@ import (
 func TestResolveLinkEdge_AmbiguousTargetRequiresEdge(t *testing.T) {
 	t.Parallel()
 
+	// Asset declares multiple edges targeting Asset, so a rule addressing the type alone must fail
 	_, err := registry.ResolveLinkEdge(entityops.SchemaAsset, types.LinkRule{TargetSchema: "Asset"})
 	assert.ErrorIs(t, err, registry.ErrLinkEdgeAmbiguous)
 }
@@ -79,6 +80,7 @@ func TestLinkSpecs_MultipleRulesPreserveOrder(t *testing.T) {
 func TestLinkSpecs_UnresolvableEdgeWrapsErrLinkFailed(t *testing.T) {
 	t.Parallel()
 
+	// Asset declares multiple edges targeting Asset, so a rule addressing the type alone is ambiguous
 	_, err := linkSpecs(entityops.SchemaAsset, []types.LinkRule{{TargetSchema: "Asset"}})
 	assert.ErrorIs(t, err, ErrLinkFailed)
 	assert.ErrorIs(t, err, registry.ErrLinkEdgeAmbiguous)

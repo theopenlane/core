@@ -28,7 +28,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
-// domainScanEnrichmentMetadataKey is the Scan.Metadata key holding gathered enrichment data
+// domainScanEnrichmentMetadataKey is the Scan.Metadata key used to carry the enrichment data
+// gathered concurrently with URL Scanner submission and polling, until the poll cycle
+// finishes and needs it to build the final report
 const domainScanEnrichmentMetadataKey = "enrichment"
 
 // domainScanSaga orchestrates the durable domain scan flow: submit, poll, finalize
@@ -189,7 +191,9 @@ func domainScanListeners() types.GalaListenerRegistration {
 	}
 }
 
-// domainScanGroupSiblings returns every Scan ID sharing internalScanID's group, or itself alone
+// domainScanGroupSiblings returns every Scan ID sharing internalScanID's group id (every domain
+// from the same organization settings update), falling back to just internalScanID alone if it
+// has no group - e.g. a scan submitted individually via the REST domain-scan endpoint
 func (s domainScanSaga) domainScanGroupSiblings(ctx context.Context, organizationID, internalScanID string) ([]string, error) {
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
@@ -215,7 +219,7 @@ func (s domainScanSaga) domainScanGroupSiblings(ctx context.Context, organizatio
 		IDs(systemCtx)
 }
 
-// submitAndScheduleDomainScan submits one Scan record to domain scanner and schedules its poll
+// submitAndScheduleDomainScan submits a single already-created Scan record to domain scanner and schedules its poll cycle
 func (s domainScanSaga) submitAndScheduleDomainScan(ctx context.Context, organizationID, scanID, domain string, forceRefresh bool) error {
 	ctx = logx.WithFields(ctx, logx.LogFields{
 		"organization_id": organizationID,
@@ -231,7 +235,8 @@ func (s domainScanSaga) submitAndScheduleDomainScan(ctx context.Context, organiz
 	return s.submitAndScheduleDomainScans(ctx, organizationID, map[string]string{domain: scanID}, forceRefresh, siblingScanIDs)
 }
 
-// submitAndScheduleDomainScans submits the scan records together and schedules a poll per scan
+// submitAndScheduleDomainScans submits the scan records in scanID to the domain scan together and schedules a poll cycle for each.
+// Any domain that isn't returned marked failed rather than left stuck in "processing" forever
 func (s domainScanSaga) submitAndScheduleDomainScans(ctx context.Context, organizationID string, scanIDs map[string]string, forceRefresh bool, siblingScanIDs []string) error {
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
@@ -274,6 +279,9 @@ func (s domainScanSaga) submitAndScheduleDomainScans(ctx context.Context, organi
 
 	enrichments := s.gatherDomainScanEnrichments(ctx, acceptedDomains, forceRefresh)
 
+	// each domain is handled independently: one domain's failure marks only that domain failed
+	// and moves on, rather than aborting the loop and leaving the remaining domains stuck with no
+	// poll cycle ever scheduled for them
 	for i, scan := range result.Scans {
 		domain := acceptedDomains[i]
 		domainCtx := logx.WithFields(ctx, map[string]any{"domain": domain, "scan_id": scan.UUID})
@@ -306,6 +314,8 @@ func (s domainScanSaga) submitAndScheduleDomainScans(ctx context.Context, organi
 		}
 	}
 
+	// any domain cloudflare didn't return a scan for has a Scan record that will never be polled,
+	// so finalize it from enrichment now rather than leaving it stuck forever
 	if len(scanIDs) > 0 {
 		logx.FromContext(ctx).Warn().Int("count", len(scanIDs)).Msg("domain scan: some domains were not submitted to cloudflare, finalizing from enrichment alone")
 
@@ -319,7 +329,10 @@ func (s domainScanSaga) submitAndScheduleDomainScans(ctx context.Context, organi
 	return nil
 }
 
-// finalizeDomainScansFromEnrichment finalizes scans that will never get a URL Scanner result
+// finalizeDomainScansFromEnrichment gathers enrichment for scans that will never have a URL
+// Scanner result to poll - a rejected submission or a domain cloudflare omitted from the batch
+// response - persists it, and finalizes each scan from that enrichment alone, so a submit-time
+// failure still surfaces whatever the other lookups found
 func (s domainScanSaga) finalizeDomainScansFromEnrichment(ctx context.Context, organizationID string, scanIDs map[string]string, forceRefresh bool, siblingScanIDs []string) error {
 	domains := lo.Keys(scanIDs)
 	enrichments := s.gatherDomainScanEnrichments(ctx, domains, forceRefresh)
@@ -345,7 +358,8 @@ func (s domainScanSaga) finalizeDomainScansFromEnrichment(ctx context.Context, o
 	return errors.Join(errs...)
 }
 
-// persistDomainScanEnrichment stores the enrichment on the scan record
+// persistDomainScanEnrichment stores the enrichment on the scan record; on failure it marks the
+// scan failed and checks sibling completion so the batch never stalls
 func (s domainScanSaga) persistDomainScanEnrichment(ctx context.Context, organizationID, internalScanID string, enrichment domainscan.Enrichment, siblingScanIDs []string) error {
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
@@ -388,7 +402,8 @@ func (s domainScanSaga) persistDomainScanEnrichment(ctx context.Context, organiz
 	return nil
 }
 
-// domainScanSystemContext builds a context authorized to update Scan/Notification records
+// domainScanSystemContext builds a context authorized to create/update Scan and Notification records
+// for organizationID on behalf of the system
 func domainScanSystemContext(ctx context.Context, organizationID string) context.Context {
 	return auth.WithOrgInternalCaller(ctx, organizationID)
 }
@@ -402,7 +417,10 @@ func hostFromURL(rawURL string) string {
 	return rawURL
 }
 
-// gatherDomainScanEnrichments gathers enrichment data for every domain concurrently
+// gatherDomainScanEnrichments gathers company profile, compliance, and DNS vendor data for
+// every domain concurrently, so enrichment overlaps with URL Scanner processing
+// instead of waiting for it to complete. Each lookup is best-effort: a failure is logged and
+// that domain's Enrichment is left zero-valued rather than failing the whole batch
 func (s domainScanSaga) gatherDomainScanEnrichments(ctx context.Context, domains []string, forceRefresh bool) []domainscan.Enrichment {
 	enrichments := make([]domainscan.Enrichment, len(domains))
 
@@ -447,7 +465,9 @@ func (s domainScanSaga) gatherDomainScanEnrichments(ctx context.Context, domains
 	return enrichments
 }
 
-// handlePoll processes one poll cycle for a submitted scan
+// handlePoll processes one poll cycle for a submitted scan: re-emitting itself for
+// another attempt while the scan is still processing, giving up after the attempt budget is
+// exhausted, and finalizing the scan once ready
 func (s domainScanSaga) handlePoll(ctx context.Context, envelope DomainScanPollEnvelope) (bool, error) {
 	config, err := json.Marshal(DomainScanPoll{
 		ScanResultID: envelope.ScanResultID,
@@ -474,6 +494,7 @@ func (s domainScanSaga) handlePoll(ctx context.Context, envelope DomainScanPollE
 
 	if len(result.TaskErrors) > 0 {
 		taskErr := fmt.Errorf("%w: %s", ErrDomainScanTaskFailed, result.TaskErrors.Error())
+		// logged as info because the report still completes from whatever enrichment was gathered
 		logx.FromContext(ctx).Info().Err(taskErr).Interface("task_errors", result.TaskErrors).Msg("domain scan: cloudflare scan task failed, finalizing from enrichment alone")
 
 		return s.finalizeDomainScanWithoutResult(ctx, envelope, taskErr)
@@ -516,7 +537,10 @@ func (s domainScanSaga) handlePoll(ctx context.Context, envelope DomainScanPollE
 	return true, nil
 }
 
-// finalizeDomainScanWithoutResult finalizes a scan whose URL Scanner result never became available
+// finalizeDomainScanWithoutResult finalizes a scan whose URL Scanner result never became
+// available - a failed poll, an undecodable response, task-level scan errors, or an exhausted
+// attempt budget - completing it from gathered enrichment when any exists and otherwise
+// cancelling the poll job with cause
 func (s domainScanSaga) finalizeDomainScanWithoutResult(ctx context.Context, envelope DomainScanPollEnvelope, cause error) (bool, error) {
 	status, err := s.finalizeDomainScan(ctx, envelope.OrganizationID, envelope.InternalScanID, envelope.SiblingScanIDs, nil)
 	if err != nil {
@@ -543,7 +567,13 @@ func (s domainScanSaga) markDomainScanFailed(ctx context.Context, organizationID
 	}
 }
 
-// finalizeDomainScan builds the scan report, stamps the terminal status, and notifies siblings
+// finalizeDomainScan builds the scan report, stamps the Scan record with its terminal status, and
+// notifies the organization once every sibling has finished; status is applied before notifying so
+// the report cannot call a scan completed that is about to be marked failed. Partial failures are
+// acceptable: a scan whose URL Scanner result is missing (result nil) still finalizes completed as
+// long as enrichment produced data - e.g. a domain with no HTTP site fails the browser scan but
+// still yields DNS, company, and compliance data. Only a scan where every resource came back
+// empty is marked failed. Returns the status it applied
 func (s domainScanSaga) finalizeDomainScan(ctx context.Context, organizationID, internalScanID string, siblingScanIDs []string, result *DomainScanPollResult) (enums.ScanStatus, error) {
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
@@ -602,7 +632,8 @@ func (s domainScanSaga) finalizeDomainScan(ctx context.Context, organizationID, 
 	return status, s.maybeNotifyDomainScanGroup(ctx, organizationID, siblingScanIDs)
 }
 
-// maybeNotifyDomainScanGroup checks whether every sibling scan has reached a terminal state
+// maybeNotifyDomainScanGroup checks whether every sibling scan in siblingScanIDs (a single-element
+// slice for a one-off scan) has reached a terminal state (completed or failed)
 func (s domainScanSaga) maybeNotifyDomainScanGroup(ctx context.Context, organizationID string, siblingScanIDs []string) error {
 	if organizationID == "" {
 		return nil

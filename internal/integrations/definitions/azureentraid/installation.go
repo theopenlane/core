@@ -6,7 +6,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// resolveInstallationMetadata derives Azure Entra installation metadata from the credential
+// resolveInstallationMetadata derives Azure Entra installation metadata from the persisted credential
 func resolveInstallationMetadata(_ context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	cred, _, err := entraTenantCredential.Resolve(req.Credentials)
 	if err != nil {

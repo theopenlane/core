@@ -89,7 +89,10 @@ func workflowMetadataExtensions(ctx context.Context, rt *intr.Runtime, db *ent.C
 	}
 }
 
-// integrationWorkflowProviders builds provider metadata for integration workflow extensions, including org-scoped availability data when the caller is authenticated
+// integrationWorkflowProviders builds provider metadata for integration workflow extensions.
+// When the caller is authenticated, org-scoped availability data (connected installations
+// and matching notification templates) is included so the composition surface can determine
+// which integration definitions are ready for use
 func integrationWorkflowProviders(ctx context.Context, rt *intr.Runtime, db *ent.Client) []integrationProviderExtensions {
 	if rt == nil {
 		return []integrationProviderExtensions{}
@@ -157,7 +160,9 @@ func integrationWorkflowProviders(ctx context.Context, rt *intr.Runtime, db *ent
 	return entries
 }
 
-// applyProviderAvailability enriches a provider entry with org-scoped installation and template availability data, setting Available to true only when at least one connected installation and one matching template both exist
+// applyProviderAvailability enriches a provider entry with org-scoped installation
+// and template availability data, setting Available to true only when at least one
+// connected installation and one matching template both exist
 func applyProviderAvailability(entry *integrationProviderExtensions, definitionID string, operations []integrationOperationEntry, avail *orgIntegrationAvailability) []integrationOperationEntry {
 	installations := avail.installationsByDefinition[definitionID]
 	entry.Installations = lo.Map(installations, func(inst *ent.Integration, _ int) integrationInstallationEntry {
@@ -190,7 +195,9 @@ type orgIntegrationAvailability struct {
 	templatesByTopicPattern   map[string][]*ent.NotificationTemplate
 }
 
-// resolveOrgIntegrationAvailability queries connected integrations and active workflow action templates for the caller's organization, returning nil when no caller context is available to preserve catalog-only behavior for unauthenticated requests
+// resolveOrgIntegrationAvailability queries connected integrations and active workflow
+// action templates for the caller's organization. Returns nil when no caller context
+// is available, preserving catalog-only behavior for unauthenticated requests
 func resolveOrgIntegrationAvailability(ctx context.Context, db *ent.Client) *orgIntegrationAvailability {
 	if db == nil {
 		return nil

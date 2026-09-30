@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// TestResolveAssumeRoleCredential_ValidData verifies credential decoding preserves explicit values
+// TestResolveAssumeRoleCredential_ValidData verifies credential decoding preserves explicit values.
 func TestResolveAssumeRoleCredential_ValidData(t *testing.T) {
 	raw, err := json.Marshal(map[string]any{
 		"roleArn":      "arn:aws:iam::123456789012:role/MyRole",
@@ -32,7 +32,7 @@ func TestResolveAssumeRoleCredential_ValidData(t *testing.T) {
 	assert.Equal(t, "all", credential.AccountScope)
 }
 
-// TestResolveAssumeRoleCredential_OmittedSessionName verifies empty session name
+// TestResolveAssumeRoleCredential_OmittedSessionName verifies omitted session name resolves to empty
 func TestResolveAssumeRoleCredential_OmittedSessionName(t *testing.T) {
 	raw, err := json.Marshal(map[string]any{
 		"roleArn":    "arn:aws:iam::123:role/R",
@@ -48,7 +48,7 @@ func TestResolveAssumeRoleCredential_OmittedSessionName(t *testing.T) {
 	assert.Empty(t, credential.SessionName)
 }
 
-// TestResolveAssumeRoleCredential_SessionNameFromData verifies data can override session name
+// TestResolveAssumeRoleCredential_SessionNameFromData verifies provider data can override the session name.
 func TestResolveAssumeRoleCredential_SessionNameFromData(t *testing.T) {
 	raw, err := json.Marshal(map[string]any{
 		"roleArn":     "arn:aws:iam::123:role/R",
@@ -65,7 +65,7 @@ func TestResolveAssumeRoleCredential_SessionNameFromData(t *testing.T) {
 	assert.Equal(t, "custom-session", credential.SessionName)
 }
 
-// TestResolveAssumeRoleCredential_OmittedAccountScope verifies empty account scope
+// TestResolveAssumeRoleCredential_OmittedAccountScope verifies omitted account scope resolves to empty
 func TestResolveAssumeRoleCredential_OmittedAccountScope(t *testing.T) {
 	raw, err := json.Marshal(map[string]any{
 		"homeRegion": "us-east-1",
@@ -80,7 +80,7 @@ func TestResolveAssumeRoleCredential_OmittedAccountScope(t *testing.T) {
 	assert.Empty(t, credential.AccountScope)
 }
 
-// TestResolveAssumeRoleCredential_EmptyInput verifies empty provider data is rejected
+// TestResolveAssumeRoleCredential_EmptyInput verifies empty provider data is rejected.
 func TestResolveAssumeRoleCredential_EmptyInput(t *testing.T) {
 	_, err := resolveAssumeRoleCredential(types.CredentialBindings{
 		{Ref: awsAssumeRoleCredential.ID(), Credential: types.CredentialSet{}},
@@ -88,19 +88,19 @@ func TestResolveAssumeRoleCredential_EmptyInput(t *testing.T) {
 	require.ErrorIs(t, err, ErrCredentialMetadataInvalid)
 }
 
-// TestParseDuration_Valid verifies valid durations are parsed
+// TestParseDuration_Valid verifies valid durations are parsed.
 func TestParseDuration_Valid(t *testing.T) {
 	duration := parseDuration("1h30m")
 	assert.Equal(t, 90*time.Minute, duration)
 }
 
-// TestParseDuration_Empty verifies empty durations return zero
+// TestParseDuration_Empty verifies empty durations return zero.
 func TestParseDuration_Empty(t *testing.T) {
 	duration := parseDuration("")
 	assert.Equal(t, time.Duration(0), duration)
 }
 
-// TestParseDuration_Invalid verifies invalid durations return zero
+// TestParseDuration_Invalid verifies invalid durations return zero.
 func TestParseDuration_Invalid(t *testing.T) {
 	duration := parseDuration("notaduration")
 	assert.Equal(t, time.Duration(0), duration)

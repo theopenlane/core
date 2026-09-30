@@ -188,6 +188,7 @@ func TestEvalMap(t *testing.T) {
 func TestEvalFilter_NonBoolResult(t *testing.T) {
 	t.Parallel()
 
+	// Expression that returns a string instead of a bool should return ErrFilterExprEval
 	ctx := context.Background()
 	_, err := EvalFilter(ctx, `"not-a-bool"`, types.MappingEnvelope{}, types.MappingInstallation{})
 

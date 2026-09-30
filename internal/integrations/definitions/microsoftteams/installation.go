@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// resolveInstallationMetadata derives Microsoft tenant metadata from the access token
+// resolveInstallationMetadata derives Microsoft tenant metadata from the persisted access token when available
 func resolveInstallationMetadata(_ context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	cred, _, err := teamsCredential.Resolve(req.Credentials)
 	if err != nil {

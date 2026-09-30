@@ -93,7 +93,8 @@ func buildEnvelopeEnv() (*cel.Env, error) {
 	))
 }
 
-// normalizeIntegralNumbers converts whole-number float64s in a JSON value to int64
+// normalizeIntegralNumbers walks a JSON-decoded value and converts whole-number float64s to int64;
+// without this, CEL string() renders big IDs like 147884153 as "1.47884153e+08"
 func normalizeIntegralNumbers(value any) any {
 	switch v := value.(type) {
 	case map[string]any:
@@ -119,7 +120,7 @@ func normalizeIntegralNumbers(value any) any {
 	}
 }
 
-// mappingVars builds the CEL variable map for filter and map evaluation
+// mappingVars builds the CEL variable map shared by filter and map evaluation, binding the envelope and the writing installation
 func mappingVars(envelope types.MappingEnvelope, installation types.MappingInstallation) (map[string]any, error) {
 	installationVars, err := jsonx.ToMap(installation)
 	if err != nil {
@@ -158,7 +159,9 @@ func envelopeToVars(envelope types.MappingEnvelope) map[string]any {
 	}
 }
 
-// EvalFilter evaluates a CEL filter expression against a MappingEnvelope and installation
+// EvalFilter evaluates a CEL filter expression against a MappingEnvelope and the writing installation
+// An empty expr returns true (pass-through). Returns false when the expression excludes the envelope,
+// or a wrapped ErrFilterExprEval on evaluation failure
 func EvalFilter(ctx context.Context, expr string, envelope types.MappingEnvelope, installation types.MappingInstallation) (bool, error) {
 	if expr == "" {
 		return true, nil
@@ -191,7 +194,9 @@ func EvalFilter(ctx context.Context, expr string, envelope types.MappingEnvelope
 	return value, nil
 }
 
-// EvalMap evaluates a CEL map expression against a MappingEnvelope and installation
+// EvalMap evaluates a CEL map expression against a MappingEnvelope and the writing installation and returns a JSON payload
+// An empty expr returns the original envelope.Payload (pass-through)
+// Returns a wrapped ErrMapExprEval on failure
 func EvalMap(ctx context.Context, expr string, envelope types.MappingEnvelope, installation types.MappingInstallation) (json.RawMessage, error) {
 	if expr == "" {
 		return envelope.Payload, nil

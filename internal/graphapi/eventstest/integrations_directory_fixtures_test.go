@@ -25,13 +25,13 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
-// directoryProfileBaseLastLogin is the base lastLoginTime in fixture records
+// directoryProfileBaseLastLogin is the profile lastLoginTime carried by every directorySnapshot fixture record before a churn permutation advances it
 const directoryProfileBaseLastLogin = "2024-01-01T00:00:00Z"
 
-// directoryProfileChurnedLastLogin is the advanced lastLoginTime a churn writes
+// directoryProfileChurnedLastLogin is the advanced lastLoginTime a churn permutation writes into a fixture record's profile
 const directoryProfileChurnedLastLogin = "2024-06-01T00:00:00Z"
 
-// directoryAccountRecord is one DirectoryAccount create-input payload
+// directoryAccountRecord is one DirectoryAccount create-input payload used by a directorySnapshot fixture
 type directoryAccountRecord struct {
 	// ExternalID is the stable identifier from the directory system, and the account's lookup key
 	ExternalID string `json:"external_id"`
@@ -43,7 +43,7 @@ type directoryAccountRecord struct {
 	Profile map[string]any `json:"profile,omitempty"`
 }
 
-// directoryGroupRecord is one DirectoryGroup create-input payload
+// directoryGroupRecord is one DirectoryGroup create-input payload used by a directorySnapshot fixture
 type directoryGroupRecord struct {
 	// ExternalID is the stable identifier from the directory system, and the group's lookup key
 	ExternalID string `json:"external_id"`
@@ -53,7 +53,7 @@ type directoryGroupRecord struct {
 	Profile map[string]any `json:"profile,omitempty"`
 }
 
-// directoryMembershipRecord is one DirectoryMembership create-input payload
+// directoryMembershipRecord is one DirectoryMembership create-input payload used by a directorySnapshot fixture
 type directoryMembershipRecord struct {
 	// DirectoryAccountID references the member account by its external id
 	DirectoryAccountID string `json:"directory_account_id"`
@@ -65,7 +65,7 @@ type directoryMembershipRecord struct {
 	Metadata map[string]any `json:"metadata,omitempty"`
 }
 
-// directorySnapshot is one deep-copyable directory provider snapshot
+// directorySnapshot is one deep-copyable directory provider snapshot — accounts, groups, and memberships
 type directorySnapshot struct {
 	// Prefix scopes every external id and email in this snapshot
 	Prefix string
@@ -77,7 +77,7 @@ type directorySnapshot struct {
 	Memberships []directoryMembershipRecord
 }
 
-// newDirectoryAccountRecord returns one account record with a stable profile
+// newDirectoryAccountRecord builds one account record with a profile carrying stable keys plus the churny lastLoginTime key
 func newDirectoryAccountRecord(externalID, displayName string) directoryAccountRecord {
 	return directoryAccountRecord{
 		ExternalID:     externalID,
@@ -92,7 +92,7 @@ func newDirectoryAccountRecord(externalID, displayName string) directoryAccountR
 	}
 }
 
-// newDirectoryGroupRecord returns one group record with a stable profile
+// newDirectoryGroupRecord builds one group record with a profile carrying stable keys plus the churny lastLoginTime key
 func newDirectoryGroupRecord(externalID, displayName string) directoryGroupRecord {
 	return directoryGroupRecord{
 		ExternalID:  externalID,
@@ -105,7 +105,7 @@ func newDirectoryGroupRecord(externalID, displayName string) directoryGroupRecor
 	}
 }
 
-// newDirectoryMembershipRecord returns one membership record linking account to a group
+// newDirectoryMembershipRecord builds one membership record linking account to the group identified by groupExternalID
 func newDirectoryMembershipRecord(account directoryAccountRecord, groupExternalID, role string) directoryMembershipRecord {
 	return directoryMembershipRecord{
 		DirectoryAccountID: account.ExternalID,
@@ -118,7 +118,7 @@ func newDirectoryMembershipRecord(account directoryAccountRecord, groupExternalI
 	}
 }
 
-// newDirectorySnapshot returns the base directory snapshot fixture tests derive from
+// newDirectorySnapshot builds the base directory snapshot every scenario test in this package derives its permutations from
 func newDirectorySnapshot(prefix string) directorySnapshot {
 	accounts := []directoryAccountRecord{
 		newDirectoryAccountRecord(prefix+"-acct-1", "Alice Example"),
@@ -146,7 +146,7 @@ func newDirectorySnapshot(prefix string) directorySnapshot {
 	}
 }
 
-// clone returns a deep copy of s's accounts, groups, and memberships
+// clone copies s's account, group, and membership slices into new backing arrays so a permutation method can edit them without mutating s
 func (s directorySnapshot) clone() directorySnapshot {
 	return directorySnapshot{
 		Prefix:      s.Prefix,
@@ -175,7 +175,7 @@ func (s directorySnapshot) identical() directorySnapshot {
 	return s.clone()
 }
 
-// withAccountMaterialChange returns a snapshot with a new display_name for externalID
+// withAccountMaterialChange returns a snapshot where the account matching externalID has a new display_name
 func (s directorySnapshot) withAccountMaterialChange(externalID string) directorySnapshot {
 	out := s.clone()
 
@@ -190,7 +190,7 @@ func (s directorySnapshot) withAccountMaterialChange(externalID string) director
 	return out
 }
 
-// withGroupProfileChurn returns a snapshot with externalID's profile lastLoginTime advanced
+// withGroupProfileChurn returns a snapshot where the group matching externalID has advanced its profile's lastLoginTime and nothing else
 func (s directorySnapshot) withGroupProfileChurn(externalID string) directorySnapshot {
 	out := s.clone()
 
@@ -207,7 +207,7 @@ func (s directorySnapshot) withGroupProfileChurn(externalID string) directorySna
 	return out
 }
 
-// withGroupMaterialChange returns a snapshot with a new display_name for externalID
+// withGroupMaterialChange returns a snapshot where the group matching externalID has a new display_name
 func (s directorySnapshot) withGroupMaterialChange(externalID string) directorySnapshot {
 	out := s.clone()
 
@@ -222,7 +222,7 @@ func (s directorySnapshot) withGroupMaterialChange(externalID string) directoryS
 	return out
 }
 
-// withMembershipMetadataChurn returns a snapshot with the matched membership's metadata churned
+// withMembershipMetadataChurn returns a snapshot where the matching membership has advanced the lastLoginTime embedded in its metadata and nothing else
 func (s directorySnapshot) withMembershipMetadataChurn(accountExternalID, groupExternalID string) directorySnapshot {
 	out := s.clone()
 
@@ -245,7 +245,7 @@ func (s directorySnapshot) withMembershipMetadataChurn(accountExternalID, groupE
 	return out
 }
 
-// withoutMembership returns a snapshot with the matching membership removed
+// withoutMembership returns a snapshot with the membership between accountExternalID and groupExternalID removed
 func (s directorySnapshot) withoutMembership(accountExternalID, groupExternalID string) directorySnapshot {
 	out := s.clone()
 
@@ -256,7 +256,7 @@ func (s directorySnapshot) withoutMembership(accountExternalID, groupExternalID 
 	return out
 }
 
-// withoutAccount returns a snapshot with externalID's account and its memberships removed
+// withoutAccount returns a snapshot with the account matching externalID, and every membership referencing it, removed
 func (s directorySnapshot) withoutAccount(externalID string) directorySnapshot {
 	out := s.clone()
 
@@ -266,7 +266,7 @@ func (s directorySnapshot) withoutAccount(externalID string) directorySnapshot {
 	return out
 }
 
-// withoutGroup returns a snapshot with externalID's group and its memberships removed
+// withoutGroup returns a snapshot with the group matching externalID, and every membership referencing it, removed
 func (s directorySnapshot) withoutGroup(externalID string) directorySnapshot {
 	out := s.clone()
 
@@ -276,14 +276,14 @@ func (s directorySnapshot) withoutGroup(externalID string) directorySnapshot {
 	return out
 }
 
-// marshalDirectoryEnvelopes returns records marshaled as mapping envelopes
+// marshalDirectoryEnvelopes marshals each fixture record to its JSON create-input payload and wraps it as a mapping envelope
 func marshalDirectoryEnvelopes[T any](records []T) []integrationtypes.MappingEnvelope {
 	return lo.Map(records, func(record T, _ int) integrationtypes.MappingEnvelope {
 		return integrationtypes.MappingEnvelope{Payload: lo.Must(json.Marshal(record))}
 	})
 }
 
-// payloadSets returns s as account, group, and membership IngestPayloadSets
+// payloadSets converts s into the three IngestPayloadSets a directory sync run submits together — account, group, and membership
 func (s directorySnapshot) payloadSets(complete bool) []integrationtypes.IngestPayloadSet {
 	return []integrationtypes.IngestPayloadSet{
 		{Schema: entityops.SchemaDirectoryAccount.Name, Envelopes: marshalDirectoryEnvelopes(s.Accounts), SnapshotComplete: complete},
@@ -292,7 +292,7 @@ func (s directorySnapshot) payloadSets(complete bool) []integrationtypes.IngestP
 	}
 }
 
-// ingestDirectorySnapshotFixture returns the ingest result of snap's payload sets
+// ingestDirectorySnapshotFixture runs snap's account, group, and membership payload sets through the synchronous ingest path in one ProcessPayloadSets call
 func ingestDirectorySnapshotFixture(ctx context.Context, t *testing.T, integration *ent.Integration, snap directorySnapshot, complete bool, options ...operations.IngestOptions) operations.IngestResult {
 	t.Helper()
 
@@ -328,7 +328,7 @@ type directoryEventCounterSet struct {
 	MembershipUpdates *atomic.Int64
 }
 
-// directoryEventCounters returns registered directory mutation event counters
+// directoryEventCounters registers counting listeners for directory schema create/update mutation events on the shared test runtime
 func directoryEventCounters(t *testing.T) (directoryEventCounterSet, func()) {
 	t.Helper()
 
@@ -368,7 +368,7 @@ func directoryEventCounters(t *testing.T) (directoryEventCounterSet, func()) {
 	return counters, setup.Teardown
 }
 
-// cleanupDirectoryPrefix registers cleanup of directory rows created by a prefixed fixture
+// cleanupDirectoryPrefix registers a t.Cleanup that removes every directory row created by a prefixed snapshot fixture
 func cleanupDirectoryPrefix(t *testing.T, ctx context.Context, integrationIDs []string, prefix string) {
 	t.Helper()
 
