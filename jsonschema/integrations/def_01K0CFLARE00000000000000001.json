@@ -1,156 +1,50 @@
 {
-  "id": "def_01K0CFLARE00000000000000001",
-  "credentials": [
-    {
-      "ref": "CredentialSchema",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/credential-schema",
-        "$ref": "#/$defs/CredentialSchema",
-        "$defs": {
-          "CredentialSchema": {
-            "properties": {
-              "apiToken": {
-                "type": "string",
-                "title": "API Token"
+  "version": "95de5a87256ac80dc0fda4c3c67e9f40c4b1b7787d7bad14b7b7ff32ed393e16",
+  "surface": {
+    "id": "def_01K0CFLARE00000000000000001",
+    "credentials": [
+      {
+        "ref": "CredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/credential-schema",
+          "$ref": "#/$defs/CredentialSchema",
+          "$defs": {
+            "CredentialSchema": {
+              "properties": {
+                "apiToken": {
+                  "type": "string",
+                  "title": "API Token"
+                },
+                "accountId": {
+                  "type": "string",
+                  "title": "Account ID",
+                  "description": "Cloudflare account ID required for listing account members."
+                }
               },
-              "accountId": {
-                "type": "string",
-                "title": "Account ID",
-                "description": "Cloudflare account ID required for listing account members."
-              }
-            },
-            "additionalProperties": false,
-            "type": "object",
-            "required": [
-              "apiToken",
-              "accountId"
-            ]
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "apiToken",
+                "accountId"
+              ]
+            }
           }
         }
       }
-    }
-  ],
-  "userInput": {
-    "schema": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/user-input",
-      "$ref": "#/$defs/UserInput",
-      "$defs": {
-        "AssetSync": {
-          "properties": {
-            "disable": {
-              "type": "boolean",
-              "title": "Disable",
-              "description": "Disable this sync"
-            },
-            "filterExpr": {
-              "type": "string",
-              "title": "Filter Expression",
-              "description": "Optional CEL expression to apply to records before ingesting",
-              "examples": [
-                "Example: payload.status == 'active'"
-              ]
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        },
-        "DirectorySync": {
-          "properties": {
-            "disable": {
-              "type": "boolean",
-              "title": "Disable",
-              "description": "Disable this sync"
-            },
-            "filterExpr": {
-              "type": "string",
-              "title": "Filter Expression",
-              "description": "Optional CEL expression to apply to records before ingesting (allows inclusion",
-              "examples": [
-                "Example: payload.status = 'ACTIVE'"
-              ]
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        },
-        "FindingsSync": {
-          "properties": {
-            "disable": {
-              "type": "boolean",
-              "title": "Disable",
-              "description": "Disable this sync"
-            },
-            "filterExpr": {
-              "type": "string",
-              "title": "Filter Expression",
-              "description": "Optional CEL expression to apply to records before ingesting",
-              "examples": [
-                "Example: payload.severity == 'Critical'"
-              ]
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        },
-        "UserInput": {
-          "properties": {
-            "directorySync": {
-              "$ref": "#/$defs/DirectorySync",
-              "title": "Directory Account Sync"
-            },
-            "assetSync": {
-              "$ref": "#/$defs/AssetSync",
-              "title": "Cloudflare Asset Sync"
-            },
-            "findingSync": {
-              "$ref": "#/$defs/FindingsSync",
-              "title": "Security Insights Sync"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        }
-      }
-    }
-  },
-  "installation": {
-    "schema": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/installation-metadata",
-      "$ref": "#/$defs/InstallationMetadata",
-      "$defs": {
-        "InstallationMetadata": {
-          "properties": {
-            "accountId": {
-              "type": "string",
-              "title": "Account ID"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        }
-      }
-    }
-  },
-  "connections": [
-    "CredentialSchema"
-  ],
-  "operations": [
-    {
-      "name": "AssetSync",
+    ],
+    "userInput": {
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/asset-sync",
-        "$ref": "#/$defs/AssetSync",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/user-input",
+        "$ref": "#/$defs/UserInput",
         "$defs": {
           "AssetSync": {
             "properties": {
               "disable": {
                 "type": "boolean",
                 "title": "Disable",
-                "description": "Disable this sync"
+                "description": "Disable the syncing of domains from Cloudflare"
               },
               "filterExpr": {
                 "type": "string",
@@ -163,24 +57,13 @@
             },
             "additionalProperties": false,
             "type": "object"
-          }
-        }
-      },
-      "section": true
-    },
-    {
-      "name": "DirectorySync",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/directory-sync",
-        "$ref": "#/$defs/DirectorySync",
-        "$defs": {
+          },
           "DirectorySync": {
             "properties": {
               "disable": {
                 "type": "boolean",
                 "title": "Disable",
-                "description": "Disable this sync"
+                "description": "Disable the syncing of account members from Cloudflare"
               },
               "filterExpr": {
                 "type": "string",
@@ -193,879 +76,13 @@
             },
             "additionalProperties": false,
             "type": "object"
-          }
-        }
-      },
-      "section": true
-    },
-    {
-      "name": "DomainScanBuildReport",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/domain-scan-build-report",
-        "$ref": "#/$defs/DomainScanBuildReport",
-        "$defs": {
-          "BrandDesignProfile": {
-            "properties": {
-              "error": {
-                "type": "string"
-              },
-              "logo_url": {
-                "type": "string"
-              },
-              "favicon_url": {
-                "type": "string"
-              },
-              "primary_color": {
-                "type": "string"
-              },
-              "font": {
-                "type": "string"
-              },
-              "foreground_color": {
-                "type": "string"
-              },
-              "background_color": {
-                "type": "string"
-              },
-              "accent_color": {
-                "type": "string"
-              },
-              "secondary_background_color": {
-                "type": "string"
-              },
-              "secondary_foreground_color": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
           },
-          "CompanyProfile": {
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string"
-              },
-              "industry": {
-                "type": "string"
-              },
-              "systems": {
-                "items": {
-                  "$ref": "#/$defs/System"
-                },
-                "type": "array"
-              },
-              "location": {
-                "type": "string"
-              },
-              "employee_range": {
-                "type": "string"
-              },
-              "founded_year": {
-                "type": "string"
-              },
-              "estimated_revenue": {
-                "type": "string"
-              },
-              "social_links": {
-                "$ref": "#/$defs/SocialLinks"
-              },
-              "customers": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "technologies": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "provided_services": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "status_page_url": {
-                "type": "string"
-              },
-              "subdomain_links": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "sso_supported": {
-                "type": "boolean"
-              },
-              "mfa_supported": {
-                "type": "boolean"
-              },
-              "social_login_supported": {
-                "type": "boolean"
-              },
-              "credentials_supported": {
-                "type": "boolean"
-              },
-              "passkey_supported": {
-                "type": "boolean"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "ComplianceLink": {
-            "properties": {
-              "url": {
-                "type": "string"
-              },
-              "type": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "CompliancePage": {
-            "properties": {
-              "url": {
-                "type": "string"
-              },
-              "page_type": {
-                "type": "string"
-              },
-              "title": {
-                "type": "string"
-              },
-              "summary": {
-                "type": "string"
-              },
-              "frameworks": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "soc2_certified": {
-                "type": "boolean"
-              },
-              "last_updated": {
-                "type": "string"
-              },
-              "download_links": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "subprocessors": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "controls": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "trust_center_hosted_by": {
-                "type": "string"
-              },
-              "documents": {
-                "items": {
-                  "$ref": "#/$defs/TrustDocument"
-                },
-                "type": "array"
-              },
-              "compliance_links": {
-                "items": {
-                  "$ref": "#/$defs/ComplianceLink"
-                },
-                "type": "array"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "DNSVendor": {
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "url": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "DNSVendorInfo": {
-            "properties": {
-              "spf_record": {
-                "type": "string"
-              },
-              "dmarc_record": {
-                "type": "string"
-              },
-              "dmarc_policy": {
-                "type": "string"
-              },
-              "mx_hosts": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "ns_hosts": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "txt_records": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "dkim_selectors": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "subdomains": {
-                "items": {
-                  "$ref": "#/$defs/SubdomainDNSInfo"
-                },
-                "type": "array"
-              },
-              "vendors": {
-                "items": {
-                  "$ref": "#/$defs/DNSVendor"
-                },
-                "type": "array"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "DomainScanBuildReport": {
-            "properties": {
-              "internalScanId": {
-                "type": "string"
-              },
-              "result": true,
-              "enrichment": {
-                "$ref": "#/$defs/Enrichment"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "Enrichment": {
-            "properties": {
-              "company": {
-                "$ref": "#/$defs/CompanyProfile"
-              },
-              "branding": {
-                "$ref": "#/$defs/BrandDesignProfile"
-              },
-              "compliance": {
-                "$ref": "#/$defs/CompliancePage"
-              },
-              "dns": {
-                "$ref": "#/$defs/DNSVendorInfo"
-              },
-              "well_known": {
-                "$ref": "#/$defs/WellKnown"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "LLMsTxt": {
-            "properties": {
-              "present": {
-                "type": "boolean"
-              },
-              "url": {
-                "type": "string"
-              },
-              "title": {
-                "type": "string"
-              },
-              "summary": {
-                "type": "string"
-              },
-              "section_count": {
-                "type": "integer"
-              },
-              "full_present": {
-                "type": "boolean"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "RobotsTxt": {
-            "properties": {
-              "present": {
-                "type": "boolean"
-              },
-              "content_signals": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "type": "object"
-              },
-              "disallowed_ai_crawlers": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "named_ai_crawlers": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "sitemaps": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "SecurityTxt": {
-            "properties": {
-              "present": {
-                "type": "boolean"
-              },
-              "url": {
-                "type": "string"
-              },
-              "contacts": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "policy": {
-                "type": "string"
-              },
-              "encryption": {
-                "type": "string"
-              },
-              "preferred_languages": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "expires": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "expired": {
-                "type": "boolean"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "SocialLinks": {
-            "properties": {
-              "linkedin": {
-                "type": "string"
-              },
-              "twitter": {
-                "type": "string"
-              },
-              "github": {
-                "type": "string"
-              },
-              "discord": {
-                "type": "string"
-              },
-              "instagram": {
-                "type": "string"
-              },
-              "youtube": {
-                "type": "string"
-              },
-              "facebook": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "SubdomainDNSInfo": {
-            "properties": {
-              "host": {
-                "type": "string"
-              },
-              "mx_hosts": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "txt_records": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "cname": {
-                "type": "string"
-              },
-              "dkim_selectors": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "System": {
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "summary": {
-                "type": "string"
-              },
-              "full_description": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "TransportSecurity": {
-            "properties": {
-              "https_reachable": {
-                "type": "boolean"
-              },
-              "redirects_to_https": {
-                "type": "boolean"
-              },
-              "hsts": {
-                "type": "boolean"
-              },
-              "hsts_max_age": {
-                "type": "integer"
-              },
-              "hsts_include_subdomains": {
-                "type": "boolean"
-              },
-              "hsts_preload": {
-                "type": "boolean"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "TrustDocument": {
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "url": {
-                "type": "string"
-              },
-              "public": {
-                "type": "boolean"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "WellKnown": {
-            "properties": {
-              "security_txt": {
-                "$ref": "#/$defs/SecurityTxt"
-              },
-              "robots_txt": {
-                "$ref": "#/$defs/RobotsTxt"
-              },
-              "llms_txt": {
-                "$ref": "#/$defs/LLMsTxt"
-              },
-              "transport": {
-                "$ref": "#/$defs/TransportSecurity"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
-        }
-      }
-    },
-    {
-      "name": "DomainScanGatherEnrichment",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/domain-scan-gather-enrichment",
-        "$ref": "#/$defs/DomainScanGatherEnrichment",
-        "$defs": {
-          "DomainScanGatherEnrichment": {
-            "properties": {
-              "domain": {
-                "type": "string"
-              },
-              "forceRefresh": {
-                "type": "boolean"
-              },
-              "brandDesignOnly": {
-                "type": "boolean"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
-        }
-      }
-    },
-    {
-      "name": "DomainScanImport",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/domain-scan-import",
-        "$ref": "#/$defs/DomainScanImport",
-        "$defs": {
-          "BrandDesignProfile": {
-            "properties": {
-              "error": {
-                "type": "string"
-              },
-              "logo_url": {
-                "type": "string"
-              },
-              "favicon_url": {
-                "type": "string"
-              },
-              "primary_color": {
-                "type": "string"
-              },
-              "font": {
-                "type": "string"
-              },
-              "foreground_color": {
-                "type": "string"
-              },
-              "background_color": {
-                "type": "string"
-              },
-              "accent_color": {
-                "type": "string"
-              },
-              "secondary_background_color": {
-                "type": "string"
-              },
-              "secondary_foreground_color": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "DomainScanImport": {
-            "properties": {
-              "organizationId": {
-                "type": "string"
-              },
-              "scanIds": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "platforms": {
-                "items": {
-                  "$ref": "#/$defs/DomainScanImportPlatform"
-                },
-                "type": "array"
-              },
-              "systems": {
-                "items": {
-                  "$ref": "#/$defs/DomainScanImportSystem"
-                },
-                "type": "array"
-              },
-              "vendors": {
-                "items": {
-                  "$ref": "#/$defs/DomainScanImportVendor"
-                },
-                "type": "array"
-              },
-              "assets": {
-                "items": {
-                  "$ref": "#/$defs/DomainScanImportAsset"
-                },
-                "type": "array"
-              },
-              "findings": {
-                "items": {
-                  "$ref": "#/$defs/DomainScanImportFinding"
-                },
-                "type": "array"
-              },
-              "branding": {
-                "$ref": "#/$defs/BrandDesignProfile"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "DomainScanImportAsset": {
-            "properties": {
-              "ref": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
-              },
-              "identifier": {
-                "type": "string"
-              },
-              "website": {
-                "type": "string"
-              },
-              "categories": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "DomainScanImportFinding": {
-            "properties": {
-              "category": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string"
-              },
-              "severity": {
-                "type": "string"
-              },
-              "domain": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "DomainScanImportPlatform": {
-            "properties": {
-              "ref": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string"
-              },
-              "entityRefs": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "assetRefs": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "DomainScanImportSystem": {
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string"
-              },
-              "entityRefs": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "assetRefs": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              "platformRefs": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "DomainScanImportVendor": {
-            "properties": {
-              "ref": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
-              },
-              "legalName": {
-                "type": "string"
-              },
-              "domain": {
-                "type": "string"
-              },
-              "categories": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
-        }
-      }
-    },
-    {
-      "name": "DomainScanPoll",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/domain-scan-poll",
-        "$ref": "#/$defs/DomainScanPoll",
-        "$defs": {
-          "DomainScanPoll": {
-            "properties": {
-              "scanResultId": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
-        }
-      }
-    },
-    {
-      "name": "DomainScanRequest",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/domain-scan-request",
-        "$ref": "#/$defs/DomainScanRequest",
-        "$defs": {
-          "DomainScanRequest": {
-            "properties": {
-              "scanId": {
-                "type": "string"
-              },
-              "organizationId": {
-                "type": "string"
-              },
-              "domain": {
-                "type": "string",
-                "title": "Domain",
-                "description": "Domain to scan"
-              },
-              "forceRefresh": {
-                "type": "boolean",
-                "title": "Force Refresh",
-                "description": "Bypass the render cache and force a fresh scan"
-              },
-              "brandDesignOnly": {
-                "type": "boolean",
-                "title": "Brand Design Only",
-                "description": "Extract and apply the brand design without building a full domain scan report"
-              },
-              "applyBrandDesignToPreview": {
-                "type": "boolean",
-                "title": "Apply Brand Design to Preview",
-                "description": "Apply extracted brand design to preview Trust Center settings"
-              },
-              "applyBrandDesignToLive": {
-                "type": "boolean",
-                "title": "Apply Brand Design to Live",
-                "description": "Apply extracted brand design to live Trust Center settings"
-              },
-              "groupId": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object",
-            "required": [
-              "domain"
-            ]
-          }
-        }
-      }
-    },
-    {
-      "name": "DomainScanSubmit",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/domain-scan-submit",
-        "$ref": "#/$defs/DomainScanSubmit",
-        "$defs": {
-          "DomainScanSubmit": {
-            "properties": {
-              "domains": {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
-        }
-      }
-    },
-    {
-      "name": "FindingsSync",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/findings-sync",
-        "$ref": "#/$defs/FindingsSync",
-        "$defs": {
           "FindingsSync": {
             "properties": {
               "disable": {
                 "type": "boolean",
                 "title": "Disable",
-                "description": "Disable this sync"
+                "description": "Disable the syncing of security insights from Cloudflare"
               },
               "filterExpr": {
                 "type": "string",
@@ -1078,10 +95,993 @@
             },
             "additionalProperties": false,
             "type": "object"
+          },
+          "UserInput": {
+            "properties": {
+              "directorySync": {
+                "$ref": "#/$defs/DirectorySync",
+                "title": "Directory Account Sync"
+              },
+              "assetSync": {
+                "$ref": "#/$defs/AssetSync",
+                "title": "Cloudflare Asset Sync"
+              },
+              "findingSync": {
+                "$ref": "#/$defs/FindingsSync",
+                "title": "Security Insights Sync"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "accountId": {
+                "type": "string",
+                "title": "Account ID"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "CredentialSchema"
+    ],
+    "operations": [
+      {
+        "name": "AssetSync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/asset-sync",
+          "$ref": "#/$defs/AssetSync",
+          "$defs": {
+            "AssetSync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable the syncing of domains from Cloudflare"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression to apply to records before ingesting",
+                  "examples": [
+                    "Example: payload.status == 'active'"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
           }
         }
       },
-      "section": true
-    }
-  ]
+      {
+        "name": "DirectorySync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/directory-sync",
+          "$ref": "#/$defs/DirectorySync",
+          "$defs": {
+            "DirectorySync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable the syncing of account members from Cloudflare"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression to apply to records before ingesting (allows inclusion",
+                  "examples": [
+                    "Example: payload.status = 'ACTIVE'"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "DomainScanBuildReport",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/domain-scan-build-report",
+          "$ref": "#/$defs/DomainScanBuildReport",
+          "$defs": {
+            "BrandDesignProfile": {
+              "properties": {
+                "error": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "favicon_url": {
+                  "type": "string"
+                },
+                "primary_color": {
+                  "type": "string"
+                },
+                "font": {
+                  "type": "string"
+                },
+                "foreground_color": {
+                  "type": "string"
+                },
+                "background_color": {
+                  "type": "string"
+                },
+                "accent_color": {
+                  "type": "string"
+                },
+                "secondary_background_color": {
+                  "type": "string"
+                },
+                "secondary_foreground_color": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "CompanyProfile": {
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "industry": {
+                  "type": "string"
+                },
+                "systems": {
+                  "items": {
+                    "$ref": "#/$defs/System"
+                  },
+                  "type": "array"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "employee_range": {
+                  "type": "string"
+                },
+                "founded_year": {
+                  "type": "string"
+                },
+                "estimated_revenue": {
+                  "type": "string"
+                },
+                "social_links": {
+                  "$ref": "#/$defs/SocialLinks"
+                },
+                "customers": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "technologies": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "provided_services": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "status_page_url": {
+                  "type": "string"
+                },
+                "subdomain_links": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "sso_supported": {
+                  "type": "boolean"
+                },
+                "mfa_supported": {
+                  "type": "boolean"
+                },
+                "social_login_supported": {
+                  "type": "boolean"
+                },
+                "credentials_supported": {
+                  "type": "boolean"
+                },
+                "passkey_supported": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "ComplianceLink": {
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "CompliancePage": {
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "page_type": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "frameworks": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "soc2_certified": {
+                  "type": "boolean"
+                },
+                "last_updated": {
+                  "type": "string"
+                },
+                "download_links": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "subprocessors": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "controls": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "trust_center_hosted_by": {
+                  "type": "string"
+                },
+                "documents": {
+                  "items": {
+                    "$ref": "#/$defs/TrustDocument"
+                  },
+                  "type": "array"
+                },
+                "compliance_links": {
+                  "items": {
+                    "$ref": "#/$defs/ComplianceLink"
+                  },
+                  "type": "array"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "DNSVendor": {
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "DNSVendorInfo": {
+              "properties": {
+                "spf_record": {
+                  "type": "string"
+                },
+                "dmarc_record": {
+                  "type": "string"
+                },
+                "dmarc_policy": {
+                  "type": "string"
+                },
+                "mx_hosts": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "ns_hosts": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "txt_records": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "dkim_selectors": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "subdomains": {
+                  "items": {
+                    "$ref": "#/$defs/SubdomainDNSInfo"
+                  },
+                  "type": "array"
+                },
+                "vendors": {
+                  "items": {
+                    "$ref": "#/$defs/DNSVendor"
+                  },
+                  "type": "array"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "DomainScanBuildReport": {
+              "properties": {
+                "internalScanId": {
+                  "type": "string"
+                },
+                "result": true,
+                "enrichment": {
+                  "$ref": "#/$defs/Enrichment"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "Enrichment": {
+              "properties": {
+                "company": {
+                  "$ref": "#/$defs/CompanyProfile"
+                },
+                "branding": {
+                  "$ref": "#/$defs/BrandDesignProfile"
+                },
+                "compliance": {
+                  "$ref": "#/$defs/CompliancePage"
+                },
+                "dns": {
+                  "$ref": "#/$defs/DNSVendorInfo"
+                },
+                "well_known": {
+                  "$ref": "#/$defs/WellKnown"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "LLMsTxt": {
+              "properties": {
+                "present": {
+                  "type": "boolean"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "section_count": {
+                  "type": "integer"
+                },
+                "full_present": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "RobotsTxt": {
+              "properties": {
+                "present": {
+                  "type": "boolean"
+                },
+                "content_signals": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                },
+                "disallowed_ai_crawlers": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "named_ai_crawlers": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "sitemaps": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "SecurityTxt": {
+              "properties": {
+                "present": {
+                  "type": "boolean"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "contacts": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "policy": {
+                  "type": "string"
+                },
+                "encryption": {
+                  "type": "string"
+                },
+                "preferred_languages": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "expires": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "expired": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "SocialLinks": {
+              "properties": {
+                "linkedin": {
+                  "type": "string"
+                },
+                "twitter": {
+                  "type": "string"
+                },
+                "github": {
+                  "type": "string"
+                },
+                "discord": {
+                  "type": "string"
+                },
+                "instagram": {
+                  "type": "string"
+                },
+                "youtube": {
+                  "type": "string"
+                },
+                "facebook": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "SubdomainDNSInfo": {
+              "properties": {
+                "host": {
+                  "type": "string"
+                },
+                "mx_hosts": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "txt_records": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "cname": {
+                  "type": "string"
+                },
+                "dkim_selectors": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "System": {
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "full_description": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "TransportSecurity": {
+              "properties": {
+                "https_reachable": {
+                  "type": "boolean"
+                },
+                "redirects_to_https": {
+                  "type": "boolean"
+                },
+                "hsts": {
+                  "type": "boolean"
+                },
+                "hsts_max_age": {
+                  "type": "integer"
+                },
+                "hsts_include_subdomains": {
+                  "type": "boolean"
+                },
+                "hsts_preload": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "TrustDocument": {
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "public": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "WellKnown": {
+              "properties": {
+                "security_txt": {
+                  "$ref": "#/$defs/SecurityTxt"
+                },
+                "robots_txt": {
+                  "$ref": "#/$defs/RobotsTxt"
+                },
+                "llms_txt": {
+                  "$ref": "#/$defs/LLMsTxt"
+                },
+                "transport": {
+                  "$ref": "#/$defs/TransportSecurity"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "DomainScanGatherEnrichment",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/domain-scan-gather-enrichment",
+          "$ref": "#/$defs/DomainScanGatherEnrichment",
+          "$defs": {
+            "DomainScanGatherEnrichment": {
+              "properties": {
+                "domain": {
+                  "type": "string"
+                },
+                "forceRefresh": {
+                  "type": "boolean"
+                },
+                "brandDesignOnly": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "DomainScanImport",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/domain-scan-import",
+          "$ref": "#/$defs/DomainScanImport",
+          "$defs": {
+            "BrandDesignProfile": {
+              "properties": {
+                "error": {
+                  "type": "string"
+                },
+                "logo_url": {
+                  "type": "string"
+                },
+                "favicon_url": {
+                  "type": "string"
+                },
+                "primary_color": {
+                  "type": "string"
+                },
+                "font": {
+                  "type": "string"
+                },
+                "foreground_color": {
+                  "type": "string"
+                },
+                "background_color": {
+                  "type": "string"
+                },
+                "accent_color": {
+                  "type": "string"
+                },
+                "secondary_background_color": {
+                  "type": "string"
+                },
+                "secondary_foreground_color": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "DomainScanImport": {
+              "properties": {
+                "organizationId": {
+                  "type": "string"
+                },
+                "scanIds": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "platforms": {
+                  "items": {
+                    "$ref": "#/$defs/DomainScanImportPlatform"
+                  },
+                  "type": "array"
+                },
+                "systems": {
+                  "items": {
+                    "$ref": "#/$defs/DomainScanImportSystem"
+                  },
+                  "type": "array"
+                },
+                "vendors": {
+                  "items": {
+                    "$ref": "#/$defs/DomainScanImportVendor"
+                  },
+                  "type": "array"
+                },
+                "assets": {
+                  "items": {
+                    "$ref": "#/$defs/DomainScanImportAsset"
+                  },
+                  "type": "array"
+                },
+                "findings": {
+                  "items": {
+                    "$ref": "#/$defs/DomainScanImportFinding"
+                  },
+                  "type": "array"
+                },
+                "branding": {
+                  "$ref": "#/$defs/BrandDesignProfile"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "DomainScanImportAsset": {
+              "properties": {
+                "ref": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "identifier": {
+                  "type": "string"
+                },
+                "website": {
+                  "type": "string"
+                },
+                "categories": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "DomainScanImportFinding": {
+              "properties": {
+                "category": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "severity": {
+                  "type": "string"
+                },
+                "domain": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "DomainScanImportPlatform": {
+              "properties": {
+                "ref": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "entityRefs": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "assetRefs": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "DomainScanImportSystem": {
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "entityRefs": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "assetRefs": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "platformRefs": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "DomainScanImportVendor": {
+              "properties": {
+                "ref": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "legalName": {
+                  "type": "string"
+                },
+                "domain": {
+                  "type": "string"
+                },
+                "categories": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "DomainScanPoll",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/domain-scan-poll",
+          "$ref": "#/$defs/DomainScanPoll",
+          "$defs": {
+            "DomainScanPoll": {
+              "properties": {
+                "scanResultId": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "DomainScanRequest",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/domain-scan-request",
+          "$ref": "#/$defs/DomainScanRequest",
+          "$defs": {
+            "DomainScanRequest": {
+              "properties": {
+                "scanId": {
+                  "type": "string"
+                },
+                "organizationId": {
+                  "type": "string"
+                },
+                "domain": {
+                  "type": "string",
+                  "title": "Domain",
+                  "description": "Domain to scan"
+                },
+                "forceRefresh": {
+                  "type": "boolean",
+                  "title": "Force Refresh",
+                  "description": "Bypass the render cache and force a fresh scan"
+                },
+                "brandDesignOnly": {
+                  "type": "boolean",
+                  "title": "Brand Design Only",
+                  "description": "Extract and apply the brand design without building a full domain scan report"
+                },
+                "applyBrandDesignToPreview": {
+                  "type": "boolean",
+                  "title": "Apply Brand Design to Preview",
+                  "description": "Apply extracted brand design to preview Trust Center settings"
+                },
+                "applyBrandDesignToLive": {
+                  "type": "boolean",
+                  "title": "Apply Brand Design to Live",
+                  "description": "Apply extracted brand design to live Trust Center settings"
+                },
+                "groupId": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "domain"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "DomainScanSubmit",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/domain-scan-submit",
+          "$ref": "#/$defs/DomainScanSubmit",
+          "$defs": {
+            "DomainScanSubmit": {
+              "properties": {
+                "domains": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "FindingsSync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare/findings-sync",
+          "$ref": "#/$defs/FindingsSync",
+          "$defs": {
+            "FindingsSync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable the syncing of security insights from Cloudflare"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression to apply to records before ingesting",
+                  "examples": [
+                    "Example: payload.severity == 'Critical'"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ]
+  }
 }

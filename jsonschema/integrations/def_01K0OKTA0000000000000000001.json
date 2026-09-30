@@ -1,126 +1,49 @@
 {
-  "id": "def_01K0OKTA0000000000000000001",
-  "credentials": [
-    {
-      "ref": "CredentialSchema",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/okta/credential-schema",
-        "$ref": "#/$defs/CredentialSchema",
-        "$defs": {
-          "CredentialSchema": {
-            "properties": {
-              "orgUrl": {
-                "type": "string",
-                "title": "Org URL"
+  "version": "de126ebcc6dc79a7b00d27930256e457ecfc363dcc218acfd1481c3da3b21dcb",
+  "surface": {
+    "id": "def_01K0OKTA0000000000000000001",
+    "credentials": [
+      {
+        "ref": "CredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/okta/credential-schema",
+          "$ref": "#/$defs/CredentialSchema",
+          "$defs": {
+            "CredentialSchema": {
+              "properties": {
+                "orgUrl": {
+                  "type": "string",
+                  "title": "Org URL"
+                },
+                "apiToken": {
+                  "type": "string",
+                  "title": "API Token"
+                }
               },
-              "apiToken": {
-                "type": "string",
-                "title": "API Token"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object",
-            "required": [
-              "orgUrl",
-              "apiToken"
-            ]
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "orgUrl",
+                "apiToken"
+              ]
+            }
           }
         }
       }
-    }
-  ],
-  "userInput": {
-    "schema": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/okta/user-input",
-      "$ref": "#/$defs/UserInput",
-      "$defs": {
-        "DirectorySync": {
-          "properties": {
-            "disable": {
-              "type": "boolean",
-              "title": "Disable",
-              "description": "Disable this sync"
-            },
-            "filterExpr": {
-              "type": "string",
-              "title": "Filter Expression",
-              "description": "Optional CEL expression to apply to records before ingesting (allows inclusion"
-            },
-            "search": {
-              "type": "string",
-              "title": "User Search Expression",
-              "description": "Optional Okta search expression for filtering users (e.g. profile.department eq \"Engineering\")."
-            },
-            "enableGroupSync": {
-              "type": "boolean",
-              "title": "Sync Groups"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        },
-        "UserInput": {
-          "properties": {
-            "directorySync": {
-              "$ref": "#/$defs/DirectorySync",
-              "title": "Directory Sync"
-            },
-            "primaryDirectory": {
-              "type": "boolean",
-              "title": "Primary Directory"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        }
-      }
-    },
-    "replaces": [
-      "okta-v1"
-    ]
-  },
-  "installation": {
-    "schema": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/okta/installation-metadata",
-      "$ref": "#/$defs/InstallationMetadata",
-      "$defs": {
-        "InstallationMetadata": {
-          "properties": {
-            "orgUrl": {
-              "type": "string",
-              "title": "Org URL"
-            },
-            "orgId": {
-              "type": "string",
-              "title": "Org ID"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        }
-      }
-    }
-  },
-  "connections": [
-    "CredentialSchema"
-  ],
-  "operations": [
-    {
-      "name": "DirectorySync",
+    ],
+    "userInput": {
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/okta/directory-sync",
-        "$ref": "#/$defs/DirectorySync",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/okta/user-input",
+        "$ref": "#/$defs/UserInput",
         "$defs": {
           "DirectorySync": {
             "properties": {
               "disable": {
                 "type": "boolean",
                 "title": "Disable",
-                "description": "Disable this sync"
+                "description": "Disable the syncing of users and groups from Okta"
               },
               "filterExpr": {
                 "type": "string",
@@ -139,10 +62,89 @@
             },
             "additionalProperties": false,
             "type": "object"
+          },
+          "UserInput": {
+            "properties": {
+              "directorySync": {
+                "$ref": "#/$defs/DirectorySync",
+                "title": "Directory Sync"
+              },
+              "primaryDirectory": {
+                "type": "boolean",
+                "title": "Primary Directory"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
           }
         }
       },
-      "section": true
-    }
-  ]
+      "replaces": [
+        "okta-v1"
+      ]
+    },
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/okta/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "orgUrl": {
+                "type": "string",
+                "title": "Org URL"
+              },
+              "orgId": {
+                "type": "string",
+                "title": "Org ID"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "CredentialSchema"
+    ],
+    "operations": [
+      {
+        "name": "DirectorySync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/okta/directory-sync",
+          "$ref": "#/$defs/DirectorySync",
+          "$defs": {
+            "DirectorySync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable the syncing of users and groups from Okta"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression to apply to records before ingesting (allows inclusion"
+                },
+                "search": {
+                  "type": "string",
+                  "title": "User Search Expression",
+                  "description": "Optional Okta search expression for filtering users (e.g. profile.department eq \"Engineering\")."
+                },
+                "enableGroupSync": {
+                  "type": "boolean",
+                  "title": "Sync Groups"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ]
+  }
 }

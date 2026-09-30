@@ -1,24 +1,51 @@
 {
-  "id": "def_01K0MSTEAMS00000000000000001",
-  "credentials": [
-    {
-      "ref": "teamsCred",
+  "version": "320ab34e951e31366768918efd713421f2979d971c4b69c87b167313779bfaec",
+  "surface": {
+    "id": "def_01K0MSTEAMS00000000000000001",
+    "credentials": [
+      {
+        "ref": "teamsCred",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/teams-cred",
+          "$ref": "#/$defs/teamsCred",
+          "$defs": {
+            "teamsCred": {
+              "properties": {
+                "accessToken": {
+                  "type": "string"
+                },
+                "refreshToken": {
+                  "type": "string"
+                },
+                "expiry": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ],
+    "userInput": {
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/teams-cred",
-        "$ref": "#/$defs/teamsCred",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/user-input",
+        "$ref": "#/$defs/UserInput",
         "$defs": {
-          "teamsCred": {
+          "UserInput": {
             "properties": {
-              "accessToken": {
-                "type": "string"
+              "defaultMessaging": {
+                "type": "boolean",
+                "title": "Default Messaging"
               },
-              "refreshToken": {
-                "type": "string"
-              },
-              "expiry": {
+              "filterExpr": {
                 "type": "string",
-                "format": "date-time"
+                "title": "Filter Expression",
+                "description": "Optional CEL expression to apply to records before ingesting (allows inclusion"
               }
             },
             "additionalProperties": false,
@@ -26,95 +53,18 @@
           }
         }
       }
-    }
-  ],
-  "userInput": {
-    "schema": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/user-input",
-      "$ref": "#/$defs/UserInput",
-      "$defs": {
-        "UserInput": {
-          "properties": {
-            "defaultMessaging": {
-              "type": "boolean",
-              "title": "Default Messaging"
-            },
-            "filterExpr": {
-              "type": "string",
-              "title": "Filter Expression",
-              "description": "Optional CEL expression to apply to records before ingesting (allows inclusion"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        }
-      }
-    }
-  },
-  "installation": {
-    "schema": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/installation-metadata",
-      "$ref": "#/$defs/InstallationMetadata",
-      "$defs": {
-        "InstallationMetadata": {
-          "properties": {
-            "tenantId": {
-              "type": "string",
-              "title": "Tenant ID"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        }
-      }
-    }
-  },
-  "connections": [
-    "teamsCred"
-  ],
-  "operations": [
-    {
-      "name": "MessageSendOperation",
+    },
+    "installation": {
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/message-send-operation",
-        "$ref": "#/$defs/MessageSendOperation",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
         "$defs": {
-          "MessageSendOperation": {
+          "InstallationMetadata": {
             "properties": {
-              "templateId": {
+              "tenantId": {
                 "type": "string",
-                "title": "Template ID"
-              },
-              "templateKey": {
-                "type": "string",
-                "title": "Template Key"
-              },
-              "teamId": {
-                "type": "string",
-                "title": "Team ID"
-              },
-              "channelId": {
-                "type": "string",
-                "title": "Channel ID"
-              },
-              "body": {
-                "type": "string",
-                "title": "Message Body"
-              },
-              "bodyFormat": {
-                "type": "string",
-                "enum": [
-                  "text",
-                  "html"
-                ],
-                "title": "Body Format"
-              },
-              "subject": {
-                "type": "string",
-                "title": "Subject"
+                "title": "Tenant ID"
               }
             },
             "additionalProperties": false,
@@ -122,6 +72,59 @@
           }
         }
       }
-    }
-  ]
+    },
+    "connections": [
+      "teamsCred"
+    ],
+    "operations": [
+      {
+        "name": "MessageSendOperation",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/message-send-operation",
+          "$ref": "#/$defs/MessageSendOperation",
+          "$defs": {
+            "MessageSendOperation": {
+              "properties": {
+                "templateId": {
+                  "type": "string",
+                  "title": "Template ID"
+                },
+                "templateKey": {
+                  "type": "string",
+                  "title": "Template Key"
+                },
+                "teamId": {
+                  "type": "string",
+                  "title": "Team ID"
+                },
+                "channelId": {
+                  "type": "string",
+                  "title": "Channel ID"
+                },
+                "body": {
+                  "type": "string",
+                  "title": "Message Body"
+                },
+                "bodyFormat": {
+                  "type": "string",
+                  "enum": [
+                    "text",
+                    "html"
+                  ],
+                  "title": "Body Format"
+                },
+                "subject": {
+                  "type": "string",
+                  "title": "Subject"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ]
+  }
 }

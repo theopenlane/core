@@ -44,7 +44,7 @@ func generateIntegrationSchemas(dir string) error {
 	}
 
 	for _, def := range reg.Definitions() {
-		next := registry.DefinitionSurface(def)
+		next := registry.Snapshot{Version: reg.Version(def.ID), Surface: registry.DefinitionSurface(def)}
 		target := filepath.Join(dir, def.ID+snapshotExtension)
 
 		existing, err := os.ReadFile(target)
@@ -53,7 +53,7 @@ func generateIntegrationSchemas(dir string) error {
 		}
 
 		if err == nil {
-			if err := registry.GateSurfaceChange(target, existing, next); err != nil {
+			if err := registry.GateSurfaceChange(target, existing, next.Surface); err != nil {
 				return err
 			}
 		}

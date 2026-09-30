@@ -1,152 +1,47 @@
 {
-  "id": "def_01K0ONEDRIVE00000000000001",
-  "credentials": [
-    {
-      "ref": "oneDriveCred",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/one-drive-cred",
-        "$ref": "#/$defs/oneDriveCred",
-        "$defs": {
-          "oneDriveCred": {
-            "properties": {
-              "accessToken": {
-                "type": "string"
+  "version": "91fa9a25689c9cff2d53ee40bb81873153aa074cdf0857828aa566f1723c758d",
+  "surface": {
+    "id": "def_01K0ONEDRIVE00000000000001",
+    "credentials": [
+      {
+        "ref": "oneDriveCred",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/one-drive-cred",
+          "$ref": "#/$defs/oneDriveCred",
+          "$defs": {
+            "oneDriveCred": {
+              "properties": {
+                "accessToken": {
+                  "type": "string"
+                },
+                "refreshToken": {
+                  "type": "string"
+                },
+                "expiry": {
+                  "type": "string",
+                  "format": "date-time"
+                }
               },
-              "refreshToken": {
-                "type": "string"
-              },
-              "expiry": {
-                "type": "string",
-                "format": "date-time"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
+              "additionalProperties": false,
+              "type": "object"
+            }
           }
         }
       }
-    }
-  ],
-  "userInput": {
-    "schema": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/user-input",
-      "$ref": "#/$defs/UserInput",
-      "$defs": {
-        "FolderSync": {
-          "properties": {
-            "disable": {
-              "type": "boolean",
-              "title": "Disable",
-              "description": "Disable this sync"
-            },
-            "folderId": {
-              "type": "string",
-              "title": "Folder Path",
-              "description": "Folder path relative to drive root (e.g. Policies). Leave empty to sync the entire drive root."
-            },
-            "filterExpr": {
-              "type": "string",
-              "title": "Filter Expression",
-              "description": "Optional CEL expression to filter documents before creating policies"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        },
-        "UserInput": {
-          "properties": {
-            "primary": {
-              "type": "boolean",
-              "title": "Primary"
-            },
-            "folderSync": {
-              "$ref": "#/$defs/FolderSync",
-              "title": "Folder Sync"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        }
-      }
-    },
-    "replaces": [
-      "onedrive-v1"
-    ]
-  },
-  "installation": {
-    "schema": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/installation-metadata",
-      "$ref": "#/$defs/InstallationMetadata",
-      "$defs": {
-        "InstallationMetadata": {
-          "properties": {
-            "tenantId": {
-              "type": "string",
-              "title": "Tenant ID"
-            },
-            "domain": {
-              "type": "string",
-              "title": "Domain"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        }
-      }
-    }
-  },
-  "connections": [
-    "oneDriveCred"
-  ],
-  "operations": [
-    {
-      "name": "DocumentExport",
+    ],
+    "userInput": {
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/operations/document-export",
-        "$ref": "#/$defs/DocumentExport",
-        "$defs": {
-          "DocumentExport": {
-            "properties": {
-              "fileId": {
-                "type": "string"
-              },
-              "html": {
-                "type": "string"
-              },
-              "pdf": {
-                "type": "string",
-                "contentEncoding": "base64"
-              },
-              "mimeType": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
-        }
-      }
-    },
-    {
-      "name": "FolderSync",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/folder-sync",
-        "$ref": "#/$defs/FolderSync",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/user-input",
+        "$ref": "#/$defs/UserInput",
         "$defs": {
           "FolderSync": {
             "properties": {
               "disable": {
                 "type": "boolean",
                 "title": "Disable",
-                "description": "Disable this sync"
+                "description": "Disable the syncing of documents from OneDrive"
               },
               "folderId": {
                 "type": "string",
@@ -161,10 +56,117 @@
             },
             "additionalProperties": false,
             "type": "object"
+          },
+          "UserInput": {
+            "properties": {
+              "primary": {
+                "type": "boolean",
+                "title": "Primary"
+              },
+              "folderSync": {
+                "$ref": "#/$defs/FolderSync",
+                "title": "Folder Sync"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
           }
         }
       },
-      "section": true
-    }
-  ]
+      "replaces": [
+        "onedrive-v1"
+      ]
+    },
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "tenantId": {
+                "type": "string",
+                "title": "Tenant ID"
+              },
+              "domain": {
+                "type": "string",
+                "title": "Domain"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "oneDriveCred"
+    ],
+    "operations": [
+      {
+        "name": "DocumentExport",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/operations/document-export",
+          "$ref": "#/$defs/DocumentExport",
+          "$defs": {
+            "DocumentExport": {
+              "properties": {
+                "fileId": {
+                  "type": "string"
+                },
+                "html": {
+                  "type": "string"
+                },
+                "pdf": {
+                  "type": "string",
+                  "contentEncoding": "base64"
+                },
+                "mimeType": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "FolderSync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive/folder-sync",
+          "$ref": "#/$defs/FolderSync",
+          "$defs": {
+            "FolderSync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable the syncing of documents from OneDrive"
+                },
+                "folderId": {
+                  "type": "string",
+                  "title": "Folder Path",
+                  "description": "Folder path relative to drive root (e.g. Policies). Leave empty to sync the entire drive root."
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression to filter documents before creating policies"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ]
+  }
 }

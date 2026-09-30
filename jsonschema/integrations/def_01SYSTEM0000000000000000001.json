@@ -1,73 +1,76 @@
 {
-  "id": "def_01SYSTEM0000000000000000001",
-  "credentials": [],
-  "connections": [],
-  "operations": [
-    {
-      "name": "IntegrationLifecycleSweep",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/system/integration-lifecycle-sweep",
-        "$ref": "#/$defs/IntegrationLifecycleSweep",
-        "$defs": {
-          "IntegrationLifecycleSweep": {
-            "properties": {
-              "dryRun": {
-                "type": "boolean"
+  "version": "ab6fbadb670778f6801cc8679103ed82481ac4ebd77e9915d174c1e29669b822",
+  "surface": {
+    "id": "def_01SYSTEM0000000000000000001",
+    "credentials": [],
+    "connections": [],
+    "operations": [
+      {
+        "name": "IntegrationLifecycleSweep",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/system/integration-lifecycle-sweep",
+          "$ref": "#/$defs/IntegrationLifecycleSweep",
+          "$defs": {
+            "IntegrationLifecycleSweep": {
+              "properties": {
+                "dryRun": {
+                  "type": "boolean"
+                },
+                "maxPerRun": {
+                  "type": "integer"
+                }
               },
-              "maxPerRun": {
-                "type": "integer"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "OrganizationDeleteSweep",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/system/organization-delete-sweep",
+          "$ref": "#/$defs/OrganizationDeleteSweep",
+          "$defs": {
+            "OrganizationDeleteSweep": {
+              "properties": {
+                "maxDeletesPerRun": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      },
+      {
+        "name": "PaymentReminderSweep",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/system/payment-reminder-sweep",
+          "$ref": "#/$defs/PaymentReminderSweep",
+          "$defs": {
+            "PaymentReminderSweep": {
+              "properties": {
+                "paymentMethodInterval": {
+                  "type": "integer"
+                },
+                "deletionDays": {
+                  "type": "integer"
+                },
+                "dryRun": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
           }
         }
       }
-    },
-    {
-      "name": "OrganizationDeleteSweep",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/system/organization-delete-sweep",
-        "$ref": "#/$defs/OrganizationDeleteSweep",
-        "$defs": {
-          "OrganizationDeleteSweep": {
-            "properties": {
-              "maxDeletesPerRun": {
-                "type": "integer"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
-        }
-      }
-    },
-    {
-      "name": "PaymentReminderSweep",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/system/payment-reminder-sweep",
-        "$ref": "#/$defs/PaymentReminderSweep",
-        "$defs": {
-          "PaymentReminderSweep": {
-            "properties": {
-              "paymentMethodInterval": {
-                "type": "integer"
-              },
-              "deletionDays": {
-                "type": "integer"
-              },
-              "dryRun": {
-                "type": "boolean"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
-        }
-      }
-    }
-  ]
+    ]
+  }
 }
