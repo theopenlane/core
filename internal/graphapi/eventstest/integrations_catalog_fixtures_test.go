@@ -23,10 +23,10 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
-// catalogFixtureIngestOperation is the shared catalog ingest operation name
+// catalogFixtureIngestOperation names the shared ingest operation used by the catalog volatile-field regression tests
 const catalogFixtureIngestOperation = "catalog.fixture.ingest"
 
-// catalogFixtureDefinition returns a minimal passthrough ingest definition for schemaName
+// catalogFixtureDefinition builds a minimal ingest definition for schemaName whose mapping passes provider payloads through unchanged
 func catalogFixtureDefinition(defID, schemaName string) integrationtypes.Definition {
 	passthrough := integrationtypes.MappingOverride{MapExpr: "payload"}
 
@@ -50,7 +50,7 @@ func catalogFixtureDefinition(defID, schemaName string) integrationtypes.Definit
 	}
 }
 
-// ingestCatalogPayload returns the ingest result of one payload for schemaName
+// ingestCatalogPayload pushes one payload for schemaName through the synchronous catalog ingest path and returns the record-level result
 func ingestCatalogPayload(ctx context.Context, t *testing.T, installation *ent.Integration, schemaName string, payload json.RawMessage) operations.IngestResult {
 	t.Helper()
 
@@ -70,7 +70,7 @@ func ingestCatalogPayload(ctx context.Context, t *testing.T, installation *ent.I
 	return result
 }
 
-// catalogListenerCounts tallies create and update mutation events for one schema
+// catalogListenerCounts tallies create and update mutation events observed for one schema during a test
 type catalogListenerCounts struct {
 	// Creates counts OpCreate mutation events
 	Creates *atomic.Int64
@@ -80,7 +80,7 @@ type catalogListenerCounts struct {
 	Teardown func()
 }
 
-// catalogEventCounters returns mutation event counts for schema
+// catalogEventCounters registers a create/update mutation listener for schema and returns the tally the caller asserts against
 func catalogEventCounters(t *testing.T, schema *entityops.Schema) catalogListenerCounts {
 	t.Helper()
 
@@ -111,7 +111,7 @@ func findingCatalogPayload(externalID string) json.RawMessage {
 	return json.RawMessage(`{"external_id":"` + externalID + `","display_name":"Catalog Finding","description":"initial desc"}`)
 }
 
-// vulnerabilityCatalogPayload returns the minimal Vulnerability create-input payload
+// vulnerabilityCatalogPayload returns the minimal Vulnerability create-input payload for externalID
 func vulnerabilityCatalogPayload(externalID string) json.RawMessage {
 	return json.RawMessage(`{"external_id":"` + externalID + `","display_name":"Catalog Vulnerability","description":"initial desc"}`)
 }

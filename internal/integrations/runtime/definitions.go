@@ -6,7 +6,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// resolveDefinitionForInstallation resolves the definition for one installation
+// resolveDefinitionForInstallation resolves the definition for one installation, returning sentinels for nil installation or missing definition
 func (r *Runtime) resolveDefinitionForInstallation(installation *ent.Integration) (types.Definition, error) {
 	if installation == nil {
 		return types.Definition{}, ErrInstallationRequired

@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
-// activeOrTrialingSubscriptionPredicates matches active or trialing subscriptions
+// activeOrTrialingSubscriptionPredicates matches organizations with an active or trialing subscription
 func activeOrTrialingSubscriptionPredicates() []predicate.OrgSubscription {
 	return []predicate.OrgSubscription{
 		orgsubscription.DeletedAtIsNil(),
@@ -22,7 +22,7 @@ func activeOrTrialingSubscriptionPredicates() []predicate.OrgSubscription {
 	}
 }
 
-// systemSweepContext builds a system caller context bypassing org filtering and FGA
+// systemSweepContext builds a cross-organization system caller context bypassing org filtering and FGA
 func systemSweepContext(ctx context.Context) context.Context {
 	return auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), &auth.Caller{
 		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,

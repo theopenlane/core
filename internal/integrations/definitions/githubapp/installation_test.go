@@ -11,7 +11,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// TestResolveInstallationMetadataFromCredential verifies the bound credential's id wins
+// TestResolveInstallationMetadataFromCredential verifies the bound credential's installation id wins over
+// callback input and stored metadata, so a credential for a different installation resolves to that installation
 func TestResolveInstallationMetadataFromCredential(t *testing.T) {
 	t.Parallel()
 
@@ -35,7 +36,7 @@ func TestResolveInstallationMetadataFromCredential(t *testing.T) {
 	require.Equal(t, "cred-org", meta.OrganizationName)
 }
 
-// TestResolveInstallationMetadataFromInput verifies callback input wins when it has an id
+// TestResolveInstallationMetadataFromInput verifies callback input wins when it carries an installation id
 func TestResolveInstallationMetadataFromInput(t *testing.T) {
 	t.Parallel()
 
@@ -53,7 +54,7 @@ func TestResolveInstallationMetadataFromInput(t *testing.T) {
 	require.Equal(t, "input-org", meta.OrganizationName)
 }
 
-// TestResolveInstallationMetadataStoredFallback verifies stored metadata is used when input is nil
+// TestResolveInstallationMetadataStoredFallback verifies stored installation metadata is used when input is nil
 func TestResolveInstallationMetadataStoredFallback(t *testing.T) {
 	t.Parallel()
 
@@ -71,7 +72,7 @@ func TestResolveInstallationMetadataStoredFallback(t *testing.T) {
 	require.Equal(t, "11", meta.InstallationIdentity().ExternalID)
 }
 
-// TestResolveInstallationMetadataNoneAvailable verifies ok is false when nothing carries an id
+// TestResolveInstallationMetadataNoneAvailable verifies ok is false when neither input nor stored metadata carries an installation id
 func TestResolveInstallationMetadataNoneAvailable(t *testing.T) {
 	t.Parallel()
 

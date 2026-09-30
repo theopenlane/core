@@ -33,11 +33,13 @@ func newTestGala(t *testing.T) *gala.Gala {
 func TestNewMinimalConfig(t *testing.T) {
 	t.Parallel()
 
+	// keystore.NewStore requires a non-nil DB and returns an error for nil
 	_, err := keystore.NewStore(nil)
 	if err == nil {
 		t.Fatal("expected error from keystore.NewStore(nil)")
 	}
 
+	// New without a keystore should panic or error at wiring time
 	g := newTestGala(t)
 	reg := registry.New()
 	_ = reg.Register(types.Definition{

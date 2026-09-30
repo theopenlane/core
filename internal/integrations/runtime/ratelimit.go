@@ -16,7 +16,10 @@ import (
 // rateLimitKeyPrefix namespaces per-operation cooldown keys in redis
 const rateLimitKeyPrefix = "integrations:ratelimit:"
 
-// checkRateLimit enforces operation.RateLimit through the shared AllowN window limiter
+// checkRateLimit enforces operation.RateLimit through the shared AllowN window limiter, consuming one
+// execution from the operation's budget for the calling organization. Operations with no RateLimit
+// policy, executions with no calling organization, callers holding the internal operation capability,
+// or a server with no redis client configured are never limited
 func (r *Runtime) checkRateLimit(ctx context.Context, operation types.OperationRegistration) (bool, error) {
 	if operation.RateLimit == nil {
 		return true, nil
@@ -41,12 +44,15 @@ func (r *Runtime) checkRateLimit(ctx context.Context, operation types.OperationR
 	return r.AllowN(ctx, rateLimitKey(operation, orgID), 1, max(operation.RateLimit.Limit, 1), operation.RateLimit.Window)
 }
 
-// rateLimitKey builds the key scoping an operation's budget to the calling organization
+// rateLimitKey builds the key scoping an operation's execution budget to the calling organization,
+// using the operation topic which is unique per definition and operation
 func rateLimitKey(operation types.OperationRegistration, orgID string) string {
 	return fmt.Sprintf("%s:%s", operation.Topic, orgID)
 }
 
-// allowNScript atomically increments the window counter, refunding it when the limit is exceeded
+// allowNScript atomically increments the window counter, ensures the key always carries the window
+// TTL so redis expiry handles cleanup, and refunds the increment when the limit would be exceeded
+// the lua script is a little hard to read but is better than doing multiple round trips with the client methods
 var allowNScript = redis.NewScript(`
 local count = redis.call('INCRBY', KEYS[1], ARGV[1])
 if redis.call('PTTL', KEYS[1]) < 0 then
@@ -59,7 +65,10 @@ end
 return 1
 `)
 
-// AllowN reports whether n more executions fit in limit for window under the namespaced key
+// AllowN reports whether n additional executions fit within limit per window for the namespaced key,
+// consuming n from the window budget when allowed. Keys share the integrations rate limit namespace
+// and always expire after window, so no separate cleanup is required. A server with no redis client
+// configured is never limited
 func (r *Runtime) AllowN(ctx context.Context, key string, n int, limit int, window time.Duration) (bool, error) {
 	redisClient := r.Redis()
 	if redisClient == nil {

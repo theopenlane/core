@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/cli/config"
 )
 
+// const values used for the schema generator
 const (
 	tagName        = "koanf"
 	jsonSchemaPath = "./config/integrations.config.json"
@@ -31,7 +32,9 @@ const (
 	yamlIndentSpaces = 4
 )
 
-// includedPackages lists packages to include in schema generation
+// includedPackages is a list of packages to include in the schema generation
+// that contain Go comments to be added to the schema
+// any external packages must use the jsonschema description tags to add comments
 var includedPackages = []string{
 	"./config",
 }
@@ -58,13 +61,17 @@ func main() {
 	}
 }
 
-// generateSchema generates a JSON schema and a YAML schema from the given config
+// generateSchema generates a JSON schema and a YAML schema based on the provided schemaConfig and structure
 func generateSchema(c schemaConfig, structure any) error {
+	// override the default name to using the prefixed pkg name
 	r := jsonschema.Reflector{Namer: namePkg}
 	r.ExpandedStruct = true
+	// set `jsonschema:required` tag to true to generate required fields
 	r.RequiredFromJSONSchemaTags = true
+	// set the tag name to `koanf` for the koanf struct tags
 	r.FieldNameTag = tagName
 
+	// add go comments to the schema
 	for _, pkg := range includedPackages {
 		if err := r.AddGoComments("github.com/theopenlane/core/v2/internal/integrations/cli", pkg); err != nil {
 			panic(err.Error())
@@ -73,6 +80,7 @@ func generateSchema(c schemaConfig, structure any) error {
 
 	s := r.Reflect(structure)
 
+	// generate the json schema
 	data, err := json.MarshalIndent(s, "", "  ")
 	if err != nil {
 		panic(err.Error())
@@ -87,6 +95,7 @@ func generateSchema(c schemaConfig, structure any) error {
 		return fmt.Errorf("unmarshal json schema: %w", err)
 	}
 
+	// generate yaml schema with default values and inline comments
 	yamlConfig := &config.Config{}
 	defaults.SetDefaults(yamlConfig)
 

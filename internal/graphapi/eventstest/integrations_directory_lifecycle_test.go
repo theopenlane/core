@@ -18,7 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 )
 
-// TestDirectoryIntegrationDeleteThenReinstallRelinks verifies reinstalls relink surviving rows
+// TestDirectoryIntegrationDeleteThenReinstallRelinks verifies a same-tenant reinstall converges onto surviving rows instead of duplicating them
 func TestDirectoryIntegrationDeleteThenReinstallRelinks(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -126,7 +126,7 @@ func TestDirectoryIntegrationDeleteThenReinstallRelinks(t *testing.T) {
 	assert.Check(t, is.Equal(int64(1), counters.AccountUpdates.Load()), "a single material account change must emit exactly one account update event")
 }
 
-// TestDirectoryDifferentDefinitionSameTenantIsReadOnly verifies cross-definition syncs are read-only
+// TestDirectoryDifferentDefinitionSameTenantIsReadOnly pins the intent that a sync run must be read-only for another definition's installation on the same tenant
 func TestDirectoryDifferentDefinitionSameTenantIsReadOnly(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -190,7 +190,7 @@ func TestDirectoryDifferentDefinitionSameTenantIsReadOnly(t *testing.T) {
 	assert.Check(t, is.Equal(installationA.ID, membershipAfter.IntegrationID), "a different definition's confirming sync must not repoint another definition's membership")
 }
 
-// TestDirectoryDifferentDefinitionDifferentTenantIsolated verifies tenants stay isolated
+// TestDirectoryDifferentDefinitionDifferentTenantIsolated verifies two installations on distinct source_instance_id tenants never see each other's directory rows
 func TestDirectoryDifferentDefinitionDifferentTenantIsolated(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -260,7 +260,7 @@ func TestDirectoryDifferentDefinitionDifferentTenantIsolated(t *testing.T) {
 	assert.Check(t, aAfter.UpdatedAt.Equal(aBefore.UpdatedAt), "A's row must not be touched by C's ingest")
 }
 
-// TestDirectoryMembershipRemovalInference verifies the membership removal-inference lifecycle
+// TestDirectoryMembershipRemovalInference walks one installation through the full membership removal-inference lifecycle
 func TestDirectoryMembershipRemovalInference(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -277,6 +277,8 @@ func TestDirectoryMembershipRemovalInference(t *testing.T) {
 
 	cleanupDirectoryPrefix(t, ctx, []string{installation.ID}, prefix)
 
+	// snapshot removal adds the ingesting run to the removed row's integration_runs edge, which
+	// requires a real IntegrationRun id; production removal always runs under a run
 	run, err := suite.Client.DB.IntegrationRun.Create().
 		SetIntegrationID(installation.ID).
 		SetOwnerID(installation.OwnerID).
@@ -374,7 +376,9 @@ func TestDirectoryMembershipRemovalInference(t *testing.T) {
 	})
 }
 
-// TestDirectoryAccountDisappearanceIsRemovalResurrectedOnReAppearance verifies removal and resurrection
+// TestDirectoryAccountDisappearanceIsRemovalResurrectedOnReAppearance verifies a directory account
+// absent from a complete snapshot is removal-inferred the same as every other ingest schema, and
+// resurrected in place — the same row, not a new one — once it reappears in a later complete snapshot
 func TestDirectoryAccountDisappearanceIsRemovalResurrectedOnReAppearance(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -391,6 +395,8 @@ func TestDirectoryAccountDisappearanceIsRemovalResurrectedOnReAppearance(t *test
 
 	cleanupDirectoryPrefix(t, ctx, []string{installation.ID}, prefix)
 
+	// snapshot removal adds the ingesting run to the removed row's integration_runs edge, which
+	// requires a real IntegrationRun id; production removal always runs under a run
 	run, err := suite.Client.DB.IntegrationRun.Create().
 		SetIntegrationID(installation.ID).
 		SetOwnerID(installation.OwnerID).
@@ -438,7 +444,7 @@ func TestDirectoryAccountDisappearanceIsRemovalResurrectedOnReAppearance(t *test
 	assert.Check(t, is.Equal(before.ID, resurrected.ID), "resurrection must reuse the existing row, not create a new one")
 }
 
-// directoryRemovedMembershipByExternalIDs returns the removed membership episode for two externalIDs
+// directoryRemovedMembershipByExternalIDs loads the removed membership episode between the accounts and group identified by accountExternalID and groupExternalID
 func directoryRemovedMembershipByExternalIDs(ctx context.Context, t *testing.T, accountExternalID, groupExternalID string) *ent.DirectoryMembership {
 	t.Helper()
 
@@ -453,7 +459,7 @@ func directoryRemovedMembershipByExternalIDs(ctx context.Context, t *testing.T, 
 	return membership
 }
 
-// directoryRemovedMembershipCount returns the installation's removed membership count
+// directoryRemovedMembershipCount counts the installation's currently removed directory memberships
 func directoryRemovedMembershipCount(ctx context.Context, t *testing.T, integrationID string) int {
 	t.Helper()
 

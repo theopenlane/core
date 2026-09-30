@@ -34,6 +34,7 @@ func TestEncodeResult(t *testing.T) {
 	t.Run("unencodable value returns custom error", func(t *testing.T) {
 		t.Parallel()
 
+		// Channels cannot be marshaled to JSON
 		_, err := EncodeResult(make(chan int), errEncodeTest)
 		if !errors.Is(err, errEncodeTest) {
 			t.Fatalf("expected errEncodeTest, got %v", err)
@@ -104,6 +105,7 @@ func TestMarshalEnvelopeVariant(t *testing.T) {
 func TestMarshalEnvelope_EncodeError(t *testing.T) {
 	t.Parallel()
 
+	// Channels cannot be marshaled to JSON
 	_, err := MarshalEnvelope("items", make(chan int), errEncodeTest)
 	if !errors.Is(err, errEncodeTest) {
 		t.Fatalf("expected errEncodeTest, got %v", err)
@@ -186,6 +188,7 @@ func TestSchemaFrom(t *testing.T) {
 			t.Fatalf("schema is not valid JSON: %v", err)
 		}
 
+		// The reflector emits a $ref + $defs structure; verify the definition exists
 		defs, ok := schema["$defs"]
 		if !ok {
 			t.Fatal("expected $defs key in schema")

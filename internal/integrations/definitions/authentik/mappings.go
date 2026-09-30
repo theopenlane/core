@@ -5,7 +5,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
-// mapExprDirectoryAccount maps Authentik user payloads to DirectoryAccount
+// mapExprDirectoryAccount is the CEL mapping expression for Authentik user payloads mapped to DirectoryAccount
 var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.ExternalID.Expr(`'uid' in payload ? payload.uid : ""`),
 	entityops.DirectoryAccountFields.CanonicalEmail.Expr(`'email' in payload && payload.email != null ? payload.email : ""`),
@@ -20,7 +20,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
-// mapExprDirectoryGroup maps Authentik group payloads to DirectoryGroup
+// mapExprDirectoryGroup is the CEL mapping expression for Authentik group payloads mapped to DirectoryGroup
 var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.ExternalID.Expr(`'pk' in payload ? payload.pk : ""`),
 	entityops.DirectoryGroupFields.DisplayName.Expr(`'name' in payload && payload.name != null ? payload.name : ""`),
@@ -30,7 +30,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
-// mapExprDirectoryMembership maps Authentik membership payloads to DirectoryMembership
+// mapExprDirectoryMembership is the CEL mapping expression for Authentik membership payloads mapped to DirectoryMembership
 var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryAccountID.Expr(`'uid' in payload ? payload.uid : ""`),
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`resource != "" ? resource : ""`),

@@ -5,7 +5,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
-// IntegrationSource is integration provenance carried in an OperationContext's Attributes
+// IntegrationSource is the integration-specific provenance carried in the
+// Attributes of a gala.OperationContext for integration-originated events. It is
+// decoded on the handling side via gala.DecodeAttributes
 type IntegrationSource struct {
 	// IntegrationID identifies the target integration installation
 	IntegrationID string `json:"integrationId,omitempty" jsonschema:"description=Target integration installation identifier"`
@@ -25,7 +27,7 @@ type IntegrationSource struct {
 	Runtime bool `json:"runtime,omitempty" jsonschema:"description=Whether the execution uses the runtime provider path"`
 	// SkipCampaignEmailSync bypasses campaign_email sibling clearing during hook maintenance updates
 	SkipCampaignEmailSync bool `json:"skipCampaignEmailSync,omitempty" jsonschema:"description=Bypass campaign email sibling clearing"`
-	// SkipPrimaryDirectorySync bypasses primary_directory sibling clearing during hook updates
+	// SkipPrimaryDirectorySync bypasses primary_directory sibling clearing during hook maintenance updates
 	SkipPrimaryDirectorySync bool `json:"skipPrimaryDirectorySync,omitempty" jsonschema:"description=Bypass primary directory sibling clearing"`
 	// Workflow captures workflow linkage when the execution originates from a workflow
 	Workflow *WorkflowMeta `json:"workflow,omitempty" jsonschema:"description=Workflow linkage when present"`
@@ -34,7 +36,9 @@ type IntegrationSource struct {
 // integrationEntityType is the OperationContext entity type for integration installations
 const integrationEntityType = "integration"
 
-// NewOperationContext builds an OperationContext for an integration execution
+// NewOperationContext builds a gala.OperationContext for an integration execution,
+// promoting the integration installation as the queryable entity and marshaling the
+// integration source provenance into its Attributes
 func NewOperationContext(ownerID, operation string, src IntegrationSource) gala.OperationContext {
 	oc := gala.OperationContext{OwnerID: ownerID, Operation: operation}
 

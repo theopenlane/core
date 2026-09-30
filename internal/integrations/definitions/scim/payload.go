@@ -31,7 +31,7 @@ func BuildDirectoryAccountPayloadSet(attributes scim.ResourceAttributes, action 
 	)
 }
 
-// BuildDirectoryGroupPayloadSets builds ingest payload sets for a group and its memberships
+// BuildDirectoryGroupPayloadSets constructs ingest payload sets for a directory group and its memberships
 func BuildDirectoryGroupPayloadSets(attributes scim.ResourceAttributes, action string) ([]integrationtypes.IngestPayloadSet, error) {
 	payload := CloneSCIMAttributes(attributes)
 
@@ -78,7 +78,7 @@ func BuildDirectoryGroupPayloadSets(attributes scim.ResourceAttributes, action s
 	return []integrationtypes.IngestPayloadSet{groupPayloadSet, membershipPayloadSet}, nil
 }
 
-// BuildDirectoryPayloadSet builds an ingest payload set from schema, payload, and resource ID
+// BuildDirectoryPayloadSet constructs an ingest payload set from a schema name, payload, resource ID, and action
 func BuildDirectoryPayloadSet(schema string, payload any, resource string, action string) (integrationtypes.IngestPayloadSet, error) {
 	items, ok := payload.([]any)
 	if !ok {
@@ -142,7 +142,8 @@ func CloneSCIMValue(value any) any {
 	}
 }
 
-// DirectoryAccountExternalID resolves external ID from externalId, userName, or email
+// DirectoryAccountExternalID resolves the external ID for a directory account
+// by checking externalId, userName, and emails in fallback order
 func DirectoryAccountExternalID(attributes scim.ResourceAttributes) string {
 	if externalID, _ := attributes["externalId"].(string); strings.TrimSpace(externalID) != "" {
 		return strings.TrimSpace(externalID)
@@ -169,7 +170,8 @@ func DirectoryAccountExternalID(attributes scim.ResourceAttributes) string {
 	return ""
 }
 
-// DirectoryGroupExternalID resolves external ID from externalId or displayName
+// DirectoryGroupExternalID resolves the external ID for a directory group
+// by checking externalId and displayName in fallback order
 func DirectoryGroupExternalID(attributes scim.ResourceAttributes) string {
 	if externalID, _ := attributes["externalId"].(string); strings.TrimSpace(externalID) != "" {
 		return strings.TrimSpace(externalID)

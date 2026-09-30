@@ -5,7 +5,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
-// mapExprDirectoryAccount maps Okta user payloads to DirectoryAccount
+// mapExprDirectoryAccount is the CEL mapping expression for Okta user payloads mapped to DirectoryAccount
 var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.ExternalID.Expr(`'id' in payload ? payload.id : ""`),
 	entityops.DirectoryAccountFields.CanonicalEmail.Expr(`'profile' in payload && payload.profile != null && 'email' in payload.profile ? payload.profile.email : ""`),
@@ -20,7 +20,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
-// mapExprDirectoryGroup maps Okta group payloads to DirectoryGroup
+// mapExprDirectoryGroup is the CEL mapping expression for Okta group payloads mapped to DirectoryGroup
 var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.ExternalID.Expr(`'id' in payload ? payload.id : ""`),
 	entityops.DirectoryGroupFields.Email.Expr(`""`),
@@ -31,7 +31,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
-// mapExprDirectoryMembership maps Okta membership payloads to DirectoryMembership
+// mapExprDirectoryMembership is the CEL mapping expression for Okta membership payloads mapped to DirectoryMembership
 var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryAccountID.Expr(`'member' in payload && payload.member != null && 'id' in payload.member ? payload.member.id : ""`),
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`'group' in payload && payload.group != null && 'id' in payload.group ? payload.group.id : ""`),

@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/httpsling"
 )
 
-// TestQueryRepositoriesUsesConfiguredGraphQLEndpoint verifies the client uses the configured URL
+// TestQueryRepositoriesUsesConfiguredGraphQLEndpoint verifies that the client uses the configured API URL for GraphQL queries
 func TestQueryRepositoriesUsesConfiguredGraphQLEndpoint(t *testing.T) {
 	t.Parallel()
 
@@ -109,7 +109,7 @@ func TestCredentialFromBindings(t *testing.T) {
 	}
 }
 
-// TestTokenRefreshConfigFillsAppID verifies AppID is filled from credential when missing
+// TestTokenRefreshConfigFillsAppID verifies AppID is filled from credential when missing from operator config
 func TestTokenRefreshConfigFillsAppID(t *testing.T) {
 	t.Parallel()
 
@@ -120,7 +120,7 @@ func TestTokenRefreshConfigFillsAppID(t *testing.T) {
 	require.Equal(t, "99", cfg.AppID)
 }
 
-// TestBuildRefreshesExpiredInstallationToken verifies the client re-mints an expired token
+// TestBuildRefreshesExpiredInstallationToken verifies the client re-mints an installation token when the persisted one is expired.
 func TestBuildRefreshesExpiredInstallationToken(t *testing.T) {
 	t.Parallel()
 

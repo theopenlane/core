@@ -94,6 +94,7 @@ func main() {
 	gqlClient := graphql.NewClient("https://api.github.com/graphql", httpClient)
 	restClient := gh.NewClient(httpClient)
 
+	// step 1: check who the viewer is
 	fmt.Println("=== viewer identity ===")
 
 	var viewerQuery struct {
@@ -111,6 +112,7 @@ func main() {
 
 	fmt.Printf("viewer login: %s (type: %s)\n\n", viewerQuery.Viewer.Login, viewerQuery.Viewer.TypeName)
 
+	// step 2: query viewer.organizations (this is what production does)
 	fmt.Println("=== viewer.organizations (GraphQL — production path) ===")
 
 	var orgQuery struct {
@@ -139,6 +141,7 @@ func main() {
 
 	fmt.Println()
 
+	// step 3: query installation metadata via app JWT (requires app-level auth, not installation token)
 	fmt.Println("=== REST: installation details (via app JWT) ===")
 
 	jwtHTTPClient := oauth2.NewClient(ctx, oauth2.StaticTokenSource(&oauth2.Token{AccessToken: jwtToken}))
@@ -158,6 +161,7 @@ func main() {
 
 	fmt.Println()
 
+	// step 4: derive orgs from repo owners (works with installation token)
 	fmt.Println("=== orgs derived from viewer.repositories ===")
 
 	var repoQuery struct {
@@ -190,6 +194,7 @@ func main() {
 
 	fmt.Println()
 
+	// step 5: try querying the org directly using the account from the installation
 	var orgLogin string
 	if installation != nil && installation.GetAccount() != nil {
 		orgLogin = installation.GetAccount().GetLogin()
@@ -223,6 +228,7 @@ func main() {
 
 		fmt.Println()
 
+		// step 6: query SAML/SCIM external identities (requires SSO and org admin permissions)
 		fmt.Printf("=== SAML/SCIM external identities for %s ===\n", orgLogin)
 
 		var samlQuery struct {
@@ -308,6 +314,7 @@ func main() {
 
 		fmt.Println()
 
+		// step 7: also try REST org members for comparison
 		fmt.Printf("=== REST: org members for %s ===\n", orgLogin)
 
 		members, resp, err := restClient.Organizations.ListMembers(ctx, orgLogin, &gh.ListMembersOptions{
@@ -327,6 +334,7 @@ func main() {
 
 	fmt.Println()
 
+	// step 7: check installation permissions (what scopes do we have?)
 	fmt.Println("=== installation permissions ===")
 
 	if installation != nil && installation.Permissions != nil {

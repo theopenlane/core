@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// OAuthRegistrationOptions maps shared OAuth mechanics to a definition's credential type
+// OAuthRegistrationOptions describes how one definition maps shared OAuth mechanics to its local credential type
 type OAuthRegistrationOptions[T any] struct {
 	// CredentialRef identifies which credential slot receives the completed OAuth credential
 	CredentialRef types.CredentialRef[T]
@@ -20,7 +20,7 @@ type OAuthRegistrationOptions[T any] struct {
 	EncodeCredentialError error
 }
 
-// OAuthRegistration adapts the shared OAuth flow to a definition-local auth registration
+// OAuthRegistration adapts the shared OAuth transport flow to one definition-local auth registration
 func OAuthRegistration[T any](opts OAuthRegistrationOptions[T]) *types.AuthRegistration {
 	return &types.AuthRegistration{
 		CredentialRef: opts.CredentialRef.ID(),

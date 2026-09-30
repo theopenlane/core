@@ -11,12 +11,12 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// integrationEnvelope constrains envelopes carrying the integration as the operation entity
+// integrationEnvelope constrains the envelope types carrying the integration installation as the operation entity
 type integrationEnvelope interface {
 	Envelope | WebhookEnvelope
 }
 
-// integrationNotFoundCancel cancels and logs when the envelope's integration no longer exists
+// integrationNotFoundCancel builds a Cancel predicate that cancels and logs when the envelope's integration no longer exists
 func integrationNotFoundCancel[T integrationEnvelope](message string) func(context.Context, T, error) bool {
 	return func(ctx context.Context, envelope T, err error) bool {
 		if !ent.IsNotFound(err) {
@@ -38,7 +38,9 @@ func integrationNotFoundCancel[T integrationEnvelope](message string) func(conte
 	}
 }
 
-// RegisterRuntimeListeners registers the event, webhook, and definition-provided gala listeners
+// RegisterRuntimeListeners registers the event, webhook, and definition-provided gala listeners for
+// the integration runtime. Adaptive-scheduled pollers (reconcile, scheduled operations) register
+// themselves at the call site via their own Register*Listener functions
 func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, services types.RuntimeServices, operationHandle func(context.Context, Envelope) error, webhookHandle func(context.Context, WebhookEnvelope) error) error {
 	if runtime == nil {
 		return ErrGalaRequired

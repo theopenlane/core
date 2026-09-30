@@ -23,7 +23,7 @@ type FederationSpec struct {
 	AssertionOptions []tokens.ConfigOpt
 }
 
-// FederatedTokenSource builds a caching token source authenticating via identity federation
+// FederatedTokenSource builds a caching token source authenticating the installation's organization via identity federation
 func FederatedTokenSource(ctx context.Context, req types.ClientBuildRequest, spec FederationSpec) (oauth2.TokenSource, error) {
 	return oidc.NewTokenSource(ctx, oidc.FederationSource{
 		Manager:          req.TokenManager,

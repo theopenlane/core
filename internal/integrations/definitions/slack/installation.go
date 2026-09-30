@@ -9,7 +9,8 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// resolveInstallationMetadata derives Slack workspace metadata from the bound credential
+// resolveInstallationMetadata derives Slack workspace metadata from whichever credential is bound
+// and merges any provider input (for example, a user-selected default channel) supplied at install time
 func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	token, err := resolveAccessToken(req.Credentials)
 	if err != nil {

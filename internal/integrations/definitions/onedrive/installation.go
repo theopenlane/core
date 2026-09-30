@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/ssoutils"
 )
 
-// resolveInstallationMetadata derives OneDrive installation metadata from the access token
+// resolveInstallationMetadata derives OneDrive installation metadata from the persisted access token
 func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	cred, _, err := oneDriveCredential.Resolve(req.Credentials)
 	if err != nil {

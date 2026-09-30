@@ -3,7 +3,7 @@ package oidclocal
 import "errors"
 
 var (
-	// ErrOAuthTokenMissing indicates the OAuth access token is missing
+	// ErrOAuthTokenMissing indicates the OAuth access token is missing from the auth-managed credential
 	ErrOAuthTokenMissing = errors.New("oidclocal: oauth token missing")
 	// ErrSubjectMissing indicates the OIDC subject claim is missing from the auth-managed credential
 	ErrSubjectMissing = errors.New("oidclocal: subject claim missing")

@@ -53,6 +53,7 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrUnsupportedAuthType)
 	}
 
+	// if integrationID is empty, we assume this is a new installation and proceed to create a record that the auth flow can reference; if it is provided we will attempt to resolve and reuse the existing installation record for the auth flow
 	installationRec, _, err := h.IntegrationsRuntime.EnsureInstallation(requestCtx, caller.OrganizationID, in.IntegrationID, def)
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to resolve integration")
@@ -60,6 +61,8 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrIntegrationNotFound)
 	}
 
+	// required user input has to be satisfied before we hand out provider scopes, otherwise the
+	// install authorizes successfully and then fails every sync it runs
 	effectiveInput := in.UserInput
 	if jsonx.IsEmptyRawMessage(effectiveInput) {
 		effectiveInput = installationRec.Config.ClientConfig
@@ -71,6 +74,7 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrIntegrationUserInputRequired)
 	}
 
+	// if we got optional config with the input, persist it
 	if !jsonx.IsEmptyRawMessage(in.UserInput) {
 		if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, in.UserInput, types.CredentialSlotID{}, nil, nil); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to reconcile user input")
@@ -79,6 +83,7 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 		}
 	}
 
+	// we should basically never be trying to start auth flow without an integration record at this point
 	begin, err := h.IntegrationsRuntime.BeginAuth(requestCtx, keymaker.BeginRequest{
 		DefinitionID:   def.ID,
 		InstallationID: installationRec.ID,
@@ -96,6 +101,8 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 		"organization_id": caller.OrganizationID,
 	}
 
+	// ConsoleURL is the full base URL for the frontend (e.g. https://console.theopenlane.io).
+	// Accept either form with or without a trailing slash.
 	redirectTo := strings.TrimRight(h.ConsoleURL, "/") + h.IntegrationsConfig.ConsoleIntegrationPath + "/" + def.ID
 	cookies["redirect_to"] = redirectTo
 

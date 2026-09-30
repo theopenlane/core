@@ -19,7 +19,7 @@ import (
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 )
 
-// directoryMembershipByExternalIDs returns the active membership for two externalIDs
+// directoryMembershipByExternalIDs loads the active membership between the accounts and group identified by accountExternalID and groupExternalID
 func directoryMembershipByExternalIDs(ctx context.Context, t *testing.T, accountExternalID, groupExternalID string) *ent.DirectoryMembership {
 	t.Helper()
 
@@ -34,7 +34,7 @@ func directoryMembershipByExternalIDs(ctx context.Context, t *testing.T, account
 	return membership
 }
 
-// TestDirectoryFullSnapshotIdleResyncWritesNothing verifies idle resyncs write nothing
+// TestDirectoryFullSnapshotIdleResyncWritesNothing verifies an unchanged resync emits zero update events, and one material change produces exactly one
 func TestDirectoryFullSnapshotIdleResyncWritesNothing(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -93,7 +93,7 @@ func TestDirectoryFullSnapshotIdleResyncWritesNothing(t *testing.T) {
 	assert.Check(t, is.Equal(materialChange.account(changedExternalID).DisplayName, after.DisplayName))
 }
 
-// TestDirectoryGroupProfileChurnRidesAlongMaterialChange verifies group profile churn rides along material changes
+// TestDirectoryGroupProfileChurnRidesAlongMaterialChange verifies a change confined to the group profile bag is not written, counted, or emitted on its own, and lands once a display-name change follows
 func TestDirectoryGroupProfileChurnRidesAlongMaterialChange(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -148,7 +148,8 @@ func TestDirectoryGroupProfileChurnRidesAlongMaterialChange(t *testing.T) {
 	assert.Check(t, after.Profile["lastLoginTime"] == directoryProfileChurnedLastLogin, "the profile must ride along the material change")
 }
 
-// TestDirectoryMembershipMetadataChangePersisted verifies metadata persistence follows volatility
+// TestDirectoryMembershipMetadataChangePersisted verifies metadata persistence follows its volatility
+// descriptor and that a material role change persists the latest metadata in either configuration.
 func TestDirectoryMembershipMetadataChangePersisted(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
