@@ -31,7 +31,7 @@ type Registry struct {
 	galaListeners []types.GalaListenerRegistration
 }
 
-// Surface is the installation-facing surface of a definition: every kind that binds stored installation data to a definition type or name
+// Surface is a definition's installation-facing surface: every kind bound to stored data
 type Surface struct {
 	// ID is the canonical definition identifier
 	ID string `json:"id"`
@@ -43,13 +43,13 @@ type Surface struct {
 	Installation *SurfaceSchema `json:"installation,omitempty"`
 	// Connections lists every connection mode's selecting credential ref, sorted
 	Connections []string `json:"connections"`
-	// Operations lists every operation name with the retired names it takes over and its config schema, sorted by name
+	// Operations lists every operation with its retired names and config schema, sorted by name
 	Operations []SurfaceOperation `json:"operations,omitempty"`
 	// Webhooks lists every webhook contract with its events, sorted by name
 	Webhooks []SurfaceWebhook `json:"webhooks,omitempty"`
 }
 
-// SurfaceSchema is the stored schema of one kind and how its stored payloads are carried across versions
+// SurfaceSchema is the stored schema of one kind and its cross-version carry rules
 type SurfaceSchema struct {
 	// Schema is the reflected JSON schema of the stored type
 	Schema json.RawMessage `json:"schema"`
@@ -67,7 +67,7 @@ type SurfaceCredential struct {
 	SurfaceSchema
 }
 
-// SurfaceOperation is one operation registration, the retired names it takes over, and the schema of its config
+// SurfaceOperation is one operation's name, retired names, and config schema
 type SurfaceOperation struct {
 	// Name is the stable operation name
 	Name string `json:"name"`
@@ -81,13 +81,13 @@ type SurfaceOperation struct {
 type SurfaceWebhook struct {
 	// Name is the stable webhook contract name
 	Name string `json:"name"`
-	// Replaces lists the retired contract names whose persisted webhook rows this contract takes over, sorted
+	// Replaces lists retired contract names whose webhook rows this contract takes over, sorted
 	Replaces []string `json:"replaces,omitempty"`
 	// Events lists the contract's event names, sorted
 	Events []string `json:"events,omitempty"`
 }
 
-// DefinitionSurface projects a definition onto its installation-facing surface, sorted for stable encoding
+// DefinitionSurface projects a definition onto its installation-facing surface
 func DefinitionSurface(def types.Definition) Surface {
 	credentials := sortedProjection(def.CredentialRegistrations, func(registration types.CredentialRegistration) SurfaceCredential {
 		replaces := lo.Map(registration.Replaces, func(slot types.CredentialSlotID, _ int) string { return slot.String() })
@@ -320,7 +320,7 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 	return validateMappingLinks(def.Mappings)
 }
 
-// validateHealthCheck requires a health check with a handler when the definition declares connections, and a health check client built from every connection's credential slot
+// validateHealthCheck requires a health check handler when connections are declared
 func validateHealthCheck(def types.Definition) error {
 	check := def.HealthCheck
 
@@ -352,7 +352,7 @@ func validateHealthCheck(def types.Definition) error {
 	return nil
 }
 
-// populateMappingLinkTargets fills each mapping's cross-link inventory from the entityops catalog — one entry per edge, carrying the edge name, the target's match-key fields, and the source's mapped input keys — so the definition payload surfaces the exact identifiers a LinkRule may reference and configuration never falls back to free-typed field names
+// populateMappingLinkTargets fills each mapping's cross-link inventory from the entityops catalog
 func populateMappingLinkTargets(mappings []types.MappingRegistration) {
 	for i := range mappings {
 		sourceSchema, ok := entityops.LookupSchema(mappings[i].Schema)
@@ -382,7 +382,7 @@ func populateMappingLinkTargets(mappings []types.MappingRegistration) {
 	}
 }
 
-// targetLinkFields projects the match-key (indexed string) fields of a target schema — the fields a LinkRule.TargetField may name
+// targetLinkFields projects a target schema's match-key fields
 func targetLinkFields(fields []entityops.FieldDescriptor) []types.LinkFieldInfo {
 	return lo.FilterMap(fields, func(f entityops.FieldDescriptor, _ int) (types.LinkFieldInfo, bool) {
 		if !f.MatchKey {
@@ -393,7 +393,7 @@ func targetLinkFields(fields []entityops.FieldDescriptor) []types.LinkFieldInfo 
 	})
 }
 
-// sourceLinkFields projects the mapped input keys of the source schema — the keys present in the mapped ingest payload that a LinkRule.SourceField (scalar) or SourceList (list) may name
+// sourceLinkFields projects the source schema's mapped input keys
 func sourceLinkFields(fields []entityops.FieldDescriptor) []types.LinkFieldInfo {
 	return lo.FilterMap(fields, func(f entityops.FieldDescriptor, _ int) (types.LinkFieldInfo, bool) {
 		if f.InputKey == "" {
@@ -404,7 +404,7 @@ func sourceLinkFields(fields []entityops.FieldDescriptor) []types.LinkFieldInfo 
 	})
 }
 
-// ResolveLinkEdge resolves the edge a link rule links through: an explicit rule edge is looked up by name and checked against the declared target type; otherwise the target type must identify exactly one edge, since silently picking one of several (e.g. editors vs viewers, both targeting Group) would link through an arbitrary edge
+// ResolveLinkEdge resolves the edge a link rule links through, by name or unique target type
 func ResolveLinkEdge(sourceSchema *entityops.Schema, rule types.LinkRule) (entityops.EdgeDescriptor, error) {
 	if rule.Edge != "" {
 		edge, found := sourceSchema.EdgeByName(rule.Edge)
@@ -435,7 +435,7 @@ func ResolveLinkEdge(sourceSchema *entityops.Schema, rule types.LinkRule) (entit
 	}
 }
 
-// validateMappingLinks verifies every link rule a mapping declares against the entityops catalog — the edge resolves unambiguously, the match shape is coherent, the target field is a match key on the target, and the source fields are mapped input keys of the right shape — so a typo or an ambiguous target in a definition's link defaults fails at registration instead of silently misbehaving at ingest
+// validateMappingLinks validates every link rule a mapping declares against the entityops catalog
 func validateMappingLinks(mappings []types.MappingRegistration) error {
 	for _, mapping := range mappings {
 		if len(mapping.Spec.Links) == 0 {
@@ -455,7 +455,7 @@ func validateMappingLinks(mappings []types.MappingRegistration) error {
 	return nil
 }
 
-// ValidateLinkRules validates each rule against the source schema's catalog: the edge resolves unambiguously, the match shape is coherent, and the referenced fields exist with the right shape
+// ValidateLinkRules validates each rule's edge, match shape, and referenced fields
 func ValidateLinkRules(sourceSchema *entityops.Schema, rules []types.LinkRule) error {
 	for _, rule := range rules {
 		edge, err := ResolveLinkEdge(sourceSchema, rule)
@@ -471,7 +471,7 @@ func ValidateLinkRules(sourceSchema *entityops.Schema, rules []types.LinkRule) e
 	return nil
 }
 
-// validateLinkRuleFields checks one resolved rule's match configuration; edges targeting an unregistered schema are rejected since link resolution needs the target catalog
+// validateLinkRuleFields checks one resolved rule's match configuration
 func validateLinkRuleFields(sourceSchema *entityops.Schema, edge entityops.EdgeDescriptor, rule types.LinkRule) error {
 	if edge.Target == nil {
 		return fmt.Errorf("%w: %s.%s targets %s", ErrLinkTargetNotRegistered, sourceSchema.Name, edge.Name, edge.TargetType)
@@ -506,7 +506,7 @@ func validateLinkRuleFields(sourceSchema *entityops.Schema, edge entityops.EdgeD
 	return nil
 }
 
-// validateSourceKey checks that key is a mapped input key on the source schema whose type shape (scalar vs list) matches its LinkRule slot
+// validateSourceKey checks key is a mapped input key with the matching scalar/list shape
 func validateSourceKey(sourceSchema *entityops.Schema, key string, wantList bool) error {
 	field, found := lo.Find(sourceSchema.Fields, func(f entityops.FieldDescriptor) bool {
 		return f.InputKey == key
@@ -562,7 +562,7 @@ func compileDefinition(def types.Definition) (definitionEntry, error) {
 	}, nil
 }
 
-// indexClients indexes client registrations by client ref, requiring each to be identified and built only from declared credential slots
+// indexClients indexes clients by ref, requiring declared credential slots
 func indexClients(definitionID string, clients []types.ClientRegistration, declared []types.CredentialSlotID) (map[types.ClientID]types.ClientRegistration, error) {
 	for _, client := range clients {
 		switch {
@@ -576,7 +576,7 @@ func indexClients(definitionID string, clients []types.ClientRegistration, decla
 	return indexUnique(definitionID, "client", clients, func(client types.ClientRegistration) types.ClientID { return client.Ref }, nil)
 }
 
-// validateConnections requires each connection's selecting slot, credential slots, clients, auth slot, and disconnect slot to be declared, and each selecting slot to back one connection
+// validateConnections requires each connection's slots and clients to be declared and unique
 func validateConnections(definitionID string, connections []types.ConnectionRegistration, declared []types.CredentialSlotID, clients map[types.ClientID]types.ClientRegistration) error {
 	for _, connection := range connections {
 		slots := append([]types.CredentialSlotID{connection.CredentialRef}, connection.CredentialRefs...)
@@ -602,7 +602,7 @@ func validateConnections(definitionID string, connections []types.ConnectionRegi
 	return err
 }
 
-// indexOperations indexes operations by name, requiring exactly one handler, ingest contracts for ingest handlers, and a declared client
+// indexOperations indexes operations by name, validating handler and client requirements
 func indexOperations(definitionID string, operations []types.OperationRegistration, clients map[types.ClientID]types.ClientRegistration) (map[string]types.OperationRegistration, error) {
 	for _, operation := range operations {
 		switch {
@@ -622,7 +622,7 @@ func indexOperations(definitionID string, operations []types.OperationRegistrati
 	return indexUnique(definitionID, "operation", operations, func(operation types.OperationRegistration) string { return operation.Name }, nil)
 }
 
-// indexWebhooks indexes webhook contracts by name and their events by webhook and event name, requiring an event resolver and event handlers
+// indexWebhooks indexes webhook contracts and events, requiring resolver and handlers
 func indexWebhooks(definitionID string, webhooks []types.WebhookRegistration) (map[string]types.WebhookRegistration, map[string]map[string]types.WebhookEventRegistration, error) {
 	webhookEvents := make(map[string]map[string]types.WebhookEventRegistration, len(webhooks))
 
@@ -708,12 +708,12 @@ func (r *Registry) StaticWebhooks() []types.StaticWebhookEntry {
 	return entries
 }
 
-// IsRuntimeIntegration reports whether the given definition was provisioned as a runtime integration (no DB record, no keystore)
+// IsRuntimeIntegration reports whether the definition was provisioned as a runtime integration
 func (r *Registry) IsRuntimeIntegration(definitionID string) bool {
 	return r.definitions[definitionID].definition.RuntimeIntegration != nil
 }
 
-// lookupInEntry finds an entry by definition id, then looks up a value in the sub-map returned by getMap
+// lookupInEntry finds a definition entry, then looks up a value in its sub-map
 func lookupInEntry[K comparable, V any](r *Registry, id string, key K, getMap func(definitionEntry) map[K]V, notFoundErr error) (V, error) {
 	entry, ok := r.definitions[id]
 	if !ok {

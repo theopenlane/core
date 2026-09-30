@@ -191,7 +191,7 @@ func arnAccountID(arn string) string {
 	return parts[arnAccountIndex]
 }
 
-// listIAMUsers pages through all IAM users using Marker-based pagination and fetches tags for each user separately
+// listIAMUsers pages through all IAM users and fetches tags for each
 func listIAMUsers(ctx context.Context, client *iam.Client) ([]iamtypes.User, error) {
 	var users []iamtypes.User
 	input := &iam.ListUsersInput{MaxItems: awssdk.Int32(iamPageSize)}

@@ -28,7 +28,7 @@ import (
 // mockProviderToken is the bearer token the mock provider server validates
 const mockProviderToken = "mock-token"
 
-// mockAccountRecord renders a directory account record the mock provider serves and ingest maps through unchanged
+// mockAccountRecord returns a directory account record the mock provider serves
 func mockAccountRecord(externalID string) json.RawMessage {
 	return json.RawMessage(fmt.Sprintf(`{"external_id":%q,"canonical_email":%q,"display_name":%q}`, externalID, externalID+"@example.com", externalID))
 }
@@ -38,14 +38,12 @@ func mockGroupRecord(externalID string) json.RawMessage {
 	return json.RawMessage(fmt.Sprintf(`{"external_id":%q,"display_name":%q}`, externalID, externalID))
 }
 
-// mockMembershipRecord renders a directory membership record linking an account and group by external id
+// mockMembershipRecord returns a directory membership record linking two externalIDs
 func mockMembershipRecord(accountExternalID, groupExternalID string) json.RawMessage {
 	return json.RawMessage(fmt.Sprintf(`{"directory_account_id":%q,"directory_group_id":%q}`, accountExternalID, groupExternalID))
 }
 
-// connectMockInstall creates and connects a mock provider installation through the production
-// EnsureInstallation and Reconcile path, returning the reloaded installation once the real health
-// check has passed and the instance id has been resolved from what the provider reports
+// connectMockInstall returns a connected mock provider installation
 func connectMockInstall(ctx context.Context, t *testing.T, server *testint.MockHTTPServer) *ent.Integration {
 	t.Helper()
 
@@ -61,8 +59,7 @@ func connectMockInstall(ctx context.Context, t *testing.T, server *testint.MockH
 	return reloadIntegration(t, ctx, install.ID)
 }
 
-// executeMockSync runs the mock provider's directory sync through the production ExecuteOperation
-// entrypoint, which resolves the installation's credential and ingests whatever the provider reports
+// executeMockSync runs the mock provider's directory sync through ExecuteOperation
 func executeMockSync(ctx context.Context, t *testing.T, install *ent.Integration) {
 	t.Helper()
 
@@ -73,9 +70,7 @@ func executeMockSync(ctx context.Context, t *testing.T, install *ent.Integration
 	th.RequireNoError(t, err)
 }
 
-// clearInstallInstanceID clears one installation's stored instance id to simulate a legacy row
-// connected before the instance-id resolver existed, a connected credentialed state the current
-// connect flow can no longer produce and precisely what the gate and backfill exist to repair
+// clearInstallInstanceID clears one installation's stored instance id
 func clearInstallInstanceID(ctx context.Context, t *testing.T, id string) {
 	t.Helper()
 
@@ -84,9 +79,7 @@ func clearInstallInstanceID(ctx context.Context, t *testing.T, id string) {
 		Exec(privacy.DecisionContext(ctx, privacy.Allow)))
 }
 
-// legacyUnclaimedAccount creates a directory account FK-linked to the installation with no provenance
-// columns, the pre-migration shape production ingest never produces and the provenance backfill exists
-// to stamp
+// legacyUnclaimedAccount returns a directory account with no provenance columns
 func legacyUnclaimedAccount(ctx context.Context, t *testing.T, install *ent.Integration, externalID string) *ent.DirectoryAccount {
 	t.Helper()
 
@@ -102,9 +95,7 @@ func legacyUnclaimedAccount(ctx context.Context, t *testing.T, install *ent.Inte
 	return account
 }
 
-// TestMockProviderIngestStampsResolvedInstanceID drives EnsureInstallation, Reconcile, and
-// ExecuteOperation so provider-supplied records flow through the real ingest pipeline, proving connect
-// resolves the instance id and ingest stamps it as provenance on every record
+// TestMockProviderIngestStampsResolvedInstanceID verifies ingest stamps the resolved instance id
 func TestMockProviderIngestStampsResolvedInstanceID(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -150,8 +141,7 @@ func TestMockProviderIngestStampsResolvedInstanceID(t *testing.T) {
 	assert.Check(t, is.Equal("tenant-ingest", group.SourceInstanceID), "the provider group ingested with the resolved instance id")
 }
 
-// TestInstanceIDGatesIngest proves the ingest pipeline refuses an installation with no instance id and
-// resumes once the backfill re-resolves it from the provider, all through the real ExecuteOperation path
+// TestInstanceIDGatesIngest verifies ingest is gated without an instance id and resumes after backfill
 func TestInstanceIDGatesIngest(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -188,8 +178,7 @@ func TestInstanceIDGatesIngest(t *testing.T) {
 	assert.Check(t, is.Equal(install.ID, account.ManagedBy), "the ingested record is managed by the installation")
 }
 
-// TestHealthAssessmentRefreshesChangedInstanceID proves a health assessment re-resolves and overwrites
-// the stored instance id when the provider begins reporting a different one, with no direct write
+// TestHealthAssessmentRefreshesChangedInstanceID verifies health assessment refreshes a changed instance id
 func TestHealthAssessmentRefreshesChangedInstanceID(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -212,8 +201,7 @@ func TestHealthAssessmentRefreshesChangedInstanceID(t *testing.T) {
 	assert.Check(t, is.Equal("tenant-v2", reloadIntegration(t, ctx, install.ID).InstallationMetadata.Display.ExternalID), "the health assessment refreshes the instance id the provider now reports")
 }
 
-// TestReconnectRefreshesChangedInstanceID proves reconnecting with a valid credential refreshes the
-// stored instance id to the one the provider now reports instead of rejecting it as an instance mismatch
+// TestReconnectRefreshesChangedInstanceID verifies reconnect refreshes a changed instance id
 func TestReconnectRefreshesChangedInstanceID(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -234,9 +222,7 @@ func TestReconnectRefreshesChangedInstanceID(t *testing.T) {
 	assert.Check(t, is.Equal("tenant-v2", reloadIntegration(t, ctx, install.ID).InstallationMetadata.Display.ExternalID), "reconnect refreshes the changed instance id instead of rejecting it as a mismatch")
 }
 
-// TestDisconnectReinstallReclaimsIngestedRecord proves a record ingested by one installation is
-// re-claimed, not duplicated, by a fresh installation of the same provider on the same instance after
-// the first is disconnected, driven entirely through the production connect, disconnect, and ingest flow
+// TestDisconnectReinstallReclaimsIngestedRecord verifies a reinstall reclaims ingested records
 func TestDisconnectReinstallReclaimsIngestedRecord(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 

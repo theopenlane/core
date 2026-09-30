@@ -31,7 +31,7 @@ var (
 	testRuntimeSchema = jsonx.SchemaFrom[testRuntimeConfig]()
 )
 
-// testCredentialRegistration is the reusable credential registration declaring the test slot with its stored schema
+// testCredentialRegistration is the reusable credential registration for the test slot
 var testCredentialRegistration = testCredentialRef.Registration(integrationtypes.CredentialRegistration{})
 
 // newTestHealthCheck returns a definition health check that runs without a client
@@ -144,7 +144,7 @@ func TestRegistryRegisterAndResolveDefinition(t *testing.T) {
 	}
 }
 
-// TestRegistrySupportsMultipleClientsPerDefinition verifies a definition can register more than one client
+// TestRegistrySupportsMultipleClientsPerDefinition verifies multiple clients can register
 func TestRegistrySupportsMultipleClientsPerDefinition(t *testing.T) {
 	t.Parallel()
 
@@ -242,7 +242,7 @@ func TestValidateDefinitionAlreadyRegistered(t *testing.T) {
 	}
 }
 
-// assertDuplicateRejected verifies registration fails with ErrDuplicateRegistration and leaves the definition unregistered
+// assertDuplicateRejected verifies registration fails with ErrDuplicateRegistration
 func assertDuplicateRejected(t *testing.T, reg *Registry, def integrationtypes.Definition) {
 	t.Helper()
 
@@ -256,7 +256,7 @@ func assertDuplicateRejected(t *testing.T, reg *Registry, def integrationtypes.D
 	}
 }
 
-// TestDuplicateConnectionSlotRejected verifies two connections on the same credential slot are rejected
+// TestDuplicateConnectionSlotRejected verifies same-slot connections are rejected
 func TestDuplicateConnectionSlotRejected(t *testing.T) {
 	t.Parallel()
 
@@ -333,7 +333,7 @@ func TestDuplicateWebhookNameRejected(t *testing.T) {
 	assertDuplicateRejected(t, reg, def)
 }
 
-// TestDuplicateWebhookEventNameRejected verifies two events with the same name within one webhook are rejected
+// TestDuplicateWebhookEventNameRejected verifies same-named events in one webhook are rejected
 func TestDuplicateWebhookEventNameRejected(t *testing.T) {
 	t.Parallel()
 
@@ -359,7 +359,7 @@ func TestDuplicateWebhookEventNameRejected(t *testing.T) {
 	assertDuplicateRejected(t, reg, def)
 }
 
-// TestDuplicateOperationTopicAcrossDefinitionsRejected verifies a second definition claiming a held operation topic is rejected without touching the registry
+// TestDuplicateOperationTopicAcrossDefinitionsRejected verifies a held topic claim is rejected
 func TestDuplicateOperationTopicAcrossDefinitionsRejected(t *testing.T) {
 	t.Parallel()
 
@@ -392,7 +392,7 @@ func TestDuplicateOperationTopicAcrossDefinitionsRejected(t *testing.T) {
 	}
 }
 
-// TestDuplicateWebhookEventTopicAcrossDefinitionsRejected verifies a second definition claiming a held webhook event topic is rejected without touching the registry
+// TestDuplicateWebhookEventTopicAcrossDefinitionsRejected verifies a held topic is rejected
 func TestDuplicateWebhookEventTopicAcrossDefinitionsRejected(t *testing.T) {
 	t.Parallel()
 
@@ -457,7 +457,7 @@ func TestValidateOperatorConfigSchemaRequired(t *testing.T) {
 	}
 }
 
-// TestValidateCredentialSchemaRequired verifies a credential registration without a stored schema is rejected
+// TestValidateCredentialSchemaRequired verifies a credential without a stored schema is rejected
 func TestValidateCredentialSchemaRequired(t *testing.T) {
 	t.Parallel()
 
@@ -510,7 +510,7 @@ func TestIndexClientsInvalidRef(t *testing.T) {
 	}
 }
 
-// TestIndexClientsCredentialRefNotDeclared verifies client referencing undeclared credential is rejected
+// TestIndexClientsCredentialRefNotDeclared verifies an undeclared client credential is rejected
 func TestIndexClientsCredentialRefNotDeclared(t *testing.T) {
 	t.Parallel()
 
@@ -620,7 +620,7 @@ func TestIndexOperationsIngestHandlerWithContracts(t *testing.T) {
 	}
 }
 
-// TestIndexOperationsSnapshotRequiresIngestHandle verifies Policy.Snapshot without an IngestHandle is rejected
+// TestIndexOperationsSnapshotRequiresIngestHandle verifies Snapshot needs an IngestHandle
 func TestIndexOperationsSnapshotRequiresIngestHandle(t *testing.T) {
 	t.Parallel()
 
@@ -643,7 +643,7 @@ func TestIndexOperationsSnapshotRequiresIngestHandle(t *testing.T) {
 	}
 }
 
-// TestIndexOperationsSnapshotWithIngestHandle verifies Policy.Snapshot with an IngestHandle succeeds
+// TestIndexOperationsSnapshotWithIngestHandle verifies Snapshot with an IngestHandle succeeds
 func TestIndexOperationsSnapshotWithIngestHandle(t *testing.T) {
 	t.Parallel()
 
@@ -843,7 +843,7 @@ func TestDefinitionNotFound(t *testing.T) {
 	}
 }
 
-// TestClientNotFoundInDefinition verifies client lookup for unknown client ID within a valid definition
+// TestClientNotFoundInDefinition verifies lookup of an unknown client ID fails
 func TestClientNotFoundInDefinition(t *testing.T) {
 	t.Parallel()
 
@@ -862,7 +862,7 @@ func TestClientNotFoundInDefinition(t *testing.T) {
 	}
 }
 
-// TestOperationNotFoundInDefinition verifies operation lookup for unknown name within a valid definition
+// TestOperationNotFoundInDefinition verifies lookup of an unknown operation name fails
 func TestOperationNotFoundInDefinition(t *testing.T) {
 	t.Parallel()
 
@@ -879,7 +879,7 @@ func TestOperationNotFoundInDefinition(t *testing.T) {
 	}
 }
 
-// TestWebhookNotFoundInDefinition verifies webhook lookup for unknown name within a valid definition
+// TestWebhookNotFoundInDefinition verifies lookup of an unknown webhook name fails
 func TestWebhookNotFoundInDefinition(t *testing.T) {
 	t.Parallel()
 
@@ -1077,7 +1077,7 @@ func TestConnectionCredentialRefRequired(t *testing.T) {
 	}
 }
 
-// TestConnectionCredentialRefNotDeclared verifies connection referencing undeclared credential is rejected
+// TestConnectionCredentialRefNotDeclared verifies an undeclared credential is rejected
 func TestConnectionCredentialRefNotDeclared(t *testing.T) {
 	t.Parallel()
 
@@ -1101,7 +1101,7 @@ func TestConnectionCredentialRefNotDeclared(t *testing.T) {
 	}
 }
 
-// TestConnectionAdditionalCredentialRefNotDeclared verifies connection with extra undeclared credential ref is rejected
+// TestConnectionAdditionalCredentialRefNotDeclared verifies extra undeclared refs are rejected
 func TestConnectionAdditionalCredentialRefNotDeclared(t *testing.T) {
 	t.Parallel()
 
@@ -1162,7 +1162,7 @@ func TestConnectionClientRefNotDeclared(t *testing.T) {
 	}
 }
 
-// TestHealthCheckRequiredWithConnections verifies a definition declaring connections without a health check is rejected
+// TestHealthCheckRequiredWithConnections verifies connections need a health check
 func TestHealthCheckRequiredWithConnections(t *testing.T) {
 	t.Parallel()
 
@@ -1213,7 +1213,7 @@ func TestHealthCheckHandlerRequired(t *testing.T) {
 	}
 }
 
-// TestHealthCheckClientNotDeclared verifies a definition health check with an unknown client ref is rejected
+// TestHealthCheckClientNotDeclared verifies an unknown health check client ref is rejected
 func TestHealthCheckClientNotDeclared(t *testing.T) {
 	t.Parallel()
 
@@ -1243,7 +1243,7 @@ func TestHealthCheckClientNotDeclared(t *testing.T) {
 	}
 }
 
-// TestHealthCheckClientCredentialMissing verifies a health check client not built from every connection's credential slot is rejected
+// TestHealthCheckClientCredentialMissing verifies a missing credential slot is rejected
 func TestHealthCheckClientCredentialMissing(t *testing.T) {
 	t.Parallel()
 
@@ -1288,7 +1288,7 @@ func TestHealthCheckClientCredentialMissing(t *testing.T) {
 	}
 }
 
-// TestConnectionAuthCredentialRefNotDeclared verifies connection auth with undeclared credential ref is rejected
+// TestConnectionAuthCredentialRefNotDeclared verifies undeclared auth refs are rejected
 func TestConnectionAuthCredentialRefNotDeclared(t *testing.T) {
 	t.Parallel()
 
@@ -1319,7 +1319,7 @@ func TestConnectionAuthCredentialRefNotDeclared(t *testing.T) {
 	}
 }
 
-// TestConnectionAuthCredentialRefEmpty verifies connection auth with zero-value credential ref is rejected
+// TestConnectionAuthCredentialRefEmpty verifies a zero-value auth credential ref is rejected
 func TestConnectionAuthCredentialRefEmpty(t *testing.T) {
 	t.Parallel()
 
@@ -1349,7 +1349,7 @@ func TestConnectionAuthCredentialRefEmpty(t *testing.T) {
 	}
 }
 
-// TestConnectionDisconnectCredentialRefNotDeclared verifies connection disconnect with undeclared credential ref is rejected
+// TestConnectionDisconnectCredentialRefNotDeclared verifies undeclared disconnect refs fail
 func TestConnectionDisconnectCredentialRefNotDeclared(t *testing.T) {
 	t.Parallel()
 
@@ -1380,7 +1380,7 @@ func TestConnectionDisconnectCredentialRefNotDeclared(t *testing.T) {
 	}
 }
 
-// TestConnectionDisconnectCredentialRefEmpty verifies connection disconnect with zero-value credential ref is rejected
+// TestConnectionDisconnectCredentialRefEmpty verifies a zero-value disconnect ref is rejected
 func TestConnectionDisconnectCredentialRefEmpty(t *testing.T) {
 	t.Parallel()
 
@@ -1410,7 +1410,7 @@ func TestConnectionDisconnectCredentialRefEmpty(t *testing.T) {
 	}
 }
 
-// TestConnectionFullyWiredSuccess verifies a fully wired connection with auth, disconnect, validation, and client refs succeeds
+// TestConnectionFullyWiredSuccess verifies a fully wired connection succeeds
 func TestConnectionFullyWiredSuccess(t *testing.T) {
 	t.Parallel()
 
@@ -1453,7 +1453,7 @@ func TestConnectionFullyWiredSuccess(t *testing.T) {
 	}
 }
 
-// TestConnectionAutoAppendsCredentialRef verifies CredentialRef is auto-appended to CredentialRefs when not present
+// TestConnectionAutoAppendsCredentialRef verifies CredentialRef auto-appends to CredentialRefs
 func TestConnectionAutoAppendsCredentialRef(t *testing.T) {
 	t.Parallel()
 
@@ -1480,7 +1480,7 @@ func TestConnectionAutoAppendsCredentialRef(t *testing.T) {
 	}
 }
 
-// TestRuntimeIntegrationRegistration verifies a definition with RuntimeIntegration can register and cache a client
+// TestRuntimeIntegrationRegistration verifies RuntimeIntegration registers and caches a client
 func TestRuntimeIntegrationRegistration(t *testing.T) {
 	t.Parallel()
 
@@ -1524,7 +1524,7 @@ func TestRuntimeIntegrationRegistration(t *testing.T) {
 	}
 }
 
-// TestRuntimeIntegrationNilConfig verifies a runtime definition with nil config registers but has no cached client
+// TestRuntimeIntegrationNilConfig verifies nil config registers without a cached client
 func TestRuntimeIntegrationNilConfig(t *testing.T) {
 	t.Parallel()
 
@@ -1622,7 +1622,7 @@ func TestRuntimeCoexistsWithCredentials(t *testing.T) {
 	}
 }
 
-// TestRuntimeCoexistsWithOperatorConfig verifies a definition can declare both a runtime integration and operator config
+// TestRuntimeCoexistsWithOperatorConfig verifies runtime integration and operator config coexist
 func TestRuntimeCoexistsWithOperatorConfig(t *testing.T) {
 	t.Parallel()
 

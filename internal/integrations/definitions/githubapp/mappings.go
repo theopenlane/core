@@ -87,7 +87,7 @@ var (
 		entityops.VulnerabilityFields.DependencyScope.Expr(`'dependency' in payload && 'scope' in payload.dependency ? payload.dependency.scope : ""`),
 	},
 	)
-	// mapExprDependabotPoll is the CEL mapping expression for Dependabot alerts collected via GraphQL poll
+	// mapExprDependabotPoll is the CEL mapping expression for Dependabot alerts collected via poll
 	mapExprDependabotPoll = buildPollMappingExpr(githubAlertTypeDependabot, `"github:" + resource + ":dependabot:" + ('Number' in payload && payload.Number != 0 ? string(payload.Number) : ('SecurityVulnerability' in payload && 'Advisory' in payload.SecurityVulnerability && 'GHSAID' in payload.SecurityVulnerability.Advisory && payload.SecurityVulnerability.Advisory.GHSAID != "" ? payload.SecurityVulnerability.Advisory.GHSAID : "unknown"))`, []entityops.MappingEntry{
 		entityops.VulnerabilityFields.DisplayName.Expr(`'SecurityVulnerability' in payload && 'Advisory' in payload.SecurityVulnerability && 'Identifiers' in payload.SecurityVulnerability.Advisory && payload.SecurityVulnerability.Advisory.Identifiers.filter(i, i.Type == "CVE").size() > 0 ? payload.SecurityVulnerability.Advisory.Identifiers.filter(i, i.Type == "CVE")[0].Value : 'GHSAID' in payload.SecurityVulnerability.Advisory ? payload.SecurityVulnerability.Advisory.GHSAID : ""`),
 		entityops.VulnerabilityFields.Severity.Expr(`'SecurityVulnerability' in payload && 'Severity' in payload.SecurityVulnerability ? payload.SecurityVulnerability.Severity : ""`),
@@ -125,7 +125,7 @@ var (
 // exprRepositoryNameWithOwner is the map expression yielding a repository's owner-qualified name
 const exprRepositoryNameWithOwner = "payload.NameWithOwner"
 
-// mapExprRepositoryAsset is the CEL mapping expression for GitHub repository payloads mapped to Asset
+// mapExprRepositoryAsset is the CEL mapping expression for GitHub repository payloads
 var mapExprRepositoryAsset = providerkit.CelMapExpr(
 	entityops.AssetFields.SourceIdentifier.Expr(exprRepositoryNameWithOwner),
 	entityops.AssetFields.DisplayName.Expr(exprRepositoryNameWithOwner),
@@ -136,7 +136,7 @@ var mapExprRepositoryAsset = providerkit.CelMapExpr(
 	entityops.AssetFields.Categories.Expr(`payload.IsPrivate ? ["private", "repository"] : ["public", "repository"]`),
 )
 
-// mapExprDirectoryAccount is the CEL mapping expression for GitHub organization member payloads mapped to DirectoryAccount
+// mapExprDirectoryAccount is the CEL mapping expression for GitHub organization member payloads
 var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.ExternalID.Expr(`payload.DatabaseID != 0 ? string(payload.DatabaseID) : payload.Login`),
 	entityops.DirectoryAccountFields.CanonicalEmail.Expr(`payload.CanonicalEmail != "" ? payload.CanonicalEmail : payload.Login`),
@@ -160,7 +160,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
-// mapExprDirectoryMembership is the CEL mapping expression for GitHub team memberships mapped to DirectoryMembership
+// mapExprDirectoryMembership is the CEL mapping expression for GitHub team memberships
 var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryAccountID.Expr(`payload.Member.DatabaseID != 0 ? string(payload.Member.DatabaseID) : payload.Member.Login`),
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`payload.Team.DatabaseID != 0 ? string(payload.Team.DatabaseID) : payload.Team.Slug`),

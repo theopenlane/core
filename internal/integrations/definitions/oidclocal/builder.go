@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// Builder returns the local Dex-backed OIDC definition builder with the supplied operator config applied
+// Builder returns the local Dex-backed OIDC definition builder
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		active := cfg.Enabled &&

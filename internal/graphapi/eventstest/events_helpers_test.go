@@ -50,8 +50,7 @@ func harnessReconcileOperation(t *testing.T, mode string) string {
 	return ""
 }
 
-// newHarnessInstallation installs the test integration in the given mode through the prod
-// connect flow; the unresolvable mode stores a non-token credential so the client cannot build
+// newHarnessInstallation installs the test integration in the given mode through the prod connect flow; the unresolvable mode stores a non-token credential so the client cannot build
 func newHarnessInstallation(t *testing.T, ctx context.Context, mode string) (*ent.Integration, string) {
 	t.Helper()
 
@@ -79,8 +78,7 @@ func newHarnessInstallation(t *testing.T, ctx context.Context, mode string) (*en
 	return reloadIntegration(t, ctx, installation.ID), fragment
 }
 
-// seedHarnessLoop installs the test integration in recurring mode and asserts the connect flow
-// seeded exactly one loop
+// seedHarnessLoop installs the test integration in recurring mode and asserts the connect flow seeded exactly one loop
 func seedHarnessLoop(t *testing.T, ctx context.Context) (*ent.Integration, string) {
 	t.Helper()
 
@@ -93,8 +91,7 @@ func seedHarnessLoop(t *testing.T, ctx context.Context) (*ent.Integration, strin
 	return installation, fragment
 }
 
-// reconcileLoopFragment builds the metadata containment fragment identifying the recurring
-// loop jobs for one installation and operation, matching the keys ResetReconcileLoops uses
+// reconcileLoopFragment builds the metadata containment fragment identifying the recurring loop jobs for one installation and operation, matching the keys ResetReconcileLoops uses
 func reconcileLoopFragment(t *testing.T, integrationID, operation string) string {
 	t.Helper()
 
@@ -142,10 +139,6 @@ func reloadIntegration(t *testing.T, ctx context.Context, id string) *ent.Integr
 
 	return installation
 }
-
-// TestIntegrationLifecycle drives one slack installation through seeding, unhealthy,
-// recovery, listener-driven cancel/reseed, duplicate collapse, and soft delete; subtests
-// share the installation and run in order
 
 // waitForCondition polls condition until it holds or the deadline passes
 func waitForCondition(t *testing.T, condition func() bool, msg string) {

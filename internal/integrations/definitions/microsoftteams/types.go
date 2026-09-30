@@ -35,7 +35,7 @@ type teamsCred struct {
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
-	// DefaultMessaging marks this installation as the preferred Teams tenant for workflow messaging operations
+	// DefaultMessaging marks this installation as the preferred tenant for messaging
 	DefaultMessaging bool `json:"defaultMessaging,omitempty" jsonschema:"title=Default Messaging"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`

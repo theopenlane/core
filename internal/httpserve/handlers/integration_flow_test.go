@@ -101,7 +101,6 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_Success() {
 	startRec, startResp := suite.startIntegrationAuth(t, user.UserCtx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
 	cookies := cookieMap(startRec.Result().Cookies())
 
-	// OAuth state is embedded in the auth URL, not the session key (startResp.State)
 	authURL, err := url.Parse(startResp.AuthURL)
 	assert.NoError(t, err)
 	oauthState := authURL.Query().Get("state")

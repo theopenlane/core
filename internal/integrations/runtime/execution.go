@@ -25,7 +25,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// operationCompletedSummary is the run summary recorded for a successful operation that ingests no records
+// operationCompletedSummary is the run summary for a successful operation that ingests no records
 const operationCompletedSummary = "operation completed"
 
 // reconcileOutput is the structured output recorded on reconcile River jobs for UI visibility
@@ -48,7 +48,7 @@ type reconcileOutput struct {
 	DurationMS int64 `json:"duration_ms"`
 }
 
-// HandleReconcile executes one recurring operation cycle inline and returns the delta for adaptive scheduling; envelopes with no integration ID run the scheduled runtime path
+// HandleReconcile executes one recurring operation cycle inline and returns the scheduling delta
 func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.ReconcileEnvelope) (int, error) {
 	oc := envelope.OperationContext
 	src := types.IntegrationSourceFrom(oc)
@@ -184,7 +184,7 @@ func (r *Runtime) failReconcileCycle(ctx context.Context, cycle reconcileCycle, 
 	return execErr
 }
 
-// completeReconcileCycle records a successful cycle on its run and river output, returning the change delta
+// completeReconcileCycle records a successful cycle on its run and river output
 func (r *Runtime) completeReconcileCycle(ctx context.Context, cycle reconcileCycle, operation types.OperationRegistration, response json.RawMessage, ingestResult operations.IngestResult) (int, error) {
 	delta := ingestResult.Changed
 
@@ -209,7 +209,7 @@ func (r *Runtime) completeReconcileCycle(ctx context.Context, cycle reconcileCyc
 	return delta, nil
 }
 
-// executionRunResult renders one execution's terminal run result from its response, ingest counters, and error; ingest selects the record-count summary for successful ingest operations
+// executionRunResult renders one execution's terminal run result from its response and error
 func executionRunResult(ingest bool, response json.RawMessage, ingestResult operations.IngestResult, execErr error) operations.RunResult {
 	metrics := operations.IngestMetrics(ingestResult)
 	metrics["response"] = jsonx.DecodeAnyOrNil(response)
@@ -242,7 +242,7 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, integration *ent.Integra
 	return r.executeOperationInline(ctx, integration, integration.DefinitionID, operation, credentials, config)
 }
 
-// ExecuteRuntimeOperation runs one system-initiated operation inline against a definition's cached runtime client, with no Integration installation and no run tracking
+// ExecuteRuntimeOperation runs a system-initiated operation inline with no installation
 func (r *Runtime) ExecuteRuntimeOperation(ctx context.Context, definitionID, operationName string, config json.RawMessage) (json.RawMessage, error) {
 	operation, err := r.Registry().Operation(definitionID, operationName)
 	if err != nil {
@@ -252,7 +252,7 @@ func (r *Runtime) ExecuteRuntimeOperation(ctx context.Context, definitionID, ope
 	return r.executeOperationInline(ctx, nil, definitionID, operation, nil, config)
 }
 
-// executeOperationInline runs one integration operation inline without run tracking, if there is no integration ID it runs as an runtime client
+// executeOperationInline runs one integration operation inline without run tracking
 func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.Integration, definitionID string, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage) (json.RawMessage, error) {
 	switch {
 	case integration == nil:
@@ -348,7 +348,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	return finish(err, operation.IngestHandle != nil, response, ingestResult)
 }
 
-// resumeTrackedRun marks the envelope's run running, continuing under a retry run when the run already left pending
+// resumeTrackedRun marks the envelope's run running, retrying under a new run if needed
 func (r *Runtime) resumeTrackedRun(ctx context.Context, oc *gala.OperationContext, src *types.IntegrationSource) (context.Context, error) {
 	db := r.DB()
 
@@ -392,7 +392,7 @@ func (r *Runtime) BuildClientForIntegration(ctx context.Context, integration *en
 	return r.keystore().BuildClient(ctx, integration, registration, credentials, nil, false)
 }
 
-// executeResolvedOperation executes the given operation with the input integration and registered Operation
+// executeResolvedOperation executes the given operation against the resolved client and config
 func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, operations.IngestResult, error) {
 	client, credentials, err := r.resolveOperationClient(ctx, integration, operation, credentials, config, clientForce)
 	if err != nil {
@@ -470,7 +470,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 	return response, result, nil
 }
 
-// SeedReconcileJobs resets the recurring loops of every operational installation whose active definition declares a reconcilable operation
+// SeedReconcileJobs resets recurring loops for installations with a reconcilable operation
 func (r *Runtime) SeedReconcileJobs(ctx context.Context) error {
 	definitionIDs := lo.FilterMap(r.Registry().Definitions(), func(def types.Definition, _ int) (string, bool) {
 		return def.ID, def.Active && lo.SomeBy(def.Operations, func(op types.OperationRegistration) bool { return op.Policy.Reconcile })
@@ -500,7 +500,7 @@ func (r *Runtime) SeedReconcileJobs(ctx context.Context) error {
 	})...)
 }
 
-// isOrgSubscriptionActive reports whether the organization's subscription permits recurring operations, always true when entitlements are disabled
+// isOrgSubscriptionActive reports whether the org's subscription permits recurring operations
 func (r *Runtime) isOrgSubscriptionActive(ctx context.Context, orgID string) (bool, error) {
 	client := r.DB()
 
@@ -524,7 +524,7 @@ func (r *Runtime) isOrgSubscriptionActive(ctx context.Context, orgID string) (bo
 		Exist(privacy.DecisionContext(ctx, privacy.Allow))
 }
 
-// PurgeInstallationJobs removes every queued River job bound to the installation across the operation-context and per-record ingest job families and returns how many were purged
+// PurgeInstallationJobs removes every queued River job bound to the installation
 func (r *Runtime) PurgeInstallationJobs(ctx context.Context, integrationID string) (int, error) {
 	operationJobs, err := types.PropertiesFragment(map[string]string{"entityId": integrationID, "entityType": "integration"})
 	if err != nil {
@@ -550,7 +550,7 @@ func (r *Runtime) PurgeInstallationJobs(ctx context.Context, integrationID strin
 	return purged, nil
 }
 
-// resolveOperationClient resolves the client and credentials an operation runs with: none for client-less operations, the definition's cached runtime client without an installation, and the installation's built client otherwise
+// resolveOperationClient resolves the client and credentials an operation runs with
 func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool) (any, types.CredentialBindings, error) {
 	switch {
 	case !operation.ClientRef.Valid():

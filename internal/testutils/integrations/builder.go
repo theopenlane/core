@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
-// Builder returns the shared test integration definition; only the reconcile operations are input-gated, since seeding sweeps every reconcile-policy operation on a connected installation
+// Builder returns the shared test integration definition
 func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{

@@ -119,7 +119,7 @@ type orgNode struct {
 // directorySyncOperation is the operation ref for the GitHub directory sync operation
 var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(gitHubClient, runDirectorySync)
 
-// runDirectorySync collects GitHub organization members, teams, and team memberships for directory ingest
+// runDirectorySync collects GitHub org members, teams, and team memberships for directory ingest
 func runDirectorySync(ctx context.Context, _ types.OperationRequest, client GraphQLClient, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	orgs, err := queryViewerOrganizations(ctx, client)
 	if err != nil {
@@ -217,7 +217,7 @@ func runDirectorySync(ctx context.Context, _ types.OperationRequest, client Grap
 	return payloadSets, nil
 }
 
-// resolveCanonicalEmail sets the best email for a member using the priority chain: SAML nameId > organization verified domain email > public profile email, and collects every remaining confirmed email as an alias for identity resolution
+// resolveCanonicalEmail sets the best email for a member and collects remaining confirmed aliases
 func resolveCanonicalEmail(member *orgMemberNode, samlMap map[string]samlIdentity) {
 	if samlMap != nil {
 		if saml, ok := samlMap[member.Login]; ok {
@@ -241,7 +241,7 @@ func resolveCanonicalEmail(member *orgMemberNode, samlMap map[string]samlIdentit
 	}))
 }
 
-// queryViewerOrganizations discovers organizations accessible to the GitHub App installation by extracting unique organization owners from the installation's accessible repositories
+// queryViewerOrganizations discovers organizations accessible to the GitHub App installation
 func queryViewerOrganizations(ctx context.Context, client GraphQLClient) ([]orgNode, error) {
 	seen := make(map[string]struct{})
 	var orgs []orgNode

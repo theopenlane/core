@@ -15,7 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// TestGitHubDirectoryMembershipMapping verifies team membership payloads carry the provider role through to the mapped document
+// TestGitHubDirectoryMembershipMapping verifies the provider role carries into the mapped document
 func TestGitHubDirectoryMembershipMapping(t *testing.T) {
 	spec := mappingtest.MappingSpec(t, testMappings(t), entityops.SchemaDirectoryMembership.Name)
 
@@ -56,7 +56,7 @@ func TestGitHubDirectoryMembershipMapping(t *testing.T) {
 	assert.Check(t, is.Equal("17146926", largeIDMapped["directory_group_id"]))
 }
 
-// TestGitHubDirectoryAccountMapping verifies confirmed email aliases flow into the mapped account document
+// TestGitHubDirectoryAccountMapping verifies confirmed email aliases flow into the mapped document
 func TestGitHubDirectoryAccountMapping(t *testing.T) {
 	spec := mappingtest.MappingSpec(t, testMappings(t), entityops.SchemaDirectoryAccount.Name)
 

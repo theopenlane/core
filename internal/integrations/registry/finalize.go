@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// finalizeDefinition derives the credential form schemas and the operation config sections, switches, and resolvers the builder leaves to the registry
+// finalizeDefinition derives credential form schemas and operation config sections/switches
 func finalizeDefinition(def types.Definition) (types.Definition, error) {
 	def.CredentialRegistrations = lo.Map(def.CredentialRegistrations, func(registration types.CredentialRegistration, _ int) types.CredentialRegistration {
 		return finalizeCredential(def.Connections, registration)
@@ -30,7 +30,7 @@ func finalizeDefinition(def types.Definition) (types.Definition, error) {
 	return def, nil
 }
 
-// finalizeCredential fills the stored schema from a hand-built form schema and the form schema from the stored schema when no auth flow manages the slot
+// finalizeCredential fills stored/form schema from each other when unset
 func finalizeCredential(connections []types.ConnectionRegistration, registration types.CredentialRegistration) types.CredentialRegistration {
 	if len(registration.StoredSchema) == 0 {
 		registration.StoredSchema = registration.Schema
@@ -47,7 +47,7 @@ func finalizeCredential(connections []types.ConnectionRegistration, registration
 	return registration
 }
 
-// finalizeOperations locates each operation's config section in the user input and derives its resolver and switch, enforcing one operation per section
+// finalizeOperations derives each operation's config section resolver and switch
 func finalizeOperations(def types.Definition) ([]types.OperationRegistration, error) {
 	inputRoot, inputDefs, err := jsonx.SchemaRoot(lo.FromPtr(def.UserInput).Schema)
 	if err != nil {
@@ -92,7 +92,7 @@ func finalizeOperations(def types.Definition) ([]types.OperationRegistration, er
 	return operations, nil
 }
 
-// bindSection fills the operation's resolver with the section lookup and its switch with the section's disable toggle, leaving authored values in place
+// bindSection derives the operation's resolver and disable switch from its section
 func bindSection(operation *types.OperationRegistration, key string) {
 	if operation.ConfigResolver == nil {
 		operation.ConfigResolver = func(userInput json.RawMessage) json.RawMessage {
@@ -113,7 +113,7 @@ func bindSection(operation *types.OperationRegistration, key string) {
 	}
 }
 
-// matchSection returns the single user input property key whose referenced type is name and whose definition equals the operation config's, empty when no property references it
+// matchSection returns the user input property key referencing the named config type
 func matchSection(inputRoot *jsonschema.Schema, inputDefs jsonschema.Definitions, name string, configDefs jsonschema.Definitions) (string, error) {
 	var candidates []string
 
@@ -135,7 +135,7 @@ func matchSection(inputRoot *jsonschema.Schema, inputDefs jsonschema.Definitions
 	}
 }
 
-// sameSchema reports whether two schema nodes encode to the same document, false when either is absent
+// sameSchema reports whether two schema nodes encode to the same document
 func sameSchema(a, b *jsonschema.Schema) bool {
 	if a == nil || b == nil {
 		return false

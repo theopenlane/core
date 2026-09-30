@@ -17,9 +17,7 @@ func TestMappingExpressionsValid(t *testing.T) {
 	mappingtest.AssertExpressionsValid(t, def.Mappings)
 }
 
-// TestNullArrayPayloads guards against CEL "no such overload: size" errors that occur
-// when array fields like Resources, Types, or Vulnerabilities are present in the payload
-// but carry an explicit null value rather than being absent.
+// TestNullArrayPayloads guards against CEL errors from explicit null array fields
 func TestNullArrayPayloads(t *testing.T) {
 	def, err := Builder(Config{})()
 	assert.NilError(t, err)

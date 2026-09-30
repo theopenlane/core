@@ -10,11 +10,11 @@ import (
 
 // DispatchRequest describes one requested operation dispatch
 type DispatchRequest struct {
-	// IntegrationID is the target integration identifier; required on the customer path, empty on the runtime path
+	// IntegrationID is the target integration id, required except on the runtime path
 	IntegrationID string
 	// DefinitionID is the definition identifier carried as metadata on the runtime path
 	DefinitionID string
-	// OwnerID is the owning organization carried on the runtime path; derived from the DB record for customer dispatch
+	// OwnerID is the owning organization; derived from the DB record on the customer path
 	OwnerID string
 	// Operation is the definition-local operation identifier
 	Operation string
@@ -28,8 +28,7 @@ type DispatchRequest struct {
 	Workflow *WorkflowMeta
 	// ScheduledAt defers execution until the specified time; nil means immediate
 	ScheduledAt *time.Time
-	// UniqueKey optionally dedups this dispatch across live and terminal job states, so a
-	// retried caller never enqueues the operation twice
+	// UniqueKey dedups this dispatch across live and terminal job states
 	UniqueKey string
 	// Runtime signals that this dispatch should use the runtime provider path
 	Runtime bool
@@ -45,5 +44,5 @@ type DispatchResult struct {
 	Status enums.IntegrationRunStatus
 }
 
-// DispatchFunc enqueues one integration operation for execution through the runtime-managed dispatcher
+// DispatchFunc enqueues one integration operation through the runtime-managed dispatcher
 type DispatchFunc func(ctx context.Context, req DispatchRequest) (DispatchResult, error)

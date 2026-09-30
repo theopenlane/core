@@ -47,7 +47,7 @@ var (
 	ErrAuthStateGenerate = errors.New("githubapp: auth state generate failed")
 	// ErrInstallationMetadataEncode indicates installation metadata could not be encoded
 	ErrInstallationMetadataEncode = errors.New("githubapp: installation metadata encode failed")
-	// ErrInstallationMetadataDecode indicates installation metadata could not be decoded from credential data
+	// ErrInstallationMetadataDecode indicates installation metadata could not be decoded
 	ErrInstallationMetadataDecode = errors.New("githubapp: installation metadata decode failed")
 	// ErrIngestPayloadEncode indicates a collected GitHub payload could not be serialized for ingest
 	ErrIngestPayloadEncode = errors.New("githubapp: ingest payload encode failed")

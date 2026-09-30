@@ -14,7 +14,7 @@ type Client struct {
 	Token string
 }
 
-// tokenClient returns a client builder reading the token out of the credential bound to slot, failing when none is stored
+// tokenClient returns a client builder reading the token from slot
 func tokenClient[T any](slot types.CredentialRef[T], token func(T) string) func(context.Context, types.ClientBuildRequest) (*Client, error) {
 	return func(_ context.Context, req types.ClientBuildRequest) (*Client, error) {
 		cred, ok, err := slot.Resolve(req.Credentials)

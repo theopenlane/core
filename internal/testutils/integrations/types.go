@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// DefinitionID is the stable identifier for the shared test integration definition
+// DefinitionID is the id of the shared test integration definition
 var DefinitionID = types.NewDefinitionRef("def_01K0TESTDEF0000000000000001")
 
 var (
@@ -27,13 +27,13 @@ var (
 	// UnresolvableOp is the client-resolving loop seeded without a credential
 	UnresolvableOp = types.OperationRefOf[unresolvableCycle]().Handles(testClient, idleClientCycle)
 
-	// LegacyTokenCredential is the slot an earlier definition version stored the token under; it is not registered
+	// LegacyTokenCredential is the unregistered legacy token credential slot
 	LegacyTokenCredential = types.CredentialRefOf[legacyTokenCred]()
-	// TokenCredential is the token slot the test client is built from, taking over payloads stored under the legacy slot
+	// TokenCredential is the token slot the test client is built from
 	TokenCredential = types.CredentialRefOf[tokenCred]().Replacing(LegacyTokenCredential, func(l legacyTokenCred) tokenCred { return tokenCred{Token: l.AccessToken} })
 	// OAuthCredential is the auth-managed slot filled by the OAuth fixture
 	OAuthCredential = types.CredentialRefOf[oauthTokenCred]()
-	// ServiceAccountCredential is the strict-schema slot backfilling a missing email from the installation id
+	// ServiceAccountCredential is the strict-schema service account credential slot
 	ServiceAccountCredential = types.CredentialRefOf[serviceAccountCred]().Backfilled(func(_ context.Context, req types.InstallationRequest, c *serviceAccountCred) error {
 		if c.ServiceAccountEmail == "" {
 			c.ServiceAccountEmail = req.Integration.ID + "@backfilled.example.com"
@@ -42,36 +42,36 @@ var (
 		return nil
 	})
 
-	// testClient builds from the token credential
+	// testClient is the client built from the token credential
 	testClient = types.ClientRefOf[*Client]().Using(TokenCredential)
 
-	// oauthConnection is the connection mode selected by the OAuth slot
+	// oauthConnection is the OAuth connection mode
 	oauthConnection = types.NewConnectionRef(OAuthCredential)
-	// tokenConnection is the connection mode selected by the token slot
+	// tokenConnection is the token connection mode
 	tokenConnection = types.NewConnectionRef(TokenCredential)
-	// serviceAccountConnection is the connection mode selected by the service account slot
+	// serviceAccountConnection is the service account connection mode
 	serviceAccountConnection = types.NewConnectionRef(ServiceAccountCredential)
 
 	// WebhookAlertCreated is the webhook event contract
 	WebhookAlertCreated = types.NewWebhookEventRef[webhookAlertEnvelope]("alert.created")
 
-	// userInput is the installation user input layout for the shared test definition
+	// userInput is the shared test definition's user input layout
 	userInput = types.NewUserInputRef[UserInput]("test-input")
 )
 
 const (
-	// ModeRecurring seeds a healthy idle loop
+	// ModeRecurring is the healthy idle loop mode
 	ModeRecurring = "recurring"
-	// ModeExhausting seeds a loop whose every cycle fails
+	// ModeExhausting is the always-failing loop mode
 	ModeExhausting = "exhausting"
-	// ModeUnresolvable seeds a client-resolving loop without a credential
+	// ModeUnresolvable is the client-resolving loop mode without a credential
 	ModeUnresolvable = "unresolvable"
 )
 
 const (
-	// FailProjectID fails the health check when set as the service-account project id
+	// FailProjectID is the project id value that fails the health check
 	FailProjectID = "fail-project"
-	// FailToken fails the health check when set as the token value
+	// FailToken is the token value that fails the health check
 	FailToken = "fail"
 )
 
@@ -119,7 +119,7 @@ type serviceAccountCred struct {
 
 // UserInput is the installation-scoped user input for the test definition
 type UserInput struct {
-	// Mode selects which recurring loop operation is active
+	// Mode is the recurring loop operation selector
 	Mode string `json:"mode,omitempty" jsonschema:"title=Scheduling Mode"`
 	// FilterExpr is a free-form filter expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression"`
@@ -138,17 +138,17 @@ type legacyTokenCred struct {
 	AccessToken string `json:"accessToken"`
 }
 
-// credentialSet marshals value as a credential payload
+// credentialSet returns a credential payload marshaled from value
 func credentialSet(value any) types.CredentialSet {
 	return types.CredentialSet{Data: lo.Must(json.Marshal(value))}
 }
 
-// TokenCredentialSet builds the token credential payload
+// TokenCredentialSet returns the token credential payload
 func TokenCredentialSet(token string) types.CredentialSet {
 	return credentialSet(tokenCred{Token: token})
 }
 
-// ServiceAccountCredentialSet builds the strict credential payload
+// ServiceAccountCredentialSet returns the strict credential payload
 func ServiceAccountCredentialSet(projectID, email string) types.CredentialSet {
 	return credentialSet(serviceAccountCred{ProjectID: projectID, ServiceAccountEmail: email})
 }

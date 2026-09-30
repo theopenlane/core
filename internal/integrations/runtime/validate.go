@@ -11,8 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// ValidateUserInput reports whether a payload satisfies the definition's user input schema, so a
-// caller can reject an install before authorizing rather than failing on every later sync
+// ValidateUserInput reports whether a payload satisfies the definition's user input schema
 func (r *Runtime) ValidateUserInput(ctx context.Context, def types.Definition, userInput json.RawMessage) error {
 	if def.UserInput == nil {
 		return nil
@@ -21,13 +20,12 @@ func (r *Runtime) ValidateUserInput(ctx context.Context, def types.Definition, u
 	return validatePayload(ctx, def.UserInput.Schema, userInput, ErrUserInputInvalid)
 }
 
-// validatePayload validates data against a JSON schema, returning the sentinel error when validation fails
+// validatePayload validates data against a JSON schema, returning sentinel on failure
 func validatePayload(ctx context.Context, schema, data json.RawMessage, sentinel error) error {
 	if len(schema) == 0 {
 		return nil
 	}
 
-	// an absent payload still has to be checked, otherwise required fields never fire
 	if jsonx.IsEmptyRawMessage(data) {
 		data = json.RawMessage("{}")
 	}

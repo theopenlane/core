@@ -23,7 +23,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// reconcileInstallationWebhooks ensures the persisted webhook rows match the definition contract for one integration
+// reconcileInstallationWebhooks ensures persisted webhook rows match the definition contract
 func (r *Runtime) reconcileInstallationWebhooks(ctx context.Context, integration *ent.Integration, previousIntegrationID string) error {
 	def, err := r.resolveDefinitionForInstallation(integration)
 	if err != nil {
@@ -134,8 +134,7 @@ func (r *Runtime) EnsureWebhook(ctx context.Context, integration *ent.Integratio
 	return r.ensureWebhook(ctx, integration, webhook, previousIntegrationID)
 }
 
-// DispatchWebhookEvent emits one normalized integration webhook event through Gala.
-// When integration is nil the event is dispatched as a runtime webhook with no DB-backed installation
+// DispatchWebhookEvent emits one normalized integration webhook event through Gala
 func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Integration, definitionID, webhookName string, event types.WebhookReceivedEvent) error {
 	if integration != nil {
 		definitionID = integration.DefinitionID
@@ -165,7 +164,6 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 
 	emitCtx, headers := intobvs.EmitContext(ctx, oc)
 
-	// provider redeliveries of one delivery id collapse to a single processed job
 	if event.DeliveryID != "" {
 		headers.UniqueKey = types.NewDefinitionRef(definitionID).WebhookEventTopics().Key(event.DeliveryID)
 		headers.UniqueOnce = true
@@ -251,7 +249,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 	})
 }
 
-// ensureWebhook creates or updates the persisted webhook row for one integration and webhook registration
+// ensureWebhook creates or updates the persisted webhook row for an integration
 func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, registration types.WebhookRegistration, previousIntegrationID string) (*ent.IntegrationWebhook, error) {
 	allowedEvents := lo.Map(registration.Events, func(event types.WebhookEventRegistration, _ int) string {
 		return event.Name
@@ -300,7 +298,6 @@ func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, regi
 	row := rows[0]
 	endpointURL := webhookEndpointURL(registration, lo.FromPtr(row.EndpointID))
 
-	// remove duplicates that should not exist
 	duplicateIDs := lo.FilterMap(rows, func(candidate *ent.IntegrationWebhook, _ int) (string, bool) {
 		return candidate.ID, candidate.ID != row.ID
 	})
@@ -324,7 +321,7 @@ func (r *Runtime) ensureWebhook(ctx context.Context, intg *ent.Integration, regi
 	return update.Save(ctx)
 }
 
-// webhookEndpointURL is a small constructor that allows us to override if required but otherwise return a consistent pattern for the route
+// webhookEndpointURL builds the endpoint URL, honoring an override template when set
 func webhookEndpointURL(registration types.WebhookRegistration, endpointID string) string {
 	if registration.EndpointURLTemplate == "" {
 		return "/v1/integrations/webhook/" + endpointID

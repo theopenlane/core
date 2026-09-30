@@ -28,9 +28,7 @@ import (
 
 const directorySyncTestOperation = "directory.sync"
 
-// directorySyncTestDefinition builds a minimal directory ingest definition whose mappings pass
-// provider payloads through unchanged, mirroring how real directory mappings carry the payload
-// as the mapped document
+// directorySyncTestDefinition returns a minimal passthrough directory ingest definition
 func directorySyncTestDefinition(defID string) integrationtypes.Definition {
 	passthrough := integrationtypes.MappingOverride{MapExpr: "payload"}
 
@@ -74,9 +72,7 @@ func directorySyncTestDefinition(defID string) integrationtypes.Definition {
 	}
 }
 
-// ingestDirectoryPayloads pushes payloads for one schema through the synchronous directory ingest
-// path — mapping, generated preparation with sanitization, and hash-gated persistence — exactly as
-// a reconcile cycle would, and returns the record-level result
+// ingestDirectoryPayloads returns the ingest result of payloads for one schema
 func ingestDirectoryPayloads(ctx context.Context, t *testing.T, integration *ent.Integration, schema string, payloads ...string) operations.IngestResult {
 	t.Helper()
 
@@ -124,16 +120,10 @@ func directoryGroupByExternalID(ctx context.Context, t *testing.T, externalID st
 	return dg
 }
 
-// TestDirectorySyncIngestUnchangedFieldGate verifies the directory sync ingest path creates,
-// leaves unchanged, and updates rows correctly across the account and group schemas; renamed from
-// TestDirectorySyncIngestProfileHashing now that change detection is a direct field comparison
-// (pruneIngestFields) rather than a stored profile_hash column, which no longer exists
+// TestDirectorySyncIngestUnchangedFieldGate verifies create, unchanged, and update gating
 func TestDirectorySyncIngestUnchangedFieldGate(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
-	// the counting listener creates mutation-topic interest, so the persist paths emit events for
-	// it exactly as they would for identity resolution in production; the counters prove which
-	// ingests emitted and which were suppressed by the unchanged-row gates
 	var accountCreates, accountUpdates atomic.Int64
 
 	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, []gala.Registration{
@@ -267,10 +257,7 @@ func TestDirectorySyncIngestUnchangedFieldGate(t *testing.T) {
 	})
 }
 
-// TestDirectoryAccountReinstallRelinkNoUpdate verifies that a second live installation of the same
-// source definition and instance does not write a row the first installation still manages:
-// applyIngestClaim returns not-owned while the manager exists, so no per-row update or mutation
-// event fires and integration_id and managed_by stay on the original installation
+// TestDirectoryAccountReinstallRelinkNoUpdate verifies a second live installation cannot write another's row
 func TestDirectoryAccountReinstallRelinkNoUpdate(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -341,7 +328,7 @@ func TestDirectoryAccountReinstallRelinkNoUpdate(t *testing.T) {
 	assert.Check(t, is.Equal(installationA.ID, after.IntegrationID), "integration_id stays on the original installation: provenance repoints only ride along an actual write, and no other field changed to justify one")
 }
 
-// TestDirectoryAccountProfileChurnRidesAlongMaterialChange verifies a change confined to the profile bag is not written, counted, or emitted on its own, and lands once a material column changes in the same run
+// TestDirectoryAccountProfileChurnRidesAlongMaterialChange verifies profile churn rides along material changes
 func TestDirectoryAccountProfileChurnRidesAlongMaterialChange(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -412,11 +399,7 @@ func TestDirectoryAccountProfileChurnRidesAlongMaterialChange(t *testing.T) {
 	assert.Check(t, is.Equal("2024-06-01T00:00:00Z", after.Profile["lastLoginTime"]), "the profile must ride along the material change")
 }
 
-// TestDirectoryMembershipStaleRunUnchangedNoop verifies a batched run whose id is older than the
-// rows already in scope persists every unchanged record normally (the per-record run guard never
-// fires for a byte-identical replay, since nothing changes for save to gate), but the scope-level
-// staleness check vetoes snapshot removal for that run even though the payload appears to omit a
-// membership
+// TestDirectoryMembershipStaleRunUnchangedNoop verifies a stale run persists but never removes
 func TestDirectoryMembershipStaleRunUnchangedNoop(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -432,9 +415,6 @@ func TestDirectoryMembershipStaleRunUnchangedNoop(t *testing.T) {
 
 	cleanupDirectoryPrefix(t, ctx, []string{installation.ID}, prefix)
 
-	// runOlder is created first, so it carries a smaller ULID than runNewer; the replay below
-	// ingests under runOlder against rows already stamped with runNewer, so the scope's run id is
-	// greater than the replay's
 	runOlder, err := suite.Client.DB.IntegrationRun.Create().
 		SetIntegrationID(installation.ID).
 		SetOwnerID(installation.OwnerID).

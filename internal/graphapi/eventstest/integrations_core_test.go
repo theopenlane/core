@@ -15,10 +15,8 @@ import (
 )
 
 func TestIntegrationBuilder(t *testing.T) {
-	// setup user context
 	orgUser := suite.UserBuilder(context.Background(), t)
 
-	// Test that we can create an integration using the builder
 	t.Run("Create integration with builder", func(t *testing.T) {
 		integration := (&th.IntegrationBuilder{Client: suite.Client}).MustNew(orgUser.UserCtx, t)
 
@@ -27,13 +25,11 @@ func TestIntegrationBuilder(t *testing.T) {
 		assert.Check(t, is.DeepEqual("github", integration.Kind))
 		assert.Check(t, is.DeepEqual(orgUser.OrganizationID, integration.OwnerID))
 
-		// Clean up
 		ctx := privacy.DecisionContext(orgUser.UserCtx, privacy.Allow)
 		err := suite.Client.DB.Integration.DeleteOneID(integration.ID).Exec(ctx)
 		assert.NilError(t, err)
 	})
 
-	// Test custom integration creation
 	t.Run("Create custom integration with builder", func(t *testing.T) {
 		integration := (&th.IntegrationBuilder{
 			Client:      suite.Client,
@@ -47,7 +43,6 @@ func TestIntegrationBuilder(t *testing.T) {
 		assert.Check(t, is.DeepEqual("slack", integration.Kind))
 		assert.Check(t, is.DeepEqual("Custom Slack integration", integration.Description))
 
-		// Clean up, add the client to the context for fga checks instead of just allowing
 		ctx := th.SetContext(orgUser.UserCtx, suite.Client.DB)
 		err := suite.Client.DB.Integration.DeleteOneID(integration.ID).Exec(ctx)
 		assert.NilError(t, err)
@@ -55,11 +50,9 @@ func TestIntegrationBuilder(t *testing.T) {
 }
 
 func TestSecretBuilder(t *testing.T) {
-	// setup user context
 	orgUser := suite.UserBuilder(context.Background(), t)
 	ctx := th.SetContext(orgUser.UserCtx, suite.Client.DB)
 
-	// Create integration first
 	integration := (&th.IntegrationBuilder{Client: suite.Client}).MustNew(ctx, t)
 
 	t.Run("Create secret with builder", func(t *testing.T) {
@@ -74,31 +67,25 @@ func TestSecretBuilder(t *testing.T) {
 		assert.Check(t, is.DeepEqual("gho_test_token_123", secret.SecretValue))
 		assert.Check(t, is.DeepEqual(orgUser.OrganizationID, secret.OwnerID))
 
-		// Verify it's associated with the integration
 		integrationSecrets, err := suite.Client.DB.Integration.QuerySecrets(integration).All(ctx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Len(integrationSecrets, 1))
 		assert.Check(t, is.DeepEqual(secret.ID, integrationSecrets[0].ID))
 
-		// Clean up
 		err = suite.Client.DB.Hush.DeleteOneID(secret.ID).Exec(ctx)
 		assert.NilError(t, err)
 	})
 
-	// Clean up
 	err := suite.Client.DB.Integration.DeleteOneID(integration.ID).Exec(ctx)
 	assert.NilError(t, err)
 }
 
 func TestIntegrationWithSecretsRelationship(t *testing.T) {
-	// setup user context
 	orgUser := suite.UserBuilder(context.Background(), t)
 	ctx := th.SetContext(orgUser.UserCtx, suite.Client.DB)
 
-	// Create integration
 	integration := (&th.IntegrationBuilder{Client: suite.Client}).MustNew(orgUser.UserCtx, t)
 
-	// Create multiple secrets for OAuth tokens
 	accessToken := (&th.SecretBuilder{Client: suite.Client}).
 		WithIntegration(integration.ID).
 		WithSecretName("github_access_token").
@@ -122,7 +109,6 @@ func TestIntegrationWithSecretsRelationship(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Check(t, is.Len(secrets, 3))
 
-		// Verify secret names
 		secretNames := make([]string, len(secrets))
 		for i, secret := range secrets {
 			secretNames[i] = secret.SecretName
@@ -133,18 +119,15 @@ func TestIntegrationWithSecretsRelationship(t *testing.T) {
 	})
 
 	t.Run("Secrets can query their integration", func(t *testing.T) {
-		// Query integration from secret
 		integrationFromSecret, err := suite.Client.DB.Hush.QueryIntegrations(accessToken).Only(ctx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(integration.ID, integrationFromSecret.ID))
 	})
 
-	// Clean up
 	th.CleanupOrganizationDataWithContext(ctx, t)
 }
 
 func TestMutationDeleteIntegration(t *testing.T) {
-	// Create integrations with different kinds (unique constraint on owner_id + kind)
 	integration1 := (&th.IntegrationBuilder{Client: suite.Client, Kind: "github"}).MustNew(th.SharedTestUser1.UserCtx, t)
 	integration2 := (&th.IntegrationBuilder{Client: suite.Client, Kind: "jira"}).MustNew(th.SharedTestUser1.UserCtx, t)
 
@@ -205,17 +188,14 @@ func TestMutationDeleteIntegration(t *testing.T) {
 			assert.Assert(t, resp != nil)
 			assert.Assert(t, resp.DeleteIntegration.DeletedID != "")
 
-			// make sure the deletedID matches the ID we wanted to delete
 			assert.Check(t, is.Equal(tc.integrationID, resp.DeleteIntegration.DeletedID))
 		})
 	}
 }
 
 func TestQueryIntegration(t *testing.T) {
-	// create an integration to be queried using th.SharedTestUser1
 	integration := (&th.IntegrationBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	// add test cases for querying the Integration
 	testCases := []struct {
 		name     string
 		queryID  string
@@ -272,7 +252,6 @@ func TestQueryIntegration(t *testing.T) {
 
 			assert.Check(t, is.Equal(tc.queryID, resp.Integration.ID))
 
-			// add additional assertions for the object
 			assert.Check(t, is.Equal(integration.Name, resp.Integration.Name))
 			assert.Check(t, is.Equal(integration.Description, *resp.Integration.Description))
 			assert.Check(t, is.Equal(integration.Kind, *resp.Integration.Kind))
@@ -284,9 +263,7 @@ func TestQueryIntegration(t *testing.T) {
 }
 
 func TestQueryIntegrationWithSecrets(t *testing.T) {
-	// create an integration to be queried using th.SharedTestUser1
 	integration := (&th.IntegrationBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
-	// Create multiple secrets for OAuth tokens
 	accessToken := (&th.SecretBuilder{Client: suite.Client}).
 		WithIntegration(integration.ID).
 		WithSecretName("github_access_token").
@@ -305,7 +282,6 @@ func TestQueryIntegrationWithSecrets(t *testing.T) {
 		WithSecretValue("2024-12-31T23:59:59Z").
 		MustNew(th.SharedTestUser1.UserCtx, t)
 
-	// add test cases for querying the Integration
 	testCases := []struct {
 		name     string
 		queryID  string
@@ -363,7 +339,6 @@ func TestQueryIntegrationWithSecrets(t *testing.T) {
 
 			assert.Check(t, is.Equal(tc.queryID, resp.Integration.ID))
 
-			// add additional assertions for the object
 			assert.Check(t, is.Equal(integration.Name, resp.Integration.Name))
 			assert.Check(t, is.Equal(integration.Description, *resp.Integration.Description))
 			assert.Check(t, is.Equal(integration.Kind, *resp.Integration.Kind))
@@ -377,11 +352,9 @@ func TestQueryIntegrationWithSecrets(t *testing.T) {
 }
 
 func TestListIntegrations(t *testing.T) {
-	// create integrations with different kinds (unique constraint on owner_id + kind)
 	integration1 := (&th.IntegrationBuilder{Client: suite.Client, Kind: "github"}).MustNew(th.SharedTestUser1.UserCtx, t)
 	integration2 := (&th.IntegrationBuilder{Client: suite.Client, Kind: "slack"}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	// add test cases for querying the Integration
 	testCases := []struct {
 		name            string
 		client          *testclient.TestClient

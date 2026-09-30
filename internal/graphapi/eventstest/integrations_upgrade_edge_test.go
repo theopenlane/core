@@ -19,13 +19,13 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// oauthTokenCredV1 is the OAuth credential shape an earlier definition version stored, before the refresh token was added
+// oauthTokenCredV1 is the earlier OAuth credential shape without a refresh token
 type oauthTokenCredV1 struct {
 	// AccessToken is the OAuth2 access token
 	AccessToken string `json:"access_token"`
 }
 
-// oauthTokenCredV2 is an OAuth credential shape carrying a refresh token, used only to prove the auth schema participates in the version hash
+// oauthTokenCredV2 is an OAuth credential shape carrying a refresh token
 type oauthTokenCredV2 struct {
 	// AccessToken is the OAuth2 access token
 	AccessToken string `json:"access_token"`
@@ -33,13 +33,13 @@ type oauthTokenCredV2 struct {
 	RefreshToken string `json:"refresh_token,omitempty"`
 }
 
-// strictRegionInput is a user input layout requiring a region the earlier zone layout never carried, with no conversion declared
+// strictRegionInput is a user input layout requiring an unconverted region
 type strictRegionInput struct {
 	// Region is the required region
 	Region string `json:"region" jsonschema:"required"`
 }
 
-// previousOAuthDefinition builds an earlier version of the shared test definition whose sole connection is auth-managed against schema, reusing current's OAuth start and complete funcs
+// previousOAuthDefinition returns an earlier version of the shared test definition
 func previousOAuthDefinition(t *testing.T, current integrationtypes.Definition, schema json.RawMessage) registry.Builder {
 	t.Helper()
 

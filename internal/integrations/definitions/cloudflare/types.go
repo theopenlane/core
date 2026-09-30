@@ -21,19 +21,19 @@ var (
 )
 
 const (
-	// DomainScanPerformedBy marks a Scan record as one the system should actually submit to the cloudflare domain scan job
+	// DomainScanPerformedBy marks a Scan record for submission to the cloudflare domain scan job
 	DomainScanPerformedBy = "openlane_domain_scan"
 
 	// DomainScanBrandDesignOnlyMetadataKey selects the brand-design-only scan path
 	DomainScanBrandDesignOnlyMetadataKey = "brandDesignOnly"
 
-	// DomainScanApplyBrandDesignToPreviewMetadataKey makes sure we apply the extracted brand design to only the preview trustcenter environment
+	// DomainScanApplyBrandDesignToPreviewMetadataKey applies extracted brand design to preview only
 	DomainScanApplyBrandDesignToPreviewMetadataKey = "applyBrandDesignToPreview"
 
-	// DomainScanApplyBrandDesignToLiveMetadataKey makes sure we apply the extracted brand design to only the live trustcenter environment
+	// DomainScanApplyBrandDesignToLiveMetadataKey applies extracted brand design to live only
 	DomainScanApplyBrandDesignToLiveMetadataKey = "applyBrandDesignToLive"
 
-	// DomainScanGroupMetadataKey is the Scan.Metadata key carrying the shared group id for scans created together (e.g. every domain from one organization settings update), so scans submitted independently can still be recombined into a single notification once the whole group reaches a terminal state
+	// DomainScanGroupMetadataKey is the Scan.Metadata key carrying the shared group id for scans
 	DomainScanGroupMetadataKey = "scan_group_id"
 )
 
@@ -43,11 +43,11 @@ type RuntimeConfig struct {
 	APIToken string `json:"apitoken" koanf:"apitoken" jsonschema:"description=Cloudflare API token for the operator-owned account" sensitive:"true"`
 	// AccountID is the Cloudflare account identifier for the operator-owned account
 	AccountID string `json:"accountid" koanf:"accountid" jsonschema:"description=Cloudflare account ID for the operator-owned account"`
-	// DomainScan configures vendor/technology classification and enrichment behavior for onboarding domain scan reports
+	// DomainScan configures vendor/technology classification for onboarding domain scan reports
 	DomainScan domainscan.ReportConfig `json:"domainscan" koanf:"domainscan" jsonschema:"description=Vendor/technology classification and enrichment behavior for onboarding domain scan reports"`
 }
 
-// Provisioned reports whether the runtime config has the minimum required fields to make Cloudflare API calls
+// Provisioned reports whether the runtime config has the fields required for Cloudflare API calls
 func (c RuntimeConfig) Provisioned() bool {
 	return c.APIToken != "" && c.AccountID != ""
 }

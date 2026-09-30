@@ -12,7 +12,7 @@ import (
 var (
 	// definitionID is the stable identifier for the GCP Security Command Center integration definition
 	definitionID = types.NewDefinitionRef("def_01K0GCPSCC00000000000000001")
-	// installation is the typed installation metadata handle for the GCP Security Command Center definition
+	// installation is the typed installation metadata handle for the definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// sccCredential is the credential slot for GCP Security Command Center service account credentials
 	sccCredential = types.CredentialRefOf[CredentialSchema]()
@@ -20,7 +20,7 @@ var (
 	workloadIdentityCredential = types.CredentialRefOf[WorkloadIdentityCredentialSchema]()
 	// sccClient is the client ref for the GCP Security Command Center client used by this definition
 	sccClient = types.ClientRefOf[*cloudscc.Client]().Using(workloadIdentityCredential).Using(sccCredential)
-	// workloadIdentityConnection is the workload identity federation connection mode enabling the SCC client
+	// workloadIdentityConnection enables the SCC client via workload identity federation
 	workloadIdentityConnection = types.NewConnectionRef(workloadIdentityCredential).Enables(sccClient)
 	// sccConnection is the service account connection mode enabling the SCC client
 	sccConnection = types.NewConnectionRef(sccCredential).Enables(sccClient)
@@ -53,7 +53,7 @@ type UserInput struct {
 	FindingsSync FindingsSync `json:"findingsSync" jsonschema:"title=Findings Sync"`
 }
 
-// FindingsSync holds the user-configurable and per-invocation parameters for the findings collection operation
+// FindingsSync holds configuration for the findings collection operation
 type FindingsSync struct {
 	// Disable switches the findings collection operation off for the installation
 	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of findings from GCP Security Command Center"`
@@ -85,9 +85,9 @@ type CredentialSchema struct {
 	CollectionScope
 }
 
-// WorkloadIdentityCredentialSchema holds the GCP workload identity federation inputs for one installation
+// WorkloadIdentityCredentialSchema holds workload identity federation inputs
 type WorkloadIdentityCredentialSchema struct {
-	// ProjectNumber is the numeric project number of the GCP project hosting the openlane workload identity pool and provider
+	// ProjectNumber is the GCP project number hosting the workload identity pool
 	ProjectNumber string `json:"projectNumber" jsonschema:"required,title=GCP Project Number,pattern=^[0-9]+$,description=Numeric project number of the GCP project hosting the openlane workload identity pool and provider"`
 	// ServiceAccountEmail optionally impersonates a service account
 	ServiceAccountEmail string `json:"serviceAccountEmail,omitempty" jsonschema:"title=Service Account Email,description=Optional service account to impersonate"`
@@ -110,7 +110,7 @@ func normalizeServiceAccountKey(value string) string {
 	return trimmed
 }
 
-// InstallationMetadata holds the stable GCP organization and service account identity for one installation
+// InstallationMetadata holds the GCP organization and service account identity
 type InstallationMetadata struct {
 	// OrganizationID is the GCP organization identifier when collection is organization-scoped
 	OrganizationID string `json:"organizationId,omitempty" jsonschema:"title=Organization ID"`
@@ -122,7 +122,7 @@ type InstallationMetadata struct {
 	ProjectIDs []string `json:"projectIds,omitempty" jsonschema:"title=Project IDs"`
 	// SourceIDs lists the SCC source identifiers configured for collection
 	SourceIDs []string `json:"sourceIds,omitempty" jsonschema:"title=SCC Source IDs,description=Filter which sources findings are pulled from, by default all sources are included within the specified organization or project"`
-	// ServiceAccountEmail is the service account email extracted from the configured key when available
+	// ServiceAccountEmail is the email extracted from the configured key
 	ServiceAccountEmail string `json:"serviceAccountEmail,omitempty" jsonschema:"title=Service Account Email"`
 }
 

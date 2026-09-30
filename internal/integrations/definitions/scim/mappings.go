@@ -5,7 +5,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
-// mapExprDirectoryAccount is the CEL mapping expression for SCIM user payloads mapped to DirectoryAccount
+// mapExprDirectoryAccount maps SCIM user payloads to DirectoryAccount
 var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.ExternalID.Expr(`'externalId' in payload && payload.externalId != "" ? payload.externalId : ('userName' in payload && payload.userName != "" ? payload.userName : ('emails' in payload && size(payload.emails) > 0 && payload.emails[0] != null && 'value' in payload.emails[0] ? payload.emails[0].value : ""))`),
 	entityops.DirectoryAccountFields.CanonicalEmail.Expr(`'emails' in payload && size(payload.emails) > 0 && payload.emails[0] != null && 'value' in payload.emails[0] && payload.emails[0].value != "" ? payload.emails[0].value : ('userName' in payload ? payload.userName : "")`),
@@ -19,7 +19,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.PrimarySource.Expr("installation.primary_directory"),
 )
 
-// mapExprDirectoryGroup is the CEL mapping expression for SCIM group payloads mapped to DirectoryGroup
+// mapExprDirectoryGroup maps SCIM group payloads to DirectoryGroup
 var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.ExternalID.Expr(`'externalId' in payload && payload.externalId != "" ? payload.externalId : ('displayName' in payload ? payload.displayName : "")`),
 	entityops.DirectoryGroupFields.DisplayName.Expr(`'displayName' in payload ? payload.displayName : ""`),
@@ -29,7 +29,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.DirectoryName.Expr(providerkit.ExprInstallationName),
 )
 
-// mapExprDirectoryMembership is the CEL mapping expression for SCIM group membership payloads mapped to DirectoryMembership
+// mapExprDirectoryMembership maps SCIM membership payloads to DirectoryMembership
 var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryAccountID.Expr(`'member' in payload && payload.member != null && 'value' in payload.member ? payload.member.value : ""`),
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`'group' in payload && payload.group != null && 'externalId' in payload.group ? payload.group.externalId : ""`),

@@ -17,7 +17,7 @@ const (
 	googleSTSEndpoint = "https://sts.googleapis.com/v1/token"
 	// workloadIdentityName is the fixed pool and provider ID customers create for Openlane federation
 	workloadIdentityName = "openlane"
-	// workloadIdentityAudienceFormat is the provider resource name Google STS expects as the exchange audience
+	// workloadIdentityAudienceFormat is the provider resource name for STS exchange
 	workloadIdentityAudienceFormat = "//iam.googleapis.com/projects/%s/locations/global/workloadIdentityPools/%s/providers/%s"
 )
 
@@ -26,7 +26,7 @@ func workloadIdentityAudience(projectNumber string) string {
 	return fmt.Sprintf(workloadIdentityAudienceFormat, projectNumber, workloadIdentityName, workloadIdentityName)
 }
 
-// workloadIdentityOptions builds client options that authenticate through workload identity federation
+// workloadIdentityOptions builds client options via workload identity federation
 func workloadIdentityOptions(ctx context.Context, req types.ClientBuildRequest) ([]option.ClientOption, error) {
 	cred, ok, err := workloadIdentityCredential.Resolve(req.Credentials)
 	if err != nil {

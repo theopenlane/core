@@ -168,7 +168,7 @@ func TestSwitchDisabled(t *testing.T) {
 	}
 }
 
-// TestDefinitionCredentialReplacing verifies the registration whose Replaces contains the retired slot is found
+// TestDefinitionCredentialReplacing verifies the registration for a retired slot is found
 func TestDefinitionCredentialReplacing(t *testing.T) {
 	t.Parallel()
 

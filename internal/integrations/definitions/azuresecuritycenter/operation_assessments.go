@@ -51,7 +51,7 @@ type AssessmentPayload struct {
 	StatusChangedAt *time.Time `json:"status_changed_at,omitempty"`
 }
 
-// assessmentsCollectOperation is the operation ref for the Azure Security Center assessments collect operation
+// assessmentsCollectOperation is the assessments collect operation ref
 var assessmentsCollectOperation = types.OperationRefOf[AssessmentsCollect]().Ingests(securityCenterClient, runAssessmentsCollect)
 
 // AssessmentsCollect collects Azure Defender for Cloud assessment findings for ingest

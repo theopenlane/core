@@ -18,7 +18,6 @@ import (
 )
 
 // PendingInstallationTTL is how long a pending installation may wait for its auth flow
-// before it expires; live auth state lasts minutes, so anything older can only restart
 const PendingInstallationTTL = 168 * time.Hour
 
 // IntegrationLookup holds the query constraints for resolving an integration
@@ -31,19 +30,17 @@ type IntegrationLookup struct {
 	DefinitionID string
 }
 
-// ResolveIntegration resolves one integration by explicit ID with optional owner
-// and definition cross-checks through the shared operations resolver
+// ResolveIntegration resolves an integration by ID with optional owner/definition checks
 func (r *Runtime) ResolveIntegration(ctx context.Context, lookup IntegrationLookup) (*ent.Integration, error) {
 	return operations.ResolveIntegration(ctx, r.DB(), lookup.IntegrationID, lookup.OwnerID, lookup.DefinitionID)
 }
 
-// ResolveOwnerIntegration finds a connected integration for the given definition
-// and owner through the shared operations resolver
+// ResolveOwnerIntegration finds a connected integration for the given definition and owner
 func (r *Runtime) ResolveOwnerIntegration(ctx context.Context, definitionID, ownerID string, prefer ...func(*ent.Integration) bool) (string, error) {
 	return operations.ResolveOwnerIntegration(ctx, r.DB(), definitionID, ownerID, prefer...)
 }
 
-// EnsureInstallation returns an existing installation when integrationID is provided, or creates a new one
+// EnsureInstallation returns an existing installation, or creates a new one
 func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID string, def types.Definition) (*ent.Integration, bool, error) {
 	if integrationID != "" {
 		record, err := r.ResolveIntegration(ctx, IntegrationLookup{
@@ -75,18 +72,14 @@ func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID
 		return nil, false, err
 	}
 
-	// record new installed integration
 	metrics.RecordIntegrationInstalled(def.ID)
 
-	// attempt to create vendor record
 	r.createVendor(ctx, ownerID, def, record.ID)
 
 	return record, true, nil
 }
 
-// createVendor will to a best-effort create of the integration family as a vendor in the organization
-// if it already exists, it will link the integration id
-// if it doesn't exist, it will create the record, add data from the system-owned subprocessors, and link the integration
+// createVendor best-effort links or creates the integration family as a vendor in the org
 func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.Definition, integrationID string) {
 	ctx = logx.WithFields(ctx, map[string]any{"vendor": def.Family, "org_id": ownerID})
 
@@ -103,7 +96,6 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 	}
 
 	if len(vendorIDs) > 0 {
-		// update the integration edges
 		ctxAllow := privacy.DecisionContext(ctx, privacy.Allow)
 		if err := r.DB().Entity.Update().Where(entity.IDIn(vendorIDs...)).AddIntegrationIDs(
 			integrationID).Exec(ctxAllow); err != nil {
@@ -122,7 +114,6 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 		IntegrationIDs: []string{integrationID},
 	}
 
-	// lookup subprocessor for existing data
 	subprocessors, err := r.DB().Subprocessor.Query().Where(
 		subprocessor.NameEqualFold(def.Family),
 	).All(ctx)

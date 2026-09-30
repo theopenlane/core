@@ -32,7 +32,7 @@ type PropertyDescriptor struct {
 	Description string
 }
 
-// PropertyDescriptors reflects a Go type and returns its top-level JSON properties with names and descriptions from the generated JSON schema
+// PropertyDescriptors returns a Go type's top-level JSON schema properties
 func PropertyDescriptors[T any]() []PropertyDescriptor {
 	schema, _, err := SchemaRoot(SchemaFrom[T]())
 	if err != nil || schema.Properties == nil {
@@ -66,7 +66,7 @@ func SchemaRoot(schema json.RawMessage) (*jsonschema.Schema, jsonschema.Definiti
 	return root, doc.Definitions, nil
 }
 
-// followSchemaRef returns the definition a node's $ref names by its base path, or the node itself when it has none
+// followSchemaRef returns the definition a node's $ref names, or the node itself
 func followSchemaRef(node *jsonschema.Schema, defs jsonschema.Definitions) (*jsonschema.Schema, error) {
 	if node.Ref == "" {
 		return node, nil
@@ -93,7 +93,7 @@ func SchemaID(schema json.RawMessage) string {
 	return path.Base(doc.Ref)
 }
 
-// InjectDefaults returns the schema document as raw JSON with stored values injected as "default" at every level of nesting, following $ref pointers into $defs recursively
+// InjectDefaults returns the schema with stored values injected as defaults
 func InjectDefaults(schema json.RawMessage, defaults map[string]any) (json.RawMessage, error) {
 	var doc jsonschema.Schema
 	if err := json.Unmarshal(schema, &doc); err != nil {
@@ -115,7 +115,7 @@ func InjectDefaults(schema json.RawMessage, defaults map[string]any) (json.RawMe
 	return out, nil
 }
 
-// injectSchemaDefaults recursively injects stored values as "default" on each property, following $ref pointers into defs so per-field defaults are available at every level
+// injectSchemaDefaults injects stored values as defaults on each property
 func injectSchemaDefaults(typeDef *jsonschema.Schema, defs jsonschema.Definitions, stored map[string]any) {
 	for pair := typeDef.Properties.Oldest(); pair != nil; pair = pair.Next() {
 		k, prop := pair.Key, pair.Value

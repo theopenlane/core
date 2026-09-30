@@ -24,13 +24,13 @@ import (
 )
 
 const (
-	// defaultJWTExpiry is the default expiry duration for GitHub App JWTs (max 10 minutes per GitHub docs)
+	// defaultJWTExpiry is the default expiry duration for GitHub App JWTs
 	defaultJWTExpiry = 9 * time.Minute
-	// jwtIssuedAtBackdate is the amount of time to backdate the JWT iat claim to account for clock skew
+	// jwtIssuedAtBackdate is the amount of time to backdate the JWT iat claim
 	jwtIssuedAtBackdate = 30 * time.Second
 	// stateTokenBytes is the number of random bytes used for CSRF state tokens
 	stateTokenBytes = 16
-	// installURLTemplate is the GitHub App installation URL pattern used to construct the install redirect
+	// installURLTemplate is the GitHub App installation URL pattern for the install redirect
 	installURLTemplate = "https://github.com/apps/%s/installations/new"
 )
 
@@ -72,7 +72,7 @@ func startAppInstall(cfg Config) (types.AuthStartResult, error) {
 	}, nil
 }
 
-// completeAppInstall validates the callback state, exchanges the installation ID for a token, and returns the auth result
+// completeAppInstall validates the callback state and exchanges the installation ID for a token
 func completeAppInstall(ctx context.Context, cfg Config, state json.RawMessage, input types.AuthCallbackInput) (types.AuthCompleteResult, error) {
 	var savedState statePayload
 	if err := jsonx.UnmarshalIfPresent(state, &savedState); err != nil {
@@ -118,7 +118,7 @@ func completeAppInstall(ctx context.Context, cfg Config, state json.RawMessage, 
 	}, nil
 }
 
-// disconnectInstallationID extracts the installation ID from the credential or installation metadata
+// disconnectInstallationID extracts the installation ID from the credential or metadata
 func disconnectInstallationID(ctx context.Context, req types.DisconnectRequest) (int64, string, error) {
 	cred, ok, err := gitHubAppCredential.Resolve(req.Credentials)
 	if err != nil {
@@ -150,7 +150,6 @@ func disconnectInstallationID(ctx context.Context, req types.DisconnectRequest) 
 }
 
 // fetchInstallationAccount fetches the organization name for the given installation ID
-// returns empty string for personal (User-type) account installations
 func fetchInstallationAccount(ctx context.Context, cfg Config, integrationID int64) (string, error) {
 	jwtToken, err := appJWT(cfg)
 	if err != nil {

@@ -13,23 +13,23 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// DomainScanBuildReport combines a completed URL Scanner result with previously-gathered enrichment data (company profile, compliance, and DNS vendor data) and builds the structured onboarding domain scan report
+// DomainScanBuildReport builds the structured domain scan report from a result and enrichment
 type DomainScanBuildReport struct {
 	// InternalScanID is the openlane Scan record id the built report belongs to
 	InternalScanID string `json:"internalScanId"`
-	// Result is the completed URL Scanner task result to build the report from, allowed to be empty so a partial report can still be built if the scan failed
+	// Result is the completed URL Scanner task result to build the report from, may be empty
 	Result json.RawMessage `json:"result,omitempty"`
-	// Enrichment is the company profile, compliance, and DNS vendor data gathered via DomainScanGatherEnrichment
+	// Enrichment is the data gathered via DomainScanGatherEnrichment
 	Enrichment domainscan.Enrichment `json:"enrichment"`
 }
 
-// DomainScanBuildReportResult carries the structured report built from the scan result and enrichment
+// DomainScanBuildReportResult carries the structured report built from the result and enrichment
 type DomainScanBuildReportResult struct {
 	// Data is the structured scan report, ready to persist on the Scan record
 	Data map[string]any `json:"data"`
 }
 
-// DomainScanBuildReportOp is the operation ref for building the scan report from a completed URL Scanner result and gathered enrichment
+// DomainScanBuildReportOp is the operation ref for building the scan report
 var DomainScanBuildReportOp = types.OperationRefOf[DomainScanBuildReport]().Handles(cloudflareClient, runDomainScanBuildReport) //nolint:revive
 
 // runDomainScanBuildReport builds the structured scan report and encodes it
@@ -42,7 +42,7 @@ func runDomainScanBuildReport(ctx context.Context, _ types.OperationRequest, cli
 	return providerkit.EncodeResult(result, ErrResultEncode)
 }
 
-// Run builds the structured scan report from the submitted URL Scanner result plus the already-gathered enrichment data
+// Run builds the structured scan report from the URL Scanner result plus gathered enrichment
 func (DomainScanBuildReport) Run(ctx context.Context, client *CloudflareClient, cfg DomainScanBuildReport) (DomainScanBuildReportResult, error) {
 	var scanResult *url_scanner.ScanGetResponse
 

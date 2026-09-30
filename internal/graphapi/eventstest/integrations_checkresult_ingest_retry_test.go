@@ -23,9 +23,7 @@ import (
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// ingestCheckResultPayloadsWithRunID pushes check-result payloads through the synchronous catalog
-// ingest path tagged with the given integration run id, mirroring ingestCheckResultPayloads with an
-// explicit run id so a tracked failure records the run that first observed it
+// ingestCheckResultPayloadsWithRunID returns the ingest result of check-result payloads tagged with runID
 func ingestCheckResultPayloadsWithRunID(ctx context.Context, t *testing.T, installation *ent.Integration, runID string, payloads ...string) operations.IngestResult {
 	t.Helper()
 
@@ -49,9 +47,7 @@ func ingestCheckResultPayloadsWithRunID(ctx context.Context, t *testing.T, insta
 	return result
 }
 
-// seedCheckResultDurableRow writes a check-result row directly through the ent client, simulating a
-// durable per-record retry job that succeeded outside the batched ingest path: the row carries the
-// installation's provenance and the given integration run id
+// seedCheckResultDurableRow returns a check-result row written directly through the ent client
 func seedCheckResultDurableRow(ctx context.Context, t *testing.T, installation *ent.Integration, parentExternalID, runID, details string) *ent.CheckResult {
 	t.Helper()
 
@@ -71,14 +67,12 @@ func seedCheckResultDurableRow(ctx context.Context, t *testing.T, installation *
 	return row
 }
 
-// trackedFailedRecord finds one key's tracked failure on the installation's health, if any
+// trackedFailedRecord returns one key's tracked failure on the installation's health, if any
 func trackedFailedRecord(health models.IntegrationHealth, key string) (models.FailedRecord, bool) {
 	return lo.Find(health.FailedRecords, func(fr models.FailedRecord) bool { return fr.Key == key })
 }
 
-// TestCheckResultTrackedFailureResolvedByDurableRetry verifies a tracked failed record is released
-// from exclusion once a durable per-record retry has independently written the row at or after the
-// tracked run, and stays excluded when the row on hand predates the tracked run
+// TestCheckResultTrackedFailureResolvedByDurableRetry verifies a durable retry releases a tracked failure
 func TestCheckResultTrackedFailureResolvedByDurableRetry(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -101,9 +95,6 @@ func TestCheckResultTrackedFailureResolvedByDurableRetry(t *testing.T) {
 		(&th.Cleanup[*ent.IntegrationDeleteOne]{Client: suite.Client.DB.Integration, ID: installation.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	})
 
-	// runs are created in order so their ids sort stale < first < second: stale is the durable
-	// row's run in the unresolved case, first records each tracked failure, second re-attempts
-	// each tracked record with a material change
 	staleRun, err := suite.Client.DB.IntegrationRun.Create().
 		SetIntegrationID(installation.ID).
 		SetOwnerID(installation.OwnerID).
@@ -128,8 +119,6 @@ func TestCheckResultTrackedFailureResolvedByDurableRetry(t *testing.T) {
 
 	staleRunID, firstRunID, secondRunID := staleRun.ID, firstRun.ID, secondRun.ID
 
-	// --- resolved case: a durable retry wrote the row at the tracked run id ---
-
 	const resolvedKey = "checkretry-resolved"
 
 	invalidResolved := `{"parent_external_id":"checkretry-resolved","status":"not-a-real-status","details":"invalid status"}`
@@ -144,8 +133,6 @@ func TestCheckResultTrackedFailureResolvedByDurableRetry(t *testing.T) {
 	assert.Check(t, ok, "the failing record must be tracked")
 	assert.Check(t, is.Equal(firstRunID, trackedEntry.RunID))
 
-	// simulate a durable per-record retry succeeding after the batched run recorded the failure:
-	// the row is written directly with the tracked run id and the installation's provenance
 	seedCheckResultDurableRow(ctx, t, installation, resolvedKey, firstRunID, "seed details")
 
 	changedResolved := `{"parent_external_id":"checkretry-resolved","source":"checkresult-retry-test","status":"PASS","details":"resolved details"}`
@@ -162,8 +149,6 @@ func TestCheckResultTrackedFailureResolvedByDurableRetry(t *testing.T) {
 	th.RequireNoError(t, err)
 	_, stillTracked := trackedFailedRecord(reloaded.Health, resolvedKey)
 	assert.Check(t, !stillTracked, "the resolved key must be dropped from tracking")
-
-	// --- unresolved case: the row on hand predates the tracked run id ---
 
 	const staleKey = "checkretry-stale"
 

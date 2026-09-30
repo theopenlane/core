@@ -9,23 +9,23 @@ var (
 	ErrDefinitionAlreadyRegistered = errors.New("integrations/registry: definition already registered")
 	// ErrDefinitionNotFound indicates the requested definition does not exist
 	ErrDefinitionNotFound = errors.New("integrations/registry: definition not found")
-	// ErrDuplicateRegistration indicates a definition registers the same connection, client, operation, webhook, event, or topic more than once
+	// ErrDuplicateRegistration indicates a definition registers the same item more than once
 	ErrDuplicateRegistration = errors.New("integrations/registry: duplicate registration")
 	// ErrClientRequired indicates a client registration is missing its identity
 	ErrClientRequired = errors.New("integrations/registry: client required")
 	// ErrClientNotFound indicates the requested client does not exist
 	ErrClientNotFound = errors.New("integrations/registry: client not found")
-	// ErrConnectionCredentialRefRequired indicates a connection registration is missing its credential ref
+	// ErrConnectionCredentialRefRequired indicates a connection is missing its credential ref
 	ErrConnectionCredentialRefRequired = errors.New("integrations/registry: connection credential ref required")
 	// ErrOperationNotFound indicates the requested operation does not exist
 	ErrOperationNotFound = errors.New("integrations/registry: operation not found")
-	// ErrOperationHandlerRequired indicates an operation registration is missing both Handle and IngestHandle
+	// ErrOperationHandlerRequired indicates an operation is missing both Handle and IngestHandle
 	ErrOperationHandlerRequired = errors.New("integrations/registry: operation handler required")
-	// ErrOperationHandlerAmbiguous indicates an operation registration specifies both Handle and IngestHandle
+	// ErrOperationHandlerAmbiguous indicates an operation specifies both Handle and IngestHandle
 	ErrOperationHandlerAmbiguous = errors.New("integrations/registry: operation must specify exactly one of Handle or IngestHandle")
 	// ErrIngestContractsRequired indicates an IngestHandle is registered without any Ingest contracts
 	ErrIngestContractsRequired = errors.New("integrations/registry: IngestHandle requires at least one Ingest contract")
-	// ErrIngestSnapshotRequiresIngestHandle indicates an operation's Policy.Snapshot is set without an IngestHandle
+	// ErrIngestSnapshotRequiresIngestHandle indicates Policy.Snapshot is set without an IngestHandle
 	ErrIngestSnapshotRequiresIngestHandle = errors.New("integrations/registry: policy snapshot requires an IngestHandle")
 	// ErrWebhookEventResolverRequired indicates a webhook registration is missing its event resolver
 	ErrWebhookEventResolverRequired = errors.New("integrations/registry: webhook event resolver required")
@@ -37,46 +37,46 @@ var (
 	ErrOperatorConfigSchemaRequired = errors.New("integrations/registry: operator config schema required")
 	// ErrCredentialSchemaRequired indicates a credential registration's slot reflects no schema
 	ErrCredentialSchemaRequired = errors.New("integrations/registry: credential schema required")
-	// ErrCredentialRefNotDeclared indicates a client references a credential ref not declared by the definition
+	// ErrCredentialRefNotDeclared indicates a client references an undeclared credential ref
 	ErrCredentialRefNotDeclared = errors.New("integrations/registry: client credential ref not declared by definition")
-	// ErrConnectionCredentialRefNotDeclared indicates a connection references a credential ref not declared by the definition
+	// ErrConnectionCredentialRefNotDeclared indicates a connection's credential ref is undeclared
 	ErrConnectionCredentialRefNotDeclared = errors.New("integrations/registry: connection credential ref not declared by definition")
-	// ErrConnectionClientRefNotDeclared indicates a connection references a client ref not declared by the definition
+	// ErrConnectionClientRefNotDeclared indicates a connection's client ref is undeclared
 	ErrConnectionClientRefNotDeclared = errors.New("integrations/registry: connection client ref not declared by definition")
-	// ErrConnectionHealthCheckHandlerRequired indicates a connection health check registration has no handler
+	// ErrConnectionHealthCheckHandlerRequired indicates a connection health check has no handler
 	ErrConnectionHealthCheckHandlerRequired = errors.New("integrations/registry: connection health check handler required")
-	// ErrConnectionAuthCredentialRefNotDeclared indicates a connection auth registration references an undeclared credential ref
+	// ErrConnectionAuthCredentialRefNotDeclared indicates auth uses an undeclared credential ref
 	ErrConnectionAuthCredentialRefNotDeclared = errors.New("integrations/registry: connection auth credential ref not declared by connection")
-	// ErrConnectionDisconnectCredentialRefNotDeclared indicates a connection disconnect registration references an undeclared credential ref
+	// ErrConnectionDisconnectCredentialRefNotDeclared indicates disconnect uses an undeclared ref
 	ErrConnectionDisconnectCredentialRefNotDeclared = errors.New("integrations/registry: connection disconnect credential ref not declared by connection")
 	// ErrUserInputSchemaRequired indicates a definition has a user input block with no schema
 	ErrUserInputSchemaRequired = errors.New("integrations/registry: user input schema required")
 	// ErrBuilderNil indicates a builder dependency was nil
 	ErrBuilderNil = errors.New("integrations/registry: builder is nil")
-	// ErrRuntimeBuildRequired indicates a runtime integration registration is missing its Build function
+	// ErrRuntimeBuildRequired indicates a runtime integration is missing its Build function
 	ErrRuntimeBuildRequired = errors.New("integrations/registry: runtime integration build function required")
-	// ErrLinkEdgeNotFound indicates a mapping opted into a link edge that does not exist on the source schema
+	// ErrLinkEdgeNotFound indicates a mapping's link edge does not exist on the source schema
 	ErrLinkEdgeNotFound = errors.New("integrations/registry: link edge not found on source schema")
-	// ErrLinkEdgeAmbiguous indicates a link rule's target type matches multiple edges and no edge name was set
+	// ErrLinkEdgeAmbiguous indicates a link rule's target type matches multiple edges, no edge set
 	ErrLinkEdgeAmbiguous = errors.New("integrations/registry: link target type is ambiguous, edge name required")
 	// ErrLinkRuleInvalid indicates a link rule sets neither or both of a field match and an expression
 	ErrLinkRuleInvalid = errors.New("integrations/registry: link rule must set exactly one of field match or expression")
-	// ErrLinkTargetNotRegistered indicates a link rule's edge targets a schema without a registry entry
+	// ErrLinkTargetNotRegistered indicates a link edge targets a schema without a registry entry
 	ErrLinkTargetNotRegistered = errors.New("integrations/registry: link edge target schema is not in the entityops registry")
-	// ErrLinkTargetFieldInvalid indicates a link rule's target field is not a match key on the target schema
+	// ErrLinkTargetFieldInvalid indicates the target field is not a match key on the target schema
 	ErrLinkTargetFieldInvalid = errors.New("integrations/registry: link target field is not a match key on the target schema")
-	// ErrLinkSourceFieldInvalid indicates a link rule's source field is not a mapped input key of the required shape
+	// ErrLinkSourceFieldInvalid indicates the source field is not a mapped input key of that shape
 	ErrLinkSourceFieldInvalid = errors.New("integrations/registry: link source field is not a mapped input key of the required shape")
-	// ErrHealthCheckRequired indicates a definition declares connections without a definition health check
+	// ErrHealthCheckRequired indicates a definition declares connections without a health check
 	ErrHealthCheckRequired = errors.New("integrations/registry: health check required when the definition declares connections")
-	// ErrHealthCheckClientCredentialMissing indicates the health check client is not built from every connection's credential slot
+	// ErrHealthCheckClientCredentialMissing indicates the health check misses a credential slot
 	ErrHealthCheckClientCredentialMissing = errors.New("integrations/registry: health check client does not use every connection credential slot")
-	// ErrConfigSectionAmbiguous indicates an operation config type is referenced by more than one user input property or one section is claimed by more than one operation
+	// ErrConfigSectionAmbiguous indicates an operation config section is ambiguous
 	ErrConfigSectionAmbiguous = errors.New("integrations/registry: operation config section is ambiguous")
-	// ErrConfigSectionMismatch indicates a user input section references an operation config type by name but declares a different schema for it
+	// ErrConfigSectionMismatch indicates a user input section's schema mismatches the config
 	ErrConfigSectionMismatch = errors.New("integrations/registry: user input section schema does not match the operation config schema")
-	// ErrConfigSectionRequired indicates a reconciled operation with configurable fields has no user input section and no authored resolver
+	// ErrConfigSectionRequired indicates a reconciled operation has no config section or resolver
 	ErrConfigSectionRequired = errors.New("integrations/registry: reconciled operation config requires a user input section")
-	// ErrDestructiveSurfaceChange indicates a credential slot, operation, or webhook was removed without a registration declaring that it replaces it
+	// ErrDestructiveSurfaceChange indicates a removed slot, operation, or webhook has no replacement
 	ErrDestructiveSurfaceChange = errors.New("integrations/registry: removed credential slot, operation, or webhook has no replacing registration")
 )

@@ -8,9 +8,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/domainscan"
 )
 
-// DomainScanImportVendor is one vendor the reviewer accepted, keyed by a client-assigned Ref so DomainScanImportPlatform/DomainScanImportSystem can reference it before it has a real Entity ID
+// DomainScanImportVendor is one reviewer-accepted vendor, keyed by a client-assigned Ref
 type DomainScanImportVendor struct {
-	// Ref is a client-assigned identifier for this vendor, referenced by EntityRefs elsewhere in the envelope
+	// Ref is a client-assigned identifier for this vendor, referenced by EntityRefs elsewhere
 	Ref string `json:"ref"`
 	// Name is the vendor's name
 	Name string `json:"name"`
@@ -22,9 +22,9 @@ type DomainScanImportVendor struct {
 	Categories []string `json:"categories,omitempty"`
 }
 
-// DomainScanImportAsset is one asset the reviewer accepted, keyed by a client-assigned Ref so DomainScanImportPlatform/DomainScanImportSystem can reference it before it has a real Asset ID
+// DomainScanImportAsset is one reviewer-accepted asset, keyed by a client-assigned Ref
 type DomainScanImportAsset struct {
-	// Ref is a client-assigned identifier for this asset, referenced by AssetRefs elsewhere in the envelope
+	// Ref is a client-assigned identifier for this asset, referenced by AssetRefs elsewhere
 	Ref string `json:"ref"`
 	// Name is the asset's display name
 	Name string `json:"name"`
@@ -36,9 +36,9 @@ type DomainScanImportAsset struct {
 	Categories []string `json:"categories,omitempty"`
 }
 
-// DomainScanImportPlatform is one accepted platform, linked to a subset of the accepted vendors/assets, and keyed by a client-assigned Ref so DomainScanImportSystem can reference it before it has a real Platform ID
+// DomainScanImportPlatform is one accepted platform, keyed by a client-assigned Ref
 type DomainScanImportPlatform struct {
-	// Ref is a client-assigned identifier for this platform, referenced by PlatformRefs elsewhere in the envelope
+	// Ref is a client-assigned identifier for this platform, referenced by PlatformRefs elsewhere
 	Ref string `json:"ref"`
 	// Name is the platform's name
 	Name string `json:"name"`
@@ -50,7 +50,7 @@ type DomainScanImportPlatform struct {
 	AssetRefs []string `json:"assetRefs,omitempty"`
 }
 
-// DomainScanImportSystem is one accepted system detail, linked to its own subset of the accepted vendors/assets/platforms
+// DomainScanImportSystem is one accepted system detail, linked to its own vendors/assets/platforms
 type DomainScanImportSystem struct {
 	// Name is the system's name
 	Name string `json:"name"`
@@ -76,7 +76,7 @@ type DomainScanImportFinding struct {
 	Domain string `json:"domain,omitempty"`
 }
 
-// DomainScanImport imports a reviewer-accepted domain scan report into real Platform/SystemDetail/Entity/Asset/Finding records
+// DomainScanImport imports a reviewer-accepted domain scan report into real records
 type DomainScanImport struct {
 	// OrganizationID is the organization the created records belong to
 	OrganizationID string `json:"organizationId"`

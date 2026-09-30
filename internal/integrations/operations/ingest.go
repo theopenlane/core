@@ -25,16 +25,13 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// ingestPreloadMinRecords is the minimum total envelope count across a batch's payload sets that
-// triggers preloading integration activity state and link-target lookups for the batch
+// ingestPreloadMinRecords is the envelope count that triggers preload for a batch
 const ingestPreloadMinRecords = 2
 
-// ingestMaxRecordAttempts caps the batched runs a tracked failing record is retried before it drops
-// out of exclusion tracking, mirroring gala's defaultMaxErrorStreak
+// ingestMaxRecordAttempts caps retries before a failing record drops from exclusion tracking
 const ingestMaxRecordAttempts = 5
 
-// keyJoin separates the schema name and lookup field values that make up an exclusion-tracking map
-// key, and separates the lookup field values stored on a FailedRecord
+// keyJoin separates schema name and lookup values in an exclusion-tracking key
 const keyJoin = "\x1f"
 
 // ingestQueryChunk bounds the number of lookup key tuples pushed into a single QueryByLookup batch
@@ -78,13 +75,11 @@ type IngestResult struct {
 	Succeeded int
 	// Changed counts records that created, modified, or durably queued rows, excluding unchanged rows
 	Changed int
-	// Skipped counts records left untouched because another definition's identity manages the row
-	// or because a newer integration run already wrote the row
+	// Skipped counts records left untouched by another definition or a newer run
 	Skipped int
 	// Failed counts records that could not be imported
 	Failed int
-	// Excluded counts records that failed again while tracked from an earlier run and were not
-	// requeued
+	// Excluded counts records that failed again while tracked and were not requeued
 	Excluded int
 	// Removed counts rows marked removed by snapshot reconciliation
 	Removed int
@@ -105,9 +100,9 @@ func IngestOptionsFromOperationContext(oc gala.OperationContext) IngestOptions {
 	}
 }
 
-// installationFilterConfig holds per-installation CEL filter configuration stored in the integration's client config
+// installationFilterConfig holds per-installation CEL filter config
 type installationFilterConfig struct {
-	// FilterExpr is a CEL expression evaluated against each ingest envelope; non-matching envelopes are dropped
+	// FilterExpr is a CEL expression evaluated per envelope; non-matches are dropped
 	FilterExpr string `json:"filterExpr,omitempty"`
 }
 
@@ -119,20 +114,17 @@ type mappedIngestRecord struct {
 	Variant string
 	// Payload is the mapped JSON document ready for unmarshaling into the ent create input type
 	Payload json.RawMessage
-	// schema is the entityops schema resolved once per payload set, carried on the record so the
-	// persist handle never re-resolves it per record
+	// schema is the entityops schema resolved once per payload set
 	schema *entityops.Schema
 }
 
-// preparedIngestRecord is one payload set envelope after mapping and filtering, staged for link
-// resolution and persistence
+// preparedIngestRecord is one envelope after mapping and filtering, staged for persistence
 type preparedIngestRecord struct {
 	// resource is the provider resource identifier, carried for failure reporting
 	resource string
 	// record is the mapped record ready for link resolution and persistence
 	record mappedIngestRecord
-	// links are the mapping variant's cross-object link rules, carried so a group of records sharing
-	// a variant resolve them to entityops link specs once instead of once per record
+	// links are the mapping variant's cross-object link rules, resolved once per group
 	links []types.LinkRule
 }
 
@@ -141,9 +133,7 @@ func (p preparedIngestRecord) logCtx(ctx context.Context) context.Context {
 	return logx.WithFields(ctx, map[string]any{"schema": p.record.Schema, "resource": p.resource})
 }
 
-// ingestOutcome captures one persisted record's identity and the upsert decision entityops made for
-// it: changed reports whether the write was material, and managed reports whether this
-// installation's definition owns the resolved row
+// ingestOutcome captures one persisted record's identity and its upsert decision
 type ingestOutcome struct {
 	id      string
 	changed bool
@@ -167,27 +157,22 @@ type ingestBatch struct {
 	Options IngestOptions
 }
 
-// variantGroup batches one payload set's prepared records sharing a mapping variant, so their link
-// rules resolve to entityops link specs once per group instead of once per record
+// variantGroup batches a payload set's prepared records sharing a mapping variant
 type variantGroup struct {
 	links   []types.LinkRule
 	records []preparedIngestRecord
 }
 
-// snapshotSet tracks one payload set's snapshot-reconciliation bookkeeping across its persist pass:
-// scope is every row entityops considers live for this owner, definition, instance, and managing
-// installation before the pass began, and seen accumulates the ids this pass actually confirmed
+// snapshotSet tracks one payload set's snapshot-reconciliation bookkeeping
 type snapshotSet struct {
 	schema *entityops.Schema
 	scope  map[string]struct{}
 	seen   map[string]struct{}
-	// stale counts rows a newer run already wrote: scope rows carrying a greater run id at load time
-	// plus rows the run guard rejected during this pass; any stale row makes this run too old to
-	// infer removals for the set
+	// stale counts rows a newer run already wrote, disqualifying removal inference
 	stale int
 }
 
-// payloadRun carries one batch's shared state across its prepare, link, persist, and finalize passes
+// payloadRun carries one batch's shared state across its ingest passes
 type payloadRun struct {
 	ic           IngestContext
 	batch        ingestBatch
@@ -202,9 +187,7 @@ type payloadRun struct {
 	result       IngestResult
 }
 
-// ProcessPayloadSets persists one batch of mapped payload sets synchronously inside the run job;
-// record failures are skipped, requeued as durable per-record jobs when ic.Runtime is set, and
-// reported in the result, never the error
+// ProcessPayloadSets persists one batch of mapped payload sets synchronously
 func ProcessPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, policy types.ExecutionPolicy, payloadSets []types.IngestPayloadSet, options IngestOptions) (IngestResult, error) {
 	batch := ingestBatch{OperationName: operationName, Contracts: contracts, Policy: policy, PayloadSets: payloadSets, Options: options}
 
@@ -215,8 +198,7 @@ func ProcessPayloadSets(ctx context.Context, ic IngestContext, operationName str
 	})
 }
 
-// applyPayloadSets maps, filters, links, and hands every record in the batch to handle, accumulating
-// the record-level result and the installation's failed-record tracking state
+// applyPayloadSets maps, filters, links, and persists every record in the batch
 func applyPayloadSets(ctx context.Context, ic IngestContext, batch ingestBatch, handle ingestHandle) (IngestResult, error) {
 	run, ctx, err := newPayloadRun(ctx, ic, batch, handle)
 	if err != nil {
@@ -350,7 +332,7 @@ func (run *payloadRun) resolveSetSchema(name string) (*entityops.Schema, error) 
 	return nil, ErrIngestSchemaNotFound
 }
 
-// prepare maps and filters the payload set's envelopes, stamping provenance on every included record
+// prepare maps and filters the payload set's envelopes, stamping provenance
 func (run *payloadRun) prepare(ctx context.Context, payloadSet types.IngestPayloadSet, sourceSchema *entityops.Schema) []preparedIngestRecord {
 	prepared := make([]preparedIngestRecord, 0, len(payloadSet.Envelopes))
 
@@ -425,7 +407,7 @@ func (run *payloadRun) link(ctx context.Context, sourceSchema *entityops.Schema,
 	return ready, nil
 }
 
-// prefetchLinkTargets caches the group's link targets on ctx when the batch is large enough to preload
+// prefetchLinkTargets caches the group's link targets on ctx when preloading
 func (run *payloadRun) prefetchLinkTargets(ctx context.Context, sourceSchema *entityops.Schema, records []preparedIngestRecord, specs []entityops.LinkSpec) (context.Context, error) {
 	if !run.preload || len(specs) == 0 {
 		return ctx, nil
@@ -470,7 +452,7 @@ func (run *payloadRun) snapshot(ctx context.Context, payloadSet types.IngestPayl
 	return set, nil
 }
 
-// persist hands one ready record to the handle unless its tracked failure excludes it, recording the outcome
+// persist hands one ready record to the handle unless a tracked failure excludes it
 func (run *payloadRun) persist(ctx context.Context, p preparedIngestRecord, set *snapshotSet) error {
 	var recordKey, trackKey string
 
@@ -508,7 +490,7 @@ func (run *payloadRun) persist(ctx context.Context, p preparedIngestRecord, set 
 	return nil
 }
 
-// skipExcluded applies the record's tracked failure, reporting whether the record is skipped this run
+// skipExcluded applies a record's tracked failure, reporting whether it's skipped
 func (run *payloadRun) skipExcluded(ctx, recordCtx context.Context, p preparedIngestRecord, set *snapshotSet, trackKey string, entry *models.FailedRecord) (bool, error) {
 	schema := p.record.schema
 	resolvable := schema.QueryByLookup != nil && entry.RunID != ""
@@ -578,7 +560,7 @@ func (run *payloadRun) recordSuccess(outcome ingestOutcome, set *snapshotSet, tr
 	}
 }
 
-// recordFailure tracks a persist failure, requeues the record durably when a runtime is available, and counts it
+// recordFailure tracks a persist failure and requeues the record when possible
 func (run *payloadRun) recordFailure(recordCtx context.Context, p preparedIngestRecord, recordKey, trackKey string, err error) {
 	wrapped := wrapIngestPersistError(err)
 
@@ -602,7 +584,7 @@ func (run *payloadRun) recordFailure(recordCtx context.Context, p preparedIngest
 	run.fail(p.record.Schema, p.resource, wrapped)
 }
 
-// finalize applies snapshot removals when every record imported and persists the failed-record tracking state
+// finalize applies snapshot removals and persists the failed-record tracking state
 func (run *payloadRun) finalize(ctx context.Context) error {
 	switch {
 	case run.result.Failed > 0:
@@ -655,7 +637,7 @@ func (run *payloadRun) removeUnseen(ctx context.Context) error {
 	return nil
 }
 
-// persistFailedRecords writes the exclusion-tracking state onto the installation's health from a fresh read of the row, so concurrent health writers are not clobbered by the batch's stale snapshot
+// persistFailedRecords writes exclusion-tracking state from a fresh read of the row
 func persistFailedRecords(ctx context.Context, ic IngestContext, records []models.FailedRecord) error {
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
@@ -676,8 +658,7 @@ func persistFailedRecords(ctx context.Context, ic IngestContext, records []model
 	return nil
 }
 
-// groupByVariant batches a payload set's prepared records by mapping variant, in first-seen order,
-// so their shared link rules resolve to entityops link specs once per group instead of once per record
+// groupByVariant batches a payload set's prepared records by mapping variant
 func groupByVariant(prepared []preparedIngestRecord) []variantGroup {
 	var groups []variantGroup
 
@@ -697,8 +678,7 @@ func groupByVariant(prepared []preparedIngestRecord) []variantGroup {
 	return groups
 }
 
-// lookupKeyFor resolves the first lookup alternative whose fields are all present and non-empty in
-// the payload, returning its index and extracted values
+// lookupKeyFor resolves the first complete lookup alternative in the payload
 func lookupKeyFor(schema *entityops.Schema, payload json.RawMessage) (alternative int, values entityops.LookupValues, ok bool) {
 	for i, alt := range schema.Lookup {
 		candidate := make(entityops.LookupValues, len(alt.Fields))
@@ -728,9 +708,7 @@ func lookupKeyFor(schema *entityops.Schema, payload json.RawMessage) (alternativ
 	return 0, nil, false
 }
 
-// failedRecordKey renders a mapped record's exclusion-tracking key from its first complete lookup
-// alternative, joining the alternative's values in declared field order by keyJoin. ok is false when
-// no alternative is complete, meaning the record cannot be tracked
+// failedRecordKey renders a record's exclusion-tracking key from its lookup values
 func failedRecordKey(schema *entityops.Schema, payload json.RawMessage) (key string, ok bool) {
 	alternative, values, ok := lookupKeyFor(schema, payload)
 	if !ok {
@@ -747,17 +725,13 @@ func failedRecordKey(schema *entityops.Schema, payload json.RawMessage) (key str
 	return strings.Join(ordered, keyJoin), true
 }
 
-// recordLookup pairs one ready record's resolved ingest lookup alternative and key values, staged
-// for grouping into per-alternative prefetch batches
+// recordLookup pairs a ready record's resolved lookup alternative and key values
 type recordLookup struct {
 	alternative int
 	values      entityops.LookupValues
 }
 
-// prefetchLookupMatches batch-queries a payload set's ready records against their ingest lookup
-// alternatives and installs the results as a ctx-carried match cache (see
-// entityops.WithLookupMatches), letting Upsert resolve each record's existing row from the
-// prefetched batch instead of issuing QueryByLookup per record
+// prefetchLookupMatches batch-queries ready records and caches matches on ctx
 func prefetchLookupMatches(ctx context.Context, db *ent.Client, ownerID string, schema *entityops.Schema, ready []preparedIngestRecord) (context.Context, error) {
 	lookups := lo.FilterMap(ready, func(p preparedIngestRecord, _ int) (recordLookup, bool) {
 		alternative, values, ok := lookupKeyFor(schema, p.record.Payload)
@@ -804,9 +778,7 @@ func keyLookupRows(alt entityops.LookupAlternative, rows []json.RawMessage, keye
 	}
 }
 
-// excludedRecordRows resolves the rows an excluded record's lookup key currently matches, so a
-// snapshot pass can mark them seen (never marking a record removed only because its write was
-// skipped) and a tracked failure can be checked for resolution by a durable retry
+// excludedRecordRows resolves the rows an excluded record's lookup key matches
 func excludedRecordRows(ctx context.Context, db *ent.Client, ownerID string, schema *entityops.Schema, payload json.RawMessage) ([]json.RawMessage, error) {
 	alternative, values, ok := lookupKeyFor(schema, payload)
 	if !ok || schema.QueryByLookup == nil {
@@ -816,23 +788,19 @@ func excludedRecordRows(ctx context.Context, db *ent.Client, ownerID string, sch
 	return schema.QueryByLookup(ctx, db, ownerID, alternative, []entityops.LookupValues{values})
 }
 
-// trackedFailureResolved reports whether any row matching an excluded record's lookup key carries
-// an integration run id at or after the tracked failure's run id, meaning a durable per-record
-// retry already wrote the row after the batched run that recorded the failure
+// trackedFailureResolved reports whether a durable retry already wrote the row
 func trackedFailureResolved(rows []json.RawMessage, runID string) bool {
 	return lo.ContainsBy(rows, func(row json.RawMessage) bool {
 		return entityops.FieldValue(row, entityops.FieldIntegrationRunID) >= runID
 	})
 }
 
-// trackingKey builds the exclusion-tracking map key from a schema name and a failed record's
-// lookup key, so records sharing lookup values across different schemas track independently
+// trackingKey builds the exclusion-tracking map key from a schema and record key
 func trackingKey(schemaName, key string) string {
 	return schemaName + keyJoin + key
 }
 
-// failedRecordsFromTracked renders the exclusion-tracking map into a deterministically ordered
-// slice, sorted by schema then key, for persistence on the integration's health
+// failedRecordsFromTracked renders the tracking map into a sorted slice
 func failedRecordsFromTracked(tracked map[string]*models.FailedRecord) []models.FailedRecord {
 	records := make([]models.FailedRecord, 0, len(tracked))
 
@@ -847,8 +815,7 @@ func failedRecordsFromTracked(tracked map[string]*models.FailedRecord) []models.
 	return records
 }
 
-// mapIngestRecord applies the resolved mapping's filters and map expression to one data envelope,
-// returning the mapped record and whether the envelope passed the include filters
+// mapIngestRecord applies the mapping's filters and map expression to one envelope
 func mapIngestRecord(ctx context.Context, mapping types.MappingOverride, schema string, envelope types.MappingEnvelope, installationFilterExpr string, installation types.MappingInstallation) (mappedIngestRecord, bool, error) {
 	matched, err := envelopeIncludedByFilters(ctx, installationFilterExpr, mapping.FilterExpr, envelope, installation)
 	if err != nil {
@@ -871,10 +838,7 @@ func mapIngestRecord(ctx context.Context, mapping types.MappingOverride, schema 
 	}, true, nil
 }
 
-// resolveInstallationFilterExpr pulls the filter expression for the current operation out of the
-// installation config. When the operation declares a ConfigResolver, it extracts the
-// operation-specific config section first (supporting nested UserInput structures like
-// directorySync.filterExpr); otherwise it falls back to a top-level filterExpr in ClientConfig
+// resolveInstallationFilterExpr resolves the filter expression for the operation
 func resolveInstallationFilterExpr(installation *ent.Integration, definition types.Definition, operationName string) (string, error) {
 	op, found := lo.Find(definition.Operations, func(o types.OperationRegistration) bool { return o.Name == operationName })
 	if found && op.ConfigResolver != nil {
@@ -896,7 +860,7 @@ func resolveInstallationFilterExpr(installation *ent.Integration, definition typ
 	return cfg.FilterExpr, nil
 }
 
-// envelopeIncludedByFilters evaluates the installation-level and mapping-level filter expressions against the data envelope
+// envelopeIncludedByFilters evaluates installation- and mapping-level filters
 func envelopeIncludedByFilters(ctx context.Context, installationFilterExpr string, mappingFilterExpr string, envelope types.MappingEnvelope, installation types.MappingInstallation) (bool, error) {
 	matched, err := providerkit.EvalFilter(ctx, installationFilterExpr, envelope, installation)
 	if err != nil {
@@ -921,21 +885,21 @@ func findMapping(mappings []types.MappingRegistration, schema string, variant st
 	return mapping.Spec, true
 }
 
-// contractIncludesSchema checks whether the given list of contracts includes a contract for the given schema
+// contractIncludesSchema reports whether the contracts include the given schema
 func contractIncludesSchema(contracts []types.IngestContract, schema string) bool {
 	return lo.ContainsBy(contracts, func(contract types.IngestContract) bool {
 		return contract.Schema == schema
 	})
 }
 
-// RecordFailureSummary renders a compact description of a run's failed records for the run's error text
+// RecordFailureSummary renders a compact summary of a run's failed records
 func RecordFailureSummary(result IngestResult) string {
 	first := result.Failures[0]
 
 	return fmt.Sprintf("%d of %d records failed to import; first failure: %s %s: %v", result.Failed, result.Attempted, first.Schema, first.Resource, first.Err)
 }
 
-// wrapIngestPersistError wraps the known errors from persistence operations so we don't need the same boilerplate in multiple functions
+// wrapIngestPersistError normalizes known persistence errors
 func wrapIngestPersistError(err error) error {
 	if err == nil {
 		return nil

@@ -1,2 +1,2 @@
-// Package templatekit provides shared template resolution and payload merging for integration operations
+// Package templatekit provides shared template resolution and payload merging
 package templatekit

@@ -25,7 +25,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// TestFindingRawPayloadOnlyReingestNoop verifies a Volatile-only raw_payload difference never writes on its own but rides along on a material change
+// TestFindingRawPayloadOnlyReingestNoop verifies volatile fields ride along on material changes
 func TestFindingRawPayloadOnlyReingestNoop(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -101,7 +101,7 @@ func TestFindingRawPayloadOnlyReingestNoop(t *testing.T) {
 	assert.Check(t, is.Equal(float64(2), after.RawPayload["a"]), "the volatile field must ride along once a material field changed")
 }
 
-// TestVulnerabilityVolatileOnlyReingestNoop verifies a Volatile-only raw_payload difference never writes on its own but rides along on a material change
+// TestVulnerabilityVolatileOnlyReingestNoop verifies volatile fields ride along on material changes
 func TestVulnerabilityVolatileOnlyReingestNoop(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -177,7 +177,7 @@ func TestVulnerabilityVolatileOnlyReingestNoop(t *testing.T) {
 	assert.Check(t, is.Equal(float64(2), after.RawPayload["a"]), "the volatile field must ride along once a material field changed")
 }
 
-// TestAssetObservedAtOnlyReingestNoop verifies an observed_at-only difference never writes on its own but rides along on a material change
+// TestAssetObservedAtOnlyReingestNoop verifies observed_at rides along on material changes
 func TestAssetObservedAtOnlyReingestNoop(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -252,7 +252,7 @@ func TestAssetObservedAtOnlyReingestNoop(t *testing.T) {
 	assert.Check(t, time.Time(*after.ObservedAt).Equal(time.Date(2024, 6, 1, 0, 0, 0, 0, time.UTC)), "the volatile field must ride along once a material field changed")
 }
 
-// TestRiskObservedAtOnlyReingestNoop verifies an observed_at-only difference never writes on its own but rides along on a material change
+// TestRiskObservedAtOnlyReingestNoop verifies observed_at rides along on material changes
 func TestRiskObservedAtOnlyReingestNoop(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -327,7 +327,7 @@ func TestRiskObservedAtOnlyReingestNoop(t *testing.T) {
 	assert.Check(t, time.Time(*after.ObservedAt).Equal(time.Date(2024, 6, 1, 0, 0, 0, 0, time.UTC)), "the volatile field must ride along once a material field changed")
 }
 
-// TestFindingFractionalTimestampReingestUnchanged pins the second-precision round-trip of a non-volatile models.DateTime field
+// TestFindingFractionalTimestampReingestUnchanged verifies fractional timestamps round-trip unchanged
 func TestFindingFractionalTimestampReingestUnchanged(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -379,7 +379,7 @@ func TestFindingFractionalTimestampReingestUnchanged(t *testing.T) {
 	assert.Check(t, after.UpdatedAt.Equal(created.UpdatedAt), "an identical fractional-second timestamp must not rewrite the row")
 }
 
-// TestFindingControlLinkResyncDedupes verifies a Finding.controls through-edge link supplied on every ingest is applied once
+// TestFindingControlLinkResyncDedupes verifies a resynced control link is not duplicated
 func TestFindingControlLinkResyncDedupes(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 

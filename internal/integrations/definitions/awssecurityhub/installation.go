@@ -11,8 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// resolveInstallationMetadata derives AWS connection metadata from whichever credential is bound.
-// It uses the assume-role credential when present, otherwise falls back to the service account credential.
+// resolveInstallationMetadata derives AWS connection metadata from the bound credential
 func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	_, hasAssumeRole := req.Credentials.Resolve(awsAssumeRoleCredential.ID())
 	if !hasAssumeRole {
@@ -50,7 +49,7 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 	return metadata, true, nil
 }
 
-// resolveServiceAccountInstallationMetadata derives the AWS account identity for the static credential path from STS
+// resolveServiceAccountInstallationMetadata derives AWS account identity via STS
 func resolveServiceAccountInstallationMetadata(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	serviceAccount, ok, err := awsServiceAccountCredential.Resolve(req.Credentials)
 	if err != nil {
@@ -78,7 +77,7 @@ func resolveServiceAccountInstallationMetadata(ctx context.Context, req types.In
 	}, true, nil
 }
 
-// callerAccountID returns the AWS account id that owns the credentials in the config via STS GetCallerIdentity
+// callerAccountID returns the AWS account id via STS GetCallerIdentity
 func callerAccountID(ctx context.Context, cfg awssdk.Config) (string, error) {
 	identity, err := sts.NewFromConfig(cfg).GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
 	if err != nil {

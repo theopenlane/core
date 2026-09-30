@@ -42,7 +42,7 @@ type DriveClient struct {
 	Graph *msgraphsdk.GraphServiceClient
 	// TS is the OAuth2 token source used to obtain access tokens for plain HTTP requests
 	TS oauth2.TokenSource
-	// Cfg is the operator-level configuration, carried so export operations can access content mode settings
+	// Cfg is the operator-level configuration for export operations
 	Cfg Config
 }
 
@@ -58,7 +58,7 @@ type UserInput struct {
 type oldUserInput struct {
 	// Primary marks this installation as the authoritative OneDrive source for live document exports
 	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
-	// FolderID is the folder path relative to the drive root (e.g. "Policies"); leave empty to sync the root
+	// FolderID is the folder path relative to the drive root; empty syncs the root
 	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder Path,description=Folder path relative to drive root (e.g. Policies). Leave empty to sync the entire drive root."`
 	// FilterExpr is an optional CEL expression to filter which documents in the folder are eligible
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to filter documents before creating policies"`

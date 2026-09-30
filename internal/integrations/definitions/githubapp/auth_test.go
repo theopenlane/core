@@ -56,7 +56,7 @@ func TestFlowStartMissingSlug(t *testing.T) {
 	require.ErrorIs(t, err, ErrAppSlugMissing)
 }
 
-// TestFlowCompleteDecodesCallbackAndProducesCredential verifies Complete mints a credential from callback input
+// TestFlowCompleteDecodesCallbackAndProducesCredential verifies Complete mints a credential
 func TestFlowCompleteDecodesCallbackAndProducesCredential(t *testing.T) {
 	t.Parallel()
 

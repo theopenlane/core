@@ -1,4 +1,4 @@
-// Package mappingtest provides shared test helpers for integration mapping tests.
+// Package mappingtest provides shared test helpers for integration mapping tests
 package mappingtest
 
 import (
@@ -39,7 +39,7 @@ func MappingSpec(t *testing.T, mappings []types.MappingRegistration, schema stri
 	return types.MappingOverride{}
 }
 
-// AssertExpressionsValid compiles the filter and map expression of every mapping, each as its own subtest
+// AssertExpressionsValid compiles the filter and map expression of every mapping
 func AssertExpressionsValid(t *testing.T, mappings []types.MappingRegistration) {
 	t.Helper()
 
@@ -59,7 +59,7 @@ func AssertExpressionsValid(t *testing.T, mappings []types.MappingRegistration) 
 	}
 }
 
-// AssertFiltered evaluates the filter expression against the envelope and returns whether it matched
+// AssertFiltered evaluates the filter expression and returns whether it matched
 func AssertFiltered(t *testing.T, spec types.MappingOverride, envelope types.MappingEnvelope) bool {
 	t.Helper()
 
@@ -79,7 +79,7 @@ var Installation = types.MappingInstallation{
 	PrimaryDirectory: true,
 }
 
-// EvalMap evaluates the map expression for the given spec and envelope, returning the result as a map
+// EvalMap evaluates the map expression and returns the result as a map
 func EvalMap(t *testing.T, spec types.MappingOverride, envelope types.MappingEnvelope) map[string]any {
 	t.Helper()
 

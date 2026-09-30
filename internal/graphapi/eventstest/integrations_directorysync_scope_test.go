@@ -16,10 +16,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
 )
 
-// directoryScopeTestInstance is the shared external instance id two installations of one definition connect to
+// directoryScopeTestInstance is the shared instance id for scope test installations
 const directoryScopeTestInstance = "tenant-dirscope"
 
-// newDirectoryScopeInstallation creates one installation of the directory sync test definition against the shared scope instance
+// newDirectoryScopeInstallation returns one installation on the shared scope instance
 func newDirectoryScopeInstallation(t *testing.T, name string) *ent.Integration {
 	t.Helper()
 
@@ -36,7 +36,7 @@ func newDirectoryScopeInstallation(t *testing.T, name string) *ent.Integration {
 	return integration
 }
 
-// TestDirectorySnapshotRemovalScopedToManagingInstallation verifies a complete snapshot from one installation only marks its own rows removed, never rows another installation of the same definition and instance manages
+// TestDirectorySnapshotRemovalScopedToManagingInstallation verifies removal is scoped to the manager
 func TestDirectorySnapshotRemovalScopedToManagingInstallation(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -73,7 +73,7 @@ func TestDirectorySnapshotRemovalScopedToManagingInstallation(t *testing.T) {
 	assert.Check(t, secondAccount.RemovedAt == nil, "the other installation's account must be untouched by the first installation's snapshot")
 }
 
-// TestDirectoryIngestExcludedRecordSkipsPersist verifies a record tracked as failing from an earlier run is skipped without a write, its attempt counter advances on the installation's health, and only that record is shielded from snapshot removal
+// TestDirectoryIngestExcludedRecordSkipsPersist verifies excluded records are skipped and shielded
 func TestDirectoryIngestExcludedRecordSkipsPersist(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -133,7 +133,7 @@ func TestDirectoryIngestExcludedRecordSkipsPersist(t *testing.T) {
 	assert.Check(t, stillExcluded.RemovedAt == nil, "the excluded record present in the snapshot must stay active")
 }
 
-// TestRetryRunCreatesFreshPendingRun verifies a re-executed attempt of a terminal run continues under a new pending run that records the run it retries
+// TestRetryRunCreatesFreshPendingRun verifies a retry continues under a new pending run
 func TestRetryRunCreatesFreshPendingRun(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 

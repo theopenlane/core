@@ -6,13 +6,12 @@ import (
 	"github.com/xeipuuv/gojsonschema"
 )
 
-// ValidateSchema validates a JSON document against a JSON schema and returns
-// the raw gojsonschema result for caller-specific error handling.
+// ValidateSchema returns the gojsonschema validation result
 func ValidateSchema(schema any, document any) (*gojsonschema.Result, error) {
 	return gojsonschema.Validate(toJSONLoader(schema), toJSONLoader(document))
 }
 
-// ValidationErrorStrings converts schema validation errors into string messages.
+// ValidationErrorStrings converts schema validation errors into string messages
 func ValidationErrorStrings(result *gojsonschema.Result) []string {
 	if result == nil || result.Valid() {
 		return nil

@@ -17,9 +17,9 @@ var (
 	ErrAWSConfigBuildFailed = errors.New("awssecurityhub: aws config build failed")
 	// ErrCallerIdentityFetchFailed indicates STS GetCallerIdentity failed
 	ErrCallerIdentityFetchFailed = errors.New("awssecurityhub: caller identity fetch failed")
-	// ErrAccountIDMissing indicates STS GetCallerIdentity returned no account id for the installation identity
+	// ErrAccountIDMissing indicates STS GetCallerIdentity returned no account id
 	ErrAccountIDMissing = errors.New("awssecurityhub: account id missing")
-	// ErrAccountIDMismatch is returned when the configured account id disagrees with the account in the role ARN
+	// ErrAccountIDMismatch indicates the configured account id disagrees with the role ARN
 	ErrAccountIDMismatch = errors.New("awssecurityhub: configured account id does not match role arn account")
 	// ErrDescribeHubFailed indicates DescribeHub failed
 	ErrDescribeHubFailed = errors.New("awssecurityhub: describe hub failed")
@@ -37,6 +37,6 @@ var (
 	ErrIAMGroupsFetchFailed = errors.New("awsiam: IAM groups fetch failed")
 	// ErrIAMGroupsForUserFetchFailed indicates ListGroupsForUser failed
 	ErrIAMGroupsForUserFetchFailed = errors.New("awsiam: IAM groups for user fetch failed")
-	// ErrDirectorySyncPayloadEncode indicates a directory sync payload could not be serialized for ingest
+	// ErrDirectorySyncPayloadEncode indicates a directory sync payload could not be serialized
 	ErrDirectorySyncPayloadEncode = errors.New("awsiam: directory sync payload encode failed")
 )

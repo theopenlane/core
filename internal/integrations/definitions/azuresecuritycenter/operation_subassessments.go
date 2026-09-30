@@ -41,7 +41,7 @@ type SubAssessmentPayload struct {
 	Remediation string `json:"remediation,omitempty"`
 	// TimeGenerated is when the sub-assessment was generated
 	TimeGenerated *time.Time `json:"time_generated,omitempty"`
-	// ResourceType is the assessed resource type (e.g. ContainerRegistryVulnerability, ServerVulnerability)
+	// ResourceType is the assessed resource type
 	ResourceType string `json:"resource_type,omitempty"`
 	// Patchable indicates whether a patch is available (container/server types)
 	Patchable *bool `json:"patchable,omitempty"`
@@ -53,7 +53,7 @@ type SubAssessmentPayload struct {
 	CVSSScore *float32 `json:"cvss_score,omitempty"`
 }
 
-// subAssessmentsCollectOperation is the operation ref for the Azure Security Center sub-assessments collect operation
+// subAssessmentsCollectOperation is the sub-assessments collect operation ref
 var subAssessmentsCollectOperation = types.OperationRefOf[SubAssessmentsCollect]().Ingests(securityCenterClient, runSubAssessmentsCollect)
 
 // SubAssessmentsCollect collects Azure Defender for Cloud sub-assessment findings for ingest

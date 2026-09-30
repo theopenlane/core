@@ -33,7 +33,7 @@ const (
 	organizationTeamsErrorResponse = `{"errors":[{"message":"teams unavailable"}]}`
 )
 
-// newDirectorySyncGraphQLServer serves canned GraphQL responses for each directory sync query, returning the given teams response
+// newDirectorySyncGraphQLServer serves canned GraphQL responses for each directory sync query
 func newDirectorySyncGraphQLServer(t *testing.T, teamsResponse string) GraphQLClient {
 	t.Helper()
 
@@ -66,7 +66,7 @@ func newDirectorySyncGraphQLServer(t *testing.T, teamsResponse string) GraphQLCl
 	return client
 }
 
-// TestDirectorySyncSnapshotComplete verifies account, group, and membership payload sets carry the expected completeness flags
+// TestDirectorySyncSnapshotComplete verifies payload sets carry the expected completeness flags
 func TestDirectorySyncSnapshotComplete(t *testing.T) {
 	t.Parallel()
 

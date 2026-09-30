@@ -30,7 +30,6 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (DriveC
 		return DriveClient{}, ErrOAuthTokenMissing
 	}
 
-	// context background used intentionally in this slot
 	ts := providerkit.GoogleTokenSource(context.Background(), c.cfg.ClientID, c.cfg.ClientSecret, providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
 
 	svc, err := drive.NewService(ctx, option.WithTokenSource(ts))

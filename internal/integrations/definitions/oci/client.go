@@ -47,7 +47,7 @@ func (CloudGuardClientBuilder) Build(_ context.Context, req types.ClientBuildReq
 	return &client, nil
 }
 
-// buildConfigurationProvider resolves the credential and turns it into an OCI request signing configuration
+// buildConfigurationProvider builds an OCI request signing configuration
 func buildConfigurationProvider(bindings types.CredentialBindings) (common.ConfigurationProvider, error) {
 	cred, err := resolveCredential(bindings)
 	if err != nil {
@@ -63,7 +63,6 @@ func buildConfigurationProvider(bindings types.CredentialBindings) (common.Confi
 		lo.EmptyableToPtr(cred.PrivateKeyPassphrase),
 	)
 
-	// catches an unparsable PEM key, a bad passphrase, or an unknown region before the first API call
 	if _, err := common.IsConfigurationProviderValid(provider); err != nil {
 		return nil, ErrConfigurationProviderInvalid
 	}

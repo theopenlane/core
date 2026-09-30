@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// directorySyncRequest builds an OperationRequest carrying the given installation metadata attributes
+// directorySyncRequest builds an OperationRequest with the given installation metadata
 func directorySyncRequest(attributes string) types.OperationRequest {
 	return types.OperationRequest{
 		Integration: &ent.Integration{

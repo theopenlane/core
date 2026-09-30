@@ -12,13 +12,13 @@ var (
 	definitionID = types.NewDefinitionRef("def_01K0AZENTRA0000000000000001")
 	// installation is the typed installation metadata handle for the Azure Entra ID definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
-	// entraTenantCredential is the auth-managed credential slot holding the consented tenant
+	// entraTenantCredential is the credential slot holding the consented tenant
 	entraTenantCredential = types.CredentialRefOf[entraIDCred]()
 	// entraCredential is the client ref for the Azure token credential used by the health check
 	entraCredential = types.ClientRefOf[azcore.TokenCredential]().Using(entraTenantCredential)
-	// entraClient is the client ref for the Microsoft Graph service client used by directory operations
+	// entraClient is the client ref for the Microsoft Graph service client
 	entraClient = types.ClientRefOf[*msgraphsdk.GraphServiceClient]().Using(entraTenantCredential)
-	// entraConnection is the connection mode selected by the admin-consented tenant credential
+	// entraConnection is the connection mode for the admin-consented tenant credential
 	entraConnection = types.NewConnectionRef(entraTenantCredential).Enables(entraCredential).Enables(entraClient)
 	// userInput is the installation user input layout, replacing the flat v1 layout
 	userInput = types.NewUserInputRef[UserInput]("azureentraid").Replacing(types.NewUserInputRef[oldUserInput]("azureentraid-v1"), func(old oldUserInput) UserInput {
@@ -28,7 +28,7 @@ var (
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
-	// PrimaryDirectory marks this installation as the authoritative directory source for identity holder enrichment and lifecycle derivation
+	// PrimaryDirectory marks this installation as the authoritative directory source
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
 	// DirectorySync configures the directory sync operation
 	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Sync"`
@@ -48,7 +48,7 @@ type DirectorySync struct {
 
 // oldUserInput is the flat v1 installation user input layout
 type oldUserInput struct {
-	// PrimaryDirectory marks this installation as the authoritative directory source for identity holder enrichment and lifecycle derivation
+	// PrimaryDirectory marks this installation as the authoritative directory source
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
 	// DisableGroupSync when true only syncs users, skipping groups and memberships
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from Azure Entra ID, disable groups sync operations"`

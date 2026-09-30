@@ -8,9 +8,8 @@ type Config struct {
 	ClientSecret string `json:"clientsecret" koanf:"clientsecret" sensitive:"true"`
 	// RedirectURL is the OAuth callback URL registered with the Azure application
 	RedirectURL string `json:"redirecturl" koanf:"redirecturl" default:"https://api.theopenlane.io/v1/integrations/auth/callback"`
-	// ContentMode controls how document content is returned for live external content queries.
-	// Valid values: "iframe" (default, returns an embeddable preview iframe) and "pdf" (exports the document as PDF bytes).
+	// ContentMode controls how document content is returned (iframe or pdf)
 	ContentMode string `json:"contentmode" koanf:"contentmode" default:"iframe"`
-	// ApplicationID is the application ID registered in azure, used in the well-known configuration for domain validation
+	// ApplicationID is the Azure application ID used for domain validation
 	ApplicationID string `json:"applicationid" koanf:"applicationid"`
 }

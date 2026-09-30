@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 )
 
-// WebhookURLs is the resolver for the webhookURLs field.
+// WebhookURLs is the resolver for the webhookURLs field
 func (r *integrationResolver) WebhookURLs(ctx context.Context, obj *generated.Integration) (map[string]any, error) {
 	if r.integrationsRuntime == nil {
 		return nil, nil
@@ -41,7 +41,7 @@ func (r *integrationResolver) WebhookURLs(ctx context.Context, obj *generated.In
 	return webhookURLs, nil
 }
 
-// Credentials is the resolver for the credentials field.
+// Credentials is the resolver for the credentials field
 func (r *integrationResolver) Credentials(ctx context.Context, obj *generated.Integration) (jsontext.Value, error) {
 	if r.integrationsRuntime == nil {
 		return nil, nil
@@ -67,8 +67,6 @@ func (r *integrationResolver) Credentials(ctx context.Context, obj *generated.In
 		}
 	}
 
-	// not all schemas have a credential schema, those with oauth like Google Workspace, will
-	// have an empty schema
 	if credentialType.Schema == nil {
 		return nil, nil
 	}
@@ -94,7 +92,7 @@ func (r *integrationResolver) Credentials(ctx context.Context, obj *generated.In
 	return out, nil
 }
 
-// Config is the resolver for the config field.
+// Config is the resolver for the config field
 func (r *integrationResolver) Config(ctx context.Context, obj *generated.Integration) (jsontext.Value, error) {
 	if r.integrationsRuntime == nil {
 		return nil, nil

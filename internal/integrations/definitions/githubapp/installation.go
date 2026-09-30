@@ -8,9 +8,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// resolveInstallationMetadata derives GitHub App installation metadata from the bound credential first, then from
-// callback input, falling back to the metadata already stored on the installation when neither carries an
-// installation id
+// resolveInstallationMetadata derives installation metadata from credential, input, or storage
 func resolveInstallationMetadata(_ context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	cred, ok, err := gitHubAppCredential.Resolve(req.Credentials)
 	if err != nil {

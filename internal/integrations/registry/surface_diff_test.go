@@ -18,7 +18,7 @@ type gateCase struct {
 	wantErr string
 }
 
-// TestGateSurfaceChange verifies the gate passes kept, added, and replaced entries and refuses every unreplaced removal with the names listed
+// TestGateSurfaceChange verifies the gate passes valid changes and refuses unreplaced removals
 func TestGateSurfaceChange(t *testing.T) {
 	t.Parallel()
 
@@ -129,7 +129,7 @@ func TestGateSurfaceChangeEmptySnapshot(t *testing.T) {
 	}
 }
 
-// TestGateSurfaceChangeUndecodableSnapshot verifies an unreadable committed snapshot fails as a decode error rather than a destructive change
+// TestGateSurfaceChangeUndecodableSnapshot verifies an unreadable snapshot yields a decode error
 func TestGateSurfaceChangeUndecodableSnapshot(t *testing.T) {
 	t.Parallel()
 

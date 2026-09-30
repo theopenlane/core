@@ -129,7 +129,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	}, nil
 }
 
-// ResolveIntegration resolves one integration by explicit ID with optional owner and definition cross-checks
+// ResolveIntegration resolves one integration by ID with optional owner and definition checks
 func ResolveIntegration(ctx context.Context, db *ent.Client, integrationID, ownerID, definitionID string) (*ent.Integration, error) {
 	if integrationID == "" {
 		return nil, ErrIntegrationIDRequired
@@ -179,7 +179,7 @@ func ResolveOwnerIntegration(ctx context.Context, db *ent.Client, definitionID, 
 	return preferred.ID, nil
 }
 
-// inheritWebhookContext propagates webhook/event context from a parent execution so the envelope carries the triggering event identity
+// inheritWebhookContext propagates webhook/event context from a parent execution
 func inheritWebhookContext(ctx context.Context, src *types.IntegrationSource) {
 	oc, ok := gala.OperationContextFromContext(ctx)
 	if !ok {

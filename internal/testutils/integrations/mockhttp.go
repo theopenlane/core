@@ -18,45 +18,45 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// MockHTTPDefinitionID is the stable id for the mock HTTP provider that exercises the full connect/health/resolve/ingest flow against a real httptest server
+// MockHTTPDefinitionID is the id of the mock HTTP provider definition
 var MockHTTPDefinitionID = types.NewDefinitionRef("def_01K0MOCKHTTP00000000000001")
 
-// MockHTTPSyncOperation is the mock provider's directory sync operation, used to drive ingest through the installed definition
+// MockHTTPSyncOperation is the mock provider's directory sync operation name
 const MockHTTPSyncOperation = "mock.sync"
 
 var (
 	// MockHTTPCredential is the credential slot the mock provider authenticates with
 	MockHTTPCredential = types.CredentialRefOf[mockHTTPCred]()
-	// mockHTTPInstallation resolves installation metadata from the mock provider's instance endpoint
+	// mockHTTPInstallation is the installation metadata resolver
 	mockHTTPInstallation = types.NewInstallationRef(resolveMockHTTPMetadata)
-	// mockHTTPClient is the operation client that carries the stored credential into the ingest handler
+	// mockHTTPClient is the client ref for the mock provider
 	mockHTTPClient = types.ClientRefOf[*mockHTTPClientInstance]().Using(MockHTTPCredential)
-	// mockHTTPConnection is the connection mode selected by the mock provider credential slot
+	// mockHTTPConnection is the mock provider connection mode
 	mockHTTPConnection = types.NewConnectionRef(MockHTTPCredential)
-	// mockHTTPSyncOp is the mock provider's directory sync operation bound to its ingest handler
+	// mockHTTPSyncOp is the mock provider's directory sync operation
 	mockHTTPSyncOp = types.NewOperationRef[mockHTTPSync](MockHTTPSyncOperation).Ingests(mockHTTPClient, mockHTTPIngest)
 )
 
 // mockHTTPSync is the config for the mock provider's directory sync operation
 type mockHTTPSync struct{}
 
-// mockHTTPCred carries the bearer token and base URL of the mock provider the installation connects to
+// mockHTTPCred is the mock provider's bearer token and base URL
 type mockHTTPCred struct {
 	// Token is the bearer token the mock provider validates
 	Token string `json:"token"`
-	// BaseURL is the root URL of the mock provider, an httptest server in tests
+	// BaseURL is the root URL of the mock provider
 	BaseURL string `json:"baseUrl"`
 }
 
-// MockHTTPCredentialSet builds the mock provider credential payload carrying the token and base URL
+// MockHTTPCredentialSet returns the mock provider credential payload
 func MockHTTPCredentialSet(token, baseURL string) types.CredentialSet {
 	return credentialSet(mockHTTPCred{Token: token, BaseURL: baseURL})
 }
 
-// mockHTTPClientInstance is the mock provider operation client; the ingest handler reads its connection from the request credentials, so the client itself carries no state and exists only to bind the stored credential onto the operation request through the runtime's client resolution
+// mockHTTPClientInstance is the stateless mock provider operation client
 type mockHTTPClientInstance struct{}
 
-// buildMockHTTPClient validates the installation's stored credential resolves and returns the stateless mock provider client
+// buildMockHTTPClient returns the mock provider client if the credential resolves
 func buildMockHTTPClient(_ context.Context, req types.ClientBuildRequest) (*mockHTTPClientInstance, error) {
 	if _, ok, err := MockHTTPCredential.Resolve(req.Credentials); err != nil || !ok {
 		return nil, ErrMockHTTPUnhealthy
@@ -71,12 +71,12 @@ type MockHTTPInstallationMetadata struct {
 	InstanceID string `json:"instanceId,omitempty"`
 }
 
-// InstallationIdentity implements types.InstallationIdentifiable
+// InstallationIdentity returns the installation identity
 func (m MockHTTPInstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	return types.IntegrationInstallationIdentity{ExternalID: m.InstanceID}
 }
 
-// resolveMockHTTPMetadata fetches the external instance id from the mock provider using the stored credential
+// resolveMockHTTPMetadata returns the mock provider's external instance id
 func resolveMockHTTPMetadata(ctx context.Context, req types.InstallationRequest) (MockHTTPInstallationMetadata, bool, error) {
 	body, err := mockHTTPGet(ctx, req.Credentials, "/instance")
 	if err != nil {
@@ -95,7 +95,7 @@ func resolveMockHTTPMetadata(ctx context.Context, req types.InstallationRequest)
 	return metadata, true, nil
 }
 
-// mockHTTPHealthCheck validates the installation's credential against the mock provider's health endpoint
+// mockHTTPHealthCheck returns the mock provider's health check result
 func mockHTTPHealthCheck(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
 	if _, err := mockHTTPGet(ctx, req.Credentials, "/health"); err != nil {
 		return nil, err
@@ -104,7 +104,7 @@ func mockHTTPHealthCheck(ctx context.Context, req types.OperationRequest) (json.
 	return json.RawMessage(`{"ok":true}`), nil
 }
 
-// mockHTTPGet performs a GET of path against the mock provider under the bound credential's token and base URL, returning the body on a 200 and an error otherwise
+// mockHTTPGet returns the response body of a GET to path on the mock provider
 func mockHTTPGet(ctx context.Context, credentials types.CredentialBindings, path string) ([]byte, error) {
 	cred, ok, err := MockHTTPCredential.Resolve(credentials)
 	if err != nil || !ok {
@@ -132,7 +132,7 @@ func mockHTTPGet(ctx context.Context, credentials types.CredentialBindings, path
 	return io.ReadAll(response.Body)
 }
 
-// mockHTTPDirectory is the directory sync payload the mock provider serves and the ingest handler decodes
+// mockHTTPDirectory is the directory sync payload the mock provider serves
 type mockHTTPDirectory struct {
 	// Accounts are the raw directory account records the provider reports
 	Accounts []json.RawMessage `json:"accounts"`
@@ -142,7 +142,7 @@ type mockHTTPDirectory struct {
 	Memberships []json.RawMessage `json:"memberships"`
 }
 
-// mockHTTPIngest fetches the mock provider directory under the installation's credential and returns the account, group, and membership payload sets for the ingest pipeline to map, link, and persist
+// mockHTTPIngest returns the mock provider's directory as ingest payload sets
 func mockHTTPIngest(ctx context.Context, req types.OperationRequest, _ *mockHTTPClientInstance, _ mockHTTPSync) ([]types.IngestPayloadSet, error) {
 	body, err := mockHTTPGet(ctx, req.Credentials, "/directory")
 	if err != nil {
@@ -161,14 +161,14 @@ func mockHTTPIngest(ctx context.Context, req types.OperationRequest, _ *mockHTTP
 	}, nil
 }
 
-// mockHTTPEnvelopes wraps each raw provider record as a mapping envelope for one payload set
+// mockHTTPEnvelopes returns records wrapped as mapping envelopes
 func mockHTTPEnvelopes(records []json.RawMessage) []types.MappingEnvelope {
 	return lo.Map(records, func(record json.RawMessage, _ int) types.MappingEnvelope {
 		return types.MappingEnvelope{Payload: record}
 	})
 }
 
-// MockHTTPBuilder returns the mock HTTP provider definition; a single credentialed connection with a health check and a metadata resolver and no operations, so an installation connects and comes up healthy without seeding reconcile loops
+// MockHTTPBuilder returns the mock HTTP provider definition
 func MockHTTPBuilder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
@@ -229,25 +229,25 @@ func MockHTTPBuilder() registry.Builder {
 	})
 }
 
-// MockHTTPServer is a concurrency-safe httptest-backed mock provider whose reported instance id and directory records can be mutated at runtime, so a test drives connect, health, reconnect, and ingest flows by changing what the provider reports rather than by writing installation state directly
+// MockHTTPServer is a mutable httptest-backed mock provider server
 type MockHTTPServer struct {
-	// server is the running httptest server serving the mock provider endpoints
+	// server is the running httptest server
 	server *httptest.Server
-	// mu guards the mutable instance id and directory records against the server's concurrent handlers
+	// mu guards the mutable fields
 	mu sync.Mutex
 	// token is the bearer token the mock provider validates
 	token string
-	// instanceID is the external instance id the mock provider reports from its instance endpoint
+	// instanceID is the external instance id the mock provider reports
 	instanceID string
-	// accounts are the directory account records the mock provider serves
+	// accounts are the served directory account records
 	accounts []json.RawMessage
-	// groups are the directory group records the mock provider serves
+	// groups are the served directory group records
 	groups []json.RawMessage
-	// memberships are the directory membership records the mock provider serves
+	// memberships are the served directory membership records
 	memberships []json.RawMessage
 }
 
-// NewMockHTTPServer starts a mock provider httptest server that authenticates the bearer token and serves its health, instance, and directory endpoints from mutable state
+// NewMockHTTPServer returns a running mock provider httptest server
 func NewMockHTTPServer(token, instanceID string) *MockHTTPServer {
 	server := &MockHTTPServer{token: token, instanceID: instanceID}
 	server.server = httptest.NewServer(http.HandlerFunc(server.handle))
@@ -255,7 +255,7 @@ func NewMockHTTPServer(token, instanceID string) *MockHTTPServer {
 	return server
 }
 
-// handle routes one mock provider request, rejecting a bad bearer token and serving the health, instance, and directory endpoints from a snapshot taken under the mutex
+// handle routes one mock provider request
 func (m *MockHTTPServer) handle(w http.ResponseWriter, r *http.Request) {
 	m.mu.Lock()
 	token := m.token
@@ -286,7 +286,7 @@ func (m *MockHTTPServer) URL() string {
 	return m.server.URL
 }
 
-// SetInstanceID updates the instance id the mock provider reports from its instance endpoint
+// SetInstanceID sets the instance id the mock provider reports
 func (m *MockHTTPServer) SetInstanceID(id string) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
@@ -294,7 +294,7 @@ func (m *MockHTTPServer) SetInstanceID(id string) {
 	m.instanceID = id
 }
 
-// SetDirectory replaces the account, group, and membership records the mock provider serves
+// SetDirectory replaces the mock provider's directory records
 func (m *MockHTTPServer) SetDirectory(accounts, groups, memberships []json.RawMessage) {
 	m.mu.Lock()
 	defer m.mu.Unlock()

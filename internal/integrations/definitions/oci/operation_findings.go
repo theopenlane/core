@@ -18,7 +18,7 @@ const findingsPageSize = 100
 // findingsSyncOperation is the operation ref for the Cloud Guard findings collection operation
 var findingsSyncOperation = types.OperationRefOf[FindingsSync]().Ingests(cloudGuardClient, runFindingsSync)
 
-// runFindingsSync collects Cloud Guard problems from the configured compartment and emits finding ingest payloads
+// runFindingsSync collects Cloud Guard problems and emits finding ingest payloads
 func runFindingsSync(ctx context.Context, req types.OperationRequest, c *cloudguard.CloudGuardClient, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
 	meta, err := resolveCredential(req.Credentials)
 	if err != nil {
@@ -56,7 +56,7 @@ func runFindingsSync(ctx context.Context, req types.OperationRequest, c *cloudgu
 	}, nil
 }
 
-// listProblems pages through every Cloud Guard problem in the compartment and its subcompartments; no time filter because resolutions and dismissals never bump timeLastDetected
+// listProblems pages through every Cloud Guard problem in the compartment
 func listProblems(ctx context.Context, c *cloudguard.CloudGuardClient, compartmentID string) ([]cloudguard.ProblemSummary, error) {
 	problems := make([]cloudguard.ProblemSummary, 0)
 

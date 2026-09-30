@@ -27,8 +27,7 @@ import (
 
 const catalogIngestTestOperation = "catalog.ingest"
 
-// catalogIngestTestDefinition builds a minimal asset ingest definition whose mapping passes
-// provider payloads through unchanged
+// catalogIngestTestDefinition returns a minimal passthrough asset ingest definition
 func catalogIngestTestDefinition(defID string) integrationtypes.Definition {
 	passthrough := integrationtypes.MappingOverride{MapExpr: "payload"}
 
@@ -52,8 +51,7 @@ func catalogIngestTestDefinition(defID string) integrationtypes.Definition {
 	}
 }
 
-// ingestAssetPayloads pushes asset payloads through the synchronous catalog ingest path and
-// returns the record-level result
+// ingestAssetPayloads returns the ingest result of asset payloads
 func ingestAssetPayloads(ctx context.Context, t *testing.T, integration *ent.Integration, payloads ...string) operations.IngestResult {
 	t.Helper()
 
@@ -135,9 +133,7 @@ func TestCatalogUpsertUnchangedGate(t *testing.T) {
 	assert.Check(t, is.Equal("Gate Asset Two", after.Name))
 }
 
-// TestCatalogUpsertDuplicateKeyInOneRunConvergesOnOneRow verifies a duplicate lookup value within
-// one run converges on the same row: the first record creates it and the second record's lookup
-// sees the row the first created, updating it instead of racing a second create
+// TestCatalogUpsertDuplicateKeyInOneRunConvergesOnOneRow verifies duplicates converge on one row
 func TestCatalogUpsertDuplicateKeyInOneRunConvergesOnOneRow(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -174,8 +170,7 @@ func TestCatalogUpsertDuplicateKeyInOneRunConvergesOnOneRow(t *testing.T) {
 	assert.Check(t, is.Equal("Second", rows[0].Name), "the second record in the run must update the row the first record created")
 }
 
-// TestCatalogClaimUnclaimedRowTakenOverInOneWrite verifies an ingest payload takes over a row that
-// carries no recorded source definition, in the same write that applies its other field changes
+// TestCatalogClaimUnclaimedRowTakenOverInOneWrite verifies unclaimed rows are claimed in one write
 func TestCatalogClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -210,8 +205,7 @@ func TestCatalogClaimUnclaimedRowTakenOverInOneWrite(t *testing.T) {
 	assert.Check(t, is.Equal(integration.ID, after.ManagedBy))
 }
 
-// TestCatalogClaimActiveOtherInstallationReadOnly verifies a row managed by another still-active
-// installation of the same definition is skipped untouched, ownership pointers and data alike
+// TestCatalogClaimActiveOtherInstallationReadOnly verifies rows managed by others are skipped
 func TestCatalogClaimActiveOtherInstallationReadOnly(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -259,8 +253,7 @@ func TestCatalogClaimActiveOtherInstallationReadOnly(t *testing.T) {
 	assert.Check(t, is.Equal("Owned By A", after.Name), "no field may be written by a non-owning live installation")
 }
 
-// TestCatalogClaimGoneOtherInstallationRepoints verifies a row whose managing installation no longer
-// exists is repointed to the new installation in the same update as any other field change
+// TestCatalogClaimGoneOtherInstallationRepoints verifies rows repoint when the manager is gone
 func TestCatalogClaimGoneOtherInstallationRepoints(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
@@ -308,8 +301,7 @@ func TestCatalogClaimGoneOtherInstallationRepoints(t *testing.T) {
 	assert.Check(t, is.Equal("Adopted By B", after.Name))
 }
 
-// TestCatalogIntegrationRunsEdgeOnChangedRow verifies a material catalog ingest change adds the
-// ingesting run to the row's integration_runs edge, not just its scalar integration_run_id field
+// TestCatalogIntegrationRunsEdgeOnChangedRow verifies the run is added to integration_runs
 func TestCatalogIntegrationRunsEdgeOnChangedRow(t *testing.T) {
 	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 

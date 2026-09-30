@@ -15,7 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// mapCapacityFactor is the multiplier applied to the expected entry count when pre-sizing maps for deduplication
+// mapCapacityFactor sizes maps ahead for deduplication
 const mapCapacityFactor = 2
 
 // directoryUserPayload is the JSON-serializable representation of one Entra ID user
@@ -207,7 +207,7 @@ func paginateOData[T any, P odataPage[T]](ctx context.Context, fetchFirst func()
 	return items, nil
 }
 
-// userSelectFields are the Graph API fields explicitly requested for user listings; accountEnabled is not returned by default and must be $selected
+// userSelectFields are the Graph API fields requested for user listings
 var userSelectFields = []string{
 	"id", "displayName", "mail", "userPrincipalName", "otherMails",
 	"accountEnabled", "userType", "department", "givenName", "surname", "jobTitle",
@@ -258,7 +258,7 @@ func listEntraGroups(ctx context.Context, c *msgraphsdk.GraphServiceClient) ([]m
 	}, ErrGroupsFetchFailed)
 }
 
-// listEntraGroupUserMembers pages through user-type members for one group via the /microsoft.graph.user cast endpoint
+// listEntraGroupUserMembers pages through user-type members for one group
 func listEntraGroupUserMembers(ctx context.Context, c *msgraphsdk.GraphServiceClient, groupID string) ([]models.Userable, error) {
 	if groupID == "" {
 		return nil, nil

@@ -28,7 +28,6 @@ type disconnectDetails struct {
 }
 
 func getManageURL(teamID, appID string) string {
-	// fall back to the full app list
 	if appID == "" {
 		return fmt.Sprintf("https://app.slack.com/apps-manage/%s/integrations", teamID)
 	}

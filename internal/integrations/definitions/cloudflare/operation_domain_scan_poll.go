@@ -28,7 +28,7 @@ type DomainScanPollResult struct {
 	Result *url_scanner.ScanGetResponse `json:"result"`
 	// TaskErrors lists task-level errors reported alongside the result, if any
 	TaskErrors ScanTaskErrors `json:"taskErrors,omitempty"`
-	// NotReady is true when Cloudflare reported the scan isn't available yet (either not yet indexed, or still running) rather than a genuine fetch failure
+	// NotReady is true when Cloudflare reported the scan isn't available yet
 	NotReady bool `json:"notReady,omitempty"`
 }
 

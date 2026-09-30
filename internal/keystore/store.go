@@ -193,7 +193,7 @@ func (s *Store) DeleteCredential(ctx context.Context, integrationID string) erro
 	return nil
 }
 
-// ReplaceCredentials applies the change from previous to next: slots in previous that differ are updated, slots absent from previous are created only when no row exists, slots in previous but not in next are deleted, and rows outside previous are never overwritten
+// ReplaceCredentials reconciles installation credential slots from previous to next
 func (s *Store) ReplaceCredentials(ctx context.Context, installation *ent.Integration, previous, next map[types.CredentialSlotID]types.CredentialSet) error {
 	systemCtx := integrationSystemContext(ctx)
 
@@ -332,7 +332,7 @@ func cloneCredentialBindings(credentials types.CredentialBindings) types.Credent
 	return cloned
 }
 
-// activeCredentialRecord returns the active credential record for an installation and credential ref
+// activeCredentialRecord returns the active credential record for a slot
 func (s *Store) activeCredentialRecord(ctx context.Context, integrationID string, credentialRef types.CredentialSlotID) (*ent.Hush, bool, error) {
 	records, err := s.activeCredentialRecords(ctx, integrationID, []types.CredentialSlotID{credentialRef})
 	if err != nil {
@@ -347,8 +347,7 @@ func (s *Store) activeCredentialRecord(ctx context.Context, integrationID string
 	return record, true, nil
 }
 
-// activeCredentialRecords returns all active credential records for an installation and credential refs
-// Credentials are keyed by Hush.SecretName which stores the CredentialSlotID as a unique discriminator
+// activeCredentialRecords returns active credential records keyed by Hush.SecretName
 func (s *Store) activeCredentialRecords(ctx context.Context, integrationID string, credentialRefs []types.CredentialSlotID) (map[string]*ent.Hush, error) {
 	query := s.db.Hush.Query().Where(enthush.HasIntegrationsWith(entintegration.IDEQ(integrationID)))
 
@@ -389,7 +388,7 @@ func (s *Store) activeCredentialRecords(ctx context.Context, integrationID strin
 	return out, nil
 }
 
-// integrationSystemContext returns a context with system-level privileges for integration operations
+// integrationSystemContext returns a context with system-level privileges
 func integrationSystemContext(ctx context.Context) context.Context {
 	callCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	return auth.WithCaller(callCtx, auth.NewKeystoreCaller())

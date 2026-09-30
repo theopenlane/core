@@ -23,7 +23,7 @@ var (
 	})
 )
 
-// googleWorkspaceCred holds the provider-owned credential material for a Google Workspace installation
+// googleWorkspaceCred holds provider-owned credential material for the installation
 type googleWorkspaceCred struct {
 	// AccessToken is the OAuth2 access token
 	AccessToken string `json:"accessToken"`
@@ -35,7 +35,7 @@ type googleWorkspaceCred struct {
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
-	// PrimaryDirectory marks this installation as the authoritative directory source for identity holder enrichment and lifecycle derivation
+	// PrimaryDirectory marks this installation as the authoritative directory source
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
 	// DirectorySync configures the directory sync operation
 	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Sync"`
@@ -51,13 +51,13 @@ type DirectorySync struct {
 
 // oldUserInput is the flat v1 installation user input layout
 type oldUserInput struct {
-	// PrimaryDirectory marks this installation as the authoritative directory source for identity holder enrichment and lifecycle derivation
+	// PrimaryDirectory marks this installation as the authoritative directory source
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.orgUnitPath.startsWith('/engineering/')"`
 }
 
-// InstallationMetadata holds the stable Google Workspace directory target selected for one installation
+// InstallationMetadata holds the Google Workspace directory target for an installation
 type InstallationMetadata struct {
 	// CustomerID is the Google Workspace customer identifier
 	CustomerID string `json:"customerId,omitempty" jsonschema:"title=Customer ID"`

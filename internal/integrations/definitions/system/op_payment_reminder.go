@@ -24,7 +24,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// reminderStaggerDifference spaces successive deletion notice emails apart to avoid bursting the email provider
+// reminderStaggerDifference spaces successive deletion notice emails apart
 const reminderStaggerDifference = 30 * time.Second
 
 // Run executes one payment reminder sweep and returns the number of dispatched notifications
@@ -187,7 +187,7 @@ type paymentReminderRecipient struct {
 	lastName  string
 }
 
-// paymentReminderRecipients collects the unique admin/owner members and billing contact eligible for a deletion notice
+// paymentReminderRecipients collects admin/owner members and the billing contact
 func paymentReminderRecipients(members []*ent.OrgMembership, billingEmail string) []paymentReminderRecipient {
 	recipients := make([]paymentReminderRecipient, 0, len(members)+1)
 
