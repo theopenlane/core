@@ -11,10 +11,11 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
-	"github.com/theopenlane/utils/rout"
 )
 
 // impersonationBlacklistTTL is how long a revoked impersonation session is kept on the token blacklist.
@@ -124,7 +125,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context) error {
 		logx.FromContext(reqCtx).Info().Str("target_user_id", req.TargetUserID).Msg("system admin impersonation initiated")
 	}
 
-	if err := h.logImpersonationEvent(reqCtx, "start", auditLog); err != nil {
+	if err := h.logImpersonationEvent(reqCtx, enums.ImpersonationActionStart, auditLog); err != nil {
 		// Log the error but don't fail the request
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to log impersonation event")
 	}
@@ -161,7 +162,7 @@ func (h *Handler) EndImpersonation(ctx echo.Context) error {
 	}
 
 	// Log impersonation end
-	if err := h.logImpersonationEvent(reqCtx, "end", &auth.ImpersonationAuditLog{
+	if err := h.logImpersonationEvent(reqCtx, enums.ImpersonationActionStop, &auth.ImpersonationAuditLog{
 		SessionID:         req.SessionID,
 		Type:              caller.Impersonation.Type,
 		ImpersonatorID:    caller.Impersonation.ImpersonatorID,
@@ -240,12 +241,12 @@ func (h *Handler) getTargetUser(ctx context.Context, userID string, orgID string
 
 // logImpersonationEvent logs impersonation events for audit purposes
 // and persists it into the database
-func (h *Handler) logImpersonationEvent(ctx context.Context, action string, auditLog *auth.ImpersonationAuditLog) error {
-	logx.FromContext(ctx).Info().Str("action", action).Str("target_user_id", auditLog.TargetUserID).Msg("impersonation event")
+func (h *Handler) logImpersonationEvent(ctx context.Context, action enums.ImpersonationAction, auditLog *auth.ImpersonationAuditLog) error {
+	logx.FromContext(ctx).Info().Str("action", action.String()).Str("target_user_id", auditLog.TargetUserID).Msg("impersonation event")
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	create := h.DBClient.ImpersonationEvent.Create().
-		SetAction(*enums.ToImpersonationAction(action)).
+		SetAction(action).
 		SetImpersonationType(*enums.ToImpersonationType(string(auditLog.Type))).
 		SetReason(auditLog.Reason).
 		SetIPAddress(auditLog.IPAddress).

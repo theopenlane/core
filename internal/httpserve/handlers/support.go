@@ -17,6 +17,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	apimodels "github.com/theopenlane/core/common/openapi"
+
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -224,7 +225,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
 		OrganizationID:    orgCookie.Value,
 	}
 
-	if err := h.logImpersonationEvent(reqCtx, "start", auditLog); err != nil {
+	if err := h.logImpersonationEvent(reqCtx, enums.ImpersonationActionStart, auditLog); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to log support access event")
 	}
 
