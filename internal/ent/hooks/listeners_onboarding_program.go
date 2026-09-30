@@ -84,6 +84,7 @@ func createProgram(ctx context.Context, client *generated.Client, orgID string, 
 	builder := client.Program.Create().
 		SetName(generateProgramName(standards, currentYear)).
 		SetDescription(description).
+		SetProgramKindName(enums.ProgramTypeFramework.String()).
 		SetFrameworkName(frameworks)
 
 	if auditor, ok := complianceData["auditor_name"].(string); ok && auditor != "" {
