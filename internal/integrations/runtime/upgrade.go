@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/utils/contextx"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
@@ -20,9 +21,12 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
+// upgradedInstallationKey carries the id of the installation whose upgrade already ran in this request
+var upgradedInstallationKey = contextx.NewKey[string]()
+
 // ensureCurrentVersion upgrades an installation if versions dont match
 func (r *Runtime) ensureCurrentVersion(ctx context.Context, installation *ent.Integration, skip ...types.CredentialSlotID) error {
-	if installation.DefinitionVersion == r.Registry().Version(installation.DefinitionID) {
+	if installation.DefinitionVersion == r.Registry().Version(installation.DefinitionID) || upgradedInstallationKey.GetOr(ctx, "") == installation.ID {
 		return nil
 	}
 

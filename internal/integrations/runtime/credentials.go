@@ -133,6 +133,8 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 		return err
 	}
 
+	ctx = upgradedInstallationKey.Set(ctx, installation.ID)
+
 	wasErrored := installation.Status == enums.IntegrationStatusErrored
 
 	if !jsonx.IsEmptyRawMessage(userInput) {

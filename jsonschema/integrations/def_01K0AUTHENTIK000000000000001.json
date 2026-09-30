@@ -1,130 +1,49 @@
 {
-  "id": "def_01K0AUTHENTIK000000000000001",
-  "credentials": [
-    {
-      "ref": "CredentialSchema",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/authentik/credential-schema",
-        "$ref": "#/$defs/CredentialSchema",
-        "$defs": {
-          "CredentialSchema": {
-            "properties": {
-              "baseUrl": {
-                "type": "string",
-                "title": "Base URL"
+  "version": "591d0a788928aedf338709279b18ec55780f42bebd3219e10a5f8ae6cdb61478",
+  "surface": {
+    "id": "def_01K0AUTHENTIK000000000000001",
+    "credentials": [
+      {
+        "ref": "CredentialSchema",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/authentik/credential-schema",
+          "$ref": "#/$defs/CredentialSchema",
+          "$defs": {
+            "CredentialSchema": {
+              "properties": {
+                "baseUrl": {
+                  "type": "string",
+                  "title": "Base URL"
+                },
+                "token": {
+                  "type": "string",
+                  "title": "API Token"
+                }
               },
-              "token": {
-                "type": "string",
-                "title": "API Token"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object",
-            "required": [
-              "baseUrl",
-              "token"
-            ]
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "baseUrl",
+                "token"
+              ]
+            }
           }
         }
       }
-    }
-  ],
-  "userInput": {
-    "schema": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/authentik/user-input",
-      "$ref": "#/$defs/UserInput",
-      "$defs": {
-        "DirectorySync": {
-          "properties": {
-            "disable": {
-              "type": "boolean",
-              "title": "Disable",
-              "description": "Disable this sync"
-            },
-            "disableGroupSync": {
-              "type": "boolean",
-              "title": "Disable Group Sync",
-              "description": "Only sync users disable group and membership sync operations"
-            },
-            "filterExpr": {
-              "type": "string",
-              "title": "Filter Expression",
-              "description": "Optional CEL expression to apply to records before ingesting",
-              "examples": [
-                "Example: payload.type == 'internal'"
-              ]
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        },
-        "UserInput": {
-          "properties": {
-            "primaryDirectory": {
-              "type": "boolean",
-              "title": "Primary Directory",
-              "description": "Mark this as the authoritative source for identity holder enrichment and lifecycle"
-            },
-            "directorySync": {
-              "$ref": "#/$defs/DirectorySync",
-              "title": "Directory Sync"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        }
-      }
-    },
-    "replaces": [
-      "authentik-v1"
-    ]
-  },
-  "installation": {
-    "schema": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/authentik/installation-metadata",
-      "$ref": "#/$defs/InstallationMetadata",
-      "$defs": {
-        "InstallationMetadata": {
-          "properties": {
-            "brand": {
-              "type": "string"
-            },
-            "brandId": {
-              "type": "string"
-            },
-            "host": {
-              "type": "string"
-            },
-            "baseUrl": {
-              "type": "string"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        }
-      }
-    }
-  },
-  "connections": [
-    "CredentialSchema"
-  ],
-  "operations": [
-    {
-      "name": "DirectorySync",
+    ],
+    "userInput": {
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/authentik/directory-sync",
-        "$ref": "#/$defs/DirectorySync",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/authentik/user-input",
+        "$ref": "#/$defs/UserInput",
         "$defs": {
           "DirectorySync": {
             "properties": {
               "disable": {
                 "type": "boolean",
                 "title": "Disable",
-                "description": "Disable this sync"
+                "description": "Disable the syncing of users and groups from Authentik"
               },
               "disableGroupSync": {
                 "type": "boolean",
@@ -142,10 +61,93 @@
             },
             "additionalProperties": false,
             "type": "object"
+          },
+          "UserInput": {
+            "properties": {
+              "primaryDirectory": {
+                "type": "boolean",
+                "title": "Primary Directory",
+                "description": "Mark this as the authoritative source for identity holder enrichment and lifecycle"
+              },
+              "directorySync": {
+                "$ref": "#/$defs/DirectorySync",
+                "title": "Directory Sync"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
           }
         }
       },
-      "section": true
-    }
-  ]
+      "replaces": [
+        "authentik-v1"
+      ]
+    },
+    "installation": {
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/authentik/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
+        "$defs": {
+          "InstallationMetadata": {
+            "properties": {
+              "brand": {
+                "type": "string"
+              },
+              "brandId": {
+                "type": "string"
+              },
+              "host": {
+                "type": "string"
+              },
+              "baseUrl": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "type": "object"
+          }
+        }
+      }
+    },
+    "connections": [
+      "CredentialSchema"
+    ],
+    "operations": [
+      {
+        "name": "DirectorySync",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/authentik/directory-sync",
+          "$ref": "#/$defs/DirectorySync",
+          "$defs": {
+            "DirectorySync": {
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable the syncing of users and groups from Authentik"
+                },
+                "disableGroupSync": {
+                  "type": "boolean",
+                  "title": "Disable Group Sync",
+                  "description": "Only sync users disable group and membership sync operations"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression to apply to records before ingesting",
+                  "examples": [
+                    "Example: payload.type == 'internal'"
+                  ]
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ]
+  }
 }

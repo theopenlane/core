@@ -19,10 +19,12 @@ func unreplaced[T any](old []string, next []T, name func(T) string, replaces fun
 
 // GateSurfaceChange refuses dropping a slot, operation, or webhook without a replacement
 func GateSurfaceChange(target string, existing []byte, next Surface) error {
-	var old Surface
-	if err := json.Unmarshal(existing, &old); err != nil {
+	var committed Snapshot
+	if err := json.Unmarshal(existing, &committed); err != nil {
 		return fmt.Errorf("decode %s: %w", target, err)
 	}
+
+	old := committed.Surface
 
 	var refused []string
 

@@ -99,7 +99,7 @@ func TestGateSurfaceChange(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			existing, err := json.Marshal(tc.old)
+			existing, err := json.Marshal(Snapshot{Surface: tc.old})
 			if err != nil {
 				t.Fatalf("json.Marshal() error = %v", err)
 			}

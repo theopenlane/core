@@ -1,103 +1,82 @@
 {
-  "id": "def_01K0OIDCLOCAL000000000000001",
-  "credentials": [
-    {
-      "ref": "oidcLocalCred",
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oidclocal/oidc-local-cred",
-        "$ref": "#/$defs/oidcLocalCred",
-        "$defs": {
-          "oidcLocalCred": {
-            "properties": {
-              "accessToken": {
-                "type": "string"
-              },
-              "refreshToken": {
-                "type": "string"
-              },
-              "expiry": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "issuer": {
-                "type": "string"
-              },
-              "subject": {
-                "type": "string"
-              },
-              "email": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
-              },
-              "preferredUsername": {
-                "type": "string"
-              },
-              "groups": {
-                "items": {
+  "version": "12c541036dbb4cc96eebc34988285a8f61b4e72ffeed8ce5a8937a50c202eff0",
+  "surface": {
+    "id": "def_01K0OIDCLOCAL000000000000001",
+    "credentials": [
+      {
+        "ref": "oidcLocalCred",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oidclocal/oidc-local-cred",
+          "$ref": "#/$defs/oidcLocalCred",
+          "$defs": {
+            "oidcLocalCred": {
+              "properties": {
+                "accessToken": {
                   "type": "string"
                 },
-                "type": "array"
+                "refreshToken": {
+                  "type": "string"
+                },
+                "expiry": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "issuer": {
+                  "type": "string"
+                },
+                "subject": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "preferredUsername": {
+                  "type": "string"
+                },
+                "groups": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "claims": {
+                  "type": "object"
+                }
               },
-              "claims": {
-                "type": "object"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
+              "additionalProperties": false,
+              "type": "object"
+            }
           }
         }
       }
-    }
-  ],
-  "installation": {
-    "schema": {
-      "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oidclocal/installation-metadata",
-      "$ref": "#/$defs/InstallationMetadata",
-      "$defs": {
-        "InstallationMetadata": {
-          "properties": {
-            "issuer": {
-              "type": "string",
-              "title": "Issuer"
-            },
-            "subject": {
-              "type": "string",
-              "title": "Subject"
-            },
-            "email": {
-              "type": "string",
-              "title": "Email"
-            },
-            "preferredUsername": {
-              "type": "string",
-              "title": "Preferred Username"
-            }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        }
-      }
-    }
-  },
-  "connections": [
-    "oidcLocalCred"
-  ],
-  "operations": [
-    {
-      "name": "ClaimsInspect",
+    ],
+    "installation": {
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oidclocal/claims-inspect",
-        "$ref": "#/$defs/ClaimsInspect",
+        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oidclocal/installation-metadata",
+        "$ref": "#/$defs/InstallationMetadata",
         "$defs": {
-          "ClaimsInspect": {
+          "InstallationMetadata": {
             "properties": {
-              "claims": {
-                "type": "object"
+              "issuer": {
+                "type": "string",
+                "title": "Issuer"
+              },
+              "subject": {
+                "type": "string",
+                "title": "Subject"
+              },
+              "email": {
+                "type": "string",
+                "title": "Email"
+              },
+              "preferredUsername": {
+                "type": "string",
+                "title": "Preferred Username"
               }
             },
             "additionalProperties": false,
@@ -105,6 +84,30 @@
           }
         }
       }
-    }
-  ]
+    },
+    "connections": [
+      "oidcLocalCred"
+    ],
+    "operations": [
+      {
+        "name": "ClaimsInspect",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oidclocal/claims-inspect",
+          "$ref": "#/$defs/ClaimsInspect",
+          "$defs": {
+            "ClaimsInspect": {
+              "properties": {
+                "claims": {
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          }
+        }
+      }
+    ]
+  }
 }

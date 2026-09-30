@@ -49,6 +49,14 @@ type Surface struct {
 	Webhooks []SurfaceWebhook `json:"webhooks,omitempty"`
 }
 
+// Snapshot is a definition's committed surface alongside the version computed from it
+type Snapshot struct {
+	// Version is the hash of Surface recorded on installations as their definition version
+	Version string `json:"version"`
+	// Surface is the definition's installation-facing surface
+	Surface Surface `json:"surface"`
+}
+
 // SurfaceSchema is the stored schema of one kind and its cross-version carry rules
 type SurfaceSchema struct {
 	// Schema is the reflected JSON schema of the stored type

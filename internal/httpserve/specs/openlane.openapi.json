@@ -719,7 +719,7 @@
         "type": "object"
       },
       "IntegrationProvidersResponse": {
-        "description": "IntegrationProvidersResponse is the response listing available integration definitions.",
+        "description": "IntegrationProvidersResponse is the response listing available integration definitions",
         "properties": {
           "error": {
             "description": "The error message if the request was unsuccessful",
@@ -740,7 +740,7 @@
                       "configSchema": {},
                       "credentialRefs": {
                         "items": {
-                          "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition\nIt is used in registration structs, bindings, and persistence where the credential schema type is not needed"
+                          "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition"
                         },
                         "type": "array"
                       },
@@ -761,17 +761,17 @@
                         "nullable": true,
                         "properties": {
                           "credentialRef": {
-                            "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition\nIt is used in registration structs, bindings, and persistence where the credential schema type is not needed"
+                            "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition"
                           }
                         },
                         "type": "object"
                       },
                       "credentialRef": {
-                        "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition\nIt is used in registration structs, bindings, and persistence where the credential schema type is not needed"
+                        "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition"
                       },
                       "credentialRefs": {
                         "items": {
-                          "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition\nIt is used in registration structs, bindings, and persistence where the credential schema type is not needed"
+                          "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition"
                         },
                         "type": "array"
                       },
@@ -783,7 +783,7 @@
                         "nullable": true,
                         "properties": {
                           "credentialRef": {
-                            "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition\nIt is used in registration structs, bindings, and persistence where the credential schema type is not needed"
+                            "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition"
                           },
                           "description": {
                             "type": "string"
@@ -792,13 +792,9 @@
                         },
                         "type": "object"
                       },
-                      "installation": {
-                        "description": "InstallationRegistration describes how one connection mode derives installation metadata",
-                        "nullable": true
-                      },
                       "meta": {
                         "additionalProperties": {
-                          "description": "MetaInfo is data to store for the UI to present to the user during credential setup of an integration",
+                          "description": "MetaInfo is data shown to the user during credential setup of an integration",
                           "properties": {
                             "AllowCopy": {
                               "type": "boolean"
@@ -833,7 +829,7 @@
                         "type": "boolean"
                       },
                       "ref": {
-                        "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition\nIt is used in registration structs, bindings, and persistence where the credential schema type is not needed"
+                        "description": "CredentialSlotID is the non-generic durable identity for one credential slot used by a definition"
                       },
                       "schema": {}
                     },
@@ -841,13 +837,17 @@
                   },
                   "type": "array"
                 },
+                "installation": {
+                  "description": "InstallationRegistration describes how one connection mode derives installation metadata",
+                  "nullable": true
+                },
                 "mappings": {
                   "items": {
                     "description": "MappingRegistration declares one default mapping shipped with a definition",
                     "properties": {
                       "linkTargets": {
                         "items": {
-                          "description": "LinkTargetInfo describes one edge an ingested record of a schema can be cross-linked through,\nwith the fields available on each side for composing a LinkRule. One entry is emitted per edge,\nso a schema with several edges to the same target type surfaces each as a distinct choice",
+                          "description": "LinkTargetInfo describes one edge an ingested record can be cross-linked through",
                           "properties": {
                             "edge": {
                               "type": "string"
@@ -910,7 +910,7 @@
                           },
                           "links": {
                             "items": {
-                              "description": "LinkRule describes one cross-object link: which target object type to link the ingested record to\nand how to match candidates — either a field match (target field equals a source field/list value,\npushed into the query as an indexed predicate) or a CEL expression evaluated per candidate.\nField names are the entityops catalog identifiers surfaced in the mapping's LinkTargets inventory:\nTargetField is a match-key column on the target, SourceField/SourceList are mapping input keys on\nthe source. Registration validates every rule against the catalog so typos fail at startup",
+                              "description": "LinkRule describes one cross-object link and how to match candidates for it",
                               "properties": {
                                 "edge": {
                                   "type": "string"
@@ -1024,12 +1024,10 @@
                   "type": "object"
                 },
                 "runtimeIntegration": {
-                  "description": "RuntimeIntegrationRegistration is the non-generic registration stored on a Definition",
+                  "description": "RuntimeIntegrationRegistration declares a definition provisioned from a runtime config struct",
                   "nullable": true,
                   "properties": {
-                    "ref": {
-                      "description": "RuntimeRefID is the stable identifier for a runtime integration config, derived from the Go type name"
-                    },
+                    "config": {},
                     "schema": {}
                   },
                   "type": "object"
