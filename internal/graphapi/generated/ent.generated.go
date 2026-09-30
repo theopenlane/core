@@ -219934,7 +219934,7 @@ func (ec *executionContext) unmarshalInputCreateSubscriberInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "email", "phoneNumber", "ownerID", "eventIDs", "trustCenterID", "campaignTargetIDs", "contactID", "userID"}
+	fieldsInOrder := [...]string{"tags", "email", "phoneNumber", "verifiedEmail", "verifiedPhone", "ownerID", "eventIDs", "trustCenterID", "campaignTargetIDs", "contactID", "userID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -219962,6 +219962,20 @@ func (ec *executionContext) unmarshalInputCreateSubscriberInput(ctx context.Cont
 				return it, err
 			}
 			it.PhoneNumber = data
+		case "verifiedEmail":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("verifiedEmail"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VerifiedEmail = data
+		case "verifiedPhone":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("verifiedPhone"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VerifiedPhone = data
 		case "ownerID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)

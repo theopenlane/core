@@ -17,12 +17,15 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/utils/contextx"
 
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
@@ -32,25 +35,41 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/export"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/findingcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
 	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgprice"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgproduct"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
@@ -60,14 +79,27 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/review"
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
+	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/template"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorscoringconfig"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/v2/pkg/celx"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -111,13 +143,41 @@ type IngestCapability struct {
 	buildUpdate func(context.Context, *generated.Client, json.RawMessage, json.RawMessage) (ent.Mutation, func(context.Context) error, error)
 }
 
+// CatalogCapability describes the catalog pointer, the visibility and key markers, and the fields copied from a catalog row
+type CatalogCapability struct {
+	// PointerField is the snake_case foreign-key field naming the catalog row an adopted row came from
+	PointerField string
+	// VisibilityField is the snake_case bool field marking a catalog row as visible to organizations
+	VisibilityField string
+	// KeyField is the snake_case field on adopted rows holding the catalog row's lookup key
+	KeyField string
+	// Fields lists the snake_case fields copied from the catalog row on adopt and refresh
+	Fields []string
+	// adopt finds or creates one organization's adopted row for a catalog row
+	adopt func(ctx context.Context, client *generated.Client, catalogID, ownerID string, overlay json.RawMessage) (string, bool, error)
+	// refresh re-copies the catalog fields onto every adopted row of a catalog row
+	refresh func(ctx context.Context, client *generated.Client, catalogID string) (int, error)
+	// relink points rows carrying a catalog row's key at that row when their pointer is null or stale
+	relink func(ctx context.Context, client *generated.Client, catalogID string) (int, error)
+	// match returns the first visible catalog row matching a candidate in order
+	match func(ctx context.Context, client *generated.Client, candidates []MatchCandidate) (string, bool, error)
+	// visible reports whether the row is a visible system-owned catalog row
+	visible func(ctx context.Context, client *generated.Client, catalogID string) (bool, error)
+}
+
+// MatchCandidate is one field and value to match a catalog row on, tried in the order given
+type MatchCandidate struct {
+	Field string
+	Value string
+}
+
 // Schema is the runtime representation of a registered entity schema. It carries the schema
 // identity and its operation closures. Load, Fields, and Edges are universal; the remaining
 // closures are emitted only for schemas whose capabilities can reach them and are nil otherwise
 type Schema struct {
 	SchemaDescriptor
 	// Create creates a new entity from a JSON input and returns the entity ID; emitted only for
-	// integration-mapped schemas, whose ingest upsert is the sole caller
+	// integration-mapped and catalog schemas, whose ingest upsert and adopt are the sole callers
 	Create func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error)
 	// Update applies a typed update input to an entity by ID; emitted only for integration-mapped
 	// and workflow-eligible schemas
@@ -129,6 +189,8 @@ type Schema struct {
 	// field matches any of the provided values, pushing the predicate into the database; emitted
 	// only for integration-mapped schemas and link-rule targets with match-key columns
 	QueryByKey func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error)
+	// OwnerField is the snake_case foreign-key field of the owner edge, empty for schemas without an owner
+	OwnerField string
 	// IntegrationFKField is the schema's mutable FK column to Integration, if any
 	IntegrationFKField string
 	// IntegrationM2MEdge is the name of the schema's to-many edge to Integration, if any
@@ -170,6 +232,8 @@ type Schema struct {
 	ProjectionType reflect.Type
 	// Ingest is present when this schema supports mapped integration ingestion
 	Ingest *IngestCapability
+	// Catalog describes how organizations adopt this schema's system-owned rows, nil when unsupported
+	Catalog *CatalogCapability
 	// ConsoleRoute is present only when the schema explicitly declares a console route
 	ConsoleRoute *ConsoleRoute
 	// MentionSpec is present only when the schema explicitly declares mention scanning
@@ -181,7 +245,7 @@ type Schema struct {
 // defaultIngestPersist returns the stock upsert-backed persistence for an ingest schema
 func defaultIngestPersist(s *Schema) IngestPersist {
 	return func(ctx context.Context, client *generated.Client, integration *generated.Integration, payload json.RawMessage) (string, bool, bool, error) {
-		owner := lookupValue(payload, FieldOwnerID)
+		owner := lookupValue(payload, s.OwnerField)
 		if owner == "" && integration != nil {
 			owner = integration.OwnerID
 		}
@@ -316,7 +380,7 @@ func (s *Schema) handleIngest(ctx context.Context, client *generated.Client, res
 		return err
 	}
 
-	payload = StampProvenance(payload, s, integration, request.RunID)
+	payload = StampProvenance(payload, s, integration, integration.DefinitionID, request.RunID)
 
 	payload, err = s.Ingest.prepare(ctx, integration, payload)
 	if err != nil {
@@ -657,10 +721,20 @@ func coerceTime(value any) (time.Time, error) {
 	}
 }
 
-// matchKeyIn returns a selector predicate matching the given match-key column against any of values
-func matchKeyIn(field string, values []string) func(*sql.Selector) {
+// matchKeyIn returns a selector predicate matching the given match-key column against any of values,
+// testing JSON string arrays for membership and every other column for equality
+func matchKeyIn(schema *Schema, field string, values []string) func(*sql.Selector) {
+	descriptor, _ := schema.FieldByName(field)
+
 	return func(s *sql.Selector) {
-		s.Where(sql.In(s.C(field), lo.ToAnySlice(values)...))
+		switch descriptor.Type {
+		case "[]string":
+			s.Where(sql.Or(lo.Map(values, func(value string, _ int) *sql.Predicate {
+				return sqljson.ValueContains(s.C(field), value)
+			})...))
+		default:
+			s.Where(sql.In(s.C(field), lo.ToAnySlice(values)...))
+		}
 	}
 }
 
@@ -668,8 +742,6 @@ func matchKeyIn(field string, values []string) func(*sql.Selector) {
 const ingestQueryChunkSize = 500
 
 const (
-	// FieldOwnerID is the provenance column recording the owning organization
-	FieldOwnerID = "owner_id"
 	// FieldIntegrationID is the provenance column recording the writing installation's FK
 	FieldIntegrationID = "integration_id"
 	// FieldManagedBy is the provenance column recording which installation owns a record
@@ -689,20 +761,29 @@ const (
 // StampProvenance writes the schema's trusted integration-derived provenance columns and ownership
 // edges onto an ingest payload from the writing installation, overriding anything the mapping
 // emitted for them; it is the sole writer of provenance columns for both the synchronous and the
-// durable ingest paths, so a queued record persists with the same provenance a batched one does
-func StampProvenance(payload json.RawMessage, schema *Schema, integration *generated.Integration, runID string) json.RawMessage {
-	values := []struct {
+// durable ingest paths, so a queued record persists with the same provenance a batched one does;
+// a nil installation stamps only the run id and the definition id, which is how runtime ingest writes system-owned rows
+func StampProvenance(payload json.RawMessage, schema *Schema, integration *generated.Integration, definitionID, runID string) json.RawMessage {
+	type provenanceValue struct {
 		field string
 		value string
-	}{
-		{FieldOwnerID, integration.OwnerID},
-		{FieldIntegrationID, integration.ID},
-		{FieldManagedBy, integration.ID},
-		{FieldPlatformID, integration.PlatformID},
-		{FieldSourceDefinitionID, integration.DefinitionID},
-		{FieldSourceDefinitionVersion, integration.DefinitionVersion},
-		{FieldSourceInstanceID, integration.InstallationMetadata.Display.ExternalID},
-		{FieldIntegrationRunID, runID},
+	}
+
+	values := []provenanceValue{provenanceValue{FieldIntegrationRunID, runID}}
+
+	switch {
+	case integration == nil:
+		values = append(values, provenanceValue{FieldSourceDefinitionID, definitionID})
+	default:
+		values = append(values,
+			provenanceValue{schema.OwnerField, integration.OwnerID},
+			provenanceValue{FieldIntegrationID, integration.ID},
+			provenanceValue{FieldManagedBy, integration.ID},
+			provenanceValue{FieldPlatformID, integration.PlatformID},
+			provenanceValue{FieldSourceDefinitionID, integration.DefinitionID},
+			provenanceValue{FieldSourceDefinitionVersion, integration.DefinitionVersion},
+			provenanceValue{FieldSourceInstanceID, integration.InstallationMetadata.Display.ExternalID},
+		)
 	}
 
 	return jsonx.EditObject(payload, func(doc map[string]json.RawMessage) bool {
@@ -723,7 +804,7 @@ func StampProvenance(payload json.RawMessage, schema *Schema, integration *gener
 			}
 		}
 
-		if schema.IntegrationM2MEdge != "" {
+		if integration != nil && schema.IntegrationM2MEdge != "" {
 			if edge, ok := schema.EdgeByName(schema.IntegrationM2MEdge); ok && stampProvenanceKey(doc, edge.CreateField, []string{integration.ID}) {
 				changed = true
 			}
@@ -1078,6 +1159,12 @@ func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID s
 			return "", false, false, err
 		}
 
+		if s.Catalog != nil && ownerID == "" {
+			if err := s.relinkCreated(ctx, client, id); err != nil {
+				return "", false, false, err
+			}
+		}
+
 		if cacheable {
 			if cache, ok := lookupMatchCacheContextKey.Get(ctx); ok {
 				entry := cache[cacheKey]
@@ -1091,8 +1178,7 @@ func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID s
 
 	id = entityID(candidate)
 
-	_, hasOwner := s.FieldByName(FieldOwnerID)
-	if id == "" || (hasOwner && lookupValue(candidate, FieldOwnerID) != ownerID) {
+	if id == "" || (s.OwnerField != "" && lookupValue(candidate, s.OwnerField) != ownerID) {
 		return "", false, false, logError(ctx, ref, ErrUpsertConflict, fmt.Errorf("invalid or cross-organization match for %s", s.Name))
 	}
 
@@ -1329,6 +1415,84 @@ func entityID(row json.RawMessage) string {
 	return id
 }
 
+// --- Catalog adoption ---
+
+// Adopt returns the organization's adopted row for the catalog row, creating it from the catalog
+// fields plus overlay when absent; created reports whether a row was created
+func (s *Schema) Adopt(ctx context.Context, client *generated.Client, catalogID, ownerID string, overlay json.RawMessage) (id string, created bool, err error) {
+	if s.Catalog == nil {
+		return "", false, ErrCatalogUnsupported
+	}
+
+	return s.Catalog.adopt(ctx, client, catalogID, ownerID, overlay)
+}
+
+// RefreshAdopted re-copies the catalog fields onto every row adopted from the catalog row and returns how many changed
+func (s *Schema) RefreshAdopted(ctx context.Context, client *generated.Client, catalogID string) (int, error) {
+	if s.Catalog == nil {
+		return 0, ErrCatalogUnsupported
+	}
+
+	return s.Catalog.refresh(ctx, client, catalogID)
+}
+
+// RelinkAdopted points rows carrying the catalog row's key at it when their pointer is null or stale and returns how many moved
+func (s *Schema) RelinkAdopted(ctx context.Context, client *generated.Client, catalogID string) (int, error) {
+	if s.Catalog == nil {
+		return 0, ErrCatalogUnsupported
+	}
+
+	return s.Catalog.relink(ctx, client, catalogID)
+}
+
+// Match returns the id of the first visible catalog row matching a candidate in order
+func (s *Schema) Match(ctx context.Context, client *generated.Client, candidates ...MatchCandidate) (string, bool, error) {
+	if s.Catalog == nil {
+		return "", false, ErrCatalogUnsupported
+	}
+
+	return s.Catalog.match(ctx, client, candidates)
+}
+
+// relinkCreated points adopted rows at a newly created row when it is a visible catalog row
+func (s *Schema) relinkCreated(ctx context.Context, client *generated.Client, id string) error {
+	visible, err := s.Catalog.visible(ctx, client, id)
+	if err != nil {
+		return logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpQuery, EntityID: id}, ErrQueryFailed, err)
+	}
+
+	if !visible {
+		return nil
+	}
+
+	_, err = s.Catalog.relink(ctx, client, id)
+
+	return err
+}
+
+// catalogPayload keeps only the keys copied onto adopted rows from a marshaled catalog row
+func catalogPayload(row json.RawMessage, fields []string) (json.RawMessage, error) {
+	document, err := jsonx.ToRawMap(row)
+	if err != nil {
+		return nil, err
+	}
+
+	kept := make(map[string]json.RawMessage, len(fields))
+
+	for _, field := range fields {
+		if value, ok := document[field]; ok {
+			kept[field] = value
+		}
+	}
+
+	payload, err := json.Marshal(kept)
+	if err != nil {
+		return nil, err
+	}
+
+	return payload, nil
+}
+
 // --- Per-schema registrations ---
 
 var (
@@ -1338,6 +1502,7 @@ var (
 			Snake: "api_token",
 			Lower: "apitoken",
 		},
+		OwnerField: apitoken.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "api_token", Operation: refOpLoad, EntityID: entityID}
 
@@ -1364,6 +1529,7 @@ var (
 		ProjectionType:        reflect.TypeFor[ActionPlanProjection](),
 		MentionSpec:           &MentionSpec{Schema: "ActionPlan", NameField: "name", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
 		ApprovalSpec:          &ApprovalSpec{Schema: "ActionPlan", StatusField: "status", ApproverField: "approver_id"},
+		OwnerField:            actionplan.FieldOwnerID,
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
@@ -1414,7 +1580,7 @@ var (
 			ref := SchemaRef{Schema: "action_plan", Operation: refOpQuery}
 
 			entities, err := client.ActionPlan.Query().
-				Where(actionplan.OwnerID(orgID)).
+				Where(ownerScopeActionPlan(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -1468,6 +1634,7 @@ var (
 			WorkflowEligible: true,
 		},
 		ProjectionType: reflect.TypeFor[AssessmentProjection](),
+		OwnerField:     assessment.FieldOwnerID,
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
 			ref := SchemaRef{Schema: "assessment", Operation: refOpUpdate, EntityID: entityID}
 
@@ -1516,6 +1683,7 @@ var (
 			WorkflowEligible: true,
 		},
 		ProjectionType: reflect.TypeFor[AssessmentResponseProjection](),
+		OwnerField:     assessmentresponse.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "assessment_response", Operation: refOpQuery}
 
@@ -1570,6 +1738,7 @@ var (
 			Lower: "asset",
 		},
 		ProjectionType:        reflect.TypeFor[AssetProjection](),
+		OwnerField:            asset.FieldOwnerID,
 		IntegrationFKField:    "integration_id",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
@@ -1620,7 +1789,7 @@ var (
 			ref := SchemaRef{Schema: "asset", Operation: refOpQuery}
 
 			entities, err := client.Asset.Query().
-				Where(asset.OwnerID(orgID)).
+				Where(ownerScopeAsset(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -1666,6 +1835,7 @@ var (
 			WorkflowEligible: true,
 		},
 		ProjectionType:     reflect.TypeFor[CampaignProjection](),
+		OwnerField:         campaign.FieldOwnerID,
 		IntegrationFKField: "integration_id",
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
 			ref := SchemaRef{Schema: "campaign", Operation: refOpUpdate, EntityID: entityID}
@@ -1738,6 +1908,7 @@ var (
 			WorkflowEligible: true,
 		},
 		ProjectionType: reflect.TypeFor[CampaignTargetProjection](),
+		OwnerField:     campaigntarget.FieldOwnerID,
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
 			ref := SchemaRef{Schema: "campaign_target", Operation: refOpUpdate, EntityID: entityID}
 
@@ -1881,6 +2052,7 @@ var (
 			Lower: "contact",
 		},
 		ProjectionType:        reflect.TypeFor[ContactProjection](),
+		OwnerField:            contact.FieldOwnerID,
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
 			{Fields: []string{"external_id"}},
@@ -1978,6 +2150,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[ControlProjection](),
 		ConsoleRoute:   &ConsoleRoute{Base: "controls"},
+		OwnerField:     control.FieldOwnerID,
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
 			ref := SchemaRef{Schema: "control", Operation: refOpUpdate, EntityID: entityID}
 
@@ -1998,7 +2171,7 @@ var (
 			ref := SchemaRef{Schema: "control", Operation: refOpQuery}
 
 			entities, err := client.Control.Query().
-				Where(control.OwnerID(orgID)).
+				Where(ownerScopeControl(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -2048,11 +2221,12 @@ var (
 			Lower: "controlimplementation",
 		},
 		ProjectionType: reflect.TypeFor[ControlImplementationProjection](),
+		OwnerField:     controlimplementation.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "control_implementation", Operation: refOpQuery}
 
 			entities, err := client.ControlImplementation.Query().
-				Where(controlimplementation.OwnerID(orgID)).
+				Where(ownerScopeControlImplementation(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -2094,11 +2268,12 @@ var (
 			Lower: "controlobjective",
 		},
 		ProjectionType: reflect.TypeFor[ControlObjectiveProjection](),
+		OwnerField:     controlobjective.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "control_objective", Operation: refOpQuery}
 
 			entities, err := client.ControlObjective.Query().
-				Where(controlobjective.OwnerID(orgID)).
+				Where(ownerScopeControlObjective(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -2139,6 +2314,7 @@ var (
 			Snake: "custom_domain",
 			Lower: "customdomain",
 		},
+		OwnerField: customdomain.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "custom_domain", Operation: refOpLoad, EntityID: entityID}
 
@@ -2162,11 +2338,12 @@ var (
 			Lower: "customtypeenum",
 		},
 		ProjectionType: reflect.TypeFor[CustomTypeEnumProjection](),
+		OwnerField:     customtypeenum.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "custom_type_enum", Operation: refOpQuery}
 
 			entities, err := client.CustomTypeEnum.Query().
-				Where(customtypeenum.OwnerID(orgID)).
+				Where(ownerScopeCustomTypeEnum(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -2207,6 +2384,7 @@ var (
 			Snake: "dns_verification",
 			Lower: "dnsverification",
 		},
+		OwnerField: dnsverification.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "dns_verification", Operation: refOpLoad, EntityID: entityID}
 
@@ -2230,6 +2408,7 @@ var (
 			Lower: "directoryaccount",
 		},
 		ProjectionType:        reflect.TypeFor[DirectoryAccountProjection](),
+		OwnerField:            directoryaccount.FieldOwnerID,
 		IntegrationFKField:    "integration_id",
 		IntegrationRunM2MEdge: "integration_runs",
 		RemovedAtField:        "removed_at",
@@ -2327,6 +2506,7 @@ var (
 			Lower: "directorygroup",
 		},
 		ProjectionType:        reflect.TypeFor[DirectoryGroupProjection](),
+		OwnerField:            directorygroup.FieldOwnerID,
 		IntegrationFKField:    "integration_id",
 		IntegrationRunM2MEdge: "integration_runs",
 		RemovedAtField:        "removed_at",
@@ -2424,6 +2604,7 @@ var (
 			Lower: "directorymembership",
 		},
 		ProjectionType:        reflect.TypeFor[DirectoryMembershipProjection](),
+		OwnerField:            directorymembership.FieldOwnerID,
 		IntegrationFKField:    "integration_id",
 		IntegrationRunM2MEdge: "integration_runs",
 		RemovedAtField:        "removed_at",
@@ -2522,6 +2703,7 @@ var (
 			Lower: "discussion",
 		},
 		ProjectionType: reflect.TypeFor[DiscussionProjection](),
+		OwnerField:     discussion.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "discussion", Operation: refOpQuery}
 
@@ -2568,6 +2750,7 @@ var (
 			Lower: "documentdata",
 		},
 		ProjectionType: reflect.TypeFor[DocumentDataProjection](),
+		OwnerField:     documentdata.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "document_data", Operation: refOpQuery}
 
@@ -2613,6 +2796,7 @@ var (
 			Snake: "email_template",
 			Lower: "emailtemplate",
 		},
+		OwnerField:         emailtemplate.FieldOwnerID,
 		IntegrationFKField: "integration_id",
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "email_template", Operation: refOpLoad, EntityID: entityID}
@@ -2659,6 +2843,7 @@ var (
 			Lower: "entity",
 		},
 		ProjectionType:        reflect.TypeFor[EntityProjection](),
+		OwnerField:            entity.FieldOwnerID,
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
@@ -2709,7 +2894,7 @@ var (
 			ref := SchemaRef{Schema: "entity", Operation: refOpQuery}
 
 			entities, err := client.Entity.Query().
-				Where(entity.OwnerID(orgID)).
+				Where(ownerScopeEntity(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -2754,11 +2939,12 @@ var (
 			Lower: "entitytype",
 		},
 		ProjectionType: reflect.TypeFor[EntityTypeProjection](),
+		OwnerField:     entitytype.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "entity_type", Operation: refOpQuery}
 
 			entities, err := client.EntityType.Query().
-				Where(entitytype.OwnerID(orgID)).
+				Where(ownerScopeEntityType(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -2826,6 +3012,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[EvidenceProjection](),
 		ConsoleRoute:   &ConsoleRoute{Base: "evidence", IDParam: "id"},
+		OwnerField:     evidence.FieldOwnerID,
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
 			ref := SchemaRef{Schema: "evidence", Operation: refOpUpdate, EntityID: entityID}
 
@@ -2872,6 +3059,7 @@ var (
 			Snake: "export",
 			Lower: "export",
 		},
+		OwnerField: export.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "export", Operation: refOpLoad, EntityID: entityID}
 
@@ -2942,6 +3130,7 @@ var (
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[FindingProjection](),
+		OwnerField:            finding.FieldOwnerID,
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
@@ -2992,7 +3181,7 @@ var (
 			ref := SchemaRef{Schema: "finding", Operation: refOpQuery}
 
 			entities, err := client.Finding.Query().
-				Where(finding.OwnerID(orgID)).
+				Where(ownerScopeFinding(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -3045,6 +3234,7 @@ var (
 			Lower: "findingcontrol",
 		},
 		ProjectionType: reflect.TypeFor[FindingControlProjection](),
+		OwnerField:     findingcontrol.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "finding_control", Operation: refOpQuery}
 
@@ -3091,6 +3281,7 @@ var (
 			Lower: "group",
 		},
 		ProjectionType:     reflect.TypeFor[GroupProjection](),
+		OwnerField:         group.FieldOwnerID,
 		IntegrationM2MEdge: "integrations",
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "group", Operation: refOpQuery}
@@ -3181,6 +3372,7 @@ var (
 			Snake: "hush",
 			Lower: "hush",
 		},
+		OwnerField:         hush.FieldOwnerID,
 		IntegrationM2MEdge: "integrations",
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "hush", Operation: refOpLoad, EntityID: entityID}
@@ -3206,6 +3398,7 @@ var (
 			WorkflowEligible: true,
 		},
 		ProjectionType: reflect.TypeFor[IdentityHolderProjection](),
+		OwnerField:     identityholder.FieldOwnerID,
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
 			ref := SchemaRef{Schema: "identity_holder", Operation: refOpUpdate, EntityID: entityID}
 
@@ -3299,12 +3492,13 @@ var (
 		},
 		ProjectionType:        reflect.TypeFor[IntegrationProjection](),
 		ConsoleRoute:          &ConsoleRoute{Base: "automation/integrations"},
+		OwnerField:            integration.FieldOwnerID,
 		IntegrationRunM2MEdge: "integration_runs",
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "integration", Operation: refOpQuery}
 
 			entities, err := client.Integration.Query().
-				Where(integration.OwnerID(orgID)).
+				Where(ownerScopeIntegration(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -3346,6 +3540,7 @@ var (
 			Lower: "integrationrun",
 		},
 		ProjectionType:     reflect.TypeFor[IntegrationRunProjection](),
+		OwnerField:         integrationrun.FieldOwnerID,
 		IntegrationFKField: "integration_id",
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "integration_run", Operation: refOpQuery}
@@ -3392,6 +3587,7 @@ var (
 			Snake: "integration_webhook",
 			Lower: "integrationwebhook",
 		},
+		OwnerField:         integrationwebhook.FieldOwnerID,
 		IntegrationFKField: "integration_id",
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "integration_webhook", Operation: refOpLoad, EntityID: entityID}
@@ -3420,6 +3616,7 @@ var (
 		ConsoleRoute:          &ConsoleRoute{Base: "policies", Suffix: "view"},
 		MentionSpec:           &MentionSpec{Schema: "InternalPolicy", NameField: "name", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
 		ApprovalSpec:          &ApprovalSpec{Schema: "InternalPolicy", StatusField: "status", ApproverField: "approver_id"},
+		OwnerField:            internalpolicy.FieldOwnerID,
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
@@ -3470,7 +3667,7 @@ var (
 			ref := SchemaRef{Schema: "internal_policy", Operation: refOpQuery}
 
 			entities, err := client.InternalPolicy.Query().
-				Where(internalpolicy.OwnerID(orgID)).
+				Where(ownerScopeInternalPolicy(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -3522,6 +3719,7 @@ var (
 			Snake: "invite",
 			Lower: "invite",
 		},
+		OwnerField: invite.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "invite", Operation: refOpLoad, EntityID: entityID}
 
@@ -3566,6 +3764,7 @@ var (
 			Snake: "mapped_control",
 			Lower: "mappedcontrol",
 		},
+		OwnerField: mappedcontrol.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "mapped_control", Operation: refOpLoad, EntityID: entityID}
 
@@ -3589,11 +3788,12 @@ var (
 			Lower: "narrative",
 		},
 		ProjectionType: reflect.TypeFor[NarrativeProjection](),
+		OwnerField:     narrative.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "narrative", Operation: refOpQuery}
 
 			entities, err := client.Narrative.Query().
-				Where(narrative.OwnerID(orgID)).
+				Where(ownerScopeNarrative(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -3636,6 +3836,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[NoteProjection](),
 		MentionSpec:    &MentionSpec{Schema: "Note", NameField: "title", DetailsField: "text", DetailsJSONField: "text_json", OwnerField: "owner_id"},
+		OwnerField:     note.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "note", Operation: refOpQuery}
 
@@ -3681,6 +3882,7 @@ var (
 			Snake: "notification",
 			Lower: "notification",
 		},
+		OwnerField: notification.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "notification", Operation: refOpLoad, EntityID: entityID}
 
@@ -3703,6 +3905,7 @@ var (
 			Snake: "notification_preference",
 			Lower: "notificationpreference",
 		},
+		OwnerField: notificationpreference.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "notification_preference", Operation: refOpLoad, EntityID: entityID}
 
@@ -3725,6 +3928,7 @@ var (
 			Snake: "notification_template",
 			Lower: "notificationtemplate",
 		},
+		OwnerField:         notificationtemplate.FieldOwnerID,
 		IntegrationFKField: "integration_id",
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "notification_template", Operation: refOpLoad, EntityID: entityID}
@@ -3792,6 +3996,7 @@ var (
 			Snake: "org_module",
 			Lower: "orgmodule",
 		},
+		OwnerField: orgmodule.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "org_module", Operation: refOpLoad, EntityID: entityID}
 
@@ -3814,6 +4019,7 @@ var (
 			Snake: "org_price",
 			Lower: "orgprice",
 		},
+		OwnerField: orgprice.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "org_price", Operation: refOpLoad, EntityID: entityID}
 
@@ -3836,6 +4042,7 @@ var (
 			Snake: "org_product",
 			Lower: "orgproduct",
 		},
+		OwnerField: orgproduct.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "org_product", Operation: refOpLoad, EntityID: entityID}
 
@@ -3858,6 +4065,7 @@ var (
 			Snake: "org_subscription",
 			Lower: "orgsubscription",
 		},
+		OwnerField: orgsubscription.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "org_subscription", Operation: refOpLoad, EntityID: entityID}
 
@@ -3973,6 +4181,7 @@ var (
 			WorkflowEligible: true,
 		},
 		ProjectionType:     reflect.TypeFor[PlatformProjection](),
+		OwnerField:         platform.FieldOwnerID,
 		IntegrationM2MEdge: "integrations",
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
 			ref := SchemaRef{Schema: "platform", Operation: refOpUpdate, EntityID: entityID}
@@ -4048,6 +4257,7 @@ var (
 		ConsoleRoute:          &ConsoleRoute{Base: "procedures", Suffix: "view"},
 		MentionSpec:           &MentionSpec{Schema: "Procedure", NameField: "name", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
 		ApprovalSpec:          &ApprovalSpec{Schema: "Procedure", StatusField: "status", ApproverField: "approver_id"},
+		OwnerField:            procedure.FieldOwnerID,
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
 			{Fields: []string{"external_file_id"}},
@@ -4097,7 +4307,7 @@ var (
 			ref := SchemaRef{Schema: "procedure", Operation: refOpQuery}
 
 			entities, err := client.Procedure.Query().
-				Where(procedure.OwnerID(orgID)).
+				Where(ownerScopeProcedure(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -4151,6 +4361,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[ProgramProjection](),
 		ConsoleRoute:   &ConsoleRoute{Base: "programs"},
+		OwnerField:     program.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "program", Operation: refOpQuery}
 
@@ -4220,6 +4431,7 @@ var (
 			WorkflowEligible: true,
 		},
 		ProjectionType:     reflect.TypeFor[RemediationProjection](),
+		OwnerField:         remediation.FieldOwnerID,
 		IntegrationM2MEdge: "integrations",
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
 			ref := SchemaRef{Schema: "remediation", Operation: refOpUpdate, EntityID: entityID}
@@ -4241,7 +4453,7 @@ var (
 			ref := SchemaRef{Schema: "remediation", Operation: refOpQuery}
 
 			entities, err := client.Remediation.Query().
-				Where(remediation.OwnerID(orgID)).
+				Where(ownerScopeRemediation(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -4291,12 +4503,13 @@ var (
 			Lower: "review",
 		},
 		ProjectionType:     reflect.TypeFor[ReviewProjection](),
+		OwnerField:         review.FieldOwnerID,
 		IntegrationM2MEdge: "integrations",
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "review", Operation: refOpQuery}
 
 			entities, err := client.Review.Query().
-				Where(review.OwnerID(orgID)).
+				Where(ownerScopeReview(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -4341,6 +4554,7 @@ var (
 		ProjectionType:        reflect.TypeFor[RiskProjection](),
 		ConsoleRoute:          &ConsoleRoute{Base: "exposure/risks"},
 		MentionSpec:           &MentionSpec{Schema: "Risk", NameField: "name", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
+		OwnerField:            risk.FieldOwnerID,
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
 			{Fields: []string{"external_id"}},
@@ -4442,6 +4656,7 @@ var (
 			Snake: "sla_definition",
 			Lower: "sladefinition",
 		},
+		OwnerField: sladefinition.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "sla_definition", Operation: refOpLoad, EntityID: entityID}
 
@@ -4465,11 +4680,12 @@ var (
 			Lower: "scan",
 		},
 		ProjectionType: reflect.TypeFor[ScanProjection](),
+		OwnerField:     scan.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "scan", Operation: refOpQuery}
 
 			entities, err := client.Scan.Query().
-				Where(scan.OwnerID(orgID)).
+				Where(ownerScopeScan(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -4511,6 +4727,7 @@ var (
 			Lower: "standard",
 		},
 		ConsoleRoute: &ConsoleRoute{Base: "standards"},
+		OwnerField:   standard.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "standard", Operation: refOpLoad, EntityID: entityID}
 
@@ -4535,6 +4752,7 @@ var (
 			WorkflowEligible: true,
 		},
 		ProjectionType: reflect.TypeFor[SubcontrolProjection](),
+		OwnerField:     subcontrol.FieldOwnerID,
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
 			ref := SchemaRef{Schema: "subcontrol", Operation: refOpUpdate, EntityID: entityID}
 
@@ -4555,7 +4773,7 @@ var (
 			ref := SchemaRef{Schema: "subcontrol", Operation: refOpQuery}
 
 			entities, err := client.Subcontrol.Query().
-				Where(subcontrol.OwnerID(orgID)).
+				Where(ownerScopeSubcontrol(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -4605,11 +4823,12 @@ var (
 			Lower: "subprocessor",
 		},
 		ProjectionType: reflect.TypeFor[SubprocessorProjection](),
+		OwnerField:     subprocessor.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "subprocessor", Operation: refOpQuery}
 
 			entities, err := client.Subprocessor.Query().
-				Where(subprocessor.OwnerID(orgID)).
+				Where(ownerScopeSubprocessor(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -4651,6 +4870,7 @@ var (
 			Lower: "subscriber",
 		},
 		ProjectionType: reflect.TypeFor[SubscriberProjection](),
+		OwnerField:     subscriber.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "subscriber", Operation: refOpQuery}
 
@@ -4697,6 +4917,7 @@ var (
 			Lower: "systemdetail",
 		},
 		ProjectionType: reflect.TypeFor[SystemDetailProjection](),
+		OwnerField:     systemdetail.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "system_detail", Operation: refOpQuery}
 
@@ -4764,6 +4985,7 @@ var (
 			Snake: "tag_definition",
 			Lower: "tagdefinition",
 		},
+		OwnerField: tagdefinition.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "tag_definition", Operation: refOpLoad, EntityID: entityID}
 
@@ -4790,6 +5012,7 @@ var (
 		ProjectionType: reflect.TypeFor[TaskProjection](),
 		ConsoleRoute:   &ConsoleRoute{Base: "automation/tasks", IDParam: "id"},
 		MentionSpec:    &MentionSpec{Schema: "Task", NameField: "title", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
+		OwnerField:     task.FieldOwnerID,
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
 			ref := SchemaRef{Schema: "task", Operation: refOpUpdate, EntityID: entityID}
 
@@ -4859,6 +5082,7 @@ var (
 			Snake: "template",
 			Lower: "template",
 		},
+		OwnerField: template.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "template", Operation: refOpLoad, EntityID: entityID}
 
@@ -4881,6 +5105,7 @@ var (
 			Snake: "trust_center",
 			Lower: "trustcenter",
 		},
+		OwnerField: trustcenter.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "trust_center", Operation: refOpLoad, EntityID: entityID}
 
@@ -5058,6 +5283,7 @@ var (
 			Snake: "trust_center_watermark_config",
 			Lower: "trustcenterwatermarkconfig",
 		},
+		OwnerField: trustcenterwatermarkconfig.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "trust_center_watermark_config", Operation: refOpLoad, EntityID: entityID}
 
@@ -5126,6 +5352,7 @@ var (
 			Lower: "vendorriskscore",
 		},
 		ProjectionType: reflect.TypeFor[VendorRiskScoreProjection](),
+		OwnerField:     vendorriskscore.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpQuery}
 
@@ -5171,6 +5398,7 @@ var (
 			Snake: "vendor_scoring_config",
 			Lower: "vendorscoringconfig",
 		},
+		OwnerField: vendorscoringconfig.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "vendor_scoring_config", Operation: refOpLoad, EntityID: entityID}
 
@@ -5195,6 +5423,7 @@ var (
 			WorkflowEligible: true,
 		},
 		ProjectionType:        reflect.TypeFor[VulnerabilityProjection](),
+		OwnerField:            vulnerability.FieldOwnerID,
 		IntegrationM2MEdge:    "integrations",
 		IntegrationRunM2MEdge: "integration_runs",
 		Lookup: []LookupAlternative{
@@ -5245,7 +5474,7 @@ var (
 			ref := SchemaRef{Schema: "vulnerability", Operation: refOpQuery}
 
 			entities, err := client.Vulnerability.Query().
-				Where(vulnerability.OwnerID(orgID)).
+				Where(ownerScopeVulnerability(orgID)).
 				All(ctx)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -5319,6 +5548,7 @@ var (
 			Snake: "workflow_assignment",
 			Lower: "workflowassignment",
 		},
+		OwnerField: workflowassignment.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "workflow_assignment", Operation: refOpLoad, EntityID: entityID}
 
@@ -5341,6 +5571,7 @@ var (
 			Snake: "workflow_assignment_target",
 			Lower: "workflowassignmenttarget",
 		},
+		OwnerField: workflowassignmenttarget.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "workflow_assignment_target", Operation: refOpLoad, EntityID: entityID}
 
@@ -5363,6 +5594,7 @@ var (
 			Snake: "workflow_definition",
 			Lower: "workflowdefinition",
 		},
+		OwnerField: workflowdefinition.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "workflow_definition", Operation: refOpLoad, EntityID: entityID}
 
@@ -5385,6 +5617,7 @@ var (
 			Snake: "workflow_event",
 			Lower: "workflowevent",
 		},
+		OwnerField: workflowevent.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "workflow_event", Operation: refOpLoad, EntityID: entityID}
 
@@ -5407,6 +5640,7 @@ var (
 			Snake: "workflow_instance",
 			Lower: "workflowinstance",
 		},
+		OwnerField:         workflowinstance.FieldOwnerID,
 		IntegrationFKField: "integration_id",
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "workflow_instance", Operation: refOpLoad, EntityID: entityID}
@@ -5431,6 +5665,7 @@ var (
 			Lower: "workflowobjectref",
 		},
 		ProjectionType: reflect.TypeFor[WorkflowObjectRefProjection](),
+		OwnerField:     workflowobjectref.FieldOwnerID,
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
 			ref := SchemaRef{Schema: "workflow_object_ref", Operation: refOpQuery}
 
@@ -5476,6 +5711,7 @@ var (
 			Snake: "workflow_proposal",
 			Lower: "workflowproposal",
 		},
+		OwnerField: workflowproposal.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "workflow_proposal", Operation: refOpLoad, EntityID: entityID}
 
@@ -19231,8 +19467,8 @@ func init() {
 		}
 
 		entities, err := client.ActionPlan.Query().
-			Where(actionplan.OwnerID(orgID)).
-			Where(predicate.ActionPlan(matchKeyIn(field, values))).
+			Where(ownerScopeActionPlan(orgID)).
+			Where(predicate.ActionPlan(matchKeyIn(SchemaActionPlan, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19260,7 +19496,7 @@ func init() {
 
 		entities, err := client.AssessmentResponse.Query().
 			Where(assessmentresponse.OwnerID(orgID)).
-			Where(predicate.AssessmentResponse(matchKeyIn(field, values))).
+			Where(predicate.AssessmentResponse(matchKeyIn(SchemaAssessmentResponse, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19287,8 +19523,8 @@ func init() {
 		}
 
 		entities, err := client.Asset.Query().
-			Where(asset.OwnerID(orgID)).
-			Where(predicate.Asset(matchKeyIn(field, values))).
+			Where(ownerScopeAsset(orgID)).
+			Where(predicate.Asset(matchKeyIn(SchemaAsset, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19316,7 +19552,7 @@ func init() {
 
 		entities, err := client.Campaign.Query().
 			Where(campaign.OwnerID(orgID)).
-			Where(predicate.Campaign(matchKeyIn(field, values))).
+			Where(predicate.Campaign(matchKeyIn(SchemaCampaign, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19344,7 +19580,7 @@ func init() {
 
 		entities, err := client.CampaignTarget.Query().
 			Where(campaigntarget.OwnerID(orgID)).
-			Where(predicate.CampaignTarget(matchKeyIn(field, values))).
+			Where(predicate.CampaignTarget(matchKeyIn(SchemaCampaignTarget, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19372,7 +19608,7 @@ func init() {
 
 		entities, err := client.Contact.Query().
 			Where(contact.OwnerID(orgID)).
-			Where(predicate.Contact(matchKeyIn(field, values))).
+			Where(predicate.Contact(matchKeyIn(SchemaContact, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19399,8 +19635,8 @@ func init() {
 		}
 
 		entities, err := client.Control.Query().
-			Where(control.OwnerID(orgID)).
-			Where(predicate.Control(matchKeyIn(field, values))).
+			Where(ownerScopeControl(orgID)).
+			Where(predicate.Control(matchKeyIn(SchemaControl, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19427,8 +19663,8 @@ func init() {
 		}
 
 		entities, err := client.ControlImplementation.Query().
-			Where(controlimplementation.OwnerID(orgID)).
-			Where(predicate.ControlImplementation(matchKeyIn(field, values))).
+			Where(ownerScopeControlImplementation(orgID)).
+			Where(predicate.ControlImplementation(matchKeyIn(SchemaControlImplementation, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19455,8 +19691,8 @@ func init() {
 		}
 
 		entities, err := client.ControlObjective.Query().
-			Where(controlobjective.OwnerID(orgID)).
-			Where(predicate.ControlObjective(matchKeyIn(field, values))).
+			Where(ownerScopeControlObjective(orgID)).
+			Where(predicate.ControlObjective(matchKeyIn(SchemaControlObjective, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19483,8 +19719,8 @@ func init() {
 		}
 
 		entities, err := client.CustomTypeEnum.Query().
-			Where(customtypeenum.OwnerID(orgID)).
-			Where(predicate.CustomTypeEnum(matchKeyIn(field, values))).
+			Where(ownerScopeCustomTypeEnum(orgID)).
+			Where(predicate.CustomTypeEnum(matchKeyIn(SchemaCustomTypeEnum, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19512,7 +19748,7 @@ func init() {
 
 		entities, err := client.DirectoryAccount.Query().
 			Where(directoryaccount.OwnerID(orgID)).
-			Where(predicate.DirectoryAccount(matchKeyIn(field, values))).
+			Where(predicate.DirectoryAccount(matchKeyIn(SchemaDirectoryAccount, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19540,7 +19776,7 @@ func init() {
 
 		entities, err := client.DirectoryGroup.Query().
 			Where(directorygroup.OwnerID(orgID)).
-			Where(predicate.DirectoryGroup(matchKeyIn(field, values))).
+			Where(predicate.DirectoryGroup(matchKeyIn(SchemaDirectoryGroup, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19568,7 +19804,7 @@ func init() {
 
 		entities, err := client.DirectoryMembership.Query().
 			Where(directorymembership.OwnerID(orgID)).
-			Where(predicate.DirectoryMembership(matchKeyIn(field, values))).
+			Where(predicate.DirectoryMembership(matchKeyIn(SchemaDirectoryMembership, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19596,7 +19832,7 @@ func init() {
 
 		entities, err := client.Discussion.Query().
 			Where(discussion.OwnerID(orgID)).
-			Where(predicate.Discussion(matchKeyIn(field, values))).
+			Where(predicate.Discussion(matchKeyIn(SchemaDiscussion, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19624,7 +19860,7 @@ func init() {
 
 		entities, err := client.DocumentData.Query().
 			Where(documentdata.OwnerID(orgID)).
-			Where(predicate.DocumentData(matchKeyIn(field, values))).
+			Where(predicate.DocumentData(matchKeyIn(SchemaDocumentData, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19651,8 +19887,8 @@ func init() {
 		}
 
 		entities, err := client.Entity.Query().
-			Where(entity.OwnerID(orgID)).
-			Where(predicate.Entity(matchKeyIn(field, values))).
+			Where(ownerScopeEntity(orgID)).
+			Where(predicate.Entity(matchKeyIn(SchemaEntity, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19679,8 +19915,8 @@ func init() {
 		}
 
 		entities, err := client.EntityType.Query().
-			Where(entitytype.OwnerID(orgID)).
-			Where(predicate.EntityType(matchKeyIn(field, values))).
+			Where(ownerScopeEntityType(orgID)).
+			Where(predicate.EntityType(matchKeyIn(SchemaEntityType, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19707,8 +19943,8 @@ func init() {
 		}
 
 		entities, err := client.Finding.Query().
-			Where(finding.OwnerID(orgID)).
-			Where(predicate.Finding(matchKeyIn(field, values))).
+			Where(ownerScopeFinding(orgID)).
+			Where(predicate.Finding(matchKeyIn(SchemaFinding, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19736,7 +19972,7 @@ func init() {
 
 		entities, err := client.FindingControl.Query().
 			Where(findingcontrol.OwnerID(orgID)).
-			Where(predicate.FindingControl(matchKeyIn(field, values))).
+			Where(predicate.FindingControl(matchKeyIn(SchemaFindingControl, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19764,7 +20000,7 @@ func init() {
 
 		entities, err := client.Group.Query().
 			Where(group.OwnerID(orgID)).
-			Where(predicate.Group(matchKeyIn(field, values))).
+			Where(predicate.Group(matchKeyIn(SchemaGroup, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19792,7 +20028,7 @@ func init() {
 
 		entities, err := client.IdentityHolder.Query().
 			Where(identityholder.OwnerID(orgID)).
-			Where(predicate.IdentityHolder(matchKeyIn(field, values))).
+			Where(predicate.IdentityHolder(matchKeyIn(SchemaIdentityHolder, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19819,8 +20055,8 @@ func init() {
 		}
 
 		entities, err := client.Integration.Query().
-			Where(integration.OwnerID(orgID)).
-			Where(predicate.Integration(matchKeyIn(field, values))).
+			Where(ownerScopeIntegration(orgID)).
+			Where(predicate.Integration(matchKeyIn(SchemaIntegration, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19848,7 +20084,7 @@ func init() {
 
 		entities, err := client.IntegrationRun.Query().
 			Where(integrationrun.OwnerID(orgID)).
-			Where(predicate.IntegrationRun(matchKeyIn(field, values))).
+			Where(predicate.IntegrationRun(matchKeyIn(SchemaIntegrationRun, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19875,8 +20111,8 @@ func init() {
 		}
 
 		entities, err := client.InternalPolicy.Query().
-			Where(internalpolicy.OwnerID(orgID)).
-			Where(predicate.InternalPolicy(matchKeyIn(field, values))).
+			Where(ownerScopeInternalPolicy(orgID)).
+			Where(predicate.InternalPolicy(matchKeyIn(SchemaInternalPolicy, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19903,8 +20139,8 @@ func init() {
 		}
 
 		entities, err := client.Narrative.Query().
-			Where(narrative.OwnerID(orgID)).
-			Where(predicate.Narrative(matchKeyIn(field, values))).
+			Where(ownerScopeNarrative(orgID)).
+			Where(predicate.Narrative(matchKeyIn(SchemaNarrative, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19932,7 +20168,7 @@ func init() {
 
 		entities, err := client.Note.Query().
 			Where(note.OwnerID(orgID)).
-			Where(predicate.Note(matchKeyIn(field, values))).
+			Where(predicate.Note(matchKeyIn(SchemaNote, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19960,7 +20196,7 @@ func init() {
 
 		entities, err := client.Platform.Query().
 			Where(platform.OwnerID(orgID)).
-			Where(predicate.Platform(matchKeyIn(field, values))).
+			Where(predicate.Platform(matchKeyIn(SchemaPlatform, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -19987,8 +20223,8 @@ func init() {
 		}
 
 		entities, err := client.Procedure.Query().
-			Where(procedure.OwnerID(orgID)).
-			Where(predicate.Procedure(matchKeyIn(field, values))).
+			Where(ownerScopeProcedure(orgID)).
+			Where(predicate.Procedure(matchKeyIn(SchemaProcedure, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -20016,7 +20252,7 @@ func init() {
 
 		entities, err := client.Program.Query().
 			Where(program.OwnerID(orgID)).
-			Where(predicate.Program(matchKeyIn(field, values))).
+			Where(predicate.Program(matchKeyIn(SchemaProgram, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -20043,8 +20279,8 @@ func init() {
 		}
 
 		entities, err := client.Remediation.Query().
-			Where(remediation.OwnerID(orgID)).
-			Where(predicate.Remediation(matchKeyIn(field, values))).
+			Where(ownerScopeRemediation(orgID)).
+			Where(predicate.Remediation(matchKeyIn(SchemaRemediation, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -20071,8 +20307,8 @@ func init() {
 		}
 
 		entities, err := client.Review.Query().
-			Where(review.OwnerID(orgID)).
-			Where(predicate.Review(matchKeyIn(field, values))).
+			Where(ownerScopeReview(orgID)).
+			Where(predicate.Review(matchKeyIn(SchemaReview, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -20100,7 +20336,7 @@ func init() {
 
 		entities, err := client.Risk.Query().
 			Where(risk.OwnerID(orgID)).
-			Where(predicate.Risk(matchKeyIn(field, values))).
+			Where(predicate.Risk(matchKeyIn(SchemaRisk, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -20127,8 +20363,8 @@ func init() {
 		}
 
 		entities, err := client.Scan.Query().
-			Where(scan.OwnerID(orgID)).
-			Where(predicate.Scan(matchKeyIn(field, values))).
+			Where(ownerScopeScan(orgID)).
+			Where(predicate.Scan(matchKeyIn(SchemaScan, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -20155,8 +20391,8 @@ func init() {
 		}
 
 		entities, err := client.Subcontrol.Query().
-			Where(subcontrol.OwnerID(orgID)).
-			Where(predicate.Subcontrol(matchKeyIn(field, values))).
+			Where(ownerScopeSubcontrol(orgID)).
+			Where(predicate.Subcontrol(matchKeyIn(SchemaSubcontrol, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -20183,8 +20419,8 @@ func init() {
 		}
 
 		entities, err := client.Subprocessor.Query().
-			Where(subprocessor.OwnerID(orgID)).
-			Where(predicate.Subprocessor(matchKeyIn(field, values))).
+			Where(ownerScopeSubprocessor(orgID)).
+			Where(predicate.Subprocessor(matchKeyIn(SchemaSubprocessor, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -20212,7 +20448,7 @@ func init() {
 
 		entities, err := client.Subscriber.Query().
 			Where(subscriber.OwnerID(orgID)).
-			Where(predicate.Subscriber(matchKeyIn(field, values))).
+			Where(predicate.Subscriber(matchKeyIn(SchemaSubscriber, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -20240,7 +20476,7 @@ func init() {
 
 		entities, err := client.SystemDetail.Query().
 			Where(systemdetail.OwnerID(orgID)).
-			Where(predicate.SystemDetail(matchKeyIn(field, values))).
+			Where(predicate.SystemDetail(matchKeyIn(SchemaSystemDetail, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -20268,7 +20504,7 @@ func init() {
 
 		entities, err := client.Task.Query().
 			Where(task.OwnerID(orgID)).
-			Where(predicate.Task(matchKeyIn(field, values))).
+			Where(predicate.Task(matchKeyIn(SchemaTask, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -20296,7 +20532,7 @@ func init() {
 
 		entities, err := client.VendorRiskScore.Query().
 			Where(vendorriskscore.OwnerID(orgID)).
-			Where(predicate.VendorRiskScore(matchKeyIn(field, values))).
+			Where(predicate.VendorRiskScore(matchKeyIn(SchemaVendorRiskScore, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -20323,8 +20559,8 @@ func init() {
 		}
 
 		entities, err := client.Vulnerability.Query().
-			Where(vulnerability.OwnerID(orgID)).
-			Where(predicate.Vulnerability(matchKeyIn(field, values))).
+			Where(ownerScopeVulnerability(orgID)).
+			Where(predicate.Vulnerability(matchKeyIn(SchemaVulnerability, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -20352,7 +20588,7 @@ func init() {
 
 		entities, err := client.WorkflowObjectRef.Query().
 			Where(workflowobjectref.OwnerID(orgID)).
-			Where(predicate.WorkflowObjectRef(matchKeyIn(field, values))).
+			Where(predicate.WorkflowObjectRef(matchKeyIn(SchemaWorkflowObjectRef, field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -21352,8 +21588,8 @@ func init() {
 
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.ActionPlan.Query()
-			query = query.Where(actionplan.OwnerID(ownerID))
-			query = query.Where(predicate.ActionPlan(matchKeyIn(primary, chunk)))
+			query = query.Where(ownerScopeActionPlan(ownerID))
+			query = query.Where(predicate.ActionPlan(matchKeyIn(SchemaActionPlan, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -21396,8 +21632,8 @@ func init() {
 
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Asset.Query()
-			query = query.Where(asset.OwnerID(ownerID))
-			query = query.Where(predicate.Asset(matchKeyIn(primary, chunk)))
+			query = query.Where(ownerScopeAsset(ownerID))
+			query = query.Where(predicate.Asset(matchKeyIn(SchemaAsset, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -21440,7 +21676,7 @@ func init() {
 
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.CheckResult.Query()
-			query = query.Where(predicate.CheckResult(matchKeyIn(primary, chunk)))
+			query = query.Where(predicate.CheckResult(matchKeyIn(SchemaCheckResult, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -21484,7 +21720,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Contact.Query()
 			query = query.Where(contact.OwnerID(ownerID))
-			query = query.Where(predicate.Contact(matchKeyIn(primary, chunk)))
+			query = query.Where(predicate.Contact(matchKeyIn(SchemaContact, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -21528,7 +21764,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.DirectoryAccount.Query()
 			query = query.Where(directoryaccount.OwnerID(ownerID))
-			query = query.Where(predicate.DirectoryAccount(matchKeyIn(primary, chunk)))
+			query = query.Where(predicate.DirectoryAccount(matchKeyIn(SchemaDirectoryAccount, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -21572,7 +21808,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.DirectoryGroup.Query()
 			query = query.Where(directorygroup.OwnerID(ownerID))
-			query = query.Where(predicate.DirectoryGroup(matchKeyIn(primary, chunk)))
+			query = query.Where(predicate.DirectoryGroup(matchKeyIn(SchemaDirectoryGroup, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -21616,7 +21852,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.DirectoryMembership.Query()
 			query = query.Where(directorymembership.OwnerID(ownerID))
-			query = query.Where(predicate.DirectoryMembership(matchKeyIn(primary, chunk)))
+			query = query.Where(predicate.DirectoryMembership(matchKeyIn(SchemaDirectoryMembership, primary, chunk)))
 			query = query.Where(directorymembership.RemovedAtIsNil())
 
 			entities, err := query.All(ctx)
@@ -21660,8 +21896,8 @@ func init() {
 
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Entity.Query()
-			query = query.Where(entity.OwnerID(ownerID))
-			query = query.Where(predicate.Entity(matchKeyIn(primary, chunk)))
+			query = query.Where(ownerScopeEntity(ownerID))
+			query = query.Where(predicate.Entity(matchKeyIn(SchemaEntity, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -21704,8 +21940,8 @@ func init() {
 
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Finding.Query()
-			query = query.Where(finding.OwnerID(ownerID))
-			query = query.Where(predicate.Finding(matchKeyIn(primary, chunk)))
+			query = query.Where(ownerScopeFinding(ownerID))
+			query = query.Where(predicate.Finding(matchKeyIn(SchemaFinding, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -21748,8 +21984,8 @@ func init() {
 
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.InternalPolicy.Query()
-			query = query.Where(internalpolicy.OwnerID(ownerID))
-			query = query.Where(predicate.InternalPolicy(matchKeyIn(primary, chunk)))
+			query = query.Where(ownerScopeInternalPolicy(ownerID))
+			query = query.Where(predicate.InternalPolicy(matchKeyIn(SchemaInternalPolicy, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -21792,8 +22028,8 @@ func init() {
 
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Procedure.Query()
-			query = query.Where(procedure.OwnerID(ownerID))
-			query = query.Where(predicate.Procedure(matchKeyIn(primary, chunk)))
+			query = query.Where(ownerScopeProcedure(ownerID))
+			query = query.Where(predicate.Procedure(matchKeyIn(SchemaProcedure, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -21837,7 +22073,7 @@ func init() {
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Risk.Query()
 			query = query.Where(risk.OwnerID(ownerID))
-			query = query.Where(predicate.Risk(matchKeyIn(primary, chunk)))
+			query = query.Where(predicate.Risk(matchKeyIn(SchemaRisk, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -21880,8 +22116,8 @@ func init() {
 
 		for _, chunk := range lo.Chunk(primaryValues, ingestQueryChunkSize) {
 			query := client.Vulnerability.Query()
-			query = query.Where(vulnerability.OwnerID(ownerID))
-			query = query.Where(predicate.Vulnerability(matchKeyIn(primary, chunk)))
+			query = query.Where(ownerScopeVulnerability(ownerID))
+			query = query.Where(predicate.Vulnerability(matchKeyIn(SchemaVulnerability, primary, chunk)))
 
 			entities, err := query.All(ctx)
 			if err != nil {
@@ -22570,6 +22806,177 @@ func init() {
 			}
 		}
 	}
+}
+
+// ownerScopeActionPlan scopes a action_plan query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeActionPlan(ownerID string) predicate.ActionPlan {
+	if ownerID == "" {
+		return actionplan.SystemOwned(true)
+	}
+
+	return actionplan.OwnerID(ownerID)
+}
+
+// ownerScopeAsset scopes a asset query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeAsset(ownerID string) predicate.Asset {
+	if ownerID == "" {
+		return asset.SystemOwned(true)
+	}
+
+	return asset.OwnerID(ownerID)
+}
+
+// ownerScopeControl scopes a control query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeControl(ownerID string) predicate.Control {
+	if ownerID == "" {
+		return control.SystemOwned(true)
+	}
+
+	return control.OwnerID(ownerID)
+}
+
+// ownerScopeControlImplementation scopes a control_implementation query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeControlImplementation(ownerID string) predicate.ControlImplementation {
+	if ownerID == "" {
+		return controlimplementation.SystemOwned(true)
+	}
+
+	return controlimplementation.OwnerID(ownerID)
+}
+
+// ownerScopeControlObjective scopes a control_objective query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeControlObjective(ownerID string) predicate.ControlObjective {
+	if ownerID == "" {
+		return controlobjective.SystemOwned(true)
+	}
+
+	return controlobjective.OwnerID(ownerID)
+}
+
+// ownerScopeCustomTypeEnum scopes a custom_type_enum query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeCustomTypeEnum(ownerID string) predicate.CustomTypeEnum {
+	if ownerID == "" {
+		return customtypeenum.SystemOwned(true)
+	}
+
+	return customtypeenum.OwnerID(ownerID)
+}
+
+// ownerScopeEntity scopes a entity query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeEntity(ownerID string) predicate.Entity {
+	if ownerID == "" {
+		return entity.SystemOwned(true)
+	}
+
+	return entity.OwnerID(ownerID)
+}
+
+// ownerScopeEntityType scopes a entity_type query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeEntityType(ownerID string) predicate.EntityType {
+	if ownerID == "" {
+		return entitytype.SystemOwned(true)
+	}
+
+	return entitytype.OwnerID(ownerID)
+}
+
+// ownerScopeFinding scopes a finding query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeFinding(ownerID string) predicate.Finding {
+	if ownerID == "" {
+		return finding.SystemOwned(true)
+	}
+
+	return finding.OwnerID(ownerID)
+}
+
+// ownerScopeIntegration scopes a integration query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeIntegration(ownerID string) predicate.Integration {
+	if ownerID == "" {
+		return integration.SystemOwned(true)
+	}
+
+	return integration.OwnerID(ownerID)
+}
+
+// ownerScopeInternalPolicy scopes a internal_policy query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeInternalPolicy(ownerID string) predicate.InternalPolicy {
+	if ownerID == "" {
+		return internalpolicy.SystemOwned(true)
+	}
+
+	return internalpolicy.OwnerID(ownerID)
+}
+
+// ownerScopeNarrative scopes a narrative query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeNarrative(ownerID string) predicate.Narrative {
+	if ownerID == "" {
+		return narrative.SystemOwned(true)
+	}
+
+	return narrative.OwnerID(ownerID)
+}
+
+// ownerScopeProcedure scopes a procedure query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeProcedure(ownerID string) predicate.Procedure {
+	if ownerID == "" {
+		return procedure.SystemOwned(true)
+	}
+
+	return procedure.OwnerID(ownerID)
+}
+
+// ownerScopeRemediation scopes a remediation query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeRemediation(ownerID string) predicate.Remediation {
+	if ownerID == "" {
+		return remediation.SystemOwned(true)
+	}
+
+	return remediation.OwnerID(ownerID)
+}
+
+// ownerScopeReview scopes a review query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeReview(ownerID string) predicate.Review {
+	if ownerID == "" {
+		return review.SystemOwned(true)
+	}
+
+	return review.OwnerID(ownerID)
+}
+
+// ownerScopeScan scopes a scan query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeScan(ownerID string) predicate.Scan {
+	if ownerID == "" {
+		return scan.SystemOwned(true)
+	}
+
+	return scan.OwnerID(ownerID)
+}
+
+// ownerScopeSubcontrol scopes a subcontrol query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeSubcontrol(ownerID string) predicate.Subcontrol {
+	if ownerID == "" {
+		return subcontrol.SystemOwned(true)
+	}
+
+	return subcontrol.OwnerID(ownerID)
+}
+
+// ownerScopeSubprocessor scopes a subprocessor query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeSubprocessor(ownerID string) predicate.Subprocessor {
+	if ownerID == "" {
+		return subprocessor.SystemOwned(true)
+	}
+
+	return subprocessor.OwnerID(ownerID)
+}
+
+// ownerScopeVulnerability scopes a vulnerability query to one organization, or to system-owned rows when ownerID is empty
+func ownerScopeVulnerability(ownerID string) predicate.Vulnerability {
+	if ownerID == "" {
+		return vulnerability.SystemOwned(true)
+	}
+
+	return vulnerability.OwnerID(ownerID)
 }
 
 // splitThroughEdgeIDs removes through-edge id lists from a create or update payload, returning the

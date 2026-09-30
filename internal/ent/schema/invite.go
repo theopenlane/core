@@ -17,6 +17,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
@@ -149,6 +150,7 @@ func (Invite) Modules() []models.OrgModule {
 // Annotations of the Invite
 func (i Invite) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.SequentialBulkCreate(),
 		history.Annotations{
 			Exclude: true,
 		},

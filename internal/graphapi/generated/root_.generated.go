@@ -71990,6 +71990,14 @@ input CreateSubscriberInput {
   phone number of the subscriber
   """
   phoneNumber: String
+  """
+  indicates if the email address has been verified
+  """
+  verifiedEmail: Boolean
+  """
+  indicates if the phone number has been verified
+  """
+  verifiedPhone: Boolean
   ownerID: ID
   eventIDs: [ID!]
   trustCenterID: ID
