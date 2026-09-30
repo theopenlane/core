@@ -9,8 +9,8 @@ import (
 var (
 	// definitionID is the stable identifier for the Zitadel integration definition
 	definitionID = types.NewDefinitionRef("def_01K0ZITADEL000000000000001")
-	// integration is the typed installation metadata handle for the Zitadel definition
-	integration = types.NewInstallationRef(resolveInstallationMetadata)
+	// installation is the typed installation metadata handle for the Zitadel definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// zitadelPATCredential is the typed runtime ref for resolving the PAT credential
 	zitadelPATCredential = types.CredentialRefOf[CredentialSchema]()
 	// zitadelOAuthCredential is the typed runtime ref for resolving the OAuth credential
@@ -55,8 +55,8 @@ type UserInput struct {
 
 // DirectorySync configures collection of Zitadel directory users
 type DirectorySync struct {
-	// Switch turns the directory sync off for the installation
-	types.Switch
+	// Disable switches the directory sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users from Zitadel"`
 	// FilterExpr limits imported records to envelopes matching a CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
 }

@@ -9,6 +9,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/mappingtest"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -16,7 +17,7 @@ import (
 
 // TestGitHubDirectoryMembershipMapping verifies team membership payloads carry the provider role through to the mapped document
 func TestGitHubDirectoryMembershipMapping(t *testing.T) {
-	spec := githubMappingSpecForSchema(t, entityops.SchemaDirectoryMembership.Name)
+	spec := mappingtest.MappingSpec(t, testMappings(t), entityops.SchemaDirectoryMembership.Name)
 
 	maintainerRaw, err := providerkit.EvalMap(context.Background(), spec.MapExpr, types.MappingEnvelope{
 		Resource: "acme/security",
@@ -57,7 +58,7 @@ func TestGitHubDirectoryMembershipMapping(t *testing.T) {
 
 // TestGitHubDirectoryAccountMapping verifies confirmed email aliases flow into the mapped account document
 func TestGitHubDirectoryAccountMapping(t *testing.T) {
-	spec := githubMappingSpecForSchema(t, entityops.SchemaDirectoryAccount.Name)
+	spec := mappingtest.MappingSpec(t, testMappings(t), entityops.SchemaDirectoryAccount.Name)
 
 	withAliasesRaw, err := providerkit.EvalMap(context.Background(), spec.MapExpr, types.MappingEnvelope{
 		Resource: "acme",
@@ -118,19 +119,4 @@ func TestResolveCanonicalEmail(t *testing.T) {
 
 	assert.Check(t, is.Equal("MANDO@example.com", publicOnlyMember.CanonicalEmail))
 	assert.Check(t, is.Len(publicOnlyMember.EmailAliases, 0), "case-insensitive match with canonical must be excluded")
-}
-
-// githubMappingSpecForSchema returns the mapping override for one schema from the GitHub App defaults
-func githubMappingSpecForSchema(t *testing.T, schema string) types.MappingOverride {
-	t.Helper()
-
-	for _, mapping := range testMappings(t) {
-		if mapping.Schema == schema {
-			return mapping.Spec
-		}
-	}
-
-	t.Fatalf("mapping not found for schema %s", schema)
-
-	return types.MappingOverride{}
 }

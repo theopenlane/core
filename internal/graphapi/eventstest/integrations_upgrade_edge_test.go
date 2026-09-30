@@ -109,10 +109,9 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, testint.OAuthCredential.ID(), state.CredentialRef)
 
-		require.NotEmpty(t, def.CredentialSchema(testint.OAuthCredential.ID()))
-
 		registration, err := def.CredentialRegistration(testint.OAuthCredential.ID())
 		require.NoError(t, err)
+		require.NotEmpty(t, registration.StoredSchema)
 		require.Empty(t, registration.Schema)
 	})
 

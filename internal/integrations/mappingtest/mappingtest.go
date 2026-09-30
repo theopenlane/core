@@ -39,6 +39,26 @@ func MappingSpec(t *testing.T, mappings []types.MappingRegistration, schema stri
 	return types.MappingOverride{}
 }
 
+// AssertExpressionsValid compiles the filter and map expression of every mapping, each as its own subtest
+func AssertExpressionsValid(t *testing.T, mappings []types.MappingRegistration) {
+	t.Helper()
+
+	for _, m := range mappings {
+		name := m.Schema
+		if m.Variant != "" {
+			name += "/" + m.Variant
+		}
+
+		t.Run(name+"/filter", func(t *testing.T) {
+			assert.NilError(t, providerkit.ValidateExpr(m.Spec.FilterExpr))
+		})
+
+		t.Run(name+"/map", func(t *testing.T) {
+			assert.NilError(t, providerkit.ValidateExpr(m.Spec.MapExpr))
+		})
+	}
+}
+
 // AssertFiltered evaluates the filter expression against the envelope and returns whether it matched
 func AssertFiltered(t *testing.T, spec types.MappingOverride, envelope types.MappingEnvelope) bool {
 	t.Helper()

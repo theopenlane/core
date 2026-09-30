@@ -2,7 +2,7 @@ package gcpscc
 
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -96,21 +96,7 @@ func Builder(federationIssuer string) registry.Builder {
 						MapExpr:    mapExprVuln,
 					},
 				},
-				{
-					Schema: entityops.SchemaFinding.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprFinding,
-						Links: []types.LinkRule{
-							{
-								TargetSchema: entityops.SchemaControl.Name,
-								TargetField:  control.FieldRefCode,
-								SourceField:  entityops.FindingFields.Category.InputKey,
-								SourceList:   entityops.FindingFields.Categories.InputKey,
-							},
-						},
-					},
-				},
+				providerkit.FindingMapping(mapExprFinding),
 			},
 		}, nil
 	})

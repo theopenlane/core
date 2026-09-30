@@ -120,7 +120,7 @@ func TestDefinitionSurface(t *testing.T) {
 	registered, _ := reg.Definition(def.ID)
 	surface := DefinitionSurface(registered)
 
-	retired := retiredUserInputRef.Name()
+	retired := "retiredUserInput"
 
 	if surface.UserInput == nil || !surface.UserInput.Backfill || !slices.Equal(surface.UserInput.Replaces, []string{retired}) {
 		t.Fatalf("UserInput = %+v, want backfilled schema replacing %s", surface.UserInput, retired)
@@ -146,22 +146,6 @@ func TestDefinitionSurface(t *testing.T) {
 		t.Fatal("expected every operation's config schema to be surfaced")
 	}
 
-	if surface.Operations[0].Section || surface.Operations[1].Section {
-		t.Fatalf("Operations = %+v, want caller-supplied config outside any user input section", surface.Operations)
-	}
-
-	sectioned := sectionDefinition(integrationtypes.NewUserInputRef[sectionUserInput]("sectionUserInput").Registration(), sectionOperation("sync"))
-
-	sectionReg := New()
-	if err := sectionReg.Register(sectioned); err != nil {
-		t.Fatalf("register sectioned: %v", err)
-	}
-
-	sectionedRegistered, _ := sectionReg.Definition(sectioned.ID)
-	if got := DefinitionSurface(sectionedRegistered).Operations; len(got) != 1 || !got[0].Section {
-		t.Fatalf("sectioned Operations = %+v, want the config resolved from its user input section", got)
-	}
-
 	if got := lo.Map(surface.Webhooks, func(w SurfaceWebhook, _ int) string { return w.Name }); !slices.Equal(got, []string{"events.v2", "static"}) {
 		t.Fatalf("Webhooks = %v, want sorted names", got)
 	}
@@ -170,7 +154,7 @@ func TestDefinitionSurface(t *testing.T) {
 		t.Fatalf("events.v2 Replaces = %v", got)
 	}
 
-	if got := lo.Map(surface.Webhooks[0].Events, func(e SurfaceNamed, _ int) string { return e.Name }); !slices.Equal(got, []string{"member.joined", "member.removed"}) {
+	if got := surface.Webhooks[0].Events; !slices.Equal(got, []string{"member.joined", "member.removed"}) {
 		t.Fatalf("events.v2 Events = %v, want sorted names", got)
 	}
 
@@ -307,7 +291,7 @@ func TestVersionChangesWhenASlotDeclaresAReplacement(t *testing.T) {
 
 	base, _ := minimalDefinition("version-def")
 
-	slot := testCredentialRef.Replacing(versionSecondCredentialRef, nil)
+	slot := testCredentialRef.Replacing(versionSecondCredentialRef, func(versionSecondCredential) testCredential { return testCredential{} })
 
 	replacing, _ := minimalDefinition("version-def")
 	replacing.CredentialRegistrations[0].Replaces = slot.Replaces()
@@ -321,6 +305,33 @@ func TestVersionChangesWhenASlotDeclaresAReplacement(t *testing.T) {
 
 	if got, want := surface.Credentials[0].Replaces, []string{versionSecondCredentialRef.String()}; !slices.Equal(got, want) {
 		t.Fatalf("Replaces = %v, want %v", got, want)
+	}
+}
+
+// TestVersionChangesWhenAReplacementIsRemoved verifies dropping a declared replacement from a user input layout, operation, or webhook moves the version since Replaces is surfaced
+func TestVersionChangesWhenAReplacementIsRemoved(t *testing.T) {
+	t.Parallel()
+
+	base := surfaceDefinition("version-def")
+
+	userInput := surfaceDefinition("version-def")
+	userInput.UserInput.Replaces = nil
+	userInput.UserInput.Convert = nil
+
+	operation := surfaceDefinition("version-def")
+	operation.Operations[0].Replaces = nil
+
+	webhook := surfaceDefinition("version-def")
+	webhook.Webhooks[1].Replaces = nil
+
+	for name, def := range map[string]integrationtypes.Definition{
+		"user input replacement removed": userInput,
+		"operation replacement removed":  operation,
+		"webhook replacement removed":    webhook,
+	} {
+		if versionOf(t, def) == versionOf(t, base) {
+			t.Fatalf("%s: expected the version to change", name)
+		}
 	}
 }
 
@@ -348,9 +359,6 @@ func TestVersionChangesWithSurfacedNameAndSchemaFields(t *testing.T) {
 	operationConfigSchema := surfaceDefinition("version-def")
 	operationConfigSchema.Operations[0].ConfigSchema = json.RawMessage(`{"type":"object","required":["limit"]}`)
 
-	operationConfigSection := surfaceDefinition("version-def")
-	operationConfigSection.Operations[0].ConfigResolver = func(userInput json.RawMessage) json.RawMessage { return userInput }
-
 	for name, def := range map[string]integrationtypes.Definition{
 		"webhook name":              webhookName,
 		"webhook replaces declared": webhookReplaces,
@@ -358,7 +366,6 @@ func TestVersionChangesWithSurfacedNameAndSchemaFields(t *testing.T) {
 		"user input schema alone":   userInputSchema,
 		"installation schema":       installationSchema,
 		"operation config schema":   operationConfigSchema,
-		"operation config section":  operationConfigSection,
 	} {
 		if versionOf(t, def) == versionOf(t, base) {
 			t.Fatalf("%s: expected the version to change", name)

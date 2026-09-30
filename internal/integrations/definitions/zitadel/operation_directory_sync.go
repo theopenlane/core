@@ -8,7 +8,6 @@ import (
 	userv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/user/v2"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
@@ -43,13 +42,7 @@ func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *client.C
 		accountEnvelopes = append(accountEnvelopes, providerkit.RawEnvelope(resourceID, raw))
 	}
 
-	return []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        accountEnvelopes,
-			SnapshotComplete: true,
-		},
-	}, nil
+	return providerkit.DirectoryAccountPayloadSets(accountEnvelopes), nil
 }
 
 // listDirectoryUsers pages through all Zitadel users using offset-based pagination

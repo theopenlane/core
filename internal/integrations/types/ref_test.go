@@ -31,9 +31,21 @@ type refTestRetiredInput struct {
 	Zone string `json:"zone"`
 }
 
-// refTestSwitchConfig is an operation config type carrying the embedded disable switch
+// refTestConvertCredential maps the retired credential layout onto the current one
+func refTestConvertCredential(r refTestRetiredCredential) refTestCredential {
+	return refTestCredential{Token: r.AccessToken}
+}
+
+// refTestConvertInput maps the retired user input layout onto the current one
+func refTestConvertInput(r refTestRetiredInput) refTestInput {
+	return refTestInput{Region: r.Zone}
+}
+
+// refTestSwitchConfig is an operation config type carrying its own disable toggle
 type refTestSwitchConfig struct {
-	Switch
+	// Disable switches the operation off for the installation
+	Disable bool `json:"disable,omitempty"`
+	// Limit bounds the number of records the operation reads
 	Limit int `json:"limit"`
 }
 
@@ -51,31 +63,22 @@ func TestCredentialRefReplacingConvert(t *testing.T) {
 		wantErr error
 	}{
 		{
-			name:    "nil convert decodes the retired payload directly",
-			ref:     NewCredentialRef[refTestCredential]("refTestCredential").Replacing(retired, nil),
-			from:    retired.ID(),
-			payload: `{"accessToken":"t"}`,
-			want:    `{"token":""}`,
-		},
-		{
 			name:    "payload outside the retired layout is rejected",
-			ref:     NewCredentialRef[refTestCredential]("refTestCredential").Replacing(retired, nil),
+			ref:     NewCredentialRef[refTestCredential]("refTestCredential").Replacing(retired, refTestConvertCredential),
 			from:    retired.ID(),
 			payload: `{"token":"t"}`,
 			wantErr: ErrLayoutMismatch,
 		},
 		{
-			name: "convert maps fields",
-			ref: NewCredentialRef[refTestCredential]("refTestCredential").Replacing(retired, func(r refTestRetiredCredential) refTestCredential {
-				return refTestCredential{Token: r.AccessToken}
-			}),
+			name:    "convert maps fields",
+			ref:     NewCredentialRef[refTestCredential]("refTestCredential").Replacing(retired, refTestConvertCredential),
 			from:    retired.ID(),
 			payload: `{"accessToken":"t"}`,
 			want:    `{"token":"t"}`,
 		},
 		{
 			name:    "undeclared slot is not replaced",
-			ref:     NewCredentialRef[refTestCredential]("refTestCredential").Replacing(retired, nil),
+			ref:     NewCredentialRef[refTestCredential]("refTestCredential").Replacing(retired, refTestConvertCredential),
 			from:    NewCredentialSlotID("unknown"),
 			payload: `{"token":"t"}`,
 			wantErr: ErrNotReplaced,
@@ -110,8 +113,8 @@ func TestCredentialRefReplacingConvert(t *testing.T) {
 func TestCredentialRefReplacingDoesNotAliasTheSource(t *testing.T) {
 	t.Parallel()
 
-	base := NewCredentialRef[refTestCredential]("refTestCredential").Replacing(NewCredentialRef[refTestRetiredCredential]("refTestRetiredCredential"), nil)
-	extended := base.Replacing(NewCredentialRef[struct{}]("other"), nil)
+	base := NewCredentialRef[refTestCredential]("refTestCredential").Replacing(NewCredentialRef[refTestRetiredCredential]("refTestRetiredCredential"), refTestConvertCredential)
+	extended := base.Replacing(NewCredentialRef[struct{}]("other"), func(struct{}) refTestCredential { return refTestCredential{} })
 
 	if got := len(base.Replaces()); got != 1 {
 		t.Fatalf("expected the source ref to keep one replacement, got %d", got)
@@ -178,16 +181,6 @@ func TestNewCredentialRefKeepsNameAsSlotID(t *testing.T) {
 	}
 }
 
-func TestUserInputRefName(t *testing.T) {
-	t.Parallel()
-
-	ref := NewUserInputRef[refTestInput]("installation.input")
-
-	if ref.Name() != "installation.input" {
-		t.Fatalf("Name() = %q", ref.Name())
-	}
-}
-
 func TestUserInputRefReplacingConvert(t *testing.T) {
 	t.Parallel()
 
@@ -201,22 +194,14 @@ func TestUserInputRefReplacingConvert(t *testing.T) {
 		wantErr error
 	}{
 		{
-			name:    "nil convert decodes the retired payload directly",
-			ref:     NewUserInputRef[refTestInput]("refTestInput").Replacing(retired, nil),
-			payload: `{"zone":"eu"}`,
-			want:    `{"region":""}`,
-		},
-		{
-			name: "convert maps fields",
-			ref: NewUserInputRef[refTestInput]("refTestInput").Replacing(retired, func(r refTestRetiredInput) refTestInput {
-				return refTestInput{Region: r.Zone}
-			}),
+			name:    "convert maps fields",
+			ref:     NewUserInputRef[refTestInput]("refTestInput").Replacing(retired, refTestConvertInput),
 			payload: `{"zone":"eu"}`,
 			want:    `{"region":"eu"}`,
 		},
 		{
 			name:    "payload matching no retired layout is rejected",
-			ref:     NewUserInputRef[refTestInput]("refTestInput").Replacing(retired, nil),
+			ref:     NewUserInputRef[refTestInput]("refTestInput").Replacing(retired, refTestConvertInput),
 			payload: `{"region":"eu"}`,
 			wantErr: ErrLayoutMismatch,
 		},
@@ -256,8 +241,8 @@ func TestUserInputRefReplacingConvert(t *testing.T) {
 func TestUserInputRefReplacingDoesNotAliasTheSource(t *testing.T) {
 	t.Parallel()
 
-	base := NewUserInputRef[refTestInput]("refTestInput").Replacing(NewUserInputRef[refTestRetiredInput]("refTestRetiredInput"), nil)
-	extended := base.Replacing(NewUserInputRef[struct{}]("other"), nil)
+	base := NewUserInputRef[refTestInput]("refTestInput").Replacing(NewUserInputRef[refTestRetiredInput]("refTestRetiredInput"), refTestConvertInput)
+	extended := base.Replacing(NewUserInputRef[struct{}]("other"), func(struct{}) refTestInput { return refTestInput{} })
 
 	if got := len(base.Replaces()); got != 1 {
 		t.Fatalf("expected the source ref to keep one replacement, got %d", got)
@@ -521,48 +506,6 @@ func TestOperationRefHandlesRequest(t *testing.T) {
 	if _, err := reg.Handle(context.Background(), OperationRequest{Config: json.RawMessage(`[]`)}); !errors.Is(err, ErrOperationConfigInvalid) {
 		t.Fatalf("expected %v, got %v", ErrOperationConfigInvalid, err)
 	}
-}
-
-func TestOperationRefConfigDisabled(t *testing.T) {
-	t.Parallel()
-
-	definition := NewDefinitionRef("def_001")
-
-	t.Run("switchable config projects the switch", func(t *testing.T) {
-		t.Parallel()
-
-		for _, ref := range []OperationRef[refTestSwitchConfig]{NewOperationRef[refTestSwitchConfig]("sync"), OperationRefOf[refTestSwitchConfig]()} {
-			reg := ref.Registration(definition, OperationRegistration{})
-
-			if reg.ConfigDisabled == nil {
-				t.Fatalf("expected ConfigDisabled projected for %s", ref.Name())
-			}
-
-			if !reg.ConfigDisabled(json.RawMessage(`{"disable":true}`)) {
-				t.Fatal("expected a set switch to disable the operation")
-			}
-
-			if reg.ConfigDisabled(json.RawMessage(`{"disable":false,"limit":1}`)) || reg.ConfigDisabled(nil) {
-				t.Fatal("expected an unset or absent switch to leave the operation enabled")
-			}
-
-			if reg.ConfigDisabled(json.RawMessage(`not json`)) {
-				t.Fatal("expected an undecodable section to leave the operation enabled")
-			}
-
-			if reg.Disabled != nil || reg.ConfigResolver != nil {
-				t.Fatal("expected Registration not to touch Disabled or ConfigResolver")
-			}
-		}
-	})
-
-	t.Run("config without a switch projects nothing", func(t *testing.T) {
-		t.Parallel()
-
-		if reg := NewOperationRef[refTestInput]("plain").Registration(definition, OperationRegistration{}); reg.ConfigDisabled != nil {
-			t.Fatal("expected no ConfigDisabled for a config without a switch")
-		}
-	})
 }
 
 func TestOperationRefReplacing(t *testing.T) {

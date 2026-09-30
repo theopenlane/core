@@ -7,8 +7,6 @@ var (
 	ErrAPITokenMissing = errors.New("okta: api token missing")
 	// ErrOrgURLMissing indicates the Okta org URL is missing from the credential
 	ErrOrgURLMissing = errors.New("okta: org url missing")
-	// ErrClientType indicates the provided client is not an Okta API client
-	ErrClientType = errors.New("okta: unexpected client type")
 	// ErrCredentialInvalid indicates credential metadata could not be decoded
 	ErrCredentialInvalid = errors.New("okta: credential invalid")
 	// ErrClientConfigInvalid indicates the Okta client configuration is invalid

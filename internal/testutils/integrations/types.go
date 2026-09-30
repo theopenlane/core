@@ -7,6 +7,8 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -127,12 +129,7 @@ type webhookAlertEnvelope struct{}
 
 // ModeInput returns the installation user input selecting one scheduling mode
 func ModeInput(mode string) json.RawMessage {
-	raw, err := json.Marshal(UserInput{Mode: mode})
-	if err != nil {
-		panic(err)
-	}
-
-	return raw
+	return lo.Must(json.Marshal(UserInput{Mode: mode}))
 }
 
 // legacyTokenCred is the token shape stored under the retired slot
@@ -141,22 +138,17 @@ type legacyTokenCred struct {
 	AccessToken string `json:"accessToken"`
 }
 
+// credentialSet marshals value as a credential payload
+func credentialSet(value any) types.CredentialSet {
+	return types.CredentialSet{Data: lo.Must(json.Marshal(value))}
+}
+
 // TokenCredentialSet builds the token credential payload
 func TokenCredentialSet(token string) types.CredentialSet {
-	raw, err := json.Marshal(tokenCred{Token: token})
-	if err != nil {
-		panic(err)
-	}
-
-	return types.CredentialSet{Data: raw}
+	return credentialSet(tokenCred{Token: token})
 }
 
 // ServiceAccountCredentialSet builds the strict credential payload
 func ServiceAccountCredentialSet(projectID, email string) types.CredentialSet {
-	raw, err := json.Marshal(serviceAccountCred{ProjectID: projectID, ServiceAccountEmail: email})
-	if err != nil {
-		panic(err)
-	}
-
-	return types.CredentialSet{Data: raw}
+	return credentialSet(serviceAccountCred{ProjectID: projectID, ServiceAccountEmail: email})
 }

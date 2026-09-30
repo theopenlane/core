@@ -7,8 +7,7 @@ import (
 	"strconv"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -113,24 +112,14 @@ func Builder(cfg Config) registry.Builder {
 					},
 				}),
 				directorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Collect organization members, teams, and team memberships",
-					Policy:      types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaDirectoryAccount.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryGroup.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryMembership.Name,
-						},
-					},
+					Description:         "Collect organization members, teams, and team memberships",
+					Policy:              types.ExecutionPolicy{Reconcile: true, Snapshot: true},
+					Ingest:              providerkit.DirectoryIngestContracts(),
 					SkipDefaultLookback: true,
 					Schedule:            gala.NewFullFetchSchedule(),
 				}),
 			},
-			Mappings: []types.MappingRegistration{
+			Mappings: append([]types.MappingRegistration{
 				{
 					Schema:  entityops.SchemaVulnerability.Name,
 					Variant: githubAlertTypeDependabot,
@@ -171,40 +160,7 @@ func Builder(cfg Config) registry.Builder {
 						MapExpr:    mapExprRepositoryAsset,
 					},
 				},
-				{
-					Schema: entityops.SchemaDirectoryAccount.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryAccount,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryGroup.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryGroup,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryMembership.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryMembership,
-						Links: []types.LinkRule{
-							{
-								TargetSchema: entityops.SchemaDirectoryAccount.Name,
-								TargetField:  directoryaccount.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
-							},
-							{
-								TargetSchema: entityops.SchemaDirectoryGroup.Name,
-								TargetField:  directorygroup.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
-							},
-						},
-					},
-				},
-			},
+			}, providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership)...),
 			Webhooks: []types.WebhookRegistration{
 				InstallationEventsWebhook.Registration(types.WebhookRegistration{
 					StaticRoute:        "/github/app/webhook",

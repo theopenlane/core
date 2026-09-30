@@ -15,9 +15,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// emitReconcileLoop starts one operation's loop unless a live one exists; the metadata guard is what stops seeds from spawning parallel chains, since successor cycles change their unique key
-func (r *Runtime) emitReconcileLoop(ctx context.Context, installation *ent.Integration, operationName string) error {
-	oc := types.NewOperationContext(installation.OwnerID, operationName, types.IntegrationSource{
+// resetReconcileLoop collapses one operation to exactly one recurring loop: a single live loop is left untouched, duplicates are purged, and a fresh loop is seeded when none remains; the metadata count is what stops seeds from spawning parallel chains, since successor cycles change their unique key
+func (r *Runtime) resetReconcileLoop(ctx context.Context, installation *ent.Integration, op types.OperationRegistration) error {
+	oc := types.NewOperationContext(installation.OwnerID, op.Name, types.IntegrationSource{
 		IntegrationID: installation.ID,
 		DefinitionID:  installation.DefinitionID,
 		RunType:       enums.IntegrationRunTypeReconcile,
@@ -25,23 +25,26 @@ func (r *Runtime) emitReconcileLoop(ctx context.Context, installation *ent.Integ
 
 	ctx, headers := intobvs.EmitContext(ctx, oc)
 
-	fragment, err := reconcileLoopFragment(installation.ID, operationName)
+	fragment, err := reconcileLoopFragment(installation.ID, op.Name)
 	if err != nil {
 		return err
 	}
 
-	active, err := r.Gala().HasActiveJobWithMetadata(ctx, fragment)
+	count, err := r.Gala().CountActiveJobsWithMetadata(ctx, fragment)
 	if err != nil {
 		return err
 	}
 
-	if active {
+	switch {
+	case count == 1:
 		return nil
-	}
+	case count > 1:
+		purged, err := r.Gala().PurgeActiveJobsWithMetadata(ctx, fragment)
+		if err != nil {
+			return err
+		}
 
-	op, err := r.Registry().Operation(installation.DefinitionID, operationName)
-	if err != nil {
-		return err
+		logx.FromContext(ctx).Info().Int("purged", purged).Msg("purged duplicate reconcile jobs")
 	}
 
 	if op.ClientRef.Valid() {
@@ -99,9 +102,14 @@ func (r *Runtime) markReconcileExhausted(ctx context.Context, e operations.Recon
 	}
 }
 
-// ResetReconcileLoops collapses each reconcilable operation on the installation to exactly one recurring loop: an operation already running a single loop is left untouched (preserving its adaptive schedule state), while zero or multiple loops are cancelled and reseeded as one fresh unique loop
+// ResetReconcileLoops collapses every runnable reconcile operation on an operational installation to exactly one recurring loop, seeding missing loops and purging duplicates; operations that are disabled or recorded unhealthy, and installations whose owner subscription is inactive, are skipped
 func (r *Runtime) ResetReconcileLoops(ctx context.Context, installation *ent.Integration) error {
 	if !lo.Contains(enums.IntegrationOperationalStatuses, installation.Status) {
+		return nil
+	}
+
+	def, ok := r.Registry().Definition(installation.DefinitionID)
+	if !ok {
 		return nil
 	}
 
@@ -118,63 +126,16 @@ func (r *Runtime) ResetReconcileLoops(ctx context.Context, installation *ent.Int
 		return nil
 	}
 
-	def, ok := r.Registry().Definition(installation.DefinitionID)
-	if !ok {
-		return nil
-	}
-
 	var errs []error
 
-	unhealthy := installation.Health.UnhealthyOperations
-
 	for _, op := range def.Operations {
-		if !op.Policy.Reconcile {
+		_, failing := installation.Health.UnhealthyOperations[op.Name]
+		if !op.Policy.Reconcile || failing || op.DisabledFor(installation.Config.ClientConfig) {
 			continue
 		}
 
-		if op.DisabledFor(installation.Config.ClientConfig) {
-			continue
-		}
-
-		if _, failing := unhealthy[op.Name]; failing {
-			continue
-		}
-
-		opCtx := intobvs.WithOperation(ctx, op.Name)
-
-		fragment, err := reconcileLoopFragment(installation.ID, op.Name)
-		if err != nil {
-			errs = append(errs, err)
-			continue
-		}
-
-		count, err := r.Gala().CountActiveJobsWithMetadata(opCtx, fragment)
-		if err != nil {
-			logx.FromContext(opCtx).Error().Err(err).Msg("failed counting reconcile jobs for loop reset")
-			errs = append(errs, err)
-
-			continue
-		}
-
-		if count == 1 {
-			continue
-		}
-
-		if count > 1 {
-			purged, err := r.Gala().PurgeActiveJobsWithMetadata(opCtx, fragment)
-			if err != nil {
-				logx.FromContext(opCtx).Error().Err(err).Msg("failed purging duplicate reconcile jobs")
-				errs = append(errs, err)
-
-				continue
-			}
-
-			logx.FromContext(opCtx).Info().Int("purged", purged).Msg("purged duplicate reconcile jobs")
-		}
-
-		if err := r.emitReconcileLoop(opCtx, installation, op.Name); err != nil {
-			logx.FromContext(opCtx).Error().Err(err).Msg("failed emitting reconcile loop after reset")
-			errs = append(errs, err)
+		if err := r.resetReconcileLoop(ctx, installation, op); err != nil {
+			errs = append(errs, fmt.Errorf("reset reconcile loop %s: %w", op.Name, err))
 		}
 	}
 

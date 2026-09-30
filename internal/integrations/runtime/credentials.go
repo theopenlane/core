@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
@@ -66,8 +65,6 @@ func (r *Runtime) cleanupInstallation(ctx context.Context, integrationID string)
 func (r *Runtime) ReapExpiredInstallation(ctx context.Context, integrationID string) (bool, error) {
 	reaped, err := r.DB().Integration.Delete().Where(integration.ID(integrationID), integration.ExpiresAtLTE(time.Now())).Exec(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to reap expired installation")
-
 		return false, err
 	}
 
@@ -82,8 +79,6 @@ func (r *Runtime) ReapExpiredInstallation(ctx context.Context, integrationID str
 func (r *Runtime) Disconnect(ctx context.Context, installation *ent.Integration) (types.DisconnectResult, error) {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to resolve definition for installation")
-
 		return types.DisconnectResult{}, err
 	}
 
@@ -97,8 +92,6 @@ func (r *Runtime) Disconnect(ctx context.Context, installation *ent.Integration)
 	if err == nil && connection.Disconnect != nil && connection.Disconnect.Disconnect != nil {
 		credentials, loadErr := r.keystore().LoadCredentials(ctx, installation, connection.CredentialRefs)
 		if loadErr != nil {
-			logx.FromContext(ctx).Error().Err(loadErr).Msg("failed to load credentials for disconnect")
-
 			return types.DisconnectResult{}, loadErr
 		}
 
@@ -109,8 +102,6 @@ func (r *Runtime) Disconnect(ctx context.Context, installation *ent.Integration)
 			Config:      installation.Config,
 		})
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to disconnect installation")
-
 			return types.DisconnectResult{}, err
 		}
 
@@ -120,8 +111,6 @@ func (r *Runtime) Disconnect(ctx context.Context, installation *ent.Integration)
 	}
 
 	if err := r.cleanupInstallation(ctx, installation.ID); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to clean up installation")
-
 		return types.DisconnectResult{}, err
 	}
 
@@ -134,8 +123,6 @@ func (r *Runtime) Disconnect(ctx context.Context, installation *ent.Integration)
 func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, userInput json.RawMessage, credentialRef types.CredentialSlotID, credential *types.CredentialSet, installationInput json.RawMessage) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to resolve definition for installation")
-
 		return err
 	}
 
@@ -144,8 +131,6 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 	skip := lo.Ternary(credential != nil, []types.CredentialSlotID{credentialRef}, nil)
 
 	if err := r.ensureCurrentVersion(ctx, installation, skip...); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to ensure current version for installation")
-
 		return err
 	}
 
@@ -153,24 +138,18 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 
 	if !jsonx.IsEmptyRawMessage(userInput) {
 		if err := r.reconcileUserInput(ctx, installation, def, userInput); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to reconcile user input for installation")
-
 			return err
 		}
 	}
 
 	if credential != nil {
 		if err := r.reconcileCredential(ctx, installation, def, credentialRef, *credential, installationInput); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to reconcile credential for installation")
-
 			return err
 		}
 	}
 
 	if wasErrored {
 		if err := r.recoverErroredInstallation(ctx, installation, def, credential == nil); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to recover errored installation")
-
 			return err
 		}
 	}
@@ -186,8 +165,6 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 func (r *Runtime) recoverErroredInstallation(ctx context.Context, installation *ent.Integration, def types.Definition, verify bool) error {
 	if verify {
 		if err := r.verifyInstallationHealth(ctx, installation, def); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to verify installation health")
-
 			return err
 		}
 	}
@@ -219,8 +196,6 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 	}
 
 	if err := update.Exec(ctx); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to update installation user input")
-
 		return err
 	}
 
@@ -248,8 +223,6 @@ func resolveConnectionIdentity(ctx context.Context, installation *ent.Integratio
 		Input:       input,
 	})
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to resolve connection identity")
-
 		return types.IntegrationInstallationMetadata{}, err
 	}
 
@@ -281,8 +254,6 @@ func (r *Runtime) saveInstallationMetadata(ctx context.Context, installation *en
 		SetInstallationMetadata(metadata).
 		SetMetadata(merged).
 		Exec(ctx); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to save installation metadata")
-
 		return err
 	}
 
@@ -296,15 +267,11 @@ func (r *Runtime) saveInstallationMetadata(ctx context.Context, installation *en
 func (r *Runtime) RefreshInstallationMetadata(ctx context.Context, installation *ent.Integration) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to resolve definition for installation")
-
 		return err
 	}
 
 	state, err := def.ProviderState(installation.ProviderState)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to resolve provider state for installation")
-
 		return err
 	}
 
@@ -320,22 +287,16 @@ func (r *Runtime) RefreshInstallationMetadata(ctx context.Context, installation 
 
 	connection, err := def.ConnectionRegistration(state.CredentialRef)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to resolve connection for credential")
-
 		return err
 	}
 
 	bindings, err := r.loadCredentials(systemCtx, installation, connection.CredentialRefs)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to load credentials for connection")
-
 		return err
 	}
 
 	metadata, err := resolveConnectionIdentity(systemCtx, installation, def, connection, bindings, nil)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to resolve connection identity")
-
 		return err
 	}
 
@@ -353,21 +314,15 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 
 	connection, err := r.resolveConnectionForCredential(def, installation, credentialRef)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to resolve connection for credential")
-
 		return err
 	}
 
 	if err := validatePayload(ctx, registration.Schema, credential.Data, ErrCredentialInvalid); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("credential validation failed")
-
 		return err
 	}
 
 	bindings, err := r.keystore().LoadCredentials(ctx, installation, connection.CredentialRefs)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to load existing credentials for connection")
-
 		return err
 	}
 
@@ -375,8 +330,6 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 
 	if def.HealthCheck != nil {
 		if err := r.runConnectionHealthCheck(ctx, installation, def.HealthCheck, bindings); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("validation failed during reconcile")
-
 			return fmt.Errorf("validation failed: %w", err)
 		}
 	}
@@ -389,34 +342,24 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 
 	metadata, err := resolveConnectionIdentity(systemCtx, installation, def, connection, bindings, installationInput)
 	if err != nil {
-		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to resolve connection identity")
-
 		return err
 	}
 
 	if err := checkInstallationInstanceMatch(installation, metadata); err != nil {
-		logx.FromContext(systemCtx).Error().Err(err).Msg("installation instance mismatch")
-
 		return err
 	}
 
 	metadata.Display.CredentialRef = credentialRef.String()
 
 	if err := r.keystore().SaveCredential(systemCtx, installation, registration.Ref, credential); err != nil {
-		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to save credential")
-
 		return err
 	}
 
 	if err := r.persistConnectionState(systemCtx, installation, def, connection.CredentialRef); err != nil {
-		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to persist connection state")
-
 		return err
 	}
 
 	if err := r.saveInstallationMetadata(systemCtx, installation, metadata); err != nil {
-		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to save installation metadata")
-
 		return err
 	}
 
@@ -441,8 +384,6 @@ func (r *Runtime) activateReconciledInstallation(ctx context.Context, installati
 	}
 
 	if err := update.Exec(ctx); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to update installation")
-
 		return err
 	}
 
@@ -453,8 +394,6 @@ func (r *Runtime) activateReconciledInstallation(ctx context.Context, installati
 	}
 
 	if err := r.reconcileInstallationWebhooks(ctx, installation, ""); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to reconcile installation webhooks")
-
 		return err
 	}
 
@@ -462,9 +401,7 @@ func (r *Runtime) activateReconciledInstallation(ctx context.Context, installati
 		return nil
 	}
 
-	if err := r.reconcileOperations(ctx, installation); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to reconcile operations")
-
+	if err := r.ResetReconcileLoops(ctx, installation); err != nil {
 		return err
 	}
 
@@ -477,7 +414,6 @@ func (r *Runtime) activateReconciledInstallation(ctx context.Context, installati
 func (r *Runtime) resolveConnectionFromState(def types.Definition, installation *ent.Integration) (types.ConnectionRegistration, bool, error) {
 	state, err := def.ProviderState(installation.ProviderState)
 	if err != nil {
-		log.Error().Err(err).Msg("integrations: error getting provider state")
 		return types.ConnectionRegistration{}, false, err
 	}
 
@@ -487,9 +423,7 @@ func (r *Runtime) resolveConnectionFromState(def types.Definition, installation 
 
 	connection, err := def.ConnectionRegistration(state.CredentialRef)
 	if err != nil {
-		log.Error().Err(err).Msg("integrations: error connecting during registration")
-
-		return types.ConnectionRegistration{}, false, ErrConnectionNotFound
+		return types.ConnectionRegistration{}, false, fmt.Errorf("%w: %w", ErrConnectionNotFound, err)
 	}
 
 	return connection, true, nil
@@ -516,27 +450,21 @@ func (r *Runtime) resolvePersistedConnection(def types.Definition, installation 
 // resolveConnectionForCredential resolves the connection for a given credential reference
 func (r *Runtime) resolveConnectionForCredential(def types.Definition, installation *ent.Integration, credentialRef types.CredentialSlotID) (types.ConnectionRegistration, error) {
 	connection, found, err := r.resolveConnectionFromState(def, installation)
-	if err != nil {
+
+	switch {
+	case err != nil:
 		return types.ConnectionRegistration{}, err
-	}
-
-	if found {
-		if !lo.Contains(connection.CredentialRefs, credentialRef) {
-			return types.ConnectionRegistration{}, ErrCredentialNotDeclared
-		}
-
+	case found && !lo.Contains(connection.CredentialRefs, credentialRef):
+		return types.ConnectionRegistration{}, ErrCredentialNotDeclared
+	case found:
 		return connection, nil
-	}
-
-	if credentialRef == (types.CredentialSlotID{}) {
+	case credentialRef == (types.CredentialSlotID{}):
 		return types.ConnectionRegistration{}, ErrConnectionRequired
 	}
 
 	connection, err = def.ConnectionRegistration(credentialRef)
 	if err != nil {
-		log.Error().Err(err).Msg("integrations: error connecting during registration")
-
-		return types.ConnectionRegistration{}, ErrConnectionNotFound
+		return types.ConnectionRegistration{}, fmt.Errorf("%w: %w", ErrConnectionNotFound, err)
 	}
 
 	return connection, nil
@@ -579,14 +507,10 @@ func (r *Runtime) persistConnectionState(ctx context.Context, installation *ent.
 		CredentialRef: credentialRef,
 	})
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to compute next provider state")
-
 		return err
 	}
 
 	if err := r.DB().Integration.UpdateOneID(installation.ID).SetProviderState(next).Exec(ctx); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to persist connection state")
-
 		return err
 	}
 

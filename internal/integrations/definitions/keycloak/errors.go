@@ -11,10 +11,6 @@ var (
 	ErrBaseURLMissing = errors.New("keycloak: base url missing")
 	// ErrRealmMissing indicates the Keycloak realm is missing from the credential
 	ErrRealmMissing = errors.New("keycloak: realm missing")
-	// ErrClientType indicates the provided client is not the expected keycloak client type
-	ErrClientType = errors.New("keycloak: unexpected client type")
-	// ErrCredentialEncode indicates the credential could not be serialized
-	ErrCredentialEncode = errors.New("keycloak: credential encode failed")
 	// ErrCredentialDecode indicates the credential could not be deserialized
 	ErrCredentialDecode = errors.New("keycloak: credential decode failed")
 	// ErrTokenAcquireFailed indicates the token could not be acquired from Keycloak

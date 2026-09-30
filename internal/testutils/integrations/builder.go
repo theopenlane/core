@@ -68,7 +68,7 @@ func Builder() registry.Builder {
 			},
 			HealthCheck: types.CredentialHealthCheck(healthHandler),
 			Clients: []types.ClientRegistration{
-				testClient.Registration(buildClient, types.ClientRegistration{
+				testClient.Registration(tokenClient(TokenCredential, func(c tokenCred) string { return c.Token }), types.ClientRegistration{
 					Description: "Test client built from the stored token credential.",
 				}),
 			},

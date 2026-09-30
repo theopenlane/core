@@ -114,7 +114,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	// operation that was just re-enabled needs a new job seeded - this is a no-op
 	// when all jobs are already active
 	if lo.Contains(enums.IntegrationOperationalStatuses, installationRec.Status) {
-		if err := h.IntegrationsRuntime.SeedReconcileJobsForInstallation(systemCtx, installationRec); err != nil {
+		if err := h.IntegrationsRuntime.ResetReconcileLoops(systemCtx, installationRec); err != nil {
 			logx.FromContext(requestCtx).Warn().Err(err).Str("installation_id", installationRec.ID).Msg("failed to seed missing reconcile jobs after config update")
 		}
 	}

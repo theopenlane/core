@@ -852,17 +852,15 @@ func failedRecordsFromTracked(tracked map[string]*models.FailedRecord) []models.
 func mapIngestRecord(ctx context.Context, mapping types.MappingOverride, schema string, envelope types.MappingEnvelope, installationFilterExpr string, installation types.MappingInstallation) (mappedIngestRecord, bool, error) {
 	matched, err := envelopeIncludedByFilters(ctx, installationFilterExpr, mapping.FilterExpr, envelope, installation)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("ingest filter failed")
-		return mappedIngestRecord{}, false, ErrIngestFilterFailed
+		return mappedIngestRecord{}, false, fmt.Errorf("%w: %w", ErrIngestFilterFailed, err)
 	}
+
 	if !matched {
 		return mappedIngestRecord{}, false, nil
 	}
 
 	mapped, err := providerkit.EvalMap(ctx, mapping.MapExpr, envelope, installation)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("ingest transform failed")
-
 		return mappedIngestRecord{}, false, fmt.Errorf("%w: %w", ErrIngestTransformFailed, err)
 	}
 
@@ -878,16 +876,15 @@ func mapIngestRecord(ctx context.Context, mapping types.MappingOverride, schema 
 // operation-specific config section first (supporting nested UserInput structures like
 // directorySync.filterExpr); otherwise it falls back to a top-level filterExpr in ClientConfig
 func resolveInstallationFilterExpr(installation *ent.Integration, definition types.Definition, operationName string) (string, error) {
-	if operationName != "" {
-		if op, ok := lo.Find(definition.Operations, func(o types.OperationRegistration) bool { return o.Name == operationName }); ok && op.ConfigResolver != nil {
-			var cfg installationFilterConfig
-			if err := jsonx.UnmarshalIfPresent(op.ConfigResolver(installation.Config.ClientConfig), &cfg); err != nil {
-				return "", err
-			}
+	op, found := lo.Find(definition.Operations, func(o types.OperationRegistration) bool { return o.Name == operationName })
+	if found && op.ConfigResolver != nil {
+		var cfg installationFilterConfig
+		if err := jsonx.UnmarshalIfPresent(op.ConfigResolver(installation.Config.ClientConfig), &cfg); err != nil {
+			return "", err
+		}
 
-			if cfg.FilterExpr != "" {
-				return cfg.FilterExpr, nil
-			}
+		if cfg.FilterExpr != "" {
+			return cfg.FilterExpr, nil
 		}
 	}
 

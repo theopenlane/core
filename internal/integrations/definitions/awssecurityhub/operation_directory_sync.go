@@ -9,7 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	iamtypes "github.com/aws/aws-sdk-go-v2/service/iam/types"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -83,13 +82,7 @@ func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *iam
 		accountEnvelopes = append(accountEnvelopes, envelope)
 	}
 
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        accountEnvelopes,
-			SnapshotComplete: true,
-		},
-	}
+	payloadSets := providerkit.DirectoryAccountPayloadSets(accountEnvelopes)
 
 	if cfg.DisableGroupSync {
 		logx.FromContext(ctx).Info().Int("user_count", len(accountEnvelopes)).Msg("awsiam: collected IAM users")
@@ -147,20 +140,7 @@ func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *iam
 
 	logx.FromContext(ctx).Debug().Int("user_count", len(accountEnvelopes)).Int("group_count", len(groupEnvelopes)).Int("membership_count", len(membershipEnvelopes)).Msg("awsiam: collected IAM users, groups, and memberships")
 
-	payloadSets = append(payloadSets,
-		types.IngestPayloadSet{
-			Schema:           entityops.SchemaDirectoryGroup.Name,
-			Envelopes:        groupEnvelopes,
-			SnapshotComplete: true,
-		},
-		types.IngestPayloadSet{
-			Schema:           entityops.SchemaDirectoryMembership.Name,
-			Envelopes:        membershipEnvelopes,
-			SnapshotComplete: true,
-		},
-	)
-
-	return payloadSets, nil
+	return append(payloadSets, providerkit.DirectoryGroupPayloadSets(groupEnvelopes, membershipEnvelopes, true)...), nil
 }
 
 // iamUserToPayload maps an IAM User SDK type to a JSON-serializable payload struct

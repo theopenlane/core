@@ -5,7 +5,6 @@ import (
 
 	gocloak "github.com/Nerzal/gocloak/v13"
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -57,13 +56,7 @@ func collectDirectory(ctx context.Context, gc *gocloak.GoCloak, token, realm str
 		includedUsers[resourceID] = struct{}{}
 	}
 
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        accountEnvelopes,
-			SnapshotComplete: true,
-		},
-	}
+	payloadSets := providerkit.DirectoryAccountPayloadSets(accountEnvelopes)
 
 	if cfg.DisableGroupSync {
 		return payloadSets, nil
@@ -116,20 +109,7 @@ func collectDirectory(ctx context.Context, gc *gocloak.GoCloak, token, realm str
 		}
 	}
 
-	payloadSets = append(payloadSets,
-		types.IngestPayloadSet{
-			Schema:           entityops.SchemaDirectoryGroup.Name,
-			Envelopes:        groupEnvelopes,
-			SnapshotComplete: true,
-		},
-		types.IngestPayloadSet{
-			Schema:           entityops.SchemaDirectoryMembership.Name,
-			Envelopes:        membershipEnvelopes,
-			SnapshotComplete: true,
-		},
-	)
-
-	return payloadSets, nil
+	return append(payloadSets, providerkit.DirectoryGroupPayloadSets(groupEnvelopes, membershipEnvelopes, true)...), nil
 }
 
 // listDirectoryUsers pages through all Keycloak users in the realm

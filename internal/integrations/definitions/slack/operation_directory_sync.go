@@ -5,7 +5,6 @@ import (
 
 	slackgo "github.com/slack-go/slack"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -81,13 +80,7 @@ func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *Sla
 		envelopes = append(envelopes, envelope)
 	}
 
-	return []types.IngestPayloadSet{
-		{
-			Schema:           entityops.SchemaDirectoryAccount.Name,
-			Envelopes:        envelopes,
-			SnapshotComplete: true,
-		},
-	}, nil
+	return providerkit.DirectoryAccountPayloadSets(envelopes), nil
 }
 
 func normalizeUser(user slackgo.User) slackUserPayload {

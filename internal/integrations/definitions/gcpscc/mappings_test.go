@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/v2/internal/integrations/mappingtest"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -25,20 +26,7 @@ func testMappings(t *testing.T) []types.MappingRegistration {
 }
 
 func TestMappingExpressionsValid(t *testing.T) {
-	for _, m := range testMappings(t) {
-		name := m.Schema
-		if m.Variant != "" {
-			name += "/" + m.Variant
-		}
-
-		t.Run(name+"/filter", func(t *testing.T) {
-			assert.NoError(t, providerkit.ValidateExpr(m.Spec.FilterExpr))
-		})
-
-		t.Run(name+"/map", func(t *testing.T) {
-			assert.NoError(t, providerkit.ValidateExpr(m.Spec.MapExpr))
-		})
-	}
+	mappingtest.AssertExpressionsValid(t, testMappings(t))
 }
 
 // TestGCPSCCMappingsEvalMap verifies SCC finding payloads map into vulnerability fields

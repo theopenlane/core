@@ -7,9 +7,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/internal/ent/generated/control"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -59,19 +57,9 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				directorySyncOperation.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Collect account members as directory accounts",
-					Policy:      types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaDirectoryAccount.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryGroup.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryMembership.Name,
-						},
-					},
+					Description:         "Collect account members as directory accounts",
+					Policy:              types.ExecutionPolicy{Reconcile: true, Snapshot: true},
+					Ingest:              providerkit.DirectoryIngestContracts(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"Account Settings Read", "Access: Users Read", "Access: Groups Read", "Access: Organizations, Identity Providers, and Groups Read"},
 					Schedule:            gala.NewFullFetchSchedule(),
@@ -144,77 +132,29 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 			GalaListeners: []types.GalaListenerRegistration{
 				domainScanListeners(),
 			},
-			Mappings: []types.MappingRegistration{
-				{
-					Schema: entityops.SchemaDirectoryAccount.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryAccount,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryGroup.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryGroup,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryMembership.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryMembership,
-						Links: []types.LinkRule{
-							{
-								TargetSchema: entityops.SchemaDirectoryAccount.Name,
-								TargetField:  directoryaccount.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
-							},
-							{
-								TargetSchema: entityops.SchemaDirectoryGroup.Name,
-								TargetField:  directorygroup.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
-							},
-						},
-					},
-				},
-				{
-					Schema: entityops.SchemaFinding.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprFinding,
-						Links: []types.LinkRule{
-							{
-								TargetSchema: entityops.SchemaControl.Name,
-								TargetField:  control.FieldRefCode,
-								SourceField:  entityops.FindingFields.Category.InputKey,
-								SourceList:   entityops.FindingFields.Categories.InputKey,
-							},
-						},
-					},
-				},
-				{
+			Mappings: append(providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
+				providerkit.FindingMapping(mapExprFinding),
+				types.MappingRegistration{
 					Schema: entityops.SchemaAsset.Name,
 					Spec: types.MappingOverride{
 						FilterExpr: "true",
 						MapExpr:    mapExprAsset,
 					},
 				},
-			},
+			),
 		}
 
 		if runtime.Provisioned() {
-			runtimeCloudflareRef.SetConfig(runtime)
-
-			marshaledConfig, err := runtimeCloudflareRef.MarshalConfig()
+			config, err := jsonx.ToRawMessage(runtime)
 			if err != nil {
 				return types.Definition{}, fmt.Errorf("%w: %w", ErrRuntimeConfigDecode, err)
 			}
 
-			def.RuntimeIntegration = lo.ToPtr(runtimeCloudflareRef.Registration(types.RuntimeIntegrationRegistration{
-				Config: marshaledConfig,
+			def.RuntimeIntegration = &types.RuntimeIntegrationRegistration{
+				Schema: jsonx.SchemaFrom[RuntimeConfig](),
+				Config: config,
 				Build:  runtimeCloudflareClientBuilder(),
-			}))
+			}
 		}
 
 		return def, nil

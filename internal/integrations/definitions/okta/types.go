@@ -9,8 +9,8 @@ import (
 var (
 	// definitionID is the stable identifier for the Okta integration definition
 	definitionID = types.NewDefinitionRef("def_01K0OKTA0000000000000000001")
-	// integration is the typed installation metadata handle for the Okta definition
-	integration = types.NewInstallationRef(resolveInstallationMetadata)
+	// installation is the typed installation metadata handle for the Okta definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// oktaCredential is the typed credential slot used by the Okta client
 	oktaCredential = types.CredentialRefOf[CredentialSchema]()
 	// oktaClient is the client ref for the Okta API client used by this definition
@@ -33,8 +33,8 @@ type UserInput struct {
 
 // DirectorySync configures collection of Okta directory users, groups, and memberships
 type DirectorySync struct {
-	// Switch turns the directory sync off for the installation
-	types.Switch
+	// Disable switches the directory sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from Okta"`
 	// FilterExpr limits imported records to envelopes matching the CEL expression
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
 	// Search is an optional Okta search expression applied server-side when listing users

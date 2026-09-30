@@ -17,5 +17,5 @@ func checkHealth(_ context.Context, _ types.OperationRequest, client *Client) (j
 	return providerkit.EncodeResult(map[string]any{
 		"provider":  client.Config.Provider,
 		"fromEmail": client.Config.FromEmail,
-	}, nil)
+	}, ErrResultEncode)
 }

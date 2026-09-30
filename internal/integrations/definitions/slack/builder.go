@@ -131,19 +131,16 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 		}
 
 		if runtime != nil && (devMode || runtime.Provisioned()) {
-			runtimeSlackRef.SetConfig(runtime)
-
-			marshaledConfig, err := runtimeSlackRef.MarshalConfig()
+			config, err := jsonx.ToRawMessage(runtime)
 			if err != nil {
 				return types.Definition{}, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 			}
 
-			runtimeRegistration := runtimeSlackRef.Registration(types.RuntimeIntegrationRegistration{
-				Config: marshaledConfig,
+			def.RuntimeIntegration = &types.RuntimeIntegrationRegistration{
+				Schema: jsonx.SchemaFrom[RuntimeSlackConfig](),
+				Config: config,
 				Build:  runtimeSlackClientBuilder(devMode && !runtime.Provisioned()),
-			})
-
-			def.RuntimeIntegration = &runtimeRegistration
+			}
 		}
 
 		return def, nil

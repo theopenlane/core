@@ -185,6 +185,134 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		require.Equal(t, secret, webhookRows[0].SecretToken)
 	})
 
+	t.Run("replacing removed after installations converged", func(t *testing.T) {
+		subOrg := suite.UserBuilder(context.Background(), t)
+		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
+
+		v1 := runtimeFor(t, testint.BuilderV1())
+		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), testint.TokenV1.ID(), testint.TokenV1Set("converged-token"))
+
+		retired, err := v1.Registry().Operation(testint.DefinitionID.ID(), testint.SyncOp.Name())
+		require.NoError(t, err)
+
+		finished, err := operations.CreatePendingRun(subCtx, suite.Client.DB, installation, retired, enums.IntegrationRunTypeManual, nil)
+		require.NoError(t, err)
+		require.NoError(t, operations.CompleteRun(subCtx, suite.Client.DB, finished.ID, finished.StartedAt, operations.RunResult{}))
+
+		require.NoError(t, suite.Client.DB.Integration.UpdateOneID(installation.ID).
+			SetHealth(models.IntegrationHealth{UnhealthyOperations: map[string]string{testint.SyncOp.Name(): "boom"}}).
+			Exec(subCtx))
+
+		_, err = runtimeFor(t, testint.BuilderV2()).RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
+		require.NoError(t, err)
+
+		v3 := runtimeFor(t, testint.BuilderV3())
+
+		_, err = v3.RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
+		require.NoError(t, err)
+
+		converged := reloadIntegration(t, subCtx, installation.ID)
+		require.Equal(t, v3.Registry().Version(testint.DefinitionID.ID()), converged.DefinitionVersion)
+
+		convergedRuns, err := suite.Client.DB.IntegrationRun.Query().
+			Where(integrationrun.IntegrationIDEQ(installation.ID)).
+			Select(integrationrun.FieldOperationName).
+			Strings(subCtx)
+		require.NoError(t, err)
+		require.Equal(t, []string{testint.SyncOpV4.Name()}, convergedRuns)
+
+		convergedAt, err := operations.LastSuccessfulRunAt(subCtx, suite.Client.DB, installation.ID, testint.SyncOpV4.Name())
+		require.NoError(t, err)
+		require.NotNil(t, convergedAt)
+
+		convergedWebhooks := endpointRows(t, subCtx, installation.ID)
+		require.Len(t, convergedWebhooks, 1)
+
+		v4 := runtimeFor(t, testint.BuilderV4())
+		v4Version := v4.Registry().Version(testint.DefinitionID.ID())
+		require.NotEqual(t, converged.DefinitionVersion, v4Version)
+
+		assessment, err := v4.RunHealthAssessment(subCtx, converged)
+		require.NoError(t, err)
+		require.True(t, assessment.Connection.Healthy)
+		require.Equal(t, []intruntime.OperationHealthResult{{Name: testint.SyncOpV4.Name(), Reason: "boom"}}, assessment.Operations)
+
+		upgraded := reloadIntegration(t, subCtx, installation.ID)
+		require.Equal(t, v4Version, upgraded.DefinitionVersion)
+		require.Equal(t, converged.Status, upgraded.Status)
+		require.Empty(t, upgraded.Health.UnhealthyReason)
+		require.JSONEq(t, string(converged.Config.ClientConfig), string(upgraded.Config.ClientConfig))
+		require.Equal(t, converged.Health.UnhealthyOperations, upgraded.Health.UnhealthyOperations)
+
+		rows, err := store.LoadAllCredentials(subCtx, installation)
+		require.NoError(t, err)
+		require.Len(t, rows, 1)
+		require.JSONEq(t, `{"token":"converged-token","region":"`+installation.ID+`"}`, string(rows[testint.TokenV4.ID()].Data))
+
+		runs, err := suite.Client.DB.IntegrationRun.Query().
+			Where(integrationrun.IntegrationIDEQ(installation.ID)).
+			Select(integrationrun.FieldOperationName).
+			Strings(subCtx)
+		require.NoError(t, err)
+		require.Equal(t, convergedRuns, runs)
+
+		upgradedAt, err := operations.LastSuccessfulRunAt(subCtx, suite.Client.DB, installation.ID, testint.SyncOpV4.Name())
+		require.NoError(t, err)
+		require.NotNil(t, upgradedAt)
+		require.True(t, upgradedAt.Equal(*convergedAt))
+
+		webhookRows := endpointRows(t, subCtx, installation.ID)
+		require.Len(t, webhookRows, 1)
+		require.Equal(t, convergedWebhooks[0].ID, webhookRows[0].ID)
+		require.Equal(t, testint.WebhookV4.Name(), webhookRows[0].Name)
+		require.Equal(t, lo.FromPtr(convergedWebhooks[0].EndpointID), lo.FromPtr(webhookRows[0].EndpointID))
+		require.Equal(t, convergedWebhooks[0].SecretToken, webhookRows[0].SecretToken)
+	})
+
+	// Replacing may be removed once every installation has upgraded past the release that introduced it
+	t.Run("replacing removed before an installation upgraded strands it", func(t *testing.T) {
+		subOrg := suite.UserBuilder(context.Background(), t)
+		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
+
+		v1 := runtimeFor(t, testint.BuilderV1())
+		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), testint.TokenV1.ID(), testint.TokenV1Set("stranded-token"))
+		require.Equal(t, v1.Registry().Version(testint.DefinitionID.ID()), installation.DefinitionVersion)
+
+		installedWebhooks := endpointRows(t, subCtx, installation.ID)
+		require.Len(t, installedWebhooks, 1)
+
+		v4 := runtimeFor(t, testint.BuilderV4())
+
+		_, err := v4.RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
+		require.ErrorIs(t, err, intruntime.ErrInstallationUpgradeFailed)
+		require.ErrorIs(t, err, intruntime.ErrUserInputInvalid)
+
+		_, unhealthy := integrationtypes.UnhealthyFrom(err)
+		require.True(t, unhealthy)
+
+		stranded := reloadIntegration(t, subCtx, installation.ID)
+		require.Equal(t, installation.DefinitionVersion, stranded.DefinitionVersion)
+		require.Equal(t, enums.IntegrationStatusErrored, stranded.Status)
+		require.Contains(t, stranded.Health.UnhealthyReason, intruntime.ErrInstallationUpgradeFailed.Error())
+		require.Contains(t, stranded.Health.UnhealthyReason, intruntime.ErrUserInputInvalid.Error())
+		require.JSONEq(t, `{"filterExpr":"initial"}`, string(stranded.Config.ClientConfig))
+
+		rows, err := store.LoadAllCredentials(subCtx, installation)
+		require.NoError(t, err)
+		require.Len(t, rows, 1)
+		require.JSONEq(t, `{"accessToken":"stranded-token"}`, string(rows[testint.TokenV1.ID()].Data))
+		require.Empty(t, slotRowIDs(t, subCtx, installation.ID, testint.TokenV4.ID()))
+
+		webhookRows := endpointRows(t, subCtx, installation.ID)
+		require.Len(t, webhookRows, 1)
+		require.Equal(t, installedWebhooks[0].ID, webhookRows[0].ID)
+		require.Equal(t, testint.WebhookV1V2.Name(), webhookRows[0].Name)
+
+		_, err = v4.RunHealthAssessment(subCtx, stranded)
+		require.ErrorIs(t, err, intruntime.ErrUserInputInvalid)
+		require.Equal(t, installation.DefinitionVersion, reloadIntegration(t, subCtx, installation.ID).DefinitionVersion)
+	})
+
 	t.Run("an installation with no recorded version is upgraded and stamped on first use", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)

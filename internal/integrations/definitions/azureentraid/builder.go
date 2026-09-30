@@ -1,9 +1,7 @@
 package azureentraid
 
 import (
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -12,8 +10,6 @@ import (
 
 // Builder returns the Azure EntraID definition builder with the supplied operator config applied
 func Builder(cfg Config) registry.Builder {
-	installation := types.NewInstallationRef(resolveInstallationMetadata)
-
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -59,60 +55,16 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				directorySyncOperation.Registration(definitionID, types.OperationRegistration{
-					Description: "Collect Azure Entra ID users, groups, and memberships as directory accounts",
-					Policy:      types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Schedule:    gala.NewFullFetchSchedule(),
-					HealthCheck: probeDirectory,
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaDirectoryAccount.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryGroup.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryMembership.Name,
-						},
-					},
+					Description:         "Collect Azure Entra ID users, groups, and memberships as directory accounts",
+					Policy:              types.ExecutionPolicy{Reconcile: true, Snapshot: true},
+					Schedule:            gala.NewFullFetchSchedule(),
+					HealthCheck:         probeDirectory,
+					Ingest:              providerkit.DirectoryIngestContracts(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"User.Read.All", "Group.Read.All", "GroupMember.Read.All", "Directory.Read.All"},
 				}),
 			},
-			Mappings: []types.MappingRegistration{
-				{
-					Schema: entityops.SchemaDirectoryAccount.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryAccount,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryGroup.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryGroup,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryMembership.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryMembership,
-						Links: []types.LinkRule{
-							{
-								TargetSchema: entityops.SchemaDirectoryAccount.Name,
-								TargetField:  directoryaccount.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
-							},
-							{
-								TargetSchema: entityops.SchemaDirectoryGroup.Name,
-								TargetField:  directorygroup.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
-							},
-						},
-					},
-				},
-			},
+			Mappings: providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 		}, nil
 	})
 }

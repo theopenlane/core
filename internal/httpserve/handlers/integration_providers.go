@@ -14,7 +14,9 @@ func (h *Handler) ListIntegrationProviders(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrIntegrationsNotEnabled)
 	}
 
-	defs := h.IntegrationsRuntime.Registry().Definitions()
+	defs := lo.Filter(h.IntegrationsRuntime.Registry().Definitions(), func(def types.Definition, _ int) bool {
+		return def.Visible
+	})
 	for i := range defs {
 		defs[i].Operations = lo.Filter(defs[i].Operations, func(op types.OperationRegistration, _ int) bool {
 			return op.CustomerSelectable == nil || *op.CustomerSelectable

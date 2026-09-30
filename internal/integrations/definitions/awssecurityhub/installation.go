@@ -11,11 +11,6 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// installationRef builds the typed installation metadata handle for the AWS Security Hub definition
-func installationRef() types.InstallationRef[InstallationMetadata] {
-	return types.NewInstallationRef(resolveInstallationMetadata)
-}
-
 // resolveInstallationMetadata derives AWS connection metadata from whichever credential is bound.
 // It uses the assume-role credential when present, otherwise falls back to the service account credential.
 func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {

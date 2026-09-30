@@ -10,21 +10,15 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
-// Switch is the embeddable per-installation disable toggle carried by an operation config type
+// Switch is the per-installation disable toggle decoded from an operation config section's disable key
 type Switch struct {
 	// Disable switches the operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable this sync"`
+	Disable bool `json:"disable,omitempty"`
 }
 
 // Disabled reports whether the toggle switches the operation off
 func (s Switch) Disabled() bool {
 	return s.Disable
-}
-
-// Switchable is implemented by operation config types that carry a per-installation disable toggle
-type Switchable interface {
-	// Disabled reports whether the config switches the operation off
-	Disabled() bool
 }
 
 // WorkflowMeta captures workflow linkage for a queued integration execution
@@ -143,8 +137,6 @@ type OperationRegistration struct {
 	Disabled func(userInput json.RawMessage) bool `json:"-"`
 	// ConfigResolver extracts the operation-specific config JSON from the installation's user input JSON
 	ConfigResolver func(userInput json.RawMessage) json.RawMessage `json:"-"`
-	// ConfigDisabled reports whether the operation's own config section switches it off
-	ConfigDisabled func(config json.RawMessage) bool `json:"-"`
 	// Schedule overrides the default adaptive schedule for this operation's recurring reconcile or scheduled cycles
 	Schedule *gala.Schedule `json:"-"`
 	// SkipDefaultLookback disables the runtime's default lookback window on initial runs

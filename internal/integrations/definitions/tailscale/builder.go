@@ -2,8 +2,7 @@ package tailscale
 
 import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
@@ -49,19 +48,9 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				directorySyncOperation.Registration(definitionID, types.OperationRegistration{
-					Description: "Sync Tailscale users and role-based groups as directory accounts",
-					Policy:      types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaDirectoryAccount.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryGroup.Name,
-						},
-						{
-							Schema: entityops.SchemaDirectoryMembership.Name,
-						},
-					},
+					Description:         "Sync Tailscale users and role-based groups as directory accounts",
+					Policy:              types.ExecutionPolicy{Reconcile: true, Snapshot: true},
+					Ingest:              providerkit.DirectoryIngestContracts(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"users:read", "policy_file:read"},
 					Schedule:            gala.NewFullFetchSchedule(),
@@ -79,41 +68,8 @@ func Builder() registry.Builder {
 					Schedule:            gala.NewFullFetchSchedule(),
 				}),
 			},
-			Mappings: []types.MappingRegistration{
-				{
-					Schema: entityops.SchemaDirectoryAccount.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryAccount,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryGroup.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryGroup,
-					},
-				},
-				{
-					Schema: entityops.SchemaDirectoryMembership.Name,
-					Spec: types.MappingOverride{
-						FilterExpr: "true",
-						MapExpr:    mapExprDirectoryMembership,
-						Links: []types.LinkRule{
-							{
-								TargetSchema: entityops.SchemaDirectoryAccount.Name,
-								TargetField:  directoryaccount.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryAccountID.InputKey,
-							},
-							{
-								TargetSchema: entityops.SchemaDirectoryGroup.Name,
-								TargetField:  directorygroup.FieldExternalID,
-								SourceField:  entityops.DirectoryMembershipFields.DirectoryGroupID.InputKey,
-							},
-						},
-					},
-				},
-				{
+			Mappings: append(providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
+				types.MappingRegistration{
 					Schema:  entityops.SchemaAsset.Name,
 					Variant: deviceAssetVariant,
 					Spec: types.MappingOverride{
@@ -121,7 +77,7 @@ func Builder() registry.Builder {
 						MapExpr:    mapExprAsset,
 					},
 				},
-			},
+			),
 		}, nil
 	})
 }

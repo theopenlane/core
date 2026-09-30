@@ -10,8 +10,6 @@ import (
 var (
 	// DefinitionID is the stable identifier for the email integration definition
 	DefinitionID = types.NewDefinitionRef("def_01EMAILINT00000000000000001")
-	// runtimeEmailRef is the typed ref for the runtime email config
-	runtimeEmailRef = types.RuntimeRefOf[RuntimeEmailConfig]()
 	// emailCredentialRef is the typed credential ref for customer-provisioned email
 	emailCredentialRef = types.CredentialRefOf[Credential]()
 	// emailClientRef is the client ref for the email client used by this definition

@@ -9,8 +9,6 @@ var (
 	ErrClientCredentialsMissing = errors.New("zitadel: client id or secret missing")
 	// ErrDomainMissing indicates the Zitadel domain is missing from the credential
 	ErrDomainMissing = errors.New("zitadel: domain missing")
-	// ErrCredentialEncode indicates the credential could not be serialized
-	ErrCredentialEncode = errors.New("zitadel: credential encode failed")
 	// ErrCredentialDecode indicates the credential could not be deserialized
 	ErrCredentialDecode = errors.New("zitadel: credential decode failed")
 	// ErrClientBuildFailed indicates the Zitadel API client could not be constructed

@@ -82,7 +82,7 @@ func TestUpgradeExclusions(t *testing.T) {
 	t.Parallel()
 
 	retired := types.NewCredentialRef[retiredCredential]("retiredCredential")
-	current := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Replacing(retired, nil)
+	current := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Replacing(retired, func(r retiredCredential) upgradeCredential { return upgradeCredential{Token: r.AccessToken} })
 	undeclared := types.NewCredentialSlotID("undeclared")
 
 	def := types.Definition{CredentialRegistrations: []types.CredentialRegistration{{

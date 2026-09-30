@@ -8,38 +8,20 @@ import (
 	"github.com/invopop/jsonschema"
 )
 
-// Reflector is the shared JSON schema reflector used by SchemaFrom and SchemaID
-var Reflector = &jsonschema.Reflector{
+// reflector is the shared JSON schema reflector used by SchemaFrom
+var reflector = &jsonschema.Reflector{
 	AllowAdditionalProperties:  false,
 	RequiredFromJSONSchemaTags: true,
 }
 
 // SchemaFrom reflects a JSON schema from a Go type and returns it as raw JSON
 func SchemaFrom[T any]() json.RawMessage {
-	schema := Reflector.Reflect(new(T))
-
-	out, err := ToRawMessage(schema)
+	out, err := ToRawMessage(reflector.Reflect(new(T)))
 	if err != nil {
 		return nil
 	}
 
 	return out
-}
-
-// PropertyNames reflects a Go type and returns the top-level JSON property names from the generated JSON schema
-func PropertyNames[T any]() []string {
-	schema, _, err := SchemaRoot(SchemaFrom[T]())
-	if err != nil || schema.Properties == nil {
-		return nil
-	}
-
-	names := make([]string, 0, schema.Properties.Len())
-
-	for pair := schema.Properties.Oldest(); pair != nil; pair = pair.Next() {
-		names = append(names, pair.Key)
-	}
-
-	return names
 }
 
 // PropertyDescriptor is a top-level JSON schema property with its name and description
@@ -67,26 +49,6 @@ func PropertyDescriptors[T any]() []PropertyDescriptor {
 	}
 
 	return out
-}
-
-// PropertyRefs returns each property key mapped to the base name of its $ref
-func PropertyRefs(schema json.RawMessage) (map[string]string, error) {
-	root, _, err := SchemaRoot(schema)
-	if err != nil {
-		return nil, err
-	}
-
-	refs := make(map[string]string, root.Properties.Len())
-
-	for pair := root.Properties.Oldest(); pair != nil; pair = pair.Next() {
-		refs[pair.Key] = ""
-
-		if pair.Value.Ref != "" {
-			refs[pair.Key] = path.Base(pair.Value.Ref)
-		}
-	}
-
-	return refs, nil
 }
 
 // SchemaRoot decodes a raw schema and follows its root $ref into its definitions

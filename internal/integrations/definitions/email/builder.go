@@ -7,6 +7,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Builder returns the email definition builder with the supplied runtime config applied
@@ -97,17 +98,16 @@ func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 		}
 
 		if devMode || cfg.Provisioned() {
-			runtimeEmailRef.SetConfig(cfg)
-
-			marshaledConfig, err := runtimeEmailRef.MarshalConfig()
+			config, err := jsonx.ToRawMessage(cfg)
 			if err != nil {
 				return types.Definition{}, fmt.Errorf("%w: %w", ErrClientBuildFailed, err)
 			}
 
-			def.RuntimeIntegration = lo.ToPtr(runtimeEmailRef.Registration(types.RuntimeIntegrationRegistration{
-				Config: marshaledConfig,
+			def.RuntimeIntegration = &types.RuntimeIntegrationRegistration{
+				Schema: jsonx.SchemaFrom[RuntimeEmailConfig](),
+				Config: config,
 				Build:  runtimeClientBuilder(devMode && !cfg.Provisioned()),
-			}))
+			}
 		}
 
 		return def, nil

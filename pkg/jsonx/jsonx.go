@@ -3,6 +3,7 @@ package jsonx
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 
 	"github.com/wundergraph/astjson"
 )
@@ -10,11 +11,10 @@ import (
 // Decode unmarshals a json.RawMessage into a typed value
 func Decode[T any](raw json.RawMessage) (T, error) {
 	var result T
-	if err := json.Unmarshal(raw, &result); err != nil {
-		return result, err
-	}
 
-	return result, nil
+	err := json.Unmarshal(raw, &result)
+
+	return result, err
 }
 
 // RoundTrip marshals input to JSON and unmarshals it into output
@@ -57,34 +57,23 @@ func ToMap(value any) (map[string]any, error) {
 	return mapped, nil
 }
 
-// ToRawMap converts an arbitrary value into a JSON object map of raw values.
+// ToRawMap converts an arbitrary value into a JSON object map of raw values
 func ToRawMap(value any) (map[string]json.RawMessage, error) {
-	if value == nil {
-		return map[string]json.RawMessage{}, nil
-	}
-
 	var out map[string]json.RawMessage
-	err := RoundTrip(value, &out)
-	if err == nil {
-		if out == nil {
-			return map[string]json.RawMessage{}, nil
-		}
 
+	err := RoundTrip(value, &out)
+	_, notObject := errors.AsType[*json.UnmarshalTypeError](err)
+
+	switch {
+	case notObject:
+		return nil, ErrObjectExpected
+	case err != nil:
+		return nil, err
+	case out == nil:
+		return map[string]json.RawMessage{}, nil
+	default:
 		return out, nil
 	}
-
-	var generic any
-	if parseErr := RoundTrip(value, &generic); parseErr != nil {
-		return nil, err
-	}
-	if generic == nil {
-		return map[string]json.RawMessage{}, nil
-	}
-	if _, ok := generic.(map[string]any); !ok {
-		return nil, ErrObjectExpected
-	}
-
-	return nil, err
 }
 
 // DecodeObjectKey decodes one top-level key of a raw JSON object into a typed value, reporting
@@ -92,8 +81,8 @@ func ToRawMap(value any) (map[string]json.RawMessage, error) {
 func DecodeObjectKey[T any](raw json.RawMessage, key string) (T, bool) {
 	var zero T
 
-	var doc map[string]json.RawMessage
-	if err := json.Unmarshal(raw, &doc); err != nil {
+	doc, err := Decode[map[string]json.RawMessage](raw)
+	if err != nil {
 		return zero, false
 	}
 
@@ -158,14 +147,7 @@ func UnmarshalIfPresent(raw json.RawMessage, output any) error {
 
 // DecodeAnyOrNil decodes raw JSON to an untyped value or returns nil on failure/empty input
 func DecodeAnyOrNil(raw json.RawMessage) any {
-	if IsEmptyRawMessage(raw) {
-		return nil
-	}
-
-	var out any
-	if err := json.Unmarshal(raw, &out); err != nil {
-		return nil
-	}
+	out, _ := Decode[any](raw)
 
 	return out
 }
@@ -253,21 +235,6 @@ func SetObjectKey(base json.RawMessage, key string, value any) (json.RawMessage,
 	}
 
 	return MergeObjectMap(base, map[string]json.RawMessage{key: raw})
-}
-
-// ApplyOverlay applies a JSON overlay to an existing typed value
-func ApplyOverlay[T any](base T, overlay any) (T, error) {
-	if overlay == nil {
-		return base, nil
-	}
-
-	out := base
-	if err := RoundTrip(overlay, &out); err != nil {
-		var zero T
-		return zero, err
-	}
-
-	return out, nil
 }
 
 // ToRawMessage converts an arbitrary value into a raw JSON document

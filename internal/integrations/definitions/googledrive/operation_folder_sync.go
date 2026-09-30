@@ -23,8 +23,8 @@ var folderSyncOperation = types.OperationRefOf[FolderSync]().Ingests(driveClient
 
 // FolderSync lists Google Docs in a configured folder and emits ingest envelopes for policy creation
 type FolderSync struct {
-	// Switch toggles the folder sync off for the installation
-	types.Switch
+	// Disable switches the folder sync operation off for the installation
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of documents from Google Drive"`
 	// FolderID is the Google Drive folder ID (or full URL) containing policy documents; required so an install is scoped to one folder rather than the caller's entire Drive
 	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder ID,description=Google Drive folder ID or URL containing policy documents,required"`
 	// FilterExpr is an optional CEL expression to filter which documents in the folder are eligible

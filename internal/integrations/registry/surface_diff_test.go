@@ -3,256 +3,95 @@ package registry
 import (
 	"encoding/json"
 	"errors"
-	"strings"
 	"testing"
 )
 
-// credSlot builds a credential slot surface entry with the given schema, backfill declaration, and replaced refs
-func credSlot(ref, schema string, backfill bool, replaces ...string) SurfaceCredential {
-	return SurfaceCredential{Ref: ref, SurfaceSchema: SurfaceSchema{Schema: json.RawMessage(schema), Backfill: backfill, Replaces: replaces}}
-}
-
-// namedRef builds a named surface entry with the given replaced names
-func namedRef(name string, replaces ...string) SurfaceNamed {
-	return SurfaceNamed{Name: name, Replaces: replaces}
-}
-
-// opConfig builds an operation surface entry with the given config schema and replaced names
-func opConfig(name, schema string, replaces ...string) SurfaceOperation {
-	return SurfaceOperation{Name: name, Schema: json.RawMessage(schema), Replaces: replaces}
-}
-
-// sectionOpConfig builds an operation surface entry whose config schema is resolved from a user input section
-func sectionOpConfig(name, schema string) SurfaceOperation {
-	return SurfaceOperation{Name: name, Schema: json.RawMessage(schema), Section: true}
-}
-
-// findingsText joins findings into one string for substring assertions
-func findingsText(findings []string) string {
-	return strings.Join(findings, "\n")
-}
-
-// surfaceChangeCase is one ClassifySurfaceChange table entry
-type surfaceChangeCase struct {
+// gateCase is one GateSurfaceChange table entry
+type gateCase struct {
 	// name describes the scenario under test
 	name string
 	// old is the committed surface
 	old Surface
 	// next is the candidate surface
 	next Surface
-	// wantErr is the sentinel the returned error must wrap, or nil when no error is expected
-	wantErr error
-	// wantContains lists substrings every one of which must appear somewhere in the findings
-	wantContains []string
-	// wantAbsent lists substrings that must not appear anywhere in the findings
-	wantAbsent []string
-	// wantEmpty requires the findings slice to be empty
-	wantEmpty bool
+	// wantErr is the exact error text expected, empty when the gate passes
+	wantErr string
 }
 
-// TestClassifySurfaceChange verifies every surface-change rule: destructive removals refuse without a taker, replaced removals and property-level changes are reported as findings, and additive changes are silent or informational
-func TestClassifySurfaceChange(t *testing.T) {
+// TestGateSurfaceChange verifies the gate passes kept, added, and replaced entries and refuses every unreplaced removal with the names listed
+func TestGateSurfaceChange(t *testing.T) {
 	t.Parallel()
 
-	cases := []surfaceChangeCase{
+	committed := Surface{
+		ID:          "acme",
+		Credentials: []SurfaceCredential{{Ref: "cred_a"}},
+		Operations:  []SurfaceOperation{{Name: "sync"}},
+		Webhooks:    []SurfaceWebhook{{Name: "github", Events: []string{"push"}}},
+	}
+
+	cases := []gateCase{
 		{
-			name:         "credential slot removed with taker converts",
-			old:          Surface{ID: "acme", Credentials: []SurfaceCredential{credSlot("legacy", `{"type":"object"}`, false)}},
-			next:         Surface{ID: "acme", Credentials: []SurfaceCredential{credSlot("modern", `{"type":"object"}`, false, "legacy")}},
-			wantContains: []string{"stored payloads convert to modern"},
+			name: "nothing removed passes",
+			old:  committed,
+			next: committed,
 		},
 		{
-			name:         "credential slot removed without taker refuses",
-			old:          Surface{ID: "acme", Credentials: []SurfaceCredential{credSlot("legacy", `{"type":"object"}`, false)}},
-			next:         Surface{ID: "acme"},
-			wantErr:      ErrDestructiveSurfaceChange,
-			wantContains: []string{"existing installations cannot resolve it"},
-		},
-		{
-			name:         "operation removed with taker moves history",
-			old:          Surface{ID: "acme", Operations: []SurfaceOperation{{Name: "sync.v1"}}},
-			next:         Surface{ID: "acme", Operations: []SurfaceOperation{{Name: "sync.v2", Replaces: []string{"sync.v1"}}}},
-			wantContains: []string{"run history and health move to sync.v2"},
-		},
-		{
-			name:         "operation removed without taker refuses",
-			old:          Surface{ID: "acme", Operations: []SurfaceOperation{{Name: "sync.v1"}}},
-			next:         Surface{ID: "acme"},
-			wantErr:      ErrDestructiveSurfaceChange,
-			wantContains: []string{"its run history and health are orphaned"},
-		},
-		{
-			name:         "webhook removed with taker renames endpoint",
-			old:          Surface{ID: "acme", Webhooks: []SurfaceWebhook{{Name: "github"}}},
-			next:         Surface{ID: "acme", Webhooks: []SurfaceWebhook{{Name: "github_v2", Replaces: []string{"github"}}}},
-			wantContains: []string{"endpoint row renamed to github_v2"},
-		},
-		{
-			name:         "webhook removed without taker refuses",
-			old:          Surface{ID: "acme", Webhooks: []SurfaceWebhook{{Name: "github"}}},
-			next:         Surface{ID: "acme"},
-			wantErr:      ErrDestructiveSurfaceChange,
-			wantContains: []string{"its endpoint row is deleted as stale"},
-		},
-		{
-			name: "webhook event removed with taker on a kept webhook",
-			old:  Surface{ID: "acme", Webhooks: []SurfaceWebhook{{Name: "github", Events: []SurfaceNamed{namedRef("push")}}}},
-			next: Surface{ID: "acme", Webhooks: []SurfaceWebhook{{Name: "github", Events: []SurfaceNamed{namedRef("push_v2", "push")}}}},
-			wantContains: []string{
-				"replaced by push_v2",
-				"allowed events refreshed on upgrade",
-			},
-		},
-		{
-			name:         "webhook event removed without taker on a kept webhook is a finding, not a refusal",
-			old:          Surface{ID: "acme", Webhooks: []SurfaceWebhook{{Name: "github", Events: []SurfaceNamed{namedRef("push")}}}},
-			next:         Surface{ID: "acme", Webhooks: []SurfaceWebhook{{Name: "github"}}},
-			wantContains: []string{"allowed events refreshed on upgrade"},
-			wantAbsent:   []string{"replaced by"},
-		},
-		{
-			name:         "credential schema property type change is errored",
-			old:          Surface{ID: "acme", Credentials: []SurfaceCredential{credSlot("cred_a", `{"type":"object","properties":{"foo":{"type":"string"}}}`, false)}},
-			next:         Surface{ID: "acme", Credentials: []SurfaceCredential{credSlot("cred_a", `{"type":"object","properties":{"foo":{"type":"integer"}}}`, false)}},
-			wantContains: []string{"type changed from", outcomeErrored},
-		},
-		{
-			name:         "credential schema enum narrowing is errored",
-			old:          Surface{ID: "acme", Credentials: []SurfaceCredential{credSlot("cred_a", `{"type":"object","properties":{"level":{"type":"string","enum":["low","medium","high"]}}}`, false)}},
-			next:         Surface{ID: "acme", Credentials: []SurfaceCredential{credSlot("cred_a", `{"type":"object","properties":{"level":{"type":"string","enum":["low","medium"]}}}`, false)}},
-			wantContains: []string{"enum narrowed", outcomeErrored},
-		},
-		{
-			name:         "new required property without default and no backfill is errored",
-			old:          Surface{ID: "acme", Credentials: []SurfaceCredential{credSlot("cred_a", `{"type":"object","properties":{"name":{"type":"string"}}}`, false)}},
-			next:         Surface{ID: "acme", Credentials: []SurfaceCredential{credSlot("cred_a", `{"type":"object","properties":{"name":{"type":"string"},"region":{"type":"string"}},"required":["region"]}`, false)}},
-			wantContains: []string{"required property region added without default", outcomeErrored},
-		},
-		{
-			name:         "new required property without default but with backfill is a backfill finding",
-			old:          Surface{ID: "acme", Credentials: []SurfaceCredential{credSlot("cred_a", `{"type":"object","properties":{"name":{"type":"string"}}}`, false)}},
-			next:         Surface{ID: "acme", Credentials: []SurfaceCredential{credSlot("cred_a", `{"type":"object","properties":{"name":{"type":"string"},"region":{"type":"string"}},"required":["region"]}`, true)}},
-			wantContains: []string{"required property region added without default", "backfilled on upgrade"},
-			wantAbsent:   []string{outcomeErrored},
-		},
-		{
-			name:      "added optional property produces no finding",
-			old:       Surface{ID: "acme", Credentials: []SurfaceCredential{credSlot("cred_a", `{"type":"object","properties":{"name":{"type":"string"}}}`, false)}},
-			next:      Surface{ID: "acme", Credentials: []SurfaceCredential{credSlot("cred_a", `{"type":"object","properties":{"name":{"type":"string"},"nickname":{"type":"string"}}}`, false)}},
-			wantEmpty: true,
-		},
-		{
-			name:         "section operation config property type change is errored",
-			old:          Surface{ID: "acme", Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
-			next:         Surface{ID: "acme", Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"string"}}}`)}},
-			wantContains: []string{"operation sync.users config property limit type changed from", outcomeErrored},
-		},
-		{
-			name:         "caller-supplied operation config property type change is supplied by each caller",
-			old:          Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
-			next:         Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"string"}}}`)}},
-			wantContains: []string{`acme: operation sync.users config property limit type changed from "integer" to "string": supplied by each caller`},
-			wantAbsent:   []string{outcomeErrored},
-		},
-		{
-			name:         "caller-supplied operation config enum narrowing is supplied by each caller",
-			old:          Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"level":{"type":"string","enum":["low","high"]}}}`)}},
-			next:         Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"level":{"type":"string","enum":["low"]}}}`)}},
-			wantContains: []string{"acme: operation sync.users config property level enum narrowed: supplied by each caller"},
-			wantAbsent:   []string{outcomeErrored},
-		},
-		{
-			name:         "new required caller-supplied operation config property is supplied by each caller",
-			old:          Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
-			next:         Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"},"region":{"type":"string"}},"required":["region"]}`)}},
-			wantContains: []string{"acme: operation sync.users config required property region added: supplied by each caller"},
-			wantAbsent:   []string{outcomeErrored, "without default"},
-		},
-		{
-			name:         "new required section operation config property without default is errored",
-			old:          Surface{ID: "acme", Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
-			next:         Surface{ID: "acme", Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"},"region":{"type":"string"}},"required":["region"]}`)}},
-			wantContains: []string{"operation sync.users config required property region added without default", outcomeErrored},
-		},
-		{
-			name: "new required section operation config property without default follows the user input backfill",
-			old:  Surface{ID: "acme", Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
+			name: "additions pass",
+			old:  committed,
 			next: Surface{
-				ID:         "acme",
-				UserInput:  &SurfaceSchema{Schema: json.RawMessage(`{"type":"object"}`), Backfill: true},
-				Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"},"region":{"type":"string"}},"required":["region"]}`)},
+				ID:          "acme",
+				Credentials: []SurfaceCredential{{Ref: "cred_a"}, {Ref: "cred_b"}},
+				Operations:  []SurfaceOperation{{Name: "sync"}, {Name: "sync.more"}},
+				Webhooks:    []SurfaceWebhook{{Name: "github", Events: []string{"pull", "push"}}, {Name: "gitlab"}},
 			},
-			wantContains: []string{"operation sync.users config required property region added without default: backfilled on upgrade"},
-			wantAbsent:   []string{outcomeErrored},
 		},
 		{
-			name:         "removed caller-supplied operation config property affects no stored value",
-			old:          Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
-			next:         Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object"}`)}},
-			wantContains: []string{"acme: operation sync.users config property limit removed: no stored value affected"},
-			wantAbsent:   []string{"dropped on upgrade"},
+			name: "removed slot, operation, and webhook replaced passes",
+			old:  committed,
+			next: Surface{
+				ID:          "acme",
+				Credentials: []SurfaceCredential{{Ref: "cred_v2", SurfaceSchema: SurfaceSchema{Replaces: []string{"cred_a"}}}},
+				Operations:  []SurfaceOperation{{Name: "sync.v2", Replaces: []string{"sync"}}},
+				Webhooks:    []SurfaceWebhook{{Name: "github_v2", Replaces: []string{"github"}}},
+			},
 		},
 		{
-			name:         "removed section operation config property is dropped",
-			old:          Surface{ID: "acme", Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
-			next:         Surface{ID: "acme", Operations: []SurfaceOperation{sectionOpConfig("sync.users", `{"type":"object"}`)}},
-			wantContains: []string{"acme: operation sync.users config property limit removed: stored value is dropped on upgrade"},
+			name:    "unreplaced credential slot refuses",
+			old:     committed,
+			next:    Surface{ID: "acme", Operations: committed.Operations, Webhooks: committed.Webhooks},
+			wantErr: ErrDestructiveSurfaceChange.Error() + ": acme: credential cred_a",
 		},
 		{
-			name:         "removed user input property without replacement is dropped",
-			old:          Surface{ID: "acme", UserInput: &SurfaceSchema{Schema: json.RawMessage(`{"type":"object","properties":{"zone":{"type":"string"}}}`)}},
-			next:         Surface{ID: "acme", UserInput: &SurfaceSchema{Schema: json.RawMessage(`{"type":"object"}`)}},
-			wantContains: []string{"acme: user input property zone removed: stored value is dropped on upgrade"},
-			wantAbsent:   []string{"converted through declared layout replacement"},
+			name:    "unreplaced operation refuses",
+			old:     committed,
+			next:    Surface{ID: "acme", Credentials: committed.Credentials, Webhooks: committed.Webhooks},
+			wantErr: ErrDestructiveSurfaceChange.Error() + ": acme: operation sync",
 		},
 		{
-			name:         "removed user input property with replacement is converted",
-			old:          Surface{ID: "acme", UserInput: &SurfaceSchema{Schema: json.RawMessage(`{"type":"object","properties":{"zone":{"type":"string"}}}`)}},
-			next:         Surface{ID: "acme", UserInput: &SurfaceSchema{Schema: json.RawMessage(`{"type":"object","properties":{"region":{"type":"string"}}}`), Replaces: []string{"retiredUserInput"}}},
-			wantContains: []string{"acme: user input property zone removed: converted through declared layout replacement"},
-			wantAbsent:   []string{"dropped on upgrade"},
+			name:    "unreplaced webhook refuses",
+			old:     committed,
+			next:    Surface{ID: "acme", Credentials: committed.Credentials, Operations: committed.Operations},
+			wantErr: ErrDestructiveSurfaceChange.Error() + ": acme: webhook github",
 		},
 		{
-			name:      "added optional operation config property produces no finding",
-			old:       Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
-			next:      Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"},"note":{"type":"string"}}}`)}},
-			wantEmpty: true,
+			name: "removed event of a kept webhook passes",
+			old:  committed,
+			next: Surface{ID: "acme", Credentials: committed.Credentials, Operations: committed.Operations, Webhooks: []SurfaceWebhook{{Name: "github"}}},
 		},
 		{
-			name:      "unchanged operation config schema produces no finding",
-			old:       Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
-			next:      Surface{ID: "acme", Operations: []SurfaceOperation{opConfig("sync.users", `{"type":"object","properties":{"limit":{"type":"integer"}}}`)}},
-			wantEmpty: true,
-		},
-		{
-			name:         "user input added from nil is a change from an empty schema",
-			old:          Surface{ID: "acme"},
-			next:         Surface{ID: "acme", UserInput: &SurfaceSchema{Schema: json.RawMessage(`{"type":"object","properties":{"region":{"type":"string"}}}`)}},
-			wantContains: []string{"user input added: stored config is conformed on upgrade"},
-		},
-		{
-			name:         "installation metadata added is re-derived",
-			old:          Surface{ID: "acme"},
-			next:         Surface{ID: "acme", Installation: &SurfaceSchema{Schema: json.RawMessage(`{"type":"object"}`)}},
-			wantContains: []string{"acme: installation metadata schema added: re-derived on upgrade"},
-		},
-		{
-			name:         "installation metadata removed is re-derived",
-			old:          Surface{ID: "acme", Installation: &SurfaceSchema{Schema: json.RawMessage(`{"type":"object"}`)}},
-			next:         Surface{ID: "acme"},
-			wantContains: []string{"acme: installation metadata schema removed: re-derived on upgrade"},
-		},
-		{
-			name:         "installation metadata changed is re-derived",
-			old:          Surface{ID: "acme", Installation: &SurfaceSchema{Schema: json.RawMessage(`{"type":"object"}`)}},
-			next:         Surface{ID: "acme", Installation: &SurfaceSchema{Schema: json.RawMessage(`{"type":"string"}`)}},
-			wantContains: []string{"acme: installation metadata schema changed: re-derived on upgrade"},
-		},
-		{
-			name:      "unchanged installation metadata produces no finding",
-			old:       Surface{ID: "acme", Installation: &SurfaceSchema{Schema: json.RawMessage(`{"type":"object"}`)}},
-			next:      Surface{ID: "acme", Installation: &SurfaceSchema{Schema: json.RawMessage(`{"type":"object"}`)}},
-			wantEmpty: true,
+			name: "every unreplaced name across kinds is listed in one error",
+			old: Surface{
+				ID:          "acme",
+				Credentials: []SurfaceCredential{{Ref: "cred_a"}, {Ref: "cred_b"}, {Ref: "cred_c"}},
+				Operations:  []SurfaceOperation{{Name: "sync"}, {Name: "sync.more"}},
+				Webhooks:    []SurfaceWebhook{{Name: "github", Events: []string{"pull", "push"}}, {Name: "gitlab"}},
+			},
+			next: Surface{
+				ID:          "acme",
+				Credentials: []SurfaceCredential{{Ref: "cred_d", SurfaceSchema: SurfaceSchema{Replaces: []string{"cred_c"}}}},
+				Webhooks:    []SurfaceWebhook{{Name: "github"}},
+			},
+			wantErr: ErrDestructiveSurfaceChange.Error() + ": acme: credential cred_a, cred_b; operation sync, sync.more; webhook gitlab",
 		},
 	}
 
@@ -260,93 +99,42 @@ func TestClassifySurfaceChange(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			findings, err := ClassifySurfaceChange(tc.old, tc.next)
-
-			if tc.wantErr != nil {
-				if !errors.Is(err, tc.wantErr) {
-					t.Fatalf("ClassifySurfaceChange() error = %v, want wrapping %v", err, tc.wantErr)
-				}
-			} else if err != nil {
-				t.Fatalf("ClassifySurfaceChange() unexpected error = %v", err)
+			existing, err := json.Marshal(tc.old)
+			if err != nil {
+				t.Fatalf("json.Marshal() error = %v", err)
 			}
 
-			if tc.wantEmpty && len(findings) != 0 {
-				t.Fatalf("ClassifySurfaceChange() findings = %v, want none", findings)
-			}
+			err = GateSurfaceChange("acme.json", existing, tc.next)
 
-			text := findingsText(findings)
-
-			for _, want := range tc.wantContains {
-				if !strings.Contains(text, want) {
-					t.Fatalf("ClassifySurfaceChange() findings = %v, want containing %q", findings, want)
-				}
-			}
-
-			for _, absent := range tc.wantAbsent {
-				if strings.Contains(text, absent) {
-					t.Fatalf("ClassifySurfaceChange() findings = %v, want not containing %q", findings, absent)
-				}
+			switch {
+			case tc.wantErr == "" && err != nil:
+				t.Fatalf("GateSurfaceChange() error = %v, want nil", err)
+			case tc.wantErr == "":
+				return
+			case !errors.Is(err, ErrDestructiveSurfaceChange):
+				t.Fatalf("GateSurfaceChange() error = %v, want wrapping ErrDestructiveSurfaceChange", err)
+			case err.Error() != tc.wantErr:
+				t.Fatalf("GateSurfaceChange() error = %q, want %q", err.Error(), tc.wantErr)
 			}
 		})
 	}
 }
 
-// TestGateSurfaceChangeNoExistingSnapshot verifies a committed surface with nothing recorded never refuses, since only removals can be destructive
-func TestGateSurfaceChangeNoExistingSnapshot(t *testing.T) {
+// TestGateSurfaceChangeEmptySnapshot verifies a committed snapshot recording nothing never refuses
+func TestGateSurfaceChangeEmptySnapshot(t *testing.T) {
 	t.Parallel()
 
-	next := Surface{ID: "acme", Operations: []SurfaceOperation{{Name: "sync"}}}
-
-	if err := GateSurfaceChange("acme.json", json.RawMessage(`{}`), next); err != nil {
+	if err := GateSurfaceChange("acme.json", json.RawMessage(`{}`), Surface{ID: "acme", Operations: []SurfaceOperation{{Name: "sync"}}}); err != nil {
 		t.Fatalf("GateSurfaceChange() error = %v, want nil", err)
 	}
 }
 
-// TestGateSurfaceChangeEqualToNext verifies an unchanged surface produces no findings and no error
-func TestGateSurfaceChangeEqualToNext(t *testing.T) {
+// TestGateSurfaceChangeUndecodableSnapshot verifies an unreadable committed snapshot fails as a decode error rather than a destructive change
+func TestGateSurfaceChangeUndecodableSnapshot(t *testing.T) {
 	t.Parallel()
 
-	next := Surface{
-		ID:          "acme",
-		Credentials: []SurfaceCredential{credSlot("cred_a", `{"type":"object","properties":{"name":{"type":"string"}}}`, false)},
-		Operations:  []SurfaceOperation{{Name: "sync"}},
-		Webhooks:    []SurfaceWebhook{{Name: "github", Events: []SurfaceNamed{namedRef("push")}}},
-	}
-
-	findings, err := ClassifySurfaceChange(next, next)
-	if err != nil {
-		t.Fatalf("ClassifySurfaceChange() error = %v, want nil", err)
-	}
-
-	if len(findings) != 0 {
-		t.Fatalf("ClassifySurfaceChange() findings = %v, want none", findings)
-	}
-
-	existing, err := json.Marshal(next)
-	if err != nil {
-		t.Fatalf("json.Marshal() error = %v", err)
-	}
-
-	if err := GateSurfaceChange("acme.json", existing, next); err != nil {
-		t.Fatalf("GateSurfaceChange() error = %v, want nil", err)
-	}
-}
-
-// TestGateSurfaceChangeDestructive verifies a destructive removal against the committed snapshot bytes surfaces ErrDestructiveSurfaceChange
-func TestGateSurfaceChangeDestructive(t *testing.T) {
-	t.Parallel()
-
-	old := Surface{ID: "acme", Credentials: []SurfaceCredential{credSlot("legacy", `{"type":"object"}`, false)}}
-
-	existing, err := json.Marshal(old)
-	if err != nil {
-		t.Fatalf("json.Marshal() error = %v", err)
-	}
-
-	next := Surface{ID: "acme"}
-
-	err = GateSurfaceChange("acme.json", existing, next)
-	if !errors.Is(err, ErrDestructiveSurfaceChange) {
-		t.Fatalf("GateSurfaceChange() error = %v, want wrapping ErrDestructiveSurfaceChange", err)
+	err := GateSurfaceChange("acme.json", []byte(`{`), Surface{ID: "acme"})
+	if err == nil || errors.Is(err, ErrDestructiveSurfaceChange) {
+		t.Fatalf("GateSurfaceChange() error = %v, want a decode error", err)
 	}
 }

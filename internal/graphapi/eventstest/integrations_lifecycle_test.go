@@ -90,8 +90,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 	})
 
 	t.Run("duplicate loops collapse to one on reset", func(t *testing.T) {
-		// mirror emitReconcileLoop but bypass the topic's insert-time dedup so a
-		// second live loop for the same operation context actually lands
+		// mirror resetReconcileLoop's emit but skip the unique key so a second live loop lands
 		oc := integrationtypes.NewOperationContext(installation.OwnerID, opName, integrationtypes.IntegrationSource{
 			IntegrationID: installation.ID,
 			DefinitionID:  installation.DefinitionID,

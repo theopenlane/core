@@ -3,6 +3,7 @@ package providerkit
 import (
 	"encoding/json"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
@@ -43,5 +44,32 @@ func RawEnvelopeVariant(variant string, resource string, payload json.RawMessage
 		Variant:  variant,
 		Resource: resource,
 		Payload:  payload,
+	}
+}
+
+// DirectoryAccountPayloadSets wraps directory account envelopes in the complete-snapshot account payload set
+func DirectoryAccountPayloadSets(accounts []types.MappingEnvelope) []types.IngestPayloadSet {
+	return []types.IngestPayloadSet{
+		{
+			Schema:           entityops.SchemaDirectoryAccount.Name,
+			Envelopes:        accounts,
+			SnapshotComplete: true,
+		},
+	}
+}
+
+// DirectoryGroupPayloadSets wraps directory group and membership envelopes in payload sets sharing one snapshot completeness flag
+func DirectoryGroupPayloadSets(groups, memberships []types.MappingEnvelope, complete bool) []types.IngestPayloadSet {
+	return []types.IngestPayloadSet{
+		{
+			Schema:           entityops.SchemaDirectoryGroup.Name,
+			Envelopes:        groups,
+			SnapshotComplete: complete,
+		},
+		{
+			Schema:           entityops.SchemaDirectoryMembership.Name,
+			Envelopes:        memberships,
+			SnapshotComplete: complete,
+		},
 	}
 }

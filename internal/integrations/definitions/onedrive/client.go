@@ -11,6 +11,7 @@ import (
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 	"golang.org/x/oauth2"
 
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -38,16 +39,6 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (*Drive
 		return nil, ErrOAuthTokenMissing
 	}
 
-	tok := &oauth2.Token{
-		AccessToken:  cred.AccessToken,
-		RefreshToken: cred.RefreshToken,
-		TokenType:    "Bearer",
-	}
-
-	if cred.Expiry != nil {
-		tok.Expiry = *cred.Expiry
-	}
-
 	base := fmt.Sprintf(microsoftAuthBaseURL, "common")
 
 	oauthCfg := &oauth2.Config{
@@ -65,7 +56,7 @@ func (c Client) Build(ctx context.Context, req types.ClientBuildRequest) (*Drive
 	}
 
 	// context background used intentionally in this slot
-	ts := oauthCfg.TokenSource(context.Background(), tok)
+	ts := oauthCfg.TokenSource(context.Background(), providerkit.OAuthToken(cred.AccessToken, cred.RefreshToken, cred.Expiry))
 
 	tokenCred := &oauthTokenCredential{ts: ts}
 

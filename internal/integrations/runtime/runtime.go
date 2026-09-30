@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/keymaker"
 	"github.com/theopenlane/core/v2/internal/keystore"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/singleton"
 )
 
@@ -232,7 +233,13 @@ func New(config Config) (*Runtime, error) {
 				return err
 			}
 
-			return rt.Reconcile(ctx, installation, nil, connection.Auth.CredentialRef, &result.Credential, result.InstallationInput)
+			if err := rt.Reconcile(ctx, installation, nil, connection.Auth.CredentialRef, &result.Credential, result.InstallationInput); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("installation_id", installation.ID).Msg("failed to reconcile completed auth credential")
+
+				return err
+			}
+
+			return nil
 		}, rt.lookupKeymakerInstallation, do.MustInvoke[keymaker.AuthStateStore](i)), nil
 	})
 

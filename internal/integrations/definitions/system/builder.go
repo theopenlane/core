@@ -13,6 +13,11 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
+// sweeper is a scheduled sweep cycle that reports how many records it processed
+type sweeper interface {
+	Run(ctx context.Context, req types.OperationRequest) (int, error)
+}
+
 // Builder returns the system definition hosting the scheduled runtime sweeps
 func Builder(paymentReminder PaymentReminderConfig, organizationDelete OrganizationDeleteConfig, integrationLifecycle IntegrationLifecycleConfig) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
@@ -27,20 +32,7 @@ func Builder(paymentReminder PaymentReminderConfig, organizationDelete Organizat
 				Visible:     false,
 			},
 			Operations: []types.OperationRegistration{
-				PaymentReminderOp.HandlesRequest(func(ctx context.Context, req types.OperationRequest, _ PaymentReminderSweep) (json.RawMessage, error) {
-					sweep := paymentReminder.Sweep()
-
-					if err := jsonx.UnmarshalIfPresent(req.Config, &sweep); err != nil {
-						return nil, ErrOperationConfigInvalid
-					}
-
-					processed, err := sweep.Run(ctx, req)
-					if err != nil {
-						return nil, err
-					}
-
-					return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
-				}).Registration(DefinitionID, types.OperationRegistration{
+				PaymentReminderOp.HandlesRequest(sweepHandler(paymentReminder.Sweep())).Registration(DefinitionID, types.OperationRegistration{
 					Description:         "Mark canceled organizations for deletion and dispatch deletion notice emails",
 					Policy:              types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true},
 					Schedule:            &gala.Schedule{MinInterval: PaymentReminderMinInterval, MaxInterval: PaymentReminderMaxInterval},
@@ -48,20 +40,7 @@ func Builder(paymentReminder PaymentReminderConfig, organizationDelete Organizat
 					DisabledForAll:      !paymentReminder.Enabled,
 					SkipDefaultLookback: true,
 				}),
-				OrganizationDeleteOp.HandlesRequest(func(ctx context.Context, req types.OperationRequest, _ OrganizationDeleteSweep) (json.RawMessage, error) {
-					sweep := organizationDelete.Sweep()
-
-					if err := jsonx.UnmarshalIfPresent(req.Config, &sweep); err != nil {
-						return nil, ErrOperationConfigInvalid
-					}
-
-					processed, err := sweep.Run(ctx, req)
-					if err != nil {
-						return nil, err
-					}
-
-					return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
-				}).Registration(DefinitionID, types.OperationRegistration{
+				OrganizationDeleteOp.HandlesRequest(sweepHandler(organizationDelete.Sweep())).Registration(DefinitionID, types.OperationRegistration{
 					Description:         "Delete overdue organizations that still have no active or trialing subscription",
 					Policy:              types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true},
 					Schedule:            &gala.Schedule{MinInterval: OrganizationDeleteMinInterval, MaxInterval: OrganizationDeleteMaxInterval},
@@ -69,20 +48,7 @@ func Builder(paymentReminder PaymentReminderConfig, organizationDelete Organizat
 					DisabledForAll:      !organizationDelete.Enabled,
 					SkipDefaultLookback: true,
 				}),
-				IntegrationLifecycleOp.HandlesRequest(func(ctx context.Context, req types.OperationRequest, _ IntegrationLifecycleSweep) (json.RawMessage, error) {
-					sweep := integrationLifecycle.Sweep()
-
-					if err := jsonx.UnmarshalIfPresent(req.Config, &sweep); err != nil {
-						return nil, ErrOperationConfigInvalid
-					}
-
-					processed, err := sweep.Run(ctx, req)
-					if err != nil {
-						return nil, err
-					}
-
-					return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
-				}).Registration(DefinitionID, types.OperationRegistration{
+				IntegrationLifecycleOp.HandlesRequest(sweepHandler(integrationLifecycle.Sweep())).Registration(DefinitionID, types.OperationRegistration{
 					Description:         "Reap expired integration installations that never connected",
 					Policy:              types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true},
 					Schedule:            &gala.Schedule{MinInterval: IntegrationLifecycleMinInterval, MaxInterval: IntegrationLifecycleMaxInterval},
@@ -93,4 +59,22 @@ func Builder(paymentReminder PaymentReminderConfig, organizationDelete Organizat
 			},
 		}, nil
 	})
+}
+
+// sweepHandler returns the request handler that overlays the request config onto a copy of the operator sweep defaults, runs the sweep, and encodes the processed count
+func sweepHandler[S sweeper](defaults S) func(context.Context, types.OperationRequest, S) (json.RawMessage, error) {
+	return func(ctx context.Context, req types.OperationRequest, _ S) (json.RawMessage, error) {
+		sweep := defaults
+
+		if err := jsonx.UnmarshalIfPresent(req.Config, &sweep); err != nil {
+			return nil, ErrOperationConfigInvalid
+		}
+
+		processed, err := sweep.Run(ctx, req)
+		if err != nil {
+			return nil, err
+		}
+
+		return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
+	}
 }

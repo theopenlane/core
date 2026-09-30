@@ -6,7 +6,6 @@ import (
 
 	tsclient "github.com/tailscale/tailscale-client-go/v2"
 
-	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -55,11 +54,7 @@ func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *tsc
 		accountEnvelopes = append(accountEnvelopes, envelope)
 	}
 
-	payloadSets := []types.IngestPayloadSet{{
-		Schema:           entityops.SchemaDirectoryAccount.Name,
-		Envelopes:        accountEnvelopes,
-		SnapshotComplete: true,
-	}}
+	payloadSets := providerkit.DirectoryAccountPayloadSets(accountEnvelopes)
 
 	if cfg.DisableGroupSync {
 		logx.FromContext(ctx).Debug().Int("user_count", len(accountEnvelopes)).Msg("tailscale: collected users; group sync disabled")
@@ -160,20 +155,7 @@ func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *tsc
 
 	logx.FromContext(ctx).Debug().Int("user_count", len(accountEnvelopes)).Int("group_count", len(groupEnvelopes)).Int("membership_count", len(membershipEnvelopes)).Msg("tailscale: collected users, role groups, and memberships")
 
-	payloadSets = append(payloadSets,
-		types.IngestPayloadSet{
-			Schema:           entityops.SchemaDirectoryGroup.Name,
-			Envelopes:        groupEnvelopes,
-			SnapshotComplete: membershipsComplete,
-		},
-		types.IngestPayloadSet{
-			Schema:           entityops.SchemaDirectoryMembership.Name,
-			Envelopes:        membershipEnvelopes,
-			SnapshotComplete: membershipsComplete,
-		},
-	)
-
-	return payloadSets, nil
+	return append(payloadSets, providerkit.DirectoryGroupPayloadSets(groupEnvelopes, membershipEnvelopes, membershipsComplete)...), nil
 }
 
 // listTailscaleUsers fetches all users from the Tailscale API and maps them to payloads
