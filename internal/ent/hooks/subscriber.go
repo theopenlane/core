@@ -228,7 +228,7 @@ func subscriberTrustCenterDomain(ctx context.Context, client *generated.Client, 
 	return customDomain, tc.Slug, emaildef.TrustCenterBrandingFromSetting(tc.Edges.Setting)
 }
 
-// updateSubscriber updates an existing subscriber's send attempts and resets the verified email status
+// updateSubscriber updates an existing subscriber's send attempts, marks the subscriber as active if needed.
 func updateSubscriber(ctx context.Context,
 	m *generated.SubscriberMutation, subscriber *generated.Subscriber) (*generated.Subscriber, error) {
 	if subscriber.SendAttempts >= maxAttempts {
