@@ -256,7 +256,7 @@ func (h *Handler) logImpersonationEvent(ctx context.Context, action enums.Impers
 		SetCreatedBy(auditLog.ImpersonatorID).
 		SetCreatedAt(time.Now())
 
-	if auditLog.TargetUserID != "" {
+	if auditLog.TargetUserID != "" && auditLog.Type != auth.SupportImpersonation {
 		create.SetTargetUserID(auditLog.TargetUserID)
 	}
 

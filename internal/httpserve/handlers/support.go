@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"crypto/subtle"
+	"net/url"
 	"strings"
 	"time"
 
@@ -162,7 +163,10 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
 
 	reason := ""
 	if c, cErr := sessions.GetCookie(ctx.Request(), supportReasonCookie); cErr == nil {
-		reason = c.Value
+		reason, err = url.QueryUnescape(c.Value)
+		if err != nil {
+			return h.BadRequest(ctx, err)
+		}
 	}
 
 	duration := time.Duration(supportSessionDefaultHours) * time.Hour
@@ -175,7 +179,7 @@ func (h *Handler) SupportCallbackHandler(ctx echo.Context) error {
 
 	// mint the support session token targeting the virtual support identity, attributed to the individual
 	token, err := h.TokenManager.CreateImpersonationToken(reqCtx, tokens.CreateImpersonationTokenOptions{
-		ImpersonatorID:    individualEmail,
+		ImpersonatorID:    individualID,
 		ImpersonatorEmail: individualEmail,
 		TargetUserID:      cfg.SubjectID,
 		TargetUserEmail:   cfg.Email,
