@@ -49,7 +49,8 @@ type Verdict struct {
 }
 
 // New builds a client for the template, authenticating with application default credentials so
-// the workload's own identity is used; sanitize calls are served from the template's region
+// the workload's own identity is used
+// sanitize calls are served from the template's region
 func New(ctx context.Context, template string) (*Client, error) {
 	parts := strings.Split(template, "/")
 	if len(parts) != templateNameParts || parts[0] != "projects" || parts[2] != "locations" || parts[4] != "templates" {

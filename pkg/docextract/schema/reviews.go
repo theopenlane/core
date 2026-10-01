@@ -1,6 +1,6 @@
 package schema
 
-import "google.golang.org/genai"
+import "github.com/theopenlane/core/v2/pkg/docextract"
 
 type Review struct {
 	Title           string   `json:"title,omitempty"`
@@ -22,64 +22,64 @@ type Reviews struct {
 	Reviews []Review `json:"reviews"`
 }
 
-var ReviewSchema = &genai.Schema{
-	Type: genai.TypeObject,
-	Properties: map[string]*genai.Schema{
+var ReviewSchema = &docextract.Schema{
+	Type: docextract.TypeObject,
+	Properties: map[string]*docextract.Schema{
 		"reviews": {
-			Type: genai.TypeArray,
-			Items: &genai.Schema{
-				Type: genai.TypeObject,
-				Properties: map[string]*genai.Schema{
+			Type: docextract.TypeArray,
+			Items: &docextract.Schema{
+				Type: docextract.TypeObject,
+				Properties: map[string]*docextract.Schema{
 					"title": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"summary": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"details": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"source": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"reportedAt": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"reviewedAt": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"reporter": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"approvedAt": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"approved": {
-						Type: genai.TypeBoolean,
+						Type: docextract.TypeBoolean,
 					},
 					"refCodes": {
-						Type: genai.TypeArray,
-						Items: &genai.Schema{
-							Type: genai.TypeString,
+						Type: docextract.TypeArray,
+						Items: &docextract.Schema{
+							Type: docextract.TypeString,
 						},
 					},
 					"externalID": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"environmentName": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"production"},
 					},
 					"scopeName": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"in-scope"},
 					},
 					"state": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"COMPLETED"},
 					},
 					"category": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"audit-review"},
 					},
 				},

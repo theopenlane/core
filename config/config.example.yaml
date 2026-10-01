@@ -536,7 +536,6 @@ workflows:
     gala:
         enabled: false
         failonenqueueerror: false
-        jobtimeout: 900000000000
         maxretries: 5
         queuename: events
         workercount: 10

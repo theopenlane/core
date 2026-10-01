@@ -4864,6 +4864,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "document_kind": {
+	ObjectType:          "document_kind",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 }, "assets": {
 	ObjectType:          "asset",
 	SkipEditCheck:       false,

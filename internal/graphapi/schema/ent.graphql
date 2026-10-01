@@ -15181,6 +15181,10 @@ input CreateScanInput {
   """
   scopeName: String
   """
+  the document_kind of the scan
+  """
+  documentKindName: String
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String!
@@ -15227,6 +15231,7 @@ input CreateScanInput {
   assignedToIdentityHolderID: ID
   environmentID: ID
   scopeID: ID
+  documentKindID: ID
   assetIDs: [ID!]
   entityIDs: [ID!]
   evidenceIDs: [ID!]
@@ -60592,6 +60597,14 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
   """
   scopeID: ID
   """
+  the document_kind of the scan
+  """
+  documentKindName: String
+  """
+  the document_kind of the scan
+  """
+  documentKindID: ID
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String!
@@ -60714,6 +60727,7 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
   assignedToIdentityHolder: IdentityHolder
   environment: CustomTypeEnum
   scope: CustomTypeEnum
+  documentKind: CustomTypeEnum
   assets(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -61470,6 +61484,34 @@ input ScanWhereInput {
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
   """
+  document_kind_name field predicates
+  """
+  documentKindName: String
+  documentKindNameNEQ: String
+  documentKindNameIn: [String!]
+  documentKindNameNotIn: [String!]
+  documentKindNameContains: String
+  documentKindNameHasPrefix: String
+  documentKindNameHasSuffix: String
+  documentKindNameIsNil: Boolean
+  documentKindNameNotNil: Boolean
+  documentKindNameEqualFold: String
+  documentKindNameContainsFold: String
+  """
+  document_kind_id field predicates
+  """
+  documentKindID: ID
+  documentKindIDNEQ: ID
+  documentKindIDIn: [ID!]
+  documentKindIDNotIn: [ID!]
+  documentKindIDContains: ID
+  documentKindIDHasPrefix: ID
+  documentKindIDHasSuffix: ID
+  documentKindIDIsNil: Boolean
+  documentKindIDNotNil: Boolean
+  documentKindIDEqualFold: ID
+  documentKindIDContainsFold: ID
+  """
   target field predicates
   """
   target: String
@@ -61633,6 +61675,11 @@ input ScanWhereInput {
   """
   hasScope: Boolean
   hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
+  document_kind edge predicates
+  """
+  hasDocumentKind: Boolean
+  hasDocumentKindWith: [CustomTypeEnumWhereInput!]
   """
   assets edge predicates
   """
@@ -77913,6 +77960,11 @@ input UpdateScanInput {
   scopeName: String
   clearScopeName: Boolean
   """
+  the document_kind of the scan
+  """
+  documentKindName: String
+  clearDocumentKindName: Boolean
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String
@@ -77977,6 +78029,8 @@ input UpdateScanInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
+  documentKindID: ID
+  clearDocumentKind: Boolean
   addAssetIDs: [ID!]
   removeAssetIDs: [ID!]
   clearAssets: Boolean

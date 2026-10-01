@@ -312,9 +312,8 @@ func isAnonTrustCenterCaller(ctx context.Context) (string, bool, error) {
 		return "", false, auth.ErrNoAuthUser
 	}
 
-	// a personal access token carries its org in the authorized list rather than as the active org
-	if _, hasOrg := caller.ActiveOrg(); !hasOrg {
-		return "", false, auth.ErrNoAuthUser
+	if _, err := auth.GetOrganizationIDFromContext(ctx); err != nil {
+		return "", false, err
 	}
 
 	if _, orgID, ok := auth.TrustCenterScopeFromContext(ctx); ok {

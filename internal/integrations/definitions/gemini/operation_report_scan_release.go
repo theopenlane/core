@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/docextract"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -25,20 +25,25 @@ func (r ReportScanReleaseRequest) Handle() types.OperationHandler {
 
 // Run deletes the cached report recorded on the scan and clears its metadata entry
 func (ReportScanReleaseRequest) Run(ctx context.Context, request types.OperationRequest, client *Client, cfg ReportScanReleaseRequest) (ReportScanReleaseResult, error) {
-	ctx = logx.WithFields(ctx, logx.LogFields{"organization_id": cfg.OrganizationID, "scan_id": cfg.ScanID})
-	systemCtx := scanSystemContext(ctx, cfg.OrganizationID)
+	ctx = logx.WithFields(ctx, logx.LogFields{"scan_id": cfg.ScanID})
 
 	if cfg.Cache == "" {
 		return ReportScanReleaseResult{}, nil
 	}
 
-	// the scan is looked up only to confirm the caller owns it before touching the cache
-	if _, err := request.DB.Scan.Query().Where(
+	// the scan is looked up only to confirm it still exists before touching the cache; existence is
+	// all that is read so the parsed report held in its metadata never crosses the wire
+	exists, err := request.DB.Scan.Query().Where(
 		scan.ID(cfg.ScanID),
-		scan.OwnerID(cfg.OrganizationID),
-		scan.ScanTypeEQ(enums.ScanTypeReport),
-	).Only(systemCtx); err != nil {
+	).Exist(ctx)
+	if err != nil {
 		return ReportScanReleaseResult{}, err
+	}
+
+	if !exists {
+		logx.FromContext(ctx).Warn().Str("cache", docextract.CacheID(cfg.Cache)).Msg("report scan: scan gone, leaving cache to expire")
+
+		return ReportScanReleaseResult{}, nil
 	}
 
 	if err := client.ReleaseDocumentCache(ctx, cfg.Cache); err != nil {

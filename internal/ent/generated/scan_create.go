@@ -367,6 +367,34 @@ func (_c *ScanCreate) SetNillableScopeID(v *string) *ScanCreate {
 	return _c
 }
 
+// SetDocumentKindName sets the "document_kind_name" field.
+func (_c *ScanCreate) SetDocumentKindName(v string) *ScanCreate {
+	_c.mutation.SetDocumentKindName(v)
+	return _c
+}
+
+// SetNillableDocumentKindName sets the "document_kind_name" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableDocumentKindName(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetDocumentKindName(*v)
+	}
+	return _c
+}
+
+// SetDocumentKindID sets the "document_kind_id" field.
+func (_c *ScanCreate) SetDocumentKindID(v string) *ScanCreate {
+	_c.mutation.SetDocumentKindID(v)
+	return _c
+}
+
+// SetNillableDocumentKindID sets the "document_kind_id" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableDocumentKindID(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetDocumentKindID(*v)
+	}
+	return _c
+}
+
 // SetTarget sets the "target" field.
 func (_c *ScanCreate) SetTarget(v string) *ScanCreate {
 	_c.mutation.SetTarget(v)
@@ -612,6 +640,11 @@ func (_c *ScanCreate) SetEnvironment(v *CustomTypeEnum) *ScanCreate {
 // SetScope sets the "scope" edge to the CustomTypeEnum entity.
 func (_c *ScanCreate) SetScope(v *CustomTypeEnum) *ScanCreate {
 	return _c.SetScopeID(v.ID)
+}
+
+// SetDocumentKind sets the "document_kind" edge to the CustomTypeEnum entity.
+func (_c *ScanCreate) SetDocumentKind(v *CustomTypeEnum) *ScanCreate {
+	return _c.SetDocumentKindID(v.ID)
 }
 
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
@@ -1033,6 +1066,10 @@ func (_c *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 		_spec.SetField(scan.FieldScopeName, field.TypeString, value)
 		_node.ScopeName = value
 	}
+	if value, ok := _c.mutation.DocumentKindName(); ok {
+		_spec.SetField(scan.FieldDocumentKindName, field.TypeString, value)
+		_node.DocumentKindName = value
+	}
 	if value, ok := _c.mutation.Target(); ok {
 		_spec.SetField(scan.FieldTarget, field.TypeString, value)
 		_node.Target = value
@@ -1256,6 +1293,23 @@ func (_c *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ScopeID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DocumentKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.DocumentKindTable,
+			Columns: []string{scan.DocumentKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.DocumentKindID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.AssetsIDs(); len(nodes) > 0 {

@@ -34,6 +34,8 @@ var (
 	ErrRequestedPartsUnavailable = errors.New("none of the requested report sections are available")
 	// ErrUnknownRequestedPart is returned when a scan asks for a section the SOC 2 kind does not know
 	ErrUnknownRequestedPart = errors.New("unknown report section requested")
+	// ErrUnsupportedDocumentKind is returned when a scan names a document kind this integration cannot parse
+	ErrUnsupportedDocumentKind = errors.New("unsupported document kind")
 	// ErrSectionFailed is wrapped into a section's failure reason
 	ErrSectionFailed = errors.New("could not be extracted")
 	// ErrResultsIncomplete is wrapped into a section's warning when some batches failed

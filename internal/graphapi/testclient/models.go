@@ -8773,6 +8773,8 @@ type CreateScanInput struct {
 	EnvironmentName *string `json:"environmentName,omitempty"`
 	// the scope of the scan
 	ScopeName *string `json:"scopeName,omitempty"`
+	// the document_kind of the scan
+	DocumentKindName *string `json:"documentKindName,omitempty"`
 	// the target of the scan, e.g., a domain name or IP address, codebase
 	Target string `json:"target"`
 	// the type of scan, e.g., domain scan, vulnerability scan, provider scan
@@ -8802,6 +8804,7 @@ type CreateScanInput struct {
 	AssignedToIdentityHolderID *string           `json:"assignedToIdentityHolderID,omitempty"`
 	EnvironmentID              *string           `json:"environmentID,omitempty"`
 	ScopeID                    *string           `json:"scopeID,omitempty"`
+	DocumentKindID             *string           `json:"documentKindID,omitempty"`
 	AssetIDs                   []string          `json:"assetIDs,omitempty"`
 	EntityIDs                  []string          `json:"entityIDs,omitempty"`
 	EvidenceIDs                []string          `json:"evidenceIDs,omitempty"`
@@ -29535,6 +29538,10 @@ type Scan struct {
 	ScopeName *string `json:"scopeName,omitempty"`
 	// the scope of the scan
 	ScopeID *string `json:"scopeID,omitempty"`
+	// the document_kind of the scan
+	DocumentKindName *string `json:"documentKindName,omitempty"`
+	// the document_kind of the scan
+	DocumentKindID *string `json:"documentKindID,omitempty"`
 	// the target of the scan, e.g., a domain name or IP address, codebase
 	Target string `json:"target"`
 	// the type of scan, e.g., domain scan, vulnerability scan, provider scan
@@ -29572,6 +29579,7 @@ type Scan struct {
 	AssignedToIdentityHolder *IdentityHolder          `json:"assignedToIdentityHolder,omitempty"`
 	Environment              *CustomTypeEnum          `json:"environment,omitempty"`
 	Scope                    *CustomTypeEnum          `json:"scope,omitempty"`
+	DocumentKind             *CustomTypeEnum          `json:"documentKind,omitempty"`
 	Assets                   *AssetConnection         `json:"assets"`
 	Entities                 *EntityConnection        `json:"entities"`
 	Evidence                 *EvidenceConnection      `json:"evidence"`
@@ -29913,6 +29921,30 @@ type ScanWhereInput struct {
 	ScopeIDNotNil       *bool    `json:"scopeIDNotNil,omitempty"`
 	ScopeIDEqualFold    *string  `json:"scopeIDEqualFold,omitempty"`
 	ScopeIDContainsFold *string  `json:"scopeIDContainsFold,omitempty"`
+	// document_kind_name field predicates
+	DocumentKindName             *string  `json:"documentKindName,omitempty"`
+	DocumentKindNameNeq          *string  `json:"documentKindNameNEQ,omitempty"`
+	DocumentKindNameIn           []string `json:"documentKindNameIn,omitempty"`
+	DocumentKindNameNotIn        []string `json:"documentKindNameNotIn,omitempty"`
+	DocumentKindNameContains     *string  `json:"documentKindNameContains,omitempty"`
+	DocumentKindNameHasPrefix    *string  `json:"documentKindNameHasPrefix,omitempty"`
+	DocumentKindNameHasSuffix    *string  `json:"documentKindNameHasSuffix,omitempty"`
+	DocumentKindNameIsNil        *bool    `json:"documentKindNameIsNil,omitempty"`
+	DocumentKindNameNotNil       *bool    `json:"documentKindNameNotNil,omitempty"`
+	DocumentKindNameEqualFold    *string  `json:"documentKindNameEqualFold,omitempty"`
+	DocumentKindNameContainsFold *string  `json:"documentKindNameContainsFold,omitempty"`
+	// document_kind_id field predicates
+	DocumentKindID             *string  `json:"documentKindID,omitempty"`
+	DocumentKindIdneq          *string  `json:"documentKindIDNEQ,omitempty"`
+	DocumentKindIDIn           []string `json:"documentKindIDIn,omitempty"`
+	DocumentKindIDNotIn        []string `json:"documentKindIDNotIn,omitempty"`
+	DocumentKindIDContains     *string  `json:"documentKindIDContains,omitempty"`
+	DocumentKindIDHasPrefix    *string  `json:"documentKindIDHasPrefix,omitempty"`
+	DocumentKindIDHasSuffix    *string  `json:"documentKindIDHasSuffix,omitempty"`
+	DocumentKindIDIsNil        *bool    `json:"documentKindIDIsNil,omitempty"`
+	DocumentKindIDNotNil       *bool    `json:"documentKindIDNotNil,omitempty"`
+	DocumentKindIDEqualFold    *string  `json:"documentKindIDEqualFold,omitempty"`
+	DocumentKindIDContainsFold *string  `json:"documentKindIDContainsFold,omitempty"`
 	// target field predicates
 	Target             *string  `json:"target,omitempty"`
 	TargetNeq          *string  `json:"targetNEQ,omitempty"`
@@ -30035,6 +30067,9 @@ type ScanWhereInput struct {
 	// scope edge predicates
 	HasScope     *bool                       `json:"hasScope,omitempty"`
 	HasScopeWith []*CustomTypeEnumWhereInput `json:"hasScopeWith,omitempty"`
+	// document_kind edge predicates
+	HasDocumentKind     *bool                       `json:"hasDocumentKind,omitempty"`
+	HasDocumentKindWith []*CustomTypeEnumWhereInput `json:"hasDocumentKindWith,omitempty"`
 	// assets edge predicates
 	HasAssets     *bool              `json:"hasAssets,omitempty"`
 	HasAssetsWith []*AssetWhereInput `json:"hasAssetsWith,omitempty"`
@@ -40892,6 +40927,9 @@ type UpdateScanInput struct {
 	// the scope of the scan
 	ScopeName      *string `json:"scopeName,omitempty"`
 	ClearScopeName *bool   `json:"clearScopeName,omitempty"`
+	// the document_kind of the scan
+	DocumentKindName      *string `json:"documentKindName,omitempty"`
+	ClearDocumentKindName *bool   `json:"clearDocumentKindName,omitempty"`
 	// the target of the scan, e.g., a domain name or IP address, codebase
 	Target *string `json:"target,omitempty"`
 	// the type of scan, e.g., domain scan, vulnerability scan, provider scan
@@ -40939,6 +40977,8 @@ type UpdateScanInput struct {
 	ClearEnvironment              *bool             `json:"clearEnvironment,omitempty"`
 	ScopeID                       *string           `json:"scopeID,omitempty"`
 	ClearScope                    *bool             `json:"clearScope,omitempty"`
+	DocumentKindID                *string           `json:"documentKindID,omitempty"`
+	ClearDocumentKind             *bool             `json:"clearDocumentKind,omitempty"`
 	AddAssetIDs                   []string          `json:"addAssetIDs,omitempty"`
 	RemoveAssetIDs                []string          `json:"removeAssetIDs,omitempty"`
 	ClearAssets                   *bool             `json:"clearAssets,omitempty"`

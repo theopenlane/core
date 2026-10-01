@@ -43,7 +43,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					ConfigSchema:   reportScanRequestSchema,
 					Policy:         types.ExecutionPolicy{SkipRunRecord: true},
 					DisabledForAll: !runtime.Provisioned(),
-					// RateLimit:          &types.RateLimitPolicy{Window: SubmitInterval},
+					// RateLimit:          &types.RateLimitPolicy{Window: submitInterval},
 					Handle:             ReportScanRequest{parts: runtime.Prompts.SOC2.ConfiguredParts()}.Handle(),
 					CustomerSelectable: lo.ToPtr(false),
 					Internal:           true,

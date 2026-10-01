@@ -6828,6 +6828,7 @@ var (
 		{Name: "assigned_to", Type: field.TypeString, Nullable: true},
 		{Name: "environment_name", Type: field.TypeString, Nullable: true},
 		{Name: "scope_name", Type: field.TypeString, Nullable: true},
+		{Name: "document_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "target", Type: field.TypeString},
 		{Name: "scan_type", Type: field.TypeEnum, Enums: []string{"DOMAIN", "VULNERABILITY", "VENDOR", "PROVIDER", "REPORT"}, Default: "DOMAIN"},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
@@ -6849,6 +6850,7 @@ var (
 		{Name: "assigned_to_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
+		{Name: "document_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "performed_by_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "performed_by_group_id", Type: field.TypeString, Nullable: true},
 	}
@@ -6860,79 +6862,85 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "scans_organizations_scans",
-				Columns:    []*schema.Column{ScansColumns[26]},
+				Columns:    []*schema.Column{ScansColumns[27]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_platforms_generated_scans",
-				Columns:    []*schema.Column{ScansColumns[27]},
+				Columns:    []*schema.Column{ScansColumns[28]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_risks_scans",
-				Columns:    []*schema.Column{ScansColumns[28]},
+				Columns:    []*schema.Column{ScansColumns[29]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_users_reviewed_by_user",
-				Columns:    []*schema.Column{ScansColumns[29]},
+				Columns:    []*schema.Column{ScansColumns[30]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_groups_reviewed_by_group",
-				Columns:    []*schema.Column{ScansColumns[30]},
+				Columns:    []*schema.Column{ScansColumns[31]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_identity_holders_reviewed_by_identity_holder",
-				Columns:    []*schema.Column{ScansColumns[31]},
+				Columns:    []*schema.Column{ScansColumns[32]},
 				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_users_assigned_to_user",
-				Columns:    []*schema.Column{ScansColumns[32]},
+				Columns:    []*schema.Column{ScansColumns[33]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_groups_assigned_to_group",
-				Columns:    []*schema.Column{ScansColumns[33]},
+				Columns:    []*schema.Column{ScansColumns[34]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_identity_holders_assigned_to_identity_holder",
-				Columns:    []*schema.Column{ScansColumns[34]},
+				Columns:    []*schema.Column{ScansColumns[35]},
 				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_custom_type_enums_environment",
-				Columns:    []*schema.Column{ScansColumns[35]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "scans_custom_type_enums_scope",
 				Columns:    []*schema.Column{ScansColumns[36]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "scans_users_performed_by_user",
+				Symbol:     "scans_custom_type_enums_scope",
 				Columns:    []*schema.Column{ScansColumns[37]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "scans_custom_type_enums_document_kind",
+				Columns:    []*schema.Column{ScansColumns[38]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "scans_users_performed_by_user",
+				Columns:    []*schema.Column{ScansColumns[39]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_groups_performed_by_group",
-				Columns:    []*schema.Column{ScansColumns[38]},
+				Columns:    []*schema.Column{ScansColumns[40]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6941,22 +6949,22 @@ var (
 			{
 				Name:    "scan_generated_by_platform_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{ScansColumns[27]},
+				Columns: []*schema.Column{ScansColumns[28]},
 			},
 			{
 				Name:    "scan_performed_by_user_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{ScansColumns[37]},
+				Columns: []*schema.Column{ScansColumns[39]},
 			},
 			{
 				Name:    "scan_performed_by_group_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{ScansColumns[38]},
+				Columns: []*schema.Column{ScansColumns[40]},
 			},
 			{
 				Name:    "scan_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{ScansColumns[26]},
+				Columns: []*schema.Column{ScansColumns[27]},
 			},
 		},
 	}
@@ -16428,8 +16436,9 @@ func init() {
 	ScansTable.ForeignKeys[8].RefTable = IdentityHoldersTable
 	ScansTable.ForeignKeys[9].RefTable = CustomTypeEnumsTable
 	ScansTable.ForeignKeys[10].RefTable = CustomTypeEnumsTable
-	ScansTable.ForeignKeys[11].RefTable = UsersTable
-	ScansTable.ForeignKeys[12].RefTable = GroupsTable
+	ScansTable.ForeignKeys[11].RefTable = CustomTypeEnumsTable
+	ScansTable.ForeignKeys[12].RefTable = UsersTable
+	ScansTable.ForeignKeys[13].RefTable = GroupsTable
 	StandardsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	StandardsTable.ForeignKeys[1].RefTable = FilesTable
 	SubcontrolsTable.ForeignKeys[0].RefTable = ControlsTable

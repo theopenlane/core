@@ -6335,6 +6335,7 @@ func init() {
 	scanMixinHooks9 := scanMixin[9].Hooks()
 	scanMixinHooks11 := scanMixin[11].Hooks()
 	scanMixinHooks12 := scanMixin[12].Hooks()
+	scanMixinHooks13 := scanMixin[13].Hooks()
 	scanHooks := schema.Scan{}.Hooks()
 
 	scan.Hooks[1] = scanMixinHooks0[0]
@@ -6359,11 +6360,13 @@ func init() {
 
 	scan.Hooks[11] = scanMixinHooks12[0]
 
-	scan.Hooks[12] = scanHooks[0]
+	scan.Hooks[12] = scanMixinHooks13[0]
 
-	scan.Hooks[13] = scanHooks[1]
+	scan.Hooks[13] = scanHooks[0]
 
-	scan.Hooks[14] = scanHooks[2]
+	scan.Hooks[14] = scanHooks[1]
+
+	scan.Hooks[15] = scanHooks[2]
 	scanMixinInters3 := scanMixin[3].Interceptors()
 	scanMixinInters7 := scanMixin[7].Interceptors()
 	scanMixinInters9 := scanMixin[9].Interceptors()

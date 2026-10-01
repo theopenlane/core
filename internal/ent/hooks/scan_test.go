@@ -4,42 +4,97 @@ import (
 	"context"
 	"testing"
 
-	"github.com/theopenlane/iam/auth"
+	"entgo.io/ent"
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/gemini"
 )
 
-func TestScanOriginFromContext(t *testing.T) {
-	cases := []struct {
-		name   string
-		caller *auth.Caller
-		want   enums.ScanOrigin
+func TestExceedsSingleReportFile(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name     string
+		existing int
+		removed  int
+		attached int
+		cleared  bool
+		want     bool
 	}{
-		{name: "integration", caller: auth.NewIntegrationCaller("org"), want: enums.ScanOriginIntegration},
-		{name: "internal", caller: &auth.Caller{OrganizationID: "org", Capabilities: auth.CapInternalOperation}, want: enums.ScanOriginSystem},
-		{name: "session", caller: &auth.Caller{SubjectID: "user", OrganizationID: "org", AuthenticationType: auth.JWTAuthentication}, want: enums.ScanOriginUser},
-		{name: "pat", caller: &auth.Caller{SubjectID: "user", OrganizationID: "org", AuthenticationType: auth.PATAuthentication}, want: enums.ScanOriginAPI},
-		{name: "api token", caller: &auth.Caller{SubjectID: "svc", OrganizationID: "org", AuthenticationType: auth.APITokenAuthentication}, want: enums.ScanOriginAPI},
-		{name: "internal user session", caller: &auth.Caller{SubjectID: "user", AuthenticationType: auth.JWTAuthentication, Capabilities: auth.CapInternalOperation}, want: enums.ScanOriginSystem},
+		{name: "first report attached", attached: 1},
+		{name: "two reports attached at once", attached: 2, want: true},
+		{name: "existing report left alone", existing: 1},
+		{name: "second report added to existing", existing: 1, attached: 1, want: true},
+		{name: "report swapped by remove then add", existing: 1, removed: 1, attached: 1},
+		{name: "report swapped by clear then add", existing: 1, attached: 1, cleared: true},
+		{name: "all reports cleared", existing: 2, cleared: true},
+		{name: "two reports added after clear", existing: 1, attached: 2, cleared: true, want: true},
+		{name: "remove more than exists", existing: 1, removed: 2, attached: 1},
 	}
 
-	for _, tc := range cases {
-		t.Run(tc.name, func(t *testing.T) {
-			origin, err := scanOriginFromContext(auth.WithCaller(context.Background(), tc.caller))
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 
-			assert.NilError(t, err)
-			assert.Check(t, origin == tc.want)
+			assert.Equal(t, exceedsSingleReportFile(tt.existing, tt.removed, tt.attached, tt.cleared), tt.want)
 		})
 	}
 }
 
-func TestScanOriginFromContextUnresolved(t *testing.T) {
-	_, err := scanOriginFromContext(context.Background())
+func TestCheckReportScanFilesOnCreate(t *testing.T) {
+	t.Parallel()
 
-	assert.ErrorIs(t, err, ErrScanOriginUnresolved)
+	tests := []struct {
+		name        string
+		reportScan  bool
+		uploaded    []string
+		builderIDs  []string
+		expectedErr error
+	}{
+		{name: "one uploaded report", reportScan: true, uploaded: []string{"file-1"}},
+		{name: "two uploaded reports", reportScan: true, uploaded: []string{"file-1", "file-2"}, expectedErr: ErrReportScanSingleFile},
+		{name: "upload plus builder file id", reportScan: true, uploaded: []string{"file-1"}, builderIDs: []string{"file-2"}, expectedErr: ErrReportScanSingleFile},
+		{name: "same file id in both sources", reportScan: true, uploaded: []string{"file-1"}, builderIDs: []string{"file-1"}},
+		{name: "two builder file ids", reportScan: true, builderIDs: []string{"file-1", "file-2"}, expectedErr: ErrReportScanSingleFile},
+		{name: "no files attached", reportScan: true},
+		{name: "domain scan with many files", uploaded: []string{"file-1", "file-2", "file-3"}},
+	}
 
-	_, err = scanOriginFromContext(auth.WithCaller(context.Background(), &auth.Caller{SubjectID: "anon"}))
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 
-	assert.ErrorIs(t, err, ErrScanOriginUnresolved)
+			m := &generated.ScanMutation{}
+			m.SetOp(ent.OpCreate)
+			m.AddFileIDs(tt.builderIDs...)
+
+			if tt.reportScan {
+				m.SetScanType(enums.ScanTypeReport)
+				m.SetPerformedBy(gemini.PerformedBy)
+			} else {
+				m.SetScanType(enums.ScanTypeDomain)
+			}
+
+			err := checkReportScanFiles(context.Background(), m, tt.uploaded)
+			if tt.expectedErr != nil {
+				assert.ErrorIs(t, err, tt.expectedErr)
+
+				return
+			}
+
+			assert.NilError(t, err)
+		})
+	}
+}
+
+func TestCheckReportScanFilesUpdateWithoutFileChange(t *testing.T) {
+	t.Parallel()
+
+	m := &generated.ScanMutation{}
+	m.SetOp(ent.OpUpdateOne)
+	m.SetStatus(enums.ScanStatusProcessing)
+
+	assert.NilError(t, checkReportScanFiles(context.Background(), m, nil))
 }

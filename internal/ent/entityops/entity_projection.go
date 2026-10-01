@@ -1539,6 +1539,8 @@ type ScanProjection struct {
 	CreatedAt                  time.Time              `json:"created_at,omitempty"`
 	CreatedBy                  string                 `json:"created_by,omitempty"`
 	DiscoveredVulnerabilityIds []string               `json:"discovered_vulnerability_ids,omitempty"`
+	DocumentKindID             string                 `json:"document_kind_id,omitempty"`
+	DocumentKindName           string                 `json:"document_kind_name,omitempty"`
 	EnvironmentID              string                 `json:"environment_id,omitempty"`
 	EnvironmentName            string                 `json:"environment_name,omitempty"`
 	GeneratedByPlatformID      string                 `json:"generated_by_platform_id,omitempty"`

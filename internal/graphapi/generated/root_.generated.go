@@ -5871,6 +5871,9 @@ type ComplexityRoot struct {
 		CreatedAt                  func(childComplexity int) int
 		CreatedBy                  func(childComplexity int) int
 		DiscoveredVulnerabilityIds func(childComplexity int) int
+		DocumentKind               func(childComplexity int) int
+		DocumentKindID             func(childComplexity int) int
+		DocumentKindName           func(childComplexity int) int
 		Editors                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Entities                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
 		Environment                func(childComplexity int) int
@@ -41589,6 +41592,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Scan.DiscoveredVulnerabilityIds(childComplexity), true
+	case "Scan.documentKind":
+		if e.ComplexityRoot.Scan.DocumentKind == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Scan.DocumentKind(childComplexity), true
+	case "Scan.documentKindID":
+		if e.ComplexityRoot.Scan.DocumentKindID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Scan.DocumentKindID(childComplexity), true
+	case "Scan.documentKindName":
+		if e.ComplexityRoot.Scan.DocumentKindName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Scan.DocumentKindName(childComplexity), true
 	case "Scan.editors":
 		if e.ComplexityRoot.Scan.Editors == nil {
 			break
@@ -71640,6 +71661,10 @@ input CreateScanInput {
   """
   scopeName: String
   """
+  the document_kind of the scan
+  """
+  documentKindName: String
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String!
@@ -71686,6 +71711,7 @@ input CreateScanInput {
   assignedToIdentityHolderID: ID
   environmentID: ID
   scopeID: ID
+  documentKindID: ID
   assetIDs: [ID!]
   entityIDs: [ID!]
   evidenceIDs: [ID!]
@@ -117051,6 +117077,14 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
   """
   scopeID: ID
   """
+  the document_kind of the scan
+  """
+  documentKindName: String
+  """
+  the document_kind of the scan
+  """
+  documentKindID: ID
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String!
@@ -117173,6 +117207,7 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
   assignedToIdentityHolder: IdentityHolder
   environment: CustomTypeEnum
   scope: CustomTypeEnum
+  documentKind: CustomTypeEnum
   assets(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -117929,6 +117964,34 @@ input ScanWhereInput {
   scopeIDEqualFold: ID
   scopeIDContainsFold: ID
   """
+  document_kind_name field predicates
+  """
+  documentKindName: String
+  documentKindNameNEQ: String
+  documentKindNameIn: [String!]
+  documentKindNameNotIn: [String!]
+  documentKindNameContains: String
+  documentKindNameHasPrefix: String
+  documentKindNameHasSuffix: String
+  documentKindNameIsNil: Boolean
+  documentKindNameNotNil: Boolean
+  documentKindNameEqualFold: String
+  documentKindNameContainsFold: String
+  """
+  document_kind_id field predicates
+  """
+  documentKindID: ID
+  documentKindIDNEQ: ID
+  documentKindIDIn: [ID!]
+  documentKindIDNotIn: [ID!]
+  documentKindIDContains: ID
+  documentKindIDHasPrefix: ID
+  documentKindIDHasSuffix: ID
+  documentKindIDIsNil: Boolean
+  documentKindIDNotNil: Boolean
+  documentKindIDEqualFold: ID
+  documentKindIDContainsFold: ID
+  """
   target field predicates
   """
   target: String
@@ -118092,6 +118155,11 @@ input ScanWhereInput {
   """
   hasScope: Boolean
   hasScopeWith: [CustomTypeEnumWhereInput!]
+  """
+  document_kind edge predicates
+  """
+  hasDocumentKind: Boolean
+  hasDocumentKindWith: [CustomTypeEnumWhereInput!]
   """
   assets edge predicates
   """
@@ -134372,6 +134440,11 @@ input UpdateScanInput {
   scopeName: String
   clearScopeName: Boolean
   """
+  the document_kind of the scan
+  """
+  documentKindName: String
+  clearDocumentKindName: Boolean
+  """
   the target of the scan, e.g., a domain name or IP address, codebase
   """
   target: String
@@ -134436,6 +134509,8 @@ input UpdateScanInput {
   clearEnvironment: Boolean
   scopeID: ID
   clearScope: Boolean
+  documentKindID: ID
+  clearDocumentKind: Boolean
   addAssetIDs: [ID!]
   removeAssetIDs: [ID!]
   clearAssets: Boolean
@@ -166320,6 +166395,10 @@ func (ec *executionContext) childFields_Scan(ctx context.Context, field graphql.
 		return ec.fieldContext_Scan_scopeName(ctx, field)
 	case "scopeID":
 		return ec.fieldContext_Scan_scopeID(ctx, field)
+	case "documentKindName":
+		return ec.fieldContext_Scan_documentKindName(ctx, field)
+	case "documentKindID":
+		return ec.fieldContext_Scan_documentKindID(ctx, field)
 	case "target":
 		return ec.fieldContext_Scan_target(ctx, field)
 	case "scanType":
@@ -166368,6 +166447,8 @@ func (ec *executionContext) childFields_Scan(ctx context.Context, field graphql.
 		return ec.fieldContext_Scan_environment(ctx, field)
 	case "scope":
 		return ec.fieldContext_Scan_scope(ctx, field)
+	case "documentKind":
+		return ec.fieldContext_Scan_documentKind(ctx, field)
 	case "assets":
 		return ec.fieldContext_Scan_assets(ctx, field)
 	case "entities":

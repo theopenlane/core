@@ -2466,9 +2466,6 @@
         "maxretries": {
           "type": "integer"
         },
-        "jobtimeout": {
-          "type": "integer"
-        },
         "failonenqueueerror": {
           "type": "boolean"
         },

@@ -23,6 +23,8 @@ var (
 	ErrPromptTemplateInvalid = errors.New("docextract: prompt template invalid")
 	// ErrCacheMissing is returned when the shared document cache named in a request no longer exists
 	ErrCacheMissing = errors.New("docextract: document cache missing")
+	// ErrProviderRequired is returned when a client is built without a model provider
+	ErrProviderRequired = errors.New("docextract: a provider is required")
 )
 
 // ValidationError carries the sentinel plus the user-facing reason built from the profile

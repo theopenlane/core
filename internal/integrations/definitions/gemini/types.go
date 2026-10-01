@@ -29,35 +29,40 @@ var (
 )
 
 const (
-	// ReportMetadataKey is the Scan.Metadata key holding the parsed report sections
-	ReportMetadataKey = "report"
-	// ReportTypeMetadataKey is the Scan.Metadata key naming which document kind parsed the report
-	ReportTypeMetadataKey = "reportType"
-	// ErrorMetadataKey is the Scan.Metadata key holding the last parse failure
-	ErrorMetadataKey = "error"
-	// SummaryMetadataKey is the Scan.Metadata key holding each section's state, item count, error, and
-	// batch progress, seeded at submit and updated as parts land
-	SummaryMetadataKey = "report_summary"
-	// ValidationMetadataKey is the Scan.Metadata key holding the SOC 2 validation outcome for the upload
-	ValidationMetadataKey = "report_validation"
-	// RequestedPartsMetadataKey is the Scan.Metadata key naming the sections to parse; empty means every configured section
-	RequestedPartsMetadataKey = "parts"
-	// DocumentCacheTTL is how long the cached report outlives the scan submit; the cache is released when the scan finalizes
-	DocumentCacheTTL = 3 * time.Hour
-
 	// PerformedBy marks a Scan record as one the system should parse as an uploaded report
 	PerformedBy = "openlane_report_parse"
-	// FileUploadKey is the multipart key report PDFs are uploaded under on scan mutations
-	FileUploadKey = "scanFiles"
-	// SubmitInterval is the minimum time between report scans for one organization
-	SubmitInterval = 24 * time.Hour
 
+	// submitInterval is the minimum time between report scans for one organization
+	submitInterval = 24 * time.Hour
+
+	// reportMetadataKey is the Scan.Metadata key holding the parsed report sections
+	reportMetadataKey = "report"
+	// ErrorMetadataKey is the Scan.Metadata key holding the last parse failure
+	ErrorMetadataKey = "error"
+	// summaryMetadataKey is the Scan.Metadata key holding each section's state, item count, error, and
+	// batch progress, seeded at submit and updated as parts land
+	summaryMetadataKey = "report_summary"
+	// validationMetadataKey is the Scan.Metadata key holding the SOC 2 validation outcome for the upload
+	validationMetadataKey = "report_validation"
+	// reportFileMetadataKey is the Scan.Metadata key naming the file the report was parsed from, recorded
+	// at submit so every later hop reads the same upload
+	reportFileMetadataKey = "report_file_id"
+	// requestedPartsMetadataKey is the Scan.Metadata key naming the sections to parse; empty means every configured section
+	requestedPartsMetadataKey = "parts"
+	// documentCacheTTL is how long the cached report outlives the scan submit; the cache is released when the scan finalizes
+	documentCacheTTL = 3 * time.Hour
+)
+
+// PartState is the parse state of one report section
+type PartState string
+
+const (
 	// PartStatePending marks a section whose parse job has not finished
-	PartStatePending = "pending"
+	PartStatePending PartState = "pending"
 	// PartStateCompleted marks a section whose parse job stored its result
-	PartStateCompleted = "completed"
+	PartStateCompleted PartState = "completed"
 	// PartStateFailed marks a section whose parse job exhausted its attempts
-	PartStateFailed = "failed"
+	PartStateFailed PartState = "failed"
 )
 
 // Client is the Gemini client for the runtime path: the generic extraction client plus the
@@ -127,6 +132,47 @@ func (c RuntimeConfig) GenAIBackend() genai.Backend {
 	return genai.BackendGeminiAPI
 }
 
+// ReportSectionSummary is one section's entry in a report scan's summary metadata; the saga writes
+// each field on its own json path so sibling batches cannot overwrite one another, and this is the
+// shape a reader takes those fields back as
+type ReportSectionSummary struct {
+	// Status is the part state the section reached
+	Status PartState `json:"status,omitempty"`
+	// Count is how many items the section holds
+	Count int `json:"count,omitempty"`
+	// Error is why the section is incomplete, empty when it finished cleanly
+	Error string `json:"error,omitempty"`
+}
+
+// ReportSummary decodes a scan's per-section summary, keyed by section name; it reports nil when
+// the metadata carries no summary or one that cannot be read
+func ReportSummary(metadata map[string]any) map[string]ReportSectionSummary {
+	raw, ok := metadata[summaryMetadataKey]
+	if !ok {
+		return nil
+	}
+
+	encoded, err := json.Marshal(raw)
+	if err != nil {
+		return nil
+	}
+
+	var summary map[string]ReportSectionSummary
+	if err := json.Unmarshal(encoded, &summary); err != nil {
+		return nil
+	}
+
+	return summary
+}
+
+// ReportFileID is the file the report was parsed from, reporting false when the scan was submitted
+// before the id was recorded
+func ReportFileID(metadata map[string]any) (string, bool) {
+	fileID, ok := metadata[reportFileMetadataKey].(string)
+
+	return fileID, ok && fileID != ""
+}
+
 // ReportScanRequest schedules the parse of the pdf attached to a pending report-type Scan record
 type ReportScanRequest struct {
 	// ScanID identifies the Scan record whose attached report should be parsed
@@ -150,10 +196,10 @@ type ReportScanRequestResult struct {
 type ReportScanPartRequest struct {
 	// ScanID identifies the Scan record whose attached report should be parsed
 	ScanID string `json:"scanId" jsonschema:"required,title=Scan ID,description=Scan record holding the uploaded report"`
-	// OrganizationID is the organization the scan belongs to
-	OrganizationID string `json:"organizationId" jsonschema:"required,title=Organization ID"`
 	// Part is the section name to parse, e.g. controls or reviews
 	Part string `json:"part" jsonschema:"required,title=Part,description=Report section to parse"`
+	// ReportFileID is the upload to parse, resolved at submit so the part never walks the scan for it
+	ReportFileID string `json:"reportFileId" jsonschema:"required,title=Report File ID,description=File holding the uploaded report"`
 	// RefCodes optionally scopes the parse to the controls with these ref codes
 	RefCodes []string `json:"refCodes,omitempty" jsonschema:"title=Ref Codes,description=Control ref codes to scope the section to"`
 	// Cache names the cached content holding the report, carried on the job rather than the scan
@@ -165,8 +211,6 @@ type ReportScanPartRequest struct {
 type ReportScanReleaseRequest struct {
 	// ScanID identifies the Scan record whose cached report should be released
 	ScanID string `json:"scanId" jsonschema:"required,title=Scan ID,description=Scan record whose cached report should be released"`
-	// OrganizationID is the organization the scan belongs to
-	OrganizationID string `json:"organizationId" jsonschema:"required,title=Organization ID"`
 	// Cache names the cached content to delete
 	Cache string `json:"cache" jsonschema:"required,title=Cache,description=Cached content to release"`
 }

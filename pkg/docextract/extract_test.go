@@ -7,7 +7,6 @@ import (
 	"testing"
 	"time"
 
-	"google.golang.org/genai"
 	"gotest.tools/v3/assert"
 )
 
@@ -54,16 +53,6 @@ func (countingStream) Continuation(context.Context, string) (string, error) { re
 func TestCountWithStreamer(t *testing.T) {
 	assert.Check(t, count(countingStream{}, `{"items": [1, 2, 3]}`) == 3)
 	assert.Check(t, count(countingStream{}, "") == 0)
-}
-
-func TestIsRetryableStatus(t *testing.T) {
-	assert.Check(t, isRetryableStatus("CANCELLED"))
-	assert.Check(t, isRetryableStatus("PARTIALLY_SUCCEEDED"))
-	assert.Check(t, isRetryableStatus("UNAVAILABLE"))
-	assert.Check(t, isRetryableStatus("INTERNAL"))
-	assert.Check(t, isRetryableStatus("RESOURCE_EXHAUSTED"))
-	assert.Check(t, !isRetryableStatus("FAILED"))
-	assert.Check(t, !isRetryableStatus("INVALID_ARGUMENT"))
 }
 
 func TestExtractRequiresSystemInstruction(t *testing.T) {
@@ -196,11 +185,6 @@ func TestResumeKeepsPartialPayloadAtMaxAttempts(t *testing.T) {
 
 	assert.ErrorIs(t, err, ErrMaxAttemptsReached)
 	assert.Check(t, extraction.stream.Count(extraction.collected) == 2)
-}
-
-func TestRequestPartsOmitsCachedDocument(t *testing.T) {
-	assert.Check(t, len(requestParts(nil, "prompt")) == 1)
-	assert.Check(t, len(requestParts(&document{part: genai.NewPartFromText("doc")}, "prompt")) == 2)
 }
 
 func TestCacheIDKeepsOnlyTheTrailingIdentifier(t *testing.T) {

@@ -216052,6 +216052,7 @@ type ScanMutation struct {
 	assigned_to                        *string
 	environment_name                   *string
 	scope_name                         *string
+	document_kind_name                 *string
 	target                             *string
 	scan_type                          *enums.ScanType
 	metadata                           *map[string]interface{}
@@ -216088,6 +216089,8 @@ type ScanMutation struct {
 	clearedenvironment                 bool
 	scope                              *string
 	clearedscope                       bool
+	document_kind                      *string
+	cleareddocument_kind               bool
 	assets                             map[string]struct{}
 	removedassets                      map[string]struct{}
 	clearedassets                      bool
@@ -217431,6 +217434,104 @@ func (m *ScanMutation) ResetScopeID() {
 	delete(m.clearedFields, scan.FieldScopeID)
 }
 
+// SetDocumentKindName sets the "document_kind_name" field.
+func (m *ScanMutation) SetDocumentKindName(s string) {
+	m.document_kind_name = &s
+}
+
+// DocumentKindName returns the value of the "document_kind_name" field in the mutation.
+func (m *ScanMutation) DocumentKindName() (r string, exists bool) {
+	v := m.document_kind_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDocumentKindName returns the old "document_kind_name" field's value of the Scan entity.
+// If the Scan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScanMutation) OldDocumentKindName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDocumentKindName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDocumentKindName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDocumentKindName: %w", err)
+	}
+	return oldValue.DocumentKindName, nil
+}
+
+// ClearDocumentKindName clears the value of the "document_kind_name" field.
+func (m *ScanMutation) ClearDocumentKindName() {
+	m.document_kind_name = nil
+	m.clearedFields[scan.FieldDocumentKindName] = struct{}{}
+}
+
+// DocumentKindNameCleared returns if the "document_kind_name" field was cleared in this mutation.
+func (m *ScanMutation) DocumentKindNameCleared() bool {
+	_, ok := m.clearedFields[scan.FieldDocumentKindName]
+	return ok
+}
+
+// ResetDocumentKindName resets all changes to the "document_kind_name" field.
+func (m *ScanMutation) ResetDocumentKindName() {
+	m.document_kind_name = nil
+	delete(m.clearedFields, scan.FieldDocumentKindName)
+}
+
+// SetDocumentKindID sets the "document_kind_id" field.
+func (m *ScanMutation) SetDocumentKindID(s string) {
+	m.document_kind = &s
+}
+
+// DocumentKindID returns the value of the "document_kind_id" field in the mutation.
+func (m *ScanMutation) DocumentKindID() (r string, exists bool) {
+	v := m.document_kind
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDocumentKindID returns the old "document_kind_id" field's value of the Scan entity.
+// If the Scan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScanMutation) OldDocumentKindID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDocumentKindID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDocumentKindID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDocumentKindID: %w", err)
+	}
+	return oldValue.DocumentKindID, nil
+}
+
+// ClearDocumentKindID clears the value of the "document_kind_id" field.
+func (m *ScanMutation) ClearDocumentKindID() {
+	m.document_kind = nil
+	m.clearedFields[scan.FieldDocumentKindID] = struct{}{}
+}
+
+// DocumentKindIDCleared returns if the "document_kind_id" field was cleared in this mutation.
+func (m *ScanMutation) DocumentKindIDCleared() bool {
+	_, ok := m.clearedFields[scan.FieldDocumentKindID]
+	return ok
+}
+
+// ResetDocumentKindID resets all changes to the "document_kind_id" field.
+func (m *ScanMutation) ResetDocumentKindID() {
+	m.document_kind = nil
+	delete(m.clearedFields, scan.FieldDocumentKindID)
+}
+
 // SetTarget sets the "target" field.
 func (m *ScanMutation) SetTarget(s string) {
 	m.target = &s
@@ -218383,6 +218484,33 @@ func (m *ScanMutation) ResetScope() {
 	m.clearedscope = false
 }
 
+// ClearDocumentKind clears the "document_kind" edge to the CustomTypeEnum entity.
+func (m *ScanMutation) ClearDocumentKind() {
+	m.cleareddocument_kind = true
+	m.clearedFields[scan.FieldDocumentKindID] = struct{}{}
+}
+
+// DocumentKindCleared reports if the "document_kind" edge to the CustomTypeEnum entity was cleared.
+func (m *ScanMutation) DocumentKindCleared() bool {
+	return m.DocumentKindIDCleared() || m.cleareddocument_kind
+}
+
+// DocumentKindIDs returns the "document_kind" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// DocumentKindID instead. It exists only for internal usage by the builders.
+func (m *ScanMutation) DocumentKindIDs() (ids []string) {
+	if id := m.document_kind; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetDocumentKind resets all changes to the "document_kind" edge.
+func (m *ScanMutation) ResetDocumentKind() {
+	m.document_kind = nil
+	m.cleareddocument_kind = false
+}
+
 // AddAssetIDs adds the "assets" edge to the Asset entity by ids.
 func (m *ScanMutation) AddAssetIDs(ids ...string) {
 	if m.assets == nil {
@@ -219146,7 +219274,7 @@ func (m *ScanMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScanMutation) Fields() []string {
-	fields := make([]string, 0, 37)
+	fields := make([]string, 0, 39)
 	if m.created_at != nil {
 		fields = append(fields, scan.FieldCreatedAt)
 	}
@@ -219218,6 +219346,12 @@ func (m *ScanMutation) Fields() []string {
 	}
 	if m.scope != nil {
 		fields = append(fields, scan.FieldScopeID)
+	}
+	if m.document_kind_name != nil {
+		fields = append(fields, scan.FieldDocumentKindName)
+	}
+	if m.document_kind != nil {
+		fields = append(fields, scan.FieldDocumentKindID)
 	}
 	if m.target != nil {
 		fields = append(fields, scan.FieldTarget)
@@ -219314,6 +219448,10 @@ func (m *ScanMutation) Field(name string) (ent.Value, bool) {
 		return m.ScopeName()
 	case scan.FieldScopeID:
 		return m.ScopeID()
+	case scan.FieldDocumentKindName:
+		return m.DocumentKindName()
+	case scan.FieldDocumentKindID:
+		return m.DocumentKindID()
 	case scan.FieldTarget:
 		return m.Target()
 	case scan.FieldScanType:
@@ -219397,6 +219535,10 @@ func (m *ScanMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldScopeName(ctx)
 	case scan.FieldScopeID:
 		return m.OldScopeID(ctx)
+	case scan.FieldDocumentKindName:
+		return m.OldDocumentKindName(ctx)
+	case scan.FieldDocumentKindID:
+		return m.OldDocumentKindID(ctx)
 	case scan.FieldTarget:
 		return m.OldTarget(ctx)
 	case scan.FieldScanType:
@@ -219600,6 +219742,20 @@ func (m *ScanMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetScopeID(v)
 		return nil
+	case scan.FieldDocumentKindName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDocumentKindName(v)
+		return nil
+	case scan.FieldDocumentKindID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDocumentKindID(v)
+		return nil
 	case scan.FieldTarget:
 		v, ok := value.(string)
 		if !ok {
@@ -219793,6 +219949,12 @@ func (m *ScanMutation) ClearedFields() []string {
 	if m.FieldCleared(scan.FieldScopeID) {
 		fields = append(fields, scan.FieldScopeID)
 	}
+	if m.FieldCleared(scan.FieldDocumentKindName) {
+		fields = append(fields, scan.FieldDocumentKindName)
+	}
+	if m.FieldCleared(scan.FieldDocumentKindID) {
+		fields = append(fields, scan.FieldDocumentKindID)
+	}
 	if m.FieldCleared(scan.FieldMetadata) {
 		fields = append(fields, scan.FieldMetadata)
 	}
@@ -219906,6 +220068,12 @@ func (m *ScanMutation) ClearField(name string) error {
 	case scan.FieldScopeID:
 		m.ClearScopeID()
 		return nil
+	case scan.FieldDocumentKindName:
+		m.ClearDocumentKindName()
+		return nil
+	case scan.FieldDocumentKindID:
+		m.ClearDocumentKindID()
+		return nil
 	case scan.FieldMetadata:
 		m.ClearMetadata()
 		return nil
@@ -220013,6 +220181,12 @@ func (m *ScanMutation) ResetField(name string) error {
 	case scan.FieldScopeID:
 		m.ResetScopeID()
 		return nil
+	case scan.FieldDocumentKindName:
+		m.ResetDocumentKindName()
+		return nil
+	case scan.FieldDocumentKindID:
+		m.ResetDocumentKindID()
+		return nil
 	case scan.FieldTarget:
 		m.ResetTarget()
 		return nil
@@ -220058,7 +220232,7 @@ func (m *ScanMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ScanMutation) AddedEdges() []string {
-	edges := make([]string, 0, 26)
+	edges := make([]string, 0, 27)
 	if m.owner != nil {
 		edges = append(edges, scan.EdgeOwner)
 	}
@@ -220091,6 +220265,9 @@ func (m *ScanMutation) AddedEdges() []string {
 	}
 	if m.scope != nil {
 		edges = append(edges, scan.EdgeScope)
+	}
+	if m.document_kind != nil {
+		edges = append(edges, scan.EdgeDocumentKind)
 	}
 	if m.assets != nil {
 		edges = append(edges, scan.EdgeAssets)
@@ -220192,6 +220369,10 @@ func (m *ScanMutation) AddedIDs(name string) []ent.Value {
 		if id := m.scope; id != nil {
 			return []ent.Value{*id}
 		}
+	case scan.EdgeDocumentKind:
+		if id := m.document_kind; id != nil {
+			return []ent.Value{*id}
+		}
 	case scan.EdgeAssets:
 		ids := make([]ent.Value, 0, len(m.assets))
 		for id := range m.assets {
@@ -220282,7 +220463,7 @@ func (m *ScanMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ScanMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 26)
+	edges := make([]string, 0, 27)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, scan.EdgeBlockedGroups)
 	}
@@ -220422,7 +220603,7 @@ func (m *ScanMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ScanMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 26)
+	edges := make([]string, 0, 27)
 	if m.clearedowner {
 		edges = append(edges, scan.EdgeOwner)
 	}
@@ -220455,6 +220636,9 @@ func (m *ScanMutation) ClearedEdges() []string {
 	}
 	if m.clearedscope {
 		edges = append(edges, scan.EdgeScope)
+	}
+	if m.cleareddocument_kind {
+		edges = append(edges, scan.EdgeDocumentKind)
 	}
 	if m.clearedassets {
 		edges = append(edges, scan.EdgeAssets)
@@ -220530,6 +220714,8 @@ func (m *ScanMutation) EdgeCleared(name string) bool {
 		return m.clearedenvironment
 	case scan.EdgeScope:
 		return m.clearedscope
+	case scan.EdgeDocumentKind:
+		return m.cleareddocument_kind
 	case scan.EdgeAssets:
 		return m.clearedassets
 	case scan.EdgeEntities:
@@ -220595,6 +220781,9 @@ func (m *ScanMutation) ClearEdge(name string) error {
 	case scan.EdgeScope:
 		m.ClearScope()
 		return nil
+	case scan.EdgeDocumentKind:
+		m.ClearDocumentKind()
+		return nil
 	case scan.EdgeGeneratedByPlatform:
 		m.ClearGeneratedByPlatform()
 		return nil
@@ -220644,6 +220833,9 @@ func (m *ScanMutation) ResetEdge(name string) error {
 		return nil
 	case scan.EdgeScope:
 		m.ResetScope()
+		return nil
+	case scan.EdgeDocumentKind:
+		m.ResetDocumentKind()
 		return nil
 	case scan.EdgeAssets:
 		m.ResetAssets()

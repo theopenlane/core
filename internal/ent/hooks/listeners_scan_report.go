@@ -9,10 +9,10 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
-	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/gemini"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/pkg/docextract/soc2"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
@@ -38,6 +39,8 @@ func init() { registerListeners(ReportScanListeners) }
 // ReportScanListeners submits pending report scans to the parser
 func ReportScanListeners() []gala.Registration {
 	return []gala.Registration{
+		// on creation of report_scan of status pending and performed by the openlane_report_parse
+		// kick off the job to begin the scan
 		entityops.MutationListener{
 			Schema:     entityops.SchemaScan,
 			Operations: []string{entityops.OpCreate},
@@ -48,14 +51,17 @@ func ReportScanListeners() []gala.Registration {
 			},
 			Handle: entityops.RequireDep(handleScanReportCreated),
 		},
+		// on scan update when the status is completed and is a report parse, send both an in-app and email notification
 		entityops.MutationListener{
 			Concern:    entityops.MutationConcernNotification,
 			Schema:     entityops.SchemaScan,
 			Operations: []string{entityops.OpUpdate, entityops.OpUpdateOne},
 			Fields:     []string{scan.FieldStatus},
 			Match:      []entityops.FieldMatch{{Field: scan.FieldStatus, In: []string{string(enums.ScanStatusCompleted)}}},
-			RowMatch:   reportScanRowMatch,
-			Caller:     internalCaller,
+			RowMatch:   reportScanRowMatchForKind(soc2.KindName),
+			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+				return restored.WithCapabilities(auth.CapInternalOperation)
+			},
 			Notify: &entityops.NotifySpec{
 				Recipients: entityops.RecipientsFromField(scan.FieldCreatedBy),
 				Content: entityops.NotificationContent{
@@ -69,15 +75,19 @@ func ReportScanListeners() []gala.Registration {
 				Email: entityops.EmailVia(email.DefinitionID, email.BrandedMessageOp, reportScanCompletedEmail).Batched(),
 			},
 		},
+		// on update when the status is completed, upload the report to the trust center as a not visible document so it can be added to the trust center by the user later
 		entityops.MutationListener{
 			Schema:     entityops.SchemaScan,
 			Operations: []string{entityops.OpUpdate, entityops.OpUpdateOne},
 			Fields:     []string{scan.FieldStatus},
 			Match:      []entityops.FieldMatch{{Field: scan.FieldStatus, In: []string{string(enums.ScanStatusCompleted)}}},
-			RowMatch:   reportScanRowMatch,
-			Caller:     internalCaller,
-			Handle:     handleScanReportCompleted,
+			RowMatch:   reportScanRowMatchForKind(soc2.KindName),
+			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+				return restored.WithCapabilities(auth.CapInternalOperation)
+			},
+			Handle: handleScanReportSOC2Completed,
 		},
+		// on scan update when the status fails, send scan failure notification and email
 		entityops.MutationListener{
 			Concern:    entityops.MutationConcernNotification,
 			Schema:     entityops.SchemaScan,
@@ -85,7 +95,9 @@ func ReportScanListeners() []gala.Registration {
 			Fields:     []string{scan.FieldStatus},
 			Match:      []entityops.FieldMatch{{Field: scan.FieldStatus, In: []string{string(enums.ScanStatusFailed)}}},
 			RowMatch:   reportScanRowMatch,
-			Caller:     internalCaller,
+			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+				return restored.WithCapabilities(auth.CapInternalOperation)
+			},
 			Notify: &entityops.NotifySpec{
 				Recipients: entityops.RecipientsFromField(scan.FieldCreatedBy),
 				Content: entityops.NotificationContent{
@@ -127,7 +139,7 @@ func reportSummaryTables(row json.RawMessage) []email.MessageTable {
 		return nil
 	}
 
-	summary, _ := metadata[gemini.SummaryMetadataKey].(map[string]any)
+	summary := gemini.ReportSummary(metadata)
 	if len(summary) == 0 {
 		return nil
 	}
@@ -138,15 +150,14 @@ func reportSummaryTables(row json.RawMessage) []email.MessageTable {
 	rows := make([][]string, 0, len(sections))
 
 	for _, section := range sections {
-		entry, _ := summary[section].(map[string]any)
-		count, _ := entry["count"].(float64)
-		status, _ := entry["status"].(string)
+		entry := summary[section]
 
-		if message, ok := entry["error"].(string); ok && message != "" {
-			status += ", " + message
+		status := string(entry.Status)
+		if entry.Error != "" {
+			status += ", " + entry.Error
 		}
 
-		rows = append(rows, []string{section, strconv.Itoa(int(count)), status})
+		rows = append(rows, []string{section, strconv.Itoa(entry.Count), status})
 	}
 
 	return []email.MessageTable{{
@@ -190,15 +201,20 @@ var reportScanRowMatch = []entityops.FieldMatch{
 	{Field: scan.FieldPerformedBy, In: []string{gemini.PerformedBy}},
 }
 
-// internalCaller grants the internal-operation capability so the listener passes privacy
-func internalCaller(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-	return restored.WithCapabilities(auth.CapInternalOperation)
+// reportScanRowMatchForKind narrows the report scan gate to a report the given document kind
+// accepted, so each kind carries its own listeners and copy; the kind is recorded when the upload is
+// validated, so a row that never passed validation fails the match
+func reportScanRowMatchForKind(kind string) []entityops.FieldMatch {
+	return slices.Concat(reportScanRowMatch, []entityops.FieldMatch{
+		{Field: scan.FieldDocumentKindName, In: []string{kind}},
+	})
 }
 
-// handleScanReportCompleted files the parsed report as a not-visible trust center document so the
-// organization's own report is on hand once its controls and reviews are imported; organizations
-// without the trust center module or a trust center are skipped
-func handleScanReportCompleted(inv entityops.Invocation, _ entityops.MutationPayload) error {
+// handleScanReportSOC2Completed files the parsed SOC 2 report as a not-visible trust center document
+// so the organization's own report is on hand once its controls and reviews are imported; the
+// listener gates on the document kind, so organizations without the trust center module or a trust
+// center are the only ones skipped here
+func handleScanReportSOC2Completed(inv entityops.Invocation, _ entityops.MutationPayload) error {
 	ctx := logx.WithFields(inv.Context, map[string]any{"scan_id": inv.EntityID})
 
 	if utils.ModulesEnabled(inv.Client) {
@@ -230,7 +246,7 @@ func handleScanReportCompleted(inv entityops.Invocation, _ entityops.MutationPay
 		return err
 	}
 
-	reportFile, err := inv.Client.Scan.QueryFiles(scanRecord).Where(file.DetectedContentTypeEQ(pdftext.ContentType)).First(ctx)
+	reportFileID, err := reportScanFileID(ctx, inv.Client, scanRecord)
 	if err != nil {
 		return err
 	}
@@ -238,7 +254,7 @@ func handleScanReportCompleted(inv entityops.Invocation, _ entityops.MutationPay
 	create := inv.Client.TrustCenterDoc.Create().
 		SetTrustCenterID(trustCenterID).
 		SetTitle("SOC 2 Report").
-		SetOriginalFileID(reportFile.ID).
+		SetOriginalFileID(reportFileID).
 		SetTags([]string{"soc2"}).
 		SetTrustCenterDocKindName("compliance").
 		SetVisibility(enums.TrustCenterDocumentVisibilityNotVisible)
@@ -247,17 +263,33 @@ func handleScanReportCompleted(inv entityops.Invocation, _ entityops.MutationPay
 		create.SetStandardID(standardID)
 	}
 
-	doc, err := create.Save(ctx)
-	if err != nil {
+	if err = create.Exec(ctx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("report scan: trust center document failed to be created")
-
-		return nil
 	}
-
-	logx.FromContext(ctx).Debug().Str("trust_center_doc_id", doc.ID).Msg("report scan: trust center document created")
 
 	return nil
 }
+
+// reportScanFileID is the file the report was parsed from, taken from the id recorded at submit and
+// falling back to the oldest attached pdf for scans submitted before the id was recorded
+func reportScanFileID(ctx context.Context, client *generated.Client, scanRecord *generated.Scan) (string, error) {
+	if fileID, ok := gemini.ReportFileID(scanRecord.Metadata); ok {
+		return fileID, nil
+	}
+
+	reportFile, err := client.Scan.QueryFiles(scanRecord).
+		Where(file.DetectedContentTypeEQ(pdftext.ContentType)).
+		Order(file.ByCreatedAt(), file.ByID()).
+		First(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	return reportFile.ID, nil
+}
+
+// soc2Framework is the framework identifier of the system SOC 2 standard
+const soc2Framework = "soc2"
 
 // soc2StandardID resolves the latest active system SOC 2 standard, reporting false when none exists
 func soc2StandardID(ctx context.Context, client *generated.Client) (string, bool) {
@@ -265,6 +297,7 @@ func soc2StandardID(ctx context.Context, client *generated.Client) (string, bool
 		Where(
 			standard.FrameworkEQ(soc2Framework),
 			standard.StatusEQ(enums.StandardActive),
+			standard.IsPublic(true),
 			standard.SystemOwned(true),
 		).
 		Order(standard.ByVersion(sql.OrderDesc()), standard.ByID()).
@@ -276,12 +309,8 @@ func soc2StandardID(ctx context.Context, client *generated.Client) (string, bool
 	return standardID, true
 }
 
-// soc2Framework is the framework key of the system SOC 2 standard
-const soc2Framework = "soc2"
-
 // handleScanReportCreated runs the parse request for a newly created report-type scan inline so the
-// operation's per-organization rate limit is applied here; a rejected scan is marked failed with the
-// cause rather than left pending
+// operation's per-organization rate limit is applied here
 func handleScanReportCreated(inv entityops.Invocation, _ entityops.MutationPayload, rt *intruntime.Runtime) error {
 	scanRecord, ok, err := entityops.LoadEntity(inv.Context, inv.EntityID, inv.Client.Scan.Get)
 	if err != nil || !ok {

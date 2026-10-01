@@ -438,6 +438,46 @@ func (_u *ScanUpdate) ClearScopeID() *ScanUpdate {
 	return _u
 }
 
+// SetDocumentKindName sets the "document_kind_name" field.
+func (_u *ScanUpdate) SetDocumentKindName(v string) *ScanUpdate {
+	_u.mutation.SetDocumentKindName(v)
+	return _u
+}
+
+// SetNillableDocumentKindName sets the "document_kind_name" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableDocumentKindName(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetDocumentKindName(*v)
+	}
+	return _u
+}
+
+// ClearDocumentKindName clears the value of the "document_kind_name" field.
+func (_u *ScanUpdate) ClearDocumentKindName() *ScanUpdate {
+	_u.mutation.ClearDocumentKindName()
+	return _u
+}
+
+// SetDocumentKindID sets the "document_kind_id" field.
+func (_u *ScanUpdate) SetDocumentKindID(v string) *ScanUpdate {
+	_u.mutation.SetDocumentKindID(v)
+	return _u
+}
+
+// SetNillableDocumentKindID sets the "document_kind_id" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableDocumentKindID(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetDocumentKindID(*v)
+	}
+	return _u
+}
+
+// ClearDocumentKindID clears the value of the "document_kind_id" field.
+func (_u *ScanUpdate) ClearDocumentKindID() *ScanUpdate {
+	_u.mutation.ClearDocumentKindID()
+	return _u
+}
+
 // SetTarget sets the "target" field.
 func (_u *ScanUpdate) SetTarget(v string) *ScanUpdate {
 	_u.mutation.SetTarget(v)
@@ -718,6 +758,11 @@ func (_u *ScanUpdate) SetEnvironment(v *CustomTypeEnum) *ScanUpdate {
 // SetScope sets the "scope" edge to the CustomTypeEnum entity.
 func (_u *ScanUpdate) SetScope(v *CustomTypeEnum) *ScanUpdate {
 	return _u.SetScopeID(v.ID)
+}
+
+// SetDocumentKind sets the "document_kind" edge to the CustomTypeEnum entity.
+func (_u *ScanUpdate) SetDocumentKind(v *CustomTypeEnum) *ScanUpdate {
+	return _u.SetDocumentKindID(v.ID)
 }
 
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
@@ -1007,6 +1052,12 @@ func (_u *ScanUpdate) ClearEnvironment() *ScanUpdate {
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *ScanUpdate) ClearScope() *ScanUpdate {
 	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearDocumentKind clears the "document_kind" edge to the CustomTypeEnum entity.
+func (_u *ScanUpdate) ClearDocumentKind() *ScanUpdate {
+	_u.mutation.ClearDocumentKind()
 	return _u
 }
 
@@ -1451,6 +1502,12 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(scan.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.DocumentKindName(); ok {
+		_spec.SetField(scan.FieldDocumentKindName, field.TypeString, value)
+	}
+	if _u.mutation.DocumentKindNameCleared() {
+		_spec.ClearField(scan.FieldDocumentKindName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Target(); ok {
 		_spec.SetField(scan.FieldTarget, field.TypeString, value)
 	}
@@ -1813,6 +1870,35 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Inverse: false,
 			Table:   scan.ScopeTable,
 			Columns: []string{scan.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DocumentKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.DocumentKindTable,
+			Columns: []string{scan.DocumentKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DocumentKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.DocumentKindTable,
+			Columns: []string{scan.DocumentKindColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
@@ -2862,6 +2948,46 @@ func (_u *ScanUpdateOne) ClearScopeID() *ScanUpdateOne {
 	return _u
 }
 
+// SetDocumentKindName sets the "document_kind_name" field.
+func (_u *ScanUpdateOne) SetDocumentKindName(v string) *ScanUpdateOne {
+	_u.mutation.SetDocumentKindName(v)
+	return _u
+}
+
+// SetNillableDocumentKindName sets the "document_kind_name" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableDocumentKindName(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetDocumentKindName(*v)
+	}
+	return _u
+}
+
+// ClearDocumentKindName clears the value of the "document_kind_name" field.
+func (_u *ScanUpdateOne) ClearDocumentKindName() *ScanUpdateOne {
+	_u.mutation.ClearDocumentKindName()
+	return _u
+}
+
+// SetDocumentKindID sets the "document_kind_id" field.
+func (_u *ScanUpdateOne) SetDocumentKindID(v string) *ScanUpdateOne {
+	_u.mutation.SetDocumentKindID(v)
+	return _u
+}
+
+// SetNillableDocumentKindID sets the "document_kind_id" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableDocumentKindID(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetDocumentKindID(*v)
+	}
+	return _u
+}
+
+// ClearDocumentKindID clears the value of the "document_kind_id" field.
+func (_u *ScanUpdateOne) ClearDocumentKindID() *ScanUpdateOne {
+	_u.mutation.ClearDocumentKindID()
+	return _u
+}
+
 // SetTarget sets the "target" field.
 func (_u *ScanUpdateOne) SetTarget(v string) *ScanUpdateOne {
 	_u.mutation.SetTarget(v)
@@ -3142,6 +3268,11 @@ func (_u *ScanUpdateOne) SetEnvironment(v *CustomTypeEnum) *ScanUpdateOne {
 // SetScope sets the "scope" edge to the CustomTypeEnum entity.
 func (_u *ScanUpdateOne) SetScope(v *CustomTypeEnum) *ScanUpdateOne {
 	return _u.SetScopeID(v.ID)
+}
+
+// SetDocumentKind sets the "document_kind" edge to the CustomTypeEnum entity.
+func (_u *ScanUpdateOne) SetDocumentKind(v *CustomTypeEnum) *ScanUpdateOne {
+	return _u.SetDocumentKindID(v.ID)
 }
 
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
@@ -3431,6 +3562,12 @@ func (_u *ScanUpdateOne) ClearEnvironment() *ScanUpdateOne {
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *ScanUpdateOne) ClearScope() *ScanUpdateOne {
 	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearDocumentKind clears the "document_kind" edge to the CustomTypeEnum entity.
+func (_u *ScanUpdateOne) ClearDocumentKind() *ScanUpdateOne {
+	_u.mutation.ClearDocumentKind()
 	return _u
 }
 
@@ -3905,6 +4042,12 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(scan.FieldScopeName, field.TypeString)
 	}
+	if value, ok := _u.mutation.DocumentKindName(); ok {
+		_spec.SetField(scan.FieldDocumentKindName, field.TypeString, value)
+	}
+	if _u.mutation.DocumentKindNameCleared() {
+		_spec.ClearField(scan.FieldDocumentKindName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Target(); ok {
 		_spec.SetField(scan.FieldTarget, field.TypeString, value)
 	}
@@ -4267,6 +4410,35 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 			Inverse: false,
 			Table:   scan.ScopeTable,
 			Columns: []string{scan.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DocumentKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.DocumentKindTable,
+			Columns: []string{scan.DocumentKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DocumentKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.DocumentKindTable,
+			Columns: []string{scan.DocumentKindColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),

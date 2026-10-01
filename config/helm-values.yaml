@@ -791,7 +791,6 @@ coreConfiguration:
       enabled: false  # @schema type:boolean; default:false
       workercount: 10  # @schema type:integer; default:10
       maxretries: 5  # @schema type:integer; default:5
-      jobtimeout: "15m0s"  # @schema type:integer; default:15m
       failonenqueueerror: false  # @schema type:boolean; default:false
       queuename: "events"  # @schema type:string; default:events
   # -- Cloudflare contains configuration for Cloudflare integration

@@ -2774,6 +2774,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scan.FieldEnvironmentID:              {Type: field.TypeString, Column: scan.FieldEnvironmentID},
 			scan.FieldScopeName:                  {Type: field.TypeString, Column: scan.FieldScopeName},
 			scan.FieldScopeID:                    {Type: field.TypeString, Column: scan.FieldScopeID},
+			scan.FieldDocumentKindName:           {Type: field.TypeString, Column: scan.FieldDocumentKindName},
+			scan.FieldDocumentKindID:             {Type: field.TypeString, Column: scan.FieldDocumentKindID},
 			scan.FieldTarget:                     {Type: field.TypeString, Column: scan.FieldTarget},
 			scan.FieldScanType:                   {Type: field.TypeEnum, Column: scan.FieldScanType},
 			scan.FieldMetadata:                   {Type: field.TypeJSON, Column: scan.FieldMetadata},
@@ -15387,6 +15389,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Inverse: false,
 			Table:   scan.ScopeTable,
 			Columns: []string{scan.ScopeColumn},
+			Bidi:    false,
+		},
+		"Scan",
+		"CustomTypeEnum",
+	)
+	graph.MustAddE(
+		"document_kind",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.DocumentKindTable,
+			Columns: []string{scan.DocumentKindColumn},
 			Bidi:    false,
 		},
 		"Scan",
@@ -43920,6 +43934,16 @@ func (f *ScanFilter) WhereScopeID(p entql.StringP) {
 	f.Where(p.Field(scan.FieldScopeID))
 }
 
+// WhereDocumentKindName applies the entql string predicate on the document_kind_name field.
+func (f *ScanFilter) WhereDocumentKindName(p entql.StringP) {
+	f.Where(p.Field(scan.FieldDocumentKindName))
+}
+
+// WhereDocumentKindID applies the entql string predicate on the document_kind_id field.
+func (f *ScanFilter) WhereDocumentKindID(p entql.StringP) {
+	f.Where(p.Field(scan.FieldDocumentKindID))
+}
+
 // WhereTarget applies the entql string predicate on the target field.
 func (f *ScanFilter) WhereTarget(p entql.StringP) {
 	f.Where(p.Field(scan.FieldTarget))
@@ -44133,6 +44157,20 @@ func (f *ScanFilter) WhereHasScope() {
 // WhereHasScopeWith applies a predicate to check if query has an edge scope with a given conditions (other predicates).
 func (f *ScanFilter) WhereHasScopeWith(preds ...predicate.CustomTypeEnum) {
 	f.Where(entql.HasEdgeWith("scope", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDocumentKind applies a predicate to check if query has an edge document_kind.
+func (f *ScanFilter) WhereHasDocumentKind() {
+	f.Where(entql.HasEdge("document_kind"))
+}
+
+// WhereHasDocumentKindWith applies a predicate to check if query has an edge document_kind with a given conditions (other predicates).
+func (f *ScanFilter) WhereHasDocumentKindWith(preds ...predicate.CustomTypeEnum) {
+	f.Where(entql.HasEdgeWith("document_kind", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
