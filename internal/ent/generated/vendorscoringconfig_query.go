@@ -607,6 +607,7 @@ func (_q *VendorScoringConfigQuery) sqlQuery(ctx context.Context) *sql.Selector 
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
+	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}
