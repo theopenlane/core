@@ -20,6 +20,9 @@ import (
 	"github.com/theopenlane/core/common/models"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
+	"github.com/theopenlane/core/v2/internal/ent/notifications"
+	"github.com/theopenlane/core/v2/internal/graphapi"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
@@ -379,6 +382,119 @@ func TestQueryTasks(t *testing.T) {
 
 func getFutureDate() time.Time {
 	return gofakeit.DateRange(time.Now(), time.Now().AddDate(1, 0, 0)).Truncate(time.Second)
+}
+
+func TestTaskNotifications(t *testing.T) {
+	listener, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, notifications.Listeners())
+	assert.NilError(t, err)
+
+	org := suite.SeedFreshOrgUsers(t)
+
+	t.Cleanup(func() {
+		listener.Teardown()
+		th.CleanupOrganizationDataWithContext(org.Owner.UserCtx, t)
+	})
+
+	owner := org.Owner
+
+	originalAssignee := org.Member
+	nextAssignee := org.Admin
+
+	calculateNotificationCount := func(ctx context.Context, userID string) int {
+		t.Helper()
+
+		count, err := suite.Client.DB.Notification.Query().
+			Where(
+				notification.UserIDEQ(userID),
+				notification.TopicEQ(enums.NotificationTopicTaskAssignment),
+			).
+			Count(ctx)
+		assert.NilError(t, err)
+
+		return count
+	}
+
+	waitForNotification := func(ctx context.Context, userID string, expected int) {
+		t.Helper()
+		deadline := time.Now().Add(5 * time.Second)
+		for time.Now().Before(deadline) {
+			if calculateNotificationCount(ctx, userID) == expected {
+				return
+			}
+
+			time.Sleep(100 * time.Millisecond)
+		}
+
+		assert.Equal(t, calculateNotificationCount(ctx, userID), expected)
+	}
+
+	var taskID string
+
+	// creating the task should notify the original assignee
+	response, err := suite.Client.API.CreateTask(owner.UserCtx, testclient.CreateTaskInput{
+		Title:      "Here is a new task",
+		Details:    lo.ToPtr("Here is the details of the task"),
+		AssigneeID: &originalAssignee.ID,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, response != nil)
+	taskID = response.CreateTask.Task.ID
+
+	waitForNotification(originalAssignee.UserCtx, originalAssignee.ID, 1)
+	assert.Equal(t, calculateNotificationCount(nextAssignee.UserCtx, nextAssignee.ID), 0)
+
+	var taskInReviewID string
+
+	for _, status := range []enums.TaskStatus{enums.TaskStatusInProgress, enums.TaskStatusInReview} {
+		newTask, err := suite.Client.API.CreateTask(owner.UserCtx, testclient.CreateTaskInput{
+			Title:      "Test with status apart from open",
+			Details:    lo.ToPtr("Verify active task assignment notifications"),
+			Status:     &status,
+			AssigneeID: &originalAssignee.ID,
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, newTask != nil)
+
+		if status == enums.TaskStatusInReview {
+			taskInReviewID = newTask.CreateTask.Task.ID
+		}
+
+	}
+	waitForNotification(originalAssignee.UserCtx, originalAssignee.ID, 3)
+
+	// if a task that is in review gets reassigned without passing in the status, the new assignee must get a new notification too
+	_, err = suite.Client.API.UpdateTask(owner.UserCtx, taskInReviewID, testclient.UpdateTaskInput{
+		AssigneeID: &nextAssignee.ID,
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, calculateNotificationCount(originalAssignee.UserCtx, originalAssignee.ID), 3)
+	waitForNotification(nextAssignee.UserCtx, nextAssignee.ID, 1)
+
+	// updating fields should not create another notification for the assignee.
+	_, err = suite.Client.API.UpdateTask(owner.UserCtx, taskID, testclient.UpdateTaskInput{
+		Details: lo.ToPtr("Updated task details to check notifications"),
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, calculateNotificationCount(originalAssignee.UserCtx, originalAssignee.ID), 3)
+
+	// even status changes should not create another notification.
+	for _, status := range []enums.TaskStatus{enums.TaskStatusInProgress, enums.TaskStatusOpen} {
+		_, err = suite.Client.API.UpdateTask(owner.UserCtx, taskID, testclient.UpdateTaskInput{
+			Status: &status,
+		})
+		assert.NilError(t, err)
+		assert.Equal(t, calculateNotificationCount(originalAssignee.UserCtx, originalAssignee.ID), 3)
+	}
+
+	// but reassigning to a new user should make notify the new assignee.
+	_, err = suite.Client.API.UpdateTask(owner.UserCtx, taskID, testclient.UpdateTaskInput{
+		AssigneeID: &nextAssignee.ID,
+		Status:     lo.ToPtr(enums.TaskStatusOpen),
+	})
+	assert.NilError(t, err)
+
+	assert.Equal(t, calculateNotificationCount(originalAssignee.UserCtx, originalAssignee.ID), 3)
+	waitForNotification(nextAssignee.UserCtx, nextAssignee.ID, 2)
 }
 
 func TestQueryTasksPaginationDueDate(t *testing.T) {
