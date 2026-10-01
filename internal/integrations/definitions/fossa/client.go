@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/httpsling/httpclient"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 const (
@@ -61,6 +62,8 @@ func (c *APIClient) get(ctx context.Context, path string, params map[string]stri
 	}
 
 	if resp == nil {
+		logx.FromContext(ctx).Error().Err(err).Str("path", path).Msg("fossa: request failed with no response")
+
 		return ErrAPIRequest
 	}
 
@@ -69,6 +72,8 @@ func (c *APIClient) get(ctx context.Context, path string, params map[string]stri
 	}
 
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("path", path).Int("status", resp.StatusCode).Msg("fossa: unable to decode response")
+
 		return ErrAPIRequest
 	}
 
