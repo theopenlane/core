@@ -64,11 +64,38 @@ func Listeners() []gala.Registration {
 
 	return append(regs,
 		entityops.MutationListener{
-			Concern: entityops.MutationConcernNotification,
-			Schema:  entityops.SchemaTask,
-			Fields:  []string{task.FieldAssigneeID},
-			Caller:  notificationCaller,
-			Handle:  handleTaskMutation,
+			Concern:    entityops.MutationConcernNotification,
+			Schema:     entityops.SchemaTask,
+			Operations: []string{entityops.OpCreate, entityops.OpUpdate, entityops.OpUpdateOne},
+			Fields:     []string{task.FieldAssigneeID},
+			// only trigger notification if assignee changes
+			Match: []entityops.FieldMatch{
+				{
+					Field:  task.FieldAssigneeID,
+					In:     []string{""},
+					Negate: true,
+				},
+			},
+			RowMatch: []entityops.FieldMatch{
+				{
+					Field: task.FieldStatus,
+					In: []string{
+						string(enums.TaskStatusOpen),
+						string(enums.TaskStatusInProgress),
+						string(enums.TaskStatusInReview),
+					},
+				},
+			},
+			Caller: notificationCaller,
+			Notify: &entityops.NotifySpec{
+				Recipients: entityops.RecipientsFromField(task.FieldAssigneeID),
+				Content: entityops.NotificationContent{
+					Type:          enums.NotificationTypeUser,
+					Topic:         enums.NotificationTopicTaskAssignment,
+					TitleTemplate: "New task assigned",
+					BodyTemplate:  "Task {{ .Name }} has been assigned to you",
+				},
+			},
 		},
 		entityops.MutationListener{
 			Concern: entityops.MutationConcernNotification,
