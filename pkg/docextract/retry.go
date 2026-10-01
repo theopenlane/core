@@ -2,10 +2,7 @@ package docextract
 
 import (
 	"math/rand/v2"
-	"strings"
 	"time"
-
-	"google.golang.org/genai"
 )
 
 const (
@@ -13,8 +10,6 @@ const (
 	quotaBaseDelay = 20 * time.Second
 	// maxQuotaDelay caps the quota backoff
 	maxQuotaDelay = 5 * time.Minute
-	// retryInfoType is the error detail carrying the delay the api asks callers to wait
-	retryInfoType = "type.googleapis.com/google.rpc.RetryInfo"
 )
 
 // generationRetry describes a generation that should be re-requested
@@ -26,42 +21,6 @@ type generationRetry struct {
 	quota bool
 	// after is the delay the api asked for, zero when it supplied none
 	after time.Duration
-}
-
-// retryFor builds the advice for an api error, reporting false when the error is not retryable
-func retryFor(apiErr genai.APIError) (generationRetry, bool) {
-	if !isRetryableStatus(apiErr.Status) {
-		return generationRetry{}, false
-	}
-
-	return generationRetry{
-		needed: true,
-		quota:  strings.EqualFold(apiErr.Status, statusResourceExhausted),
-		after:  retryInfoDelay(apiErr.Details),
-	}, true
-}
-
-// retryInfoDelay reads the delay google returns alongside a quota rejection
-func retryInfoDelay(details []map[string]any) time.Duration {
-	for _, detail := range details {
-		if kind, _ := detail["@type"].(string); kind != retryInfoType {
-			continue
-		}
-
-		delay, ok := detail["retryDelay"].(string)
-		if !ok {
-			continue
-		}
-
-		parsed, err := time.ParseDuration(delay)
-		if err != nil {
-			continue
-		}
-
-		return parsed
-	}
-
-	return 0
 }
 
 // wait reports how long to pause before the next attempt; a quota rejection backs off

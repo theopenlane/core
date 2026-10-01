@@ -1,46 +1,46 @@
 package schema
 
-import "google.golang.org/genai"
+import "github.com/theopenlane/core/v2/pkg/docextract"
 
-var FindingSchema = &genai.Schema{
-	Type: genai.TypeObject,
-	Properties: map[string]*genai.Schema{
+var FindingSchema = &docextract.Schema{
+	Type: docextract.TypeObject,
+	Properties: map[string]*docextract.Schema{
 		"findings": {
-			Type: genai.TypeArray,
-			Items: &genai.Schema{
-				Type: genai.TypeObject,
-				Properties: map[string]*genai.Schema{
+			Type: docextract.TypeArray,
+			Items: &docextract.Schema{
+				Type: docextract.TypeObject,
+				Properties: map[string]*docextract.Schema{
 					"open": {
-						Type: genai.TypeBoolean,
+						Type: docextract.TypeBoolean,
 					},
 					"description": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"severity": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"high", "medium", "low"},
 					},
 					"source": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"reported_at": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"reporter": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"refCodes": {
-						Type: genai.TypeArray,
-						Items: &genai.Schema{
-							Type: genai.TypeString,
+						Type: docextract.TypeArray,
+						Items: &docextract.Schema{
+							Type: docextract.TypeString,
 						},
 					},
 					"testDetails": {
-						Type:        genai.TypeString,
+						Type:        docextract.TypeString,
 						Description: "The verbatim text of the test procedure printed in the same table row as this exception, copied exactly and not summarized",
 					},
 					"environmentName": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"production"},
 					},
 				},

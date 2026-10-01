@@ -7,12 +7,14 @@ import (
 	"time"
 
 	"entgo.io/ent"
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/gemini"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 )
@@ -22,6 +24,10 @@ var (
 	ErrReportScanFileRequired = errors.New("scan must include a PDF report")
 	// ErrScanOriginUnresolved is returned when a scan is created without a caller to derive its origin from
 	ErrScanOriginUnresolved = errors.New("scan origin could not be determined from the caller")
+	// ErrReportScanSingleFile is returned when more than one PDF report is attached to a report scan
+	ErrReportScanSingleFile = errors.New("a report scan may only have one PDF report attached")
+	// ErrReportScanFileImmutable is returned when the report is changed after parsing has started
+	ErrReportScanFileImmutable = errors.New("the report cannot be changed once the scan has left pending")
 )
 
 // scanDateTypes are the scan types that run once when they are submitted, so the submit time is
@@ -48,7 +54,8 @@ func HookScanDefaults() ent.Hook {
 	}, ent.OpCreate)
 }
 
-// HookScanFiles runs on scan mutations to attach uploaded files
+// HookScanFiles runs on scan mutations to attach uploaded files, holding a report scan to a single
+// report that cannot be swapped once parsing has started
 func HookScanFiles() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.ScanFunc(func(ctx context.Context, m *generated.ScanMutation) (generated.Value, error) {
@@ -57,10 +64,15 @@ func HookScanFiles() ent.Hook {
 			}
 
 			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
+
+			if err := checkReportScanFiles(ctx, m, fileIDs); err != nil {
+				return nil, err
+			}
+
 			if len(fileIDs) > 0 {
 				var err error
 
-				ctx, err = pkgobjects.ProcessFilesForMutation(ctx, m, gemini.FileUploadKey)
+				ctx, err = pkgobjects.ProcessFilesForMutation(ctx, m, "scanFiles")
 				if err != nil {
 					return nil, err
 				}
@@ -93,6 +105,77 @@ func HookScanReportSubmit() ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate)
+}
+
+// checkReportScanFiles holds a report scan to one attached report and rejects a file change once
+// the scan has left pending; fileIDs are the uploads carried on the request context
+func checkReportScanFiles(ctx context.Context, m *generated.ScanMutation, fileIDs []string) error {
+	attached := lo.Union(fileIDs, m.FilesIDs())
+
+	if m.Op().Is(ent.OpCreate) {
+		if isReportScanMutation(m) && len(attached) > 1 {
+			return ErrReportScanSingleFile
+		}
+
+		return nil
+	}
+
+	if len(attached) == 0 && len(m.RemovedFilesIDs()) == 0 && !m.FilesCleared() {
+		return nil
+	}
+
+	ids, err := getMutationIDs(ctx, m)
+	if err != nil {
+		return err
+	}
+
+	reportScans, err := m.Client().Scan.Query().
+		Where(
+			scan.IDIn(ids...),
+			scan.ScanTypeEQ(enums.ScanTypeReport),
+			scan.PerformedBy(gemini.PerformedBy),
+		).
+		Select(scan.FieldID, scan.FieldStatus).
+		All(ctx)
+	if err != nil {
+		return err
+	}
+
+	for _, reportScan := range reportScans {
+		if reportScan.Status != enums.ScanStatusPending {
+			return ErrReportScanFileImmutable
+		}
+
+		if err := checkReportScanFileCount(ctx, m, reportScan, len(attached)); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// checkReportScanFileCount rejects an update that would leave a report scan holding more than one report
+func checkReportScanFileCount(ctx context.Context, m *generated.ScanMutation, reportScan *generated.Scan, attached int) error {
+	existing, err := m.Client().Scan.QueryFiles(reportScan).Count(ctx)
+	if err != nil {
+		return err
+	}
+
+	if exceedsSingleReportFile(existing, len(m.RemovedFilesIDs()), attached, m.FilesCleared()) {
+		return ErrReportScanSingleFile
+	}
+
+	return nil
+}
+
+// exceedsSingleReportFile reports whether a files edge change leaves a scan holding more than one report
+func exceedsSingleReportFile(existing, removed, attached int, cleared bool) bool {
+	remaining := existing - removed
+	if cleared {
+		remaining = 0
+	}
+
+	return remaining+attached > 1
 }
 
 // isReportScanMutation reports whether the mutation creates a system-parsed report scan

@@ -79919,6 +79919,32 @@ type ScanWhereInput struct {
 	ScopeIDEqualFold    *string  `json:"scopeIDEqualFold,omitempty"`
 	ScopeIDContainsFold *string  `json:"scopeIDContainsFold,omitempty"`
 
+	// "document_kind_name" field predicates.
+	DocumentKindName             *string  `json:"documentKindName,omitempty"`
+	DocumentKindNameNEQ          *string  `json:"documentKindNameNEQ,omitempty"`
+	DocumentKindNameIn           []string `json:"documentKindNameIn,omitempty"`
+	DocumentKindNameNotIn        []string `json:"documentKindNameNotIn,omitempty"`
+	DocumentKindNameContains     *string  `json:"documentKindNameContains,omitempty"`
+	DocumentKindNameHasPrefix    *string  `json:"documentKindNameHasPrefix,omitempty"`
+	DocumentKindNameHasSuffix    *string  `json:"documentKindNameHasSuffix,omitempty"`
+	DocumentKindNameIsNil        bool     `json:"documentKindNameIsNil,omitempty"`
+	DocumentKindNameNotNil       bool     `json:"documentKindNameNotNil,omitempty"`
+	DocumentKindNameEqualFold    *string  `json:"documentKindNameEqualFold,omitempty"`
+	DocumentKindNameContainsFold *string  `json:"documentKindNameContainsFold,omitempty"`
+
+	// "document_kind_id" field predicates.
+	DocumentKindID             *string  `json:"documentKindID,omitempty"`
+	DocumentKindIDNEQ          *string  `json:"documentKindIDNEQ,omitempty"`
+	DocumentKindIDIn           []string `json:"documentKindIDIn,omitempty"`
+	DocumentKindIDNotIn        []string `json:"documentKindIDNotIn,omitempty"`
+	DocumentKindIDContains     *string  `json:"documentKindIDContains,omitempty"`
+	DocumentKindIDHasPrefix    *string  `json:"documentKindIDHasPrefix,omitempty"`
+	DocumentKindIDHasSuffix    *string  `json:"documentKindIDHasSuffix,omitempty"`
+	DocumentKindIDIsNil        bool     `json:"documentKindIDIsNil,omitempty"`
+	DocumentKindIDNotNil       bool     `json:"documentKindIDNotNil,omitempty"`
+	DocumentKindIDEqualFold    *string  `json:"documentKindIDEqualFold,omitempty"`
+	DocumentKindIDContainsFold *string  `json:"documentKindIDContainsFold,omitempty"`
+
 	// "target" field predicates.
 	Target             *string  `json:"target,omitempty"`
 	TargetNEQ          *string  `json:"targetNEQ,omitempty"`
@@ -80067,6 +80093,10 @@ type ScanWhereInput struct {
 	// "scope" edge predicates.
 	HasScope     *bool                       `json:"hasScope,omitempty"`
 	HasScopeWith []*CustomTypeEnumWhereInput `json:"hasScopeWith,omitempty"`
+
+	// "document_kind" edge predicates.
+	HasDocumentKind     *bool                       `json:"hasDocumentKind,omitempty"`
+	HasDocumentKindWith []*CustomTypeEnumWhereInput `json:"hasDocumentKindWith,omitempty"`
 
 	// "assets" edge predicates.
 	HasAssets     *bool              `json:"hasAssets,omitempty"`
@@ -80866,6 +80896,72 @@ func (i *ScanWhereInput) P() (predicate.Scan, error) {
 	if i.ScopeIDContainsFold != nil {
 		predicates = append(predicates, scan.ScopeIDContainsFold(*i.ScopeIDContainsFold))
 	}
+	if i.DocumentKindName != nil {
+		predicates = append(predicates, scan.DocumentKindNameEQ(*i.DocumentKindName))
+	}
+	if i.DocumentKindNameNEQ != nil {
+		predicates = append(predicates, scan.DocumentKindNameNEQ(*i.DocumentKindNameNEQ))
+	}
+	if len(i.DocumentKindNameIn) > 0 {
+		predicates = append(predicates, scan.DocumentKindNameIn(i.DocumentKindNameIn...))
+	}
+	if len(i.DocumentKindNameNotIn) > 0 {
+		predicates = append(predicates, scan.DocumentKindNameNotIn(i.DocumentKindNameNotIn...))
+	}
+	if i.DocumentKindNameContains != nil {
+		predicates = append(predicates, scan.DocumentKindNameContains(*i.DocumentKindNameContains))
+	}
+	if i.DocumentKindNameHasPrefix != nil {
+		predicates = append(predicates, scan.DocumentKindNameHasPrefix(*i.DocumentKindNameHasPrefix))
+	}
+	if i.DocumentKindNameHasSuffix != nil {
+		predicates = append(predicates, scan.DocumentKindNameHasSuffix(*i.DocumentKindNameHasSuffix))
+	}
+	if i.DocumentKindNameIsNil {
+		predicates = append(predicates, scan.DocumentKindNameIsNil())
+	}
+	if i.DocumentKindNameNotNil {
+		predicates = append(predicates, scan.DocumentKindNameNotNil())
+	}
+	if i.DocumentKindNameEqualFold != nil {
+		predicates = append(predicates, scan.DocumentKindNameEqualFold(*i.DocumentKindNameEqualFold))
+	}
+	if i.DocumentKindNameContainsFold != nil {
+		predicates = append(predicates, scan.DocumentKindNameContainsFold(*i.DocumentKindNameContainsFold))
+	}
+	if i.DocumentKindID != nil {
+		predicates = append(predicates, scan.DocumentKindIDEQ(*i.DocumentKindID))
+	}
+	if i.DocumentKindIDNEQ != nil {
+		predicates = append(predicates, scan.DocumentKindIDNEQ(*i.DocumentKindIDNEQ))
+	}
+	if len(i.DocumentKindIDIn) > 0 {
+		predicates = append(predicates, scan.DocumentKindIDIn(i.DocumentKindIDIn...))
+	}
+	if len(i.DocumentKindIDNotIn) > 0 {
+		predicates = append(predicates, scan.DocumentKindIDNotIn(i.DocumentKindIDNotIn...))
+	}
+	if i.DocumentKindIDContains != nil {
+		predicates = append(predicates, scan.DocumentKindIDContains(*i.DocumentKindIDContains))
+	}
+	if i.DocumentKindIDHasPrefix != nil {
+		predicates = append(predicates, scan.DocumentKindIDHasPrefix(*i.DocumentKindIDHasPrefix))
+	}
+	if i.DocumentKindIDHasSuffix != nil {
+		predicates = append(predicates, scan.DocumentKindIDHasSuffix(*i.DocumentKindIDHasSuffix))
+	}
+	if i.DocumentKindIDIsNil {
+		predicates = append(predicates, scan.DocumentKindIDIsNil())
+	}
+	if i.DocumentKindIDNotNil {
+		predicates = append(predicates, scan.DocumentKindIDNotNil())
+	}
+	if i.DocumentKindIDEqualFold != nil {
+		predicates = append(predicates, scan.DocumentKindIDEqualFold(*i.DocumentKindIDEqualFold))
+	}
+	if i.DocumentKindIDContainsFold != nil {
+		predicates = append(predicates, scan.DocumentKindIDContainsFold(*i.DocumentKindIDContainsFold))
+	}
 	if i.Target != nil {
 		predicates = append(predicates, scan.TargetEQ(*i.Target))
 	}
@@ -81326,6 +81422,25 @@ func (i *ScanWhereInput) P() (predicate.Scan, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, scan.HasScopeWith(with...))
+	}
+	if i.HasDocumentKind != nil {
+		p := scan.HasDocumentKind()
+		if !*i.HasDocumentKind {
+			p = scan.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDocumentKindWith) > 0 {
+		with := make([]predicate.CustomTypeEnum, 0, len(i.HasDocumentKindWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
+		for _, w := range i.HasDocumentKindWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDocumentKindWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, scan.HasDocumentKindWith(with...))
 	}
 	if i.HasAssets != nil {
 		p := scan.HasAssets()

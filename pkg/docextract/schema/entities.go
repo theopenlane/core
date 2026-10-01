@@ -2,75 +2,75 @@ package schema
 
 import (
 	"github.com/samber/lo"
-	"google.golang.org/genai"
+	"github.com/theopenlane/core/v2/pkg/docextract"
 )
 
-var EntitySchema = &genai.Schema{
-	Type: genai.TypeObject,
-	Properties: map[string]*genai.Schema{
+var EntitySchema = &docextract.Schema{
+	Type: docextract.TypeObject,
+	Properties: map[string]*docextract.Schema{
 		"entities": {
-			Type: genai.TypeArray,
-			Items: &genai.Schema{
-				Type: genai.TypeObject,
-				Properties: map[string]*genai.Schema{
+			Type: docextract.TypeArray,
+			Items: &docextract.Schema{
+				Type: docextract.TypeObject,
+				Properties: map[string]*docextract.Schema{
 					"name": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"displayName": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"description": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"status": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"ACTIVE"},
 					},
 					"approvedForUse": {
-						Type: genai.TypeBoolean,
+						Type: docextract.TypeBoolean,
 					},
 					"hasSOC2": {
-						Type:     genai.TypeBoolean,
+						Type:     docextract.TypeBoolean,
 						Nullable: lo.ToPtr(true),
 					},
 					"domains": {
-						Type: genai.TypeArray,
-						Items: &genai.Schema{
-							Type: genai.TypeString,
+						Type: docextract.TypeArray,
+						Items: &docextract.Schema{
+							Type: docextract.TypeString,
 						},
 					},
 					"ssoEnforced": {
-						Type:     genai.TypeBoolean,
+						Type:     docextract.TypeBoolean,
 						Nullable: lo.ToPtr(true),
 					},
 					"mfaSupport": {
-						Type:     genai.TypeBoolean,
+						Type:     docextract.TypeBoolean,
 						Nullable: lo.ToPtr(true),
 					},
 					"mfaEnforced": {
-						Type:     genai.TypeBoolean,
+						Type:     docextract.TypeBoolean,
 						Nullable: lo.ToPtr(true),
 					},
 					"statusPageURL": {
-						Type:     genai.TypeString,
+						Type:     docextract.TypeString,
 						Nullable: lo.ToPtr(true),
 					},
 					"providedServices": {
-						Type: genai.TypeArray,
-						Items: &genai.Schema{
-							Type: genai.TypeString,
+						Type: docextract.TypeArray,
+						Items: &docextract.Schema{
+							Type: docextract.TypeString,
 						},
 					},
 					"entityTypeName": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"vendor"},
 					},
 					"environmentName": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"production"},
 					},
 					"scopeName": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"in-scope"},
 					},
 				},

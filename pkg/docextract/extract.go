@@ -3,33 +3,23 @@ package docextract
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
-	"net/http"
 	"slices"
 	"strings"
 	"time"
 
-	"google.golang.org/genai"
-
 	"github.com/theopenlane/core/v2/pkg/logx"
-	"github.com/theopenlane/core/v2/pkg/pdftext"
 )
 
 const (
-	maxTokens = int32(65536)
 	// maxAttempts caps the continuation requests issued while merging a streamed section
 	maxAttempts = 20
 	// maxEmptyAttempts caps retries when the model returns no output at all
 	maxEmptyAttempts = 3
 	// retryDelay is the pause before re-requesting after a cancelled or partial generation
 	retryDelay = 10 * time.Second
-	// defaultTemperature keeps generation close to deterministic so extractions are repeatable
-	defaultTemperature = 0.1
 )
-
-var temperature = float32(defaultTemperature)
 
 // Request selects what to extract from a document
 type Request struct {
@@ -47,7 +37,7 @@ type Plan struct {
 	// Prompt is the full prompt sent alongside the document
 	Prompt string
 	// ResponseSchema constrains the model output
-	ResponseSchema *genai.Schema
+	ResponseSchema *Schema
 	// Stream, when set, merges streamed payloads and continues output the model trimmed
 	Stream Streamer
 	// Filter, when set, drops extracted entries that fall outside the request, e.g. fabricated items
@@ -112,12 +102,12 @@ func (c *Client) Extract(ctx context.Context, pdf io.Reader, kind Kind, req Requ
 
 	// a shared cache already holds the document, so it is only loaded when there is none
 	if req.Cache == "" {
-		doc, err := c.loadDocument(ctx, pdf)
+		doc, err := c.provider.PrepareDocument(ctx, pdf)
 		if err != nil {
 			return nil, err
 		}
 
-		defer c.releaseDocument(ctx, doc)
+		defer doc.Release(ctx)
 
 		extraction.doc = doc
 	}
@@ -137,7 +127,7 @@ type sectionExtraction struct {
 	// plan is the prompt, schema, streamer, and filter for the requested section
 	plan Plan
 	// doc is the document sent with every request, nil when a shared cache already holds it
-	doc *document
+	doc Document
 	// cache names shared cached content holding the document, empty when each attempt caches its own
 	cache string
 	// stream merges payloads for a section the model returns in pieces, nil for a single-shot section
@@ -204,24 +194,33 @@ func (e *sectionExtraction) collect(ctx context.Context) error {
 // generate runs one generation, caching the document and prompt for this attempt alone when no
 // shared cache was supplied
 func (e *sectionExtraction) generate(ctx context.Context) (string, generationRetry, error) {
-	contents := []*genai.Content{genai.NewContentFromParts(requestParts(e.doc, e.plan.Prompt+e.continuation), genai.RoleUser)}
+	prompt := e.plan.Prompt + e.continuation
 
 	cacheName := e.cache
-
-	var cache *genai.CachedContent
+	ownCache := ""
 
 	if cacheName == "" {
-		created, err := e.client.createCache(ctx, contents)
+		created, err := e.client.provider.CreateCache(ctx, CacheRequest{
+			Document:          e.doc,
+			Prompt:            prompt,
+			SystemInstruction: e.client.systemInstruction,
+		})
 		if err != nil {
 			return "", generationRetry{}, err
 		}
 
-		cache, cacheName = created, created.Name
+		cacheName, ownCache = created, created
 	}
 
-	defer e.client.deleteCache(ctx, cache)
+	defer e.client.releaseAttemptCache(ctx, ownCache)
 
-	return e.client.streamContent(ctx, contents, e.plan.ResponseSchema, cacheName, e.stream)
+	return e.client.streamContent(ctx, GenerateRequest{
+		Document:          e.doc,
+		Prompt:            prompt,
+		ResponseSchema:    e.plan.ResponseSchema,
+		Cache:             cacheName,
+		SystemInstruction: e.client.systemInstruction,
+	}, e.stream)
 }
 
 // resume keeps whatever complete payloads streamed before an interruption and waits out the retry
@@ -344,17 +343,6 @@ func (e *sectionExtraction) sections(ctx context.Context) (Sections, error) {
 	return sections, nil
 }
 
-// requestParts builds the user turn: the document when it is not already cached, then the prompt
-func requestParts(doc *document, prompt string) []*genai.Part {
-	var parts []*genai.Part
-
-	if doc != nil {
-		parts = append(parts, doc.part)
-	}
-
-	return append(parts, genai.NewPartFromText(prompt))
-}
-
 // count reports the streamer's item count, zero for a single-shot extraction
 func count(stream Streamer, output string) int {
 	if stream == nil {
@@ -365,55 +353,39 @@ func count(stream Streamer, output string) int {
 }
 
 // streamContent runs one generation and returns the accumulated text; retry is true when the
-// generation was cancelled or only partially succeeded and should be re-requested
-func (c *Client) streamContent(ctx context.Context, contents []*genai.Content, responseSchema *genai.Schema, cache string, stream Streamer) (string, generationRetry, error) {
-	iter := c.Models.GenerateContentStream(ctx, c.model, contents, c.generateConfig(responseSchema, cache))
-
+// provider reports the generation should be re-requested
+func (c *Client) streamContent(ctx context.Context, req GenerateRequest, stream Streamer) (string, generationRetry, error) {
 	var buffer strings.Builder
 	var merged string
 
-	for resp, err := range iter {
+	for chunk, err := range c.provider.Stream(ctx, req) {
 		if err != nil {
-			if errors.Is(err, genai.ErrPageDone) || errors.Is(err, io.EOF) {
-				break
+			disposition := c.provider.Classify(err)
+
+			if disposition.Retry {
+				retry := generationRetry{needed: true, quota: disposition.Throttled, after: disposition.After}
+
+				logx.FromContext(ctx).Warn().Err(err).Str("cache", CacheID(req.Cache)).Dur("retry_after", retry.after).Msg("docextract: retrying generation")
+
+				return merged, retry, nil
 			}
 
-			var apiErr genai.APIError
-			if errors.As(err, &apiErr) {
-				if retry, ok := retryFor(apiErr); ok {
-					logx.FromContext(ctx).Warn().Str("status", apiErr.Status).Str("message", apiErr.Message).Str("cache", CacheID(cache)).Dur("retry_after", retry.after).Msg("docextract: retrying generation")
-
-					return merged, retry, nil
-				}
-
-				// a shared cache that expired or was deleted is reported so the caller can rebuild it
-				if cache != "" && apiErr.Code == http.StatusNotFound {
-					return "", generationRetry{}, fmt.Errorf("%w: %w", ErrCacheMissing, err)
-				}
-
-				return "", generationRetry{}, fmt.Errorf("content generation error: %w", err)
+			// a shared cache that expired or was deleted is reported so the caller can rebuild it
+			if disposition.CacheMissing && req.Cache != "" {
+				return "", generationRetry{}, fmt.Errorf("%w: %w", ErrCacheMissing, err)
 			}
 
-			// a transport failure mid-stream is retried rather than failing the whole extraction
-			logx.FromContext(ctx).Warn().Err(err).Str("cache", CacheID(cache)).Msg("docextract: stream interrupted, retrying generation")
-
-			return merged, generationRetry{needed: true}, nil
+			return "", generationRetry{}, fmt.Errorf("content generation error: %w", err)
 		}
 
-		if len(resp.Candidates) > 0 && resp.Candidates[0].Content != nil {
-			for _, part := range resp.Candidates[0].Content.Parts {
-				if part != nil {
-					buffer.WriteString(part.Text)
-				}
-			}
-		}
+		buffer.WriteString(chunk)
 
 		if stream == nil {
 			continue
 		}
 
-		next, err := stream.Merge(buffer.String(), merged)
-		if err != nil {
+		next, mergeErr := stream.Merge(buffer.String(), merged)
+		if mergeErr != nil {
 			continue
 		}
 
@@ -430,119 +402,15 @@ func (c *Client) streamContent(ctx context.Context, contents []*genai.Content, r
 	return merged, generationRetry{}, nil
 }
 
-// api error statuses are canonical google api codes, not job states
-const (
-	statusCancelled          = "CANCELLED"
-	statusPartiallySucceeded = "PARTIALLY_SUCCEEDED"
-	statusUnavailable        = "UNAVAILABLE"
-	statusInternal           = "INTERNAL"
-	statusResourceExhausted  = "RESOURCE_EXHAUSTED"
-)
-
-// isRetryableStatus reports whether a generation error status warrants re-requesting
-func isRetryableStatus(status string) bool {
-	switch status {
-	case statusCancelled, statusPartiallySucceeded, statusUnavailable, statusInternal, statusResourceExhausted:
-		return true
-	default:
-		return false
-	}
-}
-
-// createCache caches the document and prompt for one attempt, retrying transport failures so a
-// network blip does not cost the caller a whole attempt
-func (c *Client) createCache(ctx context.Context, contents []*genai.Content) (*genai.CachedContent, error) {
-	config := &genai.CreateCachedContentConfig{
-		Contents:          contents,
-		SystemInstruction: &genai.Content{Parts: []*genai.Part{{Text: c.systemInstruction}}},
-	}
-
-	var lastErr error
-
-	for attempt := range maxEmptyAttempts {
-		cache, err := c.Caches.Create(ctx, c.model, config)
-		if err == nil {
-			return cache, nil
-		}
-
-		lastErr = err
-
-		var apiErr genai.APIError
-		if errors.As(err, &apiErr) || ctx.Err() != nil {
-			break
-		}
-
-		logx.FromContext(ctx).Warn().Err(err).Int("attempt", attempt).Msg("docextract: cache creation failed, retrying")
-
-		time.Sleep(retryDelay)
-	}
-
-	return nil, fmt.Errorf("failed to create cached content: %w", lastErr)
-}
-
-// deleteCache removes cached content created for a single attempt
-func (c *Client) deleteCache(ctx context.Context, cache *genai.CachedContent) {
-	if cache == nil {
+// releaseAttemptCache removes cached content created for a single attempt
+func (c *Client) releaseAttemptCache(ctx context.Context, name string) {
+	if name == "" {
 		return
 	}
 
-	if _, err := c.Caches.Delete(ctx, cache.Name, nil); err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Str("cache", CacheID(cache.Name)).Msg("docextract: failed to delete cached content")
+	if err := c.provider.DeleteCache(ctx, name); err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Str("cache", CacheID(name)).Msg("docextract: failed to delete cached content")
 	}
-}
-
-// document is the pdf as the model receives it: a file reference on the Gemini API, inline bytes on Vertex AI
-type document struct {
-	part *genai.Part
-	file *genai.File
-}
-
-// loadDocument prepares the pdf for the configured backend; Vertex AI has no files api so the bytes go inline
-func (c *Client) loadDocument(ctx context.Context, pdf io.Reader) (*document, error) {
-	if c.backend == genai.BackendVertexAI {
-		data, err := io.ReadAll(pdf)
-		if err != nil {
-			return nil, err
-		}
-
-		return &document{part: genai.NewPartFromBytes(data, pdftext.ContentType)}, nil
-	}
-
-	uploaded, err := c.Files.Upload(ctx, pdf, &genai.UploadFileConfig{MIMEType: pdftext.ContentType})
-	if err != nil {
-		return nil, err
-	}
-
-	return &document{part: genai.NewPartFromURI(uploaded.URI, uploaded.MIMEType), file: uploaded}, nil
-}
-
-// releaseDocument removes the uploaded file once extraction is finished, a no-op for inline documents
-func (c *Client) releaseDocument(ctx context.Context, doc *document) {
-	if doc == nil || doc.file == nil {
-		return
-	}
-
-	if _, err := c.Files.Delete(ctx, doc.file.Name, nil); err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Str("file", doc.file.Name).Msg("docextract: failed to delete uploaded file")
-	}
-}
-
-// generateConfig returns the generation configuration, using the named cache when there is one
-func (c *Client) generateConfig(responseSchema *genai.Schema, cache string) *genai.GenerateContentConfig {
-	cfg := &genai.GenerateContentConfig{
-		Temperature:      &temperature,
-		MaxOutputTokens:  maxTokens,
-		ResponseSchema:   responseSchema,
-		ResponseMIMEType: "application/json",
-	}
-
-	if cache != "" {
-		cfg.CachedContent = cache
-	} else {
-		cfg.SystemInstruction = &genai.Content{Parts: []*genai.Part{{Text: c.systemInstruction}}}
-	}
-
-	return cfg
 }
 
 // splitSections splits the top-level json object into one raw payload per section, dropping

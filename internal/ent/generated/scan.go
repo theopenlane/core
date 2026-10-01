@@ -74,6 +74,10 @@ type Scan struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the scan
 	ScopeID string `json:"scope_id,omitempty"`
+	// the document_kind of the scan
+	DocumentKindName string `json:"document_kind_name,omitempty"`
+	// the document_kind of the scan
+	DocumentKindID string `json:"document_kind_id,omitempty"`
 	// the target of the scan, e.g., a domain name or IP address, codebase
 	Target string `json:"target,omitempty"`
 	// the type of scan, e.g., domain scan, vulnerability scan, provider scan
@@ -131,6 +135,8 @@ type ScanEdges struct {
 	Environment *CustomTypeEnum `json:"environment,omitempty"`
 	// Scope holds the value of the scope edge.
 	Scope *CustomTypeEnum `json:"scope,omitempty"`
+	// DocumentKind holds the value of the document_kind edge.
+	DocumentKind *CustomTypeEnum `json:"document_kind,omitempty"`
 	// Assets holds the value of the assets edge.
 	Assets []*Asset `json:"assets,omitempty"`
 	// Entities holds the value of the entities edge.
@@ -163,9 +169,9 @@ type ScanEdges struct {
 	PerformedByGroup *Group `json:"performed_by_group,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [26]bool
+	loadedTypes [27]bool
 	// totalCount holds the count of the edges above.
-	totalCount [26]map[string]int
+	totalCount [27]map[string]int
 
 	namedBlockedGroups   map[string][]*Group
 	namedEditors         map[string][]*Group
@@ -300,10 +306,21 @@ func (e ScanEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	return nil, &NotLoadedError{edge: "scope"}
 }
 
+// DocumentKindOrErr returns the DocumentKind value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScanEdges) DocumentKindOrErr() (*CustomTypeEnum, error) {
+	if e.DocumentKind != nil {
+		return e.DocumentKind, nil
+	} else if e.loadedTypes[11] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "document_kind"}
+}
+
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[12] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -312,7 +329,7 @@ func (e ScanEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -321,7 +338,7 @@ func (e ScanEdges) EntitiesOrErr() ([]*Entity, error) {
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
@@ -330,7 +347,7 @@ func (e ScanEdges) EvidenceOrErr() ([]*Evidence, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -339,7 +356,7 @@ func (e ScanEdges) FilesOrErr() ([]*File, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -348,7 +365,7 @@ func (e ScanEdges) RemediationsOrErr() ([]*Remediation, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -357,7 +374,7 @@ func (e ScanEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -366,7 +383,7 @@ func (e ScanEdges) TasksOrErr() ([]*Task, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -375,7 +392,7 @@ func (e ScanEdges) PlatformsOrErr() ([]*Platform, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -384,7 +401,7 @@ func (e ScanEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -393,7 +410,7 @@ func (e ScanEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -402,7 +419,7 @@ func (e ScanEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -413,7 +430,7 @@ func (e ScanEdges) FindingsOrErr() ([]*Finding, error) {
 func (e ScanEdges) GeneratedByPlatformOrErr() (*Platform, error) {
 	if e.GeneratedByPlatform != nil {
 		return e.GeneratedByPlatform, nil
-	} else if e.loadedTypes[23] {
+	} else if e.loadedTypes[24] {
 		return nil, &NotFoundError{label: platform.Label}
 	}
 	return nil, &NotLoadedError{edge: "generated_by_platform"}
@@ -424,7 +441,7 @@ func (e ScanEdges) GeneratedByPlatformOrErr() (*Platform, error) {
 func (e ScanEdges) PerformedByUserOrErr() (*User, error) {
 	if e.PerformedByUser != nil {
 		return e.PerformedByUser, nil
-	} else if e.loadedTypes[24] {
+	} else if e.loadedTypes[25] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "performed_by_user"}
@@ -435,7 +452,7 @@ func (e ScanEdges) PerformedByUserOrErr() (*User, error) {
 func (e ScanEdges) PerformedByGroupOrErr() (*Group, error) {
 	if e.PerformedByGroup != nil {
 		return e.PerformedByGroup, nil
-	} else if e.loadedTypes[25] {
+	} else if e.loadedTypes[26] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "performed_by_group"}
@@ -454,7 +471,7 @@ func (*Scan) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case scan.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case scan.FieldID, scan.FieldCreatedBy, scan.FieldUpdatedBy, scan.FieldUpdatedByImpersonator, scan.FieldDeletedBy, scan.FieldOwnerID, scan.FieldInternalNotes, scan.FieldSystemInternalID, scan.FieldReviewedBy, scan.FieldReviewedByUserID, scan.FieldReviewedByGroupID, scan.FieldReviewedByIdentityHolderID, scan.FieldAssignedTo, scan.FieldAssignedToUserID, scan.FieldAssignedToGroupID, scan.FieldAssignedToIdentityHolderID, scan.FieldEnvironmentName, scan.FieldEnvironmentID, scan.FieldScopeName, scan.FieldScopeID, scan.FieldTarget, scan.FieldScanType, scan.FieldOrigin, scan.FieldPerformedBy, scan.FieldPerformedByUserID, scan.FieldPerformedByGroupID, scan.FieldGeneratedByPlatformID, scan.FieldStatus:
+		case scan.FieldID, scan.FieldCreatedBy, scan.FieldUpdatedBy, scan.FieldUpdatedByImpersonator, scan.FieldDeletedBy, scan.FieldOwnerID, scan.FieldInternalNotes, scan.FieldSystemInternalID, scan.FieldReviewedBy, scan.FieldReviewedByUserID, scan.FieldReviewedByGroupID, scan.FieldReviewedByIdentityHolderID, scan.FieldAssignedTo, scan.FieldAssignedToUserID, scan.FieldAssignedToGroupID, scan.FieldAssignedToIdentityHolderID, scan.FieldEnvironmentName, scan.FieldEnvironmentID, scan.FieldScopeName, scan.FieldScopeID, scan.FieldDocumentKindName, scan.FieldDocumentKindID, scan.FieldTarget, scan.FieldScanType, scan.FieldOrigin, scan.FieldPerformedBy, scan.FieldPerformedByUserID, scan.FieldPerformedByGroupID, scan.FieldGeneratedByPlatformID, scan.FieldStatus:
 			values[i] = new(sql.NullString)
 		case scan.FieldCreatedAt, scan.FieldUpdatedAt, scan.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -630,6 +647,18 @@ func (_m *Scan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ScopeID = value.String
 			}
+		case scan.FieldDocumentKindName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field document_kind_name", values[i])
+			} else if value.Valid {
+				_m.DocumentKindName = value.String
+			}
+		case scan.FieldDocumentKindID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field document_kind_id", values[i])
+			} else if value.Valid {
+				_m.DocumentKindID = value.String
+			}
 		case scan.FieldTarget:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field target", values[i])
@@ -788,6 +817,11 @@ func (_m *Scan) QueryEnvironment() *CustomTypeEnumQuery {
 // QueryScope queries the "scope" edge of the Scan entity.
 func (_m *Scan) QueryScope() *CustomTypeEnumQuery {
 	return NewScanClient(_m.config).QueryScope(_m)
+}
+
+// QueryDocumentKind queries the "document_kind" edge of the Scan entity.
+func (_m *Scan) QueryDocumentKind() *CustomTypeEnumQuery {
+	return NewScanClient(_m.config).QueryDocumentKind(_m)
 }
 
 // QueryAssets queries the "assets" edge of the Scan entity.
@@ -965,6 +999,12 @@ func (_m *Scan) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
+	builder.WriteString(", ")
+	builder.WriteString("document_kind_name=")
+	builder.WriteString(_m.DocumentKindName)
+	builder.WriteString(", ")
+	builder.WriteString("document_kind_id=")
+	builder.WriteString(_m.DocumentKindID)
 	builder.WriteString(", ")
 	builder.WriteString("target=")
 	builder.WriteString(_m.Target)

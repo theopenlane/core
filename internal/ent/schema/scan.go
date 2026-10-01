@@ -155,6 +155,7 @@ func (s Scan) Mixin() []ent.Mixin {
 			newResponsibilityMixin(s, withReviewedBy(), withAssignedTo()),
 			newCustomEnumMixin(s, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(s, withEnumFieldName("scope"), withGlobalEnum()),
+			newCustomEnumMixin(s, withEnumFieldName("document_kind"), withGlobalEnum()),
 		},
 	}.getMixins(s)
 }

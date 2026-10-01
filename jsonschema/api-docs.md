@@ -2326,7 +2326,6 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**enabled**|`boolean`|||
 |**workercount**|`integer`|||
 |**maxretries**|`integer`|||
-|**jobtimeout**|`integer`|||
 |**failonenqueueerror**|`boolean`|||
 |**queuename**|`string`|||
 

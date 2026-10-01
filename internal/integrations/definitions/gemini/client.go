@@ -7,6 +7,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/docextract"
+	geminiprovider "github.com/theopenlane/core/v2/pkg/docextract/gemini"
 	"github.com/theopenlane/core/v2/pkg/docextract/soc2"
 	"github.com/theopenlane/core/v2/pkg/modelarmor"
 )
@@ -29,14 +30,21 @@ func runtimeClientBuilder() func(context.Context, json.RawMessage) (any, error) 
 			return nil, ErrRuntimeConfigInvalid
 		}
 
-		client, err := docextract.NewClient(ctx,
-			docextract.WithBackend(cfg.GenAIBackend()),
-			docextract.WithAPIKey(cfg.APIKey),
-			docextract.WithProject(cfg.Project),
-			docextract.WithLocation(cfg.Location),
-			docextract.WithModel(cfg.Model),
-			docextract.WithSystemInstruction(cfg.Prompts.SystemInstruction),
-		)
+		provider, err := geminiprovider.New(ctx, geminiprovider.Config{
+			Backend:  cfg.GenAIBackend(),
+			APIKey:   cfg.APIKey,
+			Project:  cfg.Project,
+			Location: cfg.Location,
+			Model:    cfg.Model,
+		})
+		if err != nil {
+			return nil, err
+		}
+
+		client, err := docextract.NewClient(docextract.Config{
+			Provider:          provider,
+			SystemInstruction: cfg.Prompts.SystemInstruction,
+		})
 		if err != nil {
 			return nil, err
 		}

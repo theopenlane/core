@@ -1417,9 +1417,6 @@ data:
         {{- if .Values.openlane.coreConfiguration.workflows.gala.maxretries }}
         maxretries: {{ .Values.openlane.coreConfiguration.workflows.gala.maxretries }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.workflows.gala.jobtimeout }}
-        jobtimeout: {{ .Values.openlane.coreConfiguration.workflows.gala.jobtimeout | quote }}
-        {{- end }}
         {{- if .Values.openlane.coreConfiguration.workflows.gala.failonenqueueerror }}
         failonenqueueerror: {{ .Values.openlane.coreConfiguration.workflows.gala.failonenqueueerror }}
         {{- end }}

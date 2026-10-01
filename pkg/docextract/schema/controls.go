@@ -1,45 +1,45 @@
 package schema
 
-import "google.golang.org/genai"
+import "github.com/theopenlane/core/v2/pkg/docextract"
 
-var ControlSchema = &genai.Schema{
-	Type: genai.TypeObject,
-	Properties: map[string]*genai.Schema{
+var ControlSchema = &docextract.Schema{
+	Type: docextract.TypeObject,
+	Properties: map[string]*docextract.Schema{
 		"controls": {
-			Type: genai.TypeArray,
-			Items: &genai.Schema{
-				Type: genai.TypeObject,
-				Properties: map[string]*genai.Schema{
+			Type: docextract.TypeArray,
+			Items: &docextract.Schema{
+				Type: docextract.TypeObject,
+				Properties: map[string]*docextract.Schema{
 					"refCode": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"title": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"description": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"auditorReferenceID": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"status": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"APPROVED"},
 					},
 					"source": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"IMPORTED"},
 					},
 					"category": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"subcategory": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"soc2Mapping": {
-						Type: genai.TypeArray,
-						Items: &genai.Schema{
-							Type: genai.TypeString,
+						Type: docextract.TypeArray,
+						Items: &docextract.Schema{
+							Type: docextract.TypeString,
 						},
 					},
 				},

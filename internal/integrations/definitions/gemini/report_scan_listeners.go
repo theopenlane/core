@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand/v2"
+	"slices"
 	"strconv"
 	"time"
 
@@ -49,6 +50,9 @@ type ReportScanPartEnvelope struct {
 	// Cache names the cached content holding the report; it rides the job rather than the scan
 	// record because the resource name identifies the operator's cloud project
 	Cache string `json:"cache,omitempty"`
+	// ReportFileID is the upload the part parses, resolved once at submit so no job has to walk
+	// the scan to find it again
+	ReportFileID string `json:"reportFileId"`
 }
 
 // isBatch reports whether the envelope covers one batch of a fanned-out section
@@ -80,10 +84,9 @@ func reportScanListeners() types.GalaListenerRegistration {
 				Topic: reportScanPartTopic,
 				LogFields: func(envelope ReportScanPartEnvelope) map[string]any {
 					fields := map[string]any{
-						"organization_id": envelope.OrganizationID,
-						"scan_id":         envelope.ScanID,
-						"part":            envelope.Part,
-						"part_attempt":    envelope.Attempt,
+						"scan_id":      envelope.ScanID,
+						"part":         envelope.Part,
+						"part_attempt": envelope.Attempt,
 					}
 
 					if envelope.isBatch() {
@@ -105,11 +108,11 @@ func reportScanListeners() types.GalaListenerRegistration {
 // budget runs out, then stores the outcome on the scan and finalizes the scan once every part is done
 func (s reportScanSaga) handlePart(ctx context.Context, envelope ReportScanPartEnvelope) error {
 	config, err := json.Marshal(ReportScanPartRequest{
-		ScanID:         envelope.ScanID,
-		OrganizationID: envelope.OrganizationID,
-		Part:           envelope.Part,
-		RefCodes:       envelope.RefCodes,
-		Cache:          envelope.Cache,
+		ScanID:       envelope.ScanID,
+		Part:         envelope.Part,
+		RefCodes:     envelope.RefCodes,
+		Cache:        envelope.Cache,
+		ReportFileID: envelope.ReportFileID,
 	})
 	if err != nil {
 		return err
@@ -173,6 +176,34 @@ func (s reportScanSaga) handlePart(ctx context.Context, envelope ReportScanPartE
 	return s.maybeFinalize(ctx, envelope)
 }
 
+// scheduleParts emits one part job per section, holding back the control-scoped sections until the
+// controls part lands so they can be batched by ref code
+func (s reportScanSaga) scheduleParts(ctx context.Context, organizationID, scanID, reportFileID string, partNames []string, cache string) error {
+	deferDependents := slices.Contains(partNames, soc2.ControlsPart)
+
+	for _, name := range partNames {
+		if deferDependents && slices.Contains(soc2.ControlScopedParts, name) {
+			continue
+		}
+
+		if _, err := s.services.Gala().EmitWithHeaders(ctx, reportScanPartTopic.Name, ReportScanPartEnvelope{
+			OrganizationID: organizationID,
+			ScanID:         scanID,
+			Part:           name,
+			Cache:          cache,
+			ReportFileID:   reportFileID,
+		}, gala.Headers{UniqueOnce: true}); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("part", name).Msg("report scan: failed scheduling part job")
+
+			return err
+		}
+	}
+
+	logx.FromContext(ctx).Debug().Int("parts", len(partNames)).Str("cache", docextract.CacheID(cache)).Msg("report scan: part jobs scheduled")
+
+	return nil
+}
+
 // fanOutDependentPart schedules one job per batch of control ref codes for a control-scoped part
 // that is still pending
 func (s reportScanSaga) fanOutDependentPart(ctx context.Context, envelope ReportScanPartEnvelope, part string, refCodes []string, batchSize int) error {
@@ -191,7 +222,7 @@ func (s reportScanSaga) fanOutDependentPart(ctx context.Context, envelope Report
 		return err
 	}
 
-	if err := s.setMetadataPaths(ctx, envelope, metadataWrite{path: jsonPath(SummaryMetadataKey, part, summaryBatchesKey), value: progress}); err != nil {
+	if err := s.setMetadataPaths(ctx, envelope, metadataWrite{path: jsonPath(summaryMetadataKey, part, summaryBatchesKey), value: progress}); err != nil {
 		return err
 	}
 
@@ -204,6 +235,7 @@ func (s reportScanSaga) fanOutDependentPart(ctx context.Context, envelope Report
 			BatchIndex:     index,
 			BatchCount:     len(batches),
 			Cache:          envelope.Cache,
+			ReportFileID:   envelope.ReportFileID,
 		}, gala.Headers{UniqueOnce: true}); err != nil {
 			return err
 		}
@@ -225,11 +257,11 @@ func (s reportScanSaga) partPending(ctx context.Context, organizationID, scanID,
 }
 
 // summaryStatus reads a part's state from the report summary
-func summaryStatus(metadata map[string]any, part string) string {
-	entry, _ := metadata[SummaryMetadataKey].(map[string]any)[part].(map[string]any)
+func summaryStatus(metadata map[string]any, part string) PartState {
+	entry, _ := metadata[summaryMetadataKey].(map[string]any)[part].(map[string]any)
 	status, _ := entry["status"].(string)
 
-	return status
+	return PartState(status)
 }
 
 // completeBatchedPart marks the batched part completed or failed once every batch has reported,
@@ -242,7 +274,7 @@ func (s reportScanSaga) completeBatchedPart(ctx context.Context, envelope Report
 		return err
 	}
 
-	entry, _ := scanRecord.Metadata[SummaryMetadataKey].(map[string]any)[envelope.Part].(map[string]any)
+	entry, _ := scanRecord.Metadata[summaryMetadataKey].(map[string]any)[envelope.Part].(map[string]any)
 	batches, _ := entry[summaryBatchesKey].(map[string]any)
 	total, _ := batches["total"].(float64)
 	completed, _ := batches["completed"].(float64)
@@ -265,7 +297,7 @@ func (s reportScanSaga) completeBatchedPart(ctx context.Context, envelope Report
 	count := 0
 
 	// every batch has reported, so the appended section can be rewritten without racing a sibling
-	if report, ok := scanRecord.Metadata[ReportMetadataKey].(map[string]any); ok {
+	if report, ok := scanRecord.Metadata[reportMetadataKey].(map[string]any); ok {
 		items, _ := report[envelope.Part].([]any)
 		count = len(items)
 
@@ -274,7 +306,7 @@ func (s reportScanSaga) completeBatchedPart(ctx context.Context, envelope Report
 
 			count -= removed
 
-			writes = append(writes, metadataWrite{path: jsonPath(ReportMetadataKey, envelope.Part), value: deduped})
+			writes = append(writes, metadataWrite{path: jsonPath(reportMetadataKey, envelope.Part), value: deduped})
 		}
 	}
 
@@ -292,7 +324,7 @@ func (s reportScanSaga) completeBatchedPart(ctx context.Context, envelope Report
 	writes = append(writes, summaryWrites...)
 
 	// batch progress only exists to detect the last batch, so it is dropped once the part is done
-	writes = append(writes, metadataWrite{path: jsonPath(SummaryMetadataKey, envelope.Part, summaryBatchesKey), remove: true})
+	writes = append(writes, metadataWrite{path: jsonPath(summaryMetadataKey, envelope.Part, summaryBatchesKey), remove: true})
 
 	if err := s.setMetadataPaths(ctx, envelope, writes...); err != nil {
 		return err
@@ -305,7 +337,7 @@ func (s reportScanSaga) completeBatchedPart(ctx context.Context, envelope Report
 // landed so both sections are complete; the findings are updated in place on the metadata written
 // by the caller
 func linkFindings(ctx context.Context, metadata map[string]any) {
-	report, ok := metadata[ReportMetadataKey].(map[string]any)
+	report, ok := metadata[reportMetadataKey].(map[string]any)
 	if !ok {
 		return
 	}
@@ -357,15 +389,15 @@ func dedupeByExternalID(section any) (json.RawMessage, int, error) {
 // storeBatchResult appends the batch's items to the section and counts the batch as completed
 func (s reportScanSaga) storeBatchResult(ctx context.Context, envelope ReportScanPartEnvelope, section json.RawMessage) error {
 	return s.setMetadataPaths(ctx, envelope,
-		metadataWrite{path: jsonPath(ReportMetadataKey, envelope.Part), value: section, appendArray: true},
-		metadataWrite{path: jsonPath(SummaryMetadataKey, envelope.Part, summaryBatchesKey, "completed"), increment: true},
+		metadataWrite{path: jsonPath(reportMetadataKey, envelope.Part), value: section, appendArray: true},
+		metadataWrite{path: jsonPath(summaryMetadataKey, envelope.Part, summaryBatchesKey, "completed"), increment: true},
 	)
 }
 
 // storeBatchFailure counts the batch as failed so the part can still complete from its siblings
 func (s reportScanSaga) storeBatchFailure(ctx context.Context, envelope ReportScanPartEnvelope) error {
 	return s.setMetadataPaths(ctx, envelope,
-		metadataWrite{path: jsonPath(SummaryMetadataKey, envelope.Part, summaryBatchesKey, "failed"), increment: true},
+		metadataWrite{path: jsonPath(summaryMetadataKey, envelope.Part, summaryBatchesKey, "failed"), increment: true},
 	)
 }
 
@@ -461,14 +493,14 @@ func (s reportScanSaga) storePartResult(ctx context.Context, envelope ReportScan
 		return err
 	}
 
-	writes = append(writes, metadataWrite{path: jsonPath(ReportMetadataKey, envelope.Part), value: section})
+	writes = append(writes, metadataWrite{path: jsonPath(reportMetadataKey, envelope.Part), value: section})
 
 	return s.setMetadataPaths(ctx, envelope, writes...)
 }
 
 // summaryEntryWrites builds the path writes for one section's summary: its state, item count, and
 // error if any; writing the fields individually preserves batch progress recorded alongside them
-func summaryEntryWrites(part, state string, count int, cause error) ([]metadataWrite, error) {
+func summaryEntryWrites(part string, state PartState, count int, cause error) ([]metadataWrite, error) {
 	stateValue, err := json.Marshal(state)
 	if err != nil {
 		return nil, err
@@ -480,8 +512,8 @@ func summaryEntryWrites(part, state string, count int, cause error) ([]metadataW
 	}
 
 	writes := []metadataWrite{
-		{path: jsonPath(SummaryMetadataKey, part, "status"), value: stateValue},
-		{path: jsonPath(SummaryMetadataKey, part, "count"), value: countValue},
+		{path: jsonPath(summaryMetadataKey, part, "status"), value: stateValue},
+		{path: jsonPath(summaryMetadataKey, part, "count"), value: countValue},
 	}
 
 	if cause != nil {
@@ -490,7 +522,7 @@ func summaryEntryWrites(part, state string, count int, cause error) ([]metadataW
 			return nil, err
 		}
 
-		writes = append(writes, metadataWrite{path: jsonPath(SummaryMetadataKey, part, "error"), value: message})
+		writes = append(writes, metadataWrite{path: jsonPath(summaryMetadataKey, part, "error"), value: message})
 	}
 
 	return writes, nil
@@ -561,7 +593,7 @@ func (s reportScanSaga) maybeFinalize(ctx context.Context, envelope ReportScanPa
 		return err
 	}
 
-	summary, _ := scanRecord.Metadata[SummaryMetadataKey].(map[string]any)
+	summary, _ := scanRecord.Metadata[summaryMetadataKey].(map[string]any)
 
 	completed := 0
 
@@ -616,7 +648,7 @@ func (s reportScanSaga) releaseCache(ctx context.Context, envelope ReportScanPar
 		return
 	}
 
-	config, err := json.Marshal(ReportScanReleaseRequest{ScanID: envelope.ScanID, OrganizationID: envelope.OrganizationID, Cache: envelope.Cache})
+	config, err := json.Marshal(ReportScanReleaseRequest{ScanID: envelope.ScanID, Cache: envelope.Cache})
 	if err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Msg("report scan: failed encoding cache release")
 

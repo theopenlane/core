@@ -1,32 +1,32 @@
 package schema
 
-import "google.golang.org/genai"
+import "github.com/theopenlane/core/v2/pkg/docextract"
 
-var ContactSchema = &genai.Schema{
-	Type: genai.TypeObject,
-	Properties: map[string]*genai.Schema{
+var ContactSchema = &docextract.Schema{
+	Type: docextract.TypeObject,
+	Properties: map[string]*docextract.Schema{
 		"contacts": {
-			Type: genai.TypeArray,
-			Items: &genai.Schema{
-				Type: genai.TypeObject,
-				Properties: map[string]*genai.Schema{
+			Type: docextract.TypeArray,
+			Items: &docextract.Schema{
+				Type: docextract.TypeObject,
+				Properties: map[string]*docextract.Schema{
 					"company": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"email": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"entityNames": {
-						Type: genai.TypeArray,
-						Items: &genai.Schema{
-							Type: genai.TypeString,
+						Type: docextract.TypeArray,
+						Items: &docextract.Schema{
+							Type: docextract.TypeString,
 						},
 					},
 					"fullName": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"title": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 				},
 				Required: []string{

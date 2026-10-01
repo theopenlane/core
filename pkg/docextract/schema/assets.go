@@ -2,61 +2,61 @@ package schema
 
 import (
 	"github.com/samber/lo"
-	"google.golang.org/genai"
+	"github.com/theopenlane/core/v2/pkg/docextract"
 )
 
-var AssetSchema = &genai.Schema{
-	Type: genai.TypeObject,
-	Properties: map[string]*genai.Schema{
+var AssetSchema = &docextract.Schema{
+	Type: docextract.TypeObject,
+	Properties: map[string]*docextract.Schema{
 		"assets": {
-			Type: genai.TypeArray,
-			Items: &genai.Schema{
-				Type: genai.TypeObject,
-				Properties: map[string]*genai.Schema{
+			Type: docextract.TypeArray,
+			Items: &docextract.Schema{
+				Type: docextract.TypeObject,
+				Properties: map[string]*docextract.Schema{
 					"name": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"displayName": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"description": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"hasPII": {
-						Type: genai.TypeBoolean,
+						Type: docextract.TypeBoolean,
 					},
 					"assetType": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"TECHNOLOGY", "DOMAIN", "DEVICE", "TELEPHONE"},
 					},
 					"physicalLocation": {
-						Type:     genai.TypeString,
+						Type:     docextract.TypeString,
 						Nullable: lo.ToPtr(true),
 					},
 					"region": {
-						Type:     genai.TypeString,
+						Type:     docextract.TypeString,
 						Nullable: lo.ToPtr(true),
 					},
 					"source": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"IMPORTED"},
 					},
 					"categories": {
-						Type: genai.TypeArray,
-						Items: &genai.Schema{
-							Type: genai.TypeString,
+						Type: docextract.TypeArray,
+						Items: &docextract.Schema{
+							Type: docextract.TypeString,
 						},
 					},
 					"entityName": {
-						Type:     genai.TypeString,
+						Type:     docextract.TypeString,
 						Nullable: lo.ToPtr(true),
 					},
 					"environmentName": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"production"},
 					},
 					"scopeName": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"in-scope"},
 					},
 				},

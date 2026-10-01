@@ -76,7 +76,6 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 		var err error
 
 		if cfg.ScanID != "" {
-
 			// if scan id exists, we need to make sure the domain matches what we expect
 			// and is also a candidate for scanning
 			scanRecord, err = request.DB.Scan.Query().Where(

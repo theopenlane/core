@@ -1,8 +1,7 @@
 package soc2
 
 import (
-	"google.golang.org/genai"
-
+	"github.com/theopenlane/core/v2/pkg/docextract"
 	"github.com/theopenlane/core/v2/pkg/docextract/schema"
 )
 
@@ -70,7 +69,7 @@ var partNames = map[int]string{
 }
 
 // sectionSchemas maps each part to the response schema the model must follow
-var sectionSchemas = map[int]*genai.Schema{
+var sectionSchemas = map[int]*docextract.Schema{
 	IncludeAll:           schema.FullImportSchema,
 	IncludeVendors:       schema.EntitySchema,
 	IncludeAssets:        schema.AssetSchema,

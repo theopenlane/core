@@ -66,6 +66,10 @@ const (
 	FieldScopeName = "scope_name"
 	// FieldScopeID holds the string denoting the scope_id field in the database.
 	FieldScopeID = "scope_id"
+	// FieldDocumentKindName holds the string denoting the document_kind_name field in the database.
+	FieldDocumentKindName = "document_kind_name"
+	// FieldDocumentKindID holds the string denoting the document_kind_id field in the database.
+	FieldDocumentKindID = "document_kind_id"
 	// FieldTarget holds the string denoting the target field in the database.
 	FieldTarget = "target"
 	// FieldScanType holds the string denoting the scan_type field in the database.
@@ -114,6 +118,8 @@ const (
 	EdgeEnvironment = "environment"
 	// EdgeScope holds the string denoting the scope edge name in mutations.
 	EdgeScope = "scope"
+	// EdgeDocumentKind holds the string denoting the document_kind edge name in mutations.
+	EdgeDocumentKind = "document_kind"
 	// EdgeAssets holds the string denoting the assets edge name in mutations.
 	EdgeAssets = "assets"
 	// EdgeEntities holds the string denoting the entities edge name in mutations.
@@ -219,6 +225,13 @@ const (
 	ScopeInverseTable = "custom_type_enums"
 	// ScopeColumn is the table column denoting the scope relation/edge.
 	ScopeColumn = "scope_id"
+	// DocumentKindTable is the table that holds the document_kind relation/edge.
+	DocumentKindTable = "scans"
+	// DocumentKindInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	DocumentKindInverseTable = "custom_type_enums"
+	// DocumentKindColumn is the table column denoting the document_kind relation/edge.
+	DocumentKindColumn = "document_kind_id"
 	// AssetsTable is the table that holds the assets relation/edge. The primary key declared below.
 	AssetsTable = "scan_assets"
 	// AssetsInverseTable is the table name for the Asset entity.
@@ -329,6 +342,8 @@ var Columns = []string{
 	FieldEnvironmentID,
 	FieldScopeName,
 	FieldScopeID,
+	FieldDocumentKindName,
+	FieldDocumentKindID,
 	FieldTarget,
 	FieldScanType,
 	FieldMetadata,
@@ -416,7 +431,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [15]ent.Hook
+	Hooks        [16]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -600,6 +615,16 @@ func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
 }
 
+// ByDocumentKindName orders the results by the document_kind_name field.
+func ByDocumentKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDocumentKindName, opts...).ToFunc()
+}
+
+// ByDocumentKindID orders the results by the document_kind_id field.
+func ByDocumentKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDocumentKindID, opts...).ToFunc()
+}
+
 // ByTarget orders the results by the target field.
 func ByTarget(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTarget, opts...).ToFunc()
@@ -743,6 +768,13 @@ func ByEnvironmentField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByScopeField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newScopeStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDocumentKindField orders the results by document_kind field.
+func ByDocumentKindField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDocumentKindStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -1009,6 +1041,13 @@ func newScopeStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScopeInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
+	)
+}
+func newDocumentKindStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DocumentKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DocumentKindTable, DocumentKindColumn),
 	)
 }
 func newAssetsStep() *sqlgraph.Step {

@@ -5,6 +5,7 @@ import (
 	"slices"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -24,8 +25,10 @@ func NotificationDeliveryListeners() []gala.Registration {
 			Concern:    entityops.MutationConcernNotification,
 			Schema:     entityops.SchemaNotification,
 			Operations: []string{entityops.OpCreate},
-			Caller:     internalCaller,
-			Handle:     handleNotificationDelivery,
+			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+				return restored.WithCapabilities(auth.CapInternalOperation)
+			},
+			Handle: handleNotificationDelivery,
 		},
 	}
 }

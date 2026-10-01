@@ -1,10 +1,10 @@
 package schema
 
-import "google.golang.org/genai"
+import "github.com/theopenlane/core/v2/pkg/docextract"
 
-var FullImportSchema = &genai.Schema{
-	Type: genai.TypeObject,
-	Properties: map[string]*genai.Schema{
+var FullImportSchema = &docextract.Schema{
+	Type: docextract.TypeObject,
+	Properties: map[string]*docextract.Schema{
 		"entities":      EntitySchema.Properties["entities"],
 		"assets":        AssetSchema.Properties["assets"],
 		"groups":        GroupSchema.Properties["groups"],

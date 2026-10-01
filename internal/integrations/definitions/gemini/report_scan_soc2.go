@@ -30,7 +30,7 @@ var controlScopedBatchSizes = map[string]int{
 // RequestedParts reads the sections a scan asked for from its metadata, validating every name;
 // an absent or empty list means every configured section
 func RequestedParts(metadata map[string]any) ([]string, error) {
-	raw, _ := metadata[RequestedPartsMetadataKey].([]any)
+	raw, _ := metadata[requestedPartsMetadataKey].([]any)
 
 	names := make([]string, 0, len(raw))
 

@@ -8,6 +8,8 @@ mutation CreateBulkCSVScan($input: Upload!) {
       createdAt
       createdBy
       discoveredVulnerabilityIds
+      documentKindID
+      documentKindName
       environmentID
       environmentName
       generatedByPlatformID
@@ -51,6 +53,8 @@ mutation CreateBulkScan($input: [CreateScanInput!]) {
       createdAt
       createdBy
       discoveredVulnerabilityIds
+      documentKindID
+      documentKindName
       environmentID
       environmentName
       generatedByPlatformID
@@ -94,6 +98,8 @@ mutation CreateScan($input: CreateScanInput!) {
       createdAt
       createdBy
       discoveredVulnerabilityIds
+      documentKindID
+      documentKindName
       environmentID
       environmentName
       generatedByPlatformID
@@ -169,6 +175,8 @@ query GetScanByID($scanId: ID!) {
     createdAt
     createdBy
     discoveredVulnerabilityIds
+    documentKindID
+    documentKindName
     environmentID
     environmentName
     generatedByPlatformID
@@ -238,6 +246,8 @@ mutation UpdateScan($updateScanId: ID!, $input: UpdateScanInput!) {
       createdAt
       createdBy
       discoveredVulnerabilityIds
+      documentKindID
+      documentKindName
       environmentID
       environmentName
       generatedByPlatformID

@@ -6,10 +6,8 @@ import (
 	"encoding/json"
 	"errors"
 
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
-	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -33,17 +31,7 @@ func (r ReportScanPartRequest) Handle() types.OperationHandler {
 
 // Run downloads the scan's pdf and extracts the single requested section
 func (ReportScanPartRequest) Run(ctx context.Context, request types.OperationRequest, client *Client, cfg ReportScanPartRequest) (ReportScanPartResult, error) {
-	ctx = logx.WithFields(ctx, logx.LogFields{"organization_id": cfg.OrganizationID, "scan_id": cfg.ScanID, "part": cfg.Part})
-	systemCtx := scanSystemContext(ctx, cfg.OrganizationID)
-
-	scanRecord, err := request.DB.Scan.Query().Where(
-		scan.ID(cfg.ScanID),
-		scan.OwnerID(cfg.OrganizationID),
-		scan.ScanTypeEQ(enums.ScanTypeReport),
-	).Only(systemCtx)
-	if err != nil {
-		return ReportScanPartResult{}, err
-	}
+	ctx = logx.WithFields(ctx, logx.LogFields{"scan_id": cfg.ScanID, "part": cfg.Part})
 
 	req := docextract.Request{Section: cfg.Part, Scope: cfg.RefCodes, Cache: cfg.Cache}
 
@@ -58,19 +46,14 @@ func (ReportScanPartRequest) Run(ctx context.Context, request types.OperationReq
 			return ReportScanPartResult{}, err
 		}
 
-		logx.FromContext(ctx).Warn().Err(err).Str("cache", docextract.CacheID(req.Cache)).Msg("report scan: document cache missing, rebuilding")
+		logx.FromContext(ctx).Warn().Err(err).Str("cache", docextract.CacheID(req.Cache)).Msg("report scan: document cache missing, sending the document")
+
+		req.Cache = ""
 	}
 
-	pdf, err := downloadReport(systemCtx, request.DB, scanRecord)
+	pdf, err := downloadReportFile(ctx, request.DB, cfg.ReportFileID)
 	if err != nil {
 		return ReportScanPartResult{}, err
-	}
-
-	if req.Cache != "" {
-		req.Cache, err = client.CacheDocument(ctx, bytes.NewReader(pdf), DocumentCacheTTL)
-		if err != nil {
-			return ReportScanPartResult{}, err
-		}
 	}
 
 	sections, err := client.Extract(ctx, bytes.NewReader(pdf), client.SOC2, req)
@@ -81,13 +64,38 @@ func (ReportScanPartRequest) Run(ctx context.Context, request types.OperationReq
 	return ReportScanPartResult{Sections: sections}, nil
 }
 
-// downloadReport fetches the scan's attached pdf from object storage
-func downloadReport(ctx context.Context, db *generated.Client, scanRecord *generated.Scan) ([]byte, error) {
+// downloadReport resolves the scan's attached pdf and fetches it, returning the id of the file it
+// read so the submit can record it and hand it to every part job
+func downloadReport(ctx context.Context, db *generated.Client, scanRecord *generated.Scan) ([]byte, string, error) {
+	if db.ObjectManager == nil {
+		return nil, "", ErrObjectManagerRequired
+	}
+
+	reportFile, err := resolveReportFile(ctx, scanRecord)
+	if err != nil {
+		if generated.IsNotFound(err) {
+			return nil, "", ErrReportFileMissing
+		}
+
+		return nil, "", err
+	}
+
+	pdf, err := download(ctx, db, reportFile)
+	if err != nil {
+		return nil, "", err
+	}
+
+	return pdf, reportFile.ID, nil
+}
+
+// downloadReportFile fetches the report the submit already resolved, so a part job reads the file
+// directly instead of walking the scan to find it again
+func downloadReportFile(ctx context.Context, db *generated.Client, fileID string) ([]byte, error) {
 	if db.ObjectManager == nil {
 		return nil, ErrObjectManagerRequired
 	}
 
-	reportFile, err := scanRecord.QueryFiles().Where(file.DetectedContentTypeEQ(pdftext.ContentType)).First(ctx)
+	reportFile, err := db.File.Get(ctx, fileID)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return nil, ErrReportFileMissing
@@ -96,6 +104,11 @@ func downloadReport(ctx context.Context, db *generated.Client, scanRecord *gener
 		return nil, err
 	}
 
+	return download(ctx, db, reportFile)
+}
+
+// download pulls the file's bytes out of object storage
+func download(ctx context.Context, db *generated.Client, reportFile *generated.File) ([]byte, error) {
 	storageFile := interceptors.StorageFileFromEnt(reportFile)
 
 	downloaded, err := db.ObjectManager.Download(ctx, nil, storageFile, &objects.DownloadOptions{
@@ -108,4 +121,16 @@ func downloadReport(ctx context.Context, db *generated.Client, scanRecord *gener
 	}
 
 	return downloaded.File, nil
+}
+
+// resolveReportFile picks the scan's report by the file id recorded at submit, falling back to the
+// oldest attached pdf for scans submitted before the id was recorded
+func resolveReportFile(ctx context.Context, scanRecord *generated.Scan) (*generated.File, error) {
+	query := scanRecord.QueryFiles().Where(file.DetectedContentTypeEQ(pdftext.ContentType))
+
+	if fileID, ok := ReportFileID(scanRecord.Metadata); ok {
+		query = query.Where(file.ID(fileID))
+	}
+
+	return query.Order(file.ByCreatedAt()).First(ctx)
 }

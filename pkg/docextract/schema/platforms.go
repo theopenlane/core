@@ -1,43 +1,43 @@
 package schema
 
-import "google.golang.org/genai"
+import "github.com/theopenlane/core/v2/pkg/docextract"
 
-var PlatformSchema = &genai.Schema{
-	Type: genai.TypeObject,
-	Properties: map[string]*genai.Schema{
+var PlatformSchema = &docextract.Schema{
+	Type: docextract.TypeObject,
+	Properties: map[string]*docextract.Schema{
 		"platforms": {
-			Type: genai.TypeArray,
-			Items: &genai.Schema{
-				Type: genai.TypeObject,
-				Properties: map[string]*genai.Schema{
+			Type: docextract.TypeArray,
+			Items: &docextract.Schema{
+				Type: docextract.TypeObject,
+				Properties: map[string]*docextract.Schema{
 					"name": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"description": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"businessPurpose": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"physicalLocation": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"region": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 					},
 					"containsPII": {
-						Type: genai.TypeBoolean,
+						Type: docextract.TypeBoolean,
 					},
 					"source": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"IMPORTED"},
 					},
 					"environmentName": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"production"},
 					},
 					"scopeName": {
-						Type: genai.TypeString,
+						Type: docextract.TypeString,
 						Enum: []string{"in-scope"},
 					},
 				},

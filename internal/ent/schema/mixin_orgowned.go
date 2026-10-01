@@ -205,13 +205,16 @@ var orgHookCreateServiceOnlyFunc HookFunc = func(o ObjectOwnedMixin) ent.Hook {
 
 // setOwnerIDField sets the owner id field on the mutation based on the current organization
 func (o ObjectOwnedMixin) setOwnerIDField(ctx context.Context, m ent.Mutation) error {
-	if _, ok := auth.CallerFromContext(ctx); !ok {
-		return fmt.Errorf("failed to get organization id from context: %w", auth.ErrNoAuthUser)
+	caller, ok := auth.CallerFromContext(ctx)
+	// skip setting owner if this is a service-level internal operation (e.g. org creation, subscription management)
+	// CapBypassFGA distinguishes real service callers from test internal contexts created by
+	// rule.WithInternalContext, which adds CapInternalOperation but not CapBypassFGA
+	if ok && caller != nil && caller.Has(auth.CapInternalOperation|auth.CapBypassFGA) {
+		return nil
 	}
 
-	// keep an owner set explicitly by a caller trusted to write across orgs
-	if owner, ok := m.Field(ownerFieldName); ok && owner != "" && auth.HasCrossOrgCapabilities(ctx) {
-		return nil
+	if !ok || caller == nil {
+		return fmt.Errorf("failed to get organization id from context: %w", auth.ErrNoAuthUser)
 	}
 
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
@@ -274,9 +277,8 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 			return nil
 		}
 
-		// if the auth into the api was an API token AND then
-		// current query is not an internal request, check scopes
-		if auth.IsAPITokenAuthentication(ctx) && !auth.IsInternalReadRequest(ctx) {
+		// check API Token scope and return error if scope not set on token for object
+		if auth.IsAPITokenAuthentication(ctx) {
 			if err := rule.CheckSubjectScope(ctx, q.Type(), fgax.CanView, nil); errors.Is(err, rule.ErrRequiredScopeNotSet) {
 				return err
 			}
@@ -305,7 +307,11 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 // trust center anonymous capability without an active trust center key is malformed and is
 // denied rather than falling through to the organization filter
 func isAnonTrustCenterCaller(ctx context.Context) (string, bool, error) {
-	// reject callers with no resolvable org, a PAT's org may only be in its authorized list
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return "", false, auth.ErrNoAuthUser
+	}
+
 	if _, err := auth.GetOrganizationIDFromContext(ctx); err != nil {
 		return "", false, err
 	}
@@ -314,17 +320,21 @@ func isAnonTrustCenterCaller(ctx context.Context) (string, bool, error) {
 		return orgID, true, nil
 	}
 
-	if auth.HasAnonymousTrustCenterCapability(ctx) {
+	if caller.Has(auth.CapTrustCenterAnonymous) {
 		return "", false, privacy.Denyf("trust center request without active trust center key")
 	}
 
 	return "", false, nil
 }
 
-// orgInterceptorSkipper skips the organization interceptor based on the context and query type
-// Callers with CapBypassOrgFilter skip the interceptor.
+// orgInterceptorSkipper skips the organization interceptor based on the context
+// and query type. Callers with CapBypassOrgFilter skip the interceptor.
 func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context) bool {
-	return auth.HasCrossOrgCapabilities(ctx)
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassOrgFilter) {
+		return true
+	}
+
+	return false
 }
 
 // orgHookSkipper skips the organization hook based on the context
@@ -337,8 +347,10 @@ func (o ObjectOwnedMixin) orgHookSkipper(ctx context.Context) (bool, error) {
 		return true, nil
 	}
 
-	// skip the hook when the caller has the system sweep cap, e.g. org creation, backfill and system subscription management
-	if auth.HasFullSystemCapabilities(ctx) {
+	// skip the hook for internal operations (subscription management, acme solver, keystore, etc.)
+	// CapBypassFGA distinguishes real service callers from test internal contexts created by
+	// rule.WithInternalContext, which adds CapBypassOrgFilter|CapInternalOperation but not CapBypassFGA
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller.Has(auth.CapBypassOrgFilter|auth.CapInternalOperation|auth.CapBypassFGA) {
 		return true, nil
 	}
 

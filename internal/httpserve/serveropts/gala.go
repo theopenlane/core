@@ -35,7 +35,6 @@ func NewGalaRuntimes(ctx context.Context, so *ServerOptions) (*gala.Gala, *gala.
 		QueueName:     galaQueueName,
 		WorkerCount:   max(galaCfg.WorkerCount, 1),
 		MaxRetries:    galaCfg.MaxRetries,
-		JobTimeout:    galaCfg.JobTimeout,
 	})
 	if err != nil {
 		return nil, nil, err

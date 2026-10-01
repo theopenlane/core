@@ -12,21 +12,21 @@ func TestRequestedPartsEmpty(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, len(parts) == 0)
 
-	parts, err = RequestedParts(map[string]any{RequestedPartsMetadataKey: []any{}})
+	parts, err = RequestedParts(map[string]any{requestedPartsMetadataKey: []any{}})
 
 	assert.NilError(t, err)
 	assert.Check(t, len(parts) == 0)
 }
 
 func TestRequestedParts(t *testing.T) {
-	parts, err := RequestedParts(map[string]any{RequestedPartsMetadataKey: []any{"controls", "reviews"}})
+	parts, err := RequestedParts(map[string]any{requestedPartsMetadataKey: []any{"controls", "reviews"}})
 
 	assert.NilError(t, err)
 	assert.DeepEqual(t, parts, []string{"controls", "reviews"})
 }
 
 func TestRequestedPartsUnknown(t *testing.T) {
-	_, err := RequestedParts(map[string]any{RequestedPartsMetadataKey: []any{"controls", "invoices"}})
+	_, err := RequestedParts(map[string]any{requestedPartsMetadataKey: []any{"controls", "invoices"}})
 
 	assert.ErrorIs(t, err, ErrUnknownRequestedPart)
 	assert.ErrorContains(t, err, `"invoices"`)
@@ -44,7 +44,7 @@ func TestSelectPartsDefaultsToConfigured(t *testing.T) {
 func TestSelectPartsIntersectsWithConfigured(t *testing.T) {
 	request := ReportScanRequest{parts: []string{"controls", "reviews", "assets"}}
 
-	selected, err := request.selectParts(map[string]any{RequestedPartsMetadataKey: []any{"reviews", "findings"}})
+	selected, err := request.selectParts(map[string]any{requestedPartsMetadataKey: []any{"reviews", "findings"}})
 
 	assert.NilError(t, err)
 	assert.DeepEqual(t, selected, []string{"reviews"})
@@ -53,7 +53,7 @@ func TestSelectPartsIntersectsWithConfigured(t *testing.T) {
 func TestSelectPartsNoneAvailable(t *testing.T) {
 	request := ReportScanRequest{parts: []string{"controls"}}
 
-	_, err := request.selectParts(map[string]any{RequestedPartsMetadataKey: []any{"findings"}})
+	_, err := request.selectParts(map[string]any{requestedPartsMetadataKey: []any{"findings"}})
 
 	assert.ErrorIs(t, err, ErrRequestedPartsUnavailable)
 }

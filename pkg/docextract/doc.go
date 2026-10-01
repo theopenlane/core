@@ -5,6 +5,10 @@
 // one response, which merges streamed payloads and asks the model to continue where it stopped.
 // A Client uploads the document once per extraction and runs the request loop.
 //
+// The model backend is a Provider, so nothing here depends on one model sdk: a Provider prepares
+// the document, caches it, runs a generation and classifies failures, while the request loop,
+// prompts, response schemas and validation stay provider neutral. The gemini subpackage is one implementation, along with mock for local testing.
+//
 // Validation runs before any model call. A Profile registered for a kind checks the page count
 // and a weighted table of markers against the document's text layer, so an upload that is not
 // the expected kind of document fails fast with a reason safe to show to the uploader.
