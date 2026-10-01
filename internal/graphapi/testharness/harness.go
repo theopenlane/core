@@ -92,6 +92,7 @@ type GraphTestSuite struct {
 	GalaRuntime        *gala.Gala
 	IntegrationsRT     *intruntime.Runtime
 	WorkflowEngine     *engine.WorkflowEngine
+	SlackMock          *slackdef.MockSlackRuntime
 }
 
 // Client contains all the clients the test need to interact with
@@ -318,9 +319,11 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	_, err = gala.Register(galaInstance, hooks.IntegrationCleanupListeners()...)
 	RequireNoError(t, err)
 
-	// wire integration runtime with mock email provider
+	// wire integration runtime with mock email and slack providers
 	credStore, err := keystore.NewStore(c.DB)
 	RequireNoError(t, err)
+
+	suite.SlackMock = slackdef.NewMockSlackRuntime()
 
 	rt, err := intruntime.New(intruntime.Config{
 		DB:          c.DB,
@@ -329,7 +332,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		RedisClient: coreutils.NewRedisClient(),
 		DefinitionBuilders: []registry.Builder{
 			emaildef.Builder(emaildef.MockRuntimeConfig(), false),
-			slackdef.Builder(slackdef.Config{}, &slackdef.RuntimeSlackConfig{WebhookURL: "https://hooks.slack.com/services/test/mock/url"}, false),
+			suite.SlackMock.Builder(),
 			systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}, systemdef.IntegrationLifecycleConfig{}),
 			testint.Builder(),
 			testint.MockHTTPBuilder(),
@@ -361,6 +364,10 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 }
 
 func (suite *GraphTestSuite) TearDownSuite(t *testing.T) {
+	if suite.SlackMock != nil {
+		suite.SlackMock.Close()
+	}
+
 	if suite.GalaRuntime != nil {
 		err := suite.GalaRuntime.StopWorkers(context.Background())
 		RequireNoError(t, err)
@@ -399,19 +406,21 @@ func NewTestGraphServer(t *testing.T) http.Handler {
 	// local validator to avoid JWK cache issues
 	validator := tokens.NewJWKSValidator(keys, "http://localhost:17608", "http://localhost:17608")
 
+	authOptions := authmw.NewAuthOptions(
+		authmw.WithSkipperFunc(
+			func(c echo.Context) bool {
+				return authmw.AuthenticateSkipperFuncForWebsockets(c)
+			},
+		),
+		authmw.WithDBClient(Suite.Client.DB),
+		authmw.WithValidator(validator),
+	)
+
 	r := graphapi.NewResolver(Suite.Client.DB, nil).
 		WithExtensions(true).
 		WithDevelopment(true).
 		WithSubscriptions(true, nil).
-		WithAuthOptions(
-			authmw.WithSkipperFunc(
-				func(c echo.Context) bool {
-					return authmw.AuthenticateSkipperFuncForWebsockets(c)
-				},
-			),
-			authmw.WithDBClient(Suite.Client.DB),
-			authmw.WithValidator(validator),
-		)
+		WithAuthOptions(&authOptions)
 
 	r.WithPool(10)
 

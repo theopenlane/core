@@ -171,7 +171,7 @@ func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_PresignedURLGener
 	cfg := storage.ProviderConfig{
 		Enabled: true,
 		Providers: storage.Providers{
-			Database: storage.ProviderConfigs{Enabled: true},
+			Database: storage.DatabaseConfig{ProviderCommon: storage.ProviderCommon{Enabled: true}},
 		},
 	}
 
@@ -240,7 +240,7 @@ func (suite *HandlerTestSuite) swapObjectStoreToDatabase() func() {
 	cfg := storage.ProviderConfig{
 		Enabled: true,
 		Providers: storage.Providers{
-			Database: storage.ProviderConfigs{Enabled: true},
+			Database: storage.DatabaseConfig{ProviderCommon: storage.ProviderCommon{Enabled: true}},
 		},
 	}
 

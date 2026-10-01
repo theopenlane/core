@@ -7,14 +7,19 @@ import (
 	"testing"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/mo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
 	"github.com/vektah/gqlparser/v2/ast"
 
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/objects"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/eddy"
@@ -48,6 +53,10 @@ func (p *downloadProvider) Exists(context.Context, *storagetypes.File) (bool, er
 
 func (p *downloadProvider) GetScheme() *string {
 	return nil
+}
+
+func (p *downloadProvider) ListObjects(context.Context, string, int) ([]string, error) {
+	return nil, nil
 }
 
 func (p *downloadProvider) ListBuckets() ([]string, error) {
@@ -198,4 +207,66 @@ func graphqlContextWithSelection(field string) context.Context {
 			},
 		},
 	})
+}
+
+func TestInterceptorFileOrgFilter(t *testing.T) {
+	orgID := ulids.New().String()
+
+	testCases := []struct {
+		name         string
+		caller       *auth.Caller
+		expectFilter bool
+		expectOrgArg bool
+	}{
+		{
+			name:         "caller with an org is filtered to its org",
+			caller:       &auth.Caller{SubjectID: ulids.New().String(), OrganizationID: orgID, OrganizationIDs: []string{orgID}},
+			expectFilter: true,
+			expectOrgArg: true,
+		},
+		{
+			name:         "caller without orgs is filtered to files without an org",
+			caller:       &auth.Caller{SubjectID: ulids.New().String()},
+			expectFilter: true,
+		},
+		{
+			// at the time this test was written, no active use-cases were there for bypass of the file organization interceptor so this test expect filters even though you'd expect it to work like any other org level filter with the bypass.
+			name:         "caller with org filter bypass is filtered because there is no bypass",
+			caller:       (&auth.Caller{SubjectID: ulids.New().String()}).WithCapabilities(auth.CapBypassOrgFilter),
+			expectFilter: true,
+		},
+		{
+			name:   "system admin is not filtered",
+			caller: (&auth.Caller{SubjectID: ulids.New().String()}).WithCapabilities(auth.CapSystemAdmin),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			traverse, ok := InterceptorFile().(intercept.TraverseFunc)
+			require.True(t, ok)
+
+			query := &mockQuery{typ: generated.TypeFile}
+			require.NoError(t, traverse(auth.WithCaller(context.Background(), tc.caller), query))
+
+			if !tc.expectFilter {
+				assert.Empty(t, query.predicates)
+				return
+			}
+
+			require.NotEmpty(t, query.predicates)
+
+			selector := sql.Select("*").From(sql.Table(file.Table))
+			for _, p := range query.predicates {
+				p(selector)
+			}
+
+			stmt, args := selector.Query()
+			assert.Contains(t, stmt, file.FieldSystemOwned)
+
+			if tc.expectOrgArg {
+				assert.Contains(t, args, any(orgID))
+			}
+		})
+	}
 }

@@ -18,6 +18,11 @@ func sendSystemSlack(ctx context.Context, operationName string, input any) error
 		return nil
 	}
 
+	// the runtime client is only registered when the system slack workspace is provisioned
+	if _, ok := rt.Registry().RuntimeClient(slack.DefinitionID.ID()); !ok {
+		return nil
+	}
+
 	config, err := json.Marshal(input)
 	if err != nil {
 		return err

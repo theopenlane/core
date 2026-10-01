@@ -7063,6 +7063,7 @@ type ComplexityRoot struct {
 		NdaApprovalRequired                   func(childComplexity int) int
 		NdaApproverGroup                      func(childComplexity int) int
 		NdaApproverGroupID                    func(childComplexity int) int
+		NoindexDefaultDomain                  func(childComplexity int) int
 		NotifySubscribersOnSubprocessorChange func(childComplexity int) int
 		Overview                              func(childComplexity int) int
 		PrimaryColor                          func(childComplexity int) int
@@ -46841,6 +46842,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSetting.NdaApproverGroupID(childComplexity), true
+	case "TrustCenterSetting.noindexDefaultDomain":
+		if e.ComplexityRoot.TrustCenterSetting.NoindexDefaultDomain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSetting.NoindexDefaultDomain(childComplexity), true
 	case "TrustCenterSetting.notifySubscribersOnSubprocessorChange":
 		if e.ComplexityRoot.TrustCenterSetting.NotifySubscribersOnSubprocessorChange == nil {
 			break
@@ -71983,6 +71990,14 @@ input CreateSubscriberInput {
   phone number of the subscriber
   """
   phoneNumber: String
+  """
+  indicates if the email address has been verified
+  """
+  verifiedEmail: Boolean
+  """
+  indicates if the phone number has been verified
+  """
+  verifiedPhone: Boolean
   ownerID: ID
   eventIDs: [ID!]
   trustCenterID: ID
@@ -72429,6 +72444,10 @@ input CreateTrustCenterNDARequestInput {
   """
   accessLevel: TrustCenterNDARequestTrustCenterNDARequestAccessLevel
   """
+  status of the NDA request
+  """
+  status: TrustCenterNDARequestTrustCenterNDARequestStatus
+  """
   timestamp when the request was approved
   """
   approvedAt: DateTime
@@ -72537,6 +72556,10 @@ input CreateTrustCenterSettingInput {
   URL to the company's status page
   """
   statusPageURL: String
+  """
+  allow trustcenter to be indexed on google
+  """
+  noindexDefaultDomain: Boolean
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   logoFileID: ID
@@ -126294,6 +126317,10 @@ type TrustCenterSetting implements Node @modules(names: ["trust_center_module"])
   URL to the company's status page
   """
   statusPageURL: String
+  """
+  allow trustcenter to be indexed on google
+  """
+  noindexDefaultDomain: Boolean
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -126855,6 +126882,13 @@ input TrustCenterSettingWhereInput {
   statusPageURLEqualFold: String
   statusPageURLContainsFold: String
   """
+  noindex_default_domain field predicates
+  """
+  noindexDefaultDomain: Boolean
+  noindexDefaultDomainNEQ: Boolean
+  noindexDefaultDomainIsNil: Boolean
+  noindexDefaultDomainNotNil: Boolean
+  """
   blocked_groups edge predicates
   """
   hasBlockedGroups: Boolean
@@ -127030,6 +127064,7 @@ Properties by which TrustCenterSubprocessor connections can be ordered.
 enum TrustCenterSubprocessorOrderField {
   created_at
   updated_at
+  SUBPROCESSOR_name
 }
 """
 TrustCenterSubprocessorWhereInput is used for filtering TrustCenterSubprocessor objects.
@@ -135612,6 +135647,11 @@ input UpdateTrustCenterSettingInput {
   """
   statusPageURL: String
   clearStatusPageURL: Boolean
+  """
+  allow trustcenter to be indexed on google
+  """
+  noindexDefaultDomain: Boolean
+  clearNoindexDefaultDomain: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -168623,6 +168663,8 @@ func (ec *executionContext) childFields_TrustCenterSetting(ctx context.Context, 
 		return ec.fieldContext_TrustCenterSetting_ndaApproverGroupID(ctx, field)
 	case "statusPageURL":
 		return ec.fieldContext_TrustCenterSetting_statusPageURL(ctx, field)
+	case "noindexDefaultDomain":
+		return ec.fieldContext_TrustCenterSetting_noindexDefaultDomain(ctx, field)
 	case "blockedGroups":
 		return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 	case "editors":

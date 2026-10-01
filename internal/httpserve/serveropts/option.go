@@ -193,6 +193,7 @@ func WithAuth() ServerOption {
 		}
 
 		conf := authmw.NewAuthOptions(opts...)
+		s.Config.Handler.AuthOptions = &conf
 
 		s.Config.Handler.WebAuthn = webauthn.NewWithConfig(s.Config.Settings.Auth.Providers.Webauthn)
 
@@ -292,7 +293,7 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithTrustCenterDefaultDomain(s.Config.Settings.Server.DefaultTrustCenterDomain).
 			WithSubscriptions(s.Config.Settings.Server.EnableGraphSubscriptions, subscriptionRedisClient).
 			WithAllowedOrigins(s.Config.Settings.Server.CORS.AllowOrigins).
-			WithAuthOptions(getAuthOptions(s)...).
+			WithAuthOptions(s.Config.Handler.AuthOptions).
 			WithNotificationLookbackDays(s.Config.Settings.Server.NotificationLookbackDays)
 
 		if rt := s.Config.Handler.IntegrationsRuntime; rt != nil {

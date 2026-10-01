@@ -757,7 +757,6 @@ components:
                                 description: RuntimeIntegrationRegistration is the non-generic registration stored on a Definition
                                 nullable: true
                                 properties:
-                                    config: {}
                                     ref:
                                         description: RuntimeRefID is the stable identifier for a runtime integration config, derived from the Go type name
                                     schema: {}

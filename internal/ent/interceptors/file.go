@@ -45,10 +45,6 @@ func InterceptorFile() ent.Interceptor {
 
 		orgs := caller.OrgIDs()
 
-		if len(orgs) == 0 {
-			return nil
-		}
-
 		// if this is a request for avatar file, add all org ids the user is a part of
 		// to the filter; allow the request to process since the JWT Will only have the current
 		// organization

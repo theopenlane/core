@@ -12,11 +12,11 @@ import (
 	"github.com/theopenlane/core/common/storagetypes"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/core/v2/internal/objects"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	disk "github.com/theopenlane/core/v2/pkg/objects/storage/providers/disk"
+	"github.com/theopenlane/core/v2/pkg/objects/storage/providers/gcs"
 	r2provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/r2"
 	s3provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/s3"
 )
@@ -82,6 +82,12 @@ func ValidateAvailabilityByProvider(ctx context.Context, cfg storage.ProviderCon
 		}
 	}
 
+	if cfg.Providers.GCS.Enabled && cfg.Providers.GCS.EnsureAvailable {
+		if err := validateGCSProvider(ctx, cfg.Providers.GCS, logSuccess); err != nil {
+			errs = append(errs, err)
+		}
+	}
+
 	if cfg.Providers.Database.Enabled && cfg.Providers.Database.EnsureAvailable {
 		if err := validateDatabaseProvider(ctx, cfg.Providers.Database); err != nil {
 			errs = append(errs, err)
@@ -92,7 +98,7 @@ func ValidateAvailabilityByProvider(ctx context.Context, cfg storage.ProviderCon
 }
 
 // validateDiskProvider checks connectivity to the disk provider and the existence of the specified bucket (directory)
-func validateDiskProvider(ctx context.Context, cfg storage.ProviderConfigs, logSuccess bool) error {
+func validateDiskProvider(ctx context.Context, cfg storage.DiskConfig, logSuccess bool) error {
 	if !cfg.Enabled {
 		return nil
 	}
@@ -102,15 +108,12 @@ func validateDiskProvider(ctx context.Context, cfg storage.ProviderConfigs, logS
 		bucket = objects.DefaultDevStorageBucket
 	}
 
-	options := storage.NewProviderOptions(
-		storage.WithBucket(bucket),
-		storage.WithBasePath(bucket),
-	)
+	options := storage.NewProviderOptions(storage.WithBucket(bucket))
 	if cfg.Endpoint != "" {
 		options.Apply(storage.WithLocalURL(cfg.Endpoint))
 	}
 
-	provider, err := disk.NewDiskBuilder().Build(ctx, cfg.Credentials, options)
+	provider, err := disk.NewDiskBuilder().Build(ctx, storage.ProviderCredentials{}, options)
 	if err != nil {
 		return fmt.Errorf("disk provider initialization: %w", err)
 	}
@@ -124,7 +127,7 @@ func validateDiskProvider(ctx context.Context, cfg storage.ProviderConfigs, logS
 }
 
 // validateS3Provider checks connectivity to the S3 provider and the existence of the specified bucket
-func validateS3Provider(ctx context.Context, cfg storage.ProviderConfigs, logSuccess bool) error {
+func validateS3Provider(ctx context.Context, cfg storage.S3Config, logSuccess bool) error {
 	if !cfg.Enabled {
 		return nil
 	}
@@ -144,7 +147,7 @@ func validateS3Provider(ctx context.Context, cfg storage.ProviderConfigs, logSuc
 		options.Apply(storage.WithEndpoint(cfg.Endpoint))
 	}
 
-	provider, err := s3provider.NewS3Builder().Build(ctx, cfg.Credentials, options)
+	provider, err := s3provider.NewS3Builder().Build(ctx, cfg.Credentials.ProviderCredentials(), options)
 	if err != nil {
 		return fmt.Errorf("s3 provider initialization: %w", err)
 	}
@@ -159,7 +162,7 @@ func validateS3Provider(ctx context.Context, cfg storage.ProviderConfigs, logSuc
 }
 
 // validateR2Provider checks connectivity to Cloudflare R2 and the existence of the specified bucket
-func validateR2Provider(ctx context.Context, cfg storage.ProviderConfigs, logSuccess bool) error {
+func validateR2Provider(ctx context.Context, cfg storage.R2Config, logSuccess bool) error {
 	if !cfg.Enabled {
 		return nil
 	}
@@ -173,7 +176,7 @@ func validateR2Provider(ctx context.Context, cfg storage.ProviderConfigs, logSuc
 		options.Apply(storage.WithEndpoint(cfg.Endpoint))
 	}
 
-	provider, err := r2provider.NewR2Builder().Build(ctx, cfg.Credentials, options)
+	provider, err := r2provider.NewR2Builder().Build(ctx, cfg.Credentials.ProviderCredentials(), options)
 	if err != nil {
 		return fmt.Errorf("r2 provider initialization: %w", err)
 	}
@@ -187,8 +190,37 @@ func validateR2Provider(ctx context.Context, cfg storage.ProviderConfigs, logSuc
 	return validateBuckets(ctx, "r2", provider, cfg.Bucket, logSuccess)
 }
 
+// validateGCSProvider checks connectivity to Google Cloud Storage and the existence of the specified bucket
+func validateGCSProvider(ctx context.Context, cfg storage.GCSConfig, logSuccess bool) error {
+	if !cfg.Enabled {
+		return nil
+	}
+
+	options := storage.NewProviderOptions(storage.WithExtra(storage.GCSProjectIDExtraKey, cfg.ProjectID))
+	if cfg.Bucket != "" {
+		options.Apply(storage.WithBucket(cfg.Bucket))
+	}
+
+	if cfg.Endpoint != "" {
+		options.Apply(storage.WithEndpoint(cfg.Endpoint))
+	}
+
+	provider, err := gcs.NewBuilder().Build(ctx, storage.ProviderCredentials{}, options)
+	if err != nil {
+		return fmt.Errorf("gcs provider initialization: %w", err)
+	}
+
+	defer provider.Close()
+
+	if err := validateProviderType(storage.GCSProvider, provider); err != nil {
+		return err
+	}
+
+	return validateBuckets(ctx, "gcs", provider, cfg.Bucket, logSuccess)
+}
+
 // validateDatabaseProvider checks that the database provider can access the File table
-func validateDatabaseProvider(ctx context.Context, cfg storage.ProviderConfigs) error {
+func validateDatabaseProvider(ctx context.Context, cfg storage.DatabaseConfig) error {
 	if !cfg.Enabled {
 		return nil
 	}
@@ -243,9 +275,9 @@ func ensureDirectoryExists(path string) error {
 	return os.MkdirAll(path, os.ModePerm)
 }
 
-// StorageAvailabilityCheck returns a handlers.CheckFunc that validates storage provider availability,
+// StorageAvailabilityCheck returns a readiness check that validates storage provider availability,
 // caching the result for StorageCheckCacheTTL so readiness probes do not hit provider APIs on every cycle
-func StorageAvailabilityCheck(cfgProvider func() storage.ProviderConfig) handlers.CheckFunc {
+func StorageAvailabilityCheck(cfgProvider func() storage.ProviderConfig) func(ctx context.Context) error {
 	var (
 		mu          sync.Mutex
 		lastChecked time.Time

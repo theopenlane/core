@@ -42,7 +42,7 @@ const (
 	// FieldTriggerEvent is the log field key for the trigger event
 	FieldTriggerEvent = "trigger_event"
 	// FieldTopic is the log field key for event topics
-	FieldTopic = "topic"
+	FieldTopic = logx.FieldTopic
 	// FieldPayload is the log field key for event payloads
 	FieldPayload = "payload"
 

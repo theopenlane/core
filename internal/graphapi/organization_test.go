@@ -557,12 +557,17 @@ func TestMutationCreateOrganization(t *testing.T) {
 			})
 			assert.NilError(t, err)
 
-			// ensure owner is in the managed group
+			// ensure owner is in the managed group, the creator of a child org is not an org member
+			expectedMembers := 1
+			if tc.parentOrgID != "" {
+				expectedMembers = 0
+			}
+
 			for _, g := range managedGroups.Groups.Edges {
 				if g.Node.Name == "Viewers" {
 					assert.Check(t, is.Len(g.Node.Members.Edges, 0))
 				} else {
-					assert.Check(t, is.Len(g.Node.Members.Edges, 1))
+					assert.Check(t, is.Len(g.Node.Members.Edges, expectedMembers))
 				}
 			}
 

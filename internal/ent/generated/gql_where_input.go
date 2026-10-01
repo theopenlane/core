@@ -97033,6 +97033,12 @@ type TrustCenterSettingWhereInput struct {
 	StatusPageURLEqualFold    *string  `json:"statusPageURLEqualFold,omitempty"`
 	StatusPageURLContainsFold *string  `json:"statusPageURLContainsFold,omitempty"`
 
+	// "noindex_default_domain" field predicates.
+	NoindexDefaultDomain       *bool `json:"noindexDefaultDomain,omitempty"`
+	NoindexDefaultDomainNEQ    *bool `json:"noindexDefaultDomainNEQ,omitempty"`
+	NoindexDefaultDomainIsNil  bool  `json:"noindexDefaultDomainIsNil,omitempty"`
+	NoindexDefaultDomainNotNil bool  `json:"noindexDefaultDomainNotNil,omitempty"`
+
 	// "blocked_groups" edge predicates.
 	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
 	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
@@ -98085,6 +98091,18 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 	}
 	if i.StatusPageURLContainsFold != nil {
 		predicates = append(predicates, trustcentersetting.StatusPageURLContainsFold(*i.StatusPageURLContainsFold))
+	}
+	if i.NoindexDefaultDomain != nil {
+		predicates = append(predicates, trustcentersetting.NoindexDefaultDomainEQ(*i.NoindexDefaultDomain))
+	}
+	if i.NoindexDefaultDomainNEQ != nil {
+		predicates = append(predicates, trustcentersetting.NoindexDefaultDomainNEQ(*i.NoindexDefaultDomainNEQ))
+	}
+	if i.NoindexDefaultDomainIsNil {
+		predicates = append(predicates, trustcentersetting.NoindexDefaultDomainIsNil())
+	}
+	if i.NoindexDefaultDomainNotNil {
+		predicates = append(predicates, trustcentersetting.NoindexDefaultDomainNotNil())
 	}
 
 	if i.HasBlockedGroups != nil {

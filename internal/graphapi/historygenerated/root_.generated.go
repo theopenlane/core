@@ -2560,6 +2560,7 @@ type ComplexityRoot struct {
 		LogoRemoteURL                         func(childComplexity int) int
 		NdaApprovalRequired                   func(childComplexity int) int
 		NdaApproverGroupID                    func(childComplexity int) int
+		NoindexDefaultDomain                  func(childComplexity int) int
 		NotifySubscribersOnSubprocessorChange func(childComplexity int) int
 		Operation                             func(childComplexity int) int
 		Overview                              func(childComplexity int) int
@@ -15663,6 +15664,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TrustCenterSettingHistory.NdaApproverGroupID(childComplexity), true
+	case "TrustCenterSettingHistory.noindexDefaultDomain":
+		if e.ComplexityRoot.TrustCenterSettingHistory.NoindexDefaultDomain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSettingHistory.NoindexDefaultDomain(childComplexity), true
 	case "TrustCenterSettingHistory.notifySubscribersOnSubprocessorChange":
 		if e.ComplexityRoot.TrustCenterSettingHistory.NotifySubscribersOnSubprocessorChange == nil {
 			break
@@ -48288,6 +48295,10 @@ type TrustCenterSettingHistory implements Node {
   URL to the company's status page
   """
   statusPageURL: String
+  """
+  allow trustcenter to be indexed on google
+  """
+  noindexDefaultDomain: Boolean
 }
 """
 A connection to a list of items.
@@ -48820,6 +48831,13 @@ input TrustCenterSettingHistoryWhereInput {
   statusPageURLNotNil: Boolean
   statusPageURLEqualFold: String
   statusPageURLContainsFold: String
+  """
+  noindex_default_domain field predicates
+  """
+  noindexDefaultDomain: Boolean
+  noindexDefaultDomainNEQ: Boolean
+  noindexDefaultDomainIsNil: Boolean
+  noindexDefaultDomainNotNil: Boolean
 }
 type TrustCenterSubprocessorHistory implements Node {
   id: ID!
@@ -58334,6 +58352,8 @@ func (ec *executionContext) childFields_TrustCenterSettingHistory(ctx context.Co
 		return ec.fieldContext_TrustCenterSettingHistory_ndaApproverGroupID(ctx, field)
 	case "statusPageURL":
 		return ec.fieldContext_TrustCenterSettingHistory_statusPageURL(ctx, field)
+	case "noindexDefaultDomain":
+		return ec.fieldContext_TrustCenterSettingHistory_noindexDefaultDomain(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterSettingHistory", field.Name)
 }

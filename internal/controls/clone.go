@@ -95,7 +95,7 @@ func CloneControls(ctx context.Context, client *generated.Client, controlsToClon
 				subcontrolsToCreate = append(subcontrolsToCreate, SubcontrolToCreate{
 					NewControlID: newControlID,
 					RefControl:   c,
-					isTemplate:   isOpenlaneBaseControl(c),
+					isTemplate:   IsOpenlaneBaseControl(c),
 					sourceName:   getSourceNameOfTemplateToClone(c),
 				})
 			}
@@ -132,7 +132,8 @@ func CloneControls(ctx context.Context, client *generated.Client, controlsToClon
 	return createdControlIDs, subcontrolsToCreate, nil
 }
 
-func isOpenlaneBaseControl(c *generated.Control) bool {
+// IsOpenlaneBaseControl identifies controls that matches the openlane template
+func IsOpenlaneBaseControl(c *generated.Control) bool {
 	if c == nil || c.Edges.Standard == nil || !c.Edges.Standard.SystemOwned {
 		return false
 	}
@@ -167,7 +168,7 @@ func CreateCloneControlInput(c *generated.Control, programID *string, orgID stri
 
 	var sourceName *string
 
-	if isOpenlaneBaseControl(c) {
+	if IsOpenlaneBaseControl(c) {
 		source = enums.ControlSourceTemplate
 		status = enums.ControlStatusDraft
 		sourceName = getSourceNameOfTemplateToClone(c)
@@ -197,12 +198,12 @@ func CreateCloneControlInput(c *generated.Control, programID *string, orgID stri
 		OwnerID:                &orgID,
 	}
 
-	if c.Edges.Standard != nil && !isOpenlaneBaseControl(c) {
+	if c.Edges.Standard != nil && !IsOpenlaneBaseControl(c) {
 		controlInput.ReferenceFramework = &c.Edges.Standard.ShortName
 		controlInput.ReferenceFrameworkRevision = &c.Edges.Standard.Revision
 	}
 
-	if !isOpenlaneBaseControl(c) {
+	if !IsOpenlaneBaseControl(c) {
 		if c.Edges.Standard != nil && c.Edges.Standard.ID != "" {
 			controlInput.StandardID = &c.Edges.Standard.ID
 		} else if c.StandardID != "" {

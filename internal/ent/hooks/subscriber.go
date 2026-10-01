@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
@@ -36,6 +37,14 @@ func HookSubscriberCreate() ent.Hook {
 			// lowercase the email for uniqueness
 			m.SetEmail(strings.ToLower(email))
 
+			isEmailVerified, _ := m.VerifiedEmail()
+			isPhoneVerified, _ := m.VerifiedPhone()
+
+			// if either of this is true, we need to mark as active
+			if isEmailVerified || isPhoneVerified {
+				m.SetActive(true)
+			}
+
 			// block subscriber creation for a trust center that has not enabled accepting subscribers
 			if err := checkTrustCenterAllowsSubscribers(ctx, m); err != nil {
 				return nil, err
@@ -51,10 +60,7 @@ func HookSubscriberCreate() ent.Hook {
 
 			if existingSubscriber != nil && err == nil {
 				if existingSubscriber.Active {
-					return nil, gqlerrors.NewCustomError(
-						gqlerrors.AlreadyExistsErrorCode,
-						"email is already subscribed to this organization",
-						ErrUserAlreadySubscriber)
+					return existingSubscriber, nil
 				}
 
 				retValue, err = updateSubscriber(ctx, m, existingSubscriber)
@@ -69,10 +75,16 @@ func HookSubscriberCreate() ent.Hook {
 				if err != nil {
 					return retValue, err
 				}
+
+			}
+
+			// if active, we do not need to send the email again
+			active, _ := m.Active()
+			if active {
+				return retValue, nil
 			}
 
 			tokenValue, _ := m.Token()
-			emailAddress, _ := m.Email()
 			orgID, _ := m.OwnerID()
 			trustCenterID, _ := m.TrustCenterID()
 
@@ -84,7 +96,7 @@ func HookSubscriberCreate() ent.Hook {
 			customDomain, slug, branding := subscriberTrustCenterDomain(ctx, m.Client(), trustCenterID)
 
 			if err := sendSystemEmail(ctx, emaildef.SubscribeOp.Name(), emaildef.SubscribeRequest{
-				RecipientInfo:       emaildef.RecipientInfo{Email: emailAddress},
+				RecipientInfo:       emaildef.RecipientInfo{Email: email},
 				TrustCenterBranding: branding,
 				OrgName:             orgName,
 				Token:               tokenValue,
@@ -216,7 +228,7 @@ func subscriberTrustCenterDomain(ctx context.Context, client *generated.Client, 
 	return customDomain, tc.Slug, emaildef.TrustCenterBrandingFromSetting(tc.Edges.Setting)
 }
 
-// updateSubscriber updates an existing subscriber's send attempts and resets the verified email status
+// updateSubscriber updates an existing subscriber's send attempts, marks the subscriber as active if needed.
 func updateSubscriber(ctx context.Context,
 	m *generated.SubscriberMutation, subscriber *generated.Subscriber) (*generated.Subscriber, error) {
 	if subscriber.SendAttempts >= maxAttempts {
@@ -237,6 +249,10 @@ func updateSubscriber(ctx context.Context,
 		subscriber.Unsubscribed = false
 	}
 
+	// use the active state from the hook earlier so we can track new verification status
+	active, _ := m.Active()
+	subscriber.Active = true
+
 	secret, _ := m.Secret()
 	token, _ := m.Token()
 	ttl, _ := m.TTL()
@@ -245,7 +261,7 @@ func updateSubscriber(ctx context.Context,
 		UpdateOneID(subscriber.ID).
 		SetSendAttempts(subscriber.SendAttempts).
 		SetUnsubscribed(subscriber.Unsubscribed).
-		SetVerifiedEmail(false).
+		SetActive(active).
 		SetToken(token).
 		SetSecret(secret).
 		SetTTL(ttl).

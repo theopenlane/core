@@ -75,6 +75,11 @@ func generateOrganizationGroups(ctx context.Context, m *generated.OrganizationMu
 		return err
 	}
 
+	// the creator of a child org is not an org member, access is inherited from the parent
+	if parentID, ok := m.ParentID(); ok && parentID != "" {
+		return nil
+	}
+
 	// add group member to managed groups
 	for _, g := range groups {
 		if g.Name == ViewersGroup {
