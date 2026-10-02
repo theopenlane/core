@@ -19,9 +19,6 @@ const (
 	defaultPageSize = 1000
 )
 
-// findingsSyncOperation is the operation ref for the Security Center insights finding sync operation
-var findingsSyncOperation = types.OperationRefOf[FindingsSync]().Ingests(cloudflareClient, runFindingsCollect)
-
 // runFindingsCollect collects Cloudflare Security Center insights and emits finding ingest payloads
 func runFindingsCollect(ctx context.Context, request types.OperationRequest, client *CloudflareClient, _ FindingsSync) ([]types.IngestPayloadSet, error) {
 	meta, err := resolveCredential(request.Credentials)

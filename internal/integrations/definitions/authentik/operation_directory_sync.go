@@ -13,9 +13,6 @@ import (
 // directoryDefaultPageSize is the number of records requested per Authentik API page
 const directoryDefaultPageSize = int32(100)
 
-// directorySyncOperation is the Authentik directory sync operation
-var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(authentikClient, runDirectorySync)
-
 // runDirectorySync collects Authentik directory users, groups, and memberships
 func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *authentikSDK.APIClient, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listDirectoryUsers(ctx, c)

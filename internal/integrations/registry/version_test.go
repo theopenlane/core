@@ -29,11 +29,22 @@ var (
 	// versionSecondCredentialRef is the extra credential slot added in the version test
 	versionSecondCredentialRef = integrationtypes.CredentialRefOf[versionSecondCredential]()
 	// retiredUserInputRef is the user input layout an earlier definition version stored
-	retiredUserInputRef = integrationtypes.NewUserInputRef[retiredUserInput]("retiredUserInput")
-	// surfaceUserInputRef is the current layout replacing the retired one with a backfill
-	surfaceUserInputRef = integrationtypes.NewUserInputRef[testUserInput]("testUserInput").
-				Replacing(retiredUserInputRef, func(r retiredUserInput) testUserInput { return testUserInput{Region: r.Zone} }).
-				Backfilled(func(context.Context, integrationtypes.InstallationRequest, *testUserInput) error { return nil })
+	retiredUserInputRef = integrationtypes.UserInputRefOf[retiredUserInput]()
+	// surfaceUserInputRef is the current layout upgrading documents stored under the retired one
+	surfaceUserInputRef = integrationtypes.UserInputRefOf[testUserInput]().
+				Upgraded(func(_ context.Context, _ integrationtypes.InstallationRequest, from string, stored json.RawMessage) (testUserInput, error) {
+			switch from {
+			case retiredUserInputRef.Name():
+				old, err := jsonx.Decode[retiredUserInput](stored)
+				if err != nil {
+					return testUserInput{}, err
+				}
+
+				return testUserInput{Region: old.Zone}, nil
+			default:
+				return jsonx.Decode[testUserInput](stored)
+			}
+		})
 )
 
 // surfaceDefinition returns a definition exercising every surfaced kind in reverse name order
@@ -41,12 +52,7 @@ func surfaceDefinition(id string) integrationtypes.Definition {
 	def, clientRef := minimalDefinition(id)
 	defRef := integrationtypes.NewDefinitionRef(id)
 
-	def.UserInput = &integrationtypes.UserInputRegistration{
-		Schema:   jsonx.SchemaFrom[testUserInput](),
-		Replaces: surfaceUserInputRef.Replaces(),
-		Convert:  surfaceUserInputRef.Convert,
-		Backfill: surfaceUserInputRef.Backfill,
-	}
+	def.UserInput = surfaceUserInputRef.Registration()
 
 	def.Connections = []integrationtypes.ConnectionRegistration{
 		{CredentialRef: testCredentialRef.ID()},
@@ -65,6 +71,7 @@ func surfaceDefinition(id string) integrationtypes.Definition {
 			Topic:        defRef.OperationTopic("sync.users"),
 			ClientRef:    clientRef.ID(),
 			ConfigSchema: jsonx.SchemaFrom[testOperationConfig](),
+			Input:        &integrationtypes.InputRegistration{Name: "sync.users"},
 			Handle:       newTestHandler(),
 		},
 		{
@@ -72,7 +79,13 @@ func surfaceDefinition(id string) integrationtypes.Definition {
 			Topic:        defRef.OperationTopic("sync.groups"),
 			ClientRef:    clientRef.ID(),
 			ConfigSchema: jsonx.SchemaFrom[testOperationConfig](),
-			Handle:       newTestHandler(),
+			Input: &integrationtypes.InputRegistration{
+				Name: "sync.groups",
+				Upgrade: func(_ context.Context, _ integrationtypes.InstallationRequest, _ string, stored json.RawMessage) (json.RawMessage, error) {
+					return stored, nil
+				},
+			},
+			Handle: newTestHandler(),
 		},
 	}
 
@@ -120,10 +133,8 @@ func TestDefinitionSurface(t *testing.T) {
 	registered, _ := reg.Definition(def.ID)
 	surface := DefinitionSurface(registered)
 
-	retired := "retiredUserInput"
-
-	if surface.UserInput == nil || !surface.UserInput.Backfill || !slices.Equal(surface.UserInput.Replaces, []string{retired}) {
-		t.Fatalf("UserInput = %+v, want backfilled schema replacing %s", surface.UserInput, retired)
+	if surface.UserInput == nil || !surface.UserInput.Upgrade {
+		t.Fatalf("UserInput = %+v, want a schema declaring an upgrade", surface.UserInput)
 	}
 
 	if len(surface.UserInput.Schema) == 0 {
@@ -143,7 +154,20 @@ func TestDefinitionSurface(t *testing.T) {
 	}
 
 	if len(surface.Operations[0].Schema) == 0 || len(surface.Operations[1].Schema) == 0 {
-		t.Fatal("expected every operation's config schema to be surfaced")
+		t.Fatal("expected every operation's stored input schema to be surfaced")
+	}
+
+	if !surface.Operations[0].Upgrade || surface.Operations[1].Upgrade {
+		t.Fatalf("expected only sync.groups to surface an upgrade, got %+v", surface.Operations)
+	}
+
+	root, _, err := jsonx.SchemaRoot(surface.Operations[1].Schema)
+	if err != nil {
+		t.Fatalf("SchemaRoot() error = %v", err)
+	}
+
+	if _, ok := root.Properties.Get("disable"); !ok {
+		t.Fatal("expected the surfaced operation schema to carry the uniform settings")
 	}
 
 	if got := lo.Map(surface.Webhooks, func(w SurfaceWebhook, _ int) string { return w.Name }); !slices.Equal(got, []string{"events.v2", "static"}) {
@@ -291,11 +315,10 @@ func TestVersionChangesWhenASlotDeclaresAReplacement(t *testing.T) {
 
 	base, _ := minimalDefinition("version-def")
 
-	slot := testCredentialRef.Replacing(versionSecondCredentialRef, func(versionSecondCredential) testCredential { return testCredential{} })
+	slot := testCredentialRef.Replacing(versionSecondCredentialRef)
 
 	replacing, _ := minimalDefinition("version-def")
 	replacing.CredentialRegistrations[0].Replaces = slot.Replaces()
-	replacing.CredentialRegistrations[0].Convert = slot.Convert
 
 	if versionOf(t, replacing) == versionOf(t, base) {
 		t.Fatal("expected declaring a replacement to change the version")
@@ -315,8 +338,7 @@ func TestVersionChangesWhenAReplacementIsRemoved(t *testing.T) {
 	base := surfaceDefinition("version-def")
 
 	userInput := surfaceDefinition("version-def")
-	userInput.UserInput.Replaces = nil
-	userInput.UserInput.Convert = nil
+	userInput.UserInput.Upgrade = nil
 
 	operation := surfaceDefinition("version-def")
 	operation.Operations[0].Replaces = nil
@@ -325,9 +347,9 @@ func TestVersionChangesWhenAReplacementIsRemoved(t *testing.T) {
 	webhook.Webhooks[1].Replaces = nil
 
 	for name, def := range map[string]integrationtypes.Definition{
-		"user input replacement removed": userInput,
-		"operation replacement removed":  operation,
-		"webhook replacement removed":    webhook,
+		"user input upgrade removed":    userInput,
+		"operation replacement removed": operation,
+		"webhook replacement removed":   webhook,
 	} {
 		if versionOf(t, def) == versionOf(t, base) {
 			t.Fatalf("%s: expected the version to change", name)

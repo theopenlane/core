@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // healthHandler validates the bound credential, failing on the marker values
@@ -67,17 +66,4 @@ func webhookInboundEvent(req types.WebhookInboundRequest) (types.WebhookReceived
 		DeliveryID: envelope.DeliveryID,
 		Payload:    req.Payload,
 	}, nil
-}
-
-// disabledUnlessMode gates a reconcile operation on the installation's mode input
-func disabledUnlessMode(mode string) func(json.RawMessage) bool {
-	return func(userInput json.RawMessage) bool {
-		var input UserInput
-
-		if err := jsonx.UnmarshalIfPresent(userInput, &input); err != nil {
-			return false
-		}
-
-		return input.Mode != mode
-	}
 }

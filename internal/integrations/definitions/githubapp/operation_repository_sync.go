@@ -11,9 +11,6 @@ import (
 // repositoryAssetVariant is the mapping variant for repository asset payloads
 const repositoryAssetVariant = "repository"
 
-// repositorySyncOperation is the operation ref for the GitHub repository sync operation
-var repositorySyncOperation = types.OperationRefOf[RepositorySync]().Ingests(gitHubClient, runRepositorySync)
-
 // runRepositorySync enumerates accessible repositories and emits Asset ingest payloads
 func runRepositorySync(ctx context.Context, request types.OperationRequest, client GraphQLClient, _ RepositorySync) ([]types.IngestPayloadSet, error) {
 	repositories, err := queryRepositories(ctx, client, defaultPageSize, request.LastRunAt)

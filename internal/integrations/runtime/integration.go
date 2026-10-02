@@ -9,8 +9,8 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
-	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
@@ -29,14 +29,54 @@ type IntegrationLookup struct {
 	DefinitionID string
 }
 
-// ResolveIntegration resolves an integration by ID with optional owner/definition checks
+// ResolveIntegration resolves an integration by ID with optional owner and definition checks
 func (r *Runtime) ResolveIntegration(ctx context.Context, lookup IntegrationLookup) (*ent.Integration, error) {
-	return operations.ResolveIntegration(ctx, r.DB(), lookup.IntegrationID, lookup.OwnerID, lookup.DefinitionID)
+	if lookup.IntegrationID == "" {
+		return nil, ErrIntegrationIDRequired
+	}
+
+	query := r.DB().Integration.Query().Where(integration.IDEQ(lookup.IntegrationID))
+	if lookup.OwnerID != "" {
+		query = query.Where(integration.OwnerIDEQ(lookup.OwnerID))
+	}
+
+	record, err := query.Only(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if lookup.DefinitionID != "" && record.DefinitionID != lookup.DefinitionID {
+		return nil, ErrInstallationDefinitionMismatch
+	}
+
+	return record, nil
 }
 
-// ResolveOwnerIntegration finds a connected integration for the given definition and owner
+// ResolveOwnerIntegration returns the operational installation id for the definition and owner, or empty when none is selectable
 func (r *Runtime) ResolveOwnerIntegration(ctx context.Context, definitionID, ownerID string, prefer ...func(*ent.Integration) bool) (string, error) {
-	return operations.ResolveOwnerIntegration(ctx, r.DB(), definitionID, ownerID, prefer...)
+	integrations, err := r.DB().Integration.Query().
+		Where(
+			integration.OwnerIDEQ(ownerID),
+			integration.DefinitionIDEQ(definitionID),
+			integration.StatusIn(enums.IntegrationOperationalStatuses...),
+		).All(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	switch {
+	case len(integrations) == 1:
+		return integrations[0].ID, nil
+	case len(prefer) == 0:
+		return "", nil
+	}
+
+	preferred, found := lo.Find(integrations, prefer[0])
+	if !found {
+		return "", nil
+	}
+
+	return preferred.ID, nil
 }
 
 // EnsureInstallation returns an existing installation, or creates a new one

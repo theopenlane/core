@@ -15,9 +15,6 @@ import (
 // findingsPageSize is the number of Cloud Guard problems requested per paginated API call
 const findingsPageSize = 100
 
-// findingsSyncOperation is the operation ref for the Cloud Guard findings collection operation
-var findingsSyncOperation = types.OperationRefOf[FindingsSync]().Ingests(cloudGuardClient, runFindingsSync)
-
 // runFindingsSync collects Cloud Guard problems and emits finding ingest payloads
 func runFindingsSync(ctx context.Context, req types.OperationRequest, c *cloudguard.CloudGuardClient, cfg FindingsSync) ([]types.IngestPayloadSet, error) {
 	meta, err := resolveCredential(req.Credentials)

@@ -9,10 +9,6 @@ var (
 	ErrCredentialRefNotFound = errors.New("integrations: credential ref not found")
 	// ErrConnectionRefNotFound indicates the connection ref was not found in the definition
 	ErrConnectionRefNotFound = errors.New("integrations: connection credential ref not found")
-	// ErrNotReplaced indicates the retired name is not taken over by the definition
-	ErrNotReplaced = errors.New("integrations: retired name not replaced")
-	// ErrLayoutMismatch indicates a payload does not match the retired layout it was stored under
-	ErrLayoutMismatch = errors.New("integrations: payload does not match retired layout")
 	// ErrOperationConfigInvalid indicates an operation config payload could not be decoded
 	ErrOperationConfigInvalid = errors.New("operation config invalid")
 )

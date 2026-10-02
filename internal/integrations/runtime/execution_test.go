@@ -46,7 +46,7 @@ func TestExecuteOperationInvalidConfig(t *testing.T) {
 		ID:           "install-1",
 		DefinitionID: "test-def",
 	}, op, nil, json.RawMessage(`{}`))
-	if !errors.Is(err, ErrOperationConfigInvalid) {
+	if !errors.Is(err, types.ErrOperationConfigInvalid) {
 		t.Fatalf("expected ErrOperationConfigInvalid, got %v", err)
 	}
 }
@@ -297,22 +297,14 @@ func TestExecuteOperationResolvesConfigFromInstallation(t *testing.T) {
 
 	rt := NewForTesting(registry.New())
 	installation := &ent.Integration{
-		ID:           "install-1",
-		DefinitionID: "test-def",
-		Config:       openapi.IntegrationConfig{ClientConfig: json.RawMessage(`{"directorySync":{"filterExpr":"payload.active"}}`)},
+		ID:              "install-1",
+		DefinitionID:    "test-def",
+		OperationConfig: openapi.IntegrationOperationConfig{Operations: map[string]json.RawMessage{"test-op": json.RawMessage(`{"filterExpr":"payload.active"}`)}},
 	}
 
 	var captured types.OperationRequest
 	_, err := rt.ExecuteOperation(context.Background(), installation, types.OperationRegistration{
 		Name: "test-op",
-		ConfigResolver: func(userInput json.RawMessage) json.RawMessage {
-			var top map[string]json.RawMessage
-			if err := json.Unmarshal(userInput, &top); err != nil {
-				return nil
-			}
-
-			return top["directorySync"]
-		},
 		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
 			captured = req
 			return nil, nil
@@ -327,21 +319,18 @@ func TestExecuteOperationRefusesDisabledOperation(t *testing.T) {
 
 	rt := NewForTesting(registry.New())
 	installation := &ent.Integration{
-		ID:           "install-1",
-		DefinitionID: "test-def",
-		Config:       openapi.IntegrationConfig{ClientConfig: json.RawMessage(`{"directorySync":{"disable":true}}`)},
+		ID:              "install-1",
+		DefinitionID:    "test-def",
+		OperationConfig: openapi.IntegrationOperationConfig{Operations: map[string]json.RawMessage{"test-op": json.RawMessage(`{"disable":true}`)}},
 	}
 
 	cases := map[string]types.OperationRegistration{
 		"disabled for all": {
-			Name:           "test-op",
+			Name:           "other-op",
 			DisabledForAll: true,
 		},
 		"disabled for the installation": {
 			Name: "test-op",
-			Disabled: func(userInput json.RawMessage) bool {
-				return string(userInput) == `{"directorySync":{"disable":true}}`
-			},
 		},
 	}
 
@@ -363,26 +352,19 @@ func TestExecuteOperationRefusesDisabledOperation(t *testing.T) {
 	}
 }
 
-func TestExecuteOperationExplicitConfigWinsOverResolver(t *testing.T) {
+func TestExecuteOperationExplicitConfigWinsOverStored(t *testing.T) {
 	t.Parallel()
 
 	rt := NewForTesting(registry.New())
 	installation := &ent.Integration{
-		ID:           "install-1",
-		DefinitionID: "test-def",
-		Config:       openapi.IntegrationConfig{ClientConfig: json.RawMessage(`{"directorySync":{"filterExpr":"payload.active"}}`)},
+		ID:              "install-1",
+		DefinitionID:    "test-def",
+		OperationConfig: openapi.IntegrationOperationConfig{Operations: map[string]json.RawMessage{"test-op": json.RawMessage(`{"filterExpr":"payload.active"}`)}},
 	}
-
-	resolved := false
 
 	var captured types.OperationRequest
 	_, err := rt.ExecuteOperation(context.Background(), installation, types.OperationRegistration{
 		Name: "test-op",
-		ConfigResolver: func(json.RawMessage) json.RawMessage {
-			resolved = true
-
-			return json.RawMessage(`{"filterExpr":"payload.active"}`)
-		},
 		Handle: func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
 			captured = req
 			return nil, nil
@@ -390,5 +372,4 @@ func TestExecuteOperationExplicitConfigWinsOverResolver(t *testing.T) {
 	}, nil, json.RawMessage(`{"key":"value"}`))
 	assert.NilError(t, err)
 	assert.Equal(t, string(captured.Config), `{"key":"value"}`)
-	assert.Assert(t, !resolved, "expected explicit config to bypass the resolver")
 }

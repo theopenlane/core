@@ -42,7 +42,7 @@ type Definition struct {
 	// OperatorConfig describes operator-owned configuration for the definition
 	OperatorConfig *OperatorConfigRegistration `json:"operatorConfig,omitempty"`
 	// UserInput describes installation-scoped user input for the definition
-	UserInput *UserInputRegistration `json:"userInput,omitempty"`
+	UserInput *InputRegistration `json:"userInput,omitempty"`
 	// CredentialRegistrations describes the credential slots exposed by the definition
 	CredentialRegistrations []CredentialRegistration `json:"credentialRegistrations,omitempty"`
 	// Connections describes the connection modes exposed by the definition
@@ -79,19 +79,22 @@ type OperatorConfigRegistration struct {
 	Schema json.RawMessage `json:"schema,omitempty"`
 }
 
-// BackfillFunc completes a stored payload missing values from the live installation
-type BackfillFunc func(ctx context.Context, req InstallationRequest, payload json.RawMessage) (json.RawMessage, error)
+// UpgradeFunc reshapes a stored document from the layout, slot, or operation name it was persisted under into the current layout
+type UpgradeFunc func(ctx context.Context, req InstallationRequest, from string, stored json.RawMessage) (json.RawMessage, error)
 
-// UserInputRegistration describes installation-scoped user input
-type UserInputRegistration struct {
-	// Schema is the JSON schema used to collect installation-scoped user input
+// ValidateFunc checks a payload that already satisfies its schema for constraints the schema cannot express
+type ValidateFunc func(ctx context.Context, req InstallationRequest, payload json.RawMessage) error
+
+// InputRegistration describes one stored installation-scoped input layout and how older documents move onto it
+type InputRegistration struct {
+	// Name is the stable layout name the stored document is keyed by
+	Name string `json:"name"`
+	// Schema is the JSON schema the stored document conforms to
 	Schema json.RawMessage `json:"schema,omitempty"`
-	// Replaces lists the retired layout names whose stored user input converts into this schema
-	Replaces []string `json:"-"`
-	// Convert reshapes stored user input from a retired layout into this schema
-	Convert func(old json.RawMessage) (json.RawMessage, error) `json:"-"`
-	// Backfill completes stored user input missing values
-	Backfill BackfillFunc `json:"-"`
+	// Upgrade reshapes a stored document from the layout it was persisted under, nil when none is declared
+	Upgrade UpgradeFunc `json:"-"`
+	// Validate checks a schema-valid payload for semantic constraints, nil when none is declared
+	Validate ValidateFunc `json:"-"`
 }
 
 // CredentialRegistration declares how a definition accepts credentials
@@ -108,12 +111,12 @@ type CredentialRegistration struct {
 	StoredSchema json.RawMessage `json:"-"`
 	// Recommended indicates the method that is recommend if there are multiple options
 	Recommended bool `json:"recommended,omitempty"`
-	// Replaces lists the retired slots whose stored payloads convert into this slot
+	// Replaces lists the retired slots whose stored payloads move onto this slot
 	Replaces []CredentialSlotID `json:"-"`
-	// Convert reshapes a payload stored under a retired slot into this slot's schema
-	Convert func(from CredentialSlotID, old json.RawMessage) (json.RawMessage, error) `json:"-"`
-	// Backfill completes a stored payload missing values
-	Backfill BackfillFunc `json:"-"`
+	// Upgrade reshapes a payload from the slot it was persisted under into this slot's schema
+	Upgrade UpgradeFunc `json:"-"`
+	// Validate checks a schema-valid payload for semantic constraints, nil when none is declared
+	Validate ValidateFunc `json:"-"`
 }
 
 // ConnectionRegistration describes one connection mode for a definition
@@ -128,8 +131,6 @@ type ConnectionRegistration struct {
 	Meta map[string]MetaInfo `json:"meta,omitempty"`
 	// CredentialRefs lists the credential slots used by this connection mode
 	CredentialRefs []CredentialSlotID `json:"credentialRefs,omitempty"`
-	// ClientRefs lists the clients initialized by this connection mode
-	ClientRefs []ClientID `json:"-"`
 	// Auth describes how this connection mode performs auth when supported
 	Auth *AuthRegistration `json:"auth,omitempty"`
 	// Disconnect describes how this connection mode tears down an installation
@@ -164,18 +165,57 @@ func (d Definition) CredentialRegistration(ref CredentialSlotID) (CredentialRegi
 	return reg, nil
 }
 
-// CredentialReplacing returns the registration whose slot takes over the retired slot's payloads
-func (d Definition) CredentialReplacing(retired CredentialSlotID) (CredentialRegistration, bool) {
-	return lo.Find(d.CredentialRegistrations, func(r CredentialRegistration) bool {
-		return lo.Contains(r.Replaces, retired)
+// Operation returns the operation registration for the given name
+func (d Definition) Operation(name string) (OperationRegistration, bool) {
+	return lo.Find(d.Operations, func(r OperationRegistration) bool {
+		return r.Name == name
 	})
 }
 
-// WebhookReplacing returns the registration whose contract takes over the retired name's rows
-func (d Definition) WebhookReplacing(retired string) (WebhookRegistration, bool) {
+// Webhook returns the webhook registration for the given contract name
+func (d Definition) Webhook(name string) (WebhookRegistration, bool) {
 	return lo.Find(d.Webhooks, func(r WebhookRegistration) bool {
-		return lo.Contains(r.Replaces, retired)
+		return r.Name == name
 	})
+}
+
+// ResolveCredential returns the registration for the slot, or the one whose slot replaces it; replaced reports the fallback
+func (d Definition) ResolveCredential(ref CredentialSlotID) (registration CredentialRegistration, replaced bool, ok bool) {
+	if registration, err := d.CredentialRegistration(ref); err == nil {
+		return registration, false, true
+	}
+
+	registration, ok = lo.Find(d.CredentialRegistrations, func(r CredentialRegistration) bool {
+		return lo.Contains(r.Replaces, ref)
+	})
+
+	return registration, ok, ok
+}
+
+// ResolveOperation returns the registration for the name, or the one whose operation replaces it; replaced reports the fallback
+func (d Definition) ResolveOperation(name string) (registration OperationRegistration, replaced bool, ok bool) {
+	if registration, ok := d.Operation(name); ok {
+		return registration, false, true
+	}
+
+	registration, ok = lo.Find(d.Operations, func(r OperationRegistration) bool {
+		return lo.Contains(r.Replaces, name)
+	})
+
+	return registration, ok, ok
+}
+
+// ResolveWebhook returns the registration for the name, or the one whose contract replaces it; replaced reports the fallback
+func (d Definition) ResolveWebhook(name string) (registration WebhookRegistration, replaced bool, ok bool) {
+	if registration, ok := d.Webhook(name); ok {
+		return registration, false, true
+	}
+
+	registration, ok = lo.Find(d.Webhooks, func(r WebhookRegistration) bool {
+		return lo.Contains(r.Replaces, name)
+	})
+
+	return registration, ok, ok
 }
 
 // ConnectionRegistration returns the connection registration for the given credential slot

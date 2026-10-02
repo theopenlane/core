@@ -10,10 +10,10 @@ import (
 
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/iam/auth"
 	mockprovider "github.com/theopenlane/newman/providers/mock"
 
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/utils/ulids"
@@ -56,7 +56,8 @@ func harnessReconcileOperation(t *testing.T, mode string) string {
 	return ""
 }
 
-// newHarnessInstallation installs the test integration in the given mode through the prod connect flow; the unresolvable mode stores a non-token credential so the client cannot build
+// newHarnessInstallation installs the test integration in the given mode through the prod
+// connect flow; the unresolvable mode stores a non-token credential so the client cannot build
 func newHarnessInstallation(t *testing.T, ctx context.Context, mode string) (*ent.Integration, string) {
 	t.Helper()
 
@@ -77,14 +78,15 @@ func newHarnessInstallation(t *testing.T, ctx context.Context, mode string) (*en
 		credential = testint.ServiceAccountCredentialSet("test-project", "svc@example.com")
 	}
 
-	require.NoError(t, suite.IntegrationsRT.Reconcile(ctx, installation, testint.ModeInput(mode), credentialRef, &credential, nil))
+	require.NoError(t, suite.IntegrationsRT.Reconcile(ctx, installation, nil, testint.ModeOperationConfig(mode), credentialRef, &credential, nil))
 
 	fragment := reconcileLoopFragment(t, installation.ID, harnessReconcileOperation(t, mode))
 
 	return reloadIntegration(t, ctx, installation.ID), fragment
 }
 
-// seedHarnessLoop installs the test integration in recurring mode and asserts the connect flow seeded exactly one loop
+// seedHarnessLoop installs the test integration in recurring mode and asserts the connect flow
+// seeded exactly one loop
 func seedHarnessLoop(t *testing.T, ctx context.Context) (*ent.Integration, string) {
 	t.Helper()
 
@@ -97,7 +99,8 @@ func seedHarnessLoop(t *testing.T, ctx context.Context) (*ent.Integration, strin
 	return installation, fragment
 }
 
-// reconcileLoopFragment builds the metadata containment fragment identifying the recurring loop jobs for one installation and operation, matching the keys ResetReconcileLoops uses
+// reconcileLoopFragment builds the metadata containment fragment identifying the recurring
+// loop jobs for one installation and operation, matching the keys ResetReconcileLoops uses
 func reconcileLoopFragment(t *testing.T, integrationID, operation string) string {
 	t.Helper()
 
@@ -145,6 +148,10 @@ func reloadIntegration(t *testing.T, ctx context.Context, id string) *ent.Integr
 
 	return installation
 }
+
+// TestIntegrationLifecycle drives one slack installation through seeding, unhealthy,
+// recovery, listener-driven cancel/reseed, duplicate collapse, and soft delete; subtests
+// share the installation and run in order
 
 // waitForCondition polls condition until it holds or the deadline passes
 func waitForCondition(t *testing.T, condition func() bool, msg string) {

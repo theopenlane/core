@@ -523,7 +523,7 @@ components:
                 - displayName
             type: object
         IntegrationProvidersResponse:
-            description: IntegrationProvidersResponse is the response listing available integration definitions
+            description: IntegrationProvidersResponse is the response listing available integration definitions.
             properties:
                 error:
                     description: The error message if the request was unsuccessful
@@ -615,7 +615,10 @@ components:
                                     properties:
                                         linkTargets:
                                             items:
-                                                description: LinkTargetInfo describes one edge an ingested record can be cross-linked through
+                                                description: |-
+                                                    LinkTargetInfo describes one edge an ingested record of a schema can be cross-linked through,
+                                                    with the fields available on each side for composing a LinkRule. One entry is emitted per edge,
+                                                    so a schema with several edges to the same target type surfaces each as a distinct choice
                                                 properties:
                                                     edge:
                                                         type: string
@@ -658,7 +661,13 @@ components:
                                                     type: string
                                                 links:
                                                     items:
-                                                        description: LinkRule describes one cross-object link and how to match candidates for it
+                                                        description: |-
+                                                            LinkRule describes one cross-object link: which target object type to link the ingested record to
+                                                            and how to match candidates — either a field match (target field equals a source field/list value,
+                                                            pushed into the query as an indexed predicate) or a CEL expression evaluated per candidate.
+                                                            Field names are the entityops catalog identifiers surfaced in the mapping's LinkTargets inventory:
+                                                            TargetField is a match-key column on the target, SourceField/SourceList are mapping input keys on
+                                                            the source. Registration validates every rule against the catalog so typos fail at startup
                                                         properties:
                                                             edge:
                                                                 type: string

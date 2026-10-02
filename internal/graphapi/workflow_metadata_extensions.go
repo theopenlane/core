@@ -100,11 +100,11 @@ func integrationWorkflowProviders(ctx context.Context, rt *intr.Runtime, db *ent
 
 	orgAvailability := resolveOrgIntegrationAvailability(ctx, db)
 
-	specs := rt.Catalog()
+	specs := rt.Registry().Catalog()
 	entries := make([]integrationProviderExtensions, 0, len(specs))
 
 	for _, spec := range specs {
-		def, ok := rt.Definition(spec.ID)
+		def, ok := rt.Registry().Definition(spec.ID)
 		if !ok {
 			continue
 		}

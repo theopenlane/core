@@ -18,13 +18,9 @@ var (
 	// slackBotTokenCredential is the credential slot for user-provisioned bot tokens
 	slackBotTokenCredential = types.CredentialRefOf[slackBotTokenCred]()
 	// slackClient is the unified client ref for every Slack operation
-	slackClient = types.ClientRefOf[*SlackClient]().Using(slackCredential).Using(slackBotTokenCredential)
-	// slackOAuthConnection is the connection mode selected by the OAuth credential slot
-	slackOAuthConnection = types.NewConnectionRef(slackCredential).Enables(slackClient)
-	// slackBotTokenConnection is the connection mode selected by the bot token credential slot
-	slackBotTokenConnection = types.NewConnectionRef(slackBotTokenCredential).Enables(slackClient)
+	slackClient = types.ClientRefOf[*SlackClient]()
 	// userInput is the installation user input layout for the Slack definition
-	userInput = types.NewUserInputRef[UserInput]("slack")
+	userInput = types.UserInputRefOf[UserInput]()
 )
 
 // RuntimeSlackConfig is the runtime-provisioned configuration for the system Slack integration
@@ -74,16 +70,10 @@ type slackBotTokenCred struct {
 type UserInput struct {
 	// DefaultMessaging marks this installation as the preferred workspace for messaging
 	DefaultMessaging bool `json:"defaultMessaging,omitempty" jsonschema:"title=Default Messaging"`
-	// DirectorySync includes the configuration for identity accounts from Slack members
-	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Account Sync"`
 }
 
-type DirectorySync struct {
-	// Disable switches the directory sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of workspace members from Slack"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting.,example=Example: payload.is_external == false'"`
-}
+// DirectorySync is the Slack directory account sync operation configuration
+type DirectorySync struct{}
 
 // InstallationMetadata holds the stable Slack workspace identity for one installation
 type InstallationMetadata struct {

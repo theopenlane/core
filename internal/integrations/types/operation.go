@@ -5,20 +5,42 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/enums"
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// Switch is the per-installation disable toggle decoded from a config section's disable key
-type Switch struct {
+// OperationSettings holds the uniform per-installation settings stored on every operation input
+type OperationSettings struct {
 	// Disable switches the operation off for the installation
-	Disable bool `json:"disable,omitempty"`
+	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable this operation for the installation"`
+	// FilterExpr limits ingested records to envelopes matching the CEL expression
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to records before ingesting"`
 }
 
-// Disabled reports whether the toggle switches the operation off
-func (s Switch) Disabled() bool {
-	return s.Disable
+// operationSettingsSchema is the reflected schema of the uniform operation settings
+var operationSettingsSchema = jsonx.SchemaFrom[OperationSettings]()
+
+// operationSettingsKeys lists the stored keys the uniform operation settings occupy
+var operationSettingsKeys = lo.Map(jsonx.PropertyDescriptors[OperationSettings](), func(property jsonx.PropertyDescriptor, _ int) string {
+	return property.Name
+})
+
+// OperationSettingsSchema returns a copy of the reflected uniform operation settings schema
+func OperationSettingsSchema() json.RawMessage {
+	return jsonx.CloneRawMessage(operationSettingsSchema)
+}
+
+// OperationSettingsFrom decodes the uniform settings from a stored operation input document
+func OperationSettingsFrom(doc json.RawMessage) (OperationSettings, error) {
+	var settings OperationSettings
+
+	err := jsonx.UnmarshalIfPresent(doc, &settings)
+
+	return settings, err
 }
 
 // WorkflowMeta captures workflow linkage for a queued integration execution
@@ -133,17 +155,17 @@ type OperationRegistration struct {
 	IngestHandle IngestHandler `json:"-"`
 	// DisabledForAll marks the sync unavailable, hiding config params from the user
 	DisabledForAll bool `json:"disabledForAll"`
-	// Disabled reports whether this operation is disabled for a given installation's user input JSON
-	Disabled func(userInput json.RawMessage) bool `json:"-"`
-	// ConfigResolver extracts the operation's config JSON from the installation's user input
-	ConfigResolver func(userInput json.RawMessage) json.RawMessage `json:"-"`
+	// Input describes the stored per-installation input document for the operation
+	Input *InputRegistration `json:"input,omitempty"`
 	// Schedule overrides the default adaptive schedule for reconcile or scheduled cycles
 	Schedule *gala.Schedule `json:"-"`
 	// SkipDefaultLookback disables the runtime's default lookback window on initial runs
 	SkipDefaultLookback bool `json:"-"`
 }
 
-// DisabledFor reports whether the operation is switched off globally or for this installation
-func (o OperationRegistration) DisabledFor(userInput json.RawMessage) bool {
-	return o.DisabledForAll || (o.Disabled != nil && o.Disabled(userInput))
+// DisabledFor reports whether the operation is switched off globally or by the stored input document
+func (o OperationRegistration) DisabledFor(input json.RawMessage) bool {
+	settings, err := OperationSettingsFrom(input)
+
+	return o.DisabledForAll || (err == nil && settings.Disable)
 }

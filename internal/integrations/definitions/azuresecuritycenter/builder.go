@@ -10,18 +10,15 @@ import (
 func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
-				Family:      "Azure",
-				DisplayName: "Microsoft Defender for Cloud",
-				Description: "Collect security assessment findings and vulnerability data from Microsoft Defender for Cloud across an Azure subscription.",
-				Category:    "security-posture",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/azure_security_center",
-				Tags:        []string{"vulnerabilities", "assets"},
-				Active:      false,
-				Visible:     true,
-			},
-			UserInput:    userInput.Registration(),
+			ID:           definitionID.ID(),
+			Family:       "Azure",
+			DisplayName:  "Microsoft Defender for Cloud",
+			Description:  "Collect security assessment findings and vulnerability data from Microsoft Defender for Cloud across an Azure subscription.",
+			Category:     "security-posture",
+			DocsURL:      "https://docs.theopenlane.io/docs/platform/integrations/azure_security_center",
+			Tags:         []string{"vulnerabilities", "assets"},
+			Active:       false,
+			Visible:      true,
 			HealthCheck:  securityCenterClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
@@ -31,13 +28,15 @@ func Builder() registry.Builder {
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				securityCenterConnection.Registration(types.ConnectionRegistration{
-					Name:        "Azure Service Principal",
-					Description: "Configure Defender for Cloud access using an Azure service principal.",
+				{
+					CredentialRef: securityCenterCredential.ID(),
+					Name:          "Azure Service Principal",
+					Description:   "Configure Defender for Cloud access using an Azure service principal.",
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Removes the stored service principal credentials from Openlane. If the Azure app registration is no longer needed, delete it from your Azure tenant.",
+						CredentialRef: securityCenterCredential.ID(),
+						Description:   "Removes the stored service principal credentials from Openlane. If the Azure app registration is no longer needed, delete it from your Azure tenant.",
 					},
-				}),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				securityCenterClient.Registration(Client{}.Build, types.ClientRegistration{
@@ -45,24 +44,20 @@ func Builder() registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				assessmentsCollectOperation.Registration(definitionID, types.OperationRegistration{
-					Description: "Collect unhealthy security posture assessment findings for vulnerability ingestion",
-					Policy:      types.ExecutionPolicy{Reconcile: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaVulnerability.Name,
-						},
-					},
-				}),
-				subAssessmentsCollectOperation.Registration(definitionID, types.OperationRegistration{
-					Description: "Collect granular sub-assessment vulnerability findings (CVEs from container images, servers, and SQL checks)",
-					Policy:      types.ExecutionPolicy{Reconcile: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaVulnerability.Name,
-						},
-					},
-				}),
+				types.OperationRefOf[AssessmentsCollect]().
+					Ingests(securityCenterClient, runAssessmentsCollect).
+					Policy(types.ExecutionPolicy{Reconcile: true}).
+					Ingest(types.IngestContract{Schema: entityops.SchemaVulnerability.Name}).
+					Registration(definitionID, types.OperationRegistration{
+						Description: "Collect unhealthy security posture assessment findings for vulnerability ingestion",
+					}),
+				types.OperationRefOf[SubAssessmentsCollect]().
+					Ingests(securityCenterClient, runSubAssessmentsCollect).
+					Policy(types.ExecutionPolicy{Reconcile: true}).
+					Ingest(types.IngestContract{Schema: entityops.SchemaVulnerability.Name}).
+					Registration(definitionID, types.OperationRegistration{
+						Description: "Collect granular sub-assessment vulnerability findings (CVEs from container images, servers, and SQL checks)",
+					}),
 			},
 			Mappings: []types.MappingRegistration{
 				{

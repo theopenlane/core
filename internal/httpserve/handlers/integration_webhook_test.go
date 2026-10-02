@@ -175,7 +175,7 @@ type webhookTestIntegration struct {
 func (suite *HandlerTestSuite) createWebhookTestIntegration(t *testing.T, ctx context.Context, orgID, definitionID string) webhookTestIntegration {
 	t.Helper()
 
-	def, ok := suite.h.IntegrationsRuntime.Definition(definitionID)
+	def, ok := suite.h.IntegrationsRuntime.Registry().Definition(definitionID)
 	require.True(t, ok)
 
 	integrationRec, _, err := suite.h.IntegrationsRuntime.EnsureInstallation(ctx, orgID, "", def)
@@ -184,7 +184,7 @@ func (suite *HandlerTestSuite) createWebhookTestIntegration(t *testing.T, ctx co
 	credential := types.CredentialSet{
 		Data: json.RawMessage(`{"token":"test-token"}`),
 	}
-	err = suite.h.IntegrationsRuntime.Reconcile(ctx, integrationRec, nil, webhookTestCredentialRef.ID(), &credential, nil)
+	err = suite.h.IntegrationsRuntime.Reconcile(ctx, integrationRec, nil, nil, webhookTestCredentialRef.ID(), &credential, nil)
 	require.NoError(t, err)
 
 	webhookRec, err := suite.h.IntegrationsRuntime.EnsureWebhook(ctx, integrationRec, "inbound.events", "")

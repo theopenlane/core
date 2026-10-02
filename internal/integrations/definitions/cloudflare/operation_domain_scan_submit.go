@@ -30,7 +30,13 @@ type DomainScanSubmitResult struct {
 }
 
 // DomainScanSubmitOp is the operation ref for submitting domains to the URL Scanner
-var DomainScanSubmitOp = types.OperationRefOf[DomainScanSubmit]().Handles(cloudflareClient, runDomainScanSubmit) //nolint:revive
+//
+//nolint:revive
+var DomainScanSubmitOp = types.OperationRefOf[DomainScanSubmit]().
+	Handles(cloudflareClient, runDomainScanSubmit).
+	Policy(types.ExecutionPolicy{SkipRunRecord: true}).
+	CustomerSelectable(false).
+	Internal()
 
 // runDomainScanSubmit submits the configured domains to the URL Scanner and encodes the result
 func runDomainScanSubmit(ctx context.Context, _ types.OperationRequest, client *CloudflareClient, cfg DomainScanSubmit) (json.RawMessage, error) {

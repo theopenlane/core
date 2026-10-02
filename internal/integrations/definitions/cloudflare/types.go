@@ -13,11 +13,7 @@ var (
 	// cloudflareCredential is the typed credential slot for the Cloudflare API token
 	cloudflareCredential = types.CredentialRefOf[CredentialSchema]()
 	// cloudflareClient is the client ref for the Cloudflare API client used by this definition
-	cloudflareClient = types.ClientRefOf[*CloudflareClient]().Using(cloudflareCredential)
-	// cloudflareConnection is the connection mode selected by the Cloudflare API token credential
-	cloudflareConnection = types.NewConnectionRef(cloudflareCredential).Enables(cloudflareClient)
-	// userInput is the installation user input layout for the Cloudflare definition
-	userInput = types.NewUserInputRef[UserInput]("cloudflare")
+	cloudflareClient = types.ClientRefOf[*CloudflareClient]()
 )
 
 const (
@@ -58,39 +54,14 @@ const (
 	assetSyncMaxIntervalDays   = 7
 )
 
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// DirectorySync includes the configuration for identity accounts from Cloudflare members
-	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Account Sync"`
-	// AssetSync includes the configuration for Cloudflare domains as assets
-	AssetSync AssetSync `json:"assetSync,omitempty" jsonschema:"title=Cloudflare Asset Sync"`
-	// FindingsSync includes the configuration for findings from Cloudflare Security Center insights
-	FindingsSync FindingsSync `json:"findingSync,omitempty" jsonschema:"title=Security Insights Sync"`
-}
-
-// DirectorySync holds installation-specific configuration collected from the user
-type DirectorySync struct {
-	// Disable switches the directory sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of account members from Cloudflare"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.status = 'ACTIVE'"`
-}
+// DirectorySync holds installation-specific configuration for Cloudflare account members
+type DirectorySync struct{}
 
 // FindingsSync holds installation-specific configuration for Cloudflare Security Center insights
-type FindingsSync struct {
-	// Disable switches the findings sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of security insights from Cloudflare"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.severity == 'Critical'"`
-}
+type FindingsSync struct{}
 
 // AssetSync holds installation-specific configuration for Cloudflare domain assets
-type AssetSync struct {
-	// Disable switches the asset sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of domains from Cloudflare"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.status == 'active'"`
-}
+type AssetSync struct{}
 
 // CredentialSchema holds the Cloudflare API credentials for one installation
 type CredentialSchema struct {

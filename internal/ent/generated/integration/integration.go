@@ -68,6 +68,10 @@ const (
 	FieldInstallationMetadata = "installation_metadata"
 	// FieldProviderState holds the string denoting the provider_state field in the database.
 	FieldProviderState = "provider_state"
+	// FieldUserInput holds the string denoting the user_input field in the database.
+	FieldUserInput = "user_input"
+	// FieldOperationConfig holds the string denoting the operation_config field in the database.
+	FieldOperationConfig = "operation_config"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
 	// FieldHealth holds the string denoting the health field in the database.
@@ -329,6 +333,8 @@ var Columns = []string{
 	FieldConfig,
 	FieldInstallationMetadata,
 	FieldProviderState,
+	FieldUserInput,
+	FieldOperationConfig,
 	FieldMetadata,
 	FieldHealth,
 	FieldDefinitionID,

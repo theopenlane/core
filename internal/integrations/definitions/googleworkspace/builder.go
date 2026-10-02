@@ -23,17 +23,15 @@ func Builder(cfg Config) registry.Builder {
 		installation := installationRef(cfg)
 
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
-				Family:      "Google Workspace",
-				DisplayName: "Google Workspace",
-				Description: "Collect Google Workspace directory and identity metadata to support account hygiene and compliance posture checks.",
-				Category:    "identity",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/google_workspace",
-				Tags:        []string{"directory"},
-				Active:      true,
-				Visible:     true,
-			},
+			ID:          definitionID.ID(),
+			Family:      "Google Workspace",
+			DisplayName: "Google Workspace",
+			Description: "Collect Google Workspace directory and identity metadata to support account hygiene and compliance posture checks.",
+			Category:    "identity",
+			DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/google_workspace",
+			Tags:        []string{"directory"},
+			Active:      true,
+			Visible:     true,
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
@@ -47,9 +45,10 @@ func Builder(cfg Config) registry.Builder {
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				workspaceConnection.Registration(types.ConnectionRegistration{
-					Name:        "Google Workspace OAuth",
-					Description: "Connect your Google Workspace domain using OAuth.",
+				{
+					CredentialRef: workspaceCredential.ID(),
+					Name:          "Google Workspace OAuth",
+					Description:   "Connect your Google Workspace domain using OAuth.",
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[googleWorkspaceCred]{
 						CredentialRef: workspaceCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -74,9 +73,10 @@ func Builder(cfg Config) registry.Builder {
 						EncodeCredentialError: ErrCredentialEncode,
 					}),
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Google Workspace admin console under Security > API controls.",
+						CredentialRef: workspaceCredential.ID(),
+						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Google Workspace admin console under Security > API controls.",
 					},
-				}),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				workspaceClient.Registration(Client{cfg: cfg}.Build, types.ClientRegistration{
@@ -84,14 +84,16 @@ func Builder(cfg Config) registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				directorySyncOperation.Registration(definitionID, types.OperationRegistration{
-					Description:         "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",
-					Policy:              types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Ingest:              providerkit.DirectoryIngestContracts(),
-					SkipDefaultLookback: true,
-					RequiredPermissions: directorySyncScopes,
-					Schedule:            gala.NewFullFetchSchedule(),
-				}),
+				types.OperationRefOf[DirectorySync]().
+					Ingests(workspaceClient, runDirectorySync).
+					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
+					Schedule(gala.NewFullFetchSchedule()).
+					SkipDefaultLookback().
+					Ingest(providerkit.DirectoryIngestContracts()...).
+					Permissions(directorySyncScopes...).
+					Registration(definitionID, types.OperationRegistration{
+						Description: "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",
+					}),
 			},
 			Mappings: providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 		}, nil

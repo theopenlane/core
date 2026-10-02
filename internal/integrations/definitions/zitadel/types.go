@@ -16,15 +16,9 @@ var (
 	// zitadelOAuthCredential is the typed runtime ref for resolving the OAuth credential
 	zitadelOAuthCredential = types.CredentialRefOf[OAuthCredentialSchema]()
 	// zitadelClient is the client ref for the Zitadel unified API client
-	zitadelClient = types.ClientRefOf[*client.Client]().Using(zitadelPATCredential).Using(zitadelOAuthCredential)
-	// zitadelPATConnection is the connection mode selected by the PAT credential slot
-	zitadelPATConnection = types.NewConnectionRef(zitadelPATCredential).Enables(zitadelClient)
-	// zitadelOAuthConnection is the connection mode selected by the OAuth client-credentials slot
-	zitadelOAuthConnection = types.NewConnectionRef(zitadelOAuthCredential).Enables(zitadelClient)
-	// userInput is the installation user input layout, replacing the flat v1 layout
-	userInput = types.NewUserInputRef[UserInput]("zitadel").Replacing(types.NewUserInputRef[oldUserInput]("zitadel-v1"), func(old oldUserInput) UserInput {
-		return UserInput{PrimaryDirectory: old.PrimaryDirectory, DirectorySync: DirectorySync{FilterExpr: old.FilterExpr}}
-	})
+	zitadelClient = types.ClientRefOf[*client.Client]()
+	// userInput is the installation user input layout
+	userInput = types.UserInputRefOf[UserInput]()
 )
 
 // CredentialSchema holds the Zitadel instance credentials for one installation
@@ -49,25 +43,10 @@ type OAuthCredentialSchema struct {
 type UserInput struct {
 	// PrimaryDirectory marks this installation as the authoritative source for identity holder sync
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory,description=Mark this as the authoritative source for identity holder enrichment and lifecycle"`
-	// DirectorySync configures the directory sync operation
-	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Sync"`
 }
 
 // DirectorySync configures collection of Zitadel directory users
-type DirectorySync struct {
-	// Disable switches the directory sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users from Zitadel"`
-	// FilterExpr limits imported records to envelopes matching a CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
-}
-
-// oldUserInput is the flat v1 installation user input layout
-type oldUserInput struct {
-	// PrimaryDirectory marks this installation as the authoritative source for identity holder sync
-	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory,description=Mark this as the authoritative source for identity holder enrichment and lifecycle"`
-	// FilterExpr limits imported records to envelopes matching a CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
-}
+type DirectorySync struct{}
 
 // InstallationMetadata holds the stable Zitadel instance identity for one installation
 type InstallationMetadata struct {

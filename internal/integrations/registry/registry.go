@@ -1,6 +1,7 @@
 package registry
 
 import (
+	"cmp"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -57,32 +58,34 @@ type Snapshot struct {
 	Surface Surface `json:"surface"`
 }
 
-// SurfaceSchema is the stored schema of one kind and its cross-version carry rules
+// SurfaceSchema is the stored schema of one kind and whether it declares an upgrade for older documents
 type SurfaceSchema struct {
 	// Schema is the reflected JSON schema of the stored type
 	Schema json.RawMessage `json:"schema"`
-	// Replaces lists the retired names whose stored payloads this kind takes over, sorted
-	Replaces []string `json:"replaces,omitempty"`
-	// Backfill reports whether the kind declares a backfill for payloads missing values
-	Backfill bool `json:"backfill,omitempty"`
+	// Upgrade reports whether the kind declares an upgrade for documents stored under an older layout
+	Upgrade bool `json:"upgrade,omitempty"`
 }
 
-// SurfaceCredential is one credential slot and the schema of what it stores
+// SurfaceCredential is one credential slot, the schema of what it stores, and the retired slots it takes over
 type SurfaceCredential struct {
 	// Ref is the stable credential slot name
 	Ref string `json:"ref"`
-	// SurfaceSchema is the stored credential schema with its replacement and backfill declarations
+	// SurfaceSchema is the stored credential schema with its upgrade declaration
 	SurfaceSchema
+	// Replaces lists the retired slot names whose stored payloads move onto this slot, sorted
+	Replaces []string `json:"replaces,omitempty"`
 }
 
-// SurfaceOperation is one operation's name, retired names, and config schema
+// SurfaceOperation is one operation's name, retired names, and stored input schema
 type SurfaceOperation struct {
 	// Name is the stable operation name
 	Name string `json:"name"`
 	// Replaces lists the retired operation names this operation takes over, sorted
 	Replaces []string `json:"replaces,omitempty"`
-	// Schema is the reflected JSON schema of the operation's config
+	// Schema is the composed JSON schema of the operation's stored input
 	Schema json.RawMessage `json:"schema,omitempty"`
+	// Upgrade reports whether the operation declares an upgrade for stored input persisted under an older layout
+	Upgrade bool `json:"upgrade,omitempty"`
 }
 
 // SurfaceWebhook is one webhook contract with its events
@@ -100,7 +103,7 @@ func DefinitionSurface(def types.Definition) Surface {
 	credentials := sortedProjection(def.CredentialRegistrations, func(registration types.CredentialRegistration) SurfaceCredential {
 		replaces := lo.Map(registration.Replaces, func(slot types.CredentialSlotID, _ int) string { return slot.String() })
 
-		return SurfaceCredential{Ref: registration.Ref.String(), SurfaceSchema: SurfaceSchema{Schema: registration.StoredSchema, Replaces: replaces, Backfill: registration.Backfill != nil}}
+		return SurfaceCredential{Ref: registration.Ref.String(), SurfaceSchema: SurfaceSchema{Schema: registration.StoredSchema, Upgrade: registration.Upgrade != nil}, Replaces: replaces}
 	}, func(credential SurfaceCredential) string { return credential.Ref })
 
 	connections := lo.Map(def.Connections, func(connection types.ConnectionRegistration, _ int) string {
@@ -110,7 +113,14 @@ func DefinitionSurface(def types.Definition) Surface {
 	slices.Sort(connections)
 
 	operations := sortedProjection(def.Operations, func(operation types.OperationRegistration) SurfaceOperation {
-		return SurfaceOperation{Name: operation.Name, Replaces: operation.Replaces, Schema: operation.ConfigSchema}
+		surface := SurfaceOperation{Name: operation.Name, Replaces: operation.Replaces}
+
+		if operation.Input != nil {
+			surface.Schema = operation.Input.Schema
+			surface.Upgrade = operation.Input.Upgrade != nil
+		}
+
+		return surface
 	}, func(operation SurfaceOperation) string { return operation.Name })
 
 	webhooks := sortedProjection(def.Webhooks, func(webhook types.WebhookRegistration) SurfaceWebhook {
@@ -124,7 +134,7 @@ func DefinitionSurface(def types.Definition) Surface {
 	surface := Surface{ID: def.ID, Credentials: credentials, Connections: connections, Operations: operations, Webhooks: webhooks}
 
 	if def.UserInput != nil {
-		surface.UserInput = &SurfaceSchema{Schema: def.UserInput.Schema, Replaces: def.UserInput.Replaces, Backfill: def.UserInput.Backfill != nil}
+		surface.UserInput = &SurfaceSchema{Schema: def.UserInput.Schema, Upgrade: def.UserInput.Upgrade != nil}
 	}
 
 	if def.Installation != nil && len(def.Installation.Schema) > 0 {
@@ -546,7 +556,7 @@ func compileDefinition(def types.Definition) (definitionEntry, error) {
 		return definitionEntry{}, err
 	}
 
-	if err := validateConnections(def.ID, def.Connections, declared, clients); err != nil {
+	if err := validateConnections(def.ID, def.Connections, declared); err != nil {
 		return definitionEntry{}, err
 	}
 
@@ -584,8 +594,8 @@ func indexClients(definitionID string, clients []types.ClientRegistration, decla
 	return indexUnique(definitionID, "client", clients, func(client types.ClientRegistration) types.ClientID { return client.Ref }, nil)
 }
 
-// validateConnections requires each connection's slots and clients to be declared and unique
-func validateConnections(definitionID string, connections []types.ConnectionRegistration, declared []types.CredentialSlotID, clients map[types.ClientID]types.ClientRegistration) error {
+// validateConnections requires each connection's slots to be declared and its selecting slot unique
+func validateConnections(definitionID string, connections []types.ConnectionRegistration, declared []types.CredentialSlotID) error {
 	for _, connection := range connections {
 		slots := append([]types.CredentialSlotID{connection.CredentialRef}, connection.CredentialRefs...)
 
@@ -594,8 +604,6 @@ func validateConnections(definitionID string, connections []types.ConnectionRegi
 			return ErrConnectionCredentialRefRequired
 		case !lo.Every(declared, slots):
 			return ErrConnectionCredentialRefNotDeclared
-		case !lo.EveryBy(connection.ClientRefs, func(client types.ClientID) bool { return lo.HasKey(clients, client) }):
-			return ErrConnectionClientRefNotDeclared
 		case connection.Auth != nil && !lo.Contains(slots, connection.Auth.CredentialRef):
 			return ErrConnectionAuthCredentialRefNotDeclared
 		case connection.Disconnect != nil && !lo.Contains(slots, connection.Disconnect.CredentialRef):
@@ -697,7 +705,7 @@ func (r *Registry) RuntimeClient(definitionID string) (any, bool) {
 	return client, client != nil
 }
 
-// StaticWebhooks returns all webhook registrations that declare a fixed static route
+// StaticWebhooks returns all webhook registrations that declare a fixed static route, sorted by definition id then webhook name
 func (r *Registry) StaticWebhooks() []types.StaticWebhookEntry {
 	var entries []types.StaticWebhookEntry
 
@@ -712,6 +720,10 @@ func (r *Registry) StaticWebhooks() []types.StaticWebhookEntry {
 			}
 		}
 	}
+
+	slices.SortFunc(entries, func(a, b types.StaticWebhookEntry) int {
+		return cmp.Or(strings.Compare(a.DefinitionID, b.DefinitionID), strings.Compare(a.WebhookName, b.WebhookName))
+	})
 
 	return entries
 }

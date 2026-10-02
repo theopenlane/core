@@ -12,23 +12,13 @@ var (
 	// {{ name }}Credential is the credential ref for {{ display }} credentials
 	{{ name }}Credential = types.CredentialRefOf[CredentialSchema]()
 	// {{ name }}Client is the client ref for the {{ display }} client used by this definition
-	{{ name }}Client = types.ClientRefOf[*APIClient]().Using({{ name }}Credential)
-	// {{ name }}Connection is the connection mode selected by the {{ display }} credential slot
-	{{ name }}Connection = types.NewConnectionRef({{ name }}Credential).Enables({{ name }}Client)
-	// userInput is the installation user input layout for the {{ display }} definition
-	userInput = types.NewUserInputRef[UserInput]("{{ name }}")
+	{{ name }}Client = types.ClientRefOf[*APIClient]()
 )
 
 // APIClient is the client handed to {{ display }} operations; swap this for the provider SDK client type
 type APIClient struct {
 	// Credential is the resolved credential this client was built from
 	Credential CredentialSchema
-}
-
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
 }
 
 // CredentialSchema holds the {{ display }} credentials for one installation

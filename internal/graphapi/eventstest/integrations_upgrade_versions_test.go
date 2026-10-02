@@ -21,6 +21,11 @@ import (
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 )
 
+// syncOpConfig returns the operation config storing the version 1 and 2 sync pattern
+func syncOpConfig(pattern string) map[string]json.RawMessage {
+	return map[string]json.RawMessage{testint.SyncOp.Name(): json.RawMessage(`{"pattern":"` + pattern + `"}`)}
+}
+
 // TestInstallationUpgradeAcrossVersions verifies multi-version upgrades including a v1-to-v3 jump
 func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 	store, err := keystore.NewStore(suite.Client.DB)
@@ -48,8 +53,10 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		v1 := runtimeFor(t, testint.BuilderV1())
-		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), testint.TokenV1.ID(), testint.TokenV1Set("initial-token"))
+		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), syncOpConfig("initial"), testint.TokenV1.ID(), testint.TokenV1Set("initial-token"))
 		require.Equal(t, v1.Registry().Version(testint.DefinitionID.ID()), installation.DefinitionVersion)
+		require.Equal(t, testint.UserInputV1.Name(), installation.UserInput.Layout)
+		require.JSONEq(t, `{"pattern":"initial"}`, string(installation.OperationConfig.For(testint.SyncOp.Name())))
 
 		v2 := runtimeFor(t, testint.BuilderV2())
 		v2Version := v2.Registry().Version(testint.DefinitionID.ID())
@@ -60,7 +67,9 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 
 		reloaded := reloadIntegration(t, subCtx, installation.ID)
 		require.Equal(t, v2Version, reloaded.DefinitionVersion)
-		require.JSONEq(t, `{"filterExpr":"initial"}`, string(reloaded.Config.ClientConfig))
+		require.Equal(t, testint.UserInputV2.Name(), reloaded.UserInput.Layout)
+		require.JSONEq(t, `{"filterExpr":"initial"}`, string(reloaded.UserInput.Data))
+		require.JSONEq(t, `{"pattern":"initial"}`, string(reloaded.OperationConfig.For(testint.SyncOp.Name())))
 
 		rows, err := store.LoadAllCredentials(subCtx, installation)
 		require.NoError(t, err)
@@ -100,7 +109,10 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 
 		reloaded = reloadIntegration(t, subCtx, installation.ID)
 		require.Equal(t, v3Version, reloaded.DefinitionVersion)
-		require.JSONEq(t, `{"filter":"initial"}`, string(reloaded.Config.ClientConfig))
+		require.Equal(t, testint.UserInputV3.Name(), reloaded.UserInput.Layout)
+		require.JSONEq(t, `{"filter":"initial"}`, string(reloaded.UserInput.Data))
+		require.JSONEq(t, `{"filter":"initial"}`, string(reloaded.OperationConfig.For(testint.SyncOpV3.Name())))
+		require.Nil(t, reloaded.OperationConfig.For(testint.SyncOp.Name()))
 		require.Equal(t, map[string]string{testint.SyncOpV3.Name(): "boom"}, reloaded.Health.UnhealthyOperations)
 
 		rows, err = store.LoadAllCredentials(subCtx, installation)
@@ -133,7 +145,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		v1 := runtimeFor(t, testint.BuilderV1())
-		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), testint.TokenV1.ID(), testint.TokenV1Set("initial-token"))
+		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), syncOpConfig("initial"), testint.TokenV1.ID(), testint.TokenV1Set("initial-token"))
 
 		retired, err := v1.Registry().Operation(testint.DefinitionID.ID(), testint.SyncOp.Name())
 		require.NoError(t, err)
@@ -164,7 +176,10 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 
 		reloaded := reloadIntegration(t, subCtx, installation.ID)
 		require.Equal(t, v3Version, reloaded.DefinitionVersion)
-		require.JSONEq(t, `{"filter":"initial"}`, string(reloaded.Config.ClientConfig))
+		require.Equal(t, testint.UserInputV3.Name(), reloaded.UserInput.Layout)
+		require.JSONEq(t, `{"filter":"initial"}`, string(reloaded.UserInput.Data))
+		require.JSONEq(t, `{"filter":"initial"}`, string(reloaded.OperationConfig.For(testint.SyncOpV3.Name())))
+		require.Nil(t, reloaded.OperationConfig.For(testint.SyncOp.Name()))
 		require.Equal(t, map[string]string{testint.SyncOpV3.Name(): "boom"}, reloaded.Health.UnhealthyOperations)
 
 		rows, err := store.LoadAllCredentials(subCtx, installation)
@@ -190,7 +205,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		v1 := runtimeFor(t, testint.BuilderV1())
-		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), testint.TokenV1.ID(), testint.TokenV1Set("converged-token"))
+		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), syncOpConfig("initial"), testint.TokenV1.ID(), testint.TokenV1Set("converged-token"))
 
 		retired, err := v1.Registry().Operation(testint.DefinitionID.ID(), testint.SyncOp.Name())
 		require.NoError(t, err)
@@ -241,7 +256,9 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		require.Equal(t, v4Version, upgraded.DefinitionVersion)
 		require.Equal(t, converged.Status, upgraded.Status)
 		require.Empty(t, upgraded.Health.UnhealthyReason)
-		require.JSONEq(t, string(converged.Config.ClientConfig), string(upgraded.Config.ClientConfig))
+		require.Equal(t, converged.UserInput.Layout, upgraded.UserInput.Layout)
+		require.JSONEq(t, string(converged.UserInput.Data), string(upgraded.UserInput.Data))
+		require.JSONEq(t, string(converged.OperationConfig.For(testint.SyncOpV4.Name())), string(upgraded.OperationConfig.For(testint.SyncOpV4.Name())))
 		require.Equal(t, converged.Health.UnhealthyOperations, upgraded.Health.UnhealthyOperations)
 
 		rows, err := store.LoadAllCredentials(subCtx, installation)
@@ -274,7 +291,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		v1 := runtimeFor(t, testint.BuilderV1())
-		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), testint.TokenV1.ID(), testint.TokenV1Set("stranded-token"))
+		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), nil, testint.TokenV1.ID(), testint.TokenV1Set("stranded-token"))
 		require.Equal(t, v1.Registry().Version(testint.DefinitionID.ID()), installation.DefinitionVersion)
 
 		installedWebhooks := endpointRows(t, subCtx, installation.ID)
@@ -294,7 +311,8 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		require.Equal(t, enums.IntegrationStatusErrored, stranded.Status)
 		require.Contains(t, stranded.Health.UnhealthyReason, intruntime.ErrInstallationUpgradeFailed.Error())
 		require.Contains(t, stranded.Health.UnhealthyReason, intruntime.ErrUserInputInvalid.Error())
-		require.JSONEq(t, `{"filterExpr":"initial"}`, string(stranded.Config.ClientConfig))
+		require.Equal(t, testint.UserInputV1.Name(), stranded.UserInput.Layout)
+		require.JSONEq(t, `{"filterExpr":"initial"}`, string(stranded.UserInput.Data))
 
 		rows, err := store.LoadAllCredentials(subCtx, installation)
 		require.NoError(t, err)
@@ -354,7 +372,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		v1 := runtimeFor(t, testint.BuilderV1())
-		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"x"}`), testint.TokenV1.ID(), testint.TokenV1Set("meta-token"))
+		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"x"}`), nil, testint.TokenV1.ID(), testint.TokenV1Set("meta-token"))
 
 		before := reloadIntegration(t, subCtx, installation.ID).InstallationMetadata
 		require.Equal(t, installation.ID, before.Display.ExternalID)
@@ -376,12 +394,14 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		require.Equal(t, installation.ID, attrs.Region)
 	})
 
-	t.Run("an operation executed with no explicit config resolves it from the installation input", func(t *testing.T) {
+	t.Run("an operation executed with no explicit config resolves it from the installation's stored operation input", func(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		v3 := runtimeFor(t, testint.BuilderV3())
-		installation := installOn(t, subCtx, v3, json.RawMessage(`{"filter":"only-mine"}`), testint.TokenV3.ID(), testint.TokenV3Set("token", "region-1"))
+		operationConfig := map[string]json.RawMessage{testint.SyncOpV3.Name(): json.RawMessage(`{"filter":"only-mine"}`)}
+		installation := installOn(t, subCtx, v3, json.RawMessage(`{"filter":"global"}`), operationConfig, testint.TokenV3.ID(), testint.TokenV3Set("token", "region-1"))
+		require.JSONEq(t, `{"filter":"only-mine"}`, string(installation.OperationConfig.For(testint.SyncOpV3.Name())))
 
 		syncOp, err := v3.Registry().Operation(testint.DefinitionID.ID(), testint.SyncOpV3.Name())
 		require.NoError(t, err)

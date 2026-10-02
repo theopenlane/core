@@ -14,13 +14,9 @@ var (
 	// driveCredential is the credential slot for Google Drive OAuth credentials
 	driveCredential = types.CredentialRefOf[googleDriveCred]()
 	// driveClient is the client ref for the Google Drive SDK
-	driveClient = types.ClientRefOf[DriveClient]().Using(driveCredential)
-	// driveConnection is the OAuth connection mode enabling the Drive client
-	driveConnection = types.NewConnectionRef(driveCredential).Enables(driveClient)
-	// userInput is the installation user input layout, replacing the flat v1 layout
-	userInput = types.NewUserInputRef[UserInput]("googledrive").Replacing(types.NewUserInputRef[oldUserInput]("googledrive-v1"), func(old oldUserInput) UserInput {
-		return UserInput{Primary: old.Primary, FolderSync: FolderSync{FolderID: old.FolderID, FilterExpr: old.FilterExpr}}
-	})
+	driveClient = types.ClientRefOf[DriveClient]()
+	// userInput is the installation user input layout
+	userInput = types.UserInputRefOf[UserInput]()
 )
 
 // DriveClient wraps the client for Google operations
@@ -43,18 +39,6 @@ type googleDriveCred struct {
 type UserInput struct {
 	// Primary marks this installation as the authoritative Drive source for live document exports
 	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
-	// FolderSync configures the folder sync operation
-	FolderSync FolderSync `json:"folderSync,omitempty" jsonschema:"title=Folder Sync"`
-}
-
-// oldUserInput is the flat v1 installation user input layout replaced by UserInput
-type oldUserInput struct {
-	// Primary marks this installation as the authoritative Drive source for live document exports
-	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
-	// FolderID is the Google Drive folder ID or URL containing policy documents
-	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder ID,description=Google Drive folder ID or URL containing policy documents,required"`
-	// FilterExpr is an optional CEL expression to filter which documents in the folder are eligible
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to filter documents before creating policies"`
 }
 
 // InstallationMetadata holds the stable Google Drive target selected for one installation

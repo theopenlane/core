@@ -84,16 +84,8 @@ var (
 	partialServiceAccountRef = integrationtypes.NewCredentialRef[serviceAccountCred](testint.ServiceAccountCredential.String())
 	unreplacedRef            = integrationtypes.NewCredentialRef[unreplacedCred]("unreplaced")
 
-	zoneInputRef   = integrationtypes.NewUserInputRef[zoneInput]("zone")
-	regionInputRef = integrationtypes.NewUserInputRef[regionInput]("region").
-			Replacing(zoneInputRef, func(o zoneInput) regionInput { return regionInput{Region: o.Zone} }).
-			Backfilled(func(_ context.Context, _ integrationtypes.InstallationRequest, c *regionInput) error {
-			if c.Token == "" {
-				c.Token = backfilledToken
-			}
-
-			return nil
-		})
+	zoneInputRef   = integrationtypes.UserInputRefOf[zoneInput]()
+	regionInputRef = integrationtypes.UserInputRefOf[regionInput]().Upgraded(upgradeRegionInput)
 
 	retiredSyncOp = integrationtypes.OperationRefOf[retiredSync]()
 	renamedSyncOp = integrationtypes.OperationRefOf[renamedSync]()
@@ -103,6 +95,34 @@ var (
 	renameEventA         = integrationtypes.NewWebhookEventRef[renameEvent]("a")
 	renameEventB         = integrationtypes.NewWebhookEventRef[renameEvent]("b")
 )
+
+// upgradeRegionInput maps a document stored under the zone layout onto the region layout and fills an empty token
+func upgradeRegionInput(_ context.Context, _ integrationtypes.InstallationRequest, from string, stored json.RawMessage) (regionInput, error) {
+	var (
+		current regionInput
+		err     error
+	)
+
+	switch from {
+	case zoneInputRef.Name():
+		var old zoneInput
+
+		old, err = jsonx.Decode[zoneInput](stored)
+		current = regionInput{Region: old.Zone}
+	default:
+		current, err = jsonx.Decode[regionInput](stored)
+	}
+
+	if err != nil {
+		return regionInput{}, err
+	}
+
+	if current.Token == "" {
+		current.Token = backfilledToken
+	}
+
+	return current, nil
+}
 
 // retiredSlot pairs a retired credential slot id with its schema
 type retiredSlot struct {
@@ -117,9 +137,8 @@ func slotOf[T any](ref integrationtypes.CredentialRef[T]) retiredSlot {
 
 // syncOperation returns a no-op operation registration replacing retired names
 func syncOperation[Cfg any](op integrationtypes.OperationRef[Cfg], policy integrationtypes.ExecutionPolicy, replaces ...string) integrationtypes.OperationRegistration {
-	return op.Registration(testint.DefinitionID, integrationtypes.OperationRegistration{
+	return op.Policy(policy).Registration(testint.DefinitionID, integrationtypes.OperationRegistration{
 		Replaces: replaces,
-		Policy:   policy,
 		Handle:   func(context.Context, integrationtypes.OperationRequest) (json.RawMessage, error) { return nil, nil },
 	})
 }
@@ -234,7 +253,7 @@ func seedRetiredLoop(t *testing.T, ctx context.Context, installation *ent.Integr
 }
 
 // installOn returns the installation of the shared test definition through rt
-func installOn(t *testing.T, ctx context.Context, rt *intruntime.Runtime, userInput json.RawMessage, primary integrationtypes.CredentialSlotID, credential integrationtypes.CredentialSet) *ent.Integration {
+func installOn(t *testing.T, ctx context.Context, rt *intruntime.Runtime, userInput json.RawMessage, operationConfig map[string]json.RawMessage, primary integrationtypes.CredentialSlotID, credential integrationtypes.CredentialSet) *ent.Integration {
 	t.Helper()
 
 	def, ok := rt.Registry().Definition(testint.DefinitionID.ID())
@@ -246,7 +265,7 @@ func installOn(t *testing.T, ctx context.Context, rt *intruntime.Runtime, userIn
 	installation, _, err := rt.EnsureInstallation(ctx, ownerID, "", def)
 	require.NoError(t, err)
 
-	require.NoError(t, rt.Reconcile(ctx, installation, userInput, primary, &credential, nil))
+	require.NoError(t, rt.Reconcile(ctx, installation, userInput, operationConfig, primary, &credential, nil))
 
 	return reloadIntegration(t, ctx, installation.ID)
 }
@@ -257,14 +276,14 @@ func installUnder(t *testing.T, ctx context.Context, builder registry.Builder, p
 
 	rt := runtimeFor(t, builder)
 
-	installation := installOn(t, ctx, rt, testint.ModeInput("none"), primary, credentials[primary])
+	installation := installOn(t, ctx, rt, nil, nil, primary, credentials[primary])
 
 	for slot, credential := range credentials {
 		if slot == primary {
 			continue
 		}
 
-		require.NoError(t, rt.Reconcile(ctx, reloadIntegration(t, ctx, installation.ID), nil, slot, &credential, nil))
+		require.NoError(t, rt.Reconcile(ctx, reloadIntegration(t, ctx, installation.ID), nil, nil, slot, &credential, nil))
 	}
 
 	return reloadIntegration(t, ctx, installation.ID), rt.Registry().Version(testint.DefinitionID.ID())
@@ -289,7 +308,7 @@ func TestInstallationUpgrade(t *testing.T) {
 	store, err := keystore.NewStore(suite.Client.DB)
 	require.NoError(t, err)
 
-	def, ok := suite.IntegrationsRT.Definition(testint.DefinitionID.ID())
+	def, ok := suite.IntegrationsRT.Registry().Definition(testint.DefinitionID.ID())
 	require.True(t, ok)
 
 	current := suite.IntegrationsRT.Registry().Version(def.ID)
@@ -385,7 +404,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		require.Equal(t, 1, integrationNotificationCount(t, subCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 
 		cred := testint.TokenCredentialSet("fresh")
-		require.NoError(t, suite.IntegrationsRT.Reconcile(subCtx, reloaded, nil, testint.TokenCredential.ID(), &cred, nil))
+		require.NoError(t, suite.IntegrationsRT.Reconcile(subCtx, reloaded, nil, nil, testint.TokenCredential.ID(), &cred, nil))
 
 		recovered := reloadIntegration(t, subCtx, installation.ID)
 		require.Equal(t, enums.IntegrationStatusConnected, recovered.Status)
@@ -517,18 +536,14 @@ func TestInstallationUpgrade(t *testing.T) {
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
-			def.UserInput = &integrationtypes.UserInputRegistration{Schema: jsonx.SchemaFrom[zoneInput]()}
+			def.UserInput = zoneInputRef.Registration()
 		}))
-		installation := installOn(t, subCtx, previous, json.RawMessage(`{"zone":"eu"}`), testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
-		require.JSONEq(t, `{"zone":"eu"}`, string(installation.Config.ClientConfig))
+		installation := installOn(t, subCtx, previous, json.RawMessage(`{"zone":"eu"}`), nil, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+		require.Equal(t, zoneInputRef.Name(), installation.UserInput.Layout)
+		require.JSONEq(t, `{"zone":"eu"}`, string(installation.UserInput.Data))
 
 		renamed := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
-			def.UserInput = &integrationtypes.UserInputRegistration{
-				Schema:   jsonx.SchemaFrom[regionInput](),
-				Replaces: regionInputRef.Replaces(),
-				Convert:  regionInputRef.Convert,
-				Backfill: regionInputRef.Backfill,
-			}
+			def.UserInput = regionInputRef.Registration()
 		}))
 		renamedVersion := renamed.Registry().Version(testint.DefinitionID.ID())
 		require.NotEqual(t, renamedVersion, installation.DefinitionVersion)
@@ -536,11 +551,13 @@ func TestInstallationUpgrade(t *testing.T) {
 		assessment, err := renamed.RunHealthAssessment(subCtx, installation)
 		require.NoError(t, err)
 		require.True(t, assessment.Connection.Healthy)
-		require.JSONEq(t, `{"region":"eu","token":"x"}`, string(installation.Config.ClientConfig))
+		require.Equal(t, regionInputRef.Name(), installation.UserInput.Layout)
+		require.JSONEq(t, `{"region":"eu","token":"x"}`, string(installation.UserInput.Data))
 		require.Equal(t, renamedVersion, installation.DefinitionVersion)
 
 		reloaded := reloadIntegration(t, subCtx, installation.ID)
-		require.JSONEq(t, `{"region":"eu","token":"x"}`, string(reloaded.Config.ClientConfig))
+		require.Equal(t, regionInputRef.Name(), reloaded.UserInput.Layout)
+		require.JSONEq(t, `{"region":"eu","token":"x"}`, string(reloaded.UserInput.Data))
 		require.Equal(t, renamedVersion, reloaded.DefinitionVersion)
 		require.Equal(t, enums.IntegrationStatusConnected, reloaded.Status)
 		require.Zero(t, integrationNotificationCount(t, subCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
@@ -553,7 +570,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.Operations = []integrationtypes.OperationRegistration{syncOperation(retiredSyncOp, integrationtypes.ExecutionPolicy{Inline: true})}
 		}))
-		installation := installOn(t, subCtx, previous, testint.ModeInput("none"), testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+		installation := installOn(t, subCtx, previous, nil, nil, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
 
 		retired, err := previous.Registry().Operation(testint.DefinitionID.ID(), retiredSyncOp.Name())
 		require.NoError(t, err)
@@ -610,7 +627,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.Operations = []integrationtypes.OperationRegistration{syncOperation(retiredSyncOp, integrationtypes.ExecutionPolicy{Inline: true})}
 		}))
-		installation := installOn(t, subCtx, previous, testint.ModeInput(testint.ModeRecurring), testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+		installation := installOn(t, subCtx, previous, nil, nil, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
 
 		retiredFragment := reconcileLoopFragment(t, installation.ID, retiredSyncOp.Name())
 		currentFragment := reconcileLoopFragment(t, installation.ID, testint.RecurringOp.Name())
@@ -646,7 +663,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
 			def.Webhooks = []integrationtypes.WebhookRegistration{eventsWebhook(retiredEventsWebhook, nil, renameEventA)}
 		}))
-		installation := installOn(t, subCtx, previous, testint.ModeInput("none"), testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+		installation := installOn(t, subCtx, previous, nil, nil, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
 
 		rows := endpointRows(t, subCtx, installation.ID)
 		require.Len(t, rows, 1)
@@ -688,13 +705,13 @@ func TestInstallationUpgrade(t *testing.T) {
 		require.Equal(t, renamedEventsWebhook.Name(), dedupes[0].Name)
 
 		fresh := testint.TokenCredentialSet("fresh")
-		require.NoError(t, renamed.Reconcile(subCtx, reloadIntegration(t, subCtx, installation.ID), nil, testint.TokenCredential.ID(), &fresh, nil))
+		require.NoError(t, renamed.Reconcile(subCtx, reloadIntegration(t, subCtx, installation.ID), nil, nil, testint.TokenCredential.ID(), &fresh, nil))
 
 		rows = endpointRows(t, subCtx, installation.ID)
 		require.Len(t, rows, 1)
 		require.Equal(t, endpointID, lo.FromPtr(rows[0].EndpointID))
 
-		untouched := installOn(t, subCtx, previous, testint.ModeInput("none"), testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+		untouched := installOn(t, subCtx, previous, nil, nil, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
 		untouchedRows := endpointRows(t, subCtx, untouched.ID)
 		require.Len(t, untouchedRows, 1)
 		untouchedEndpoint := lo.FromPtr(untouchedRows[0].EndpointID)
@@ -702,7 +719,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		_, err = renamed.EnsureWebhook(subCtx, untouched, renamedEventsWebhook.Name(), "")
 		require.NoError(t, err)
 
-		require.NoError(t, renamed.Reconcile(subCtx, untouched, nil, testint.TokenCredential.ID(), &fresh, nil))
+		require.NoError(t, renamed.Reconcile(subCtx, untouched, nil, nil, testint.TokenCredential.ID(), &fresh, nil))
 
 		untouchedRows = endpointRows(t, subCtx, untouched.ID)
 		require.Len(t, untouchedRows, 1)
@@ -716,8 +733,9 @@ func TestInstallationUpgrade(t *testing.T) {
 		renamedDef, ok := renamed.Registry().Definition(testint.DefinitionID.ID())
 		require.True(t, ok)
 
-		registration, found := renamedDef.WebhookReplacing(retiredEventsWebhook.Name())
+		registration, replaced, found := renamedDef.ResolveWebhook(retiredEventsWebhook.Name())
 		require.True(t, found)
+		require.True(t, replaced)
 		require.Equal(t, renamedEventsWebhook.Name(), registration.Name)
 	})
 

@@ -8,8 +8,6 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
@@ -116,11 +114,10 @@ Organizations marked for deletion: {{ .Count }}
 func systemMessageRegistration[T any](op types.OperationRef[T], description string, tmpl *template.Template) types.OperationRegistration {
 	return op.Handles(slackClient, func(ctx context.Context, _ types.OperationRequest, c *SlackClient, cfg T) (json.RawMessage, error) {
 		return nil, renderAndSendSystemMessage(ctx, c, tmpl, cfg)
-	}).Registration(DefinitionID, types.OperationRegistration{
-		Description:        description,
-		CustomerSelectable: lo.ToPtr(false),
-		Policy:             types.ExecutionPolicy{SkipRunRecord: true},
-	})
+	}).
+		CustomerSelectable(false).
+		Policy(types.ExecutionPolicy{SkipRunRecord: true}).
+		Registration(DefinitionID, types.OperationRegistration{Description: description})
 }
 
 // renderAndSendSystemMessage executes tmpl against input and posts the result through c's transport

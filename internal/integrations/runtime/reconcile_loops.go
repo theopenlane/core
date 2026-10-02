@@ -39,7 +39,7 @@ func (r *Runtime) resetReconcileLoop(ctx context.Context, installation *ent.Inte
 	case count == 1:
 		return nil
 	case count > 1:
-		purged, err := r.Gala().PurgeActiveJobsWithMetadata(ctx, fragment)
+		purged, err := r.purgeReconcileLoop(ctx, installation.ID, op.Name)
 		if err != nil {
 			return err
 		}
@@ -71,6 +71,16 @@ func reconcileLoopFragment(integrationID, operationName string) (string, error) 
 		"operation": operationName,
 		"runType":   enums.IntegrationRunTypeReconcile.String(),
 	})
+}
+
+// purgeReconcileLoop cancels every queued recurring loop job for one installation operation, reporting how many were purged
+func (r *Runtime) purgeReconcileLoop(ctx context.Context, integrationID, operationName string) (int, error) {
+	fragment, err := reconcileLoopFragment(integrationID, operationName)
+	if err != nil {
+		return 0, err
+	}
+
+	return r.Gala().PurgeActiveJobsWithMetadata(ctx, fragment)
 }
 
 // clientUnresolvedReasonFmt formats the reason recorded when a client can't be established
@@ -130,7 +140,7 @@ func (r *Runtime) ResetReconcileLoops(ctx context.Context, installation *ent.Int
 
 	for _, op := range def.Operations {
 		_, failing := installation.Health.UnhealthyOperations[op.Name]
-		if !op.Policy.Reconcile || failing || op.DisabledFor(installation.Config.ClientConfig) {
+		if !op.Policy.Reconcile || failing || op.DisabledFor(installation.OperationConfig.For(op.Name)) {
 			continue
 		}
 

@@ -13,13 +13,9 @@ var (
 	// authentikCredential is the typed credential slot for the Authentik API token
 	authentikCredential = types.CredentialRefOf[CredentialSchema]()
 	// authentikClient is the client ref for the Authentik API client
-	authentikClient = types.ClientRefOf[*authentikSDK.APIClient]().Using(authentikCredential)
-	// authentikConnection is the connection mode selected by the Authentik API token credential
-	authentikConnection = types.NewConnectionRef(authentikCredential).Enables(authentikClient)
-	// userInput is the installation user input layout, replacing the flat v1 layout
-	userInput = types.NewUserInputRef[UserInput]("authentik").Replacing(types.NewUserInputRef[oldUserInput]("authentik-v1"), func(old oldUserInput) UserInput {
-		return UserInput{PrimaryDirectory: old.PrimaryDirectory, DirectorySync: DirectorySync{DisableGroupSync: old.DisableGroupSync, FilterExpr: old.FilterExpr}}
-	})
+	authentikClient = types.ClientRefOf[*authentikSDK.APIClient]()
+	// userInput is the installation user input layout
+	userInput = types.UserInputRefOf[UserInput]()
 )
 
 // CredentialSchema holds the Authentik instance credentials for one installation
@@ -34,28 +30,12 @@ type CredentialSchema struct {
 type UserInput struct {
 	// PrimaryDirectory marks this installation as the authoritative source for identity holder sync
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory,description=Mark this as the authoritative source for identity holder enrichment and lifecycle"`
-	// DirectorySync configures the directory sync operation
-	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Sync"`
 }
 
 // DirectorySync configures collection of Authentik directory users, groups, and memberships
 type DirectorySync struct {
-	// Disable switches the directory sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from Authentik"`
 	// DisableGroupSync when true only syncs users, skipping groups and memberships
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users disable group and membership sync operations"`
-	// FilterExpr limits imported records to envelopes matching a CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.type == 'internal'"`
-}
-
-// oldUserInput is the flat v1 installation user input layout
-type oldUserInput struct {
-	// PrimaryDirectory marks this installation as the authoritative source for identity holder sync
-	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory,description=Mark this as the authoritative source for identity holder enrichment and lifecycle"`
-	// DisableGroupSync when true only syncs users, skipping groups and memberships
-	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users disable group and membership sync operations"`
-	// FilterExpr limits imported records to envelopes matching a CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting,example=Example: payload.type == 'internal'"`
 }
 
 // InstallationMetadata holds the stable Authentik instance identity for one installation

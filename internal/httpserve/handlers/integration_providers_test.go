@@ -19,7 +19,7 @@ import (
 type providerResponse struct {
 	Spec                    types.DefinitionSpec         `json:"spec"`
 	CredentialRegistrations []providerCredentialResponse `json:"credentialRegistrations"`
-	UserInput               *types.UserInputRegistration `json:"userInput"`
+	UserInput               *types.InputRegistration     `json:"userInput"`
 	Operations              []json.RawMessage            `json:"operations"`
 }
 

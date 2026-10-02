@@ -80,6 +80,56 @@ func followSchemaRef(node *jsonschema.Schema, defs jsonschema.Definitions) (*jso
 	return target, nil
 }
 
+// MergeSchemas returns base with extra's root properties, required names, and definitions appended
+func MergeSchemas(base, extra json.RawMessage) (json.RawMessage, error) {
+	var doc jsonschema.Schema
+	if err := UnmarshalIfPresent(base, &doc); err != nil {
+		return nil, err
+	}
+
+	root, err := followSchemaRef(&doc, doc.Definitions)
+	if err != nil {
+		return nil, err
+	}
+
+	extraRoot, extraDefs, err := SchemaRoot(extra)
+	if err != nil {
+		return nil, err
+	}
+
+	if root.Properties == nil {
+		root.Properties = jsonschema.NewProperties()
+	}
+
+	if extraRoot.Properties != nil {
+		for pair := extraRoot.Properties.Oldest(); pair != nil; pair = pair.Next() {
+			if _, exists := root.Properties.Get(pair.Key); exists {
+				return nil, fmt.Errorf("%w: %s", ErrSchemaPropertyConflict, pair.Key)
+			}
+
+			root.Properties.Set(pair.Key, pair.Value)
+		}
+	}
+
+	root.Required = append(root.Required, extraRoot.Required...)
+
+	if doc.Definitions == nil {
+		doc.Definitions = jsonschema.Definitions{}
+	}
+
+	rootName := path.Base(doc.Ref)
+
+	for name, definition := range extraDefs {
+		if name == rootName {
+			continue
+		}
+
+		doc.Definitions[name] = definition
+	}
+
+	return ToRawMessage(&doc)
+}
+
 // SchemaID extracts the definition key from a reflected JSON schema's $ref path
 func SchemaID(schema json.RawMessage) string {
 	var doc struct {

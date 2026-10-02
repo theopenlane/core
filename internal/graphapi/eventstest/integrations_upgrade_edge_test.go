@@ -39,6 +39,9 @@ type strictRegionInput struct {
 	Region string `json:"region" jsonschema:"required"`
 }
 
+// strictRegionInputRef is the strict region layout, replacing no earlier layout
+var strictRegionInputRef = integrationtypes.UserInputRefOf[strictRegionInput]()
+
 // previousOAuthDefinition returns an earlier version of the shared test definition
 func previousOAuthDefinition(t *testing.T, current integrationtypes.Definition, schema json.RawMessage) registry.Builder {
 	t.Helper()
@@ -76,7 +79,7 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 	store, err := keystore.NewStore(suite.Client.DB)
 	require.NoError(t, err)
 
-	def, ok := suite.IntegrationsRT.Definition(testint.DefinitionID.ID())
+	def, ok := suite.IntegrationsRT.Registry().Definition(testint.DefinitionID.ID())
 	require.True(t, ok)
 
 	current := suite.IntegrationsRT.Registry().Version(def.ID)
@@ -120,13 +123,14 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
-			def.UserInput = &integrationtypes.UserInputRegistration{Schema: jsonx.SchemaFrom[zoneInput]()}
+			def.UserInput = zoneInputRef.Registration()
 		}))
-		installation := installOn(t, subCtx, previous, json.RawMessage(`{"zone":"eu"}`), testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
-		require.JSONEq(t, `{"zone":"eu"}`, string(installation.Config.ClientConfig))
+		installation := installOn(t, subCtx, previous, json.RawMessage(`{"zone":"eu"}`), nil, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+		require.Equal(t, zoneInputRef.Name(), installation.UserInput.Layout)
+		require.JSONEq(t, `{"zone":"eu"}`, string(installation.UserInput.Data))
 
 		strict := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
-			def.UserInput = &integrationtypes.UserInputRegistration{Schema: jsonx.SchemaFrom[strictRegionInput]()}
+			def.UserInput = strictRegionInputRef.Registration()
 		}))
 		strictVersion := strict.Registry().Version(testint.DefinitionID.ID())
 		require.NotEqual(t, strictVersion, installation.DefinitionVersion)
@@ -141,7 +145,8 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 		reloaded := reloadIntegration(t, subCtx, installation.ID)
 		require.Equal(t, installation.DefinitionVersion, reloaded.DefinitionVersion)
 		require.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
-		require.JSONEq(t, `{"zone":"eu"}`, string(reloaded.Config.ClientConfig))
+		require.Equal(t, zoneInputRef.Name(), reloaded.UserInput.Layout)
+		require.JSONEq(t, `{"zone":"eu"}`, string(reloaded.UserInput.Data))
 	})
 
 	t.Run("the auth-managed slot's schema participates in the version hash", func(t *testing.T) {

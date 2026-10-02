@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -97,12 +96,6 @@ func IngestOptionsFromOperationContext(oc gala.OperationContext) IngestOptions {
 		DeliveryID:   src.DeliveryID,
 		WorkflowMeta: src.Workflow,
 	}
-}
-
-// installationFilterConfig holds per-installation CEL filter config
-type installationFilterConfig struct {
-	// FilterExpr is a CEL expression evaluated per envelope; non-matches are dropped
-	FilterExpr string `json:"filterExpr,omitempty"`
 }
 
 // mappedIngestRecord is the result of applying a mapping expression to one ingest envelope
@@ -228,7 +221,7 @@ func newPayloadRun(ctx context.Context, ic IngestContext, batch ingestBatch, han
 		return nil, ctx, ErrIngestInstanceIDRequired
 	}
 
-	filterExpr, err := resolveInstallationFilterExpr(ic.Integration, definition, batch.OperationName)
+	filterExpr, err := resolveInstallationFilterExpr(ic.Integration, batch.OperationName)
 	if err != nil {
 		return nil, ctx, ErrIngestInstallationFilterConfigInvalid
 	}
@@ -836,26 +829,14 @@ func mapIngestRecord(ctx context.Context, mapping types.MappingOverride, schema 
 	}, true, nil
 }
 
-// resolveInstallationFilterExpr resolves the filter expression for the operation
-func resolveInstallationFilterExpr(installation *ent.Integration, definition types.Definition, operationName string) (string, error) {
-	op, found := lo.Find(definition.Operations, func(o types.OperationRegistration) bool { return o.Name == operationName })
-	if found && op.ConfigResolver != nil {
-		var cfg installationFilterConfig
-		if err := jsonx.UnmarshalIfPresent(op.ConfigResolver(installation.Config.ClientConfig), &cfg); err != nil {
-			return "", err
-		}
-
-		if cfg.FilterExpr != "" {
-			return cfg.FilterExpr, nil
-		}
-	}
-
-	var cfg installationFilterConfig
-	if err := jsonx.UnmarshalIfPresent(installation.Config.ClientConfig, &cfg); err != nil {
+// resolveInstallationFilterExpr resolves the filter expression stored on the operation's input document
+func resolveInstallationFilterExpr(installation *ent.Integration, operationName string) (string, error) {
+	settings, err := types.OperationSettingsFrom(installation.OperationConfig.For(operationName))
+	if err != nil {
 		return "", err
 	}
 
-	return cfg.FilterExpr, nil
+	return settings.FilterExpr, nil
 }
 
 // envelopeIncludedByFilters evaluates installation- and mapping-level filters
@@ -888,13 +869,6 @@ func contractIncludesSchema(contracts []types.IngestContract, schema string) boo
 	return lo.ContainsBy(contracts, func(contract types.IngestContract) bool {
 		return contract.Schema == schema
 	})
-}
-
-// RecordFailureSummary renders a compact summary of a run's failed records
-func RecordFailureSummary(result IngestResult) string {
-	first := result.Failures[0]
-
-	return fmt.Sprintf("%d of %d records failed to import; first failure: %s %s: %v", result.Failed, result.Attempted, first.Schema, first.Resource, first.Err)
 }
 
 // wrapIngestPersistError normalizes known persistence errors

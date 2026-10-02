@@ -4,54 +4,82 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"reflect"
+	"slices"
 	"testing"
 
+	"github.com/samber/lo"
+
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// sectionConfig is a test config type for a user input section
-type sectionConfig struct {
-	// Disable switches the operation off for the installation
-	Disable bool `json:"disable,omitempty"`
+// finalizeConfig is a test operation config type with one specific key
+type finalizeConfig struct {
 	// Limit bounds the number of records the operation reads
 	Limit int `json:"limit,omitempty"`
 }
 
-// sectionUserInput carries sectionConfig under the section key
-type sectionUserInput struct {
-	// Primary is a top-level knob outside any section
-	Primary string `json:"primary,omitempty"`
-	// Section is the operation config section
-	Section sectionConfig `json:"section,omitempty"`
+// finalizeReservedConfig declares a key the uniform operation settings reserve
+type finalizeReservedConfig struct {
+	// Disable collides with the uniform disable key
+	Disable bool `json:"disable,omitempty"`
 }
 
-// doubledSectionUserInput references sectionConfig from two properties
-type doubledSectionUserInput struct {
-	// First references the section type
-	First sectionConfig `json:"first,omitempty"`
-	// Second references the same section type
-	Second sectionConfig `json:"second,omitempty"`
-}
+// finalizeEmptyConfig has no properties
+type finalizeEmptyConfig struct{}
 
-// sectionDefinitionRef is the definition identity for finalize tests
-var sectionDefinitionRef = integrationtypes.NewDefinitionRef("def_finalize")
+// finalizeDefinitionRef is the definition identity for finalize tests
+var finalizeDefinitionRef = integrationtypes.NewDefinitionRef("def_finalize")
 
-// sectionOperation returns a reconciled operation registration over sectionConfig
-func sectionOperation(name string) integrationtypes.OperationRegistration {
-	return integrationtypes.NewOperationRef[sectionConfig](name).
-		HandlesRequest(func(context.Context, integrationtypes.OperationRequest, sectionConfig) (json.RawMessage, error) {
+// finalizeOperation returns a reconciled operation registration over Cfg
+func finalizeOperation[Cfg any]() integrationtypes.OperationRegistration {
+	return integrationtypes.OperationRefOf[Cfg]().
+		Policy(integrationtypes.ExecutionPolicy{Reconcile: true}).
+		HandlesRequest(func(context.Context, integrationtypes.OperationRequest, Cfg) (json.RawMessage, error) {
 			return nil, nil
 		}).
-		Registration(sectionDefinitionRef, integrationtypes.OperationRegistration{Policy: integrationtypes.ExecutionPolicy{Reconcile: true}})
+		Registration(finalizeDefinitionRef, integrationtypes.OperationRegistration{})
 }
 
-// sectionDefinition returns a definition with the given user input and operations
-func sectionDefinition(userInput *integrationtypes.UserInputRegistration, operations ...integrationtypes.OperationRegistration) integrationtypes.Definition {
+// operationDefinition returns a definition with the given operations
+func operationDefinition(operations ...integrationtypes.OperationRegistration) integrationtypes.Definition {
 	return integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: sectionDefinitionRef.ID()},
-		UserInput:      userInput,
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: finalizeDefinitionRef.ID()},
 		Operations:     operations,
 	}
+}
+
+// propertyKeys lists a schema root's property keys in declaration order
+func propertyKeys(t *testing.T, schema json.RawMessage) []string {
+	t.Helper()
+
+	root, _, err := jsonx.SchemaRoot(schema)
+	if err != nil {
+		t.Fatalf("SchemaRoot() error = %v", err)
+	}
+
+	var keys []string
+	for pair := root.Properties.Oldest(); pair != nil; pair = pair.Next() {
+		keys = append(keys, pair.Key)
+	}
+
+	return keys
+}
+
+// sameJSON reports whether two raw documents decode to the same value regardless of encoding
+func sameJSON(a, b json.RawMessage) bool {
+	var left, right any
+
+	if err := json.Unmarshal(a, &left); err != nil {
+		return false
+	}
+
+	if err := json.Unmarshal(b, &right); err != nil {
+		return false
+	}
+
+	return reflect.DeepEqual(left, right)
 }
 
 // TestFinalizeCredentialFormSchema verifies form/stored schema derivation across slot kinds
@@ -69,9 +97,10 @@ func TestFinalizeCredentialFormSchema(t *testing.T) {
 			{Ref: literalSlot, Schema: literalSchema},
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
-			integrationtypes.NewConnectionRef(testAuthCredentialRef).Registration(integrationtypes.ConnectionRegistration{
-				Auth: &integrationtypes.AuthRegistration{CredentialRef: testAuthCredentialRef.ID()},
-			}),
+			{
+				CredentialRef: testAuthCredentialRef.ID(),
+				Auth:          &integrationtypes.AuthRegistration{CredentialRef: testAuthCredentialRef.ID()},
+			},
 		},
 	}
 
@@ -104,141 +133,190 @@ func TestFinalizeCredentialFormSchema(t *testing.T) {
 	}
 }
 
-// TestFinalizeDerivesSectionResolverAndSwitch verifies section resolver and switch derivation
-func TestFinalizeDerivesSectionResolverAndSwitch(t *testing.T) {
+// TestFinalizeComposesOperationInputSchema verifies the uniform settings lead every operation's stored schema
+func TestFinalizeComposesOperationInputSchema(t *testing.T) {
 	t.Parallel()
 
-	def := sectionDefinition(integrationtypes.NewUserInputRef[sectionUserInput]("sectionUserInput").Registration(), sectionOperation("sync"))
+	def := operationDefinition(finalizeOperation[finalizeConfig](), finalizeOperation[finalizeEmptyConfig]())
 
 	finalized, err := finalizeDefinition(def)
 	if err != nil {
 		t.Fatalf("finalizeDefinition() error = %v", err)
 	}
 
-	operation := finalized.Operations[0]
-	if operation.ConfigResolver == nil || operation.Disabled == nil {
-		t.Fatal("expected the section resolver and switch to be derived")
+	configured := finalized.Operations[0]
+
+	if got := propertyKeys(t, configured.Input.Schema); !slices.Equal(got, []string{"disable", "filterExpr", "limit"}) {
+		t.Fatalf("input properties = %v, want the settings followed by the config keys", got)
 	}
 
-	if def.Operations[0].ConfigResolver != nil {
+	if !sameJSON(configured.ConfigSchema, integrationtypes.OperationRefOf[finalizeConfig]().Schema()) {
+		t.Fatalf("expected ConfigSchema to stay the pure config schema, got %s", configured.ConfigSchema)
+	}
+
+	if configured.Input.Name != "finalizeConfig" {
+		t.Fatalf("Input.Name = %q", configured.Input.Name)
+	}
+
+	empty := finalized.Operations[1]
+
+	if got := propertyKeys(t, empty.Input.Schema); !slices.Equal(got, []string{"disable", "filterExpr"}) {
+		t.Fatalf("empty config input properties = %v, want only the settings", got)
+	}
+
+	if sameJSON(def.Operations[0].Input.Schema, configured.Input.Schema) {
 		t.Fatal("expected finalize to leave the builder's operations untouched")
 	}
 
-	disabled := json.RawMessage(`{"primary":"p","section":{"disable":true,"limit":3}}`)
+	stored := json.RawMessage(`{"disable":true,"filterExpr":"payload.ok","limit":3}`)
 
-	if got := operation.ConfigResolver(disabled); !sameJSON(got, json.RawMessage(`{"disable":true,"limit":3}`)) {
-		t.Fatalf("ConfigResolver() = %s, want the section", got)
+	result, err := jsonx.ValidateSchema(configured.Input.Schema, stored)
+	if err != nil || !result.Valid() {
+		t.Fatalf("expected the composed schema to accept a stored document, got %v %v", err, jsonx.ValidationErrorStrings(result))
 	}
 
-	if !operation.DisabledFor(disabled) {
-		t.Fatal("expected the section's disable flag to switch the operation off")
+	if !configured.DisabledFor(stored) {
+		t.Fatal("expected the stored disable key to switch the operation off")
 	}
 
-	enabled := json.RawMessage(`{"section":{"limit":1}}`)
-	if operation.DisabledFor(enabled) {
-		t.Fatal("expected a section without the disable flag to leave the operation on")
-	}
-
-	absent := json.RawMessage(`{"primary":"p"}`)
-	if got := operation.ConfigResolver(absent); got != nil {
-		t.Fatalf("ConfigResolver() = %s, want nil for an absent section", got)
-	}
-
-	if operation.DisabledFor(absent) {
-		t.Fatal("expected an absent section to leave the operation on")
+	if configured.DisabledFor(json.RawMessage(`{"limit":3}`)) {
+		t.Fatal("expected a stored document without the disable key to leave the operation on")
 	}
 }
 
-// TestFinalizeKeepsAuthoredResolverAndSwitch verifies authored resolver and switch are kept
-func TestFinalizeKeepsAuthoredResolverAndSwitch(t *testing.T) {
+// TestFinalizeValidatesOperationFilterExpr verifies the composed input rejects a filter expression that does not compile and still runs the definition's own check
+func TestFinalizeValidatesOperationFilterExpr(t *testing.T) {
 	t.Parallel()
 
-	operation := sectionOperation("sync")
-	operation.ConfigResolver = func(json.RawMessage) json.RawMessage { return json.RawMessage(`{"limit":9}`) }
-	operation.Disabled = func(json.RawMessage) bool { return true }
+	errLimit := errors.New("limit too high")
 
-	finalized, err := finalizeDefinition(sectionDefinition(integrationtypes.NewUserInputRef[sectionUserInput]("sectionUserInput").Registration(), operation))
+	limited := integrationtypes.OperationRefOf[finalizeConfig]().
+		Policy(integrationtypes.ExecutionPolicy{Reconcile: true}).
+		HandlesRequest(func(context.Context, integrationtypes.OperationRequest, finalizeConfig) (json.RawMessage, error) {
+			return nil, nil
+		}).
+		Validated(func(_ context.Context, _ integrationtypes.InstallationRequest, config *finalizeConfig) error {
+			if config.Limit > 10 {
+				return errLimit
+			}
+
+			return nil
+		}).
+		Registration(finalizeDefinitionRef, integrationtypes.OperationRegistration{})
+
+	finalized, err := finalizeDefinition(operationDefinition(limited, finalizeOperation[finalizeEmptyConfig]()))
 	if err != nil {
 		t.Fatalf("finalizeDefinition() error = %v", err)
 	}
 
-	if got := finalized.Operations[0].ConfigResolver(json.RawMessage(`{"section":{"limit":1}}`)); !sameJSON(got, json.RawMessage(`{"limit":9}`)) {
-		t.Fatalf("ConfigResolver() = %s, want the authored resolver", got)
-	}
-
-	if !finalized.Operations[0].DisabledFor(json.RawMessage(`{}`)) {
-		t.Fatal("expected the authored switch to be kept")
-	}
-}
-
-// TestFinalizeSectionErrors verifies ambiguous, mismatched, and missing sections are rejected
-func TestFinalizeSectionErrors(t *testing.T) {
-	t.Parallel()
-
-	mismatched := &integrationtypes.UserInputRegistration{Schema: json.RawMessage(`{
-		"$ref": "#/$defs/input",
-		"$defs": {
-			"input": {"type": "object", "properties": {"section": {"$ref": "#/$defs/sectionConfig"}}},
-			"sectionConfig": {"type": "object", "properties": {"other": {"type": "string"}}}
-		}
-	}`)}
-
-	flat := &integrationtypes.UserInputRegistration{Schema: json.RawMessage(`{"type":"object","properties":{"limit":{"type":"integer"}}}`)}
-
-	cases := []struct {
-		name    string
-		def     integrationtypes.Definition
-		wantErr error
+	tests := []struct {
+		name      string
+		operation integrationtypes.OperationRegistration
+		payload   string
+		wantErr   error
 	}{
-		{
-			name:    "two properties reference one config type",
-			def:     sectionDefinition(integrationtypes.NewUserInputRef[doubledSectionUserInput]("doubledSectionUserInput").Registration(), sectionOperation("sync")),
-			wantErr: ErrConfigSectionAmbiguous,
-		},
-		{
-			name:    "two operations resolve to one section",
-			def:     sectionDefinition(integrationtypes.NewUserInputRef[sectionUserInput]("sectionUserInput").Registration(), sectionOperation("sync.a"), sectionOperation("sync.b")),
-			wantErr: ErrConfigSectionAmbiguous,
-		},
-		{
-			name:    "section declares a different schema for the config type",
-			def:     sectionDefinition(mismatched, sectionOperation("sync")),
-			wantErr: ErrConfigSectionMismatch,
-		},
-		{
-			name:    "reconciled configurable operation without a section",
-			def:     sectionDefinition(flat, sectionOperation("sync")),
-			wantErr: ErrConfigSectionRequired,
-		},
-		{
-			name:    "reconciled configurable operation without user input",
-			def:     sectionDefinition(nil, sectionOperation("sync")),
-			wantErr: ErrConfigSectionRequired,
-		},
+		{name: "valid expression passes", operation: finalized.Operations[0], payload: `{"filterExpr":"payload.ok == true","limit":3}`},
+		{name: "empty expression passes", operation: finalized.Operations[0], payload: `{"limit":3}`},
+		{name: "expression that does not compile is rejected", operation: finalized.Operations[0], payload: `{"filterExpr":"payload.","limit":3}`, wantErr: ErrOperationFilterExprInvalid},
+		{name: "definition validation runs after the framework check", operation: finalized.Operations[0], payload: `{"filterExpr":"true","limit":11}`, wantErr: errLimit},
+		{name: "operation without its own validation still compiles the expression", operation: finalized.Operations[1], payload: `{"filterExpr":"payload."}`, wantErr: ErrOperationFilterExprInvalid},
 	}
 
-	for _, tc := range cases {
+	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			if _, err := finalizeDefinition(tc.def); !errors.Is(err, tc.wantErr) {
-				t.Fatalf("finalizeDefinition() error = %v, want %v", err, tc.wantErr)
+			err := tc.operation.Input.Validate(context.Background(), integrationtypes.InstallationRequest{}, json.RawMessage(tc.payload))
+
+			switch {
+			case tc.wantErr == nil && err != nil:
+				t.Fatalf("Validate() error = %v, want nil", err)
+			case tc.wantErr != nil && !errors.Is(err, tc.wantErr):
+				t.Fatalf("Validate() error = %v, want %v", err, tc.wantErr)
 			}
 		})
 	}
 }
 
-// TestFinalizeSectionRequiredExemptions verifies inline and authored-resolver ops need no section
-func TestFinalizeSectionRequiredExemptions(t *testing.T) {
+// TestFinalizeRejectsReservedConfigKeys verifies a config declaring a settings key fails registration
+func TestFinalizeRejectsReservedConfigKeys(t *testing.T) {
 	t.Parallel()
 
-	inline := sectionOperation("inline")
-	inline.Policy = integrationtypes.ExecutionPolicy{Inline: true}
+	if _, err := finalizeDefinition(operationDefinition(finalizeOperation[finalizeReservedConfig]())); !errors.Is(err, ErrOperationConfigReservedKey) {
+		t.Fatalf("finalizeDefinition() error = %v, want %v", err, ErrOperationConfigReservedKey)
+	}
+}
 
-	authored := sectionOperation("authored")
-	authored.ConfigResolver = func(userInput json.RawMessage) json.RawMessage { return userInput }
+// TestFinalizeLeavesLiteralOperationsWithoutInput verifies operations declared without a stored input stay bare
+func TestFinalizeLeavesLiteralOperationsWithoutInput(t *testing.T) {
+	t.Parallel()
 
-	if _, err := finalizeDefinition(sectionDefinition(nil, inline, authored)); err != nil {
+	def := operationDefinition(integrationtypes.OperationRegistration{Name: "literal", Handle: newTestHandler()})
+
+	finalized, err := finalizeDefinition(def)
+	if err != nil {
 		t.Fatalf("finalizeDefinition() error = %v", err)
+	}
+
+	if finalized.Operations[0].Input != nil {
+		t.Fatalf("expected no stored input derived for a literal operation, got %+v", finalized.Operations[0].Input)
+	}
+}
+
+// TestFinalizeDefaultsCredentialSlots verifies clients and connections without slots take the declared ones
+func TestFinalizeDefaultsCredentialSlots(t *testing.T) {
+	t.Parallel()
+
+	clientRef := integrationtypes.ClientRefOf[string]()
+	explicit := integrationtypes.NewClientRef[int]("explicit").Using(testAuthCredentialRef)
+	build := func(context.Context, integrationtypes.ClientBuildRequest) (string, error) { return "", nil }
+	buildInt := func(context.Context, integrationtypes.ClientBuildRequest) (int, error) { return 0, nil }
+
+	def := integrationtypes.Definition{
+		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_finalize_slots"},
+		CredentialRegistrations: []integrationtypes.CredentialRegistration{
+			testCredentialRef.Registration(integrationtypes.CredentialRegistration{}),
+			testAuthCredentialRef.Registration(integrationtypes.CredentialRegistration{}),
+		},
+		Clients: []integrationtypes.ClientRegistration{
+			clientRef.Registration(build, integrationtypes.ClientRegistration{}),
+			explicit.Registration(buildInt, integrationtypes.ClientRegistration{}),
+		},
+		Connections: []integrationtypes.ConnectionRegistration{
+			{CredentialRef: testCredentialRef.ID()},
+			{CredentialRef: testAuthCredentialRef.ID(), CredentialRefs: []integrationtypes.CredentialSlotID{testAuthCredentialRef.ID(), testCredentialRef.ID()}},
+		},
+	}
+
+	finalized, err := finalizeDefinition(def)
+	if err != nil {
+		t.Fatalf("finalizeDefinition() error = %v", err)
+	}
+
+	declared := []integrationtypes.CredentialSlotID{testCredentialRef.ID(), testAuthCredentialRef.ID()}
+
+	if got := finalized.Clients[0].CredentialRefs; !slices.Equal(got, declared) {
+		t.Fatalf("defaulted client CredentialRefs = %v, want every declared slot", got)
+	}
+
+	if got := finalized.Clients[1].CredentialRefs; !slices.Equal(got, []integrationtypes.CredentialSlotID{testAuthCredentialRef.ID()}) {
+		t.Fatalf("explicit client CredentialRefs = %v, want the declared slot kept", got)
+	}
+
+	if got := finalized.Connections[0].CredentialRefs; !slices.Equal(got, []integrationtypes.CredentialSlotID{testCredentialRef.ID()}) {
+		t.Fatalf("defaulted connection CredentialRefs = %v, want the selecting slot", got)
+	}
+
+	if got := finalized.Connections[1].CredentialRefs; len(got) != 2 {
+		t.Fatalf("explicit connection CredentialRefs = %v, want the authored slots kept", got)
+	}
+
+	if len(def.Clients[0].CredentialRefs) != 0 || len(def.Connections[0].CredentialRefs) != 0 {
+		t.Fatal("expected finalize to leave the builder's registrations untouched")
+	}
+
+	names := lo.Map(finalized.Clients, func(client integrationtypes.ClientRegistration, _ int) string { return client.Ref.String() })
+	if !slices.Equal(names, []string{clientRef.ID().String(), explicit.ID().String()}) {
+		t.Fatalf("expected client order preserved, got %v", names)
 	}
 }

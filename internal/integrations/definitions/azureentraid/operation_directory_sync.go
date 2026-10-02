@@ -86,9 +86,6 @@ type directoryMembershipPayload struct {
 	Member directoryEntityRef `json:"member"`
 }
 
-// directorySyncOperation is the Azure Entra ID directory sync operation
-var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(entraClient, runDirectorySync)
-
 // runDirectorySync collects Azure Entra ID directory users, groups, and memberships
 func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *msgraphsdk.GraphServiceClient, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listEntraUsers(ctx, c)

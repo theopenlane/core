@@ -15,8 +15,8 @@ type InstallationRequest struct {
 	Connection ConnectionRegistration
 	// Credentials lists all resolved credential bundles participating in the connection mode
 	Credentials CredentialBindings
-	// Config is the installation-scoped configuration payload
-	Config IntegrationConfig
+	// UserInput is the stored installation-scoped user input document
+	UserInput json.RawMessage
 	// Input is provider-defined raw input used to derive installation metadata
 	Input json.RawMessage
 }

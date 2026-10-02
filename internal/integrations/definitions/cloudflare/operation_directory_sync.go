@@ -73,9 +73,6 @@ type cloudflareGroupMemberPayload struct {
 	Payload any `json:"payload"`
 }
 
-// directorySyncOperation is the operation ref for the directory account sync operation
-var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(cloudflareClient, runDirectorySync)
-
 // runDirectorySync collects Cloudflare account members and emits directory account ingest payloads
 func runDirectorySync(ctx context.Context, request types.OperationRequest, client *CloudflareClient, _ DirectorySync) ([]types.IngestPayloadSet, error) {
 	meta, err := resolveCredential(request.Credentials)

@@ -9,9 +9,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// claimsInspectOperation is the operation ref for the OIDC claims inspection operation
-var claimsInspectOperation = types.OperationRefOf[ClaimsInspect]().HandlesRequest(inspectClaims)
-
 // inspectClaims returns the stored OIDC claims for local inspection
 func inspectClaims(_ context.Context, req types.OperationRequest, _ ClaimsInspect) (json.RawMessage, error) {
 	cred, ok, err := oidcCredential.Resolve(req.Credentials)

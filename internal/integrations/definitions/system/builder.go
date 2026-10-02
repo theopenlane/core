@@ -3,13 +3,11 @@ package system
 import (
 	"context"
 	"encoding/json"
-
-	"github.com/samber/lo"
+	"fmt"
 
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
@@ -21,40 +19,35 @@ type sweeper interface {
 // Builder returns the system definition hosting the scheduled runtime sweeps
 func Builder(paymentReminder PaymentReminderConfig, organizationDelete OrganizationDeleteConfig, integrationLifecycle IntegrationLifecycleConfig) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
+		paymentReminderOp := PaymentReminderOp.
+			HandlesRequest(sweepHandler(paymentReminder.Sweep())).
+			DisabledForAll(!paymentReminder.Enabled)
+
+		organizationDeleteOp := OrganizationDeleteOp.
+			HandlesRequest(sweepHandler(organizationDelete.Sweep())).
+			DisabledForAll(!organizationDelete.Enabled)
+
+		integrationLifecycleOp := IntegrationLifecycleOp.
+			HandlesRequest(sweepHandler(integrationLifecycle.Sweep())).
+			DisabledForAll(!integrationLifecycle.Enabled)
+
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
-				Family:      "Openlane",
-				DisplayName: "Openlane System",
-				Description: "Internal scheduled sweeps for organization lifecycle.",
-				Category:    "system",
-				Active:      true,
-				Visible:     false,
-			},
+			ID:          DefinitionID.ID(),
+			Family:      "Openlane",
+			DisplayName: "Openlane System",
+			Description: "Internal scheduled sweeps for organization lifecycle.",
+			Category:    "system",
+			Active:      true,
+			Visible:     false,
 			Operations: []types.OperationRegistration{
-				PaymentReminderOp.HandlesRequest(sweepHandler(paymentReminder.Sweep())).Registration(DefinitionID, types.OperationRegistration{
-					Description:         "Mark canceled organizations for deletion and dispatch deletion notice emails",
-					Policy:              types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true},
-					Schedule:            &gala.Schedule{MinInterval: PaymentReminderMinInterval, MaxInterval: PaymentReminderMaxInterval},
-					CustomerSelectable:  lo.ToPtr(false),
-					DisabledForAll:      !paymentReminder.Enabled,
-					SkipDefaultLookback: true,
+				paymentReminderOp.Registration(DefinitionID, types.OperationRegistration{
+					Description: "Mark canceled organizations for deletion and dispatch deletion notice emails",
 				}),
-				OrganizationDeleteOp.HandlesRequest(sweepHandler(organizationDelete.Sweep())).Registration(DefinitionID, types.OperationRegistration{
-					Description:         "Delete overdue organizations that still have no active or trialing subscription",
-					Policy:              types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true},
-					Schedule:            &gala.Schedule{MinInterval: OrganizationDeleteMinInterval, MaxInterval: OrganizationDeleteMaxInterval},
-					CustomerSelectable:  lo.ToPtr(false),
-					DisabledForAll:      !organizationDelete.Enabled,
-					SkipDefaultLookback: true,
+				organizationDeleteOp.Registration(DefinitionID, types.OperationRegistration{
+					Description: "Delete overdue organizations that still have no active or trialing subscription",
 				}),
-				IntegrationLifecycleOp.HandlesRequest(sweepHandler(integrationLifecycle.Sweep())).Registration(DefinitionID, types.OperationRegistration{
-					Description:         "Reap expired integration installations that never connected",
-					Policy:              types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true},
-					Schedule:            &gala.Schedule{MinInterval: IntegrationLifecycleMinInterval, MaxInterval: IntegrationLifecycleMaxInterval},
-					CustomerSelectable:  lo.ToPtr(false),
-					DisabledForAll:      !integrationLifecycle.Enabled,
-					SkipDefaultLookback: true,
+				integrationLifecycleOp.Registration(DefinitionID, types.OperationRegistration{
+					Description: "Reap expired integration installations that never connected",
 				}),
 			},
 		}, nil
@@ -67,7 +60,7 @@ func sweepHandler[S sweeper](defaults S) func(context.Context, types.OperationRe
 		sweep := defaults
 
 		if err := jsonx.UnmarshalIfPresent(req.Config, &sweep); err != nil {
-			return nil, ErrOperationConfigInvalid
+			return nil, fmt.Errorf("%w: %w", types.ErrOperationConfigInvalid, err)
 		}
 
 		processed, err := sweep.Run(ctx, req)

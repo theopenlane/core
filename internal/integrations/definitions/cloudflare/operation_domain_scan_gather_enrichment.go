@@ -31,7 +31,13 @@ type DomainScanGatherEnrichmentResult struct {
 }
 
 // DomainScanEnrichmentOp is the operation ref for gathering enrichment data for a domain
-var DomainScanEnrichmentOp = types.OperationRefOf[DomainScanGatherEnrichment]().Handles(cloudflareClient, runDomainScanGatherEnrichment) //nolint:revive
+//
+//nolint:revive
+var DomainScanEnrichmentOp = types.OperationRefOf[DomainScanGatherEnrichment]().
+	Handles(cloudflareClient, runDomainScanGatherEnrichment).
+	Policy(types.ExecutionPolicy{SkipRunRecord: true}).
+	CustomerSelectable(false).
+	Internal()
 
 // runDomainScanGatherEnrichment gathers enrichment data for the configured domain and encodes it
 func runDomainScanGatherEnrichment(ctx context.Context, _ types.OperationRequest, client *CloudflareClient, cfg DomainScanGatherEnrichment) (json.RawMessage, error) {

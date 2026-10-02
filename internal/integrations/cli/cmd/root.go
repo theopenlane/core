@@ -40,29 +40,6 @@ func Execute() {
 	cobra.CheckErr(RootCmd.Execute())
 }
 
-// ConfigPath returns the resolved config file path
-func ConfigPath() string { return cfgFile }
-
-// RenderOutput dispatches to the requested output format handler
-func RenderOutput(format string, jsonFn, tableFn func() error) error {
-	switch format {
-	case JSONOutput:
-		if jsonFn == nil {
-			return ErrUnsupportedOutputFormat
-		}
-
-		return jsonFn()
-	case TableOutput:
-		if tableFn == nil {
-			return ErrUnsupportedOutputFormat
-		}
-
-		return tableFn()
-	default:
-		return ErrUnsupportedOutputFormat
-	}
-}
-
 // init sets up the root command configuration and flags
 func init() {
 	Config = koanf.New(".")

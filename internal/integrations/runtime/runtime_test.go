@@ -92,7 +92,7 @@ func TestNewWithRegistryOverride(t *testing.T) {
 		t.Fatal("expected keystore to be wired")
 	}
 
-	def, ok := rt.Definition("test-def")
+	def, ok := rt.Registry().Definition("test-def")
 	if !ok {
 		t.Fatal("expected definition to be found")
 	}
@@ -101,7 +101,7 @@ func TestNewWithRegistryOverride(t *testing.T) {
 		t.Fatalf("expected display name Test, got %q", def.DisplayName)
 	}
 
-	catalog := rt.Catalog()
+	catalog := rt.Registry().Catalog()
 	if len(catalog) != 1 {
 		t.Fatalf("expected 1 catalog entry, got %d", len(catalog))
 	}
@@ -155,7 +155,7 @@ func TestNewWithBuildersNoRegistry(t *testing.T) {
 		t.Fatal("expected builder to be called")
 	}
 
-	_, ok := rt.Definition("built-def")
+	_, ok := rt.Registry().Definition("built-def")
 	if !ok {
 		t.Fatal("expected built definition to be registered")
 	}
@@ -201,11 +201,6 @@ func TestNormalizeDispatchError(t *testing.T) {
 		expectedErr error
 	}{
 		{
-			name:        "nil",
-			err:         nil,
-			expectedErr: nil,
-		},
-		{
 			name:        "definition not found",
 			err:         registry.ErrDefinitionNotFound,
 			expectedErr: ErrDefinitionNotFound,
@@ -231,13 +226,7 @@ func TestNormalizeDispatchError(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			got := normalizeDispatchError(tt.err)
-			switch {
-			case tt.expectedErr == nil:
-				if got != nil {
-					t.Fatalf("expected nil error, got %v", got)
-				}
-			case !errors.Is(got, tt.expectedErr):
+			if got := normalizeDispatchError(tt.err); !errors.Is(got, tt.expectedErr) {
 				t.Fatalf("expected %v, got %v", tt.expectedErr, got)
 			}
 		})

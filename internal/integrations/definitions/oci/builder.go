@@ -10,18 +10,15 @@ import (
 func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
-				Family:      "Oracle Cloud Infrastructure",
-				DisplayName: "Oracle Cloud Infrastructure",
-				Description: "Collect Oracle Cloud Infrastructure Cloud Guard problems for security posture reporting.",
-				Category:    "security-posture",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/oci",
-				Tags:        []string{"findings"},
-				Active:      false,
-				Visible:     true,
-			},
-			UserInput:    userInput.Registration(),
+			ID:           definitionID.ID(),
+			Family:       "Oracle Cloud Infrastructure",
+			DisplayName:  "Oracle Cloud Infrastructure",
+			Description:  "Collect Oracle Cloud Infrastructure Cloud Guard problems for security posture reporting.",
+			Category:     "security-posture",
+			DocsURL:      "https://docs.theopenlane.io/docs/platform/integrations/oci",
+			Tags:         []string{"findings"},
+			Active:       false,
+			Visible:      true,
 			HealthCheck:  identityClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
@@ -31,13 +28,15 @@ func Builder() registry.Builder {
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				ociConnection.Registration(types.ConnectionRegistration{
-					Name:        "OCI API Key",
-					Description: "Configure Oracle Cloud Infrastructure access using an API signing key registered to a tenancy user.",
+				{
+					CredentialRef: ociCredential.ID(),
+					Name:          "OCI API Key",
+					Description:   "Configure Oracle Cloud Infrastructure access using an API signing key registered to a tenancy user.",
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Removes the stored API signing key from Openlane. If the key is no longer needed, delete it from the user's API keys in the OCI console.",
+						CredentialRef: ociCredential.ID(),
+						Description:   "Removes the stored API signing key from Openlane. If the key is no longer needed, delete it from the user's API keys in the OCI console.",
 					},
-				}),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				identityClient.Registration(IdentityClientBuilder{}.Build, types.ClientRegistration{
@@ -48,16 +47,14 @@ func Builder() registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				findingsSyncOperation.Registration(definitionID, types.OperationRegistration{
-					Description: "Collect OCI Cloud Guard problems as findings",
-					Policy:      types.ExecutionPolicy{Reconcile: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaFinding.Name,
-						},
-					},
-					RequiredPermissions: []string{"read cloud-guard-problems in tenancy"},
-				}),
+				types.OperationRefOf[FindingsSync]().
+					Ingests(cloudGuardClient, runFindingsSync).
+					Policy(types.ExecutionPolicy{Reconcile: true}).
+					Ingest(types.IngestContract{Schema: entityops.SchemaFinding.Name}).
+					Permissions("read cloud-guard-problems in tenancy").
+					Registration(definitionID, types.OperationRegistration{
+						Description: "Collect OCI Cloud Guard problems as findings",
+					}),
 			},
 			Mappings: []types.MappingRegistration{
 				{

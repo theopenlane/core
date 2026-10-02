@@ -13,8 +13,6 @@ var (
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// oidcCredential is the auth-managed credential slot used by the local OIDC connection
 	oidcCredential = types.CredentialRefOf[oidcLocalCred]()
-	// oidcConnection is the connection mode selected by the local OIDC credential slot
-	oidcConnection = types.NewConnectionRef(oidcCredential)
 )
 
 // oidcLocalCred holds the provider-owned credential material for a local OIDC installation

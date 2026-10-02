@@ -31,10 +31,15 @@ var (
 	mockHTTPInstallation = types.NewInstallationRef(resolveMockHTTPMetadata)
 	// mockHTTPClient is the client ref for the mock provider
 	mockHTTPClient = types.ClientRefOf[*mockHTTPClientInstance]().Using(MockHTTPCredential)
-	// mockHTTPConnection is the mock provider connection mode
-	mockHTTPConnection = types.NewConnectionRef(MockHTTPCredential)
 	// mockHTTPSyncOp is the mock provider's directory sync operation
-	mockHTTPSyncOp = types.NewOperationRef[mockHTTPSync](MockHTTPSyncOperation).Ingests(mockHTTPClient, mockHTTPIngest)
+	mockHTTPSyncOp = types.NewOperationRef[mockHTTPSync](MockHTTPSyncOperation).
+			Ingests(mockHTTPClient, mockHTTPIngest).
+			Policy(types.ExecutionPolicy{Snapshot: true}).
+			Ingest(
+			types.IngestContract{Schema: entityops.SchemaDirectoryAccount.Name},
+			types.IngestContract{Schema: entityops.SchemaDirectoryGroup.Name},
+			types.IngestContract{Schema: entityops.SchemaDirectoryMembership.Name},
+		)
 )
 
 // mockHTTPSync is the config for the mock provider's directory sync operation
@@ -188,13 +193,15 @@ func MockHTTPBuilder() registry.Builder {
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				mockHTTPConnection.Registration(types.ConnectionRegistration{
-					Name:        "Mock HTTP",
-					Description: "Connect to the mock HTTP provider and resolve its instance id.",
+				{
+					CredentialRef: MockHTTPCredential.ID(),
+					Name:          "Mock HTTP",
+					Description:   "Connect to the mock HTTP provider and resolve its instance id.",
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Remove the persisted mock provider credential and disconnect this installation.",
+						CredentialRef: MockHTTPCredential.ID(),
+						Description:   "Remove the persisted mock provider credential and disconnect this installation.",
 					},
-				}),
+				},
 			},
 			HealthCheck:  types.CredentialHealthCheck(mockHTTPHealthCheck),
 			Installation: mockHTTPInstallation.Registration(),
@@ -206,12 +213,6 @@ func MockHTTPBuilder() registry.Builder {
 			Operations: []types.OperationRegistration{
 				mockHTTPSyncOp.Registration(MockHTTPDefinitionID, types.OperationRegistration{
 					Description: "Directory sync ingest for the mock provider",
-					Policy:      types.ExecutionPolicy{Snapshot: true},
-					Ingest: []types.IngestContract{
-						{Schema: entityops.SchemaDirectoryAccount.Name},
-						{Schema: entityops.SchemaDirectoryGroup.Name},
-						{Schema: entityops.SchemaDirectoryMembership.Name},
-					},
 				}),
 			},
 			Mappings: []types.MappingRegistration{

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"slices"
 	"testing"
 )
 
@@ -116,19 +117,18 @@ func TestDefinitionCredentialRegistration(t *testing.T) {
 func TestOperationRegistrationDisabledFor(t *testing.T) {
 	t.Parallel()
 
-	byInput := func(userInput json.RawMessage) bool { return string(userInput) == `{"off":true}` }
-
 	tests := []struct {
 		name  string
 		op    OperationRegistration
 		input string
 		want  bool
 	}{
-		{name: "no switches", op: OperationRegistration{}, input: `{"off":true}`, want: false},
+		{name: "stored input without the disable key", op: OperationRegistration{}, input: `{"limit":1}`, want: false},
 		{name: "disabled for all ignores input", op: OperationRegistration{DisabledForAll: true}, input: `{}`, want: true},
-		{name: "per-installation switch on", op: OperationRegistration{Disabled: byInput}, input: `{"off":true}`, want: true},
-		{name: "per-installation switch off", op: OperationRegistration{Disabled: byInput}, input: `{}`, want: false},
-		{name: "nil input with per-installation switch", op: OperationRegistration{Disabled: byInput}, want: false},
+		{name: "stored input disables", op: OperationRegistration{}, input: `{"disable":true,"limit":1}`, want: true},
+		{name: "stored input explicitly enabled", op: OperationRegistration{}, input: `{"disable":false}`, want: false},
+		{name: "nil input leaves the operation on", op: OperationRegistration{}, want: false},
+		{name: "undecodable input leaves the operation on", op: OperationRegistration{}, input: `[]`, want: false},
 	}
 
 	for _, tc := range tests {
@@ -147,29 +147,77 @@ func TestOperationRegistrationDisabledFor(t *testing.T) {
 	}
 }
 
-func TestSwitchDisabled(t *testing.T) {
+func TestOperationSettingsFrom(t *testing.T) {
 	t.Parallel()
 
-	if (Switch{}).Disabled() {
-		t.Fatal("expected the zero switch to be enabled")
+	settings, err := OperationSettingsFrom(json.RawMessage(`{"disable":true,"filterExpr":"payload.ok","limit":1}`))
+	if err != nil {
+		t.Fatalf("OperationSettingsFrom() error = %v", err)
 	}
 
-	if !(Switch{Disable: true}).Disabled() {
-		t.Fatal("expected a set switch to be disabled")
+	if !settings.Disable || settings.FilterExpr != "payload.ok" {
+		t.Fatalf("expected the uniform keys decoded beside config keys, got %+v", settings)
 	}
 
-	var decoded Switch
-	if err := json.Unmarshal(json.RawMessage(`{"disable":true,"limit":1}`), &decoded); err != nil {
-		t.Fatalf("unmarshal: %v", err)
+	empty, err := OperationSettingsFrom(nil)
+	if err != nil || empty != (OperationSettings{}) {
+		t.Fatalf("expected empty input to decode to zero settings, got %+v, %v", empty, err)
 	}
 
-	if !decoded.Disabled() {
-		t.Fatal("expected the section's disable key decoded into the switch")
+	if _, err := OperationSettingsFrom(json.RawMessage(`[]`)); err == nil {
+		t.Fatal("expected a non-object document to fail decoding")
+	}
+
+	if got := len(OperationSettingsSchema()); got == 0 {
+		t.Fatal("expected the settings schema reflected")
+	}
+
+	if !slices.Equal(operationSettingsKeys, []string{"disable", "filterExpr"}) {
+		t.Fatalf("operationSettingsKeys = %v", operationSettingsKeys)
 	}
 }
 
-// TestDefinitionCredentialReplacing verifies the registration for a retired slot is found
-func TestDefinitionCredentialReplacing(t *testing.T) {
+// TestDefinitionResolveOperation verifies exact names resolve directly and retired names resolve through their replacement
+func TestDefinitionResolveOperation(t *testing.T) {
+	t.Parallel()
+
+	def := Definition{
+		DefinitionSpec: DefinitionSpec{ID: "test-def"},
+		Operations: []OperationRegistration{
+			{Name: "sync.users"},
+			{Name: "sync.groups", Replaces: []string{"sync.teams"}},
+		},
+	}
+
+	t.Run("exact", func(t *testing.T) {
+		t.Parallel()
+
+		reg, replaced, ok := def.ResolveOperation("sync.users")
+		if !ok || replaced || reg.Name != "sync.users" {
+			t.Fatalf("expected sync.users to resolve directly, got %+v replaced=%v ok=%v", reg, replaced, ok)
+		}
+	})
+
+	t.Run("retired", func(t *testing.T) {
+		t.Parallel()
+
+		reg, replaced, ok := def.ResolveOperation("sync.teams")
+		if !ok || !replaced || reg.Name != "sync.groups" {
+			t.Fatalf("expected sync.groups to replace sync.teams, got %+v replaced=%v ok=%v", reg, replaced, ok)
+		}
+	})
+
+	t.Run("unknown", func(t *testing.T) {
+		t.Parallel()
+
+		if _, _, ok := def.ResolveOperation("sync.unknown"); ok {
+			t.Fatal("expected an undeclared name not to resolve")
+		}
+	})
+}
+
+// TestDefinitionResolveCredential verifies exact slots resolve directly and retired slots resolve through their replacement
+func TestDefinitionResolveCredential(t *testing.T) {
 	t.Parallel()
 
 	retired := NewCredentialSlotID("retiredCredential")
@@ -182,12 +230,21 @@ func TestDefinitionCredentialReplacing(t *testing.T) {
 		},
 	}
 
-	t.Run("found", func(t *testing.T) {
+	t.Run("exact", func(t *testing.T) {
 		t.Parallel()
 
-		reg, ok := def.CredentialReplacing(retired)
-		if !ok {
-			t.Fatal("expected a replacing registration to be found")
+		reg, replaced, ok := def.ResolveCredential(apiKeyCredentialRef.ID())
+		if !ok || replaced || reg.Ref != apiKeyCredentialRef.ID() {
+			t.Fatalf("expected the declared slot to resolve directly, got %+v replaced=%v ok=%v", reg, replaced, ok)
+		}
+	})
+
+	t.Run("retired", func(t *testing.T) {
+		t.Parallel()
+
+		reg, replaced, ok := def.ResolveCredential(retired)
+		if !ok || !replaced {
+			t.Fatalf("expected a replacing registration to be found, got replaced=%v ok=%v", replaced, ok)
 		}
 
 		if reg.Ref != oauthCredentialRef.ID() {
@@ -195,12 +252,11 @@ func TestDefinitionCredentialReplacing(t *testing.T) {
 		}
 	})
 
-	t.Run("not found", func(t *testing.T) {
+	t.Run("unknown", func(t *testing.T) {
 		t.Parallel()
 
-		_, ok := def.CredentialReplacing(NewCredentialSlotID("nonexistent"))
-		if ok {
-			t.Fatal("expected no replacing registration to be found")
+		if _, _, ok := def.ResolveCredential(NewCredentialSlotID("nonexistent")); ok {
+			t.Fatal("expected no registration to be found")
 		}
 	})
 }

@@ -33,12 +33,6 @@ type upgradeUserInput struct {
 	Region string `json:"region" jsonschema:"required,minLength=1"`
 }
 
-// retiredUserInput is the shape an earlier definition version stored the region under
-type retiredUserInput struct {
-	// Zone is the retired field name for the region
-	Zone string `json:"zone"`
-}
-
 // upgradeCredentialRegion is a credential type whose region is required by presence only
 type upgradeCredentialRegion struct {
 	// Token is the token field
@@ -47,50 +41,129 @@ type upgradeCredentialRegion struct {
 	Region string `json:"region" jsonschema:"required"`
 }
 
-// flatDirectoryUserInput is the retired layout carrying an optional knob at the top level
-type flatDirectoryUserInput struct {
-	// FilterExpr is the optional top-level filter expression
-	FilterExpr string `json:"filterExpr,omitempty"`
+// upgradeOperationConfigCfg is the current operation config type with a required non-empty region
+type upgradeOperationConfigCfg struct {
+	// Region is the required non-empty region
+	Region string `json:"region" jsonschema:"required,minLength=1"`
 }
 
-// nestedDirectorySync is the section the optional knob moves into
-type nestedDirectorySync struct {
-	// FilterExpr is the optional filter expression inside the section
-	FilterExpr string `json:"filterExpr,omitempty"`
+// retiredOperationConfigCfg is the shape an earlier definition version stored the region under
+type retiredOperationConfigCfg struct {
+	// Zone is the retired field name for the region
+	Zone string `json:"zone"`
 }
 
-// nestedDirectoryUserInput is the current layout nesting the optional knob under a section
-type nestedDirectoryUserInput struct {
-	// DirectorySync is the section holding the knob
-	DirectorySync nestedDirectorySync `json:"directorySync,omitempty"`
+// upgradeRetiredCredential maps a payload stored under the retired slot onto the current credential layout
+func upgradeRetiredCredential(retired types.CredentialRef[retiredCredential]) func(context.Context, types.InstallationRequest, string, json.RawMessage) (upgradeCredential, error) {
+	return func(_ context.Context, _ types.InstallationRequest, from string, stored json.RawMessage) (upgradeCredential, error) {
+		switch from {
+		case retired.ID().String():
+			old, err := jsonx.Decode[retiredCredential](stored)
+			if err != nil {
+				return upgradeCredential{}, err
+			}
+
+			return upgradeCredential{Token: old.AccessToken}, nil
+		default:
+			return jsonx.Decode[upgradeCredential](stored)
+		}
+	}
 }
 
-func TestConformUserInputConvertsReNestedOptionalKey(t *testing.T) {
+func TestUpgradeOperationDocuments(t *testing.T) {
 	t.Parallel()
 
-	flat := types.NewUserInputRef[flatDirectoryUserInput]("flatDirectoryUserInput")
-	nested := types.NewUserInputRef[nestedDirectoryUserInput]("nestedDirectoryUserInput").Replacing(flat, func(old flatDirectoryUserInput) nestedDirectoryUserInput {
-		return nestedDirectoryUserInput{DirectorySync: nestedDirectorySync{FilterExpr: old.FilterExpr}}
-	})
+	definition := types.NewDefinitionRef("test-def")
+	retired := types.OperationRefOf[retiredOperationConfigCfg]()
+	current := types.OperationRefOf[upgradeOperationConfigCfg]().
+		Replacing(retired).
+		Upgraded(func(_ context.Context, _ types.InstallationRequest, from string, stored json.RawMessage) (upgradeOperationConfigCfg, error) {
+			switch from {
+			case retired.Name():
+				old, err := jsonx.Decode[retiredOperationConfigCfg](stored)
+				if err != nil {
+					return upgradeOperationConfigCfg{}, err
+				}
 
-	got, err := conformUserInput(t.Context(), types.InstallationRequest{}, *nested.Registration(), json.RawMessage(`{"filterExpr":"x"}`))
+				return upgradeOperationConfigCfg{Region: old.Zone}, nil
+			default:
+				return jsonx.Decode[upgradeOperationConfigCfg](stored)
+			}
+		})
+
+	registration := current.Registration(definition, types.OperationRegistration{})
+
+	envelope, err := jsonx.MergeSchemas(types.OperationSettingsSchema(), registration.ConfigSchema)
 	assert.NilError(t, err)
-	assert.Equal(t, string(got), `{"directorySync":{"filterExpr":"x"}}`)
+
+	registration.Input.Schema = envelope
+
+	def := types.Definition{Operations: []types.OperationRegistration{registration}}
+
+	tests := []struct {
+		name    string
+		stored  map[string]json.RawMessage
+		want    map[string]string
+		wantErr error
+	}{
+		{
+			name:   "declared operation is conformed keeping the uniform settings",
+			stored: map[string]json.RawMessage{current.Name(): json.RawMessage(`{"disable":true,"region":"eu","legacy":1}`)},
+			want:   map[string]string{current.Name(): `{"disable":true,"region":"eu"}`},
+		},
+		{
+			name:   "retired operation name is upgraded onto its replacement",
+			stored: map[string]json.RawMessage{retired.Name(): json.RawMessage(`{"filterExpr":"payload.active","zone":"eu"}`)},
+			want:   map[string]string{current.Name(): `{"filterExpr":"payload.active","region":"eu"}`},
+		},
+		{
+			name: "retired document does not overwrite an existing replacement document",
+			stored: map[string]json.RawMessage{
+				retired.Name(): json.RawMessage(`{"zone":"eu"}`),
+				current.Name(): json.RawMessage(`{"region":"us"}`),
+			},
+			want: map[string]string{current.Name(): `{"region":"us"}`},
+		},
+		{
+			name:   "undeclared operation is left untouched",
+			stored: map[string]json.RawMessage{"unknown": json.RawMessage(`{"zone":"eu"}`)},
+			want:   map[string]string{"unknown": `{"zone":"eu"}`},
+		},
+		{
+			name:    "upgrade that still fails validation is rejected",
+			stored:  map[string]json.RawMessage{retired.Name(): json.RawMessage(`{"zone":""}`)},
+			wantErr: types.ErrOperationConfigInvalid,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			got, err := upgradeOperationDocuments(t.Context(), types.InstallationRequest{}, def, tc.stored)
+
+			if tc.wantErr != nil {
+				assert.Assert(t, errors.Is(err, tc.wantErr), "got %v", err)
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.DeepEqual(t, lo.MapValues(got, func(doc json.RawMessage, _ string) string { return string(doc) }), tc.want)
+		})
+	}
 }
 
 func TestUpgradeExclusions(t *testing.T) {
 	t.Parallel()
 
 	retired := types.NewCredentialRef[retiredCredential]("retiredCredential")
-	current := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Replacing(retired, func(r retiredCredential) upgradeCredential { return upgradeCredential{Token: r.AccessToken} })
+	current := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Replacing(retired)
 	undeclared := types.NewCredentialSlotID("undeclared")
 
-	def := types.Definition{CredentialRegistrations: []types.CredentialRegistration{{
-		Ref:      current.ID(),
-		Schema:   jsonx.SchemaFrom[upgradeCredential](),
-		Replaces: current.Replaces(),
-		Convert:  current.Convert,
-	}}}
+	def := types.Definition{CredentialRegistrations: []types.CredentialRegistration{current.Registration(types.CredentialRegistration{
+		Schema: jsonx.SchemaFrom[upgradeCredential](),
+	})}}
 
 	tests := []struct {
 		name string
@@ -126,44 +199,47 @@ func TestUpgradeExclusions(t *testing.T) {
 	}
 }
 
-func TestConformPayload(t *testing.T) {
+func TestConformStored(t *testing.T) {
 	t.Parallel()
 
-	fillToken := func(_ context.Context, _ types.InstallationRequest, v *upgradeCredential) error {
-		v.Token = "filled"
-
-		return nil
-	}
-
-	noop := func(context.Context, types.InstallationRequest, *upgradeCredential) error { return nil }
-
+	retired := types.NewCredentialRef[retiredCredential]("retiredCredential")
 	credentialSchema := jsonx.SchemaFrom[upgradeCredential]()
-	filling := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Backfilled(fillToken)
-	idle := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Backfilled(noop)
 
-	retagRegion := func(_ context.Context, _ types.InstallationRequest, v *upgradeCredential) error {
-		v.Region = "override"
+	filling := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Upgraded(func(_ context.Context, _ types.InstallationRequest, _ string, stored json.RawMessage) (upgradeCredential, error) {
+		value, err := jsonx.Decode[upgradeCredential](stored)
+		value.Token = "filled"
 
-		return nil
-	}
+		return value, err
+	}).Registration(types.CredentialRegistration{})
 
-	retagging := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Backfilled(retagRegion)
+	idle := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Upgraded(func(_ context.Context, _ types.InstallationRequest, _ string, stored json.RawMessage) (upgradeCredential, error) {
+		return jsonx.Decode[upgradeCredential](stored)
+	}).Registration(types.CredentialRegistration{})
 
-	fillRegionIfEmpty := func(_ context.Context, _ types.InstallationRequest, v *upgradeCredentialRegion) error {
-		if v.Region == "" {
-			v.Region = "resolved"
-		}
+	retagging := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Upgraded(func(_ context.Context, _ types.InstallationRequest, _ string, stored json.RawMessage) (upgradeCredential, error) {
+		value, err := jsonx.Decode[upgradeCredential](stored)
+		value.Region = "override"
 
-		return nil
-	}
+		return value, err
+	}).Registration(types.CredentialRegistration{})
+
+	renaming := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Replacing(retired).Upgraded(upgradeRetiredCredential(retired)).Registration(types.CredentialRegistration{})
 
 	regionSchema := jsonx.SchemaFrom[upgradeCredentialRegion]()
-	regionBackfill := types.NewCredentialRef[upgradeCredentialRegion]("upgradeCredentialRegion").Backfilled(fillRegionIfEmpty)
+	regionFilling := types.NewCredentialRef[upgradeCredentialRegion]("upgradeCredentialRegion").Upgraded(func(_ context.Context, _ types.InstallationRequest, _ string, stored json.RawMessage) (upgradeCredentialRegion, error) {
+		value, err := jsonx.Decode[upgradeCredentialRegion](stored)
+		if value.Region == "" {
+			value.Region = "resolved"
+		}
+
+		return value, err
+	}).Registration(types.CredentialRegistration{})
 
 	tests := []struct {
 		name     string
 		schema   json.RawMessage
-		backfill types.BackfillFunc
+		upgrade  types.UpgradeFunc
+		from     string
 		sentinel error
 		payload  string
 		want     string
@@ -191,24 +267,24 @@ func TestConformPayload(t *testing.T) {
 			want:     `{"region":"us","token":"t"}`,
 		},
 		{
-			name:     "missing required without default and no backfill is invalid",
+			name:     "missing required without default and no upgrade is invalid",
 			schema:   credentialSchema,
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"region":"eu"}`,
 			wantErr:  ErrCredentialInvalid,
 		},
 		{
-			name:     "missing required without default is filled by the declared backfill",
+			name:     "missing required without default is filled by the declared upgrade",
 			schema:   credentialSchema,
-			backfill: filling.Backfill,
+			upgrade:  filling.Upgrade,
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"region":"eu"}`,
 			want:     `{"token":"filled","region":"eu"}`,
 		},
 		{
-			name:     "backfill that leaves the payload invalid is rejected",
+			name:     "upgrade that leaves the payload invalid is rejected",
 			schema:   credentialSchema,
-			backfill: idle.Backfill,
+			upgrade:  idle.Upgrade,
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"region":"eu"}`,
 			wantErr:  ErrCredentialInvalid,
@@ -221,17 +297,26 @@ func TestConformPayload(t *testing.T) {
 			wantErr:  ErrUserInputInvalid,
 		},
 		{
-			name:     "declared backfill runs even when the stored payload already validates",
+			name:     "declared upgrade runs even when the stored payload already validates",
 			schema:   credentialSchema,
-			backfill: retagging.Backfill,
+			upgrade:  retagging.Upgrade,
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"token":"t","region":"eu"}`,
 			want:     `{"token":"t","region":"override"}`,
 		},
 		{
-			name:     "a required field present but empty after conversion is filled by the declared backfill",
+			name:     "payload stored under a retired slot is mapped by the declared upgrade",
+			schema:   credentialSchema,
+			upgrade:  renaming.Upgrade,
+			from:     retired.ID().String(),
+			sentinel: ErrCredentialInvalid,
+			payload:  `{"accessToken":"t"}`,
+			want:     `{"token":"t","region":""}`,
+		},
+		{
+			name:     "a required field present but empty is filled by the declared upgrade",
 			schema:   regionSchema,
-			backfill: regionBackfill.Backfill,
+			upgrade:  regionFilling.Upgrade,
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"token":"t","region":""}`,
 			want:     `{"token":"t","region":"resolved"}`,
@@ -242,99 +327,7 @@ func TestConformPayload(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := conformPayload(t.Context(), types.InstallationRequest{}, tc.schema, tc.backfill, json.RawMessage(tc.payload), tc.sentinel)
-
-			if tc.wantErr != nil {
-				assert.Assert(t, errors.Is(err, tc.wantErr), "got %v", err)
-
-				return
-			}
-
-			assert.NilError(t, err)
-			assert.Equal(t, string(got), tc.want)
-		})
-	}
-}
-
-func TestConformUserInput(t *testing.T) {
-	t.Parallel()
-
-	retired := types.NewUserInputRef[retiredUserInput]("retiredUserInput")
-	renamed := types.NewUserInputRef[upgradeUserInput]("upgradeUserInput").Replacing(retired, func(r retiredUserInput) upgradeUserInput {
-		return upgradeUserInput{Region: r.Zone}
-	})
-
-	renamedInput := types.UserInputRegistration{
-		Schema:   jsonx.SchemaFrom[upgradeUserInput](),
-		Replaces: renamed.Replaces(),
-		Convert:  renamed.Convert,
-	}
-
-	plainInput := types.UserInputRegistration{
-		Schema: jsonx.SchemaFrom[upgradeUserInput](),
-	}
-
-	backfilled := types.NewUserInputRef[upgradeUserInput]("upgradeUserInputBackfilled").
-		Replacing(retired, func(r retiredUserInput) upgradeUserInput { return upgradeUserInput{Region: r.Zone} }).
-		Backfilled(func(_ context.Context, _ types.InstallationRequest, v *upgradeUserInput) error {
-			if v.Region == "" {
-				v.Region = "fallback"
-			}
-
-			return nil
-		})
-
-	backfilledInput := types.UserInputRegistration{
-		Schema:   jsonx.SchemaFrom[upgradeUserInput](),
-		Replaces: backfilled.Replaces(),
-		Convert:  backfilled.Convert,
-		Backfill: backfilled.Backfill,
-	}
-
-	tests := []struct {
-		name    string
-		input   types.UserInputRegistration
-		stored  string
-		want    string
-		wantErr error
-	}{
-		{
-			name:   "valid stored input is conformed without conversion",
-			input:  renamedInput,
-			stored: `{"region":"eu","zone":"ignored"}`,
-			want:   `{"region":"eu"}`,
-		},
-		{
-			name:   "stored input in the retired layout is converted when it fails validation",
-			input:  renamedInput,
-			stored: `{"zone":"eu"}`,
-			want:   `{"region":"eu"}`,
-		},
-		{
-			name:    "invalid stored input with no replacements is rejected",
-			input:   plainInput,
-			stored:  `{"zone":"eu"}`,
-			wantErr: ErrUserInputInvalid,
-		},
-		{
-			name:    "conversion that still fails validation is rejected",
-			input:   renamedInput,
-			stored:  `{"zone":""}`,
-			wantErr: ErrUserInputInvalid,
-		},
-		{
-			name:   "backfill runs after conversion of a retired layout",
-			input:  backfilledInput,
-			stored: `{"zone":""}`,
-			want:   `{"region":"fallback"}`,
-		},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			got, err := conformUserInput(t.Context(), types.InstallationRequest{}, tc.input, json.RawMessage(tc.stored))
+			got, err := conformStored(t.Context(), types.InstallationRequest{}, tc.schema, tc.upgrade, nil, tc.from, json.RawMessage(tc.payload), tc.sentinel)
 
 			if tc.wantErr != nil {
 				assert.Assert(t, errors.Is(err, tc.wantErr), "got %v", err)

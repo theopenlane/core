@@ -50,7 +50,7 @@ func TestGateSurfaceChange(t *testing.T) {
 			old:  committed,
 			next: Surface{
 				ID:          "acme",
-				Credentials: []SurfaceCredential{{Ref: "cred_v2", SurfaceSchema: SurfaceSchema{Replaces: []string{"cred_a"}}}},
+				Credentials: []SurfaceCredential{{Ref: "cred_v2", Replaces: []string{"cred_a"}}},
 				Operations:  []SurfaceOperation{{Name: "sync.v2", Replaces: []string{"sync"}}},
 				Webhooks:    []SurfaceWebhook{{Name: "github_v2", Replaces: []string{"github"}}},
 			},
@@ -88,7 +88,7 @@ func TestGateSurfaceChange(t *testing.T) {
 			},
 			next: Surface{
 				ID:          "acme",
-				Credentials: []SurfaceCredential{{Ref: "cred_d", SurfaceSchema: SurfaceSchema{Replaces: []string{"cred_c"}}}},
+				Credentials: []SurfaceCredential{{Ref: "cred_d", Replaces: []string{"cred_c"}}},
 				Webhooks:    []SurfaceWebhook{{Name: "github"}},
 			},
 			wantErr: ErrDestructiveSurfaceChange.Error() + ": acme: credential cred_a, cred_b; operation sync, sync.more; webhook gitlab",

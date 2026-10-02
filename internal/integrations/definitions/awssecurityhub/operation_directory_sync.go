@@ -58,9 +58,6 @@ type iamMembershipPayload struct {
 	Member iamEntityRef `json:"member"`
 }
 
-// directorySyncOperation is the AWS IAM directory sync operation
-var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(iamClient, runDirectorySync)
-
 // runDirectorySync collects AWS IAM users, and optionally groups and memberships
 func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *iam.Client, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listIAMUsers(ctx, client)

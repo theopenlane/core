@@ -12,18 +12,15 @@ import (
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
-				Family:      "Amazon Web Services",
-				DisplayName: "AWS",
-				Description: "Collect AWS Security Hub findings, AWS IAM users and groups, using a shared AWS assume-role credential.",
-				Category:    "security-posture",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/aws",
-				Tags:        []string{"findings", "directory", "assets"},
-				Active:      true,
-				Visible:     true,
-			},
-			UserInput:    userInput.Registration(),
+			ID:           definitionID.ID(),
+			Family:       "Amazon Web Services",
+			DisplayName:  "AWS",
+			Description:  "Collect AWS Security Hub findings, AWS IAM users and groups, using a shared AWS assume-role credential.",
+			Category:     "security-posture",
+			DocsURL:      "https://docs.theopenlane.io/docs/platform/integrations/aws",
+			Tags:         []string{"findings", "directory", "assets"},
+			Active:       true,
+			Visible:      true,
 			HealthCheck:  securityHubClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
@@ -38,9 +35,10 @@ func Builder(cfg Config) registry.Builder {
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				awsAssumeRoleConnection.Registration(types.ConnectionRegistration{
-					Name:        "AWS Assume Role",
-					Description: "Configure Security Hub access using a cross-account IAM role.",
+				{
+					CredentialRef: awsAssumeRoleCredential.ID(),
+					Name:          "AWS Assume Role",
+					Description:   "Configure Security Hub access using a cross-account IAM role.",
 					Meta: map[string]types.MetaInfo{
 						"Openlane Principal ARN": {
 							Value:     cfg.ARN,
@@ -48,16 +46,19 @@ func Builder(cfg Config) registry.Builder {
 						},
 					},
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Removes the stored IAM assume-role configuration from Openlane. If the cross-account IAM role is no longer needed, delete it from your AWS account.",
+						CredentialRef: awsAssumeRoleCredential.ID(),
+						Description:   "Removes the stored IAM assume-role configuration from Openlane. If the cross-account IAM role is no longer needed, delete it from your AWS account.",
 					},
-				}),
-				awsServiceAccountConnection.Registration(types.ConnectionRegistration{
-					Name:        "AWS Static Credentials",
-					Description: "Configure Security Hub access using static IAM access keys.",
+				},
+				{
+					CredentialRef: awsServiceAccountCredential.ID(),
+					Name:          "AWS Static Credentials",
+					Description:   "Configure Security Hub access using static IAM access keys.",
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Removes the stored IAM access key credentials from Openlane. If the IAM user is no longer needed, delete it from your AWS account.",
+						CredentialRef: awsServiceAccountCredential.ID(),
+						Description:   "Removes the stored IAM access key credentials from Openlane. If the IAM user is no longer needed, delete it from your AWS account.",
 					},
-				}),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				securityHubClient.Registration(SecurityHubClientBuilder{cfg: cfg}.Build, types.ClientRegistration{
@@ -71,55 +72,51 @@ func Builder(cfg Config) registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				findingsCollectOperation.Registration(definitionID, types.OperationRegistration{
-					Description: "Collect AWS Security Hub for findings and vulnerability ingestion",
-					Policy:      types.ExecutionPolicy{Reconcile: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaFinding.Name,
-						},
-						{
-							Schema: entityops.SchemaVulnerability.Name,
-						},
-					},
-					RequiredPermissions: []string{"AWSSecurityHubReadOnlyAccess"},
-				}),
-				directorySyncOperation.Registration(definitionID, types.OperationRegistration{
-					Description:         "Sync AWS IAM users, groups, and memberships as directory accounts",
-					Policy:              types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Ingest:              providerkit.DirectoryIngestContracts(),
-					SkipDefaultLookback: true,
-					RequiredPermissions: []string{"iam:ListUsers", "iam:ListGroups", "iam:ListGroupsForUser", "iam:ListUserTags"},
-					Schedule:            gala.NewFullFetchSchedule(),
-				}),
-				checkSyncOperation.Registration(definitionID, types.OperationRegistration{
-					Description: "Sync AWS Config rules and check results",
-					Policy:      types.ExecutionPolicy{Reconcile: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaCheckResult.Name,
-						},
-					},
-					RequiredPermissions: []string{
+				types.OperationRefOf[FindingSync]().
+					Ingests(securityHubClient, runFindingsCollect).
+					Policy(types.ExecutionPolicy{Reconcile: true}).
+					Ingest(
+						types.IngestContract{Schema: entityops.SchemaFinding.Name},
+						types.IngestContract{Schema: entityops.SchemaVulnerability.Name},
+					).
+					Permissions("AWSSecurityHubReadOnlyAccess").
+					Registration(definitionID, types.OperationRegistration{
+						Description: "Collect AWS Security Hub for findings and vulnerability ingestion",
+					}),
+				types.OperationRefOf[DirectorySync]().
+					Ingests(iamClient, runDirectorySync).
+					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
+					Ingest(providerkit.DirectoryIngestContracts()...).
+					Permissions("iam:ListUsers", "iam:ListGroups", "iam:ListGroupsForUser", "iam:ListUserTags").
+					Schedule(gala.NewFullFetchSchedule()).
+					SkipDefaultLookback().
+					Registration(definitionID, types.OperationRegistration{
+						Description: "Sync AWS IAM users, groups, and memberships as directory accounts",
+					}),
+				types.OperationRefOf[CheckSync]().
+					Ingests(configServiceClient, runCheckSync).
+					Policy(types.ExecutionPolicy{Reconcile: true}).
+					Ingest(types.IngestContract{Schema: entityops.SchemaCheckResult.Name}).
+					Permissions(
 						"config:DescribeConfigRules",
 						"config:DescribeComplianceByConfigRule",
 						"controlcatalog:ListControls",
 						"controlcatalog:ListControlMappings",
 						"controlcatalog:ListCommonControls",
-					},
-					DisabledForAll: true,
-				}),
-				assetSyncOperation.Registration(definitionID, types.OperationRegistration{
-					Description: "Sync assets from AWS",
-					Policy:      types.ExecutionPolicy{Reconcile: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaAsset.Name,
-						},
-					},
-					RequiredPermissions: []string{"AWSSecurityHubReadOnlyAccess"},
-					DisabledForAll:      true,
-				}),
+					).
+					DisabledForAll(true).
+					Registration(definitionID, types.OperationRegistration{
+						Description: "Sync AWS Config rules and check results",
+					}),
+				types.OperationRefOf[AssetSync]().
+					Ingests(configServiceClient, runAssetSync).
+					Policy(types.ExecutionPolicy{Reconcile: true}).
+					Ingest(types.IngestContract{Schema: entityops.SchemaAsset.Name}).
+					Permissions("AWSSecurityHubReadOnlyAccess").
+					DisabledForAll(true).
+					Registration(definitionID, types.OperationRegistration{
+						Description: "Sync assets from AWS",
+					}),
 			},
 			Mappings: append([]types.MappingRegistration{
 				providerkit.FindingMapping(mapExprFinding),

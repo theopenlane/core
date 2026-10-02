@@ -11,17 +11,15 @@ import (
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          DefinitionID.ID(),
-				Family:      "Microsoft",
-				DisplayName: "Microsoft Teams",
-				Description: "Send notification messages to Microsoft Teams channels via Microsoft Graph.",
-				Category:    "collaboration",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/microsoft_teams/",
-				Tags:        []string{"messaging"},
-				Active:      false,
-				Visible:     true,
-			},
+			ID:          DefinitionID.ID(),
+			Family:      "Microsoft",
+			DisplayName: "Microsoft Teams",
+			Description: "Send notification messages to Microsoft Teams channels via Microsoft Graph.",
+			Category:    "collaboration",
+			DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/microsoft_teams/",
+			Tags:        []string{"messaging"},
+			Active:      false,
+			Visible:     true,
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
 			},
@@ -35,9 +33,10 @@ func Builder(cfg Config) registry.Builder {
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				teamsConnection.Registration(types.ConnectionRegistration{
-					Name:        "Microsoft Teams OAuth",
-					Description: "Connect your Microsoft Teams workspace using OAuth.",
+				{
+					CredentialRef: teamsCredential.ID(),
+					Name:          "Microsoft Teams OAuth",
+					Description:   "Connect your Microsoft Teams workspace using OAuth.",
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[teamsCred]{
 						CredentialRef: teamsCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -62,9 +61,10 @@ func Builder(cfg Config) registry.Builder {
 						EncodeCredentialError: ErrCredentialEncode,
 					}),
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.",
+						CredentialRef: teamsCredential.ID(),
+						Description:   "Removes the stored OAuth credential from Openlane. To fully revoke access, remove the Openlane app from your Azure Entra ID enterprise applications.",
 					},
-				}),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				teamsClient.Registration(Client{}.Build, types.ClientRegistration{
@@ -72,9 +72,11 @@ func Builder(cfg Config) registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				MessageSendOp.Registration(DefinitionID, types.OperationRegistration{
-					Description: "Send a Teams channel message via Microsoft Graph",
-				}),
+				types.OperationRefOf[MessageSendOperation]().
+					Handles(teamsClient, MessageSend{}.Run).
+					Registration(DefinitionID, types.OperationRegistration{
+						Description: "Send a Teams channel message via Microsoft Graph",
+					}),
 			},
 		}, nil
 	})

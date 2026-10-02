@@ -12,15 +12,14 @@ import (
 const directorySyncAckMessage = "scim is push-based; sync is triggered by the external identity provider"
 
 // directorySyncOperation is the operation ref for the SCIM directory sync operation
-var directorySyncOperation = types.OperationRefOf[DirectorySync]().HandlesRequest(runDirectorySync)
+var directorySyncOperation = types.OperationRefOf[DirectorySync]().
+	HandlesRequest(runDirectorySync).
+	Policy(types.ExecutionPolicy{Inline: true}).
+	Ingest(providerkit.DirectoryIngestContracts()...).
+	SkipDefaultLookback()
 
 // DirectorySync is the SCIM directory sync operation configuration
-type DirectorySync struct {
-	// Disable switches the directory sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from SCIM"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
-}
+type DirectorySync struct{}
 
 // directorySyncResult is the operation result returned for push-based SCIM sync requests
 type directorySyncResult struct {

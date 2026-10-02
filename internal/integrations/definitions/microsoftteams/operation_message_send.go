@@ -14,9 +14,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// MessageSendOp is the operation ref for the Microsoft Teams message send operation
-var MessageSendOp = types.OperationRefOf[MessageSendOperation]().Handles(teamsClient, MessageSend{}.Run)
-
 // MessageSendOperation holds per-invocation parameters for the message.send operation
 type MessageSendOperation struct {
 	// TemplateID references a notification template by database ID

@@ -19,13 +19,7 @@ var (
 	// workloadIdentityCredential is the credential slot for GCP workload identity federation
 	workloadIdentityCredential = types.CredentialRefOf[WorkloadIdentityCredentialSchema]()
 	// sccClient is the client ref for the GCP Security Command Center client used by this definition
-	sccClient = types.ClientRefOf[*cloudscc.Client]().Using(workloadIdentityCredential).Using(sccCredential)
-	// workloadIdentityConnection enables the SCC client via workload identity federation
-	workloadIdentityConnection = types.NewConnectionRef(workloadIdentityCredential).Enables(sccClient)
-	// sccConnection is the service account connection mode enabling the SCC client
-	sccConnection = types.NewConnectionRef(sccCredential).Enables(sccClient)
-	// userInput is the installation user input layout for the GCP Security Command Center definition
-	userInput = types.NewUserInputRef[UserInput]("gcpscc")
+	sccClient = types.ClientRefOf[*cloudscc.Client]()
 )
 
 const (
@@ -47,18 +41,8 @@ func projectParent(projectID string) string {
 	return projectParentPrefix + projectID
 }
 
-// UserInput holds installation-specific configuration collected from the user
-type UserInput struct {
-	// FindingsSync includes the configuration for the findings collection operation
-	FindingsSync FindingsSync `json:"findingsSync" jsonschema:"title=Findings Sync"`
-}
-
 // FindingsSync holds configuration for the findings collection operation
 type FindingsSync struct {
-	// Disable switches the findings collection operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of findings from GCP Security Command Center"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.),example=Example: payload.category != \"GKE_SECURITY_BULLETIN\""`
 	// PageSize controls the number of findings per API page
 	PageSize int `json:"page_size,omitempty"`
 }

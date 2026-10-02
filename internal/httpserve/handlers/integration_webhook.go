@@ -28,7 +28,9 @@ const (
 	maxIntegrationWebhookBodyBytes = int64(1024 * 1024)
 )
 
-// IntegrationWebhookHandler verifies and dispatches one inbound integration webhook event, addressed by the stable endpoint_id generated at webhook creation time so it survives integration record replacement without disrupting external callers
+// IntegrationWebhookHandler verifies and dispatches one inbound integration webhook event.
+// The endpoint is addressed by the stable endpoint_id generated at webhook creation time,
+// which survives integration record replacement so external callers are not disrupted
 func (h *Handler) IntegrationWebhookHandler(ctx echo.Context) error {
 	endpointID := ctx.PathParam("endpointID")
 	req := ctx.Request()
@@ -44,6 +46,7 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context) error {
 	persistedWebhook, err := h.IntegrationsRuntime.ResolveWebhookByEndpoint(webhookCtx, endpointID)
 	if err != nil {
 		if !ent.IsNotFound(err) {
+			// not finding a record vs. failing to query are different so branching that
 			logx.FromContext(webhookCtx).Error().Err(err).Msg("failed to query integration webhook")
 
 			return h.InternalServerError(ctx, ErrProcessingRequest)
@@ -78,17 +81,14 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context) error {
 
 // resolveIntegrationWebhook finds the webhook registration a persisted row is named after, falling back to the registration whose ref replaces that name when the row predates a rename
 func resolveIntegrationWebhook(reg *registry.Registry, definitionID, name string) (types.WebhookRegistration, bool) {
-	webhookReg, err := reg.Webhook(definitionID, name)
-	if err == nil {
-		return webhookReg, true
-	}
-
 	def, ok := reg.Definition(definitionID)
 	if !ok {
 		return types.WebhookRegistration{}, false
 	}
 
-	return def.WebhookReplacing(name)
+	webhookReg, _, ok := def.ResolveWebhook(name)
+
+	return webhookReg, ok
 }
 
 // readIntegrationWebhookPayload reads the request body up to a defined maximum size and returns an error if the body is empty or exceeds the limit
@@ -136,7 +136,8 @@ func verifyWebhookHMACSHA256(req *http.Request, payload []byte, secret string) e
 	return nil
 }
 
-// verifyIntegrationWebhook delegates verification to the registration's Verify func when present, otherwise falls back to the framework HMAC-SHA256 verification
+// verifyIntegrationWebhook delegates verification to the registration's Verify func when present,
+// otherwise falls back to the framework HMAC-SHA256 verification
 func verifyIntegrationWebhook(reg types.WebhookRegistration, req *http.Request, payload []byte, persistedWebhook *ent.IntegrationWebhook, integration *ent.Integration) error {
 	if reg.Verify != nil {
 		return reg.Verify(types.WebhookInboundRequest{
@@ -150,7 +151,8 @@ func verifyIntegrationWebhook(reg types.WebhookRegistration, req *http.Request, 
 	return verifyWebhookHMACSHA256(req, payload, persistedWebhook.SecretToken)
 }
 
-// handleResolvedIntegrationWebhook processes a webhook with a known integration and webhook registration; callers must verify the request before calling this function
+// handleResolvedIntegrationWebhook processes a webhook with a known integration and webhook registration.
+// Callers must verify the request before calling this function
 func (h *Handler) handleResolvedIntegrationWebhook(requestCtx context.Context, ctx echo.Context, integration *ent.Integration, webhook types.WebhookRegistration, persistedWebhook *ent.IntegrationWebhook, payload []byte) error {
 	requestCtx = logx.WithFields(requestCtx, logx.LogFields{
 		"integration_id": integration.ID,
@@ -175,6 +177,7 @@ func (h *Handler) handleResolvedIntegrationWebhook(requestCtx context.Context, c
 
 	if event.Name == "" || len(persistedWebhook.AllowedEvents) > 0 && !lo.Contains(persistedWebhook.AllowedEvents, event.Name) {
 		logx.FromContext(requestCtx).Debug().Str("event", event.Name).Msg("webhook event not in allowed list, skipped")
+		// event name is our contract for what events we accept; not having one means we return early with 200 to not trigger retries (even types unsupported)
 		return h.Success(ctx, rout.Reply{Success: true})
 	}
 
@@ -206,7 +209,13 @@ func (h *Handler) handleResolvedIntegrationWebhook(requestCtx context.Context, c
 	return h.Success(ctx, rout.Reply{Success: true})
 }
 
-// IntegrationStaticWebhookHandler returns a handler for webhooks addressed by a fixed definition-level route rather than a per-installation endpoint ID, delegating to the full handleResolvedIntegrationWebhook pipeline when ResolveIntegration is set or resolving and dispatching the event inline with no DB integration when it is runtime-owned
+// IntegrationStaticWebhookHandler returns a handler for webhooks addressed by a fixed
+// definition-level route rather than a per-installation endpoint ID.
+// When ResolveIntegration is set, the handler resolves a DB-backed integration and
+// delegates to the full handleResolvedIntegrationWebhook pipeline (gala dispatch,
+// idempotency tracking, delivery finalization).
+// When ResolveIntegration is nil, the webhook is runtime-owned: the handler resolves
+// the event, finds the registered handler, and calls it inline with no DB integration
 func (h *Handler) IntegrationStaticWebhookHandler(definitionID, webhookName string) func(echo.Context) error {
 	return func(ctx echo.Context) error {
 		req := ctx.Request()
@@ -243,7 +252,8 @@ func (h *Handler) IntegrationStaticWebhookHandler(definitionID, webhookName stri
 	}
 }
 
-// handleStaticWebhookWithIntegration handles static webhooks backed by a DB integration record, used by definitions like GitHub App where webhooks resolve to a per-customer installation
+// handleStaticWebhookWithIntegration handles static webhooks backed by a DB integration record.
+// Used by definitions like GitHub App where webhooks resolve to a per-customer installation
 func (h *Handler) handleStaticWebhookWithIntegration(webhookCtx context.Context, ctx echo.Context, webhookName string, webhookReg types.WebhookRegistration, req *http.Request, payload []byte) error {
 	integration, err := webhookReg.ResolveIntegration(webhookCtx, h.DBClient, types.WebhookInboundRequest{
 		Request: req,
@@ -271,7 +281,9 @@ func (h *Handler) handleStaticWebhookWithIntegration(webhookCtx context.Context,
 	return h.handleResolvedIntegrationWebhook(webhookCtx, ctx, integration, webhookReg, persistedWebhook, payload)
 }
 
-// handleStaticWebhookRuntime handles static webhooks for runtime-owned definitions that have no DB integration record, resolving and dispatching the event through the runtime which owns the DB client and handler lifecycle
+// handleStaticWebhookRuntime handles static webhooks for runtime-owned definitions
+// that have no DB integration record. The event is resolved and dispatched through
+// the runtime which owns the DB client and handler lifecycle
 func (h *Handler) handleStaticWebhookRuntime(webhookCtx context.Context, ctx echo.Context, definitionID string, webhookName string, webhookReg types.WebhookRegistration, req *http.Request, payload []byte) error {
 	if webhookReg.Event == nil {
 		logx.FromContext(webhookCtx).Error().Msg("webhook registration missing event resolver")

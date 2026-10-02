@@ -7,7 +7,6 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // Builder returns the shared test integration definition
@@ -23,7 +22,6 @@ func Builder() registry.Builder {
 				Active:      true,
 				Visible:     true,
 			},
-			UserInput: userInput.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
 				TokenCredential.Registration(types.CredentialRegistration{
 					Name:        "Test Token",
@@ -39,32 +37,38 @@ func Builder() registry.Builder {
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				oauthConnection.Registration(types.ConnectionRegistration{
-					Name:        "Test OAuth",
-					Description: "Authenticate through the OAuth callback fixture.",
+				{
+					CredentialRef: OAuthCredential.ID(),
+					Name:          "Test OAuth",
+					Description:   "Authenticate through the OAuth callback fixture.",
 					Auth: &types.AuthRegistration{
 						CredentialRef: OAuthCredential.ID(),
 						Start:         oauthStart,
 						Complete:      oauthComplete,
 					},
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Remove the persisted OAuth credential and disconnect this installation.",
+						CredentialRef: OAuthCredential.ID(),
+						Description:   "Remove the persisted OAuth credential and disconnect this installation.",
 					},
-				}),
-				tokenConnection.Registration(types.ConnectionRegistration{
-					Name:        "Test Token",
-					Description: "Connect with an API token validated by the health check.",
+				},
+				{
+					CredentialRef: TokenCredential.ID(),
+					Name:          "Test Token",
+					Description:   "Connect with an API token validated by the health check.",
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Remove the persisted token credential and disconnect this installation.",
+						CredentialRef: TokenCredential.ID(),
+						Description:   "Remove the persisted token credential and disconnect this installation.",
 					},
-				}),
-				serviceAccountConnection.Registration(types.ConnectionRegistration{
-					Name:        "Test Service Account",
-					Description: "Connect with a service account validated by the health check.",
+				},
+				{
+					CredentialRef: ServiceAccountCredential.ID(),
+					Name:          "Test Service Account",
+					Description:   "Connect with a service account validated by the health check.",
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Remove the persisted service account credential and disconnect this installation.",
+						CredentialRef: ServiceAccountCredential.ID(),
+						Description:   "Remove the persisted service account credential and disconnect this installation.",
 					},
-				}),
+				},
 			},
 			HealthCheck: types.CredentialHealthCheck(healthHandler),
 			Clients: []types.ClientRegistration{
@@ -86,29 +90,18 @@ func Builder() registry.Builder {
 			Operations: []types.OperationRegistration{
 				RepoSyncOp.Registration(DefinitionID, types.OperationRegistration{
 					Description: "Async operation running with the built client",
-					Policy:      types.ExecutionPolicy{},
 				}),
 				ValidatedOp.Registration(DefinitionID, types.OperationRegistration{
 					Description: "Inline operation with a required config field",
-					Policy:      types.ExecutionPolicy{Inline: true},
 				}),
 				RecurringOp.Registration(DefinitionID, types.OperationRegistration{
 					Description: "Healthy idle reconcile loop",
-					Policy:      types.ExecutionPolicy{Reconcile: true},
-					Schedule:    &gala.Schedule{MinInterval: recurringInterval},
-					Disabled:    disabledUnlessMode(ModeRecurring),
 				}),
 				ExhaustingOp.Registration(DefinitionID, types.OperationRegistration{
 					Description: "Always-failing reconcile loop for exhaustion",
-					Policy:      types.ExecutionPolicy{Reconcile: true},
-					Schedule:    &gala.Schedule{MinInterval: exhaustingInterval, MaxErrorStreak: exhaustingMaxErrorStreak},
-					Disabled:    disabledUnlessMode(ModeExhausting),
 				}),
 				UnresolvableOp.Registration(DefinitionID, types.OperationRegistration{
 					Description: "Reconcile loop whose client cannot resolve without a stored credential",
-					Policy:      types.ExecutionPolicy{Reconcile: true},
-					Schedule:    &gala.Schedule{MinInterval: recurringInterval},
-					Disabled:    disabledUnlessMode(ModeUnresolvable),
 				}),
 			},
 		}, nil

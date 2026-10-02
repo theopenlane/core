@@ -15,9 +15,6 @@ import (
 // protoJSON serializes Zitadel protobuf payloads into the JSON shape the mappings expect
 var protoJSON = protojson.MarshalOptions{UseProtoNames: true, UseEnumNumbers: true}
 
-// directorySyncOperation is the Zitadel directory sync operation
-var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(zitadelClient, runDirectorySync)
-
 // runDirectorySync collects Zitadel directory users
 func runDirectorySync(ctx context.Context, _ types.OperationRequest, c *client.Client, _ DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := listDirectoryUsers(ctx, c)

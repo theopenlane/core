@@ -71,12 +71,10 @@ var (
 	ErrHealthCheckRequired = errors.New("integrations/registry: health check required when the definition declares connections")
 	// ErrHealthCheckClientCredentialMissing indicates the health check misses a credential slot
 	ErrHealthCheckClientCredentialMissing = errors.New("integrations/registry: health check client does not use every connection credential slot")
-	// ErrConfigSectionAmbiguous indicates an operation config section is ambiguous
-	ErrConfigSectionAmbiguous = errors.New("integrations/registry: operation config section is ambiguous")
-	// ErrConfigSectionMismatch indicates a user input section's schema mismatches the config
-	ErrConfigSectionMismatch = errors.New("integrations/registry: user input section schema does not match the operation config schema")
-	// ErrConfigSectionRequired indicates a reconciled operation has no config section or resolver
-	ErrConfigSectionRequired = errors.New("integrations/registry: reconciled operation config requires a user input section")
+	// ErrOperationConfigReservedKey indicates an operation config declares a key reserved by the uniform settings
+	ErrOperationConfigReservedKey = errors.New("integrations/registry: operation config declares a key reserved by the operation settings")
+	// ErrOperationFilterExprInvalid indicates a stored operation input carries a filter expression that does not compile
+	ErrOperationFilterExprInvalid = errors.New("integrations/registry: operation filter expression invalid")
 	// ErrDestructiveSurfaceChange indicates a removed slot, operation, or webhook has no replacement
 	ErrDestructiveSurfaceChange = errors.New("integrations/registry: removed credential slot, operation, or webhook has no replacing registration")
 )

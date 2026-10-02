@@ -12,18 +12,15 @@ import (
 func Builder() registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			DefinitionSpec: types.DefinitionSpec{
-				ID:          definitionID.ID(),
-				Family:      "Tailscale",
-				DisplayName: "Tailscale",
-				Description: "Sync Tailscale users and role groups as directory accounts, and Tailscale devices as assets.",
-				Category:    "identity",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/tailscale/overview",
-				Tags:        []string{"directory", "assets"},
-				Active:      true,
-				Visible:     true,
-			},
-			UserInput:    userInput.Registration(),
+			ID:           definitionID.ID(),
+			Family:       "Tailscale",
+			DisplayName:  "Tailscale",
+			Description:  "Sync Tailscale users and role groups as directory accounts, and Tailscale devices as assets.",
+			Category:     "identity",
+			DocsURL:      "https://docs.theopenlane.io/docs/platform/integrations/tailscale/overview",
+			Tags:         []string{"directory", "assets"},
+			Active:       true,
+			Visible:      true,
 			HealthCheck:  tailscaleClient.HealthCheck(checkHealth),
 			Installation: installation.Registration(),
 			CredentialRegistrations: []types.CredentialRegistration{
@@ -33,13 +30,15 @@ func Builder() registry.Builder {
 				}),
 			},
 			Connections: []types.ConnectionRegistration{
-				tailscaleConnection.Registration(types.ConnectionRegistration{
-					Name:        "Tailscale OAuth",
-					Description: "Configure Tailscale access using an OAuth client scoped to your tailnet.",
+				{
+					CredentialRef: tailscaleCredential.ID(),
+					Name:          "Tailscale OAuth",
+					Description:   "Configure Tailscale access using an OAuth client scoped to your tailnet.",
 					Disconnect: &types.DisconnectRegistration{
-						Description: "Removes the stored OAuth credentials from Openlane. If the client is no longer needed, revoke it in the Tailscale admin console.",
+						CredentialRef: tailscaleCredential.ID(),
+						Description:   "Removes the stored OAuth credentials from Openlane. If the client is no longer needed, revoke it in the Tailscale admin console.",
 					},
-				}),
+				},
 			},
 			Clients: []types.ClientRegistration{
 				tailscaleClient.Registration(Client{}.Build, types.ClientRegistration{
@@ -47,26 +46,26 @@ func Builder() registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				directorySyncOperation.Registration(definitionID, types.OperationRegistration{
-					Description:         "Sync Tailscale users and role-based groups as directory accounts",
-					Policy:              types.ExecutionPolicy{Reconcile: true, Snapshot: true},
-					Ingest:              providerkit.DirectoryIngestContracts(),
-					SkipDefaultLookback: true,
-					RequiredPermissions: []string{"users:read", "policy_file:read"},
-					Schedule:            gala.NewFullFetchSchedule(),
-				}),
-				assetSyncOperation.Registration(definitionID, types.OperationRegistration{
-					Description: "Sync Tailscale devices as assets",
-					Policy:      types.ExecutionPolicy{Reconcile: true},
-					Ingest: []types.IngestContract{
-						{
-							Schema: entityops.SchemaAsset.Name,
-						},
-					},
-					SkipDefaultLookback: true,
-					RequiredPermissions: []string{"devices:core:read", "devices:posture_attributes:read", "devices:routes:read"},
-					Schedule:            gala.NewFullFetchSchedule(),
-				}),
+				types.OperationRefOf[DirectorySync]().
+					Ingests(tailscaleClient, runDirectorySync).
+					Policy(types.ExecutionPolicy{Reconcile: true, Snapshot: true}).
+					Ingest(providerkit.DirectoryIngestContracts()...).
+					Permissions("users:read", "policy_file:read").
+					Schedule(gala.NewFullFetchSchedule()).
+					SkipDefaultLookback().
+					Registration(definitionID, types.OperationRegistration{
+						Description: "Sync Tailscale users and role-based groups as directory accounts",
+					}),
+				types.OperationRefOf[AssetSync]().
+					Ingests(tailscaleClient, runAssetSync).
+					Policy(types.ExecutionPolicy{Reconcile: true}).
+					Ingest(types.IngestContract{Schema: entityops.SchemaAsset.Name}).
+					Permissions("devices:core:read", "devices:posture_attributes:read", "devices:routes:read").
+					Schedule(gala.NewFullFetchSchedule()).
+					SkipDefaultLookback().
+					Registration(definitionID, types.OperationRegistration{
+						Description: "Sync Tailscale devices as assets",
+					}),
 			},
 			Mappings: append(providerkit.DirectoryMappings(mapExprDirectoryAccount, mapExprDirectoryGroup, mapExprDirectoryMembership),
 				types.MappingRegistration{

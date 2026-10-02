@@ -50,9 +50,6 @@ type slackUserPayload struct {
 	IsExternal bool `json:"is_external"`
 }
 
-// directorySyncOperation is the operation ref for the directory account sync operation
-var directorySyncOperation = types.OperationRefOf[DirectorySync]().Ingests(slackClient, runDirectorySync)
-
 // runDirectorySync collects Slack workspace users and emits directory account ingest payloads
 func runDirectorySync(ctx context.Context, _ types.OperationRequest, client *SlackClient, _ DirectorySync) ([]types.IngestPayloadSet, error) {
 	users, err := client.API.GetUsersContext(ctx)

@@ -14,45 +14,23 @@ var (
 	// oktaCredential is the typed credential slot used by the Okta client
 	oktaCredential = types.CredentialRefOf[CredentialSchema]()
 	// oktaClient is the client ref for the Okta API client used by this definition
-	oktaClient = types.ClientRefOf[*oktagosdk.APIClient]().Using(oktaCredential)
-	// oktaConnection is the connection mode selected by the Okta API token credential slot
-	oktaConnection = types.NewConnectionRef(oktaCredential).Enables(oktaClient)
-	// userInput is the installation user input layout, replacing the flat v1 layout
-	userInput = types.NewUserInputRef[UserInput]("okta").Replacing(types.NewUserInputRef[oldUserInput]("okta-v1"), func(old oldUserInput) UserInput {
-		return UserInput{PrimaryDirectory: old.PrimaryDirectory, DirectorySync: DirectorySync{FilterExpr: old.FilterExpr, Search: old.Search, EnableGroupSync: old.EnableGroupSync}}
-	})
+	oktaClient = types.ClientRefOf[*oktagosdk.APIClient]()
+	// userInput is the installation user input layout
+	userInput = types.UserInputRefOf[UserInput]()
 )
 
 // UserInput holds installation-specific configuration collected from the user
 type UserInput struct {
-	// DirectorySync configures the directory sync operation
-	DirectorySync DirectorySync `json:"directorySync,omitempty" jsonschema:"title=Directory Sync"`
 	// PrimaryDirectory marks this installation as the authoritative directory source
 	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
 }
 
 // DirectorySync configures collection of Okta directory users, groups, and memberships
 type DirectorySync struct {
-	// Disable switches the directory sync operation off for the installation
-	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable the syncing of users and groups from Okta"`
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
 	// Search is an optional Okta search expression applied server-side when listing users
 	Search string `json:"search,omitempty" jsonschema:"title=User Search Expression,description=Optional Okta search expression for filtering users (e.g. profile.department eq \"Engineering\")."`
 	// EnableGroupSync controls whether group and membership records are collected
 	EnableGroupSync bool `json:"enableGroupSync,omitempty" jsonschema:"title=Sync Groups"`
-}
-
-// oldUserInput is the flat v1 installation user input layout
-type oldUserInput struct {
-	// FilterExpr limits imported records to envelopes matching the CEL expression
-	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting (allows inclusion, exclusion, etc.)"`
-	// Search is an optional Okta search expression applied server-side when listing users
-	Search string `json:"search,omitempty" jsonschema:"title=User Search Expression,description=Optional Okta search expression for filtering users (e.g. profile.department eq \"Engineering\")."`
-	// EnableGroupSync controls whether group and membership records are collected
-	EnableGroupSync bool `json:"enableGroupSync,omitempty" jsonschema:"title=Sync Groups"`
-	// PrimaryDirectory marks this installation as the authoritative directory source
-	PrimaryDirectory bool `json:"primaryDirectory,omitempty" jsonschema:"title=Primary Directory"`
 }
 
 // CredentialSchema holds the Okta tenant credentials for one installation

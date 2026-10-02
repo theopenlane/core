@@ -1,23 +1,35 @@
 package registry
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"path"
-	"reflect"
 	"slices"
 
-	"github.com/invopop/jsonschema"
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// finalizeDefinition derives credential form schemas and operation config sections/switches
+// finalizeDefinition derives credential form schemas, defaults credential slots, and composes operation input schemas
 func finalizeDefinition(def types.Definition) (types.Definition, error) {
+	declared := lo.Map(def.CredentialRegistrations, func(registration types.CredentialRegistration, _ int) types.CredentialSlotID {
+		return registration.Ref
+	})
+
 	def.CredentialRegistrations = lo.Map(def.CredentialRegistrations, func(registration types.CredentialRegistration, _ int) types.CredentialRegistration {
 		return finalizeCredential(def.Connections, registration)
+	})
+
+	def.Clients = lo.Map(def.Clients, func(client types.ClientRegistration, _ int) types.ClientRegistration {
+		return finalizeClient(client, declared)
+	})
+
+	def.Connections = lo.Map(def.Connections, func(connection types.ConnectionRegistration, _ int) types.ConnectionRegistration {
+		return finalizeConnection(connection)
 	})
 
 	operations, err := finalizeOperations(def)
@@ -47,124 +59,71 @@ func finalizeCredential(connections []types.ConnectionRegistration, registration
 	return registration
 }
 
-// finalizeOperations derives each operation's config section resolver and switch
-func finalizeOperations(def types.Definition) ([]types.OperationRegistration, error) {
-	inputRoot, inputDefs, err := jsonx.SchemaRoot(lo.FromPtr(def.UserInput).Schema)
-	if err != nil {
-		return nil, fmt.Errorf("definition %s user input: %w", def.ID, err)
+// finalizeClient defaults a client declaring no credential slots to every declared slot
+func finalizeClient(client types.ClientRegistration, declared []types.CredentialSlotID) types.ClientRegistration {
+	if len(client.CredentialRefs) == 0 {
+		client.CredentialRefs = slices.Clone(declared)
 	}
 
+	return client
+}
+
+// finalizeConnection defaults a connection declaring no credential slots to its selecting slot
+func finalizeConnection(connection types.ConnectionRegistration) types.ConnectionRegistration {
+	if len(connection.CredentialRefs) == 0 {
+		connection.CredentialRefs = []types.CredentialSlotID{connection.CredentialRef}
+	}
+
+	return connection
+}
+
+// finalizeOperations composes each operation's stored input schema from the uniform settings and its config schema
+func finalizeOperations(def types.Definition) ([]types.OperationRegistration, error) {
 	operations := slices.Clone(def.Operations)
-	claimed := map[string]string{}
 
 	for i := range operations {
 		operation := &operations[i]
 
-		if len(operation.ConfigSchema) == 0 {
+		if operation.Input == nil {
 			continue
 		}
 
-		root, configDefs, err := jsonx.SchemaRoot(operation.ConfigSchema)
-		if err != nil {
-			return nil, fmt.Errorf("definition %s operation %s config: %w", def.ID, operation.Name, err)
+		schema, err := jsonx.MergeSchemas(types.OperationSettingsSchema(), operation.ConfigSchema)
+
+		switch {
+		case errors.Is(err, jsonx.ErrSchemaPropertyConflict):
+			return nil, fmt.Errorf("%w: definition %s operation %s: %w", ErrOperationConfigReservedKey, def.ID, operation.Name, err)
+		case err != nil:
+			return nil, fmt.Errorf("definition %s operation %s input: %w", def.ID, operation.Name, err)
 		}
 
-		key, err := matchSection(inputRoot, inputDefs, jsonx.SchemaID(operation.ConfigSchema), configDefs)
-		if err != nil {
-			return nil, fmt.Errorf("%w: definition %s operation %s", err, def.ID, operation.Name)
-		}
-
-		if key != "" {
-			if holder, taken := claimed[key]; taken {
-				return nil, fmt.Errorf("%w: definition %s operations %s and %s share section %s", ErrConfigSectionAmbiguous, def.ID, holder, operation.Name, key)
-			}
-
-			claimed[key] = operation.Name
-
-			bindSection(operation, key)
-		}
-
-		if operation.Policy.Reconcile && operation.ConfigResolver == nil && root.Properties != nil && root.Properties.Len() > 0 {
-			return nil, fmt.Errorf("%w: definition %s operation %s", ErrConfigSectionRequired, def.ID, operation.Name)
-		}
+		input := *operation.Input
+		input.Schema = schema
+		input.Validate = validateOperationInput(input.Validate)
+		operation.Input = &input
 	}
 
 	return operations, nil
 }
 
-// bindSection derives the operation's resolver and disable switch from its section
-func bindSection(operation *types.OperationRegistration, key string) {
-	if operation.ConfigResolver == nil {
-		operation.ConfigResolver = func(userInput json.RawMessage) json.RawMessage {
-			raw, _ := jsonx.DecodeObjectKey[json.RawMessage](userInput, key)
-
-			return raw
+// validateOperationInput compiles the stored filter expression before running the definition's own validation
+func validateOperationInput(next types.ValidateFunc) types.ValidateFunc {
+	return func(ctx context.Context, req types.InstallationRequest, payload json.RawMessage) error {
+		settings, err := types.OperationSettingsFrom(payload)
+		if err != nil {
+			return err
 		}
-	}
 
-	if operation.Disabled == nil {
-		resolver := operation.ConfigResolver
-
-		operation.Disabled = func(userInput json.RawMessage) bool {
-			toggle, err := jsonx.Decode[types.Switch](resolver(userInput))
-
-			return err == nil && toggle.Disable
+		if settings.FilterExpr != "" {
+			if err := providerkit.ValidateExpr(settings.FilterExpr); err != nil {
+				return fmt.Errorf("%w: %w", ErrOperationFilterExprInvalid, err)
+			}
 		}
-	}
-}
 
-// matchSection returns the user input property key referencing the named config type
-func matchSection(inputRoot *jsonschema.Schema, inputDefs jsonschema.Definitions, name string, configDefs jsonschema.Definitions) (string, error) {
-	var candidates []string
-
-	for pair := inputRoot.Properties.Oldest(); pair != nil; pair = pair.Next() {
-		if pair.Value.Ref != "" && path.Base(pair.Value.Ref) == name {
-			candidates = append(candidates, pair.Key)
+		if next == nil {
+			return nil
 		}
+
+		return next(ctx, req, payload)
 	}
-
-	switch {
-	case len(candidates) == 0:
-		return "", nil
-	case len(candidates) > 1:
-		return "", fmt.Errorf("%w: properties %v reference %s", ErrConfigSectionAmbiguous, candidates, name)
-	case !sameSchema(inputDefs[name], configDefs[name]):
-		return "", fmt.Errorf("%w: property %s type %s", ErrConfigSectionMismatch, candidates[0], name)
-	default:
-		return candidates[0], nil
-	}
-}
-
-// sameSchema reports whether two schema nodes encode to the same document
-func sameSchema(a, b *jsonschema.Schema) bool {
-	if a == nil || b == nil {
-		return false
-	}
-
-	left, err := json.Marshal(a)
-	if err != nil {
-		return false
-	}
-
-	right, err := json.Marshal(b)
-	if err != nil {
-		return false
-	}
-
-	return sameJSON(left, right)
-}
-
-// sameJSON reports whether two raw documents decode to the same value regardless of encoding
-func sameJSON(a, b json.RawMessage) bool {
-	var left, right any
-
-	if err := json.Unmarshal(a, &left); err != nil {
-		return false
-	}
-
-	if err := json.Unmarshal(b, &right); err != nil {
-		return false
-	}
-
-	return reflect.DeepEqual(left, right)
 }

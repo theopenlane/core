@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersubprocessor"
-	"github.com/theopenlane/core/v2/internal/integrations/operations"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/trustcenterurl"
@@ -36,7 +35,7 @@ const trustCenterNotificationGrace = time.Hour
 type TrustCenterNotificationSweep struct{}
 
 // TrustCenterNotificationOp is the operation ref for the global trust center notification sweep, which runs without a client
-var TrustCenterNotificationOp = types.OperationRefOf[TrustCenterNotificationSweep]().HandlesRequest(runTrustCenterNotificationSweep) //nolint:revive
+var TrustCenterNotificationOp = types.OperationRefOf[TrustCenterNotificationSweep]().HandlesRequest(runTrustCenterNotificationSweep).Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).CustomerSelectable(false).SkipDefaultLookback() //nolint:revive
 
 // Handle adapts the trust center notification sweep to the generic operation registration boundary
 func (t TrustCenterNotificationSweep) Handle() types.OperationHandler {
@@ -295,7 +294,7 @@ func createAndDispatchTrustCenterCampaign(ctx context.Context, req types.Operati
 		return err
 	}
 
-	integrationID, err := operations.ResolveOwnerIntegration(ctx, req.DB, DefinitionID.ID(), ownerID, func(inst *ent.Integration) bool {
+	integrationID, err := req.Services.ResolveOwnerIntegration(ctx, DefinitionID.ID(), ownerID, func(inst *ent.Integration) bool {
 		return inst.CampaignEmail
 	})
 	if err != nil {

@@ -483,7 +483,7 @@ func TestValidateUserInputSchemaRequired(t *testing.T) {
 	reg := New()
 	def := integrationtypes.Definition{
 		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_userinput"},
-		UserInput:      &integrationtypes.UserInputRegistration{Schema: nil},
+		UserInput:      &integrationtypes.InputRegistration{Name: "UserInput"},
 	}
 
 	err := reg.Register(def)
@@ -1131,37 +1131,6 @@ func TestConnectionAdditionalCredentialRefNotDeclared(t *testing.T) {
 	}
 }
 
-// TestConnectionClientRefNotDeclared verifies connection referencing undeclared client is rejected
-func TestConnectionClientRefNotDeclared(t *testing.T) {
-	t.Parallel()
-
-	reg := New()
-	ghost := integrationtypes.ClientRefOf[string]()
-
-	def := integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{ID: "def_conn_badclient"},
-		CredentialRegistrations: []integrationtypes.CredentialRegistration{
-			testCredentialRegistration,
-		},
-		Connections: []integrationtypes.ConnectionRegistration{
-			{
-				CredentialRef:  testCredentialRef.ID(),
-				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialRef.ID()},
-				ClientRefs:     []integrationtypes.ClientID{ghost.ID()},
-			},
-		},
-		HealthCheck: newTestHealthCheck(),
-		Operations: []integrationtypes.OperationRegistration{
-			{Name: "h", Topic: gala.TopicName("h"), Handle: newTestHandler()},
-		},
-	}
-
-	err := reg.Register(def)
-	if !errors.Is(err, ErrConnectionClientRefNotDeclared) {
-		t.Fatalf("expected ErrConnectionClientRefNotDeclared, got %v", err)
-	}
-}
-
 // TestHealthCheckRequiredWithConnections verifies connections need a health check
 func TestHealthCheckRequiredWithConnections(t *testing.T) {
 	t.Parallel()
@@ -1260,8 +1229,8 @@ func TestHealthCheckClientCredentialMissing(t *testing.T) {
 			clientRef.Registration(func(context.Context, integrationtypes.ClientBuildRequest) (string, error) { return "ok", nil }, integrationtypes.ClientRegistration{}),
 		},
 		Connections: []integrationtypes.ConnectionRegistration{
-			integrationtypes.NewConnectionRef(testCredentialRef).Enables(clientRef).Registration(integrationtypes.ConnectionRegistration{}),
-			integrationtypes.NewConnectionRef(testAuthCredentialRef).Enables(clientRef).Registration(integrationtypes.ConnectionRegistration{}),
+			{CredentialRef: testCredentialRef.ID()},
+			{CredentialRef: testAuthCredentialRef.ID()},
 		},
 		HealthCheck: clientRef.HealthCheck(func(context.Context, integrationtypes.OperationRequest, string) (json.RawMessage, error) {
 			return nil, nil
@@ -1437,7 +1406,6 @@ func TestConnectionFullyWiredSuccess(t *testing.T) {
 			{
 				CredentialRef:  testCredentialRef.ID(),
 				CredentialRefs: []integrationtypes.CredentialSlotID{testCredentialRef.ID(), testAuthCredentialRef.ID()},
-				ClientRefs:     []integrationtypes.ClientID{clientRef.ID()},
 				Auth:           &integrationtypes.AuthRegistration{CredentialRef: testAuthCredentialRef.ID()},
 				Disconnect:     &integrationtypes.DisconnectRegistration{CredentialRef: testCredentialRef.ID()},
 			},
@@ -1595,7 +1563,8 @@ func TestRuntimeCoexistsWithCredentials(t *testing.T) {
 			},
 		},
 		HealthCheck: newTestHealthCheck(),
-		UserInput: &integrationtypes.UserInputRegistration{
+		UserInput: &integrationtypes.InputRegistration{
+			Name:   "UserInput",
 			Schema: json.RawMessage(`{"type":"object"}`),
 		},
 		Operations: []integrationtypes.OperationRegistration{

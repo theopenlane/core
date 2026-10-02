@@ -4,10 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"maps"
 	"reflect"
 	"slices"
-	"strings"
 
 	"github.com/samber/lo"
 
@@ -55,20 +53,14 @@ func (r DefinitionRef) WebhookEventTopic(name string) gala.TopicName {
 	return r.WebhookEventTopics().Name(name)
 }
 
-// replacement is one retired layout a typed ref takes over
-type replacement[T any] struct {
-	schema json.RawMessage
-	decode func(json.RawMessage) (T, error)
-}
-
-// storedLayout is a stored payload's reflected schema with retired layouts and backfill
+// storedLayout is a stored document's reflected schema, the upgrade that moves older documents onto it, and its semantic validation
 type storedLayout[T any] struct {
 	// schema is the reflected JSON schema of T
 	schema json.RawMessage
-	// replacements are the retired layouts this layout takes over, keyed by retired name
-	replacements map[string]replacement[T]
-	// backfill completes a stored payload missing values
-	backfill func(context.Context, InstallationRequest, *T) error
+	// upgrade reshapes a stored document from the layout it was persisted under into T, nil when none is declared
+	upgrade UpgradeFunc
+	// validate checks a schema-valid document for constraints the schema cannot express, nil when none is declared
+	validate ValidateFunc
 }
 
 // newStoredLayout creates a stored layout with the schema reflected from T
@@ -76,73 +68,29 @@ func newStoredLayout[T any]() storedLayout[T] {
 	return storedLayout[T]{schema: jsonx.SchemaFrom[T]()}
 }
 
-// replacing records a retired layout decoded as Old and reshaped through convert
-func (l storedLayout[T]) replacing[Old any](name string, convert func(Old) T) storedLayout[T] {
-	l.replacements = maps.Clone(l.replacements)
-	if l.replacements == nil {
-		l.replacements = map[string]replacement[T]{}
-	}
+// validated binds a typed validation closure as a ValidateFunc, decoding the payload into T first
+func validated[T any](fn func(context.Context, InstallationRequest, *T) error) ValidateFunc {
+	return func(ctx context.Context, req InstallationRequest, payload json.RawMessage) error {
+		var value T
 
-	l.replacements[name] = replacement[T]{schema: jsonx.SchemaFrom[Old](), decode: func(payload json.RawMessage) (T, error) {
-		previous, err := jsonx.Decode[Old](payload)
-		if err != nil {
-			var zero T
-
-			return zero, err
+		if err := jsonx.UnmarshalIfPresent(payload, &value); err != nil {
+			return err
 		}
 
-		return convert(previous), nil
-	}}
-
-	return l
+		return fn(ctx, req, &value)
+	}
 }
 
-// retired lists the retired layout names this layout takes over, sorted
-func (l storedLayout[T]) retired() []string {
-	return slices.Sorted(maps.Keys(l.replacements))
-}
+// upgraded binds a typed upgrade closure as an UpgradeFunc, marshalling its result
+func upgraded[T any](fn func(context.Context, InstallationRequest, string, json.RawMessage) (T, error)) UpgradeFunc {
+	return func(ctx context.Context, req InstallationRequest, from string, stored json.RawMessage) (json.RawMessage, error) {
+		value, err := fn(ctx, req, from, stored)
+		if err != nil {
+			return nil, err
+		}
 
-// convert reshapes a payload stored under the retired layout from into T
-func (l storedLayout[T]) convert(from string, old json.RawMessage) (json.RawMessage, error) {
-	retired, ok := l.replacements[from]
-	if !ok {
-		return nil, fmt.Errorf("%w: %s", ErrNotReplaced, from)
+		return jsonx.ToRawMessage(value)
 	}
-
-	result, err := jsonx.ValidateSchema(retired.schema, old)
-	if err != nil {
-		return nil, err
-	}
-
-	if !result.Valid() {
-		return nil, fmt.Errorf("%w: %s: %s", ErrLayoutMismatch, from, strings.Join(jsonx.ValidationErrorStrings(result), "; "))
-	}
-
-	value, err := retired.decode(old)
-	if err != nil {
-		return nil, err
-	}
-
-	return jsonx.ToRawMessage(value)
-}
-
-// Backfill completes a stored payload through the declared backfill, or returns it unchanged
-func (l storedLayout[T]) Backfill(ctx context.Context, req InstallationRequest, payload json.RawMessage) (json.RawMessage, error) {
-	if l.backfill == nil {
-		return payload, nil
-	}
-
-	var value T
-
-	if err := jsonx.UnmarshalIfPresent(payload, &value); err != nil {
-		return nil, err
-	}
-
-	if err := l.backfill(ctx, req, &value); err != nil {
-		return nil, err
-	}
-
-	return jsonx.ToRawMessage(value)
 }
 
 // =========
@@ -187,8 +135,10 @@ func (r *CredentialSlotID) UnmarshalJSON(data []byte) error {
 type CredentialRef[T any] struct {
 	// id is the durable credential slot identity
 	id CredentialSlotID
-	// storedLayout is the credential type's reflected schema with retired slots and backfill
+	// storedLayout is the credential type's reflected schema and declared upgrade
 	storedLayout[T]
+	// replaces lists the retired slots whose stored payloads move onto this slot
+	replaces []CredentialSlotID
 }
 
 // NewCredentialRef creates a typed credential slot identity handle with the schema reflected from T
@@ -231,44 +181,43 @@ func (r CredentialRef[T]) Resolve(bindings CredentialBindings) (T, bool, error) 
 	return out, true, err
 }
 
-// Replacing declares that the slot takes over payloads stored under old
-func (r CredentialRef[T]) Replacing[Old any](old CredentialRef[Old], convert func(Old) T) CredentialRef[T] {
-	r.storedLayout = r.replacing(old.String(), convert)
+// Replacing declares that the slot takes over the payloads stored under old
+func (r CredentialRef[T]) Replacing[Old any](old CredentialRef[Old]) CredentialRef[T] {
+	r.replaces = append(slices.Clone(r.replaces), old.ID())
 
 	return r
 }
 
-// Backfilled declares how a stored payload missing values is completed
-func (r CredentialRef[T]) Backfilled(fn func(context.Context, InstallationRequest, *T) error) CredentialRef[T] {
-	r.backfill = fn
+// Upgraded declares how a stored payload is reshaped from the slot it was persisted under into T
+func (r CredentialRef[T]) Upgraded(fn func(context.Context, InstallationRequest, string, json.RawMessage) (T, error)) CredentialRef[T] {
+	r.upgrade = upgraded(fn)
+
+	return r
+}
+
+// Validated declares a semantic check run on a schema-valid credential payload decoded as T
+func (r CredentialRef[T]) Validated(fn func(context.Context, InstallationRequest, *T) error) CredentialRef[T] {
+	r.validate = validated(fn)
 
 	return r
 }
 
 // Replaces lists the retired slots whose stored payloads this slot takes over, sorted
 func (r CredentialRef[T]) Replaces() []CredentialSlotID {
-	return lo.Map(r.retired(), func(name string, _ int) CredentialSlotID {
+	return lo.Map(sortedUnique(lo.Map(r.replaces, func(slot CredentialSlotID, _ int) string { return slot.String() })), func(name string, _ int) CredentialSlotID {
 		return NewCredentialSlotID(name)
 	})
-}
-
-// Convert reshapes a payload stored under one of the replaced slots into this slot's shape
-func (r CredentialRef[T]) Convert(from CredentialSlotID, old json.RawMessage) (json.RawMessage, error) {
-	return r.convert(from.String(), old)
 }
 
 // Registration projects the slot identity and lifecycle onto base
 func (r CredentialRef[T]) Registration(base CredentialRegistration) CredentialRegistration {
 	base.Ref = r.ID()
 	base.StoredSchema = r.Schema()
+	base.Upgrade = r.upgrade
+	base.Validate = r.validate
 
-	if len(r.replacements) > 0 {
+	if len(r.replaces) > 0 {
 		base.Replaces = r.Replaces()
-		base.Convert = r.Convert
-	}
-
-	if r.backfill != nil {
-		base.Backfill = r.Backfill
 	}
 
 	return base
@@ -280,62 +229,41 @@ func (r CredentialRef[T]) Registration(base CredentialRegistration) CredentialRe
 
 // UserInputRef is a typed handle for one definition's installation-scoped user input layout
 type UserInputRef[T any] struct {
-	// name is the stable layout name a later layout retires this one by
+	// name is the stable layout name the stored document is keyed by, reflected from T
 	name string
-	// storedLayout is the user input type's reflected schema with retired layouts and backfill
+	// storedLayout is the user input type's reflected schema and declared upgrade
 	storedLayout[T]
 }
 
-// NewUserInputRef creates a typed user input layout handle with the schema reflected from T
-func NewUserInputRef[T any](name string) UserInputRef[T] {
-	return UserInputRef[T]{name: name, storedLayout: newStoredLayout[T]()}
+// UserInputRefOf creates a typed user input layout handle named after T's reflected schema
+func UserInputRefOf[T any]() UserInputRef[T] {
+	layout := newStoredLayout[T]()
+
+	return UserInputRef[T]{name: jsonx.SchemaID(layout.schema), storedLayout: layout}
 }
 
-// Replacing declares that the layout takes over user input stored in old
-func (r UserInputRef[T]) Replacing[Old any](old UserInputRef[Old], convert func(Old) T) UserInputRef[T] {
-	r.storedLayout = r.replacing(old.name, convert)
+// Name returns the stable layout name the stored document is keyed by
+func (r UserInputRef[T]) Name() string {
+	return r.name
+}
+
+// Upgraded declares how stored user input is reshaped from the layout it was persisted under into T
+func (r UserInputRef[T]) Upgraded(fn func(context.Context, InstallationRequest, string, json.RawMessage) (T, error)) UserInputRef[T] {
+	r.upgrade = upgraded(fn)
 
 	return r
 }
 
-// Backfilled declares how stored user input missing values is completed
-func (r UserInputRef[T]) Backfilled(fn func(context.Context, InstallationRequest, *T) error) UserInputRef[T] {
-	r.backfill = fn
+// Validated declares a semantic check run on schema-valid user input decoded as T
+func (r UserInputRef[T]) Validated(fn func(context.Context, InstallationRequest, *T) error) UserInputRef[T] {
+	r.validate = validated(fn)
 
 	return r
 }
 
-// Replaces lists the retired layout names whose stored user input this layout takes over, sorted
-func (r UserInputRef[T]) Replaces() []string {
-	return r.retired()
-}
-
-// Convert reshapes stored user input through the first retired layout it matches
-func (r UserInputRef[T]) Convert(old json.RawMessage) (json.RawMessage, error) {
-	for _, retired := range r.retired() {
-		converted, err := r.convert(retired, old)
-		if err == nil {
-			return converted, nil
-		}
-	}
-
-	return nil, fmt.Errorf("%w: %s", ErrLayoutMismatch, r.name)
-}
-
-// Registration projects the reflected schema and declared lifecycle into a user input registration
-func (r UserInputRef[T]) Registration() *UserInputRegistration {
-	reg := &UserInputRegistration{Schema: jsonx.CloneRawMessage(r.schema)}
-
-	if len(r.replacements) > 0 {
-		reg.Replaces = r.Replaces()
-		reg.Convert = r.Convert
-	}
-
-	if r.backfill != nil {
-		reg.Backfill = r.Backfill
-	}
-
-	return reg
+// Registration projects the layout name, reflected schema, declared upgrade, and validation into an input registration
+func (r UserInputRef[T]) Registration() *InputRegistration {
+	return &InputRegistration{Name: r.name, Schema: jsonx.CloneRawMessage(r.schema), Upgrade: r.upgrade, Validate: r.validate}
 }
 
 // =========
@@ -448,8 +376,8 @@ func CredentialHealthCheck(fn func(context.Context, OperationRequest) (json.RawM
 type OperationRef[Cfg any] struct {
 	// name is the stable operation name used for persistence and topic derivation
 	name string
-	// schema is the reflected JSON schema of the config type
-	schema json.RawMessage
+	// storedLayout is the config type's reflected schema and declared upgrade
+	storedLayout[Cfg]
 	// client is the registered client the operation runs against, invalid when the operation has none
 	client ClientID
 	// handle executes the operation when it does not produce ingest payloads
@@ -458,18 +386,53 @@ type OperationRef[Cfg any] struct {
 	ingest IngestHandler
 	// replaces lists the retired operation names this operation takes over
 	replaces []string
+	// policy controls synchronous execution behavior for the operation
+	policy ExecutionPolicy
+	// contracts declares the normalized schemas emitted by the operation
+	contracts []IngestContract
+	// permissions lists scopes or permissions needed to retrieve data for the operation
+	permissions []string
+	// schedule overrides the default adaptive schedule for reconcile or scheduled cycles
+	schedule *gala.Schedule
+	// skipDefaultLookback disables the runtime's default lookback window on initial runs
+	skipDefaultLookback bool
+	// rateLimit bounds how often the operation may run per organization
+	rateLimit *RateLimitPolicy
+	// internal marks the operation as reachable only through its own listener or saga machinery
+	internal bool
+	// customerSelectable controls whether the operation is exposed in customer-facing surfaces
+	customerSelectable *bool
+	// requiresPaymentMethod gates direct invocation on the org having a payment method on file
+	requiresPaymentMethod bool
+	// disabledForAll marks the operation unavailable for every installation
+	disabledForAll bool
 }
 
 // NewOperationRef creates a typed operation identity handle with the schema reflected from Cfg
 func NewOperationRef[Cfg any](name string) OperationRef[Cfg] {
-	return OperationRef[Cfg]{name: name, schema: jsonx.SchemaFrom[Cfg]()}
+	return OperationRef[Cfg]{name: name, storedLayout: newStoredLayout[Cfg]()}
 }
 
 // OperationRefOf creates a typed operation identity handle named after the reflected schema of Cfg
 func OperationRefOf[Cfg any]() OperationRef[Cfg] {
-	schema := jsonx.SchemaFrom[Cfg]()
+	layout := newStoredLayout[Cfg]()
 
-	return OperationRef[Cfg]{name: jsonx.SchemaID(schema), schema: schema}
+	return OperationRef[Cfg]{name: jsonx.SchemaID(layout.schema), storedLayout: layout}
+}
+
+// withOperationSettings copies the uniform settings keys stored on doc over the upgraded config document
+func withOperationSettings(doc, upgraded json.RawMessage) (json.RawMessage, error) {
+	settings := map[string]json.RawMessage{}
+
+	for _, key := range operationSettingsKeys {
+		if value, ok := jsonx.DecodeObjectKey[json.RawMessage](doc, key); ok {
+			settings[key] = value
+		}
+	}
+
+	merged, _, err := jsonx.MergeObjectMap(upgraded, settings)
+
+	return merged, err
 }
 
 // decodeConfig decodes an operation config payload into Cfg, treating absent as the zero value
@@ -556,18 +519,122 @@ func (r OperationRef[Cfg]) HandlesRequest(fn func(context.Context, OperationRequ
 	return r
 }
 
-// Replacing declares that the operation takes over the recorded runs and health of old
+// Replacing declares that the operation takes over the stored input, recorded runs, and health of old
 func (r OperationRef[Cfg]) Replacing[Old any](old OperationRef[Old]) OperationRef[Cfg] {
 	r.replaces = append(slices.Clone(r.replaces), old.Name())
 
 	return r
 }
 
-// Registration projects the operation's name, topic, schema, client, and handler onto base
+// Upgraded declares how a stored input document is reshaped from the operation it was persisted under into Cfg, keeping the uniform settings
+func (r OperationRef[Cfg]) Upgraded(fn func(context.Context, InstallationRequest, string, json.RawMessage) (Cfg, error)) OperationRef[Cfg] {
+	typed := upgraded(fn)
+
+	r.upgrade = func(ctx context.Context, req InstallationRequest, from string, stored json.RawMessage) (json.RawMessage, error) {
+		config, err := typed(ctx, req, from, stored)
+		if err != nil {
+			return nil, err
+		}
+
+		return withOperationSettings(stored, config)
+	}
+
+	return r
+}
+
+// Validated declares a semantic check run on a schema-valid stored input document decoded as Cfg
+func (r OperationRef[Cfg]) Validated(fn func(context.Context, InstallationRequest, *Cfg) error) OperationRef[Cfg] {
+	r.validate = validated(fn)
+
+	return r
+}
+
+// Policy declares the execution policy of the operation
+func (r OperationRef[Cfg]) Policy(policy ExecutionPolicy) OperationRef[Cfg] {
+	r.policy = policy
+
+	return r
+}
+
+// Ingest declares the normalized schemas emitted by the operation
+func (r OperationRef[Cfg]) Ingest(contracts ...IngestContract) OperationRef[Cfg] {
+	r.contracts = append(slices.Clone(r.contracts), contracts...)
+
+	return r
+}
+
+// Permissions declares the scopes or permissions needed to retrieve data for the operation
+func (r OperationRef[Cfg]) Permissions(permissions ...string) OperationRef[Cfg] {
+	r.permissions = append(slices.Clone(r.permissions), permissions...)
+
+	return r
+}
+
+// Schedule overrides the default adaptive schedule for reconcile or scheduled cycles
+func (r OperationRef[Cfg]) Schedule(schedule *gala.Schedule) OperationRef[Cfg] {
+	r.schedule = schedule
+
+	return r
+}
+
+// SkipDefaultLookback disables the runtime's default lookback window on initial runs
+func (r OperationRef[Cfg]) SkipDefaultLookback() OperationRef[Cfg] {
+	r.skipDefaultLookback = true
+
+	return r
+}
+
+// RateLimit bounds how often the operation may run per organization
+func (r OperationRef[Cfg]) RateLimit(policy RateLimitPolicy) OperationRef[Cfg] {
+	r.rateLimit = &policy
+
+	return r
+}
+
+// Internal marks the operation as reachable only through its own listener or saga machinery
+func (r OperationRef[Cfg]) Internal() OperationRef[Cfg] {
+	r.internal = true
+
+	return r
+}
+
+// CustomerSelectable controls whether the operation is exposed in customer-facing surfaces
+func (r OperationRef[Cfg]) CustomerSelectable(selectable bool) OperationRef[Cfg] {
+	r.customerSelectable = &selectable
+
+	return r
+}
+
+// RequiresPaymentMethod gates direct invocation on the org having a payment method on file
+func (r OperationRef[Cfg]) RequiresPaymentMethod() OperationRef[Cfg] {
+	r.requiresPaymentMethod = true
+
+	return r
+}
+
+// DisabledForAll marks the operation unavailable for every installation when disabled is true
+func (r OperationRef[Cfg]) DisabledForAll(disabled bool) OperationRef[Cfg] {
+	r.disabledForAll = disabled
+
+	return r
+}
+
+// Registration projects the operation's identity, handler, stored input, and declared behavior onto base
 func (r OperationRef[Cfg]) Registration(definition DefinitionRef, base OperationRegistration) OperationRegistration {
 	base.Name = r.name
 	base.Topic = definition.OperationTopic(r.name)
 	base.ConfigSchema = r.Schema()
+	base.Input = &InputRegistration{Name: r.name, Schema: r.Schema(), Upgrade: r.upgrade, Validate: r.validate}
+	base.Policy = r.policy
+	base.Ingest = slices.Clone(r.contracts)
+	base.RequiredPermissions = slices.Clone(r.permissions)
+	base.Schedule = r.schedule
+	base.SkipDefaultLookback = r.skipDefaultLookback
+	base.RateLimit = r.rateLimit
+	base.Internal = r.internal
+	base.CustomerSelectable = r.customerSelectable
+	base.RequiresPaymentMethod = r.requiresPaymentMethod
+	base.DisabledForAll = r.disabledForAll
 
 	if r.client.Valid() {
 		base.ClientRef = r.client
@@ -630,45 +697,6 @@ func (r InstallationRef[T]) Registration() *InstallationRegistration {
 }
 
 // =========
-// Connections
-// =========
-
-// ConnectionRef ties one connection mode's primary credential slot to the clients it initializes
-type ConnectionRef struct {
-	// credential is the credential slot that selects the connection mode
-	credential CredentialSlotID
-	// clients lists the clients the connection mode initializes
-	clients []ClientID
-}
-
-// NewConnectionRef creates a connection mode handle selected by the given credential slot
-func NewConnectionRef[T any](cred CredentialRef[T]) ConnectionRef {
-	return ConnectionRef{credential: cred.ID()}
-}
-
-// Enables declares that the connection mode initializes the given client
-func (r ConnectionRef) Enables[C any](client ClientRef[C]) ConnectionRef {
-	r.clients = append(slices.Clone(r.clients), client.ID())
-
-	return r
-}
-
-// Registration projects the credential slot, disconnect flow, and enabled clients onto base
-func (r ConnectionRef) Registration(base ConnectionRegistration) ConnectionRegistration {
-	base.CredentialRef = r.credential
-	base.CredentialRefs = []CredentialSlotID{r.credential}
-	base.ClientRefs = slices.Clone(r.clients)
-
-	if base.Disconnect != nil {
-		disconnect := *base.Disconnect
-		disconnect.CredentialRef = r.credential
-		base.Disconnect = &disconnect
-	}
-
-	return base
-}
-
-// =========
 // Webhooks
 // =========
 
@@ -717,11 +745,6 @@ type WebhookEventRef[T any] struct {
 // NewWebhookEventRef creates a typed webhook event identity handle
 func NewWebhookEventRef[T any](name string) WebhookEventRef[T] {
 	return WebhookEventRef[T]{name: name}
-}
-
-// WebhookEventRefOf creates a typed webhook event handle named after T's reflected schema
-func WebhookEventRefOf[T any]() WebhookEventRef[T] {
-	return WebhookEventRef[T]{name: jsonx.SchemaID(jsonx.SchemaFrom[T]())}
 }
 
 // Name returns the stable webhook event name
