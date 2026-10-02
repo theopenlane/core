@@ -3,7 +3,6 @@ package registry
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"slices"
 
@@ -11,10 +10,9 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// finalizeDefinition derives credential form schemas, defaults credential slots, and composes operation input schemas
+// finalizeDefinition derives credential form schemas, defaults credential slots, and wraps stored-input validation
 func finalizeDefinition(def types.Definition) (types.Definition, error) {
 	declared := lo.Map(def.CredentialRegistrations, func(registration types.CredentialRegistration, _ int) types.CredentialSlotID {
 		return registration.Ref
@@ -32,12 +30,7 @@ func finalizeDefinition(def types.Definition) (types.Definition, error) {
 		return finalizeConnection(connection)
 	})
 
-	operations, err := finalizeOperations(def)
-	if err != nil {
-		return types.Definition{}, err
-	}
-
-	def.Operations = operations
+	def.Operations = finalizeOperations(def)
 
 	return def, nil
 }
@@ -77,8 +70,8 @@ func finalizeConnection(connection types.ConnectionRegistration) types.Connectio
 	return connection
 }
 
-// finalizeOperations composes each operation's stored input schema from the uniform settings and its config schema
-func finalizeOperations(def types.Definition) ([]types.OperationRegistration, error) {
+// finalizeOperations wraps each stored-input operation's validation with the uniform filter expression check
+func finalizeOperations(def types.Definition) []types.OperationRegistration {
 	operations := slices.Clone(def.Operations)
 
 	for i := range operations {
@@ -88,22 +81,12 @@ func finalizeOperations(def types.Definition) ([]types.OperationRegistration, er
 			continue
 		}
 
-		schema, err := jsonx.MergeSchemas(types.OperationSettingsSchema(), operation.ConfigSchema)
-
-		switch {
-		case errors.Is(err, jsonx.ErrSchemaPropertyConflict):
-			return nil, fmt.Errorf("%w: definition %s operation %s: %w", ErrOperationConfigReservedKey, def.ID, operation.Name, err)
-		case err != nil:
-			return nil, fmt.Errorf("definition %s operation %s input: %w", def.ID, operation.Name, err)
-		}
-
 		input := *operation.Input
-		input.Schema = schema
 		input.Validate = validateOperationInput(input.Validate)
 		operation.Input = &input
 	}
 
-	return operations, nil
+	return operations
 }
 
 // validateOperationInput compiles the stored filter expression before running the definition's own validation

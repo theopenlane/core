@@ -32,7 +32,7 @@ type DomainScanSubmitResult struct {
 // DomainScanSubmitOp is the operation ref for submitting domains to the URL Scanner
 //
 //nolint:revive
-var DomainScanSubmitOp = types.OperationRefOf[DomainScanSubmit]().
+var DomainScanSubmitOp = types.OperationPayloadOf[DomainScanSubmit]().
 	Handles(cloudflareClient, runDomainScanSubmit).
 	Policy(types.ExecutionPolicy{SkipRunRecord: true}).
 	CustomerSelectable(false).

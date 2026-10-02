@@ -32,7 +32,7 @@ type SendQuestionnaireCampaignRequest struct {
 type SendQuestionnaireCampaign struct{}
 
 // SendQuestionnaireCampaignOp is the operation ref for the questionnaire campaign dispatch operation
-var SendQuestionnaireCampaignOp = types.OperationRefOf[SendQuestionnaireCampaignRequest]().Handles(emailClientRef, SendQuestionnaireCampaign{}.Run).Policy(types.ExecutionPolicy{SkipRunRecord: true}) //nolint:revive
+var SendQuestionnaireCampaignOp = types.OperationPayloadOf[SendQuestionnaireCampaignRequest]().Handles(emailClientRef, SendQuestionnaireCampaign{}.Run).Policy(types.ExecutionPolicy{SkipRunRecord: true}) //nolint:revive
 
 // Run loads the campaign and its assessment, iterates pending targets, creates assessment responses, generates anonymous JWT access tokens, and sends questionnaire access emails
 func (SendQuestionnaireCampaign) Run(ctx context.Context, req types.OperationRequest, client *Client, cfg SendQuestionnaireCampaignRequest) (json.RawMessage, error) {

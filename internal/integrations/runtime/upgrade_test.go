@@ -43,12 +43,14 @@ type upgradeCredentialRegion struct {
 
 // upgradeOperationConfigCfg is the current operation config type with a required non-empty region
 type upgradeOperationConfigCfg struct {
+	types.OperationSettings
 	// Region is the required non-empty region
 	Region string `json:"region" jsonschema:"required,minLength=1"`
 }
 
 // retiredOperationConfigCfg is the shape an earlier definition version stored the region under
 type retiredOperationConfigCfg struct {
+	types.OperationSettings
 	// Zone is the retired field name for the region
 	Zone string `json:"zone"`
 }
@@ -92,11 +94,6 @@ func TestUpgradeOperationDocuments(t *testing.T) {
 		})
 
 	registration := current.Registration(definition, types.OperationRegistration{})
-
-	envelope, err := jsonx.MergeSchemas(types.OperationSettingsSchema(), registration.ConfigSchema)
-	assert.NilError(t, err)
-
-	registration.Input.Schema = envelope
 
 	def := types.Definition{Operations: []types.OperationRegistration{registration}}
 

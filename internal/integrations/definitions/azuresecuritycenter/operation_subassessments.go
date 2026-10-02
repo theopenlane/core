@@ -54,7 +54,9 @@ type SubAssessmentPayload struct {
 }
 
 // SubAssessmentsCollect collects Azure Defender for Cloud sub-assessment findings for ingest
-type SubAssessmentsCollect struct{}
+type SubAssessmentsCollect struct {
+	types.OperationSettings
+}
 
 // runSubAssessmentsCollect collects all unhealthy sub-assessment findings for the subscription
 func runSubAssessmentsCollect(ctx context.Context, _ types.OperationRequest, client *SecurityClient, _ SubAssessmentsCollect) ([]types.IngestPayloadSet, error) {

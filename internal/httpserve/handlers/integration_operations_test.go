@@ -35,6 +35,7 @@ type OperationTestRepoSync struct{}
 
 // OperationTestValidated is the config type for the test validated operation
 type OperationTestValidated struct {
+	types.OperationSettings
 	// Target is the required target field
 	Target string `json:"target" jsonschema:"required"`
 }
@@ -47,8 +48,8 @@ type operationTestCredential struct {
 
 var (
 	operationTestCredentialRef = types.CredentialRefOf[operationTestCredential]()
-	opTestHealthCheckOperation = types.OperationRefOf[OperationTestHealthCheck]().Policy(types.ExecutionPolicy{Inline: true})
-	opTestRepoSyncOperation    = types.OperationRefOf[OperationTestRepoSync]()
+	opTestHealthCheckOperation = types.OperationPayloadOf[OperationTestHealthCheck]().Policy(types.ExecutionPolicy{Inline: true})
+	opTestRepoSyncOperation    = types.OperationPayloadOf[OperationTestRepoSync]()
 	opTestValidatedOperation   = types.OperationRefOf[OperationTestValidated]().Policy(types.ExecutionPolicy{Inline: true})
 )
 

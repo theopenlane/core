@@ -72,7 +72,7 @@ func Builder(cfg Config) registry.Builder {
 				}),
 			},
 			Operations: []types.OperationRegistration{
-				types.OperationRefOf[MessageSendOperation]().
+				types.OperationPayloadOf[MessageSendOperation]().
 					Handles(teamsClient, MessageSend{}.Run).
 					Registration(DefinitionID, types.OperationRegistration{
 						Description: "Send a Teams channel message via Microsoft Graph",

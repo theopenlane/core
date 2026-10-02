@@ -253,21 +253,21 @@ type TrustCenterNDAApprovalRequestEmail struct {
 }
 
 var (
-	VerifyEmailOp          = types.OperationRefOf[VerifyEmailRequest]()                 //nolint:revive
-	WelcomeOp              = types.OperationRefOf[WelcomeRequest]()                     //nolint:revive
-	InviteOp               = types.OperationRefOf[InviteRequest]()                      //nolint:revive
-	InviteJoinedOp         = types.OperationRefOf[InviteJoinedRequest]()                //nolint:revive
-	ResetRequestOp         = types.OperationRefOf[PasswordResetEmailRequest]()          //nolint:revive
-	ResetSuccessOp         = types.OperationRefOf[PasswordResetSuccessRequest]()        //nolint:revive
-	SubscribeOp            = types.OperationRefOf[SubscribeRequest]()                   //nolint:revive
-	VerifyBillingOp        = types.OperationRefOf[VerifyBillingRequest]()               //nolint:revive
-	TCNDARequestOp         = types.OperationRefOf[TrustCenterNDARequestEmail]()         //nolint:revive
-	TCNDASignedOp          = types.OperationRefOf[TrustCenterNDASignedEmail]()          //nolint:revive
-	TCAuthOp               = types.OperationRefOf[TrustCenterAuthEmail]()               //nolint:revive
-	QuestionnaireAuthOp    = types.OperationRefOf[QuestionnaireAuthEmail]()             //nolint:revive
-	BillingEmailChangedOp  = types.OperationRefOf[BillingEmailChangedEmail]()           //nolint:revive
-	OrgDeletionNoticeOp    = types.OperationRefOf[OrgDeletionNoticeEmail]()             //nolint:revive
-	TCNDAApprovalRequestOp = types.OperationRefOf[TrustCenterNDAApprovalRequestEmail]() //nolint:revive
+	VerifyEmailOp          = types.OperationPayloadOf[VerifyEmailRequest]()                 //nolint:revive
+	WelcomeOp              = types.OperationPayloadOf[WelcomeRequest]()                     //nolint:revive
+	InviteOp               = types.OperationPayloadOf[InviteRequest]()                      //nolint:revive
+	InviteJoinedOp         = types.OperationPayloadOf[InviteJoinedRequest]()                //nolint:revive
+	ResetRequestOp         = types.OperationPayloadOf[PasswordResetEmailRequest]()          //nolint:revive
+	ResetSuccessOp         = types.OperationPayloadOf[PasswordResetSuccessRequest]()        //nolint:revive
+	SubscribeOp            = types.OperationPayloadOf[SubscribeRequest]()                   //nolint:revive
+	VerifyBillingOp        = types.OperationPayloadOf[VerifyBillingRequest]()               //nolint:revive
+	TCNDARequestOp         = types.OperationPayloadOf[TrustCenterNDARequestEmail]()         //nolint:revive
+	TCNDASignedOp          = types.OperationPayloadOf[TrustCenterNDASignedEmail]()          //nolint:revive
+	TCAuthOp               = types.OperationPayloadOf[TrustCenterAuthEmail]()               //nolint:revive
+	QuestionnaireAuthOp    = types.OperationPayloadOf[QuestionnaireAuthEmail]()             //nolint:revive
+	BillingEmailChangedOp  = types.OperationPayloadOf[BillingEmailChangedEmail]()           //nolint:revive
+	OrgDeletionNoticeOp    = types.OperationPayloadOf[OrgDeletionNoticeEmail]()             //nolint:revive
+	TCNDAApprovalRequestOp = types.OperationPayloadOf[TrustCenterNDAApprovalRequestEmail]() //nolint:revive
 )
 
 var _ = RegisterEmailOperation(Operation[VerifyEmailRequest]{

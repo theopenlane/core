@@ -64,10 +64,14 @@ type regionInput struct {
 }
 
 // retiredSync is the config of the operation an earlier definition version declared
-type retiredSync struct{}
+type retiredSync struct {
+	integrationtypes.OperationSettings
+}
 
 // renamedSync is the config of the operation replacing retiredSync
-type renamedSync struct{}
+type renamedSync struct {
+	integrationtypes.OperationSettings
+}
 
 // renameEvent is the payload of the events on the renamed webhook contract
 type renameEvent struct{}
@@ -135,18 +139,16 @@ func slotOf[T any](ref integrationtypes.CredentialRef[T]) retiredSlot {
 	return retiredSlot{id: ref.ID(), schema: ref.Schema()}
 }
 
-// syncOperation returns a no-op operation registration replacing retired names
-func syncOperation[Cfg any](op integrationtypes.OperationRef[Cfg], policy integrationtypes.ExecutionPolicy, replaces ...string) integrationtypes.OperationRegistration {
+// syncOperation returns a no-op operation registration for the ref, carrying whatever the ref replaces
+func syncOperation[Config any](op integrationtypes.OperationRef[Config], policy integrationtypes.ExecutionPolicy) integrationtypes.OperationRegistration {
 	return op.Policy(policy).Registration(testint.DefinitionID, integrationtypes.OperationRegistration{
-		Replaces: replaces,
-		Handle:   func(context.Context, integrationtypes.OperationRequest) (json.RawMessage, error) { return nil, nil },
+		Handle: func(context.Context, integrationtypes.OperationRequest) (json.RawMessage, error) { return nil, nil },
 	})
 }
 
-// eventsWebhook returns a webhook registration accepting events, replacing retired names
-func eventsWebhook(webhook integrationtypes.WebhookRef, replaces []string, events ...integrationtypes.WebhookEventRef[renameEvent]) integrationtypes.WebhookRegistration {
+// eventsWebhook returns a webhook registration accepting events, carrying whatever the ref replaces
+func eventsWebhook(webhook integrationtypes.WebhookRef, events ...integrationtypes.WebhookEventRef[renameEvent]) integrationtypes.WebhookRegistration {
 	return webhook.Registration(integrationtypes.WebhookRegistration{
-		Replaces: replaces,
 		Event: func(req integrationtypes.WebhookInboundRequest) (integrationtypes.WebhookReceivedEvent, error) {
 			return integrationtypes.WebhookReceivedEvent{Name: string(req.Payload), Payload: req.Payload}, nil
 		},
@@ -591,7 +593,7 @@ func TestInstallationUpgrade(t *testing.T) {
 			Exec(subCtx))
 
 		renamed := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
-			def.Operations = []integrationtypes.OperationRegistration{syncOperation(renamedSyncOp, integrationtypes.ExecutionPolicy{Inline: true}, retiredSyncOp.Name())}
+			def.Operations = []integrationtypes.OperationRegistration{syncOperation(renamedSyncOp.Replacing(retiredSyncOp), integrationtypes.ExecutionPolicy{Inline: true})}
 		}))
 
 		assessment, err := renamed.RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
@@ -642,7 +644,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		require.Equal(t, 1, activeReconcileJobs(t, retiredFragment))
 
 		renamed := queuedRuntimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
-			def.Operations = []integrationtypes.OperationRegistration{syncOperation(testint.RecurringOp, integrationtypes.ExecutionPolicy{Reconcile: true}, retiredSyncOp.Name())}
+			def.Operations = []integrationtypes.OperationRegistration{syncOperation(testint.RecurringOp.Replacing(retiredSyncOp), integrationtypes.ExecutionPolicy{Reconcile: true})}
 		}))
 
 		assessment, err := renamed.RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
@@ -661,7 +663,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
 		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
-			def.Webhooks = []integrationtypes.WebhookRegistration{eventsWebhook(retiredEventsWebhook, nil, renameEventA)}
+			def.Webhooks = []integrationtypes.WebhookRegistration{eventsWebhook(retiredEventsWebhook, renameEventA)}
 		}))
 		installation := installOn(t, subCtx, previous, nil, nil, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
 
@@ -675,7 +677,7 @@ func TestInstallationUpgrade(t *testing.T) {
 		require.NotEmpty(t, secret)
 
 		renamed := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
-			def.Webhooks = []integrationtypes.WebhookRegistration{eventsWebhook(renamedEventsWebhook, []string{retiredEventsWebhook.Name()}, renameEventA, renameEventB)}
+			def.Webhooks = []integrationtypes.WebhookRegistration{eventsWebhook(renamedEventsWebhook.Replacing(retiredEventsWebhook), renameEventA, renameEventB)}
 		}))
 
 		early, err := renamed.EnsureWebhook(subCtx, installation, renamedEventsWebhook.Name(), "")

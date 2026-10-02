@@ -38,6 +38,7 @@ type UserInput struct {
 
 // DirectorySync configures collection of Keycloak directory users, groups, and memberships
 type DirectorySync struct {
+	types.OperationSettings
 	// DisableGroupSync when true only syncs users, skipping groups and memberships
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users disable group and membership sync operations"`
 }

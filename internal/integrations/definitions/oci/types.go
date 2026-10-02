@@ -22,6 +22,7 @@ var (
 
 // FindingsSync holds installation-specific configuration for OCI Cloud Guard problem collection
 type FindingsSync struct {
+	types.OperationSettings
 	// SkipProblemDetails collects only the list response and skips the per-problem detail lookup
 	SkipProblemDetails bool `json:"skipProblemDetails,omitempty" jsonschema:"title=Skip Problem Details,description=Skip the per-problem detail lookup. Far fewer API calls on large tenancies, but findings arrive without a description or recommendation"`
 }

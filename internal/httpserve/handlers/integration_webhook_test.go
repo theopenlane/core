@@ -41,7 +41,7 @@ type webhookTestCredential struct {
 
 var (
 	webhookTestCredentialRef    = types.CredentialRefOf[webhookTestCredential]()
-	webhookHealthCheckOperation = types.OperationRefOf[WebhookTestHealthCheck]().Policy(types.ExecutionPolicy{Inline: true})
+	webhookHealthCheckOperation = types.OperationPayloadOf[WebhookTestHealthCheck]().Policy(types.ExecutionPolicy{Inline: true})
 	webhookAlertCreatedEvent    = types.NewWebhookEventRef[webhookTestAlertEnvelope]("alert.created")
 )
 

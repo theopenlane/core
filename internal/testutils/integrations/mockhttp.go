@@ -43,7 +43,9 @@ var (
 )
 
 // mockHTTPSync is the config for the mock provider's directory sync operation
-type mockHTTPSync struct{}
+type mockHTTPSync struct {
+	types.OperationSettings
+}
 
 // mockHTTPCred is the mock provider's bearer token and base URL
 type mockHTTPCred struct {

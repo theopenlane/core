@@ -19,7 +19,7 @@ import (
 )
 
 // documentExportOperation is the operation ref for the document export operation
-var documentExportOperation = types.OperationRefOf[operations.DocumentExport]().
+var documentExportOperation = types.OperationPayloadOf[operations.DocumentExport]().
 	Handles(oneDriveClient, operations.ExportDocument[*DriveClient]).
 	Policy(types.ExecutionPolicy{Inline: true})
 

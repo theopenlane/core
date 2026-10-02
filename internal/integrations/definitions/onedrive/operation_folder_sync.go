@@ -46,6 +46,7 @@ type driveItemPayload struct {
 
 // FolderSync lists OneDrive documents in a folder and emits ingest envelopes
 type FolderSync struct {
+	types.OperationSettings
 	// FolderID is the folder path relative to the drive root; empty syncs the root
 	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder Path,description=Folder path relative to drive root (e.g. Policies). Leave empty to sync the entire drive root."`
 }

@@ -71,8 +71,6 @@ var (
 	ErrHealthCheckRequired = errors.New("integrations/registry: health check required when the definition declares connections")
 	// ErrHealthCheckClientCredentialMissing indicates the health check misses a credential slot
 	ErrHealthCheckClientCredentialMissing = errors.New("integrations/registry: health check client does not use every connection credential slot")
-	// ErrOperationConfigReservedKey indicates an operation config declares a key reserved by the uniform settings
-	ErrOperationConfigReservedKey = errors.New("integrations/registry: operation config declares a key reserved by the operation settings")
 	// ErrOperationFilterExprInvalid indicates a stored operation input carries a filter expression that does not compile
 	ErrOperationFilterExprInvalid = errors.New("integrations/registry: operation filter expression invalid")
 	// ErrDestructiveSurfaceChange indicates a removed slot, operation, or webhook has no replacement

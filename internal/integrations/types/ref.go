@@ -215,6 +215,7 @@ func (r CredentialRef[T]) Registration(base CredentialRegistration) CredentialRe
 	base.StoredSchema = r.Schema()
 	base.Upgrade = r.upgrade
 	base.Validate = r.validate
+	base.Replaces = nil
 
 	if len(r.replaces) > 0 {
 		base.Replaces = r.Replaces()
@@ -373,11 +374,11 @@ func CredentialHealthCheck(fn func(context.Context, OperationRequest) (json.RawM
 // =========
 
 // OperationRef is a typed handle for one operation identity, parameterized by its config type
-type OperationRef[Cfg any] struct {
+type OperationRef[Config any] struct {
 	// name is the stable operation name used for persistence and topic derivation
 	name string
 	// storedLayout is the config type's reflected schema and declared upgrade
-	storedLayout[Cfg]
+	storedLayout[Config]
 	// client is the registered client the operation runs against, invalid when the operation has none
 	client ClientID
 	// handle executes the operation when it does not produce ingest payloads
@@ -406,38 +407,41 @@ type OperationRef[Cfg any] struct {
 	requiresPaymentMethod bool
 	// disabledForAll marks the operation unavailable for every installation
 	disabledForAll bool
+	// stored reports whether the operation keeps a per-installation input document under its name
+	stored bool
 }
 
-// NewOperationRef creates a typed operation identity handle with the schema reflected from Cfg
-func NewOperationRef[Cfg any](name string) OperationRef[Cfg] {
-	return OperationRef[Cfg]{name: name, storedLayout: newStoredLayout[Cfg]()}
+// NewOperationRef creates a stored-input operation handle with the given name; Config embeds OperationSettings and
+// its reflected schema is the per-installation input document stored under the operation name
+func NewOperationRef[Config OperationInput](name string) OperationRef[Config] {
+	return OperationRef[Config]{name: name, storedLayout: newStoredLayout[Config](), stored: true}
 }
 
-// OperationRefOf creates a typed operation identity handle named after the reflected schema of Cfg
-func OperationRefOf[Cfg any]() OperationRef[Cfg] {
-	layout := newStoredLayout[Cfg]()
+// OperationRefOf creates a stored-input operation handle named after the reflected schema of Config; Config embeds
+// OperationSettings and its reflected schema is the per-installation input document stored under the operation name
+func OperationRefOf[Config OperationInput]() OperationRef[Config] {
+	layout := newStoredLayout[Config]()
 
-	return OperationRef[Cfg]{name: jsonx.SchemaID(layout.schema), storedLayout: layout}
+	return OperationRef[Config]{name: jsonx.SchemaID(layout.schema), storedLayout: layout, stored: true}
 }
 
-// withOperationSettings copies the uniform settings keys stored on doc over the upgraded config document
-func withOperationSettings(doc, upgraded json.RawMessage) (json.RawMessage, error) {
-	settings := map[string]json.RawMessage{}
-
-	for _, key := range operationSettingsKeys {
-		if value, ok := jsonx.DecodeObjectKey[json.RawMessage](doc, key); ok {
-			settings[key] = value
-		}
-	}
-
-	merged, _, err := jsonx.MergeObjectMap(upgraded, settings)
-
-	return merged, err
+// NewOperationPayload creates a payload operation handle with the given name; Config is the payload a caller
+// supplies on each dispatch, nothing is stored per installation, and Upgraded and Validated are ignored
+func NewOperationPayload[Config any](name string) OperationRef[Config] {
+	return OperationRef[Config]{name: name, storedLayout: newStoredLayout[Config]()}
 }
 
-// decodeConfig decodes an operation config payload into Cfg, treating absent as the zero value
-func decodeConfig[Cfg any](raw json.RawMessage) (Cfg, error) {
-	var cfg Cfg
+// OperationPayloadOf creates a payload operation handle named after the reflected schema of Config; Config is the
+// payload a caller supplies on each dispatch, nothing is stored per installation, and Upgraded and Validated are ignored
+func OperationPayloadOf[Config any]() OperationRef[Config] {
+	layout := newStoredLayout[Config]()
+
+	return OperationRef[Config]{name: jsonx.SchemaID(layout.schema), storedLayout: layout}
+}
+
+// decodeConfig decodes an operation config payload into Config, treating absent as the zero value
+func decodeConfig[Config any](raw json.RawMessage) (Config, error) {
+	var cfg Config
 
 	if err := jsonx.UnmarshalIfPresent(raw, &cfg); err != nil {
 		return cfg, fmt.Errorf("%w: %w", ErrOperationConfigInvalid, err)
@@ -446,16 +450,16 @@ func decodeConfig[Cfg any](raw json.RawMessage) (Cfg, error) {
 	return cfg, nil
 }
 
-// bindRequest casts the request client through client and decodes the request config into Cfg
-func bindRequest[C, Cfg any](client ClientRef[C], request OperationRequest) (C, Cfg, error) {
+// bindRequest casts the request client through client and decodes the request config into Config
+func bindRequest[C, Config any](client ClientRef[C], request OperationRequest) (C, Config, error) {
 	typed, err := client.Cast(request.Client)
 	if err != nil {
-		var cfg Cfg
+		var cfg Config
 
 		return typed, cfg, err
 	}
 
-	cfg, err := decodeConfig[Cfg](request.Config)
+	cfg, err := decodeConfig[Config](request.Config)
 
 	return typed, cfg, err
 }
@@ -466,20 +470,20 @@ func sortedUnique(names []string) []string {
 }
 
 // Name returns the stable operation name
-func (r OperationRef[Cfg]) Name() string {
+func (r OperationRef[Config]) Name() string {
 	return r.name
 }
 
 // Schema returns a copy of the reflected JSON schema of the config type
-func (r OperationRef[Cfg]) Schema() json.RawMessage {
+func (r OperationRef[Config]) Schema() json.RawMessage {
 	return jsonx.CloneRawMessage(r.schema)
 }
 
 // Ingests binds fn as the ingest handler, run against client with the decoded config
-func (r OperationRef[Cfg]) Ingests[C any](client ClientRef[C], fn func(context.Context, OperationRequest, C, Cfg) ([]IngestPayloadSet, error)) OperationRef[Cfg] {
+func (r OperationRef[Config]) Ingests[C any](client ClientRef[C], fn func(context.Context, OperationRequest, C, Config) ([]IngestPayloadSet, error)) OperationRef[Config] {
 	r.client = client.ID()
 	r.ingest = func(ctx context.Context, request OperationRequest) ([]IngestPayloadSet, error) {
-		typed, cfg, err := bindRequest[C, Cfg](client, request)
+		typed, cfg, err := bindRequest[C, Config](client, request)
 		if err != nil {
 			return nil, err
 		}
@@ -491,10 +495,10 @@ func (r OperationRef[Cfg]) Ingests[C any](client ClientRef[C], fn func(context.C
 }
 
 // Handles binds fn as the handler, run against client with the decoded config
-func (r OperationRef[Cfg]) Handles[C any](client ClientRef[C], fn func(context.Context, OperationRequest, C, Cfg) (json.RawMessage, error)) OperationRef[Cfg] {
+func (r OperationRef[Config]) Handles[C any](client ClientRef[C], fn func(context.Context, OperationRequest, C, Config) (json.RawMessage, error)) OperationRef[Config] {
 	r.client = client.ID()
 	r.handle = func(ctx context.Context, request OperationRequest) (json.RawMessage, error) {
-		typed, cfg, err := bindRequest[C, Cfg](client, request)
+		typed, cfg, err := bindRequest[C, Config](client, request)
 		if err != nil {
 			return nil, err
 		}
@@ -506,9 +510,9 @@ func (r OperationRef[Cfg]) Handles[C any](client ClientRef[C], fn func(context.C
 }
 
 // HandlesRequest binds fn as the handler, run without a client, with the decoded config
-func (r OperationRef[Cfg]) HandlesRequest(fn func(context.Context, OperationRequest, Cfg) (json.RawMessage, error)) OperationRef[Cfg] {
+func (r OperationRef[Config]) HandlesRequest(fn func(context.Context, OperationRequest, Config) (json.RawMessage, error)) OperationRef[Config] {
 	r.handle = func(ctx context.Context, request OperationRequest) (json.RawMessage, error) {
-		cfg, err := decodeConfig[Cfg](request.Config)
+		cfg, err := decodeConfig[Config](request.Config)
 		if err != nil {
 			return nil, err
 		}
@@ -520,111 +524,101 @@ func (r OperationRef[Cfg]) HandlesRequest(fn func(context.Context, OperationRequ
 }
 
 // Replacing declares that the operation takes over the stored input, recorded runs, and health of old
-func (r OperationRef[Cfg]) Replacing[Old any](old OperationRef[Old]) OperationRef[Cfg] {
+func (r OperationRef[Config]) Replacing[Old any](old OperationRef[Old]) OperationRef[Config] {
 	r.replaces = append(slices.Clone(r.replaces), old.Name())
 
 	return r
 }
 
-// Upgraded declares how a stored input document is reshaped from the operation it was persisted under into Cfg, keeping the uniform settings
-func (r OperationRef[Cfg]) Upgraded(fn func(context.Context, InstallationRequest, string, json.RawMessage) (Cfg, error)) OperationRef[Cfg] {
-	typed := upgraded(fn)
-
-	r.upgrade = func(ctx context.Context, req InstallationRequest, from string, stored json.RawMessage) (json.RawMessage, error) {
-		config, err := typed(ctx, req, from, stored)
-		if err != nil {
-			return nil, err
-		}
-
-		return withOperationSettings(stored, config)
-	}
+// Upgraded declares how a stored input document is reshaped from the operation it was persisted under into Config; ignored on a payload operation
+func (r OperationRef[Config]) Upgraded(fn func(context.Context, InstallationRequest, string, json.RawMessage) (Config, error)) OperationRef[Config] {
+	r.upgrade = upgraded(fn)
 
 	return r
 }
 
-// Validated declares a semantic check run on a schema-valid stored input document decoded as Cfg
-func (r OperationRef[Cfg]) Validated(fn func(context.Context, InstallationRequest, *Cfg) error) OperationRef[Cfg] {
+// Validated declares a semantic check run on a schema-valid stored input document decoded as Config; ignored on a payload operation
+func (r OperationRef[Config]) Validated(fn func(context.Context, InstallationRequest, *Config) error) OperationRef[Config] {
 	r.validate = validated(fn)
 
 	return r
 }
 
 // Policy declares the execution policy of the operation
-func (r OperationRef[Cfg]) Policy(policy ExecutionPolicy) OperationRef[Cfg] {
+func (r OperationRef[Config]) Policy(policy ExecutionPolicy) OperationRef[Config] {
 	r.policy = policy
 
 	return r
 }
 
 // Ingest declares the normalized schemas emitted by the operation
-func (r OperationRef[Cfg]) Ingest(contracts ...IngestContract) OperationRef[Cfg] {
+func (r OperationRef[Config]) Ingest(contracts ...IngestContract) OperationRef[Config] {
 	r.contracts = append(slices.Clone(r.contracts), contracts...)
 
 	return r
 }
 
 // Permissions declares the scopes or permissions needed to retrieve data for the operation
-func (r OperationRef[Cfg]) Permissions(permissions ...string) OperationRef[Cfg] {
+func (r OperationRef[Config]) Permissions(permissions ...string) OperationRef[Config] {
 	r.permissions = append(slices.Clone(r.permissions), permissions...)
 
 	return r
 }
 
 // Schedule overrides the default adaptive schedule for reconcile or scheduled cycles
-func (r OperationRef[Cfg]) Schedule(schedule *gala.Schedule) OperationRef[Cfg] {
+func (r OperationRef[Config]) Schedule(schedule *gala.Schedule) OperationRef[Config] {
 	r.schedule = schedule
 
 	return r
 }
 
 // SkipDefaultLookback disables the runtime's default lookback window on initial runs
-func (r OperationRef[Cfg]) SkipDefaultLookback() OperationRef[Cfg] {
+func (r OperationRef[Config]) SkipDefaultLookback() OperationRef[Config] {
 	r.skipDefaultLookback = true
 
 	return r
 }
 
 // RateLimit bounds how often the operation may run per organization
-func (r OperationRef[Cfg]) RateLimit(policy RateLimitPolicy) OperationRef[Cfg] {
+func (r OperationRef[Config]) RateLimit(policy RateLimitPolicy) OperationRef[Config] {
 	r.rateLimit = &policy
 
 	return r
 }
 
 // Internal marks the operation as reachable only through its own listener or saga machinery
-func (r OperationRef[Cfg]) Internal() OperationRef[Cfg] {
+func (r OperationRef[Config]) Internal() OperationRef[Config] {
 	r.internal = true
 
 	return r
 }
 
 // CustomerSelectable controls whether the operation is exposed in customer-facing surfaces
-func (r OperationRef[Cfg]) CustomerSelectable(selectable bool) OperationRef[Cfg] {
+func (r OperationRef[Config]) CustomerSelectable(selectable bool) OperationRef[Config] {
 	r.customerSelectable = &selectable
 
 	return r
 }
 
 // RequiresPaymentMethod gates direct invocation on the org having a payment method on file
-func (r OperationRef[Cfg]) RequiresPaymentMethod() OperationRef[Cfg] {
+func (r OperationRef[Config]) RequiresPaymentMethod() OperationRef[Config] {
 	r.requiresPaymentMethod = true
 
 	return r
 }
 
 // DisabledForAll marks the operation unavailable for every installation when disabled is true
-func (r OperationRef[Cfg]) DisabledForAll(disabled bool) OperationRef[Cfg] {
+func (r OperationRef[Config]) DisabledForAll(disabled bool) OperationRef[Config] {
 	r.disabledForAll = disabled
 
 	return r
 }
 
 // Registration projects the operation's identity, handler, stored input, and declared behavior onto base
-func (r OperationRef[Cfg]) Registration(definition DefinitionRef, base OperationRegistration) OperationRegistration {
+func (r OperationRef[Config]) Registration(definition DefinitionRef, base OperationRegistration) OperationRegistration {
 	base.Name = r.name
 	base.Topic = definition.OperationTopic(r.name)
 	base.ConfigSchema = r.Schema()
-	base.Input = &InputRegistration{Name: r.name, Schema: r.Schema(), Upgrade: r.upgrade, Validate: r.validate}
 	base.Policy = r.policy
 	base.Ingest = slices.Clone(r.contracts)
 	base.RequiredPermissions = slices.Clone(r.permissions)
@@ -635,6 +629,10 @@ func (r OperationRef[Cfg]) Registration(definition DefinitionRef, base Operation
 	base.CustomerSelectable = r.customerSelectable
 	base.RequiresPaymentMethod = r.requiresPaymentMethod
 	base.DisabledForAll = r.disabledForAll
+
+	if r.stored {
+		base.Input = &InputRegistration{Name: r.name, Schema: r.Schema(), Upgrade: r.upgrade, Validate: r.validate}
+	}
 
 	if r.client.Valid() {
 		base.ClientRef = r.client
@@ -647,6 +645,8 @@ func (r OperationRef[Cfg]) Registration(definition DefinitionRef, base Operation
 	if r.ingest != nil {
 		base.IngestHandle = r.ingest
 	}
+
+	base.Replaces = nil
 
 	if len(r.replaces) > 0 {
 		base.Replaces = sortedUnique(r.replaces)
@@ -728,6 +728,7 @@ func (r WebhookRef) Replacing(old WebhookRef) WebhookRef {
 // Registration projects the webhook contract name and retired names onto base
 func (r WebhookRef) Registration(base WebhookRegistration) WebhookRegistration {
 	base.Name = r.name
+	base.Replaces = nil
 
 	if len(r.replaces) > 0 {
 		base.Replaces = sortedUnique(r.replaces)

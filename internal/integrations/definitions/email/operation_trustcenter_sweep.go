@@ -35,7 +35,7 @@ const trustCenterNotificationGrace = time.Hour
 type TrustCenterNotificationSweep struct{}
 
 // TrustCenterNotificationOp is the operation ref for the global trust center notification sweep, which runs without a client
-var TrustCenterNotificationOp = types.OperationRefOf[TrustCenterNotificationSweep]().HandlesRequest(runTrustCenterNotificationSweep).Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).CustomerSelectable(false).SkipDefaultLookback() //nolint:revive
+var TrustCenterNotificationOp = types.OperationPayloadOf[TrustCenterNotificationSweep]().HandlesRequest(runTrustCenterNotificationSweep).Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).CustomerSelectable(false).SkipDefaultLookback() //nolint:revive
 
 // systemSweepContext builds a cross-organization system caller context bypassing org filtering and FGA
 func systemSweepContext(ctx context.Context) context.Context {

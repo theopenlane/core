@@ -46,7 +46,9 @@ type UserInput struct {
 }
 
 // DirectorySync configures collection of Zitadel directory users
-type DirectorySync struct{}
+type DirectorySync struct {
+	types.OperationSettings
+}
 
 // InstallationMetadata holds the stable Zitadel instance identity for one installation
 type InstallationMetadata struct {

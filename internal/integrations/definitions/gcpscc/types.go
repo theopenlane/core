@@ -43,6 +43,7 @@ func projectParent(projectID string) string {
 
 // FindingsSync holds configuration for the findings collection operation
 type FindingsSync struct {
+	types.OperationSettings
 	// PageSize controls the number of findings per API page
 	PageSize int `json:"page_size,omitempty"`
 }

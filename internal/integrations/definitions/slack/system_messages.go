@@ -63,10 +63,10 @@ type OrganizationsPendingDeletionMessage struct {
 }
 
 var (
-	NewUserOp                      = types.OperationRefOf[NewUserMessage]()                      //nolint:revive
-	IntegrationInstalledOp         = types.OperationRefOf[IntegrationInstalledMessage]()         //nolint:revive
-	DemoRequestOp                  = types.OperationRefOf[DemoRequestMessage]()                  //nolint:revive
-	OrganizationsPendingDeletionOp = types.OperationRefOf[OrganizationsPendingDeletionMessage]() //nolint:revive
+	NewUserOp                      = types.OperationPayloadOf[NewUserMessage]()                      //nolint:revive
+	IntegrationInstalledOp         = types.OperationPayloadOf[IntegrationInstalledMessage]()         //nolint:revive
+	DemoRequestOp                  = types.OperationPayloadOf[DemoRequestMessage]()                  //nolint:revive
+	OrganizationsPendingDeletionOp = types.OperationPayloadOf[OrganizationsPendingDeletionMessage]() //nolint:revive
 )
 
 var (

@@ -14,26 +14,29 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// finalizeConfig is a test operation config type with one specific key
+// finalizeConfig is a test stored-input config type with one specific key beside the uniform settings
 type finalizeConfig struct {
+	integrationtypes.OperationSettings
 	// Limit bounds the number of records the operation reads
 	Limit int `json:"limit,omitempty"`
 }
 
-// finalizeReservedConfig declares a key the uniform operation settings reserve
-type finalizeReservedConfig struct {
-	// Disable collides with the uniform disable key
-	Disable bool `json:"disable,omitempty"`
+// finalizeEmptyConfig carries only the uniform settings
+type finalizeEmptyConfig struct {
+	integrationtypes.OperationSettings
 }
 
-// finalizeEmptyConfig has no properties
-type finalizeEmptyConfig struct{}
+// finalizePayload is a caller-supplied payload type with no stored input
+type finalizePayload struct {
+	// Target names what the payload operation acts on
+	Target string `json:"target"`
+}
 
 // finalizeDefinitionRef is the definition identity for finalize tests
 var finalizeDefinitionRef = integrationtypes.NewDefinitionRef("def_finalize")
 
-// finalizeOperation returns a reconciled operation registration over Cfg
-func finalizeOperation[Cfg any]() integrationtypes.OperationRegistration {
+// finalizeOperation returns a reconciled stored-input operation registration over Cfg
+func finalizeOperation[Cfg integrationtypes.OperationInput]() integrationtypes.OperationRegistration {
 	return integrationtypes.OperationRefOf[Cfg]().
 		Policy(integrationtypes.ExecutionPolicy{Reconcile: true}).
 		HandlesRequest(func(context.Context, integrationtypes.OperationRequest, Cfg) (json.RawMessage, error) {
@@ -133,8 +136,8 @@ func TestFinalizeCredentialFormSchema(t *testing.T) {
 	}
 }
 
-// TestFinalizeComposesOperationInputSchema verifies the uniform settings lead every operation's stored schema
-func TestFinalizeComposesOperationInputSchema(t *testing.T) {
+// TestFinalizeKeepsEmbeddedOperationInputSchema verifies a stored-input config's embedded settings lead its one schema
+func TestFinalizeKeepsEmbeddedOperationInputSchema(t *testing.T) {
 	t.Parallel()
 
 	def := operationDefinition(finalizeOperation[finalizeConfig](), finalizeOperation[finalizeEmptyConfig]())
@@ -147,11 +150,11 @@ func TestFinalizeComposesOperationInputSchema(t *testing.T) {
 	configured := finalized.Operations[0]
 
 	if got := propertyKeys(t, configured.Input.Schema); !slices.Equal(got, []string{"disable", "filterExpr", "limit"}) {
-		t.Fatalf("input properties = %v, want the settings followed by the config keys", got)
+		t.Fatalf("input properties = %v, want the embedded settings followed by the config keys", got)
 	}
 
-	if !sameJSON(configured.ConfigSchema, integrationtypes.OperationRefOf[finalizeConfig]().Schema()) {
-		t.Fatalf("expected ConfigSchema to stay the pure config schema, got %s", configured.ConfigSchema)
+	if !sameJSON(configured.ConfigSchema, configured.Input.Schema) {
+		t.Fatalf("expected one schema for caller config and stored input, got %s and %s", configured.ConfigSchema, configured.Input.Schema)
 	}
 
 	if configured.Input.Name != "finalizeConfig" {
@@ -164,7 +167,7 @@ func TestFinalizeComposesOperationInputSchema(t *testing.T) {
 		t.Fatalf("empty config input properties = %v, want only the settings", got)
 	}
 
-	if sameJSON(def.Operations[0].Input.Schema, configured.Input.Schema) {
+	if def.Operations[0].Input.Validate != nil {
 		t.Fatal("expected finalize to leave the builder's operations untouched")
 	}
 
@@ -172,7 +175,7 @@ func TestFinalizeComposesOperationInputSchema(t *testing.T) {
 
 	result, err := jsonx.ValidateSchema(configured.Input.Schema, stored)
 	if err != nil || !result.Valid() {
-		t.Fatalf("expected the composed schema to accept a stored document, got %v %v", err, jsonx.ValidationErrorStrings(result))
+		t.Fatalf("expected the stored input schema to accept a stored document, got %v %v", err, jsonx.ValidationErrorStrings(result))
 	}
 
 	if !configured.DisabledFor(stored) {
@@ -238,28 +241,31 @@ func TestFinalizeValidatesOperationFilterExpr(t *testing.T) {
 	}
 }
 
-// TestFinalizeRejectsReservedConfigKeys verifies a config declaring a settings key fails registration
-func TestFinalizeRejectsReservedConfigKeys(t *testing.T) {
+// TestFinalizeLeavesOperationsWithoutInput verifies literal and payload operations stay without a stored input
+func TestFinalizeLeavesOperationsWithoutInput(t *testing.T) {
 	t.Parallel()
 
-	if _, err := finalizeDefinition(operationDefinition(finalizeOperation[finalizeReservedConfig]())); !errors.Is(err, ErrOperationConfigReservedKey) {
-		t.Fatalf("finalizeDefinition() error = %v, want %v", err, ErrOperationConfigReservedKey)
-	}
-}
+	payload := integrationtypes.OperationPayloadOf[finalizePayload]().
+		HandlesRequest(func(context.Context, integrationtypes.OperationRequest, finalizePayload) (json.RawMessage, error) {
+			return nil, nil
+		}).
+		Registration(finalizeDefinitionRef, integrationtypes.OperationRegistration{})
 
-// TestFinalizeLeavesLiteralOperationsWithoutInput verifies operations declared without a stored input stay bare
-func TestFinalizeLeavesLiteralOperationsWithoutInput(t *testing.T) {
-	t.Parallel()
-
-	def := operationDefinition(integrationtypes.OperationRegistration{Name: "literal", Handle: newTestHandler()})
+	def := operationDefinition(integrationtypes.OperationRegistration{Name: "literal", Handle: newTestHandler()}, payload)
 
 	finalized, err := finalizeDefinition(def)
 	if err != nil {
 		t.Fatalf("finalizeDefinition() error = %v", err)
 	}
 
-	if finalized.Operations[0].Input != nil {
-		t.Fatalf("expected no stored input derived for a literal operation, got %+v", finalized.Operations[0].Input)
+	for _, operation := range finalized.Operations {
+		if operation.Input != nil {
+			t.Fatalf("expected no stored input for operation %s, got %+v", operation.Name, operation.Input)
+		}
+	}
+
+	if got := propertyKeys(t, finalized.Operations[1].ConfigSchema); !slices.Equal(got, []string{"target"}) {
+		t.Fatalf("payload config properties = %v, want only the payload keys", got)
 	}
 }
 

@@ -69,7 +69,7 @@ type BrandedMessageRequest struct {
 }
 
 // BrandedMessageOp is the typed operation ref used for catalog dispatch
-var BrandedMessageOp = types.OperationRefOf[BrandedMessageRequest]() //nolint:revive
+var BrandedMessageOp = types.OperationPayloadOf[BrandedMessageRequest]() //nolint:revive
 
 // brandedMessageExample is a representative input used to render the catalog preview and to seed the form preview with demo values for fields the author has not yet filled
 var brandedMessageExample = BrandedMessageRequest{

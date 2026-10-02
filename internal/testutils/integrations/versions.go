@@ -209,12 +209,14 @@ var versionMetadataV3 = types.NewInstallationRef(func(_ context.Context, req typ
 
 // syncCfg is the stored input layout of the reconcile operation shared by versions 1 and 2
 type syncCfg struct {
+	types.OperationSettings
 	// Pattern is the record pattern the version 1 and 2 operation filters on
 	Pattern string `json:"pattern,omitempty"`
 }
 
 // syncCfgV3 is the stored input layout of the version 3 reconcile operation
 type syncCfgV3 struct {
+	types.OperationSettings
 	// Filter is the record filter the version 3 operation applies
 	Filter string `json:"filter,omitempty"`
 }

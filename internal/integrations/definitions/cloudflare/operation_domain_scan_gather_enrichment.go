@@ -33,7 +33,7 @@ type DomainScanGatherEnrichmentResult struct {
 // DomainScanEnrichmentOp is the operation ref for gathering enrichment data for a domain
 //
 //nolint:revive
-var DomainScanEnrichmentOp = types.OperationRefOf[DomainScanGatherEnrichment]().
+var DomainScanEnrichmentOp = types.OperationPayloadOf[DomainScanGatherEnrichment]().
 	Handles(cloudflareClient, runDomainScanGatherEnrichment).
 	Policy(types.ExecutionPolicy{SkipRunRecord: true}).
 	CustomerSelectable(false).

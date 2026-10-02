@@ -92,7 +92,7 @@ func Builder(cfg Config) registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				types.OperationRefOf[ClaimsInspect]().
+				types.OperationPayloadOf[ClaimsInspect]().
 					HandlesRequest(inspectClaims).
 					Policy(types.ExecutionPolicy{Inline: true}).
 					Registration(definitionID, types.OperationRegistration{

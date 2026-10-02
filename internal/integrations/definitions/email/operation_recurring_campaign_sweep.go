@@ -20,7 +20,7 @@ import (
 type RecurringCampaignSweep struct{}
 
 // RecurringCampaignOp is the operation ref for the global recurring campaign sweep, which runs without a client
-var RecurringCampaignOp = types.OperationRefOf[RecurringCampaignSweep]().HandlesRequest(runRecurringCampaignSweep).Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).CustomerSelectable(false).SkipDefaultLookback() //nolint:revive
+var RecurringCampaignOp = types.OperationPayloadOf[RecurringCampaignSweep]().HandlesRequest(runRecurringCampaignSweep).Policy(types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true}).CustomerSelectable(false).SkipDefaultLookback() //nolint:revive
 
 // runRecurringCampaignSweep runs one recurring campaign sweep cycle and encodes the processed count
 func runRecurringCampaignSweep(ctx context.Context, req types.OperationRequest, sweep RecurringCampaignSweep) (json.RawMessage, error) {
