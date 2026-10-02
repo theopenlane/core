@@ -17,6 +17,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -86,7 +87,7 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, opts brandDesign
 			return err
 		}
 
-		return s.maybeNotifyDomainScanGroup(ctx, opts.organizationID, []string{opts.scanID})
+		return s.sendBrandDesignNotification(ctx, opts)
 	}
 
 	if result.Enrichment.Branding.Error == "" {
@@ -126,7 +127,43 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, opts brandDesign
 		return err
 	}
 
-	return s.maybeNotifyDomainScanGroup(ctx, opts.organizationID, []string{opts.scanID})
+	return s.sendBrandDesignNotification(ctx, opts)
+}
+
+func (s domainScanSaga) sendBrandDesignNotification(ctx context.Context, opts brandDesignScanOpts) error {
+	if opts.organizationID == "" {
+		return nil
+	}
+
+	var url string
+	body := "We finished scanning your domain. Your branding is now ready to review and use."
+
+	// if applying to any env, we should link to the branding page
+	if opts.applyBrandDesignToPreview || opts.applyBrandDesignToLive {
+		body = "We finished scanning your domain. You can now review the changes in your preview environment, then publish."
+		url = fmt.Sprintf("%s/%s", entityops.ConsoleLanding(entityops.SchemaTrustCenter.String()), "branding")
+	}
+
+	result := &domainscan.Result{
+		URL:            url,
+		InternalScanID: opts.scanID,
+	}
+	data, err := jsonx.ToMap(result)
+	if err != nil {
+		return err
+	}
+
+	_, err = s.services.DB().Notification.Create().
+		SetOwnerID(opts.organizationID).
+		SetNotificationType(enums.NotificationTypeOrganization).
+		SetObjectType("scan.created").
+		SetTitle("Domain Branding is ready").
+		SetBody(body).
+		SetData(data).
+		SetTopic(enums.NotificationTopicDomainScan).
+		Save(domainScanSystemContext(ctx, opts.organizationID))
+
+	return err
 }
 
 // domainScanListeners declares the standalone gala listeners implementing the domain scan saga
