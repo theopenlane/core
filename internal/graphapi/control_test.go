@@ -1204,7 +1204,7 @@ func TestMutationCreateControlsByClone_Mappings(t *testing.T) {
 		flipMapping bool
 	}{
 		{
-			name: "SOC 2 template to framework", 
+			name:              "SOC 2 template to framework",
 			selectedFramework: 0,
 			excludedFramework: 1,
 			expectedCount:     1,

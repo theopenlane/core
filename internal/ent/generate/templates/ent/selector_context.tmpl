@@ -1,0 +1,4 @@
+{{/* attach the request context so predicates and modifiers on scan, group-by, and aggregate queries can read it */}}
+{{ define "dialect/sql/query/selector/context" }}
+	selector.WithContext(ctx)
+{{- end }}
