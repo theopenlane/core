@@ -23,6 +23,8 @@ type AnonTokenRequest struct {
 	OrgID string
 	// Email is the recipient email address embedded in the token
 	Email string
+	// Purpose names the flow generating the link and is recorded on the shortlink
+	Purpose shortlinks.Purpose
 	// Duration is the access token lifetime
 	Duration time.Duration
 	// ExtraClaims is an optional callback to set domain-specific claim fields
@@ -62,10 +64,17 @@ func GenerateAnonTokenURL(ctx context.Context, tm *tokens.TokenManager, sl *shor
 		return nil, fmt.Errorf("%w: %w", ErrTokenCreationFailed, err)
 	}
 
-	tokenURL, err := BuildTokenURL(ctx, sl, baseURL, accessToken)
-	if err != nil {
-		return nil, fmt.Errorf("%w: %w", ErrURLConstructionFailed, err)
-	}
+	// the shortlink expires with the token it carries so the service never holds a live link
+	// longer than the credential inside it is valid
+	tokenURL := Shorten(ctx, sl, shortlinks.CreateRequest{
+		URL:        TokenURL(baseURL, accessToken),
+		Expiration: time.Now().Add(req.Duration).Unix(),
+		Metadata: shortlinks.Metadata{
+			OrganizationID: req.OrgID,
+			RecipientEmail: req.Email,
+			Purpose:        req.Purpose,
+		},
+	})
 
 	return &AnonTokenResult{
 		AccessToken: accessToken,

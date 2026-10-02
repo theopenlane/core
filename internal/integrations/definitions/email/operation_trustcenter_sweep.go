@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/trustcenterurl"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
@@ -108,7 +109,7 @@ func dispatchDuePosts(ctx context.Context, req types.OperationRequest, cutoff, n
 		content, err := TrustCenterUpdateContent(TrustCenterUpdateRequest{
 			PostTitle:      title,
 			PostText:       post.Text,
-			TrustCenterURL: trustcenterurl.BuildURL(customDomain, tc.Slug),
+			TrustCenterURL: trackingLink(ctx, req, trustcenterurl.BuildURL(customDomain, tc.Slug), shortlinks.Metadata{Purpose: shortlinks.PurposeTrustCenterUpdate, OrganizationID: tc.OwnerID, TrustCenterID: tc.ID}, post.ID),
 			UnsubscribeURL: trustcenterurl.UnsubscribeURL(customDomain, tc.Slug),
 		})
 		if err != nil {
@@ -222,10 +223,17 @@ func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequ
 
 		// the request carries only data; the subprocessor operation composes the subject and body copy
 		// from the branding's company name with defined fallbacks
+		// the tracking link is shared by every subscriber of this notification, so it is created once
+		// per baseline window and only when there is someone to send it to
+		trustCenterURL := trustcenterurl.BuildURL(customDomain, tc.Slug)
+		if len(subscribers) > 0 {
+			trustCenterURL = trackingLink(ctx, req, trustCenterURL, shortlinks.Metadata{Purpose: shortlinks.PurposeSubprocessorNotification, OrganizationID: tc.OwnerID, TrustCenterID: tc.ID}, latest.UTC().Format(time.RFC3339))
+		}
+
 		base := SubprocessorNotificationRequest{
 			TrustCenterBranding: TrustCenterBrandingFromSetting(setting),
 			Subprocessors:       entries,
-			TrustCenterURL:      trustcenterurl.BuildURL(customDomain, tc.Slug),
+			TrustCenterURL:      trustCenterURL,
 		}
 
 		// a dead logo URL renders a broken image, so fall back to the default logo when it does not load

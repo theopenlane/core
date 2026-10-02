@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
@@ -81,6 +82,7 @@ func setAssessmentAccessURL(ctx context.Context, assessment *generated.Assessmen
 		Prefix:    authmanager.AnonQuestionnaireJWTPrefix,
 		SubjectID: ulids.New().String(),
 		OrgID:     caller.OrganizationID,
+		Purpose:   shortlinks.PurposeAssessmentAccess,
 		Duration:  q.TokenManager.Config().AssessmentAccessDuration,
 		ExtraClaims: func(c *tokens.Claims) {
 			c.AssessmentID = assessment.ID

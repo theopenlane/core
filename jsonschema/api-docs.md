@@ -2258,6 +2258,7 @@ CloudflareConfig contains configuration for Cloudflare integration.
 |**clientid**|`string`|||
 |**clientsecret**|`string`|||
 |**endpointurl**|`string`|||
+|**linkttl**|`integer`|||
 
 **Additional Properties:** not allowed   
    

@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
@@ -101,6 +102,7 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context) error {
 		SubjectID: ulids.New().String(),
 		OrgID:     assessmentResp.OwnerID,
 		Email:     in.Email,
+		Purpose:   shortlinks.PurposeQuestionnaireAuth,
 		Duration:  duration,
 		ExtraClaims: func(c *tokens.Claims) {
 			c.AssessmentID = in.AssessmentID

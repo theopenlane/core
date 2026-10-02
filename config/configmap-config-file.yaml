@@ -1401,6 +1401,9 @@ data:
       {{- if .Values.openlane.coreConfiguration.shortlinks.endpointurl }}
       endpointurl: {{ .Values.openlane.coreConfiguration.shortlinks.endpointurl | quote }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.shortlinks.linkttl }}
+      linkttl: {{ .Values.openlane.coreConfiguration.shortlinks.linkttl | quote }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.backfill }}
     backfill:

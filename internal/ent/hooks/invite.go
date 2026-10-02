@@ -333,8 +333,9 @@ func HookInviteAccepted() ent.Hook {
 			}
 
 			if err := sendSystemEmail(ctx, emaildef.InviteJoinedOp.Name(), emaildef.InviteJoinedRequest{
-				RecipientInfo: emaildef.RecipientInfo{Email: recipient},
-				OrgName:       org.DisplayName,
+				Email:   recipient,
+				OrgName: org.DisplayName,
+				OrgID:   ownerID,
 			}); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error sending email to user")
 

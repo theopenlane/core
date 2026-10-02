@@ -4,6 +4,8 @@ import (
 	"context"
 	"crypto/ed25519"
 	"crypto/rand"
+	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"testing"
 	"time"
@@ -12,17 +14,18 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/iam/tokens"
+
+	"github.com/theopenlane/core/v2/pkg/shortlinks"
 )
 
-func TestBuildTokenURL_AppendsToken(t *testing.T) {
+func TestTokenURL_AppendsToken(t *testing.T) {
 	baseURL := url.URL{
 		Scheme: "https",
 		Host:   "trustcenter.example.com",
 		Path:   "/acme",
 	}
 
-	result, err := BuildTokenURL(context.Background(), nil, baseURL, "test-token-value")
-	require.NoError(t, err)
+	result := TokenURL(baseURL, "test-token-value")
 
 	parsed, err := url.Parse(result)
 	require.NoError(t, err)
@@ -33,27 +36,25 @@ func TestBuildTokenURL_AppendsToken(t *testing.T) {
 	assert.Equal(t, "test-token-value", parsed.Query().Get("token"))
 }
 
-func TestBuildTokenURL_PreservesSlugPath(t *testing.T) {
+func TestTokenURL_PreservesSlugPath(t *testing.T) {
 	baseURL := url.URL{
 		Scheme: "https",
 		Host:   "trust.theopenlane.io",
 		Path:   "/my-org",
 	}
 
-	result, err := BuildTokenURL(context.Background(), nil, baseURL, "jwt-abc123")
-	require.NoError(t, err)
+	result := TokenURL(baseURL, "jwt-abc123")
 
 	assert.Equal(t, "https://trust.theopenlane.io/my-org?token=jwt-abc123", result)
 }
 
-func TestBuildTokenURL_CustomDomainNoPath(t *testing.T) {
+func TestTokenURL_CustomDomainNoPath(t *testing.T) {
 	baseURL := url.URL{
 		Scheme: "https",
 		Host:   "trust.acme.com",
 	}
 
-	result, err := BuildTokenURL(context.Background(), nil, baseURL, "jwt-xyz")
-	require.NoError(t, err)
+	result := TokenURL(baseURL, "jwt-xyz")
 
 	assert.Equal(t, "https://trust.acme.com?token=jwt-xyz", result)
 }
@@ -127,4 +128,31 @@ func TestGenerateAnonTokenURL_CustomDomainNoSlug(t *testing.T) {
 	assert.Equal(t, "trust.acme.com", parsed.Host)
 	assert.Empty(t, parsed.Path)
 	assert.NotEmpty(t, parsed.Query().Get("token"))
+}
+
+func TestShorten_ReturnsOriginalWithoutClient(t *testing.T) {
+	assert.Equal(t, "https://console.example.com/verify?token=abc", Shorten(context.Background(), nil, shortlinks.CreateRequest{URL: "https://console.example.com/verify?token=abc"}))
+	assert.Empty(t, Shorten(context.Background(), nil, shortlinks.CreateRequest{}))
+}
+
+func TestShorten_UsesServiceAndFallsBack(t *testing.T) {
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		if calls == 1 {
+			_, _ = w.Write([]byte(`{"shortUrl":"https://s.example.com/r/abc"}`))
+			return
+		}
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	defer server.Close()
+
+	client, err := shortlinks.NewClient("id", "secret", shortlinks.WithEndpointURL(server.URL))
+	require.NoError(t, err)
+
+	req := shortlinks.CreateRequest{URL: "https://www.example.com/welcome"}
+	assert.Equal(t, "https://s.example.com/r/abc", Shorten(context.Background(), client, req))
+	assert.Equal(t, "https://www.example.com/welcome", Shorten(context.Background(), client, req), "service failure falls back to the original")
+	assert.Equal(t, "https://www.example.com/welcome", Shorten(shortlinks.ContextWithoutShortlinks(context.Background()), client, req), "suppressed context never calls the service")
+	assert.Equal(t, 2, calls)
 }

@@ -509,6 +509,7 @@ func sendNDAApprovalRequestEmails(ctx context.Context, client *generated.Client,
 	return sendSystemEmail(ctx, emaildef.TCNDAApprovalRequestOp.Name(), emaildef.TrustCenterNDAApprovalRequestEmail{
 		RecipientInfo:  emaildef.RecipientInfo{Email: emails[0], Recipients: emails},
 		OrgName:        org.DisplayName,
+		OrgID:          tc.OwnerID,
 		RequesterName:  requesterName,
 		RequesterEmail: ndaRequest.Email,
 	})

@@ -482,6 +482,7 @@ shortlinks:
     clientsecret: ""
     enabled: false
     endpointurl: https://admin.s.theopenlane.io/api/links
+    linkttl: 7776000000000000
 subscription:
     enabled: false
     privatestripekey: ""

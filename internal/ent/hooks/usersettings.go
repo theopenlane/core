@@ -145,6 +145,7 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 					FirstName: user.FirstName,
 					LastName:  user.LastName,
 				},
+				UserID: user.ID,
 			}); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("could not send welcome email")
 
