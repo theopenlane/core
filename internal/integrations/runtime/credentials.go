@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -32,15 +33,6 @@ func (r *Runtime) BeginAuth(ctx context.Context, req keymaker.BeginRequest) (key
 // CompleteAuth completes one definition auth flow through the runtime-managed keymaker service
 func (r *Runtime) CompleteAuth(ctx context.Context, req keymaker.CompleteRequest) (keymaker.CompleteResult, error) {
 	return r.keymaker().CompleteAuth(ctx, req)
-}
-
-// loadCredentials resolves the requested credential slots for one installation
-func (r *Runtime) loadCredentials(ctx context.Context, installation *ent.Integration, credentialRefs []types.CredentialSlotID) (types.CredentialBindings, error) {
-	if err := r.ensureCurrentVersion(ctx, installation); err != nil {
-		return nil, err
-	}
-
-	return r.keystore().LoadCredentials(ctx, installation, credentialRefs)
 }
 
 // cleanupInstallation removes credentials and the installation record for one installation
@@ -119,14 +111,6 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 
 	ctx = intobvs.WithInstallation(ctx, installation)
 
-	skip := lo.Ternary(credential != nil, []types.CredentialSlotID{credentialRef}, nil)
-
-	if err := r.ensureCurrentVersion(ctx, installation, skip...); err != nil {
-		return err
-	}
-
-	ctx = upgradedInstallationKey.Set(ctx, installation.ID)
-
 	wasErrored := installation.Status == enums.IntegrationStatusErrored
 
 	req, _, err := r.installationRequest(ctx, installation, def)
@@ -150,6 +134,16 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 
 	if credential != nil {
 		if err := r.reconcileCredential(ctx, req, installation, def, credentialRef, *credential, installationInput); err != nil {
+			return err
+		}
+	}
+
+	if err := r.ensureCurrentVersion(ctx, installation); err != nil {
+		return err
+	}
+
+	if credential != nil {
+		if err := r.activateReconciledInstallation(auth.EnsureIntegrationCaller(ctx, installation.OwnerID), installation, def); err != nil {
 			return err
 		}
 	}
@@ -459,9 +453,7 @@ func (r *Runtime) activateReconciledInstallation(ctx context.Context, installati
 	health.UnhealthyOperations = nil
 	installation.Health = health
 
-	version := r.Registry().Version(def.ID)
-
-	update := r.DB().Integration.UpdateOneID(installation.ID).SetHealth(health).SetDefinitionVersion(version).ClearExpiresAt()
+	update := r.DB().Integration.UpdateOneID(installation.ID).SetHealth(health).ClearExpiresAt()
 
 	if !wasErrored {
 		update = update.SetStatus(enums.IntegrationStatusConnected)
@@ -470,8 +462,6 @@ func (r *Runtime) activateReconciledInstallation(ctx context.Context, installati
 	if err := update.Exec(ctx); err != nil {
 		return err
 	}
-
-	installation.DefinitionVersion = version
 
 	if !wasErrored {
 		installation.Status = enums.IntegrationStatusConnected
@@ -505,7 +495,13 @@ func (r *Runtime) resolveConnectionFromState(def types.Definition, installation 
 		return types.ConnectionRegistration{}, false, nil
 	}
 
-	connection, err := def.ConnectionRegistration(state.CredentialRef)
+	credentialRef := state.CredentialRef
+
+	if registration, replaced, ok := def.ResolveCredential(credentialRef); ok && replaced {
+		credentialRef = registration.Ref
+	}
+
+	connection, err := def.ConnectionRegistration(credentialRef)
 	if err != nil {
 		return types.ConnectionRegistration{}, false, fmt.Errorf("%w: %w", ErrConnectionNotFound, err)
 	}

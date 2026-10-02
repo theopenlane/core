@@ -1,5 +1,5 @@
 {
-  "version": "8f9106f1e5b18e77e5a8ffce5c74d5a164469ff92a0f4b9e573e4c2975e6970c",
+  "version": "0c8cbc4b98bfe5cb65e771b314658fa346717e68efae4bd28259baf0cead9652",
   "surface": {
     "id": "def_01K0GHAPP000000000000000001",
     "credentials": [
@@ -36,100 +36,6 @@
         }
       }
     ],
-    "userInput": {
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp/user-input",
-        "$ref": "#/$defs/UserInput",
-        "$defs": {
-          "DirectorySync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of users and groups from GitHub"
-              },
-              "disableGroupSync": {
-                "type": "boolean",
-                "title": "Disable Group Sync",
-                "description": "Only sync users from GitHub"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting.",
-                "examples": [
-                  "Example: payload.Org == 'my-org'"
-                ]
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "RepositorySync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of repositories from GitHub"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting.",
-                "examples": [
-                  "Example: payload.IsPrivate == 'true'"
-                ]
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "UserInput": {
-            "properties": {
-              "findingSync": {
-                "$ref": "#/$defs/VulnerabilitySync",
-                "title": "GitHub Security Hub Sync"
-              },
-              "directorySync": {
-                "$ref": "#/$defs/DirectorySync",
-                "title": "Directory Account Sync"
-              },
-              "repositorySync": {
-                "$ref": "#/$defs/RepositorySync",
-                "title": "Repository Account Sync"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "VulnerabilitySync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of vulnerabilities from GitHub"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting.",
-                "examples": [
-                  "Example: payload.state == 'open'"
-                ]
-              },
-              "maxRepos": {
-                "type": "integer",
-                "title": "Max Repositories",
-                "description": "Optional cap on the number of repositories to scan."
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
-        }
-      }
-    },
     "installation": {
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -169,20 +75,17 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of users and groups from GitHub"
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
                 },
                 "disableGroupSync": {
                   "type": "boolean",
                   "title": "Disable Group Sync",
                   "description": "Only sync users from GitHub"
-                },
-                "filterExpr": {
-                  "type": "string",
-                  "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting.",
-                  "examples": [
-                    "Example: payload.Org == 'my-org'"
-                  ]
                 }
               },
               "additionalProperties": false,
@@ -203,15 +106,12 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of repositories from GitHub"
+                  "description": "Disable this operation for the installation"
                 },
                 "filterExpr": {
                   "type": "string",
                   "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting.",
-                  "examples": [
-                    "Example: payload.IsPrivate == 'true'"
-                  ]
+                  "description": "Optional CEL expression applied to records before ingesting"
                 }
               },
               "additionalProperties": false,
@@ -232,15 +132,12 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of vulnerabilities from GitHub"
+                  "description": "Disable this operation for the installation"
                 },
                 "filterExpr": {
                   "type": "string",
                   "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting.",
-                  "examples": [
-                    "Example: payload.state == 'open'"
-                  ]
+                  "description": "Optional CEL expression applied to records before ingesting"
                 },
                 "maxRepos": {
                   "type": "integer",

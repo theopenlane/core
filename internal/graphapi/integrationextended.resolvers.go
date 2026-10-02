@@ -134,7 +134,7 @@ func (r *integrationResolver) OperationConfig(ctx context.Context, obj *generate
 	schemas := map[string]json.RawMessage{}
 
 	for _, operation := range def.Operations {
-		if operation.Input == nil || operation.Internal || operation.DisabledForAll {
+		if operation.Input == nil {
 			continue
 		}
 

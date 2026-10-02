@@ -72,16 +72,16 @@ func upgradeRetiredCredential(retired types.CredentialRef[retiredCredential]) fu
 	}
 }
 
-func TestUpgradeOperationDocuments(t *testing.T) {
+func TestConformDocuments(t *testing.T) {
 	t.Parallel()
 
 	definition := types.NewDefinitionRef("test-def")
-	retired := types.OperationRefOf[retiredOperationConfigCfg]()
-	current := types.OperationRefOf[upgradeOperationConfigCfg]().
-		Replacing(retired).
+	retiredOp := types.OperationRefOf[retiredOperationConfigCfg]()
+	currentOp := types.OperationRefOf[upgradeOperationConfigCfg]().
+		Replacing(retiredOp).
 		Upgraded(func(_ context.Context, _ types.InstallationRequest, from string, stored json.RawMessage) (upgradeOperationConfigCfg, error) {
 			switch from {
-			case retired.Name():
+			case retiredOp.Name():
 				old, err := jsonx.Decode[retiredOperationConfigCfg](stored)
 				if err != nil {
 					return upgradeOperationConfigCfg{}, err
@@ -93,43 +93,119 @@ func TestUpgradeOperationDocuments(t *testing.T) {
 			}
 		})
 
-	registration := current.Registration(definition, types.OperationRegistration{})
+	operationDef := types.Definition{Operations: []types.OperationRegistration{currentOp.Registration(definition, types.OperationRegistration{})}}
 
-	def := types.Definition{Operations: []types.OperationRegistration{registration}}
+	retiredSlot := types.NewCredentialRef[retiredCredential]("retiredCredential")
+	currentSlot := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Replacing(retiredSlot).Upgraded(upgradeRetiredCredential(retiredSlot))
+
+	credentialDef := types.Definition{CredentialRegistrations: []types.CredentialRegistration{currentSlot.Registration(types.CredentialRegistration{})}}
+
+	userInput := types.UserInputRefOf[upgradeUserInput]()
+	userInputDef := types.Definition{UserInput: userInput.Registration()}
+
+	hooked := types.UserInputRefOf[upgradeUserInput]().Upgraded(func(context.Context, types.InstallationRequest, string, json.RawMessage) (upgradeUserInput, error) {
+		return upgradeUserInput{}, ErrUpgradeHookCalled
+	})
+	hookedDef := types.Definition{UserInput: hooked.Registration()}
 
 	tests := []struct {
 		name    string
+		kind    documentKind
 		stored  map[string]json.RawMessage
 		want    map[string]string
 		wantErr error
 	}{
 		{
 			name:   "declared operation is conformed keeping the uniform settings",
-			stored: map[string]json.RawMessage{current.Name(): json.RawMessage(`{"disable":true,"region":"eu","legacy":1}`)},
-			want:   map[string]string{current.Name(): `{"disable":true,"region":"eu"}`},
+			kind:   operationInputKind(operationDef),
+			stored: map[string]json.RawMessage{currentOp.Name(): json.RawMessage(`{"disable":true,"region":"eu","legacy":1}`)},
+			want:   map[string]string{currentOp.Name(): `{"disable":true,"region":"eu"}`},
 		},
 		{
 			name:   "retired operation name is upgraded onto its replacement",
-			stored: map[string]json.RawMessage{retired.Name(): json.RawMessage(`{"filterExpr":"payload.active","zone":"eu"}`)},
-			want:   map[string]string{current.Name(): `{"filterExpr":"payload.active","region":"eu"}`},
+			kind:   operationInputKind(operationDef),
+			stored: map[string]json.RawMessage{retiredOp.Name(): json.RawMessage(`{"filterExpr":"payload.active","zone":"eu"}`)},
+			want:   map[string]string{currentOp.Name(): `{"filterExpr":"payload.active","region":"eu"}`},
 		},
 		{
 			name: "retired document does not overwrite an existing replacement document",
+			kind: operationInputKind(operationDef),
 			stored: map[string]json.RawMessage{
-				retired.Name(): json.RawMessage(`{"zone":"eu"}`),
-				current.Name(): json.RawMessage(`{"region":"us"}`),
+				retiredOp.Name(): json.RawMessage(`{"zone":"eu"}`),
+				currentOp.Name(): json.RawMessage(`{"region":"us"}`),
 			},
-			want: map[string]string{current.Name(): `{"region":"us"}`},
+			want: map[string]string{currentOp.Name(): `{"region":"us"}`},
 		},
 		{
 			name:   "undeclared operation is left untouched",
+			kind:   operationInputKind(operationDef),
 			stored: map[string]json.RawMessage{"unknown": json.RawMessage(`{"zone":"eu"}`)},
 			want:   map[string]string{"unknown": `{"zone":"eu"}`},
 		},
 		{
 			name:    "upgrade that still fails validation is rejected",
-			stored:  map[string]json.RawMessage{retired.Name(): json.RawMessage(`{"zone":""}`)},
+			kind:    operationInputKind(operationDef),
+			stored:  map[string]json.RawMessage{retiredOp.Name(): json.RawMessage(`{"zone":""}`)},
 			wantErr: types.ErrOperationConfigInvalid,
+		},
+		{
+			name: "a retired document is dropped unconformed when its replacement is already stored",
+			kind: operationInputKind(operationDef),
+			stored: map[string]json.RawMessage{
+				retiredOp.Name(): json.RawMessage(`{"zone":""}`),
+				currentOp.Name(): json.RawMessage(`{"region":"us"}`),
+			},
+			want: map[string]string{currentOp.Name(): `{"region":"us"}`},
+		},
+		{
+			name:   "retired credential slot is upgraded onto its replacement",
+			kind:   credentialKind(credentialDef),
+			stored: map[string]json.RawMessage{retiredSlot.String(): json.RawMessage(`{"accessToken":"t"}`)},
+			want:   map[string]string{currentSlot.String(): `{"token":"t","region":""}`},
+		},
+		{
+			name: "retired credential slot is dropped unconformed when its replacement is already stored",
+			kind: credentialKind(credentialDef),
+			stored: map[string]json.RawMessage{
+				retiredSlot.String(): json.RawMessage(`{"accessToken":""}`),
+				currentSlot.String(): json.RawMessage(`{"token":"t","region":"eu"}`),
+			},
+			want: map[string]string{currentSlot.String(): `{"token":"t","region":"eu"}`},
+		},
+		{
+			name:   "undeclared credential slot is left untouched",
+			kind:   credentialKind(credentialDef),
+			stored: map[string]json.RawMessage{"unknown": json.RawMessage(`{"accessToken":"t"}`)},
+			want:   map[string]string{"unknown": `{"accessToken":"t"}`},
+		},
+		{
+			name:    "credential that still fails validation is rejected with the credential sentinel",
+			kind:    credentialKind(credentialDef),
+			stored:  map[string]json.RawMessage{retiredSlot.String(): json.RawMessage(`{"accessToken":""}`)},
+			wantErr: ErrCredentialInvalid,
+		},
+		{
+			name:   "user input stored under an empty layout is persisted under the current name",
+			kind:   userInputKind(userInputDef),
+			stored: map[string]json.RawMessage{"": json.RawMessage(`{"region":"eu"}`)},
+			want:   map[string]string{userInput.Name(): `{"region":"eu"}`},
+		},
+		{
+			name:   "user input stored under the current layout is conformed in place",
+			kind:   userInputKind(userInputDef),
+			stored: map[string]json.RawMessage{userInput.Name(): json.RawMessage(`{"region":"eu","legacy":1}`)},
+			want:   map[string]string{userInput.Name(): `{"region":"eu"}`},
+		},
+		{
+			name:    "user input that fails validation is rejected with the user input sentinel",
+			kind:    userInputKind(userInputDef),
+			stored:  map[string]json.RawMessage{"": json.RawMessage(`{"region":""}`)},
+			wantErr: ErrUserInputInvalid,
+		},
+		{
+			name: "absent document never visits the hook",
+			kind: userInputKind(hookedDef),
+			want: map[string]string{},
 		},
 	}
 
@@ -137,7 +213,7 @@ func TestUpgradeOperationDocuments(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := upgradeOperationDocuments(t.Context(), types.InstallationRequest{}, def, tc.stored)
+			got, err := conformDocuments(t.Context(), types.InstallationRequest{}, tc.kind, tc.stored)
 
 			if tc.wantErr != nil {
 				assert.Assert(t, errors.Is(err, tc.wantErr), "got %v", err)
@@ -147,51 +223,6 @@ func TestUpgradeOperationDocuments(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.DeepEqual(t, lo.MapValues(got, func(doc json.RawMessage, _ string) string { return string(doc) }), tc.want)
-		})
-	}
-}
-
-func TestUpgradeExclusions(t *testing.T) {
-	t.Parallel()
-
-	retired := types.NewCredentialRef[retiredCredential]("retiredCredential")
-	current := types.NewCredentialRef[upgradeCredential]("upgradeCredential").Replacing(retired)
-	undeclared := types.NewCredentialSlotID("undeclared")
-
-	def := types.Definition{CredentialRegistrations: []types.CredentialRegistration{current.Registration(types.CredentialRegistration{
-		Schema: jsonx.SchemaFrom[upgradeCredential](),
-	})}}
-
-	tests := []struct {
-		name string
-		skip []types.CredentialSlotID
-		want []string
-	}{
-		{
-			name: "no skip excludes nothing",
-			want: []string{},
-		},
-		{
-			name: "declared slot excludes itself and the slots it replaces",
-			skip: []types.CredentialSlotID{current.ID()},
-			want: []string{retired.String(), current.String()},
-		},
-		{
-			name: "undeclared slot excludes only itself",
-			skip: []types.CredentialSlotID{undeclared},
-			want: []string{undeclared.String()},
-		},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
-
-			got := lo.Map(upgradeExclusions(def, tc.skip), func(slot types.CredentialSlotID, _ int) string {
-				return slot.String()
-			})
-
-			assert.DeepEqual(t, got, tc.want)
 		})
 	}
 }
@@ -317,6 +348,15 @@ func TestConformStored(t *testing.T) {
 			sentinel: ErrCredentialInvalid,
 			payload:  `{"token":"t","region":""}`,
 			want:     `{"token":"t","region":"resolved"}`,
+		},
+		{
+			name:   "a present empty document still passes through the upgrade hook",
+			schema: jsonx.SchemaFrom[retiredCredential](),
+			upgrade: func(context.Context, types.InstallationRequest, string, json.RawMessage) (json.RawMessage, error) {
+				return nil, ErrUpgradeHookCalled
+			},
+			sentinel: ErrCredentialInvalid,
+			wantErr:  ErrUpgradeHookCalled,
 		},
 	}
 

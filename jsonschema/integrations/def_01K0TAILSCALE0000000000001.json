@@ -1,5 +1,5 @@
 {
-  "version": "590fc3e837389b507b5f269d55d8526be75c9d46bda076b80cc3cd8e3a3fc447",
+  "version": "f635ce8b33166e55daaca6a1ac8c488e3fbd0716cf3ac8239a5c5694b29304b2",
   "surface": {
     "id": "def_01K0TAILSCALE0000000000001",
     "credentials": [
@@ -34,69 +34,6 @@
         }
       }
     ],
-    "userInput": {
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/tailscale/user-input",
-        "$ref": "#/$defs/UserInput",
-        "$defs": {
-          "AssetSync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of devices from Tailscale"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "DirectorySync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of users and groups from Tailscale"
-              },
-              "disableGroupSync": {
-                "type": "boolean",
-                "title": "Disable Group Sync",
-                "description": "Only sync users from Tailscale; disable role-based group sync"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting",
-                "examples": [
-                  "Example: payload.status == 'active'"
-                ]
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "UserInput": {
-            "properties": {
-              "directorySync": {
-                "$ref": "#/$defs/DirectorySync",
-                "title": "Directory Sync"
-              },
-              "assetSync": {
-                "$ref": "#/$defs/AssetSync",
-                "title": "Asset Sync"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
-        }
-      }
-    },
     "installation": {
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -136,12 +73,12 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of devices from Tailscale"
+                  "description": "Disable this operation for the installation"
                 },
                 "filterExpr": {
                   "type": "string",
                   "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting"
+                  "description": "Optional CEL expression applied to records before ingesting"
                 }
               },
               "additionalProperties": false,
@@ -162,20 +99,17 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of users and groups from Tailscale"
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
                 },
                 "disableGroupSync": {
                   "type": "boolean",
                   "title": "Disable Group Sync",
                   "description": "Only sync users from Tailscale; disable role-based group sync"
-                },
-                "filterExpr": {
-                  "type": "string",
-                  "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting",
-                  "examples": [
-                    "Example: payload.status == 'active'"
-                  ]
                 }
               },
               "additionalProperties": false,

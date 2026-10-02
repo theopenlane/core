@@ -1,5 +1,5 @@
 {
-  "version": "f08a5375417fcabd5ec60a29e9f95ee573b3cb20f394250445285f219c829e95",
+  "version": "e187d182fc70b41fbd5981c0adfa964e3a6dba8c19fb3e95fa5f450ab52db2ce",
   "surface": {
     "id": "def_01K0GDRIVE00000000000000001",
     "credentials": [
@@ -36,49 +36,18 @@
         "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/googledrive/user-input",
         "$ref": "#/$defs/UserInput",
         "$defs": {
-          "FolderSync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of documents from Google Drive"
-              },
-              "folderId": {
-                "type": "string",
-                "title": "Folder ID",
-                "description": "Google Drive folder ID or URL containing policy documents"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to filter documents before creating policies"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object",
-            "required": [
-              "folderId"
-            ]
-          },
           "UserInput": {
             "properties": {
               "primary": {
                 "type": "boolean",
                 "title": "Primary"
-              },
-              "folderSync": {
-                "$ref": "#/$defs/FolderSync",
-                "title": "Folder Sync"
               }
             },
             "additionalProperties": false,
             "type": "object"
           }
         }
-      },
-      "replaces": [
-        "googledrive-v1"
-      ]
+      }
     },
     "installation": {
       "schema": {
@@ -108,36 +77,7 @@
     ],
     "operations": [
       {
-        "name": "DocumentExport",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/operations/document-export",
-          "$ref": "#/$defs/DocumentExport",
-          "$defs": {
-            "DocumentExport": {
-              "properties": {
-                "fileId": {
-                  "type": "string"
-                },
-                "html": {
-                  "type": "string"
-                },
-                "pdf": {
-                  "type": "string",
-                  "contentEncoding": "base64"
-                },
-                "mimeType": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false,
-              "type": "object"
-            }
-          }
-        }
+        "name": "DocumentExport"
       },
       {
         "name": "FolderSync",
@@ -151,17 +91,17 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of documents from Google Drive"
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
                 },
                 "folderId": {
                   "type": "string",
                   "title": "Folder ID",
                   "description": "Google Drive folder ID or URL containing policy documents"
-                },
-                "filterExpr": {
-                  "type": "string",
-                  "title": "Filter Expression",
-                  "description": "Optional CEL expression to filter documents before creating policies"
                 }
               },
               "additionalProperties": false,

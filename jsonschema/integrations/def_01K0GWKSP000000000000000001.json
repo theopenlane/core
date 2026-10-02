@@ -1,5 +1,5 @@
 {
-  "version": "d7984aa84b9c8a6dd8429309b35c056cc782a0548213cf600b21a0f9e4ab3b69",
+  "version": "9d0c4c5bde7271fe190670b63e0bcedcb5c0a46dce2cbe32082f27ece999fd0c",
   "surface": {
     "id": "def_01K0GWKSP000000000000000001",
     "credentials": [
@@ -36,44 +36,18 @@
         "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/googleworkspace/user-input",
         "$ref": "#/$defs/UserInput",
         "$defs": {
-          "DirectorySync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of users and groups from Google Workspace"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting (allows inclusion",
-                "examples": [
-                  "Example: payload.orgUnitPath.startsWith('/engineering/')"
-                ]
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
           "UserInput": {
             "properties": {
               "primaryDirectory": {
                 "type": "boolean",
                 "title": "Primary Directory"
-              },
-              "directorySync": {
-                "$ref": "#/$defs/DirectorySync",
-                "title": "Directory Sync"
               }
             },
             "additionalProperties": false,
             "type": "object"
           }
         }
-      },
-      "replaces": [
-        "googleworkspace-v1"
-      ]
+      }
     },
     "installation": {
       "schema": {
@@ -114,15 +88,12 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of users and groups from Google Workspace"
+                  "description": "Disable this operation for the installation"
                 },
                 "filterExpr": {
                   "type": "string",
                   "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting (allows inclusion",
-                  "examples": [
-                    "Example: payload.orgUnitPath.startsWith('/engineering/')"
-                  ]
+                  "description": "Optional CEL expression applied to records before ingesting"
                 }
               },
               "additionalProperties": false,

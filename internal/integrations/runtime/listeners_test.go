@@ -11,8 +11,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-var errTestCycle = errors.New("provider request failed")
-
 // reconcileEnvelope builds an installation-bound envelope for classification tests
 func reconcileEnvelope(t *testing.T, integrationID string) operations.ReconcileEnvelope {
 	t.Helper()
@@ -44,7 +42,7 @@ func TestReconcileShouldCancelClassification(t *testing.T) {
 	}{
 		{
 			name: "plain error keeps the loop running",
-			err:  errTestCycle,
+			err:  ErrTestCycle,
 			want: false,
 		},
 		{
@@ -54,12 +52,12 @@ func TestReconcileShouldCancelClassification(t *testing.T) {
 		},
 		{
 			name: "unhealthy failure stops the loop",
-			err:  fmt.Errorf("cycle: %w", types.Unhealthy(errTestCycle, "needs reauthorization")),
+			err:  fmt.Errorf("cycle: %w", types.Unhealthy(ErrTestCycle, "needs reauthorization")),
 			want: true,
 		},
 		{
 			name: "degraded failure stops the loop",
-			err:  fmt.Errorf("cycle: %w", types.Degraded(errTestCycle, "missing operation permission")),
+			err:  fmt.Errorf("cycle: %w", types.Degraded(ErrTestCycle, "missing operation permission")),
 			want: true,
 		},
 		{

@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/keystore"
@@ -26,19 +27,43 @@ func syncOpConfig(pattern string) map[string]json.RawMessage {
 	return map[string]json.RawMessage{testint.SyncOp.Name(): json.RawMessage(`{"pattern":"` + pattern + `"}`)}
 }
 
+// versionedDefinitionID keeps the versioned fixtures out of the suite registry so the harness status listener does not reseed the suite definition's loops onto their installations
+var versionedDefinitionID = integrationtypes.NewDefinitionRef("def_01K0TESTVERSIONS0000000001")
+
+// versionedRuntime returns an in-memory runtime running one fixture version registered under versionedDefinitionID
+func versionedRuntime(t *testing.T, builder registry.Builder) *intruntime.Runtime {
+	t.Helper()
+
+	return runtimeFor(t, func() (integrationtypes.Definition, error) {
+		def, err := builder()
+		if err != nil {
+			return integrationtypes.Definition{}, err
+		}
+
+		def.ID = versionedDefinitionID.ID()
+		def.Operations = lo.Map(def.Operations, func(op integrationtypes.OperationRegistration, _ int) integrationtypes.OperationRegistration {
+			op.Topic = versionedDefinitionID.OperationTopic(op.Name)
+
+			return op
+		})
+
+		return def, nil
+	})
+}
+
 // TestInstallationUpgradeAcrossVersions verifies multi-version upgrades including a v1-to-v3 jump
 func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 	store, err := keystore.NewStore(suite.Client.DB)
 	require.NoError(t, err)
 
 	t.Run("the version hash differs between every fixture version", func(t *testing.T) {
-		v1 := runtimeFor(t, testint.BuilderV1())
-		v2 := runtimeFor(t, testint.BuilderV2())
-		v3 := runtimeFor(t, testint.BuilderV3())
+		v1 := versionedRuntime(t, testint.BuilderV1())
+		v2 := versionedRuntime(t, testint.BuilderV2())
+		v3 := versionedRuntime(t, testint.BuilderV3())
 
-		hashV1 := v1.Registry().Version(testint.DefinitionID.ID())
-		hashV2 := v2.Registry().Version(testint.DefinitionID.ID())
-		hashV3 := v3.Registry().Version(testint.DefinitionID.ID())
+		hashV1 := v1.Registry().Version(versionedDefinitionID.ID())
+		hashV2 := v2.Registry().Version(versionedDefinitionID.ID())
+		hashV3 := v3.Registry().Version(versionedDefinitionID.ID())
 
 		require.NotEmpty(t, hashV1)
 		require.NotEmpty(t, hashV2)
@@ -52,14 +77,14 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
-		v1 := runtimeFor(t, testint.BuilderV1())
+		v1 := versionedRuntime(t, testint.BuilderV1())
 		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), syncOpConfig("initial"), testint.TokenV1.ID(), testint.TokenV1Set("initial-token"))
-		require.Equal(t, v1.Registry().Version(testint.DefinitionID.ID()), installation.DefinitionVersion)
+		require.Equal(t, v1.Registry().Version(versionedDefinitionID.ID()), installation.DefinitionVersion)
 		require.Equal(t, testint.UserInputV1.Name(), installation.UserInput.Layout)
 		require.JSONEq(t, `{"pattern":"initial"}`, string(installation.OperationConfig.For(testint.SyncOp.Name())))
 
-		v2 := runtimeFor(t, testint.BuilderV2())
-		v2Version := v2.Registry().Version(testint.DefinitionID.ID())
+		v2 := versionedRuntime(t, testint.BuilderV2())
+		v2Version := v2.Registry().Version(versionedDefinitionID.ID())
 
 		assessment, err := v2.RunHealthAssessment(subCtx, installation)
 		require.NoError(t, err)
@@ -77,7 +102,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		require.JSONEq(t, `{"token":"initial-token"}`, string(rows[testint.TokenV2.ID()].Data))
 		require.Empty(t, slotRowIDs(t, subCtx, installation.ID, testint.TokenV1.ID()))
 
-		retired, err := v2.Registry().Operation(testint.DefinitionID.ID(), testint.SyncOp.Name())
+		retired, err := v2.Registry().Operation(versionedDefinitionID.ID(), testint.SyncOp.Name())
 		require.NoError(t, err)
 
 		finished, err := operations.CreatePendingRun(subCtx, suite.Client.DB, installation, retired, enums.IntegrationRunTypeManual, nil)
@@ -99,8 +124,8 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		secret := webhookRows[0].SecretToken
 		require.NotEmpty(t, endpointID)
 
-		v3 := runtimeFor(t, testint.BuilderV3())
-		v3Version := v3.Registry().Version(testint.DefinitionID.ID())
+		v3 := versionedRuntime(t, testint.BuilderV3())
+		v3Version := v3.Registry().Version(versionedDefinitionID.ID())
 
 		assessment, err = v3.RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
 		require.NoError(t, err)
@@ -144,10 +169,10 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
-		v1 := runtimeFor(t, testint.BuilderV1())
+		v1 := versionedRuntime(t, testint.BuilderV1())
 		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), syncOpConfig("initial"), testint.TokenV1.ID(), testint.TokenV1Set("initial-token"))
 
-		retired, err := v1.Registry().Operation(testint.DefinitionID.ID(), testint.SyncOp.Name())
+		retired, err := v1.Registry().Operation(versionedDefinitionID.ID(), testint.SyncOp.Name())
 		require.NoError(t, err)
 
 		finished, err := operations.CreatePendingRun(subCtx, suite.Client.DB, installation, retired, enums.IntegrationRunTypeManual, nil)
@@ -167,8 +192,8 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		endpointID := lo.FromPtr(webhookRows[0].EndpointID)
 		secret := webhookRows[0].SecretToken
 
-		v3 := runtimeFor(t, testint.BuilderV3())
-		v3Version := v3.Registry().Version(testint.DefinitionID.ID())
+		v3 := versionedRuntime(t, testint.BuilderV3())
+		v3Version := v3.Registry().Version(versionedDefinitionID.ID())
 
 		assessment, err := v3.RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
 		require.NoError(t, err)
@@ -204,10 +229,10 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
-		v1 := runtimeFor(t, testint.BuilderV1())
+		v1 := versionedRuntime(t, testint.BuilderV1())
 		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), syncOpConfig("initial"), testint.TokenV1.ID(), testint.TokenV1Set("converged-token"))
 
-		retired, err := v1.Registry().Operation(testint.DefinitionID.ID(), testint.SyncOp.Name())
+		retired, err := v1.Registry().Operation(versionedDefinitionID.ID(), testint.SyncOp.Name())
 		require.NoError(t, err)
 
 		finished, err := operations.CreatePendingRun(subCtx, suite.Client.DB, installation, retired, enums.IntegrationRunTypeManual, nil)
@@ -218,16 +243,16 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 			SetHealth(models.IntegrationHealth{UnhealthyOperations: map[string]string{testint.SyncOp.Name(): "boom"}}).
 			Exec(subCtx))
 
-		_, err = runtimeFor(t, testint.BuilderV2()).RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
+		_, err = versionedRuntime(t, testint.BuilderV2()).RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
 		require.NoError(t, err)
 
-		v3 := runtimeFor(t, testint.BuilderV3())
+		v3 := versionedRuntime(t, testint.BuilderV3())
 
 		_, err = v3.RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
 		require.NoError(t, err)
 
 		converged := reloadIntegration(t, subCtx, installation.ID)
-		require.Equal(t, v3.Registry().Version(testint.DefinitionID.ID()), converged.DefinitionVersion)
+		require.Equal(t, v3.Registry().Version(versionedDefinitionID.ID()), converged.DefinitionVersion)
 
 		convergedRuns, err := suite.Client.DB.IntegrationRun.Query().
 			Where(integrationrun.IntegrationIDEQ(installation.ID)).
@@ -243,8 +268,8 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		convergedWebhooks := endpointRows(t, subCtx, installation.ID)
 		require.Len(t, convergedWebhooks, 1)
 
-		v4 := runtimeFor(t, testint.BuilderV4())
-		v4Version := v4.Registry().Version(testint.DefinitionID.ID())
+		v4 := versionedRuntime(t, testint.BuilderV4())
+		v4Version := v4.Registry().Version(versionedDefinitionID.ID())
 		require.NotEqual(t, converged.DefinitionVersion, v4Version)
 
 		assessment, err := v4.RunHealthAssessment(subCtx, converged)
@@ -290,14 +315,14 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
-		v1 := runtimeFor(t, testint.BuilderV1())
+		v1 := versionedRuntime(t, testint.BuilderV1())
 		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"initial"}`), nil, testint.TokenV1.ID(), testint.TokenV1Set("stranded-token"))
-		require.Equal(t, v1.Registry().Version(testint.DefinitionID.ID()), installation.DefinitionVersion)
+		require.Equal(t, v1.Registry().Version(versionedDefinitionID.ID()), installation.DefinitionVersion)
 
 		installedWebhooks := endpointRows(t, subCtx, installation.ID)
 		require.Len(t, installedWebhooks, 1)
 
-		v4 := runtimeFor(t, testint.BuilderV4())
+		v4 := versionedRuntime(t, testint.BuilderV4())
 
 		_, err := v4.RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
 		require.ErrorIs(t, err, intruntime.ErrInstallationUpgradeFailed)
@@ -334,8 +359,8 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
-		v3 := runtimeFor(t, testint.BuilderV3())
-		def, ok := v3.Registry().Definition(testint.DefinitionID.ID())
+		v3 := versionedRuntime(t, testint.BuilderV3())
+		def, ok := v3.Registry().Definition(versionedDefinitionID.ID())
 		require.True(t, ok)
 
 		state, err := def.WithProviderState(integrationtypes.IntegrationProviderState{}, integrationtypes.DefinitionProviderState{CredentialRef: testint.TokenV3.ID()})
@@ -343,8 +368,8 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 
 		installation, err := suite.Client.DB.Integration.Create().
 			SetName("No Version").
-			SetKind(testint.DefinitionID.ID()).
-			SetDefinitionID(testint.DefinitionID.ID()).
+			SetKind(versionedDefinitionID.ID()).
+			SetDefinitionID(versionedDefinitionID.ID()).
 			SetDefinitionVersion("").
 			SetProviderState(state).
 			SetStatus(enums.IntegrationStatusConnected).
@@ -354,7 +379,7 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 
 		require.NoError(t, store.SaveCredential(subCtx, installation, testint.TokenV3.ID(), integrationtypes.CredentialSet{Data: json.RawMessage(`{"token":"incomplete-token"}`)}))
 
-		v3Version := v3.Registry().Version(testint.DefinitionID.ID())
+		v3Version := v3.Registry().Version(versionedDefinitionID.ID())
 
 		_, err = v3.RunHealthAssessment(subCtx, installation)
 		require.NoError(t, err)
@@ -371,14 +396,14 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
-		v1 := runtimeFor(t, testint.BuilderV1())
+		v1 := versionedRuntime(t, testint.BuilderV1())
 		installation := installOn(t, subCtx, v1, json.RawMessage(`{"filterExpr":"x"}`), nil, testint.TokenV1.ID(), testint.TokenV1Set("meta-token"))
 
 		before := reloadIntegration(t, subCtx, installation.ID).InstallationMetadata
 		require.Equal(t, installation.ID, before.Display.ExternalID)
 		require.Empty(t, before.Attributes)
 
-		v3 := runtimeFor(t, testint.BuilderV3())
+		v3 := versionedRuntime(t, testint.BuilderV3())
 
 		_, err := v3.RunHealthAssessment(subCtx, reloadIntegration(t, subCtx, installation.ID))
 		require.NoError(t, err)
@@ -398,12 +423,12 @@ func TestInstallationUpgradeAcrossVersions(t *testing.T) {
 		subOrg := suite.UserBuilder(context.Background(), t)
 		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
 
-		v3 := runtimeFor(t, testint.BuilderV3())
+		v3 := versionedRuntime(t, testint.BuilderV3())
 		operationConfig := map[string]json.RawMessage{testint.SyncOpV3.Name(): json.RawMessage(`{"filter":"only-mine"}`)}
 		installation := installOn(t, subCtx, v3, json.RawMessage(`{"filter":"global"}`), operationConfig, testint.TokenV3.ID(), testint.TokenV3Set("token", "region-1"))
 		require.JSONEq(t, `{"filter":"only-mine"}`, string(installation.OperationConfig.For(testint.SyncOpV3.Name())))
 
-		syncOp, err := v3.Registry().Operation(testint.DefinitionID.ID(), testint.SyncOpV3.Name())
+		syncOp, err := v3.Registry().Operation(versionedDefinitionID.ID(), testint.SyncOpV3.Name())
 		require.NoError(t, err)
 
 		_, err = v3.ExecuteOperation(subCtx, installation, syncOp, nil, nil)

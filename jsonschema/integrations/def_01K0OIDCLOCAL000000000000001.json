@@ -1,5 +1,5 @@
 {
-  "version": "12c541036dbb4cc96eebc34988285a8f61b4e72ffeed8ce5a8937a50c202eff0",
+  "version": "b9a7a48c05d53dec89b516864b662addcf08dbbd66303832fd9fd63d5d187711",
   "surface": {
     "id": "def_01K0OIDCLOCAL000000000000001",
     "credentials": [
@@ -90,23 +90,7 @@
     ],
     "operations": [
       {
-        "name": "ClaimsInspect",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oidclocal/claims-inspect",
-          "$ref": "#/$defs/ClaimsInspect",
-          "$defs": {
-            "ClaimsInspect": {
-              "properties": {
-                "claims": {
-                  "type": "object"
-                }
-              },
-              "additionalProperties": false,
-              "type": "object"
-            }
-          }
-        }
+        "name": "ClaimsInspect"
       }
     ]
   }

@@ -70,6 +70,30 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow_InvalidProvider() {
 	assert.Equal(t, http.StatusBadRequest, rec.Code)
 }
 
+func (suite *HandlerTestSuite) TestStartOAuthFlow_UndeclaredOperationConfig() {
+	t := suite.T()
+
+	suite.registerRouteOnce(http.MethodPost, integrationStartPath, suite.h.StartIntegrationAuth)
+
+	requestCtx := privacy.DecisionContext(echocontext.NewTestEchoContext().Request().Context(), privacy.Allow)
+	user := suite.userBuilderWithInput(requestCtx, &userInput{confirmedUser: true})
+
+	body, err := json.Marshal(handlers.IntegrationAuthStartRequest{
+		DefinitionID:    testAuthDefinitionID,
+		CredentialRef:   testAuthCredentialRef.String(),
+		OperationConfig: map[string]json.RawMessage{"undeclared_operation": json.RawMessage(`{}`)},
+	})
+	assert.NoError(t, err)
+
+	req := httptest.NewRequest(http.MethodPost, integrationStartPath, bytes.NewReader(body))
+	req.Header.Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
+
+	rec := httptest.NewRecorder()
+	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
+
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
+}
+
 func (suite *HandlerTestSuite) TestStartOAuthFlow_Unauthorized() {
 	t := suite.T()
 

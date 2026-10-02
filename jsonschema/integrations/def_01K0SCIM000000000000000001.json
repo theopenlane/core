@@ -1,5 +1,5 @@
 {
-  "version": "ca43cd4dfb0b266d9169505922f83beac25f9266f001e6cf572f6b8a705e49fc",
+  "version": "f2ea8a3a347c5114193e6b49351cc5e9f73eacfb7806c24d18f6dff80a321fb7",
   "surface": {
     "id": "def_01K0SCIM000000000000000001",
     "credentials": [],
@@ -9,22 +9,6 @@
         "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/scim/user-input",
         "$ref": "#/$defs/UserInput",
         "$defs": {
-          "DirectorySync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of users and groups from SCIM"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting (allows inclusion"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
           "UserInput": {
             "properties": {
               "name": {
@@ -35,10 +19,6 @@
               "primaryDirectory": {
                 "type": "boolean",
                 "title": "Primary Directory"
-              },
-              "directorySync": {
-                "$ref": "#/$defs/DirectorySync",
-                "title": "Directory Sync"
               }
             },
             "additionalProperties": false,
@@ -48,10 +28,7 @@
             ]
           }
         }
-      },
-      "replaces": [
-        "scim-v1"
-      ]
+      }
     },
     "connections": [],
     "operations": [
@@ -67,12 +44,12 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of users and groups from SCIM"
+                  "description": "Disable this operation for the installation"
                 },
                 "filterExpr": {
                   "type": "string",
                   "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting (allows inclusion"
+                  "description": "Optional CEL expression applied to records before ingesting"
                 }
               },
               "additionalProperties": false,

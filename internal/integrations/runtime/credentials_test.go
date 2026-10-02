@@ -302,42 +302,6 @@ func TestReconcileMissingDefinition(t *testing.T) {
 	}
 }
 
-func TestReconcileNoInputNoCredential(t *testing.T) {
-	t.Parallel()
-
-	reg := registry.New()
-	_ = reg.Register(types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-	})
-
-	rt := NewForTesting(reg)
-	err := rt.Reconcile(context.Background(), &ent.Integration{
-		DefinitionID:      "test-def",
-		DefinitionVersion: reg.Version("test-def"),
-	}, nil, nil, types.CredentialSlotID{}, nil, nil)
-	if err != nil {
-		t.Fatalf("expected no error for no-op reconcile, got %v", err)
-	}
-}
-
-func TestReconcileEmptyInputNoCredential(t *testing.T) {
-	t.Parallel()
-
-	reg := registry.New()
-	_ = reg.Register(types.Definition{
-		DefinitionSpec: types.DefinitionSpec{ID: "test-def"},
-	})
-
-	rt := NewForTesting(reg)
-	err := rt.Reconcile(context.Background(), &ent.Integration{
-		DefinitionID:      "test-def",
-		DefinitionVersion: reg.Version("test-def"),
-	}, json.RawMessage(`null`), nil, types.CredentialSlotID{}, nil, nil)
-	if err != nil {
-		t.Fatalf("expected no error for null input reconcile, got %v", err)
-	}
-}
-
 func TestResolvePersistedConnectionSingleConnectionFallback(t *testing.T) {
 	t.Parallel()
 
