@@ -5105,7 +5105,8 @@ var (
 			Snake: "trust_center",
 			Lower: "trustcenter",
 		},
-		OwnerField: trustcenter.FieldOwnerID,
+		ConsoleRoute: &ConsoleRoute{Base: "trust-center"},
+		OwnerField:   trustcenter.FieldOwnerID,
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
 			ref := SchemaRef{Schema: "trust_center", Operation: refOpLoad, EntityID: entityID}
 
