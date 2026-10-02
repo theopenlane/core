@@ -1,5 +1,5 @@
 {
-  "version": "c1e419569b39e988d9033d5190ae98f10a491b05c899918b3ec693ffdfb57f46",
+  "version": "ce9ed92359d45925e93a135328330dda99b6931b6d7df2062a8c1093d52c252b",
   "surface": {
     "id": "def_01K0ZITADEL000000000000001",
     "credentials": [
@@ -73,42 +73,19 @@
         "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/zitadel/user-input",
         "$ref": "#/$defs/UserInput",
         "$defs": {
-          "DirectorySync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of users from Zitadel"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
           "UserInput": {
             "properties": {
               "primaryDirectory": {
                 "type": "boolean",
                 "title": "Primary Directory",
                 "description": "Mark this as the authoritative source for identity holder enrichment and lifecycle"
-              },
-              "directorySync": {
-                "$ref": "#/$defs/DirectorySync",
-                "title": "Directory Sync"
               }
             },
             "additionalProperties": false,
             "type": "object"
           }
         }
-      },
-      "replaces": [
-        "zitadel-v1"
-      ]
+      }
     },
     "installation": {
       "schema": {
@@ -148,12 +125,12 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of users from Zitadel"
+                  "description": "Disable this operation for the installation"
                 },
                 "filterExpr": {
                   "type": "string",
                   "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting"
+                  "description": "Optional CEL expression applied to records before ingesting"
                 }
               },
               "additionalProperties": false,

@@ -254,12 +254,14 @@ func seedRetiredLoop(t *testing.T, ctx context.Context, installation *ent.Integr
 	require.NoError(t, err)
 }
 
-// installOn returns the installation of the shared test definition through rt
+// installOn returns the installation of the single definition rt runs
 func installOn(t *testing.T, ctx context.Context, rt *intruntime.Runtime, userInput json.RawMessage, operationConfig map[string]json.RawMessage, primary integrationtypes.CredentialSlotID, credential integrationtypes.CredentialSet) *ent.Integration {
 	t.Helper()
 
-	def, ok := rt.Registry().Definition(testint.DefinitionID.ID())
-	require.True(t, ok)
+	definitions := rt.Registry().Definitions()
+	require.Len(t, definitions, 1)
+
+	def := definitions[0]
 
 	ownerID, err := auth.GetOrganizationIDFromContext(ctx)
 	require.NoError(t, err)
@@ -682,8 +684,8 @@ func TestInstallationUpgrade(t *testing.T) {
 
 		early, err := renamed.EnsureWebhook(subCtx, installation, renamedEventsWebhook.Name(), "")
 		require.NoError(t, err)
-		require.NotEqual(t, endpointID, lo.FromPtr(early.EndpointID))
-		require.Len(t, endpointRows(t, subCtx, installation.ID), 2)
+		require.Equal(t, endpointID, lo.FromPtr(early.EndpointID))
+		require.Len(t, endpointRows(t, subCtx, installation.ID), 1)
 
 		duplicate, err := previous.PrepareWebhookDelivery(subCtx, rows[0], "d1")
 		require.NoError(t, err)

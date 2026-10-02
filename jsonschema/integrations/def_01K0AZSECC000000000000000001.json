@@ -1,5 +1,5 @@
 {
-  "version": "d254a78e7bf34f1543d8a642e2d390d44a2fcd2154ed097ef4d530fde9783bcd",
+  "version": "ba0b8e59aa8c8a4629dfdc579f6b228520ce37a33955600f69f866a8d1f8911f",
   "surface": {
     "id": "def_01K0AZSECC000000000000000001",
     "credentials": [
@@ -42,26 +42,6 @@
         }
       }
     ],
-    "userInput": {
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azuresecuritycenter/user-input",
-        "$ref": "#/$defs/UserInput",
-        "$defs": {
-          "UserInput": {
-            "properties": {
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting (allows inclusion"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
-        }
-      }
-    },
     "installation": {
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -101,7 +81,18 @@
           "$ref": "#/$defs/AssessmentsCollect",
           "$defs": {
             "AssessmentsCollect": {
-              "properties": {},
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                }
+              },
               "additionalProperties": false,
               "type": "object"
             }
@@ -116,7 +107,18 @@
           "$ref": "#/$defs/SubAssessmentsCollect",
           "$defs": {
             "SubAssessmentsCollect": {
-              "properties": {},
+              "properties": {
+                "disable": {
+                  "type": "boolean",
+                  "title": "Disable",
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
+                }
+              },
               "additionalProperties": false,
               "type": "object"
             }

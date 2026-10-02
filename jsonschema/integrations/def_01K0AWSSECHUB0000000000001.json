@@ -1,5 +1,5 @@
 {
-  "version": "14497b78eb0a296ae4a0e67002f7dfcbb9816fb18656d52c6cfa5a516bf14535",
+  "version": "cc61418808a25d24d0aec4e39697e7489312f2cf32191057f127fc1e5340868f",
   "surface": {
     "id": "def_01K0AWSSECHUB0000000000001",
     "credentials": [
@@ -120,115 +120,6 @@
         }
       }
     ],
-    "userInput": {
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/awssecurityhub/user-input",
-        "$ref": "#/$defs/UserInput",
-        "$defs": {
-          "AssetSync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of assets from AWS"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "CheckSync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of checks from AWS Config"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting",
-                "examples": [
-                  "Example: payload.ComplianceType == 'NON_COMPLIANT' || payload.ComplianceType == 'COMPLIANT'"
-                ]
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "DirectorySync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of users and groups from AWS IAM"
-              },
-              "disableGroupSync": {
-                "type": "boolean",
-                "title": "Disable Group Sync",
-                "description": "Only sync users from AWS IAM"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting.",
-                "examples": [
-                  "Example: payload.path.startsWith('/engineering/')"
-                ]
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "FindingSync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of findings from AWS Security Hub"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting",
-                "examples": [
-                  "Example: payload.Severity.Label == 'CRITICAL' || payload.Severity.Label == 'HIGH'"
-                ]
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "UserInput": {
-            "properties": {
-              "findingSync": {
-                "$ref": "#/$defs/FindingSync",
-                "title": "AWS Security Hub Sync"
-              },
-              "directorySync": {
-                "$ref": "#/$defs/DirectorySync",
-                "title": "Directory Account Sync"
-              },
-              "checkSync": {
-                "$ref": "#/$defs/CheckSync",
-                "title": "AWS Config Rule Sync"
-              },
-              "assetSync": {
-                "$ref": "#/$defs/AssetSync",
-                "title": "AWS Asset Sync"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
-        }
-      }
-    },
     "installation": {
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -291,12 +182,12 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of assets from AWS"
+                  "description": "Disable this operation for the installation"
                 },
                 "filterExpr": {
                   "type": "string",
                   "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting"
+                  "description": "Optional CEL expression applied to records before ingesting"
                 }
               },
               "additionalProperties": false,
@@ -317,15 +208,12 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of checks from AWS Config"
+                  "description": "Disable this operation for the installation"
                 },
                 "filterExpr": {
                   "type": "string",
                   "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting",
-                  "examples": [
-                    "Example: payload.ComplianceType == 'NON_COMPLIANT' || payload.ComplianceType == 'COMPLIANT'"
-                  ]
+                  "description": "Optional CEL expression applied to records before ingesting"
                 }
               },
               "additionalProperties": false,
@@ -346,20 +234,17 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of users and groups from AWS IAM"
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
                 },
                 "disableGroupSync": {
                   "type": "boolean",
                   "title": "Disable Group Sync",
                   "description": "Only sync users from AWS IAM"
-                },
-                "filterExpr": {
-                  "type": "string",
-                  "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting.",
-                  "examples": [
-                    "Example: payload.path.startsWith('/engineering/')"
-                  ]
                 }
               },
               "additionalProperties": false,
@@ -380,15 +265,12 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of findings from AWS Security Hub"
+                  "description": "Disable this operation for the installation"
                 },
                 "filterExpr": {
                   "type": "string",
                   "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting",
-                  "examples": [
-                    "Example: payload.Severity.Label == 'CRITICAL' || payload.Severity.Label == 'HIGH'"
-                  ]
+                  "description": "Optional CEL expression applied to records before ingesting"
                 }
               },
               "additionalProperties": false,

@@ -1,5 +1,5 @@
 {
-  "version": "1a000f91faa1b9572695863dc4b2e2b121f5d26fa857bda2d73d15ba4d48138f",
+  "version": "b46dcaee3198103a7e34f91d5243f9e74a830616a709c36a94e4ed6d6c19e084",
   "surface": {
     "id": "def_01K0AZENTRA0000000000000001",
     "credentials": [
@@ -33,50 +33,18 @@
         "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid/user-input",
         "$ref": "#/$defs/UserInput",
         "$defs": {
-          "DirectorySync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of users and groups from Azure Entra ID"
-              },
-              "disableGroupSync": {
-                "type": "boolean",
-                "title": "Disable Group Sync",
-                "description": "Only sync users from Azure Entra ID"
-              },
-              "includeGuestUsers": {
-                "type": "boolean",
-                "title": "Include Guest Users"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting (allows inclusion"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
           "UserInput": {
             "properties": {
               "primaryDirectory": {
                 "type": "boolean",
                 "title": "Primary Directory"
-              },
-              "directorySync": {
-                "$ref": "#/$defs/DirectorySync",
-                "title": "Directory Sync"
               }
             },
             "additionalProperties": false,
             "type": "object"
           }
         }
-      },
-      "replaces": [
-        "azureentraid-v1"
-      ]
+      }
     },
     "installation": {
       "schema": {
@@ -136,7 +104,12 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of users and groups from Azure Entra ID"
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
                 },
                 "disableGroupSync": {
                   "type": "boolean",
@@ -146,11 +119,6 @@
                 "includeGuestUsers": {
                   "type": "boolean",
                   "title": "Include Guest Users"
-                },
-                "filterExpr": {
-                  "type": "string",
-                  "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting (allows inclusion"
                 }
               },
               "additionalProperties": false,

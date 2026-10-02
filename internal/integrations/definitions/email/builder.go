@@ -60,25 +60,23 @@ func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 			),
 		}
 
-		if cfg.ResendSecret != "" {
-			deliveryHandler := ResendDeliveryEvent{}.Handle
+		deliveryHandler := ResendDeliveryEvent{}.Handle
 
-			def.Webhooks = []types.WebhookRegistration{
-				resendWebhookRef.Registration(types.WebhookRegistration{
-					StaticRoute:  "/email/webhook",
-					SecretSource: func() string { return cfg.ResendSecret },
-					Verify:       ResendWebhook{Secret: cfg.ResendSecret}.Verify,
-					Event:        ResendWebhook{}.Event,
-					Events: []types.WebhookEventRegistration{
-						resendEmailSentEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
-						resendEmailDeliveredEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
-						resendEmailOpenedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
-						resendEmailClickedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
-						resendEmailBouncedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
-						resendEmailFailedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
-					},
-				}),
-			}
+		def.Webhooks = []types.WebhookRegistration{
+			resendWebhookRef.Registration(types.WebhookRegistration{
+				StaticRoute:  "/email/webhook",
+				SecretSource: func() string { return cfg.ResendSecret },
+				Verify:       ResendWebhook{Secret: cfg.ResendSecret}.Verify,
+				Event:        ResendWebhook{}.Event,
+				Events: []types.WebhookEventRegistration{
+					resendEmailSentEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailDeliveredEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailOpenedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailClickedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailBouncedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
+					resendEmailFailedEvent.Registration(DefinitionID, types.WebhookEventRegistration{Handle: deliveryHandler}),
+				},
+			}),
 		}
 
 		if len(cfg.Social) == 0 {

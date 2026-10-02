@@ -1,5 +1,5 @@
 {
-  "version": "320ab34e951e31366768918efd713421f2979d971c4b69c87b167313779bfaec",
+  "version": "21393a9d159cc455a8257f6d3a5ec409e63532b738362b7d6bcc0a27165df3b0",
   "surface": {
     "id": "def_01K0MSTEAMS00000000000000001",
     "credentials": [
@@ -41,11 +41,6 @@
               "defaultMessaging": {
                 "type": "boolean",
                 "title": "Default Messaging"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting (allows inclusion"
               }
             },
             "additionalProperties": false,
@@ -78,52 +73,7 @@
     ],
     "operations": [
       {
-        "name": "MessageSendOperation",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams/message-send-operation",
-          "$ref": "#/$defs/MessageSendOperation",
-          "$defs": {
-            "MessageSendOperation": {
-              "properties": {
-                "templateId": {
-                  "type": "string",
-                  "title": "Template ID"
-                },
-                "templateKey": {
-                  "type": "string",
-                  "title": "Template Key"
-                },
-                "teamId": {
-                  "type": "string",
-                  "title": "Team ID"
-                },
-                "channelId": {
-                  "type": "string",
-                  "title": "Channel ID"
-                },
-                "body": {
-                  "type": "string",
-                  "title": "Message Body"
-                },
-                "bodyFormat": {
-                  "type": "string",
-                  "enum": [
-                    "text",
-                    "html"
-                  ],
-                  "title": "Body Format"
-                },
-                "subject": {
-                  "type": "string",
-                  "title": "Subject"
-                }
-              },
-              "additionalProperties": false,
-              "type": "object"
-            }
-          }
-        }
+        "name": "MessageSendOperation"
       }
     ]
   }

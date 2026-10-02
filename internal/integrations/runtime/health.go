@@ -322,7 +322,7 @@ func (r *Runtime) verifyConnection(ctx context.Context, installation *ent.Integr
 		return nil, err
 	}
 
-	bindings, err := r.loadCredentials(privacy.DecisionContext(ctx, privacy.Allow), installation, connection.CredentialRefs)
+	bindings, err := r.keystore().LoadCredentials(privacy.DecisionContext(ctx, privacy.Allow), installation, connection.CredentialRefs)
 	if err != nil {
 		return nil, err
 	}

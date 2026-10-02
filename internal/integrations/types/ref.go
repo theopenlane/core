@@ -532,7 +532,28 @@ func (r OperationRef[Config]) Replacing[Old any](old OperationRef[Old]) Operatio
 
 // Upgraded declares how a stored input document is reshaped from the operation it was persisted under into Config; ignored on a payload operation
 func (r OperationRef[Config]) Upgraded(fn func(context.Context, InstallationRequest, string, json.RawMessage) (Config, error)) OperationRef[Config] {
-	r.upgrade = upgraded(fn)
+	typed := upgraded(fn)
+
+	r.upgrade = func(ctx context.Context, req InstallationRequest, from string, stored json.RawMessage) (json.RawMessage, error) {
+		document, err := typed(ctx, req, from, stored)
+		if err != nil {
+			return nil, err
+		}
+
+		settings, err := OperationSettingsFrom(stored)
+		if err != nil {
+			return nil, err
+		}
+
+		patch, err := jsonx.ToRawMap(settings)
+		if err != nil {
+			return nil, err
+		}
+
+		merged, _, err := jsonx.MergeObjectMap(document, patch)
+
+		return merged, err
+	}
 
 	return r
 }

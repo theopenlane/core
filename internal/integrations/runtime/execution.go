@@ -437,7 +437,7 @@ func (r *Runtime) BuildClientForIntegration(ctx context.Context, integration *en
 		return nil, err
 	}
 
-	credentials, err := r.loadCredentials(ctx, integration, registration.CredentialRefs)
+	credentials, err := r.keystore().LoadCredentials(ctx, integration, registration.CredentialRefs)
 	if err != nil {
 		return nil, err
 	}
@@ -627,7 +627,7 @@ func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.I
 	}
 
 	if credentials == nil {
-		credentials, err = r.loadCredentials(ctx, integration, registration.CredentialRefs)
+		credentials, err = r.keystore().LoadCredentials(ctx, integration, registration.CredentialRefs)
 		if err != nil {
 			return nil, credentials, err
 		}

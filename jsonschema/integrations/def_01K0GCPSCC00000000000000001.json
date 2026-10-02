@@ -1,5 +1,5 @@
 {
-  "version": "019e9aeb834763d402d4647ee9a04be4fc1d1651f223053c512081648cd208b2",
+  "version": "94a5aebb49e34ba8b00c09ad12063c9fac2a89979f91806ba42a37941ca16402",
   "surface": {
     "id": "def_01K0GCPSCC00000000000000001",
     "credentials": [
@@ -130,47 +130,6 @@
         }
       }
     ],
-    "userInput": {
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/gcpscc/user-input",
-        "$ref": "#/$defs/UserInput",
-        "$defs": {
-          "FindingsSync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of findings from GCP Security Command Center"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting (allows inclusion",
-                "examples": [
-                  "Example: payload.category != \"GKE_SECURITY_BULLETIN\""
-                ]
-              },
-              "page_size": {
-                "type": "integer"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "UserInput": {
-            "properties": {
-              "findingsSync": {
-                "$ref": "#/$defs/FindingsSync",
-                "title": "Findings Sync"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
-        }
-      }
-    },
     "installation": {
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -234,15 +193,12 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of findings from GCP Security Command Center"
+                  "description": "Disable this operation for the installation"
                 },
                 "filterExpr": {
                   "type": "string",
                   "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting (allows inclusion",
-                  "examples": [
-                    "Example: payload.category != \"GKE_SECURITY_BULLETIN\""
-                  ]
+                  "description": "Optional CEL expression applied to records before ingesting"
                 },
                 "page_size": {
                   "type": "integer"

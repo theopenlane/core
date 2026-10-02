@@ -1,5 +1,5 @@
 {
-  "version": "01cd0ebdc549eb277a22f0bb15fcbb4b8e1483134884370a07df6627343afd6b",
+  "version": "acfc919a0202f7f8a20c555134f0f2001dc5f8b0c7aa61f072ec8ce8e16138f2",
   "surface": {
     "id": "def_01K0OCI00000000000000000001",
     "credentials": [
@@ -62,49 +62,6 @@
         }
       }
     ],
-    "userInput": {
-      "schema": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/oci/user-input",
-        "$ref": "#/$defs/UserInput",
-        "$defs": {
-          "FindingsSync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of problems from OCI Cloud Guard"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting",
-                "examples": [
-                  "Example: payload.riskLevel == 'CRITICAL' || payload.riskLevel == 'HIGH'"
-                ]
-              },
-              "skipProblemDetails": {
-                "type": "boolean",
-                "title": "Skip Problem Details",
-                "description": "Skip the per-problem detail lookup. Far fewer API calls on large tenancies"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
-          "UserInput": {
-            "properties": {
-              "findingsSync": {
-                "$ref": "#/$defs/FindingsSync",
-                "title": "Cloud Guard Findings Sync"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          }
-        }
-      }
-    },
     "installation": {
       "schema": {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -148,15 +105,12 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of problems from OCI Cloud Guard"
+                  "description": "Disable this operation for the installation"
                 },
                 "filterExpr": {
                   "type": "string",
                   "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting",
-                  "examples": [
-                    "Example: payload.riskLevel == 'CRITICAL' || payload.riskLevel == 'HIGH'"
-                  ]
+                  "description": "Optional CEL expression applied to records before ingesting"
                 },
                 "skipProblemDetails": {
                   "type": "boolean",

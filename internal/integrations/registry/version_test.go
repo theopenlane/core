@@ -71,7 +71,7 @@ func surfaceDefinition(id string) integrationtypes.Definition {
 			Topic:        defRef.OperationTopic("sync.users"),
 			ClientRef:    clientRef.ID(),
 			ConfigSchema: jsonx.SchemaFrom[testOperationConfig](),
-			Input:        &integrationtypes.InputRegistration{Name: "sync.users"},
+			Input:        &integrationtypes.InputRegistration{Name: "sync.users", Schema: jsonx.SchemaFrom[finalizeConfig]()},
 			Handle:       newTestHandler(),
 		},
 		{
@@ -80,7 +80,8 @@ func surfaceDefinition(id string) integrationtypes.Definition {
 			ClientRef:    clientRef.ID(),
 			ConfigSchema: jsonx.SchemaFrom[testOperationConfig](),
 			Input: &integrationtypes.InputRegistration{
-				Name: "sync.groups",
+				Name:   "sync.groups",
+				Schema: jsonx.SchemaFrom[finalizeConfig](),
 				Upgrade: func(_ context.Context, _ integrationtypes.InstallationRequest, _ string, stored json.RawMessage) (json.RawMessage, error) {
 					return stored, nil
 				},
@@ -379,7 +380,7 @@ func TestVersionChangesWithSurfacedNameAndSchemaFields(t *testing.T) {
 	installationSchema.Installation.Schema = json.RawMessage(`{"type":"object","properties":{"zone":{"type":"string"}}}`)
 
 	operationConfigSchema := surfaceDefinition("version-def")
-	operationConfigSchema.Operations[0].ConfigSchema = json.RawMessage(`{"type":"object","required":["limit"]}`)
+	operationConfigSchema.Operations[0].Input.Schema = json.RawMessage(`{"type":"object","required":["limit"]}`)
 
 	for name, def := range map[string]integrationtypes.Definition{
 		"webhook name":              webhookName,
@@ -409,6 +410,50 @@ func TestVersionUnchangedForDescriptionMetaAndHandlers(t *testing.T) {
 
 	if versionOf(t, changed) != versionOf(t, base) {
 		t.Fatal("expected description, meta, and handler changes to leave the version unchanged")
+	}
+}
+
+// TestFingerprintIsStableAcrossOrderAndChangesWithDefinitions verifies the registry-wide fingerprint
+func TestFingerprintIsStableAcrossOrderAndChangesWithDefinitions(t *testing.T) {
+	t.Parallel()
+
+	first, _ := minimalDefinition("fingerprint-a")
+	second := surfaceDefinition("fingerprint-b")
+	third, _ := minimalDefinition("fingerprint-c")
+
+	fingerprintOf := func(defs ...integrationtypes.Definition) string {
+		t.Helper()
+
+		reg := New()
+		for _, def := range defs {
+			if err := reg.Register(def); err != nil {
+				t.Fatalf("register %s: %v", def.ID, err)
+			}
+		}
+
+		return reg.Fingerprint()
+	}
+
+	base := fingerprintOf(first, second)
+
+	if base == "" {
+		t.Fatal("expected a fingerprint")
+	}
+
+	if fingerprintOf(first, second) != base {
+		t.Fatal("expected registries with the same definitions to share a fingerprint")
+	}
+
+	if fingerprintOf(second, first) != base {
+		t.Fatal("expected registration order not to change the fingerprint")
+	}
+
+	if fingerprintOf(first, second, third) == base {
+		t.Fatal("expected an extra definition to change the fingerprint")
+	}
+
+	if fingerprintOf(first) == base {
+		t.Fatal("expected a missing definition to change the fingerprint")
 	}
 }
 

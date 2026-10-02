@@ -8,10 +8,8 @@ import (
 	"fmt"
 	"maps"
 	"slices"
-	"strings"
 
 	"github.com/samber/lo"
-	"github.com/theopenlane/utils/contextx"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
@@ -23,16 +21,37 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// upgradedInstallationKey carries the id of the installation whose upgrade already ran in this request
-var upgradedInstallationKey = contextx.NewKey[string]()
+// documentLayout is the current layout a stored document name resolves to
+type documentLayout struct {
+	// name is the current name the document is stored under
+	name string
+	// schema is the reflected JSON schema of the current layout
+	schema json.RawMessage
+	// upgrade reshapes a document stored under an earlier layout, nil when none is declared
+	upgrade types.UpgradeFunc
+	// validate checks a schema-valid document for constraints the schema cannot express, nil when none is declared
+	validate types.ValidateFunc
+	// replaced reports that the stored name is retired and name is its replacement
+	replaced bool
+}
+
+// documentKind projects one stored document kind onto name-keyed documents
+type documentKind struct {
+	// label is the noun used in logs and errors for one document of this kind
+	label string
+	// sentinel is the error a failed conformance is wrapped with
+	sentinel error
+	// resolve maps a stored name onto its current layout, false when the definition does not declare it
+	resolve func(name string) (documentLayout, bool)
+}
 
 // ensureCurrentVersion upgrades an installation if versions dont match
-func (r *Runtime) ensureCurrentVersion(ctx context.Context, installation *ent.Integration, skip ...types.CredentialSlotID) error {
-	if installation.DefinitionVersion == r.Registry().Version(installation.DefinitionID) || upgradedInstallationKey.GetOr(ctx, "") == installation.ID {
+func (r *Runtime) ensureCurrentVersion(ctx context.Context, installation *ent.Integration) error {
+	if installation.DefinitionVersion == r.Registry().Version(installation.DefinitionID) {
 		return nil
 	}
 
-	if err := r.upgradeInstallation(ctx, installation, skip); err != nil {
+	if err := r.upgradeInstallation(ctx, installation); err != nil {
 		failed := fmt.Errorf("%w: %w", ErrInstallationUpgradeFailed, err)
 
 		if markErr := r.MarkIntegrationUnhealthy(ctx, installation, failed.Error()); markErr != nil {
@@ -45,8 +64,8 @@ func (r *Runtime) ensureCurrentVersion(ctx context.Context, installation *ent.In
 	return nil
 }
 
-// upgradeInstallation conforms stored credentials and user input, moving data off retired names
-func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Integration, skip []types.CredentialSlotID) error {
+// upgradeInstallation conforms every stored document onto its current name and stamps the installation with the definition version
+func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Integration) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {
 		return fmt.Errorf("resolve definition: %w", err)
@@ -62,47 +81,8 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 		return fmt.Errorf("load credentials: %w", err)
 	}
 
-	next := maps.Clone(records)
-	excluded := upgradeExclusions(def, skip)
-
-	slots := lo.Keys(records)
-
-	slices.SortFunc(slots, func(a, b types.CredentialSlotID) int {
-		return strings.Compare(a.String(), b.String())
-	})
-
-	for _, slot := range slots {
-		if lo.Contains(excluded, slot) {
-			continue
-		}
-
-		registration, replaced, ok := def.ResolveCredential(slot)
-		if !ok {
-			logx.FromContext(ctx).Warn().Str("slot", slot.String()).Msg("stored credential slot is not declared by the definition and was left untouched")
-
-			continue
-		}
-
-		payload, err := conformStored(ctx, req, registration.StoredSchema, registration.Upgrade, registration.Validate, slot.String(), records[slot].Data, ErrCredentialInvalid)
-		if err != nil {
-			return fmt.Errorf("%w: slot %s", err, slot)
-		}
-
-		if !replaced {
-			next[slot] = types.CredentialSet{Data: payload}
-
-			continue
-		}
-
-		if _, stored := records[registration.Ref]; !stored {
-			next[registration.Ref] = types.CredentialSet{Data: payload}
-		}
-
-		delete(next, slot)
-	}
-
-	if err := r.keystore().ReplaceCredentials(ctx, installation, records, next); err != nil {
-		return fmt.Errorf("replace credentials: %w", err)
+	if err := r.upgradeCredentials(ctx, req, installation, def, records); err != nil {
+		return fmt.Errorf("upgrade credentials: %w", err)
 	}
 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
@@ -137,18 +117,6 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 		return fmt.Errorf("upgrade webhooks: %w", err)
 	}
 
-	if len(skip) > 0 {
-		return nil
-	}
-
-	version := r.Registry().Version(def.ID)
-
-	if err := r.DB().Integration.UpdateOneID(installation.ID).SetDefinitionVersion(version).Exec(systemCtx); err != nil {
-		return fmt.Errorf("set definition version: %w", err)
-	}
-
-	installation.DefinitionVersion = version
-
 	if err := r.RefreshInstallationMetadata(ctx, installation); err != nil {
 		return fmt.Errorf("refresh installation metadata: %w", err)
 	}
@@ -157,13 +125,28 @@ func (r *Runtime) upgradeInstallation(ctx context.Context, installation *ent.Int
 		return len(operation.Replaces) > 0
 	})
 
-	if !renamed {
-		return nil
+	if renamed {
+		if err := r.ResetReconcileLoops(ctx, installation); err != nil {
+			return fmt.Errorf("reset reconcile loops: %w", err)
+		}
 	}
 
-	if err := r.ResetReconcileLoops(ctx, installation); err != nil {
-		return fmt.Errorf("reset reconcile loops: %w", err)
+	if err := r.persistDefinitionVersion(systemCtx, installation, def); err != nil {
+		return fmt.Errorf("set definition version: %w", err)
 	}
+
+	return nil
+}
+
+// persistDefinitionVersion stamps the installation with the current definition version and mirrors it on the record
+func (r *Runtime) persistDefinitionVersion(ctx context.Context, installation *ent.Integration, def types.Definition) error {
+	version := r.Registry().Version(def.ID)
+
+	if err := r.DB().Integration.UpdateOneID(installation.ID).SetDefinitionVersion(version).Exec(ctx); err != nil {
+		return err
+	}
+
+	installation.DefinitionVersion = version
 
 	return nil
 }
@@ -282,18 +265,54 @@ func schemaPropertyKeys(schema json.RawMessage) ([]string, error) {
 	return keys, nil
 }
 
-// upgradeUserInput upgrades stored user input from the layout it was persisted under and conforms it to the current layout
+// upgradeCredentials conforms every stored credential onto its current slot and replaces the stored rows
+func (r *Runtime) upgradeCredentials(ctx context.Context, req types.InstallationRequest, installation *ent.Integration, def types.Definition, records map[types.CredentialSlotID]types.CredentialSet) error {
+	stored := make(map[string]json.RawMessage, len(records))
+
+	for slot, credential := range records {
+		stored[slot.String()] = credential.Data
+	}
+
+	conformed, err := conformDocuments(ctx, req, credentialKind(def), stored)
+	if err != nil {
+		return err
+	}
+
+	next := make(map[types.CredentialSlotID]types.CredentialSet, len(conformed))
+
+	for name, document := range conformed {
+		next[types.NewCredentialSlotID(name)] = types.CredentialSet{Data: document}
+	}
+
+	if err := r.keystore().ReplaceCredentials(ctx, installation, records, next); err != nil {
+		return fmt.Errorf("replace credentials: %w", err)
+	}
+
+	return nil
+}
+
+// upgradeUserInput conforms the stored user input document onto the current layout name
 func (r *Runtime) upgradeUserInput(ctx context.Context, req types.InstallationRequest, installation *ent.Integration, def types.Definition) error {
 	if def.UserInput == nil {
 		return nil
 	}
 
-	conformed, err := conformStored(ctx, req, def.UserInput.Schema, def.UserInput.Upgrade, def.UserInput.Validate, installation.UserInput.Layout, installation.UserInput.Data, ErrUserInputInvalid)
-	if err != nil {
-		return fmt.Errorf("%w: layout %s", err, installation.UserInput.Layout)
+	stored := map[string]json.RawMessage{}
+
+	if installation.UserInput.Layout != "" || !jsonx.IsEmptyRawMessage(installation.UserInput.Data) {
+		stored[installation.UserInput.Layout] = installation.UserInput.Data
 	}
 
-	next := types.IntegrationUserInput{Layout: def.UserInput.Name, Data: conformed}
+	conformed, err := conformDocuments(ctx, req, userInputKind(def), stored)
+	if err != nil {
+		return err
+	}
+
+	if len(conformed) == 0 {
+		return nil
+	}
+
+	next := types.IntegrationUserInput{Layout: def.UserInput.Name, Data: conformed[def.UserInput.Name]}
 
 	if next.Layout == installation.UserInput.Layout && bytes.Equal(next.Data, installation.UserInput.Data) {
 		return nil
@@ -302,11 +321,11 @@ func (r *Runtime) upgradeUserInput(ctx context.Context, req types.InstallationRe
 	return r.persistUserInput(ctx, installation, next, r.DB().Integration.UpdateOneID(installation.ID))
 }
 
-// upgradeOperationConfig upgrades each stored operation document, moving retired names onto their replacements
+// upgradeOperationConfig conforms every stored operation document onto its current operation name
 func (r *Runtime) upgradeOperationConfig(ctx context.Context, req types.InstallationRequest, installation *ent.Integration, def types.Definition) error {
 	stored := installation.OperationConfig.Operations
 
-	next, err := upgradeOperationDocuments(ctx, req, def, stored)
+	next, err := conformDocuments(ctx, req, operationInputKind(def), stored)
 	if err != nil {
 		return err
 	}
@@ -410,20 +429,55 @@ func (r *Runtime) upgradeWebhookDeliveries(ctx context.Context, installation *en
 	return r.reconcileInstallationWebhooks(ctx, installation, "")
 }
 
-// upgradeExclusions expands skipped slots to include every retired slot they replace
-func upgradeExclusions(def types.Definition, skip []types.CredentialSlotID) []types.CredentialSlotID {
-	return lo.FlatMap(skip, func(slot types.CredentialSlotID, _ int) []types.CredentialSlotID {
-		registration, err := def.CredentialRegistration(slot)
-		if err != nil {
-			return []types.CredentialSlotID{slot}
-		}
+// credentialKind projects stored credential slots onto the definition's credential registrations
+func credentialKind(def types.Definition) documentKind {
+	return documentKind{
+		label:    "slot",
+		sentinel: ErrCredentialInvalid,
+		resolve: func(name string) (documentLayout, bool) {
+			registration, replaced, ok := def.ResolveCredential(types.NewCredentialSlotID(name))
+			if !ok {
+				return documentLayout{}, false
+			}
 
-		return append(slices.Clone(registration.Replaces), slot)
-	})
+			return documentLayout{name: registration.Ref.String(), schema: registration.StoredSchema, upgrade: registration.Upgrade, validate: registration.Validate, replaced: replaced}, true
+		},
+	}
 }
 
-// upgradeOperationDocuments upgrades each stored operation document by the name it was persisted under, moving retired names onto their replacements
-func upgradeOperationDocuments(ctx context.Context, req types.InstallationRequest, def types.Definition, stored map[string]json.RawMessage) (map[string]json.RawMessage, error) {
+// userInputKind projects the stored user input document onto the definition's user input layout
+func userInputKind(def types.Definition) documentKind {
+	return documentKind{
+		label:    "layout",
+		sentinel: ErrUserInputInvalid,
+		resolve: func(name string) (documentLayout, bool) {
+			if def.UserInput == nil {
+				return documentLayout{}, false
+			}
+
+			return documentLayout{name: def.UserInput.Name, schema: def.UserInput.Schema, upgrade: def.UserInput.Upgrade, validate: def.UserInput.Validate, replaced: name != def.UserInput.Name}, true
+		},
+	}
+}
+
+// operationInputKind projects stored operation input documents onto the definition's operation registrations
+func operationInputKind(def types.Definition) documentKind {
+	return documentKind{
+		label:    "operation",
+		sentinel: types.ErrOperationConfigInvalid,
+		resolve: func(name string) (documentLayout, bool) {
+			operation, replaced, ok := def.ResolveOperation(name)
+			if !ok || operation.Input == nil {
+				return documentLayout{}, false
+			}
+
+			return documentLayout{name: operation.Name, schema: operation.Input.Schema, upgrade: operation.Input.Upgrade, validate: operation.Input.Validate, replaced: replaced}, true
+		},
+	}
+}
+
+// conformDocuments conforms every stored document onto its current name, dropping a retired document whose replacement is already stored
+func conformDocuments(ctx context.Context, req types.InstallationRequest, kind documentKind, stored map[string]json.RawMessage) (map[string]json.RawMessage, error) {
 	next := maps.Clone(stored)
 
 	if next == nil {
@@ -435,29 +489,29 @@ func upgradeOperationDocuments(ctx context.Context, req types.InstallationReques
 	slices.Sort(names)
 
 	for _, name := range names {
-		operation, replaced, ok := def.ResolveOperation(name)
-		if !ok || operation.Input == nil {
-			logx.FromContext(ctx).Warn().Str("operation", name).Msg("stored operation input is not declared by the definition and was left untouched")
+		layout, ok := kind.resolve(name)
+		if !ok {
+			logx.FromContext(ctx).Warn().Str(kind.label, name).Msg("stored document is not declared by the definition and was left untouched")
 
 			continue
 		}
 
-		conformed, err := conformStored(ctx, req, operation.Input.Schema, operation.Input.Upgrade, operation.Input.Validate, name, stored[name], types.ErrOperationConfigInvalid)
+		if layout.replaced && lo.HasKey(next, layout.name) {
+			delete(next, name)
+
+			continue
+		}
+
+		document, err := conformStored(ctx, req, layout.schema, layout.upgrade, layout.validate, name, stored[name], kind.sentinel)
 		if err != nil {
-			return nil, fmt.Errorf("%w: operation %s", err, name)
+			return nil, fmt.Errorf("%w: %s %s", err, kind.label, name)
 		}
 
-		if !replaced {
-			next[name] = conformed
+		next[layout.name] = document
 
-			continue
+		if layout.replaced {
+			delete(next, name)
 		}
-
-		if _, kept := stored[operation.Name]; !kept {
-			next[operation.Name] = conformed
-		}
-
-		delete(next, name)
 	}
 
 	return next, nil
@@ -470,7 +524,7 @@ func conformStored(ctx context.Context, req types.InstallationRequest, schema js
 	if upgrade != nil {
 		upgraded, err := upgrade(ctx, req, from, stored)
 		if err != nil {
-			return nil, fmt.Errorf("upgrade: %w", err)
+			return nil, fmt.Errorf("%w: upgrade: %w", sentinel, err)
 		}
 
 		document = upgraded
@@ -478,7 +532,7 @@ func conformStored(ctx context.Context, req types.InstallationRequest, schema js
 
 	conformed, err := jsonx.ConformToSchema(schema, document)
 	if err != nil {
-		return nil, fmt.Errorf("conform to schema: %w", err)
+		return nil, fmt.Errorf("%w: conform to schema: %w", sentinel, err)
 	}
 
 	if err := operations.ValidateInput(ctx, req, schema, validate, conformed, sentinel); err != nil {

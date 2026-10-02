@@ -35,4 +35,8 @@ var (
 	ErrInstallationUpgradeFailed = errors.New("integrations/runtime: installation upgrade failed")
 	// ErrLegacyConfigAmbiguous indicates a stored client config key belongs to more than one operation
 	ErrLegacyConfigAmbiguous = errors.New("integrations/runtime: legacy client config key claimed by multiple operations")
+	// ErrUpgradeHookCalled indicates an upgrade hook ran on an absent stored document
+	ErrUpgradeHookCalled = errors.New("integrations/runtime: upgrade hook called on absent document")
+	// ErrTestCycle is the provider failure used by cycle classification tests
+	ErrTestCycle = errors.New("integrations/runtime: provider request failed")
 )

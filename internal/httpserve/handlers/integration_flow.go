@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"maps"
 	"net/http"
 	"slices"
@@ -83,9 +84,18 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 	// if we got optional config with the input, persist it
 	if !jsonx.IsEmptyRawMessage(in.UserInput) || len(in.OperationConfig) > 0 {
 		if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, in.UserInput, in.OperationConfig, types.CredentialSlotID{}, nil, nil); err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Interface("request", in).Msg("failed to reconcile user input")
+			switch {
+			case errors.Is(err, integrationsruntime.ErrOperationNotFound),
+				errors.Is(err, integrationsruntime.ErrUserInputInvalid),
+				errors.Is(err, types.ErrOperationConfigInvalid):
+				logx.FromContext(requestCtx).Warn().Err(err).Str("definition_id", def.ID).Msg("integration input rejected, refusing to start auth flow")
 
-			return h.InternalServerError(ctx, ErrProcessingRequest)
+				return h.BadRequest(ctx, err)
+			default:
+				logx.FromContext(requestCtx).Error().Err(err).Str("definition_id", def.ID).Msg("failed to reconcile user input")
+
+				return h.InternalServerError(ctx, ErrProcessingRequest)
+			}
 		}
 	}
 

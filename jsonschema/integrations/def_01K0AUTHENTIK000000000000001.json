@@ -1,5 +1,5 @@
 {
-  "version": "591d0a788928aedf338709279b18ec55780f42bebd3219e10a5f8ae6cdb61478",
+  "version": "92d7c6b9165bd14cc29e444c24fb6c96796be960dc749b41c7a3229213145966",
   "surface": {
     "id": "def_01K0AUTHENTIK000000000000001",
     "credentials": [
@@ -38,50 +38,19 @@
         "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/authentik/user-input",
         "$ref": "#/$defs/UserInput",
         "$defs": {
-          "DirectorySync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of users and groups from Authentik"
-              },
-              "disableGroupSync": {
-                "type": "boolean",
-                "title": "Disable Group Sync",
-                "description": "Only sync users disable group and membership sync operations"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting",
-                "examples": [
-                  "Example: payload.type == 'internal'"
-                ]
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
           "UserInput": {
             "properties": {
               "primaryDirectory": {
                 "type": "boolean",
                 "title": "Primary Directory",
                 "description": "Mark this as the authoritative source for identity holder enrichment and lifecycle"
-              },
-              "directorySync": {
-                "$ref": "#/$defs/DirectorySync",
-                "title": "Directory Sync"
               }
             },
             "additionalProperties": false,
             "type": "object"
           }
         }
-      },
-      "replaces": [
-        "authentik-v1"
-      ]
+      }
     },
     "installation": {
       "schema": {
@@ -126,20 +95,17 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of users and groups from Authentik"
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
                 },
                 "disableGroupSync": {
                   "type": "boolean",
                   "title": "Disable Group Sync",
                   "description": "Only sync users disable group and membership sync operations"
-                },
-                "filterExpr": {
-                  "type": "string",
-                  "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting",
-                  "examples": [
-                    "Example: payload.type == 'internal'"
-                  ]
                 }
               },
               "additionalProperties": false,

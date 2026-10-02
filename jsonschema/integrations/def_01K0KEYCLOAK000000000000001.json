@@ -1,5 +1,5 @@
 {
-  "version": "00d6039fd55332d53ed9604e06df6b7c5d699079e170f50361ba9927dc477b66",
+  "version": "497efd73d1a8129f60a2994f7d7d489583e4daee441bb772d9e58d94f5ba1fd4",
   "surface": {
     "id": "def_01K0KEYCLOAK000000000000001",
     "credentials": [
@@ -48,47 +48,19 @@
         "$id": "https://github.com/theopenlane/core/v2/internal/integrations/definitions/keycloak/user-input",
         "$ref": "#/$defs/UserInput",
         "$defs": {
-          "DirectorySync": {
-            "properties": {
-              "disable": {
-                "type": "boolean",
-                "title": "Disable",
-                "description": "Disable the syncing of users and groups from Keycloak"
-              },
-              "disableGroupSync": {
-                "type": "boolean",
-                "title": "Disable Group Sync",
-                "description": "Only sync users disable group and membership sync operations"
-              },
-              "filterExpr": {
-                "type": "string",
-                "title": "Filter Expression",
-                "description": "Optional CEL expression to apply to records before ingesting"
-              }
-            },
-            "additionalProperties": false,
-            "type": "object"
-          },
           "UserInput": {
             "properties": {
               "primaryDirectory": {
                 "type": "boolean",
                 "title": "Primary Directory",
                 "description": "Mark this as the authoritative source for identity holder enrichment and lifecycle"
-              },
-              "directorySync": {
-                "$ref": "#/$defs/DirectorySync",
-                "title": "Directory Sync"
               }
             },
             "additionalProperties": false,
             "type": "object"
           }
         }
-      },
-      "replaces": [
-        "keycloak-v1"
-      ]
+      }
     },
     "installation": {
       "schema": {
@@ -133,17 +105,17 @@
                 "disable": {
                   "type": "boolean",
                   "title": "Disable",
-                  "description": "Disable the syncing of users and groups from Keycloak"
+                  "description": "Disable this operation for the installation"
+                },
+                "filterExpr": {
+                  "type": "string",
+                  "title": "Filter Expression",
+                  "description": "Optional CEL expression applied to records before ingesting"
                 },
                 "disableGroupSync": {
                   "type": "boolean",
                   "title": "Disable Group Sync",
                   "description": "Only sync users disable group and membership sync operations"
-                },
-                "filterExpr": {
-                  "type": "string",
-                  "title": "Filter Expression",
-                  "description": "Optional CEL expression to apply to records before ingesting"
                 }
               },
               "additionalProperties": false,

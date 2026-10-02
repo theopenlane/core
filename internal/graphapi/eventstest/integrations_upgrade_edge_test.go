@@ -149,6 +149,69 @@ func TestInstallationUpgradeEdges(t *testing.T) {
 		require.JSONEq(t, `{"zone":"eu"}`, string(reloaded.UserInput.Data))
 	})
 
+	t.Run("corrected user input supplied to reconcile repairs a stranded installation in place and completes the upgrade", func(t *testing.T) {
+		subOrg := suite.UserBuilder(context.Background(), t)
+		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
+
+		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
+			def.UserInput = zoneInputRef.Registration()
+		}))
+		installation := installOn(t, subCtx, previous, json.RawMessage(`{"zone":"eu"}`), nil, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+
+		strict := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
+			def.UserInput = strictRegionInputRef.Registration()
+		}))
+		strictVersion := strict.Registry().Version(testint.DefinitionID.ID())
+
+		_, err := strict.RunHealthAssessment(subCtx, installation)
+		require.ErrorIs(t, err, intruntime.ErrInstallationUpgradeFailed)
+
+		stranded := reloadIntegration(t, subCtx, installation.ID)
+		require.Equal(t, enums.IntegrationStatusErrored, stranded.Status)
+		require.NotEqual(t, strictVersion, stranded.DefinitionVersion)
+
+		require.NoError(t, strict.Reconcile(subCtx, stranded, json.RawMessage(`{"region":"eu"}`), nil, integrationtypes.CredentialSlotID{}, nil, nil))
+
+		repaired := reloadIntegration(t, subCtx, installation.ID)
+		require.Equal(t, strictRegionInputRef.Name(), repaired.UserInput.Layout)
+		require.JSONEq(t, `{"region":"eu"}`, string(repaired.UserInput.Data))
+		require.Equal(t, strictVersion, repaired.DefinitionVersion)
+		require.Equal(t, enums.IntegrationStatusConnected, repaired.Status)
+
+		rows, err := store.LoadAllCredentials(subCtx, repaired)
+		require.NoError(t, err)
+		require.JSONEq(t, `{"token":"token"}`, string(rows[testint.TokenCredential.ID()].Data))
+	})
+
+	t.Run("operation config supplied to reconcile still upgrades every other stored document and completes the upgrade", func(t *testing.T) {
+		subOrg := suite.UserBuilder(context.Background(), t)
+		subCtx := th.SetContext(subOrg.UserCtx, suite.Client.DB)
+
+		previous := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
+			def.UserInput = zoneInputRef.Registration()
+			def.Operations = []integrationtypes.OperationRegistration{syncOperation(retiredSyncOp, integrationtypes.ExecutionPolicy{Inline: true})}
+		}))
+		installation := installOn(t, subCtx, previous, json.RawMessage(`{"zone":"eu"}`), map[string]json.RawMessage{retiredSyncOp.Name(): json.RawMessage(`{"disable":true}`)}, testint.TokenCredential.ID(), testint.TokenCredentialSet("token"))
+		require.JSONEq(t, `{"disable":true}`, string(installation.OperationConfig.For(retiredSyncOp.Name())))
+
+		renamed := runtimeFor(t, definitionOver(func(def *integrationtypes.Definition) {
+			def.UserInput = regionInputRef.Registration()
+			def.Operations = []integrationtypes.OperationRegistration{syncOperation(renamedSyncOp.Replacing(retiredSyncOp), integrationtypes.ExecutionPolicy{Inline: true})}
+		}))
+		renamedVersion := renamed.Registry().Version(testint.DefinitionID.ID())
+		require.NotEqual(t, renamedVersion, installation.DefinitionVersion)
+
+		require.NoError(t, renamed.Reconcile(subCtx, installation, nil, map[string]json.RawMessage{renamedSyncOp.Name(): json.RawMessage(`{"disable":false}`)}, integrationtypes.CredentialSlotID{}, nil, nil))
+
+		reloaded := reloadIntegration(t, subCtx, installation.ID)
+		require.Equal(t, renamedVersion, reloaded.DefinitionVersion)
+		require.Equal(t, regionInputRef.Name(), reloaded.UserInput.Layout)
+		require.JSONEq(t, `{"region":"eu","token":"x"}`, string(reloaded.UserInput.Data))
+		require.JSONEq(t, `{"disable":false}`, string(reloaded.OperationConfig.For(renamedSyncOp.Name())))
+		require.Empty(t, reloaded.OperationConfig.For(retiredSyncOp.Name()))
+		require.Equal(t, enums.IntegrationStatusConnected, reloaded.Status)
+	})
+
 	t.Run("the auth-managed slot's schema participates in the version hash", func(t *testing.T) {
 		v1 := runtimeFor(t, previousOAuthDefinition(t, def, jsonx.SchemaFrom[oauthTokenCredV1]()))
 		v2 := runtimeFor(t, previousOAuthDefinition(t, def, jsonx.SchemaFrom[oauthTokenCredV2]()))
