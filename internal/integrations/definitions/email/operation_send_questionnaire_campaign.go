@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
@@ -143,6 +144,7 @@ func QuestionnaireAuthURL(ctx context.Context, db *generated.Client, assessmentI
 		SubjectID: assessmentID,
 		OrgID:     ownerID,
 		Email:     recipientEmail,
+		Purpose:   shortlinks.PurposeQuestionnaireAuth,
 		Duration:  db.TokenManager.Config().AssessmentAccessDuration,
 		ExtraClaims: func(c *tokens.Claims) {
 			c.AssessmentID = assessmentID

@@ -142,12 +142,11 @@ func (p PaymentReminderSweep) Run(ctx context.Context, req types.OperationReques
 
 		for _, rcp := range recipients {
 			input := emaildef.OrgDeletionNoticeEmail{
-				RecipientInfo: emaildef.RecipientInfo{
-					Email:     rcp.email,
-					FirstName: rcp.firstName,
-					LastName:  rcp.lastName,
-				},
+				Email:        rcp.email,
+				FirstName:    rcp.firstName,
+				LastName:     rcp.lastName,
 				OrgName:      org.Name,
+				OrgID:        org.ID,
 				DeletionDate: pendingDeletionAt,
 			}
 

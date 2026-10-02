@@ -1,6 +1,8 @@
 package email
 
 import (
+	"cmp"
+	"context"
 	"fmt"
 	"html/template"
 	"net/url"
@@ -13,6 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email/themes"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
@@ -37,6 +40,9 @@ const (
 
 // ndaApprovalRequestPath is the console path where an approver reviews pending NDA requests
 const ndaApprovalRequestPath = "/trust-center/NDAs"
+
+// billingPath is the console route where an organization adds a payment method
+const billingPath = "/billing"
 
 // Brand palette colors sourced from the Openlane web design system (global.css)
 const (
@@ -113,6 +119,10 @@ type VerifyEmailRequest struct {
 // WelcomeRequest is the input for the welcome email operation
 type WelcomeRequest struct {
 	RecipientInfo
+	// UserID identifies the new account; attached to the tracking link so clicks group by user
+	UserID string `json:"user_id,omitempty" jsonschema:"description=Identifier of the new user"`
+	// GetStartedURL is the console link the button points at
+	GetStartedURL string `json:"getStartedURL,omitempty" jsonschema:"description=Console link the button points at"`
 }
 
 // InviteRequest is the input for the organization invite operation
@@ -135,6 +145,10 @@ type InviteJoinedRequest struct {
 	RecipientInfo
 	// OrgName is the organization the user joined
 	OrgName string `json:"org_name" jsonschema:"required,description=Organization name"`
+	// OrgID identifies the joined organization
+	OrgID string `json:"org_id,omitempty" jsonschema:"description=Identifier of the joined organization"`
+	// GetStartedURL is the console link the button points at
+	GetStartedURL string `json:"getStartedURL,omitempty" jsonschema:"description=Console link the button points at"`
 }
 
 // PasswordResetEmailRequest is the input for the password reset request operation
@@ -257,6 +271,10 @@ type OrgDeletionNoticeEmail struct {
 	OrgName string `json:"org_name" jsonschema:"required,description=Organization name"`
 	// DeletionDate is the date the organization will be deleted
 	DeletionDate time.Time `json:"deletion_date" jsonschema:"required,description=Scheduled deletion date"`
+	// OrgID identifies the organization scheduled for deletion
+	OrgID string `json:"org_id,omitempty" jsonschema:"description=Identifier of the organization scheduled for deletion"`
+	// BillingURL is the console billing link the button points at
+	BillingURL string `json:"billingURL,omitempty" jsonschema:"description=Billing link the button points at"`
 }
 
 // TrustCenterNDAApprovalRequestEmail is the input for notifying the organization's
@@ -269,6 +287,10 @@ type TrustCenterNDAApprovalRequestEmail struct {
 	RequesterName string `json:"requester_name,omitempty" jsonschema:"description=Name of the requester"`
 	// RequesterEmail is the email address of the person requesting access
 	RequesterEmail string `json:"requester_email" jsonschema:"required,description=Email address of the requester"`
+	// OrgID identifies the organization whose trust center received the request
+	OrgID string `json:"org_id,omitempty" jsonschema:"description=Identifier of the organization that owns the trust center"`
+	// ReviewURL is the console review link the button points at
+	ReviewURL string `json:"reviewURL,omitempty" jsonschema:"description=Review link the button points at"`
 }
 
 // --- Schema + operation ref vars ---
@@ -328,6 +350,15 @@ var _ = RegisterEmailOperation(Operation[WelcomeRequest]{
 	Subject: func(cfg RuntimeEmailConfig, _ WelcomeRequest) string {
 		return "Welcome to " + cfg.CompanyName + "!"
 	},
+	PreHook: func(ctx context.Context, req types.OperationRequest, cfg RuntimeEmailConfig, input *WelcomeRequest) error {
+		if input.GetStartedURL != "" {
+			return nil
+		}
+
+		input.GetStartedURL = trackingLink(ctx, req, cfg.ProductURL, shortlinks.Metadata{Purpose: shortlinks.PurposeWelcome, UserID: input.UserID, RecipientEmail: linkRecipient(input.RecipientInfo)}, "")
+
+		return nil
+	},
 	Build: func(cfg RuntimeEmailConfig, req WelcomeRequest) render.ContentBody {
 		return render.ContentBody{
 			Preheader: "We're thrilled to have you here!",
@@ -344,7 +375,7 @@ var _ = RegisterEmailOperation(Operation[WelcomeRequest]{
 				},
 			},
 			Actions: []render.Action{{
-				Button: render.Button{Text: "Get Started", Link: cfg.ProductURL},
+				Button: render.Button{Text: "Get Started", Link: cmp.Or(req.GetStartedURL, cfg.ProductURL)},
 			}},
 		}
 	},
@@ -395,6 +426,15 @@ var _ = RegisterEmailOperation(Operation[InviteJoinedRequest]{
 	Subject: func(cfg RuntimeEmailConfig, _ InviteJoinedRequest) string {
 		return "You've been added to an Organization on " + cfg.CompanyName
 	},
+	PreHook: func(ctx context.Context, req types.OperationRequest, cfg RuntimeEmailConfig, input *InviteJoinedRequest) error {
+		if input.GetStartedURL != "" {
+			return nil
+		}
+
+		input.GetStartedURL = trackingLink(ctx, req, cfg.ProductURL, shortlinks.Metadata{Purpose: shortlinks.PurposeOrgInviteJoined, OrganizationID: input.OrgID, RecipientEmail: linkRecipient(input.RecipientInfo)}, "")
+
+		return nil
+	},
 	Build: func(cfg RuntimeEmailConfig, req InviteJoinedRequest) render.ContentBody {
 		return render.ContentBody{
 			Preheader: "You're now a part of the " + req.OrgName + " organization on " + cfg.CompanyName,
@@ -411,7 +451,7 @@ var _ = RegisterEmailOperation(Operation[InviteJoinedRequest]{
 				},
 			},
 			Actions: []render.Action{{
-				Button: render.Button{Text: "Get Started", Link: cfg.ProductURL},
+				Button: render.Button{Text: "Get Started", Link: cmp.Or(req.GetStartedURL, cfg.ProductURL)},
 			}},
 		}
 	},
@@ -652,6 +692,15 @@ var _ = RegisterEmailOperation(Operation[TrustCenterNDAApprovalRequestEmail]{
 	Subject: func(cfg RuntimeEmailConfig, _ TrustCenterNDAApprovalRequestEmail) string {
 		return "Trust Center NDA Request Pending Approval in " + cfg.CompanyName
 	},
+	PreHook: func(ctx context.Context, req types.OperationRequest, cfg RuntimeEmailConfig, input *TrustCenterNDAApprovalRequestEmail) error {
+		if input.ReviewURL != "" {
+			return nil
+		}
+
+		input.ReviewURL = trackingLink(ctx, req, cfg.ProductURL+ndaApprovalRequestPath, shortlinks.Metadata{Purpose: shortlinks.PurposeTrustCenterNDAApproval, OrganizationID: input.OrgID, RecipientEmail: linkRecipient(input.RecipientInfo)}, "")
+
+		return nil
+	},
 	Build: func(cfg RuntimeEmailConfig, req TrustCenterNDAApprovalRequestEmail) render.ContentBody {
 		requester := req.RequesterEmail
 		if req.RequesterName != "" {
@@ -676,7 +725,7 @@ var _ = RegisterEmailOperation(Operation[TrustCenterNDAApprovalRequestEmail]{
 			Actions: []render.Action{{
 				Button: render.Button{
 					Text:      "Review NDA Request",
-					Link:      cfg.ProductURL + ndaApprovalRequestPath,
+					Link:      cmp.Or(req.ReviewURL, cfg.ProductURL+ndaApprovalRequestPath),
 					Color:     tcButtonColor,
 					TextColor: tcButtonTextColor,
 				},
@@ -759,6 +808,15 @@ var _ = RegisterEmailOperation(Operation[OrgDeletionNoticeEmail]{
 	Subject: func(_ RuntimeEmailConfig, req OrgDeletionNoticeEmail) string {
 		return fmt.Sprintf("Organization Deletion Notice for %s", req.OrgName)
 	},
+	PreHook: func(ctx context.Context, req types.OperationRequest, cfg RuntimeEmailConfig, input *OrgDeletionNoticeEmail) error {
+		if input.BillingURL != "" {
+			return nil
+		}
+
+		input.BillingURL = trackingLink(ctx, req, cfg.ProductURL+billingPath, shortlinks.Metadata{Purpose: shortlinks.PurposeOrgDeletionNotice, OrganizationID: input.OrgID, RecipientEmail: linkRecipient(input.RecipientInfo)}, "")
+
+		return nil
+	},
 	Build: func(cfg RuntimeEmailConfig, req OrgDeletionNoticeEmail) render.ContentBody {
 		return render.ContentBody{
 			Preheader: "Your organization " + req.OrgName + " has been scheduled for deletion",
@@ -775,7 +833,7 @@ var _ = RegisterEmailOperation(Operation[OrgDeletionNoticeEmail]{
 				},
 			},
 			Actions: []render.Action{{
-				Button: render.Button{Text: "Add Payment Method", Link: cfg.ProductURL + "/billing", Color: tcButtonColor, TextColor: tcButtonTextColor},
+				Button: render.Button{Text: "Add Payment Method", Link: cmp.Or(req.BillingURL, cfg.ProductURL+billingPath), Color: tcButtonColor, TextColor: tcButtonTextColor},
 			}},
 			Outros: render.OutrosBlock{
 				Paragraphs: []string{

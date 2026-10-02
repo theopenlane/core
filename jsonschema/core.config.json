@@ -1576,6 +1576,9 @@
         },
         "endpointurl": {
           "type": "string"
+        },
+        "linkttl": {
+          "type": "integer"
         }
       },
       "additionalProperties": false,

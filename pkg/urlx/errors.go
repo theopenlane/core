@@ -5,8 +5,6 @@ import "errors"
 var (
 	// ErrTokenCreationFailed indicates that the token pair could not be created
 	ErrTokenCreationFailed = errors.New("urlx: token creation failed")
-	// ErrURLConstructionFailed indicates that the URL could not be constructed
-	ErrURLConstructionFailed = errors.New("urlx: URL construction failed")
 	// ErrEmptyURL indicates the input URL is empty or whitespace
 	ErrEmptyURL = errors.New("urlx: url is required")
 	// ErrInvalidURL indicates the input could not be parsed as a URL
