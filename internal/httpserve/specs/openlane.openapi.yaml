@@ -710,6 +710,14 @@ components:
                                                         type: string
                                                 type: object
                                             type: array
+                                        input:
+                                            description: InputRegistration describes one stored installation-scoped input layout and how older documents move onto it
+                                            nullable: true
+                                            properties:
+                                                name:
+                                                    type: string
+                                                schema: {}
+                                            type: object
                                         name:
                                             type: string
                                         policy:
@@ -745,7 +753,6 @@ components:
                                 description: RuntimeIntegrationRegistration declares a definition provisioned from a runtime config struct
                                 nullable: true
                                 properties:
-                                    config: {}
                                     schema: {}
                                 type: object
                             spec:
@@ -775,9 +782,11 @@ components:
                                         type: boolean
                                 type: object
                             userInput:
-                                description: UserInputRegistration describes installation-scoped user input
+                                description: InputRegistration describes one stored installation-scoped input layout and how older documents move onto it
                                 nullable: true
                                 properties:
+                                    name:
+                                        type: string
                                     schema: {}
                                 type: object
                             webhooks:
