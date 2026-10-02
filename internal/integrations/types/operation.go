@@ -5,15 +5,14 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/common/enums"
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
-// OperationSettings holds the uniform per-installation settings stored on every operation input
+// OperationSettings holds the uniform per-installation settings every stored operation input carries; a
+// stored-input config type embeds it so the settings reflect into the operation's schema beside its own fields
 type OperationSettings struct {
 	// Disable switches the operation off for the installation
 	Disable bool `json:"disable,omitempty" jsonschema:"title=Disable,description=Disable this operation for the installation"`
@@ -21,13 +20,16 @@ type OperationSettings struct {
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression applied to records before ingesting"`
 }
 
+// operationSettings marks the type as carrying the uniform operation settings
+func (OperationSettings) operationSettings() {}
+
+// OperationInput is satisfied by any config type that embeds OperationSettings, which every stored-input operation requires
+type OperationInput interface {
+	operationSettings()
+}
+
 // operationSettingsSchema is the reflected schema of the uniform operation settings
 var operationSettingsSchema = jsonx.SchemaFrom[OperationSettings]()
-
-// operationSettingsKeys lists the stored keys the uniform operation settings occupy
-var operationSettingsKeys = lo.Map(jsonx.PropertyDescriptors[OperationSettings](), func(property jsonx.PropertyDescriptor, _ int) string {
-	return property.Name
-})
 
 // OperationSettingsSchema returns a copy of the reflected uniform operation settings schema
 func OperationSettingsSchema() json.RawMessage {

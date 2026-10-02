@@ -52,7 +52,9 @@ type AssessmentPayload struct {
 }
 
 // AssessmentsCollect collects Azure Defender for Cloud assessment findings for ingest
-type AssessmentsCollect struct{}
+type AssessmentsCollect struct {
+	types.OperationSettings
+}
 
 // runAssessmentsCollect collects all unhealthy security assessment findings for the subscription
 func runAssessmentsCollect(ctx context.Context, _ types.OperationRequest, client *SecurityClient, _ AssessmentsCollect) ([]types.IngestPayloadSet, error) {

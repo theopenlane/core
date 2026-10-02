@@ -58,18 +58,22 @@ type githubAppCredential struct {
 
 // DirectorySync controls the directory sync operation
 type DirectorySync struct {
+	types.OperationSettings
 	// DisableGroupSync will just sync users and no groups or group memberships
 	DisableGroupSync bool `json:"disableGroupSync,omitempty" jsonschema:"title=Disable Group Sync,description=Only sync users from GitHub, disable groups sync operations"`
 }
 
 // VulnerabilitySync controls the vulnerability collect operation
 type VulnerabilitySync struct {
+	types.OperationSettings
 	// MaxRepos caps the number of repositories scanned during one run
 	MaxRepos int `json:"maxRepos,omitempty" jsonschema:"title=Max Repositories,description=Optional cap on the number of repositories to scan."`
 }
 
 // RepositorySync controls the repository sync operation
-type RepositorySync struct{}
+type RepositorySync struct {
+	types.OperationSettings
+}
 
 // InstallationMetadata holds the stable GitHub App installation identity attributes
 type InstallationMetadata struct {

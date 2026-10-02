@@ -19,9 +19,9 @@ var DefinitionID = types.NewDefinitionRef("def_01K0TESTDEF0000000000000001")
 
 var (
 	// RepoSyncOp is the async client-resolving operation
-	RepoSyncOp = types.OperationRefOf[repoSync]().Handles(testClient, repoSyncHandler)
+	RepoSyncOp = types.OperationPayloadOf[repoSync]().Handles(testClient, repoSyncHandler)
 	// ValidatedOp is the inline operation with a required config field
-	ValidatedOp = types.OperationRefOf[validatedRun]().HandlesRequest(validatedHandler).Policy(types.ExecutionPolicy{Inline: true})
+	ValidatedOp = types.OperationPayloadOf[validatedRun]().HandlesRequest(validatedHandler).Policy(types.ExecutionPolicy{Inline: true})
 	// RecurringOp is the healthy idle loop
 	RecurringOp = types.OperationRefOf[recurringCycle]().
 			HandlesRequest(idleCycle[recurringCycle]).
@@ -95,11 +95,17 @@ type validatedRun struct {
 	Target string `json:"target" jsonschema:"required"`
 }
 
-type recurringCycle struct{}
+type recurringCycle struct {
+	types.OperationSettings
+}
 
-type exhaustingCycle struct{}
+type exhaustingCycle struct {
+	types.OperationSettings
+}
 
-type unresolvableCycle struct{}
+type unresolvableCycle struct {
+	types.OperationSettings
+}
 
 // tokenCred is the credential material the test client is built from
 type tokenCred struct {

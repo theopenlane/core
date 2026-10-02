@@ -73,7 +73,9 @@ type UserInput struct {
 }
 
 // DirectorySync is the Slack directory account sync operation configuration
-type DirectorySync struct{}
+type DirectorySync struct {
+	types.OperationSettings
+}
 
 // InstallationMetadata holds the stable Slack workspace identity for one installation
 type InstallationMetadata struct {

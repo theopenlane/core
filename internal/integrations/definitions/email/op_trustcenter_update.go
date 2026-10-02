@@ -37,7 +37,7 @@ type TrustCenterUpdateRequest struct {
 }
 
 // TrustCenterUpdateOp is the typed operation ref for the trust center post notification, registered under the durable template key
-var TrustCenterUpdateOp = types.NewOperationRef[TrustCenterUpdateRequest](TrustCenterUpdateTemplate)
+var TrustCenterUpdateOp = types.NewOperationPayload[TrustCenterUpdateRequest](TrustCenterUpdateTemplate)
 
 var _ = RegisterEmailOperation(Operation[TrustCenterUpdateRequest]{
 	Op: TrustCenterUpdateOp, Theme: baseTheme,

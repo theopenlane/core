@@ -6,6 +6,10 @@ import (
 	"errors"
 	"slices"
 	"testing"
+
+	"github.com/samber/lo"
+
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // oauthCredential is the credential type behind the OAuth test slot
@@ -168,12 +172,16 @@ func TestOperationSettingsFrom(t *testing.T) {
 		t.Fatal("expected a non-object document to fail decoding")
 	}
 
-	if got := len(OperationSettingsSchema()); got == 0 {
-		t.Fatal("expected the settings schema reflected")
+	keys := lo.Map(jsonx.PropertyDescriptors[OperationSettings](), func(property jsonx.PropertyDescriptor, _ int) string {
+		return property.Name
+	})
+
+	if !slices.Equal(keys, []string{"disable", "filterExpr"}) {
+		t.Fatalf("settings schema keys = %v", keys)
 	}
 
-	if !slices.Equal(operationSettingsKeys, []string{"disable", "filterExpr"}) {
-		t.Fatalf("operationSettingsKeys = %v", operationSettingsKeys)
+	if got := len(OperationSettingsSchema()); got == 0 {
+		t.Fatal("expected the settings schema reflected")
 	}
 }
 

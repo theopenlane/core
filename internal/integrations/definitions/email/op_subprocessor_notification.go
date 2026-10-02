@@ -41,7 +41,7 @@ type SubprocessorNotificationRequest struct {
 }
 
 // SubprocessorNotificationOp is the typed operation ref used for catalog dispatch
-var SubprocessorNotificationOp = types.OperationRefOf[SubprocessorNotificationRequest]() //nolint:revive
+var SubprocessorNotificationOp = types.OperationPayloadOf[SubprocessorNotificationRequest]() //nolint:revive
 
 var _ = RegisterEmailOperation(Operation[SubprocessorNotificationRequest]{
 	Op: SubprocessorNotificationOp, Theme: baseTheme,

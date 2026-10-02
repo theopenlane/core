@@ -33,7 +33,7 @@ func validatedHandler(context.Context, types.OperationRequest, validatedRun) (js
 }
 
 // idleCycle reports zero drift
-func idleCycle[Cfg any](context.Context, types.OperationRequest, Cfg) (json.RawMessage, error) {
+func idleCycle[Config any](context.Context, types.OperationRequest, Config) (json.RawMessage, error) {
 	return nil, nil
 }
 

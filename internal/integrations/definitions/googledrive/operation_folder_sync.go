@@ -20,6 +20,7 @@ const (
 
 // FolderSync lists Google Docs in a folder and emits ingest envelopes
 type FolderSync struct {
+	types.OperationSettings
 	// FolderID is the Google Drive folder ID or URL containing policy documents
 	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder ID,description=Google Drive folder ID or URL containing policy documents,required"`
 }

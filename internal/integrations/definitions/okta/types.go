@@ -27,6 +27,7 @@ type UserInput struct {
 
 // DirectorySync configures collection of Okta directory users, groups, and memberships
 type DirectorySync struct {
+	types.OperationSettings
 	// Search is an optional Okta search expression applied server-side when listing users
 	Search string `json:"search,omitempty" jsonschema:"title=User Search Expression,description=Optional Okta search expression for filtering users (e.g. profile.department eq \"Engineering\")."`
 	// EnableGroupSync controls whether group and membership records are collected

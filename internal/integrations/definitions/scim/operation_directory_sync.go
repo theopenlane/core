@@ -19,7 +19,9 @@ var directorySyncOperation = types.OperationRefOf[DirectorySync]().
 	SkipDefaultLookback()
 
 // DirectorySync is the SCIM directory sync operation configuration
-type DirectorySync struct{}
+type DirectorySync struct {
+	types.OperationSettings
+}
 
 // directorySyncResult is the operation result returned for push-based SCIM sync requests
 type directorySyncResult struct {

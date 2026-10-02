@@ -36,7 +36,9 @@ type UserInput struct {
 }
 
 // DirectorySync configures collection of Google Workspace directory users, groups, and memberships
-type DirectorySync struct{}
+type DirectorySync struct {
+	types.OperationSettings
+}
 
 // InstallationMetadata holds the Google Workspace directory target for an installation
 type InstallationMetadata struct {

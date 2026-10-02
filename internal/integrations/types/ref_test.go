@@ -24,6 +24,7 @@ type refTestRetiredCredential struct {
 
 // refTestInput is the user input type the user input ref tests reflect
 type refTestInput struct {
+	OperationSettings
 	Region string `json:"region" jsonschema:"required"`
 }
 
@@ -64,21 +65,27 @@ func refTestUpgradeInput(_ context.Context, _ InstallationRequest, from string, 
 
 // refTestConfig is an operation config type the operation ref tests reflect
 type refTestConfig struct {
+	OperationSettings
 	// Limit bounds the number of records the operation reads
 	Limit int `json:"limit"`
 }
 
 // refTestRetiredConfig is the shape an earlier definition version stored the limit under
 type refTestRetiredConfig struct {
+	OperationSettings
 	// Max is the retired name of the limit
 	Max int `json:"max"`
 }
 
 // refTestZetaConfig is an empty retired config named to sort last
-type refTestZetaConfig struct{}
+type refTestZetaConfig struct {
+	OperationSettings
+}
 
 // refTestAlphaConfig is an empty retired config named to sort first
-type refTestAlphaConfig struct{}
+type refTestAlphaConfig struct {
+	OperationSettings
+}
 
 // refTestUpgradeConfig maps a document stored under the retired operation onto the current config layout
 func refTestUpgradeConfig(_ context.Context, _ InstallationRequest, from string, stored json.RawMessage) (refTestConfig, error) {
@@ -89,7 +96,7 @@ func refTestUpgradeConfig(_ context.Context, _ InstallationRequest, from string,
 			return refTestConfig{}, err
 		}
 
-		return refTestConfig{Limit: old.Max}, nil
+		return refTestConfig{OperationSettings: old.OperationSettings, Limit: old.Max}, nil
 	default:
 		return jsonx.Decode[refTestConfig](stored)
 	}
@@ -337,9 +344,35 @@ func TestClientRefIdentity(t *testing.T) {
 func TestOperationRefName(t *testing.T) {
 	t.Parallel()
 
-	ref := NewOperationRef[refTestCredential]("refTestCredential")
+	ref := NewOperationPayload[refTestCredential]("refTestCredential")
 	if ref.Name() != "refTestCredential" {
 		t.Fatalf("OperationRef.Name() = %q", ref.Name())
+	}
+}
+
+func TestOperationPayloadRegistrationHasNoInput(t *testing.T) {
+	t.Parallel()
+
+	definition := NewDefinitionRef("def_001")
+
+	reg := OperationPayloadOf[refTestCredential]().
+		Upgraded(func(_ context.Context, _ InstallationRequest, _ string, stored json.RawMessage) (refTestCredential, error) {
+			return jsonx.Decode[refTestCredential](stored)
+		}).
+		Registration(definition, OperationRegistration{})
+
+	if reg.Name != "refTestCredential" || reg.Input != nil {
+		t.Fatalf("expected a payload operation named from its schema with no stored input, got %+v", reg)
+	}
+
+	if jsonx.SchemaID(reg.ConfigSchema) != "refTestCredential" {
+		t.Fatalf("expected the payload schema as the config schema, got %s", reg.ConfigSchema)
+	}
+
+	stored := OperationRefOf[refTestConfig]().Registration(definition, OperationRegistration{})
+
+	if stored.Input == nil || string(stored.Input.Schema) != string(stored.ConfigSchema) {
+		t.Fatalf("expected a stored-input operation to carry one schema for config and input, got %+v", stored)
 	}
 }
 
@@ -548,7 +581,7 @@ func TestOperationRefReplacing(t *testing.T) {
 	}
 }
 
-func TestOperationRefUpgradedKeepsSettings(t *testing.T) {
+func TestOperationRefUpgraded(t *testing.T) {
 	t.Parallel()
 
 	definition := NewDefinitionRef("def_001")
@@ -949,14 +982,14 @@ func TestOperationRefHandlesDoesNotAliasTheReceiver(t *testing.T) {
 func TestWebhookRefRegistration(t *testing.T) {
 	t.Parallel()
 
-	reg := NewWebhookRef("installation.events").Registration(WebhookRegistration{StaticRoute: "/hooks", Replaces: []string{"old"}})
+	reg := NewWebhookRef("installation.events").Replacing(NewWebhookRef("old")).Registration(WebhookRegistration{StaticRoute: "/hooks", Replaces: []string{"stale"}})
 
 	if reg.Name != "installation.events" {
 		t.Fatalf("Name = %q", reg.Name)
 	}
 
 	if reg.StaticRoute != "/hooks" || !slices.Equal(reg.Replaces, []string{"old"}) {
-		t.Fatalf("expected base fields preserved, got %+v", reg)
+		t.Fatalf("expected the base route preserved and replacements taken from the ref only, got %+v", reg)
 	}
 }
 

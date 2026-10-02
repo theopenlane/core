@@ -55,13 +55,19 @@ const (
 )
 
 // DirectorySync holds installation-specific configuration for Cloudflare account members
-type DirectorySync struct{}
+type DirectorySync struct {
+	types.OperationSettings
+}
 
 // FindingsSync holds installation-specific configuration for Cloudflare Security Center insights
-type FindingsSync struct{}
+type FindingsSync struct {
+	types.OperationSettings
+}
 
 // AssetSync holds installation-specific configuration for Cloudflare domain assets
-type AssetSync struct{}
+type AssetSync struct {
+	types.OperationSettings
+}
 
 // CredentialSchema holds the Cloudflare API credentials for one installation
 type CredentialSchema struct {
