@@ -1,0 +1,174 @@
+extend type Query {
+    """
+    Look up trustCenterNDARequestSetting by ID
+    """
+     trustCenterNDARequestSetting(
+        """
+        ID of the trustCenterNDARequestSetting
+        """
+        id: ID!
+    ):  TrustCenterNDARequestSetting!
+}
+
+extend type Mutation{
+    """
+    Create a new trustCenterNDARequestSetting
+    """
+    createTrustCenterNDARequestSetting(
+        """
+        values of the trustCenterNDARequestSetting
+        """
+        input: CreateTrustCenterNDARequestSettingInput!
+    ): TrustCenterNDARequestSettingCreatePayload!
+    """
+    Create multiple new trustCenterNDARequestSettings
+    """
+    createBulkTrustCenterNDARequestSetting(
+        """
+        values of the trustCenterNDARequestSetting
+        """
+        input: [CreateTrustCenterNDARequestSettingInput!]
+    ): TrustCenterNDARequestSettingBulkCreatePayload!
+    """
+    Create multiple new trustCenterNDARequestSettings via file upload
+    """
+    createBulkCSVTrustCenterNDARequestSetting(
+        """
+        csv file containing values of the trustCenterNDARequestSetting
+        """
+        input: Upload!
+    ): TrustCenterNDARequestSettingBulkCreatePayload!
+    """
+    Update multiple existing trustCenterNDARequestSettings
+    """
+    updateBulkTrustCenterNDARequestSetting(
+        """
+        IDs of the trustCenterNDARequestSettings to update
+        """
+        ids: [ID!]!
+        """
+        values to update the trustCenterNDARequestSettings with
+        """
+        input: UpdateTrustCenterNDARequestSettingInput!
+    ): TrustCenterNDARequestSettingBulkUpdatePayload!
+    """
+    Update multiple existing trustCenterNDARequestSettings via file upload
+    """
+    updateBulkCSVTrustCenterNDARequestSetting(
+        """
+        csv file containing values of the trustCenterNDARequestSetting, must include ID column
+        """
+        input: Upload!
+    ): TrustCenterNDARequestSettingBulkUpdatePayload!
+    """
+    Update an existing trustCenterNDARequestSetting
+    """
+    updateTrustCenterNDARequestSetting(
+        """
+        ID of the trustCenterNDARequestSetting
+        """
+        id: ID!
+        """
+        New values for the trustCenterNDARequestSetting
+        """
+        input: UpdateTrustCenterNDARequestSettingInput!
+    ): TrustCenterNDARequestSettingUpdatePayload!
+    """
+    Delete an existing trustCenterNDARequestSetting
+    """
+    deleteTrustCenterNDARequestSetting(
+        """
+        ID of the trustCenterNDARequestSetting
+        """
+        id: ID!
+    ): TrustCenterNDARequestSettingDeletePayload!
+    """
+    Delete multiple trustCenterNDARequestSettings
+    """
+    deleteBulkTrustCenterNDARequestSetting(
+        """
+        IDs of the trustCenterNDARequestSettings to delete
+        """
+        ids: [ID!]!
+    ): TrustCenterNDARequestSettingBulkDeletePayload!
+}
+
+"""
+Return response for createTrustCenterNDARequestSetting mutation
+"""
+type TrustCenterNDARequestSettingCreatePayload {
+    """
+    Created trustCenterNDARequestSetting
+    """
+    trustCenterNDARequestSetting: TrustCenterNDARequestSetting!
+}
+
+"""
+Return response for updateTrustCenterNDARequestSetting mutation
+"""
+type TrustCenterNDARequestSettingUpdatePayload {
+    """
+    Updated trustCenterNDARequestSetting
+    """
+    trustCenterNDARequestSetting: TrustCenterNDARequestSetting!
+}
+
+"""
+Return response for deleteTrustCenterNDARequestSetting mutation
+"""
+type TrustCenterNDARequestSettingDeletePayload {
+    """
+    Deleted trustCenterNDARequestSetting ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTrustCenterNDARequestSetting mutation
+"""
+type TrustCenterNDARequestSettingBulkCreatePayload {
+    """
+    Created trustCenterNDARequestSettings
+    """
+    trustCenterNDARequestSettings: [TrustCenterNDARequestSetting!]
+}
+
+"""
+Return response for updateBulkTrustCenterNDARequestSetting mutation
+"""
+type TrustCenterNDARequestSettingBulkUpdatePayload {
+    """
+    Updated trustCenterNDARequestSettings
+    """
+    trustCenterNDARequestSettings: [TrustCenterNDARequestSetting!]
+    """
+    IDs of the updated trustCenterNDARequestSettings
+    """
+    updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
+}
+
+"""
+Return response for deleteBulkTrustCenterNDARequestSetting mutation
+"""
+type TrustCenterNDARequestSettingBulkDeletePayload {
+    """
+    Deleted trustCenterNDARequestSetting IDs
+    """
+    deletedIDs: [ID!]!
+    """
+    Error returned when the bulk delete is only partially applied
+    """
+    error: String
+    """
+    IDs of trustCenterNDARequestSettings that were not deleted
+    """
+    notDeletedIDs: [ID!]
+}

@@ -102,6 +102,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterentity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequestsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
@@ -307,6 +308,8 @@ type Client struct {
 	TrustCenterFAQ *TrustCenterFAQClient
 	// TrustCenterNDARequest is the client for interacting with the TrustCenterNDARequest builders.
 	TrustCenterNDARequest *TrustCenterNDARequestClient
+	// TrustCenterNDARequestSetting is the client for interacting with the TrustCenterNDARequestSetting builders.
+	TrustCenterNDARequestSetting *TrustCenterNDARequestSettingClient
 	// TrustCenterSetting is the client for interacting with the TrustCenterSetting builders.
 	TrustCenterSetting *TrustCenterSettingClient
 	// TrustCenterSubprocessor is the client for interacting with the TrustCenterSubprocessor builders.
@@ -442,6 +445,7 @@ func (c *Client) init() {
 	c.TrustCenterEntity = NewTrustCenterEntityClient(c.config)
 	c.TrustCenterFAQ = NewTrustCenterFAQClient(c.config)
 	c.TrustCenterNDARequest = NewTrustCenterNDARequestClient(c.config)
+	c.TrustCenterNDARequestSetting = NewTrustCenterNDARequestSettingClient(c.config)
 	c.TrustCenterSetting = NewTrustCenterSettingClient(c.config)
 	c.TrustCenterSubprocessor = NewTrustCenterSubprocessorClient(c.config)
 	c.TrustCenterWatermarkConfig = NewTrustCenterWatermarkConfigClient(c.config)
@@ -654,107 +658,108 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:                        ctx,
-		config:                     cfg,
-		APIToken:                   NewAPITokenClient(cfg),
-		ActionPlan:                 NewActionPlanClient(cfg),
-		Assessment:                 NewAssessmentClient(cfg),
-		AssessmentResponse:         NewAssessmentResponseClient(cfg),
-		Asset:                      NewAssetClient(cfg),
-		Campaign:                   NewCampaignClient(cfg),
-		CampaignTarget:             NewCampaignTargetClient(cfg),
-		CheckResult:                NewCheckResultClient(cfg),
-		Contact:                    NewContactClient(cfg),
-		Control:                    NewControlClient(cfg),
-		ControlImplementation:      NewControlImplementationClient(cfg),
-		ControlObjective:           NewControlObjectiveClient(cfg),
-		CustomDomain:               NewCustomDomainClient(cfg),
-		CustomTypeEnum:             NewCustomTypeEnumClient(cfg),
-		DNSVerification:            NewDNSVerificationClient(cfg),
-		DirectoryAccount:           NewDirectoryAccountClient(cfg),
-		DirectoryGroup:             NewDirectoryGroupClient(cfg),
-		DirectoryMembership:        NewDirectoryMembershipClient(cfg),
-		Discussion:                 NewDiscussionClient(cfg),
-		DocumentData:               NewDocumentDataClient(cfg),
-		EmailTemplate:              NewEmailTemplateClient(cfg),
-		EmailVerificationToken:     NewEmailVerificationTokenClient(cfg),
-		Entity:                     NewEntityClient(cfg),
-		EntityType:                 NewEntityTypeClient(cfg),
-		Event:                      NewEventClient(cfg),
-		Evidence:                   NewEvidenceClient(cfg),
-		Export:                     NewExportClient(cfg),
-		File:                       NewFileClient(cfg),
-		FileDownloadToken:          NewFileDownloadTokenClient(cfg),
-		Finding:                    NewFindingClient(cfg),
-		FindingControl:             NewFindingControlClient(cfg),
-		Group:                      NewGroupClient(cfg),
-		GroupMembership:            NewGroupMembershipClient(cfg),
-		GroupSetting:               NewGroupSettingClient(cfg),
-		Hush:                       NewHushClient(cfg),
-		IdentityHolder:             NewIdentityHolderClient(cfg),
-		ImpersonationEvent:         NewImpersonationEventClient(cfg),
-		Integration:                NewIntegrationClient(cfg),
-		IntegrationRun:             NewIntegrationRunClient(cfg),
-		IntegrationWebhook:         NewIntegrationWebhookClient(cfg),
-		InternalPolicy:             NewInternalPolicyClient(cfg),
-		Invite:                     NewInviteClient(cfg),
-		MappableDomain:             NewMappableDomainClient(cfg),
-		MappedControl:              NewMappedControlClient(cfg),
-		Narrative:                  NewNarrativeClient(cfg),
-		Note:                       NewNoteClient(cfg),
-		Notification:               NewNotificationClient(cfg),
-		NotificationPreference:     NewNotificationPreferenceClient(cfg),
-		NotificationTemplate:       NewNotificationTemplateClient(cfg),
-		Onboarding:                 NewOnboardingClient(cfg),
-		OrgMembership:              NewOrgMembershipClient(cfg),
-		OrgModule:                  NewOrgModuleClient(cfg),
-		OrgPrice:                   NewOrgPriceClient(cfg),
-		OrgProduct:                 NewOrgProductClient(cfg),
-		OrgSubscription:            NewOrgSubscriptionClient(cfg),
-		Organization:               NewOrganizationClient(cfg),
-		OrganizationSetting:        NewOrganizationSettingClient(cfg),
-		PasswordResetToken:         NewPasswordResetTokenClient(cfg),
-		PersonalAccessToken:        NewPersonalAccessTokenClient(cfg),
-		Platform:                   NewPlatformClient(cfg),
-		Procedure:                  NewProcedureClient(cfg),
-		Program:                    NewProgramClient(cfg),
-		ProgramMembership:          NewProgramMembershipClient(cfg),
-		Remediation:                NewRemediationClient(cfg),
-		Review:                     NewReviewClient(cfg),
-		Risk:                       NewRiskClient(cfg),
-		SLADefinition:              NewSLADefinitionClient(cfg),
-		Scan:                       NewScanClient(cfg),
-		Standard:                   NewStandardClient(cfg),
-		Subcontrol:                 NewSubcontrolClient(cfg),
-		Subprocessor:               NewSubprocessorClient(cfg),
-		Subscriber:                 NewSubscriberClient(cfg),
-		SystemDetail:               NewSystemDetailClient(cfg),
-		TFASetting:                 NewTFASettingClient(cfg),
-		TagDefinition:              NewTagDefinitionClient(cfg),
-		Task:                       NewTaskClient(cfg),
-		Template:                   NewTemplateClient(cfg),
-		TrustCenter:                NewTrustCenterClient(cfg),
-		TrustCenterCompliance:      NewTrustCenterComplianceClient(cfg),
-		TrustCenterDoc:             NewTrustCenterDocClient(cfg),
-		TrustCenterEntity:          NewTrustCenterEntityClient(cfg),
-		TrustCenterFAQ:             NewTrustCenterFAQClient(cfg),
-		TrustCenterNDARequest:      NewTrustCenterNDARequestClient(cfg),
-		TrustCenterSetting:         NewTrustCenterSettingClient(cfg),
-		TrustCenterSubprocessor:    NewTrustCenterSubprocessorClient(cfg),
-		TrustCenterWatermarkConfig: NewTrustCenterWatermarkConfigClient(cfg),
-		User:                       NewUserClient(cfg),
-		UserSetting:                NewUserSettingClient(cfg),
-		VendorRiskScore:            NewVendorRiskScoreClient(cfg),
-		VendorScoringConfig:        NewVendorScoringConfigClient(cfg),
-		Vulnerability:              NewVulnerabilityClient(cfg),
-		Webauthn:                   NewWebauthnClient(cfg),
-		WorkflowAssignment:         NewWorkflowAssignmentClient(cfg),
-		WorkflowAssignmentTarget:   NewWorkflowAssignmentTargetClient(cfg),
-		WorkflowDefinition:         NewWorkflowDefinitionClient(cfg),
-		WorkflowEvent:              NewWorkflowEventClient(cfg),
-		WorkflowInstance:           NewWorkflowInstanceClient(cfg),
-		WorkflowObjectRef:          NewWorkflowObjectRefClient(cfg),
-		WorkflowProposal:           NewWorkflowProposalClient(cfg),
+		ctx:                          ctx,
+		config:                       cfg,
+		APIToken:                     NewAPITokenClient(cfg),
+		ActionPlan:                   NewActionPlanClient(cfg),
+		Assessment:                   NewAssessmentClient(cfg),
+		AssessmentResponse:           NewAssessmentResponseClient(cfg),
+		Asset:                        NewAssetClient(cfg),
+		Campaign:                     NewCampaignClient(cfg),
+		CampaignTarget:               NewCampaignTargetClient(cfg),
+		CheckResult:                  NewCheckResultClient(cfg),
+		Contact:                      NewContactClient(cfg),
+		Control:                      NewControlClient(cfg),
+		ControlImplementation:        NewControlImplementationClient(cfg),
+		ControlObjective:             NewControlObjectiveClient(cfg),
+		CustomDomain:                 NewCustomDomainClient(cfg),
+		CustomTypeEnum:               NewCustomTypeEnumClient(cfg),
+		DNSVerification:              NewDNSVerificationClient(cfg),
+		DirectoryAccount:             NewDirectoryAccountClient(cfg),
+		DirectoryGroup:               NewDirectoryGroupClient(cfg),
+		DirectoryMembership:          NewDirectoryMembershipClient(cfg),
+		Discussion:                   NewDiscussionClient(cfg),
+		DocumentData:                 NewDocumentDataClient(cfg),
+		EmailTemplate:                NewEmailTemplateClient(cfg),
+		EmailVerificationToken:       NewEmailVerificationTokenClient(cfg),
+		Entity:                       NewEntityClient(cfg),
+		EntityType:                   NewEntityTypeClient(cfg),
+		Event:                        NewEventClient(cfg),
+		Evidence:                     NewEvidenceClient(cfg),
+		Export:                       NewExportClient(cfg),
+		File:                         NewFileClient(cfg),
+		FileDownloadToken:            NewFileDownloadTokenClient(cfg),
+		Finding:                      NewFindingClient(cfg),
+		FindingControl:               NewFindingControlClient(cfg),
+		Group:                        NewGroupClient(cfg),
+		GroupMembership:              NewGroupMembershipClient(cfg),
+		GroupSetting:                 NewGroupSettingClient(cfg),
+		Hush:                         NewHushClient(cfg),
+		IdentityHolder:               NewIdentityHolderClient(cfg),
+		ImpersonationEvent:           NewImpersonationEventClient(cfg),
+		Integration:                  NewIntegrationClient(cfg),
+		IntegrationRun:               NewIntegrationRunClient(cfg),
+		IntegrationWebhook:           NewIntegrationWebhookClient(cfg),
+		InternalPolicy:               NewInternalPolicyClient(cfg),
+		Invite:                       NewInviteClient(cfg),
+		MappableDomain:               NewMappableDomainClient(cfg),
+		MappedControl:                NewMappedControlClient(cfg),
+		Narrative:                    NewNarrativeClient(cfg),
+		Note:                         NewNoteClient(cfg),
+		Notification:                 NewNotificationClient(cfg),
+		NotificationPreference:       NewNotificationPreferenceClient(cfg),
+		NotificationTemplate:         NewNotificationTemplateClient(cfg),
+		Onboarding:                   NewOnboardingClient(cfg),
+		OrgMembership:                NewOrgMembershipClient(cfg),
+		OrgModule:                    NewOrgModuleClient(cfg),
+		OrgPrice:                     NewOrgPriceClient(cfg),
+		OrgProduct:                   NewOrgProductClient(cfg),
+		OrgSubscription:              NewOrgSubscriptionClient(cfg),
+		Organization:                 NewOrganizationClient(cfg),
+		OrganizationSetting:          NewOrganizationSettingClient(cfg),
+		PasswordResetToken:           NewPasswordResetTokenClient(cfg),
+		PersonalAccessToken:          NewPersonalAccessTokenClient(cfg),
+		Platform:                     NewPlatformClient(cfg),
+		Procedure:                    NewProcedureClient(cfg),
+		Program:                      NewProgramClient(cfg),
+		ProgramMembership:            NewProgramMembershipClient(cfg),
+		Remediation:                  NewRemediationClient(cfg),
+		Review:                       NewReviewClient(cfg),
+		Risk:                         NewRiskClient(cfg),
+		SLADefinition:                NewSLADefinitionClient(cfg),
+		Scan:                         NewScanClient(cfg),
+		Standard:                     NewStandardClient(cfg),
+		Subcontrol:                   NewSubcontrolClient(cfg),
+		Subprocessor:                 NewSubprocessorClient(cfg),
+		Subscriber:                   NewSubscriberClient(cfg),
+		SystemDetail:                 NewSystemDetailClient(cfg),
+		TFASetting:                   NewTFASettingClient(cfg),
+		TagDefinition:                NewTagDefinitionClient(cfg),
+		Task:                         NewTaskClient(cfg),
+		Template:                     NewTemplateClient(cfg),
+		TrustCenter:                  NewTrustCenterClient(cfg),
+		TrustCenterCompliance:        NewTrustCenterComplianceClient(cfg),
+		TrustCenterDoc:               NewTrustCenterDocClient(cfg),
+		TrustCenterEntity:            NewTrustCenterEntityClient(cfg),
+		TrustCenterFAQ:               NewTrustCenterFAQClient(cfg),
+		TrustCenterNDARequest:        NewTrustCenterNDARequestClient(cfg),
+		TrustCenterNDARequestSetting: NewTrustCenterNDARequestSettingClient(cfg),
+		TrustCenterSetting:           NewTrustCenterSettingClient(cfg),
+		TrustCenterSubprocessor:      NewTrustCenterSubprocessorClient(cfg),
+		TrustCenterWatermarkConfig:   NewTrustCenterWatermarkConfigClient(cfg),
+		User:                         NewUserClient(cfg),
+		UserSetting:                  NewUserSettingClient(cfg),
+		VendorRiskScore:              NewVendorRiskScoreClient(cfg),
+		VendorScoringConfig:          NewVendorScoringConfigClient(cfg),
+		Vulnerability:                NewVulnerabilityClient(cfg),
+		Webauthn:                     NewWebauthnClient(cfg),
+		WorkflowAssignment:           NewWorkflowAssignmentClient(cfg),
+		WorkflowAssignmentTarget:     NewWorkflowAssignmentTargetClient(cfg),
+		WorkflowDefinition:           NewWorkflowDefinitionClient(cfg),
+		WorkflowEvent:                NewWorkflowEventClient(cfg),
+		WorkflowInstance:             NewWorkflowInstanceClient(cfg),
+		WorkflowObjectRef:            NewWorkflowObjectRefClient(cfg),
+		WorkflowProposal:             NewWorkflowProposalClient(cfg),
 	}, nil
 }
 
@@ -772,107 +777,108 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:                        ctx,
-		config:                     cfg,
-		APIToken:                   NewAPITokenClient(cfg),
-		ActionPlan:                 NewActionPlanClient(cfg),
-		Assessment:                 NewAssessmentClient(cfg),
-		AssessmentResponse:         NewAssessmentResponseClient(cfg),
-		Asset:                      NewAssetClient(cfg),
-		Campaign:                   NewCampaignClient(cfg),
-		CampaignTarget:             NewCampaignTargetClient(cfg),
-		CheckResult:                NewCheckResultClient(cfg),
-		Contact:                    NewContactClient(cfg),
-		Control:                    NewControlClient(cfg),
-		ControlImplementation:      NewControlImplementationClient(cfg),
-		ControlObjective:           NewControlObjectiveClient(cfg),
-		CustomDomain:               NewCustomDomainClient(cfg),
-		CustomTypeEnum:             NewCustomTypeEnumClient(cfg),
-		DNSVerification:            NewDNSVerificationClient(cfg),
-		DirectoryAccount:           NewDirectoryAccountClient(cfg),
-		DirectoryGroup:             NewDirectoryGroupClient(cfg),
-		DirectoryMembership:        NewDirectoryMembershipClient(cfg),
-		Discussion:                 NewDiscussionClient(cfg),
-		DocumentData:               NewDocumentDataClient(cfg),
-		EmailTemplate:              NewEmailTemplateClient(cfg),
-		EmailVerificationToken:     NewEmailVerificationTokenClient(cfg),
-		Entity:                     NewEntityClient(cfg),
-		EntityType:                 NewEntityTypeClient(cfg),
-		Event:                      NewEventClient(cfg),
-		Evidence:                   NewEvidenceClient(cfg),
-		Export:                     NewExportClient(cfg),
-		File:                       NewFileClient(cfg),
-		FileDownloadToken:          NewFileDownloadTokenClient(cfg),
-		Finding:                    NewFindingClient(cfg),
-		FindingControl:             NewFindingControlClient(cfg),
-		Group:                      NewGroupClient(cfg),
-		GroupMembership:            NewGroupMembershipClient(cfg),
-		GroupSetting:               NewGroupSettingClient(cfg),
-		Hush:                       NewHushClient(cfg),
-		IdentityHolder:             NewIdentityHolderClient(cfg),
-		ImpersonationEvent:         NewImpersonationEventClient(cfg),
-		Integration:                NewIntegrationClient(cfg),
-		IntegrationRun:             NewIntegrationRunClient(cfg),
-		IntegrationWebhook:         NewIntegrationWebhookClient(cfg),
-		InternalPolicy:             NewInternalPolicyClient(cfg),
-		Invite:                     NewInviteClient(cfg),
-		MappableDomain:             NewMappableDomainClient(cfg),
-		MappedControl:              NewMappedControlClient(cfg),
-		Narrative:                  NewNarrativeClient(cfg),
-		Note:                       NewNoteClient(cfg),
-		Notification:               NewNotificationClient(cfg),
-		NotificationPreference:     NewNotificationPreferenceClient(cfg),
-		NotificationTemplate:       NewNotificationTemplateClient(cfg),
-		Onboarding:                 NewOnboardingClient(cfg),
-		OrgMembership:              NewOrgMembershipClient(cfg),
-		OrgModule:                  NewOrgModuleClient(cfg),
-		OrgPrice:                   NewOrgPriceClient(cfg),
-		OrgProduct:                 NewOrgProductClient(cfg),
-		OrgSubscription:            NewOrgSubscriptionClient(cfg),
-		Organization:               NewOrganizationClient(cfg),
-		OrganizationSetting:        NewOrganizationSettingClient(cfg),
-		PasswordResetToken:         NewPasswordResetTokenClient(cfg),
-		PersonalAccessToken:        NewPersonalAccessTokenClient(cfg),
-		Platform:                   NewPlatformClient(cfg),
-		Procedure:                  NewProcedureClient(cfg),
-		Program:                    NewProgramClient(cfg),
-		ProgramMembership:          NewProgramMembershipClient(cfg),
-		Remediation:                NewRemediationClient(cfg),
-		Review:                     NewReviewClient(cfg),
-		Risk:                       NewRiskClient(cfg),
-		SLADefinition:              NewSLADefinitionClient(cfg),
-		Scan:                       NewScanClient(cfg),
-		Standard:                   NewStandardClient(cfg),
-		Subcontrol:                 NewSubcontrolClient(cfg),
-		Subprocessor:               NewSubprocessorClient(cfg),
-		Subscriber:                 NewSubscriberClient(cfg),
-		SystemDetail:               NewSystemDetailClient(cfg),
-		TFASetting:                 NewTFASettingClient(cfg),
-		TagDefinition:              NewTagDefinitionClient(cfg),
-		Task:                       NewTaskClient(cfg),
-		Template:                   NewTemplateClient(cfg),
-		TrustCenter:                NewTrustCenterClient(cfg),
-		TrustCenterCompliance:      NewTrustCenterComplianceClient(cfg),
-		TrustCenterDoc:             NewTrustCenterDocClient(cfg),
-		TrustCenterEntity:          NewTrustCenterEntityClient(cfg),
-		TrustCenterFAQ:             NewTrustCenterFAQClient(cfg),
-		TrustCenterNDARequest:      NewTrustCenterNDARequestClient(cfg),
-		TrustCenterSetting:         NewTrustCenterSettingClient(cfg),
-		TrustCenterSubprocessor:    NewTrustCenterSubprocessorClient(cfg),
-		TrustCenterWatermarkConfig: NewTrustCenterWatermarkConfigClient(cfg),
-		User:                       NewUserClient(cfg),
-		UserSetting:                NewUserSettingClient(cfg),
-		VendorRiskScore:            NewVendorRiskScoreClient(cfg),
-		VendorScoringConfig:        NewVendorScoringConfigClient(cfg),
-		Vulnerability:              NewVulnerabilityClient(cfg),
-		Webauthn:                   NewWebauthnClient(cfg),
-		WorkflowAssignment:         NewWorkflowAssignmentClient(cfg),
-		WorkflowAssignmentTarget:   NewWorkflowAssignmentTargetClient(cfg),
-		WorkflowDefinition:         NewWorkflowDefinitionClient(cfg),
-		WorkflowEvent:              NewWorkflowEventClient(cfg),
-		WorkflowInstance:           NewWorkflowInstanceClient(cfg),
-		WorkflowObjectRef:          NewWorkflowObjectRefClient(cfg),
-		WorkflowProposal:           NewWorkflowProposalClient(cfg),
+		ctx:                          ctx,
+		config:                       cfg,
+		APIToken:                     NewAPITokenClient(cfg),
+		ActionPlan:                   NewActionPlanClient(cfg),
+		Assessment:                   NewAssessmentClient(cfg),
+		AssessmentResponse:           NewAssessmentResponseClient(cfg),
+		Asset:                        NewAssetClient(cfg),
+		Campaign:                     NewCampaignClient(cfg),
+		CampaignTarget:               NewCampaignTargetClient(cfg),
+		CheckResult:                  NewCheckResultClient(cfg),
+		Contact:                      NewContactClient(cfg),
+		Control:                      NewControlClient(cfg),
+		ControlImplementation:        NewControlImplementationClient(cfg),
+		ControlObjective:             NewControlObjectiveClient(cfg),
+		CustomDomain:                 NewCustomDomainClient(cfg),
+		CustomTypeEnum:               NewCustomTypeEnumClient(cfg),
+		DNSVerification:              NewDNSVerificationClient(cfg),
+		DirectoryAccount:             NewDirectoryAccountClient(cfg),
+		DirectoryGroup:               NewDirectoryGroupClient(cfg),
+		DirectoryMembership:          NewDirectoryMembershipClient(cfg),
+		Discussion:                   NewDiscussionClient(cfg),
+		DocumentData:                 NewDocumentDataClient(cfg),
+		EmailTemplate:                NewEmailTemplateClient(cfg),
+		EmailVerificationToken:       NewEmailVerificationTokenClient(cfg),
+		Entity:                       NewEntityClient(cfg),
+		EntityType:                   NewEntityTypeClient(cfg),
+		Event:                        NewEventClient(cfg),
+		Evidence:                     NewEvidenceClient(cfg),
+		Export:                       NewExportClient(cfg),
+		File:                         NewFileClient(cfg),
+		FileDownloadToken:            NewFileDownloadTokenClient(cfg),
+		Finding:                      NewFindingClient(cfg),
+		FindingControl:               NewFindingControlClient(cfg),
+		Group:                        NewGroupClient(cfg),
+		GroupMembership:              NewGroupMembershipClient(cfg),
+		GroupSetting:                 NewGroupSettingClient(cfg),
+		Hush:                         NewHushClient(cfg),
+		IdentityHolder:               NewIdentityHolderClient(cfg),
+		ImpersonationEvent:           NewImpersonationEventClient(cfg),
+		Integration:                  NewIntegrationClient(cfg),
+		IntegrationRun:               NewIntegrationRunClient(cfg),
+		IntegrationWebhook:           NewIntegrationWebhookClient(cfg),
+		InternalPolicy:               NewInternalPolicyClient(cfg),
+		Invite:                       NewInviteClient(cfg),
+		MappableDomain:               NewMappableDomainClient(cfg),
+		MappedControl:                NewMappedControlClient(cfg),
+		Narrative:                    NewNarrativeClient(cfg),
+		Note:                         NewNoteClient(cfg),
+		Notification:                 NewNotificationClient(cfg),
+		NotificationPreference:       NewNotificationPreferenceClient(cfg),
+		NotificationTemplate:         NewNotificationTemplateClient(cfg),
+		Onboarding:                   NewOnboardingClient(cfg),
+		OrgMembership:                NewOrgMembershipClient(cfg),
+		OrgModule:                    NewOrgModuleClient(cfg),
+		OrgPrice:                     NewOrgPriceClient(cfg),
+		OrgProduct:                   NewOrgProductClient(cfg),
+		OrgSubscription:              NewOrgSubscriptionClient(cfg),
+		Organization:                 NewOrganizationClient(cfg),
+		OrganizationSetting:          NewOrganizationSettingClient(cfg),
+		PasswordResetToken:           NewPasswordResetTokenClient(cfg),
+		PersonalAccessToken:          NewPersonalAccessTokenClient(cfg),
+		Platform:                     NewPlatformClient(cfg),
+		Procedure:                    NewProcedureClient(cfg),
+		Program:                      NewProgramClient(cfg),
+		ProgramMembership:            NewProgramMembershipClient(cfg),
+		Remediation:                  NewRemediationClient(cfg),
+		Review:                       NewReviewClient(cfg),
+		Risk:                         NewRiskClient(cfg),
+		SLADefinition:                NewSLADefinitionClient(cfg),
+		Scan:                         NewScanClient(cfg),
+		Standard:                     NewStandardClient(cfg),
+		Subcontrol:                   NewSubcontrolClient(cfg),
+		Subprocessor:                 NewSubprocessorClient(cfg),
+		Subscriber:                   NewSubscriberClient(cfg),
+		SystemDetail:                 NewSystemDetailClient(cfg),
+		TFASetting:                   NewTFASettingClient(cfg),
+		TagDefinition:                NewTagDefinitionClient(cfg),
+		Task:                         NewTaskClient(cfg),
+		Template:                     NewTemplateClient(cfg),
+		TrustCenter:                  NewTrustCenterClient(cfg),
+		TrustCenterCompliance:        NewTrustCenterComplianceClient(cfg),
+		TrustCenterDoc:               NewTrustCenterDocClient(cfg),
+		TrustCenterEntity:            NewTrustCenterEntityClient(cfg),
+		TrustCenterFAQ:               NewTrustCenterFAQClient(cfg),
+		TrustCenterNDARequest:        NewTrustCenterNDARequestClient(cfg),
+		TrustCenterNDARequestSetting: NewTrustCenterNDARequestSettingClient(cfg),
+		TrustCenterSetting:           NewTrustCenterSettingClient(cfg),
+		TrustCenterSubprocessor:      NewTrustCenterSubprocessorClient(cfg),
+		TrustCenterWatermarkConfig:   NewTrustCenterWatermarkConfigClient(cfg),
+		User:                         NewUserClient(cfg),
+		UserSetting:                  NewUserSettingClient(cfg),
+		VendorRiskScore:              NewVendorRiskScoreClient(cfg),
+		VendorScoringConfig:          NewVendorScoringConfigClient(cfg),
+		Vulnerability:                NewVulnerabilityClient(cfg),
+		Webauthn:                     NewWebauthnClient(cfg),
+		WorkflowAssignment:           NewWorkflowAssignmentClient(cfg),
+		WorkflowAssignmentTarget:     NewWorkflowAssignmentTargetClient(cfg),
+		WorkflowDefinition:           NewWorkflowDefinitionClient(cfg),
+		WorkflowEvent:                NewWorkflowEventClient(cfg),
+		WorkflowInstance:             NewWorkflowInstanceClient(cfg),
+		WorkflowObjectRef:            NewWorkflowObjectRefClient(cfg),
+		WorkflowProposal:             NewWorkflowProposalClient(cfg),
 	}, nil
 }
 
@@ -920,11 +926,11 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
 		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
 		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterFAQ,
-		c.TrustCenterNDARequest, c.TrustCenterSetting, c.TrustCenterSubprocessor,
-		c.TrustCenterWatermarkConfig, c.User, c.UserSetting, c.VendorRiskScore,
-		c.VendorScoringConfig, c.Vulnerability, c.Webauthn, c.WorkflowAssignment,
-		c.WorkflowAssignmentTarget, c.WorkflowDefinition, c.WorkflowEvent,
-		c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
+		c.TrustCenterNDARequest, c.TrustCenterNDARequestSetting, c.TrustCenterSetting,
+		c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig, c.User, c.UserSetting,
+		c.VendorRiskScore, c.VendorScoringConfig, c.Vulnerability, c.Webauthn,
+		c.WorkflowAssignment, c.WorkflowAssignmentTarget, c.WorkflowDefinition,
+		c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
 	} {
 		n.Use(hooks...)
 	}
@@ -952,11 +958,11 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
 		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
 		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterFAQ,
-		c.TrustCenterNDARequest, c.TrustCenterSetting, c.TrustCenterSubprocessor,
-		c.TrustCenterWatermarkConfig, c.User, c.UserSetting, c.VendorRiskScore,
-		c.VendorScoringConfig, c.Vulnerability, c.Webauthn, c.WorkflowAssignment,
-		c.WorkflowAssignmentTarget, c.WorkflowDefinition, c.WorkflowEvent,
-		c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
+		c.TrustCenterNDARequest, c.TrustCenterNDARequestSetting, c.TrustCenterSetting,
+		c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig, c.User, c.UserSetting,
+		c.VendorRiskScore, c.VendorScoringConfig, c.Vulnerability, c.Webauthn,
+		c.WorkflowAssignment, c.WorkflowAssignmentTarget, c.WorkflowDefinition,
+		c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1203,6 +1209,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.TrustCenterFAQ.mutate(ctx, m)
 	case *TrustCenterNDARequestMutation:
 		return c.TrustCenterNDARequest.mutate(ctx, m)
+	case *TrustCenterNDARequestSettingMutation:
+		return c.TrustCenterNDARequestSetting.mutate(ctx, m)
 	case *TrustCenterSettingMutation:
 		return c.TrustCenterSetting.mutate(ctx, m)
 	case *TrustCenterSubprocessorMutation:
@@ -30124,6 +30132,189 @@ func (c *TrustCenterNDARequestClient) mutate(ctx context.Context, m *TrustCenter
 	}
 }
 
+// TrustCenterNDARequestSettingClient is a client for the TrustCenterNDARequestSetting schema.
+type TrustCenterNDARequestSettingClient struct {
+	config
+}
+
+// NewTrustCenterNDARequestSettingClient returns a client for the TrustCenterNDARequestSetting from the given config.
+func NewTrustCenterNDARequestSettingClient(c config) *TrustCenterNDARequestSettingClient {
+	return &TrustCenterNDARequestSettingClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trustcenterndarequestsetting.Hooks(f(g(h())))`.
+func (c *TrustCenterNDARequestSettingClient) Use(hooks ...Hook) {
+	c.hooks.TrustCenterNDARequestSetting = append(c.hooks.TrustCenterNDARequestSetting, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `trustcenterndarequestsetting.Intercept(f(g(h())))`.
+func (c *TrustCenterNDARequestSettingClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TrustCenterNDARequestSetting = append(c.inters.TrustCenterNDARequestSetting, interceptors...)
+}
+
+// Create returns a builder for creating a TrustCenterNDARequestSetting entity.
+func (c *TrustCenterNDARequestSettingClient) Create() *TrustCenterNDARequestSettingCreate {
+	mutation := newTrustCenterNDARequestSettingMutation(c.config, OpCreate)
+	return &TrustCenterNDARequestSettingCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrustCenterNDARequestSetting entities.
+func (c *TrustCenterNDARequestSettingClient) CreateBulk(builders ...*TrustCenterNDARequestSettingCreate) *TrustCenterNDARequestSettingCreateBulk {
+	return &TrustCenterNDARequestSettingCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TrustCenterNDARequestSettingClient) MapCreateBulk(slice any, setFunc func(*TrustCenterNDARequestSettingCreate, int)) *TrustCenterNDARequestSettingCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TrustCenterNDARequestSettingCreateBulk{err: fmt.Errorf("calling to TrustCenterNDARequestSettingClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TrustCenterNDARequestSettingCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TrustCenterNDARequestSettingCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrustCenterNDARequestSetting.
+func (c *TrustCenterNDARequestSettingClient) Update() *TrustCenterNDARequestSettingUpdate {
+	mutation := newTrustCenterNDARequestSettingMutation(c.config, OpUpdate)
+	return &TrustCenterNDARequestSettingUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrustCenterNDARequestSettingClient) UpdateOne(_m *TrustCenterNDARequestSetting) *TrustCenterNDARequestSettingUpdateOne {
+	mutation := newTrustCenterNDARequestSettingMutation(c.config, OpUpdateOne, withTrustCenterNDARequestSetting(_m))
+	return &TrustCenterNDARequestSettingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrustCenterNDARequestSettingClient) UpdateOneID(id string) *TrustCenterNDARequestSettingUpdateOne {
+	mutation := newTrustCenterNDARequestSettingMutation(c.config, OpUpdateOne, withTrustCenterNDARequestSettingID(id))
+	return &TrustCenterNDARequestSettingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrustCenterNDARequestSetting.
+func (c *TrustCenterNDARequestSettingClient) Delete() *TrustCenterNDARequestSettingDelete {
+	mutation := newTrustCenterNDARequestSettingMutation(c.config, OpDelete)
+	return &TrustCenterNDARequestSettingDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TrustCenterNDARequestSettingClient) DeleteOne(_m *TrustCenterNDARequestSetting) *TrustCenterNDARequestSettingDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TrustCenterNDARequestSettingClient) DeleteOneID(id string) *TrustCenterNDARequestSettingDeleteOne {
+	builder := c.Delete().Where(trustcenterndarequestsetting.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrustCenterNDARequestSettingDeleteOne{builder}
+}
+
+// Query returns a query builder for TrustCenterNDARequestSetting.
+func (c *TrustCenterNDARequestSettingClient) Query() *TrustCenterNDARequestSettingQuery {
+	return &TrustCenterNDARequestSettingQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTrustCenterNDARequestSetting},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TrustCenterNDARequestSetting entity by its id.
+func (c *TrustCenterNDARequestSettingClient) Get(ctx context.Context, id string) (*TrustCenterNDARequestSetting, error) {
+	return c.Query().Where(trustcenterndarequestsetting.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrustCenterNDARequestSettingClient) GetX(ctx context.Context, id string) *TrustCenterNDARequestSetting {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryBlockedGroups queries the blocked_groups edge of a TrustCenterNDARequestSetting.
+func (c *TrustCenterNDARequestSettingClient) QueryBlockedGroups(_m *TrustCenterNDARequestSetting) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterndarequestsetting.Table, trustcenterndarequestsetting.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterndarequestsetting.BlockedGroupsTable, trustcenterndarequestsetting.BlockedGroupsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a TrustCenterNDARequestSetting.
+func (c *TrustCenterNDARequestSettingClient) QueryEditors(_m *TrustCenterNDARequestSetting) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterndarequestsetting.Table, trustcenterndarequestsetting.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterndarequestsetting.EditorsTable, trustcenterndarequestsetting.EditorsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryApproverGroup queries the approver_group edge of a TrustCenterNDARequestSetting.
+func (c *TrustCenterNDARequestSettingClient) QueryApproverGroup(_m *TrustCenterNDARequestSetting) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterndarequestsetting.Table, trustcenterndarequestsetting.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterndarequestsetting.ApproverGroupTable, trustcenterndarequestsetting.ApproverGroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *TrustCenterNDARequestSettingClient) Hooks() []Hook {
+	hooks := c.hooks.TrustCenterNDARequestSetting
+	return append(hooks[:len(hooks):len(hooks)], trustcenterndarequestsetting.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TrustCenterNDARequestSettingClient) Interceptors() []Interceptor {
+	inters := c.inters.TrustCenterNDARequestSetting
+	return append(inters[:len(inters):len(inters)], trustcenterndarequestsetting.Interceptors[:]...)
+}
+
+func (c *TrustCenterNDARequestSettingClient) mutate(ctx context.Context, m *TrustCenterNDARequestSettingMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TrustCenterNDARequestSettingCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TrustCenterNDARequestSettingUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TrustCenterNDARequestSettingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TrustCenterNDARequestSettingDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown TrustCenterNDARequestSetting mutation op: %q", m.Op())
+	}
+}
+
 // TrustCenterSettingClient is a client for the TrustCenterSetting schema.
 type TrustCenterSettingClient struct {
 	config
@@ -34815,11 +35006,11 @@ type (
 		SLADefinition, Scan, Standard, Subcontrol, Subprocessor, Subscriber,
 		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
 		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,
-		TrustCenterNDARequest, TrustCenterSetting, TrustCenterSubprocessor,
-		TrustCenterWatermarkConfig, User, UserSetting, VendorRiskScore,
-		VendorScoringConfig, Vulnerability, Webauthn, WorkflowAssignment,
-		WorkflowAssignmentTarget, WorkflowDefinition, WorkflowEvent, WorkflowInstance,
-		WorkflowObjectRef, WorkflowProposal []ent.Hook
+		TrustCenterNDARequest, TrustCenterNDARequestSetting, TrustCenterSetting,
+		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
+		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
+		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
+		WorkflowEvent, WorkflowInstance, WorkflowObjectRef, WorkflowProposal []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
@@ -34838,11 +35029,12 @@ type (
 		SLADefinition, Scan, Standard, Subcontrol, Subprocessor, Subscriber,
 		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
 		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,
-		TrustCenterNDARequest, TrustCenterSetting, TrustCenterSubprocessor,
-		TrustCenterWatermarkConfig, User, UserSetting, VendorRiskScore,
-		VendorScoringConfig, Vulnerability, Webauthn, WorkflowAssignment,
-		WorkflowAssignmentTarget, WorkflowDefinition, WorkflowEvent, WorkflowInstance,
-		WorkflowObjectRef, WorkflowProposal []ent.Interceptor
+		TrustCenterNDARequest, TrustCenterNDARequestSetting, TrustCenterSetting,
+		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
+		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
+		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
+		WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
+		WorkflowProposal []ent.Interceptor
 	}
 )
 

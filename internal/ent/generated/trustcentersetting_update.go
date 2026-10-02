@@ -544,26 +544,6 @@ func (_u *TrustCenterSettingUpdate) ClearSecurityContact() *TrustCenterSettingUp
 	return _u
 }
 
-// SetNdaApprovalRequired sets the "nda_approval_required" field.
-func (_u *TrustCenterSettingUpdate) SetNdaApprovalRequired(v bool) *TrustCenterSettingUpdate {
-	_u.mutation.SetNdaApprovalRequired(v)
-	return _u
-}
-
-// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
-func (_u *TrustCenterSettingUpdate) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingUpdate {
-	if v != nil {
-		_u.SetNdaApprovalRequired(*v)
-	}
-	return _u
-}
-
-// ClearNdaApprovalRequired clears the value of the "nda_approval_required" field.
-func (_u *TrustCenterSettingUpdate) ClearNdaApprovalRequired() *TrustCenterSettingUpdate {
-	_u.mutation.ClearNdaApprovalRequired()
-	return _u
-}
-
 // SetAllowSubscribers sets the "allow_subscribers" field.
 func (_u *TrustCenterSettingUpdate) SetAllowSubscribers(v bool) *TrustCenterSettingUpdate {
 	_u.mutation.SetAllowSubscribers(v)
@@ -624,26 +604,6 @@ func (_u *TrustCenterSettingUpdate) ClearSubprocessorsNotifiedAt() *TrustCenterS
 	return _u
 }
 
-// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
-func (_u *TrustCenterSettingUpdate) SetNdaApproverGroupID(v string) *TrustCenterSettingUpdate {
-	_u.mutation.SetNdaApproverGroupID(v)
-	return _u
-}
-
-// SetNillableNdaApproverGroupID sets the "nda_approver_group_id" field if the given value is not nil.
-func (_u *TrustCenterSettingUpdate) SetNillableNdaApproverGroupID(v *string) *TrustCenterSettingUpdate {
-	if v != nil {
-		_u.SetNdaApproverGroupID(*v)
-	}
-	return _u
-}
-
-// ClearNdaApproverGroupID clears the value of the "nda_approver_group_id" field.
-func (_u *TrustCenterSettingUpdate) ClearNdaApproverGroupID() *TrustCenterSettingUpdate {
-	_u.mutation.ClearNdaApproverGroupID()
-	return _u
-}
-
 // SetStatusPageURL sets the "status_page_url" field.
 func (_u *TrustCenterSettingUpdate) SetStatusPageURL(v string) *TrustCenterSettingUpdate {
 	_u.mutation.SetStatusPageURL(v)
@@ -681,6 +641,46 @@ func (_u *TrustCenterSettingUpdate) SetNillableNoindexDefaultDomain(v *bool) *Tr
 // ClearNoindexDefaultDomain clears the value of the "noindex_default_domain" field.
 func (_u *TrustCenterSettingUpdate) ClearNoindexDefaultDomain() *TrustCenterSettingUpdate {
 	_u.mutation.ClearNoindexDefaultDomain()
+	return _u
+}
+
+// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
+func (_u *TrustCenterSettingUpdate) SetNdaApproverGroupID(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetNdaApproverGroupID(v)
+	return _u
+}
+
+// SetNillableNdaApproverGroupID sets the "nda_approver_group_id" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableNdaApproverGroupID(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetNdaApproverGroupID(*v)
+	}
+	return _u
+}
+
+// ClearNdaApproverGroupID clears the value of the "nda_approver_group_id" field.
+func (_u *TrustCenterSettingUpdate) ClearNdaApproverGroupID() *TrustCenterSettingUpdate {
+	_u.mutation.ClearNdaApproverGroupID()
+	return _u
+}
+
+// SetNdaApprovalRequired sets the "nda_approval_required" field.
+func (_u *TrustCenterSettingUpdate) SetNdaApprovalRequired(v bool) *TrustCenterSettingUpdate {
+	_u.mutation.SetNdaApprovalRequired(v)
+	return _u
+}
+
+// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetNdaApprovalRequired(*v)
+	}
+	return _u
+}
+
+// ClearNdaApprovalRequired clears the value of the "nda_approval_required" field.
+func (_u *TrustCenterSettingUpdate) ClearNdaApprovalRequired() *TrustCenterSettingUpdate {
+	_u.mutation.ClearNdaApprovalRequired()
 	return _u
 }
 
@@ -1139,12 +1139,6 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.SecurityContactCleared() {
 		_spec.ClearField(trustcentersetting.FieldSecurityContact, field.TypeString)
 	}
-	if value, ok := _u.mutation.NdaApprovalRequired(); ok {
-		_spec.SetField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool, value)
-	}
-	if _u.mutation.NdaApprovalRequiredCleared() {
-		_spec.ClearField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool)
-	}
 	if value, ok := _u.mutation.AllowSubscribers(); ok {
 		_spec.SetField(trustcentersetting.FieldAllowSubscribers, field.TypeBool, value)
 	}
@@ -1174,6 +1168,12 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.NoindexDefaultDomainCleared() {
 		_spec.ClearField(trustcentersetting.FieldNoindexDefaultDomain, field.TypeBool)
+	}
+	if value, ok := _u.mutation.NdaApprovalRequired(); ok {
+		_spec.SetField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool, value)
+	}
+	if _u.mutation.NdaApprovalRequiredCleared() {
+		_spec.ClearField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1915,26 +1915,6 @@ func (_u *TrustCenterSettingUpdateOne) ClearSecurityContact() *TrustCenterSettin
 	return _u
 }
 
-// SetNdaApprovalRequired sets the "nda_approval_required" field.
-func (_u *TrustCenterSettingUpdateOne) SetNdaApprovalRequired(v bool) *TrustCenterSettingUpdateOne {
-	_u.mutation.SetNdaApprovalRequired(v)
-	return _u
-}
-
-// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
-func (_u *TrustCenterSettingUpdateOne) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingUpdateOne {
-	if v != nil {
-		_u.SetNdaApprovalRequired(*v)
-	}
-	return _u
-}
-
-// ClearNdaApprovalRequired clears the value of the "nda_approval_required" field.
-func (_u *TrustCenterSettingUpdateOne) ClearNdaApprovalRequired() *TrustCenterSettingUpdateOne {
-	_u.mutation.ClearNdaApprovalRequired()
-	return _u
-}
-
 // SetAllowSubscribers sets the "allow_subscribers" field.
 func (_u *TrustCenterSettingUpdateOne) SetAllowSubscribers(v bool) *TrustCenterSettingUpdateOne {
 	_u.mutation.SetAllowSubscribers(v)
@@ -1995,26 +1975,6 @@ func (_u *TrustCenterSettingUpdateOne) ClearSubprocessorsNotifiedAt() *TrustCent
 	return _u
 }
 
-// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
-func (_u *TrustCenterSettingUpdateOne) SetNdaApproverGroupID(v string) *TrustCenterSettingUpdateOne {
-	_u.mutation.SetNdaApproverGroupID(v)
-	return _u
-}
-
-// SetNillableNdaApproverGroupID sets the "nda_approver_group_id" field if the given value is not nil.
-func (_u *TrustCenterSettingUpdateOne) SetNillableNdaApproverGroupID(v *string) *TrustCenterSettingUpdateOne {
-	if v != nil {
-		_u.SetNdaApproverGroupID(*v)
-	}
-	return _u
-}
-
-// ClearNdaApproverGroupID clears the value of the "nda_approver_group_id" field.
-func (_u *TrustCenterSettingUpdateOne) ClearNdaApproverGroupID() *TrustCenterSettingUpdateOne {
-	_u.mutation.ClearNdaApproverGroupID()
-	return _u
-}
-
 // SetStatusPageURL sets the "status_page_url" field.
 func (_u *TrustCenterSettingUpdateOne) SetStatusPageURL(v string) *TrustCenterSettingUpdateOne {
 	_u.mutation.SetStatusPageURL(v)
@@ -2052,6 +2012,46 @@ func (_u *TrustCenterSettingUpdateOne) SetNillableNoindexDefaultDomain(v *bool) 
 // ClearNoindexDefaultDomain clears the value of the "noindex_default_domain" field.
 func (_u *TrustCenterSettingUpdateOne) ClearNoindexDefaultDomain() *TrustCenterSettingUpdateOne {
 	_u.mutation.ClearNoindexDefaultDomain()
+	return _u
+}
+
+// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
+func (_u *TrustCenterSettingUpdateOne) SetNdaApproverGroupID(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetNdaApproverGroupID(v)
+	return _u
+}
+
+// SetNillableNdaApproverGroupID sets the "nda_approver_group_id" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableNdaApproverGroupID(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetNdaApproverGroupID(*v)
+	}
+	return _u
+}
+
+// ClearNdaApproverGroupID clears the value of the "nda_approver_group_id" field.
+func (_u *TrustCenterSettingUpdateOne) ClearNdaApproverGroupID() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearNdaApproverGroupID()
+	return _u
+}
+
+// SetNdaApprovalRequired sets the "nda_approval_required" field.
+func (_u *TrustCenterSettingUpdateOne) SetNdaApprovalRequired(v bool) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetNdaApprovalRequired(v)
+	return _u
+}
+
+// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetNdaApprovalRequired(*v)
+	}
+	return _u
+}
+
+// ClearNdaApprovalRequired clears the value of the "nda_approval_required" field.
+func (_u *TrustCenterSettingUpdateOne) ClearNdaApprovalRequired() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearNdaApprovalRequired()
 	return _u
 }
 
@@ -2540,12 +2540,6 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	if _u.mutation.SecurityContactCleared() {
 		_spec.ClearField(trustcentersetting.FieldSecurityContact, field.TypeString)
 	}
-	if value, ok := _u.mutation.NdaApprovalRequired(); ok {
-		_spec.SetField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool, value)
-	}
-	if _u.mutation.NdaApprovalRequiredCleared() {
-		_spec.ClearField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool)
-	}
 	if value, ok := _u.mutation.AllowSubscribers(); ok {
 		_spec.SetField(trustcentersetting.FieldAllowSubscribers, field.TypeBool, value)
 	}
@@ -2575,6 +2569,12 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.NoindexDefaultDomainCleared() {
 		_spec.ClearField(trustcentersetting.FieldNoindexDefaultDomain, field.TypeBool)
+	}
+	if value, ok := _u.mutation.NdaApprovalRequired(); ok {
+		_spec.SetField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool, value)
+	}
+	if _u.mutation.NdaApprovalRequiredCleared() {
+		_spec.ClearField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

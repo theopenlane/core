@@ -75,6 +75,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterfaqhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequesthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequestsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
@@ -206,6 +207,8 @@ type Client struct {
 	TrustCenterHistory *TrustCenterHistoryClient
 	// TrustCenterNDARequestHistory is the client for interacting with the TrustCenterNDARequestHistory builders.
 	TrustCenterNDARequestHistory *TrustCenterNDARequestHistoryClient
+	// TrustCenterNDARequestSettingHistory is the client for interacting with the TrustCenterNDARequestSettingHistory builders.
+	TrustCenterNDARequestSettingHistory *TrustCenterNDARequestSettingHistoryClient
 	// TrustCenterSettingHistory is the client for interacting with the TrustCenterSettingHistory builders.
 	TrustCenterSettingHistory *TrustCenterSettingHistoryClient
 	// TrustCenterSubprocessorHistory is the client for interacting with the TrustCenterSubprocessorHistory builders.
@@ -300,6 +303,7 @@ func (c *Client) init() {
 	c.TrustCenterFAQHistory = NewTrustCenterFAQHistoryClient(c.config)
 	c.TrustCenterHistory = NewTrustCenterHistoryClient(c.config)
 	c.TrustCenterNDARequestHistory = NewTrustCenterNDARequestHistoryClient(c.config)
+	c.TrustCenterNDARequestSettingHistory = NewTrustCenterNDARequestSettingHistoryClient(c.config)
 	c.TrustCenterSettingHistory = NewTrustCenterSettingHistoryClient(c.config)
 	c.TrustCenterSubprocessorHistory = NewTrustCenterSubprocessorHistoryClient(c.config)
 	c.TrustCenterWatermarkConfigHistory = NewTrustCenterWatermarkConfigHistoryClient(c.config)
@@ -419,74 +423,75 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:                               ctx,
-		config:                            cfg,
-		ActionPlanHistory:                 NewActionPlanHistoryClient(cfg),
-		AssessmentHistory:                 NewAssessmentHistoryClient(cfg),
-		AssessmentResponseHistory:         NewAssessmentResponseHistoryClient(cfg),
-		AssetHistory:                      NewAssetHistoryClient(cfg),
-		CampaignHistory:                   NewCampaignHistoryClient(cfg),
-		CampaignTargetHistory:             NewCampaignTargetHistoryClient(cfg),
-		ContactHistory:                    NewContactHistoryClient(cfg),
-		ControlHistory:                    NewControlHistoryClient(cfg),
-		ControlImplementationHistory:      NewControlImplementationHistoryClient(cfg),
-		ControlObjectiveHistory:           NewControlObjectiveHistoryClient(cfg),
-		CustomDomainHistory:               NewCustomDomainHistoryClient(cfg),
-		DiscussionHistory:                 NewDiscussionHistoryClient(cfg),
-		DocumentDataHistory:               NewDocumentDataHistoryClient(cfg),
-		EmailTemplateHistory:              NewEmailTemplateHistoryClient(cfg),
-		EntityHistory:                     NewEntityHistoryClient(cfg),
-		EntityTypeHistory:                 NewEntityTypeHistoryClient(cfg),
-		EvidenceHistory:                   NewEvidenceHistoryClient(cfg),
-		FileHistory:                       NewFileHistoryClient(cfg),
-		FindingControlHistory:             NewFindingControlHistoryClient(cfg),
-		FindingHistory:                    NewFindingHistoryClient(cfg),
-		GroupHistory:                      NewGroupHistoryClient(cfg),
-		GroupMembershipHistory:            NewGroupMembershipHistoryClient(cfg),
-		GroupSettingHistory:               NewGroupSettingHistoryClient(cfg),
-		HushHistory:                       NewHushHistoryClient(cfg),
-		IdentityHolderHistory:             NewIdentityHolderHistoryClient(cfg),
-		InternalPolicyHistory:             NewInternalPolicyHistoryClient(cfg),
-		MappableDomainHistory:             NewMappableDomainHistoryClient(cfg),
-		MappedControlHistory:              NewMappedControlHistoryClient(cfg),
-		NarrativeHistory:                  NewNarrativeHistoryClient(cfg),
-		NoteHistory:                       NewNoteHistoryClient(cfg),
-		NotificationPreferenceHistory:     NewNotificationPreferenceHistoryClient(cfg),
-		NotificationTemplateHistory:       NewNotificationTemplateHistoryClient(cfg),
-		OrgMembershipHistory:              NewOrgMembershipHistoryClient(cfg),
-		OrganizationHistory:               NewOrganizationHistoryClient(cfg),
-		OrganizationSettingHistory:        NewOrganizationSettingHistoryClient(cfg),
-		PlatformHistory:                   NewPlatformHistoryClient(cfg),
-		ProcedureHistory:                  NewProcedureHistoryClient(cfg),
-		ProgramHistory:                    NewProgramHistoryClient(cfg),
-		ProgramMembershipHistory:          NewProgramMembershipHistoryClient(cfg),
-		RemediationHistory:                NewRemediationHistoryClient(cfg),
-		ReviewHistory:                     NewReviewHistoryClient(cfg),
-		RiskHistory:                       NewRiskHistoryClient(cfg),
-		SLADefinitionHistory:              NewSLADefinitionHistoryClient(cfg),
-		StandardHistory:                   NewStandardHistoryClient(cfg),
-		SubcontrolHistory:                 NewSubcontrolHistoryClient(cfg),
-		SubprocessorHistory:               NewSubprocessorHistoryClient(cfg),
-		SystemDetailHistory:               NewSystemDetailHistoryClient(cfg),
-		TaskHistory:                       NewTaskHistoryClient(cfg),
-		TemplateHistory:                   NewTemplateHistoryClient(cfg),
-		TrustCenterComplianceHistory:      NewTrustCenterComplianceHistoryClient(cfg),
-		TrustCenterDocHistory:             NewTrustCenterDocHistoryClient(cfg),
-		TrustCenterEntityHistory:          NewTrustCenterEntityHistoryClient(cfg),
-		TrustCenterFAQHistory:             NewTrustCenterFAQHistoryClient(cfg),
-		TrustCenterHistory:                NewTrustCenterHistoryClient(cfg),
-		TrustCenterNDARequestHistory:      NewTrustCenterNDARequestHistoryClient(cfg),
-		TrustCenterSettingHistory:         NewTrustCenterSettingHistoryClient(cfg),
-		TrustCenterSubprocessorHistory:    NewTrustCenterSubprocessorHistoryClient(cfg),
-		TrustCenterWatermarkConfigHistory: NewTrustCenterWatermarkConfigHistoryClient(cfg),
-		UserHistory:                       NewUserHistoryClient(cfg),
-		UserSettingHistory:                NewUserSettingHistoryClient(cfg),
-		VendorRiskScoreHistory:            NewVendorRiskScoreHistoryClient(cfg),
-		VendorScoringConfigHistory:        NewVendorScoringConfigHistoryClient(cfg),
-		VulnerabilityHistory:              NewVulnerabilityHistoryClient(cfg),
-		WorkflowAssignmentHistory:         NewWorkflowAssignmentHistoryClient(cfg),
-		WorkflowAssignmentTargetHistory:   NewWorkflowAssignmentTargetHistoryClient(cfg),
-		WorkflowDefinitionHistory:         NewWorkflowDefinitionHistoryClient(cfg),
+		ctx:                                 ctx,
+		config:                              cfg,
+		ActionPlanHistory:                   NewActionPlanHistoryClient(cfg),
+		AssessmentHistory:                   NewAssessmentHistoryClient(cfg),
+		AssessmentResponseHistory:           NewAssessmentResponseHistoryClient(cfg),
+		AssetHistory:                        NewAssetHistoryClient(cfg),
+		CampaignHistory:                     NewCampaignHistoryClient(cfg),
+		CampaignTargetHistory:               NewCampaignTargetHistoryClient(cfg),
+		ContactHistory:                      NewContactHistoryClient(cfg),
+		ControlHistory:                      NewControlHistoryClient(cfg),
+		ControlImplementationHistory:        NewControlImplementationHistoryClient(cfg),
+		ControlObjectiveHistory:             NewControlObjectiveHistoryClient(cfg),
+		CustomDomainHistory:                 NewCustomDomainHistoryClient(cfg),
+		DiscussionHistory:                   NewDiscussionHistoryClient(cfg),
+		DocumentDataHistory:                 NewDocumentDataHistoryClient(cfg),
+		EmailTemplateHistory:                NewEmailTemplateHistoryClient(cfg),
+		EntityHistory:                       NewEntityHistoryClient(cfg),
+		EntityTypeHistory:                   NewEntityTypeHistoryClient(cfg),
+		EvidenceHistory:                     NewEvidenceHistoryClient(cfg),
+		FileHistory:                         NewFileHistoryClient(cfg),
+		FindingControlHistory:               NewFindingControlHistoryClient(cfg),
+		FindingHistory:                      NewFindingHistoryClient(cfg),
+		GroupHistory:                        NewGroupHistoryClient(cfg),
+		GroupMembershipHistory:              NewGroupMembershipHistoryClient(cfg),
+		GroupSettingHistory:                 NewGroupSettingHistoryClient(cfg),
+		HushHistory:                         NewHushHistoryClient(cfg),
+		IdentityHolderHistory:               NewIdentityHolderHistoryClient(cfg),
+		InternalPolicyHistory:               NewInternalPolicyHistoryClient(cfg),
+		MappableDomainHistory:               NewMappableDomainHistoryClient(cfg),
+		MappedControlHistory:                NewMappedControlHistoryClient(cfg),
+		NarrativeHistory:                    NewNarrativeHistoryClient(cfg),
+		NoteHistory:                         NewNoteHistoryClient(cfg),
+		NotificationPreferenceHistory:       NewNotificationPreferenceHistoryClient(cfg),
+		NotificationTemplateHistory:         NewNotificationTemplateHistoryClient(cfg),
+		OrgMembershipHistory:                NewOrgMembershipHistoryClient(cfg),
+		OrganizationHistory:                 NewOrganizationHistoryClient(cfg),
+		OrganizationSettingHistory:          NewOrganizationSettingHistoryClient(cfg),
+		PlatformHistory:                     NewPlatformHistoryClient(cfg),
+		ProcedureHistory:                    NewProcedureHistoryClient(cfg),
+		ProgramHistory:                      NewProgramHistoryClient(cfg),
+		ProgramMembershipHistory:            NewProgramMembershipHistoryClient(cfg),
+		RemediationHistory:                  NewRemediationHistoryClient(cfg),
+		ReviewHistory:                       NewReviewHistoryClient(cfg),
+		RiskHistory:                         NewRiskHistoryClient(cfg),
+		SLADefinitionHistory:                NewSLADefinitionHistoryClient(cfg),
+		StandardHistory:                     NewStandardHistoryClient(cfg),
+		SubcontrolHistory:                   NewSubcontrolHistoryClient(cfg),
+		SubprocessorHistory:                 NewSubprocessorHistoryClient(cfg),
+		SystemDetailHistory:                 NewSystemDetailHistoryClient(cfg),
+		TaskHistory:                         NewTaskHistoryClient(cfg),
+		TemplateHistory:                     NewTemplateHistoryClient(cfg),
+		TrustCenterComplianceHistory:        NewTrustCenterComplianceHistoryClient(cfg),
+		TrustCenterDocHistory:               NewTrustCenterDocHistoryClient(cfg),
+		TrustCenterEntityHistory:            NewTrustCenterEntityHistoryClient(cfg),
+		TrustCenterFAQHistory:               NewTrustCenterFAQHistoryClient(cfg),
+		TrustCenterHistory:                  NewTrustCenterHistoryClient(cfg),
+		TrustCenterNDARequestHistory:        NewTrustCenterNDARequestHistoryClient(cfg),
+		TrustCenterNDARequestSettingHistory: NewTrustCenterNDARequestSettingHistoryClient(cfg),
+		TrustCenterSettingHistory:           NewTrustCenterSettingHistoryClient(cfg),
+		TrustCenterSubprocessorHistory:      NewTrustCenterSubprocessorHistoryClient(cfg),
+		TrustCenterWatermarkConfigHistory:   NewTrustCenterWatermarkConfigHistoryClient(cfg),
+		UserHistory:                         NewUserHistoryClient(cfg),
+		UserSettingHistory:                  NewUserSettingHistoryClient(cfg),
+		VendorRiskScoreHistory:              NewVendorRiskScoreHistoryClient(cfg),
+		VendorScoringConfigHistory:          NewVendorScoringConfigHistoryClient(cfg),
+		VulnerabilityHistory:                NewVulnerabilityHistoryClient(cfg),
+		WorkflowAssignmentHistory:           NewWorkflowAssignmentHistoryClient(cfg),
+		WorkflowAssignmentTargetHistory:     NewWorkflowAssignmentTargetHistoryClient(cfg),
+		WorkflowDefinitionHistory:           NewWorkflowDefinitionHistoryClient(cfg),
 	}, nil
 }
 
@@ -504,74 +509,75 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:                               ctx,
-		config:                            cfg,
-		ActionPlanHistory:                 NewActionPlanHistoryClient(cfg),
-		AssessmentHistory:                 NewAssessmentHistoryClient(cfg),
-		AssessmentResponseHistory:         NewAssessmentResponseHistoryClient(cfg),
-		AssetHistory:                      NewAssetHistoryClient(cfg),
-		CampaignHistory:                   NewCampaignHistoryClient(cfg),
-		CampaignTargetHistory:             NewCampaignTargetHistoryClient(cfg),
-		ContactHistory:                    NewContactHistoryClient(cfg),
-		ControlHistory:                    NewControlHistoryClient(cfg),
-		ControlImplementationHistory:      NewControlImplementationHistoryClient(cfg),
-		ControlObjectiveHistory:           NewControlObjectiveHistoryClient(cfg),
-		CustomDomainHistory:               NewCustomDomainHistoryClient(cfg),
-		DiscussionHistory:                 NewDiscussionHistoryClient(cfg),
-		DocumentDataHistory:               NewDocumentDataHistoryClient(cfg),
-		EmailTemplateHistory:              NewEmailTemplateHistoryClient(cfg),
-		EntityHistory:                     NewEntityHistoryClient(cfg),
-		EntityTypeHistory:                 NewEntityTypeHistoryClient(cfg),
-		EvidenceHistory:                   NewEvidenceHistoryClient(cfg),
-		FileHistory:                       NewFileHistoryClient(cfg),
-		FindingControlHistory:             NewFindingControlHistoryClient(cfg),
-		FindingHistory:                    NewFindingHistoryClient(cfg),
-		GroupHistory:                      NewGroupHistoryClient(cfg),
-		GroupMembershipHistory:            NewGroupMembershipHistoryClient(cfg),
-		GroupSettingHistory:               NewGroupSettingHistoryClient(cfg),
-		HushHistory:                       NewHushHistoryClient(cfg),
-		IdentityHolderHistory:             NewIdentityHolderHistoryClient(cfg),
-		InternalPolicyHistory:             NewInternalPolicyHistoryClient(cfg),
-		MappableDomainHistory:             NewMappableDomainHistoryClient(cfg),
-		MappedControlHistory:              NewMappedControlHistoryClient(cfg),
-		NarrativeHistory:                  NewNarrativeHistoryClient(cfg),
-		NoteHistory:                       NewNoteHistoryClient(cfg),
-		NotificationPreferenceHistory:     NewNotificationPreferenceHistoryClient(cfg),
-		NotificationTemplateHistory:       NewNotificationTemplateHistoryClient(cfg),
-		OrgMembershipHistory:              NewOrgMembershipHistoryClient(cfg),
-		OrganizationHistory:               NewOrganizationHistoryClient(cfg),
-		OrganizationSettingHistory:        NewOrganizationSettingHistoryClient(cfg),
-		PlatformHistory:                   NewPlatformHistoryClient(cfg),
-		ProcedureHistory:                  NewProcedureHistoryClient(cfg),
-		ProgramHistory:                    NewProgramHistoryClient(cfg),
-		ProgramMembershipHistory:          NewProgramMembershipHistoryClient(cfg),
-		RemediationHistory:                NewRemediationHistoryClient(cfg),
-		ReviewHistory:                     NewReviewHistoryClient(cfg),
-		RiskHistory:                       NewRiskHistoryClient(cfg),
-		SLADefinitionHistory:              NewSLADefinitionHistoryClient(cfg),
-		StandardHistory:                   NewStandardHistoryClient(cfg),
-		SubcontrolHistory:                 NewSubcontrolHistoryClient(cfg),
-		SubprocessorHistory:               NewSubprocessorHistoryClient(cfg),
-		SystemDetailHistory:               NewSystemDetailHistoryClient(cfg),
-		TaskHistory:                       NewTaskHistoryClient(cfg),
-		TemplateHistory:                   NewTemplateHistoryClient(cfg),
-		TrustCenterComplianceHistory:      NewTrustCenterComplianceHistoryClient(cfg),
-		TrustCenterDocHistory:             NewTrustCenterDocHistoryClient(cfg),
-		TrustCenterEntityHistory:          NewTrustCenterEntityHistoryClient(cfg),
-		TrustCenterFAQHistory:             NewTrustCenterFAQHistoryClient(cfg),
-		TrustCenterHistory:                NewTrustCenterHistoryClient(cfg),
-		TrustCenterNDARequestHistory:      NewTrustCenterNDARequestHistoryClient(cfg),
-		TrustCenterSettingHistory:         NewTrustCenterSettingHistoryClient(cfg),
-		TrustCenterSubprocessorHistory:    NewTrustCenterSubprocessorHistoryClient(cfg),
-		TrustCenterWatermarkConfigHistory: NewTrustCenterWatermarkConfigHistoryClient(cfg),
-		UserHistory:                       NewUserHistoryClient(cfg),
-		UserSettingHistory:                NewUserSettingHistoryClient(cfg),
-		VendorRiskScoreHistory:            NewVendorRiskScoreHistoryClient(cfg),
-		VendorScoringConfigHistory:        NewVendorScoringConfigHistoryClient(cfg),
-		VulnerabilityHistory:              NewVulnerabilityHistoryClient(cfg),
-		WorkflowAssignmentHistory:         NewWorkflowAssignmentHistoryClient(cfg),
-		WorkflowAssignmentTargetHistory:   NewWorkflowAssignmentTargetHistoryClient(cfg),
-		WorkflowDefinitionHistory:         NewWorkflowDefinitionHistoryClient(cfg),
+		ctx:                                 ctx,
+		config:                              cfg,
+		ActionPlanHistory:                   NewActionPlanHistoryClient(cfg),
+		AssessmentHistory:                   NewAssessmentHistoryClient(cfg),
+		AssessmentResponseHistory:           NewAssessmentResponseHistoryClient(cfg),
+		AssetHistory:                        NewAssetHistoryClient(cfg),
+		CampaignHistory:                     NewCampaignHistoryClient(cfg),
+		CampaignTargetHistory:               NewCampaignTargetHistoryClient(cfg),
+		ContactHistory:                      NewContactHistoryClient(cfg),
+		ControlHistory:                      NewControlHistoryClient(cfg),
+		ControlImplementationHistory:        NewControlImplementationHistoryClient(cfg),
+		ControlObjectiveHistory:             NewControlObjectiveHistoryClient(cfg),
+		CustomDomainHistory:                 NewCustomDomainHistoryClient(cfg),
+		DiscussionHistory:                   NewDiscussionHistoryClient(cfg),
+		DocumentDataHistory:                 NewDocumentDataHistoryClient(cfg),
+		EmailTemplateHistory:                NewEmailTemplateHistoryClient(cfg),
+		EntityHistory:                       NewEntityHistoryClient(cfg),
+		EntityTypeHistory:                   NewEntityTypeHistoryClient(cfg),
+		EvidenceHistory:                     NewEvidenceHistoryClient(cfg),
+		FileHistory:                         NewFileHistoryClient(cfg),
+		FindingControlHistory:               NewFindingControlHistoryClient(cfg),
+		FindingHistory:                      NewFindingHistoryClient(cfg),
+		GroupHistory:                        NewGroupHistoryClient(cfg),
+		GroupMembershipHistory:              NewGroupMembershipHistoryClient(cfg),
+		GroupSettingHistory:                 NewGroupSettingHistoryClient(cfg),
+		HushHistory:                         NewHushHistoryClient(cfg),
+		IdentityHolderHistory:               NewIdentityHolderHistoryClient(cfg),
+		InternalPolicyHistory:               NewInternalPolicyHistoryClient(cfg),
+		MappableDomainHistory:               NewMappableDomainHistoryClient(cfg),
+		MappedControlHistory:                NewMappedControlHistoryClient(cfg),
+		NarrativeHistory:                    NewNarrativeHistoryClient(cfg),
+		NoteHistory:                         NewNoteHistoryClient(cfg),
+		NotificationPreferenceHistory:       NewNotificationPreferenceHistoryClient(cfg),
+		NotificationTemplateHistory:         NewNotificationTemplateHistoryClient(cfg),
+		OrgMembershipHistory:                NewOrgMembershipHistoryClient(cfg),
+		OrganizationHistory:                 NewOrganizationHistoryClient(cfg),
+		OrganizationSettingHistory:          NewOrganizationSettingHistoryClient(cfg),
+		PlatformHistory:                     NewPlatformHistoryClient(cfg),
+		ProcedureHistory:                    NewProcedureHistoryClient(cfg),
+		ProgramHistory:                      NewProgramHistoryClient(cfg),
+		ProgramMembershipHistory:            NewProgramMembershipHistoryClient(cfg),
+		RemediationHistory:                  NewRemediationHistoryClient(cfg),
+		ReviewHistory:                       NewReviewHistoryClient(cfg),
+		RiskHistory:                         NewRiskHistoryClient(cfg),
+		SLADefinitionHistory:                NewSLADefinitionHistoryClient(cfg),
+		StandardHistory:                     NewStandardHistoryClient(cfg),
+		SubcontrolHistory:                   NewSubcontrolHistoryClient(cfg),
+		SubprocessorHistory:                 NewSubprocessorHistoryClient(cfg),
+		SystemDetailHistory:                 NewSystemDetailHistoryClient(cfg),
+		TaskHistory:                         NewTaskHistoryClient(cfg),
+		TemplateHistory:                     NewTemplateHistoryClient(cfg),
+		TrustCenterComplianceHistory:        NewTrustCenterComplianceHistoryClient(cfg),
+		TrustCenterDocHistory:               NewTrustCenterDocHistoryClient(cfg),
+		TrustCenterEntityHistory:            NewTrustCenterEntityHistoryClient(cfg),
+		TrustCenterFAQHistory:               NewTrustCenterFAQHistoryClient(cfg),
+		TrustCenterHistory:                  NewTrustCenterHistoryClient(cfg),
+		TrustCenterNDARequestHistory:        NewTrustCenterNDARequestHistoryClient(cfg),
+		TrustCenterNDARequestSettingHistory: NewTrustCenterNDARequestSettingHistoryClient(cfg),
+		TrustCenterSettingHistory:           NewTrustCenterSettingHistoryClient(cfg),
+		TrustCenterSubprocessorHistory:      NewTrustCenterSubprocessorHistoryClient(cfg),
+		TrustCenterWatermarkConfigHistory:   NewTrustCenterWatermarkConfigHistoryClient(cfg),
+		UserHistory:                         NewUserHistoryClient(cfg),
+		UserSettingHistory:                  NewUserSettingHistoryClient(cfg),
+		VendorRiskScoreHistory:              NewVendorRiskScoreHistoryClient(cfg),
+		VendorScoringConfigHistory:          NewVendorScoringConfigHistoryClient(cfg),
+		VulnerabilityHistory:                NewVulnerabilityHistoryClient(cfg),
+		WorkflowAssignmentHistory:           NewWorkflowAssignmentHistoryClient(cfg),
+		WorkflowAssignmentTargetHistory:     NewWorkflowAssignmentTargetHistoryClient(cfg),
+		WorkflowDefinitionHistory:           NewWorkflowDefinitionHistoryClient(cfg),
 	}, nil
 }
 
@@ -618,10 +624,10 @@ func (c *Client) Use(hooks ...Hook) {
 		c.SubprocessorHistory, c.SystemDetailHistory, c.TaskHistory, c.TemplateHistory,
 		c.TrustCenterComplianceHistory, c.TrustCenterDocHistory,
 		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
-		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
-		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfigHistory,
-		c.UserHistory, c.UserSettingHistory, c.VendorRiskScoreHistory,
-		c.VendorScoringConfigHistory, c.VulnerabilityHistory,
+		c.TrustCenterNDARequestHistory, c.TrustCenterNDARequestSettingHistory,
+		c.TrustCenterSettingHistory, c.TrustCenterSubprocessorHistory,
+		c.TrustCenterWatermarkConfigHistory, c.UserHistory, c.UserSettingHistory,
+		c.VendorRiskScoreHistory, c.VendorScoringConfigHistory, c.VulnerabilityHistory,
 		c.WorkflowAssignmentHistory, c.WorkflowAssignmentTargetHistory,
 		c.WorkflowDefinitionHistory,
 	} {
@@ -650,10 +656,10 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.SubprocessorHistory, c.SystemDetailHistory, c.TaskHistory, c.TemplateHistory,
 		c.TrustCenterComplianceHistory, c.TrustCenterDocHistory,
 		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
-		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
-		c.TrustCenterSubprocessorHistory, c.TrustCenterWatermarkConfigHistory,
-		c.UserHistory, c.UserSettingHistory, c.VendorRiskScoreHistory,
-		c.VendorScoringConfigHistory, c.VulnerabilityHistory,
+		c.TrustCenterNDARequestHistory, c.TrustCenterNDARequestSettingHistory,
+		c.TrustCenterSettingHistory, c.TrustCenterSubprocessorHistory,
+		c.TrustCenterWatermarkConfigHistory, c.UserHistory, c.UserSettingHistory,
+		c.VendorRiskScoreHistory, c.VendorScoringConfigHistory, c.VulnerabilityHistory,
 		c.WorkflowAssignmentHistory, c.WorkflowAssignmentTargetHistory,
 		c.WorkflowDefinitionHistory,
 	} {
@@ -826,6 +832,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.TrustCenterHistory.mutate(ctx, m)
 	case *TrustCenterNDARequestHistoryMutation:
 		return c.TrustCenterNDARequestHistory.mutate(ctx, m)
+	case *TrustCenterNDARequestSettingHistoryMutation:
+		return c.TrustCenterNDARequestSettingHistory.mutate(ctx, m)
 	case *TrustCenterSettingHistoryMutation:
 		return c.TrustCenterSettingHistory.mutate(ctx, m)
 	case *TrustCenterSubprocessorHistoryMutation:
@@ -8278,6 +8286,141 @@ func (c *TrustCenterNDARequestHistoryClient) mutate(ctx context.Context, m *Trus
 	}
 }
 
+// TrustCenterNDARequestSettingHistoryClient is a client for the TrustCenterNDARequestSettingHistory schema.
+type TrustCenterNDARequestSettingHistoryClient struct {
+	config
+}
+
+// NewTrustCenterNDARequestSettingHistoryClient returns a client for the TrustCenterNDARequestSettingHistory from the given config.
+func NewTrustCenterNDARequestSettingHistoryClient(c config) *TrustCenterNDARequestSettingHistoryClient {
+	return &TrustCenterNDARequestSettingHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `trustcenterndarequestsettinghistory.Hooks(f(g(h())))`.
+func (c *TrustCenterNDARequestSettingHistoryClient) Use(hooks ...Hook) {
+	c.hooks.TrustCenterNDARequestSettingHistory = append(c.hooks.TrustCenterNDARequestSettingHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `trustcenterndarequestsettinghistory.Intercept(f(g(h())))`.
+func (c *TrustCenterNDARequestSettingHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.TrustCenterNDARequestSettingHistory = append(c.inters.TrustCenterNDARequestSettingHistory, interceptors...)
+}
+
+// Create returns a builder for creating a TrustCenterNDARequestSettingHistory entity.
+func (c *TrustCenterNDARequestSettingHistoryClient) Create() *TrustCenterNDARequestSettingHistoryCreate {
+	mutation := newTrustCenterNDARequestSettingHistoryMutation(c.config, OpCreate)
+	return &TrustCenterNDARequestSettingHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of TrustCenterNDARequestSettingHistory entities.
+func (c *TrustCenterNDARequestSettingHistoryClient) CreateBulk(builders ...*TrustCenterNDARequestSettingHistoryCreate) *TrustCenterNDARequestSettingHistoryCreateBulk {
+	return &TrustCenterNDARequestSettingHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *TrustCenterNDARequestSettingHistoryClient) MapCreateBulk(slice any, setFunc func(*TrustCenterNDARequestSettingHistoryCreate, int)) *TrustCenterNDARequestSettingHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &TrustCenterNDARequestSettingHistoryCreateBulk{err: fmt.Errorf("calling to TrustCenterNDARequestSettingHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*TrustCenterNDARequestSettingHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &TrustCenterNDARequestSettingHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for TrustCenterNDARequestSettingHistory.
+func (c *TrustCenterNDARequestSettingHistoryClient) Update() *TrustCenterNDARequestSettingHistoryUpdate {
+	mutation := newTrustCenterNDARequestSettingHistoryMutation(c.config, OpUpdate)
+	return &TrustCenterNDARequestSettingHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *TrustCenterNDARequestSettingHistoryClient) UpdateOne(_m *TrustCenterNDARequestSettingHistory) *TrustCenterNDARequestSettingHistoryUpdateOne {
+	mutation := newTrustCenterNDARequestSettingHistoryMutation(c.config, OpUpdateOne, withTrustCenterNDARequestSettingHistory(_m))
+	return &TrustCenterNDARequestSettingHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *TrustCenterNDARequestSettingHistoryClient) UpdateOneID(id string) *TrustCenterNDARequestSettingHistoryUpdateOne {
+	mutation := newTrustCenterNDARequestSettingHistoryMutation(c.config, OpUpdateOne, withTrustCenterNDARequestSettingHistoryID(id))
+	return &TrustCenterNDARequestSettingHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for TrustCenterNDARequestSettingHistory.
+func (c *TrustCenterNDARequestSettingHistoryClient) Delete() *TrustCenterNDARequestSettingHistoryDelete {
+	mutation := newTrustCenterNDARequestSettingHistoryMutation(c.config, OpDelete)
+	return &TrustCenterNDARequestSettingHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *TrustCenterNDARequestSettingHistoryClient) DeleteOne(_m *TrustCenterNDARequestSettingHistory) *TrustCenterNDARequestSettingHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *TrustCenterNDARequestSettingHistoryClient) DeleteOneID(id string) *TrustCenterNDARequestSettingHistoryDeleteOne {
+	builder := c.Delete().Where(trustcenterndarequestsettinghistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &TrustCenterNDARequestSettingHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for TrustCenterNDARequestSettingHistory.
+func (c *TrustCenterNDARequestSettingHistoryClient) Query() *TrustCenterNDARequestSettingHistoryQuery {
+	return &TrustCenterNDARequestSettingHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeTrustCenterNDARequestSettingHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a TrustCenterNDARequestSettingHistory entity by its id.
+func (c *TrustCenterNDARequestSettingHistoryClient) Get(ctx context.Context, id string) (*TrustCenterNDARequestSettingHistory, error) {
+	return c.Query().Where(trustcenterndarequestsettinghistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *TrustCenterNDARequestSettingHistoryClient) GetX(ctx context.Context, id string) *TrustCenterNDARequestSettingHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *TrustCenterNDARequestSettingHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.TrustCenterNDARequestSettingHistory
+	return append(hooks[:len(hooks):len(hooks)], trustcenterndarequestsettinghistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *TrustCenterNDARequestSettingHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.TrustCenterNDARequestSettingHistory
+	return append(inters[:len(inters):len(inters)], trustcenterndarequestsettinghistory.Interceptors[:]...)
+}
+
+func (c *TrustCenterNDARequestSettingHistoryClient) mutate(ctx context.Context, m *TrustCenterNDARequestSettingHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&TrustCenterNDARequestSettingHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&TrustCenterNDARequestSettingHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&TrustCenterNDARequestSettingHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&TrustCenterNDARequestSettingHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown TrustCenterNDARequestSettingHistory mutation op: %q", m.Op())
+	}
+}
+
 // TrustCenterSettingHistoryClient is a client for the TrustCenterSettingHistory schema.
 type TrustCenterSettingHistoryClient struct {
 	config
@@ -9781,7 +9924,8 @@ type (
 		StandardHistory, SubcontrolHistory, SubprocessorHistory, SystemDetailHistory,
 		TaskHistory, TemplateHistory, TrustCenterComplianceHistory,
 		TrustCenterDocHistory, TrustCenterEntityHistory, TrustCenterFAQHistory,
-		TrustCenterHistory, TrustCenterNDARequestHistory, TrustCenterSettingHistory,
+		TrustCenterHistory, TrustCenterNDARequestHistory,
+		TrustCenterNDARequestSettingHistory, TrustCenterSettingHistory,
 		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfigHistory, UserHistory,
 		UserSettingHistory, VendorRiskScoreHistory, VendorScoringConfigHistory,
 		VulnerabilityHistory, WorkflowAssignmentHistory,
@@ -9803,7 +9947,8 @@ type (
 		StandardHistory, SubcontrolHistory, SubprocessorHistory, SystemDetailHistory,
 		TaskHistory, TemplateHistory, TrustCenterComplianceHistory,
 		TrustCenterDocHistory, TrustCenterEntityHistory, TrustCenterFAQHistory,
-		TrustCenterHistory, TrustCenterNDARequestHistory, TrustCenterSettingHistory,
+		TrustCenterHistory, TrustCenterNDARequestHistory,
+		TrustCenterNDARequestSettingHistory, TrustCenterSettingHistory,
 		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfigHistory, UserHistory,
 		UserSettingHistory, VendorRiskScoreHistory, VendorScoringConfigHistory,
 		VulnerabilityHistory, WorkflowAssignmentHistory,

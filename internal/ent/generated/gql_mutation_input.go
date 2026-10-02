@@ -27893,6 +27893,168 @@ func (c *TrustCenterNDARequestUpdateOne) SetInput(i UpdateTrustCenterNDARequestI
 	return c
 }
 
+// CreateTrustCenterNDARequestSettingInput represents a mutation input for creating trustcenterndarequestsettings.
+type CreateTrustCenterNDARequestSettingInput struct {
+	ApprovalRequired          *bool    `json:"approval_required,omitempty"`
+	AutoApprove               *bool    `json:"auto_approve,omitempty"`
+	WorkEmailOnly             *bool    `json:"work_email_only,omitempty"`
+	UseDomainBlocklist        *bool    `json:"use_domain_blocklist,omitempty"`
+	UseDomainAllowlist        *bool    `json:"use_domain_allowlist,omitempty"`
+	ApproveFromExistingDomain *bool    `json:"approve_from_existing_domain,omitempty"`
+	ApproveIfContactExists    *bool    `json:"approve_if_contact_exists,omitempty"`
+	BlockedGroupIDs           []string `json:"blocked_group_ids,omitempty"`
+	EditorIDs                 []string `json:"editor_ids,omitempty"`
+	ApproverGroupID           *string  `json:"approver_group_id,omitempty"`
+}
+
+// Mutate applies the CreateTrustCenterNDARequestSettingInput on the TrustCenterNDARequestSettingMutation builder.
+func (i *CreateTrustCenterNDARequestSettingInput) Mutate(m *TrustCenterNDARequestSettingMutation) {
+	if v := i.ApprovalRequired; v != nil {
+		m.SetApprovalRequired(*v)
+	}
+	if v := i.AutoApprove; v != nil {
+		m.SetAutoApprove(*v)
+	}
+	if v := i.WorkEmailOnly; v != nil {
+		m.SetWorkEmailOnly(*v)
+	}
+	if v := i.UseDomainBlocklist; v != nil {
+		m.SetUseDomainBlocklist(*v)
+	}
+	if v := i.UseDomainAllowlist; v != nil {
+		m.SetUseDomainAllowlist(*v)
+	}
+	if v := i.ApproveFromExistingDomain; v != nil {
+		m.SetApproveFromExistingDomain(*v)
+	}
+	if v := i.ApproveIfContactExists; v != nil {
+		m.SetApproveIfContactExists(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ApproverGroupID; v != nil {
+		m.SetApproverGroupID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateTrustCenterNDARequestSettingInput on the TrustCenterNDARequestSettingCreate builder.
+func (c *TrustCenterNDARequestSettingCreate) SetInput(i CreateTrustCenterNDARequestSettingInput) *TrustCenterNDARequestSettingCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTrustCenterNDARequestSettingInput represents a mutation input for updating trustcenterndarequestsettings.
+type UpdateTrustCenterNDARequestSettingInput struct {
+	ClearApprovalRequired          bool
+	ApprovalRequired               *bool `json:"approval_required,omitempty"`
+	ClearAutoApprove               bool
+	AutoApprove                    *bool `json:"auto_approve,omitempty"`
+	ClearWorkEmailOnly             bool
+	WorkEmailOnly                  *bool `json:"work_email_only,omitempty"`
+	ClearUseDomainBlocklist        bool
+	UseDomainBlocklist             *bool `json:"use_domain_blocklist,omitempty"`
+	ClearUseDomainAllowlist        bool
+	UseDomainAllowlist             *bool `json:"use_domain_allowlist,omitempty"`
+	ClearApproveFromExistingDomain bool
+	ApproveFromExistingDomain      *bool `json:"approve_from_existing_domain,omitempty"`
+	ClearApproveIfContactExists    bool
+	ApproveIfContactExists         *bool `json:"approve_if_contact_exists,omitempty"`
+	ClearBlockedGroups             bool
+	AddBlockedGroupIDs             []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs          []string `json:"remove_blocked_group_ids,omitempty"`
+	ClearEditors                   bool
+	AddEditorIDs                   []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs                []string `json:"remove_editor_ids,omitempty"`
+	ClearApproverGroup             bool
+	ApproverGroupID                *string `json:"approver_group_id,omitempty"`
+}
+
+// Mutate applies the UpdateTrustCenterNDARequestSettingInput on the TrustCenterNDARequestSettingMutation builder.
+func (i *UpdateTrustCenterNDARequestSettingInput) Mutate(m *TrustCenterNDARequestSettingMutation) {
+	if i.ClearApprovalRequired {
+		m.ClearApprovalRequired()
+	}
+	if v := i.ApprovalRequired; v != nil {
+		m.SetApprovalRequired(*v)
+	}
+	if i.ClearAutoApprove {
+		m.ClearAutoApprove()
+	}
+	if v := i.AutoApprove; v != nil {
+		m.SetAutoApprove(*v)
+	}
+	if i.ClearWorkEmailOnly {
+		m.ClearWorkEmailOnly()
+	}
+	if v := i.WorkEmailOnly; v != nil {
+		m.SetWorkEmailOnly(*v)
+	}
+	if i.ClearUseDomainBlocklist {
+		m.ClearUseDomainBlocklist()
+	}
+	if v := i.UseDomainBlocklist; v != nil {
+		m.SetUseDomainBlocklist(*v)
+	}
+	if i.ClearUseDomainAllowlist {
+		m.ClearUseDomainAllowlist()
+	}
+	if v := i.UseDomainAllowlist; v != nil {
+		m.SetUseDomainAllowlist(*v)
+	}
+	if i.ClearApproveFromExistingDomain {
+		m.ClearApproveFromExistingDomain()
+	}
+	if v := i.ApproveFromExistingDomain; v != nil {
+		m.SetApproveFromExistingDomain(*v)
+	}
+	if i.ClearApproveIfContactExists {
+		m.ClearApproveIfContactExists()
+	}
+	if v := i.ApproveIfContactExists; v != nil {
+		m.SetApproveIfContactExists(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearApproverGroup {
+		m.ClearApproverGroup()
+	}
+	if v := i.ApproverGroupID; v != nil {
+		m.SetApproverGroupID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterNDARequestSettingInput on the TrustCenterNDARequestSettingUpdate builder.
+func (c *TrustCenterNDARequestSettingUpdate) SetInput(i UpdateTrustCenterNDARequestSettingInput) *TrustCenterNDARequestSettingUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterNDARequestSettingInput on the TrustCenterNDARequestSettingUpdateOne builder.
+func (c *TrustCenterNDARequestSettingUpdateOne) SetInput(i UpdateTrustCenterNDARequestSettingInput) *TrustCenterNDARequestSettingUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateTrustCenterSettingInput represents a mutation input for creating trustcentersettings.
 type CreateTrustCenterSettingInput struct {
 	TrustCenterID                         *string                       `json:"trust_center_id,omitempty"`
@@ -27913,11 +28075,11 @@ type CreateTrustCenterSettingInput struct {
 	Environment                           *enums.TrustCenterEnvironment `json:"environment,omitempty"`
 	CompanyDomain                         *string                       `json:"company_domain,omitempty"`
 	SecurityContact                       *string                       `json:"security_contact,omitempty"`
-	NdaApprovalRequired                   *bool                         `json:"nda_approval_required,omitempty"`
 	AllowSubscribers                      *bool                         `json:"allow_subscribers,omitempty"`
 	NotifySubscribersOnSubprocessorChange *bool                         `json:"notify_subscribers_on_subprocessor_change,omitempty"`
 	StatusPageURL                         *string                       `json:"status_page_url,omitempty"`
 	NoindexDefaultDomain                  *bool                         `json:"noindex_default_domain,omitempty"`
+	NdaApprovalRequired                   *bool                         `json:"nda_approval_required,omitempty"`
 	BlockedGroupIDs                       []string                      `json:"blocked_group_ids,omitempty"`
 	EditorIDs                             []string                      `json:"editor_ids,omitempty"`
 	LogoFileID                            *string                       `json:"logo_file_id,omitempty"`
@@ -27982,9 +28144,6 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.SecurityContact; v != nil {
 		m.SetSecurityContact(*v)
 	}
-	if v := i.NdaApprovalRequired; v != nil {
-		m.SetNdaApprovalRequired(*v)
-	}
 	if v := i.AllowSubscribers; v != nil {
 		m.SetAllowSubscribers(*v)
 	}
@@ -27996,6 +28155,9 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.NoindexDefaultDomain; v != nil {
 		m.SetNoindexDefaultDomain(*v)
+	}
+	if v := i.NdaApprovalRequired; v != nil {
+		m.SetNdaApprovalRequired(*v)
 	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
@@ -28059,8 +28221,6 @@ type UpdateTrustCenterSettingInput struct {
 	CompanyDomain                              *string `json:"company_domain,omitempty"`
 	ClearSecurityContact                       bool
 	SecurityContact                            *string `json:"security_contact,omitempty"`
-	ClearNdaApprovalRequired                   bool
-	NdaApprovalRequired                        *bool `json:"nda_approval_required,omitempty"`
 	ClearAllowSubscribers                      bool
 	AllowSubscribers                           *bool `json:"allow_subscribers,omitempty"`
 	ClearNotifySubscribersOnSubprocessorChange bool
@@ -28069,6 +28229,8 @@ type UpdateTrustCenterSettingInput struct {
 	StatusPageURL                              *string `json:"status_page_url,omitempty"`
 	ClearNoindexDefaultDomain                  bool
 	NoindexDefaultDomain                       *bool `json:"noindex_default_domain,omitempty"`
+	ClearNdaApprovalRequired                   bool
+	NdaApprovalRequired                        *bool `json:"nda_approval_required,omitempty"`
 	ClearBlockedGroups                         bool
 	AddBlockedGroupIDs                         []string `json:"add_blocked_group_ids,omitempty"`
 	RemoveBlockedGroupIDs                      []string `json:"remove_blocked_group_ids,omitempty"`
@@ -28189,12 +28351,6 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.SecurityContact; v != nil {
 		m.SetSecurityContact(*v)
 	}
-	if i.ClearNdaApprovalRequired {
-		m.ClearNdaApprovalRequired()
-	}
-	if v := i.NdaApprovalRequired; v != nil {
-		m.SetNdaApprovalRequired(*v)
-	}
 	if i.ClearAllowSubscribers {
 		m.ClearAllowSubscribers()
 	}
@@ -28218,6 +28374,12 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.NoindexDefaultDomain; v != nil {
 		m.SetNoindexDefaultDomain(*v)
+	}
+	if i.ClearNdaApprovalRequired {
+		m.ClearNdaApprovalRequired()
+	}
+	if v := i.NdaApprovalRequired; v != nil {
+		m.SetNdaApprovalRequired(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()

@@ -10896,6 +10896,225 @@ func (r *mutationResolver) bulkDeleteTrustCenterNDARequest(ctx context.Context, 
 	}, nil
 }
 
+// bulkCreateTrustCenterNDARequestSetting uses the CreateBulk function to create multiple TrustCenterNDARequestSetting entities
+func (r *mutationResolver) bulkCreateTrustCenterNDARequestSetting(ctx context.Context, input []*generated.CreateTrustCenterNDARequestSettingInput) (*model.TrustCenterNDARequestSettingBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.TrustCenterNDARequestSettingCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.TrustCenterNDARequestSetting.Create().SetInput(*data)
+	}
+
+	res, err := c.TrustCenterNDARequestSetting.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndarequestsetting"})
+	}
+
+	// return response
+	return &model.TrustCenterNDARequestSettingBulkCreatePayload{
+		TrustCenterNDARequestSettings: res,
+	}, nil
+}
+
+// bulkUpdateTrustCenterNDARequestSetting updates multiple TrustCenterNDARequestSetting entities
+func (r *mutationResolver) bulkUpdateTrustCenterNDARequestSetting(ctx context.Context, ids []string, input generated.UpdateTrustCenterNDARequestSettingInput) (*model.TrustCenterNDARequestSettingBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	originalIDs := append([]string(nil), ids...)
+	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_nda_request_setting", fgax.CanEdit)
+	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
+		return &model.TrustCenterNDARequestSettingBulkUpdatePayload{
+			TrustCenterNDARequestSettings: []*generated.TrustCenterNDARequestSetting{},
+			UpdatedIDs:                    []string{},
+			NotUpdatedIDs:                 originalIDs,
+			Error:                         &err,
+		}, nil
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.TrustCenterNDARequestSetting, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each trustcenterndarequestsetting individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for trustcenterndarequestsetting")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.TrustCenterNDARequestSetting.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trustcenterndarequestsetting_id", id).Msg("failed to get trustcenterndarequestsetting in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trustcenterndarequestsetting_id", id).Msg("failed to update trustcenterndarequestsetting in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
+	return &model.TrustCenterNDARequestSettingBulkUpdatePayload{
+		TrustCenterNDARequestSettings: results,
+		UpdatedIDs:                    updatedIDs,
+		NotUpdatedIDs:                 notUpdatedIDs,
+		Error:                         err,
+	}, nil
+}
+
+// bulkUpdateCSVTrustCenterNDARequestSetting updates multiple TrustCenterNDARequestSetting entities from CSV data with per-row values
+func (r *mutationResolver) bulkUpdateCSVTrustCenterNDARequestSetting(ctx context.Context, inputs []*csvgenerated.TrustCenterNDARequestSettingCSVUpdateInput) (*model.TrustCenterNDARequestSettingBulkUpdatePayload, error) {
+	if len(inputs) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.TrustCenterNDARequestSetting, 0, len(inputs))
+	updatedIDs := make([]string, 0, len(inputs))
+
+	// update each trustcenterndarequestsetting individually with its own input values
+	for _, input := range inputs {
+		if input == nil || input.ID == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in CSV bulk update for trustcenterndarequestsetting")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.TrustCenterNDARequestSetting.Get(ctx, input.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trustcenterndarequestsetting_id", input.ID).Msg("failed to get trustcenterndarequestsetting in CSV bulk update operation")
+			continue
+		}
+
+		// setup update request with this row's input values
+		updatedEntity, err := existing.Update().SetInput(input.Input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trustcenterndarequestsetting_id", input.ID).Msg("failed to update trustcenterndarequestsetting in CSV bulk operation")
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterndarequestsetting"})
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, input.ID)
+	}
+
+	return &model.TrustCenterNDARequestSettingBulkUpdatePayload{
+		TrustCenterNDARequestSettings: results,
+		UpdatedIDs:                    updatedIDs,
+	}, nil
+}
+
+// bulkDeleteTrustCenterNDARequestSetting deletes multiple TrustCenterNDARequestSetting entities by their IDs
+func (r *mutationResolver) bulkDeleteTrustCenterNDARequestSetting(ctx context.Context, ids []string) (*model.TrustCenterNDARequestSettingBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	originalIDs := append([]string(nil), ids...)
+	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_nda_request_setting", fgax.CanDelete)
+	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
+		return &model.TrustCenterNDARequestSettingBulkDeletePayload{
+			DeletedIDs:    []string{},
+			NotDeletedIDs: originalIDs,
+			Error:         &err,
+		}, nil
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// use r.db in context so interceptors use the connection pool instead of the shared transaction
+			poolCtx := generated.NewContext(ctx, r.db)
+
+			// delete each trustcenterndarequestsetting individually to ensure proper cleanup
+			if err := r.db.TrustCenterNDARequestSetting.DeleteOneID(id).Exec(poolCtx); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("trustcenterndarequestsetting_id", id).Msg("failed to delete trustcenterndarequestsetting in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.TrustCenterNDARequestSettingEdgeCleanup(poolCtx, id); err != nil {
+				logx.FromContext(poolCtx).Error().Err(err).Str("trustcenterndarequestsetting_id", id).Msg("failed to cleanup trustcenterndarequestsetting edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcenterndarequestsetting deletions failed")
+	}
+
+	deleted := make(map[string]struct{}, len(deletedIDs))
+	for _, id := range deletedIDs {
+		deleted[id] = struct{}{}
+	}
+
+	notDeletedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := deleted[id]; !ok {
+			notDeletedIDs = append(notDeletedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notDeletedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
+	return &model.TrustCenterNDARequestSettingBulkDeletePayload{
+		DeletedIDs:    deletedIDs,
+		NotDeletedIDs: notDeletedIDs,
+		Error:         err,
+	}, nil
+}
+
 // bulkCreateTrustCenterSubprocessor uses the CreateBulk function to create multiple TrustCenterSubprocessor entities
 func (r *mutationResolver) bulkCreateTrustCenterSubprocessor(ctx context.Context, input []*generated.CreateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

@@ -428,20 +428,6 @@ func (_c *TrustCenterSettingCreate) SetNillableSecurityContact(v *string) *Trust
 	return _c
 }
 
-// SetNdaApprovalRequired sets the "nda_approval_required" field.
-func (_c *TrustCenterSettingCreate) SetNdaApprovalRequired(v bool) *TrustCenterSettingCreate {
-	_c.mutation.SetNdaApprovalRequired(v)
-	return _c
-}
-
-// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
-func (_c *TrustCenterSettingCreate) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingCreate {
-	if v != nil {
-		_c.SetNdaApprovalRequired(*v)
-	}
-	return _c
-}
-
 // SetAllowSubscribers sets the "allow_subscribers" field.
 func (_c *TrustCenterSettingCreate) SetAllowSubscribers(v bool) *TrustCenterSettingCreate {
 	_c.mutation.SetAllowSubscribers(v)
@@ -484,20 +470,6 @@ func (_c *TrustCenterSettingCreate) SetNillableSubprocessorsNotifiedAt(v *time.T
 	return _c
 }
 
-// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
-func (_c *TrustCenterSettingCreate) SetNdaApproverGroupID(v string) *TrustCenterSettingCreate {
-	_c.mutation.SetNdaApproverGroupID(v)
-	return _c
-}
-
-// SetNillableNdaApproverGroupID sets the "nda_approver_group_id" field if the given value is not nil.
-func (_c *TrustCenterSettingCreate) SetNillableNdaApproverGroupID(v *string) *TrustCenterSettingCreate {
-	if v != nil {
-		_c.SetNdaApproverGroupID(*v)
-	}
-	return _c
-}
-
 // SetStatusPageURL sets the "status_page_url" field.
 func (_c *TrustCenterSettingCreate) SetStatusPageURL(v string) *TrustCenterSettingCreate {
 	_c.mutation.SetStatusPageURL(v)
@@ -522,6 +494,34 @@ func (_c *TrustCenterSettingCreate) SetNoindexDefaultDomain(v bool) *TrustCenter
 func (_c *TrustCenterSettingCreate) SetNillableNoindexDefaultDomain(v *bool) *TrustCenterSettingCreate {
 	if v != nil {
 		_c.SetNoindexDefaultDomain(*v)
+	}
+	return _c
+}
+
+// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
+func (_c *TrustCenterSettingCreate) SetNdaApproverGroupID(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetNdaApproverGroupID(v)
+	return _c
+}
+
+// SetNillableNdaApproverGroupID sets the "nda_approver_group_id" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableNdaApproverGroupID(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetNdaApproverGroupID(*v)
+	}
+	return _c
+}
+
+// SetNdaApprovalRequired sets the "nda_approval_required" field.
+func (_c *TrustCenterSettingCreate) SetNdaApprovalRequired(v bool) *TrustCenterSettingCreate {
+	_c.mutation.SetNdaApprovalRequired(v)
+	return _c
+}
+
+// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetNdaApprovalRequired(*v)
 	}
 	return _c
 }
@@ -695,10 +695,6 @@ func (_c *TrustCenterSettingCreate) defaults() error {
 		v := trustcentersetting.DefaultRemoveBranding
 		_c.mutation.SetRemoveBranding(v)
 	}
-	if _, ok := _c.mutation.NdaApprovalRequired(); !ok {
-		v := trustcentersetting.DefaultNdaApprovalRequired
-		_c.mutation.SetNdaApprovalRequired(v)
-	}
 	if _, ok := _c.mutation.AllowSubscribers(); !ok {
 		v := trustcentersetting.DefaultAllowSubscribers
 		_c.mutation.SetAllowSubscribers(v)
@@ -710,6 +706,10 @@ func (_c *TrustCenterSettingCreate) defaults() error {
 	if _, ok := _c.mutation.NoindexDefaultDomain(); !ok {
 		v := trustcentersetting.DefaultNoindexDefaultDomain
 		_c.mutation.SetNoindexDefaultDomain(v)
+	}
+	if _, ok := _c.mutation.NdaApprovalRequired(); !ok {
+		v := trustcentersetting.DefaultNdaApprovalRequired
+		_c.mutation.SetNdaApprovalRequired(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcentersetting.DefaultID == nil {
@@ -947,10 +947,6 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 		_spec.SetField(trustcentersetting.FieldSecurityContact, field.TypeString, value)
 		_node.SecurityContact = &value
 	}
-	if value, ok := _c.mutation.NdaApprovalRequired(); ok {
-		_spec.SetField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool, value)
-		_node.NdaApprovalRequired = value
-	}
 	if value, ok := _c.mutation.AllowSubscribers(); ok {
 		_spec.SetField(trustcentersetting.FieldAllowSubscribers, field.TypeBool, value)
 		_node.AllowSubscribers = value
@@ -970,6 +966,10 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 	if value, ok := _c.mutation.NoindexDefaultDomain(); ok {
 		_spec.SetField(trustcentersetting.FieldNoindexDefaultDomain, field.TypeBool, value)
 		_node.NoindexDefaultDomain = value
+	}
+	if value, ok := _c.mutation.NdaApprovalRequired(); ok {
+		_spec.SetField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool, value)
+		_node.NdaApprovalRequired = value
 	}
 	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

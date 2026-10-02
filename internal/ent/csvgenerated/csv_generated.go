@@ -2022,6 +2022,10 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		SchemaName: "TrustCenterNDARequest",
 		Rules:      []CSVReferenceRule{},
 	},
+	"TrustCenterNDARequestSetting": {
+		SchemaName: "TrustCenterNDARequestSetting",
+		Rules:      []CSVReferenceRule{},
+	},
 	"TrustCenterSetting": {
 		SchemaName: "TrustCenterSetting",
 		Rules:      []CSVReferenceRule{},
@@ -3639,6 +3643,24 @@ type TrustCenterNDARequestCSVUpdateInput struct {
 
 // CSVInputWrapper marks TrustCenterNDARequestCSVUpdateInput for CSV header preprocessing.
 func (TrustCenterNDARequestCSVUpdateInput) CSVInputWrapper() {}
+
+// TrustCenterNDARequestSettingCSVInput wraps CreateTrustCenterNDARequestSettingInput with CSV reference columns.
+type TrustCenterNDARequestSettingCSVInput struct {
+	Input generated.CreateTrustCenterNDARequestSettingInput
+}
+
+// CSVInputWrapper marks TrustCenterNDARequestSettingCSVInput for CSV header preprocessing.
+func (TrustCenterNDARequestSettingCSVInput) CSVInputWrapper() {}
+
+// TrustCenterNDARequestSettingCSVUpdateInput wraps UpdateTrustCenterNDARequestSettingInput with CSV reference columns for bulk updates.
+type TrustCenterNDARequestSettingCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID    string `csv:"ID"`
+	Input generated.UpdateTrustCenterNDARequestSettingInput
+}
+
+// CSVInputWrapper marks TrustCenterNDARequestSettingCSVUpdateInput for CSV header preprocessing.
+func (TrustCenterNDARequestSettingCSVUpdateInput) CSVInputWrapper() {}
 
 // TrustCenterSettingCSVInput wraps CreateTrustCenterSettingInput with CSV reference columns.
 type TrustCenterSettingCSVInput struct {

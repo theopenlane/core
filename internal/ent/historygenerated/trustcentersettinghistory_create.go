@@ -464,20 +464,6 @@ func (_c *TrustCenterSettingHistoryCreate) SetNillableSecurityContact(v *string)
 	return _c
 }
 
-// SetNdaApprovalRequired sets the "nda_approval_required" field.
-func (_c *TrustCenterSettingHistoryCreate) SetNdaApprovalRequired(v bool) *TrustCenterSettingHistoryCreate {
-	_c.mutation.SetNdaApprovalRequired(v)
-	return _c
-}
-
-// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
-func (_c *TrustCenterSettingHistoryCreate) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingHistoryCreate {
-	if v != nil {
-		_c.SetNdaApprovalRequired(*v)
-	}
-	return _c
-}
-
 // SetAllowSubscribers sets the "allow_subscribers" field.
 func (_c *TrustCenterSettingHistoryCreate) SetAllowSubscribers(v bool) *TrustCenterSettingHistoryCreate {
 	_c.mutation.SetAllowSubscribers(v)
@@ -520,20 +506,6 @@ func (_c *TrustCenterSettingHistoryCreate) SetNillableSubprocessorsNotifiedAt(v 
 	return _c
 }
 
-// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
-func (_c *TrustCenterSettingHistoryCreate) SetNdaApproverGroupID(v string) *TrustCenterSettingHistoryCreate {
-	_c.mutation.SetNdaApproverGroupID(v)
-	return _c
-}
-
-// SetNillableNdaApproverGroupID sets the "nda_approver_group_id" field if the given value is not nil.
-func (_c *TrustCenterSettingHistoryCreate) SetNillableNdaApproverGroupID(v *string) *TrustCenterSettingHistoryCreate {
-	if v != nil {
-		_c.SetNdaApproverGroupID(*v)
-	}
-	return _c
-}
-
 // SetStatusPageURL sets the "status_page_url" field.
 func (_c *TrustCenterSettingHistoryCreate) SetStatusPageURL(v string) *TrustCenterSettingHistoryCreate {
 	_c.mutation.SetStatusPageURL(v)
@@ -558,6 +530,34 @@ func (_c *TrustCenterSettingHistoryCreate) SetNoindexDefaultDomain(v bool) *Trus
 func (_c *TrustCenterSettingHistoryCreate) SetNillableNoindexDefaultDomain(v *bool) *TrustCenterSettingHistoryCreate {
 	if v != nil {
 		_c.SetNoindexDefaultDomain(*v)
+	}
+	return _c
+}
+
+// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
+func (_c *TrustCenterSettingHistoryCreate) SetNdaApproverGroupID(v string) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetNdaApproverGroupID(v)
+	return _c
+}
+
+// SetNillableNdaApproverGroupID sets the "nda_approver_group_id" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableNdaApproverGroupID(v *string) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetNdaApproverGroupID(*v)
+	}
+	return _c
+}
+
+// SetNdaApprovalRequired sets the "nda_approval_required" field.
+func (_c *TrustCenterSettingHistoryCreate) SetNdaApprovalRequired(v bool) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetNdaApprovalRequired(v)
+	return _c
+}
+
+// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetNdaApprovalRequired(*v)
 	}
 	return _c
 }
@@ -646,10 +646,6 @@ func (_c *TrustCenterSettingHistoryCreate) defaults() error {
 		v := trustcentersettinghistory.DefaultRemoveBranding
 		_c.mutation.SetRemoveBranding(v)
 	}
-	if _, ok := _c.mutation.NdaApprovalRequired(); !ok {
-		v := trustcentersettinghistory.DefaultNdaApprovalRequired
-		_c.mutation.SetNdaApprovalRequired(v)
-	}
 	if _, ok := _c.mutation.AllowSubscribers(); !ok {
 		v := trustcentersettinghistory.DefaultAllowSubscribers
 		_c.mutation.SetAllowSubscribers(v)
@@ -661,6 +657,10 @@ func (_c *TrustCenterSettingHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.NoindexDefaultDomain(); !ok {
 		v := trustcentersettinghistory.DefaultNoindexDefaultDomain
 		_c.mutation.SetNoindexDefaultDomain(v)
+	}
+	if _, ok := _c.mutation.NdaApprovalRequired(); !ok {
+		v := trustcentersettinghistory.DefaultNdaApprovalRequired
+		_c.mutation.SetNdaApprovalRequired(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcentersettinghistory.DefaultID == nil {
@@ -858,10 +858,6 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 		_spec.SetField(trustcentersettinghistory.FieldSecurityContact, field.TypeString, value)
 		_node.SecurityContact = &value
 	}
-	if value, ok := _c.mutation.NdaApprovalRequired(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool, value)
-		_node.NdaApprovalRequired = value
-	}
 	if value, ok := _c.mutation.AllowSubscribers(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldAllowSubscribers, field.TypeBool, value)
 		_node.AllowSubscribers = value
@@ -874,10 +870,6 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 		_spec.SetField(trustcentersettinghistory.FieldSubprocessorsNotifiedAt, field.TypeTime, value)
 		_node.SubprocessorsNotifiedAt = &value
 	}
-	if value, ok := _c.mutation.NdaApproverGroupID(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldNdaApproverGroupID, field.TypeString, value)
-		_node.NdaApproverGroupID = &value
-	}
 	if value, ok := _c.mutation.StatusPageURL(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString, value)
 		_node.StatusPageURL = &value
@@ -885,6 +877,14 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 	if value, ok := _c.mutation.NoindexDefaultDomain(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldNoindexDefaultDomain, field.TypeBool, value)
 		_node.NoindexDefaultDomain = value
+	}
+	if value, ok := _c.mutation.NdaApproverGroupID(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldNdaApproverGroupID, field.TypeString, value)
+		_node.NdaApproverGroupID = &value
+	}
+	if value, ok := _c.mutation.NdaApprovalRequired(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool, value)
+		_node.NdaApprovalRequired = value
 	}
 	return _node, _spec
 }

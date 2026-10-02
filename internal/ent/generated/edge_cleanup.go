@@ -2813,6 +2813,12 @@ func TrustCenterNDARequestEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func TrustCenterNDARequestSettingEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterndarequestsetting edge")))
+
+	return nil
+}
+
 func TrustCenterSettingEdgeCleanup(ctx context.Context, id string) error {
 	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersetting edge")))
 

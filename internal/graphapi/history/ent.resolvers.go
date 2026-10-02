@@ -1797,6 +1797,38 @@ func (r *queryResolver) TrustCenterNdaRequestHistories(ctx context.Context, afte
 	return res, err
 }
 
+// TrustCenterNdaRequestSettingHistories is the resolver for the trustCenterNdaRequestSettingHistories field.
+func (r *queryResolver) TrustCenterNdaRequestSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterNDARequestSettingHistoryOrder, where *historygenerated.TrustCenterNDARequestSettingHistoryWhereInput) (*historygenerated.TrustCenterNDARequestSettingHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.TrustCenterNDARequestSettingHistoryOrder{
+			Field:     historygenerated.TrustCenterNDARequestSettingHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustCenterNDARequestSettingHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterndarequestsettinghistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithTrustCenterNDARequestSettingHistoryOrder(orderBy),
+		historygenerated.WithTrustCenterNDARequestSettingHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterndarequestsettinghistory"})
+	}
+
+	return res, err
+}
+
 // TrustCenterSettingHistories is the resolver for the trustCenterSettingHistories field.
 func (r *queryResolver) TrustCenterSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterSettingHistoryOrder, where *historygenerated.TrustCenterSettingHistoryWhereInput) (*historygenerated.TrustCenterSettingHistoryConnection, error) {
 	// set page limit if nothing was set

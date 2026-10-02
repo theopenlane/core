@@ -85,21 +85,21 @@ type TrustCenterSettingHistory struct {
 	CompanyDomain *string `json:"company_domain,omitempty"`
 	// email address for security contact
 	SecurityContact *string `json:"security_contact,omitempty"`
-	// whether NDA requests require approval before being processed
-	NdaApprovalRequired bool `json:"nda_approval_required,omitempty"`
 	// whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked
 	AllowSubscribers bool `json:"allow_subscribers,omitempty"`
 	// whether to email trust center subscribers when subprocessors are added, updated, or removed
 	NotifySubscribersOnSubprocessorChange bool `json:"notify_subscribers_on_subprocessor_change,omitempty"`
 	// watermark of the most recent subprocessor change subscribers have been notified about
 	SubprocessorsNotifiedAt *time.Time `json:"subprocessors_notified_at,omitempty"`
-	// group whose members approve trust center NDA requests
-	NdaApproverGroupID *string `json:"nda_approver_group_id,omitempty"`
 	// URL to the company's status page
 	StatusPageURL *string `json:"status_page_url,omitempty"`
 	// allow trustcenter to be indexed on google
 	NoindexDefaultDomain bool `json:"noindex_default_domain,omitempty"`
-	selectValues         sql.SelectValues
+	// group whose members approve trust center NDA requests
+	NdaApproverGroupID *string `json:"nda_approver_group_id,omitempty"`
+	// whether NDA requests require approval before being processed
+	NdaApprovalRequired bool `json:"nda_approval_required,omitempty"`
+	selectValues        sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -109,9 +109,9 @@ func (*TrustCenterSettingHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcentersettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcentersettinghistory.FieldRemoveBranding, trustcentersettinghistory.FieldNdaApprovalRequired, trustcentersettinghistory.FieldAllowSubscribers, trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange, trustcentersettinghistory.FieldNoindexDefaultDomain:
+		case trustcentersettinghistory.FieldRemoveBranding, trustcentersettinghistory.FieldAllowSubscribers, trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange, trustcentersettinghistory.FieldNoindexDefaultDomain, trustcentersettinghistory.FieldNdaApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldUpdatedByImpersonator, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldCompanyName, trustcentersettinghistory.FieldCompanyDescription, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldHeroImageLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor, trustcentersettinghistory.FieldEnvironment, trustcentersettinghistory.FieldCompanyDomain, trustcentersettinghistory.FieldSecurityContact, trustcentersettinghistory.FieldNdaApproverGroupID, trustcentersettinghistory.FieldStatusPageURL:
+		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldUpdatedByImpersonator, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldCompanyName, trustcentersettinghistory.FieldCompanyDescription, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldHeroImageLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor, trustcentersettinghistory.FieldEnvironment, trustcentersettinghistory.FieldCompanyDomain, trustcentersettinghistory.FieldSecurityContact, trustcentersettinghistory.FieldStatusPageURL, trustcentersettinghistory.FieldNdaApproverGroupID:
 			values[i] = new(sql.NullString)
 		case trustcentersettinghistory.FieldHistoryTime, trustcentersettinghistory.FieldCreatedAt, trustcentersettinghistory.FieldUpdatedAt, trustcentersettinghistory.FieldDeletedAt, trustcentersettinghistory.FieldSubprocessorsNotifiedAt:
 			values[i] = new(sql.NullTime)
@@ -336,12 +336,6 @@ func (_m *TrustCenterSettingHistory) assignValues(columns []string, values []any
 				_m.SecurityContact = new(string)
 				*_m.SecurityContact = value.String
 			}
-		case trustcentersettinghistory.FieldNdaApprovalRequired:
-			if value, ok := values[i].(*sql.NullBool); !ok {
-				return fmt.Errorf("unexpected type %T for field nda_approval_required", values[i])
-			} else if value.Valid {
-				_m.NdaApprovalRequired = value.Bool
-			}
 		case trustcentersettinghistory.FieldAllowSubscribers:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field allow_subscribers", values[i])
@@ -361,13 +355,6 @@ func (_m *TrustCenterSettingHistory) assignValues(columns []string, values []any
 				_m.SubprocessorsNotifiedAt = new(time.Time)
 				*_m.SubprocessorsNotifiedAt = value.Time
 			}
-		case trustcentersettinghistory.FieldNdaApproverGroupID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field nda_approver_group_id", values[i])
-			} else if value.Valid {
-				_m.NdaApproverGroupID = new(string)
-				*_m.NdaApproverGroupID = value.String
-			}
 		case trustcentersettinghistory.FieldStatusPageURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status_page_url", values[i])
@@ -380,6 +367,19 @@ func (_m *TrustCenterSettingHistory) assignValues(columns []string, values []any
 				return fmt.Errorf("unexpected type %T for field noindex_default_domain", values[i])
 			} else if value.Valid {
 				_m.NoindexDefaultDomain = value.Bool
+			}
+		case trustcentersettinghistory.FieldNdaApproverGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field nda_approver_group_id", values[i])
+			} else if value.Valid {
+				_m.NdaApproverGroupID = new(string)
+				*_m.NdaApproverGroupID = value.String
+			}
+		case trustcentersettinghistory.FieldNdaApprovalRequired:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field nda_approval_required", values[i])
+			} else if value.Valid {
+				_m.NdaApprovalRequired = value.Bool
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -529,9 +529,6 @@ func (_m *TrustCenterSettingHistory) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	builder.WriteString("nda_approval_required=")
-	builder.WriteString(fmt.Sprintf("%v", _m.NdaApprovalRequired))
-	builder.WriteString(", ")
 	builder.WriteString("allow_subscribers=")
 	builder.WriteString(fmt.Sprintf("%v", _m.AllowSubscribers))
 	builder.WriteString(", ")
@@ -543,11 +540,6 @@ func (_m *TrustCenterSettingHistory) String() string {
 		builder.WriteString(v.Format(time.ANSIC))
 	}
 	builder.WriteString(", ")
-	if v := _m.NdaApproverGroupID; v != nil {
-		builder.WriteString("nda_approver_group_id=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
 	if v := _m.StatusPageURL; v != nil {
 		builder.WriteString("status_page_url=")
 		builder.WriteString(*v)
@@ -555,6 +547,14 @@ func (_m *TrustCenterSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("noindex_default_domain=")
 	builder.WriteString(fmt.Sprintf("%v", _m.NoindexDefaultDomain))
+	builder.WriteString(", ")
+	if v := _m.NdaApproverGroupID; v != nil {
+		builder.WriteString("nda_approver_group_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("nda_approval_required=")
+	builder.WriteString(fmt.Sprintf("%v", _m.NdaApprovalRequired))
 	builder.WriteByte(')')
 	return builder.String()
 }

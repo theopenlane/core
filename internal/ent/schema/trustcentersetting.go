@@ -164,10 +164,6 @@ func (TrustCenterSetting) Fields() []ent.Field {
 				_, err := mail.ParseAddress(email)
 				return err
 			}),
-		field.Bool("nda_approval_required").
-			Comment("whether NDA requests require approval before being processed").
-			Default(false).
-			Optional(),
 		field.Bool("allow_subscribers").
 			Comment("whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked").
 			Default(true).
@@ -183,10 +179,6 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			),
-		field.String("nda_approver_group_id").
-			Comment("group whose members approve trust center NDA requests").
-			Optional().
-			Nillable(),
 		field.String("status_page_url").
 			Comment("URL to the company's status page").
 			MaxLen(urlMaxLen).
@@ -196,6 +188,24 @@ func (TrustCenterSetting) Fields() []ent.Field {
 		field.Bool("noindex_default_domain").
 			Comment("allow trustcenter to be indexed on google").
 			Default(true).
+			Optional(),
+		field.String("nda_approver_group_id").
+			Comment("group whose members approve trust center NDA requests").
+			Optional().
+			Annotations(
+				entgql.Directives(
+					entgql.Deprecated("use trustcenter_nda_request_setting instead for this"),
+				),
+			).
+			Nillable(),
+		field.Bool("nda_approval_required").
+			Comment("whether NDA requests require approval before being processed").
+			Default(false).
+			Annotations(
+				entgql.Directives(
+					entgql.Deprecated("use trustcenter_nda_request_setting instead for this"),
+				),
+			).
 			Optional(),
 	}
 }

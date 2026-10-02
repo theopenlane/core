@@ -85,6 +85,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterentity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequestsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
@@ -88207,6 +88208,354 @@ func newTrustCenterNDARequestPaginateArgs(rv map[string]any) *trustcenterndarequ
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *TrustCenterNDARequestSettingQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterNDARequestSettingQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *TrustCenterNDARequestSettingQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(trustcenterndarequestsetting.Columns))
+		selectedFields = []string{trustcenterndarequestsetting.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "blockedGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: _q.config}).Query()
+			)
+			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newGroupPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterNDARequestSetting) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"trust_center_nda_request_setting_blocked_groups"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(trustcenterndarequestsetting.BlockedGroupsColumn), ids...))
+						})
+						if err := query.GroupBy(trustcenterndarequestsetting.BlockedGroupsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[0][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenterNDARequestSetting) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.BlockedGroups)
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[0][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(trustcenterndarequestsetting.BlockedGroupsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedBlockedGroups(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "editors":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: _q.config}).Query()
+			)
+			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newGroupPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustCenterNDARequestSetting) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"trust_center_nda_request_setting_editors"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(trustcenterndarequestsetting.EditorsColumn), ids...))
+						})
+						if err := query.GroupBy(trustcenterndarequestsetting.EditorsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[1][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenterNDARequestSetting) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Editors)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[1][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(trustcenterndarequestsetting.EditorsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedEditors(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+
+		case "approverGroup":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			_q.withApproverGroup = query
+			if _, ok := fieldSeen[trustcenterndarequestsetting.FieldApproverGroupID]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsetting.FieldApproverGroupID)
+				fieldSeen[trustcenterndarequestsetting.FieldApproverGroupID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[trustcenterndarequestsetting.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsetting.FieldCreatedAt)
+				fieldSeen[trustcenterndarequestsetting.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[trustcenterndarequestsetting.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsetting.FieldUpdatedAt)
+				fieldSeen[trustcenterndarequestsetting.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[trustcenterndarequestsetting.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsetting.FieldCreatedBy)
+				fieldSeen[trustcenterndarequestsetting.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[trustcenterndarequestsetting.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsetting.FieldUpdatedBy)
+				fieldSeen[trustcenterndarequestsetting.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[trustcenterndarequestsetting.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsetting.FieldUpdatedByImpersonator)
+				fieldSeen[trustcenterndarequestsetting.FieldUpdatedByImpersonator] = struct{}{}
+			}
+		case "approverGroupID":
+			if _, ok := fieldSeen[trustcenterndarequestsetting.FieldApproverGroupID]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsetting.FieldApproverGroupID)
+				fieldSeen[trustcenterndarequestsetting.FieldApproverGroupID] = struct{}{}
+			}
+		case "approvalRequired":
+			if _, ok := fieldSeen[trustcenterndarequestsetting.FieldApprovalRequired]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsetting.FieldApprovalRequired)
+				fieldSeen[trustcenterndarequestsetting.FieldApprovalRequired] = struct{}{}
+			}
+		case "autoApprove":
+			if _, ok := fieldSeen[trustcenterndarequestsetting.FieldAutoApprove]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsetting.FieldAutoApprove)
+				fieldSeen[trustcenterndarequestsetting.FieldAutoApprove] = struct{}{}
+			}
+		case "workEmailOnly":
+			if _, ok := fieldSeen[trustcenterndarequestsetting.FieldWorkEmailOnly]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsetting.FieldWorkEmailOnly)
+				fieldSeen[trustcenterndarequestsetting.FieldWorkEmailOnly] = struct{}{}
+			}
+		case "useDomainBlocklist":
+			if _, ok := fieldSeen[trustcenterndarequestsetting.FieldUseDomainBlocklist]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsetting.FieldUseDomainBlocklist)
+				fieldSeen[trustcenterndarequestsetting.FieldUseDomainBlocklist] = struct{}{}
+			}
+		case "useDomainAllowlist":
+			if _, ok := fieldSeen[trustcenterndarequestsetting.FieldUseDomainAllowlist]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsetting.FieldUseDomainAllowlist)
+				fieldSeen[trustcenterndarequestsetting.FieldUseDomainAllowlist] = struct{}{}
+			}
+		case "approveFromExistingDomain":
+			if _, ok := fieldSeen[trustcenterndarequestsetting.FieldApproveFromExistingDomain]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsetting.FieldApproveFromExistingDomain)
+				fieldSeen[trustcenterndarequestsetting.FieldApproveFromExistingDomain] = struct{}{}
+			}
+		case "approveIfContactExists":
+			if _, ok := fieldSeen[trustcenterndarequestsetting.FieldApproveIfContactExists]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsetting.FieldApproveIfContactExists)
+				fieldSeen[trustcenterndarequestsetting.FieldApproveIfContactExists] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type trustcenterndarequestsettingPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []TrustCenterNDARequestSettingPaginateOption
+}
+
+func newTrustCenterNDARequestSettingPaginateArgs(rv map[string]any) *trustcenterndarequestsettingPaginateArgs {
+	args := &trustcenterndarequestsettingPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*TrustCenterNDARequestSettingOrder:
+			args.opts = append(args.opts, WithTrustCenterNDARequestSettingOrder(v))
+		case []any:
+			var orders []*TrustCenterNDARequestSettingOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &TrustCenterNDARequestSettingOrder{Field: &TrustCenterNDARequestSettingOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithTrustCenterNDARequestSettingOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*TrustCenterNDARequestSettingWhereInput); ok {
+		args.opts = append(args.opts, WithTrustCenterNDARequestSettingFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (_q *TrustCenterSettingQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterSettingQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -88600,11 +88949,6 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, trustcentersetting.FieldSecurityContact)
 				fieldSeen[trustcentersetting.FieldSecurityContact] = struct{}{}
 			}
-		case "ndaApprovalRequired":
-			if _, ok := fieldSeen[trustcentersetting.FieldNdaApprovalRequired]; !ok {
-				selectedFields = append(selectedFields, trustcentersetting.FieldNdaApprovalRequired)
-				fieldSeen[trustcentersetting.FieldNdaApprovalRequired] = struct{}{}
-			}
 		case "allowSubscribers":
 			if _, ok := fieldSeen[trustcentersetting.FieldAllowSubscribers]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldAllowSubscribers)
@@ -88620,11 +88964,6 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, trustcentersetting.FieldSubprocessorsNotifiedAt)
 				fieldSeen[trustcentersetting.FieldSubprocessorsNotifiedAt] = struct{}{}
 			}
-		case "ndaApproverGroupID":
-			if _, ok := fieldSeen[trustcentersetting.FieldNdaApproverGroupID]; !ok {
-				selectedFields = append(selectedFields, trustcentersetting.FieldNdaApproverGroupID)
-				fieldSeen[trustcentersetting.FieldNdaApproverGroupID] = struct{}{}
-			}
 		case "statusPageURL":
 			if _, ok := fieldSeen[trustcentersetting.FieldStatusPageURL]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldStatusPageURL)
@@ -88634,6 +88973,16 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[trustcentersetting.FieldNoindexDefaultDomain]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldNoindexDefaultDomain)
 				fieldSeen[trustcentersetting.FieldNoindexDefaultDomain] = struct{}{}
+			}
+		case "ndaApproverGroupID":
+			if _, ok := fieldSeen[trustcentersetting.FieldNdaApproverGroupID]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldNdaApproverGroupID)
+				fieldSeen[trustcentersetting.FieldNdaApproverGroupID] = struct{}{}
+			}
+		case "ndaApprovalRequired":
+			if _, ok := fieldSeen[trustcentersetting.FieldNdaApprovalRequired]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldNdaApprovalRequired)
+				fieldSeen[trustcentersetting.FieldNdaApprovalRequired] = struct{}{}
 			}
 		case "id":
 		case "__typename":

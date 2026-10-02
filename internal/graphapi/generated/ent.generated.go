@@ -187,6 +187,7 @@ type QueryResolver interface {
 	TrustCenterEntities(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterEntityOrder, where *generated.TrustCenterEntityWhereInput) (*generated.TrustCenterEntityConnection, error)
 	TrustCenterFAQs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterFAQOrder, where *generated.TrustCenterFAQWhereInput) (*generated.TrustCenterFAQConnection, error)
 	TrustCenterNdaRequests(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterNDARequestOrder, where *generated.TrustCenterNDARequestWhereInput) (*generated.TrustCenterNDARequestConnection, error)
+	TrustCenterNDARequestSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterNDARequestSettingOrder, where *generated.TrustCenterNDARequestSettingWhereInput) (*generated.TrustCenterNDARequestSettingConnection, error)
 	TrustCenterSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSettingOrder, where *generated.TrustCenterSettingWhereInput) (*generated.TrustCenterSettingConnection, error)
 	TrustCenterSubprocessors(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSubprocessorOrder, where *generated.TrustCenterSubprocessorWhereInput) (*generated.TrustCenterSubprocessorConnection, error)
 	TrustCenterWatermarkConfigs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterWatermarkConfigOrder, where *generated.TrustCenterWatermarkConfigWhereInput) (*generated.TrustCenterWatermarkConfigConnection, error)
@@ -325,6 +326,7 @@ type QueryResolver interface {
 	TrustCenterEntity(ctx context.Context, id string) (*generated.TrustCenterEntity, error)
 	TrustCenterFaq(ctx context.Context, id string) (*generated.TrustCenterFAQ, error)
 	TrustCenterNDARequest(ctx context.Context, id string) (*generated.TrustCenterNDARequest, error)
+	TrustCenterNDARequestSetting(ctx context.Context, id string) (*generated.TrustCenterNDARequestSetting, error)
 	TrustCenterSetting(ctx context.Context, id string) (*generated.TrustCenterSetting, error)
 	TrustCenterSubprocessor(ctx context.Context, id string) (*generated.TrustCenterSubprocessor, error)
 	TrustCenterWatermarkConfig(ctx context.Context, id string) (*generated.TrustCenterWatermarkConfig, error)
@@ -39895,6 +39897,74 @@ func (ec *executionContext) field_Query_trustCenterFAQs_args(ctx context.Context
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_trustCenterNDARequestSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_trustCenterNDARequestSettings_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.TrustCenterNDARequestSettingOrder, error) {
+			return ec.unmarshalOTrustCenterNDARequestSettingOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.TrustCenterNDARequestSettingWhereInput, error) {
+			return ec.unmarshalOTrustCenterNDARequestSettingWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_trustCenterNDARequest_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -48750,6 +48820,114 @@ func (ec *executionContext) field_TrustCenterFAQ_blockedGroups_args(ctx context.
 }
 
 func (ec *executionContext) field_TrustCenterFAQ_editors_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.GroupOrder, error) {
+			return ec.unmarshalOGroupOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
+			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_TrustCenterNDARequestSetting_blockedGroups_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.GroupOrder, error) {
+			return ec.unmarshalOGroupOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
+			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_TrustCenterNDARequestSetting_editors_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
@@ -133254,6 +133432,50 @@ func (ec *executionContext) fieldContext_Query_trustCenterNdaRequests(ctx contex
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_trustCenterNDARequestSettings(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_trustCenterNDARequestSettings(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().TrustCenterNDARequestSettings(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.TrustCenterNDARequestSettingOrder), fc.Args["where"].(*generated.TrustCenterNDARequestSettingWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterNDARequestSettingConnection) graphql.Marshaler {
+			return ec.marshalNTrustCenterNDARequestSettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_trustCenterNDARequestSettings(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TrustCenterNDARequestSettingConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_trustCenterNDARequestSettings_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_trustCenterSettings(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -139254,6 +139476,50 @@ func (ec *executionContext) fieldContext_Query_trustCenterNDARequest(ctx context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_trustCenterNDARequest_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_trustCenterNDARequestSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_trustCenterNDARequestSetting(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().TrustCenterNDARequestSetting(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterNDARequestSetting) graphql.Marshaler {
+			return ec.marshalNTrustCenterNDARequestSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSetting(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_trustCenterNDARequestSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TrustCenterNDARequestSetting(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_trustCenterNDARequestSetting_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -164134,6 +164400,590 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestEdge_cursor(_ cont
 	return graphql.NewScalarFieldContext("TrustCenterNDARequestEdge", field, false, false, errors.New("field of type Cursor does not have child fields"))
 }
 
+func (ec *executionContext) _TrustCenterNDARequestSetting_id(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSetting", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_createdAt(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSetting", field, false, false, errors.New("field of type Time does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_updatedAt(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSetting", field, false, false, errors.New("field of type Time does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_createdBy(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_createdBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSetting", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_updatedBy(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_updatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSetting", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_updatedByImpersonator(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_updatedByImpersonator(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedByImpersonator, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_updatedByImpersonator(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSetting", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_approverGroupID(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_approverGroupID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ApproverGroupID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOID2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_approverGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSetting", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_approvalRequired(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_approvalRequired(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ApprovalRequired, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_approvalRequired(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSetting", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_autoApprove(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_autoApprove(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AutoApprove, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_autoApprove(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSetting", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_workEmailOnly(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_workEmailOnly(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.WorkEmailOnly, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_workEmailOnly(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSetting", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_useDomainBlocklist(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_useDomainBlocklist(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UseDomainBlocklist, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_useDomainBlocklist(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSetting", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_useDomainAllowlist(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_useDomainAllowlist(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UseDomainAllowlist, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_useDomainAllowlist(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSetting", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_approveFromExistingDomain(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_approveFromExistingDomain(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ApproveFromExistingDomain, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_approveFromExistingDomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSetting", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_approveIfContactExists(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_approveIfContactExists(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ApproveIfContactExists, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_approveIfContactExists(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSetting", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_blockedGroups(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_blockedGroups(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.BlockedGroups(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.GroupOrder), fc.Args["where"].(*generated.GroupWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.GroupConnection) graphql.Marshaler {
+			return ec.marshalNGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_blockedGroups(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TrustCenterNDARequestSetting",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_GroupConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_TrustCenterNDARequestSetting_blockedGroups_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_editors(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_editors(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Editors(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.GroupOrder), fc.Args["where"].(*generated.GroupWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.GroupConnection) graphql.Marshaler {
+			return ec.marshalNGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_editors(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TrustCenterNDARequestSetting",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_GroupConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_TrustCenterNDARequestSetting_editors_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting_approverGroup(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSetting_approverGroup(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ApproverGroup(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Group) graphql.Marshaler {
+			return ec.marshalOGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroup(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSetting_approverGroup(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TrustCenterNDARequestSetting",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Group(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingConnection_edges(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSettingConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*generated.TrustCenterNDARequestSettingEdge) graphql.Marshaler {
+			return ec.marshalOTrustCenterNDARequestSettingEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingEdge(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TrustCenterNDARequestSettingConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TrustCenterNDARequestSettingEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSettingConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.PageInfo[string]) graphql.Marshaler {
+			return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TrustCenterNDARequestSettingConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSettingConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingConnection", field, false, false, errors.New("field of type Int does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingEdge_node(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSettingEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingEdge_node(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterNDARequestSetting) graphql.Marshaler {
+			return ec.marshalOTrustCenterNDARequestSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSetting(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TrustCenterNDARequestSettingEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TrustCenterNDARequestSetting(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequestSettingEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingEdge_cursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.Cursor[string]) graphql.Marshaler {
+			return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingEdge", field, false, false, errors.New("field of type Cursor does not have child fields"))
+}
+
 func (ec *executionContext) _TrustCenterSetting_id(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterSetting) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -164778,29 +165628,6 @@ func (ec *executionContext) fieldContext_TrustCenterSetting_securityContact(_ co
 	return graphql.NewScalarFieldContext("TrustCenterSetting", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
-func (ec *executionContext) _TrustCenterSetting_ndaApprovalRequired(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterSetting) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_TrustCenterSetting_ndaApprovalRequired(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.NdaApprovalRequired, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
-			return ec.marshalOBoolean2bool(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_TrustCenterSetting_ndaApprovalRequired(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TrustCenterSetting", field, false, false, errors.New("field of type Boolean does not have child fields"))
-}
-
 func (ec *executionContext) _TrustCenterSetting_allowSubscribers(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterSetting) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -164870,29 +165697,6 @@ func (ec *executionContext) fieldContext_TrustCenterSetting_subprocessorsNotifie
 	return graphql.NewScalarFieldContext("TrustCenterSetting", field, false, false, errors.New("field of type Time does not have child fields"))
 }
 
-func (ec *executionContext) _TrustCenterSetting_ndaApproverGroupID(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterSetting) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_TrustCenterSetting_ndaApproverGroupID(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.NdaApproverGroupID, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
-			return ec.marshalOID2ᚖstring(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_TrustCenterSetting_ndaApproverGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TrustCenterSetting", field, false, false, errors.New("field of type ID does not have child fields"))
-}
-
 func (ec *executionContext) _TrustCenterSetting_statusPageURL(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterSetting) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -164936,6 +165740,52 @@ func (ec *executionContext) _TrustCenterSetting_noindexDefaultDomain(ctx context
 	)
 }
 func (ec *executionContext) fieldContext_TrustCenterSetting_noindexDefaultDomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterSetting", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterSetting_ndaApproverGroupID(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSetting_ndaApproverGroupID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.NdaApproverGroupID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOID2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterSetting_ndaApproverGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterSetting", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterSetting_ndaApprovalRequired(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterSetting) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSetting_ndaApprovalRequired(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.NdaApprovalRequired, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterSetting_ndaApprovalRequired(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("TrustCenterSetting", field, false, false, errors.New("field of type Boolean does not have child fields"))
 }
 
@@ -221532,6 +222382,99 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterNDARequestInput(ctx c
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputCreateTrustCenterNDARequestSettingInput(ctx context.Context, obj any) (generated.CreateTrustCenterNDARequestSettingInput, error) {
+	var it generated.CreateTrustCenterNDARequestSettingInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"approvalRequired", "autoApprove", "workEmailOnly", "useDomainBlocklist", "useDomainAllowlist", "approveFromExistingDomain", "approveIfContactExists", "blockedGroupIDs", "editorIDs", "approverGroupID"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "approvalRequired":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvalRequired"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApprovalRequired = data
+		case "autoApprove":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApprove"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApprove = data
+		case "workEmailOnly":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workEmailOnly"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WorkEmailOnly = data
+		case "useDomainBlocklist":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainBlocklist"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainBlocklist = data
+		case "useDomainAllowlist":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainAllowlist"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainAllowlist = data
+		case "approveFromExistingDomain":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveFromExistingDomain"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveFromExistingDomain = data
+		case "approveIfContactExists":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveIfContactExists"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveIfContactExists = data
+		case "blockedGroupIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("blockedGroupIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BlockedGroupIDs = data
+		case "editorIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("editorIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.EditorIDs = data
+		case "approverGroupID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupID = data
+		}
+	}
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputCreateTrustCenterSettingInput(ctx context.Context, obj any) (generated.CreateTrustCenterSettingInput, error) {
 	var it generated.CreateTrustCenterSettingInput
 	if obj == nil {
@@ -221543,7 +222486,7 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterSettingInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"trustCenterID", "title", "companyName", "companyDescription", "overview", "logoRemoteURL", "faviconRemoteURL", "themeMode", "primaryColor", "font", "foregroundColor", "backgroundColor", "accentColor", "secondaryBackgroundColor", "secondaryForegroundColor", "environment", "companyDomain", "securityContact", "ndaApprovalRequired", "allowSubscribers", "notifySubscribersOnSubprocessorChange", "statusPageURL", "noindexDefaultDomain", "blockedGroupIDs", "editorIDs", "logoFileID", "faviconFileID", "heroImageFileID", "ndaApproverGroupID"}
+	fieldsInOrder := [...]string{"trustCenterID", "title", "companyName", "companyDescription", "overview", "logoRemoteURL", "faviconRemoteURL", "themeMode", "primaryColor", "font", "foregroundColor", "backgroundColor", "accentColor", "secondaryBackgroundColor", "secondaryForegroundColor", "environment", "companyDomain", "securityContact", "allowSubscribers", "notifySubscribersOnSubprocessorChange", "statusPageURL", "noindexDefaultDomain", "ndaApprovalRequired", "blockedGroupIDs", "editorIDs", "logoFileID", "faviconFileID", "heroImageFileID", "ndaApproverGroupID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -221676,13 +222619,6 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterSettingInput(ctx cont
 				return it, err
 			}
 			it.SecurityContact = data
-		case "ndaApprovalRequired":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequired"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApprovalRequired = data
 		case "allowSubscribers":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("allowSubscribers"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -221711,6 +222647,13 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterSettingInput(ctx cont
 				return it, err
 			}
 			it.NoindexDefaultDomain = data
+		case "ndaApprovalRequired":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequired"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApprovalRequired = data
 		case "blockedGroupIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("blockedGroupIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -324045,6 +324988,777 @@ func (ec *executionContext) unmarshalInputTrustCenterNDARequestOrder(ctx context
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputTrustCenterNDARequestSettingOrder(ctx context.Context, obj any) (generated.TrustCenterNDARequestSettingOrder, error) {
+	var it generated.TrustCenterNDARequestSettingOrder
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	if _, present := asMap["direction"]; !present {
+		asMap["direction"] = "ASC"
+	}
+
+	fieldsInOrder := [...]string{"direction", "field"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "direction":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
+			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Direction = data
+		case "field":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
+			data, err := ec.unmarshalNTrustCenterNDARequestSettingOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingOrderField(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Field = data
+		}
+	}
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputTrustCenterNDARequestSettingWhereInput(ctx context.Context, obj any) (generated.TrustCenterNDARequestSettingWhereInput, error) {
+	var it generated.TrustCenterNDARequestSettingWhereInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "approverGroupID", "approverGroupIDNEQ", "approverGroupIDIn", "approverGroupIDNotIn", "approverGroupIDContains", "approverGroupIDHasPrefix", "approverGroupIDHasSuffix", "approverGroupIDIsNil", "approverGroupIDNotNil", "approverGroupIDEqualFold", "approverGroupIDContainsFold", "approvalRequired", "approvalRequiredNEQ", "approvalRequiredIsNil", "approvalRequiredNotNil", "autoApprove", "autoApproveNEQ", "autoApproveIsNil", "autoApproveNotNil", "workEmailOnly", "workEmailOnlyNEQ", "workEmailOnlyIsNil", "workEmailOnlyNotNil", "useDomainBlocklist", "useDomainBlocklistNEQ", "useDomainBlocklistIsNil", "useDomainBlocklistNotNil", "useDomainAllowlist", "useDomainAllowlistNEQ", "useDomainAllowlistIsNil", "useDomainAllowlistNotNil", "approveFromExistingDomain", "approveFromExistingDomainNEQ", "approveFromExistingDomainIsNil", "approveFromExistingDomainNotNil", "approveIfContactExists", "approveIfContactExistsNEQ", "approveIfContactExistsIsNil", "approveIfContactExistsNotNil", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasApproverGroup", "hasApproverGroupWith"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOTrustCenterNDARequestSettingWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Not = data
+		case "and":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOTrustCenterNDARequestSettingWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.And = data
+		case "or":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOTrustCenterNDARequestSettingWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Or = data
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "idNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNEQ = data
+		case "idIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDIn = data
+		case "idNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNotIn = data
+		case "idEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDEqualFold = data
+		case "idContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDContainsFold = data
+		case "createdAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAt = data
+		case "createdAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGT = data
+		case "createdAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGTE = data
+		case "createdAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLT = data
+		case "createdAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLTE = data
+		case "createdAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtIsNil = data
+		case "createdAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtNotNil = data
+		case "updatedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAt = data
+		case "updatedAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGT = data
+		case "updatedAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGTE = data
+		case "updatedAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLT = data
+		case "updatedAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLTE = data
+		case "updatedAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtIsNil = data
+		case "updatedAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtNotNil = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "createdByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNEQ = data
+		case "createdByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIn = data
+		case "createdByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotIn = data
+		case "createdByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
+		case "createdByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasSuffix = data
+		case "createdByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIsNil = data
+		case "createdByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotNil = data
+		case "createdByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByEqualFold = data
+		case "createdByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContainsFold = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "updatedByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNEQ = data
+		case "updatedByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIn = data
+		case "updatedByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotIn = data
+		case "updatedByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
+		case "updatedByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasSuffix = data
+		case "updatedByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIsNil = data
+		case "updatedByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotNil = data
+		case "updatedByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByEqualFold = data
+		case "updatedByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContainsFold = data
+		case "updatedByImpersonator":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonator"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonator = data
+		case "updatedByImpersonatorNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNEQ = data
+		case "updatedByImpersonatorIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIn = data
+		case "updatedByImpersonatorNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotIn = data
+		case "updatedByImpersonatorContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
+		case "updatedByImpersonatorHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasSuffix = data
+		case "updatedByImpersonatorIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIsNil = data
+		case "updatedByImpersonatorNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotNil = data
+		case "updatedByImpersonatorEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorEqualFold = data
+		case "updatedByImpersonatorContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContainsFold = data
+		case "approverGroupID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupID = data
+		case "approverGroupIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDNEQ = data
+		case "approverGroupIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDIn = data
+		case "approverGroupIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDNotIn = data
+		case "approverGroupIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDContains = data
+		case "approverGroupIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDHasPrefix = data
+		case "approverGroupIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDHasSuffix = data
+		case "approverGroupIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDIsNil = data
+		case "approverGroupIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDNotNil = data
+		case "approverGroupIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDEqualFold = data
+		case "approverGroupIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDContainsFold = data
+		case "approvalRequired":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvalRequired"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApprovalRequired = data
+		case "approvalRequiredNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvalRequiredNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApprovalRequiredNEQ = data
+		case "approvalRequiredIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvalRequiredIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApprovalRequiredIsNil = data
+		case "approvalRequiredNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvalRequiredNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApprovalRequiredNotNil = data
+		case "autoApprove":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApprove"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApprove = data
+		case "autoApproveNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApproveNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApproveNEQ = data
+		case "autoApproveIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApproveIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApproveIsNil = data
+		case "autoApproveNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApproveNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApproveNotNil = data
+		case "workEmailOnly":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workEmailOnly"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WorkEmailOnly = data
+		case "workEmailOnlyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workEmailOnlyNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WorkEmailOnlyNEQ = data
+		case "workEmailOnlyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workEmailOnlyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WorkEmailOnlyIsNil = data
+		case "workEmailOnlyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workEmailOnlyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WorkEmailOnlyNotNil = data
+		case "useDomainBlocklist":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainBlocklist"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainBlocklist = data
+		case "useDomainBlocklistNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainBlocklistNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainBlocklistNEQ = data
+		case "useDomainBlocklistIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainBlocklistIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainBlocklistIsNil = data
+		case "useDomainBlocklistNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainBlocklistNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainBlocklistNotNil = data
+		case "useDomainAllowlist":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainAllowlist"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainAllowlist = data
+		case "useDomainAllowlistNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainAllowlistNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainAllowlistNEQ = data
+		case "useDomainAllowlistIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainAllowlistIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainAllowlistIsNil = data
+		case "useDomainAllowlistNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainAllowlistNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainAllowlistNotNil = data
+		case "approveFromExistingDomain":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveFromExistingDomain"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveFromExistingDomain = data
+		case "approveFromExistingDomainNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveFromExistingDomainNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveFromExistingDomainNEQ = data
+		case "approveFromExistingDomainIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveFromExistingDomainIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveFromExistingDomainIsNil = data
+		case "approveFromExistingDomainNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveFromExistingDomainNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveFromExistingDomainNotNil = data
+		case "approveIfContactExists":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveIfContactExists"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveIfContactExists = data
+		case "approveIfContactExistsNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveIfContactExistsNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveIfContactExistsNEQ = data
+		case "approveIfContactExistsIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveIfContactExistsIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveIfContactExistsIsNil = data
+		case "approveIfContactExistsNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveIfContactExistsNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveIfContactExistsNotNil = data
+		case "hasBlockedGroups":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBlockedGroups"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasBlockedGroups = data
+		case "hasBlockedGroupsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBlockedGroupsWith"))
+			data, err := ec.unmarshalOGroupWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasBlockedGroupsWith = data
+		case "hasEditors":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEditors"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasEditors = data
+		case "hasEditorsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEditorsWith"))
+			data, err := ec.unmarshalOGroupWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasEditorsWith = data
+		case "hasApproverGroup":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasApproverGroup"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasApproverGroup = data
+		case "hasApproverGroupWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasApproverGroupWith"))
+			data, err := ec.unmarshalOGroupWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasApproverGroupWith = data
+		}
+	}
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputTrustCenterNDARequestWhereInput(ctx context.Context, obj any) (generated.TrustCenterNDARequestWhereInput, error) {
 	var it generated.TrustCenterNDARequestWhereInput
 	if obj == nil {
@@ -325491,7 +327205,7 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingWhereInput(ctx conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameIsNil", "companyNameNotNil", "companyNameEqualFold", "companyNameContainsFold", "companyDescription", "companyDescriptionNEQ", "companyDescriptionIn", "companyDescriptionNotIn", "companyDescriptionContains", "companyDescriptionHasPrefix", "companyDescriptionHasSuffix", "companyDescriptionIsNil", "companyDescriptionNotNil", "companyDescriptionEqualFold", "companyDescriptionContainsFold", "overview", "overviewNEQ", "overviewIn", "overviewNotIn", "overviewContains", "overviewHasPrefix", "overviewHasSuffix", "overviewIsNil", "overviewNotNil", "overviewEqualFold", "overviewContainsFold", "logoRemoteURL", "logoRemoteURLNEQ", "logoRemoteURLIn", "logoRemoteURLNotIn", "logoRemoteURLContains", "logoRemoteURLHasPrefix", "logoRemoteURLHasSuffix", "logoRemoteURLIsNil", "logoRemoteURLNotNil", "logoRemoteURLEqualFold", "logoRemoteURLContainsFold", "logoLocalFileID", "logoLocalFileIDNEQ", "logoLocalFileIDIn", "logoLocalFileIDNotIn", "logoLocalFileIDContains", "logoLocalFileIDHasPrefix", "logoLocalFileIDHasSuffix", "logoLocalFileIDIsNil", "logoLocalFileIDNotNil", "logoLocalFileIDEqualFold", "logoLocalFileIDContainsFold", "faviconRemoteURL", "faviconRemoteURLNEQ", "faviconRemoteURLIn", "faviconRemoteURLNotIn", "faviconRemoteURLContains", "faviconRemoteURLHasPrefix", "faviconRemoteURLHasSuffix", "faviconRemoteURLIsNil", "faviconRemoteURLNotNil", "faviconRemoteURLEqualFold", "faviconRemoteURLContainsFold", "faviconLocalFileID", "faviconLocalFileIDNEQ", "faviconLocalFileIDIn", "faviconLocalFileIDNotIn", "faviconLocalFileIDContains", "faviconLocalFileIDHasPrefix", "faviconLocalFileIDHasSuffix", "faviconLocalFileIDIsNil", "faviconLocalFileIDNotNil", "faviconLocalFileIDEqualFold", "faviconLocalFileIDContainsFold", "heroImageLocalFileID", "heroImageLocalFileIDNEQ", "heroImageLocalFileIDIn", "heroImageLocalFileIDNotIn", "heroImageLocalFileIDContains", "heroImageLocalFileIDHasPrefix", "heroImageLocalFileIDHasSuffix", "heroImageLocalFileIDIsNil", "heroImageLocalFileIDNotNil", "heroImageLocalFileIDEqualFold", "heroImageLocalFileIDContainsFold", "themeMode", "themeModeNEQ", "themeModeIn", "themeModeNotIn", "themeModeIsNil", "themeModeNotNil", "primaryColor", "primaryColorNEQ", "primaryColorIn", "primaryColorNotIn", "primaryColorContains", "primaryColorHasPrefix", "primaryColorHasSuffix", "primaryColorIsNil", "primaryColorNotNil", "primaryColorEqualFold", "primaryColorContainsFold", "font", "fontNEQ", "fontIn", "fontNotIn", "fontContains", "fontHasPrefix", "fontHasSuffix", "fontIsNil", "fontNotNil", "fontEqualFold", "fontContainsFold", "foregroundColor", "foregroundColorNEQ", "foregroundColorIn", "foregroundColorNotIn", "foregroundColorContains", "foregroundColorHasPrefix", "foregroundColorHasSuffix", "foregroundColorIsNil", "foregroundColorNotNil", "foregroundColorEqualFold", "foregroundColorContainsFold", "backgroundColor", "backgroundColorNEQ", "backgroundColorIn", "backgroundColorNotIn", "backgroundColorContains", "backgroundColorHasPrefix", "backgroundColorHasSuffix", "backgroundColorIsNil", "backgroundColorNotNil", "backgroundColorEqualFold", "backgroundColorContainsFold", "accentColor", "accentColorNEQ", "accentColorIn", "accentColorNotIn", "accentColorContains", "accentColorHasPrefix", "accentColorHasSuffix", "accentColorIsNil", "accentColorNotNil", "accentColorEqualFold", "accentColorContainsFold", "secondaryBackgroundColor", "secondaryBackgroundColorNEQ", "secondaryBackgroundColorIn", "secondaryBackgroundColorNotIn", "secondaryBackgroundColorContains", "secondaryBackgroundColorHasPrefix", "secondaryBackgroundColorHasSuffix", "secondaryBackgroundColorIsNil", "secondaryBackgroundColorNotNil", "secondaryBackgroundColorEqualFold", "secondaryBackgroundColorContainsFold", "secondaryForegroundColor", "secondaryForegroundColorNEQ", "secondaryForegroundColorIn", "secondaryForegroundColorNotIn", "secondaryForegroundColorContains", "secondaryForegroundColorHasPrefix", "secondaryForegroundColorHasSuffix", "secondaryForegroundColorIsNil", "secondaryForegroundColorNotNil", "secondaryForegroundColorEqualFold", "secondaryForegroundColorContainsFold", "environment", "environmentNEQ", "environmentIn", "environmentNotIn", "environmentIsNil", "environmentNotNil", "removeBranding", "removeBrandingNEQ", "removeBrandingIsNil", "removeBrandingNotNil", "companyDomain", "companyDomainNEQ", "companyDomainIn", "companyDomainNotIn", "companyDomainContains", "companyDomainHasPrefix", "companyDomainHasSuffix", "companyDomainIsNil", "companyDomainNotNil", "companyDomainEqualFold", "companyDomainContainsFold", "securityContact", "securityContactNEQ", "securityContactIn", "securityContactNotIn", "securityContactContains", "securityContactHasPrefix", "securityContactHasSuffix", "securityContactIsNil", "securityContactNotNil", "securityContactEqualFold", "securityContactContainsFold", "ndaApprovalRequired", "ndaApprovalRequiredNEQ", "ndaApprovalRequiredIsNil", "ndaApprovalRequiredNotNil", "allowSubscribers", "allowSubscribersNEQ", "allowSubscribersIsNil", "allowSubscribersNotNil", "notifySubscribersOnSubprocessorChange", "notifySubscribersOnSubprocessorChangeNEQ", "notifySubscribersOnSubprocessorChangeIsNil", "notifySubscribersOnSubprocessorChangeNotNil", "subprocessorsNotifiedAt", "subprocessorsNotifiedAtGT", "subprocessorsNotifiedAtGTE", "subprocessorsNotifiedAtLT", "subprocessorsNotifiedAtLTE", "subprocessorsNotifiedAtIsNil", "subprocessorsNotifiedAtNotNil", "ndaApproverGroupID", "ndaApproverGroupIDNEQ", "ndaApproverGroupIDIn", "ndaApproverGroupIDNotIn", "ndaApproverGroupIDContains", "ndaApproverGroupIDHasPrefix", "ndaApproverGroupIDHasSuffix", "ndaApproverGroupIDIsNil", "ndaApproverGroupIDNotNil", "ndaApproverGroupIDEqualFold", "ndaApproverGroupIDContainsFold", "statusPageURL", "statusPageURLNEQ", "statusPageURLIn", "statusPageURLNotIn", "statusPageURLContains", "statusPageURLHasPrefix", "statusPageURLHasSuffix", "statusPageURLIsNil", "statusPageURLNotNil", "statusPageURLEqualFold", "statusPageURLContainsFold", "noindexDefaultDomain", "noindexDefaultDomainNEQ", "noindexDefaultDomainIsNil", "noindexDefaultDomainNotNil", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasLogoFile", "hasLogoFileWith", "hasFaviconFile", "hasFaviconFileWith", "hasHeroImageFile", "hasHeroImageFileWith", "hasNdaApproverGroup", "hasNdaApproverGroupWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameIsNil", "companyNameNotNil", "companyNameEqualFold", "companyNameContainsFold", "companyDescription", "companyDescriptionNEQ", "companyDescriptionIn", "companyDescriptionNotIn", "companyDescriptionContains", "companyDescriptionHasPrefix", "companyDescriptionHasSuffix", "companyDescriptionIsNil", "companyDescriptionNotNil", "companyDescriptionEqualFold", "companyDescriptionContainsFold", "overview", "overviewNEQ", "overviewIn", "overviewNotIn", "overviewContains", "overviewHasPrefix", "overviewHasSuffix", "overviewIsNil", "overviewNotNil", "overviewEqualFold", "overviewContainsFold", "logoRemoteURL", "logoRemoteURLNEQ", "logoRemoteURLIn", "logoRemoteURLNotIn", "logoRemoteURLContains", "logoRemoteURLHasPrefix", "logoRemoteURLHasSuffix", "logoRemoteURLIsNil", "logoRemoteURLNotNil", "logoRemoteURLEqualFold", "logoRemoteURLContainsFold", "logoLocalFileID", "logoLocalFileIDNEQ", "logoLocalFileIDIn", "logoLocalFileIDNotIn", "logoLocalFileIDContains", "logoLocalFileIDHasPrefix", "logoLocalFileIDHasSuffix", "logoLocalFileIDIsNil", "logoLocalFileIDNotNil", "logoLocalFileIDEqualFold", "logoLocalFileIDContainsFold", "faviconRemoteURL", "faviconRemoteURLNEQ", "faviconRemoteURLIn", "faviconRemoteURLNotIn", "faviconRemoteURLContains", "faviconRemoteURLHasPrefix", "faviconRemoteURLHasSuffix", "faviconRemoteURLIsNil", "faviconRemoteURLNotNil", "faviconRemoteURLEqualFold", "faviconRemoteURLContainsFold", "faviconLocalFileID", "faviconLocalFileIDNEQ", "faviconLocalFileIDIn", "faviconLocalFileIDNotIn", "faviconLocalFileIDContains", "faviconLocalFileIDHasPrefix", "faviconLocalFileIDHasSuffix", "faviconLocalFileIDIsNil", "faviconLocalFileIDNotNil", "faviconLocalFileIDEqualFold", "faviconLocalFileIDContainsFold", "heroImageLocalFileID", "heroImageLocalFileIDNEQ", "heroImageLocalFileIDIn", "heroImageLocalFileIDNotIn", "heroImageLocalFileIDContains", "heroImageLocalFileIDHasPrefix", "heroImageLocalFileIDHasSuffix", "heroImageLocalFileIDIsNil", "heroImageLocalFileIDNotNil", "heroImageLocalFileIDEqualFold", "heroImageLocalFileIDContainsFold", "themeMode", "themeModeNEQ", "themeModeIn", "themeModeNotIn", "themeModeIsNil", "themeModeNotNil", "primaryColor", "primaryColorNEQ", "primaryColorIn", "primaryColorNotIn", "primaryColorContains", "primaryColorHasPrefix", "primaryColorHasSuffix", "primaryColorIsNil", "primaryColorNotNil", "primaryColorEqualFold", "primaryColorContainsFold", "font", "fontNEQ", "fontIn", "fontNotIn", "fontContains", "fontHasPrefix", "fontHasSuffix", "fontIsNil", "fontNotNil", "fontEqualFold", "fontContainsFold", "foregroundColor", "foregroundColorNEQ", "foregroundColorIn", "foregroundColorNotIn", "foregroundColorContains", "foregroundColorHasPrefix", "foregroundColorHasSuffix", "foregroundColorIsNil", "foregroundColorNotNil", "foregroundColorEqualFold", "foregroundColorContainsFold", "backgroundColor", "backgroundColorNEQ", "backgroundColorIn", "backgroundColorNotIn", "backgroundColorContains", "backgroundColorHasPrefix", "backgroundColorHasSuffix", "backgroundColorIsNil", "backgroundColorNotNil", "backgroundColorEqualFold", "backgroundColorContainsFold", "accentColor", "accentColorNEQ", "accentColorIn", "accentColorNotIn", "accentColorContains", "accentColorHasPrefix", "accentColorHasSuffix", "accentColorIsNil", "accentColorNotNil", "accentColorEqualFold", "accentColorContainsFold", "secondaryBackgroundColor", "secondaryBackgroundColorNEQ", "secondaryBackgroundColorIn", "secondaryBackgroundColorNotIn", "secondaryBackgroundColorContains", "secondaryBackgroundColorHasPrefix", "secondaryBackgroundColorHasSuffix", "secondaryBackgroundColorIsNil", "secondaryBackgroundColorNotNil", "secondaryBackgroundColorEqualFold", "secondaryBackgroundColorContainsFold", "secondaryForegroundColor", "secondaryForegroundColorNEQ", "secondaryForegroundColorIn", "secondaryForegroundColorNotIn", "secondaryForegroundColorContains", "secondaryForegroundColorHasPrefix", "secondaryForegroundColorHasSuffix", "secondaryForegroundColorIsNil", "secondaryForegroundColorNotNil", "secondaryForegroundColorEqualFold", "secondaryForegroundColorContainsFold", "environment", "environmentNEQ", "environmentIn", "environmentNotIn", "environmentIsNil", "environmentNotNil", "removeBranding", "removeBrandingNEQ", "removeBrandingIsNil", "removeBrandingNotNil", "companyDomain", "companyDomainNEQ", "companyDomainIn", "companyDomainNotIn", "companyDomainContains", "companyDomainHasPrefix", "companyDomainHasSuffix", "companyDomainIsNil", "companyDomainNotNil", "companyDomainEqualFold", "companyDomainContainsFold", "securityContact", "securityContactNEQ", "securityContactIn", "securityContactNotIn", "securityContactContains", "securityContactHasPrefix", "securityContactHasSuffix", "securityContactIsNil", "securityContactNotNil", "securityContactEqualFold", "securityContactContainsFold", "allowSubscribers", "allowSubscribersNEQ", "allowSubscribersIsNil", "allowSubscribersNotNil", "notifySubscribersOnSubprocessorChange", "notifySubscribersOnSubprocessorChangeNEQ", "notifySubscribersOnSubprocessorChangeIsNil", "notifySubscribersOnSubprocessorChangeNotNil", "subprocessorsNotifiedAt", "subprocessorsNotifiedAtGT", "subprocessorsNotifiedAtGTE", "subprocessorsNotifiedAtLT", "subprocessorsNotifiedAtLTE", "subprocessorsNotifiedAtIsNil", "subprocessorsNotifiedAtNotNil", "statusPageURL", "statusPageURLNEQ", "statusPageURLIn", "statusPageURLNotIn", "statusPageURLContains", "statusPageURLHasPrefix", "statusPageURLHasSuffix", "statusPageURLIsNil", "statusPageURLNotNil", "statusPageURLEqualFold", "statusPageURLContainsFold", "noindexDefaultDomain", "noindexDefaultDomainNEQ", "noindexDefaultDomainIsNil", "noindexDefaultDomainNotNil", "ndaApproverGroupID", "ndaApproverGroupIDNEQ", "ndaApproverGroupIDIn", "ndaApproverGroupIDNotIn", "ndaApproverGroupIDContains", "ndaApproverGroupIDHasPrefix", "ndaApproverGroupIDHasSuffix", "ndaApproverGroupIDIsNil", "ndaApproverGroupIDNotNil", "ndaApproverGroupIDEqualFold", "ndaApproverGroupIDContainsFold", "ndaApprovalRequired", "ndaApprovalRequiredNEQ", "ndaApprovalRequiredIsNil", "ndaApprovalRequiredNotNil", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasLogoFile", "hasLogoFileWith", "hasFaviconFile", "hasFaviconFileWith", "hasHeroImageFile", "hasHeroImageFileWith", "hasNdaApproverGroup", "hasNdaApproverGroupWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -327465,34 +329179,6 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingWhereInput(ctx conte
 				return it, err
 			}
 			it.SecurityContactContainsFold = data
-		case "ndaApprovalRequired":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequired"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApprovalRequired = data
-		case "ndaApprovalRequiredNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequiredNEQ"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApprovalRequiredNEQ = data
-		case "ndaApprovalRequiredIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequiredIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApprovalRequiredIsNil = data
-		case "ndaApprovalRequiredNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequiredNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApprovalRequiredNotNil = data
 		case "allowSubscribers":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("allowSubscribers"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -327598,83 +329284,6 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingWhereInput(ctx conte
 				return it, err
 			}
 			it.SubprocessorsNotifiedAtNotNil = data
-		case "ndaApproverGroupID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupID"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupID = data
-		case "ndaApproverGroupIDNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDNEQ"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDNEQ = data
-		case "ndaApproverGroupIDIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDIn"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDIn = data
-		case "ndaApproverGroupIDNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDNotIn"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDNotIn = data
-		case "ndaApproverGroupIDContains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDContains"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDContains = data
-		case "ndaApproverGroupIDHasPrefix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDHasPrefix"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDHasPrefix = data
-		case "ndaApproverGroupIDHasSuffix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDHasSuffix"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDHasSuffix = data
-		case "ndaApproverGroupIDIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDIsNil = data
-		case "ndaApproverGroupIDNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDNotNil = data
-		case "ndaApproverGroupIDEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDEqualFold"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDEqualFold = data
-		case "ndaApproverGroupIDContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDContainsFold"))
-			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDContainsFold = data
 		case "statusPageURL":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("statusPageURL"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -327780,6 +329389,111 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingWhereInput(ctx conte
 				return it, err
 			}
 			it.NoindexDefaultDomainNotNil = data
+		case "ndaApproverGroupID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupID = data
+		case "ndaApproverGroupIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDNEQ = data
+		case "ndaApproverGroupIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDIn = data
+		case "ndaApproverGroupIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDNotIn = data
+		case "ndaApproverGroupIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDContains = data
+		case "ndaApproverGroupIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDHasPrefix = data
+		case "ndaApproverGroupIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDHasSuffix = data
+		case "ndaApproverGroupIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDIsNil = data
+		case "ndaApproverGroupIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDNotNil = data
+		case "ndaApproverGroupIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDEqualFold = data
+		case "ndaApproverGroupIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDContainsFold = data
+		case "ndaApprovalRequired":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequired"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApprovalRequired = data
+		case "ndaApprovalRequiredNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequiredNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApprovalRequiredNEQ = data
+		case "ndaApprovalRequiredIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequiredIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApprovalRequiredIsNil = data
+		case "ndaApprovalRequiredNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequiredNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApprovalRequiredNotNil = data
 		case "hasBlockedGroups":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBlockedGroups"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -366372,6 +368086,183 @@ func (ec *executionContext) unmarshalInputUpdateTrustCenterNDARequestInput(ctx c
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateTrustCenterNDARequestSettingInput(ctx context.Context, obj any) (generated.UpdateTrustCenterNDARequestSettingInput, error) {
+	var it generated.UpdateTrustCenterNDARequestSettingInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"approvalRequired", "clearApprovalRequired", "autoApprove", "clearAutoApprove", "workEmailOnly", "clearWorkEmailOnly", "useDomainBlocklist", "clearUseDomainBlocklist", "useDomainAllowlist", "clearUseDomainAllowlist", "approveFromExistingDomain", "clearApproveFromExistingDomain", "approveIfContactExists", "clearApproveIfContactExists", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "approverGroupID", "clearApproverGroup"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "approvalRequired":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvalRequired"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApprovalRequired = data
+		case "clearApprovalRequired":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearApprovalRequired"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearApprovalRequired = data
+		case "autoApprove":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApprove"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApprove = data
+		case "clearAutoApprove":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAutoApprove"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAutoApprove = data
+		case "workEmailOnly":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workEmailOnly"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WorkEmailOnly = data
+		case "clearWorkEmailOnly":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearWorkEmailOnly"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearWorkEmailOnly = data
+		case "useDomainBlocklist":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainBlocklist"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainBlocklist = data
+		case "clearUseDomainBlocklist":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearUseDomainBlocklist"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearUseDomainBlocklist = data
+		case "useDomainAllowlist":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainAllowlist"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainAllowlist = data
+		case "clearUseDomainAllowlist":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearUseDomainAllowlist"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearUseDomainAllowlist = data
+		case "approveFromExistingDomain":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveFromExistingDomain"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveFromExistingDomain = data
+		case "clearApproveFromExistingDomain":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearApproveFromExistingDomain"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearApproveFromExistingDomain = data
+		case "approveIfContactExists":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveIfContactExists"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveIfContactExists = data
+		case "clearApproveIfContactExists":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearApproveIfContactExists"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearApproveIfContactExists = data
+		case "addBlockedGroupIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addBlockedGroupIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddBlockedGroupIDs = data
+		case "removeBlockedGroupIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeBlockedGroupIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveBlockedGroupIDs = data
+		case "clearBlockedGroups":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearBlockedGroups"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearBlockedGroups = data
+		case "addEditorIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addEditorIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddEditorIDs = data
+		case "removeEditorIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeEditorIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveEditorIDs = data
+		case "clearEditors":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearEditors"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearEditors = data
+		case "approverGroupID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupID = data
+		case "clearApproverGroup":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearApproverGroup"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearApproverGroup = data
+		}
+	}
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputUpdateTrustCenterSettingInput(ctx context.Context, obj any) (generated.UpdateTrustCenterSettingInput, error) {
 	var it generated.UpdateTrustCenterSettingInput
 	if obj == nil {
@@ -366383,7 +368274,7 @@ func (ec *executionContext) unmarshalInputUpdateTrustCenterSettingInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"trustCenterID", "clearTrustCenterID", "title", "clearTitle", "companyName", "clearCompanyName", "companyDescription", "clearCompanyDescription", "overview", "clearOverview", "logoRemoteURL", "clearLogoRemoteURL", "faviconRemoteURL", "clearFaviconRemoteURL", "themeMode", "clearThemeMode", "primaryColor", "clearPrimaryColor", "font", "clearFont", "foregroundColor", "clearForegroundColor", "backgroundColor", "clearBackgroundColor", "accentColor", "clearAccentColor", "secondaryBackgroundColor", "clearSecondaryBackgroundColor", "secondaryForegroundColor", "clearSecondaryForegroundColor", "companyDomain", "clearCompanyDomain", "securityContact", "clearSecurityContact", "ndaApprovalRequired", "clearNdaApprovalRequired", "allowSubscribers", "clearAllowSubscribers", "notifySubscribersOnSubprocessorChange", "clearNotifySubscribersOnSubprocessorChange", "statusPageURL", "clearStatusPageURL", "noindexDefaultDomain", "clearNoindexDefaultDomain", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "logoFileID", "clearLogoFile", "faviconFileID", "clearFaviconFile", "heroImageFileID", "clearHeroImageFile", "ndaApproverGroupID", "clearNdaApproverGroup"}
+	fieldsInOrder := [...]string{"trustCenterID", "clearTrustCenterID", "title", "clearTitle", "companyName", "clearCompanyName", "companyDescription", "clearCompanyDescription", "overview", "clearOverview", "logoRemoteURL", "clearLogoRemoteURL", "faviconRemoteURL", "clearFaviconRemoteURL", "themeMode", "clearThemeMode", "primaryColor", "clearPrimaryColor", "font", "clearFont", "foregroundColor", "clearForegroundColor", "backgroundColor", "clearBackgroundColor", "accentColor", "clearAccentColor", "secondaryBackgroundColor", "clearSecondaryBackgroundColor", "secondaryForegroundColor", "clearSecondaryForegroundColor", "companyDomain", "clearCompanyDomain", "securityContact", "clearSecurityContact", "allowSubscribers", "clearAllowSubscribers", "notifySubscribersOnSubprocessorChange", "clearNotifySubscribersOnSubprocessorChange", "statusPageURL", "clearStatusPageURL", "noindexDefaultDomain", "clearNoindexDefaultDomain", "ndaApprovalRequired", "clearNdaApprovalRequired", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "logoFileID", "clearLogoFile", "faviconFileID", "clearFaviconFile", "heroImageFileID", "clearHeroImageFile", "ndaApproverGroupID", "clearNdaApproverGroup"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -366628,20 +368519,6 @@ func (ec *executionContext) unmarshalInputUpdateTrustCenterSettingInput(ctx cont
 				return it, err
 			}
 			it.ClearSecurityContact = data
-		case "ndaApprovalRequired":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequired"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApprovalRequired = data
-		case "clearNdaApprovalRequired":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearNdaApprovalRequired"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearNdaApprovalRequired = data
 		case "allowSubscribers":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("allowSubscribers"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -366698,6 +368575,20 @@ func (ec *executionContext) unmarshalInputUpdateTrustCenterSettingInput(ctx cont
 				return it, err
 			}
 			it.ClearNoindexDefaultDomain = data
+		case "ndaApprovalRequired":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequired"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApprovalRequired = data
+		case "clearNdaApprovalRequired":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearNdaApprovalRequired"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearNdaApprovalRequired = data
 		case "addBlockedGroupIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addBlockedGroupIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -389947,6 +391838,11 @@ func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj
 			return graphql.Null
 		}
 		return ec._TrustCenterSetting(ctx, sel, obj)
+	case *generated.TrustCenterNDARequestSetting:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._TrustCenterNDARequestSetting(ctx, sel, obj)
 	case *generated.TrustCenterNDARequest:
 		if obj == nil {
 			return graphql.Null
@@ -439643,6 +441539,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "trustCenterNDARequestSettings":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_trustCenterNDARequestSettings(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "trustCenterSettings":
 			field := field
 
@@ -442667,6 +444585,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_trustCenterNDARequest(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "trustCenterNDARequestSetting":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_trustCenterNDARequestSetting(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -457618,6 +459558,314 @@ func (ec *executionContext) _TrustCenterNDARequestEdge(ctx context.Context, sel 
 	return out
 }
 
+var trustCenterNDARequestSettingImplementors = []string{"TrustCenterNDARequestSetting", "Node"}
+
+func (ec *executionContext) _TrustCenterNDARequestSetting(ctx context.Context, sel ast.SelectionSet, obj *generated.TrustCenterNDARequestSetting) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterNDARequestSettingImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TrustCenterNDARequestSetting")
+		case "id":
+			out.Values[i] = ec._TrustCenterNDARequestSetting_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "createdAt":
+			out.Values[i] = ec._TrustCenterNDARequestSetting_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedAt":
+			out.Values[i] = ec._TrustCenterNDARequestSetting_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "createdBy":
+			out.Values[i] = ec._TrustCenterNDARequestSetting_createdBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedBy":
+			out.Values[i] = ec._TrustCenterNDARequestSetting_updatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "updatedByImpersonator":
+			out.Values[i] = ec._TrustCenterNDARequestSetting_updatedByImpersonator(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "approverGroupID":
+			out.Values[i] = ec._TrustCenterNDARequestSetting_approverGroupID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "approvalRequired":
+			out.Values[i] = ec._TrustCenterNDARequestSetting_approvalRequired(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "autoApprove":
+			out.Values[i] = ec._TrustCenterNDARequestSetting_autoApprove(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "workEmailOnly":
+			out.Values[i] = ec._TrustCenterNDARequestSetting_workEmailOnly(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "useDomainBlocklist":
+			out.Values[i] = ec._TrustCenterNDARequestSetting_useDomainBlocklist(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "useDomainAllowlist":
+			out.Values[i] = ec._TrustCenterNDARequestSetting_useDomainAllowlist(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "approveFromExistingDomain":
+			out.Values[i] = ec._TrustCenterNDARequestSetting_approveFromExistingDomain(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "approveIfContactExists":
+			out.Values[i] = ec._TrustCenterNDARequestSetting_approveIfContactExists(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "blockedGroups":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._TrustCenterNDARequestSetting_blockedGroups(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "editors":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._TrustCenterNDARequestSetting_editors(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "approverGroup":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._TrustCenterNDARequestSetting_approverGroup(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
+var trustCenterNDARequestSettingConnectionImplementors = []string{"TrustCenterNDARequestSettingConnection"}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingConnection(ctx context.Context, sel ast.SelectionSet, obj *generated.TrustCenterNDARequestSettingConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterNDARequestSettingConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TrustCenterNDARequestSettingConnection")
+		case "edges":
+			out.Values[i] = ec._TrustCenterNDARequestSettingConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._TrustCenterNDARequestSettingConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._TrustCenterNDARequestSettingConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
+var trustCenterNDARequestSettingEdgeImplementors = []string{"TrustCenterNDARequestSettingEdge"}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingEdge(ctx context.Context, sel ast.SelectionSet, obj *generated.TrustCenterNDARequestSettingEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterNDARequestSettingEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TrustCenterNDARequestSettingEdge")
+		case "node":
+			out.Values[i] = ec._TrustCenterNDARequestSettingEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._TrustCenterNDARequestSettingEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
 var trustCenterSettingImplementors = []string{"TrustCenterSetting", "Node"}
 
 func (ec *executionContext) _TrustCenterSetting(ctx context.Context, sel ast.SelectionSet, obj *generated.TrustCenterSetting) graphql.Marshaler {
@@ -457770,11 +460018,6 @@ func (ec *executionContext) _TrustCenterSetting(ctx context.Context, sel ast.Sel
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
-		case "ndaApprovalRequired":
-			out.Values[i] = ec._TrustCenterSetting_ndaApprovalRequired(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
 		case "allowSubscribers":
 			out.Values[i] = ec._TrustCenterSetting_allowSubscribers(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -457790,11 +460033,6 @@ func (ec *executionContext) _TrustCenterSetting(ctx context.Context, sel ast.Sel
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
-		case "ndaApproverGroupID":
-			out.Values[i] = ec._TrustCenterSetting_ndaApproverGroupID(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
 		case "statusPageURL":
 			out.Values[i] = ec._TrustCenterSetting_statusPageURL(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -457802,6 +460040,16 @@ func (ec *executionContext) _TrustCenterSetting(ctx context.Context, sel ast.Sel
 			}
 		case "noindexDefaultDomain":
 			out.Values[i] = ec._TrustCenterSetting_noindexDefaultDomain(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "ndaApproverGroupID":
+			out.Values[i] = ec._TrustCenterSetting_ndaApproverGroupID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "ndaApprovalRequired":
+			out.Values[i] = ec._TrustCenterSetting_ndaApprovalRequired(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -468598,6 +470846,16 @@ func (ec *executionContext) unmarshalNCreateTrustCenterNDARequestInput2ᚖgithub
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNCreateTrustCenterNDARequestSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterNDARequestSettingInput(ctx context.Context, v any) (generated.CreateTrustCenterNDARequestSettingInput, error) {
+	res, err := ec.unmarshalInputCreateTrustCenterNDARequestSettingInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNCreateTrustCenterNDARequestSettingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterNDARequestSettingInput(ctx context.Context, v any) (*generated.CreateTrustCenterNDARequestSettingInput, error) {
+	res, err := ec.unmarshalInputCreateTrustCenterNDARequestSettingInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNCreateTrustCenterSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterSettingInput(ctx context.Context, v any) (generated.CreateTrustCenterSettingInput, error) {
 	res, err := ec.unmarshalInputCreateTrustCenterSettingInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -472311,6 +474569,52 @@ func (ec *executionContext) marshalNTrustCenterNDARequestOrderField2ᚖgithubᚗ
 	return v
 }
 
+func (ec *executionContext) marshalNTrustCenterNDARequestSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSetting(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterNDARequestSetting) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._TrustCenterNDARequestSetting(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNTrustCenterNDARequestSettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterNDARequestSettingConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._TrustCenterNDARequestSettingConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNTrustCenterNDARequestSettingOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingOrder(ctx context.Context, v any) (*generated.TrustCenterNDARequestSettingOrder, error) {
+	res, err := ec.unmarshalInputTrustCenterNDARequestSettingOrder(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNTrustCenterNDARequestSettingOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingOrderField(ctx context.Context, v any) (*generated.TrustCenterNDARequestSettingOrderField, error) {
+	var res = new(generated.TrustCenterNDARequestSettingOrderField)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNTrustCenterNDARequestSettingOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingOrderField(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterNDARequestSettingOrderField) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalNTrustCenterNDARequestSettingWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingWhereInput(ctx context.Context, v any) (*generated.TrustCenterNDARequestSettingWhereInput, error) {
+	res, err := ec.unmarshalInputTrustCenterNDARequestSettingWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNTrustCenterNDARequestTrustCenterNDARequestAccessLevel2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐTrustCenterNDARequestAccessLevel(ctx context.Context, v any) (enums.TrustCenterNDARequestAccessLevel, error) {
 	var res enums.TrustCenterNDARequestAccessLevel
 	err := res.UnmarshalGQL(v)
@@ -472887,6 +475191,11 @@ func (ec *executionContext) unmarshalNUpdateTrustCenterInput2githubᚗcomᚋtheo
 
 func (ec *executionContext) unmarshalNUpdateTrustCenterNDARequestInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterNDARequestInput(ctx context.Context, v any) (generated.UpdateTrustCenterNDARequestInput, error) {
 	res, err := ec.unmarshalInputUpdateTrustCenterNDARequestInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateTrustCenterNDARequestSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterNDARequestSettingInput(ctx context.Context, v any) (generated.UpdateTrustCenterNDARequestSettingInput, error) {
+	res, err := ec.unmarshalInputUpdateTrustCenterNDARequestSettingInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -477035,6 +479344,23 @@ func (ec *executionContext) unmarshalOCreateTrustCenterNDARequestInput2ᚕᚖgit
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
 		res[i], err = ec.unmarshalNCreateTrustCenterNDARequestInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterNDARequestInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOCreateTrustCenterNDARequestSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterNDARequestSettingInputᚄ(ctx context.Context, v any) ([]*generated.CreateTrustCenterNDARequestSettingInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*generated.CreateTrustCenterNDARequestSettingInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNCreateTrustCenterNDARequestSettingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterNDARequestSettingInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -486954,6 +489280,94 @@ func (ec *executionContext) unmarshalOTrustCenterNDARequestOrder2ᚕᚖgithubᚗ
 		}
 	}
 	return res, nil
+}
+
+func (ec *executionContext) marshalOTrustCenterNDARequestSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingᚄ(ctx context.Context, sel ast.SelectionSet, v []*generated.TrustCenterNDARequestSetting) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNTrustCenterNDARequestSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSetting(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalOTrustCenterNDARequestSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSetting(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterNDARequestSetting) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._TrustCenterNDARequestSetting(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOTrustCenterNDARequestSettingEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingEdge(ctx context.Context, sel ast.SelectionSet, v []*generated.TrustCenterNDARequestSettingEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalOTrustCenterNDARequestSettingEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingEdge(ctx, sel, v[i])
+	})
+
+	return ret
+}
+
+func (ec *executionContext) marshalOTrustCenterNDARequestSettingEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingEdge(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterNDARequestSettingEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._TrustCenterNDARequestSettingEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOTrustCenterNDARequestSettingOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingOrderᚄ(ctx context.Context, v any) ([]*generated.TrustCenterNDARequestSettingOrder, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*generated.TrustCenterNDARequestSettingOrder, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNTrustCenterNDARequestSettingOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingOrder(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOTrustCenterNDARequestSettingWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingWhereInputᚄ(ctx context.Context, v any) ([]*generated.TrustCenterNDARequestSettingWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*generated.TrustCenterNDARequestSettingWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNTrustCenterNDARequestSettingWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOTrustCenterNDARequestSettingWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestSettingWhereInput(ctx context.Context, v any) (*generated.TrustCenterNDARequestSettingWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputTrustCenterNDARequestSettingWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOTrustCenterNDARequestTrustCenterNDARequestAccessLevel2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐTrustCenterNDARequestAccessLevel(ctx context.Context, v any) (enums.TrustCenterNDARequestAccessLevel, error) {

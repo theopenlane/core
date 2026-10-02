@@ -87,6 +87,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterentity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequestsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
@@ -112,7 +113,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 99)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 100)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   apitoken.Table,
@@ -3297,6 +3298,34 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[83] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   trustcenterndarequestsetting.Table,
+			Columns: trustcenterndarequestsetting.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: trustcenterndarequestsetting.FieldID,
+			},
+		},
+		Type: "TrustCenterNDARequestSetting",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			trustcenterndarequestsetting.FieldCreatedAt:                 {Type: field.TypeTime, Column: trustcenterndarequestsetting.FieldCreatedAt},
+			trustcenterndarequestsetting.FieldUpdatedAt:                 {Type: field.TypeTime, Column: trustcenterndarequestsetting.FieldUpdatedAt},
+			trustcenterndarequestsetting.FieldCreatedBy:                 {Type: field.TypeString, Column: trustcenterndarequestsetting.FieldCreatedBy},
+			trustcenterndarequestsetting.FieldUpdatedBy:                 {Type: field.TypeString, Column: trustcenterndarequestsetting.FieldUpdatedBy},
+			trustcenterndarequestsetting.FieldUpdatedByImpersonator:     {Type: field.TypeString, Column: trustcenterndarequestsetting.FieldUpdatedByImpersonator},
+			trustcenterndarequestsetting.FieldDeletedAt:                 {Type: field.TypeTime, Column: trustcenterndarequestsetting.FieldDeletedAt},
+			trustcenterndarequestsetting.FieldDeletedBy:                 {Type: field.TypeString, Column: trustcenterndarequestsetting.FieldDeletedBy},
+			trustcenterndarequestsetting.FieldApproverGroupID:           {Type: field.TypeString, Column: trustcenterndarequestsetting.FieldApproverGroupID},
+			trustcenterndarequestsetting.FieldApprovalRequired:          {Type: field.TypeBool, Column: trustcenterndarequestsetting.FieldApprovalRequired},
+			trustcenterndarequestsetting.FieldAutoApprove:               {Type: field.TypeBool, Column: trustcenterndarequestsetting.FieldAutoApprove},
+			trustcenterndarequestsetting.FieldWorkEmailOnly:             {Type: field.TypeBool, Column: trustcenterndarequestsetting.FieldWorkEmailOnly},
+			trustcenterndarequestsetting.FieldUseDomainBlocklist:        {Type: field.TypeBool, Column: trustcenterndarequestsetting.FieldUseDomainBlocklist},
+			trustcenterndarequestsetting.FieldUseDomainAllowlist:        {Type: field.TypeBool, Column: trustcenterndarequestsetting.FieldUseDomainAllowlist},
+			trustcenterndarequestsetting.FieldApproveFromExistingDomain: {Type: field.TypeBool, Column: trustcenterndarequestsetting.FieldApproveFromExistingDomain},
+			trustcenterndarequestsetting.FieldApproveIfContactExists:    {Type: field.TypeBool, Column: trustcenterndarequestsetting.FieldApproveIfContactExists},
+		},
+	}
+	graph.Nodes[84] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersetting.Table,
 			Columns: trustcentersetting.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -3335,16 +3364,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldRemoveBranding:                        {Type: field.TypeBool, Column: trustcentersetting.FieldRemoveBranding},
 			trustcentersetting.FieldCompanyDomain:                         {Type: field.TypeString, Column: trustcentersetting.FieldCompanyDomain},
 			trustcentersetting.FieldSecurityContact:                       {Type: field.TypeString, Column: trustcentersetting.FieldSecurityContact},
-			trustcentersetting.FieldNdaApprovalRequired:                   {Type: field.TypeBool, Column: trustcentersetting.FieldNdaApprovalRequired},
 			trustcentersetting.FieldAllowSubscribers:                      {Type: field.TypeBool, Column: trustcentersetting.FieldAllowSubscribers},
 			trustcentersetting.FieldNotifySubscribersOnSubprocessorChange: {Type: field.TypeBool, Column: trustcentersetting.FieldNotifySubscribersOnSubprocessorChange},
 			trustcentersetting.FieldSubprocessorsNotifiedAt:               {Type: field.TypeTime, Column: trustcentersetting.FieldSubprocessorsNotifiedAt},
-			trustcentersetting.FieldNdaApproverGroupID:                    {Type: field.TypeString, Column: trustcentersetting.FieldNdaApproverGroupID},
 			trustcentersetting.FieldStatusPageURL:                         {Type: field.TypeString, Column: trustcentersetting.FieldStatusPageURL},
 			trustcentersetting.FieldNoindexDefaultDomain:                  {Type: field.TypeBool, Column: trustcentersetting.FieldNoindexDefaultDomain},
+			trustcentersetting.FieldNdaApproverGroupID:                    {Type: field.TypeString, Column: trustcentersetting.FieldNdaApproverGroupID},
+			trustcentersetting.FieldNdaApprovalRequired:                   {Type: field.TypeBool, Column: trustcentersetting.FieldNdaApprovalRequired},
 		},
 	}
-	graph.Nodes[84] = &sqlgraph.Node{
+	graph.Nodes[85] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersubprocessor.Table,
 			Columns: trustcentersubprocessor.Columns,
@@ -3369,7 +3398,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersubprocessor.FieldCountries:                       {Type: field.TypeJSON, Column: trustcentersubprocessor.FieldCountries},
 		},
 	}
-	graph.Nodes[85] = &sqlgraph.Node{
+	graph.Nodes[86] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterwatermarkconfig.Table,
 			Columns: trustcenterwatermarkconfig.Columns,
@@ -3399,7 +3428,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfig.FieldFont:                  {Type: field.TypeEnum, Column: trustcenterwatermarkconfig.FieldFont},
 		},
 	}
-	graph.Nodes[86] = &sqlgraph.Node{
+	graph.Nodes[87] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
@@ -3438,7 +3467,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldScimLocale:            {Type: field.TypeString, Column: user.FieldScimLocale},
 		},
 	}
-	graph.Nodes[87] = &sqlgraph.Node{
+	graph.Nodes[88] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersetting.Table,
 			Columns: usersetting.Columns,
@@ -3471,7 +3500,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersetting.FieldPhoneNumber:           {Type: field.TypeString, Column: usersetting.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[88] = &sqlgraph.Node{
+	graph.Nodes[89] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vendorriskscore.Table,
 			Columns: vendorriskscore.Columns,
@@ -3506,7 +3535,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vendorriskscore.FieldAssessmentResponseID:  {Type: field.TypeString, Column: vendorriskscore.FieldAssessmentResponseID},
 		},
 	}
-	graph.Nodes[89] = &sqlgraph.Node{
+	graph.Nodes[90] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vendorscoringconfig.Table,
 			Columns: vendorscoringconfig.Columns,
@@ -3531,7 +3560,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vendorscoringconfig.FieldRiskThresholds:        {Type: field.TypeJSON, Column: vendorscoringconfig.FieldRiskThresholds},
 		},
 	}
-	graph.Nodes[90] = &sqlgraph.Node{
+	graph.Nodes[91] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vulnerability.Table,
 			Columns: vulnerability.Columns,
@@ -3623,7 +3652,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerability.FieldRawPayload:                    {Type: field.TypeJSON, Column: vulnerability.FieldRawPayload},
 		},
 	}
-	graph.Nodes[91] = &sqlgraph.Node{
+	graph.Nodes[92] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webauthn.Table,
 			Columns: webauthn.Columns,
@@ -3652,7 +3681,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			webauthn.FieldUserVerified:    {Type: field.TypeBool, Column: webauthn.FieldUserVerified},
 		},
 	}
-	graph.Nodes[92] = &sqlgraph.Node{
+	graph.Nodes[93] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowassignment.Table,
 			Columns: workflowassignment.Columns,
@@ -3691,7 +3720,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowassignment.FieldDueAt:                 {Type: field.TypeTime, Column: workflowassignment.FieldDueAt},
 		},
 	}
-	graph.Nodes[93] = &sqlgraph.Node{
+	graph.Nodes[94] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowassignmenttarget.Table,
 			Columns: workflowassignmenttarget.Columns,
@@ -3719,7 +3748,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowassignmenttarget.FieldResolverKey:           {Type: field.TypeString, Column: workflowassignmenttarget.FieldResolverKey},
 		},
 	}
-	graph.Nodes[94] = &sqlgraph.Node{
+	graph.Nodes[95] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowdefinition.Table,
 			Columns: workflowdefinition.Columns,
@@ -3762,7 +3791,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowdefinition.FieldTrackedFields:          {Type: field.TypeJSON, Column: workflowdefinition.FieldTrackedFields},
 		},
 	}
-	graph.Nodes[95] = &sqlgraph.Node{
+	graph.Nodes[96] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowevent.Table,
 			Columns: workflowevent.Columns,
@@ -3788,7 +3817,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowevent.FieldPayload:               {Type: field.TypeJSON, Column: workflowevent.FieldPayload},
 		},
 	}
-	graph.Nodes[96] = &sqlgraph.Node{
+	graph.Nodes[97] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowinstance.Table,
 			Columns: workflowinstance.Columns,
@@ -3836,7 +3865,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowinstance.FieldVulnerabilityID:       {Type: field.TypeString, Column: workflowinstance.FieldVulnerabilityID},
 		},
 	}
-	graph.Nodes[97] = &sqlgraph.Node{
+	graph.Nodes[98] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowobjectref.Table,
 			Columns: workflowobjectref.Columns,
@@ -3877,7 +3906,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowobjectref.FieldRemediationID:         {Type: field.TypeString, Column: workflowobjectref.FieldRemediationID},
 		},
 	}
-	graph.Nodes[98] = &sqlgraph.Node{
+	graph.Nodes[99] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowproposal.Table,
 			Columns: workflowproposal.Columns,
@@ -17166,6 +17195,42 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterNDARequest",
 		"User",
+	)
+	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterndarequestsetting.BlockedGroupsTable,
+			Columns: []string{trustcenterndarequestsetting.BlockedGroupsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterNDARequestSetting",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterndarequestsetting.EditorsTable,
+			Columns: []string{trustcenterndarequestsetting.EditorsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterNDARequestSetting",
+		"Group",
+	)
+	graph.MustAddE(
+		"approver_group",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequestsetting.ApproverGroupTable,
+			Columns: []string{trustcenterndarequestsetting.ApproverGroupColumn},
+			Bidi:    false,
+		},
+		"TrustCenterNDARequestSetting",
+		"Group",
 	)
 	graph.MustAddE(
 		"blocked_groups",
@@ -48366,6 +48431,163 @@ func (f *TrustCenterNDARequestFilter) WhereHasApprovedByUserWith(preds ...predic
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *TrustCenterNDARequestSettingQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the TrustCenterNDARequestSettingQuery builder.
+func (_q *TrustCenterNDARequestSettingQuery) Filter() *TrustCenterNDARequestSettingFilter {
+	return &TrustCenterNDARequestSettingFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *TrustCenterNDARequestSettingMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the TrustCenterNDARequestSettingMutation builder.
+func (m *TrustCenterNDARequestSettingMutation) Filter() *TrustCenterNDARequestSettingFilter {
+	return &TrustCenterNDARequestSettingFilter{config: m.config, predicateAdder: m}
+}
+
+// TrustCenterNDARequestSettingFilter provides a generic filtering capability at runtime for TrustCenterNDARequestSettingQuery.
+type TrustCenterNDARequestSettingFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *TrustCenterNDARequestSettingFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[83].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *TrustCenterNDARequestSettingFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *TrustCenterNDARequestSettingFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *TrustCenterNDARequestSettingFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *TrustCenterNDARequestSettingFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *TrustCenterNDARequestSettingFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldUpdatedBy))
+}
+
+// WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
+func (f *TrustCenterNDARequestSettingFilter) WhereUpdatedByImpersonator(p entql.StringP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldUpdatedByImpersonator))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *TrustCenterNDARequestSettingFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *TrustCenterNDARequestSettingFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldDeletedBy))
+}
+
+// WhereApproverGroupID applies the entql string predicate on the approver_group_id field.
+func (f *TrustCenterNDARequestSettingFilter) WhereApproverGroupID(p entql.StringP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldApproverGroupID))
+}
+
+// WhereApprovalRequired applies the entql bool predicate on the approval_required field.
+func (f *TrustCenterNDARequestSettingFilter) WhereApprovalRequired(p entql.BoolP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldApprovalRequired))
+}
+
+// WhereAutoApprove applies the entql bool predicate on the auto_approve field.
+func (f *TrustCenterNDARequestSettingFilter) WhereAutoApprove(p entql.BoolP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldAutoApprove))
+}
+
+// WhereWorkEmailOnly applies the entql bool predicate on the work_email_only field.
+func (f *TrustCenterNDARequestSettingFilter) WhereWorkEmailOnly(p entql.BoolP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldWorkEmailOnly))
+}
+
+// WhereUseDomainBlocklist applies the entql bool predicate on the use_domain_blocklist field.
+func (f *TrustCenterNDARequestSettingFilter) WhereUseDomainBlocklist(p entql.BoolP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldUseDomainBlocklist))
+}
+
+// WhereUseDomainAllowlist applies the entql bool predicate on the use_domain_allowlist field.
+func (f *TrustCenterNDARequestSettingFilter) WhereUseDomainAllowlist(p entql.BoolP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldUseDomainAllowlist))
+}
+
+// WhereApproveFromExistingDomain applies the entql bool predicate on the approve_from_existing_domain field.
+func (f *TrustCenterNDARequestSettingFilter) WhereApproveFromExistingDomain(p entql.BoolP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldApproveFromExistingDomain))
+}
+
+// WhereApproveIfContactExists applies the entql bool predicate on the approve_if_contact_exists field.
+func (f *TrustCenterNDARequestSettingFilter) WhereApproveIfContactExists(p entql.BoolP) {
+	f.Where(p.Field(trustcenterndarequestsetting.FieldApproveIfContactExists))
+}
+
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *TrustCenterNDARequestSettingFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *TrustCenterNDARequestSettingFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *TrustCenterNDARequestSettingFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *TrustCenterNDARequestSettingFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasApproverGroup applies a predicate to check if query has an edge approver_group.
+func (f *TrustCenterNDARequestSettingFilter) WhereHasApproverGroup() {
+	f.Where(entql.HasEdge("approver_group"))
+}
+
+// WhereHasApproverGroupWith applies a predicate to check if query has an edge approver_group with a given conditions (other predicates).
+func (f *TrustCenterNDARequestSettingFilter) WhereHasApproverGroupWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("approver_group", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *TrustCenterSettingQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -48394,7 +48616,7 @@ type TrustCenterSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[83].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[84].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -48550,11 +48772,6 @@ func (f *TrustCenterSettingFilter) WhereSecurityContact(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldSecurityContact))
 }
 
-// WhereNdaApprovalRequired applies the entql bool predicate on the nda_approval_required field.
-func (f *TrustCenterSettingFilter) WhereNdaApprovalRequired(p entql.BoolP) {
-	f.Where(p.Field(trustcentersetting.FieldNdaApprovalRequired))
-}
-
 // WhereAllowSubscribers applies the entql bool predicate on the allow_subscribers field.
 func (f *TrustCenterSettingFilter) WhereAllowSubscribers(p entql.BoolP) {
 	f.Where(p.Field(trustcentersetting.FieldAllowSubscribers))
@@ -48570,11 +48787,6 @@ func (f *TrustCenterSettingFilter) WhereSubprocessorsNotifiedAt(p entql.TimeP) {
 	f.Where(p.Field(trustcentersetting.FieldSubprocessorsNotifiedAt))
 }
 
-// WhereNdaApproverGroupID applies the entql string predicate on the nda_approver_group_id field.
-func (f *TrustCenterSettingFilter) WhereNdaApproverGroupID(p entql.StringP) {
-	f.Where(p.Field(trustcentersetting.FieldNdaApproverGroupID))
-}
-
 // WhereStatusPageURL applies the entql string predicate on the status_page_url field.
 func (f *TrustCenterSettingFilter) WhereStatusPageURL(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldStatusPageURL))
@@ -48583,6 +48795,16 @@ func (f *TrustCenterSettingFilter) WhereStatusPageURL(p entql.StringP) {
 // WhereNoindexDefaultDomain applies the entql bool predicate on the noindex_default_domain field.
 func (f *TrustCenterSettingFilter) WhereNoindexDefaultDomain(p entql.BoolP) {
 	f.Where(p.Field(trustcentersetting.FieldNoindexDefaultDomain))
+}
+
+// WhereNdaApproverGroupID applies the entql string predicate on the nda_approver_group_id field.
+func (f *TrustCenterSettingFilter) WhereNdaApproverGroupID(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldNdaApproverGroupID))
+}
+
+// WhereNdaApprovalRequired applies the entql bool predicate on the nda_approval_required field.
+func (f *TrustCenterSettingFilter) WhereNdaApprovalRequired(p entql.BoolP) {
+	f.Where(p.Field(trustcentersetting.FieldNdaApprovalRequired))
 }
 
 // WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
@@ -48698,7 +48920,7 @@ type TrustCenterSubprocessorFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSubprocessorFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[84].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[85].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -48868,7 +49090,7 @@ type TrustCenterWatermarkConfigFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterWatermarkConfigFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[85].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[86].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -49063,7 +49285,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[86].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[87].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -49611,7 +49833,7 @@ type UserSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[87].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[88].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -49779,7 +50001,7 @@ type VendorRiskScoreFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VendorRiskScoreFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[88].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[89].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -49985,7 +50207,7 @@ type VendorScoringConfigFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VendorScoringConfigFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[89].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[90].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -50113,7 +50335,7 @@ type VulnerabilityFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VulnerabilityFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[90].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[91].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -51010,7 +51232,7 @@ type WebauthnFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebauthnFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[91].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[92].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -51144,7 +51366,7 @@ type WorkflowAssignmentFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowAssignmentFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[92].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[93].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -51384,7 +51606,7 @@ type WorkflowAssignmentTargetFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowAssignmentTargetFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[93].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[94].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -51555,7 +51777,7 @@ type WorkflowDefinitionFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowDefinitionFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[94].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[95].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -51871,7 +52093,7 @@ type WorkflowEventFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowEventFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[95].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[96].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -52004,7 +52226,7 @@ type WorkflowInstanceFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowInstanceFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[96].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[97].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -52569,7 +52791,7 @@ type WorkflowObjectRefFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowObjectRefFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[97].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[98].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -53071,7 +53293,7 @@ type WorkflowProposalFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowProposalFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[98].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[99].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

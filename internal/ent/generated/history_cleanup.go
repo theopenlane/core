@@ -64,6 +64,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterentity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequestsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
@@ -130,6 +131,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterfaqhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequesthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequestsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
@@ -1851,6 +1853,37 @@ func PurgeTrustCenterNDARequestHistory(ctx context.Context, ps ...predicate.Trus
 		s.Where(sql.In(trustcenterndarequesthistory.FieldRef, refs))
 	}).Exec(history.WithContext(ctx)); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error purging trustcenterndarequest history")
+
+		return err
+	}
+
+	return nil
+}
+
+// PurgeTrustCenterNDARequestSettingHistory removes the history rows belonging to every trustcenterndarequestsetting matching
+// the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
+// deletes that should keep their audit trail are unaffected.
+// This has to run before the trustcenterndarequestsetting records themselves are deleted, the rows are matched
+// with a sub-select against the trustcenterndarequestsetting table
+func PurgeTrustCenterNDARequestSettingHistory(ctx context.Context, ps ...predicate.TrustCenterNDARequestSetting) error {
+	if !contextx.PurgeHistoryEnabled(ctx) {
+		return nil
+	}
+
+	client := FromContext(ctx)
+	if client == nil || client.HistoryClient == nil {
+		return nil
+	}
+
+	refs := sql.Select(trustcenterndarequestsetting.FieldID).From(sql.Table(trustcenterndarequestsetting.Table))
+	for _, p := range ps {
+		p(refs)
+	}
+
+	if _, err := client.HistoryClient.TrustCenterNDARequestSettingHistory.Delete().Where(func(s *sql.Selector) {
+		s.Where(sql.In(trustcenterndarequestsettinghistory.FieldRef, refs))
+	}).Exec(history.WithContext(ctx)); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error purging trustcenterndarequestsetting history")
 
 		return err
 	}

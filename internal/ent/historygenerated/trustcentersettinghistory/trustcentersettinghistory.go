@@ -84,20 +84,20 @@ const (
 	FieldCompanyDomain = "company_domain"
 	// FieldSecurityContact holds the string denoting the security_contact field in the database.
 	FieldSecurityContact = "security_contact"
-	// FieldNdaApprovalRequired holds the string denoting the nda_approval_required field in the database.
-	FieldNdaApprovalRequired = "nda_approval_required"
 	// FieldAllowSubscribers holds the string denoting the allow_subscribers field in the database.
 	FieldAllowSubscribers = "allow_subscribers"
 	// FieldNotifySubscribersOnSubprocessorChange holds the string denoting the notify_subscribers_on_subprocessor_change field in the database.
 	FieldNotifySubscribersOnSubprocessorChange = "notify_subscribers_on_subprocessor_change"
 	// FieldSubprocessorsNotifiedAt holds the string denoting the subprocessors_notified_at field in the database.
 	FieldSubprocessorsNotifiedAt = "subprocessors_notified_at"
-	// FieldNdaApproverGroupID holds the string denoting the nda_approver_group_id field in the database.
-	FieldNdaApproverGroupID = "nda_approver_group_id"
 	// FieldStatusPageURL holds the string denoting the status_page_url field in the database.
 	FieldStatusPageURL = "status_page_url"
 	// FieldNoindexDefaultDomain holds the string denoting the noindex_default_domain field in the database.
 	FieldNoindexDefaultDomain = "noindex_default_domain"
+	// FieldNdaApproverGroupID holds the string denoting the nda_approver_group_id field in the database.
+	FieldNdaApproverGroupID = "nda_approver_group_id"
+	// FieldNdaApprovalRequired holds the string denoting the nda_approval_required field in the database.
+	FieldNdaApprovalRequired = "nda_approval_required"
 	// Table holds the table name of the trustcentersettinghistory in the database.
 	Table = "trust_center_setting_history"
 )
@@ -137,13 +137,13 @@ var Columns = []string{
 	FieldRemoveBranding,
 	FieldCompanyDomain,
 	FieldSecurityContact,
-	FieldNdaApprovalRequired,
 	FieldAllowSubscribers,
 	FieldNotifySubscribersOnSubprocessorChange,
 	FieldSubprocessorsNotifiedAt,
-	FieldNdaApproverGroupID,
 	FieldStatusPageURL,
 	FieldNoindexDefaultDomain,
+	FieldNdaApproverGroupID,
+	FieldNdaApprovalRequired,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -173,14 +173,14 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// DefaultRemoveBranding holds the default value on creation for the "remove_branding" field.
 	DefaultRemoveBranding bool
-	// DefaultNdaApprovalRequired holds the default value on creation for the "nda_approval_required" field.
-	DefaultNdaApprovalRequired bool
 	// DefaultAllowSubscribers holds the default value on creation for the "allow_subscribers" field.
 	DefaultAllowSubscribers bool
 	// DefaultNotifySubscribersOnSubprocessorChange holds the default value on creation for the "notify_subscribers_on_subprocessor_change" field.
 	DefaultNotifySubscribersOnSubprocessorChange bool
 	// DefaultNoindexDefaultDomain holds the default value on creation for the "noindex_default_domain" field.
 	DefaultNoindexDefaultDomain bool
+	// DefaultNdaApprovalRequired holds the default value on creation for the "nda_approval_required" field.
+	DefaultNdaApprovalRequired bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -387,11 +387,6 @@ func BySecurityContact(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSecurityContact, opts...).ToFunc()
 }
 
-// ByNdaApprovalRequired orders the results by the nda_approval_required field.
-func ByNdaApprovalRequired(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNdaApprovalRequired, opts...).ToFunc()
-}
-
 // ByAllowSubscribers orders the results by the allow_subscribers field.
 func ByAllowSubscribers(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAllowSubscribers, opts...).ToFunc()
@@ -407,11 +402,6 @@ func BySubprocessorsNotifiedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSubprocessorsNotifiedAt, opts...).ToFunc()
 }
 
-// ByNdaApproverGroupID orders the results by the nda_approver_group_id field.
-func ByNdaApproverGroupID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldNdaApproverGroupID, opts...).ToFunc()
-}
-
 // ByStatusPageURL orders the results by the status_page_url field.
 func ByStatusPageURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatusPageURL, opts...).ToFunc()
@@ -420,6 +410,16 @@ func ByStatusPageURL(opts ...sql.OrderTermOption) OrderOption {
 // ByNoindexDefaultDomain orders the results by the noindex_default_domain field.
 func ByNoindexDefaultDomain(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldNoindexDefaultDomain, opts...).ToFunc()
+}
+
+// ByNdaApproverGroupID orders the results by the nda_approver_group_id field.
+func ByNdaApproverGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNdaApproverGroupID, opts...).ToFunc()
+}
+
+// ByNdaApprovalRequired orders the results by the nda_approval_required field.
+func ByNdaApprovalRequired(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNdaApprovalRequired, opts...).ToFunc()
 }
 
 var (

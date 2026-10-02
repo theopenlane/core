@@ -81,6 +81,7 @@ type QueryResolver interface {
 	TrustCenterFaqHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterFAQHistoryOrder, where *historygenerated.TrustCenterFAQHistoryWhereInput) (*historygenerated.TrustCenterFAQHistoryConnection, error)
 	TrustCenterHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterHistoryOrder, where *historygenerated.TrustCenterHistoryWhereInput) (*historygenerated.TrustCenterHistoryConnection, error)
 	TrustCenterNdaRequestHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterNDARequestHistoryOrder, where *historygenerated.TrustCenterNDARequestHistoryWhereInput) (*historygenerated.TrustCenterNDARequestHistoryConnection, error)
+	TrustCenterNdaRequestSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterNDARequestSettingHistoryOrder, where *historygenerated.TrustCenterNDARequestSettingHistoryWhereInput) (*historygenerated.TrustCenterNDARequestSettingHistoryConnection, error)
 	TrustCenterSettingHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterSettingHistoryOrder, where *historygenerated.TrustCenterSettingHistoryWhereInput) (*historygenerated.TrustCenterSettingHistoryConnection, error)
 	TrustCenterSubprocessorHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterSubprocessorHistoryOrder, where *historygenerated.TrustCenterSubprocessorHistoryWhereInput) (*historygenerated.TrustCenterSubprocessorHistoryConnection, error)
 	TrustCenterWatermarkConfigHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterWatermarkConfigHistoryOrder, where *historygenerated.TrustCenterWatermarkConfigHistoryWhereInput) (*historygenerated.TrustCenterWatermarkConfigHistoryConnection, error)
@@ -3102,6 +3103,60 @@ func (ec *executionContext) field_Query_trustCenterNdaRequestHistories_args(ctx 
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*historygenerated.TrustCenterNDARequestHistoryWhereInput, error) {
 			return ec.unmarshalOTrustCenterNDARequestHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestHistoryWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_trustCenterNdaRequestSettingHistories_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) (*historygenerated.TrustCenterNDARequestSettingHistoryOrder, error) {
+			return ec.unmarshalOTrustCenterNDARequestSettingHistoryOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryOrder(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*historygenerated.TrustCenterNDARequestSettingHistoryWhereInput, error) {
+			return ec.unmarshalOTrustCenterNDARequestSettingHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -40762,6 +40817,50 @@ func (ec *executionContext) fieldContext_Query_trustCenterNdaRequestHistories(ct
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_trustCenterNdaRequestSettingHistories(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_trustCenterNdaRequestSettingHistories(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().TrustCenterNdaRequestSettingHistories(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].(*historygenerated.TrustCenterNDARequestSettingHistoryOrder), fc.Args["where"].(*historygenerated.TrustCenterNDARequestSettingHistoryWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *historygenerated.TrustCenterNDARequestSettingHistoryConnection) graphql.Marshaler {
+			return ec.marshalNTrustCenterNDARequestSettingHistoryConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_trustCenterNdaRequestSettingHistories(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TrustCenterNDARequestSettingHistoryConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_trustCenterNdaRequestSettingHistories_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_trustCenterSettingHistories(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -54008,6 +54107,539 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestHistoryEdge_cursor
 	return graphql.NewScalarFieldContext("TrustCenterNDARequestHistoryEdge", field, false, false, errors.New("field of type Cursor does not have child fields"))
 }
 
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_id(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_historyTime(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_historyTime(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.HistoryTime, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalNTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_historyTime(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type Time does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_ref(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_ref(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Ref, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_ref(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_operation(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_operation(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Operation, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v history.OpType) graphql.Marshaler {
+			return ec.marshalNTrustCenterNDARequestSettingHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_operation(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type TrustCenterNDARequestSettingHistoryOpType does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_createdAt(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type Time does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_updatedAt(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type Time does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_createdBy(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_createdBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_createdBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_updatedBy(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_updatedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_updatedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_updatedByImpersonator(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_updatedByImpersonator(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedByImpersonator, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_updatedByImpersonator(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_approverGroupID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_approverGroupID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ApproverGroupID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_approverGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_approvalRequired(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_approvalRequired(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ApprovalRequired, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_approvalRequired(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_autoApprove(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_autoApprove(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AutoApprove, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_autoApprove(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_workEmailOnly(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_workEmailOnly(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.WorkEmailOnly, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_workEmailOnly(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_useDomainBlocklist(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_useDomainBlocklist(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UseDomainBlocklist, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_useDomainBlocklist(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_useDomainAllowlist(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_useDomainAllowlist(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UseDomainAllowlist, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_useDomainAllowlist(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_approveFromExistingDomain(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_approveFromExistingDomain(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ApproveFromExistingDomain, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_approveFromExistingDomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory_approveIfContactExists(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistory_approveIfContactExists(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ApproveIfContactExists, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistory_approveIfContactExists(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistoryConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistoryConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*historygenerated.TrustCenterNDARequestSettingHistoryEdge) graphql.Marshaler {
+			return ec.marshalOTrustCenterNDARequestSettingHistoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryEdge(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistoryConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TrustCenterNDARequestSettingHistoryConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TrustCenterNDARequestSettingHistoryEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistoryConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistoryConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistoryConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.PageInfo[string]) graphql.Marshaler {
+			return ec.marshalNPageInfo2entgoᚗioᚋcontribᚋentgqlᚐPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistoryConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TrustCenterNDARequestSettingHistoryConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistoryConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistoryConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistoryConnection_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistoryConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistoryConnection", field, false, false, errors.New("field of type Int does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistoryEdge_node(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistoryEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistoryEdge_node(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *historygenerated.TrustCenterNDARequestSettingHistory) graphql.Marshaler {
+			return ec.marshalOTrustCenterNDARequestSettingHistory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistory(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistoryEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TrustCenterNDARequestSettingHistoryEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_TrustCenterNDARequestSettingHistory(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistoryEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterNDARequestSettingHistoryEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequestSettingHistoryEdge_cursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v entgql.Cursor[string]) graphql.Marshaler {
+			return ec.marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequestSettingHistoryEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterNDARequestSettingHistoryEdge", field, false, false, errors.New("field of type Cursor does not have child fields"))
+}
+
 func (ec *executionContext) _TrustCenterSettingHistory_id(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterSettingHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -54721,29 +55353,6 @@ func (ec *executionContext) fieldContext_TrustCenterSettingHistory_securityConta
 	return graphql.NewScalarFieldContext("TrustCenterSettingHistory", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
-func (ec *executionContext) _TrustCenterSettingHistory_ndaApprovalRequired(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterSettingHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_TrustCenterSettingHistory_ndaApprovalRequired(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.NdaApprovalRequired, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
-			return ec.marshalOBoolean2bool(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_TrustCenterSettingHistory_ndaApprovalRequired(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TrustCenterSettingHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
-}
-
 func (ec *executionContext) _TrustCenterSettingHistory_allowSubscribers(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterSettingHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -54813,29 +55422,6 @@ func (ec *executionContext) fieldContext_TrustCenterSettingHistory_subprocessors
 	return graphql.NewScalarFieldContext("TrustCenterSettingHistory", field, false, false, errors.New("field of type Time does not have child fields"))
 }
 
-func (ec *executionContext) _TrustCenterSettingHistory_ndaApproverGroupID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterSettingHistory) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_TrustCenterSettingHistory_ndaApproverGroupID(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.NdaApproverGroupID, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
-			return ec.marshalOString2ᚖstring(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_TrustCenterSettingHistory_ndaApproverGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TrustCenterSettingHistory", field, false, false, errors.New("field of type String does not have child fields"))
-}
-
 func (ec *executionContext) _TrustCenterSettingHistory_statusPageURL(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterSettingHistory) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -54879,6 +55465,52 @@ func (ec *executionContext) _TrustCenterSettingHistory_noindexDefaultDomain(ctx 
 	)
 }
 func (ec *executionContext) fieldContext_TrustCenterSettingHistory_noindexDefaultDomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterSettingHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterSettingHistory_ndaApproverGroupID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSettingHistory_ndaApproverGroupID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.NdaApproverGroupID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterSettingHistory_ndaApproverGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("TrustCenterSettingHistory", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _TrustCenterSettingHistory_ndaApprovalRequired(ctx context.Context, field graphql.CollectedField, obj *historygenerated.TrustCenterSettingHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterSettingHistory_ndaApprovalRequired(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.NdaApprovalRequired, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterSettingHistory_ndaApprovalRequired(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("TrustCenterSettingHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
 }
 
@@ -160432,6 +161064,875 @@ func (ec *executionContext) unmarshalInputTrustCenterNDARequestHistoryWhereInput
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputTrustCenterNDARequestSettingHistoryOrder(ctx context.Context, obj any) (historygenerated.TrustCenterNDARequestSettingHistoryOrder, error) {
+	var it historygenerated.TrustCenterNDARequestSettingHistoryOrder
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	if _, present := asMap["direction"]; !present {
+		asMap["direction"] = "ASC"
+	}
+
+	fieldsInOrder := [...]string{"direction", "field"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "direction":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("direction"))
+			data, err := ec.unmarshalNOrderDirection2entgoᚗioᚋcontribᚋentgqlᚐOrderDirection(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Direction = data
+		case "field":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
+			data, err := ec.unmarshalNTrustCenterNDARequestSettingHistoryOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryOrderField(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Field = data
+		}
+	}
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputTrustCenterNDARequestSettingHistoryWhereInput(ctx context.Context, obj any) (historygenerated.TrustCenterNDARequestSettingHistoryWhereInput, error) {
+	var it historygenerated.TrustCenterNDARequestSettingHistoryWhereInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "approverGroupID", "approverGroupIDNEQ", "approverGroupIDIn", "approverGroupIDNotIn", "approverGroupIDContains", "approverGroupIDHasPrefix", "approverGroupIDHasSuffix", "approverGroupIDIsNil", "approverGroupIDNotNil", "approverGroupIDEqualFold", "approverGroupIDContainsFold", "approvalRequired", "approvalRequiredNEQ", "approvalRequiredIsNil", "approvalRequiredNotNil", "autoApprove", "autoApproveNEQ", "autoApproveIsNil", "autoApproveNotNil", "workEmailOnly", "workEmailOnlyNEQ", "workEmailOnlyIsNil", "workEmailOnlyNotNil", "useDomainBlocklist", "useDomainBlocklistNEQ", "useDomainBlocklistIsNil", "useDomainBlocklistNotNil", "useDomainAllowlist", "useDomainAllowlistNEQ", "useDomainAllowlistIsNil", "useDomainAllowlistNotNil", "approveFromExistingDomain", "approveFromExistingDomainNEQ", "approveFromExistingDomainIsNil", "approveFromExistingDomainNotNil", "approveIfContactExists", "approveIfContactExistsNEQ", "approveIfContactExistsIsNil", "approveIfContactExistsNotNil"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "not":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOTrustCenterNDARequestSettingHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryWhereInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Not = data
+		case "and":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOTrustCenterNDARequestSettingHistoryWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.And = data
+		case "or":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOTrustCenterNDARequestSettingHistoryWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Or = data
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "idNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNEQ = data
+		case "idIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDIn = data
+		case "idNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDNotIn = data
+		case "idEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDEqualFold = data
+		case "idContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IDContainsFold = data
+		case "historyTime":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTime"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HistoryTime = data
+		case "historyTimeGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HistoryTimeGT = data
+		case "historyTimeGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HistoryTimeGTE = data
+		case "historyTimeLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HistoryTimeLT = data
+		case "historyTimeLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("historyTimeLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HistoryTimeLTE = data
+		case "ref":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ref"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Ref = data
+		case "refNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefNEQ = data
+		case "refIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefIn = data
+		case "refNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefNotIn = data
+		case "refContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefContains = data
+		case "refHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasPrefix = data
+		case "refHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefHasSuffix = data
+		case "refIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefIsNil = data
+		case "refNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefNotNil = data
+		case "refEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefEqualFold = data
+		case "refContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("refContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RefContainsFold = data
+		case "operation":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operation"))
+			data, err := ec.unmarshalOTrustCenterNDARequestSettingHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Operation = data
+		case "operationNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operationNEQ"))
+			data, err := ec.unmarshalOTrustCenterNDARequestSettingHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OperationNEQ = data
+		case "operationIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operationIn"))
+			data, err := ec.unmarshalOTrustCenterNDARequestSettingHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OperationIn = data
+		case "operationNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("operationNotIn"))
+			data, err := ec.unmarshalOTrustCenterNDARequestSettingHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OperationNotIn = data
+		case "createdAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAt = data
+		case "createdAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGT = data
+		case "createdAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtGTE = data
+		case "createdAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLT = data
+		case "createdAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtLTE = data
+		case "createdAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtIsNil = data
+		case "createdAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedAtNotNil = data
+		case "updatedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAt = data
+		case "updatedAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGT = data
+		case "updatedAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtGTE = data
+		case "updatedAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLT = data
+		case "updatedAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtLTE = data
+		case "updatedAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtIsNil = data
+		case "updatedAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedAtNotNil = data
+		case "createdBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedBy = data
+		case "createdByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNEQ = data
+		case "createdByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIn = data
+		case "createdByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotIn = data
+		case "createdByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContains = data
+		case "createdByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasPrefix = data
+		case "createdByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByHasSuffix = data
+		case "createdByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByIsNil = data
+		case "createdByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByNotNil = data
+		case "createdByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByEqualFold = data
+		case "createdByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.CreatedByContainsFold = data
+		case "updatedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedBy = data
+		case "updatedByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNEQ = data
+		case "updatedByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIn = data
+		case "updatedByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotIn = data
+		case "updatedByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContains = data
+		case "updatedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasPrefix = data
+		case "updatedByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByHasSuffix = data
+		case "updatedByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByIsNil = data
+		case "updatedByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByNotNil = data
+		case "updatedByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByEqualFold = data
+		case "updatedByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByContainsFold = data
+		case "updatedByImpersonator":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonator"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonator = data
+		case "updatedByImpersonatorNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNEQ = data
+		case "updatedByImpersonatorIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIn = data
+		case "updatedByImpersonatorNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotIn = data
+		case "updatedByImpersonatorContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContains = data
+		case "updatedByImpersonatorHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasPrefix = data
+		case "updatedByImpersonatorHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorHasSuffix = data
+		case "updatedByImpersonatorIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorIsNil = data
+		case "updatedByImpersonatorNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorNotNil = data
+		case "updatedByImpersonatorEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorEqualFold = data
+		case "updatedByImpersonatorContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedByImpersonatorContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UpdatedByImpersonatorContainsFold = data
+		case "approverGroupID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupID = data
+		case "approverGroupIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDNEQ = data
+		case "approverGroupIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDIn = data
+		case "approverGroupIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDNotIn = data
+		case "approverGroupIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDContains = data
+		case "approverGroupIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDHasPrefix = data
+		case "approverGroupIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDHasSuffix = data
+		case "approverGroupIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDIsNil = data
+		case "approverGroupIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDNotNil = data
+		case "approverGroupIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDEqualFold = data
+		case "approverGroupIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approverGroupIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproverGroupIDContainsFold = data
+		case "approvalRequired":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvalRequired"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApprovalRequired = data
+		case "approvalRequiredNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvalRequiredNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApprovalRequiredNEQ = data
+		case "approvalRequiredIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvalRequiredIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApprovalRequiredIsNil = data
+		case "approvalRequiredNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvalRequiredNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApprovalRequiredNotNil = data
+		case "autoApprove":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApprove"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApprove = data
+		case "autoApproveNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApproveNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApproveNEQ = data
+		case "autoApproveIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApproveIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApproveIsNil = data
+		case "autoApproveNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("autoApproveNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AutoApproveNotNil = data
+		case "workEmailOnly":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workEmailOnly"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WorkEmailOnly = data
+		case "workEmailOnlyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workEmailOnlyNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WorkEmailOnlyNEQ = data
+		case "workEmailOnlyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workEmailOnlyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WorkEmailOnlyIsNil = data
+		case "workEmailOnlyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workEmailOnlyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.WorkEmailOnlyNotNil = data
+		case "useDomainBlocklist":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainBlocklist"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainBlocklist = data
+		case "useDomainBlocklistNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainBlocklistNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainBlocklistNEQ = data
+		case "useDomainBlocklistIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainBlocklistIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainBlocklistIsNil = data
+		case "useDomainBlocklistNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainBlocklistNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainBlocklistNotNil = data
+		case "useDomainAllowlist":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainAllowlist"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainAllowlist = data
+		case "useDomainAllowlistNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainAllowlistNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainAllowlistNEQ = data
+		case "useDomainAllowlistIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainAllowlistIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainAllowlistIsNil = data
+		case "useDomainAllowlistNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useDomainAllowlistNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.UseDomainAllowlistNotNil = data
+		case "approveFromExistingDomain":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveFromExistingDomain"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveFromExistingDomain = data
+		case "approveFromExistingDomainNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveFromExistingDomainNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveFromExistingDomainNEQ = data
+		case "approveFromExistingDomainIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveFromExistingDomainIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveFromExistingDomainIsNil = data
+		case "approveFromExistingDomainNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveFromExistingDomainNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveFromExistingDomainNotNil = data
+		case "approveIfContactExists":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveIfContactExists"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveIfContactExists = data
+		case "approveIfContactExistsNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveIfContactExistsNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveIfContactExistsNEQ = data
+		case "approveIfContactExistsIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveIfContactExistsIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveIfContactExistsIsNil = data
+		case "approveIfContactExistsNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approveIfContactExistsNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApproveIfContactExistsNotNil = data
+		}
+	}
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputTrustCenterSettingHistoryOrder(ctx context.Context, obj any) (historygenerated.TrustCenterSettingHistoryOrder, error) {
 	var it historygenerated.TrustCenterSettingHistoryOrder
 	if obj == nil {
@@ -160484,7 +161985,7 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingHistoryWhereInput(ct
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameIsNil", "companyNameNotNil", "companyNameEqualFold", "companyNameContainsFold", "companyDescription", "companyDescriptionNEQ", "companyDescriptionIn", "companyDescriptionNotIn", "companyDescriptionContains", "companyDescriptionHasPrefix", "companyDescriptionHasSuffix", "companyDescriptionIsNil", "companyDescriptionNotNil", "companyDescriptionEqualFold", "companyDescriptionContainsFold", "overview", "overviewNEQ", "overviewIn", "overviewNotIn", "overviewContains", "overviewHasPrefix", "overviewHasSuffix", "overviewIsNil", "overviewNotNil", "overviewEqualFold", "overviewContainsFold", "logoRemoteURL", "logoRemoteURLNEQ", "logoRemoteURLIn", "logoRemoteURLNotIn", "logoRemoteURLContains", "logoRemoteURLHasPrefix", "logoRemoteURLHasSuffix", "logoRemoteURLIsNil", "logoRemoteURLNotNil", "logoRemoteURLEqualFold", "logoRemoteURLContainsFold", "logoLocalFileID", "logoLocalFileIDNEQ", "logoLocalFileIDIn", "logoLocalFileIDNotIn", "logoLocalFileIDContains", "logoLocalFileIDHasPrefix", "logoLocalFileIDHasSuffix", "logoLocalFileIDIsNil", "logoLocalFileIDNotNil", "logoLocalFileIDEqualFold", "logoLocalFileIDContainsFold", "faviconRemoteURL", "faviconRemoteURLNEQ", "faviconRemoteURLIn", "faviconRemoteURLNotIn", "faviconRemoteURLContains", "faviconRemoteURLHasPrefix", "faviconRemoteURLHasSuffix", "faviconRemoteURLIsNil", "faviconRemoteURLNotNil", "faviconRemoteURLEqualFold", "faviconRemoteURLContainsFold", "faviconLocalFileID", "faviconLocalFileIDNEQ", "faviconLocalFileIDIn", "faviconLocalFileIDNotIn", "faviconLocalFileIDContains", "faviconLocalFileIDHasPrefix", "faviconLocalFileIDHasSuffix", "faviconLocalFileIDIsNil", "faviconLocalFileIDNotNil", "faviconLocalFileIDEqualFold", "faviconLocalFileIDContainsFold", "heroImageLocalFileID", "heroImageLocalFileIDNEQ", "heroImageLocalFileIDIn", "heroImageLocalFileIDNotIn", "heroImageLocalFileIDContains", "heroImageLocalFileIDHasPrefix", "heroImageLocalFileIDHasSuffix", "heroImageLocalFileIDIsNil", "heroImageLocalFileIDNotNil", "heroImageLocalFileIDEqualFold", "heroImageLocalFileIDContainsFold", "themeMode", "themeModeNEQ", "themeModeIn", "themeModeNotIn", "themeModeIsNil", "themeModeNotNil", "primaryColor", "primaryColorNEQ", "primaryColorIn", "primaryColorNotIn", "primaryColorContains", "primaryColorHasPrefix", "primaryColorHasSuffix", "primaryColorIsNil", "primaryColorNotNil", "primaryColorEqualFold", "primaryColorContainsFold", "font", "fontNEQ", "fontIn", "fontNotIn", "fontContains", "fontHasPrefix", "fontHasSuffix", "fontIsNil", "fontNotNil", "fontEqualFold", "fontContainsFold", "foregroundColor", "foregroundColorNEQ", "foregroundColorIn", "foregroundColorNotIn", "foregroundColorContains", "foregroundColorHasPrefix", "foregroundColorHasSuffix", "foregroundColorIsNil", "foregroundColorNotNil", "foregroundColorEqualFold", "foregroundColorContainsFold", "backgroundColor", "backgroundColorNEQ", "backgroundColorIn", "backgroundColorNotIn", "backgroundColorContains", "backgroundColorHasPrefix", "backgroundColorHasSuffix", "backgroundColorIsNil", "backgroundColorNotNil", "backgroundColorEqualFold", "backgroundColorContainsFold", "accentColor", "accentColorNEQ", "accentColorIn", "accentColorNotIn", "accentColorContains", "accentColorHasPrefix", "accentColorHasSuffix", "accentColorIsNil", "accentColorNotNil", "accentColorEqualFold", "accentColorContainsFold", "secondaryBackgroundColor", "secondaryBackgroundColorNEQ", "secondaryBackgroundColorIn", "secondaryBackgroundColorNotIn", "secondaryBackgroundColorContains", "secondaryBackgroundColorHasPrefix", "secondaryBackgroundColorHasSuffix", "secondaryBackgroundColorIsNil", "secondaryBackgroundColorNotNil", "secondaryBackgroundColorEqualFold", "secondaryBackgroundColorContainsFold", "secondaryForegroundColor", "secondaryForegroundColorNEQ", "secondaryForegroundColorIn", "secondaryForegroundColorNotIn", "secondaryForegroundColorContains", "secondaryForegroundColorHasPrefix", "secondaryForegroundColorHasSuffix", "secondaryForegroundColorIsNil", "secondaryForegroundColorNotNil", "secondaryForegroundColorEqualFold", "secondaryForegroundColorContainsFold", "environment", "environmentNEQ", "environmentIn", "environmentNotIn", "environmentIsNil", "environmentNotNil", "removeBranding", "removeBrandingNEQ", "removeBrandingIsNil", "removeBrandingNotNil", "companyDomain", "companyDomainNEQ", "companyDomainIn", "companyDomainNotIn", "companyDomainContains", "companyDomainHasPrefix", "companyDomainHasSuffix", "companyDomainIsNil", "companyDomainNotNil", "companyDomainEqualFold", "companyDomainContainsFold", "securityContact", "securityContactNEQ", "securityContactIn", "securityContactNotIn", "securityContactContains", "securityContactHasPrefix", "securityContactHasSuffix", "securityContactIsNil", "securityContactNotNil", "securityContactEqualFold", "securityContactContainsFold", "ndaApprovalRequired", "ndaApprovalRequiredNEQ", "ndaApprovalRequiredIsNil", "ndaApprovalRequiredNotNil", "allowSubscribers", "allowSubscribersNEQ", "allowSubscribersIsNil", "allowSubscribersNotNil", "notifySubscribersOnSubprocessorChange", "notifySubscribersOnSubprocessorChangeNEQ", "notifySubscribersOnSubprocessorChangeIsNil", "notifySubscribersOnSubprocessorChangeNotNil", "subprocessorsNotifiedAt", "subprocessorsNotifiedAtGT", "subprocessorsNotifiedAtGTE", "subprocessorsNotifiedAtLT", "subprocessorsNotifiedAtLTE", "subprocessorsNotifiedAtIsNil", "subprocessorsNotifiedAtNotNil", "ndaApproverGroupID", "ndaApproverGroupIDNEQ", "ndaApproverGroupIDIn", "ndaApproverGroupIDNotIn", "ndaApproverGroupIDContains", "ndaApproverGroupIDHasPrefix", "ndaApproverGroupIDHasSuffix", "ndaApproverGroupIDIsNil", "ndaApproverGroupIDNotNil", "ndaApproverGroupIDEqualFold", "ndaApproverGroupIDContainsFold", "statusPageURL", "statusPageURLNEQ", "statusPageURLIn", "statusPageURLNotIn", "statusPageURLContains", "statusPageURLHasPrefix", "statusPageURLHasSuffix", "statusPageURLIsNil", "statusPageURLNotNil", "statusPageURLEqualFold", "statusPageURLContainsFold", "noindexDefaultDomain", "noindexDefaultDomainNEQ", "noindexDefaultDomainIsNil", "noindexDefaultDomainNotNil"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameIsNil", "companyNameNotNil", "companyNameEqualFold", "companyNameContainsFold", "companyDescription", "companyDescriptionNEQ", "companyDescriptionIn", "companyDescriptionNotIn", "companyDescriptionContains", "companyDescriptionHasPrefix", "companyDescriptionHasSuffix", "companyDescriptionIsNil", "companyDescriptionNotNil", "companyDescriptionEqualFold", "companyDescriptionContainsFold", "overview", "overviewNEQ", "overviewIn", "overviewNotIn", "overviewContains", "overviewHasPrefix", "overviewHasSuffix", "overviewIsNil", "overviewNotNil", "overviewEqualFold", "overviewContainsFold", "logoRemoteURL", "logoRemoteURLNEQ", "logoRemoteURLIn", "logoRemoteURLNotIn", "logoRemoteURLContains", "logoRemoteURLHasPrefix", "logoRemoteURLHasSuffix", "logoRemoteURLIsNil", "logoRemoteURLNotNil", "logoRemoteURLEqualFold", "logoRemoteURLContainsFold", "logoLocalFileID", "logoLocalFileIDNEQ", "logoLocalFileIDIn", "logoLocalFileIDNotIn", "logoLocalFileIDContains", "logoLocalFileIDHasPrefix", "logoLocalFileIDHasSuffix", "logoLocalFileIDIsNil", "logoLocalFileIDNotNil", "logoLocalFileIDEqualFold", "logoLocalFileIDContainsFold", "faviconRemoteURL", "faviconRemoteURLNEQ", "faviconRemoteURLIn", "faviconRemoteURLNotIn", "faviconRemoteURLContains", "faviconRemoteURLHasPrefix", "faviconRemoteURLHasSuffix", "faviconRemoteURLIsNil", "faviconRemoteURLNotNil", "faviconRemoteURLEqualFold", "faviconRemoteURLContainsFold", "faviconLocalFileID", "faviconLocalFileIDNEQ", "faviconLocalFileIDIn", "faviconLocalFileIDNotIn", "faviconLocalFileIDContains", "faviconLocalFileIDHasPrefix", "faviconLocalFileIDHasSuffix", "faviconLocalFileIDIsNil", "faviconLocalFileIDNotNil", "faviconLocalFileIDEqualFold", "faviconLocalFileIDContainsFold", "heroImageLocalFileID", "heroImageLocalFileIDNEQ", "heroImageLocalFileIDIn", "heroImageLocalFileIDNotIn", "heroImageLocalFileIDContains", "heroImageLocalFileIDHasPrefix", "heroImageLocalFileIDHasSuffix", "heroImageLocalFileIDIsNil", "heroImageLocalFileIDNotNil", "heroImageLocalFileIDEqualFold", "heroImageLocalFileIDContainsFold", "themeMode", "themeModeNEQ", "themeModeIn", "themeModeNotIn", "themeModeIsNil", "themeModeNotNil", "primaryColor", "primaryColorNEQ", "primaryColorIn", "primaryColorNotIn", "primaryColorContains", "primaryColorHasPrefix", "primaryColorHasSuffix", "primaryColorIsNil", "primaryColorNotNil", "primaryColorEqualFold", "primaryColorContainsFold", "font", "fontNEQ", "fontIn", "fontNotIn", "fontContains", "fontHasPrefix", "fontHasSuffix", "fontIsNil", "fontNotNil", "fontEqualFold", "fontContainsFold", "foregroundColor", "foregroundColorNEQ", "foregroundColorIn", "foregroundColorNotIn", "foregroundColorContains", "foregroundColorHasPrefix", "foregroundColorHasSuffix", "foregroundColorIsNil", "foregroundColorNotNil", "foregroundColorEqualFold", "foregroundColorContainsFold", "backgroundColor", "backgroundColorNEQ", "backgroundColorIn", "backgroundColorNotIn", "backgroundColorContains", "backgroundColorHasPrefix", "backgroundColorHasSuffix", "backgroundColorIsNil", "backgroundColorNotNil", "backgroundColorEqualFold", "backgroundColorContainsFold", "accentColor", "accentColorNEQ", "accentColorIn", "accentColorNotIn", "accentColorContains", "accentColorHasPrefix", "accentColorHasSuffix", "accentColorIsNil", "accentColorNotNil", "accentColorEqualFold", "accentColorContainsFold", "secondaryBackgroundColor", "secondaryBackgroundColorNEQ", "secondaryBackgroundColorIn", "secondaryBackgroundColorNotIn", "secondaryBackgroundColorContains", "secondaryBackgroundColorHasPrefix", "secondaryBackgroundColorHasSuffix", "secondaryBackgroundColorIsNil", "secondaryBackgroundColorNotNil", "secondaryBackgroundColorEqualFold", "secondaryBackgroundColorContainsFold", "secondaryForegroundColor", "secondaryForegroundColorNEQ", "secondaryForegroundColorIn", "secondaryForegroundColorNotIn", "secondaryForegroundColorContains", "secondaryForegroundColorHasPrefix", "secondaryForegroundColorHasSuffix", "secondaryForegroundColorIsNil", "secondaryForegroundColorNotNil", "secondaryForegroundColorEqualFold", "secondaryForegroundColorContainsFold", "environment", "environmentNEQ", "environmentIn", "environmentNotIn", "environmentIsNil", "environmentNotNil", "removeBranding", "removeBrandingNEQ", "removeBrandingIsNil", "removeBrandingNotNil", "companyDomain", "companyDomainNEQ", "companyDomainIn", "companyDomainNotIn", "companyDomainContains", "companyDomainHasPrefix", "companyDomainHasSuffix", "companyDomainIsNil", "companyDomainNotNil", "companyDomainEqualFold", "companyDomainContainsFold", "securityContact", "securityContactNEQ", "securityContactIn", "securityContactNotIn", "securityContactContains", "securityContactHasPrefix", "securityContactHasSuffix", "securityContactIsNil", "securityContactNotNil", "securityContactEqualFold", "securityContactContainsFold", "allowSubscribers", "allowSubscribersNEQ", "allowSubscribersIsNil", "allowSubscribersNotNil", "notifySubscribersOnSubprocessorChange", "notifySubscribersOnSubprocessorChangeNEQ", "notifySubscribersOnSubprocessorChangeIsNil", "notifySubscribersOnSubprocessorChangeNotNil", "subprocessorsNotifiedAt", "subprocessorsNotifiedAtGT", "subprocessorsNotifiedAtGTE", "subprocessorsNotifiedAtLT", "subprocessorsNotifiedAtLTE", "subprocessorsNotifiedAtIsNil", "subprocessorsNotifiedAtNotNil", "statusPageURL", "statusPageURLNEQ", "statusPageURLIn", "statusPageURLNotIn", "statusPageURLContains", "statusPageURLHasPrefix", "statusPageURLHasSuffix", "statusPageURLIsNil", "statusPageURLNotNil", "statusPageURLEqualFold", "statusPageURLContainsFold", "noindexDefaultDomain", "noindexDefaultDomainNEQ", "noindexDefaultDomainIsNil", "noindexDefaultDomainNotNil", "ndaApproverGroupID", "ndaApproverGroupIDNEQ", "ndaApproverGroupIDIn", "ndaApproverGroupIDNotIn", "ndaApproverGroupIDContains", "ndaApproverGroupIDHasPrefix", "ndaApproverGroupIDHasSuffix", "ndaApproverGroupIDIsNil", "ndaApproverGroupIDNotNil", "ndaApproverGroupIDEqualFold", "ndaApproverGroupIDContainsFold", "ndaApprovalRequired", "ndaApprovalRequiredNEQ", "ndaApprovalRequiredIsNil", "ndaApprovalRequiredNotNil"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -162598,34 +164099,6 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingHistoryWhereInput(ct
 				return it, err
 			}
 			it.SecurityContactContainsFold = data
-		case "ndaApprovalRequired":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequired"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApprovalRequired = data
-		case "ndaApprovalRequiredNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequiredNEQ"))
-			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApprovalRequiredNEQ = data
-		case "ndaApprovalRequiredIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequiredIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApprovalRequiredIsNil = data
-		case "ndaApprovalRequiredNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequiredNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApprovalRequiredNotNil = data
 		case "allowSubscribers":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("allowSubscribers"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -162731,83 +164204,6 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingHistoryWhereInput(ct
 				return it, err
 			}
 			it.SubprocessorsNotifiedAtNotNil = data
-		case "ndaApproverGroupID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupID = data
-		case "ndaApproverGroupIDNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDNEQ = data
-		case "ndaApproverGroupIDIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDIn = data
-		case "ndaApproverGroupIDNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDNotIn = data
-		case "ndaApproverGroupIDContains":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDContains = data
-		case "ndaApproverGroupIDHasPrefix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDHasPrefix = data
-		case "ndaApproverGroupIDHasSuffix":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDHasSuffix = data
-		case "ndaApproverGroupIDIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDIsNil = data
-		case "ndaApproverGroupIDNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDNotNil = data
-		case "ndaApproverGroupIDEqualFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDEqualFold = data
-		case "ndaApproverGroupIDContainsFold":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.NdaApproverGroupIDContainsFold = data
 		case "statusPageURL":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("statusPageURL"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -162913,6 +164309,111 @@ func (ec *executionContext) unmarshalInputTrustCenterSettingHistoryWhereInput(ct
 				return it, err
 			}
 			it.NoindexDefaultDomainNotNil = data
+		case "ndaApproverGroupID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupID = data
+		case "ndaApproverGroupIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDNEQ = data
+		case "ndaApproverGroupIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDIn = data
+		case "ndaApproverGroupIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDNotIn = data
+		case "ndaApproverGroupIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDContains = data
+		case "ndaApproverGroupIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDHasPrefix = data
+		case "ndaApproverGroupIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDHasSuffix = data
+		case "ndaApproverGroupIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDIsNil = data
+		case "ndaApproverGroupIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDNotNil = data
+		case "ndaApproverGroupIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDEqualFold = data
+		case "ndaApproverGroupIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApproverGroupIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApproverGroupIDContainsFold = data
+		case "ndaApprovalRequired":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequired"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApprovalRequired = data
+		case "ndaApprovalRequiredNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequiredNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApprovalRequiredNEQ = data
+		case "ndaApprovalRequiredIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequiredIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApprovalRequiredIsNil = data
+		case "ndaApprovalRequiredNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ndaApprovalRequiredNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.NdaApprovalRequiredNotNil = data
 		}
 	}
 	return it, nil
@@ -178685,6 +180186,11 @@ func (ec *executionContext) _Node(ctx context.Context, sel ast.SelectionSet, obj
 			return graphql.Null
 		}
 		return ec._TrustCenterSettingHistory(ctx, sel, obj)
+	case *historygenerated.TrustCenterNDARequestSettingHistory:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._TrustCenterNDARequestSettingHistory(ctx, sel, obj)
 	case *historygenerated.TrustCenterNDARequestHistory:
 		if obj == nil {
 			return graphql.Null
@@ -191246,6 +192752,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "trustCenterNdaRequestSettingHistories":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_trustCenterNdaRequestSettingHistories(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "trustCenterSettingHistories":
 			field := field
 
@@ -195677,6 +197205,215 @@ func (ec *executionContext) _TrustCenterNDARequestHistoryEdge(ctx context.Contex
 	return out
 }
 
+var trustCenterNDARequestSettingHistoryImplementors = []string{"TrustCenterNDARequestSettingHistory", "Node"}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistory(ctx context.Context, sel ast.SelectionSet, obj *historygenerated.TrustCenterNDARequestSettingHistory) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterNDARequestSettingHistoryImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TrustCenterNDARequestSettingHistory")
+		case "id":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "historyTime":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_historyTime(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "ref":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_ref(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "operation":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_operation(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "createdBy":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_createdBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "updatedBy":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_updatedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "updatedByImpersonator":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_updatedByImpersonator(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "approverGroupID":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_approverGroupID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "approvalRequired":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_approvalRequired(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "autoApprove":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_autoApprove(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "workEmailOnly":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_workEmailOnly(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "useDomainBlocklist":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_useDomainBlocklist(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "useDomainAllowlist":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_useDomainAllowlist(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "approveFromExistingDomain":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_approveFromExistingDomain(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "approveIfContactExists":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistory_approveIfContactExists(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
+var trustCenterNDARequestSettingHistoryConnectionImplementors = []string{"TrustCenterNDARequestSettingHistoryConnection"}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistoryConnection(ctx context.Context, sel ast.SelectionSet, obj *historygenerated.TrustCenterNDARequestSettingHistoryConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterNDARequestSettingHistoryConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TrustCenterNDARequestSettingHistoryConnection")
+		case "edges":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistoryConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistoryConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistoryConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
+var trustCenterNDARequestSettingHistoryEdgeImplementors = []string{"TrustCenterNDARequestSettingHistoryEdge"}
+
+func (ec *executionContext) _TrustCenterNDARequestSettingHistoryEdge(ctx context.Context, sel ast.SelectionSet, obj *historygenerated.TrustCenterNDARequestSettingHistoryEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterNDARequestSettingHistoryEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TrustCenterNDARequestSettingHistoryEdge")
+		case "node":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistoryEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._TrustCenterNDARequestSettingHistoryEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
 var trustCenterSettingHistoryImplementors = []string{"TrustCenterSettingHistory", "Node"}
 
 func (ec *executionContext) _TrustCenterSettingHistory(ctx context.Context, sel ast.SelectionSet, obj *historygenerated.TrustCenterSettingHistory) graphql.Marshaler {
@@ -195844,11 +197581,6 @@ func (ec *executionContext) _TrustCenterSettingHistory(ctx context.Context, sel 
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
-		case "ndaApprovalRequired":
-			out.Values[i] = ec._TrustCenterSettingHistory_ndaApprovalRequired(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
 		case "allowSubscribers":
 			out.Values[i] = ec._TrustCenterSettingHistory_allowSubscribers(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -195864,11 +197596,6 @@ func (ec *executionContext) _TrustCenterSettingHistory(ctx context.Context, sel 
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
-		case "ndaApproverGroupID":
-			out.Values[i] = ec._TrustCenterSettingHistory_ndaApproverGroupID(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
 		case "statusPageURL":
 			out.Values[i] = ec._TrustCenterSettingHistory_statusPageURL(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -195876,6 +197603,16 @@ func (ec *executionContext) _TrustCenterSettingHistory(ctx context.Context, sel 
 			}
 		case "noindexDefaultDomain":
 			out.Values[i] = ec._TrustCenterSettingHistory_noindexDefaultDomain(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "ndaApproverGroupID":
+			out.Values[i] = ec._TrustCenterSettingHistory_ndaApproverGroupID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "ndaApprovalRequired":
+			out.Values[i] = ec._TrustCenterSettingHistory_ndaApprovalRequired(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -201689,6 +203426,47 @@ func (ec *executionContext) marshalNTrustCenterNDARequestHistoryTrustCenterNDARe
 
 func (ec *executionContext) unmarshalNTrustCenterNDARequestHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestHistoryWhereInput(ctx context.Context, v any) (*historygenerated.TrustCenterNDARequestHistoryWhereInput, error) {
 	res, err := ec.unmarshalInputTrustCenterNDARequestHistoryWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNTrustCenterNDARequestSettingHistoryConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryConnection(ctx context.Context, sel ast.SelectionSet, v *historygenerated.TrustCenterNDARequestSettingHistoryConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._TrustCenterNDARequestSettingHistoryConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNTrustCenterNDARequestSettingHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, v any) (history.OpType, error) {
+	var res history.OpType
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNTrustCenterNDARequestSettingHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, sel ast.SelectionSet, v history.OpType) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNTrustCenterNDARequestSettingHistoryOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryOrderField(ctx context.Context, v any) (*historygenerated.TrustCenterNDARequestSettingHistoryOrderField, error) {
+	var res = new(historygenerated.TrustCenterNDARequestSettingHistoryOrderField)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNTrustCenterNDARequestSettingHistoryOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryOrderField(ctx context.Context, sel ast.SelectionSet, v *historygenerated.TrustCenterNDARequestSettingHistoryOrderField) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalNTrustCenterNDARequestSettingHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryWhereInput(ctx context.Context, v any) (*historygenerated.TrustCenterNDARequestSettingHistoryWhereInput, error) {
+	res, err := ec.unmarshalInputTrustCenterNDARequestSettingHistoryWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -213025,6 +214803,118 @@ func (ec *executionContext) unmarshalOTrustCenterNDARequestHistoryWhereInput2ᚖ
 		return nil, nil
 	}
 	res, err := ec.unmarshalInputTrustCenterNDARequestHistoryWhereInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOTrustCenterNDARequestSettingHistory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistory(ctx context.Context, sel ast.SelectionSet, v *historygenerated.TrustCenterNDARequestSettingHistory) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._TrustCenterNDARequestSettingHistory(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOTrustCenterNDARequestSettingHistoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryEdge(ctx context.Context, sel ast.SelectionSet, v []*historygenerated.TrustCenterNDARequestSettingHistoryEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalOTrustCenterNDARequestSettingHistoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryEdge(ctx, sel, v[i])
+	})
+
+	return ret
+}
+
+func (ec *executionContext) marshalOTrustCenterNDARequestSettingHistoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryEdge(ctx context.Context, sel ast.SelectionSet, v *historygenerated.TrustCenterNDARequestSettingHistoryEdge) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._TrustCenterNDARequestSettingHistoryEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOTrustCenterNDARequestSettingHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx context.Context, v any) ([]history.OpType, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]history.OpType, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNTrustCenterNDARequestSettingHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOTrustCenterNDARequestSettingHistoryOpType2ᚕgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpTypeᚄ(ctx context.Context, sel ast.SelectionSet, v []history.OpType) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNTrustCenterNDARequestSettingHistoryOpType2githubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOTrustCenterNDARequestSettingHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, v any) (*history.OpType, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(history.OpType)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOTrustCenterNDARequestSettingHistoryOpType2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, sel ast.SelectionSet, v *history.OpType) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOTrustCenterNDARequestSettingHistoryOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryOrder(ctx context.Context, v any) (*historygenerated.TrustCenterNDARequestSettingHistoryOrder, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputTrustCenterNDARequestSettingHistoryOrder(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOTrustCenterNDARequestSettingHistoryWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryWhereInputᚄ(ctx context.Context, v any) ([]*historygenerated.TrustCenterNDARequestSettingHistoryWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*historygenerated.TrustCenterNDARequestSettingHistoryWhereInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNTrustCenterNDARequestSettingHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryWhereInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOTrustCenterNDARequestSettingHistoryWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋhistorygeneratedᚐTrustCenterNDARequestSettingHistoryWhereInput(ctx context.Context, v any) (*historygenerated.TrustCenterNDARequestSettingHistoryWhereInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputTrustCenterNDARequestSettingHistoryWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 

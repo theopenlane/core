@@ -3597,6 +3597,52 @@ type TrustCenterNDARequestDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// Return response for createBulkTrustCenterNDARequestSetting mutation
+type TrustCenterNDARequestSettingBulkCreatePayload struct {
+	// Created trustCenterNDARequestSettings
+	TrustCenterNDARequestSettings []*generated.TrustCenterNDARequestSetting `json:"trustCenterNDARequestSettings,omitempty"`
+}
+
+// Return response for deleteBulkTrustCenterNDARequestSetting mutation
+type TrustCenterNDARequestSettingBulkDeletePayload struct {
+	// Deleted trustCenterNDARequestSetting IDs
+	DeletedIDs []string `json:"deletedIDs"`
+	// Error returned when the bulk delete is only partially applied
+	Error *string `json:"error,omitempty"`
+	// IDs of trustCenterNDARequestSettings that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs,omitempty"`
+}
+
+// Return response for updateBulkTrustCenterNDARequestSetting mutation
+type TrustCenterNDARequestSettingBulkUpdatePayload struct {
+	// Updated trustCenterNDARequestSettings
+	TrustCenterNDARequestSettings []*generated.TrustCenterNDARequestSetting `json:"trustCenterNDARequestSettings,omitempty"`
+	// IDs of the updated trustCenterNDARequestSettings
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
+}
+
+// Return response for createTrustCenterNDARequestSetting mutation
+type TrustCenterNDARequestSettingCreatePayload struct {
+	// Created trustCenterNDARequestSetting
+	TrustCenterNDARequestSetting *generated.TrustCenterNDARequestSetting `json:"trustCenterNDARequestSetting"`
+}
+
+// Return response for deleteTrustCenterNDARequestSetting mutation
+type TrustCenterNDARequestSettingDeletePayload struct {
+	// Deleted trustCenterNDARequestSetting ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTrustCenterNDARequestSetting mutation
+type TrustCenterNDARequestSettingUpdatePayload struct {
+	// Updated trustCenterNDARequestSetting
+	TrustCenterNDARequestSetting *generated.TrustCenterNDARequestSetting `json:"trustCenterNDARequestSetting"`
+}
+
 // Return response for updateTrustCenterNDARequest mutation
 type TrustCenterNDARequestUpdatePayload struct {
 	// Updated trustCenterNDARequest

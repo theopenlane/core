@@ -71,6 +71,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterfaqhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequesthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequestsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
@@ -94,72 +95,73 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeActionPlanHistory                 = "ActionPlanHistory"
-	TypeAssessmentHistory                 = "AssessmentHistory"
-	TypeAssessmentResponseHistory         = "AssessmentResponseHistory"
-	TypeAssetHistory                      = "AssetHistory"
-	TypeCampaignHistory                   = "CampaignHistory"
-	TypeCampaignTargetHistory             = "CampaignTargetHistory"
-	TypeContactHistory                    = "ContactHistory"
-	TypeControlHistory                    = "ControlHistory"
-	TypeControlImplementationHistory      = "ControlImplementationHistory"
-	TypeControlObjectiveHistory           = "ControlObjectiveHistory"
-	TypeCustomDomainHistory               = "CustomDomainHistory"
-	TypeDiscussionHistory                 = "DiscussionHistory"
-	TypeDocumentDataHistory               = "DocumentDataHistory"
-	TypeEmailTemplateHistory              = "EmailTemplateHistory"
-	TypeEntityHistory                     = "EntityHistory"
-	TypeEntityTypeHistory                 = "EntityTypeHistory"
-	TypeEvidenceHistory                   = "EvidenceHistory"
-	TypeFileHistory                       = "FileHistory"
-	TypeFindingControlHistory             = "FindingControlHistory"
-	TypeFindingHistory                    = "FindingHistory"
-	TypeGroupHistory                      = "GroupHistory"
-	TypeGroupMembershipHistory            = "GroupMembershipHistory"
-	TypeGroupSettingHistory               = "GroupSettingHistory"
-	TypeHushHistory                       = "HushHistory"
-	TypeIdentityHolderHistory             = "IdentityHolderHistory"
-	TypeInternalPolicyHistory             = "InternalPolicyHistory"
-	TypeMappableDomainHistory             = "MappableDomainHistory"
-	TypeMappedControlHistory              = "MappedControlHistory"
-	TypeNarrativeHistory                  = "NarrativeHistory"
-	TypeNoteHistory                       = "NoteHistory"
-	TypeNotificationPreferenceHistory     = "NotificationPreferenceHistory"
-	TypeNotificationTemplateHistory       = "NotificationTemplateHistory"
-	TypeOrgMembershipHistory              = "OrgMembershipHistory"
-	TypeOrganizationHistory               = "OrganizationHistory"
-	TypeOrganizationSettingHistory        = "OrganizationSettingHistory"
-	TypePlatformHistory                   = "PlatformHistory"
-	TypeProcedureHistory                  = "ProcedureHistory"
-	TypeProgramHistory                    = "ProgramHistory"
-	TypeProgramMembershipHistory          = "ProgramMembershipHistory"
-	TypeRemediationHistory                = "RemediationHistory"
-	TypeReviewHistory                     = "ReviewHistory"
-	TypeRiskHistory                       = "RiskHistory"
-	TypeSLADefinitionHistory              = "SLADefinitionHistory"
-	TypeStandardHistory                   = "StandardHistory"
-	TypeSubcontrolHistory                 = "SubcontrolHistory"
-	TypeSubprocessorHistory               = "SubprocessorHistory"
-	TypeSystemDetailHistory               = "SystemDetailHistory"
-	TypeTaskHistory                       = "TaskHistory"
-	TypeTemplateHistory                   = "TemplateHistory"
-	TypeTrustCenterComplianceHistory      = "TrustCenterComplianceHistory"
-	TypeTrustCenterDocHistory             = "TrustCenterDocHistory"
-	TypeTrustCenterEntityHistory          = "TrustCenterEntityHistory"
-	TypeTrustCenterFAQHistory             = "TrustCenterFAQHistory"
-	TypeTrustCenterHistory                = "TrustCenterHistory"
-	TypeTrustCenterNDARequestHistory      = "TrustCenterNDARequestHistory"
-	TypeTrustCenterSettingHistory         = "TrustCenterSettingHistory"
-	TypeTrustCenterSubprocessorHistory    = "TrustCenterSubprocessorHistory"
-	TypeTrustCenterWatermarkConfigHistory = "TrustCenterWatermarkConfigHistory"
-	TypeUserHistory                       = "UserHistory"
-	TypeUserSettingHistory                = "UserSettingHistory"
-	TypeVendorRiskScoreHistory            = "VendorRiskScoreHistory"
-	TypeVendorScoringConfigHistory        = "VendorScoringConfigHistory"
-	TypeVulnerabilityHistory              = "VulnerabilityHistory"
-	TypeWorkflowAssignmentHistory         = "WorkflowAssignmentHistory"
-	TypeWorkflowAssignmentTargetHistory   = "WorkflowAssignmentTargetHistory"
-	TypeWorkflowDefinitionHistory         = "WorkflowDefinitionHistory"
+	TypeActionPlanHistory                   = "ActionPlanHistory"
+	TypeAssessmentHistory                   = "AssessmentHistory"
+	TypeAssessmentResponseHistory           = "AssessmentResponseHistory"
+	TypeAssetHistory                        = "AssetHistory"
+	TypeCampaignHistory                     = "CampaignHistory"
+	TypeCampaignTargetHistory               = "CampaignTargetHistory"
+	TypeContactHistory                      = "ContactHistory"
+	TypeControlHistory                      = "ControlHistory"
+	TypeControlImplementationHistory        = "ControlImplementationHistory"
+	TypeControlObjectiveHistory             = "ControlObjectiveHistory"
+	TypeCustomDomainHistory                 = "CustomDomainHistory"
+	TypeDiscussionHistory                   = "DiscussionHistory"
+	TypeDocumentDataHistory                 = "DocumentDataHistory"
+	TypeEmailTemplateHistory                = "EmailTemplateHistory"
+	TypeEntityHistory                       = "EntityHistory"
+	TypeEntityTypeHistory                   = "EntityTypeHistory"
+	TypeEvidenceHistory                     = "EvidenceHistory"
+	TypeFileHistory                         = "FileHistory"
+	TypeFindingControlHistory               = "FindingControlHistory"
+	TypeFindingHistory                      = "FindingHistory"
+	TypeGroupHistory                        = "GroupHistory"
+	TypeGroupMembershipHistory              = "GroupMembershipHistory"
+	TypeGroupSettingHistory                 = "GroupSettingHistory"
+	TypeHushHistory                         = "HushHistory"
+	TypeIdentityHolderHistory               = "IdentityHolderHistory"
+	TypeInternalPolicyHistory               = "InternalPolicyHistory"
+	TypeMappableDomainHistory               = "MappableDomainHistory"
+	TypeMappedControlHistory                = "MappedControlHistory"
+	TypeNarrativeHistory                    = "NarrativeHistory"
+	TypeNoteHistory                         = "NoteHistory"
+	TypeNotificationPreferenceHistory       = "NotificationPreferenceHistory"
+	TypeNotificationTemplateHistory         = "NotificationTemplateHistory"
+	TypeOrgMembershipHistory                = "OrgMembershipHistory"
+	TypeOrganizationHistory                 = "OrganizationHistory"
+	TypeOrganizationSettingHistory          = "OrganizationSettingHistory"
+	TypePlatformHistory                     = "PlatformHistory"
+	TypeProcedureHistory                    = "ProcedureHistory"
+	TypeProgramHistory                      = "ProgramHistory"
+	TypeProgramMembershipHistory            = "ProgramMembershipHistory"
+	TypeRemediationHistory                  = "RemediationHistory"
+	TypeReviewHistory                       = "ReviewHistory"
+	TypeRiskHistory                         = "RiskHistory"
+	TypeSLADefinitionHistory                = "SLADefinitionHistory"
+	TypeStandardHistory                     = "StandardHistory"
+	TypeSubcontrolHistory                   = "SubcontrolHistory"
+	TypeSubprocessorHistory                 = "SubprocessorHistory"
+	TypeSystemDetailHistory                 = "SystemDetailHistory"
+	TypeTaskHistory                         = "TaskHistory"
+	TypeTemplateHistory                     = "TemplateHistory"
+	TypeTrustCenterComplianceHistory        = "TrustCenterComplianceHistory"
+	TypeTrustCenterDocHistory               = "TrustCenterDocHistory"
+	TypeTrustCenterEntityHistory            = "TrustCenterEntityHistory"
+	TypeTrustCenterFAQHistory               = "TrustCenterFAQHistory"
+	TypeTrustCenterHistory                  = "TrustCenterHistory"
+	TypeTrustCenterNDARequestHistory        = "TrustCenterNDARequestHistory"
+	TypeTrustCenterNDARequestSettingHistory = "TrustCenterNDARequestSettingHistory"
+	TypeTrustCenterSettingHistory           = "TrustCenterSettingHistory"
+	TypeTrustCenterSubprocessorHistory      = "TrustCenterSubprocessorHistory"
+	TypeTrustCenterWatermarkConfigHistory   = "TrustCenterWatermarkConfigHistory"
+	TypeUserHistory                         = "UserHistory"
+	TypeUserSettingHistory                  = "UserSettingHistory"
+	TypeVendorRiskScoreHistory              = "VendorRiskScoreHistory"
+	TypeVendorScoringConfigHistory          = "VendorScoringConfigHistory"
+	TypeVulnerabilityHistory                = "VulnerabilityHistory"
+	TypeWorkflowAssignmentHistory           = "WorkflowAssignmentHistory"
+	TypeWorkflowAssignmentTargetHistory     = "WorkflowAssignmentTargetHistory"
+	TypeWorkflowDefinitionHistory           = "WorkflowDefinitionHistory"
 )
 
 // ActionPlanHistoryMutation represents an operation that mutates the ActionPlanHistory nodes in the graph.
@@ -138738,6 +138740,1563 @@ func (m *TrustCenterNDARequestHistoryMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown TrustCenterNDARequestHistory edge %s", name)
 }
 
+// TrustCenterNDARequestSettingHistoryMutation represents an operation that mutates the TrustCenterNDARequestSettingHistory nodes in the graph.
+type TrustCenterNDARequestSettingHistoryMutation struct {
+	config
+	op                           Op
+	typ                          string
+	id                           *string
+	history_time                 *time.Time
+	ref                          *string
+	operation                    *history.OpType
+	created_at                   *time.Time
+	updated_at                   *time.Time
+	created_by                   *string
+	updated_by                   *string
+	updated_by_impersonator      *string
+	deleted_at                   *time.Time
+	deleted_by                   *string
+	approver_group_id            *string
+	approval_required            *bool
+	auto_approve                 *bool
+	work_email_only              *bool
+	use_domain_blocklist         *bool
+	use_domain_allowlist         *bool
+	approve_from_existing_domain *bool
+	approve_if_contact_exists    *bool
+	clearedFields                map[string]struct{}
+	done                         bool
+	oldValue                     func(context.Context) (*TrustCenterNDARequestSettingHistory, error)
+	predicates                   []predicate.TrustCenterNDARequestSettingHistory
+}
+
+var _ ent.Mutation = (*TrustCenterNDARequestSettingHistoryMutation)(nil)
+
+// trustcenterndarequestsettinghistoryOption allows management of the mutation configuration using functional options.
+type trustcenterndarequestsettinghistoryOption func(*TrustCenterNDARequestSettingHistoryMutation)
+
+// newTrustCenterNDARequestSettingHistoryMutation creates new mutation for the TrustCenterNDARequestSettingHistory entity.
+func newTrustCenterNDARequestSettingHistoryMutation(c config, op Op, opts ...trustcenterndarequestsettinghistoryOption) *TrustCenterNDARequestSettingHistoryMutation {
+	m := &TrustCenterNDARequestSettingHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeTrustCenterNDARequestSettingHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withTrustCenterNDARequestSettingHistoryID sets the ID field of the mutation.
+func withTrustCenterNDARequestSettingHistoryID(id string) trustcenterndarequestsettinghistoryOption {
+	return func(m *TrustCenterNDARequestSettingHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *TrustCenterNDARequestSettingHistory
+		)
+		m.oldValue = func(ctx context.Context) (*TrustCenterNDARequestSettingHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().TrustCenterNDARequestSettingHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withTrustCenterNDARequestSettingHistory sets the old TrustCenterNDARequestSettingHistory of the mutation.
+func withTrustCenterNDARequestSettingHistory(node *TrustCenterNDARequestSettingHistory) trustcenterndarequestsettinghistoryOption {
+	return func(m *TrustCenterNDARequestSettingHistoryMutation) {
+		m.oldValue = func(context.Context) (*TrustCenterNDARequestSettingHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m TrustCenterNDARequestSettingHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m TrustCenterNDARequestSettingHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("historygenerated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of TrustCenterNDARequestSettingHistory entities.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().TrustCenterNDARequestSettingHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) Operation() (r history.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldUpdatedBy)
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetUpdatedByImpersonator(s string) {
+	m.updated_by_impersonator = &s
+}
+
+// UpdatedByImpersonator returns the value of the "updated_by_impersonator" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) UpdatedByImpersonator() (r string, exists bool) {
+	v := m.updated_by_impersonator
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedByImpersonator returns the old "updated_by_impersonator" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldUpdatedByImpersonator(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedByImpersonator is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedByImpersonator requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedByImpersonator: %w", err)
+	}
+	return oldValue.UpdatedByImpersonator, nil
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldUpdatedByImpersonator] = struct{}{}
+}
+
+// UpdatedByImpersonatorCleared returns if the "updated_by_impersonator" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) UpdatedByImpersonatorCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldUpdatedByImpersonator]
+	return ok
+}
+
+// ResetUpdatedByImpersonator resets all changes to the "updated_by_impersonator" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldUpdatedByImpersonator)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldDeletedBy)
+}
+
+// SetApproverGroupID sets the "approver_group_id" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetApproverGroupID(s string) {
+	m.approver_group_id = &s
+}
+
+// ApproverGroupID returns the value of the "approver_group_id" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ApproverGroupID() (r string, exists bool) {
+	v := m.approver_group_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldApproverGroupID returns the old "approver_group_id" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldApproverGroupID(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldApproverGroupID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldApproverGroupID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldApproverGroupID: %w", err)
+	}
+	return oldValue.ApproverGroupID, nil
+}
+
+// ClearApproverGroupID clears the value of the "approver_group_id" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearApproverGroupID() {
+	m.approver_group_id = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldApproverGroupID] = struct{}{}
+}
+
+// ApproverGroupIDCleared returns if the "approver_group_id" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ApproverGroupIDCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldApproverGroupID]
+	return ok
+}
+
+// ResetApproverGroupID resets all changes to the "approver_group_id" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetApproverGroupID() {
+	m.approver_group_id = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldApproverGroupID)
+}
+
+// SetApprovalRequired sets the "approval_required" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetApprovalRequired(b bool) {
+	m.approval_required = &b
+}
+
+// ApprovalRequired returns the value of the "approval_required" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ApprovalRequired() (r bool, exists bool) {
+	v := m.approval_required
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldApprovalRequired returns the old "approval_required" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldApprovalRequired(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldApprovalRequired is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldApprovalRequired requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldApprovalRequired: %w", err)
+	}
+	return oldValue.ApprovalRequired, nil
+}
+
+// ClearApprovalRequired clears the value of the "approval_required" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearApprovalRequired() {
+	m.approval_required = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldApprovalRequired] = struct{}{}
+}
+
+// ApprovalRequiredCleared returns if the "approval_required" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ApprovalRequiredCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldApprovalRequired]
+	return ok
+}
+
+// ResetApprovalRequired resets all changes to the "approval_required" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetApprovalRequired() {
+	m.approval_required = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldApprovalRequired)
+}
+
+// SetAutoApprove sets the "auto_approve" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetAutoApprove(b bool) {
+	m.auto_approve = &b
+}
+
+// AutoApprove returns the value of the "auto_approve" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) AutoApprove() (r bool, exists bool) {
+	v := m.auto_approve
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAutoApprove returns the old "auto_approve" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldAutoApprove(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAutoApprove is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAutoApprove requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAutoApprove: %w", err)
+	}
+	return oldValue.AutoApprove, nil
+}
+
+// ClearAutoApprove clears the value of the "auto_approve" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearAutoApprove() {
+	m.auto_approve = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldAutoApprove] = struct{}{}
+}
+
+// AutoApproveCleared returns if the "auto_approve" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) AutoApproveCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldAutoApprove]
+	return ok
+}
+
+// ResetAutoApprove resets all changes to the "auto_approve" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetAutoApprove() {
+	m.auto_approve = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldAutoApprove)
+}
+
+// SetWorkEmailOnly sets the "work_email_only" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetWorkEmailOnly(b bool) {
+	m.work_email_only = &b
+}
+
+// WorkEmailOnly returns the value of the "work_email_only" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) WorkEmailOnly() (r bool, exists bool) {
+	v := m.work_email_only
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWorkEmailOnly returns the old "work_email_only" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldWorkEmailOnly(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWorkEmailOnly is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWorkEmailOnly requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWorkEmailOnly: %w", err)
+	}
+	return oldValue.WorkEmailOnly, nil
+}
+
+// ClearWorkEmailOnly clears the value of the "work_email_only" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearWorkEmailOnly() {
+	m.work_email_only = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldWorkEmailOnly] = struct{}{}
+}
+
+// WorkEmailOnlyCleared returns if the "work_email_only" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) WorkEmailOnlyCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldWorkEmailOnly]
+	return ok
+}
+
+// ResetWorkEmailOnly resets all changes to the "work_email_only" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetWorkEmailOnly() {
+	m.work_email_only = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldWorkEmailOnly)
+}
+
+// SetUseDomainBlocklist sets the "use_domain_blocklist" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetUseDomainBlocklist(b bool) {
+	m.use_domain_blocklist = &b
+}
+
+// UseDomainBlocklist returns the value of the "use_domain_blocklist" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) UseDomainBlocklist() (r bool, exists bool) {
+	v := m.use_domain_blocklist
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUseDomainBlocklist returns the old "use_domain_blocklist" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldUseDomainBlocklist(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUseDomainBlocklist is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUseDomainBlocklist requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUseDomainBlocklist: %w", err)
+	}
+	return oldValue.UseDomainBlocklist, nil
+}
+
+// ClearUseDomainBlocklist clears the value of the "use_domain_blocklist" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearUseDomainBlocklist() {
+	m.use_domain_blocklist = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldUseDomainBlocklist] = struct{}{}
+}
+
+// UseDomainBlocklistCleared returns if the "use_domain_blocklist" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) UseDomainBlocklistCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldUseDomainBlocklist]
+	return ok
+}
+
+// ResetUseDomainBlocklist resets all changes to the "use_domain_blocklist" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetUseDomainBlocklist() {
+	m.use_domain_blocklist = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldUseDomainBlocklist)
+}
+
+// SetUseDomainAllowlist sets the "use_domain_allowlist" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetUseDomainAllowlist(b bool) {
+	m.use_domain_allowlist = &b
+}
+
+// UseDomainAllowlist returns the value of the "use_domain_allowlist" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) UseDomainAllowlist() (r bool, exists bool) {
+	v := m.use_domain_allowlist
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUseDomainAllowlist returns the old "use_domain_allowlist" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldUseDomainAllowlist(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUseDomainAllowlist is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUseDomainAllowlist requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUseDomainAllowlist: %w", err)
+	}
+	return oldValue.UseDomainAllowlist, nil
+}
+
+// ClearUseDomainAllowlist clears the value of the "use_domain_allowlist" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearUseDomainAllowlist() {
+	m.use_domain_allowlist = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldUseDomainAllowlist] = struct{}{}
+}
+
+// UseDomainAllowlistCleared returns if the "use_domain_allowlist" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) UseDomainAllowlistCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldUseDomainAllowlist]
+	return ok
+}
+
+// ResetUseDomainAllowlist resets all changes to the "use_domain_allowlist" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetUseDomainAllowlist() {
+	m.use_domain_allowlist = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldUseDomainAllowlist)
+}
+
+// SetApproveFromExistingDomain sets the "approve_from_existing_domain" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetApproveFromExistingDomain(b bool) {
+	m.approve_from_existing_domain = &b
+}
+
+// ApproveFromExistingDomain returns the value of the "approve_from_existing_domain" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ApproveFromExistingDomain() (r bool, exists bool) {
+	v := m.approve_from_existing_domain
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldApproveFromExistingDomain returns the old "approve_from_existing_domain" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldApproveFromExistingDomain(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldApproveFromExistingDomain is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldApproveFromExistingDomain requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldApproveFromExistingDomain: %w", err)
+	}
+	return oldValue.ApproveFromExistingDomain, nil
+}
+
+// ClearApproveFromExistingDomain clears the value of the "approve_from_existing_domain" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearApproveFromExistingDomain() {
+	m.approve_from_existing_domain = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldApproveFromExistingDomain] = struct{}{}
+}
+
+// ApproveFromExistingDomainCleared returns if the "approve_from_existing_domain" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ApproveFromExistingDomainCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldApproveFromExistingDomain]
+	return ok
+}
+
+// ResetApproveFromExistingDomain resets all changes to the "approve_from_existing_domain" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetApproveFromExistingDomain() {
+	m.approve_from_existing_domain = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldApproveFromExistingDomain)
+}
+
+// SetApproveIfContactExists sets the "approve_if_contact_exists" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetApproveIfContactExists(b bool) {
+	m.approve_if_contact_exists = &b
+}
+
+// ApproveIfContactExists returns the value of the "approve_if_contact_exists" field in the mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ApproveIfContactExists() (r bool, exists bool) {
+	v := m.approve_if_contact_exists
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldApproveIfContactExists returns the old "approve_if_contact_exists" field's value of the TrustCenterNDARequestSettingHistory entity.
+// If the TrustCenterNDARequestSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldApproveIfContactExists(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldApproveIfContactExists is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldApproveIfContactExists requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldApproveIfContactExists: %w", err)
+	}
+	return oldValue.ApproveIfContactExists, nil
+}
+
+// ClearApproveIfContactExists clears the value of the "approve_if_contact_exists" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearApproveIfContactExists() {
+	m.approve_if_contact_exists = nil
+	m.clearedFields[trustcenterndarequestsettinghistory.FieldApproveIfContactExists] = struct{}{}
+}
+
+// ApproveIfContactExistsCleared returns if the "approve_if_contact_exists" field was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ApproveIfContactExistsCleared() bool {
+	_, ok := m.clearedFields[trustcenterndarequestsettinghistory.FieldApproveIfContactExists]
+	return ok
+}
+
+// ResetApproveIfContactExists resets all changes to the "approve_if_contact_exists" field.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetApproveIfContactExists() {
+	m.approve_if_contact_exists = nil
+	delete(m.clearedFields, trustcenterndarequestsettinghistory.FieldApproveIfContactExists)
+}
+
+// Where appends a list predicates to the TrustCenterNDARequestSettingHistoryMutation builder.
+func (m *TrustCenterNDARequestSettingHistoryMutation) Where(ps ...predicate.TrustCenterNDARequestSettingHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the TrustCenterNDARequestSettingHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *TrustCenterNDARequestSettingHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.TrustCenterNDARequestSettingHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *TrustCenterNDARequestSettingHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (TrustCenterNDARequestSettingHistory).
+func (m *TrustCenterNDARequestSettingHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *TrustCenterNDARequestSettingHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 18)
+	if m.history_time != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldOperation)
+	}
+	if m.created_at != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldUpdatedBy)
+	}
+	if m.updated_by_impersonator != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldUpdatedByImpersonator)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldDeletedBy)
+	}
+	if m.approver_group_id != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldApproverGroupID)
+	}
+	if m.approval_required != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldApprovalRequired)
+	}
+	if m.auto_approve != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldAutoApprove)
+	}
+	if m.work_email_only != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldWorkEmailOnly)
+	}
+	if m.use_domain_blocklist != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldUseDomainBlocklist)
+	}
+	if m.use_domain_allowlist != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldUseDomainAllowlist)
+	}
+	if m.approve_from_existing_domain != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldApproveFromExistingDomain)
+	}
+	if m.approve_if_contact_exists != nil {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldApproveIfContactExists)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *TrustCenterNDARequestSettingHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case trustcenterndarequestsettinghistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case trustcenterndarequestsettinghistory.FieldRef:
+		return m.Ref()
+	case trustcenterndarequestsettinghistory.FieldOperation:
+		return m.Operation()
+	case trustcenterndarequestsettinghistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case trustcenterndarequestsettinghistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case trustcenterndarequestsettinghistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case trustcenterndarequestsettinghistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case trustcenterndarequestsettinghistory.FieldUpdatedByImpersonator:
+		return m.UpdatedByImpersonator()
+	case trustcenterndarequestsettinghistory.FieldDeletedAt:
+		return m.DeletedAt()
+	case trustcenterndarequestsettinghistory.FieldDeletedBy:
+		return m.DeletedBy()
+	case trustcenterndarequestsettinghistory.FieldApproverGroupID:
+		return m.ApproverGroupID()
+	case trustcenterndarequestsettinghistory.FieldApprovalRequired:
+		return m.ApprovalRequired()
+	case trustcenterndarequestsettinghistory.FieldAutoApprove:
+		return m.AutoApprove()
+	case trustcenterndarequestsettinghistory.FieldWorkEmailOnly:
+		return m.WorkEmailOnly()
+	case trustcenterndarequestsettinghistory.FieldUseDomainBlocklist:
+		return m.UseDomainBlocklist()
+	case trustcenterndarequestsettinghistory.FieldUseDomainAllowlist:
+		return m.UseDomainAllowlist()
+	case trustcenterndarequestsettinghistory.FieldApproveFromExistingDomain:
+		return m.ApproveFromExistingDomain()
+	case trustcenterndarequestsettinghistory.FieldApproveIfContactExists:
+		return m.ApproveIfContactExists()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *TrustCenterNDARequestSettingHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case trustcenterndarequestsettinghistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case trustcenterndarequestsettinghistory.FieldRef:
+		return m.OldRef(ctx)
+	case trustcenterndarequestsettinghistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case trustcenterndarequestsettinghistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case trustcenterndarequestsettinghistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case trustcenterndarequestsettinghistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case trustcenterndarequestsettinghistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case trustcenterndarequestsettinghistory.FieldUpdatedByImpersonator:
+		return m.OldUpdatedByImpersonator(ctx)
+	case trustcenterndarequestsettinghistory.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case trustcenterndarequestsettinghistory.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case trustcenterndarequestsettinghistory.FieldApproverGroupID:
+		return m.OldApproverGroupID(ctx)
+	case trustcenterndarequestsettinghistory.FieldApprovalRequired:
+		return m.OldApprovalRequired(ctx)
+	case trustcenterndarequestsettinghistory.FieldAutoApprove:
+		return m.OldAutoApprove(ctx)
+	case trustcenterndarequestsettinghistory.FieldWorkEmailOnly:
+		return m.OldWorkEmailOnly(ctx)
+	case trustcenterndarequestsettinghistory.FieldUseDomainBlocklist:
+		return m.OldUseDomainBlocklist(ctx)
+	case trustcenterndarequestsettinghistory.FieldUseDomainAllowlist:
+		return m.OldUseDomainAllowlist(ctx)
+	case trustcenterndarequestsettinghistory.FieldApproveFromExistingDomain:
+		return m.OldApproveFromExistingDomain(ctx)
+	case trustcenterndarequestsettinghistory.FieldApproveIfContactExists:
+		return m.OldApproveIfContactExists(ctx)
+	}
+	return nil, fmt.Errorf("unknown TrustCenterNDARequestSettingHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TrustCenterNDARequestSettingHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case trustcenterndarequestsettinghistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldOperation:
+		v, ok := value.(history.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldUpdatedByImpersonator:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedByImpersonator(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldApproverGroupID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetApproverGroupID(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldApprovalRequired:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetApprovalRequired(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldAutoApprove:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAutoApprove(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldWorkEmailOnly:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWorkEmailOnly(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldUseDomainBlocklist:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUseDomainBlocklist(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldUseDomainAllowlist:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUseDomainAllowlist(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldApproveFromExistingDomain:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetApproveFromExistingDomain(v)
+		return nil
+	case trustcenterndarequestsettinghistory.FieldApproveIfContactExists:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetApproveIfContactExists(v)
+		return nil
+	}
+	return fmt.Errorf("unknown TrustCenterNDARequestSettingHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *TrustCenterNDARequestSettingHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *TrustCenterNDARequestSettingHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown TrustCenterNDARequestSettingHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldRef) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldRef)
+	}
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldCreatedAt) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldUpdatedAt) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldCreatedBy) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldUpdatedBy) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldUpdatedByImpersonator) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldUpdatedByImpersonator)
+	}
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldDeletedAt) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldDeletedAt)
+	}
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldDeletedBy) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldDeletedBy)
+	}
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldApproverGroupID) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldApproverGroupID)
+	}
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldApprovalRequired) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldApprovalRequired)
+	}
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldAutoApprove) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldAutoApprove)
+	}
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldWorkEmailOnly) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldWorkEmailOnly)
+	}
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldUseDomainBlocklist) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldUseDomainBlocklist)
+	}
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldUseDomainAllowlist) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldUseDomainAllowlist)
+	}
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldApproveFromExistingDomain) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldApproveFromExistingDomain)
+	}
+	if m.FieldCleared(trustcenterndarequestsettinghistory.FieldApproveIfContactExists) {
+		fields = append(fields, trustcenterndarequestsettinghistory.FieldApproveIfContactExists)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearField(name string) error {
+	switch name {
+	case trustcenterndarequestsettinghistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldUpdatedByImpersonator:
+		m.ClearUpdatedByImpersonator()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldApproverGroupID:
+		m.ClearApproverGroupID()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldApprovalRequired:
+		m.ClearApprovalRequired()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldAutoApprove:
+		m.ClearAutoApprove()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldWorkEmailOnly:
+		m.ClearWorkEmailOnly()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldUseDomainBlocklist:
+		m.ClearUseDomainBlocklist()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldUseDomainAllowlist:
+		m.ClearUseDomainAllowlist()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldApproveFromExistingDomain:
+		m.ClearApproveFromExistingDomain()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldApproveIfContactExists:
+		m.ClearApproveIfContactExists()
+		return nil
+	}
+	return fmt.Errorf("unknown TrustCenterNDARequestSettingHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetField(name string) error {
+	switch name {
+	case trustcenterndarequestsettinghistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldUpdatedByImpersonator:
+		m.ResetUpdatedByImpersonator()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldApproverGroupID:
+		m.ResetApproverGroupID()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldApprovalRequired:
+		m.ResetApprovalRequired()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldAutoApprove:
+		m.ResetAutoApprove()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldWorkEmailOnly:
+		m.ResetWorkEmailOnly()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldUseDomainBlocklist:
+		m.ResetUseDomainBlocklist()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldUseDomainAllowlist:
+		m.ResetUseDomainAllowlist()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldApproveFromExistingDomain:
+		m.ResetApproveFromExistingDomain()
+		return nil
+	case trustcenterndarequestsettinghistory.FieldApproveIfContactExists:
+		m.ResetApproveIfContactExists()
+		return nil
+	}
+	return fmt.Errorf("unknown TrustCenterNDARequestSettingHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *TrustCenterNDARequestSettingHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown TrustCenterNDARequestSettingHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *TrustCenterNDARequestSettingHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown TrustCenterNDARequestSettingHistory edge %s", name)
+}
+
 // TrustCenterSettingHistoryMutation represents an operation that mutates the TrustCenterSettingHistory nodes in the graph.
 type TrustCenterSettingHistoryMutation struct {
 	config
@@ -138776,13 +140335,13 @@ type TrustCenterSettingHistoryMutation struct {
 	remove_branding                           *bool
 	company_domain                            *string
 	security_contact                          *string
-	nda_approval_required                     *bool
 	allow_subscribers                         *bool
 	notify_subscribers_on_subprocessor_change *bool
 	subprocessors_notified_at                 *time.Time
-	nda_approver_group_id                     *string
 	status_page_url                           *string
 	noindex_default_domain                    *bool
+	nda_approver_group_id                     *string
+	nda_approval_required                     *bool
 	clearedFields                             map[string]struct{}
 	done                                      bool
 	oldValue                                  func(context.Context) (*TrustCenterSettingHistory, error)
@@ -140435,55 +141994,6 @@ func (m *TrustCenterSettingHistoryMutation) ResetSecurityContact() {
 	delete(m.clearedFields, trustcentersettinghistory.FieldSecurityContact)
 }
 
-// SetNdaApprovalRequired sets the "nda_approval_required" field.
-func (m *TrustCenterSettingHistoryMutation) SetNdaApprovalRequired(b bool) {
-	m.nda_approval_required = &b
-}
-
-// NdaApprovalRequired returns the value of the "nda_approval_required" field in the mutation.
-func (m *TrustCenterSettingHistoryMutation) NdaApprovalRequired() (r bool, exists bool) {
-	v := m.nda_approval_required
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldNdaApprovalRequired returns the old "nda_approval_required" field's value of the TrustCenterSettingHistory entity.
-// If the TrustCenterSettingHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TrustCenterSettingHistoryMutation) OldNdaApprovalRequired(ctx context.Context) (v bool, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldNdaApprovalRequired is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldNdaApprovalRequired requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldNdaApprovalRequired: %w", err)
-	}
-	return oldValue.NdaApprovalRequired, nil
-}
-
-// ClearNdaApprovalRequired clears the value of the "nda_approval_required" field.
-func (m *TrustCenterSettingHistoryMutation) ClearNdaApprovalRequired() {
-	m.nda_approval_required = nil
-	m.clearedFields[trustcentersettinghistory.FieldNdaApprovalRequired] = struct{}{}
-}
-
-// NdaApprovalRequiredCleared returns if the "nda_approval_required" field was cleared in this mutation.
-func (m *TrustCenterSettingHistoryMutation) NdaApprovalRequiredCleared() bool {
-	_, ok := m.clearedFields[trustcentersettinghistory.FieldNdaApprovalRequired]
-	return ok
-}
-
-// ResetNdaApprovalRequired resets all changes to the "nda_approval_required" field.
-func (m *TrustCenterSettingHistoryMutation) ResetNdaApprovalRequired() {
-	m.nda_approval_required = nil
-	delete(m.clearedFields, trustcentersettinghistory.FieldNdaApprovalRequired)
-}
-
 // SetAllowSubscribers sets the "allow_subscribers" field.
 func (m *TrustCenterSettingHistoryMutation) SetAllowSubscribers(b bool) {
 	m.allow_subscribers = &b
@@ -140631,55 +142141,6 @@ func (m *TrustCenterSettingHistoryMutation) ResetSubprocessorsNotifiedAt() {
 	delete(m.clearedFields, trustcentersettinghistory.FieldSubprocessorsNotifiedAt)
 }
 
-// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
-func (m *TrustCenterSettingHistoryMutation) SetNdaApproverGroupID(s string) {
-	m.nda_approver_group_id = &s
-}
-
-// NdaApproverGroupID returns the value of the "nda_approver_group_id" field in the mutation.
-func (m *TrustCenterSettingHistoryMutation) NdaApproverGroupID() (r string, exists bool) {
-	v := m.nda_approver_group_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldNdaApproverGroupID returns the old "nda_approver_group_id" field's value of the TrustCenterSettingHistory entity.
-// If the TrustCenterSettingHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *TrustCenterSettingHistoryMutation) OldNdaApproverGroupID(ctx context.Context) (v *string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldNdaApproverGroupID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldNdaApproverGroupID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldNdaApproverGroupID: %w", err)
-	}
-	return oldValue.NdaApproverGroupID, nil
-}
-
-// ClearNdaApproverGroupID clears the value of the "nda_approver_group_id" field.
-func (m *TrustCenterSettingHistoryMutation) ClearNdaApproverGroupID() {
-	m.nda_approver_group_id = nil
-	m.clearedFields[trustcentersettinghistory.FieldNdaApproverGroupID] = struct{}{}
-}
-
-// NdaApproverGroupIDCleared returns if the "nda_approver_group_id" field was cleared in this mutation.
-func (m *TrustCenterSettingHistoryMutation) NdaApproverGroupIDCleared() bool {
-	_, ok := m.clearedFields[trustcentersettinghistory.FieldNdaApproverGroupID]
-	return ok
-}
-
-// ResetNdaApproverGroupID resets all changes to the "nda_approver_group_id" field.
-func (m *TrustCenterSettingHistoryMutation) ResetNdaApproverGroupID() {
-	m.nda_approver_group_id = nil
-	delete(m.clearedFields, trustcentersettinghistory.FieldNdaApproverGroupID)
-}
-
 // SetStatusPageURL sets the "status_page_url" field.
 func (m *TrustCenterSettingHistoryMutation) SetStatusPageURL(s string) {
 	m.status_page_url = &s
@@ -140776,6 +142237,104 @@ func (m *TrustCenterSettingHistoryMutation) NoindexDefaultDomainCleared() bool {
 func (m *TrustCenterSettingHistoryMutation) ResetNoindexDefaultDomain() {
 	m.noindex_default_domain = nil
 	delete(m.clearedFields, trustcentersettinghistory.FieldNoindexDefaultDomain)
+}
+
+// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
+func (m *TrustCenterSettingHistoryMutation) SetNdaApproverGroupID(s string) {
+	m.nda_approver_group_id = &s
+}
+
+// NdaApproverGroupID returns the value of the "nda_approver_group_id" field in the mutation.
+func (m *TrustCenterSettingHistoryMutation) NdaApproverGroupID() (r string, exists bool) {
+	v := m.nda_approver_group_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNdaApproverGroupID returns the old "nda_approver_group_id" field's value of the TrustCenterSettingHistory entity.
+// If the TrustCenterSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterSettingHistoryMutation) OldNdaApproverGroupID(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNdaApproverGroupID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNdaApproverGroupID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNdaApproverGroupID: %w", err)
+	}
+	return oldValue.NdaApproverGroupID, nil
+}
+
+// ClearNdaApproverGroupID clears the value of the "nda_approver_group_id" field.
+func (m *TrustCenterSettingHistoryMutation) ClearNdaApproverGroupID() {
+	m.nda_approver_group_id = nil
+	m.clearedFields[trustcentersettinghistory.FieldNdaApproverGroupID] = struct{}{}
+}
+
+// NdaApproverGroupIDCleared returns if the "nda_approver_group_id" field was cleared in this mutation.
+func (m *TrustCenterSettingHistoryMutation) NdaApproverGroupIDCleared() bool {
+	_, ok := m.clearedFields[trustcentersettinghistory.FieldNdaApproverGroupID]
+	return ok
+}
+
+// ResetNdaApproverGroupID resets all changes to the "nda_approver_group_id" field.
+func (m *TrustCenterSettingHistoryMutation) ResetNdaApproverGroupID() {
+	m.nda_approver_group_id = nil
+	delete(m.clearedFields, trustcentersettinghistory.FieldNdaApproverGroupID)
+}
+
+// SetNdaApprovalRequired sets the "nda_approval_required" field.
+func (m *TrustCenterSettingHistoryMutation) SetNdaApprovalRequired(b bool) {
+	m.nda_approval_required = &b
+}
+
+// NdaApprovalRequired returns the value of the "nda_approval_required" field in the mutation.
+func (m *TrustCenterSettingHistoryMutation) NdaApprovalRequired() (r bool, exists bool) {
+	v := m.nda_approval_required
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldNdaApprovalRequired returns the old "nda_approval_required" field's value of the TrustCenterSettingHistory entity.
+// If the TrustCenterSettingHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TrustCenterSettingHistoryMutation) OldNdaApprovalRequired(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldNdaApprovalRequired is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldNdaApprovalRequired requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldNdaApprovalRequired: %w", err)
+	}
+	return oldValue.NdaApprovalRequired, nil
+}
+
+// ClearNdaApprovalRequired clears the value of the "nda_approval_required" field.
+func (m *TrustCenterSettingHistoryMutation) ClearNdaApprovalRequired() {
+	m.nda_approval_required = nil
+	m.clearedFields[trustcentersettinghistory.FieldNdaApprovalRequired] = struct{}{}
+}
+
+// NdaApprovalRequiredCleared returns if the "nda_approval_required" field was cleared in this mutation.
+func (m *TrustCenterSettingHistoryMutation) NdaApprovalRequiredCleared() bool {
+	_, ok := m.clearedFields[trustcentersettinghistory.FieldNdaApprovalRequired]
+	return ok
+}
+
+// ResetNdaApprovalRequired resets all changes to the "nda_approval_required" field.
+func (m *TrustCenterSettingHistoryMutation) ResetNdaApprovalRequired() {
+	m.nda_approval_required = nil
+	delete(m.clearedFields, trustcentersettinghistory.FieldNdaApprovalRequired)
 }
 
 // Where appends a list predicates to the TrustCenterSettingHistoryMutation builder.
@@ -140909,9 +142468,6 @@ func (m *TrustCenterSettingHistoryMutation) Fields() []string {
 	if m.security_contact != nil {
 		fields = append(fields, trustcentersettinghistory.FieldSecurityContact)
 	}
-	if m.nda_approval_required != nil {
-		fields = append(fields, trustcentersettinghistory.FieldNdaApprovalRequired)
-	}
 	if m.allow_subscribers != nil {
 		fields = append(fields, trustcentersettinghistory.FieldAllowSubscribers)
 	}
@@ -140921,14 +142477,17 @@ func (m *TrustCenterSettingHistoryMutation) Fields() []string {
 	if m.subprocessors_notified_at != nil {
 		fields = append(fields, trustcentersettinghistory.FieldSubprocessorsNotifiedAt)
 	}
-	if m.nda_approver_group_id != nil {
-		fields = append(fields, trustcentersettinghistory.FieldNdaApproverGroupID)
-	}
 	if m.status_page_url != nil {
 		fields = append(fields, trustcentersettinghistory.FieldStatusPageURL)
 	}
 	if m.noindex_default_domain != nil {
 		fields = append(fields, trustcentersettinghistory.FieldNoindexDefaultDomain)
+	}
+	if m.nda_approver_group_id != nil {
+		fields = append(fields, trustcentersettinghistory.FieldNdaApproverGroupID)
+	}
+	if m.nda_approval_required != nil {
+		fields = append(fields, trustcentersettinghistory.FieldNdaApprovalRequired)
 	}
 	return fields
 }
@@ -141002,20 +142561,20 @@ func (m *TrustCenterSettingHistoryMutation) Field(name string) (ent.Value, bool)
 		return m.CompanyDomain()
 	case trustcentersettinghistory.FieldSecurityContact:
 		return m.SecurityContact()
-	case trustcentersettinghistory.FieldNdaApprovalRequired:
-		return m.NdaApprovalRequired()
 	case trustcentersettinghistory.FieldAllowSubscribers:
 		return m.AllowSubscribers()
 	case trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange:
 		return m.NotifySubscribersOnSubprocessorChange()
 	case trustcentersettinghistory.FieldSubprocessorsNotifiedAt:
 		return m.SubprocessorsNotifiedAt()
-	case trustcentersettinghistory.FieldNdaApproverGroupID:
-		return m.NdaApproverGroupID()
 	case trustcentersettinghistory.FieldStatusPageURL:
 		return m.StatusPageURL()
 	case trustcentersettinghistory.FieldNoindexDefaultDomain:
 		return m.NoindexDefaultDomain()
+	case trustcentersettinghistory.FieldNdaApproverGroupID:
+		return m.NdaApproverGroupID()
+	case trustcentersettinghistory.FieldNdaApprovalRequired:
+		return m.NdaApprovalRequired()
 	}
 	return nil, false
 }
@@ -141089,20 +142648,20 @@ func (m *TrustCenterSettingHistoryMutation) OldField(ctx context.Context, name s
 		return m.OldCompanyDomain(ctx)
 	case trustcentersettinghistory.FieldSecurityContact:
 		return m.OldSecurityContact(ctx)
-	case trustcentersettinghistory.FieldNdaApprovalRequired:
-		return m.OldNdaApprovalRequired(ctx)
 	case trustcentersettinghistory.FieldAllowSubscribers:
 		return m.OldAllowSubscribers(ctx)
 	case trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange:
 		return m.OldNotifySubscribersOnSubprocessorChange(ctx)
 	case trustcentersettinghistory.FieldSubprocessorsNotifiedAt:
 		return m.OldSubprocessorsNotifiedAt(ctx)
-	case trustcentersettinghistory.FieldNdaApproverGroupID:
-		return m.OldNdaApproverGroupID(ctx)
 	case trustcentersettinghistory.FieldStatusPageURL:
 		return m.OldStatusPageURL(ctx)
 	case trustcentersettinghistory.FieldNoindexDefaultDomain:
 		return m.OldNoindexDefaultDomain(ctx)
+	case trustcentersettinghistory.FieldNdaApproverGroupID:
+		return m.OldNdaApproverGroupID(ctx)
+	case trustcentersettinghistory.FieldNdaApprovalRequired:
+		return m.OldNdaApprovalRequired(ctx)
 	}
 	return nil, fmt.Errorf("unknown TrustCenterSettingHistory field %s", name)
 }
@@ -141336,13 +142895,6 @@ func (m *TrustCenterSettingHistoryMutation) SetField(name string, value ent.Valu
 		}
 		m.SetSecurityContact(v)
 		return nil
-	case trustcentersettinghistory.FieldNdaApprovalRequired:
-		v, ok := value.(bool)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetNdaApprovalRequired(v)
-		return nil
 	case trustcentersettinghistory.FieldAllowSubscribers:
 		v, ok := value.(bool)
 		if !ok {
@@ -141364,13 +142916,6 @@ func (m *TrustCenterSettingHistoryMutation) SetField(name string, value ent.Valu
 		}
 		m.SetSubprocessorsNotifiedAt(v)
 		return nil
-	case trustcentersettinghistory.FieldNdaApproverGroupID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetNdaApproverGroupID(v)
-		return nil
 	case trustcentersettinghistory.FieldStatusPageURL:
 		v, ok := value.(string)
 		if !ok {
@@ -141384,6 +142929,20 @@ func (m *TrustCenterSettingHistoryMutation) SetField(name string, value ent.Valu
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetNoindexDefaultDomain(v)
+		return nil
+	case trustcentersettinghistory.FieldNdaApproverGroupID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNdaApproverGroupID(v)
+		return nil
+	case trustcentersettinghistory.FieldNdaApprovalRequired:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetNdaApprovalRequired(v)
 		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSettingHistory field %s", name)
@@ -141505,9 +143064,6 @@ func (m *TrustCenterSettingHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(trustcentersettinghistory.FieldSecurityContact) {
 		fields = append(fields, trustcentersettinghistory.FieldSecurityContact)
 	}
-	if m.FieldCleared(trustcentersettinghistory.FieldNdaApprovalRequired) {
-		fields = append(fields, trustcentersettinghistory.FieldNdaApprovalRequired)
-	}
 	if m.FieldCleared(trustcentersettinghistory.FieldAllowSubscribers) {
 		fields = append(fields, trustcentersettinghistory.FieldAllowSubscribers)
 	}
@@ -141517,14 +143073,17 @@ func (m *TrustCenterSettingHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(trustcentersettinghistory.FieldSubprocessorsNotifiedAt) {
 		fields = append(fields, trustcentersettinghistory.FieldSubprocessorsNotifiedAt)
 	}
-	if m.FieldCleared(trustcentersettinghistory.FieldNdaApproverGroupID) {
-		fields = append(fields, trustcentersettinghistory.FieldNdaApproverGroupID)
-	}
 	if m.FieldCleared(trustcentersettinghistory.FieldStatusPageURL) {
 		fields = append(fields, trustcentersettinghistory.FieldStatusPageURL)
 	}
 	if m.FieldCleared(trustcentersettinghistory.FieldNoindexDefaultDomain) {
 		fields = append(fields, trustcentersettinghistory.FieldNoindexDefaultDomain)
+	}
+	if m.FieldCleared(trustcentersettinghistory.FieldNdaApproverGroupID) {
+		fields = append(fields, trustcentersettinghistory.FieldNdaApproverGroupID)
+	}
+	if m.FieldCleared(trustcentersettinghistory.FieldNdaApprovalRequired) {
+		fields = append(fields, trustcentersettinghistory.FieldNdaApprovalRequired)
 	}
 	return fields
 }
@@ -141630,9 +143189,6 @@ func (m *TrustCenterSettingHistoryMutation) ClearField(name string) error {
 	case trustcentersettinghistory.FieldSecurityContact:
 		m.ClearSecurityContact()
 		return nil
-	case trustcentersettinghistory.FieldNdaApprovalRequired:
-		m.ClearNdaApprovalRequired()
-		return nil
 	case trustcentersettinghistory.FieldAllowSubscribers:
 		m.ClearAllowSubscribers()
 		return nil
@@ -141642,14 +143198,17 @@ func (m *TrustCenterSettingHistoryMutation) ClearField(name string) error {
 	case trustcentersettinghistory.FieldSubprocessorsNotifiedAt:
 		m.ClearSubprocessorsNotifiedAt()
 		return nil
-	case trustcentersettinghistory.FieldNdaApproverGroupID:
-		m.ClearNdaApproverGroupID()
-		return nil
 	case trustcentersettinghistory.FieldStatusPageURL:
 		m.ClearStatusPageURL()
 		return nil
 	case trustcentersettinghistory.FieldNoindexDefaultDomain:
 		m.ClearNoindexDefaultDomain()
+		return nil
+	case trustcentersettinghistory.FieldNdaApproverGroupID:
+		m.ClearNdaApproverGroupID()
+		return nil
+	case trustcentersettinghistory.FieldNdaApprovalRequired:
+		m.ClearNdaApprovalRequired()
 		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSettingHistory nullable field %s", name)
@@ -141755,9 +143314,6 @@ func (m *TrustCenterSettingHistoryMutation) ResetField(name string) error {
 	case trustcentersettinghistory.FieldSecurityContact:
 		m.ResetSecurityContact()
 		return nil
-	case trustcentersettinghistory.FieldNdaApprovalRequired:
-		m.ResetNdaApprovalRequired()
-		return nil
 	case trustcentersettinghistory.FieldAllowSubscribers:
 		m.ResetAllowSubscribers()
 		return nil
@@ -141767,14 +143323,17 @@ func (m *TrustCenterSettingHistoryMutation) ResetField(name string) error {
 	case trustcentersettinghistory.FieldSubprocessorsNotifiedAt:
 		m.ResetSubprocessorsNotifiedAt()
 		return nil
-	case trustcentersettinghistory.FieldNdaApproverGroupID:
-		m.ResetNdaApproverGroupID()
-		return nil
 	case trustcentersettinghistory.FieldStatusPageURL:
 		m.ResetStatusPageURL()
 		return nil
 	case trustcentersettinghistory.FieldNoindexDefaultDomain:
 		m.ResetNoindexDefaultDomain()
+		return nil
+	case trustcentersettinghistory.FieldNdaApproverGroupID:
+		m.ResetNdaApproverGroupID()
+		return nil
+	case trustcentersettinghistory.FieldNdaApprovalRequired:
+		m.ResetNdaApprovalRequired()
 		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterSettingHistory field %s", name)

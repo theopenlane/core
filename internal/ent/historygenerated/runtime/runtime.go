@@ -64,6 +64,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterfaqhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequesthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequestsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
@@ -2444,6 +2445,63 @@ func init() {
 	trustcenterndarequesthistoryDescID := trustcenterndarequesthistoryFields[10].Descriptor()
 	// trustcenterndarequesthistory.DefaultID holds the default value on creation for the id field.
 	trustcenterndarequesthistory.DefaultID = trustcenterndarequesthistoryDescID.Default.(func() string)
+	trustcenterndarequestsettinghistory.Policy = privacy.NewPolicies(historyschema.TrustCenterNDARequestSettingHistory{})
+	trustcenterndarequestsettinghistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := trustcenterndarequestsettinghistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	trustcenterndarequestsettinghistoryInters := historyschema.TrustCenterNDARequestSettingHistory{}.Interceptors()
+	trustcenterndarequestsettinghistory.Interceptors[0] = trustcenterndarequestsettinghistoryInters[0]
+	trustcenterndarequestsettinghistoryFields := historyschema.TrustCenterNDARequestSettingHistory{}.Fields()
+	_ = trustcenterndarequestsettinghistoryFields
+	// trustcenterndarequestsettinghistoryDescHistoryTime is the schema descriptor for history_time field.
+	trustcenterndarequestsettinghistoryDescHistoryTime := trustcenterndarequestsettinghistoryFields[0].Descriptor()
+	// trustcenterndarequestsettinghistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	trustcenterndarequestsettinghistory.DefaultHistoryTime = trustcenterndarequestsettinghistoryDescHistoryTime.Default.(func() time.Time)
+	// trustcenterndarequestsettinghistoryDescCreatedAt is the schema descriptor for created_at field.
+	trustcenterndarequestsettinghistoryDescCreatedAt := trustcenterndarequestsettinghistoryFields[3].Descriptor()
+	// trustcenterndarequestsettinghistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	trustcenterndarequestsettinghistory.DefaultCreatedAt = trustcenterndarequestsettinghistoryDescCreatedAt.Default.(func() time.Time)
+	// trustcenterndarequestsettinghistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	trustcenterndarequestsettinghistoryDescUpdatedAt := trustcenterndarequestsettinghistoryFields[4].Descriptor()
+	// trustcenterndarequestsettinghistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	trustcenterndarequestsettinghistory.DefaultUpdatedAt = trustcenterndarequestsettinghistoryDescUpdatedAt.Default.(func() time.Time)
+	// trustcenterndarequestsettinghistoryDescApprovalRequired is the schema descriptor for approval_required field.
+	trustcenterndarequestsettinghistoryDescApprovalRequired := trustcenterndarequestsettinghistoryFields[12].Descriptor()
+	// trustcenterndarequestsettinghistory.DefaultApprovalRequired holds the default value on creation for the approval_required field.
+	trustcenterndarequestsettinghistory.DefaultApprovalRequired = trustcenterndarequestsettinghistoryDescApprovalRequired.Default.(bool)
+	// trustcenterndarequestsettinghistoryDescAutoApprove is the schema descriptor for auto_approve field.
+	trustcenterndarequestsettinghistoryDescAutoApprove := trustcenterndarequestsettinghistoryFields[13].Descriptor()
+	// trustcenterndarequestsettinghistory.DefaultAutoApprove holds the default value on creation for the auto_approve field.
+	trustcenterndarequestsettinghistory.DefaultAutoApprove = trustcenterndarequestsettinghistoryDescAutoApprove.Default.(bool)
+	// trustcenterndarequestsettinghistoryDescWorkEmailOnly is the schema descriptor for work_email_only field.
+	trustcenterndarequestsettinghistoryDescWorkEmailOnly := trustcenterndarequestsettinghistoryFields[14].Descriptor()
+	// trustcenterndarequestsettinghistory.DefaultWorkEmailOnly holds the default value on creation for the work_email_only field.
+	trustcenterndarequestsettinghistory.DefaultWorkEmailOnly = trustcenterndarequestsettinghistoryDescWorkEmailOnly.Default.(bool)
+	// trustcenterndarequestsettinghistoryDescUseDomainBlocklist is the schema descriptor for use_domain_blocklist field.
+	trustcenterndarequestsettinghistoryDescUseDomainBlocklist := trustcenterndarequestsettinghistoryFields[15].Descriptor()
+	// trustcenterndarequestsettinghistory.DefaultUseDomainBlocklist holds the default value on creation for the use_domain_blocklist field.
+	trustcenterndarequestsettinghistory.DefaultUseDomainBlocklist = trustcenterndarequestsettinghistoryDescUseDomainBlocklist.Default.(bool)
+	// trustcenterndarequestsettinghistoryDescUseDomainAllowlist is the schema descriptor for use_domain_allowlist field.
+	trustcenterndarequestsettinghistoryDescUseDomainAllowlist := trustcenterndarequestsettinghistoryFields[16].Descriptor()
+	// trustcenterndarequestsettinghistory.DefaultUseDomainAllowlist holds the default value on creation for the use_domain_allowlist field.
+	trustcenterndarequestsettinghistory.DefaultUseDomainAllowlist = trustcenterndarequestsettinghistoryDescUseDomainAllowlist.Default.(bool)
+	// trustcenterndarequestsettinghistoryDescApproveFromExistingDomain is the schema descriptor for approve_from_existing_domain field.
+	trustcenterndarequestsettinghistoryDescApproveFromExistingDomain := trustcenterndarequestsettinghistoryFields[17].Descriptor()
+	// trustcenterndarequestsettinghistory.DefaultApproveFromExistingDomain holds the default value on creation for the approve_from_existing_domain field.
+	trustcenterndarequestsettinghistory.DefaultApproveFromExistingDomain = trustcenterndarequestsettinghistoryDescApproveFromExistingDomain.Default.(bool)
+	// trustcenterndarequestsettinghistoryDescApproveIfContactExists is the schema descriptor for approve_if_contact_exists field.
+	trustcenterndarequestsettinghistoryDescApproveIfContactExists := trustcenterndarequestsettinghistoryFields[18].Descriptor()
+	// trustcenterndarequestsettinghistory.DefaultApproveIfContactExists holds the default value on creation for the approve_if_contact_exists field.
+	trustcenterndarequestsettinghistory.DefaultApproveIfContactExists = trustcenterndarequestsettinghistoryDescApproveIfContactExists.Default.(bool)
+	// trustcenterndarequestsettinghistoryDescID is the schema descriptor for id field.
+	trustcenterndarequestsettinghistoryDescID := trustcenterndarequestsettinghistoryFields[10].Descriptor()
+	// trustcenterndarequestsettinghistory.DefaultID holds the default value on creation for the id field.
+	trustcenterndarequestsettinghistory.DefaultID = trustcenterndarequestsettinghistoryDescID.Default.(func() string)
 	trustcentersettinghistory.Policy = privacy.NewPolicies(historyschema.TrustCenterSettingHistory{})
 	trustcentersettinghistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -2473,22 +2531,22 @@ func init() {
 	trustcentersettinghistoryDescRemoveBranding := trustcentersettinghistoryFields[30].Descriptor()
 	// trustcentersettinghistory.DefaultRemoveBranding holds the default value on creation for the remove_branding field.
 	trustcentersettinghistory.DefaultRemoveBranding = trustcentersettinghistoryDescRemoveBranding.Default.(bool)
-	// trustcentersettinghistoryDescNdaApprovalRequired is the schema descriptor for nda_approval_required field.
-	trustcentersettinghistoryDescNdaApprovalRequired := trustcentersettinghistoryFields[33].Descriptor()
-	// trustcentersettinghistory.DefaultNdaApprovalRequired holds the default value on creation for the nda_approval_required field.
-	trustcentersettinghistory.DefaultNdaApprovalRequired = trustcentersettinghistoryDescNdaApprovalRequired.Default.(bool)
 	// trustcentersettinghistoryDescAllowSubscribers is the schema descriptor for allow_subscribers field.
-	trustcentersettinghistoryDescAllowSubscribers := trustcentersettinghistoryFields[34].Descriptor()
+	trustcentersettinghistoryDescAllowSubscribers := trustcentersettinghistoryFields[33].Descriptor()
 	// trustcentersettinghistory.DefaultAllowSubscribers holds the default value on creation for the allow_subscribers field.
 	trustcentersettinghistory.DefaultAllowSubscribers = trustcentersettinghistoryDescAllowSubscribers.Default.(bool)
 	// trustcentersettinghistoryDescNotifySubscribersOnSubprocessorChange is the schema descriptor for notify_subscribers_on_subprocessor_change field.
-	trustcentersettinghistoryDescNotifySubscribersOnSubprocessorChange := trustcentersettinghistoryFields[35].Descriptor()
+	trustcentersettinghistoryDescNotifySubscribersOnSubprocessorChange := trustcentersettinghistoryFields[34].Descriptor()
 	// trustcentersettinghistory.DefaultNotifySubscribersOnSubprocessorChange holds the default value on creation for the notify_subscribers_on_subprocessor_change field.
 	trustcentersettinghistory.DefaultNotifySubscribersOnSubprocessorChange = trustcentersettinghistoryDescNotifySubscribersOnSubprocessorChange.Default.(bool)
 	// trustcentersettinghistoryDescNoindexDefaultDomain is the schema descriptor for noindex_default_domain field.
-	trustcentersettinghistoryDescNoindexDefaultDomain := trustcentersettinghistoryFields[39].Descriptor()
+	trustcentersettinghistoryDescNoindexDefaultDomain := trustcentersettinghistoryFields[37].Descriptor()
 	// trustcentersettinghistory.DefaultNoindexDefaultDomain holds the default value on creation for the noindex_default_domain field.
 	trustcentersettinghistory.DefaultNoindexDefaultDomain = trustcentersettinghistoryDescNoindexDefaultDomain.Default.(bool)
+	// trustcentersettinghistoryDescNdaApprovalRequired is the schema descriptor for nda_approval_required field.
+	trustcentersettinghistoryDescNdaApprovalRequired := trustcentersettinghistoryFields[39].Descriptor()
+	// trustcentersettinghistory.DefaultNdaApprovalRequired holds the default value on creation for the nda_approval_required field.
+	trustcentersettinghistory.DefaultNdaApprovalRequired = trustcentersettinghistoryDescNdaApprovalRequired.Default.(bool)
 	// trustcentersettinghistoryDescID is the schema descriptor for id field.
 	trustcentersettinghistoryDescID := trustcentersettinghistoryFields[10].Descriptor()
 	// trustcentersettinghistory.DefaultID holds the default value on creation for the id field.

@@ -90,6 +90,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterentity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterfaq"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequestsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
@@ -7788,6 +7789,87 @@ func init() {
 	trustcenterndarequestDescID := trustcenterndarequestMixinFields4[0].Descriptor()
 	// trustcenterndarequest.DefaultID holds the default value on creation for the id field.
 	trustcenterndarequest.DefaultID = trustcenterndarequestDescID.Default.(func() string)
+	trustcenterndarequestsettingMixin := schema.TrustCenterNDARequestSetting{}.Mixin()
+	trustcenterndarequestsetting.Policy = privacy.NewPolicies(schema.TrustCenterNDARequestSetting{})
+	trustcenterndarequestsetting.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := trustcenterndarequestsetting.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	trustcenterndarequestsettingMixinHooks0 := trustcenterndarequestsettingMixin[0].Hooks()
+	trustcenterndarequestsettingMixinHooks1 := trustcenterndarequestsettingMixin[1].Hooks()
+	trustcenterndarequestsettingMixinHooks3 := trustcenterndarequestsettingMixin[3].Hooks()
+	trustcenterndarequestsettingMixinHooks6 := trustcenterndarequestsettingMixin[6].Hooks()
+	trustcenterndarequestsettingMixinHooks7 := trustcenterndarequestsettingMixin[7].Hooks()
+
+	trustcenterndarequestsetting.Hooks[1] = trustcenterndarequestsettingMixinHooks0[0]
+
+	trustcenterndarequestsetting.Hooks[2] = trustcenterndarequestsettingMixinHooks1[0]
+
+	trustcenterndarequestsetting.Hooks[3] = trustcenterndarequestsettingMixinHooks3[0]
+
+	trustcenterndarequestsetting.Hooks[4] = trustcenterndarequestsettingMixinHooks6[0]
+
+	trustcenterndarequestsetting.Hooks[5] = trustcenterndarequestsettingMixinHooks7[0]
+
+	trustcenterndarequestsetting.Hooks[6] = trustcenterndarequestsettingMixinHooks7[1]
+	trustcenterndarequestsettingMixinInters3 := trustcenterndarequestsettingMixin[3].Interceptors()
+	trustcenterndarequestsettingMixinInters6 := trustcenterndarequestsettingMixin[6].Interceptors()
+	trustcenterndarequestsettingInters := schema.TrustCenterNDARequestSetting{}.Interceptors()
+	trustcenterndarequestsetting.Interceptors[0] = trustcenterndarequestsettingMixinInters3[0]
+	trustcenterndarequestsetting.Interceptors[1] = trustcenterndarequestsettingMixinInters6[0]
+	trustcenterndarequestsetting.Interceptors[2] = trustcenterndarequestsettingInters[0]
+	trustcenterndarequestsettingMixinFields0 := trustcenterndarequestsettingMixin[0].Fields()
+	_ = trustcenterndarequestsettingMixinFields0
+	trustcenterndarequestsettingMixinFields4 := trustcenterndarequestsettingMixin[4].Fields()
+	_ = trustcenterndarequestsettingMixinFields4
+	trustcenterndarequestsettingFields := schema.TrustCenterNDARequestSetting{}.Fields()
+	_ = trustcenterndarequestsettingFields
+	// trustcenterndarequestsettingDescCreatedAt is the schema descriptor for created_at field.
+	trustcenterndarequestsettingDescCreatedAt := trustcenterndarequestsettingMixinFields0[0].Descriptor()
+	// trustcenterndarequestsetting.DefaultCreatedAt holds the default value on creation for the created_at field.
+	trustcenterndarequestsetting.DefaultCreatedAt = trustcenterndarequestsettingDescCreatedAt.Default.(func() time.Time)
+	// trustcenterndarequestsettingDescUpdatedAt is the schema descriptor for updated_at field.
+	trustcenterndarequestsettingDescUpdatedAt := trustcenterndarequestsettingMixinFields0[1].Descriptor()
+	// trustcenterndarequestsetting.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	trustcenterndarequestsetting.DefaultUpdatedAt = trustcenterndarequestsettingDescUpdatedAt.Default.(func() time.Time)
+	// trustcenterndarequestsetting.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	trustcenterndarequestsetting.UpdateDefaultUpdatedAt = trustcenterndarequestsettingDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// trustcenterndarequestsettingDescApprovalRequired is the schema descriptor for approval_required field.
+	trustcenterndarequestsettingDescApprovalRequired := trustcenterndarequestsettingFields[1].Descriptor()
+	// trustcenterndarequestsetting.DefaultApprovalRequired holds the default value on creation for the approval_required field.
+	trustcenterndarequestsetting.DefaultApprovalRequired = trustcenterndarequestsettingDescApprovalRequired.Default.(bool)
+	// trustcenterndarequestsettingDescAutoApprove is the schema descriptor for auto_approve field.
+	trustcenterndarequestsettingDescAutoApprove := trustcenterndarequestsettingFields[2].Descriptor()
+	// trustcenterndarequestsetting.DefaultAutoApprove holds the default value on creation for the auto_approve field.
+	trustcenterndarequestsetting.DefaultAutoApprove = trustcenterndarequestsettingDescAutoApprove.Default.(bool)
+	// trustcenterndarequestsettingDescWorkEmailOnly is the schema descriptor for work_email_only field.
+	trustcenterndarequestsettingDescWorkEmailOnly := trustcenterndarequestsettingFields[3].Descriptor()
+	// trustcenterndarequestsetting.DefaultWorkEmailOnly holds the default value on creation for the work_email_only field.
+	trustcenterndarequestsetting.DefaultWorkEmailOnly = trustcenterndarequestsettingDescWorkEmailOnly.Default.(bool)
+	// trustcenterndarequestsettingDescUseDomainBlocklist is the schema descriptor for use_domain_blocklist field.
+	trustcenterndarequestsettingDescUseDomainBlocklist := trustcenterndarequestsettingFields[4].Descriptor()
+	// trustcenterndarequestsetting.DefaultUseDomainBlocklist holds the default value on creation for the use_domain_blocklist field.
+	trustcenterndarequestsetting.DefaultUseDomainBlocklist = trustcenterndarequestsettingDescUseDomainBlocklist.Default.(bool)
+	// trustcenterndarequestsettingDescUseDomainAllowlist is the schema descriptor for use_domain_allowlist field.
+	trustcenterndarequestsettingDescUseDomainAllowlist := trustcenterndarequestsettingFields[5].Descriptor()
+	// trustcenterndarequestsetting.DefaultUseDomainAllowlist holds the default value on creation for the use_domain_allowlist field.
+	trustcenterndarequestsetting.DefaultUseDomainAllowlist = trustcenterndarequestsettingDescUseDomainAllowlist.Default.(bool)
+	// trustcenterndarequestsettingDescApproveFromExistingDomain is the schema descriptor for approve_from_existing_domain field.
+	trustcenterndarequestsettingDescApproveFromExistingDomain := trustcenterndarequestsettingFields[6].Descriptor()
+	// trustcenterndarequestsetting.DefaultApproveFromExistingDomain holds the default value on creation for the approve_from_existing_domain field.
+	trustcenterndarequestsetting.DefaultApproveFromExistingDomain = trustcenterndarequestsettingDescApproveFromExistingDomain.Default.(bool)
+	// trustcenterndarequestsettingDescApproveIfContactExists is the schema descriptor for approve_if_contact_exists field.
+	trustcenterndarequestsettingDescApproveIfContactExists := trustcenterndarequestsettingFields[7].Descriptor()
+	// trustcenterndarequestsetting.DefaultApproveIfContactExists holds the default value on creation for the approve_if_contact_exists field.
+	trustcenterndarequestsetting.DefaultApproveIfContactExists = trustcenterndarequestsettingDescApproveIfContactExists.Default.(bool)
+	// trustcenterndarequestsettingDescID is the schema descriptor for id field.
+	trustcenterndarequestsettingDescID := trustcenterndarequestsettingMixinFields4[0].Descriptor()
+	// trustcenterndarequestsetting.DefaultID holds the default value on creation for the id field.
+	trustcenterndarequestsetting.DefaultID = trustcenterndarequestsettingDescID.Default.(func() string)
 	trustcentersettingMixin := schema.TrustCenterSetting{}.Mixin()
 	trustcentersetting.Policy = privacy.NewPolicies(schema.TrustCenterSetting{})
 	trustcentersetting.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -7944,20 +8026,16 @@ func init() {
 	trustcentersettingDescSecurityContact := trustcentersettingFields[21].Descriptor()
 	// trustcentersetting.SecurityContactValidator is a validator for the "security_contact" field. It is called by the builders before save.
 	trustcentersetting.SecurityContactValidator = trustcentersettingDescSecurityContact.Validators[0].(func(string) error)
-	// trustcentersettingDescNdaApprovalRequired is the schema descriptor for nda_approval_required field.
-	trustcentersettingDescNdaApprovalRequired := trustcentersettingFields[22].Descriptor()
-	// trustcentersetting.DefaultNdaApprovalRequired holds the default value on creation for the nda_approval_required field.
-	trustcentersetting.DefaultNdaApprovalRequired = trustcentersettingDescNdaApprovalRequired.Default.(bool)
 	// trustcentersettingDescAllowSubscribers is the schema descriptor for allow_subscribers field.
-	trustcentersettingDescAllowSubscribers := trustcentersettingFields[23].Descriptor()
+	trustcentersettingDescAllowSubscribers := trustcentersettingFields[22].Descriptor()
 	// trustcentersetting.DefaultAllowSubscribers holds the default value on creation for the allow_subscribers field.
 	trustcentersetting.DefaultAllowSubscribers = trustcentersettingDescAllowSubscribers.Default.(bool)
 	// trustcentersettingDescNotifySubscribersOnSubprocessorChange is the schema descriptor for notify_subscribers_on_subprocessor_change field.
-	trustcentersettingDescNotifySubscribersOnSubprocessorChange := trustcentersettingFields[24].Descriptor()
+	trustcentersettingDescNotifySubscribersOnSubprocessorChange := trustcentersettingFields[23].Descriptor()
 	// trustcentersetting.DefaultNotifySubscribersOnSubprocessorChange holds the default value on creation for the notify_subscribers_on_subprocessor_change field.
 	trustcentersetting.DefaultNotifySubscribersOnSubprocessorChange = trustcentersettingDescNotifySubscribersOnSubprocessorChange.Default.(bool)
 	// trustcentersettingDescStatusPageURL is the schema descriptor for status_page_url field.
-	trustcentersettingDescStatusPageURL := trustcentersettingFields[27].Descriptor()
+	trustcentersettingDescStatusPageURL := trustcentersettingFields[25].Descriptor()
 	// trustcentersetting.StatusPageURLValidator is a validator for the "status_page_url" field. It is called by the builders before save.
 	trustcentersetting.StatusPageURLValidator = func() func(string) error {
 		validators := trustcentersettingDescStatusPageURL.Validators
@@ -7975,9 +8053,13 @@ func init() {
 		}
 	}()
 	// trustcentersettingDescNoindexDefaultDomain is the schema descriptor for noindex_default_domain field.
-	trustcentersettingDescNoindexDefaultDomain := trustcentersettingFields[28].Descriptor()
+	trustcentersettingDescNoindexDefaultDomain := trustcentersettingFields[26].Descriptor()
 	// trustcentersetting.DefaultNoindexDefaultDomain holds the default value on creation for the noindex_default_domain field.
 	trustcentersetting.DefaultNoindexDefaultDomain = trustcentersettingDescNoindexDefaultDomain.Default.(bool)
+	// trustcentersettingDescNdaApprovalRequired is the schema descriptor for nda_approval_required field.
+	trustcentersettingDescNdaApprovalRequired := trustcentersettingFields[28].Descriptor()
+	// trustcentersetting.DefaultNdaApprovalRequired holds the default value on creation for the nda_approval_required field.
+	trustcentersetting.DefaultNdaApprovalRequired = trustcentersettingDescNdaApprovalRequired.Default.(bool)
 	// trustcentersettingDescID is the schema descriptor for id field.
 	trustcentersettingDescID := trustcentersettingMixinFields4[0].Descriptor()
 	// trustcentersetting.DefaultID holds the default value on creation for the id field.

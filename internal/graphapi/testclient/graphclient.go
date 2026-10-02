@@ -633,6 +633,17 @@ type TestGraphClient interface {
 	GetTrustCenterNDARequests(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*TrustCenterNDARequestOrder, where *TrustCenterNDARequestWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterNDARequests, error)
 	RequestNewTrustCenterToken(ctx context.Context, email string, interceptors ...clientv2.RequestInterceptor) (*RequestNewTrustCenterToken, error)
 	UpdateTrustCenterNDARequest(ctx context.Context, updateTrustCenterNDARequestID string, input UpdateTrustCenterNDARequestInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterNDARequest, error)
+	CreateBulkCSVTrustCenterNDARequestSetting(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenterNDARequestSetting, error)
+	CreateBulkTrustCenterNDARequestSetting(ctx context.Context, input []*CreateTrustCenterNDARequestSettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenterNDARequestSetting, error)
+	CreateTrustCenterNDARequestSetting(ctx context.Context, input CreateTrustCenterNDARequestSettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterNDARequestSetting, error)
+	DeleteBulkTrustCenterNDARequestSetting(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkTrustCenterNDARequestSetting, error)
+	DeleteTrustCenterNDARequestSetting(ctx context.Context, deleteTrustCenterNDARequestSettingID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterNDARequestSetting, error)
+	GetAllTrustCenterNDARequestSettings(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*TrustCenterNDARequestSettingOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterNDARequestSettings, error)
+	GetTrustCenterNDARequestSettingByID(ctx context.Context, trustCenterNDARequestSettingID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterNDARequestSettingByID, error)
+	GetTrustCenterNDARequestSettings(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*TrustCenterNDARequestSettingOrder, where *TrustCenterNDARequestSettingWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterNDARequestSettings, error)
+	UpdateBulkCSVTrustCenterNDARequestSetting(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVTrustCenterNDARequestSetting, error)
+	UpdateBulkTrustCenterNDARequestSetting(ctx context.Context, ids []string, input UpdateTrustCenterNDARequestSettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkTrustCenterNDARequestSetting, error)
+	UpdateTrustCenterNDARequestSetting(ctx context.Context, updateTrustCenterNDARequestSettingID string, input UpdateTrustCenterNDARequestSettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterNDARequestSetting, error)
 	CreateTrustCenterPreviewSetting(ctx context.Context, input CreateTrustCenterPreviewSettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterPreviewSetting, error)
 	CreateTrustCenterSetting(ctx context.Context, input CreateTrustCenterSettingInput, logoFile *graphql.Upload, logoFileMetadata *FileMetadataInput, faviconFile *graphql.Upload, faviconFileMetadata *FileMetadataInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterSetting, error)
 	DeleteTrustCenterSetting(ctx context.Context, deleteTrustCenterSettingID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterSetting, error)
@@ -138617,6 +138628,1162 @@ func (t *UpdateTrustCenterNDARequest_UpdateTrustCenterNDARequest) GetTrustCenter
 	return &t.TrustCenterNDARequest
 }
 
+type CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings struct {
+	ApprovalRequired          *bool      "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	ApproveFromExistingDomain *bool      "json:\"approveFromExistingDomain,omitempty\" graphql:\"approveFromExistingDomain\""
+	ApproveIfContactExists    *bool      "json:\"approveIfContactExists,omitempty\" graphql:\"approveIfContactExists\""
+	ApproverGroupID           *string    "json:\"approverGroupID,omitempty\" graphql:\"approverGroupID\""
+	AutoApprove               *bool      "json:\"autoApprove,omitempty\" graphql:\"autoApprove\""
+	CreatedAt                 *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                 *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                        string     "json:\"id\" graphql:\"id\""
+	UpdatedAt                 *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                 *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator     *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UseDomainAllowlist        *bool      "json:\"useDomainAllowlist,omitempty\" graphql:\"useDomainAllowlist\""
+	UseDomainBlocklist        *bool      "json:\"useDomainBlocklist,omitempty\" graphql:\"useDomainBlocklist\""
+	WorkEmailOnly             *bool      "json:\"workEmailOnly,omitempty\" graphql:\"workEmailOnly\""
+}
+
+func (t *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApprovalRequired
+}
+func (t *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApproveFromExistingDomain() *bool {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApproveFromExistingDomain
+}
+func (t *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApproveIfContactExists() *bool {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApproveIfContactExists
+}
+func (t *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApproverGroupID() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApproverGroupID
+}
+func (t *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetAutoApprove() *bool {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.AutoApprove
+}
+func (t *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUseDomainAllowlist() *bool {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UseDomainAllowlist
+}
+func (t *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUseDomainBlocklist() *bool {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UseDomainBlocklist
+}
+func (t *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetWorkEmailOnly() *bool {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.WorkEmailOnly
+}
+
+type CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting struct {
+	TrustCenterNDARequestSettings []*CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings "json:\"trustCenterNDARequestSettings,omitempty\" graphql:\"trustCenterNDARequestSettings\""
+}
+
+func (t *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting) GetTrustCenterNDARequestSettings() []*CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting{}
+	}
+	return t.TrustCenterNDARequestSettings
+}
+
+type CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings struct {
+	ApprovalRequired          *bool      "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	ApproveFromExistingDomain *bool      "json:\"approveFromExistingDomain,omitempty\" graphql:\"approveFromExistingDomain\""
+	ApproveIfContactExists    *bool      "json:\"approveIfContactExists,omitempty\" graphql:\"approveIfContactExists\""
+	ApproverGroupID           *string    "json:\"approverGroupID,omitempty\" graphql:\"approverGroupID\""
+	AutoApprove               *bool      "json:\"autoApprove,omitempty\" graphql:\"autoApprove\""
+	CreatedAt                 *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                 *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                        string     "json:\"id\" graphql:\"id\""
+	UpdatedAt                 *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                 *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator     *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UseDomainAllowlist        *bool      "json:\"useDomainAllowlist,omitempty\" graphql:\"useDomainAllowlist\""
+	UseDomainBlocklist        *bool      "json:\"useDomainBlocklist,omitempty\" graphql:\"useDomainBlocklist\""
+	WorkEmailOnly             *bool      "json:\"workEmailOnly,omitempty\" graphql:\"workEmailOnly\""
+}
+
+func (t *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApprovalRequired
+}
+func (t *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApproveFromExistingDomain() *bool {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApproveFromExistingDomain
+}
+func (t *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApproveIfContactExists() *bool {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApproveIfContactExists
+}
+func (t *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApproverGroupID() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApproverGroupID
+}
+func (t *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetAutoApprove() *bool {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.AutoApprove
+}
+func (t *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetID() string {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ID
+}
+func (t *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUseDomainAllowlist() *bool {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UseDomainAllowlist
+}
+func (t *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUseDomainBlocklist() *bool {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UseDomainBlocklist
+}
+func (t *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetWorkEmailOnly() *bool {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.WorkEmailOnly
+}
+
+type CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting struct {
+	TrustCenterNDARequestSettings []*CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings "json:\"trustCenterNDARequestSettings,omitempty\" graphql:\"trustCenterNDARequestSettings\""
+}
+
+func (t *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting) GetTrustCenterNDARequestSettings() []*CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting{}
+	}
+	return t.TrustCenterNDARequestSettings
+}
+
+type CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting struct {
+	ApprovalRequired          *bool      "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	ApproveFromExistingDomain *bool      "json:\"approveFromExistingDomain,omitempty\" graphql:\"approveFromExistingDomain\""
+	ApproveIfContactExists    *bool      "json:\"approveIfContactExists,omitempty\" graphql:\"approveIfContactExists\""
+	ApproverGroupID           *string    "json:\"approverGroupID,omitempty\" graphql:\"approverGroupID\""
+	AutoApprove               *bool      "json:\"autoApprove,omitempty\" graphql:\"autoApprove\""
+	CreatedAt                 *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                 *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                        string     "json:\"id\" graphql:\"id\""
+	UpdatedAt                 *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                 *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator     *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UseDomainAllowlist        *bool      "json:\"useDomainAllowlist,omitempty\" graphql:\"useDomainAllowlist\""
+	UseDomainBlocklist        *bool      "json:\"useDomainBlocklist,omitempty\" graphql:\"useDomainBlocklist\""
+	WorkEmailOnly             *bool      "json:\"workEmailOnly,omitempty\" graphql:\"workEmailOnly\""
+}
+
+func (t *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.ApprovalRequired
+}
+func (t *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetApproveFromExistingDomain() *bool {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.ApproveFromExistingDomain
+}
+func (t *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetApproveIfContactExists() *bool {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.ApproveIfContactExists
+}
+func (t *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetApproverGroupID() *string {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.ApproverGroupID
+}
+func (t *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetAutoApprove() *bool {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.AutoApprove
+}
+func (t *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetID() string {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.ID
+}
+func (t *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetUseDomainAllowlist() *bool {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.UseDomainAllowlist
+}
+func (t *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetUseDomainBlocklist() *bool {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.UseDomainBlocklist
+}
+func (t *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetWorkEmailOnly() *bool {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.WorkEmailOnly
+}
+
+type CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting struct {
+	TrustCenterNDARequestSetting CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting "json:\"trustCenterNDARequestSetting\" graphql:\"trustCenterNDARequestSetting\""
+}
+
+func (t *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting) GetTrustCenterNDARequestSetting() *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting{}
+	}
+	return &t.TrustCenterNDARequestSetting
+}
+
+type DeleteBulkTrustCenterNDARequestSetting_DeleteBulkTrustCenterNDARequestSetting struct {
+	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+}
+
+func (t *DeleteBulkTrustCenterNDARequestSetting_DeleteBulkTrustCenterNDARequestSetting) GetDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkTrustCenterNDARequestSetting_DeleteBulkTrustCenterNDARequestSetting{}
+	}
+	return t.DeletedIDs
+}
+
+type DeleteTrustCenterNDARequestSetting_DeleteTrustCenterNDARequestSetting struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteTrustCenterNDARequestSetting_DeleteTrustCenterNDARequestSetting) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteTrustCenterNDARequestSetting_DeleteTrustCenterNDARequestSetting{}
+	}
+	return t.DeletedID
+}
+
+type GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node struct {
+	ApprovalRequired          *bool      "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	ApproveFromExistingDomain *bool      "json:\"approveFromExistingDomain,omitempty\" graphql:\"approveFromExistingDomain\""
+	ApproveIfContactExists    *bool      "json:\"approveIfContactExists,omitempty\" graphql:\"approveIfContactExists\""
+	ApproverGroupID           *string    "json:\"approverGroupID,omitempty\" graphql:\"approverGroupID\""
+	AutoApprove               *bool      "json:\"autoApprove,omitempty\" graphql:\"autoApprove\""
+	CreatedAt                 *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                 *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                        string     "json:\"id\" graphql:\"id\""
+	UpdatedAt                 *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                 *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator     *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UseDomainAllowlist        *bool      "json:\"useDomainAllowlist,omitempty\" graphql:\"useDomainAllowlist\""
+	UseDomainBlocklist        *bool      "json:\"useDomainBlocklist,omitempty\" graphql:\"useDomainBlocklist\""
+	WorkEmailOnly             *bool      "json:\"workEmailOnly,omitempty\" graphql:\"workEmailOnly\""
+}
+
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.ApprovalRequired
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetApproveFromExistingDomain() *bool {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.ApproveFromExistingDomain
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetApproveIfContactExists() *bool {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.ApproveIfContactExists
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetApproverGroupID() *string {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.ApproverGroupID
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetAutoApprove() *bool {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.AutoApprove
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetUseDomainAllowlist() *bool {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.UseDomainAllowlist
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetUseDomainBlocklist() *bool {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.UseDomainBlocklist
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetWorkEmailOnly() *bool {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.WorkEmailOnly
+}
+
+type GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges struct {
+	Node *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges) GetNode() *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings struct {
+	Edges      []*GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                      "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings) GetEdges() []*GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings{}
+	}
+	return t.Edges
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings) GetPageInfo() *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings{}
+	}
+	return t.TotalCount
+}
+
+type GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting struct {
+	ApprovalRequired          *bool      "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	ApproveFromExistingDomain *bool      "json:\"approveFromExistingDomain,omitempty\" graphql:\"approveFromExistingDomain\""
+	ApproveIfContactExists    *bool      "json:\"approveIfContactExists,omitempty\" graphql:\"approveIfContactExists\""
+	ApproverGroupID           *string    "json:\"approverGroupID,omitempty\" graphql:\"approverGroupID\""
+	AutoApprove               *bool      "json:\"autoApprove,omitempty\" graphql:\"autoApprove\""
+	CreatedAt                 *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                 *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                        string     "json:\"id\" graphql:\"id\""
+	UpdatedAt                 *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                 *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator     *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UseDomainAllowlist        *bool      "json:\"useDomainAllowlist,omitempty\" graphql:\"useDomainAllowlist\""
+	UseDomainBlocklist        *bool      "json:\"useDomainBlocklist,omitempty\" graphql:\"useDomainBlocklist\""
+	WorkEmailOnly             *bool      "json:\"workEmailOnly,omitempty\" graphql:\"workEmailOnly\""
+}
+
+func (t *GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting{}
+	}
+	return t.ApprovalRequired
+}
+func (t *GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting) GetApproveFromExistingDomain() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting{}
+	}
+	return t.ApproveFromExistingDomain
+}
+func (t *GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting) GetApproveIfContactExists() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting{}
+	}
+	return t.ApproveIfContactExists
+}
+func (t *GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting) GetApproverGroupID() *string {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting{}
+	}
+	return t.ApproverGroupID
+}
+func (t *GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting) GetAutoApprove() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting{}
+	}
+	return t.AutoApprove
+}
+func (t *GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting) GetUseDomainAllowlist() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting{}
+	}
+	return t.UseDomainAllowlist
+}
+func (t *GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting) GetUseDomainBlocklist() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting{}
+	}
+	return t.UseDomainBlocklist
+}
+func (t *GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting) GetWorkEmailOnly() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting{}
+	}
+	return t.WorkEmailOnly
+}
+
+type GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node struct {
+	ApprovalRequired          *bool      "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	ApproveFromExistingDomain *bool      "json:\"approveFromExistingDomain,omitempty\" graphql:\"approveFromExistingDomain\""
+	ApproveIfContactExists    *bool      "json:\"approveIfContactExists,omitempty\" graphql:\"approveIfContactExists\""
+	ApproverGroupID           *string    "json:\"approverGroupID,omitempty\" graphql:\"approverGroupID\""
+	AutoApprove               *bool      "json:\"autoApprove,omitempty\" graphql:\"autoApprove\""
+	CreatedAt                 *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                 *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                        string     "json:\"id\" graphql:\"id\""
+	UpdatedAt                 *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                 *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator     *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UseDomainAllowlist        *bool      "json:\"useDomainAllowlist,omitempty\" graphql:\"useDomainAllowlist\""
+	UseDomainBlocklist        *bool      "json:\"useDomainBlocklist,omitempty\" graphql:\"useDomainBlocklist\""
+	WorkEmailOnly             *bool      "json:\"workEmailOnly,omitempty\" graphql:\"workEmailOnly\""
+}
+
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.ApprovalRequired
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetApproveFromExistingDomain() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.ApproveFromExistingDomain
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetApproveIfContactExists() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.ApproveIfContactExists
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetApproverGroupID() *string {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.ApproverGroupID
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetAutoApprove() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.AutoApprove
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetUseDomainAllowlist() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.UseDomainAllowlist
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetUseDomainBlocklist() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.UseDomainBlocklist
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node) GetWorkEmailOnly() *bool {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node{}
+	}
+	return t.WorkEmailOnly
+}
+
+type GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges struct {
+	Node *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges) GetNode() *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges_Node {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges{}
+	}
+	return t.Node
+}
+
+type GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings struct {
+	Edges      []*GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                                                   "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings) GetEdges() []*GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_Edges {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings{}
+	}
+	return t.Edges
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings) GetPageInfo() *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings_PageInfo {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings{}
+	}
+	return &t.PageInfo
+}
+func (t *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings{}
+	}
+	return t.TotalCount
+}
+
+type UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings struct {
+	ApprovalRequired          *bool      "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	ApproveFromExistingDomain *bool      "json:\"approveFromExistingDomain,omitempty\" graphql:\"approveFromExistingDomain\""
+	ApproveIfContactExists    *bool      "json:\"approveIfContactExists,omitempty\" graphql:\"approveIfContactExists\""
+	ApproverGroupID           *string    "json:\"approverGroupID,omitempty\" graphql:\"approverGroupID\""
+	AutoApprove               *bool      "json:\"autoApprove,omitempty\" graphql:\"autoApprove\""
+	CreatedAt                 *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                 *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                        string     "json:\"id\" graphql:\"id\""
+	UpdatedAt                 *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                 *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator     *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UseDomainAllowlist        *bool      "json:\"useDomainAllowlist,omitempty\" graphql:\"useDomainAllowlist\""
+	UseDomainBlocklist        *bool      "json:\"useDomainBlocklist,omitempty\" graphql:\"useDomainBlocklist\""
+	WorkEmailOnly             *bool      "json:\"workEmailOnly,omitempty\" graphql:\"workEmailOnly\""
+}
+
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApprovalRequired
+}
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApproveFromExistingDomain() *bool {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApproveFromExistingDomain
+}
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApproveIfContactExists() *bool {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApproveIfContactExists
+}
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApproverGroupID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApproverGroupID
+}
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetAutoApprove() *bool {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.AutoApprove
+}
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetID() string {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUseDomainAllowlist() *bool {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UseDomainAllowlist
+}
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUseDomainBlocklist() *bool {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UseDomainBlocklist
+}
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetWorkEmailOnly() *bool {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.WorkEmailOnly
+}
+
+type UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting struct {
+	TrustCenterNDARequestSettings []*UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings "json:\"trustCenterNDARequestSettings,omitempty\" graphql:\"trustCenterNDARequestSettings\""
+	UpdatedIDs                    []string                                                                                                             "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting) GetTrustCenterNDARequestSettings() []*UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting_TrustCenterNDARequestSettings {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting{}
+	}
+	return t.TrustCenterNDARequestSettings
+}
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting{}
+	}
+	return t.UpdatedIDs
+}
+
+type UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings struct {
+	ApprovalRequired          *bool      "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	ApproveFromExistingDomain *bool      "json:\"approveFromExistingDomain,omitempty\" graphql:\"approveFromExistingDomain\""
+	ApproveIfContactExists    *bool      "json:\"approveIfContactExists,omitempty\" graphql:\"approveIfContactExists\""
+	ApproverGroupID           *string    "json:\"approverGroupID,omitempty\" graphql:\"approverGroupID\""
+	AutoApprove               *bool      "json:\"autoApprove,omitempty\" graphql:\"autoApprove\""
+	CreatedAt                 *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                 *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                        string     "json:\"id\" graphql:\"id\""
+	UpdatedAt                 *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                 *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator     *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UseDomainAllowlist        *bool      "json:\"useDomainAllowlist,omitempty\" graphql:\"useDomainAllowlist\""
+	UseDomainBlocklist        *bool      "json:\"useDomainBlocklist,omitempty\" graphql:\"useDomainBlocklist\""
+	WorkEmailOnly             *bool      "json:\"workEmailOnly,omitempty\" graphql:\"workEmailOnly\""
+}
+
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApprovalRequired
+}
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApproveFromExistingDomain() *bool {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApproveFromExistingDomain
+}
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApproveIfContactExists() *bool {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApproveIfContactExists
+}
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetApproverGroupID() *string {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ApproverGroupID
+}
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetAutoApprove() *bool {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.AutoApprove
+}
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetID() string {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUseDomainAllowlist() *bool {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UseDomainAllowlist
+}
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetUseDomainBlocklist() *bool {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.UseDomainBlocklist
+}
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings) GetWorkEmailOnly() *bool {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings{}
+	}
+	return t.WorkEmailOnly
+}
+
+type UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting struct {
+	TrustCenterNDARequestSettings []*UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings "json:\"trustCenterNDARequestSettings,omitempty\" graphql:\"trustCenterNDARequestSettings\""
+	UpdatedIDs                    []string                                                                                                       "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting) GetTrustCenterNDARequestSettings() []*UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting_TrustCenterNDARequestSettings {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting{}
+	}
+	return t.TrustCenterNDARequestSettings
+}
+func (t *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting{}
+	}
+	return t.UpdatedIDs
+}
+
+type UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting struct {
+	ApprovalRequired          *bool      "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
+	ApproveFromExistingDomain *bool      "json:\"approveFromExistingDomain,omitempty\" graphql:\"approveFromExistingDomain\""
+	ApproveIfContactExists    *bool      "json:\"approveIfContactExists,omitempty\" graphql:\"approveIfContactExists\""
+	ApproverGroupID           *string    "json:\"approverGroupID,omitempty\" graphql:\"approverGroupID\""
+	AutoApprove               *bool      "json:\"autoApprove,omitempty\" graphql:\"autoApprove\""
+	CreatedAt                 *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                 *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	ID                        string     "json:\"id\" graphql:\"id\""
+	UpdatedAt                 *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                 *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator     *string    "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UseDomainAllowlist        *bool      "json:\"useDomainAllowlist,omitempty\" graphql:\"useDomainAllowlist\""
+	UseDomainBlocklist        *bool      "json:\"useDomainBlocklist,omitempty\" graphql:\"useDomainBlocklist\""
+	WorkEmailOnly             *bool      "json:\"workEmailOnly,omitempty\" graphql:\"workEmailOnly\""
+}
+
+func (t *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetApprovalRequired() *bool {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.ApprovalRequired
+}
+func (t *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetApproveFromExistingDomain() *bool {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.ApproveFromExistingDomain
+}
+func (t *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetApproveIfContactExists() *bool {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.ApproveIfContactExists
+}
+func (t *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetApproverGroupID() *string {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.ApproverGroupID
+}
+func (t *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetAutoApprove() *bool {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.AutoApprove
+}
+func (t *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetID() string {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.ID
+}
+func (t *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetUseDomainAllowlist() *bool {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.UseDomainAllowlist
+}
+func (t *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetUseDomainBlocklist() *bool {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.UseDomainBlocklist
+}
+func (t *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting) GetWorkEmailOnly() *bool {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting{}
+	}
+	return t.WorkEmailOnly
+}
+
+type UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting struct {
+	TrustCenterNDARequestSetting UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting "json:\"trustCenterNDARequestSetting\" graphql:\"trustCenterNDARequestSetting\""
+}
+
+func (t *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting) GetTrustCenterNDARequestSetting() *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting_TrustCenterNDARequestSetting {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting{}
+	}
+	return &t.TrustCenterNDARequestSetting
+}
+
 type CreateTrustCenterPreviewSetting_CreateTrustCenterPreviewSetting_TrustCenterSetting struct {
 	AccentColor          *string                       "json:\"accentColor,omitempty\" graphql:\"accentColor\""
 	BackgroundColor      *string                       "json:\"backgroundColor,omitempty\" graphql:\"backgroundColor\""
@@ -171907,6 +173074,127 @@ func (t *UpdateTrustCenterNDARequest) GetUpdateTrustCenterNDARequest() *UpdateTr
 		t = &UpdateTrustCenterNDARequest{}
 	}
 	return &t.UpdateTrustCenterNDARequest
+}
+
+type CreateBulkCSVTrustCenterNDARequestSetting struct {
+	CreateBulkCSVTrustCenterNDARequestSetting CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting "json:\"createBulkCSVTrustCenterNDARequestSetting\" graphql:\"createBulkCSVTrustCenterNDARequestSetting\""
+}
+
+func (t *CreateBulkCSVTrustCenterNDARequestSetting) GetCreateBulkCSVTrustCenterNDARequestSetting() *CreateBulkCSVTrustCenterNDARequestSetting_CreateBulkCSVTrustCenterNDARequestSetting {
+	if t == nil {
+		t = &CreateBulkCSVTrustCenterNDARequestSetting{}
+	}
+	return &t.CreateBulkCSVTrustCenterNDARequestSetting
+}
+
+type CreateBulkTrustCenterNDARequestSetting struct {
+	CreateBulkTrustCenterNDARequestSetting CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting "json:\"createBulkTrustCenterNDARequestSetting\" graphql:\"createBulkTrustCenterNDARequestSetting\""
+}
+
+func (t *CreateBulkTrustCenterNDARequestSetting) GetCreateBulkTrustCenterNDARequestSetting() *CreateBulkTrustCenterNDARequestSetting_CreateBulkTrustCenterNDARequestSetting {
+	if t == nil {
+		t = &CreateBulkTrustCenterNDARequestSetting{}
+	}
+	return &t.CreateBulkTrustCenterNDARequestSetting
+}
+
+type CreateTrustCenterNDARequestSetting struct {
+	CreateTrustCenterNDARequestSetting CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting "json:\"createTrustCenterNDARequestSetting\" graphql:\"createTrustCenterNDARequestSetting\""
+}
+
+func (t *CreateTrustCenterNDARequestSetting) GetCreateTrustCenterNDARequestSetting() *CreateTrustCenterNDARequestSetting_CreateTrustCenterNDARequestSetting {
+	if t == nil {
+		t = &CreateTrustCenterNDARequestSetting{}
+	}
+	return &t.CreateTrustCenterNDARequestSetting
+}
+
+type DeleteBulkTrustCenterNDARequestSetting struct {
+	DeleteBulkTrustCenterNDARequestSetting DeleteBulkTrustCenterNDARequestSetting_DeleteBulkTrustCenterNDARequestSetting "json:\"deleteBulkTrustCenterNDARequestSetting\" graphql:\"deleteBulkTrustCenterNDARequestSetting\""
+}
+
+func (t *DeleteBulkTrustCenterNDARequestSetting) GetDeleteBulkTrustCenterNDARequestSetting() *DeleteBulkTrustCenterNDARequestSetting_DeleteBulkTrustCenterNDARequestSetting {
+	if t == nil {
+		t = &DeleteBulkTrustCenterNDARequestSetting{}
+	}
+	return &t.DeleteBulkTrustCenterNDARequestSetting
+}
+
+type DeleteTrustCenterNDARequestSetting struct {
+	DeleteTrustCenterNDARequestSetting DeleteTrustCenterNDARequestSetting_DeleteTrustCenterNDARequestSetting "json:\"deleteTrustCenterNDARequestSetting\" graphql:\"deleteTrustCenterNDARequestSetting\""
+}
+
+func (t *DeleteTrustCenterNDARequestSetting) GetDeleteTrustCenterNDARequestSetting() *DeleteTrustCenterNDARequestSetting_DeleteTrustCenterNDARequestSetting {
+	if t == nil {
+		t = &DeleteTrustCenterNDARequestSetting{}
+	}
+	return &t.DeleteTrustCenterNDARequestSetting
+}
+
+type GetAllTrustCenterNDARequestSettings struct {
+	TrustCenterNDARequestSettings GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings "json:\"trustCenterNDARequestSettings\" graphql:\"trustCenterNDARequestSettings\""
+}
+
+func (t *GetAllTrustCenterNDARequestSettings) GetTrustCenterNDARequestSettings() *GetAllTrustCenterNDARequestSettings_TrustCenterNDARequestSettings {
+	if t == nil {
+		t = &GetAllTrustCenterNDARequestSettings{}
+	}
+	return &t.TrustCenterNDARequestSettings
+}
+
+type GetTrustCenterNDARequestSettingByID struct {
+	TrustCenterNDARequestSetting GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting "json:\"trustCenterNDARequestSetting\" graphql:\"trustCenterNDARequestSetting\""
+}
+
+func (t *GetTrustCenterNDARequestSettingByID) GetTrustCenterNDARequestSetting() *GetTrustCenterNDARequestSettingByID_TrustCenterNDARequestSetting {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettingByID{}
+	}
+	return &t.TrustCenterNDARequestSetting
+}
+
+type GetTrustCenterNDARequestSettings struct {
+	TrustCenterNDARequestSettings GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings "json:\"trustCenterNDARequestSettings\" graphql:\"trustCenterNDARequestSettings\""
+}
+
+func (t *GetTrustCenterNDARequestSettings) GetTrustCenterNDARequestSettings() *GetTrustCenterNDARequestSettings_TrustCenterNDARequestSettings {
+	if t == nil {
+		t = &GetTrustCenterNDARequestSettings{}
+	}
+	return &t.TrustCenterNDARequestSettings
+}
+
+type UpdateBulkCSVTrustCenterNDARequestSetting struct {
+	UpdateBulkCSVTrustCenterNDARequestSetting UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting "json:\"updateBulkCSVTrustCenterNDARequestSetting\" graphql:\"updateBulkCSVTrustCenterNDARequestSetting\""
+}
+
+func (t *UpdateBulkCSVTrustCenterNDARequestSetting) GetUpdateBulkCSVTrustCenterNDARequestSetting() *UpdateBulkCSVTrustCenterNDARequestSetting_UpdateBulkCSVTrustCenterNDARequestSetting {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterNDARequestSetting{}
+	}
+	return &t.UpdateBulkCSVTrustCenterNDARequestSetting
+}
+
+type UpdateBulkTrustCenterNDARequestSetting struct {
+	UpdateBulkTrustCenterNDARequestSetting UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting "json:\"updateBulkTrustCenterNDARequestSetting\" graphql:\"updateBulkTrustCenterNDARequestSetting\""
+}
+
+func (t *UpdateBulkTrustCenterNDARequestSetting) GetUpdateBulkTrustCenterNDARequestSetting() *UpdateBulkTrustCenterNDARequestSetting_UpdateBulkTrustCenterNDARequestSetting {
+	if t == nil {
+		t = &UpdateBulkTrustCenterNDARequestSetting{}
+	}
+	return &t.UpdateBulkTrustCenterNDARequestSetting
+}
+
+type UpdateTrustCenterNDARequestSetting struct {
+	UpdateTrustCenterNDARequestSetting UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting "json:\"updateTrustCenterNDARequestSetting\" graphql:\"updateTrustCenterNDARequestSetting\""
+}
+
+func (t *UpdateTrustCenterNDARequestSetting) GetUpdateTrustCenterNDARequestSetting() *UpdateTrustCenterNDARequestSetting_UpdateTrustCenterNDARequestSetting {
+	if t == nil {
+		t = &UpdateTrustCenterNDARequestSetting{}
+	}
+	return &t.UpdateTrustCenterNDARequestSetting
 }
 
 type CreateTrustCenterPreviewSetting struct {
@@ -208218,6 +209506,434 @@ func (c *Client) UpdateTrustCenterNDARequest(ctx context.Context, updateTrustCen
 	return &res, nil
 }
 
+const CreateBulkCSVTrustCenterNDARequestSettingDocument = `mutation CreateBulkCSVTrustCenterNDARequestSetting ($input: Upload!) {
+	createBulkCSVTrustCenterNDARequestSetting(input: $input) {
+		trustCenterNDARequestSettings {
+			approvalRequired
+			approveFromExistingDomain
+			approveIfContactExists
+			approverGroupID
+			autoApprove
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			useDomainAllowlist
+			useDomainBlocklist
+			workEmailOnly
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVTrustCenterNDARequestSetting(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVTrustCenterNDARequestSetting, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVTrustCenterNDARequestSetting
+	if err := c.Client.Post(ctx, "CreateBulkCSVTrustCenterNDARequestSetting", CreateBulkCSVTrustCenterNDARequestSettingDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkTrustCenterNDARequestSettingDocument = `mutation CreateBulkTrustCenterNDARequestSetting ($input: [CreateTrustCenterNDARequestSettingInput!]) {
+	createBulkTrustCenterNDARequestSetting(input: $input) {
+		trustCenterNDARequestSettings {
+			approvalRequired
+			approveFromExistingDomain
+			approveIfContactExists
+			approverGroupID
+			autoApprove
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			useDomainAllowlist
+			useDomainBlocklist
+			workEmailOnly
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkTrustCenterNDARequestSetting(ctx context.Context, input []*CreateTrustCenterNDARequestSettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkTrustCenterNDARequestSetting, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkTrustCenterNDARequestSetting
+	if err := c.Client.Post(ctx, "CreateBulkTrustCenterNDARequestSetting", CreateBulkTrustCenterNDARequestSettingDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateTrustCenterNDARequestSettingDocument = `mutation CreateTrustCenterNDARequestSetting ($input: CreateTrustCenterNDARequestSettingInput!) {
+	createTrustCenterNDARequestSetting(input: $input) {
+		trustCenterNDARequestSetting {
+			approvalRequired
+			approveFromExistingDomain
+			approveIfContactExists
+			approverGroupID
+			autoApprove
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			useDomainAllowlist
+			useDomainBlocklist
+			workEmailOnly
+		}
+	}
+}
+`
+
+func (c *Client) CreateTrustCenterNDARequestSetting(ctx context.Context, input CreateTrustCenterNDARequestSettingInput, interceptors ...clientv2.RequestInterceptor) (*CreateTrustCenterNDARequestSetting, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateTrustCenterNDARequestSetting
+	if err := c.Client.Post(ctx, "CreateTrustCenterNDARequestSetting", CreateTrustCenterNDARequestSettingDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteBulkTrustCenterNDARequestSettingDocument = `mutation DeleteBulkTrustCenterNDARequestSetting ($ids: [ID!]!) {
+	deleteBulkTrustCenterNDARequestSetting(ids: $ids) {
+		deletedIDs
+	}
+}
+`
+
+func (c *Client) DeleteBulkTrustCenterNDARequestSetting(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkTrustCenterNDARequestSetting, error) {
+	vars := map[string]any{
+		"ids": ids,
+	}
+
+	var res DeleteBulkTrustCenterNDARequestSetting
+	if err := c.Client.Post(ctx, "DeleteBulkTrustCenterNDARequestSetting", DeleteBulkTrustCenterNDARequestSettingDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteTrustCenterNDARequestSettingDocument = `mutation DeleteTrustCenterNDARequestSetting ($deleteTrustCenterNDARequestSettingId: ID!) {
+	deleteTrustCenterNDARequestSetting(id: $deleteTrustCenterNDARequestSettingId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteTrustCenterNDARequestSetting(ctx context.Context, deleteTrustCenterNDARequestSettingID string, interceptors ...clientv2.RequestInterceptor) (*DeleteTrustCenterNDARequestSetting, error) {
+	vars := map[string]any{
+		"deleteTrustCenterNDARequestSettingId": deleteTrustCenterNDARequestSettingID,
+	}
+
+	var res DeleteTrustCenterNDARequestSetting
+	if err := c.Client.Post(ctx, "DeleteTrustCenterNDARequestSetting", DeleteTrustCenterNDARequestSettingDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllTrustCenterNDARequestSettingsDocument = `query GetAllTrustCenterNDARequestSettings ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TrustCenterNDARequestSettingOrder!]) {
+	trustCenterNDARequestSettings(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				approvalRequired
+				approveFromExistingDomain
+				approveIfContactExists
+				approverGroupID
+				autoApprove
+				createdAt
+				createdBy
+				id
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				useDomainAllowlist
+				useDomainBlocklist
+				workEmailOnly
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllTrustCenterNDARequestSettings(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*TrustCenterNDARequestSettingOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllTrustCenterNDARequestSettings, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
+
+	var res GetAllTrustCenterNDARequestSettings
+	if err := c.Client.Post(ctx, "GetAllTrustCenterNDARequestSettings", GetAllTrustCenterNDARequestSettingsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterNDARequestSettingByIDDocument = `query GetTrustCenterNDARequestSettingByID ($trustCenterNDARequestSettingId: ID!) {
+	trustCenterNDARequestSetting(id: $trustCenterNDARequestSettingId) {
+		approvalRequired
+		approveFromExistingDomain
+		approveIfContactExists
+		approverGroupID
+		autoApprove
+		createdAt
+		createdBy
+		id
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+		useDomainAllowlist
+		useDomainBlocklist
+		workEmailOnly
+	}
+}
+`
+
+func (c *Client) GetTrustCenterNDARequestSettingByID(ctx context.Context, trustCenterNDARequestSettingID string, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterNDARequestSettingByID, error) {
+	vars := map[string]any{
+		"trustCenterNDARequestSettingId": trustCenterNDARequestSettingID,
+	}
+
+	var res GetTrustCenterNDARequestSettingByID
+	if err := c.Client.Post(ctx, "GetTrustCenterNDARequestSettingByID", GetTrustCenterNDARequestSettingByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetTrustCenterNDARequestSettingsDocument = `query GetTrustCenterNDARequestSettings ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [TrustCenterNDARequestSettingOrder!], $where: TrustCenterNDARequestSettingWhereInput) {
+	trustCenterNDARequestSettings(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				approvalRequired
+				approveFromExistingDomain
+				approveIfContactExists
+				approverGroupID
+				autoApprove
+				createdAt
+				createdBy
+				id
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				useDomainAllowlist
+				useDomainBlocklist
+				workEmailOnly
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetTrustCenterNDARequestSettings(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*TrustCenterNDARequestSettingOrder, where *TrustCenterNDARequestSettingWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetTrustCenterNDARequestSettings, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+		"where":   where,
+	}
+
+	var res GetTrustCenterNDARequestSettings
+	if err := c.Client.Post(ctx, "GetTrustCenterNDARequestSettings", GetTrustCenterNDARequestSettingsDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkCSVTrustCenterNDARequestSettingDocument = `mutation UpdateBulkCSVTrustCenterNDARequestSetting ($input: Upload!) {
+	updateBulkCSVTrustCenterNDARequestSetting(input: $input) {
+		trustCenterNDARequestSettings {
+			approvalRequired
+			approveFromExistingDomain
+			approveIfContactExists
+			approverGroupID
+			autoApprove
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			useDomainAllowlist
+			useDomainBlocklist
+			workEmailOnly
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkCSVTrustCenterNDARequestSetting(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVTrustCenterNDARequestSetting, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res UpdateBulkCSVTrustCenterNDARequestSetting
+	if err := c.Client.Post(ctx, "UpdateBulkCSVTrustCenterNDARequestSetting", UpdateBulkCSVTrustCenterNDARequestSettingDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkTrustCenterNDARequestSettingDocument = `mutation UpdateBulkTrustCenterNDARequestSetting ($ids: [ID!]!, $input: UpdateTrustCenterNDARequestSettingInput!) {
+	updateBulkTrustCenterNDARequestSetting(ids: $ids, input: $input) {
+		trustCenterNDARequestSettings {
+			approvalRequired
+			approveFromExistingDomain
+			approveIfContactExists
+			approverGroupID
+			autoApprove
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			useDomainAllowlist
+			useDomainBlocklist
+			workEmailOnly
+		}
+		updatedIDs
+	}
+}
+`
+
+func (c *Client) UpdateBulkTrustCenterNDARequestSetting(ctx context.Context, ids []string, input UpdateTrustCenterNDARequestSettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkTrustCenterNDARequestSetting, error) {
+	vars := map[string]any{
+		"ids":   ids,
+		"input": input,
+	}
+
+	var res UpdateBulkTrustCenterNDARequestSetting
+	if err := c.Client.Post(ctx, "UpdateBulkTrustCenterNDARequestSetting", UpdateBulkTrustCenterNDARequestSettingDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateTrustCenterNDARequestSettingDocument = `mutation UpdateTrustCenterNDARequestSetting ($updateTrustCenterNDARequestSettingId: ID!, $input: UpdateTrustCenterNDARequestSettingInput!) {
+	updateTrustCenterNDARequestSetting(id: $updateTrustCenterNDARequestSettingId, input: $input) {
+		trustCenterNDARequestSetting {
+			approvalRequired
+			approveFromExistingDomain
+			approveIfContactExists
+			approverGroupID
+			autoApprove
+			createdAt
+			createdBy
+			id
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			useDomainAllowlist
+			useDomainBlocklist
+			workEmailOnly
+		}
+	}
+}
+`
+
+func (c *Client) UpdateTrustCenterNDARequestSetting(ctx context.Context, updateTrustCenterNDARequestSettingID string, input UpdateTrustCenterNDARequestSettingInput, interceptors ...clientv2.RequestInterceptor) (*UpdateTrustCenterNDARequestSetting, error) {
+	vars := map[string]any{
+		"updateTrustCenterNDARequestSettingId": updateTrustCenterNDARequestSettingID,
+		"input":                                input,
+	}
+
+	var res UpdateTrustCenterNDARequestSetting
+	if err := c.Client.Post(ctx, "UpdateTrustCenterNDARequestSetting", UpdateTrustCenterNDARequestSettingDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const CreateTrustCenterPreviewSettingDocument = `mutation CreateTrustCenterPreviewSetting ($input: CreateTrustCenterPreviewSettingInput!) {
 	createTrustCenterPreviewSetting(input: $input) {
 		trustCenterSetting {
@@ -215170,752 +216886,763 @@ func (c *Client) GetWorkflowObjectRefs(ctx context.Context, first *int64, last *
 }
 
 var DocumentOperationNames = map[string]string{
-	CreateActionPlanDocument:                      "CreateActionPlan",
-	CreateBulkActionPlanDocument:                  "CreateBulkActionPlan",
-	CreateBulkCSVActionPlanDocument:               "CreateBulkCSVActionPlan",
-	DeleteActionPlanDocument:                      "DeleteActionPlan",
-	GetActionPlanByIDDocument:                     "GetActionPlanByID",
-	GetActionPlansDocument:                        "GetActionPlans",
-	GetAllActionPlansDocument:                     "GetAllActionPlans",
-	UpdateActionPlanDocument:                      "UpdateActionPlan",
-	UpdateBulkActionPlanDocument:                  "UpdateBulkActionPlan",
-	CreateAPITokenDocument:                        "CreateAPIToken",
-	DeleteAPITokenDocument:                        "DeleteAPIToken",
-	GetAPITokenByIDDocument:                       "GetAPITokenByID",
-	GetAPITokensDocument:                          "GetAPITokens",
-	GetAllAPITokensDocument:                       "GetAllAPITokens",
-	UpdateAPITokenDocument:                        "UpdateAPIToken",
-	CreateAssessmentDocument:                      "CreateAssessment",
-	CreateAssessmentTemplateDocument:              "CreateAssessmentTemplate",
-	DeleteAssessmentDocument:                      "DeleteAssessment",
-	DeleteBulkAssessmentDocument:                  "DeleteBulkAssessment",
-	GetAllAssessmentsDocument:                     "GetAllAssessments",
-	GetAssessmentByIDDocument:                     "GetAssessmentByID",
-	GetAssessmentsDocument:                        "GetAssessments",
-	UpdateAssessmentDocument:                      "UpdateAssessment",
-	CreateAssessmentResponseDocument:              "CreateAssessmentResponse",
-	DeleteAssessmentResponseDocument:              "DeleteAssessmentResponse",
-	GetAllAssessmentResponsesDocument:             "GetAllAssessmentResponses",
-	GetAssessmentResponseByIDDocument:             "GetAssessmentResponseByID",
-	GetAssessmentResponsesDocument:                "GetAssessmentResponses",
-	CreateAssetDocument:                           "CreateAsset",
-	CreateBulkAssetDocument:                       "CreateBulkAsset",
-	CreateBulkCSVAssetDocument:                    "CreateBulkCSVAsset",
-	DeleteAssetDocument:                           "DeleteAsset",
-	DeleteBulkAssetDocument:                       "DeleteBulkAsset",
-	GetAllAssetsDocument:                          "GetAllAssets",
-	GetAssetByIDDocument:                          "GetAssetByID",
-	GetAssetsDocument:                             "GetAssets",
-	UpdateAssetDocument:                           "UpdateAsset",
-	UpdateBulkAssetDocument:                       "UpdateBulkAsset",
-	UpdateBulkCSVAssetDocument:                    "UpdateBulkCSVAsset",
-	CreateBulkCSVCampaignDocument:                 "CreateBulkCSVCampaign",
-	CreateBulkCampaignDocument:                    "CreateBulkCampaign",
-	CreateCampaignDocument:                        "CreateCampaign",
-	DeleteCampaignDocument:                        "DeleteCampaign",
-	GetAllCampaignsDocument:                       "GetAllCampaigns",
-	GetCampaignByIDDocument:                       "GetCampaignByID",
-	GetCampaignsDocument:                          "GetCampaigns",
-	UpdateCampaignDocument:                        "UpdateCampaign",
-	CreateCampaignWithTargetsDocument:             "CreateCampaignWithTargets",
-	CreateCampaignWithTargetsCSVDocument:          "CreateCampaignWithTargetsCSV",
-	LaunchCampaignDocument:                        "LaunchCampaign",
-	ResendCampaignIncompleteTargetsDocument:       "ResendCampaignIncompleteTargets",
-	SendCampaignTestEmailDocument:                 "SendCampaignTestEmail",
-	CreateBulkCSVCampaignTargetDocument:           "CreateBulkCSVCampaignTarget",
-	CreateBulkCampaignTargetDocument:              "CreateBulkCampaignTarget",
-	CreateCampaignTargetDocument:                  "CreateCampaignTarget",
-	DeleteCampaignTargetDocument:                  "DeleteCampaignTarget",
-	GetAllCampaignTargetsDocument:                 "GetAllCampaignTargets",
-	GetCampaignTargetByIDDocument:                 "GetCampaignTargetByID",
-	GetCampaignTargetsDocument:                    "GetCampaignTargets",
-	UpdateCampaignTargetDocument:                  "UpdateCampaignTarget",
-	CreateBulkCSVCheckResultDocument:              "CreateBulkCSVCheckResult",
-	CreateBulkCheckResultDocument:                 "CreateBulkCheckResult",
-	CreateCheckResultDocument:                     "CreateCheckResult",
-	DeleteBulkCheckResultDocument:                 "DeleteBulkCheckResult",
-	DeleteCheckResultDocument:                     "DeleteCheckResult",
-	GetAllCheckResultsDocument:                    "GetAllCheckResults",
-	GetCheckResultByIDDocument:                    "GetCheckResultByID",
-	GetCheckResultsDocument:                       "GetCheckResults",
-	UpdateBulkCSVCheckResultDocument:              "UpdateBulkCSVCheckResult",
-	UpdateBulkCheckResultDocument:                 "UpdateBulkCheckResult",
-	UpdateCheckResultDocument:                     "UpdateCheckResult",
-	CreateBulkCSVContactDocument:                  "CreateBulkCSVContact",
-	CreateBulkContactDocument:                     "CreateBulkContact",
-	CreateContactDocument:                         "CreateContact",
-	DeleteContactDocument:                         "DeleteContact",
-	GetAllContactsDocument:                        "GetAllContacts",
-	GetContactByIDDocument:                        "GetContactByID",
-	GetContactsDocument:                           "GetContacts",
-	UpdateBulkContactDocument:                     "UpdateBulkContact",
-	UpdateContactDocument:                         "UpdateContact",
-	CreateBulkCSVControlDocument:                  "CreateBulkCSVControl",
-	CreateBulkControlDocument:                     "CreateBulkControl",
-	CreateControlDocument:                         "CreateControl",
-	DeleteBulkControlDocument:                     "DeleteBulkControl",
-	DeleteControlDocument:                         "DeleteControl",
-	GetAllControlsDocument:                        "GetAllControls",
-	GetControlByIDDocument:                        "GetControlByID",
-	GetControlsDocument:                           "GetControls",
-	GetTrustCenterControlByIDDocument:             "GetTrustCenterControlByID",
-	GetTrustCenterControlsDocument:                "GetTrustCenterControls",
-	UpdateBulkControlDocument:                     "UpdateBulkControl",
-	UpdateControlDocument:                         "UpdateControl",
-	CloneBulkCSVControlDocument:                   "CloneBulkCSVControl",
-	CreateControlsByCloneDocument:                 "CreateControlsByClone",
-	CreateControlsByCloneReturnIDDocument:         "CreateControlsByCloneReturnID",
-	GetControlCategoriesDocument:                  "GetControlCategories",
-	GetControlCategoriesWithFrameworkDocument:     "GetControlCategoriesWithFramework",
-	GetControlsGroupByCategoryDocument:            "GetControlsGroupByCategory",
-	GetControlSubcategoriesDocument:               "GetControlSubcategories",
-	GetControlSubcategoriesWithFrameworkDocument:  "GetControlSubcategoriesWithFramework",
-	UpdateControlCommentDocument:                  "UpdateControlComment",
-	CreateBulkCSVControlImplementationDocument:    "CreateBulkCSVControlImplementation",
-	CreateBulkControlImplementationDocument:       "CreateBulkControlImplementation",
-	CreateControlImplementationDocument:           "CreateControlImplementation",
-	DeleteControlImplementationDocument:           "DeleteControlImplementation",
-	GetAllControlImplementationsDocument:          "GetAllControlImplementations",
-	GetControlImplementationByIDDocument:          "GetControlImplementationByID",
-	GetControlImplementationsDocument:             "GetControlImplementations",
-	UpdateControlImplementationDocument:           "UpdateControlImplementation",
-	CreateBulkCSVControlObjectiveDocument:         "CreateBulkCSVControlObjective",
-	CreateBulkControlObjectiveDocument:            "CreateBulkControlObjective",
-	CreateControlObjectiveDocument:                "CreateControlObjective",
-	DeleteControlObjectiveDocument:                "DeleteControlObjective",
-	GetAllControlObjectivesDocument:               "GetAllControlObjectives",
-	GetControlObjectiveByIDDocument:               "GetControlObjectiveByID",
-	GetControlObjectivesDocument:                  "GetControlObjectives",
-	UpdateControlObjectiveDocument:                "UpdateControlObjective",
-	GetAllControlReportsDocument:                  "GetAllControlReports",
-	GetControlReportsDocument:                     "GetControlReports",
-	GetControlReportsByCategoryDocument:           "GetControlReportsByCategory",
-	CreateBulkCSVCustomDomainDocument:             "CreateBulkCSVCustomDomain",
-	CreateBulkCustomDomainDocument:                "CreateBulkCustomDomain",
-	CreateCustomDomainDocument:                    "CreateCustomDomain",
-	DeleteCustomDomainDocument:                    "DeleteCustomDomain",
-	GetAllCustomDomainsDocument:                   "GetAllCustomDomains",
-	GetCustomDomainByIDDocument:                   "GetCustomDomainByID",
-	GetCustomDomainsDocument:                      "GetCustomDomains",
-	UpdateCustomDomainDocument:                    "UpdateCustomDomain",
-	ValidateCustomDomainDocument:                  "ValidateCustomDomain",
-	CreateBulkCSVCustomTypeEnumDocument:           "CreateBulkCSVCustomTypeEnum",
-	CreateBulkCustomTypeEnumDocument:              "CreateBulkCustomTypeEnum",
-	CreateCustomTypeEnumDocument:                  "CreateCustomTypeEnum",
-	DeleteCustomTypeEnumDocument:                  "DeleteCustomTypeEnum",
-	GetAllCustomTypeEnumsDocument:                 "GetAllCustomTypeEnums",
-	GetCustomTypeEnumByIDDocument:                 "GetCustomTypeEnumByID",
-	GetCustomTypeEnumsDocument:                    "GetCustomTypeEnums",
-	UpdateCustomTypeEnumDocument:                  "UpdateCustomTypeEnum",
-	CreateBulkCSVDirectoryAccountDocument:         "CreateBulkCSVDirectoryAccount",
-	CreateBulkDirectoryAccountDocument:            "CreateBulkDirectoryAccount",
-	CreateDirectoryAccountDocument:                "CreateDirectoryAccount",
-	DeleteDirectoryAccountDocument:                "DeleteDirectoryAccount",
-	GetAllDirectoryAccountsDocument:               "GetAllDirectoryAccounts",
-	GetDirectoryAccountByIDDocument:               "GetDirectoryAccountByID",
-	GetDirectoryAccountsDocument:                  "GetDirectoryAccounts",
-	UpdateDirectoryAccountDocument:                "UpdateDirectoryAccount",
-	CreateBulkCSVDirectoryGroupDocument:           "CreateBulkCSVDirectoryGroup",
-	CreateBulkDirectoryGroupDocument:              "CreateBulkDirectoryGroup",
-	CreateDirectoryGroupDocument:                  "CreateDirectoryGroup",
-	DeleteDirectoryGroupDocument:                  "DeleteDirectoryGroup",
-	GetAllDirectoryGroupsDocument:                 "GetAllDirectoryGroups",
-	GetDirectoryGroupByIDDocument:                 "GetDirectoryGroupByID",
-	GetDirectoryGroupsDocument:                    "GetDirectoryGroups",
-	UpdateDirectoryGroupDocument:                  "UpdateDirectoryGroup",
-	CreateBulkCSVDirectoryMembershipDocument:      "CreateBulkCSVDirectoryMembership",
-	CreateBulkDirectoryMembershipDocument:         "CreateBulkDirectoryMembership",
-	CreateDirectoryMembershipDocument:             "CreateDirectoryMembership",
-	DeleteDirectoryMembershipDocument:             "DeleteDirectoryMembership",
-	GetAllDirectoryMembershipsDocument:            "GetAllDirectoryMemberships",
-	GetDirectoryMembershipByIDDocument:            "GetDirectoryMembershipByID",
-	GetDirectoryMembershipsDocument:               "GetDirectoryMemberships",
-	UpdateDirectoryMembershipDocument:             "UpdateDirectoryMembership",
-	CreateBulkCSVDiscussionDocument:               "CreateBulkCSVDiscussion",
-	CreateBulkDiscussionDocument:                  "CreateBulkDiscussion",
-	CreateDiscussionDocument:                      "CreateDiscussion",
-	DeleteDiscussionDocument:                      "DeleteDiscussion",
-	GetAllDiscussionsDocument:                     "GetAllDiscussions",
-	GetDiscussionByIDDocument:                     "GetDiscussionByID",
-	GetDiscussionsDocument:                        "GetDiscussions",
-	UpdateDiscussionDocument:                      "UpdateDiscussion",
-	CreateBulkCSVDNSVerificationDocument:          "CreateBulkCSVDNSVerification",
-	CreateBulkDNSVerificationDocument:             "CreateBulkDNSVerification",
-	CreateDNSVerificationDocument:                 "CreateDNSVerification",
-	DeleteDNSVerificationDocument:                 "DeleteDNSVerification",
-	GetAllDNSVerificationsDocument:                "GetAllDNSVerifications",
-	GetDNSVerificationByIDDocument:                "GetDNSVerificationByID",
-	GetDNSVerificationsDocument:                   "GetDNSVerifications",
-	UpdateDNSVerificationDocument:                 "UpdateDNSVerification",
-	CreateDocumentDataDocument:                    "CreateDocumentData",
-	DeleteDocumentDataDocument:                    "DeleteDocumentData",
-	GetDocumentDataByIDDocument:                   "GetDocumentDataByID",
-	UpdateDocumentDataDocument:                    "UpdateDocumentData",
-	CreateBulkCSVEmailTemplateDocument:            "CreateBulkCSVEmailTemplate",
-	CreateBulkEmailTemplateDocument:               "CreateBulkEmailTemplate",
-	CreateEmailTemplateDocument:                   "CreateEmailTemplate",
-	DeleteBulkEmailTemplateDocument:               "DeleteBulkEmailTemplate",
-	DeleteEmailTemplateDocument:                   "DeleteEmailTemplate",
-	GetAllEmailTemplatesDocument:                  "GetAllEmailTemplates",
-	GetEmailTemplateByIDDocument:                  "GetEmailTemplateByID",
-	GetEmailTemplatesDocument:                     "GetEmailTemplates",
-	PreviewEmailTemplateDocument:                  "PreviewEmailTemplate",
-	UpdateBulkCSVEmailTemplateDocument:            "UpdateBulkCSVEmailTemplate",
-	UpdateBulkEmailTemplateDocument:               "UpdateBulkEmailTemplate",
-	UpdateEmailTemplateDocument:                   "UpdateEmailTemplate",
-	CreateBulkCSVEntityDocument:                   "CreateBulkCSVEntity",
-	CreateBulkEntityDocument:                      "CreateBulkEntity",
-	CreateEntityDocument:                          "CreateEntity",
-	DeleteEntityDocument:                          "DeleteEntity",
-	GetAllEntitiesDocument:                        "GetAllEntities",
-	GetEntitiesDocument:                           "GetEntities",
-	GetEntityByIDDocument:                         "GetEntityByID",
-	UpdateEntityDocument:                          "UpdateEntity",
-	CreateBulkCSVEntityTypeDocument:               "CreateBulkCSVEntityType",
-	CreateBulkEntityTypeDocument:                  "CreateBulkEntityType",
-	CreateEntityTypeDocument:                      "CreateEntityType",
-	DeleteEntityTypeDocument:                      "DeleteEntityType",
-	GetAllEntityTypesDocument:                     "GetAllEntityTypes",
-	GetEntityTypeByIDDocument:                     "GetEntityTypeByID",
-	GetEntityTypesDocument:                        "GetEntityTypes",
-	UpdateEntityTypeDocument:                      "UpdateEntityType",
-	CreateBulkCSVEventDocument:                    "CreateBulkCSVEvent",
-	CreateBulkEventDocument:                       "CreateBulkEvent",
-	CreateEventDocument:                           "CreateEvent",
-	DeleteEventDocument:                           "DeleteEvent",
-	GetAllEventsDocument:                          "GetAllEvents",
-	GetEventByIDDocument:                          "GetEventByID",
-	GetEventsDocument:                             "GetEvents",
-	UpdateEventDocument:                           "UpdateEvent",
-	CreateBulkCSVEvidenceDocument:                 "CreateBulkCSVEvidence",
-	CreateEvidenceDocument:                        "CreateEvidence",
-	DeleteEvidenceDocument:                        "DeleteEvidence",
-	GetAllEvidencesDocument:                       "GetAllEvidences",
-	GetEvidenceByIDDocument:                       "GetEvidenceByID",
-	GetEvidencesDocument:                          "GetEvidences",
-	UpdateBulkEvidenceDocument:                    "UpdateBulkEvidence",
-	UpdateEvidenceDocument:                        "UpdateEvidence",
-	UpdateEvidenceCommentDocument:                 "UpdateEvidenceComment",
-	CreateExportDocument:                          "CreateExport",
-	DeleteBulkExportDocument:                      "DeleteBulkExport",
-	DeleteExportDocument:                          "DeleteExport",
-	GetAllExportsDocument:                         "GetAllExports",
-	GetExportByIDDocument:                         "GetExportByID",
-	GetExportsDocument:                            "GetExports",
-	UpdateExportDocument:                          "UpdateExport",
-	DeleteFileDocument:                            "DeleteFile",
-	GetAllFilesDocument:                           "GetAllFiles",
-	GetFileByIDDocument:                           "GetFileByID",
-	GetFilesDocument:                              "GetFiles",
-	CreateBulkCSVFindingDocument:                  "CreateBulkCSVFinding",
-	CreateBulkFindingDocument:                     "CreateBulkFinding",
-	CreateFindingDocument:                         "CreateFinding",
-	DeleteBulkFindingDocument:                     "DeleteBulkFinding",
-	DeleteFindingDocument:                         "DeleteFinding",
-	GetAllFindingsDocument:                        "GetAllFindings",
-	GetFindingByIDDocument:                        "GetFindingByID",
-	GetFindingsDocument:                           "GetFindings",
-	UpdateBulkCSVFindingDocument:                  "UpdateBulkCSVFinding",
-	UpdateBulkFindingDocument:                     "UpdateBulkFinding",
-	UpdateFindingDocument:                         "UpdateFinding",
-	CreateBulkCSVFindingControlDocument:           "CreateBulkCSVFindingControl",
-	CreateBulkFindingControlDocument:              "CreateBulkFindingControl",
-	CreateFindingControlDocument:                  "CreateFindingControl",
-	DeleteBulkFindingControlDocument:              "DeleteBulkFindingControl",
-	DeleteFindingControlDocument:                  "DeleteFindingControl",
-	GetAllFindingControlsDocument:                 "GetAllFindingControls",
-	GetFindingControlByIDDocument:                 "GetFindingControlByID",
-	GetFindingControlsDocument:                    "GetFindingControls",
-	UpdateFindingControlDocument:                  "UpdateFindingControl",
-	CreateBulkCSVGroupDocument:                    "CreateBulkCSVGroup",
-	CreateBulkGroupDocument:                       "CreateBulkGroup",
-	CreateGroupDocument:                           "CreateGroup",
-	CreateGroupByCloneDocument:                    "CreateGroupByClone",
-	CreateGroupSimpleDocument:                     "CreateGroupSimple",
-	CreateGroupWithMembersDocument:                "CreateGroupWithMembers",
-	DeleteGroupDocument:                           "DeleteGroup",
-	GetAllGroupsDocument:                          "GetAllGroups",
-	GetGroupByIDDocument:                          "GetGroupByID",
-	GetGroupInfoDocument:                          "GetGroupInfo",
-	GetGroupsDocument:                             "GetGroups",
-	UpdateGroupDocument:                           "UpdateGroup",
-	AddUserToGroupWithRoleDocument:                "AddUserToGroupWithRole",
-	CreateBulkCSVGroupMembersDocument:             "CreateBulkCSVGroupMembers",
-	CreateBulkGroupMembersDocument:                "CreateBulkGroupMembers",
-	GetGroupMembersByGroupIDDocument:              "GetGroupMembersByGroupID",
-	RemoveUserFromGroupDocument:                   "RemoveUserFromGroup",
-	UpdateUserRoleInGroupDocument:                 "UpdateUserRoleInGroup",
-	GetAllGroupSettingsDocument:                   "GetAllGroupSettings",
-	GetGroupSettingByIDDocument:                   "GetGroupSettingByID",
-	GetGroupSettingsDocument:                      "GetGroupSettings",
-	UpdateGroupSettingDocument:                    "UpdateGroupSetting",
-	CreateBulkCSVHushDocument:                     "CreateBulkCSVHush",
-	CreateBulkHushDocument:                        "CreateBulkHush",
-	CreateHushDocument:                            "CreateHush",
-	GetAllHushesDocument:                          "GetAllHushes",
-	GetHushByIDDocument:                           "GetHushByID",
-	GetHushesDocument:                             "GetHushes",
-	UpdateHushDocument:                            "UpdateHush",
-	CreateBulkCSVIdentityHolderDocument:           "CreateBulkCSVIdentityHolder",
-	CreateBulkIdentityHolderDocument:              "CreateBulkIdentityHolder",
-	CreateIdentityHolderDocument:                  "CreateIdentityHolder",
-	DeleteIdentityHolderDocument:                  "DeleteIdentityHolder",
-	GetAllIdentityHoldersDocument:                 "GetAllIdentityHolders",
-	GetIdentityHolderByIDDocument:                 "GetIdentityHolderByID",
-	GetIdentityHolderDirectoryAccountsDocument:    "GetIdentityHolderDirectoryAccounts",
-	GetIdentityHoldersDocument:                    "GetIdentityHolders",
-	UpdateIdentityHolderDocument:                  "UpdateIdentityHolder",
-	DeleteIntegrationDocument:                     "DeleteIntegration",
-	GetAllIntegrationsDocument:                    "GetAllIntegrations",
-	GetIntegrationByIDDocument:                    "GetIntegrationByID",
-	GetIntegrationByIDWithSecretsDocument:         "GetIntegrationByIDWithSecrets",
-	GetIntegrationsDocument:                       "GetIntegrations",
-	CreateBulkCSVInternalPolicyDocument:           "CreateBulkCSVInternalPolicy",
-	CreateBulkInternalPolicyDocument:              "CreateBulkInternalPolicy",
-	CreateInternalPolicyDocument:                  "CreateInternalPolicy",
-	CreateUploadInternalPolicyDocument:            "CreateUploadInternalPolicy",
-	DeleteInternalPolicyDocument:                  "DeleteInternalPolicy",
-	GetAllInternalPoliciesDocument:                "GetAllInternalPolicies",
-	GetInternalPoliciesDocument:                   "GetInternalPolicies",
-	GetInternalPolicyByIDDocument:                 "GetInternalPolicyByID",
-	UpdateBulkInternalPolicyDocument:              "UpdateBulkInternalPolicy",
-	UpdateInternalPolicyDocument:                  "UpdateInternalPolicy",
-	UpdateInternalPolicyCommentDocument:           "UpdateInternalPolicyComment",
-	CreateBulkCSVInviteDocument:                   "CreateBulkCSVInvite",
-	CreateBulkInviteDocument:                      "CreateBulkInvite",
-	CreateInviteDocument:                          "CreateInvite",
-	DeleteInviteDocument:                          "DeleteInvite",
-	GetAllInvitesDocument:                         "GetAllInvites",
-	GetInviteByIDDocument:                         "GetInviteByID",
-	InvitesByOrgIDDocument:                        "InvitesByOrgID",
-	CreateBulkCSVMappableDomainDocument:           "CreateBulkCSVMappableDomain",
-	CreateBulkMappableDomainDocument:              "CreateBulkMappableDomain",
-	CreateMappableDomainDocument:                  "CreateMappableDomain",
-	DeleteMappableDomainDocument:                  "DeleteMappableDomain",
-	GetAllMappableDomainsDocument:                 "GetAllMappableDomains",
-	GetMappableDomainByIDDocument:                 "GetMappableDomainByID",
-	GetMappableDomainsDocument:                    "GetMappableDomains",
-	UpdateMappableDomainDocument:                  "UpdateMappableDomain",
-	CreateBulkCSVMappedControlDocument:            "CreateBulkCSVMappedControl",
-	CreateBulkMappedControlDocument:               "CreateBulkMappedControl",
-	CreateMappedControlDocument:                   "CreateMappedControl",
-	DeleteMappedControlDocument:                   "DeleteMappedControl",
-	GetAllMappedControlsDocument:                  "GetAllMappedControls",
-	GetMappedControlByIDDocument:                  "GetMappedControlByID",
-	GetMappedControlsDocument:                     "GetMappedControls",
-	UpdateMappedControlDocument:                   "UpdateMappedControl",
-	CreateBulkCSVNarrativeDocument:                "CreateBulkCSVNarrative",
-	CreateBulkNarrativeDocument:                   "CreateBulkNarrative",
-	CreateNarrativeDocument:                       "CreateNarrative",
-	DeleteNarrativeDocument:                       "DeleteNarrative",
-	GetAllNarrativesDocument:                      "GetAllNarratives",
-	GetNarrativeByIDDocument:                      "GetNarrativeByID",
-	GetNarrativesDocument:                         "GetNarratives",
-	UpdateNarrativeDocument:                       "UpdateNarrative",
-	GetNoteByIDDocument:                           "GetNoteByID",
-	DeleteNoteDocument:                            "DeleteNote",
-	CreateNotificationDocument:                    "CreateNotification",
-	UpdateNotificationDocument:                    "UpdateNotification",
-	CreateBulkCSVNotificationPreferenceDocument:   "CreateBulkCSVNotificationPreference",
-	CreateBulkNotificationPreferenceDocument:      "CreateBulkNotificationPreference",
-	CreateNotificationPreferenceDocument:          "CreateNotificationPreference",
-	DeleteBulkNotificationPreferenceDocument:      "DeleteBulkNotificationPreference",
-	DeleteNotificationPreferenceDocument:          "DeleteNotificationPreference",
-	GetAllNotificationPreferencesDocument:         "GetAllNotificationPreferences",
-	GetNotificationPreferenceByIDDocument:         "GetNotificationPreferenceByID",
-	GetNotificationPreferencesDocument:            "GetNotificationPreferences",
-	UpdateBulkCSVNotificationPreferenceDocument:   "UpdateBulkCSVNotificationPreference",
-	UpdateBulkNotificationPreferenceDocument:      "UpdateBulkNotificationPreference",
-	UpdateNotificationPreferenceDocument:          "UpdateNotificationPreference",
-	CreateBulkCSVNotificationTemplateDocument:     "CreateBulkCSVNotificationTemplate",
-	CreateBulkNotificationTemplateDocument:        "CreateBulkNotificationTemplate",
-	CreateNotificationTemplateDocument:            "CreateNotificationTemplate",
-	DeleteBulkNotificationTemplateDocument:        "DeleteBulkNotificationTemplate",
-	DeleteNotificationTemplateDocument:            "DeleteNotificationTemplate",
-	GetAllNotificationTemplatesDocument:           "GetAllNotificationTemplates",
-	GetNotificationTemplateByIDDocument:           "GetNotificationTemplateByID",
-	GetNotificationTemplatesDocument:              "GetNotificationTemplates",
-	UpdateBulkCSVNotificationTemplateDocument:     "UpdateBulkCSVNotificationTemplate",
-	UpdateBulkNotificationTemplateDocument:        "UpdateBulkNotificationTemplate",
-	UpdateNotificationTemplateDocument:            "UpdateNotificationTemplate",
-	CreateOnboardingDocument:                      "CreateOnboarding",
-	CreateOrganizationDocument:                    "CreateOrganization",
-	CreateOrganizationWithMembersDocument:         "CreateOrganizationWithMembers",
-	DeleteOrganizationDocument:                    "DeleteOrganization",
-	GetAllOrganizationsDocument:                   "GetAllOrganizations",
-	GetOrganizationByIDDocument:                   "GetOrganizationByID",
-	GetOrganizationsDocument:                      "GetOrganizations",
-	TransferOrganizationOwnershipDocument:         "TransferOrganizationOwnership",
-	UpdateOrganizationDocument:                    "UpdateOrganization",
-	GetAllOrganizationSettingsDocument:            "GetAllOrganizationSettings",
-	GetOrganizationSettingByIDDocument:            "GetOrganizationSettingByID",
-	GetOrganizationSettingsDocument:               "GetOrganizationSettings",
-	UpdateOrganizationSettingDocument:             "UpdateOrganizationSetting",
-	AddUserToOrgWithRoleDocument:                  "AddUserToOrgWithRole",
-	CreateBulkCSVOrgMembersDocument:               "CreateBulkCSVOrgMembers",
-	CreateBulkOrgMembersDocument:                  "CreateBulkOrgMembers",
-	GetOrgMembersByOrgIDDocument:                  "GetOrgMembersByOrgID",
-	LeaveOrganizationDocument:                     "LeaveOrganization",
-	RemoveBulkUsersFromOrgDocument:                "RemoveBulkUsersFromOrg",
-	RemoveUserFromOrgDocument:                     "RemoveUserFromOrg",
-	UpdateBulkOrgMemberRolesDocument:              "UpdateBulkOrgMemberRoles",
-	UpdateUserRoleInOrgDocument:                   "UpdateUserRoleInOrg",
-	GetAllOrgSubscriptionsDocument:                "GetAllOrgSubscriptions",
-	GetOrgSubscriptionByIDDocument:                "GetOrgSubscriptionByID",
-	GetOrgSubscriptionsDocument:                   "GetOrgSubscriptions",
-	CreatePersonalAccessTokenDocument:             "CreatePersonalAccessToken",
-	DeletePersonalAccessTokenDocument:             "DeletePersonalAccessToken",
-	GetAllPersonalAccessTokensDocument:            "GetAllPersonalAccessTokens",
-	GetPersonalAccessTokenByIDDocument:            "GetPersonalAccessTokenByID",
-	GetPersonalAccessTokensDocument:               "GetPersonalAccessTokens",
-	UpdatePersonalAccessTokenDocument:             "UpdatePersonalAccessToken",
-	CreateBulkCSVPlatformDocument:                 "CreateBulkCSVPlatform",
-	CreateBulkPlatformDocument:                    "CreateBulkPlatform",
-	CreatePlatformDocument:                        "CreatePlatform",
-	DeletePlatformDocument:                        "DeletePlatform",
-	GetAllPlatformsDocument:                       "GetAllPlatforms",
-	GetPlatformByIDDocument:                       "GetPlatformByID",
-	GetPlatformsDocument:                          "GetPlatforms",
-	UpdatePlatformDocument:                        "UpdatePlatform",
-	CreateBulkCSVProcedureDocument:                "CreateBulkCSVProcedure",
-	CreateBulkProcedureDocument:                   "CreateBulkProcedure",
-	CreateProcedureDocument:                       "CreateProcedure",
-	CreateUploadProcedureDocument:                 "CreateUploadProcedure",
-	DeleteBulkProcedureDocument:                   "DeleteBulkProcedure",
-	DeleteProcedureDocument:                       "DeleteProcedure",
-	GetAllProceduresDocument:                      "GetAllProcedures",
-	GetProcedureByIDDocument:                      "GetProcedureByID",
-	GetProceduresDocument:                         "GetProcedures",
-	UpdateBulkProcedureDocument:                   "UpdateBulkProcedure",
-	UpdateProcedureDocument:                       "UpdateProcedure",
-	CreateBulkCSVProgramDocument:                  "CreateBulkCSVProgram",
-	CreateBulkProgramDocument:                     "CreateBulkProgram",
-	CreateControlWithSubcontrolsDocument:          "CreateControlWithSubcontrols",
-	CreateFullProgramDocument:                     "CreateFullProgram",
-	CreateFullProgramReturnIDsDocument:            "CreateFullProgramReturnIDs",
-	CreateProgramDocument:                         "CreateProgram",
-	CreateProgramWithMembersDocument:              "CreateProgramWithMembers",
-	DeleteProgramDocument:                         "DeleteProgram",
-	GetAllProgramsDocument:                        "GetAllPrograms",
-	GetProgramByIDDocument:                        "GetProgramByID",
-	GetProgramsDocument:                           "GetPrograms",
-	UpdateProgramDocument:                         "UpdateProgram",
-	AddUserToProgramWithRoleDocument:              "AddUserToProgramWithRole",
-	CreateBulkCSVProgramMembersDocument:           "CreateBulkCSVProgramMembers",
-	CreateBulkProgramMembersDocument:              "CreateBulkProgramMembers",
-	GetProgramMembersByProgramIDDocument:          "GetProgramMembersByProgramID",
-	RemoveUserFromProgramDocument:                 "RemoveUserFromProgram",
-	UpdateUserRoleInProgramDocument:               "UpdateUserRoleInProgram",
-	CreateBulkCSVProgramMembershipDocument:        "CreateBulkCSVProgramMembership",
-	CreateBulkProgramMembershipDocument:           "CreateBulkProgramMembership",
-	CreateProgramMembershipDocument:               "CreateProgramMembership",
-	DeleteProgramMembershipDocument:               "DeleteProgramMembership",
-	GetAllProgramMembershipsDocument:              "GetAllProgramMemberships",
-	GetProgramMembershipByIDDocument:              "GetProgramMembershipByID",
-	GetProgramMembershipsDocument:                 "GetProgramMemberships",
-	UpdateProgramMembershipDocument:               "UpdateProgramMembership",
-	CreateBulkCSVRemediationDocument:              "CreateBulkCSVRemediation",
-	CreateBulkRemediationDocument:                 "CreateBulkRemediation",
-	CreateRemediationDocument:                     "CreateRemediation",
-	DeleteBulkRemediationDocument:                 "DeleteBulkRemediation",
-	DeleteRemediationDocument:                     "DeleteRemediation",
-	GetAllRemediationsDocument:                    "GetAllRemediations",
-	GetRemediationByIDDocument:                    "GetRemediationByID",
-	GetRemediationsDocument:                       "GetRemediations",
-	UpdateBulkCSVRemediationDocument:              "UpdateBulkCSVRemediation",
-	UpdateBulkRemediationDocument:                 "UpdateBulkRemediation",
-	UpdateRemediationDocument:                     "UpdateRemediation",
-	CreateBulkCSVReviewDocument:                   "CreateBulkCSVReview",
-	CreateBulkReviewDocument:                      "CreateBulkReview",
-	CreateReviewDocument:                          "CreateReview",
-	DeleteBulkReviewReviewDocument:                "DeleteBulkReviewReview",
-	DeleteReviewDocument:                          "DeleteReview",
-	GetAllReviewsDocument:                         "GetAllReviews",
-	GetReviewByIDDocument:                         "GetReviewByID",
-	GetReviewsDocument:                            "GetReviews",
-	UpdateBulkCSVReviewDocument:                   "UpdateBulkCSVReview",
-	UpdateBulkReviewDocument:                      "UpdateBulkReview",
-	UpdateReviewDocument:                          "UpdateReview",
-	UpdateReviewCommentDocument:                   "UpdateReviewComment",
-	CreateBulkCSVRiskDocument:                     "CreateBulkCSVRisk",
-	CreateBulkRiskDocument:                        "CreateBulkRisk",
-	CreateRiskDocument:                            "CreateRisk",
-	DeleteRiskDocument:                            "DeleteRisk",
-	GetAllRisksDocument:                           "GetAllRisks",
-	GetRiskByIDDocument:                           "GetRiskByID",
-	GetRisksDocument:                              "GetRisks",
-	UpdateBulkRiskDocument:                        "UpdateBulkRisk",
-	UpdateRiskDocument:                            "UpdateRisk",
-	CreateBulkCSVScanDocument:                     "CreateBulkCSVScan",
-	CreateBulkScanDocument:                        "CreateBulkScan",
-	CreateScanDocument:                            "CreateScan",
-	DeleteScanDocument:                            "DeleteScan",
-	GetAllScansDocument:                           "GetAllScans",
-	GetScanByIDDocument:                           "GetScanByID",
-	GetScansDocument:                              "GetScans",
-	UpdateScanDocument:                            "UpdateScan",
-	GlobalSearchDocument:                          "GlobalSearch",
-	CreateBulkCSVSLADefinitionDocument:            "CreateBulkCSVSLADefinition",
-	CreateBulkSLADefinitionDocument:               "CreateBulkSLADefinition",
-	CreateSLADefinitionDocument:                   "CreateSLADefinition",
-	DeleteBulkSLADefinitionDocument:               "DeleteBulkSLADefinition",
-	DeleteSLADefinitionDocument:                   "DeleteSLADefinition",
-	GetAllSLADefinitionsDocument:                  "GetAllSLADefinitions",
-	GetSLADefinitionByIDDocument:                  "GetSLADefinitionByID",
-	GetSLADefinitionsDocument:                     "GetSLADefinitions",
-	UpdateBulkCSVSLADefinitionDocument:            "UpdateBulkCSVSLADefinition",
-	UpdateBulkSLADefinitionDocument:               "UpdateBulkSLADefinition",
-	UpdateSLADefinitionDocument:                   "UpdateSLADefinition",
-	CreateStandardDocument:                        "CreateStandard",
-	DeleteStandardDocument:                        "DeleteStandard",
-	GetAllStandardsDocument:                       "GetAllStandards",
-	GetStandardByIDDocument:                       "GetStandardByID",
-	GetStandardsDocument:                          "GetStandards",
-	UpdateStandardDocument:                        "UpdateStandard",
-	CreateBulkCSVSubcontrolDocument:               "CreateBulkCSVSubcontrol",
-	CreateBulkSubcontrolDocument:                  "CreateBulkSubcontrol",
-	CreateSubcontrolDocument:                      "CreateSubcontrol",
-	DeleteSubcontrolDocument:                      "DeleteSubcontrol",
-	GetAllSubcontrolsDocument:                     "GetAllSubcontrols",
-	GetSubcontrolByIDDocument:                     "GetSubcontrolByID",
-	GetSubcontrolsDocument:                        "GetSubcontrols",
-	UpdateSubcontrolDocument:                      "UpdateSubcontrol",
-	CreateBulkCSVSubprocessorDocument:             "CreateBulkCSVSubprocessor",
-	CreateBulkSubprocessorDocument:                "CreateBulkSubprocessor",
-	CreateSubprocessorDocument:                    "CreateSubprocessor",
-	DeleteSubprocessorDocument:                    "DeleteSubprocessor",
-	GetAllSubprocessorsDocument:                   "GetAllSubprocessors",
-	GetSubprocessorByIDDocument:                   "GetSubprocessorByID",
-	GetSubprocessorsDocument:                      "GetSubprocessors",
-	UpdateBulkSubprocessorDocument:                "UpdateBulkSubprocessor",
-	UpdateSubprocessorDocument:                    "UpdateSubprocessor",
-	CreateBulkCSVSubscriberDocument:               "CreateBulkCSVSubscriber",
-	CreateBulkSubscriberDocument:                  "CreateBulkSubscriber",
-	CreateSubscriberDocument:                      "CreateSubscriber",
-	DeleteSubscriberDocument:                      "DeleteSubscriber",
-	GetAllSubscribersDocument:                     "GetAllSubscribers",
-	GetSubscriberByEmailDocument:                  "GetSubscriberByEmail",
-	GetSubscribersDocument:                        "GetSubscribers",
-	UpdateSubscriberDocument:                      "UpdateSubscriber",
-	CreateBulkCSVSystemDetailDocument:             "CreateBulkCSVSystemDetail",
-	CreateBulkSystemDetailDocument:                "CreateBulkSystemDetail",
-	CreateSystemDetailDocument:                    "CreateSystemDetail",
-	DeleteBulkSystemDetailDocument:                "DeleteBulkSystemDetail",
-	DeleteSystemDetailDocument:                    "DeleteSystemDetail",
-	GetAllSystemDetailsDocument:                   "GetAllSystemDetails",
-	GetSystemDetailByIDDocument:                   "GetSystemDetailByID",
-	GetSystemDetailsDocument:                      "GetSystemDetails",
-	UpdateBulkCSVSystemDetailDocument:             "UpdateBulkCSVSystemDetail",
-	UpdateBulkSystemDetailDocument:                "UpdateBulkSystemDetail",
-	UpdateSystemDetailDocument:                    "UpdateSystemDetail",
-	CreateBulkCSVTagDefinitionDocument:            "CreateBulkCSVTagDefinition",
-	CreateBulkTagDefinitionDocument:               "CreateBulkTagDefinition",
-	CreateTagDefinitionDocument:                   "CreateTagDefinition",
-	DeleteTagDefinitionDocument:                   "DeleteTagDefinition",
-	GetAllTagDefinitionsDocument:                  "GetAllTagDefinitions",
-	GetTagDefinitionByIDDocument:                  "GetTagDefinitionByID",
-	GetTagDefinitionsDocument:                     "GetTagDefinitions",
-	UpdateTagDefinitionDocument:                   "UpdateTagDefinition",
-	CreateBulkCSVTaskDocument:                     "CreateBulkCSVTask",
-	CreateBulkTaskDocument:                        "CreateBulkTask",
-	CreateTaskDocument:                            "CreateTask",
-	DeleteTaskDocument:                            "DeleteTask",
-	GetAllTasksDocument:                           "GetAllTasks",
-	GetTaskByIDDocument:                           "GetTaskByID",
-	GetTasksDocument:                              "GetTasks",
-	UpdateBulkTaskDocument:                        "UpdateBulkTask",
-	UpdateTaskDocument:                            "UpdateTask",
-	UpdateTaskCommentDocument:                     "UpdateTaskComment",
-	CreateBulkCSVTemplateDocument:                 "CreateBulkCSVTemplate",
-	CreateBulkTemplateDocument:                    "CreateBulkTemplate",
-	CreateTemplateDocument:                        "CreateTemplate",
-	GetAllTemplatesDocument:                       "GetAllTemplates",
-	GetTemplateByIDDocument:                       "GetTemplateByID",
-	UpdateTemplateDocument:                        "UpdateTemplate",
-	CreateTFASettingDocument:                      "CreateTFASetting",
-	GetAllTFASettingsDocument:                     "GetAllTFASettings",
-	GetTFASettingDocument:                         "GetTFASetting",
-	UpdateTFASettingDocument:                      "UpdateTFASetting",
-	CreateTrustCenterDocument:                     "CreateTrustCenter",
-	DeleteTrustCenterDocument:                     "DeleteTrustCenter",
-	GetAllTrustCentersDocument:                    "GetAllTrustCenters",
-	GetTrustCenterByIDDocument:                    "GetTrustCenterByID",
-	GetTrustCenterFrontendQueryDocument:           "GetTrustCenterFrontendQuery",
-	GetTrustCentersDocument:                       "GetTrustCenters",
-	UpdateTrustCenterDocument:                     "UpdateTrustCenter",
-	CreateBulkCSVTrustCenterComplianceDocument:    "CreateBulkCSVTrustCenterCompliance",
-	CreateBulkTrustCenterComplianceDocument:       "CreateBulkTrustCenterCompliance",
-	CreateTrustCenterComplianceDocument:           "CreateTrustCenterCompliance",
-	DeleteTrustCenterComplianceDocument:           "DeleteTrustCenterCompliance",
-	GetAllTrustCenterCompliancesDocument:          "GetAllTrustCenterCompliances",
-	GetTrustCenterComplianceByIDDocument:          "GetTrustCenterComplianceByID",
-	GetTrustCenterCompliancesDocument:             "GetTrustCenterCompliances",
-	UpdateTrustCenterComplianceDocument:           "UpdateTrustCenterCompliance",
-	CreateTrustCenterDocDocument:                  "CreateTrustCenterDoc",
-	DeleteTrustCenterDocDocument:                  "DeleteTrustCenterDoc",
-	GetAllTrustCenterDocsDocument:                 "GetAllTrustCenterDocs",
-	GetTrustCenterDocByIDDocument:                 "GetTrustCenterDocByID",
-	GetTrustCenterDocsDocument:                    "GetTrustCenterDocs",
-	UpdateTrustCenterDocDocument:                  "UpdateTrustCenterDoc",
-	CreateTrustCenterDomainDocument:               "CreateTrustCenterDomain",
-	CreateBulkCSVTrustCenterEntityDocument:        "CreateBulkCSVTrustCenterEntity",
-	CreateBulkTrustCenterEntityDocument:           "CreateBulkTrustCenterEntity",
-	CreateTrustCenterEntityDocument:               "CreateTrustCenterEntity",
-	DeleteTrustCenterEntityDocument:               "DeleteTrustCenterEntity",
-	GetAlltrustCenterEntitiesDocument:             "GetAlltrustCenterEntities",
-	GetTrustCenterEntitiesDocument:                "GetTrustCenterEntities",
-	GetTrustCenterEntityByIDDocument:              "GetTrustCenterEntityByID",
-	UpdateTrustCenterEntityDocument:               "UpdateTrustCenterEntity",
-	CreateBulkCSVTrustCenterFaqDocument:           "CreateBulkCSVTrustCenterFAQ",
-	CreateBulkTrustCenterFaqDocument:              "CreateBulkTrustCenterFAQ",
-	CreateTrustCenterFaqDocument:                  "CreateTrustCenterFAQ",
-	DeleteBulkTrustCenterFaqDocument:              "DeleteBulkTrustCenterFAQ",
-	DeleteTrustCenterFaqDocument:                  "DeleteTrustCenterFAQ",
-	GetAllTrustCenterFaqsDocument:                 "GetAllTrustCenterFAQS",
-	GetTrustCenterFAQByIDDocument:                 "GetTrustCenterFAQByID",
-	GetTrustCenterFaqsDocument:                    "GetTrustCenterFAQS",
-	UpdateBulkCSVTrustCenterFaqDocument:           "UpdateBulkCSVTrustCenterFAQ",
-	UpdateBulkTrustCenterFaqDocument:              "UpdateBulkTrustCenterFAQ",
-	UpdateTrustCenterFaqDocument:                  "UpdateTrustCenterFAQ",
-	CreateTrustCenterNdaDocument:                  "CreateTrustCenterNda",
-	SubmitTrustCenterNDAResponseDocument:          "SubmitTrustCenterNDAResponse",
-	UpdateTrustCenterNdaDocument:                  "UpdateTrustCenterNda",
-	CreateBulkCSVTrustCenterNDARequestDocument:    "CreateBulkCSVTrustCenterNDARequest",
-	CreateBulkTrustCenterNDARequestDocument:       "CreateBulkTrustCenterNDARequest",
-	CreateTrustCenterNDARequestDocument:           "CreateTrustCenterNDARequest",
-	DeleteBulkTrustCenterNDARequestDocument:       "DeleteBulkTrustCenterNDARequest",
-	DeleteTrustCenterNDARequestDocument:           "DeleteTrustCenterNDARequest",
-	GetAllTrustCenterNDARequestsDocument:          "GetAllTrustCenterNDARequests",
-	GetTrustCenterNDARequestByIDDocument:          "GetTrustCenterNDARequestByID",
-	GetTrustCenterNDARequestsDocument:             "GetTrustCenterNDARequests",
-	RequestNewTrustCenterTokenDocument:            "RequestNewTrustCenterToken",
-	UpdateTrustCenterNDARequestDocument:           "UpdateTrustCenterNDARequest",
-	CreateTrustCenterPreviewSettingDocument:       "CreateTrustCenterPreviewSetting",
-	CreateTrustCenterSettingDocument:              "CreateTrustCenterSetting",
-	DeleteTrustCenterSettingDocument:              "DeleteTrustCenterSetting",
-	GetAllTrustCenterSettingsDocument:             "GetAllTrustCenterSettings",
-	GetTrustCenterSettingByIDDocument:             "GetTrustCenterSettingByID",
-	GetTrustCenterSettingsDocument:                "GetTrustCenterSettings",
-	UpdateTrustCenterSettingDocument:              "UpdateTrustCenterSetting",
-	CreateBulkCSVTrustCenterSubprocessorDocument:  "CreateBulkCSVTrustCenterSubprocessor",
-	CreateBulkTrustCenterSubprocessorDocument:     "CreateBulkTrustCenterSubprocessor",
-	CreateTrustCenterSubprocessorDocument:         "CreateTrustCenterSubprocessor",
-	DeleteTrustCenterSubprocessorDocument:         "DeleteTrustCenterSubprocessor",
-	GetAllTrustCenterSubprocessorsDocument:        "GetAllTrustCenterSubprocessors",
-	GetTrustCenterSubprocessorByIDDocument:        "GetTrustCenterSubprocessorByID",
-	GetTrustCenterSubprocessorsDocument:           "GetTrustCenterSubprocessors",
-	UpdateBulkTrustCenterSubprocessorDocument:     "UpdateBulkTrustCenterSubprocessor",
-	UpdateTrustCenterSubprocessorDocument:         "UpdateTrustCenterSubprocessor",
-	CreateTrustCenterWatermarkConfigDocument:      "CreateTrustCenterWatermarkConfig",
-	DeleteTrustCenterWatermarkConfigDocument:      "DeleteTrustCenterWatermarkConfig",
-	GetAllTrustCenterWatermarkConfigsDocument:     "GetAllTrustCenterWatermarkConfigs",
-	GetTrustCenterWatermarkConfigByIDDocument:     "GetTrustCenterWatermarkConfigByID",
-	GetTrustCenterWatermarkConfigsDocument:        "GetTrustCenterWatermarkConfigs",
-	UpdateTrustCenterWatermarkConfigDocument:      "UpdateTrustCenterWatermarkConfig",
-	CreateUserDocument:                            "CreateUser",
-	DeleteUserDocument:                            "DeleteUser",
-	GetAllUsersDocument:                           "GetAllUsers",
-	GetSelfDocument:                               "GetSelf",
-	GetUserByIDDocument:                           "GetUserByID",
-	GetUserByIDWithOrgsDocument:                   "GetUserByIDWithOrgs",
-	UpdateUserDocument:                            "UpdateUser",
-	GetAllUserSettingsDocument:                    "GetAllUserSettings",
-	GetUserSettingByIDDocument:                    "GetUserSettingByID",
-	GetUserSettingsDocument:                       "GetUserSettings",
-	UpdateUserSettingDocument:                     "UpdateUserSetting",
-	CreateBulkCSVVendorRiskScoreDocument:          "CreateBulkCSVVendorRiskScore",
-	CreateBulkVendorRiskScoreDocument:             "CreateBulkVendorRiskScore",
-	CreateVendorRiskScoreDocument:                 "CreateVendorRiskScore",
-	DeleteBulkVendorRiskScoreDocument:             "DeleteBulkVendorRiskScore",
-	DeleteVendorRiskScoreDocument:                 "DeleteVendorRiskScore",
-	GetAllVendorRiskScoresDocument:                "GetAllVendorRiskScores",
-	GetVendorRiskScoreByIDDocument:                "GetVendorRiskScoreByID",
-	GetVendorRiskScoresDocument:                   "GetVendorRiskScores",
-	UpdateBulkCSVVendorRiskScoreDocument:          "UpdateBulkCSVVendorRiskScore",
-	UpdateBulkVendorRiskScoreDocument:             "UpdateBulkVendorRiskScore",
-	UpdateVendorRiskScoreDocument:                 "UpdateVendorRiskScore",
-	CreateBulkCSVVendorScoringConfigDocument:      "CreateBulkCSVVendorScoringConfig",
-	CreateBulkVendorScoringConfigDocument:         "CreateBulkVendorScoringConfig",
-	CreateVendorScoringConfigDocument:             "CreateVendorScoringConfig",
-	DeleteBulkVendorScoringConfigDocument:         "DeleteBulkVendorScoringConfig",
-	DeleteVendorScoringConfigDocument:             "DeleteVendorScoringConfig",
-	GetAllVendorScoringConfigsDocument:            "GetAllVendorScoringConfigs",
-	GetVendorScoringConfigByIDDocument:            "GetVendorScoringConfigByID",
-	GetVendorScoringConfigsDocument:               "GetVendorScoringConfigs",
-	UpdateBulkCSVVendorScoringConfigDocument:      "UpdateBulkCSVVendorScoringConfig",
-	UpdateBulkVendorScoringConfigDocument:         "UpdateBulkVendorScoringConfig",
-	UpdateVendorScoringConfigDocument:             "UpdateVendorScoringConfig",
-	CreateBulkCSVVulnerabilityDocument:            "CreateBulkCSVVulnerability",
-	CreateBulkVulnerabilityDocument:               "CreateBulkVulnerability",
-	CreateVulnerabilityDocument:                   "CreateVulnerability",
-	DeleteBulkVulnerabilityDocument:               "DeleteBulkVulnerability",
-	DeleteVulnerabilityDocument:                   "DeleteVulnerability",
-	GetAllVulnerabilitiesDocument:                 "GetAllVulnerabilities",
-	GetVulnerabilitiesDocument:                    "GetVulnerabilities",
-	GetVulnerabilityByIDDocument:                  "GetVulnerabilityByID",
-	UpdateBulkCSVVulnerabilityDocument:            "UpdateBulkCSVVulnerability",
-	UpdateBulkVulnerabilityDocument:               "UpdateBulkVulnerability",
-	UpdateVulnerabilityDocument:                   "UpdateVulnerability",
-	DeleteWebauthnDocument:                        "DeleteWebauthn",
-	GetAllWebauthnsDocument:                       "GetAllWebauthns",
-	ApproveWorkflowAssignmentDocument:             "ApproveWorkflowAssignment",
-	RejectWorkflowAssignmentDocument:              "RejectWorkflowAssignment",
-	GetMyWorkflowAssignmentsDocument:              "GetMyWorkflowAssignments",
-	GetActionPlanWorkflowStatusDocument:           "GetActionPlanWorkflowStatus",
-	GetActionPlanWorkflowTimelineDocument:         "GetActionPlanWorkflowTimeline",
-	GetAssessmentWorkflowStatusDocument:           "GetAssessmentWorkflowStatus",
-	GetAssessmentWorkflowTimelineDocument:         "GetAssessmentWorkflowTimeline",
-	GetAssessmentResponseWorkflowStatusDocument:   "GetAssessmentResponseWorkflowStatus",
-	GetAssessmentResponseWorkflowTimelineDocument: "GetAssessmentResponseWorkflowTimeline",
-	GetCampaignWorkflowStatusDocument:             "GetCampaignWorkflowStatus",
-	GetCampaignWorkflowTimelineDocument:           "GetCampaignWorkflowTimeline",
-	GetCampaignTargetWorkflowStatusDocument:       "GetCampaignTargetWorkflowStatus",
-	GetCampaignTargetWorkflowTimelineDocument:     "GetCampaignTargetWorkflowTimeline",
-	GetControlWorkflowStatusDocument:              "GetControlWorkflowStatus",
-	GetControlWorkflowTimelineDocument:            "GetControlWorkflowTimeline",
-	GetEvidenceWorkflowStatusDocument:             "GetEvidenceWorkflowStatus",
-	GetEvidenceWorkflowTimelineDocument:           "GetEvidenceWorkflowTimeline",
-	GetFindingWorkflowStatusDocument:              "GetFindingWorkflowStatus",
-	GetFindingWorkflowTimelineDocument:            "GetFindingWorkflowTimeline",
-	GetIdentityHolderWorkflowStatusDocument:       "GetIdentityHolderWorkflowStatus",
-	GetIdentityHolderWorkflowTimelineDocument:     "GetIdentityHolderWorkflowTimeline",
-	GetInternalPolicyWorkflowStatusDocument:       "GetInternalPolicyWorkflowStatus",
-	GetInternalPolicyWorkflowTimelineDocument:     "GetInternalPolicyWorkflowTimeline",
-	GetPlatformWorkflowStatusDocument:             "GetPlatformWorkflowStatus",
-	GetPlatformWorkflowTimelineDocument:           "GetPlatformWorkflowTimeline",
-	GetProcedureWorkflowStatusDocument:            "GetProcedureWorkflowStatus",
-	GetProcedureWorkflowTimelineDocument:          "GetProcedureWorkflowTimeline",
-	GetRemediationWorkflowStatusDocument:          "GetRemediationWorkflowStatus",
-	GetRemediationWorkflowTimelineDocument:        "GetRemediationWorkflowTimeline",
-	GetRiskWorkflowStatusDocument:                 "GetRiskWorkflowStatus",
-	GetRiskWorkflowTimelineDocument:               "GetRiskWorkflowTimeline",
-	GetSubcontrolWorkflowStatusDocument:           "GetSubcontrolWorkflowStatus",
-	GetSubcontrolWorkflowTimelineDocument:         "GetSubcontrolWorkflowTimeline",
-	GetTaskWorkflowStatusDocument:                 "GetTaskWorkflowStatus",
-	GetTaskWorkflowTimelineDocument:               "GetTaskWorkflowTimeline",
-	GetVulnerabilityWorkflowStatusDocument:        "GetVulnerabilityWorkflowStatus",
-	GetVulnerabilityWorkflowTimelineDocument:      "GetVulnerabilityWorkflowTimeline",
-	GetAllWorkflowAssignmentsDocument:             "GetAllWorkflowAssignments",
-	GetWorkflowAssignmentByIDDocument:             "GetWorkflowAssignmentByID",
-	GetWorkflowAssignmentsDocument:                "GetWorkflowAssignments",
-	GetAllWorkflowAssignmentTargetsDocument:       "GetAllWorkflowAssignmentTargets",
-	GetWorkflowAssignmentTargetByIDDocument:       "GetWorkflowAssignmentTargetByID",
-	GetWorkflowAssignmentTargetsDocument:          "GetWorkflowAssignmentTargets",
-	CreateBulkCSVWorkflowDefinitionDocument:       "CreateBulkCSVWorkflowDefinition",
-	CreateBulkWorkflowDefinitionDocument:          "CreateBulkWorkflowDefinition",
-	CreateWorkflowDefinitionDocument:              "CreateWorkflowDefinition",
-	DeleteWorkflowDefinitionDocument:              "DeleteWorkflowDefinition",
-	GetAllWorkflowDefinitionsDocument:             "GetAllWorkflowDefinitions",
-	GetWorkflowDefinitionByIDDocument:             "GetWorkflowDefinitionByID",
-	GetWorkflowDefinitionsDocument:                "GetWorkflowDefinitions",
-	UpdateWorkflowDefinitionDocument:              "UpdateWorkflowDefinition",
-	GetAllWorkflowEventsDocument:                  "GetAllWorkflowEvents",
-	GetWorkflowEventByIDDocument:                  "GetWorkflowEventByID",
-	GetWorkflowEventsDocument:                     "GetWorkflowEvents",
-	GetAllWorkflowInstancesDocument:               "GetAllWorkflowInstances",
-	GetWorkflowInstanceByIDDocument:               "GetWorkflowInstanceByID",
-	GetWorkflowInstancesDocument:                  "GetWorkflowInstances",
-	GetAllWorkflowObjectRefsDocument:              "GetAllWorkflowObjectRefs",
-	GetWorkflowObjectRefByIDDocument:              "GetWorkflowObjectRefByID",
-	GetWorkflowObjectRefsDocument:                 "GetWorkflowObjectRefs",
+	CreateActionPlanDocument:                          "CreateActionPlan",
+	CreateBulkActionPlanDocument:                      "CreateBulkActionPlan",
+	CreateBulkCSVActionPlanDocument:                   "CreateBulkCSVActionPlan",
+	DeleteActionPlanDocument:                          "DeleteActionPlan",
+	GetActionPlanByIDDocument:                         "GetActionPlanByID",
+	GetActionPlansDocument:                            "GetActionPlans",
+	GetAllActionPlansDocument:                         "GetAllActionPlans",
+	UpdateActionPlanDocument:                          "UpdateActionPlan",
+	UpdateBulkActionPlanDocument:                      "UpdateBulkActionPlan",
+	CreateAPITokenDocument:                            "CreateAPIToken",
+	DeleteAPITokenDocument:                            "DeleteAPIToken",
+	GetAPITokenByIDDocument:                           "GetAPITokenByID",
+	GetAPITokensDocument:                              "GetAPITokens",
+	GetAllAPITokensDocument:                           "GetAllAPITokens",
+	UpdateAPITokenDocument:                            "UpdateAPIToken",
+	CreateAssessmentDocument:                          "CreateAssessment",
+	CreateAssessmentTemplateDocument:                  "CreateAssessmentTemplate",
+	DeleteAssessmentDocument:                          "DeleteAssessment",
+	DeleteBulkAssessmentDocument:                      "DeleteBulkAssessment",
+	GetAllAssessmentsDocument:                         "GetAllAssessments",
+	GetAssessmentByIDDocument:                         "GetAssessmentByID",
+	GetAssessmentsDocument:                            "GetAssessments",
+	UpdateAssessmentDocument:                          "UpdateAssessment",
+	CreateAssessmentResponseDocument:                  "CreateAssessmentResponse",
+	DeleteAssessmentResponseDocument:                  "DeleteAssessmentResponse",
+	GetAllAssessmentResponsesDocument:                 "GetAllAssessmentResponses",
+	GetAssessmentResponseByIDDocument:                 "GetAssessmentResponseByID",
+	GetAssessmentResponsesDocument:                    "GetAssessmentResponses",
+	CreateAssetDocument:                               "CreateAsset",
+	CreateBulkAssetDocument:                           "CreateBulkAsset",
+	CreateBulkCSVAssetDocument:                        "CreateBulkCSVAsset",
+	DeleteAssetDocument:                               "DeleteAsset",
+	DeleteBulkAssetDocument:                           "DeleteBulkAsset",
+	GetAllAssetsDocument:                              "GetAllAssets",
+	GetAssetByIDDocument:                              "GetAssetByID",
+	GetAssetsDocument:                                 "GetAssets",
+	UpdateAssetDocument:                               "UpdateAsset",
+	UpdateBulkAssetDocument:                           "UpdateBulkAsset",
+	UpdateBulkCSVAssetDocument:                        "UpdateBulkCSVAsset",
+	CreateBulkCSVCampaignDocument:                     "CreateBulkCSVCampaign",
+	CreateBulkCampaignDocument:                        "CreateBulkCampaign",
+	CreateCampaignDocument:                            "CreateCampaign",
+	DeleteCampaignDocument:                            "DeleteCampaign",
+	GetAllCampaignsDocument:                           "GetAllCampaigns",
+	GetCampaignByIDDocument:                           "GetCampaignByID",
+	GetCampaignsDocument:                              "GetCampaigns",
+	UpdateCampaignDocument:                            "UpdateCampaign",
+	CreateCampaignWithTargetsDocument:                 "CreateCampaignWithTargets",
+	CreateCampaignWithTargetsCSVDocument:              "CreateCampaignWithTargetsCSV",
+	LaunchCampaignDocument:                            "LaunchCampaign",
+	ResendCampaignIncompleteTargetsDocument:           "ResendCampaignIncompleteTargets",
+	SendCampaignTestEmailDocument:                     "SendCampaignTestEmail",
+	CreateBulkCSVCampaignTargetDocument:               "CreateBulkCSVCampaignTarget",
+	CreateBulkCampaignTargetDocument:                  "CreateBulkCampaignTarget",
+	CreateCampaignTargetDocument:                      "CreateCampaignTarget",
+	DeleteCampaignTargetDocument:                      "DeleteCampaignTarget",
+	GetAllCampaignTargetsDocument:                     "GetAllCampaignTargets",
+	GetCampaignTargetByIDDocument:                     "GetCampaignTargetByID",
+	GetCampaignTargetsDocument:                        "GetCampaignTargets",
+	UpdateCampaignTargetDocument:                      "UpdateCampaignTarget",
+	CreateBulkCSVCheckResultDocument:                  "CreateBulkCSVCheckResult",
+	CreateBulkCheckResultDocument:                     "CreateBulkCheckResult",
+	CreateCheckResultDocument:                         "CreateCheckResult",
+	DeleteBulkCheckResultDocument:                     "DeleteBulkCheckResult",
+	DeleteCheckResultDocument:                         "DeleteCheckResult",
+	GetAllCheckResultsDocument:                        "GetAllCheckResults",
+	GetCheckResultByIDDocument:                        "GetCheckResultByID",
+	GetCheckResultsDocument:                           "GetCheckResults",
+	UpdateBulkCSVCheckResultDocument:                  "UpdateBulkCSVCheckResult",
+	UpdateBulkCheckResultDocument:                     "UpdateBulkCheckResult",
+	UpdateCheckResultDocument:                         "UpdateCheckResult",
+	CreateBulkCSVContactDocument:                      "CreateBulkCSVContact",
+	CreateBulkContactDocument:                         "CreateBulkContact",
+	CreateContactDocument:                             "CreateContact",
+	DeleteContactDocument:                             "DeleteContact",
+	GetAllContactsDocument:                            "GetAllContacts",
+	GetContactByIDDocument:                            "GetContactByID",
+	GetContactsDocument:                               "GetContacts",
+	UpdateBulkContactDocument:                         "UpdateBulkContact",
+	UpdateContactDocument:                             "UpdateContact",
+	CreateBulkCSVControlDocument:                      "CreateBulkCSVControl",
+	CreateBulkControlDocument:                         "CreateBulkControl",
+	CreateControlDocument:                             "CreateControl",
+	DeleteBulkControlDocument:                         "DeleteBulkControl",
+	DeleteControlDocument:                             "DeleteControl",
+	GetAllControlsDocument:                            "GetAllControls",
+	GetControlByIDDocument:                            "GetControlByID",
+	GetControlsDocument:                               "GetControls",
+	GetTrustCenterControlByIDDocument:                 "GetTrustCenterControlByID",
+	GetTrustCenterControlsDocument:                    "GetTrustCenterControls",
+	UpdateBulkControlDocument:                         "UpdateBulkControl",
+	UpdateControlDocument:                             "UpdateControl",
+	CloneBulkCSVControlDocument:                       "CloneBulkCSVControl",
+	CreateControlsByCloneDocument:                     "CreateControlsByClone",
+	CreateControlsByCloneReturnIDDocument:             "CreateControlsByCloneReturnID",
+	GetControlCategoriesDocument:                      "GetControlCategories",
+	GetControlCategoriesWithFrameworkDocument:         "GetControlCategoriesWithFramework",
+	GetControlsGroupByCategoryDocument:                "GetControlsGroupByCategory",
+	GetControlSubcategoriesDocument:                   "GetControlSubcategories",
+	GetControlSubcategoriesWithFrameworkDocument:      "GetControlSubcategoriesWithFramework",
+	UpdateControlCommentDocument:                      "UpdateControlComment",
+	CreateBulkCSVControlImplementationDocument:        "CreateBulkCSVControlImplementation",
+	CreateBulkControlImplementationDocument:           "CreateBulkControlImplementation",
+	CreateControlImplementationDocument:               "CreateControlImplementation",
+	DeleteControlImplementationDocument:               "DeleteControlImplementation",
+	GetAllControlImplementationsDocument:              "GetAllControlImplementations",
+	GetControlImplementationByIDDocument:              "GetControlImplementationByID",
+	GetControlImplementationsDocument:                 "GetControlImplementations",
+	UpdateControlImplementationDocument:               "UpdateControlImplementation",
+	CreateBulkCSVControlObjectiveDocument:             "CreateBulkCSVControlObjective",
+	CreateBulkControlObjectiveDocument:                "CreateBulkControlObjective",
+	CreateControlObjectiveDocument:                    "CreateControlObjective",
+	DeleteControlObjectiveDocument:                    "DeleteControlObjective",
+	GetAllControlObjectivesDocument:                   "GetAllControlObjectives",
+	GetControlObjectiveByIDDocument:                   "GetControlObjectiveByID",
+	GetControlObjectivesDocument:                      "GetControlObjectives",
+	UpdateControlObjectiveDocument:                    "UpdateControlObjective",
+	GetAllControlReportsDocument:                      "GetAllControlReports",
+	GetControlReportsDocument:                         "GetControlReports",
+	GetControlReportsByCategoryDocument:               "GetControlReportsByCategory",
+	CreateBulkCSVCustomDomainDocument:                 "CreateBulkCSVCustomDomain",
+	CreateBulkCustomDomainDocument:                    "CreateBulkCustomDomain",
+	CreateCustomDomainDocument:                        "CreateCustomDomain",
+	DeleteCustomDomainDocument:                        "DeleteCustomDomain",
+	GetAllCustomDomainsDocument:                       "GetAllCustomDomains",
+	GetCustomDomainByIDDocument:                       "GetCustomDomainByID",
+	GetCustomDomainsDocument:                          "GetCustomDomains",
+	UpdateCustomDomainDocument:                        "UpdateCustomDomain",
+	ValidateCustomDomainDocument:                      "ValidateCustomDomain",
+	CreateBulkCSVCustomTypeEnumDocument:               "CreateBulkCSVCustomTypeEnum",
+	CreateBulkCustomTypeEnumDocument:                  "CreateBulkCustomTypeEnum",
+	CreateCustomTypeEnumDocument:                      "CreateCustomTypeEnum",
+	DeleteCustomTypeEnumDocument:                      "DeleteCustomTypeEnum",
+	GetAllCustomTypeEnumsDocument:                     "GetAllCustomTypeEnums",
+	GetCustomTypeEnumByIDDocument:                     "GetCustomTypeEnumByID",
+	GetCustomTypeEnumsDocument:                        "GetCustomTypeEnums",
+	UpdateCustomTypeEnumDocument:                      "UpdateCustomTypeEnum",
+	CreateBulkCSVDirectoryAccountDocument:             "CreateBulkCSVDirectoryAccount",
+	CreateBulkDirectoryAccountDocument:                "CreateBulkDirectoryAccount",
+	CreateDirectoryAccountDocument:                    "CreateDirectoryAccount",
+	DeleteDirectoryAccountDocument:                    "DeleteDirectoryAccount",
+	GetAllDirectoryAccountsDocument:                   "GetAllDirectoryAccounts",
+	GetDirectoryAccountByIDDocument:                   "GetDirectoryAccountByID",
+	GetDirectoryAccountsDocument:                      "GetDirectoryAccounts",
+	UpdateDirectoryAccountDocument:                    "UpdateDirectoryAccount",
+	CreateBulkCSVDirectoryGroupDocument:               "CreateBulkCSVDirectoryGroup",
+	CreateBulkDirectoryGroupDocument:                  "CreateBulkDirectoryGroup",
+	CreateDirectoryGroupDocument:                      "CreateDirectoryGroup",
+	DeleteDirectoryGroupDocument:                      "DeleteDirectoryGroup",
+	GetAllDirectoryGroupsDocument:                     "GetAllDirectoryGroups",
+	GetDirectoryGroupByIDDocument:                     "GetDirectoryGroupByID",
+	GetDirectoryGroupsDocument:                        "GetDirectoryGroups",
+	UpdateDirectoryGroupDocument:                      "UpdateDirectoryGroup",
+	CreateBulkCSVDirectoryMembershipDocument:          "CreateBulkCSVDirectoryMembership",
+	CreateBulkDirectoryMembershipDocument:             "CreateBulkDirectoryMembership",
+	CreateDirectoryMembershipDocument:                 "CreateDirectoryMembership",
+	DeleteDirectoryMembershipDocument:                 "DeleteDirectoryMembership",
+	GetAllDirectoryMembershipsDocument:                "GetAllDirectoryMemberships",
+	GetDirectoryMembershipByIDDocument:                "GetDirectoryMembershipByID",
+	GetDirectoryMembershipsDocument:                   "GetDirectoryMemberships",
+	UpdateDirectoryMembershipDocument:                 "UpdateDirectoryMembership",
+	CreateBulkCSVDiscussionDocument:                   "CreateBulkCSVDiscussion",
+	CreateBulkDiscussionDocument:                      "CreateBulkDiscussion",
+	CreateDiscussionDocument:                          "CreateDiscussion",
+	DeleteDiscussionDocument:                          "DeleteDiscussion",
+	GetAllDiscussionsDocument:                         "GetAllDiscussions",
+	GetDiscussionByIDDocument:                         "GetDiscussionByID",
+	GetDiscussionsDocument:                            "GetDiscussions",
+	UpdateDiscussionDocument:                          "UpdateDiscussion",
+	CreateBulkCSVDNSVerificationDocument:              "CreateBulkCSVDNSVerification",
+	CreateBulkDNSVerificationDocument:                 "CreateBulkDNSVerification",
+	CreateDNSVerificationDocument:                     "CreateDNSVerification",
+	DeleteDNSVerificationDocument:                     "DeleteDNSVerification",
+	GetAllDNSVerificationsDocument:                    "GetAllDNSVerifications",
+	GetDNSVerificationByIDDocument:                    "GetDNSVerificationByID",
+	GetDNSVerificationsDocument:                       "GetDNSVerifications",
+	UpdateDNSVerificationDocument:                     "UpdateDNSVerification",
+	CreateDocumentDataDocument:                        "CreateDocumentData",
+	DeleteDocumentDataDocument:                        "DeleteDocumentData",
+	GetDocumentDataByIDDocument:                       "GetDocumentDataByID",
+	UpdateDocumentDataDocument:                        "UpdateDocumentData",
+	CreateBulkCSVEmailTemplateDocument:                "CreateBulkCSVEmailTemplate",
+	CreateBulkEmailTemplateDocument:                   "CreateBulkEmailTemplate",
+	CreateEmailTemplateDocument:                       "CreateEmailTemplate",
+	DeleteBulkEmailTemplateDocument:                   "DeleteBulkEmailTemplate",
+	DeleteEmailTemplateDocument:                       "DeleteEmailTemplate",
+	GetAllEmailTemplatesDocument:                      "GetAllEmailTemplates",
+	GetEmailTemplateByIDDocument:                      "GetEmailTemplateByID",
+	GetEmailTemplatesDocument:                         "GetEmailTemplates",
+	PreviewEmailTemplateDocument:                      "PreviewEmailTemplate",
+	UpdateBulkCSVEmailTemplateDocument:                "UpdateBulkCSVEmailTemplate",
+	UpdateBulkEmailTemplateDocument:                   "UpdateBulkEmailTemplate",
+	UpdateEmailTemplateDocument:                       "UpdateEmailTemplate",
+	CreateBulkCSVEntityDocument:                       "CreateBulkCSVEntity",
+	CreateBulkEntityDocument:                          "CreateBulkEntity",
+	CreateEntityDocument:                              "CreateEntity",
+	DeleteEntityDocument:                              "DeleteEntity",
+	GetAllEntitiesDocument:                            "GetAllEntities",
+	GetEntitiesDocument:                               "GetEntities",
+	GetEntityByIDDocument:                             "GetEntityByID",
+	UpdateEntityDocument:                              "UpdateEntity",
+	CreateBulkCSVEntityTypeDocument:                   "CreateBulkCSVEntityType",
+	CreateBulkEntityTypeDocument:                      "CreateBulkEntityType",
+	CreateEntityTypeDocument:                          "CreateEntityType",
+	DeleteEntityTypeDocument:                          "DeleteEntityType",
+	GetAllEntityTypesDocument:                         "GetAllEntityTypes",
+	GetEntityTypeByIDDocument:                         "GetEntityTypeByID",
+	GetEntityTypesDocument:                            "GetEntityTypes",
+	UpdateEntityTypeDocument:                          "UpdateEntityType",
+	CreateBulkCSVEventDocument:                        "CreateBulkCSVEvent",
+	CreateBulkEventDocument:                           "CreateBulkEvent",
+	CreateEventDocument:                               "CreateEvent",
+	DeleteEventDocument:                               "DeleteEvent",
+	GetAllEventsDocument:                              "GetAllEvents",
+	GetEventByIDDocument:                              "GetEventByID",
+	GetEventsDocument:                                 "GetEvents",
+	UpdateEventDocument:                               "UpdateEvent",
+	CreateBulkCSVEvidenceDocument:                     "CreateBulkCSVEvidence",
+	CreateEvidenceDocument:                            "CreateEvidence",
+	DeleteEvidenceDocument:                            "DeleteEvidence",
+	GetAllEvidencesDocument:                           "GetAllEvidences",
+	GetEvidenceByIDDocument:                           "GetEvidenceByID",
+	GetEvidencesDocument:                              "GetEvidences",
+	UpdateBulkEvidenceDocument:                        "UpdateBulkEvidence",
+	UpdateEvidenceDocument:                            "UpdateEvidence",
+	UpdateEvidenceCommentDocument:                     "UpdateEvidenceComment",
+	CreateExportDocument:                              "CreateExport",
+	DeleteBulkExportDocument:                          "DeleteBulkExport",
+	DeleteExportDocument:                              "DeleteExport",
+	GetAllExportsDocument:                             "GetAllExports",
+	GetExportByIDDocument:                             "GetExportByID",
+	GetExportsDocument:                                "GetExports",
+	UpdateExportDocument:                              "UpdateExport",
+	DeleteFileDocument:                                "DeleteFile",
+	GetAllFilesDocument:                               "GetAllFiles",
+	GetFileByIDDocument:                               "GetFileByID",
+	GetFilesDocument:                                  "GetFiles",
+	CreateBulkCSVFindingDocument:                      "CreateBulkCSVFinding",
+	CreateBulkFindingDocument:                         "CreateBulkFinding",
+	CreateFindingDocument:                             "CreateFinding",
+	DeleteBulkFindingDocument:                         "DeleteBulkFinding",
+	DeleteFindingDocument:                             "DeleteFinding",
+	GetAllFindingsDocument:                            "GetAllFindings",
+	GetFindingByIDDocument:                            "GetFindingByID",
+	GetFindingsDocument:                               "GetFindings",
+	UpdateBulkCSVFindingDocument:                      "UpdateBulkCSVFinding",
+	UpdateBulkFindingDocument:                         "UpdateBulkFinding",
+	UpdateFindingDocument:                             "UpdateFinding",
+	CreateBulkCSVFindingControlDocument:               "CreateBulkCSVFindingControl",
+	CreateBulkFindingControlDocument:                  "CreateBulkFindingControl",
+	CreateFindingControlDocument:                      "CreateFindingControl",
+	DeleteBulkFindingControlDocument:                  "DeleteBulkFindingControl",
+	DeleteFindingControlDocument:                      "DeleteFindingControl",
+	GetAllFindingControlsDocument:                     "GetAllFindingControls",
+	GetFindingControlByIDDocument:                     "GetFindingControlByID",
+	GetFindingControlsDocument:                        "GetFindingControls",
+	UpdateFindingControlDocument:                      "UpdateFindingControl",
+	CreateBulkCSVGroupDocument:                        "CreateBulkCSVGroup",
+	CreateBulkGroupDocument:                           "CreateBulkGroup",
+	CreateGroupDocument:                               "CreateGroup",
+	CreateGroupByCloneDocument:                        "CreateGroupByClone",
+	CreateGroupSimpleDocument:                         "CreateGroupSimple",
+	CreateGroupWithMembersDocument:                    "CreateGroupWithMembers",
+	DeleteGroupDocument:                               "DeleteGroup",
+	GetAllGroupsDocument:                              "GetAllGroups",
+	GetGroupByIDDocument:                              "GetGroupByID",
+	GetGroupInfoDocument:                              "GetGroupInfo",
+	GetGroupsDocument:                                 "GetGroups",
+	UpdateGroupDocument:                               "UpdateGroup",
+	AddUserToGroupWithRoleDocument:                    "AddUserToGroupWithRole",
+	CreateBulkCSVGroupMembersDocument:                 "CreateBulkCSVGroupMembers",
+	CreateBulkGroupMembersDocument:                    "CreateBulkGroupMembers",
+	GetGroupMembersByGroupIDDocument:                  "GetGroupMembersByGroupID",
+	RemoveUserFromGroupDocument:                       "RemoveUserFromGroup",
+	UpdateUserRoleInGroupDocument:                     "UpdateUserRoleInGroup",
+	GetAllGroupSettingsDocument:                       "GetAllGroupSettings",
+	GetGroupSettingByIDDocument:                       "GetGroupSettingByID",
+	GetGroupSettingsDocument:                          "GetGroupSettings",
+	UpdateGroupSettingDocument:                        "UpdateGroupSetting",
+	CreateBulkCSVHushDocument:                         "CreateBulkCSVHush",
+	CreateBulkHushDocument:                            "CreateBulkHush",
+	CreateHushDocument:                                "CreateHush",
+	GetAllHushesDocument:                              "GetAllHushes",
+	GetHushByIDDocument:                               "GetHushByID",
+	GetHushesDocument:                                 "GetHushes",
+	UpdateHushDocument:                                "UpdateHush",
+	CreateBulkCSVIdentityHolderDocument:               "CreateBulkCSVIdentityHolder",
+	CreateBulkIdentityHolderDocument:                  "CreateBulkIdentityHolder",
+	CreateIdentityHolderDocument:                      "CreateIdentityHolder",
+	DeleteIdentityHolderDocument:                      "DeleteIdentityHolder",
+	GetAllIdentityHoldersDocument:                     "GetAllIdentityHolders",
+	GetIdentityHolderByIDDocument:                     "GetIdentityHolderByID",
+	GetIdentityHolderDirectoryAccountsDocument:        "GetIdentityHolderDirectoryAccounts",
+	GetIdentityHoldersDocument:                        "GetIdentityHolders",
+	UpdateIdentityHolderDocument:                      "UpdateIdentityHolder",
+	DeleteIntegrationDocument:                         "DeleteIntegration",
+	GetAllIntegrationsDocument:                        "GetAllIntegrations",
+	GetIntegrationByIDDocument:                        "GetIntegrationByID",
+	GetIntegrationByIDWithSecretsDocument:             "GetIntegrationByIDWithSecrets",
+	GetIntegrationsDocument:                           "GetIntegrations",
+	CreateBulkCSVInternalPolicyDocument:               "CreateBulkCSVInternalPolicy",
+	CreateBulkInternalPolicyDocument:                  "CreateBulkInternalPolicy",
+	CreateInternalPolicyDocument:                      "CreateInternalPolicy",
+	CreateUploadInternalPolicyDocument:                "CreateUploadInternalPolicy",
+	DeleteInternalPolicyDocument:                      "DeleteInternalPolicy",
+	GetAllInternalPoliciesDocument:                    "GetAllInternalPolicies",
+	GetInternalPoliciesDocument:                       "GetInternalPolicies",
+	GetInternalPolicyByIDDocument:                     "GetInternalPolicyByID",
+	UpdateBulkInternalPolicyDocument:                  "UpdateBulkInternalPolicy",
+	UpdateInternalPolicyDocument:                      "UpdateInternalPolicy",
+	UpdateInternalPolicyCommentDocument:               "UpdateInternalPolicyComment",
+	CreateBulkCSVInviteDocument:                       "CreateBulkCSVInvite",
+	CreateBulkInviteDocument:                          "CreateBulkInvite",
+	CreateInviteDocument:                              "CreateInvite",
+	DeleteInviteDocument:                              "DeleteInvite",
+	GetAllInvitesDocument:                             "GetAllInvites",
+	GetInviteByIDDocument:                             "GetInviteByID",
+	InvitesByOrgIDDocument:                            "InvitesByOrgID",
+	CreateBulkCSVMappableDomainDocument:               "CreateBulkCSVMappableDomain",
+	CreateBulkMappableDomainDocument:                  "CreateBulkMappableDomain",
+	CreateMappableDomainDocument:                      "CreateMappableDomain",
+	DeleteMappableDomainDocument:                      "DeleteMappableDomain",
+	GetAllMappableDomainsDocument:                     "GetAllMappableDomains",
+	GetMappableDomainByIDDocument:                     "GetMappableDomainByID",
+	GetMappableDomainsDocument:                        "GetMappableDomains",
+	UpdateMappableDomainDocument:                      "UpdateMappableDomain",
+	CreateBulkCSVMappedControlDocument:                "CreateBulkCSVMappedControl",
+	CreateBulkMappedControlDocument:                   "CreateBulkMappedControl",
+	CreateMappedControlDocument:                       "CreateMappedControl",
+	DeleteMappedControlDocument:                       "DeleteMappedControl",
+	GetAllMappedControlsDocument:                      "GetAllMappedControls",
+	GetMappedControlByIDDocument:                      "GetMappedControlByID",
+	GetMappedControlsDocument:                         "GetMappedControls",
+	UpdateMappedControlDocument:                       "UpdateMappedControl",
+	CreateBulkCSVNarrativeDocument:                    "CreateBulkCSVNarrative",
+	CreateBulkNarrativeDocument:                       "CreateBulkNarrative",
+	CreateNarrativeDocument:                           "CreateNarrative",
+	DeleteNarrativeDocument:                           "DeleteNarrative",
+	GetAllNarrativesDocument:                          "GetAllNarratives",
+	GetNarrativeByIDDocument:                          "GetNarrativeByID",
+	GetNarrativesDocument:                             "GetNarratives",
+	UpdateNarrativeDocument:                           "UpdateNarrative",
+	GetNoteByIDDocument:                               "GetNoteByID",
+	DeleteNoteDocument:                                "DeleteNote",
+	CreateNotificationDocument:                        "CreateNotification",
+	UpdateNotificationDocument:                        "UpdateNotification",
+	CreateBulkCSVNotificationPreferenceDocument:       "CreateBulkCSVNotificationPreference",
+	CreateBulkNotificationPreferenceDocument:          "CreateBulkNotificationPreference",
+	CreateNotificationPreferenceDocument:              "CreateNotificationPreference",
+	DeleteBulkNotificationPreferenceDocument:          "DeleteBulkNotificationPreference",
+	DeleteNotificationPreferenceDocument:              "DeleteNotificationPreference",
+	GetAllNotificationPreferencesDocument:             "GetAllNotificationPreferences",
+	GetNotificationPreferenceByIDDocument:             "GetNotificationPreferenceByID",
+	GetNotificationPreferencesDocument:                "GetNotificationPreferences",
+	UpdateBulkCSVNotificationPreferenceDocument:       "UpdateBulkCSVNotificationPreference",
+	UpdateBulkNotificationPreferenceDocument:          "UpdateBulkNotificationPreference",
+	UpdateNotificationPreferenceDocument:              "UpdateNotificationPreference",
+	CreateBulkCSVNotificationTemplateDocument:         "CreateBulkCSVNotificationTemplate",
+	CreateBulkNotificationTemplateDocument:            "CreateBulkNotificationTemplate",
+	CreateNotificationTemplateDocument:                "CreateNotificationTemplate",
+	DeleteBulkNotificationTemplateDocument:            "DeleteBulkNotificationTemplate",
+	DeleteNotificationTemplateDocument:                "DeleteNotificationTemplate",
+	GetAllNotificationTemplatesDocument:               "GetAllNotificationTemplates",
+	GetNotificationTemplateByIDDocument:               "GetNotificationTemplateByID",
+	GetNotificationTemplatesDocument:                  "GetNotificationTemplates",
+	UpdateBulkCSVNotificationTemplateDocument:         "UpdateBulkCSVNotificationTemplate",
+	UpdateBulkNotificationTemplateDocument:            "UpdateBulkNotificationTemplate",
+	UpdateNotificationTemplateDocument:                "UpdateNotificationTemplate",
+	CreateOnboardingDocument:                          "CreateOnboarding",
+	CreateOrganizationDocument:                        "CreateOrganization",
+	CreateOrganizationWithMembersDocument:             "CreateOrganizationWithMembers",
+	DeleteOrganizationDocument:                        "DeleteOrganization",
+	GetAllOrganizationsDocument:                       "GetAllOrganizations",
+	GetOrganizationByIDDocument:                       "GetOrganizationByID",
+	GetOrganizationsDocument:                          "GetOrganizations",
+	TransferOrganizationOwnershipDocument:             "TransferOrganizationOwnership",
+	UpdateOrganizationDocument:                        "UpdateOrganization",
+	GetAllOrganizationSettingsDocument:                "GetAllOrganizationSettings",
+	GetOrganizationSettingByIDDocument:                "GetOrganizationSettingByID",
+	GetOrganizationSettingsDocument:                   "GetOrganizationSettings",
+	UpdateOrganizationSettingDocument:                 "UpdateOrganizationSetting",
+	AddUserToOrgWithRoleDocument:                      "AddUserToOrgWithRole",
+	CreateBulkCSVOrgMembersDocument:                   "CreateBulkCSVOrgMembers",
+	CreateBulkOrgMembersDocument:                      "CreateBulkOrgMembers",
+	GetOrgMembersByOrgIDDocument:                      "GetOrgMembersByOrgID",
+	LeaveOrganizationDocument:                         "LeaveOrganization",
+	RemoveBulkUsersFromOrgDocument:                    "RemoveBulkUsersFromOrg",
+	RemoveUserFromOrgDocument:                         "RemoveUserFromOrg",
+	UpdateBulkOrgMemberRolesDocument:                  "UpdateBulkOrgMemberRoles",
+	UpdateUserRoleInOrgDocument:                       "UpdateUserRoleInOrg",
+	GetAllOrgSubscriptionsDocument:                    "GetAllOrgSubscriptions",
+	GetOrgSubscriptionByIDDocument:                    "GetOrgSubscriptionByID",
+	GetOrgSubscriptionsDocument:                       "GetOrgSubscriptions",
+	CreatePersonalAccessTokenDocument:                 "CreatePersonalAccessToken",
+	DeletePersonalAccessTokenDocument:                 "DeletePersonalAccessToken",
+	GetAllPersonalAccessTokensDocument:                "GetAllPersonalAccessTokens",
+	GetPersonalAccessTokenByIDDocument:                "GetPersonalAccessTokenByID",
+	GetPersonalAccessTokensDocument:                   "GetPersonalAccessTokens",
+	UpdatePersonalAccessTokenDocument:                 "UpdatePersonalAccessToken",
+	CreateBulkCSVPlatformDocument:                     "CreateBulkCSVPlatform",
+	CreateBulkPlatformDocument:                        "CreateBulkPlatform",
+	CreatePlatformDocument:                            "CreatePlatform",
+	DeletePlatformDocument:                            "DeletePlatform",
+	GetAllPlatformsDocument:                           "GetAllPlatforms",
+	GetPlatformByIDDocument:                           "GetPlatformByID",
+	GetPlatformsDocument:                              "GetPlatforms",
+	UpdatePlatformDocument:                            "UpdatePlatform",
+	CreateBulkCSVProcedureDocument:                    "CreateBulkCSVProcedure",
+	CreateBulkProcedureDocument:                       "CreateBulkProcedure",
+	CreateProcedureDocument:                           "CreateProcedure",
+	CreateUploadProcedureDocument:                     "CreateUploadProcedure",
+	DeleteBulkProcedureDocument:                       "DeleteBulkProcedure",
+	DeleteProcedureDocument:                           "DeleteProcedure",
+	GetAllProceduresDocument:                          "GetAllProcedures",
+	GetProcedureByIDDocument:                          "GetProcedureByID",
+	GetProceduresDocument:                             "GetProcedures",
+	UpdateBulkProcedureDocument:                       "UpdateBulkProcedure",
+	UpdateProcedureDocument:                           "UpdateProcedure",
+	CreateBulkCSVProgramDocument:                      "CreateBulkCSVProgram",
+	CreateBulkProgramDocument:                         "CreateBulkProgram",
+	CreateControlWithSubcontrolsDocument:              "CreateControlWithSubcontrols",
+	CreateFullProgramDocument:                         "CreateFullProgram",
+	CreateFullProgramReturnIDsDocument:                "CreateFullProgramReturnIDs",
+	CreateProgramDocument:                             "CreateProgram",
+	CreateProgramWithMembersDocument:                  "CreateProgramWithMembers",
+	DeleteProgramDocument:                             "DeleteProgram",
+	GetAllProgramsDocument:                            "GetAllPrograms",
+	GetProgramByIDDocument:                            "GetProgramByID",
+	GetProgramsDocument:                               "GetPrograms",
+	UpdateProgramDocument:                             "UpdateProgram",
+	AddUserToProgramWithRoleDocument:                  "AddUserToProgramWithRole",
+	CreateBulkCSVProgramMembersDocument:               "CreateBulkCSVProgramMembers",
+	CreateBulkProgramMembersDocument:                  "CreateBulkProgramMembers",
+	GetProgramMembersByProgramIDDocument:              "GetProgramMembersByProgramID",
+	RemoveUserFromProgramDocument:                     "RemoveUserFromProgram",
+	UpdateUserRoleInProgramDocument:                   "UpdateUserRoleInProgram",
+	CreateBulkCSVProgramMembershipDocument:            "CreateBulkCSVProgramMembership",
+	CreateBulkProgramMembershipDocument:               "CreateBulkProgramMembership",
+	CreateProgramMembershipDocument:                   "CreateProgramMembership",
+	DeleteProgramMembershipDocument:                   "DeleteProgramMembership",
+	GetAllProgramMembershipsDocument:                  "GetAllProgramMemberships",
+	GetProgramMembershipByIDDocument:                  "GetProgramMembershipByID",
+	GetProgramMembershipsDocument:                     "GetProgramMemberships",
+	UpdateProgramMembershipDocument:                   "UpdateProgramMembership",
+	CreateBulkCSVRemediationDocument:                  "CreateBulkCSVRemediation",
+	CreateBulkRemediationDocument:                     "CreateBulkRemediation",
+	CreateRemediationDocument:                         "CreateRemediation",
+	DeleteBulkRemediationDocument:                     "DeleteBulkRemediation",
+	DeleteRemediationDocument:                         "DeleteRemediation",
+	GetAllRemediationsDocument:                        "GetAllRemediations",
+	GetRemediationByIDDocument:                        "GetRemediationByID",
+	GetRemediationsDocument:                           "GetRemediations",
+	UpdateBulkCSVRemediationDocument:                  "UpdateBulkCSVRemediation",
+	UpdateBulkRemediationDocument:                     "UpdateBulkRemediation",
+	UpdateRemediationDocument:                         "UpdateRemediation",
+	CreateBulkCSVReviewDocument:                       "CreateBulkCSVReview",
+	CreateBulkReviewDocument:                          "CreateBulkReview",
+	CreateReviewDocument:                              "CreateReview",
+	DeleteBulkReviewReviewDocument:                    "DeleteBulkReviewReview",
+	DeleteReviewDocument:                              "DeleteReview",
+	GetAllReviewsDocument:                             "GetAllReviews",
+	GetReviewByIDDocument:                             "GetReviewByID",
+	GetReviewsDocument:                                "GetReviews",
+	UpdateBulkCSVReviewDocument:                       "UpdateBulkCSVReview",
+	UpdateBulkReviewDocument:                          "UpdateBulkReview",
+	UpdateReviewDocument:                              "UpdateReview",
+	UpdateReviewCommentDocument:                       "UpdateReviewComment",
+	CreateBulkCSVRiskDocument:                         "CreateBulkCSVRisk",
+	CreateBulkRiskDocument:                            "CreateBulkRisk",
+	CreateRiskDocument:                                "CreateRisk",
+	DeleteRiskDocument:                                "DeleteRisk",
+	GetAllRisksDocument:                               "GetAllRisks",
+	GetRiskByIDDocument:                               "GetRiskByID",
+	GetRisksDocument:                                  "GetRisks",
+	UpdateBulkRiskDocument:                            "UpdateBulkRisk",
+	UpdateRiskDocument:                                "UpdateRisk",
+	CreateBulkCSVScanDocument:                         "CreateBulkCSVScan",
+	CreateBulkScanDocument:                            "CreateBulkScan",
+	CreateScanDocument:                                "CreateScan",
+	DeleteScanDocument:                                "DeleteScan",
+	GetAllScansDocument:                               "GetAllScans",
+	GetScanByIDDocument:                               "GetScanByID",
+	GetScansDocument:                                  "GetScans",
+	UpdateScanDocument:                                "UpdateScan",
+	GlobalSearchDocument:                              "GlobalSearch",
+	CreateBulkCSVSLADefinitionDocument:                "CreateBulkCSVSLADefinition",
+	CreateBulkSLADefinitionDocument:                   "CreateBulkSLADefinition",
+	CreateSLADefinitionDocument:                       "CreateSLADefinition",
+	DeleteBulkSLADefinitionDocument:                   "DeleteBulkSLADefinition",
+	DeleteSLADefinitionDocument:                       "DeleteSLADefinition",
+	GetAllSLADefinitionsDocument:                      "GetAllSLADefinitions",
+	GetSLADefinitionByIDDocument:                      "GetSLADefinitionByID",
+	GetSLADefinitionsDocument:                         "GetSLADefinitions",
+	UpdateBulkCSVSLADefinitionDocument:                "UpdateBulkCSVSLADefinition",
+	UpdateBulkSLADefinitionDocument:                   "UpdateBulkSLADefinition",
+	UpdateSLADefinitionDocument:                       "UpdateSLADefinition",
+	CreateStandardDocument:                            "CreateStandard",
+	DeleteStandardDocument:                            "DeleteStandard",
+	GetAllStandardsDocument:                           "GetAllStandards",
+	GetStandardByIDDocument:                           "GetStandardByID",
+	GetStandardsDocument:                              "GetStandards",
+	UpdateStandardDocument:                            "UpdateStandard",
+	CreateBulkCSVSubcontrolDocument:                   "CreateBulkCSVSubcontrol",
+	CreateBulkSubcontrolDocument:                      "CreateBulkSubcontrol",
+	CreateSubcontrolDocument:                          "CreateSubcontrol",
+	DeleteSubcontrolDocument:                          "DeleteSubcontrol",
+	GetAllSubcontrolsDocument:                         "GetAllSubcontrols",
+	GetSubcontrolByIDDocument:                         "GetSubcontrolByID",
+	GetSubcontrolsDocument:                            "GetSubcontrols",
+	UpdateSubcontrolDocument:                          "UpdateSubcontrol",
+	CreateBulkCSVSubprocessorDocument:                 "CreateBulkCSVSubprocessor",
+	CreateBulkSubprocessorDocument:                    "CreateBulkSubprocessor",
+	CreateSubprocessorDocument:                        "CreateSubprocessor",
+	DeleteSubprocessorDocument:                        "DeleteSubprocessor",
+	GetAllSubprocessorsDocument:                       "GetAllSubprocessors",
+	GetSubprocessorByIDDocument:                       "GetSubprocessorByID",
+	GetSubprocessorsDocument:                          "GetSubprocessors",
+	UpdateBulkSubprocessorDocument:                    "UpdateBulkSubprocessor",
+	UpdateSubprocessorDocument:                        "UpdateSubprocessor",
+	CreateBulkCSVSubscriberDocument:                   "CreateBulkCSVSubscriber",
+	CreateBulkSubscriberDocument:                      "CreateBulkSubscriber",
+	CreateSubscriberDocument:                          "CreateSubscriber",
+	DeleteSubscriberDocument:                          "DeleteSubscriber",
+	GetAllSubscribersDocument:                         "GetAllSubscribers",
+	GetSubscriberByEmailDocument:                      "GetSubscriberByEmail",
+	GetSubscribersDocument:                            "GetSubscribers",
+	UpdateSubscriberDocument:                          "UpdateSubscriber",
+	CreateBulkCSVSystemDetailDocument:                 "CreateBulkCSVSystemDetail",
+	CreateBulkSystemDetailDocument:                    "CreateBulkSystemDetail",
+	CreateSystemDetailDocument:                        "CreateSystemDetail",
+	DeleteBulkSystemDetailDocument:                    "DeleteBulkSystemDetail",
+	DeleteSystemDetailDocument:                        "DeleteSystemDetail",
+	GetAllSystemDetailsDocument:                       "GetAllSystemDetails",
+	GetSystemDetailByIDDocument:                       "GetSystemDetailByID",
+	GetSystemDetailsDocument:                          "GetSystemDetails",
+	UpdateBulkCSVSystemDetailDocument:                 "UpdateBulkCSVSystemDetail",
+	UpdateBulkSystemDetailDocument:                    "UpdateBulkSystemDetail",
+	UpdateSystemDetailDocument:                        "UpdateSystemDetail",
+	CreateBulkCSVTagDefinitionDocument:                "CreateBulkCSVTagDefinition",
+	CreateBulkTagDefinitionDocument:                   "CreateBulkTagDefinition",
+	CreateTagDefinitionDocument:                       "CreateTagDefinition",
+	DeleteTagDefinitionDocument:                       "DeleteTagDefinition",
+	GetAllTagDefinitionsDocument:                      "GetAllTagDefinitions",
+	GetTagDefinitionByIDDocument:                      "GetTagDefinitionByID",
+	GetTagDefinitionsDocument:                         "GetTagDefinitions",
+	UpdateTagDefinitionDocument:                       "UpdateTagDefinition",
+	CreateBulkCSVTaskDocument:                         "CreateBulkCSVTask",
+	CreateBulkTaskDocument:                            "CreateBulkTask",
+	CreateTaskDocument:                                "CreateTask",
+	DeleteTaskDocument:                                "DeleteTask",
+	GetAllTasksDocument:                               "GetAllTasks",
+	GetTaskByIDDocument:                               "GetTaskByID",
+	GetTasksDocument:                                  "GetTasks",
+	UpdateBulkTaskDocument:                            "UpdateBulkTask",
+	UpdateTaskDocument:                                "UpdateTask",
+	UpdateTaskCommentDocument:                         "UpdateTaskComment",
+	CreateBulkCSVTemplateDocument:                     "CreateBulkCSVTemplate",
+	CreateBulkTemplateDocument:                        "CreateBulkTemplate",
+	CreateTemplateDocument:                            "CreateTemplate",
+	GetAllTemplatesDocument:                           "GetAllTemplates",
+	GetTemplateByIDDocument:                           "GetTemplateByID",
+	UpdateTemplateDocument:                            "UpdateTemplate",
+	CreateTFASettingDocument:                          "CreateTFASetting",
+	GetAllTFASettingsDocument:                         "GetAllTFASettings",
+	GetTFASettingDocument:                             "GetTFASetting",
+	UpdateTFASettingDocument:                          "UpdateTFASetting",
+	CreateTrustCenterDocument:                         "CreateTrustCenter",
+	DeleteTrustCenterDocument:                         "DeleteTrustCenter",
+	GetAllTrustCentersDocument:                        "GetAllTrustCenters",
+	GetTrustCenterByIDDocument:                        "GetTrustCenterByID",
+	GetTrustCenterFrontendQueryDocument:               "GetTrustCenterFrontendQuery",
+	GetTrustCentersDocument:                           "GetTrustCenters",
+	UpdateTrustCenterDocument:                         "UpdateTrustCenter",
+	CreateBulkCSVTrustCenterComplianceDocument:        "CreateBulkCSVTrustCenterCompliance",
+	CreateBulkTrustCenterComplianceDocument:           "CreateBulkTrustCenterCompliance",
+	CreateTrustCenterComplianceDocument:               "CreateTrustCenterCompliance",
+	DeleteTrustCenterComplianceDocument:               "DeleteTrustCenterCompliance",
+	GetAllTrustCenterCompliancesDocument:              "GetAllTrustCenterCompliances",
+	GetTrustCenterComplianceByIDDocument:              "GetTrustCenterComplianceByID",
+	GetTrustCenterCompliancesDocument:                 "GetTrustCenterCompliances",
+	UpdateTrustCenterComplianceDocument:               "UpdateTrustCenterCompliance",
+	CreateTrustCenterDocDocument:                      "CreateTrustCenterDoc",
+	DeleteTrustCenterDocDocument:                      "DeleteTrustCenterDoc",
+	GetAllTrustCenterDocsDocument:                     "GetAllTrustCenterDocs",
+	GetTrustCenterDocByIDDocument:                     "GetTrustCenterDocByID",
+	GetTrustCenterDocsDocument:                        "GetTrustCenterDocs",
+	UpdateTrustCenterDocDocument:                      "UpdateTrustCenterDoc",
+	CreateTrustCenterDomainDocument:                   "CreateTrustCenterDomain",
+	CreateBulkCSVTrustCenterEntityDocument:            "CreateBulkCSVTrustCenterEntity",
+	CreateBulkTrustCenterEntityDocument:               "CreateBulkTrustCenterEntity",
+	CreateTrustCenterEntityDocument:                   "CreateTrustCenterEntity",
+	DeleteTrustCenterEntityDocument:                   "DeleteTrustCenterEntity",
+	GetAlltrustCenterEntitiesDocument:                 "GetAlltrustCenterEntities",
+	GetTrustCenterEntitiesDocument:                    "GetTrustCenterEntities",
+	GetTrustCenterEntityByIDDocument:                  "GetTrustCenterEntityByID",
+	UpdateTrustCenterEntityDocument:                   "UpdateTrustCenterEntity",
+	CreateBulkCSVTrustCenterFaqDocument:               "CreateBulkCSVTrustCenterFAQ",
+	CreateBulkTrustCenterFaqDocument:                  "CreateBulkTrustCenterFAQ",
+	CreateTrustCenterFaqDocument:                      "CreateTrustCenterFAQ",
+	DeleteBulkTrustCenterFaqDocument:                  "DeleteBulkTrustCenterFAQ",
+	DeleteTrustCenterFaqDocument:                      "DeleteTrustCenterFAQ",
+	GetAllTrustCenterFaqsDocument:                     "GetAllTrustCenterFAQS",
+	GetTrustCenterFAQByIDDocument:                     "GetTrustCenterFAQByID",
+	GetTrustCenterFaqsDocument:                        "GetTrustCenterFAQS",
+	UpdateBulkCSVTrustCenterFaqDocument:               "UpdateBulkCSVTrustCenterFAQ",
+	UpdateBulkTrustCenterFaqDocument:                  "UpdateBulkTrustCenterFAQ",
+	UpdateTrustCenterFaqDocument:                      "UpdateTrustCenterFAQ",
+	CreateTrustCenterNdaDocument:                      "CreateTrustCenterNda",
+	SubmitTrustCenterNDAResponseDocument:              "SubmitTrustCenterNDAResponse",
+	UpdateTrustCenterNdaDocument:                      "UpdateTrustCenterNda",
+	CreateBulkCSVTrustCenterNDARequestDocument:        "CreateBulkCSVTrustCenterNDARequest",
+	CreateBulkTrustCenterNDARequestDocument:           "CreateBulkTrustCenterNDARequest",
+	CreateTrustCenterNDARequestDocument:               "CreateTrustCenterNDARequest",
+	DeleteBulkTrustCenterNDARequestDocument:           "DeleteBulkTrustCenterNDARequest",
+	DeleteTrustCenterNDARequestDocument:               "DeleteTrustCenterNDARequest",
+	GetAllTrustCenterNDARequestsDocument:              "GetAllTrustCenterNDARequests",
+	GetTrustCenterNDARequestByIDDocument:              "GetTrustCenterNDARequestByID",
+	GetTrustCenterNDARequestsDocument:                 "GetTrustCenterNDARequests",
+	RequestNewTrustCenterTokenDocument:                "RequestNewTrustCenterToken",
+	UpdateTrustCenterNDARequestDocument:               "UpdateTrustCenterNDARequest",
+	CreateBulkCSVTrustCenterNDARequestSettingDocument: "CreateBulkCSVTrustCenterNDARequestSetting",
+	CreateBulkTrustCenterNDARequestSettingDocument:    "CreateBulkTrustCenterNDARequestSetting",
+	CreateTrustCenterNDARequestSettingDocument:        "CreateTrustCenterNDARequestSetting",
+	DeleteBulkTrustCenterNDARequestSettingDocument:    "DeleteBulkTrustCenterNDARequestSetting",
+	DeleteTrustCenterNDARequestSettingDocument:        "DeleteTrustCenterNDARequestSetting",
+	GetAllTrustCenterNDARequestSettingsDocument:       "GetAllTrustCenterNDARequestSettings",
+	GetTrustCenterNDARequestSettingByIDDocument:       "GetTrustCenterNDARequestSettingByID",
+	GetTrustCenterNDARequestSettingsDocument:          "GetTrustCenterNDARequestSettings",
+	UpdateBulkCSVTrustCenterNDARequestSettingDocument: "UpdateBulkCSVTrustCenterNDARequestSetting",
+	UpdateBulkTrustCenterNDARequestSettingDocument:    "UpdateBulkTrustCenterNDARequestSetting",
+	UpdateTrustCenterNDARequestSettingDocument:        "UpdateTrustCenterNDARequestSetting",
+	CreateTrustCenterPreviewSettingDocument:           "CreateTrustCenterPreviewSetting",
+	CreateTrustCenterSettingDocument:                  "CreateTrustCenterSetting",
+	DeleteTrustCenterSettingDocument:                  "DeleteTrustCenterSetting",
+	GetAllTrustCenterSettingsDocument:                 "GetAllTrustCenterSettings",
+	GetTrustCenterSettingByIDDocument:                 "GetTrustCenterSettingByID",
+	GetTrustCenterSettingsDocument:                    "GetTrustCenterSettings",
+	UpdateTrustCenterSettingDocument:                  "UpdateTrustCenterSetting",
+	CreateBulkCSVTrustCenterSubprocessorDocument:      "CreateBulkCSVTrustCenterSubprocessor",
+	CreateBulkTrustCenterSubprocessorDocument:         "CreateBulkTrustCenterSubprocessor",
+	CreateTrustCenterSubprocessorDocument:             "CreateTrustCenterSubprocessor",
+	DeleteTrustCenterSubprocessorDocument:             "DeleteTrustCenterSubprocessor",
+	GetAllTrustCenterSubprocessorsDocument:            "GetAllTrustCenterSubprocessors",
+	GetTrustCenterSubprocessorByIDDocument:            "GetTrustCenterSubprocessorByID",
+	GetTrustCenterSubprocessorsDocument:               "GetTrustCenterSubprocessors",
+	UpdateBulkTrustCenterSubprocessorDocument:         "UpdateBulkTrustCenterSubprocessor",
+	UpdateTrustCenterSubprocessorDocument:             "UpdateTrustCenterSubprocessor",
+	CreateTrustCenterWatermarkConfigDocument:          "CreateTrustCenterWatermarkConfig",
+	DeleteTrustCenterWatermarkConfigDocument:          "DeleteTrustCenterWatermarkConfig",
+	GetAllTrustCenterWatermarkConfigsDocument:         "GetAllTrustCenterWatermarkConfigs",
+	GetTrustCenterWatermarkConfigByIDDocument:         "GetTrustCenterWatermarkConfigByID",
+	GetTrustCenterWatermarkConfigsDocument:            "GetTrustCenterWatermarkConfigs",
+	UpdateTrustCenterWatermarkConfigDocument:          "UpdateTrustCenterWatermarkConfig",
+	CreateUserDocument:                                "CreateUser",
+	DeleteUserDocument:                                "DeleteUser",
+	GetAllUsersDocument:                               "GetAllUsers",
+	GetSelfDocument:                                   "GetSelf",
+	GetUserByIDDocument:                               "GetUserByID",
+	GetUserByIDWithOrgsDocument:                       "GetUserByIDWithOrgs",
+	UpdateUserDocument:                                "UpdateUser",
+	GetAllUserSettingsDocument:                        "GetAllUserSettings",
+	GetUserSettingByIDDocument:                        "GetUserSettingByID",
+	GetUserSettingsDocument:                           "GetUserSettings",
+	UpdateUserSettingDocument:                         "UpdateUserSetting",
+	CreateBulkCSVVendorRiskScoreDocument:              "CreateBulkCSVVendorRiskScore",
+	CreateBulkVendorRiskScoreDocument:                 "CreateBulkVendorRiskScore",
+	CreateVendorRiskScoreDocument:                     "CreateVendorRiskScore",
+	DeleteBulkVendorRiskScoreDocument:                 "DeleteBulkVendorRiskScore",
+	DeleteVendorRiskScoreDocument:                     "DeleteVendorRiskScore",
+	GetAllVendorRiskScoresDocument:                    "GetAllVendorRiskScores",
+	GetVendorRiskScoreByIDDocument:                    "GetVendorRiskScoreByID",
+	GetVendorRiskScoresDocument:                       "GetVendorRiskScores",
+	UpdateBulkCSVVendorRiskScoreDocument:              "UpdateBulkCSVVendorRiskScore",
+	UpdateBulkVendorRiskScoreDocument:                 "UpdateBulkVendorRiskScore",
+	UpdateVendorRiskScoreDocument:                     "UpdateVendorRiskScore",
+	CreateBulkCSVVendorScoringConfigDocument:          "CreateBulkCSVVendorScoringConfig",
+	CreateBulkVendorScoringConfigDocument:             "CreateBulkVendorScoringConfig",
+	CreateVendorScoringConfigDocument:                 "CreateVendorScoringConfig",
+	DeleteBulkVendorScoringConfigDocument:             "DeleteBulkVendorScoringConfig",
+	DeleteVendorScoringConfigDocument:                 "DeleteVendorScoringConfig",
+	GetAllVendorScoringConfigsDocument:                "GetAllVendorScoringConfigs",
+	GetVendorScoringConfigByIDDocument:                "GetVendorScoringConfigByID",
+	GetVendorScoringConfigsDocument:                   "GetVendorScoringConfigs",
+	UpdateBulkCSVVendorScoringConfigDocument:          "UpdateBulkCSVVendorScoringConfig",
+	UpdateBulkVendorScoringConfigDocument:             "UpdateBulkVendorScoringConfig",
+	UpdateVendorScoringConfigDocument:                 "UpdateVendorScoringConfig",
+	CreateBulkCSVVulnerabilityDocument:                "CreateBulkCSVVulnerability",
+	CreateBulkVulnerabilityDocument:                   "CreateBulkVulnerability",
+	CreateVulnerabilityDocument:                       "CreateVulnerability",
+	DeleteBulkVulnerabilityDocument:                   "DeleteBulkVulnerability",
+	DeleteVulnerabilityDocument:                       "DeleteVulnerability",
+	GetAllVulnerabilitiesDocument:                     "GetAllVulnerabilities",
+	GetVulnerabilitiesDocument:                        "GetVulnerabilities",
+	GetVulnerabilityByIDDocument:                      "GetVulnerabilityByID",
+	UpdateBulkCSVVulnerabilityDocument:                "UpdateBulkCSVVulnerability",
+	UpdateBulkVulnerabilityDocument:                   "UpdateBulkVulnerability",
+	UpdateVulnerabilityDocument:                       "UpdateVulnerability",
+	DeleteWebauthnDocument:                            "DeleteWebauthn",
+	GetAllWebauthnsDocument:                           "GetAllWebauthns",
+	ApproveWorkflowAssignmentDocument:                 "ApproveWorkflowAssignment",
+	RejectWorkflowAssignmentDocument:                  "RejectWorkflowAssignment",
+	GetMyWorkflowAssignmentsDocument:                  "GetMyWorkflowAssignments",
+	GetActionPlanWorkflowStatusDocument:               "GetActionPlanWorkflowStatus",
+	GetActionPlanWorkflowTimelineDocument:             "GetActionPlanWorkflowTimeline",
+	GetAssessmentWorkflowStatusDocument:               "GetAssessmentWorkflowStatus",
+	GetAssessmentWorkflowTimelineDocument:             "GetAssessmentWorkflowTimeline",
+	GetAssessmentResponseWorkflowStatusDocument:       "GetAssessmentResponseWorkflowStatus",
+	GetAssessmentResponseWorkflowTimelineDocument:     "GetAssessmentResponseWorkflowTimeline",
+	GetCampaignWorkflowStatusDocument:                 "GetCampaignWorkflowStatus",
+	GetCampaignWorkflowTimelineDocument:               "GetCampaignWorkflowTimeline",
+	GetCampaignTargetWorkflowStatusDocument:           "GetCampaignTargetWorkflowStatus",
+	GetCampaignTargetWorkflowTimelineDocument:         "GetCampaignTargetWorkflowTimeline",
+	GetControlWorkflowStatusDocument:                  "GetControlWorkflowStatus",
+	GetControlWorkflowTimelineDocument:                "GetControlWorkflowTimeline",
+	GetEvidenceWorkflowStatusDocument:                 "GetEvidenceWorkflowStatus",
+	GetEvidenceWorkflowTimelineDocument:               "GetEvidenceWorkflowTimeline",
+	GetFindingWorkflowStatusDocument:                  "GetFindingWorkflowStatus",
+	GetFindingWorkflowTimelineDocument:                "GetFindingWorkflowTimeline",
+	GetIdentityHolderWorkflowStatusDocument:           "GetIdentityHolderWorkflowStatus",
+	GetIdentityHolderWorkflowTimelineDocument:         "GetIdentityHolderWorkflowTimeline",
+	GetInternalPolicyWorkflowStatusDocument:           "GetInternalPolicyWorkflowStatus",
+	GetInternalPolicyWorkflowTimelineDocument:         "GetInternalPolicyWorkflowTimeline",
+	GetPlatformWorkflowStatusDocument:                 "GetPlatformWorkflowStatus",
+	GetPlatformWorkflowTimelineDocument:               "GetPlatformWorkflowTimeline",
+	GetProcedureWorkflowStatusDocument:                "GetProcedureWorkflowStatus",
+	GetProcedureWorkflowTimelineDocument:              "GetProcedureWorkflowTimeline",
+	GetRemediationWorkflowStatusDocument:              "GetRemediationWorkflowStatus",
+	GetRemediationWorkflowTimelineDocument:            "GetRemediationWorkflowTimeline",
+	GetRiskWorkflowStatusDocument:                     "GetRiskWorkflowStatus",
+	GetRiskWorkflowTimelineDocument:                   "GetRiskWorkflowTimeline",
+	GetSubcontrolWorkflowStatusDocument:               "GetSubcontrolWorkflowStatus",
+	GetSubcontrolWorkflowTimelineDocument:             "GetSubcontrolWorkflowTimeline",
+	GetTaskWorkflowStatusDocument:                     "GetTaskWorkflowStatus",
+	GetTaskWorkflowTimelineDocument:                   "GetTaskWorkflowTimeline",
+	GetVulnerabilityWorkflowStatusDocument:            "GetVulnerabilityWorkflowStatus",
+	GetVulnerabilityWorkflowTimelineDocument:          "GetVulnerabilityWorkflowTimeline",
+	GetAllWorkflowAssignmentsDocument:                 "GetAllWorkflowAssignments",
+	GetWorkflowAssignmentByIDDocument:                 "GetWorkflowAssignmentByID",
+	GetWorkflowAssignmentsDocument:                    "GetWorkflowAssignments",
+	GetAllWorkflowAssignmentTargetsDocument:           "GetAllWorkflowAssignmentTargets",
+	GetWorkflowAssignmentTargetByIDDocument:           "GetWorkflowAssignmentTargetByID",
+	GetWorkflowAssignmentTargetsDocument:              "GetWorkflowAssignmentTargets",
+	CreateBulkCSVWorkflowDefinitionDocument:           "CreateBulkCSVWorkflowDefinition",
+	CreateBulkWorkflowDefinitionDocument:              "CreateBulkWorkflowDefinition",
+	CreateWorkflowDefinitionDocument:                  "CreateWorkflowDefinition",
+	DeleteWorkflowDefinitionDocument:                  "DeleteWorkflowDefinition",
+	GetAllWorkflowDefinitionsDocument:                 "GetAllWorkflowDefinitions",
+	GetWorkflowDefinitionByIDDocument:                 "GetWorkflowDefinitionByID",
+	GetWorkflowDefinitionsDocument:                    "GetWorkflowDefinitions",
+	UpdateWorkflowDefinitionDocument:                  "UpdateWorkflowDefinition",
+	GetAllWorkflowEventsDocument:                      "GetAllWorkflowEvents",
+	GetWorkflowEventByIDDocument:                      "GetWorkflowEventByID",
+	GetWorkflowEventsDocument:                         "GetWorkflowEvents",
+	GetAllWorkflowInstancesDocument:                   "GetAllWorkflowInstances",
+	GetWorkflowInstanceByIDDocument:                   "GetWorkflowInstanceByID",
+	GetWorkflowInstancesDocument:                      "GetWorkflowInstances",
+	GetAllWorkflowObjectRefsDocument:                  "GetAllWorkflowObjectRefs",
+	GetWorkflowObjectRefByIDDocument:                  "GetWorkflowObjectRefByID",
+	GetWorkflowObjectRefsDocument:                     "GetWorkflowObjectRefs",
 }

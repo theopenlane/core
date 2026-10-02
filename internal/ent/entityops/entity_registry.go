@@ -5233,6 +5233,28 @@ var (
 			return data, nil
 		},
 	}
+	SchemaTrustCenterNDARequestSetting = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:  "TrustCenterNDARequestSetting",
+			Snake: "trust_center_nda_request_setting",
+			Lower: "trustcenterndarequestsetting",
+		},
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "trust_center_nda_request_setting", Operation: refOpLoad, EntityID: entityID}
+
+			entity, err := client.TrustCenterNDARequestSetting.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
+		},
+	}
 	SchemaTrustCenterSetting = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
 			Name:  "TrustCenterSetting",
@@ -8000,6 +8022,23 @@ func init() {
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+	}
+	SchemaTrustCenterNDARequestSetting.Fields = []FieldDescriptor{
+		{Name: "approval_required", Label: "ApprovalRequired", Type: "bool", Clearable: true},
+		{Name: "approve_from_existing_domain", Label: "ApproveFromExistingDomain", Type: "bool", Clearable: true},
+		{Name: "approve_if_contact_exists", Label: "ApproveIfContactExists", Type: "bool", Clearable: true},
+		{Name: "approver_group_id", Label: "ApproverGroupID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "auto_approve", Label: "AutoApprove", Type: "bool", Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "use_domain_allowlist", Label: "UseDomainAllowlist", Type: "bool", Clearable: true},
+		{Name: "use_domain_blocklist", Label: "UseDomainBlocklist", Type: "bool", Clearable: true},
+		{Name: "work_email_only", Label: "WorkEmailOnly", Type: "bool", Clearable: true},
 	}
 	SchemaTrustCenterSetting.Fields = []FieldDescriptor{
 		{Name: "accent_color", Label: "AccentColor", Type: "string", MatchKey: true, Clearable: true},
@@ -18008,6 +18047,33 @@ func init() {
 			AddField:    "add_trust_center_doc_ids",
 		},
 	}
+	SchemaTrustCenterNDARequestSetting.Edges = []EdgeDescriptor{
+		{
+			Name:        "approver_group",
+			Label:       "ApproverGroup",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			Unique:      true,
+			CreateField: "approver_group_id",
+			Field:       "approver_group_id",
+		},
+		{
+			Name:        "blocked_groups",
+			Label:       "BlockedGroups",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "blocked_group_ids",
+			AddField:    "add_blocked_group_ids",
+		},
+		{
+			Name:        "editors",
+			Label:       "Editors",
+			Target:      SchemaGroup,
+			TargetType:  "Group",
+			CreateField: "editor_ids",
+			AddField:    "add_editor_ids",
+		},
+	}
 	SchemaTrustCenterSetting.Edges = []EdgeDescriptor{
 		{
 			Name:        "blocked_groups",
@@ -23129,6 +23195,7 @@ var allSchemas = []*Schema{
 	SchemaTrustCenterEntity,
 	SchemaTrustCenterFAQ,
 	SchemaTrustCenterNDARequest,
+	SchemaTrustCenterNDARequestSetting,
 	SchemaTrustCenterSetting,
 	SchemaTrustCenterSubprocessor,
 	SchemaTrustCenterWatermarkConfig,

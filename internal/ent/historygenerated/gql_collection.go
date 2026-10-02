@@ -64,6 +64,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterfaqhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequesthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequestsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
@@ -12703,6 +12704,170 @@ func newTrustCenterNDARequestHistoryPaginateArgs(rv map[string]any) *trustcenter
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *TrustCenterNDARequestSettingHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterNDARequestSettingHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *TrustCenterNDARequestSettingHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(trustcenterndarequestsettinghistory.Columns))
+		selectedFields = []string{trustcenterndarequestsettinghistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldHistoryTime)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldRef)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldOperation)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldCreatedAt)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldUpdatedAt)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldCreatedBy)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldUpdatedBy)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldUpdatedByImpersonator)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
+		case "approverGroupID":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldApproverGroupID]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldApproverGroupID)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldApproverGroupID] = struct{}{}
+			}
+		case "approvalRequired":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldApprovalRequired]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldApprovalRequired)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldApprovalRequired] = struct{}{}
+			}
+		case "autoApprove":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldAutoApprove]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldAutoApprove)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldAutoApprove] = struct{}{}
+			}
+		case "workEmailOnly":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldWorkEmailOnly]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldWorkEmailOnly)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldWorkEmailOnly] = struct{}{}
+			}
+		case "useDomainBlocklist":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldUseDomainBlocklist]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldUseDomainBlocklist)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldUseDomainBlocklist] = struct{}{}
+			}
+		case "useDomainAllowlist":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldUseDomainAllowlist]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldUseDomainAllowlist)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldUseDomainAllowlist] = struct{}{}
+			}
+		case "approveFromExistingDomain":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldApproveFromExistingDomain]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldApproveFromExistingDomain)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldApproveFromExistingDomain] = struct{}{}
+			}
+		case "approveIfContactExists":
+			if _, ok := fieldSeen[trustcenterndarequestsettinghistory.FieldApproveIfContactExists]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequestsettinghistory.FieldApproveIfContactExists)
+				fieldSeen[trustcenterndarequestsettinghistory.FieldApproveIfContactExists] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type trustcenterndarequestsettinghistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []TrustCenterNDARequestSettingHistoryPaginateOption
+}
+
+func newTrustCenterNDARequestSettingHistoryPaginateArgs(rv map[string]any) *trustcenterndarequestsettinghistoryPaginateArgs {
+	args := &trustcenterndarequestsettinghistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &TrustCenterNDARequestSettingHistoryOrder{Field: &TrustCenterNDARequestSettingHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithTrustCenterNDARequestSettingHistoryOrder(order))
+			}
+		case *TrustCenterNDARequestSettingHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithTrustCenterNDARequestSettingHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*TrustCenterNDARequestSettingHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithTrustCenterNDARequestSettingHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (_q *TrustCenterSettingHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterSettingHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -12873,11 +13038,6 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldSecurityContact)
 				fieldSeen[trustcentersettinghistory.FieldSecurityContact] = struct{}{}
 			}
-		case "ndaApprovalRequired":
-			if _, ok := fieldSeen[trustcentersettinghistory.FieldNdaApprovalRequired]; !ok {
-				selectedFields = append(selectedFields, trustcentersettinghistory.FieldNdaApprovalRequired)
-				fieldSeen[trustcentersettinghistory.FieldNdaApprovalRequired] = struct{}{}
-			}
 		case "allowSubscribers":
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldAllowSubscribers]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldAllowSubscribers)
@@ -12893,11 +13053,6 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldSubprocessorsNotifiedAt)
 				fieldSeen[trustcentersettinghistory.FieldSubprocessorsNotifiedAt] = struct{}{}
 			}
-		case "ndaApproverGroupID":
-			if _, ok := fieldSeen[trustcentersettinghistory.FieldNdaApproverGroupID]; !ok {
-				selectedFields = append(selectedFields, trustcentersettinghistory.FieldNdaApproverGroupID)
-				fieldSeen[trustcentersettinghistory.FieldNdaApproverGroupID] = struct{}{}
-			}
 		case "statusPageURL":
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldStatusPageURL]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldStatusPageURL)
@@ -12907,6 +13062,16 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldNoindexDefaultDomain]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldNoindexDefaultDomain)
 				fieldSeen[trustcentersettinghistory.FieldNoindexDefaultDomain] = struct{}{}
+			}
+		case "ndaApproverGroupID":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldNdaApproverGroupID]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldNdaApproverGroupID)
+				fieldSeen[trustcentersettinghistory.FieldNdaApproverGroupID] = struct{}{}
+			}
+		case "ndaApprovalRequired":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldNdaApprovalRequired]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldNdaApprovalRequired)
+				fieldSeen[trustcentersettinghistory.FieldNdaApprovalRequired] = struct{}{}
 			}
 		case "id":
 		case "__typename":

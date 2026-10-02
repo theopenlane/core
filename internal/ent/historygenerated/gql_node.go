@@ -66,6 +66,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterfaqhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequesthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequestsettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersettinghistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
@@ -358,6 +359,11 @@ var trustcenterndarequesthistoryImplementors = []string{"TrustCenterNDARequestHi
 
 // IsNode implements the Node interface check for GQLGen.
 func (*TrustCenterNDARequestHistory) IsNode() {}
+
+var trustcenterndarequestsettinghistoryImplementors = []string{"TrustCenterNDARequestSettingHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*TrustCenterNDARequestSettingHistory) IsNode() {}
 
 var trustcentersettinghistoryImplementors = []string{"TrustCenterSettingHistory", "Node"}
 
@@ -963,6 +969,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(trustcenterndarequesthistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterndarequesthistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case trustcenterndarequestsettinghistory.Table:
+		query := c.TrustCenterNDARequestSettingHistory.Query().
+			Where(trustcenterndarequestsettinghistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterndarequestsettinghistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2007,6 +2022,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.TrustCenterNDARequestHistory.Query().
 			Where(trustcenterndarequesthistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, trustcenterndarequesthistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case trustcenterndarequestsettinghistory.Table:
+		query := c.TrustCenterNDARequestSettingHistory.Query().
+			Where(trustcenterndarequestsettinghistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, trustcenterndarequestsettinghistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

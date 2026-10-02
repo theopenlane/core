@@ -2103,6 +2103,30 @@ func (f TrustCenterNDARequestMutationRuleFunc) EvalMutation(ctx context.Context,
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustCenterNDARequestMutation", m)
 }
 
+// The TrustCenterNDARequestSettingQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TrustCenterNDARequestSettingQueryRuleFunc func(context.Context, *generated.TrustCenterNDARequestSettingQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TrustCenterNDARequestSettingQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterNDARequestSettingQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.TrustCenterNDARequestSettingQuery", q)
+}
+
+// The TrustCenterNDARequestSettingMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TrustCenterNDARequestSettingMutationRuleFunc func(context.Context, *generated.TrustCenterNDARequestSettingMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TrustCenterNDARequestSettingMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.TrustCenterNDARequestSettingMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustCenterNDARequestSettingMutation", m)
+}
+
 // The TrustCenterSettingQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type TrustCenterSettingQueryRuleFunc func(context.Context, *generated.TrustCenterSettingQuery) error
@@ -2688,6 +2712,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.TrustCenterNDARequestQuery:
 		return q.Filter(), nil
+	case *generated.TrustCenterNDARequestSettingQuery:
+		return q.Filter(), nil
 	case *generated.TrustCenterSettingQuery:
 		return q.Filter(), nil
 	case *generated.TrustCenterSubprocessorQuery:
@@ -2892,6 +2918,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.TrustCenterFAQMutation:
 		return m.Filter(), nil
 	case *generated.TrustCenterNDARequestMutation:
+		return m.Filter(), nil
+	case *generated.TrustCenterNDARequestSettingMutation:
 		return m.Filter(), nil
 	case *generated.TrustCenterSettingMutation:
 		return m.Filter(), nil

@@ -255,6 +255,9 @@ type TrustCenterFAQ func(*sql.Selector)
 // TrustCenterNDARequest is the predicate function for trustcenterndarequest builders.
 type TrustCenterNDARequest func(*sql.Selector)
 
+// TrustCenterNDARequestSetting is the predicate function for trustcenterndarequestsetting builders.
+type TrustCenterNDARequestSetting func(*sql.Selector)
+
 // TrustCenterSetting is the predicate function for trustcentersetting builders.
 type TrustCenterSetting func(*sql.Selector)
 

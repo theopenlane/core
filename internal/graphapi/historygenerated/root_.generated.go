@@ -1811,74 +1811,75 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		ActionPlanHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ActionPlanHistoryOrder, where *historygenerated.ActionPlanHistoryWhereInput) int
-		AssessmentHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentHistoryOrder, where *historygenerated.AssessmentHistoryWhereInput) int
-		AssessmentResponseHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentResponseHistoryOrder, where *historygenerated.AssessmentResponseHistoryWhereInput) int
-		AssetHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssetHistoryOrder, where *historygenerated.AssetHistoryWhereInput) int
-		CampaignHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CampaignHistoryOrder, where *historygenerated.CampaignHistoryWhereInput) int
-		CampaignTargetHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CampaignTargetHistoryOrder, where *historygenerated.CampaignTargetHistoryWhereInput) int
-		ContactHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ContactHistoryOrder, where *historygenerated.ContactHistoryWhereInput) int
-		ControlHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ControlHistoryOrder, where *historygenerated.ControlHistoryWhereInput) int
-		ControlImplementationHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ControlImplementationHistoryOrder, where *historygenerated.ControlImplementationHistoryWhereInput) int
-		ControlObjectiveHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ControlObjectiveHistoryOrder, where *historygenerated.ControlObjectiveHistoryWhereInput) int
-		CustomDomainHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CustomDomainHistoryOrder, where *historygenerated.CustomDomainHistoryWhereInput) int
-		DiscussionHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.DiscussionHistoryOrder, where *historygenerated.DiscussionHistoryWhereInput) int
-		DocumentDataHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.DocumentDataHistoryOrder, where *historygenerated.DocumentDataHistoryWhereInput) int
-		EmailTemplateHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EmailTemplateHistoryOrder, where *historygenerated.EmailTemplateHistoryWhereInput) int
-		EntityHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EntityHistoryOrder, where *historygenerated.EntityHistoryWhereInput) int
-		EntityTypeHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EntityTypeHistoryOrder, where *historygenerated.EntityTypeHistoryWhereInput) int
-		EvidenceHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EvidenceHistoryOrder, where *historygenerated.EvidenceHistoryWhereInput) int
-		FileHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.FileHistoryOrder, where *historygenerated.FileHistoryWhereInput) int
-		FindingControlHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.FindingControlHistoryOrder, where *historygenerated.FindingControlHistoryWhereInput) int
-		FindingHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.FindingHistoryOrder, where *historygenerated.FindingHistoryWhereInput) int
-		GroupHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.GroupHistoryOrder, where *historygenerated.GroupHistoryWhereInput) int
-		GroupMembershipHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.GroupMembershipHistoryOrder, where *historygenerated.GroupMembershipHistoryWhereInput) int
-		GroupSettingHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.GroupSettingHistoryOrder, where *historygenerated.GroupSettingHistoryWhereInput) int
-		HushHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.HushHistoryOrder, where *historygenerated.HushHistoryWhereInput) int
-		IdentityHolderHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.IdentityHolderHistoryOrder, where *historygenerated.IdentityHolderHistoryWhereInput) int
-		InternalPolicyHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.InternalPolicyHistoryOrder, where *historygenerated.InternalPolicyHistoryWhereInput) int
-		MappableDomainHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.MappableDomainHistoryOrder, where *historygenerated.MappableDomainHistoryWhereInput) int
-		MappedControlHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.MappedControlHistoryOrder, where *historygenerated.MappedControlHistoryWhereInput) int
-		NarrativeHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.NarrativeHistoryOrder, where *historygenerated.NarrativeHistoryWhereInput) int
-		Node                                func(childComplexity int, id string) int
-		Nodes                               func(childComplexity int, ids []string) int
-		NoteHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.NoteHistoryOrder, where *historygenerated.NoteHistoryWhereInput) int
-		NotificationPreferenceHistories     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.NotificationPreferenceHistoryOrder, where *historygenerated.NotificationPreferenceHistoryWhereInput) int
-		NotificationTemplateHistories       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.NotificationTemplateHistoryOrder, where *historygenerated.NotificationTemplateHistoryWhereInput) int
-		OrgMembershipHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrgMembershipHistoryOrder, where *historygenerated.OrgMembershipHistoryWhereInput) int
-		OrganizationHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrganizationHistoryOrder, where *historygenerated.OrganizationHistoryWhereInput) int
-		OrganizationSettingHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrganizationSettingHistoryOrder, where *historygenerated.OrganizationSettingHistoryWhereInput) int
-		PlatformHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.PlatformHistoryOrder, where *historygenerated.PlatformHistoryWhereInput) int
-		ProcedureHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ProcedureHistoryOrder, where *historygenerated.ProcedureHistoryWhereInput) int
-		ProgramHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ProgramHistoryOrder, where *historygenerated.ProgramHistoryWhereInput) int
-		ProgramMembershipHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ProgramMembershipHistoryOrder, where *historygenerated.ProgramMembershipHistoryWhereInput) int
-		RemediationHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.RemediationHistoryOrder, where *historygenerated.RemediationHistoryWhereInput) int
-		ReviewHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ReviewHistoryOrder, where *historygenerated.ReviewHistoryWhereInput) int
-		RiskHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.RiskHistoryOrder, where *historygenerated.RiskHistoryWhereInput) int
-		SLADefinitionHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SLADefinitionHistoryOrder, where *historygenerated.SLADefinitionHistoryWhereInput) int
-		StandardHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.StandardHistoryOrder, where *historygenerated.StandardHistoryWhereInput) int
-		SubcontrolHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SubcontrolHistoryOrder, where *historygenerated.SubcontrolHistoryWhereInput) int
-		SubprocessorHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SubprocessorHistoryOrder, where *historygenerated.SubprocessorHistoryWhereInput) int
-		SystemDetailHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SystemDetailHistoryOrder, where *historygenerated.SystemDetailHistoryWhereInput) int
-		TaskHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TaskHistoryOrder, where *historygenerated.TaskHistoryWhereInput) int
-		TemplateHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TemplateHistoryOrder, where *historygenerated.TemplateHistoryWhereInput) int
-		TrustCenterComplianceHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterComplianceHistoryOrder, where *historygenerated.TrustCenterComplianceHistoryWhereInput) int
-		TrustCenterDocHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterDocHistoryOrder, where *historygenerated.TrustCenterDocHistoryWhereInput) int
-		TrustCenterEntityHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterEntityHistoryOrder, where *historygenerated.TrustCenterEntityHistoryWhereInput) int
-		TrustCenterFaqHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterFAQHistoryOrder, where *historygenerated.TrustCenterFAQHistoryWhereInput) int
-		TrustCenterHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterHistoryOrder, where *historygenerated.TrustCenterHistoryWhereInput) int
-		TrustCenterNdaRequestHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterNDARequestHistoryOrder, where *historygenerated.TrustCenterNDARequestHistoryWhereInput) int
-		TrustCenterSettingHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterSettingHistoryOrder, where *historygenerated.TrustCenterSettingHistoryWhereInput) int
-		TrustCenterSubprocessorHistories    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterSubprocessorHistoryOrder, where *historygenerated.TrustCenterSubprocessorHistoryWhereInput) int
-		TrustCenterWatermarkConfigHistories func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterWatermarkConfigHistoryOrder, where *historygenerated.TrustCenterWatermarkConfigHistoryWhereInput) int
-		UserHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.UserHistoryOrder, where *historygenerated.UserHistoryWhereInput) int
-		UserSettingHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.UserSettingHistoryOrder, where *historygenerated.UserSettingHistoryWhereInput) int
-		VendorRiskScoreHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.VendorRiskScoreHistoryOrder, where *historygenerated.VendorRiskScoreHistoryWhereInput) int
-		VendorScoringConfigHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.VendorScoringConfigHistoryOrder, where *historygenerated.VendorScoringConfigHistoryWhereInput) int
-		VulnerabilityHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.VulnerabilityHistoryOrder, where *historygenerated.VulnerabilityHistoryWhereInput) int
-		WorkflowAssignmentHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.WorkflowAssignmentHistoryOrder, where *historygenerated.WorkflowAssignmentHistoryWhereInput) int
-		WorkflowAssignmentTargetHistories   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.WorkflowAssignmentTargetHistoryOrder, where *historygenerated.WorkflowAssignmentTargetHistoryWhereInput) int
-		WorkflowDefinitionHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.WorkflowDefinitionHistoryOrder, where *historygenerated.WorkflowDefinitionHistoryWhereInput) int
+		ActionPlanHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ActionPlanHistoryOrder, where *historygenerated.ActionPlanHistoryWhereInput) int
+		AssessmentHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentHistoryOrder, where *historygenerated.AssessmentHistoryWhereInput) int
+		AssessmentResponseHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentResponseHistoryOrder, where *historygenerated.AssessmentResponseHistoryWhereInput) int
+		AssetHistories                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssetHistoryOrder, where *historygenerated.AssetHistoryWhereInput) int
+		CampaignHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CampaignHistoryOrder, where *historygenerated.CampaignHistoryWhereInput) int
+		CampaignTargetHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CampaignTargetHistoryOrder, where *historygenerated.CampaignTargetHistoryWhereInput) int
+		ContactHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ContactHistoryOrder, where *historygenerated.ContactHistoryWhereInput) int
+		ControlHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ControlHistoryOrder, where *historygenerated.ControlHistoryWhereInput) int
+		ControlImplementationHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ControlImplementationHistoryOrder, where *historygenerated.ControlImplementationHistoryWhereInput) int
+		ControlObjectiveHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ControlObjectiveHistoryOrder, where *historygenerated.ControlObjectiveHistoryWhereInput) int
+		CustomDomainHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CustomDomainHistoryOrder, where *historygenerated.CustomDomainHistoryWhereInput) int
+		DiscussionHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.DiscussionHistoryOrder, where *historygenerated.DiscussionHistoryWhereInput) int
+		DocumentDataHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.DocumentDataHistoryOrder, where *historygenerated.DocumentDataHistoryWhereInput) int
+		EmailTemplateHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EmailTemplateHistoryOrder, where *historygenerated.EmailTemplateHistoryWhereInput) int
+		EntityHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EntityHistoryOrder, where *historygenerated.EntityHistoryWhereInput) int
+		EntityTypeHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EntityTypeHistoryOrder, where *historygenerated.EntityTypeHistoryWhereInput) int
+		EvidenceHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.EvidenceHistoryOrder, where *historygenerated.EvidenceHistoryWhereInput) int
+		FileHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.FileHistoryOrder, where *historygenerated.FileHistoryWhereInput) int
+		FindingControlHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.FindingControlHistoryOrder, where *historygenerated.FindingControlHistoryWhereInput) int
+		FindingHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.FindingHistoryOrder, where *historygenerated.FindingHistoryWhereInput) int
+		GroupHistories                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.GroupHistoryOrder, where *historygenerated.GroupHistoryWhereInput) int
+		GroupMembershipHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.GroupMembershipHistoryOrder, where *historygenerated.GroupMembershipHistoryWhereInput) int
+		GroupSettingHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.GroupSettingHistoryOrder, where *historygenerated.GroupSettingHistoryWhereInput) int
+		HushHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.HushHistoryOrder, where *historygenerated.HushHistoryWhereInput) int
+		IdentityHolderHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.IdentityHolderHistoryOrder, where *historygenerated.IdentityHolderHistoryWhereInput) int
+		InternalPolicyHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.InternalPolicyHistoryOrder, where *historygenerated.InternalPolicyHistoryWhereInput) int
+		MappableDomainHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.MappableDomainHistoryOrder, where *historygenerated.MappableDomainHistoryWhereInput) int
+		MappedControlHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.MappedControlHistoryOrder, where *historygenerated.MappedControlHistoryWhereInput) int
+		NarrativeHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.NarrativeHistoryOrder, where *historygenerated.NarrativeHistoryWhereInput) int
+		Node                                  func(childComplexity int, id string) int
+		Nodes                                 func(childComplexity int, ids []string) int
+		NoteHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.NoteHistoryOrder, where *historygenerated.NoteHistoryWhereInput) int
+		NotificationPreferenceHistories       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.NotificationPreferenceHistoryOrder, where *historygenerated.NotificationPreferenceHistoryWhereInput) int
+		NotificationTemplateHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.NotificationTemplateHistoryOrder, where *historygenerated.NotificationTemplateHistoryWhereInput) int
+		OrgMembershipHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrgMembershipHistoryOrder, where *historygenerated.OrgMembershipHistoryWhereInput) int
+		OrganizationHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrganizationHistoryOrder, where *historygenerated.OrganizationHistoryWhereInput) int
+		OrganizationSettingHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.OrganizationSettingHistoryOrder, where *historygenerated.OrganizationSettingHistoryWhereInput) int
+		PlatformHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.PlatformHistoryOrder, where *historygenerated.PlatformHistoryWhereInput) int
+		ProcedureHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ProcedureHistoryOrder, where *historygenerated.ProcedureHistoryWhereInput) int
+		ProgramHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ProgramHistoryOrder, where *historygenerated.ProgramHistoryWhereInput) int
+		ProgramMembershipHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ProgramMembershipHistoryOrder, where *historygenerated.ProgramMembershipHistoryWhereInput) int
+		RemediationHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.RemediationHistoryOrder, where *historygenerated.RemediationHistoryWhereInput) int
+		ReviewHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ReviewHistoryOrder, where *historygenerated.ReviewHistoryWhereInput) int
+		RiskHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.RiskHistoryOrder, where *historygenerated.RiskHistoryWhereInput) int
+		SLADefinitionHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SLADefinitionHistoryOrder, where *historygenerated.SLADefinitionHistoryWhereInput) int
+		StandardHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.StandardHistoryOrder, where *historygenerated.StandardHistoryWhereInput) int
+		SubcontrolHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SubcontrolHistoryOrder, where *historygenerated.SubcontrolHistoryWhereInput) int
+		SubprocessorHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SubprocessorHistoryOrder, where *historygenerated.SubprocessorHistoryWhereInput) int
+		SystemDetailHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.SystemDetailHistoryOrder, where *historygenerated.SystemDetailHistoryWhereInput) int
+		TaskHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TaskHistoryOrder, where *historygenerated.TaskHistoryWhereInput) int
+		TemplateHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TemplateHistoryOrder, where *historygenerated.TemplateHistoryWhereInput) int
+		TrustCenterComplianceHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterComplianceHistoryOrder, where *historygenerated.TrustCenterComplianceHistoryWhereInput) int
+		TrustCenterDocHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterDocHistoryOrder, where *historygenerated.TrustCenterDocHistoryWhereInput) int
+		TrustCenterEntityHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterEntityHistoryOrder, where *historygenerated.TrustCenterEntityHistoryWhereInput) int
+		TrustCenterFaqHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterFAQHistoryOrder, where *historygenerated.TrustCenterFAQHistoryWhereInput) int
+		TrustCenterHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterHistoryOrder, where *historygenerated.TrustCenterHistoryWhereInput) int
+		TrustCenterNdaRequestHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterNDARequestHistoryOrder, where *historygenerated.TrustCenterNDARequestHistoryWhereInput) int
+		TrustCenterNdaRequestSettingHistories func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterNDARequestSettingHistoryOrder, where *historygenerated.TrustCenterNDARequestSettingHistoryWhereInput) int
+		TrustCenterSettingHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterSettingHistoryOrder, where *historygenerated.TrustCenterSettingHistoryWhereInput) int
+		TrustCenterSubprocessorHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterSubprocessorHistoryOrder, where *historygenerated.TrustCenterSubprocessorHistoryWhereInput) int
+		TrustCenterWatermarkConfigHistories   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterWatermarkConfigHistoryOrder, where *historygenerated.TrustCenterWatermarkConfigHistoryWhereInput) int
+		UserHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.UserHistoryOrder, where *historygenerated.UserHistoryWhereInput) int
+		UserSettingHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.UserSettingHistoryOrder, where *historygenerated.UserSettingHistoryWhereInput) int
+		VendorRiskScoreHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.VendorRiskScoreHistoryOrder, where *historygenerated.VendorRiskScoreHistoryWhereInput) int
+		VendorScoringConfigHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.VendorScoringConfigHistoryOrder, where *historygenerated.VendorScoringConfigHistoryWhereInput) int
+		VulnerabilityHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.VulnerabilityHistoryOrder, where *historygenerated.VulnerabilityHistoryWhereInput) int
+		WorkflowAssignmentHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.WorkflowAssignmentHistoryOrder, where *historygenerated.WorkflowAssignmentHistoryWhereInput) int
+		WorkflowAssignmentTargetHistories     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.WorkflowAssignmentTargetHistoryOrder, where *historygenerated.WorkflowAssignmentTargetHistoryWhereInput) int
+		WorkflowDefinitionHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.WorkflowDefinitionHistoryOrder, where *historygenerated.WorkflowDefinitionHistoryWhereInput) int
 	}
 
 	RemediationHistory struct {
@@ -2535,6 +2536,37 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterNDARequestHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	TrustCenterNDARequestSettingHistory struct {
+		ApprovalRequired          func(childComplexity int) int
+		ApproveFromExistingDomain func(childComplexity int) int
+		ApproveIfContactExists    func(childComplexity int) int
+		ApproverGroupID           func(childComplexity int) int
+		AutoApprove               func(childComplexity int) int
+		CreatedAt                 func(childComplexity int) int
+		CreatedBy                 func(childComplexity int) int
+		HistoryTime               func(childComplexity int) int
+		ID                        func(childComplexity int) int
+		Operation                 func(childComplexity int) int
+		Ref                       func(childComplexity int) int
+		UpdatedAt                 func(childComplexity int) int
+		UpdatedBy                 func(childComplexity int) int
+		UpdatedByImpersonator     func(childComplexity int) int
+		UseDomainAllowlist        func(childComplexity int) int
+		UseDomainBlocklist        func(childComplexity int) int
+		WorkEmailOnly             func(childComplexity int) int
+	}
+
+	TrustCenterNDARequestSettingHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	TrustCenterNDARequestSettingHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
 	}
@@ -12290,6 +12322,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.TrustCenterNdaRequestHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterNDARequestHistoryOrder), args["where"].(*historygenerated.TrustCenterNDARequestHistoryWhereInput)), true
+	case "Query.trustCenterNdaRequestSettingHistories":
+		if e.ComplexityRoot.Query.TrustCenterNdaRequestSettingHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterNdaRequestSettingHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.TrustCenterNdaRequestSettingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterNDARequestSettingHistoryOrder), args["where"].(*historygenerated.TrustCenterNDARequestSettingHistoryWhereInput)), true
 	case "Query.trustCenterSettingHistories":
 		if e.ComplexityRoot.Query.TrustCenterSettingHistories == nil {
 			break
@@ -15544,6 +15587,141 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TrustCenterNDARequestHistoryEdge.Node(childComplexity), true
 
+	case "TrustCenterNDARequestSettingHistory.approvalRequired":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.ApprovalRequired == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.ApprovalRequired(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.approveFromExistingDomain":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.ApproveFromExistingDomain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.ApproveFromExistingDomain(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.approveIfContactExists":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.ApproveIfContactExists == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.ApproveIfContactExists(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.approverGroupID":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.ApproverGroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.ApproverGroupID(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.autoApprove":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.AutoApprove == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.AutoApprove(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.createdAt":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.CreatedAt(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.createdBy":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.CreatedBy(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.historyTime":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.HistoryTime(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.id":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.ID(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.operation":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.Operation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.Operation(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.ref":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.Ref == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.Ref(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.updatedAt":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.UpdatedAt(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.updatedBy":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.UpdatedBy(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.updatedByImpersonator":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.UpdatedByImpersonator(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.useDomainAllowlist":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.UseDomainAllowlist == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.UseDomainAllowlist(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.useDomainBlocklist":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.UseDomainBlocklist == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.UseDomainBlocklist(childComplexity), true
+	case "TrustCenterNDARequestSettingHistory.workEmailOnly":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistory.WorkEmailOnly == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistory.WorkEmailOnly(childComplexity), true
+
+	case "TrustCenterNDARequestSettingHistoryConnection.edges":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistoryConnection.Edges(childComplexity), true
+	case "TrustCenterNDARequestSettingHistoryConnection.pageInfo":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistoryConnection.PageInfo(childComplexity), true
+	case "TrustCenterNDARequestSettingHistoryConnection.totalCount":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistoryConnection.TotalCount(childComplexity), true
+
+	case "TrustCenterNDARequestSettingHistoryEdge.cursor":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistoryEdge.Cursor(childComplexity), true
+	case "TrustCenterNDARequestSettingHistoryEdge.node":
+		if e.ComplexityRoot.TrustCenterNDARequestSettingHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterNDARequestSettingHistoryEdge.Node(childComplexity), true
+
 	case "TrustCenterSettingHistory.accentColor":
 		if e.ComplexityRoot.TrustCenterSettingHistory.AccentColor == nil {
 			break
@@ -17885,6 +18063,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTrustCenterHistoryWhereInput,
 		ec.unmarshalInputTrustCenterNDARequestHistoryOrder,
 		ec.unmarshalInputTrustCenterNDARequestHistoryWhereInput,
+		ec.unmarshalInputTrustCenterNDARequestSettingHistoryOrder,
+		ec.unmarshalInputTrustCenterNDARequestSettingHistoryWhereInput,
 		ec.unmarshalInputTrustCenterSettingHistoryOrder,
 		ec.unmarshalInputTrustCenterSettingHistoryWhereInput,
 		ec.unmarshalInputTrustCenterSubprocessorHistoryOrder,
@@ -40380,6 +40560,37 @@ type Query {
     """
     where: TrustCenterNDARequestHistoryWhereInput
   ): TrustCenterNDARequestHistoryConnection!
+  trustCenterNdaRequestSettingHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterNDARequestSettingHistories returned from the connection.
+    """
+    orderBy: TrustCenterNDARequestSettingHistoryOrder
+
+    """
+    Filtering options for TrustCenterNDARequestSettingHistories returned from the connection.
+    """
+    where: TrustCenterNDARequestSettingHistoryWhereInput
+  ): TrustCenterNDARequestSettingHistoryConnection!
   trustCenterSettingHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -48170,6 +48381,283 @@ input TrustCenterNDARequestHistoryWhereInput {
   fileIDEqualFold: String
   fileIDContainsFold: String
 }
+type TrustCenterNDARequestSettingHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: TrustCenterNDARequestSettingHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  group whose members approve trust center NDA requests
+  """
+  approverGroupID: String
+  """
+  whether NDA requests require approval before being processed
+  """
+  approvalRequired: Boolean
+  """
+  Auto approve NDA requests based on certain rules
+  """
+  autoApprove: Boolean
+  """
+  require only work email when auto approving a nda request
+  """
+  workEmailOnly: Boolean
+  """
+  Enable the use of a domain blocklist
+  """
+  useDomainBlocklist: Boolean
+  """
+  Enable the use of a domain allowlist
+  """
+  useDomainAllowlist: Boolean
+  """
+  automatically approve if the request uses the same domain as that of an existing domain
+  """
+  approveFromExistingDomain: Boolean
+  """
+  automatically approve if the request email is already a contact object
+  """
+  approveIfContactExists: Boolean
+}
+"""
+A connection to a list of items.
+"""
+type TrustCenterNDARequestSettingHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [TrustCenterNDARequestSettingHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TrustCenterNDARequestSettingHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: TrustCenterNDARequestSettingHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+TrustCenterNDARequestSettingHistoryOpType is enum for the field operation
+"""
+enum TrustCenterNDARequestSettingHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for TrustCenterNDARequestSettingHistory connections
+"""
+input TrustCenterNDARequestSettingHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TrustCenterNDARequestSettingHistories.
+  """
+  field: TrustCenterNDARequestSettingHistoryOrderField!
+}
+"""
+Properties by which TrustCenterNDARequestSettingHistory connections can be ordered.
+"""
+enum TrustCenterNDARequestSettingHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+TrustCenterNDARequestSettingHistoryWhereInput is used for filtering TrustCenterNDARequestSettingHistory objects.
+Input was generated by ent.
+"""
+input TrustCenterNDARequestSettingHistoryWhereInput {
+  not: TrustCenterNDARequestSettingHistoryWhereInput
+  and: [TrustCenterNDARequestSettingHistoryWhereInput!]
+  or: [TrustCenterNDARequestSettingHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: TrustCenterNDARequestSettingHistoryOpType
+  operationNEQ: TrustCenterNDARequestSettingHistoryOpType
+  operationIn: [TrustCenterNDARequestSettingHistoryOpType!]
+  operationNotIn: [TrustCenterNDARequestSettingHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  approver_group_id field predicates
+  """
+  approverGroupID: String
+  approverGroupIDNEQ: String
+  approverGroupIDIn: [String!]
+  approverGroupIDNotIn: [String!]
+  approverGroupIDContains: String
+  approverGroupIDHasPrefix: String
+  approverGroupIDHasSuffix: String
+  approverGroupIDIsNil: Boolean
+  approverGroupIDNotNil: Boolean
+  approverGroupIDEqualFold: String
+  approverGroupIDContainsFold: String
+  """
+  approval_required field predicates
+  """
+  approvalRequired: Boolean
+  approvalRequiredNEQ: Boolean
+  approvalRequiredIsNil: Boolean
+  approvalRequiredNotNil: Boolean
+  """
+  auto_approve field predicates
+  """
+  autoApprove: Boolean
+  autoApproveNEQ: Boolean
+  autoApproveIsNil: Boolean
+  autoApproveNotNil: Boolean
+  """
+  work_email_only field predicates
+  """
+  workEmailOnly: Boolean
+  workEmailOnlyNEQ: Boolean
+  workEmailOnlyIsNil: Boolean
+  workEmailOnlyNotNil: Boolean
+  """
+  use_domain_blocklist field predicates
+  """
+  useDomainBlocklist: Boolean
+  useDomainBlocklistNEQ: Boolean
+  useDomainBlocklistIsNil: Boolean
+  useDomainBlocklistNotNil: Boolean
+  """
+  use_domain_allowlist field predicates
+  """
+  useDomainAllowlist: Boolean
+  useDomainAllowlistNEQ: Boolean
+  useDomainAllowlistIsNil: Boolean
+  useDomainAllowlistNotNil: Boolean
+  """
+  approve_from_existing_domain field predicates
+  """
+  approveFromExistingDomain: Boolean
+  approveFromExistingDomainNEQ: Boolean
+  approveFromExistingDomainIsNil: Boolean
+  approveFromExistingDomainNotNil: Boolean
+  """
+  approve_if_contact_exists field predicates
+  """
+  approveIfContactExists: Boolean
+  approveIfContactExistsNEQ: Boolean
+  approveIfContactExistsIsNil: Boolean
+  approveIfContactExistsNotNil: Boolean
+}
 type TrustCenterSettingHistory implements Node {
   id: ID!
   historyTime: Time!
@@ -48272,10 +48760,6 @@ type TrustCenterSettingHistory implements Node {
   """
   securityContact: String
   """
-  whether NDA requests require approval before being processed
-  """
-  ndaApprovalRequired: Boolean
-  """
   whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked
   """
   allowSubscribers: Boolean
@@ -48288,10 +48772,6 @@ type TrustCenterSettingHistory implements Node {
   """
   subprocessorsNotifiedAt: Time
   """
-  group whose members approve trust center NDA requests
-  """
-  ndaApproverGroupID: String
-  """
   URL to the company's status page
   """
   statusPageURL: String
@@ -48299,6 +48779,14 @@ type TrustCenterSettingHistory implements Node {
   allow trustcenter to be indexed on google
   """
   noindexDefaultDomain: Boolean
+  """
+  group whose members approve trust center NDA requests
+  """
+  ndaApproverGroupID: String @deprecated(reason: "use trustcenter_nda_request_setting instead for this")
+  """
+  whether NDA requests require approval before being processed
+  """
+  ndaApprovalRequired: Boolean @deprecated(reason: "use trustcenter_nda_request_setting instead for this")
 }
 """
 A connection to a list of items.
@@ -48773,13 +49261,6 @@ input TrustCenterSettingHistoryWhereInput {
   securityContactEqualFold: String
   securityContactContainsFold: String
   """
-  nda_approval_required field predicates
-  """
-  ndaApprovalRequired: Boolean
-  ndaApprovalRequiredNEQ: Boolean
-  ndaApprovalRequiredIsNil: Boolean
-  ndaApprovalRequiredNotNil: Boolean
-  """
   allow_subscribers field predicates
   """
   allowSubscribers: Boolean
@@ -48804,20 +49285,6 @@ input TrustCenterSettingHistoryWhereInput {
   subprocessorsNotifiedAtIsNil: Boolean
   subprocessorsNotifiedAtNotNil: Boolean
   """
-  nda_approver_group_id field predicates
-  """
-  ndaApproverGroupID: String
-  ndaApproverGroupIDNEQ: String
-  ndaApproverGroupIDIn: [String!]
-  ndaApproverGroupIDNotIn: [String!]
-  ndaApproverGroupIDContains: String
-  ndaApproverGroupIDHasPrefix: String
-  ndaApproverGroupIDHasSuffix: String
-  ndaApproverGroupIDIsNil: Boolean
-  ndaApproverGroupIDNotNil: Boolean
-  ndaApproverGroupIDEqualFold: String
-  ndaApproverGroupIDContainsFold: String
-  """
   status_page_url field predicates
   """
   statusPageURL: String
@@ -48838,6 +49305,27 @@ input TrustCenterSettingHistoryWhereInput {
   noindexDefaultDomainNEQ: Boolean
   noindexDefaultDomainIsNil: Boolean
   noindexDefaultDomainNotNil: Boolean
+  """
+  nda_approver_group_id field predicates
+  """
+  ndaApproverGroupID: String
+  ndaApproverGroupIDNEQ: String
+  ndaApproverGroupIDIn: [String!]
+  ndaApproverGroupIDNotIn: [String!]
+  ndaApproverGroupIDContains: String
+  ndaApproverGroupIDHasPrefix: String
+  ndaApproverGroupIDHasSuffix: String
+  ndaApproverGroupIDIsNil: Boolean
+  ndaApproverGroupIDNotNil: Boolean
+  ndaApproverGroupIDEqualFold: String
+  ndaApproverGroupIDContainsFold: String
+  """
+  nda_approval_required field predicates
+  """
+  ndaApprovalRequired: Boolean
+  ndaApprovalRequiredNEQ: Boolean
+  ndaApprovalRequiredIsNil: Boolean
+  ndaApprovalRequiredNotNil: Boolean
 }
 type TrustCenterSubprocessorHistory implements Node {
   id: ID!
@@ -58276,6 +58764,68 @@ func (ec *executionContext) childFields_TrustCenterNDARequestHistoryEdge(ctx con
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDARequestHistoryEdge", field.Name)
 }
 
+func (ec *executionContext) childFields_TrustCenterNDARequestSettingHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_updatedByImpersonator(ctx, field)
+	case "approverGroupID":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_approverGroupID(ctx, field)
+	case "approvalRequired":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_approvalRequired(ctx, field)
+	case "autoApprove":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_autoApprove(ctx, field)
+	case "workEmailOnly":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_workEmailOnly(ctx, field)
+	case "useDomainBlocklist":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_useDomainBlocklist(ctx, field)
+	case "useDomainAllowlist":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_useDomainAllowlist(ctx, field)
+	case "approveFromExistingDomain":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_approveFromExistingDomain(ctx, field)
+	case "approveIfContactExists":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistory_approveIfContactExists(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDARequestSettingHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterNDARequestSettingHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDARequestSettingHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_TrustCenterNDARequestSettingHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_TrustCenterNDARequestSettingHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type TrustCenterNDARequestSettingHistoryEdge", field.Name)
+}
+
 func (ec *executionContext) childFields_TrustCenterSettingHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -58340,20 +58890,20 @@ func (ec *executionContext) childFields_TrustCenterSettingHistory(ctx context.Co
 		return ec.fieldContext_TrustCenterSettingHistory_companyDomain(ctx, field)
 	case "securityContact":
 		return ec.fieldContext_TrustCenterSettingHistory_securityContact(ctx, field)
-	case "ndaApprovalRequired":
-		return ec.fieldContext_TrustCenterSettingHistory_ndaApprovalRequired(ctx, field)
 	case "allowSubscribers":
 		return ec.fieldContext_TrustCenterSettingHistory_allowSubscribers(ctx, field)
 	case "notifySubscribersOnSubprocessorChange":
 		return ec.fieldContext_TrustCenterSettingHistory_notifySubscribersOnSubprocessorChange(ctx, field)
 	case "subprocessorsNotifiedAt":
 		return ec.fieldContext_TrustCenterSettingHistory_subprocessorsNotifiedAt(ctx, field)
-	case "ndaApproverGroupID":
-		return ec.fieldContext_TrustCenterSettingHistory_ndaApproverGroupID(ctx, field)
 	case "statusPageURL":
 		return ec.fieldContext_TrustCenterSettingHistory_statusPageURL(ctx, field)
 	case "noindexDefaultDomain":
 		return ec.fieldContext_TrustCenterSettingHistory_noindexDefaultDomain(ctx, field)
+	case "ndaApproverGroupID":
+		return ec.fieldContext_TrustCenterSettingHistory_ndaApproverGroupID(ctx, field)
+	case "ndaApprovalRequired":
+		return ec.fieldContext_TrustCenterSettingHistory_ndaApprovalRequired(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterSettingHistory", field.Name)
 }

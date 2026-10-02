@@ -1433,6 +1433,30 @@ func (f TrustCenterNDARequestHistoryMutationRuleFunc) EvalMutation(ctx context.C
 	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.TrustCenterNDARequestHistoryMutation", m)
 }
 
+// The TrustCenterNDARequestSettingHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TrustCenterNDARequestSettingHistoryQueryRuleFunc func(context.Context, *historygenerated.TrustCenterNDARequestSettingHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TrustCenterNDARequestSettingHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.TrustCenterNDARequestSettingHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.TrustCenterNDARequestSettingHistoryQuery", q)
+}
+
+// The TrustCenterNDARequestSettingHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TrustCenterNDARequestSettingHistoryMutationRuleFunc func(context.Context, *historygenerated.TrustCenterNDARequestSettingHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TrustCenterNDARequestSettingHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.TrustCenterNDARequestSettingHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.TrustCenterNDARequestSettingHistoryMutation", m)
+}
+
 // The TrustCenterSettingHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type TrustCenterSettingHistoryQueryRuleFunc func(context.Context, *historygenerated.TrustCenterSettingHistoryQuery) error
@@ -1842,6 +1866,8 @@ func queryFilter(q historygenerated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *historygenerated.TrustCenterNDARequestHistoryQuery:
 		return q.Filter(), nil
+	case *historygenerated.TrustCenterNDARequestSettingHistoryQuery:
+		return q.Filter(), nil
 	case *historygenerated.TrustCenterSettingHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.TrustCenterSubprocessorHistoryQuery:
@@ -1980,6 +2006,8 @@ func mutationFilter(m historygenerated.Mutation) (Filter, error) {
 	case *historygenerated.TrustCenterHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.TrustCenterNDARequestHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.TrustCenterNDARequestSettingHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.TrustCenterSettingHistoryMutation:
 		return m.Filter(), nil

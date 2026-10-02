@@ -23219,6 +23219,283 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromDelete(ctx context.Cont
 	return nil
 }
 
+func (m *TrustCenterNDARequestSettingMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
+func (m *TrustCenterNDARequestSettingMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.TrustCenterNDARequestSettingHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if approverGroupID, exists := m.ApproverGroupID(); exists {
+		create = create.SetNillableApproverGroupID(&approverGroupID)
+	}
+
+	if approvalRequired, exists := m.ApprovalRequired(); exists {
+		create = create.SetApprovalRequired(approvalRequired)
+	}
+
+	if autoApprove, exists := m.AutoApprove(); exists {
+		create = create.SetAutoApprove(autoApprove)
+	}
+
+	if workEmailOnly, exists := m.WorkEmailOnly(); exists {
+		create = create.SetWorkEmailOnly(workEmailOnly)
+	}
+
+	if useDomainBlocklist, exists := m.UseDomainBlocklist(); exists {
+		create = create.SetUseDomainBlocklist(useDomainBlocklist)
+	}
+
+	if useDomainAllowlist, exists := m.UseDomainAllowlist(); exists {
+		create = create.SetUseDomainAllowlist(useDomainAllowlist)
+	}
+
+	if approveFromExistingDomain, exists := m.ApproveFromExistingDomain(); exists {
+		create = create.SetApproveFromExistingDomain(approveFromExistingDomain)
+	}
+
+	if approveIfContactExists, exists := m.ApproveIfContactExists(); exists {
+		create = create.SetApproveIfContactExists(approveIfContactExists)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *TrustCenterNDARequestSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		trustcenterndarequestsetting, err := client.TrustCenterNDARequestSetting.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.TrustCenterNDARequestSettingHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(trustcenterndarequestsetting.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(trustcenterndarequestsetting.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(trustcenterndarequestsetting.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(trustcenterndarequestsetting.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(trustcenterndarequestsetting.UpdatedByImpersonator)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(trustcenterndarequestsetting.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(trustcenterndarequestsetting.DeletedBy)
+		}
+
+		if approverGroupID, exists := m.ApproverGroupID(); exists {
+			create = create.SetNillableApproverGroupID(&approverGroupID)
+		} else {
+			create = create.SetNillableApproverGroupID(trustcenterndarequestsetting.ApproverGroupID)
+		}
+
+		if approvalRequired, exists := m.ApprovalRequired(); exists {
+			create = create.SetApprovalRequired(approvalRequired)
+		} else {
+			create = create.SetApprovalRequired(trustcenterndarequestsetting.ApprovalRequired)
+		}
+
+		if autoApprove, exists := m.AutoApprove(); exists {
+			create = create.SetAutoApprove(autoApprove)
+		} else {
+			create = create.SetAutoApprove(trustcenterndarequestsetting.AutoApprove)
+		}
+
+		if workEmailOnly, exists := m.WorkEmailOnly(); exists {
+			create = create.SetWorkEmailOnly(workEmailOnly)
+		} else {
+			create = create.SetWorkEmailOnly(trustcenterndarequestsetting.WorkEmailOnly)
+		}
+
+		if useDomainBlocklist, exists := m.UseDomainBlocklist(); exists {
+			create = create.SetUseDomainBlocklist(useDomainBlocklist)
+		} else {
+			create = create.SetUseDomainBlocklist(trustcenterndarequestsetting.UseDomainBlocklist)
+		}
+
+		if useDomainAllowlist, exists := m.UseDomainAllowlist(); exists {
+			create = create.SetUseDomainAllowlist(useDomainAllowlist)
+		} else {
+			create = create.SetUseDomainAllowlist(trustcenterndarequestsetting.UseDomainAllowlist)
+		}
+
+		if approveFromExistingDomain, exists := m.ApproveFromExistingDomain(); exists {
+			create = create.SetApproveFromExistingDomain(approveFromExistingDomain)
+		} else {
+			create = create.SetApproveFromExistingDomain(trustcenterndarequestsetting.ApproveFromExistingDomain)
+		}
+
+		if approveIfContactExists, exists := m.ApproveIfContactExists(); exists {
+			create = create.SetApproveIfContactExists(approveIfContactExists)
+		} else {
+			create = create.SetApproveIfContactExists(trustcenterndarequestsetting.ApproveIfContactExists)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *TrustCenterNDARequestSettingMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		trustcenterndarequestsetting, err := client.TrustCenterNDARequestSetting.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.TrustCenterNDARequestSettingHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(trustcenterndarequestsetting.CreatedAt).
+			SetUpdatedAt(trustcenterndarequestsetting.UpdatedAt).
+			SetCreatedBy(trustcenterndarequestsetting.CreatedBy).
+			SetUpdatedBy(trustcenterndarequestsetting.UpdatedBy).
+			SetNillableUpdatedByImpersonator(trustcenterndarequestsetting.UpdatedByImpersonator).
+			SetDeletedAt(trustcenterndarequestsetting.DeletedAt).
+			SetDeletedBy(trustcenterndarequestsetting.DeletedBy).
+			SetNillableApproverGroupID(trustcenterndarequestsetting.ApproverGroupID).
+			SetApprovalRequired(trustcenterndarequestsetting.ApprovalRequired).
+			SetAutoApprove(trustcenterndarequestsetting.AutoApprove).
+			SetWorkEmailOnly(trustcenterndarequestsetting.WorkEmailOnly).
+			SetUseDomainBlocklist(trustcenterndarequestsetting.UseDomainBlocklist).
+			SetUseDomainAllowlist(trustcenterndarequestsetting.UseDomainAllowlist).
+			SetApproveFromExistingDomain(trustcenterndarequestsetting.ApproveFromExistingDomain).
+			SetApproveIfContactExists(trustcenterndarequestsetting.ApproveIfContactExists).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *TrustCenterSettingMutation) skipper(ctx context.Context) bool {
 
 	if PurgeHistoryEnabled(ctx) {
@@ -23366,10 +23643,6 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetNillableSecurityContact(&securityContact)
 	}
 
-	if ndaApprovalRequired, exists := m.NdaApprovalRequired(); exists {
-		create = create.SetNdaApprovalRequired(ndaApprovalRequired)
-	}
-
 	if allowSubscribers, exists := m.AllowSubscribers(); exists {
 		create = create.SetAllowSubscribers(allowSubscribers)
 	}
@@ -23382,16 +23655,20 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetNillableSubprocessorsNotifiedAt(&subprocessorsNotifiedAt)
 	}
 
-	if ndaApproverGroupID, exists := m.NdaApproverGroupID(); exists {
-		create = create.SetNillableNdaApproverGroupID(&ndaApproverGroupID)
-	}
-
 	if statusPageURL, exists := m.StatusPageURL(); exists {
 		create = create.SetNillableStatusPageURL(&statusPageURL)
 	}
 
 	if noindexDefaultDomain, exists := m.NoindexDefaultDomain(); exists {
 		create = create.SetNoindexDefaultDomain(noindexDefaultDomain)
+	}
+
+	if ndaApproverGroupID, exists := m.NdaApproverGroupID(); exists {
+		create = create.SetNillableNdaApproverGroupID(&ndaApproverGroupID)
+	}
+
+	if ndaApprovalRequired, exists := m.NdaApprovalRequired(); exists {
+		create = create.SetNdaApprovalRequired(ndaApprovalRequired)
 	}
 
 	_, err := create.Save(ctx)
@@ -23602,12 +23879,6 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNillableSecurityContact(trustcentersetting.SecurityContact)
 		}
 
-		if ndaApprovalRequired, exists := m.NdaApprovalRequired(); exists {
-			create = create.SetNdaApprovalRequired(ndaApprovalRequired)
-		} else {
-			create = create.SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired)
-		}
-
 		if allowSubscribers, exists := m.AllowSubscribers(); exists {
 			create = create.SetAllowSubscribers(allowSubscribers)
 		} else {
@@ -23626,12 +23897,6 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNillableSubprocessorsNotifiedAt(trustcentersetting.SubprocessorsNotifiedAt)
 		}
 
-		if ndaApproverGroupID, exists := m.NdaApproverGroupID(); exists {
-			create = create.SetNillableNdaApproverGroupID(&ndaApproverGroupID)
-		} else {
-			create = create.SetNillableNdaApproverGroupID(trustcentersetting.NdaApproverGroupID)
-		}
-
 		if statusPageURL, exists := m.StatusPageURL(); exists {
 			create = create.SetNillableStatusPageURL(&statusPageURL)
 		} else {
@@ -23642,6 +23907,18 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNoindexDefaultDomain(noindexDefaultDomain)
 		} else {
 			create = create.SetNoindexDefaultDomain(trustcentersetting.NoindexDefaultDomain)
+		}
+
+		if ndaApproverGroupID, exists := m.NdaApproverGroupID(); exists {
+			create = create.SetNillableNdaApproverGroupID(&ndaApproverGroupID)
+		} else {
+			create = create.SetNillableNdaApproverGroupID(trustcentersetting.NdaApproverGroupID)
+		}
+
+		if ndaApprovalRequired, exists := m.NdaApprovalRequired(); exists {
+			create = create.SetNdaApprovalRequired(ndaApprovalRequired)
+		} else {
+			create = create.SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -23711,13 +23988,13 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetRemoveBranding(trustcentersetting.RemoveBranding).
 			SetNillableCompanyDomain(trustcentersetting.CompanyDomain).
 			SetNillableSecurityContact(trustcentersetting.SecurityContact).
-			SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired).
 			SetAllowSubscribers(trustcentersetting.AllowSubscribers).
 			SetNotifySubscribersOnSubprocessorChange(trustcentersetting.NotifySubscribersOnSubprocessorChange).
 			SetNillableSubprocessorsNotifiedAt(trustcentersetting.SubprocessorsNotifiedAt).
-			SetNillableNdaApproverGroupID(trustcentersetting.NdaApproverGroupID).
 			SetNillableStatusPageURL(trustcentersetting.StatusPageURL).
 			SetNoindexDefaultDomain(trustcentersetting.NoindexDefaultDomain).
+			SetNillableNdaApproverGroupID(trustcentersetting.NdaApproverGroupID).
+			SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired).
 			Save(ctx)
 		if err != nil {
 			return err

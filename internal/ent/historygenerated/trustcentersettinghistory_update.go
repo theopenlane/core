@@ -160,9 +160,6 @@ func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.SecurityContactCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldSecurityContact, field.TypeString)
 	}
-	if _u.mutation.NdaApprovalRequiredCleared() {
-		_spec.ClearField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool)
-	}
 	if _u.mutation.AllowSubscribersCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldAllowSubscribers, field.TypeBool)
 	}
@@ -172,14 +169,17 @@ func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.SubprocessorsNotifiedAtCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldSubprocessorsNotifiedAt, field.TypeTime)
 	}
-	if _u.mutation.NdaApproverGroupIDCleared() {
-		_spec.ClearField(trustcentersettinghistory.FieldNdaApproverGroupID, field.TypeString)
-	}
 	if _u.mutation.StatusPageURLCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString)
 	}
 	if _u.mutation.NoindexDefaultDomainCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldNoindexDefaultDomain, field.TypeBool)
+	}
+	if _u.mutation.NdaApproverGroupIDCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldNdaApproverGroupID, field.TypeString)
+	}
+	if _u.mutation.NdaApprovalRequiredCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -362,9 +362,6 @@ func (_u *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.SecurityContactCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldSecurityContact, field.TypeString)
 	}
-	if _u.mutation.NdaApprovalRequiredCleared() {
-		_spec.ClearField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool)
-	}
 	if _u.mutation.AllowSubscribersCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldAllowSubscribers, field.TypeBool)
 	}
@@ -374,14 +371,17 @@ func (_u *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.SubprocessorsNotifiedAtCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldSubprocessorsNotifiedAt, field.TypeTime)
 	}
-	if _u.mutation.NdaApproverGroupIDCleared() {
-		_spec.ClearField(trustcentersettinghistory.FieldNdaApproverGroupID, field.TypeString)
-	}
 	if _u.mutation.StatusPageURLCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString)
 	}
 	if _u.mutation.NoindexDefaultDomainCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldNoindexDefaultDomain, field.TypeBool)
+	}
+	if _u.mutation.NdaApproverGroupIDCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldNdaApproverGroupID, field.TypeString)
+	}
+	if _u.mutation.NdaApprovalRequiredCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool)
 	}
 	_node = &TrustCenterSettingHistory{config: _u.config}
 	_spec.Assign = _node.assignValues

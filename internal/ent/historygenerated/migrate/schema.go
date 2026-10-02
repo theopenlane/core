@@ -2659,6 +2659,41 @@ var (
 			},
 		},
 	}
+	// TrustCenterNdaRequestSettingHistoryColumns holds the columns for the "trust_center_nda_request_setting_history" table.
+	TrustCenterNdaRequestSettingHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "approver_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "approval_required", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "auto_approve", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "work_email_only", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "use_domain_blocklist", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "use_domain_allowlist", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "approve_from_existing_domain", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "approve_if_contact_exists", Type: field.TypeBool, Nullable: true, Default: true},
+	}
+	// TrustCenterNdaRequestSettingHistoryTable holds the schema information for the "trust_center_nda_request_setting_history" table.
+	TrustCenterNdaRequestSettingHistoryTable = &schema.Table{
+		Name:       "trust_center_nda_request_setting_history",
+		Columns:    TrustCenterNdaRequestSettingHistoryColumns,
+		PrimaryKey: []*schema.Column{TrustCenterNdaRequestSettingHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcenterndarequestsettinghistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterNdaRequestSettingHistoryColumns[1]},
+			},
+		},
+	}
 	// TrustCenterSettingHistoryColumns holds the columns for the "trust_center_setting_history" table.
 	TrustCenterSettingHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -2694,13 +2729,13 @@ var (
 		{Name: "remove_branding", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "company_domain", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "security_contact", Type: field.TypeString, Nullable: true},
-		{Name: "nda_approval_required", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "allow_subscribers", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "notify_subscribers_on_subprocessor_change", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "subprocessors_notified_at", Type: field.TypeTime, Nullable: true},
-		{Name: "nda_approver_group_id", Type: field.TypeString, Nullable: true},
 		{Name: "status_page_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "noindex_default_domain", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "nda_approver_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "nda_approval_required", Type: field.TypeBool, Nullable: true, Default: false},
 	}
 	// TrustCenterSettingHistoryTable holds the schema information for the "trust_center_setting_history" table.
 	TrustCenterSettingHistoryTable = &schema.Table{
@@ -3231,6 +3266,7 @@ var (
 		TrustCenterFaqsHistoryTable,
 		TrustCenterHistoryTable,
 		TrustCenterNdaRequestHistoryTable,
+		TrustCenterNdaRequestSettingHistoryTable,
 		TrustCenterSettingHistoryTable,
 		TrustCenterSubprocessorHistoryTable,
 		TrustCenterWatermarkConfigHistoryTable,
@@ -3410,6 +3446,9 @@ func init() {
 	}
 	TrustCenterNdaRequestHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_nda_request_history",
+	}
+	TrustCenterNdaRequestSettingHistoryTable.Annotation = &entsql.Annotation{
+		Table: "trust_center_nda_request_setting_history",
 	}
 	TrustCenterSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_setting_history",
